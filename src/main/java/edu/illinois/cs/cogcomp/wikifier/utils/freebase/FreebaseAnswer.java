@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 public class FreebaseAnswer {
 	private String name;
 	private String mid;
-	private String id;
+//	private String id;
 	public FreebaseAnswer(JsonElement js) {
 //		System.out.println(js.toString());
 		JsonObject jobject = js.getAsJsonObject();

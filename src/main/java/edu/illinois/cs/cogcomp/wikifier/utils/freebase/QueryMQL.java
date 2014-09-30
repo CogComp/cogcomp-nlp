@@ -10,7 +10,6 @@ import java.math.BigInteger;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -215,69 +214,69 @@ public class QueryMQL {
 	 * @throws IOException
 	 * @throws ParseException
 	 */
-	@Deprecated
-	public List<String> lookupType(MQLQueryWrapper mql) throws IOException,
-			ParseException {
-		List<String> ans = new ArrayList<String>();
-		JSONObject response;
-		String mid = mql.mid;
-		mid = mid.replace("/", "_");
-		String mqlQuery = mql.MQLquery;
-		// first check mid in cache
-		if (IOUtils.exists(typeCacheLocation + "/" + mid + ".cached")) {
-			System.out.println("Found!");
-			JSONParser jsonParser = new JSONParser();
-			response = (JSONObject) jsonParser.parse(FileUtils
-					.readFileToString(new File(typeCacheLocation + "/" + mid
-							+ ".cached"), "UTF-8"));
-		} else {
-			System.out.println("Caching");
-			response = getResponse(mqlQuery);
-			FileUtils.writeStringToFile(new File(typeCacheLocation + "/" + mid
-					+ ".cached"), response.toString(), "UTF-8");
-		}
-
-		JSONObject result = (JSONObject) response.get("result");
-
-		JSONArray types = (JSONArray) result.get("type");
-		for (Object value : types) {
-			ans.add(value.toString());
-		}
-		return ans;
-	}
+//	@Deprecated
+//	public List<String> lookupType(MQLQueryWrapper mql) throws IOException,
+//			ParseException {
+//		List<String> ans = new ArrayList<String>();
+//		JSONObject response;
+//		String mid = mql.mid;
+//		mid = mid.replace("/", "_");
+//		String mqlQuery = mql.MQLquery;
+//		// first check mid in cache
+//		if (IOUtils.exists(typeCacheLocation + "/" + mid + ".cached")) {
+//			System.out.println("Found!");
+//			JSONParser jsonParser = new JSONParser();
+//			response = (JSONObject) jsonParser.parse(FileUtils
+//					.readFileToString(new File(typeCacheLocation + "/" + mid
+//							+ ".cached"), "UTF-8"));
+//		} else {
+//			System.out.println("Caching");
+//			response = getResponse(mqlQuery);
+//			FileUtils.writeStringToFile(new File(typeCacheLocation + "/" + mid
+//					+ ".cached"), response.toString(), "UTF-8");
+//		}
+//
+//		JSONObject result = (JSONObject) response.get("result");
+//
+//		JSONArray types = (JSONArray) result.get("type");
+//		for (Object value : types) {
+//			ans.add(value.toString());
+//		}
+//		return ans;
+//	}
 
 	static int found=0;
 	static int cacheMiss=0;
 	
-	public List<String> lookupType(String title) throws Exception{
-		List<String> ans = new ArrayList<String>();
-		
-		if (this.title_types.containsKey(title)) {
-			ans = title_types.get(title);
-			return ans;
-		} else {
-			try{
-				String mid = this.lookupMid(this.buildQuery(null, "/wikipedia/en", QueryMQL.encodeMQL(title)));
-				MQLQueryWrapper mql = this.buildQuery(mid);
-				JSONObject response;
-				String mqlQuery = mql.MQLquery;
-				response = getResponse(mqlQuery);
-				JSONObject result = (JSONObject) response.get("result");
-				if (result != null) {
-					JSONArray types = (JSONArray) result.get("type");
-					for (Object value : types) {
-						ans.add(value.toString());
-					}
-				}
-			} catch (HttpResponseException e){
-				System.out.println("title: "+title);
-				e.printStackTrace();
-				if(e.getStatusCode() == 403)
-					System.exit(0);
-			}
-		}
-		return ans;
-	}
+//	public List<String> lookupType(String title) throws Exception{
+//		List<String> ans = new ArrayList<String>();
+//		
+//		if (this.title_types.containsKey(title)) {
+//			ans = title_types.get(title);
+//			return ans;
+//		} else {
+//			try{
+//				String mid = this.lookupMid(this.buildQuery(null, "/wikipedia/en", QueryMQL.encodeMQL(title)));
+//				MQLQueryWrapper mql = this.buildQuery(mid);
+//				JSONObject response;
+//				String mqlQuery = mql.MQLquery;
+//				response = getResponse(mqlQuery);
+//				JSONObject result = (JSONObject) response.get("result");
+//				if (result != null) {
+//					JSONArray types = (JSONArray) result.get("type");
+//					for (Object value : types) {
+//						ans.add(value.toString());
+//					}
+//				}
+//			} catch (HttpResponseException e){
+//				System.out.println("title: "+title);
+//				e.printStackTrace();
+//				if(e.getStatusCode() == 403)
+//					System.exit(0);
+//			}
+//		}
+//		return ans;
+//	}
 
 
 	public List<String> lookupTypeFromTitle(MQLQueryWrapper mql)
@@ -402,10 +401,10 @@ public class QueryMQL {
 	 * @param value
 	 * @return
 	 */
-	@Deprecated
-	public MQLQueryWrapper buildQuery(String mid, String namespace, String value) {
-		return new MQLQueryWrapper(mid, namespace, value);
-	}
+//	@Deprecated
+//	public MQLQueryWrapper buildQuery(String mid, String namespace, String value) {
+//		return new MQLQueryWrapper(mid, namespace, value);
+//	}
 
 	/**
 	 * Create queries with mid for type i.e. mid -> type
@@ -413,10 +412,10 @@ public class QueryMQL {
 	 * @param mid
 	 * @return
 	 */
-	@Deprecated
-	public MQLQueryWrapper buildQuery(String mid) {
-		return new MQLQueryWrapper(mid);
-	}
+//	@Deprecated
+//	public MQLQueryWrapper buildQuery(String mid) {
+//		return new MQLQueryWrapper(mid);
+//	}
 
 	public static String toHex(String arg) {
 		return String.format("%04X", new BigInteger(1, arg.getBytes()));

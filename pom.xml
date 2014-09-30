@@ -34,25 +34,18 @@
             <version>1.18.0-rc</version>
         </dependency>
 
-	  <!-- For Fine2Coarse Classifier -->
-	  <!-- <dependency> -->
-          <!--   <groupId>personal</groupId> -->
-          <!--   <artifactId>lbj</artifactId> -->
-          <!--   <version>3.0</version> -->
-          <!-- </dependency> -->
-
 	  <dependency>
 	    <groupId>com.jayway.jsonpath</groupId>
 	    <artifactId>json-path</artifactId>
 	    <version>0.9.1</version>
 	  </dependency>
 
-	  <dependency>
-	    <groupId>com.jayway.jsonpath</groupId>
-	    <artifactId>json-path-assert</artifactId>
-	    <version>0.9.1</version>
-	    <scope>test</scope>
-	  </dependency>
+	  <!-- <dependency> -->
+	  <!--   <groupId>com.jayway.jsonpath</groupId> -->
+	  <!--   <artifactId>json-path-assert</artifactId> -->
+	  <!--   <version>0.9.1</version> -->
+	  <!--   <scope>test</scope> -->
+	  <!-- </dependency> -->
 	  <dependency>
 	    <groupId>com.googlecode.json-simple</groupId>
 	    <artifactId>json-simple</artifactId>
@@ -211,72 +204,7 @@
 	    <artifactId>slf4j-log4j12</artifactId>
 	    <version>1.7.6</version>
 	  </dependency>
-	<!--   <dependency> -->
-	<!--     <groupId>edu.illinois.cs.cogcomp</groupId> -->
-	<!--     <artifactId>illinois-entity-similarity</artifactId> -->
-	<!--     <version>2.0.0</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>com.gurobi</groupId> -->
-	<!--     <artifactId>gurobi</artifactId> -->
-	<!--     <version>5.5</version> -->
-	<!--   </dependency> -->
 
-	<!--   <dependency> -->
-	<!--     <groupId>org.xeustechnologies.google-api</groupId> -->
-	<!--     <artifactId>google-api-spelling</artifactId> -->
-	<!--     <version>1.1</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>edu.smu.cse</groupId> -->
-	<!--     <artifactId>jaws</artifactId> -->
-	<!--     <version>1.3</version> -->
-	<!--   </dependency> -->
-        <!--   <dependency> -->
-        <!--     <groupId>org.itadaki</groupId> -->
-        <!--     <artifactId>jbzip2</artifactId> -->
-        <!--     <version>0.9.1</version> -->
-        <!--   </dependency> -->
-	<!--  <dependency> -->
-	<!--     <groupId>edu.illinois.cs.cogcomp</groupId> -->
-	<!--     <artifactId>lbj-ner-tagger</artifactId> -->
-	<!--     <version>1.0</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>de.bwaldvogel</groupId> -->
-	<!--     <artifactId>liblinear-with-deps</artifactId> -->
-	<!--     <version>1.5</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>javatools</groupId> -->
-	<!--     <artifactId>javatools</artifactId> -->
-	<!--     <version>20120110</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-        <!--     <groupId>edu.mit</groupId> -->
-        <!--     <artifactId>jwi</artifactId> -->
-        <!--     <version>2.2.3</version> -->
-        <!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>edu.illinois.cs.cogcomp</groupId> -->
-	<!--     <artifactId>illinois-chunker</artifactId> -->
-	<!--     <version>1.5.1</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>edu.illinois.cs.cogcomp</groupId> -->
-	<!--     <artifactId>illinois-coref-ace-model</artifactId> -->
-	<!--     <version>1.5</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	<!--     <groupId>edu.cmu.cs</groupId> -->
-	<!--     <artifactId>SecondString</artifactId> -->
-	<!--     <version>1.0.0</version> -->
-	<!--   </dependency> -->
-	<!--   <dependency> -->
-	  <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
-	  <!--   <artifactId>DEFTIR</artifactId> -->
-	  <!--   <version>0.0.2</version> -->
-	  <!-- </dependency> -->
 	  <dependency>
 	    <groupId>edu.illinois.cs.cogcomp</groupId>
 	    <artifactId>LBJava</artifactId>
