@@ -67,7 +67,7 @@ public class QueryMQL {
 			.getLogger(QueryMQL.class);
 
 	private String apikey; // use the same key as FreebaseSearch
-	private boolean cacheOn = false;
+//	private boolean cacheOn = false;
 	private String typeCacheLocation;
 	private String midCacheLocation;
 
@@ -426,7 +426,7 @@ public class QueryMQL {
 
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-			int cp = Character.codePointAt(str, i);
+//			int cp = Character.codePointAt(str, i);
 			Matcher matcher = MQLKEY_CHAR_MUSTQUOTE.matcher("" + c);
 			if (matcher.find()) {
 				retStr.append("$" + toHex("" + c));
