@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>wikiutils-freebase</artifactId>
-	<version>1.0</version> 
-	<!-- This is for installing into EL2014 -->
+	<version>1.0-SNAPSHOT</version> 
+
 	<repositories>
 		<repository>
 			<id>CogcompSoftware</id>
