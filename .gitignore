@@ -3,6 +3,7 @@
 *.iml
 *.jar
 target/
+bin/
 .project
 .svn
 .settings
