@@ -210,17 +210,17 @@
 	    <version>1.7.6</version>
 	  </dependency>
 
-	  <dependency>
-	    <groupId>edu.illinois.cs.cogcomp</groupId>
-	    <artifactId>LBJava</artifactId>
-	    <version>1.0</version>
-	    <exclusions>
-              <exclusion>
-		<groupId>gurobi</groupId>
-		<artifactId>gurobi</artifactId>
-              </exclusion>
-	    </exclusions>
-	  </dependency>
+	  <!-- <dependency> -->
+	  <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
+	  <!--   <artifactId>LBJava</artifactId> -->
+	  <!--   <version>1.0</version> -->
+	  <!--   <exclusions> -->
+          <!--     <exclusion> -->
+	  <!-- 	<groupId>gurobi</groupId> -->
+	  <!-- 	<artifactId>gurobi</artifactId> -->
+          <!--     </exclusion> -->
+	  <!--   </exclusions> -->
+	  <!-- </dependency> -->
 	</dependencies>
 
 	<!--reporting> <outputDirectory>${basedir}/doc/javadoc</outputDirectory> 
