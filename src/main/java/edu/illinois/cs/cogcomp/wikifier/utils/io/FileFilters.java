@@ -1,4 +1,3 @@
-// $codepro.audit.disable useCharAtRatherThanStartsWith
 package edu.illinois.cs.cogcomp.wikifier.utils.io;
 
 import java.io.File;

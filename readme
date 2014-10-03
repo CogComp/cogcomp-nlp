@@ -3,4 +3,5 @@ package containing utilities for
 freebase search,
 spelling correction,
 using lucene,
+loading JAXB compliant XML classes,
 using mapdb.
