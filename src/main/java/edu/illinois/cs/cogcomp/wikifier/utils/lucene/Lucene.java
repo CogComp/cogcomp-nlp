@@ -77,7 +77,7 @@ public class Lucene {
     public static final Analyzer SIMPLE = new SimpleAnalyzer(version);
     public static final Analyzer KEYWORD = new KeywordAnalyzer();
     public static final Analyzer WHITESPACE = new WhitespaceAnalyzer(version);
-//    public static final Analyzer AGGRESSIVE_TRANSFORM = new ASCIIEnglishAnalyzer(version);
+    public static final Analyzer AGGRESSIVE_TRANSFORM = new ASCIIEnglishAnalyzer(version);
     
     private static final IndexWriterConfig storeConfig = newConfig(new KeywordAnalyzer());
     

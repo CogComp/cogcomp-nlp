@@ -23,7 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-//import edu.illinois.cs.cogcomp.wikifier.utils.io.MapDB;
+
 
 /**
  * Takes a string (e.g., "obama") and asks the Freebase Search API. Caches if
@@ -151,18 +151,18 @@ public class FreebaseSearch {
 		// {
 		// System.out.println(term.getName()+" ");
 		// }
-//		Map<String, String> map = MapDB
-//				.newDefaultDb("data/freebaseRawResponseCache/",
-//						"freebase_cache").make().getHashMap("freebase_cache");
-//		System.out.println(map.size());
-//		int i = 0;
-//		for (String key : map.keySet()) {
-//			// System.out.println(map.get(key));
-//			fb.lookup(key);
-//			if (i++ % 1000 == 0) {
-//				System.out.println("Done " + i);
-//			}
-//		}
+		// Map<String, String> map = MapDB
+		// .newDefaultDb("data/freebaseRawResponseCache/",
+		// "freebase_cache").make().getHashMap("freebase_cache");
+		// System.out.println(map.size());
+		// int i = 0;
+		// for (String key : map.keySet()) {
+		// // System.out.println(map.get(key));
+		// fb.lookup(key);
+		// if (i++ % 1000 == 0) {
+		// System.out.println("Done " + i);
+		// }
+		// }
 		// query = "Obomber"; //
 		// query = "Saint Ronnie"; // NO!
 		// query = "Kstewart"; // NO!
