@@ -1,3 +1,16 @@
 .idea
 illinois-comma.iml
 target
+
+# LBJ-generated files
+src/main/java/edu/illinois/cs/cogcomp/comma/BigramRightFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/CommaLabel.java
+src/main/java/edu/illinois/cs/cogcomp/comma/UnigramLeftFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/BigramLeftFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/UnigramRightFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/OneWordWindowFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/CommaClassifier.java
+src/main/java/edu/illinois/cs/cogcomp/comma/CommaClassifier.ex
+src/main/java/edu/illinois/cs/cogcomp/comma/TwoWordWindowFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/CommaClassifier.test.ex
+src/main/java/edu/illinois/cs/cogcomp/comma/CommaClassifier$$1.java
