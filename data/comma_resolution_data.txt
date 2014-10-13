@@ -4662,7 +4662,6 @@ COMMAS: 1 Total
 [the Iowa Test of Basic Skills] {is} [by Houghton Mifflin Co.]
 [The most widely used of these tests are Macmillan\/McGraw 's CAT and Comprehensive Test of Basic Skills ;] [the Iowa Test of Basic Skills] [; and Harcourt Brace Jovanovich Inc. 's Metropolitan Achievement Test and Stanford Achievement Test]
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sec00.815
 Sales figures of the test-prep materials are n't known , but their reach into schools is significant . 
@@ -5251,6 +5250,7 @@ COMMAS: 2 Total
 (Comments: )
 
 2. [Entity substitute]: 3 relations
+(Comments: )
 [First Constitution has signed a merger agreement with WFRR L.P. and GHKM Corp. , under which all of its common shares will be acquired for] [$ 25 each] 
 [$ 25 each] {is} [$ 273.5 million]
 [First Constitution has signed a merger agreement with WFRR L.P. and GHKM Corp. , under which all of its common shares will be acquired for] [$ 273.5 million]
@@ -6936,7 +6936,7 @@ ANNOTATION:
 But the ratings are considerably below expectations [1], and some stations say they may not buy new episodes when their current contracts expire . 
 
 COMMAS: 1 Total
-1. [Other]: 0 relations
+1. [Other]: 1 relations
 (Comments: )
 [But] [the ratings are considerably below expectations , and some stations say they may not buy new episodes when their current contracts expire]
 
@@ -9180,7 +9180,8 @@ COMMAS: 3 Total
 
 3. [List]: 1 relation
 (Comments: )
-[Retail sales also were reported slow in most districts , particularly `` for discretionary , big-ticket items such as] [furniture , home appliances and consumer electronics] 
+[Retail sales also were reported slow in most districts , particularly `` for discretionary , big-ticket items such as] [furniture , home appliances and consumer electronics]
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 sec00.1275
 Despite the economic slowdown , there are few clear signs that growth is coming to a halt . 
@@ -14335,6 +14336,7 @@ COMMAS: 5 Total
 [Weatherly Securities Corp. , New York , and three of its principals -- Dell Eugene Keehn and William Northy Prater Jr. , both of Mercer Island , Wash. , and Thomas Albert McFall , of][ Red Bank ][-- consented to a fine of $ 20,000 ]
 
 6. [List]: 1 relation
+(Comments: )
 [Weatherly Securities Corp. , New York , and three of its principals --] [Dell Eugene Keehn and William Northy Prater Jr. , both of Mercer Island , Wash. , and Thomas Albert McFall , of Red Bank , N.J .] [-- consented to a fine of $ 20,000]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
