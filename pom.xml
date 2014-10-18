@@ -54,7 +54,7 @@
     <dependency>
       <groupId>edu.illinois.cs.cogcomp</groupId>
       <artifactId>edison</artifactId>
-      <version>0.4</version>
+      <version>0.7.2</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
