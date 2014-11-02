@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>wikiutils</artifactId>
-  <version>1.0-SNAPSHOT</version> 
+  <version>1.0</version> 
 
   <repositories>
     <repository>
@@ -302,7 +302,7 @@
     <repository>
       <id>CogcompSoftware</id>
       <name>CogcompSoftware</name>
-      <url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+      <url>scp://upadhya3@bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
     </repository>
   </distributionManagement>
   <properties>
