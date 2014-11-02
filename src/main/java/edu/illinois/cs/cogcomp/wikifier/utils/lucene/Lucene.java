@@ -16,6 +16,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -28,6 +29,7 @@ import org.apache.lucene.store.IOContext;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Bits;
 import org.apache.lucene.util.Version;
 
 import com.google.common.collect.Iterators;
@@ -96,6 +98,17 @@ public class Lucene {
 //    public static IndexWriter simpleStemmingWriter(String indexDir) throws IOException{
 //        return writer(indexDir, newConfig(new MinimalAnalyzer(version)));
 //    }
+    
+    public static boolean isDeleted(IndexReader indexReader, int docID)
+    {
+    	Bits liveDocs = MultiFields.getLiveDocs(indexReader);
+    	  if (!liveDocs.get(docID)) {
+    	    // document is deleted...
+    		  return true;
+    	  }
+    	  else
+    		  return false;
+    }
     
     public static IndexWriter storeOnlyWriter(String pathToIndexDir) throws IOException{
         return new IndexWriter(new MMapDirectory(new File(pathToIndexDir)),storeConfig);
