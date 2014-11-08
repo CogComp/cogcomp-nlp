@@ -6,109 +6,133 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
+/**
+ * Simple utility class for counting strings.
+ * @author cheng88, upadhya3
+ *
+ */
 public class StringCounter {
 
-    Map<String, Integer> counter;
-    int totalCount = 0;
-    private int defaultCount = 0;
+	Map<String, Integer> counter;
+	int totalCount = 0;
+	private int defaultCount = 0;
 
-    public StringCounter(int defaultCount) {
-        this.defaultCount = defaultCount;
-        counter = new HashMap<String, Integer>();
-    }
+	public StringCounter(int defaultCount) {
+		this.defaultCount = defaultCount;
+		counter = new HashMap<String, Integer>();
+	}
 
-    public StringCounter() {
-        this(0);
-    }
+	public StringCounter() {
+		this(0);
+	}
 
-    public StringCounter(Iterable<String> ss) {
-        for (String s : ss) {
-            count(s);
-        }
-    }
+	public StringCounter(Iterable<String> ss) {
+		for (String s : ss) {
+			count(s);
+		}
+	}
 
-    public void count(String s) {
-        if (counter.containsKey(s))
-            counter.put(s, counter.get(s) + 1);
-        else
-            counter.put(s, 1 + defaultCount);
-        totalCount++;
-    }
+	/**
+	 * returns the set of strings in the vocabulary
+	 * 
+	 * @return set of string
+	 */
+	public Set<String> getVocab() {
+		return counter.keySet();
+	}
 
-    public void countAll(Iterable<String> ss) {
-        if (ss == null)
-            return;
-        for (String s : ss) {
-            count(s);
-        }
-    }
+	/**
+	 * returns the hashmap string-->counts
+	 * @return
+	 */
+	public Map<String, Integer> getCountMap() {
+		return counter;
+	}
 
-    public int getCount(String s) {
-        Integer count = counter.get(s);
-        return count == null ? defaultCount : count;
-    }
+	public void count(String s) {
+		if (counter.containsKey(s))
+			counter.put(s, counter.get(s) + 1);
+		else
+			counter.put(s, 1 + defaultCount);
+		totalCount++;
+	}
 
-    public void reset() {
-        counter.clear();
-    }
+	public void countAll(Iterable<String> ss) {
+		if (ss == null)
+			return;
+		for (String s : ss) {
+			count(s);
+		}
+	}
 
-    /**
-     * The second argument is the score
-     *
-     * @return
-     */
-    public List<Pair<String, Double>> toScoredList() {
-        List<Pair<String, Double>> ret = new ArrayList<Pair<String, Double>>();
+	public int getCount(String s) {
+		Integer count = counter.get(s);
+		return count == null ? defaultCount : count;
+	}
 
-        for (String key : counter.keySet()) {
-            double matchPercentage = counter.get(key) / (StringUtils.countMatches(key, "_") + 1.0);
-            ret.add(new Pair<String, Double>(key, matchPercentage));
-        }
+	public void reset() {
+		counter.clear();
+	}
 
-        if (counter.size() <= 1)
-            return ret;
+	/**
+	 * The second argument is the score
+	 *
+	 * @return
+	 */
+	public List<Pair<String, Double>> toScoredList() {
+		List<Pair<String, Double>> ret = new ArrayList<Pair<String, Double>>();
 
-        Collections.sort(ret, highScoreFirst);
-        return ret;
-    }
+		for (String key : counter.keySet()) {
+			double matchPercentage = counter.get(key)
+					/ (StringUtils.countMatches(key, "_") + 1.0);
+			ret.add(new Pair<String, Double>(key, matchPercentage));
+		}
 
-    /**
-     * Shows some statistics of the counter
-     */
-    @Override
-    public String toString() {
-        List<Pair<String, Double>> histogram = toScoredList();
-        return "unique strings:" + histogram.size() + "\n" + "total strings:" + totalCount + "\n"
-                + histogram.toString();
-    }
+		if (counter.size() <= 1)
+			return ret;
 
-    public List<String> toRankedList() {
-        List<String> ret = new ArrayList<String>();
-        for (Pair<String, Double> pair : toScoredList()) {
-            ret.add(pair.getFirst());
-        }
-        return ret;
-    }
+		Collections.sort(ret, highScoreFirst);
+		return ret;
+	}
 
-    // public List<String> toRankedList(String surface) {
-    // List<String> ret = new ArrayList<String>();
-    // for (Pair<String, Double> pair : toScoredList()) {
-    // ret.add(pair.getFirst());
-    // }
-    // return ret;
-    // }
+	/**
+	 * Shows some statistics of the counter
+	 */
+	@Override
+	public String toString() {
+		List<Pair<String, Double>> histogram = toScoredList();
+		return "unique strings:" + histogram.size() + "\n" + "total strings:"
+				+ totalCount + "\n" + histogram.toString();
+	}
 
-    private static final Comparator<Pair<String, Double>> highScoreFirst = new Comparator<Pair<String, Double>>() {
+	public List<String> toRankedList() {
+		List<String> ret = new ArrayList<String>();
+		for (Pair<String, Double> pair : toScoredList()) {
+			ret.add(pair.getFirst());
+		}
+		return ret;
+	}
 
-        @Override
-        public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
-            return Double.compare(o2.getSecond(), o1.getSecond());
-        }
+	// public List<String> toRankedList(String surface) {
+	// List<String> ret = new ArrayList<String>();
+	// for (Pair<String, Double> pair : toScoredList()) {
+	// ret.add(pair.getFirst());
+	// }
+	// return ret;
+	// }
 
-    };
+	private static final Comparator<Pair<String, Double>> highScoreFirst = new Comparator<Pair<String, Double>>() {
+
+		@Override
+		public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
+			return Double.compare(o2.getSecond(), o1.getSecond());
+		}
+
+	};
 }

@@ -42,7 +42,6 @@ import com.google.common.collect.Iterators;
  */
 public class Lucene {
 
-	
 	public static FieldType FULL_INDEX = new FieldType();
 
     static{
@@ -84,21 +83,46 @@ public class Lucene {
     private static final IndexWriterConfig storeConfig = newConfig(new KeywordAnalyzer());
     
 
+    /**
+     * creates a config for a writer using a specified analyzer
+     * @param analyzer
+     * @return
+     */
     public static IndexWriterConfig newConfig(Analyzer analyzer){
         return new IndexWriterConfig(version, analyzer);
     }
     
+    /**
+     * returns a index writer with the specified writer config.
+     * @param pathToIndexDir
+     * @param config
+     * @return
+     * @throws IOException
+     */
     public static IndexWriter writer(String pathToIndexDir,IndexWriterConfig config) throws IOException{
         return new IndexWriter(new MMapDirectory(new File(pathToIndexDir)),config);
     }
     
+    /**
+     * returns a index writer configured to use a simple analyzer
+     * @param pathToIndexDir
+     * @return
+     * @throws IOException
+     */
     public static IndexWriter simpleWriter(String pathToIndexDir) throws IOException{
         return writer(pathToIndexDir, newConfig(SIMPLE));
     }
+    
 //    public static IndexWriter simpleStemmingWriter(String indexDir) throws IOException{
 //        return writer(indexDir, newConfig(new MinimalAnalyzer(version)));
 //    }
     
+    /**
+     * checks if docId is deleted in the index
+     * @param indexReader
+     * @param docID
+     * @return
+     */
     public static boolean isDeleted(IndexReader indexReader, int docID)
     {
     	Bits liveDocs = MultiFields.getLiveDocs(indexReader);
@@ -145,7 +169,7 @@ public class Lucene {
     /**
      * 
      * @param terms
-     * @return an iterable terms represetnation of the terms in the index
+     * @return an iterable terms representation of the terms in the index
      */
     public static Iterable<TermsEnum> terms(final Terms terms){
         return new Iterable<TermsEnum>() {
