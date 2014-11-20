@@ -4,12 +4,20 @@ discrete% UnigramLeftFeature(Comma c) <- {
     sense c.getWordToLeft(1);
 }
 
+discrete% UnigramSecondLeftFeature(Comma c) <- {
+	sense c.getWordToLeft(2);
+}
+
 discrete% BigramLeftFeature(Comma c) <- {
     sense c.getWordToLeft(2) + "-" + c.getWordToLeft(1);
 }
 
 discrete% UnigramRightFeature(Comma c) <- {
     sense c.getWordToRight(1);
+}
+
+discrete% UnigramSecondRightFeature(Comma c) <- {
+	sense c.getWordToRight(2);
 }
 
 discrete% BigramRightFeature(Comma c) <- {
@@ -31,9 +39,11 @@ discrete CommaLabel(Comma c) <- { return c.getRole(); }
 /** A learned text classifier; its definition comes from data. */
 discrete CommaClassifier(Comma c) <-
 learn CommaLabel
-  using UnigramLeftFeature, UnigramRightFeature
-  from new CommaReader("data/comma_resolution_data.txt", "train")
+  using UnigramLeftFeature, UnigramRightFeature, UnigramSecondLeftFeature, UnigramSecondRightFeature 
+  from new CommaReader("data/comma_resolution_data.txt")
   100 rounds
+//  with new NaiveBayes()
+  cval 5 "random"
 
   with SparseNetworkLearner {
     SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
@@ -42,7 +52,9 @@ learn CommaLabel
     baseLTU = new SparseAveragedPerceptron(p);
   }
 
-  testFrom new CommaReader("data/comma_resolution_data.txt", "test")
+  testingMetric new PrintMetrics(5)
+//  testFrom new CommaReader("data/comma_resolution_data.txt", "test")
 
-  progressOutput 2000
+
+  progressOutput 0
 end
