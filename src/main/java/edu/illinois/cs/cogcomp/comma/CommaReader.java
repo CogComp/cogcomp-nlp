@@ -193,7 +193,7 @@ public class CommaReader implements Parser {
 	
 	public static void main(String[] args) throws Exception {
 		CommaReader reader = new CommaReader("data/comma_resolution_data.txt");
-		Comma c;
+		Comma sentence;
 		reader.next();
 		reader.next();
 		reader.next();
@@ -204,28 +204,32 @@ public class CommaReader implements Parser {
 		reader.next();
 		reader.next();
 		reader.next();
-		while ((c = (Comma) reader.next()) != null){
-				TreeView parseView= (TreeView) c.ta.getView(ViewNames.PARSE_GOLD);
+		while ((sentence = (Comma) reader.next()) != null){
+			TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
+			System.out.println(parseView);
+			
+			Constituent comma = sentence.getCommaConstituent();	
+			System.out.println(comma + " " + comma.getOutgoingRelations().size());
+			//System.out.println("1st left sib = " + sentence.getSibilingToLeft(1, comma).getLabel());
+			//System.out.println("2nd left sib = " + sentence.getSibilingToLeft(2, comma).getLabel());
+			//System.out.println("1st right sib = " + sentence.getSibilingToRight(1, comma).getLabel());
+			//System.out.println("2nd right sib = " + sentence.getSibilingToRight(2, comma).getLabel());
+			System.out.println("rightPhrase = " + sentence.getPhraseToLeftOfComma(1, true));
+			/*List<Constituent> posViewComma = sentence.ta.getView("POS").getConstituentsCoveringSpan(sentence.commaPosition, sentence.commaPosition+1);
+				System.out.println(posViewComma);
+				TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
 				System.out.println(parseView);
-				List<Constituent> commaConstituents = parseView.getConstituentsCoveringToken(c.commaPosition);
-				System.out.println(commaConstituents.size());
-				for(Constituent con: commaConstituents)
-					System.out.println(con.getLabel() + "\t" + con);
+				System.out.println("---------------------");
 				Constituent comma = null;
-				for(Constituent con: commaConstituents)
-					if(TreeView.isLeaf(con)){
-						comma = con;
-						System.out.println("SUCESS");
-					}
+				comma = parseView.getParsePhrase(parseView.where(Queries.sameSpanAsConstituent(posViewComma.get(0))).iterator().next());
+				
+				System.out.println("constituent match = " + comma);
 				for(Constituent sibiling : parseView.where(Queries.isSiblingOf(comma)))
 					System.out.println(sibiling);
-				/*Constituent leftSib = parseView.where(Queries.isSiblingOf(comma)).where(Queries.adjacentToBefore(comma)).iterator().next();
-				System.out.println(leftSib);*/
-				/*
-				List<String> labels = parseView.getLabelsCoveringToken(c.commaPosition);
-				System.out.println(parseView);
-				for(String label: labels)
-					System.out.println(label);*/
+				Constituent leftSib = parseView.where(Queries.isSiblingOf(comma)).where(Queries.adjacentToBefore(comma)).iterator().next();
+				Constituent rightSib = parseView.where(Queries.isSiblingOf(comma)).where(Queries.adjacentToAfter(comma)).iterator().next();
+				System.out.println("left sibiling = " + leftSib);
+				System.out.println("right sibiling = " + rightSib);*/
 				break;
 		}
 	}

@@ -1,0 +1,70 @@
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, ParseTreeFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature, UnigramLexicalisedLeftPhraseFeature, UnigramLexicalisedRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     80.632 76.981 78.764    265    253
+List          85.809 85.246 85.526    305    303
+Locative      82.828 85.417 84.103     96     99
+Other         92.360 92.152 92.256    892    890
+Substitute    84.073 87.027 85.525    370    383
+------------------------------------------------
+Accuracy      87.656   -      -      -      1928
+
+
+
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, ParseTreeFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     79.365 75.472 77.369    265    252
+List          87.241 82.951 85.042    305    290
+Locative      82.609 79.167 80.851     96     92
+Other         91.964 92.377 92.170    892    896
+Substitute    82.663 88.919 85.677    370    398
+------------------------------------------------
+Accuracy      87.241   -      -      -      1928
+
+
+
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, ParseTreeFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     82.558 80.377 81.453    265    258
+List          86.885 86.885 86.885    305    305
+Locative      83.333 83.333 83.333     96     96
+Other         92.639 91.704 92.169    892    883
+Substitute    84.715 88.378 86.508    370    386
+------------------------------------------------
+Accuracy      88.330   -      -      -      1928
+
+
+
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, ParseTreeFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     82.213 78.491 80.309    265    253
+List          86.047 84.918 85.479    305    301
+Locative      78.000 81.250 79.592     96    100
+Other         92.316 91.592 91.953    892    885
+Substitute    84.576 88.919 86.693    370    389
+------------------------------------------------
+Accuracy      87.707   -      -      -      1928
+
+
+
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, ParseTreeFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     80.658 73.962 77.165    265    243
+List          85.390 86.230 85.808    305    308
+Locative      81.053 80.208 80.628     96     95
+Other         92.768 92.040 92.403    892    885
+Substitute    83.123 89.189 86.050    370    397
+------------------------------------------------
+Accuracy      87.500   -      -      -      1928
+
+
+

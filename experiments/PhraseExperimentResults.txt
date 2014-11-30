@@ -1,0 +1,154 @@
+UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     81.111 55.094 65.618    265    180
+List          76.695 59.344 66.913    305    236
+Locative      62.105 61.458 61.780     96     95
+Other         87.621 91.256 89.401    892    929
+Substitute    66.189 87.297 75.291    370    488
+------------------------------------------------
+Accuracy      78.994   -      -      -      1928
+
+
+
+BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     83.019 66.415 73.795    265    212
+List          86.538 73.770 79.646    305    260
+Locative      71.579 70.833 71.204     96     95
+Other         89.508 91.816 90.647    892    915
+Substitute    74.215 89.459 81.127    370    446
+------------------------------------------------
+Accuracy      83.973   -      -      -      1928
+
+
+
+UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     83.412 66.415 73.950    265    211
+List          86.517 75.738 80.769    305    267
+Locative      71.579 70.833 71.204     96     95
+Other         89.989 91.704 90.838    892    909
+Substitute    73.991 89.189 80.882    370    446
+------------------------------------------------
+Accuracy      84.180   -      -      -      1928
+
+
+
+OnePhraseWindowFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     79.913 69.057 74.089    265    229
+List          87.266 76.393 81.469    305    267
+Locative      72.043 69.792 70.899     96     93
+Other         91.412 90.695 91.052    892    885
+Substitute    73.568 90.270 81.068    370    454
+------------------------------------------------
+Accuracy      84.336   -      -      -      1928
+
+
+
+TwoPhraseWindowFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     82.432 69.057 75.154    265    222
+List          87.970 76.721 81.961    305    266
+Locative      73.118 70.833 71.958     96     93
+Other         91.071 91.480 91.275    892    896
+Substitute    74.058 90.270 81.364    370    451
+------------------------------------------------
+Accuracy      84.803   -      -      -      1928
+
+
+
+OnePhraseWindowFeature, TwoPhraseWindowFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     83.105 68.679 75.207    265    219
+List          87.405 75.082 80.776    305    262
+Locative      70.833 70.833 70.833     96     96
+Other         90.960 91.368 91.163    892    896
+Substitute    74.066 91.081 81.697    370    455
+------------------------------------------------
+Accuracy      84.595   -      -      -      1928
+
+
+
+OnePhraseWindowFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     79.904 63.019 70.464    265    209
+List          80.374 56.393 66.281    305    214
+Locative      63.043 60.417 61.702     96     92
+Other         88.306 90.583 89.430    892    915
+Substitute    66.265 89.189 76.037    370    498
+------------------------------------------------
+Accuracy      79.616   -      -      -      1928
+
+
+
+OnePhraseWindowFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     81.579 70.189 75.456    265    228
+List          88.281 74.098 80.570    305    256
+Locative      73.118 70.833 71.958     96     93
+Other         90.737 91.143 90.940    892    896
+Substitute    73.846 90.811 81.455    370    455
+------------------------------------------------
+Accuracy      84.492   -      -      -      1928
+
+
+
+UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     77.828 64.906 70.782    265    221
+List          85.714 74.754 79.860    305    266
+Locative      73.118 70.833 71.958     96     93
+Other         90.919 90.919 90.919    892    892
+Substitute    73.904 91.081 81.598    370    456
+------------------------------------------------
+Accuracy      83.817   -      -      -      1928
+
+
+
+OnePhraseWindowFeature, UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     81.818 67.925 74.227    265    220
+List          88.846 75.738 81.770    305    260
+Locative      71.277 69.792 70.526     96     94
+Other         91.163 91.368 91.265    892    894
+Substitute    73.043 90.811 80.964    370    460
+------------------------------------------------
+Accuracy      84.492   -      -      -      1928
+
+
+
+BigramRightPhraseFeature, BigramLeftPhraseFeature, TwoPhraseWindowFeature, OnePhraseWindowFeature, UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     81.982 68.679 74.743    265    222
+List          90.000 76.721 82.832    305    260
+Locative      73.118 70.833 71.958     96     93
+Other         91.010 91.928 91.467    892    901
+Substitute    74.115 90.541 81.509    370    452
+------------------------------------------------
+Accuracy      85.010   -      -      -      1928
+
+
+

@@ -1,0 +1,154 @@
+UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     72.892 45.660 56.148    265    166
+List          62.613 45.574 52.751    305    222
+Locative      46.429 67.708 55.085     96    140
+Other         73.366 83.072 77.918    892   1010
+Substitute    56.154 59.189 57.632    370    390
+------------------------------------------------
+Accuracy      66.649   -      -      -      1928
+
+
+
+BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     63.793 55.849 59.557    265    232
+List          69.099 52.787 59.851    305    233
+Locative      66.972 76.042 71.220     96    109
+Other         74.772 82.735 78.552    892    987
+Substitute    61.308 60.811 61.058    370    367
+------------------------------------------------
+Accuracy      69.761   -      -      -      1928
+
+
+
+UnigramLeftPOSFeature, UnigramRightPOSFeature, BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     65.919 55.472 60.246    265    223
+List          71.730 55.738 62.731    305    237
+Locative      68.182 78.125 72.816     96    110
+Other         75.915 83.744 79.638    892    984
+Substitute    63.102 63.784 63.441    370    374
+------------------------------------------------
+Accuracy      71.317   -      -      -      1928
+
+
+
+OnePOSWindowFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature, BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     66.964 56.604 61.350    265    224
+List          70.567 65.246 67.802    305    282
+Locative      70.909 81.250 75.728     96    110
+Other         77.886 80.942 79.384    892    927
+Substitute    65.195 67.838 66.490    370    385
+------------------------------------------------
+Accuracy      72.614   -      -      -      1928
+
+
+
+TwoPOSWindowFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature, BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     65.106 57.736 61.200    265    235
+List          70.946 68.852 69.884    305    296
+Locative      81.395 72.917 76.923     96     86
+Other         77.513 83.857 80.560    892    965
+Substitute    69.075 64.595 66.760    370    346
+------------------------------------------------
+Accuracy      73.651   -      -      -      1928
+
+
+
+OnePOSWindowFeature, TwoPOSWindowFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature, BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     69.027 58.868 63.544    265    226
+List          72.355 69.508 70.903    305    293
+Locative      80.645 78.125 79.365     96     93
+Other         75.701 81.726 78.598    892    963
+Substitute    67.139 64.054 65.560    370    353
+------------------------------------------------
+Accuracy      73.081   -      -      -      1928
+
+
+
+OnePOSWindowFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     71.282 52.453 60.435    265    195
+List          61.034 58.033 59.496    305    290
+Locative      42.553 41.667 42.105     96     94
+Other         73.008 82.175 77.321    892   1004
+Substitute    62.319 58.108 60.140    370    345
+------------------------------------------------
+Accuracy      67.635   -      -      -      1928
+
+
+
+OnePOSWindowFeature, BigramLeftPOSFeature, BigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     63.913 55.472 59.394    265    230
+List          70.144 63.934 66.895    305    278
+Locative      72.115 78.125 75.000     96    104
+Other         76.923 80.717 78.775    892    936
+Substitute    63.684 65.405 64.533    370    380
+------------------------------------------------
+Accuracy      71.525   -      -      -      1928
+
+
+
+UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     73.481 50.189 59.641    265    181
+List          65.603 60.656 63.032    305    282
+Locative      65.306 66.667 65.979     96     98
+Other         74.351 83.520 78.669    892   1002
+Substitute    58.356 57.568 57.959    370    365
+------------------------------------------------
+Accuracy      69.502   -      -      -      1928
+
+
+
+OnePOSWindowFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     70.854 53.208 60.776    265    199
+List          68.601 65.902 67.224    305    293
+Locative      70.103 70.833 70.466     96     97
+Other         75.873 82.848 79.207    892    974
+Substitute    62.740 61.892 62.313    370    365
+------------------------------------------------
+Accuracy      71.473   -      -      -      1928
+
+
+
+BigramRightPOSFeature, BigramLeftPOSFeature, TwoPOSWindowFeature, OnePOSWindowFeature, UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
+
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     67.249 58.113 62.348    265    229
+List          70.169 67.869 69.000    305    295
+Locative      81.720 79.167 80.423     96     93
+Other         77.392 82.511 79.870    892    951
+Substitute    65.278 63.514 64.384    370    360
+------------------------------------------------
+Accuracy      73.029   -      -      -      1928
+
+
+

@@ -1,8 +1,8 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
@@ -26,8 +26,20 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
 		iteration++;
 		TestDiscrete tester = TestDiscrete.testDiscrete(classifier, oracle, parser);
 		reportAll(tester);
-		if(iteration == total_iterations)
+		if(iteration == total_iterations){
 			printPerformance(System.out);
+			try {
+				PrintStream experimentResults = new PrintStream(
+					     new FileOutputStream("experimentResults.txt", true));
+				printPerformance(experimentResults);
+				experimentResults.println();
+				experimentResults.println();
+				experimentResults.println();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				System.exit(1);
+			} 
+		}
 		return tester.getOverallStats()[3];
 	}
 /*	
