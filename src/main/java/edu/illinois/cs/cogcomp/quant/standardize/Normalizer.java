@@ -25,22 +25,20 @@ public class Normalizer implements Serializable {
 	
 	public Object parse(String phrase, String label) {
 		phrase = phrase.toLowerCase();
-		if(label.equals("DATERANGE")) {
+		if(label.equals("DATE")) {
 			DateRange dateRange = DateRange.extractDateRange(phrase);
 			if(dateRange != null) {
 				return dateRange;
+			}
+			Date date = Date.extractDate(phrase);
+			if(date != null) {
+				return date;
 			}
 		}
 		if(label.equals("RANGE")) {
 			Range range = Range.extractRange(phrase);
 			if(range != null) {
 				return range;
-			}
-		}
-		if(label.equals("DATE")) {
-			Date date = Date.extractDate(phrase);
-			if(date != null) {
-				return date;
 			}
 		}
 		if(label.equals("RATIO")) {

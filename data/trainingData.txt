@@ -22128,12 +22128,12 @@ novelists - O
 and - O 
 poets - O 
 in - O 
-a - O 
-ratio - O 
-of - O 
-5 - B-NUMBER
-to - O 
-3 - B-NUMBER 
+a - O
+ratio - O
+of - O
+5 - B-RATIO 
+to - B-RATIO 
+3 - B-RATIO 
 . - O 
 
 Twice - B-NUMBER 
@@ -22213,9 +22213,9 @@ on - O
 weight - O 
 training - O 
 is - O 
-3 - B-NUMBER 
-to - O 
-2 - B-NUMBER 
+3 - B-RATIO  
+to - B-RATIO  
+2 - B-RATIO 
 . - O 
 
 1 - B-RATIO

@@ -28,7 +28,7 @@ public class Ratio implements Serializable{
 				"(\\s*(.+?)\\s*((?:out\\s*)?of\\s*(?:every\\s*)?(?:the\\s*)?)\\s*(.+))", 
 				Pattern.CASE_INSENSITIVE);
 		explicitRatioPat = Pattern.compile( 
-				"(ratio\\s*of\\s*(.+)\\s*to\\s*(.+))", 
+				"((.+)\\s+to\\s+(.+))", 
 				Pattern.CASE_INSENSITIVE);
 	}
 	
