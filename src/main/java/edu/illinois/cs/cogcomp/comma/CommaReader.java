@@ -71,17 +71,32 @@ public class CommaReader implements Parser {
 
 			// Next line is the sentence id (in PTB), ignore for now
 			String  textId = scanner.nextLine();
-			/*textId = textId.split("\\.")[1];
-			int textNum = Integer.parseInt(textId);*/
+			
+			
 
+			
+			
 			String rawText = scanner.nextLine().trim();
+
+			/*try {
+				String sentenceIdx = textId.split("\\.")[1];
+
+				int textNum = Integer.parseInt(sentenceIdx);
+				if (!taList.get(textNum).equals(rawText))
+					System.out.println(textId);
+			} catch (Exception e) {
+				System.out.println(textId + "\tunexpected format");
+			}*/
+			
 			
 			boolean skip=false;
 			if(!taMap.containsKey(rawText)){
 				skip = true;
-				//System.out.println(misses + "\t" + rawText);
+				//System.out.println(textId + "\t" + rawText);
 				misses++;
 			}
+			
+			
 			line = scanner.nextLine().trim();
 			assert line.length() == 0;
 
@@ -206,15 +221,7 @@ public class CommaReader implements Parser {
 		reader.next();
 		while ((sentence = (Comma) reader.next()) != null){
 			TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
-			System.out.println(parseView);
 			
-			Constituent comma = sentence.getCommaConstituent();	
-			System.out.println(comma + " " + comma.getOutgoingRelations().size());
-			//System.out.println("1st left sib = " + sentence.getSibilingToLeft(1, comma).getLabel());
-			//System.out.println("2nd left sib = " + sentence.getSibilingToLeft(2, comma).getLabel());
-			//System.out.println("1st right sib = " + sentence.getSibilingToRight(1, comma).getLabel());
-			//System.out.println("2nd right sib = " + sentence.getSibilingToRight(2, comma).getLabel());
-			System.out.println("rightPhrase = " + sentence.getPhraseToLeftOfComma(1, true));
 			/*List<Constituent> posViewComma = sentence.ta.getView("POS").getConstituentsCoveringSpan(sentence.commaPosition, sentence.commaPosition+1);
 				System.out.println(posViewComma);
 				TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
