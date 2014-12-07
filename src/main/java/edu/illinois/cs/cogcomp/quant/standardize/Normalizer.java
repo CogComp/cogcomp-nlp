@@ -20,7 +20,6 @@ public class Normalizer implements Serializable {
 		Numbers.initialize();
 		Range.initialize();
 		Ratio.initialize();
-		Quantity.initialize();
 	}
 	
 	public Object parse(String phrase, String label) {

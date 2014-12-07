@@ -274,7 +274,6 @@ learn ChunkLabel
     p.thickness = 2;
     baseLTU = new SparseAveragedPerceptron(p);
   }
-  cval 5 "random"
 
   progressOutput 300000
 end

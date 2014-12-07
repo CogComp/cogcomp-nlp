@@ -14,15 +14,11 @@ public class Quantity implements Serializable{
 	private static final long serialVersionUID = -996750464077246098L;
 	public String bound, units;
 	public Double value;
-	public static Pattern wordsplitQuantityPat, getValuePat, getUnitsPat; 
 	
 	public Quantity( String bound, Double value, String units) {	
 		this.bound = bound;
 		this.value = value;
 		this.units = units; 
-	}
-	
-	public static void initialize() {
 	}
 	
 	public static Quantity extractQuantity(String phrase){
@@ -60,6 +56,19 @@ public class Quantity implements Serializable{
 		if(q.units.toLowerCase().contains("triple") && q.value == 1.0) {
 			q.value = 3.0;
 			q.units = "times";
+		}
+		if(q.units.toLowerCase().contains("percent") || 
+				q.units.toLowerCase().contains("%") ) {
+			q.value *= 0.01;
+			q.units = "times";
+		}
+		if(q.units.toLowerCase().contains("cents")) {
+			q.value *= 0.01;
+			q.units = "US$";
+		}
+		if(q.units.toLowerCase().contains("dollar") || 
+				q.units.toLowerCase().contains("$") ) {
+			q.units = "US$";
 		}
 	}
 	

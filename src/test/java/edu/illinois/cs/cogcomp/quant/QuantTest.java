@@ -394,16 +394,16 @@ public class QuantTest {
 				"[ratio[~ 24.0][= 70.0]]",
 				normalizer.parse("About two dozen of the 70 national parks", "RATIO").toString());
 		Assert.assertEquals(
-				"[ratio[= 77.8][= 64000.0]]",
+				"[ratio[= 0.778][= 64000.0]]",
 				normalizer.parse("77.8% of the 64,000 students", "RATIO").toString());
 		Assert.assertEquals(
-				"[ratio[= 90.0][= 1.0]]",
+				"[ratio[= 0.9][= 1.0]]",
 				normalizer.parse("90% of dentists", "RATIO").toString());
 		Assert.assertEquals(
 				"[ratio[= 9.0][= 10.0]]",
 				normalizer.parse("9 out of 10 dentists", "RATIO").toString());
 		Assert.assertEquals(
-				"[ratio[= 100.0][= 10.0]]",
+				"[ratio[= 1.0][= 10.0]]",
 				normalizer.parse("100 percent of the 10 people", "RATIO").toString());
 	}
 	
