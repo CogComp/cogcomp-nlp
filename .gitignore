@@ -8,3 +8,4 @@ bin/
 .svn
 .settings
 log/
+src/main/java/edu/illinois/cs/cogcomp/quant/lbj/*

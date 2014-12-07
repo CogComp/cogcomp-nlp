@@ -22132,8 +22132,8 @@ a - O
 ratio - O
 of - O
 5 - B-RATIO 
-to - B-RATIO 
-3 - B-RATIO 
+to - I-RATIO 
+3 - I-RATIO 
 . - O 
 
 Twice - B-NUMBER 
@@ -22214,8 +22214,8 @@ weight - O
 training - O 
 is - O 
 3 - B-RATIO  
-to - B-RATIO  
-2 - B-RATIO 
+to - I-RATIO  
+2 - I-RATIO 
 . - O 
 
 1 - B-RATIO
@@ -22536,4 +22536,21 @@ is - O
 twice - B-NUMBER
 the - O
 number - O
+. - O
+
+The - O
+ratio - O
+of - O
+spaces - O
+for - O
+full - O
+sized - O
+cars - O
+to - O
+compact - O
+cars - O
+is - O
+11 - B-RATIO
+to - I-RATIO
+4 - I-RATIO
 . - O
