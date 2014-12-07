@@ -278,7 +278,7 @@ public class Numbers implements Serializable {
 			quantity = new Quantity(null, Double.parseDouble(matcher.group()), 
 					phrase.substring(matcher.end()));
 
-			System.out.println("Extract number: "+quantity.value);
+//			System.out.println("Extract number: "+quantity.value);
 			return postProcessing(quantity);
 		}
 		matcher = decimalPat.matcher(phrase);
@@ -359,6 +359,8 @@ public class Numbers implements Serializable {
 				"2.3e5"));
 		System.out.println(extractNumber(
 				"50,000 dollars"));
+		System.out.println(extractNumber(
+				"70 cents"));
 	}
 	
 	

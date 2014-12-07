@@ -28,6 +28,7 @@ public class Quantity implements Serializable{
 		}
 		String[] strArr = Bounds.extractBound(phrase);
 		Quantity q = Numbers.extractNumber(strArr[1]);
+		System.out.println(q);
 		if(q == null) {
 			q = new Quantity("=", 1.0, phrase.trim());
 		}
@@ -83,7 +84,7 @@ public class Quantity implements Serializable{
 	public static void main(String args[]) {
 		Bounds.initialize();
 		Numbers.initialize();
-		System.out.println(Quantity.extractQuantity("time"));
+		System.out.println(Quantity.extractQuantity("70 cents"));
 	}
 }
 	
