@@ -46,7 +46,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  * useLemmatizer	[true|false]
  * useNer	[true|false]
  * useStanfordParse [true|false]
- * nerConfigFile   config/conll.config
+ * nerConfigFile   config/ner-conll-config.properties
  * lemmaCacheFile  data/lemmaCache.txt
  * updateLemmaCacheFile    true
  * maxLemmaCacheEntries    10000
@@ -56,9 +56,9 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  * If useChunker is 'true', usePos must also be 'true'.
  * IllinoisPreprocessor to provide. 
  * The flag 'nerConfigFile' specifies one of the two config
- *    files provided from the Illinois NER tool. "conll.config"
+ *    files provided from the Illinois NER tool. "ner-conll-config.properties"
  *    specifies the most standard 4-label model (PER, LOC, ORG, MISC),
- *    whereas "ontonotes.config" specifies a more complex 
+ *    whereas "ner-ontonotes-config.properties" specifies a more complex
  *    18-label model (see the documentation for Illinois NER for 
  *    details). 
  * The next three flags specify properties of the lemmatizer cache; it will speed

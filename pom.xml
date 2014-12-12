@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-nlp-pipeline</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.8</version>
 	<name>Illinois NLP Pipeline</name>
 	<description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
 	<properties>
@@ -24,6 +24,7 @@
             <version>0.9.28</version>
             <type>jar</type>
             <scope>runtime</scope>
+			<optional>true</optional>
         </dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>

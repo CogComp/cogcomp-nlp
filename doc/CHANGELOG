@@ -1,0 +1,4 @@
+Version 0.0.8
+Switched to Git for version control
+Made logback-classing an optional dependency
+Changed the names of the config files for better uniformity

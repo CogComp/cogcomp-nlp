@@ -8,4 +8,4 @@ lemmaCacheFile  data/lemmaCache.txt
 updateLemmaCacheFile    false
 maxLemmaCacheEntries    100
 wordnetPath data/WordNet
-nerConfigFile   config/conll.config
+nerConfigFile  config/ner-conll-config.properties
