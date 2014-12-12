@@ -1,21 +1,20 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
+import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
+import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import org.apache.thrift.TException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.illinois.cs.cogcomp.common.CuratorViewNames;
-import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
 import edu.illinois.cs.cogcomp.thrift.base.Labeling;
 import edu.illinois.cs.cogcomp.thrift.base.Span;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
+import org.apache.thrift.TException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Wraps the Illinois part-of-speech tagger in a Labeler.Iface.

@@ -1,10 +1,6 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -97,7 +93,7 @@ public class IllinoisPreprocessor
      * ResourceManager is read from a config file that specifies which 
      *    annotation resources are active. 
      *    
-     * @param rm_
+     * @param rm_ The ResourceManager object
      * @throws Exception
      */
     public IllinoisPreprocessor( ResourceManager rm_ ) throws Exception
@@ -160,11 +156,11 @@ public class IllinoisPreprocessor
      * generates a TextAnnotation from the input raw text, setting the corpus and text ID fields in 
      *   the TextAnnotation with the specified values.
      *   
-     * @param corpusId_
-     * @param textId_
-     * @param rawText_
-     * @param isWhitespaced_
-     * @return
+     * @param corpusId_ The corpus ID
+     * @param textId_ The text ID
+     * @param rawText_ The raw string
+     * @param isWhitespaced_ Whether the ta is tokenized
+     * @return The TextAnnotation object
      * @throws AnnotationFailedException
      * @throws TException
      */
@@ -186,8 +182,8 @@ public class IllinoisPreprocessor
     /**
      * A complementary method to {@code processTextToTextAnnotation(String, String, String, boolean)}
      * that appends the newly created views to an existing TextAnnotation
-     * @param ta
-     * @param isWhitespaced_
+     * @param ta The TextAnnotation to be labeled
+     * @param isWhitespaced_ Whether the ta is tokenized
      * @return The original TextAnnotation with the new views from the TextPrepocessor
      * @throws AnnotationFailedException
      * @throws TException
@@ -285,9 +281,8 @@ public class IllinoisPreprocessor
             List< String > inputs = new LinkedList< String >();
 
             String[] sentences = rawText_.split( System.getProperty( "line.separator" ) );
-            
-            for ( int i = 0; i < sentences.length; ++i )
-                inputs.add( sentences[i] );
+
+            Collections.addAll(inputs, sentences);
             
             Labeling sents = Whitespacer.sentences( inputs );
             record.getLabelViews().put( CuratorViewNames.sentences, sents );
