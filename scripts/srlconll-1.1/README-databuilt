@@ -1,0 +1,95 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+CoNLL Shared Task on Semantic Role Labeling
+	
+Authors: 
+	Xavier Carreras and Lluis Marquez
+	TALP Research Center
+	Technical University of Catalonia (UPC)
+
+Contact: carreras@lsi.upc.edu
+
+
+PropBank Version : PropBank-1.0
+
+Created :  January 2004
+Revised :  March 2005
+
+Revised 2005/12/01 : Added options to process NomBank; see below
+
+This software is distributed to support the CoNLL-2005 Shared Task. It
+is free for research and educational purposes. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
++ 
++  LINKING PropBank TO THE TreeBank : link_tbpb.pl 
++------------------------------------------------------------
+
+The link_tbpb.pl script takes a WSJ tree and PropBank annotations of a
+sentence, and outputs the sentece in the CoNLL-2005 shared task column
+format, with a column for each predicate of the sentence representing
+the arguments of the predicate.
+
+The script expects two parameters: the name of the file containing WSJ
+trees, and the name of the file containing the PropBank annotations
+corresponding to the trees. The PB annotations must be ordered with
+respect to sentence number (2nd column) and predicate position in each
+sentence (3rd column).
+
+In the srlconll package, the directory data contains two files, WSJ
+trees and PB annotations for the 1500 WSJ file. With such files, we
+can play with the link_tbpb.pl script : 
+
+$  link_tbpb.pl data/tb_1500 data/pb_1500 |& less
+<...> 
+
+Moreover, a number of options can be specified to control the behavior
+of link_tbpb. Executing the script without parameters lists the
+options with a brief explanation. The verbosity level can be
+controlled by the -v option. The messages always are output through
+the STDERR channel. Apart from this, the options control which
+propositions are processed (or, actually, which ones are skipped). 
+
+When generating the data for the CoNLL-2005 shared task, only the
+options related to traces were used: -st and -ft. The command was: 
+
+$  link_tbpb.pl -noi -st -ft data/tb_1500 data/pb_1500 > data/srltask_1500
+<...> 
+
+
+PREPROCESSING OF THE PropBank "prop.txt" file 
+--------------------------------------------------
+
+The PropBank project distributes the propositional annotations for the
+WSJ TreeBank in a single file, containing the annotations for all the
+WSJ sections and files of the section. However, the link_tbpb.pl
+script expects in the second argument the propositions corresponding
+to a WSJ TreeBank file. Thus, the PropBank "prop.txt" file must be
+split into the TreeBank file structure. 
+
+The "nb_propsbyfiles.sh" script performs this operation for the WSJ
+sections which compose the CoNLL datasets. 
+
+
++
++  NOMBANK
++-------------------------
+
+- Before using "link_pbtb.pl", it is necessary to split the nombank
+propositions file into many files, following WSJ TreeBank structure.
+To do so, use the "nb_probsbyfiles.sh" script under "bin".
+
+- With link_pbtb.pl use option "-nb" to read nombank entries. E.g. : 
+
+$ link_pbtb.pl -nb data/tb_1500 data/nb_1500
+
+
+
+
+
+
+
+

@@ -1,0 +1,33 @@
+* Problem sentences
+  1. I gave the dog food. I gave the dog much food.
+
+     The second sentence is not analyzed at all. If the two sentences
+     are given to the SRL independently, the arguments are correctly
+     identified.
+
+  2. I gave the dog food. I gave the dog a lot of food.
+
+     The second gave is identified as an AM-MOD. When the second
+     sentence is given alone, this doesn't happen.
+
+  3. "I gave the dog food. " vs. "I gave the dog a lot of food."
+
+     The first sentence is analyzed incorrectly. Can this be fixed
+     using proper subcategorization or maybe with the correct sense of
+     the predicate?
+
+
+  
+
+
+* Nom SRL predicates
+  
+  We need a better way to pick NOM SRL predicates. Try the following
+  sentences:
+
+  1. His thought was that the building is falling.
+
+     /thought/ is missed because the POS tagger does not identify it
+     as a noun.
+
+  

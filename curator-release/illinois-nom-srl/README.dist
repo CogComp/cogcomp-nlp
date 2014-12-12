@@ -1,0 +1,48 @@
+Illinois Nominal SRL Server
+======================
+
+Description
+-----------
+
+This package wraps the Illinois Nominal Semantic Role Labeler as a
+Thrift server using the Curator's Parser interface. It is designed to
+be integrated into the Curator system. Parsers return a forests; in
+this case, consisting of one tree per predicate, with the predicate as
+the root and its arguments as the children.
+
+
+Semantics
+----------
+
+Semantic Roles are represented using a forest consisting of two level
+trees. Each predicate in the input is associated with a tree whose
+root corresponds to the predicate. The children of this node denote
+the labeled arguments of the predicate.
+
+Usage
+-----
+
+>     $ bin/illinois-verb-srl-server.sh --help
+>     usage: java edu.illinois.cs.cogcomp.annotation.server.IllinoisNomSRLServer
+>            [-c <CONFIG>] [-h] [-p <PORT>] [-t <THREADS>]
+>      -c,--config <CONFIG>     configuration file
+>      -h,--help                print this message
+>      -p,--port <PORT>         port to open server on
+>      -t,--threads <THREADS>   number of threads to run
+
+Installation
+------------
+
+The Illinois Nominal SRL Server depends on:
+
+* Java >= 1.5
+* The Illinois SRL system
+* Illinois SRL model jar
+* Curator interfaces (`curator-interfaces.jar`)
+
+
+Configuration
+-------------
+
+See the documentation for the Illinois SRL system for configuration
+options.

@@ -1,0 +1,10 @@
+noOverlappingArguments
+noDuplicateCore
+CArgumentConstraint
+RArgumentConstraint
+predicateSense
+beVerbConstraint
+noCrossArgumentExclusiveOverlap
+crossArgumentRetainedModifiers
+
+; atLeastOneCoreArgument ; Bad constraint

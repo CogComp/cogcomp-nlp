@@ -1,0 +1,101 @@
+wsj/15/wsj_1500.mrg 0 24 gold fail.01 vn--a 14:3-ARG1 24:0-rel 25:2-ARG2
+wsj/15/wsj_1500.mrg 0 27 gold show.01 i---a 14:3*25:0-ARG0 27:0-rel 28:2-ARG1
+wsj/15/wsj_1500.mrg 0 6 gold expect.01 pn-3p 0:2,7:2-ARG1 5:1-ARGM-MNR 6:0-rel
+wsj/15/wsj_1500.mrg 0 9 gold take.01 i---a 0:2*7:0-ARG0 9:0-rel 10:1-ARG1 13:1-ARGM-ADV
+wsj/15/wsj_1500.mrg 1 15 gold help.01 pnp3a 0:4-ARG0 15:0-rel 16:2-ARG1
+wsj/15/wsj_1500.mrg 1 18 gold prevent.01 i---a 0:4*16:0-ARG0 18:0-rel 19:2-ARG1 23:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 1 7 gold restate.01 p---p 7:0-rel 8:0-ARG1
+wsj/15/wsj_1500.mrg 2 10 gold erode.01 pnp3p 10:0-rel 4:2*11:0-ARG1 12:1-ARG0-by
+wsj/15/wsj_1500.mrg 2 19 gold announce.01 i---a 13:1*17:0-ARG0 19:0-rel 20:1-ARG1 24:1-ARGM-LOC 29:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 2 2 gold reckon.01 vn--a 0:0-ARGM-DIS 1:1-ARG0 2:0-rel 3:1-ARG1
+wsj/15/wsj_1500.mrg 3 12 gold increase.01 i---a 6:1*10:0-ARG0 12:0-rel 13:1-ARG1 15:1-ARG4-to 18:1-ARG3-from 24:2-ARGM-PNC
+wsj/15/wsj_1500.mrg 3 26 gold defend.01 i---a 6:1*10:0*24:0-ARG0 26:0-rel 27:1-ARG1
+wsj/15/wsj_1500.mrg 3 2 gold increase.01 pnp3a 0:1-ARG0 2:0-rel 3:2-ARG1
+wsj/15/wsj_1500.mrg 3 36 gold say.01 vn--a 30:2-ARG0 36:0-rel 0:2*38:0-ARG1
+wsj/15/wsj_1500.mrg 3 9 gold force.01 p-o-p 9:0-rel 6:1*10:0-ARG1 11:1-ARG2
+wsj/15/wsj_1500.mrg 4 19 gold say.01 vp--a 19:0-rel 1:3*20:0-ARG1 21:2-ARG0
+wsj/15/wsj_1500.mrg 5 19 gold note.XX vp--a 19:0-rel 1:2*20:0-ARG1 21:2-ARG0
+wsj/15/wsj_1500.mrg 6 11 gold expect.01 vn--a 9:1-ARG0 11:0-rel 12:2-ARG1
+wsj/15/wsj_1500.mrg 6 15 gold show.01 i---a 12:1-ARG0 15:0-rel 16:2-ARG1
+wsj/15/wsj_1500.mrg 6 37 gold report.01 p---p 33:1-ARGM-LOC 37:0-rel 21:1*38:0-ARG1 39:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 6 5 gold range.01 vn--a 0:2-ARG1 5:0-rel 6:1-ARG2-MNR
+wsj/15/wsj_1500.mrg 7 10 gold register.01 p---p 10:0-rel 4:1*11:0-ARG1 12:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 7 15 gold top.02 pn--p 15:0-rel 0:2*16:0-ARG1 17:2-ARG0-by
+wsj/15/wsj_1500.mrg 8 11 gold say.01 vp--a 0:2-ARG0 11:0-rel 12:1-ARG1
+wsj/15/wsj_1500.mrg 8 20 gold manufacture.01 p---a 20:0-rel 21:0-ARG0
+wsj/15/wsj_1500.mrg 8 23 gold transform.01 pno3a 18:2-ARG0 23:0-rel 24:1-ARG1-REC 25:2-ARGM-PNC
+wsj/15/wsj_1500.mrg 9 15 gold give.01 p---p 15:0-rel 16:1-ARG1
+wsj/15/wsj_1500.mrg 9 16 gold continue.01 p---p 16:0-rel 17:0,18:0,19:0,20:0,21:0,22:0-ARG1
+wsj/15/wsj_1500.mrg 9 6 gold remain.01 vn-3a 0:1-ARGM-TMP 5:1-ARG1 6:0-rel 7:1-ARG3 15:1-ARGM-ADV
+wsj/15/wsj_1500.mrg 10 1 gold reckon.01 vn-3a 0:1-ARG0 1:0-rel 2:1-ARG1
+wsj/15/wsj_1500.mrg 10 8 gold narrow.01 vf--a 3:1-ARG1 7:0-ARGM-MOD 8:0-rel 9:1-ARG4-to 15:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 11 18 gold lead.03 ----a 9:2-ARG0 17:0-ARGM-MOD 18:0-rel 19:1-ARG2-to
+wsj/15/wsj_1500.mrg 11 4 gold say.01 vp--a 0:1-ARGM-DIS 2:1-ARG0 4:0-rel 5:1-ARG1
+wsj/15/wsj_1500.mrg 11 7 gold believe.01 vn-3a 6:1-ARG0 7:0-rel 8:1-ARG1
+wsj/15/wsj_1500.mrg 12 0 gold combine.01 p---p 0:0-rel 1:1-ARG2-with 14:1-ARG1
+wsj/15/wsj_1500.mrg 12 17 gold narrow.01 ----a 0:1-ARGM-ADV 14:1-ARG1 16:0-ARGM-MOD 17:0-rel 18:1-ARG4-to
+wsj/15/wsj_1500.mrg 13 16 gold warn.01 vn-3a 0:2-ARG0 16:0-rel 17:1-ARG1
+wsj/15/wsj_1500.mrg 13 32 gold advance.01 vf--a 18:1-ARGM-ADV 28:1-ARG1 30:0-ARGM-MOD 31:0-ARGM-NEG 32:0-rel 33:1-ARG2-EXT 34:1-ARGM-CAU
+wsj/15/wsj_1500.mrg 13 37 gold want.01 vf--a 35:1-ARG0 36:0-ARGM-MOD 37:0-rel 38:2-ARG1
+wsj/15/wsj_1500.mrg 13 40 gold see.01 i---a 35:1*38:0-ARG0 40:0-rel 41:2-ARG1 46:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 13 48 gold adjust.01 g---- 35:1*38:0*47:0-ARG0 48:0-rel 49:1-ARG1
+wsj/15/wsj_1500.mrg 13 6 gold forecast.01 vn-3a 0:1*3:1*4:0-ARG0 5:1-ARGM-DIS 6:0-rel 7:1-ARG1
+wsj/15/wsj_1500.mrg 14 11 gold want.01 vf--a 0:1-ARGM-DIS 8:1-ARG0 10:0-ARGM-MOD 11:0-rel 12:2-ARG1
+wsj/15/wsj_1500.mrg 14 14 gold go.06 i---a 8:1*12:0-ARG0 14:0-rel 15:1-ARG2-into 19:1-ARGM-MNR
+wsj/15/wsj_1500.mrg 14 3 gold note.XX vp--a 0:1,4:1,8:1,10:1-ARG1 2:1-ARG0 3:0-rel
+wsj/15/wsj_1500.mrg 15 7 gold remain.01 vn-3a 0:1-ARGM-TMP 2:2-ARG1 7:0-rel 8:1-ARG3
+wsj/15/wsj_1500.mrg 16 15 gold expect.01 p---p 13:0-ARGM-MOD 15:0-rel 10:1*16:0-ARG1 17:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 16 30 gold take.01 vn-3a 18:2-ARG1 30:0-rel 31:1-ARG2
+wsj/15/wsj_1500.mrg 16 8 gold warn.01 vp--a 0:1-ARGM-LOC 6:1-ARG0 8:0-rel 9:1-ARG1
+wsj/15/wsj_1500.mrg 18 15 gold slow.01 pno3a 11:1-ARG1 15:0-rel 16:1-ARGM-MNR
+wsj/15/wsj_1500.mrg 18 4 gold release.01 p---p 4:0-rel 1:1*5:0-ARG1 6:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 18 9 gold suggest.01 vn--a 1:2-ARG0 8:0-ARGM-NEG 9:0-rel 10:1-ARG1
+wsj/15/wsj_1500.mrg 19 2 gold show.01 vn--a 0:1-ARG0 2:0-rel 3:1-ARG1
+wsj/15/wsj_1500.mrg 19 5 gold rise.01 vp--a 4:1-ARG1 5:0-rel 6:1-ARG2-EXT 8:1-ARGM-TMP 12:1-ARG3-from
+wsj/15/wsj_1500.mrg 20 1 gold compare.01 vn-3a 0:1-ARG1 1:0-rel 2:1-ARG2-with
+wsj/15/wsj_1500.mrg 21 24 gold go.10 vp--a 20:2-ARG1 24:0-rel 25:1-ARG2-on
+wsj/15/wsj_1500.mrg 21 2 gold say.01 vp--a 0:1-ARG0 2:0-rel 3:1-ARG1
+wsj/15/wsj_1500.mrg 21 32 gold reduce.01 ----a 18:1-ARG0 31:0-ARGM-MOD 32:0-rel 33:2-ARG1
+wsj/15/wsj_1500.mrg 21 6 gold show.01 vn--a 4:1-ARG0 6:0-rel 7:1-ARG1
+wsj/15/wsj_1500.mrg 22 12 gold prepare.02 pn-3p 12:0-rel 10:1*13:0-ARG1 14:1-ARG2
+wsj/15/wsj_1500.mrg 22 15 gold increase.01 i---a 10:1*13:0-ARG0 15:0-rel 16:1-ARG1 18:1-ARGM-TMP 19:1-ARGM-ADV 21:2-ARGM-PNC
+wsj/15/wsj_1500.mrg 22 24 gold ensure.01 i---a 21:1-ARG0 24:0-rel 25:2-ARG1
+wsj/15/wsj_1500.mrg 22 30 gold take.14 vn-3a 26:1-ARG1 30:0-rel 31:1-ARG2
+wsj/15/wsj_1500.mrg 22 37 gold decline.01 vn-3a 34:1-ARG1 36:0-ARGM-NEG 37:0-rel 38:1-ARGM-MNR
+wsj/15/wsj_1500.mrg 22 5 gold make.02 pnp3a 0:1-ARGM-ADV 2:1-ARG0 5:0-rel 8:1-ARG2 9:1-ARG1
+wsj/15/wsj_1500.mrg 23 12 gold allow.01 ----a 7:1-ARG0 10:0-ARGM-MOD 11:0-ARGM-NEG 12:0-rel 13:3-ARG1
+wsj/15/wsj_1500.mrg 23 21 gold undermine.01 p---p 21:0-rel 13:2*22:0-ARG1 23:1-ARG0-by
+wsj/15/wsj_1500.mrg 23 3 gold remind.01 vp--a 0:1-ARGM-TMP 2:1-ARG0 3:0-rel 4:1-ARG2 6:1-ARG1
+wsj/15/wsj_1500.mrg 24 1 gold agree.01 vn--a 0:1-ARG0 1:0-rel 2:1-ARG1
+wsj/15/wsj_1500.mrg 24 23 gold push.01 pf--p 21:0-ARGM-MOD 23:0-rel 20:1*24:0-ARG1 25:1-ARG2-DIR 26:1-ARGM-ADV
+wsj/15/wsj_1500.mrg 24 6 gold hold.01 p---a 5:1-ARG0 6:0-rel 7:1-ARG1 8:1-ARG2
+wsj/15/wsj_1500.mrg 25 17 gold make.02 ----a 0:0-ARGM-DIS 7:2-ARG0 15:0-ARGM-MOD 16:1-ARGM-MNR 17:0-rel 18:1-ARG1 20:1-ARG2
+wsj/15/wsj_1500.mrg 25 20 gold sound.01 ----a 18:1-ARG1 20:0-rel 21:1-ARG2
+wsj/15/wsj_1500.mrg 25 3 gold warn.01 vn--a 0:0-ARGM-DIS 2:1-ARG0 3:0-rel 7:2,15:1-ARG1
+wsj/15/wsj_1500.mrg 26 3 gold show.01 ppo-a 0:1-ARG0 2:1-ARGM-TMP 3:0-rel 4:2-ARG1 16:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 27 4 gold decline.01 vp--a 0:1-ARGM-LOC 3:1-ARG1 4:0-rel 5:1-ARG4-to 12:1-ARG3-from 19:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 28 16 gold force.01 pf--p 3:1-ARGM-ADV 14:0-ARGM-MOD 16:0-rel 12:1*17:0-ARG1 18:1-ARG2
+wsj/15/wsj_1500.mrg 28 19 gold increase.01 i---a 12:1*17:0-ARG0 19:0-rel 20:1-ARG1 21:1-ARG4-to 25:2-ARGM-PNC
+wsj/15/wsj_1500.mrg 28 1 gold suggest.01 vp--a 0:1-ARG0 1:0-rel 2:1-ARG1
+wsj/15/wsj_1500.mrg 28 28 gold halt.01 i---a 12:1*17:0*25:0-ARG0 28:0-rel 29:1-ARG1
+wsj/15/wsj_1500.mrg 28 33 gold ensure.01 i---a 12:1*17:0*25:0-ARG0 33:0-rel 34:1-ARG1
+wsj/15/wsj_1500.mrg 28 40 gold remain.01 vn-3a 35:2-ARG1 40:0-rel 41:1-ARG3
+wsj/15/wsj_1500.mrg 28 6 gold fall.01 vn-3a 4:1-ARG1 6:0-rel 7:2-ARG4-below
+wsj/15/wsj_1500.mrg 30 11 gold abate.01 vp--a 8:2-ARG1 11:0-rel
+wsj/15/wsj_1500.mrg 30 2 gold post.01 vp--a 0:1-ARG0 2:0-rel 3:1-ARG1 4:1-ARGM-LOC 7:1-ARGM-ADV
+wsj/15/wsj_1500.mrg 31 12 gold distance.01 i---a 5:1*10:0-ARG0 12:0-rel 13:1-ARG1-REC 14:1-ARG2-from
+wsj/15/wsj_1500.mrg 31 23 gold preoccupy.01 pnp3a 15:1*20:1*21:0-ARG0 23:0-rel 24:1-ARG1 26:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 31 36 gold plunge.01 vp--a 31:1-ARG1 36:0-rel 37:2-ARG2-EXT 27:1*30:1*41:0-ARGM-TMP
+wsj/15/wsj_1500.mrg 31 3 gold say.01 vp--a 0:1-ARG0 3:0-rel 4:1-ARG1
+wsj/15/wsj_1500.mrg 31 9 gold begin.01 pnp3a 5:1,10:2-ARG1 9:0-rel
+wsj/15/wsj_1500.mrg 32 13 gold shift.01 vf--a 4:1-ARGM-TMP 8:1-ARG0 12:0-ARGM-MOD 13:0-rel 14:1-ARG1 16:0-ARGM-DIR 17:1-ARG2-to 21:2-ARGM-ADV
+wsj/15/wsj_1500.mrg 32 22 gold keep.XX p---a 8:1*21:0-ARG0 22:0-rel 23:2-ARG1 27:1-ARG2-for
+wsj/15/wsj_1500.mrg 32 2 gold predict.01 vn--a 0:1-ARG0 2:0-rel 3:1-ARG1
+wsj/15/wsj_1500.mrg 32 32 gold ease.02 g---- 31:0-ARGM-MNR 32:0-rel 33:1-ARG0-by
+wsj/15/wsj_1500.mrg 32 6 gold come.01 p---a 6:0-rel 7:0-ARG1
+wsj/15/wsj_1500.mrg 33 11 gold quote.01 pp--p 0:1-ARGM-TMP 11:0-rel 8:1*12:0-ARG1 13:1-ARG2-at
+wsj/15/wsj_1500.mrg 34 5 gold change.02 ppo-a 0:1-ARG1 4:1-ARGM-DIS 5:0-rel 6:1-ARG2 7:1-ARGM-MNR
+wsj/15/wsj_1500.mrg 35 8 gold open.02 vp--a 0:1-ARGM-LOC 2:1-ARGM-TMP 5:1-ARG1 8:0-rel 9:1-ARGM-PNC 11:1-ARGM-EXT
+wsj/15/wsj_1500.mrg 36 12 gold settle.03 vp--a 0:1-ARGM-LOC 4:1-ARGM-LOC 8:2-ARG1 12:0-rel 13:1-ARG4-at 20:1-ARG2-EXT
+wsj/15/wsj_1500.mrg 37 0 gold estimate.01 p---p 0:0-rel 1:0-ARG1
+wsj/15/wsj_1500.mrg 38 10 gold quote.01 pp--p 0:1-ARGM-LOC 3:1-ARGM-LOC 6:1-ARGM-TMP 10:0-rel 8:1*11:0-ARG1 12:1-ARG2-at

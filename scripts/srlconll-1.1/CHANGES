@@ -1,0 +1,22 @@
+
+
+Version 1.1 
+===========
+
+2005/12/01 : (preliminary) added support for NomBank-0.8 in link_tbpb.pl
+
+2005/04/14 : 
+
+The Start-End format accepts phrase types that contain "\*". Note that
+the asterisk is escaped.  
+
+In version 1.0, we assumed that phrase types did not contain the "*"
+character, and that the first occurrence of "*" corresponded to the
+separation between the start and end tags. It happens that the Collins
+trees with head information (the "synt.col2h" files) do have "\*"
+within the string that represents the node type.
+
+This change affects the methods "load_SE_tagging" of SRL::phrase_set
+and SRL::syntree classes.
+
+

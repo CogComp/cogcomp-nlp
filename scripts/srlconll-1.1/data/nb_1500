@@ -1,0 +1,95 @@
+wsj/15/wsj_1500.mrg 0 0 confidence 01 0:0-rel 1:1-ARG2
+wsj/15/wsj_1500.mrg 0 12 dive 02 0:2*7:0-ARG1 9:0-Support 11:0-ARG2 12:0-rel
+wsj/15/wsj_1500.mrg 0 15 figure 02 14:0-ARG1 15:0-rel
+wsj/15/wsj_1500.mrg 0 21 release 01 14:2-ARG1 19:0,20:0-Support 21:0-rel 22:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 0 30 improvement 01 14:3*25:0-ARG1 27:0-Support 29:0-ARGM-MNR 30:0-rel
+wsj/15/wsj_1500.mrg 0 37 deficit 01 32:1-ARGM-TMP 36:0-ARGM-EXT 37:0-rel 37:0-ARG2-REF
+wsj/15/wsj_1500.mrg 1 20 fall 01 20:0-rel 21:1-ARG1
+wsj/15/wsj_1500.mrg 1 8 commitment 01 0:2-ARG1 8:0-rel 9:1-ARG2
+wsj/15/wsj_1500.mrg 2 16 failure 01 13:1-ARG1 16:0-rel 17:2-ARG2-PRD
+wsj/15/wsj_1500.mrg 2 28 speech 01 25:0-ARG0 26:0,27:0-ARGM-LOC 28:0-rel
+wsj/15/wsj_1500.mrg 2 5 support 01 5:0-rel 6:1-ARG1
+wsj/15/wsj_1500.mrg 3 13 base 02 13:0-rel 14:0-ARG1
+wsj/15/wsj_1500.mrg 3 14 rate 01 12:0-Support 14:0-rel 15:1-ARG2
+wsj/15/wsj_1500.mrg 3 35 analyst 01 32:0,33:0,34:0-ARG1 35:0-rel 35:0-ARG0
+wsj/15/wsj_1500.mrg 3 4 risk 01 4:0-rel 5:1-ARG1
+wsj/15/wsj_1500.mrg 4 2 risk 01 2:0-rel 3:1-ARG0 5:1-ARG1
+wsj/15/wsj_1500.mrg 4 26 economist 01 24:0-ARG3 25:0-ARG1 26:0-rel 26:0-ARG0 27:1-ARG2
+wsj/15/wsj_1500.mrg 4 9 figure 02 8:0-ARG1 9:0-rel 9:0-ARG2-REF
+wsj/15/wsj_1500.mrg 5 25 economist 01 24:0-ARG1 25:0-rel 25:0-ARG0 26:1-ARG2
+wsj/15/wsj_1500.mrg 5 31 unit 01 31:0-rel 32:1-ARG1
+wsj/15/wsj_1500.mrg 5 7 number 03 6:0-ARG3 7:0-rel 7:0-ARG2-REF
+wsj/15/wsj_1500.mrg 6 0 forecast 01 0:0-rel 1:1-ARG1
+wsj/15/wsj_1500.mrg 6 19 improvement 01 17:1-ARGM-MNR 19:0-rel
+wsj/15/wsj_1500.mrg 6 32 deficit 01 22:3-ARG2 32:0-rel 33:1-ARGM-LOC 37:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 6 36 account 02 35:0-ARGM-TMP 36:0-rel
+wsj/15/wsj_1500.mrg 6 4 figure 02 3:0-ARG1 4:0-rel 4:0-ARG2-REF
+wsj/15/wsj_1500.mrg 7 2 deficit 01 1:0-ARGM-TMP 2:0-rel 2:0-ARG2-REF
+wsj/15/wsj_1500.mrg 7 24 deficit 01 20:2-ARG2 24:0-rel 25:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 7 9 gap 01 5:2-ARG2 9:0-rel
+wsj/15/wsj_1500.mrg 8 16 sign 01 15:0-ARGM-NEG 16:0-rel 17:1-ARG1
+wsj/15/wsj_1500.mrg 8 21 industry 01 20:0-ARG1 21:0-rel
+wsj/15/wsj_1500.mrg 8 28 export 01 18:2*25:0-ARG0 27:0-Support 28:0-rel
+wsj/15/wsj_1500.mrg 8 4 economist 01 3:0-ARG1 4:0-rel 4:0-ARG0 5:1-ARG2
+wsj/15/wsj_1500.mrg 9 11 outlook 01 5:1-ARG0 6:0,8:0,9:0-Support 11:0-rel 12:1-ARG1
+wsj/15/wsj_1500.mrg 9 22 inflow 01 16:0-ARGM-TMP 18:0,19:0,20:0,21:0-ARG1 22:0-rel
+wsj/15/wsj_1500.mrg 10 6 deficit 01 4:0,5:0-ARG1 6:0-rel 8:0-Support 9:1-ARG2
+wsj/15/wsj_1500.mrg 11 10 reduction 01 10:0-rel 11:1-ARG1 15:1-ARG0
+wsj/15/wsj_1500.mrg 12 12 decline 01 6:1-ARG1 8:0-Support 9:1-ARGM-TMP 11:0-ARGM-MNR 12:0-rel
+wsj/15/wsj_1500.mrg 12 15 deficit 01 15:0-rel 17:0-Support 18:1-ARG2
+wsj/15/wsj_1500.mrg 12 5 rebound 01 5:0-rel 6:1-ARG1 8:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 13 14 gap 01 8:2-ARG2 12:0,13:0-ARG1 14:0-rel
+wsj/15/wsj_1500.mrg 13 22 figure 02 21:0-ARG1 22:0-rel 22:0-ARG2-REF
+wsj/15/wsj_1500.mrg 13 42 evidence 01 41:0-ARGM-EXT 42:0-rel 42:0-ARG0 43:1-ARG1
+wsj/15/wsj_1500.mrg 14 18 figure 02 17:0-ARG1 18:0-rel 18:0-ARG2-REF
+wsj/15/wsj_1500.mrg 14 22 position 04 22:0-rel 24:1-ARG1
+wsj/15/wsj_1500.mrg 15 3 evidence 01 2:0-ARGM-MNR 3:0-rel 3:0-ARG0 4:1-ARG1
+wsj/15/wsj_1500.mrg 16 12 slowdown 01 11:0-ARGM-EXT 12:0-rel
+wsj/15/wsj_1500.mrg 16 19 impact 01 19:0-rel 20:1-ARG0
+wsj/15/wsj_1500.mrg 16 23 rise 01 23:0-rel 24:1-ARG1 27:1-ARGM-TMP
+wsj/15/wsj_1500.mrg 16 26 rate 01 25:0-ARG1 26:0-rel 26:0-ARG2-REF
+wsj/15/wsj_1500.mrg 16 31 effect 01 18:2-ARG1 30:0-Support 31:0-rel
+wsj/15/wsj_1500.mrg 16 4 speech 01 1:0-ARG0 2:0,3:0-ARGM-LOC 4:0-rel
+wsj/15/wsj_1500.mrg 17 1 base 02 1:0-rel 2:0-ARG1
+wsj/15/wsj_1500.mrg 18 13 economy 01 12:0-ARG1 13:0-rel 13:0-ARG2-REF
+wsj/15/wsj_1500.mrg 18 2 expenditure 01 1:0-ARG0 2:0-rel
+wsj/15/wsj_1500.mrg 18 3 datum 01 1:0,2:0-ARG2 3:0-rel
+wsj/15/wsj_1500.mrg 19 20 % 01 4:1-ARG1 20:0-rel
+wsj/15/wsj_1500.mrg 19 7 % 01 4:1-ARG1 5:0-Support 7:0-rel
+wsj/15/wsj_1500.mrg 20 18 increase 01 16:1-ARG2 18:0-rel 19:1-ARG3
+wsj/15/wsj_1500.mrg 20 22 quarter 01 22:0-rel 23:1-ARG1
+wsj/15/wsj_1500.mrg 20 6 rise 01 4:1-ARG2 6:0-rel 7:1-ARGM-TMP 10:1-ARG3
+wsj/15/wsj_1500.mrg 21 18 suggestion 01 18:0-rel 19:1-ARG1
+wsj/15/wsj_1500.mrg 21 23 spending 01 20:0,21:0,24:0-Support 23:0-rel 25:1-ARG1
+wsj/15/wsj_1500.mrg 21 29 consumer 01 29:0-rel 29:0-ARG0 30:0-ARG1
+wsj/15/wsj_1500.mrg 21 33 fear 01 33:0-rel 34:1-ARG1
+wsj/15/wsj_1500.mrg 21 37 rise 01 36:0-ARG1 37:0-rel
+wsj/15/wsj_1500.mrg 21 9 economy 01 9:0-rel 13:1-ARG2
+wsj/15/wsj_1500.mrg 22 17 rate 01 16:0-ARG1 17:0-rel 17:0-ARG2-REF
+wsj/15/wsj_1500.mrg 22 28 slowdown 01 27:0-ARGM-EXT 28:0-rel
+wsj/15/wsj_1500.mrg 23 25 rate 01 24:0-ARG1 25:0-rel 25:0-ARG2-REF
+wsj/15/wsj_1500.mrg 23 26 weakness 01 24:0,25:0-ARG1 26:0-rel
+wsj/15/wsj_1500.mrg 24 18 promise 01 15:1-ARG0 18:0-rel 19:1-ARG2
+wsj/15/wsj_1500.mrg 26 10 confidence 01 10:0-rel 11:1-ARG2
+wsj/15/wsj_1500.mrg 26 15 promise 01 12:1-ARG0 15:0-rel
+wsj/15/wsj_1500.mrg 26 5 sign 01 0:1-ARG0 3:0-Support 5:0-rel 6:1-ARG1
+wsj/15/wsj_1500.mrg 26 8 lack 01 8:0-rel 9:1-ARG1
+wsj/15/wsj_1500.mrg 27 2 trading 01 1:0-ARGM-LOC 2:0-rel
+wsj/15/wsj_1500.mrg 28 20 rate 01 19:0-Support 20:0-rel 21:1-ARG2
+wsj/15/wsj_1500.mrg 28 36 balance 02 36:0-rel 37:1-ARG1
+wsj/15/wsj_1500.mrg 30 3 gain 01 0:1-ARG1 2:0-Support 3:0-rel 3:0-ARG2-REF 4:1-ARGM-LOC
+wsj/15/wsj_1500.mrg 30 6 trading 01 5:0-ARGM-MNR 6:0-rel
+wsj/15/wsj_1500.mrg 30 8 concern 01 8:0-rel 9:1-ARG0
+wsj/15/wsj_1500.mrg 31 1 exchange 01 1:0-rel 2:0-ARG0
+wsj/15/wsj_1500.mrg 31 18 exchange 02 16:0-ARGM-MNR 17:0-ARG1 18:0-rel
+wsj/15/wsj_1500.mrg 31 2 dealer 01 0:0,1:0-ARG1 2:0-rel 2:0-ARG0
+wsj/15/wsj_1500.mrg 31 7 market 01 6:0-ARG1 7:0-rel
+wsj/15/wsj_1500.mrg 32 1 analyst 01 0:0-ARG1 1:0-rel 1:0-ARG0
+wsj/15/wsj_1500.mrg 32 15 focus 01 13:0-Support 14:0-ARG0 15:0-rel 17:1-ARG2
+wsj/15/wsj_1500.mrg 32 25 eye 01 8:1*21:0-ARG0 22:0-Support 25:0-rel 27:1-ARG1
+wsj/15/wsj_1500.mrg 32 29 sign 01 8:1*21:0-ARG2 22:0,27:0-Support 29:0-rel 30:1-ARG1
+wsj/15/wsj_1500.mrg 33 6 day 01 5:0-ARG1 6:0-rel
+wsj/15/wsj_1500.mrg 35 10 trading 01 5:1-ARG1 8:0,9:0-Support 10:0-rel
+wsj/15/wsj_1500.mrg 35 20 close 01 5:1-ARG1 8:0,15:0,16:0-Support 17:1-ARGM-TMP 19:0-ARGM-LOC 20:0-rel 21:1-ARG2
+wsj/15/wsj_1500.mrg 36 11 delivery 01 8:1-ARG1 10:0-ARGM-TMP 11:0-rel
+wsj/15/wsj_1500.mrg 38 2 trading 01 1:0-ARGM-TMP 2:0-rel 3:1-ARGM-LOC

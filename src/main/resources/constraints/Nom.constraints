@@ -1,0 +1,14 @@
+noOverlappingArguments
+noDuplicateCore
+CArgumentConstraint
+; RArgumentConstraint
+predicateSense
+
+;; It is disappointing that this constraint doesn't improve
+;;  performance. I think this is because of noise in the data.
+
+; supportVerbConstraint
+
+noCrossArgumentExclusiveOverlap
+
+crossArgumentRetainedModifiers

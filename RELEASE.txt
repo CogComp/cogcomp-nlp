@@ -1,0 +1,38 @@
+Version 5.0
+TODO (standalone + plus cleanup + ready to add Prep)
+
+Version 4.1.1
+Switched to edison-0.7.1 and LBJava-1.0
+Added dependency to illinois-common-resources
+
+Version 4.1
+Various bugfixes
+
+Version 4.0.2
+Updated inference dependency to latest version and modified inference
+code accordingly.
+
+Version 4.0.1
+Removed duplicate code from JLIS-core and moved to IllinoisSL. Minor edits.
+
+Version 4.0
+A complete rewrite of the SRL. Includes predicate and sense detectors,
+new constraints and a memory footprint of only 3GB.
+
+Version 3.0.3
+Minor bugfixes. Uses edison v0.2.9
+
+Version 3.0.2
+Added an option to trim leading prepositions from arguments.
+
+Revamped the training mechanism to train using LBJ's BatchTrainer in
+the code. This allows manual lexicon handling, which reduces the
+memory requirements by nearly 40 percent.
+
+Version 3.0.1
+Minor bugfix
+
+Version 3.0
+A complete Java based re-implementation of the Illinois SRL from
+Punyakanok 2008. This version uses LBJ to train classifiers and
+for performing inference with a home-brewed beam search.

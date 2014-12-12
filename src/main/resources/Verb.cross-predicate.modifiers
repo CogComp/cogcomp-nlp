@@ -1,0 +1,10 @@
+AM-ADV	put,A2	
+AM-CAU	ask,R-A1	impeach,A2	
+AM-DIR	inflate,A4	romp,A1	slip,A2	wiggle,A1	
+AM-DIS	hope,A1	
+AM-EXT	tumble,A2	
+AM-LOC	buckle,A2	call,A1	gather,R-AM-LOC	grimace,A1	incorporate,A2	mire,A2	send,A1	work,A1	
+AM-MNR	advertise,A1	ask,R-A1	detect,A2	do,A3	drain,A1	fall,A2	feast,A1	hope,A1	look,A1	package,A3	sell,A3	start,A2	stay,A3	structure,A2	vote,A2	
+AM-PNC	buy,A4	design,A2	finance,A1	pay,A3	review,A2	sell,A4	use,A2	wonder,R-A1	
+AM-REC	market,A1	
+AM-TMP	arrest,A1	flee,R-AM-TMP	imprison,A2	lower,A2	spend,A1	

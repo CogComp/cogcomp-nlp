@@ -1,0 +1,13 @@
+### Maven
+target/
+pom.xml
+
+
+### Eclipse
+local.properties
+.settings/
+.loadpath
+
+### JetBrains
+*.iml
+.idea/

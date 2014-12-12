@@ -1,0 +1,262 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+srlconll-1.1 : scripts for the CoNLL-2005 shared task on Semantic Role Labeling
+	  
+
+Version 1.1
+January 2005
+
+Authors: 
+	Xavier Carreras and Lluís Màrquez
+	TALP Research Center
+	Technical University of Catalonia (UPC)
+
+Contact: carreras@lsi.upc.edu
+
+This software is distributed to support the CoNLL-2005 Shared Task. It
+is free for research and educational purposes. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
++
++ INSTALLATION 
++------------------------------------------------------------
+
+The srlconll package is a collection of scripts in Perl, which make use of
+a Perl library (found under directory lib). You must set the PERL5LIB
+environment variable to look for that directory. Assuming that the
+srlconll-1.1 package is at directory $HOME/soft/srlconll-1.1, the
+command under tcsh is :
+
+  $ setenv PERL5LIB $HOME/soft/srlconll-1.1/lib:$PERL5LIB
+
+Once the variable is set, the Perl scripts under directory "bin" should
+work. For example : 
+
+  $ perl $HOME/soft/srlconll-1.1/bin/srl-eval.pl 
+  Usage:   srl-eval.pl <gold props> <predicted props>
+  (...)
+
+For continuate use with tcsh, add these lines in your $HOME/.tcshrc
+file: 
+
+  setenv PERL5LIB $HOME/soft/srlconll-1.1/lib:$PERL5LIB
+  setenv PATH $HOME/soft/srlconll-1.1/bin:$PATH
+
+
+
++
++  SCRIPTS
++-----------------------------------------------------------
+
+Most of the scripts print a brief help when:
+  -  called with no arguments
+  -  an invalid argument is given (hint: "-h" is never valid)
+
+
+
+--------------------------------------------------
+ srl-eval.pl 
+--------------------------------------------------
+
+The srl-eval.pl program is the official script for evaluation of
+CoNLL-2005 Shared Task systems. It expects two parameters: The first
+is the name of the file containing correct propositions; the second is
+the name of the file containing predicted propositions. Both files are
+expected to follow the format of "props" files (first column: target
+verbs; remaining columns: args of each target verb). It is required
+that both files contain the same sentences and the same target
+verbs. The program outputs performance measures based on precision,
+recall and F1. The overall F1 measure will be the measure used to
+compare the performance of systems.
+
+The files can be gzipped (the name should end in ".gz"). 
+
+Use the option "-latex" to produce a table of results in LaTeX.
+
+Use the option "-C" to produce a confusion matrix of gold
+vs. predicted arguments.
+
+
+--------------------------------------------------
+ srl-baseline04.pl
+--------------------------------------------------
+
+Baseline system used in CoNLL-2004, developed by Erik Tjong Kim Sang.
+
+Try following commands to run the baseline and evaluate its
+performance:
+
+  $ paste -d ' ' devel/words/devel.24.words devel/synt.upc/devel.24.synt.upc devel/props/devel.24.props | srl-baseline04.pl > devel.props.bs04
+  $ srl-eval.pl devel/props/devel.24.props devel.props.bs04
+  
+    (...)
+                  corr.  excess  missed    prec.    rec.      F1
+    ------------------------------------------------------------
+       Overall     2419    2419    5927    50.00   28.98   36.70
+    ----------
+            A0     1128    1167     953    49.15   54.20   51.55
+            A1      831    1205    2163    40.82   27.76   33.04
+    (...)
+
+
+
+--------------------------------------------------
+ prop-discr.pl
+--------------------------------------------------
+
+Expects two files in the parameters, A and B, containing propositions
+of the same sentences.  It generates three proposition files:
+   - A and B : arguments which are in both files
+   - A not B : arguments in file A but not in B
+   - B not A : arguments in file B but not in A
+
+The script is useful to discriminate predicted arguments with respect
+to gold arguments, and inspect the type of errors a system produces
+(missed and overpredicted arguments).
+
+
+--------------------------------------------------
+ prop-filter.pl
+--------------------------------------------------
+
+Reads propositions from STDIN and filters out arguments form them,
+according to a number of given filtering conditions. It writes to
+STDOUT the filtered propositions. To pass the filter, an argument must
+satisfy all conditions. 
+
+The filtering conditions are: 
+
+   -type <RE> 	   Perl regular expression on the argument type. 
+   -min <n>  	   Minimum number of words. 
+   -max <n>  	   Maximum number of words.
+   -single [0|1]   Single or Discontinuous argument.
+   -verb <RE>      Perl regular expression on the verb predicate.
+   -fverbs <file>  File containing selected verbs (one per line)
+
+Examples: 
+ 
+ Select A0, A1 and A2 arguments
+    $ cat sample.props | prop-filter.pl -type "^A[012]"
+
+ Select arguments spanning from 10 to 20 words
+    $ cat sample.props | prop-filter.pl -min 10 -max 20
+
+ Select single arguments of the verbs expect and show
+    $ cat sample.props | prop-filter.pl -verb '^(expect|show)$' -single 1
+ 
+
+
+--------------------------------------------------
+ col-format.pl
+--------------------------------------------------
+
+Reads sentences of a datafile formatted in columns.  
+
+Changes the format of a specified column, from/to start-end or
+begin-inside-outside formats.
+
+Finally, prints the columns of a sentence so that columns are
+vertically aligned.
+
+The options of the script are: 
+    -N            column number (starts at 0; default: no column) 
+    -i  bio|se    input format  (default: bio)
+    -o  bio|se    output format (default: se)
+    -P            do NOT print pretty columns (faster)
+
+
+Example: change the format of the 3rd column of "myfile" from
+start-end to BIO : 
+
+  $ cat myfile | col-format -2 -i se -o bio 
+
+
+
+
+--------------------------------------------------
+ wsj-removetraces.pl   
+--------------------------------------------------
+    this script changed wrt. srlconll-beta
+--------------------------------------------------
+
+Reads WSJ trees in the standard Penn Treebank format.  
+
+Removes word traces (i.e., words pos-tagged as "-NONE-"), and
+syntactic constituents that only include word traces.  
+
+Finally, prints the tree in the Penn Treebank format. 
+
+Assuming directory WSJ contains the WSJ portion of the
+Penn Treebank, here's an example of usage on section 02: 
+
+  $ zcat WSJ/02/wsj_*.mrg.gz | wsj-removetraces.pl
+
+
+
+--------------------------------------------------
+ wsj-to-se.pl
+--------------------------------------------------
+
+Reads WSJ trees in the standard Penn Treebank format, and outputs the
+same trees in CoNLL Start-End format.
+
+Options : 
+   -w 0|1         Print words or not (default 1)
+   -p 0|1         Print PoS tags or not (default 1)
+
+The trees should be preprocessed by wsj-removetraces.pl. Otherwise,
+the columns will not align correctly with the CoNLL-2005 data.
+
+Assuming directory WSJ contains the WSJ portion of the
+Penn Treebank, here's an example of usage on section 02: 
+
+  $ zcat WSJ/02/wsj_*.mrg.gz | wsj-removetraces.pl | wsj-to-se.pl
+
+
+
+--------------------------------------------------
+ srl-cols2rows.pl
+--------------------------------------------------
+
+Transforms a datafile in column-based format into a format based on
+rows. The row-based annotations might be simpler to process. 
+
+The format is as follows. Each line represents a level of annotation
+of the sentence, and blank lines separate sentences. The first tag of
+a non-empty line marks the type of annotations.
+
+Words (W) are represented as a sequence of tokens separated by a
+single space, ordered as they appear in a sentence. Part-of-Speech
+tags (P) are represented as a sequence of tags that aligns with the
+word sequence.
+
+Chunks, Clauses and Named Entities (C, S and N respectively) are
+represented as a list of phrases that appear in a sentence. Each
+phrase appears as "(s,e)_k", where s is the start position (wrt. word
+sequence, starting at 0), e is the end position, and k is the type of
+phrase.
+
+The syntactic tree (T) is represented with the standard WSJ format.
+
+Finally, each predicate-argument structure (R) is represented with the
+verb predicate, the verb position, and the list of phrases which form
+the arguments of the proposition. Note that phrases do not necessarily
+correspond to arguments (i.e., a discontinuous argument is formed by
+many phrases).
+
+Try the command as: 
+
+  $ paste -d ' ' sample.words sample.synt.upc sample.synt.cha sample.ne.cn sample.props | srl-cols2rows.pl
+
+The script is configured to select from input the columns in start-end
+format that contain the annotations. You can easily specify (editing
+te script) at which position of the input file the relevant columns
+are found.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
