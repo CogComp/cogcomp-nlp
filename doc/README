@@ -1,0 +1,237 @@
+CONTENTS
+=================
+1 PURPOSE  
+	1.1  Purpose 
+	1.2  License 
+2 System requirements 
+3 Download contents 
+4 Dependencies
+5 Compiling
+6 Running the IllinoisPreprocessor
+7 Troubleshooting 
+8 Contact Information 
+
+
+==============================
+
+1. PURPOSE
+
+This software bundles some basic preprocessing steps that a lot of CCG packages need, with a view to 
+making some of them stand-alone (rather than having dependencies on the Curator).
+The idea is to use the same Curator data structures and information sources, but from the local classpath:
+the preprocessor should essentially be interchangeable with the curator.
+
+1.1 ...A LITTLE MORE SPECIFICALLY
+
+The IllinoisPreprocessor is intended to be used PROGRAMMATICALLY. Some rudimentary command-line
+functionality is provided principally to allow you to test that it is working properly. 
+
+IllinoisPreprocessor works only for English plain text. You will need to remove XML/HTML mark-up,
+as well as formatting like bulleted lists if you want well-formed output. (IllinoisPreprocesor
+may generate output for such texts, but it is not guaranteed that the different tools will
+succeed in producing mutually consistent output.)
+
+One important note: if you wish to use your own tokenization, you will need to delimit tokens with
+whitespace. You may either process your text one sentence at a time, or you may delimit sentence
+boundaries with a newline character and pass multiple sentences as a single string.
+
+1.2 LICENSE
+
+The Illinois Standalone NLP Pipeline is available under a Research and Academic use license. For more details, 
+visit the Curator website and click the download link.
+
+==============================
+
+2. SYSTEM REQUIREMENTS
+
+This software was developed on the following platform:
+
+Scientific Linux (2.6.32-279.5.2.el6.x86_64)
+Java 1.6
+
+This package depends on the Cognitive Computation Group (CCG)'s
+Curator libraries, which define Thrift-based data structures for NLP,
+and a number of other libraries and packages. These will be provided
+as part of the main download.
+
+The memory required depends on the options you set in the config
+file. 2G should be plenty to run the Tokenizer, POS tagger, and
+lemmatizer.
+
+==============================
+
+3. DOWNLOAD CONTENTS
+
+config/ : configuration files
+dist/ : the Illinois Preprocessor jar
+lib/ : dependencies 
+scripts/ : scripts to allow command-line test of the Illinois Preprocessor
+src/ : source code for the IllinoisPreprocessor
+test/ : test files used for the command line test of the Illinois Preprocessor
+
+README : this file
+
+==============================
+
+4. DEPENDENCIES
+
+A tarball with the dependencies is provided at the same page on the CCG web site as this package was found. 
+
+The list of dependencies is as follows:
+
+cogcomp-common-resources-1.2.jar
+commons-cli-1.2.jar
+commons-codec-1.8.jar
+commons-collections-3.2.1.jar
+commons-configuration-1.9.jar
+commons-io-1.3.2.jar
+commons-lang-2.5.jar
+commons-lang3-3.1.jar
+commons-logging-1.1.1.jar
+coreUtilities-0.1.9.jar
+curator-archive-0.0.2.jar
+curator-interfaces-0.7.jar
+curator-utils-0.0.3.jar
+edison-0.5.jar
+gson-2.2.4.jar
+hamcrest-core-1.3.jar
+httpclient-4.1.2.jar
+httpcore-4.1.3.jar
+illinois-chunker-1.5.1.jar
+illinois-lemmatizer-0.0.7.jar
+illinois-pos-1.7.1.jar
+junit-4.11.jar
+jwi-2.2.3.jar
+jwnl-1.4_rc3.jar
+LBJLibrary-2.8.2.jar
+libthrift-0.8.0.jar
+slf4j-api-1.5.8.jar
+slf4j-log4j12-1.5.8.jar
+snowball-1.0.jar
+trove4j-3.0.3.jar
+
+You will also need configuration files for the NER.
+
+==============================
+
+5. COMPILING
+
+We assume that most people will simply use the compiled jar,
+downloaded from our web site.
+
+If you are a developer using maven to compile this, you will need to
+specify values in the configuration file as described in section 
+of these instructions. In particular, you will need to download 
+WordNet version 3.0 or later and set the corresponding path value
+in the configuration file in config/pipelineConfig.txt and
+src/test/resources/testConfig.txt.
+
+==============================
+
+6. RUNNING THE ILLINOIS PREPROCESSOR
+
+This software is intended to be run PROGRAMMATICALLY, not as a tool to
+write annotations to file for later use. It has been developed to
+allow some of our more complex tools to be run completely within a
+single JVM instead of in tandem with the CCG NLP Curator
+(http://cogcomp.cs.illinois.edu/page/software_view/Curator).
+
+You need to set the relevant options in the pipeline configuration
+file, including specifying the location of the WordNet dictionary files.
+The configuration file is used to construct a ResourceManager object,
+which is passed to the IllinoisPreprocessor as a constructor argument.
+
+The standard distribution for this package puts dependencies in lib/;
+the parser model in data/; and the config file in config/. There are
+two sample scripts that are provided to test that the
+IllinoisProcessor works after you have downloaded
+it. scripts/runPreprocessor.sh takes as arguments a configuration file
+and a text file; it processes the text file according to the
+properties set in the config file, and writes output to STDOUT.
+scripts/testPreprocessor.sh is a self-contained script that calls
+runPreprocessor.sh with fixed arguments and compares the output to
+some reference output. If the new output and reference output are
+different, the script prints an error message and indicates the
+differences.
+
+6.1 Running a Simple Command-Line Test
+
+Running the test:
+
+   scripts/testPreprocessor.sh
+
+
+Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
+
+   scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+
+
+Changing the logging settings: modify config/.  For the
+settings in this file to take effect, you will need to put directory
+containing it on your classpath.
+
+
+==============================
+
+PROGRAMMATIC USE
+
+You can check the javadoc for detailed information about the
+IllinoisPreprocessor API.
+
+The main class is IllinoisPreprocessor, in the package
+edu.illinois.cs.cogcomp.nlp.pipeline. For an example showing how the
+IllinoisPreprocessor can be used, look at PreprocessorTester in
+edu.illinois.cs.cogcomp.nlp.main.
+
+The main method, 
+
+    public Record createRecord( String rawText_, boolean isWhitespaced_ )
+ 
+takes as input a string of plain text (rawText_) and a boolean flag
+indicating whether or not to tokenize it (isWhitespaced_). If
+"isWhitespaced_" is set to false, IllinoisPreprocessor will segment
+"rawText_" into sentences and tokens using Illinois' Tokenizer.
+Otherwise, "rawText_" will be split into sentences on newline
+characters (IllinoisProcessor uses the System property
+"line.separator" to test for these characters) and then tokenized
+using whitespace.
+
+
+
+
+==============================
+
+CONFIGURATION OPTIONS
+
+The following options MUST be specified in the config file used to
+construct the ResourceManager and thus the IllinoisPreprocessor:
+
+usePos	[true|false]
+useChunker	true
+useLemmatizer	true
+jwnlConfigFile	config/jwnl_properties.xml
+lemmaCacheFile  data/lemmaCache.txt
+updateLemmaCacheFile    false
+maxLemmaCacheEntries    100
+wordnetPath /shared/trollope/curator/dist/data/WordNet
+
+The first three flags indicate which annotations you want.
+IllinoisPreprocessor to provide. The third, fourth, and fifth
+flags specify properties of the lemmatizer cache; it will speed
+up the lemmatizer considerably if you allocate a large number
+(say, 100000) to maxLemmaCacheEntries and set updateLemmaCacheFile
+to 'true'. 'lemmaCacheFile' indicates the plain text file that
+contains the cache.
+'wordnetPath' should point to the root directory of your copy
+of WordNet.
+
+
+==============================
+
+TODO
+
+One current design flaw is that this package contains copies of the
+relevant Curator handler. Solving this problem requires redesign of
+the Curator and its release/installation process, so for the time
+being, we live with the bad and await the good.
+
