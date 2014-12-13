@@ -1,4 +1,4 @@
-package examples;
+package edu.illinois.cs.cogcomp.wikifier.utils.examples;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -17,13 +17,15 @@ import edu.illinois.cs.cogcomp.wikifier.utils.XmlModel;
  */
 @XmlRootElement(name = "exampleClass")
 @XmlAccessorType(XmlAccessType.FIELD)
-// this will serialize all fields to xml, for more details see
+// this will serialize all fields to xml, 
+// for more details on Xmlaccesstype see,
 // http://blog.bdoughan.com/2011/06/using-jaxbs-xmlaccessortype-to.html
 public class XMLModelExample {
 	public String fieldA;
 	public String fieldB;
-	public String fieldC;
-
+	private String fieldC; // does not matter its private, a field is a field
+	private EnclosedObject obj;
+	
 	/**
 	 * Used for JAXB calls only. This is important. JAXB wont work if you do not
 	 * have a empty constructor.
@@ -37,8 +39,13 @@ public class XMLModelExample {
 		fieldC = c;
 	}
 
+	public void setEnclosed(EnclosedObject s1 )
+	{
+		this.obj=s1;
+	}
 	public static void main(String[] args) {
 		XMLModelExample ob = new XMLModelExample("1", "2", "3");
+		ob.setEnclosed(new EnclosedObject("xyz"));
 		try {
 			XmlModel.write(ob, "somefile.xml");
 		} catch (JAXBException e) {
