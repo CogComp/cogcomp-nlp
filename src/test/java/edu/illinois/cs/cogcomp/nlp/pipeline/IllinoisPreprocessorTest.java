@@ -1,28 +1,25 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.thrift.TException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.Forest;
 import edu.illinois.cs.cogcomp.thrift.base.Labeling;
 import edu.illinois.cs.cogcomp.thrift.base.Span;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.illinois.cs.cogcomp.util.CuratorDataUtils;
+import org.apache.thrift.TException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class IllinoisPreprocessorTest
 {
@@ -83,8 +80,8 @@ public class IllinoisPreprocessorTest
 		boolean isChunkOk = false;
 		boolean isLemmaOk = false;
 		boolean isNerOk = false;
-		boolean isParseOk = false;
-		Set< String > views = rec.getLabelViews().keySet();
+		boolean isParseOk;
+//		Set< String > views = rec.getLabelViews().keySet();
 
 //		if ( views.contains( CuratorViewNames.pos ) && views.contains( CuratorViewNames.tokens ) )
 //		{
@@ -124,11 +121,11 @@ public class IllinoisPreprocessorTest
 //		if ( views.contains( AdditionalViewNames.ccgLemma ) && views.contains( CuratorViewNames.tokens ) )
 //		{
 //			Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
-			Labeling wnPlusLabeling = rec.getLabelViews().get( AdditionalViewNames.ccgLemma );
+			Labeling lemma = rec.getLabelViews().get( CuratorViewNames.lemma );
 
 //			List< Span > tokens = toks.getLabels();
 
-			int numSpans = wnPlusLabeling.getLabelsSize();
+			int numSpans = lemma.getLabelsSize();
 
 			if ( numSpans == tokens.size() )
 				isLemmaOk = true;
@@ -137,8 +134,8 @@ public class IllinoisPreprocessorTest
 
 			System.out.println( "found " + numSpans + " lemma nodes, "  + tokens.size() + " tokens." );
 
-			System.out.println( AdditionalViewNames.ccgLemma + " VIEW: " );
-			CuratorDataUtils.printLabeling( System.out, wnPlusLabeling, text );
+			System.out.println( CuratorViewNames.lemma + " VIEW: " );
+			CuratorDataUtils.printLabeling( System.out, lemma, text );
 
 //		}  
 
@@ -168,11 +165,10 @@ public class IllinoisPreprocessorTest
 			assertTrue( isParseOk );
 //		}
 
-		boolean isWhitespaced = false; 
 		TextAnnotation ta = null;
 
 		try {
-			ta = prep.processTextToTextAnnotation( "test", "test", text, isWhitespaced );
+			ta = prep.processTextToTextAnnotation( "test", "test", text, false);
 		} catch (AnnotationFailedException e) {
 			e.printStackTrace();
 			fail( "Exception creating TextAnnotation for text '" + text + "'." );
@@ -181,7 +177,7 @@ public class IllinoisPreprocessorTest
 			fail( "Exception creating TextAnnotation for text '" + text + "'." );
 		}
 
-		List< Constituent > lemmaConstituents = ta.getView( AdditionalViewNames.ccgLemma ).getConstituents();
+		List< Constituent > lemmaConstituents = ta.getView( CuratorViewNames.lemma ).getConstituents();
 
 		for ( Constituent c: lemmaConstituents )
 		{

@@ -15,7 +15,6 @@ import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.io.RecordFileIO;
-import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.Forest;
@@ -116,7 +115,7 @@ public class PreprocessorTester
         Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
         Labeling chunk = rec.getLabelViews().get( CuratorViewNames.chunk );
         Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
-        Labeling lemmaLab = rec.getLabelViews().get( AdditionalViewNames.ccgLemma );
+        Labeling lemmaLab = rec.getLabelViews().get( CuratorViewNames.lemma );
         
         List< Span > tokens = toks.getLabels();
         List< Span >  posTags = lab.getLabels();
@@ -174,7 +173,7 @@ public class PreprocessorTester
 //        }
 
         
-        Labeling ccgLemmas = rec.getLabelViews().get( AdditionalViewNames.ccgLemma );
+        Labeling ccgLemmas = rec.getLabelViews().get( CuratorViewNames.lemma );
         
         if ( null != ccgLemmas )
             if ( ccgLemmas.getLabelsSize() > 0 )

@@ -92,8 +92,7 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 		String clabel = "";
 		Span previous = null;
 		int tcounter = 0;
-		for (int i = 0; i < lbjTokens.size(); i++) {
-			Token lbjtoken = lbjTokens.get(i);
+		for (Token lbjtoken : lbjTokens) {
 			Span current = tags.get(tcounter);
 			tagger.discreteValue(lbjtoken);
 			logger.debug("{} {}", lbjtoken.toString(), lbjtoken.type);
@@ -101,8 +100,8 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 				if (!clabel.equals(lbjtoken.type.substring(2))) {
 					lbjtoken.type = "B" + lbjtoken.type.substring(1);
 				}
-			} 
-			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && label !=null) {
+			}
+			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && label != null) {
 				label.setEnding(previous.getEnding());
 				labels.add(label);
 				label = null;
@@ -124,7 +123,7 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 		labeling.setSource(getSourceIdentifier());
 
 		long endTime = System.currentTimeMillis();
-		logger.info("Tagged input in {}ms", endTime-startTime);
+		logger.debug("Tagged input in {}ms", endTime - startTime);
 		return labeling;
 	}
 
@@ -146,9 +145,6 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 	
 	/**
 	 * Converts a Record to LBJ Tokens with POS information.
-	 * 
-	 * @param record
-	 * @return
 	 */
 	private List<Token> recordToLBJTokensPos(Record record) {
 		List<Token> lbjTokens = new LinkedList<Token>();
@@ -159,7 +155,7 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 			Word wprevious = null;
 			Token tprevious = null;
 			boolean opendblquote = true;
-			Span tag = null;
+			Span tag;
 			do {
 				tag = tags.get(j);
 				Word wcurrent;

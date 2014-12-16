@@ -18,7 +18,6 @@ import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
-import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.curator.Identifier;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
@@ -171,7 +170,7 @@ public class IllinoisPreprocessor
   
         if ( useLemmatizer )
         {
-        	addLabelingToTextAnnotation( rec, AdditionalViewNames.ccgLemma, ta );
+        	addLabelingToTextAnnotation( rec, CuratorViewNames.lemma, ta );
 //        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaWn, ta );
 //        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaPorter, ta );
         }
@@ -229,7 +228,7 @@ public class IllinoisPreprocessor
         {
             Labeling lemmaView = lemmatizer.labelRecord( record );
             
-            labelViews.put( AdditionalViewNames.ccgLemma, lemmaView );
+            labelViews.put( CuratorViewNames.lemma, lemmaView );
 //            labelViews.put( AdditionalViewNames.lemmaWnPlus, lemmaViews.get( 1 ) );
 //            labelViews.put( AdditionalViewNames.lemmaPorter, lemmaViews.get( 2 ) );
 //            labelViews.put( CuratorViewNames.lemmaKp, lemmaViews.get( 3 ) );

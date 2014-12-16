@@ -19,10 +19,10 @@ public class AdditionalViewNames {
 //	public static String tokens = "tokens";
 //	public static String sentences = ViewNames.SENTENCE;
 //	public static String pos = ViewNames.POS;
-	public static final String lemmaWn = "lemma_wn";
-	public static final String lemmaWnPlus = "lemma_wnplus";
-	public static final String lemmaPorter = "lemma_porter";
-	public static final String lemmaKp = "lemma_kp";
-	public static final String ccgLemma = "illinois_lemma";
+//	public static final String lemmaWn = "lemma_wn";
+//	public static final String lemmaWnPlus = "lemma_wnplus";
+//	public static final String lemmaPorter = "lemma_porter";
+//	public static final String lemmaKp = "lemma_kp";
+//	public static final String ccgLemma = "illinois_lemma";
     
 }
