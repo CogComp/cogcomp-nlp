@@ -405,6 +405,9 @@ public class QuantTest {
 		Assert.assertEquals(
 				"[ratio[= 1.0][= 10.0]]",
 				normalizer.parse("100 percent of the 10 people", "RATIO").toString());
+		Assert.assertEquals(
+				"[ratio[= 11.0][= 4.0]]",
+				normalizer.parse("11 to 4", "RATIO").toString());
 	}
 	
 	@SuppressWarnings("deprecation")

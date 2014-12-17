@@ -22554,3 +22554,17 @@ is - O
 to - I-RATIO
 4 - I-RATIO
 . - O
+
+Twice - B-NUMBER 
+the - O
+larger - O
+number - O
+exceeds - O
+3 - B-NUMBER
+times - I-NUMBER
+the - O
+smaller - O
+number - O
+by - O
+16 - B-NUMBER
+. - O
