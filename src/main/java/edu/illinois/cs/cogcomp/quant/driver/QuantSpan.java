@@ -18,6 +18,12 @@ public class QuantSpan implements Serializable{
 	public int start, end;
 	public Object object;
 
+	public QuantSpan(Object object, int start, int end) {
+		this.object = object;
+		this.start = start;
+		this.end = end;
+	}
+	
 	public String toString() {
 		IntPair ip = new IntPair(start, end);
 		if(object instanceof Date) {

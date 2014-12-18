@@ -145,16 +145,16 @@ public class Quantifier {
 	
 	public List<QuantSpan> getSpans(String text, boolean standardized) {
 		TextAnnotation taCurator = new TextAnnotation("", "", text);
-		List<QuantSpan> spanArray = new ArrayList<QuantSpan>();
-		String textArray[] = new String[1];
-//		System.out.println(text);
-		textArray[0] = wordsplitSentence(text).trim();
-//		System.out.println("After wordsplit : " + textArray[0]);
-//		textArray[0] = text.trim();
+		TextAnnotation taQuant = new TextAnnotation("", "", wordsplitSentence(text).trim());
+		List<QuantSpan> quantSpans = new ArrayList<QuantSpan>();
+		String sentences[] = new String[taQuant.getNumberOfSentences()];
+		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
+			sentences[i] = taQuant.getSentence(i).getText();
+		}
 		
 		Chunker chunker = new Chunker();
 	    Parser parser = new PlainToTokenParser(new WordSplitter(
-	    		new SentenceSplitter(textArray)));
+	    		new SentenceSplitter(sentences)));
 	    String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;
@@ -162,11 +162,11 @@ public class Quantifier {
 	    int startPos=0, endPos=0, tokenPos=0;
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-	    	if( tokenPos>0 ){
-	    		if( !taCurator.getToken(tokenPos).contains(w.form) && 
-	    				!taCurator.getToken(tokenPos).contains(prevWord))
-	    			tokenPos++;
-	    	}
+//	    	if( tokenPos>0 ){
+//	    		if( !taCurator.getToken(tokenPos).contains(w.form) && 
+//	    				!taCurator.getToken(tokenPos).contains(prevWord))
+//	    			tokenPos++;
+//	    	}
 	    	prediction = chunker.discreteValue(w);
 	    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 	    							&& !previous.endsWith(prediction.substring(2))){
@@ -186,16 +186,12 @@ public class Quantifier {
     							prediction.substring(2)))){
     			
     			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
-    			QuantSpan span = new QuantSpan();
-    			span.start = startPos;
-    			span.end = endPos;
+    			QuantSpan span = new QuantSpan(null, startPos, endPos);
     			if(standardized) {
     				span.object = normalizer.parse(chunk, 
     						chunker.discreteValue(w).substring(2));
-    			} else {
-    				span.object = null;
     			}
-    			spanArray.add(span);
+    			quantSpans.add(span);
     			inChunk = false;
     			chunk = "";
     		}
@@ -205,72 +201,25 @@ public class Quantifier {
     			tokenPos++;
     		}
 	    }
-		return spanArray;
-	}
-	
-	// Returns list of quantity phrases detected by segmentation module
-	public List<String> getChunks(String text) {
-		List<QuantSpan> spans = getSpans(text, false);
-		List<String> chunks = new ArrayList<String>();
-		for(QuantSpan span : spans) {
-			chunks.add(text.substring(
-					span.start, 
-					span.end).trim());
-		}
-		return chunks;
+		return quantSpans;
 	}
 	
 	public String getAnnotatedString(String text, boolean standardized){
 		
 		String ans = "";
-		String textArray[] = new String[1];
-		textArray[0] = wordsplitSentence(text).trim();
-//		textArray[0] = text.trim();
-		List<String> chunkArray = new ArrayList<String>();
-		
-		Chunker chunker = new Chunker();
-	    Parser parser =
-	      new PlainToTokenParser(
-	          new WordSplitter(new SentenceSplitter(textArray)));
-	    String previous = "";
-	    String chunk="";
-	    boolean inChunk = false;
-	    String prediction="";
-	    
-	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-	    	prediction = chunker.discreteValue(w);
-	    	if (prediction.startsWith("B-") || prediction.startsWith("I-") 
-	    			&& !previous.endsWith(prediction.substring(2))){
-	    		if( !inChunk ){
-	    			inChunk = true;
-	    			ans+="[";
-	    		}		
-	    	}
-	    	if( inChunk ){
-	    		chunk+=w.form+" ";
-	    	}
-    		ans+=w.form+" ";
-    		if (!prediction.equals("O")
-    					&& (w.next == null
-    					|| chunker.discreteValue(w.next).equals("O")
-    					|| chunker.discreteValue(w.next).startsWith("B-")
-    					|| !chunker.discreteValue(w.next).endsWith(
-    							prediction.substring(2)))){
-    			chunkArray.add(chunk.trim());
-    			ans+="]";
-//    			System.out.println(chunk);
-    			if( standardized )
-    				ans+="("+normalizer.parse(chunk, 
-    						chunker.discreteValue(w).substring(2))+") ";
-    			else
-    				ans+="("+prediction.substring(2)+") ";
-//    			System.out.println(chunk);
-    			inChunk = false;
-    			chunk = "";
-    		}
-
-    		previous = prediction;
-	    }	    
+		TextAnnotation ta = new TextAnnotation("", "", text);
+		List<QuantSpan> quantSpans = getSpans(text, standardized);
+		int quantIndex = 0;
+		for(int i=0; i<ta.size(); ++i) {
+			if(quantSpans.get(quantIndex).start == ta.getTokenCharacterOffset(i).getFirst()) {
+				ans += " [ ";
+			}
+			ans += ta.getToken(i) + " ";
+			if(quantSpans.get(quantIndex).end == ta.getTokenCharacterOffset(i).getSecond()) {
+				ans += " ] " + quantSpans.get(quantIndex) + " ";
+				if(quantIndex < quantSpans.size()-1) quantIndex++;
+			}
+		}
 	    return ans;
 	}
 	

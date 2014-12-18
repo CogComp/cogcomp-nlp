@@ -510,12 +510,4 @@ public class QuantTest {
 		return true;
 	}
 	
-	@SuppressWarnings("deprecation")
-//	@Test
-	public void testSegmentation() {
-		Quantifier quantifier = new Quantifier();
-		Assert.assertTrue(isEqual(
-				quantifier.getChunks("I have twenty dollars in my pocket."),
-				Arrays.asList("twenty dollars")));
-	}
 }

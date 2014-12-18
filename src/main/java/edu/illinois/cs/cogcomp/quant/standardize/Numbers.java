@@ -210,7 +210,7 @@ public class Numbers implements Serializable {
 				if(tokens.get(i).equals(order)) {
 					num += extractNumberFromTokenizedWords(numberForOrder, false).value*
 							str2num.get(order);
-					System.out.println(num);
+//					System.out.println(num);
 					indexOfLastOrder = i;
 					indexOfLastNumber = i;
 					break;
