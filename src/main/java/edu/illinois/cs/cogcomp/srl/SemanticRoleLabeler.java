@@ -110,6 +110,7 @@ public class SemanticRoleLabeler {
 		TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
 		tlv.addTokenLabel(0, "PRP", 1d);
 		tlv.addTokenLabel(1, "VBP", 1d);
+		tlv.addTokenLabel(2, ".", 1d);
 		ta.addView(ViewNames.POS, tlv);
 
 		ta.addView(ViewNames.NER, new SpanLabelView(ViewNames.NER, "test", ta, 1d));
@@ -119,11 +120,21 @@ public class SemanticRoleLabeler {
 		chunks.addSpanLabel(1, 2, "VP", 1d);
 		ta.addView(ViewNames.SHALLOW_PARSE, chunks);
 
-		TreeView parse = new TreeView(ViewNames.PARSE_CHARNIAK, "Charniak", ta, 1.0);
+		String defaultParser = properties.getDefaultParser();
+		String parseView = null;
+		if (defaultParser.equals("Charniak")) parseView = ViewNames.PARSE_CHARNIAK;
+		if (defaultParser.equals("Stanford")) parseView = ViewNames.PARSE_STANFORD;
+		if (defaultParser.equals("Berkeley")) parseView = ViewNames.PARSE_BERKELEY;
+		TreeView parse = new TreeView(parseView, defaultParser, ta, 1.0);
 		parse.setParseTree(0, TreeParserFactory.getStringTreeParser()
 				.parse("(S1 (S (NP (PRP I))       (VP (VPB do))        (. .)))"));
 		ta.addView(parse.getViewName(), parse);
 
+		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "test", ta, 1d);
+		view.addTokenLabel(0, "i", 1d);
+		view.addTokenLabel(1, "do", 1d);
+		view.addTokenLabel(2, ".", 1d);
+		ta.addView(ViewNames.LEMMA, view);
 		return ta;
 	}
 
@@ -153,13 +164,28 @@ public class SemanticRoleLabeler {
 
 		ta.addView(ViewNames.SHALLOW_PARSE, chunks);
 
-		TreeView parse = new TreeView(ViewNames.PARSE_CHARNIAK, "Charniak", ta, 1.0);
+		String defaultParser = properties.getDefaultParser();
+		String parseView = null;
+		if (defaultParser.equals("Charniak")) parseView = ViewNames.PARSE_CHARNIAK;
+		if (defaultParser.equals("Stanford")) parseView = ViewNames.PARSE_STANFORD;
+		if (defaultParser.equals("Berkeley")) parseView = ViewNames.PARSE_BERKELEY;
+		TreeView parse = new TreeView(parseView, defaultParser, ta, 1.0);
 
 		String treeString = "(S1 (S (NP (NP (DT The) (NN construction)) (PP (IN of) (NP (DT the) (NN library)))) " +
 				"(VP (AUX is) (ADJP (JJ complete))) (. .)))";
 		parse.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(treeString));
 		ta.addView(parse.getViewName(), parse);
 
+		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "test", ta, 1d);
+		view.addTokenLabel(0, "the", 1d);
+		view.addTokenLabel(1, "construction", 1d);
+		view.addTokenLabel(2, "of", 1d);
+		view.addTokenLabel(3, "the", 1d);
+		view.addTokenLabel(4, "library", 1d);
+		view.addTokenLabel(5, "be", 1d);
+		view.addTokenLabel(6, "complete", 1d);
+		view.addTokenLabel(7, ".", 1d);
+		ta.addView(ViewNames.LEMMA, view);
 		return ta;
 
 	}

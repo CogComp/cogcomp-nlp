@@ -9,6 +9,8 @@ import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
+import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
+import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,19 +75,22 @@ public class TextPreProcessor {
 		TextAnnotation ta;
 		if (useCurator) {
 			ta = curator.getTextAnnotation("", "", text, false);
-			addViewsFromCurator(ta, curator, defaultParser);
+			addViewsFromCurator(ta, curator);
 		}
 		else {
 			ta = illinoisPreprocessor.processTextToTextAnnotation("", "", text, false);
+			addAdditionalViewsFromPipeline(ta);
 		}
 		return ta;
 	}
 
 	public void preProcessText(TextAnnotation ta) throws Exception {
 		if (useCurator)
-			addViewsFromCurator(ta, curator, defaultParser);
-		else
+			addViewsFromCurator(ta, curator);
+		else {
 			illinoisPreprocessor.processTextAnnotation(ta, tokenized);
+			addAdditionalViewsFromPipeline(ta);
+		}
 	}
 
 	/**
@@ -93,10 +98,9 @@ public class TextPreProcessor {
 	 *
 	 * @param ta The {@link TextAnnotation} where the views will be added
 	 * @param curator The Curator client providing the views
-	 * @param defaultParser The default parser
 	 * @throws Exception
 	 */
-	private void addViewsFromCurator(TextAnnotation ta, CuratorClient curator, String defaultParser)
+	private void addViewsFromCurator(TextAnnotation ta, CuratorClient curator)
 			throws Exception {
 		if (!ta.hasView(ViewNames.NER))
 			curator.addNamedEntityView(ta, forceUpdate);
@@ -122,6 +126,28 @@ public class TextPreProcessor {
 			ta.addView(ClauseViewGenerator.STANFORD);
 			ta.addView(PseudoParse.STANFORD);
 			ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_STANFORD));
+		}
+	}
+
+	private void addAdditionalViewsFromPipeline(TextAnnotation ta) throws TException, AnnotationFailedException {
+		if (defaultParser.equals("Charniak")) {
+			if (!ta.hasView(ViewNames.CLAUSES_CHARNIAK))
+				ta.addView(ClauseViewGenerator.CHARNIAK);
+//			ta.addView(PseudoParse.CHARNIAK);
+			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_CHARNIAK))
+				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK));
+		} else if (defaultParser.equals("Berkeley")) {
+			if (!ta.hasView(ViewNames.CLAUSES_BERKELEY))
+				ta.addView(ClauseViewGenerator.BERKELEY);
+//			ta.addView(PseudoParse.BERKELEY);
+			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_BERKELEY))
+				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_BERKELEY));
+		} else if (defaultParser.equals("Stanford")) {
+			if (!ta.hasView(ViewNames.CLAUSES_STANFORD))
+				ta.addView(ClauseViewGenerator.STANFORD);
+//			ta.addView(PseudoParse.STANFORD);
+			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_STANFORD))
+				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_STANFORD));
 		}
 	}
 }

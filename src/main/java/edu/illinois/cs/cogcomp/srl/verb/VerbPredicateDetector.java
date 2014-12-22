@@ -35,8 +35,7 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 
 			predicate = true;
 
-			if (lemma.equals("xmodal") || pos.equals("MD")
-					|| token.equals("'ve")) // modals and some
+			if (lemma.equals("xmodal") || pos.equals("MD") || token.equals("'ve")) // modals and some
 				predicate = false;
 
 			// ignore all instances of has + "to be" if they are followed by a
@@ -49,11 +48,8 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 			if (tokenId < ta.size() - 1) {
 
 				if (be) {
-
-					SpanLabelView chunk = (SpanLabelView) ta
-							.getView(ViewNames.SHALLOW_PARSE);
-					for (Constituent c : chunk
-							.getConstituentsCoveringToken(tokenId)) {
+					SpanLabelView chunk = (SpanLabelView) ta.getView(ViewNames.SHALLOW_PARSE);
+					for (Constituent c : chunk.getConstituentsCoveringToken(tokenId)) {
 						// if the token under consideration is not the last
 						// token, then there is another verb here
 						if (c.getEndSpan() - 1 != tokenId) {
@@ -69,16 +65,13 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 				}
 
 				// ignore "have/do + verb"
-				if ((have || doVerb)
-						&& POSUtils.isPOSVerb(WordHelpers.getPOS(ta,
-								tokenId + 1)))
+				if ((have || doVerb) && POSUtils.isPOSVerb(WordHelpers.getPOS(ta, tokenId + 1)))
 					predicate = false;
 
 				// for some reason "according" in 'according to' is tagged as a
 				// verb. we want to avoid this.
 
-				if (token.equals("according")
-						&& ta.getToken(tokenId + 1).toLowerCase().equals("to"))
+				if (token.equals("according") && ta.getToken(tokenId + 1).toLowerCase().equals("to"))
 					predicate = false;
 			}
 
@@ -89,8 +82,7 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 					String nextToken = ta.getToken(tokenId + 1).toLowerCase();
 
 					if ((nextToken.equals("n't") || nextToken.equals("not"))
-							&& POSUtils.isPOSVerb(WordHelpers.getPOS(ta,
-									tokenId + 2)))
+							&& POSUtils.isPOSVerb(WordHelpers.getPOS(ta, tokenId + 2)))
 						predicate = false;
 
 				}
@@ -125,32 +117,4 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 			return Option.empty();
 		}
 	}
-
-	/*private boolean checkVPAmongSiblings(TextAnnotation ta, int tokenId) {
-		boolean pred = true;
-		int sentenceId = ta.getSentenceId(tokenId);
-		Tree<String> tree = ParseHelper.getParseTree(
-				this.getManager().defaultParser, ta, sentenceId);
-
-		List<Tree<String>> yield = tree.getYield();
-		if (tokenId >= yield.size()) {
-			pred = false;
-		} else {
-			Tree<String> predicateTree = yield.get(tokenId).getParent();
-			Tree<String> parent = predicateTree.getParent();
-
-			int predicatPosition = predicateTree
-					.getPositionAmongParentsChildren() + 1;
-
-			for (int i = predicatPosition; i < parent.getNumberOfChildren(); i++) {
-				if (parent.getChild(i).getLabel().equals("VP")) {
-					pred = false;
-					break;
-				}
-			}
-
-		}
-		return pred;
-	}*/
-
 }

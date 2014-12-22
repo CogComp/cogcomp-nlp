@@ -1,7 +1,9 @@
+### illinois-srl
+models/
+srl-out/
+
 ### Maven
 target/
-pom.xml
-
 
 ### Eclipse
 local.properties

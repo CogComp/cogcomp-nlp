@@ -48,7 +48,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 		lexicon = manager.getModelInfo(modelToExtract).getLexicon();
 
-		TextPreProcessor.initialize(true);
+//		TextPreProcessor.initialize(true);
 	}
 
 	@Override
@@ -150,11 +150,12 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 	@Override
 	protected List<TextAnnotation> process(TextAnnotation ta) {
-		try {
-			TextPreProcessor.getInstance().preProcessText(ta);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		//TODO Check if this needed
+//		try {
+//			TextPreProcessor.getInstance().preProcessText(ta);
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
 		return Arrays.asList(ta);
 	}
 

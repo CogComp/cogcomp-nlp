@@ -24,8 +24,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 		super(manager);
 	}
 
-	private final static Logger log = LoggerFactory
-			.getLogger(XuePalmerCandidateGenerator.class);
+	private final static Logger log = LoggerFactory.getLogger(XuePalmerCandidateGenerator.class);
 
 	@Override
 	public String getCandidateViewName() {
@@ -34,16 +33,13 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 
 	@Override
 	public List<Constituent> generateCandidates(Constituent predicate) {
-		Constituent predicateClone = predicate
-				.cloneForNewView(getCandidateViewName());
+		Constituent predicateClone = predicate.cloneForNewView(getCandidateViewName());
 
 		TextAnnotation ta = predicateClone.getTextAnnotation();
 		int sentenceId = ta.getSentenceId(predicateClone);
-		Tree<String> tree = ParseHelper.getParseTree(manager.defaultParser, ta,
-				sentenceId);
+		Tree<String> tree = ParseHelper.getParseTree(manager.defaultParser, ta, sentenceId);
 
-		Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils
-				.getSpanLabeledTree(tree);
+		Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils.getSpanLabeledTree(tree);
 
 		int sentenceStart = ta.getSentence(sentenceId).getStartSpan();
 		int predicatePosition = predicateClone.getStartSpan() - sentenceStart;
@@ -55,11 +51,8 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 		if (predicatePosition >= yield.size()) {
 			System.out.println(ta);
 
-			System.out.println("Predicate: " + predicatePosition + "\t"
-					+ predicateClone);
-
+			System.out.println("Predicate: " + predicatePosition + "\t" + predicateClone);
 			System.out.println(tree);
-
 			System.out.println(spanLabeledTree);
 
 			System.out.println("Tree view");
@@ -68,74 +61,48 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 			throw new RuntimeException();
 		}
 
-		Tree<Pair<String, IntPair>> predicateTree = yield
-				.get(predicatePosition);
+		Tree<Pair<String, IntPair>> predicateTree = yield.get(predicatePosition);
 
 		Tree<Pair<String, IntPair>> currentNode = predicateTree.getParent();
 
 		boolean done = false;
-		boolean first = true;
 		while (!done) {
 			if (currentNode.isRoot())
 				done = true;
 			else {
-
 				List<Constituent> candidates = new ArrayList<Constituent>();
-				boolean conjunctionFound = false;
 
-				for (Tree<Pair<String, IntPair>> sibling : currentNode
-						.getParent().getChildren()) {
-					// if this is the lowest level, then ignore conjunctions
+				for (Tree<Pair<String, IntPair>> sibling : currentNode.getParent().getChildren()) {
 					Pair<String, IntPair> siblingNode = sibling.getLabel();
-					// do not take the predicate as the argument
 
+					// do not take the predicate as the argument
 					IntPair siblingSpan = siblingNode.getSecond();
 					if (siblingSpan.equals(predicateClone.getSpan()))
 						continue;
 
-					// do not take any constituent including the predicate as an
-					// argument
+					// do not take any constituent including the predicate as an argument
 					if ((predicatePosition >= siblingSpan.getFirst())
-							&& (predicateClone.getEndSpan() <= siblingSpan
-									.getSecond()))
+							&& (predicateClone.getEndSpan() <= siblingSpan.getSecond()))
 						continue;
 
 					String siblingLabel = siblingNode.getFirst();
 
-					if (first && siblingLabel.equals("CC")) {
-						// conjunctionFound = true;
-						// break;
-					}
-
 					int start = siblingSpan.getFirst() + sentenceStart;
 					int end = siblingSpan.getSecond() + sentenceStart;
 
-					candidates.add(getNewConstituent(ta, predicateClone, start,
-							end));
+					candidates.add(getNewConstituent(ta, predicateClone, start, end));
 
 					if (siblingLabel.startsWith("PP")) {
-						for (Tree<Pair<String, IntPair>> child : sibling
-								.getChildren()) {
-							int candidateStart = child.getLabel().getSecond()
-									.getFirst()
-									+ sentenceStart;
+						for (Tree<Pair<String, IntPair>> child : sibling.getChildren()) {
+							int candidateStart = child.getLabel().getSecond().getFirst() + sentenceStart;
+							int candidateEnd = child.getLabel().getSecond().getSecond() + sentenceStart;
 
-							int candidateEnd = child.getLabel().getSecond()
-									.getSecond()
-									+ sentenceStart;
-
-							candidates.add(getNewConstituent(ta,
-									predicateClone, candidateStart,
-									candidateEnd));
+							candidates.add(getNewConstituent(ta, predicateClone, candidateStart, candidateEnd));
 						}
 					}
 				}
+				out.addAll(candidates);
 
-				if (!conjunctionFound) {
-					out.addAll(candidates);
-				}
-
-				first = false;
 				currentNode = currentNode.getParent();
 			}
 		}
@@ -155,8 +122,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 			String caller = callerClass + "." + callerMethod + ":" + lineNumber;
 
 			log.debug("Candidates for {} from heuristic: {}. Call from {}",
-					new String[] { predicateClone.toString(),
-							output.toString(), caller });
+					new String[] { predicateClone.toString(), output.toString(), caller });
 		}
 
 		return output;

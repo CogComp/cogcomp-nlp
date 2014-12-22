@@ -15,8 +15,7 @@ import java.sql.SQLException;
 
 public class SentenceDBHandler {
 
-	private Logger log = org.slf4j.LoggerFactory
-			.getLogger(SentenceDBHandler.class);
+	private Logger log = org.slf4j.LoggerFactory.getLogger(SentenceDBHandler.class);
 
 	private final String dbFile;
 
@@ -138,7 +137,7 @@ public class SentenceDBHandler {
 				stmt.setInt(2, datasetId);
 				stmt.executeUpdate();
 			} else {
-				System.out.println("Repeated in " + dataset + ": " + ta);
+				log.debug("Repeated in {} : {}", dataset, ta);
 			}
 
 		} catch (SQLException e) {

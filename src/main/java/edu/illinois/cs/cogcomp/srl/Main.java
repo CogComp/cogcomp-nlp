@@ -113,19 +113,19 @@ public class Main {
 
 	@CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
 	public static void cacheDatasets() throws Exception {
-		System.out.println("Initializing datasets");
+		log.info("Initializing datasets");
 		SentenceDBHandler.instance.initializeDatasets(properties.getSentenceDBFile());
 
 		// Add Propbank data
-		System.out.println("Caching PropBank data");
+		log.info("Caching PropBank data");
 		cacheVerbNom(SRLType.Verb);
 
-		System.out.println("Caching NomBank data");
+		log.info("Caching NomBank data");
 		cacheVerbNom(SRLType.Nom);
 
-		System.out.println("Cahced all datasets");
+		log.info("Cahced all datasets");
 
-		System.out.println("Adding required views in PTB");
+		log.info("Adding required views in PTB");
 		addRequiredViews(SentenceDBHandler.instance.getDataset(Dataset.PTBAll));
 	}
 
@@ -178,14 +178,15 @@ public class Main {
 	private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset) {
 		Counter<String> addedViews = new Counter<String>();
 
+		log.info("Initializing pre-processor");
+		TextPreProcessor.initialize(true);
+
 		int count = 0;
 		while (dataset.hasNext()) {
 			TextAnnotation ta = dataset.next();
 			Set<String> views = new HashSet<String>(ta.getAvailableViews());
 
 			try {
-				log.info("Initializing pre-processor");
-				TextPreProcessor.initialize(true);
 				TextPreProcessor.getInstance().preProcessText(ta);
 			} catch (Exception e) {
 				// Remove from dataset
@@ -243,7 +244,7 @@ public class Main {
 
 		String gapStr = "";
 		for (int i  =0; i < ((29-model.length())/2); i++) gapStr += " ";
-		System.out.println("\n\n\n\n" +
+		log.info("\n\n\n\n" +
 				"**************************************************\n" +
 				"** " + gapStr + "PRE-EXTRACTING " + model.toUpperCase() + gapStr + " **\n" +
 				"**************************************************\n");
@@ -335,14 +336,14 @@ public class Main {
 	}
 
 	@CommandDescription(description = "Trains a specific model and SRL type",
-			usage = "train [Verb | Nom | Prep] [Predicate | Sense | Identifier | Classifier]")
+			usage = "train [Verb | Nom] [Predicate | Sense | Identifier | Classifier]")
 	public static void train(String srlType_, String model_) throws Exception {
 		SRLType srlType = SRLType.valueOf(srlType_);
 		SRLManager manager = getManager(srlType, true);
 
 		String gapStr = "";
 		for (int i  =0; i < ((36-model_.length())/2); i++) gapStr += " ";
-		System.out.println("\n\n\n\n" +
+		log.info("\n\n\n\n" +
 				"**************************************************\n" +
 				"** " + gapStr + "TRAINING " + model_.toUpperCase() + gapStr + " **\n" +
 				"**************************************************\n");
@@ -467,7 +468,7 @@ public class Main {
 
 			if (!ta.hasView(manager.getGoldViewName())) continue;
 
-			ta.addView(new HeadFinderDependencyViewGenerator(manager.defaultParser));
+			//ta.addView(new HeadFinderDependencyViewGenerator(manager.defaultParser));
 			PredicateArgumentView gold = (PredicateArgumentView) ta.getView(manager.getGoldViewName());
 
 			SRLILPInference inference = manager.getInference(solver, gold.getPredicates());
@@ -486,7 +487,7 @@ public class Main {
 			count++;
 			if (count % 1000 == 0) {
 				long end = System.currentTimeMillis();
-				System.out.println(count + " sentences done. Took "
+				log.info(count + " sentences done. Took "
 						+ (end - start) + "ms, F1 so far = "
 						+ tester.getAverageF1());
 			}
