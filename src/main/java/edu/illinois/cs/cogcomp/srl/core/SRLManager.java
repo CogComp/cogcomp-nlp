@@ -61,7 +61,7 @@ public abstract class SRLManager {
 
 	private final HashMap<String, Integer> argToId, senseToId;
 
-	private final Set<String> allArgumentsSet, allSensesSet;
+	private final Set<String> allArgumentsSet;
 
 	private final LegalArguments knownLegalArguments;
 	private final Map<String, Set<String>> legalArgumentsCache;
@@ -82,16 +82,11 @@ public abstract class SRLManager {
 
 		initializeFeatureManifest(defaultParser);
 
-		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<String>(
-				Arrays.asList(getArgumentLabels())));
-
-		allSensesSet = Collections.unmodifiableSet(new TreeSet<String>(Arrays
-				.asList(getSenseLabels())));
+		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(getArgumentLabels())));
 
 		senseToId = getLabelIdMap(getSenseLabels());
 		argToId = getLabelIdMap(getArgumentLabels());
-		this.knownLegalArguments = new LegalArguments(getSRLType()
-				+ ".legal.arguments");
+		this.knownLegalArguments = new LegalArguments(getSRLType() + ".legal.arguments");
 
 		this.legalArgumentsCache = new ConcurrentHashMap<String, Set<String>>();
 
@@ -195,10 +190,6 @@ public abstract class SRLManager {
 
 	public Set<String> getAllArguments() {
 		return allArgumentsSet;
-	}
-
-	public Set<String> getAllSenses() {
-		return allSensesSet;
 	}
 
 	public void addConstraint(SRLConstraints c) {
@@ -381,7 +372,7 @@ public abstract class SRLManager {
 	 * The name of the file that contains the lexicon
 	 */
 	public String getLexiconFileName(Models m) {
-		return properties.getModelsDir() + "/lexicon." + getSRLType() + "." + m + ".lex";
+		return properties.getModelsDir() + "/" + getSRLType() + "." + m + "." + defaultParser + ".lex";
 	}
 
 	/**

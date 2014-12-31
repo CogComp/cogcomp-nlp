@@ -81,15 +81,13 @@ public class SRLProperties {
 		return wordNetFile;
 	}
 
-	String getFeatureCacheFile(SRLType SRLType, Models type, String featureSet,
-							   String parser, Dataset dataset) {
+	String getFeatureCacheFile(SRLType SRLType, Models type, String featureSet, String parser, Dataset dataset) {
 		return this.config.getString("CacheDirectory") + "/features."
 				+ SRLType.name() + "." + type.name() + "." + featureSet + "."
 				+ dataset + "." + parser + ".cache";
 	}
 
-	String getPrunedFeatureCacheFile(SRLType SRLType, Models type,
-									 String featureSet, String parser) {
+	String getPrunedFeatureCacheFile(SRLType SRLType, Models type, String featureSet, String parser) {
 		return this.config.getString("CacheDirectory") + "/features."
 				+ SRLType.name() + "." + type.name() + "." + featureSet + "."
 				+ parser + ".pruned.cache";
@@ -102,7 +100,7 @@ public class SRLProperties {
 	public String[] getAllTrainSections() {
 		return new String[] { "02", "03", "04", "05", "06", "07", "08", "09",
 				"10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-				"20", "21", "22", "24" };
+				"20", "21", "22" };
 	}
 
 	public String getTestSections() {
@@ -119,7 +117,7 @@ public class SRLProperties {
 	public String[] getTrainDevSections() {
 		return new String[] { "02", "03", "04", "05", "06", "07", "08",
 				"09", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-				"19", "20", "21", "22" };
+				"19", "20", "21", "22", "24" };
 	}
 
 	public String[] getDevSections() {

@@ -8,7 +8,6 @@ import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
-import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
 import edu.illinois.cs.cogcomp.edison.data.ColumnFormatWriter;
 import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
 import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
@@ -123,7 +122,7 @@ public class Main {
 		log.info("Caching NomBank data");
 		cacheVerbNom(SRLType.Nom);
 
-		log.info("Cahced all datasets");
+		log.info("Cached all datasets");
 
 		log.info("Adding required views in PTB");
 		addRequiredViews(SentenceDBHandler.instance.getDataset(Dataset.PTBAll));
