@@ -1,0 +1,15 @@
+### illinois-verbsense
+models/
+scratch/
+
+### Maven
+target/
+
+### Eclipse
+local.properties
+.settings/
+.loadpath
+
+### JetBrains
+*.iml
+.idea/
