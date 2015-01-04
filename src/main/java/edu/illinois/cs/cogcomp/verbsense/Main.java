@@ -11,7 +11,6 @@ import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
 import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
@@ -38,7 +37,6 @@ import java.util.*;
 public class Main {
 	private final static Logger log = LoggerFactory.getLogger(Main.class);
 
-	private static String defaultParser;
 	private static Properties properties;
 
 
@@ -59,8 +57,6 @@ public class Main {
 			try {
 				Properties.initialize(arguments[0]);
 				properties = Properties.getInstance();
-
-				defaultParser = Properties.getInstance().getDefaultParser();
 
 				String[] args = new String[arguments.length - 1];
 				System.arraycopy(arguments, 1, args, 0, args.length);
@@ -165,16 +161,6 @@ public class Main {
 				SentenceDBHandler.instance.removeTextAnnotation(ta);
 				continue;
 			}
-			String parserView = ViewNames.DEPENDENCY + ":";
-			String parser = properties.getDefaultParser();
-			if (parser.equals("Charniak")) parserView += ViewNames.PARSE_CHARNIAK;
-			if (parser.equals("Berkeley")) parserView += ViewNames.PARSE_BERKELEY;
-			if (parser.equals("Stanford")) parserView += ViewNames.PARSE_STANFORD;
-			if (ta.getView(parserView).getNumberOfConstituents() != ta.getSentence(0).size()) {
-				log.error("Head-dependency mismatch, removing sentence from dataset");
-				SentenceDBHandler.instance.removeTextAnnotation(ta);
-				continue;
-			}
 
 			Set<String> newViews = new HashSet<>(ta.getAvailableViews());
 			newViews.removeAll(views);
@@ -192,24 +178,7 @@ public class Main {
 
 	@CommandIgnore
 	public static SenseManager getManager(boolean trainingMode) throws Exception {
-		String viewName;
-		if (defaultParser == null) defaultParser = Properties.getInstance().getDefaultParser();
-		switch (defaultParser) {
-			case "Charniak":
-				viewName = ViewNames.PARSE_CHARNIAK;
-				break;
-			case "Berkeley":
-				viewName = ViewNames.PARSE_BERKELEY;
-				break;
-			case "Stanford":
-				viewName = ViewNames.PARSE_STANFORD;
-				break;
-			default:
-				viewName = defaultParser;
-				break;
-		}
-
-		return new SenseManager(trainingMode, viewName);
+		return new SenseManager(trainingMode);
 	}
 
 	@CommandDescription(description = "Pre-extracts the features for the verb-sense model. Run this before training.",
@@ -230,11 +199,11 @@ public class Main {
 
 		String featureSet = "" + modelInfo.featureManifest.getIncludedFeatures().hashCode();
 
-		String allDataCacheFile = properties.getFeatureCacheFile(featureSet, defaultParser, dataset);
+		String allDataCacheFile = properties.getFeatureCacheFile(featureSet, dataset);
 		FeatureVectorCacheFile featureCache = preExtract(numConsumers, manager, dataset, allDataCacheFile);
 
 		pruneFeatures(numConsumers, manager, featureCache,
-				properties.getPrunedFeatureCacheFile(featureSet, defaultParser));
+				properties.getPrunedFeatureCacheFile(featureSet));
 
 		Lexicon lexicon = modelInfo.getLexicon().getPrunedLexicon(manager.getPruneSize());
 
@@ -285,7 +254,7 @@ public class Main {
 		ModelInfo modelInfo = manager.getModelInfo();
 
 		String featureSet = "" + modelInfo.featureManifest.getIncludedFeatures().hashCode();
-		String cacheFile = properties.getPrunedFeatureCacheFile(featureSet, defaultParser);
+		String cacheFile = properties.getPrunedFeatureCacheFile(featureSet);
 		AbstractInferenceSolver[] inference = new AbstractInferenceSolver[numThreads];
 
 		//TODO Can I replace this with ILPInference?

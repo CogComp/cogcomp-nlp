@@ -73,7 +73,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 	@Override
 	protected String getStatus() {
 		return taCounter.get() + " sentences cached, " +
-				"#predicates =" + predicateCounter.get() + ", " +
+				"#predicates = " + predicateCounter.get() + ", " +
 				"#features = " + manager.getModelInfo().getLexicon().size();
 	}
 

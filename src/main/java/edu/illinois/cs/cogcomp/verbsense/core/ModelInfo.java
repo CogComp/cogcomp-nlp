@@ -40,7 +40,6 @@ public class ModelInfo {
 		log.info("Loading feature extractor from {}", file);
 		featureManifest = new FeatureManifest(file);
 		featureManifest.useCompressedName();
-		featureManifest.setVariable("*default-parser*", manager.defaultParser);
 
 		fex = featureManifest.createFex();
 	}

@@ -75,14 +75,12 @@ public class Properties {
 		return wordNetFile;
 	}
 
-	String getFeatureCacheFile(String featureSet, String parser, Dataset dataset) {
-		return this.config.getString("CacheDirectory") + "/features." + featureSet + "."
-				+ dataset + "." + parser + ".cache";
+	String getFeatureCacheFile(String featureSet, Dataset dataset) {
+		return this.config.getString("CacheDirectory") + "/features." + featureSet + "." + dataset + ".cache";
 	}
 
-	String getPrunedFeatureCacheFile(String featureSet, String parser) {
-		return this.config.getString("CacheDirectory") + "/features." + featureSet + "."
-				+ parser + ".pruned.cache";
+	String getPrunedFeatureCacheFile(String featureSet) {
+		return this.config.getString("CacheDirectory") + "/features." + featureSet + ".pruned.cache";
 	}
 
 	public String getPennTreebankHome() {
@@ -122,10 +120,6 @@ public class Properties {
 
 	public String getSentenceDBFile() {
 		return this.config.getString("CacheDirectory") + "/sentences.db";
-	}
-
-	public String getDefaultParser() {
-		return config.getString("DefaultParser");
 	}
 
 	public String getModelsDir() {

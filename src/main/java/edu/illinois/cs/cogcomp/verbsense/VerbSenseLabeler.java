@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.verbsense;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.edison.sentences.*;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
@@ -16,7 +15,6 @@ import java.util.List;
 public class VerbSenseLabeler {
 	private final static Logger log = LoggerFactory.getLogger(VerbSenseLabeler.class);
 	public final SenseManager manager;
-	private static Properties properties;
 
 	public static void main(String[] arguments) throws Exception {
 		if (arguments.length < 1) {
@@ -53,7 +51,6 @@ public class VerbSenseLabeler {
 
 		log.info("Initializing config");
 		Properties.initialize(configFile);
-		properties = Properties.getInstance();
 
 		log.info("Initializing pre-processor");
 		TextPreProcessor.initialize(false);
@@ -87,16 +84,6 @@ public class VerbSenseLabeler {
 		chunks.addSpanLabel(0, 1, "NP", 1d);
 		chunks.addSpanLabel(1, 2, "VP", 1d);
 		ta.addView(ViewNames.SHALLOW_PARSE, chunks);
-
-		String defaultParser = properties.getDefaultParser();
-		String parseView = null;
-		if (defaultParser.equals("Charniak")) parseView = ViewNames.PARSE_CHARNIAK;
-		if (defaultParser.equals("Stanford")) parseView = ViewNames.PARSE_STANFORD;
-		if (defaultParser.equals("Berkeley")) parseView = ViewNames.PARSE_BERKELEY;
-		TreeView parse = new TreeView(parseView, defaultParser, ta, 1.0);
-		parse.setParseTree(0, TreeParserFactory.getStringTreeParser()
-				.parse("(S1 (S (NP (PRP I))       (VP (VPB do))        (. .)))"));
-		ta.addView(parse.getViewName(), parse);
 
 		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "test", ta, 1d);
 		view.addTokenLabel(0, "i", 1d);

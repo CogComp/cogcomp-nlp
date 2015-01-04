@@ -36,11 +36,7 @@
 		   :include-index true
 		   :ignore-center true
 		   (bigram word)
-		   (trigram word))
-	  (governor-features :parse-view *default-parser*
-			     word-features)
-	  (object-features :parse-view *default-parser*
-			   word-features)))
+		   (trigram word))))
   (list my-features
 	(conjoin lemma my-features)))
 

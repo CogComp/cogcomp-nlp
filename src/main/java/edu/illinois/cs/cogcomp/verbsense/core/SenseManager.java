@@ -12,7 +12,6 @@ import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.verbsense.Constants;
 import edu.illinois.cs.cogcomp.verbsense.Properties;
 import edu.illinois.cs.cogcomp.verbsense.features.FeatureGenerators;
-import edu.illinois.cs.cogcomp.verbsense.features.ProjectedPath;
 import edu.illinois.cs.cogcomp.verbsense.inference.ILPInference;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseInstance;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseStructure;
@@ -41,12 +40,6 @@ public class SenseManager {
 	 */
 	public final boolean trainingMode;
 
-	/**
-	 * This class works with a parse trees from this parser, which controls both
-	 * candidate extraction and feature generation.
-	 */
-	public final String defaultParser;
-
 	private final HashMap<String, Integer> senseToId;
 
 	private final Map<String, Set<String>> legalSenses;
@@ -58,11 +51,10 @@ public class SenseManager {
 	public final SenseExampleGenerator exampleGenerator;
 	private final PredicateDetector heuristicPredicateDetector;
 
-	public SenseManager(boolean trainingMode, String defaultParser) throws Exception {
+	public SenseManager(boolean trainingMode) throws Exception {
 		this.trainingMode = trainingMode;
-		this.defaultParser = defaultParser;
 
-		initializeFeatureManifest(defaultParser);
+		initializeFeatureManifest();
 
 		senseToId = getLabelIdMap(getSenseLabels());
 		legalSenses = getLegalSensesMap();
@@ -114,21 +106,13 @@ public class SenseManager {
 		return map;
 	}
 
-	private void initializeFeatureManifest(String defaultParser) {
+	private void initializeFeatureManifest() {
 		Feature.setUseAscii();
 		Feature.setKeepString();
 
 		FeatureManifest.setJWNLConfigFile(properties.getWordNetFile());
 
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
-
-		// These three are from Surdeanu etal.
-		FeatureManifest.setTransformer("parse-left-sibling", FeatureGenerators.getParseLeftSibling(defaultParser));
-		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseLeftSibling(defaultParser));
-		FeatureManifest.setFeatureExtractor("pp-features", FeatureGenerators.ppFeatures(defaultParser));
-
-		// Introduced in Toutanova etal.
-		FeatureManifest.setFeatureExtractor("projected-path", new ProjectedPath(defaultParser));
 	}
 
 	public int getNumLabels() {
@@ -187,7 +171,8 @@ public class SenseManager {
 	 * The name of the file that contains the lexicon
 	 */
 	public String getLexiconFileName() {
-		return properties.getModelsDir() + "/" + defaultParser + ".lex";
+		String identifier = getFeatureIdentifier();
+		return properties.getModelsDir() + "/sense." + identifier + ".lex";
 	}
 
 	/**
@@ -195,7 +180,7 @@ public class SenseManager {
 	 */
 	public String getModelFileName() {
 		String identifier = getFeatureIdentifier();
-		return properties.getModelsDir() + "/" + defaultParser + "." + identifier + ".lc";
+		return properties.getModelsDir() + "/sense." + identifier + ".lc";
 	}
 
 	/**
