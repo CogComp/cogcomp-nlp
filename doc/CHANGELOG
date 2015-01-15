@@ -7,3 +7,6 @@ Version 0.0.9
 Switched to edison-0.7.4 (extracts LEMMA view from Record)
 Switched to illinois-lemmatizer-0.0.9 (uses CuratorViewNames.lemma)
 Switched to illinois-ner-2.8.1
+
+Version 0.1.0
+Switched to illinois-ner-2.8.2 (less STDOUT pollution)
