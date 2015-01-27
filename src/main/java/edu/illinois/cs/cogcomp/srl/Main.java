@@ -212,10 +212,10 @@ public class Main {
 				for (String s : newViews) addedViews.incrementCount(s);
 			}
 			count++;
-			if (count % 1000 == 0) System.out.println(count + " sentences done");
+			if (count % 1000 == 0) log.info(count + " sentences done");
 		}
-		System.out.println("New views: ");
-		for (String s : addedViews.items()) System.out.println(s + "\t" + addedViews.getCount(s));
+		log.info("New views: ");
+		for (String s : addedViews.items()) log.info(s + "\t" + addedViews.getCount(s));
 	}
 
 	@CommandIgnore
@@ -236,7 +236,7 @@ public class Main {
 
 	@CommandDescription(description = "Pre-extracts the features for a specific model and SRL type. " +
 			"Run this before training",
-			usage = "preExtract [Verb | Nom | Prep] [Predicate | Sense | Identifier | Classifier]")
+			usage = "preExtract [Verb | Nom] [Predicate | Sense | Identifier | Classifier]")
 	public static void preExtract(String srlType_, String model) throws Exception {
 		SRLType srlType = SRLType.valueOf(srlType_);
 		SRLManager manager = getManager(srlType, true);
@@ -419,7 +419,7 @@ public class Main {
 		manager.writeIdentifierScale(pair.getFirst(), pair.getSecond());
 	}
 
-	@CommandDescription(description = "Performs evaluation.", usage = "evaluate [Verb | Prep | Nom]")
+	@CommandDescription(description = "Performs evaluation.", usage = "evaluate [Verb | Nom]")
 	public static void evaluate(String srlType_) throws Exception {
 		SRLType srlType = SRLType.valueOf(srlType_);
 		SRLManager manager = getManager(srlType, false);

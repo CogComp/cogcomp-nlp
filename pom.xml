@@ -5,7 +5,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-srl</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0-SNAPSHOT</version>
+	<version>5.0</version>
 
 	<url>http://cogcomp.cs.illinois.edu</url>
 
@@ -27,13 +27,15 @@
         <!--Include the pre-trained SRL models for running SemanticRoleLabeler-->
         <!--<dependency>-->
             <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
-            <!--<artifactId>illinoisSRL-verb-models</artifactId>-->
-            <!--<version>4.0.1</version>-->
+            <!--<artifactId>illinois-srl</artifactId>-->
+			<!--<classifier>models-verb-stanford</classifier>-->
+            <!--<version>5.0</version>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
-            <!--<artifactId>illinoisSRL-nom-models</artifactId>-->
-            <!--<version>4.0.1</version>-->
+            <!--<artifactId>illinois-srl</artifactId>-->
+			<!--<classifier>models-nom-stanford</classifier>-->
+            <!--<version>5.0</version>-->
         <!--</dependency>-->
 
 		<!--The Illinois pipeline can be used instead -->

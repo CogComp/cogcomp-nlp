@@ -5,32 +5,32 @@ VERSION=`mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpress
 
 tmpdir=tmp-Srl-verb-$RANDOM
 
-rm -rdf $tmpdir
-mkdir -p $tmpdir/models
+rm -rdf ${tmpdir}
+mkdir -p ${tmpdir}/models
 
-cp ./models/Verb* $tmpdir/models
-cp ./models/lexicon.Verb.* $tmpdir/models
+for parser in STANFORD CHARNIAK; do
+    cp ./models/Verb*${parser}* ${tmpdir}/models
 
-cd $tmpdir
-rm -rdf ../target/illinoisSRL-verb-models-$VERSION.jar
-jar cf ../target/illinoisSRL-verb-models-$VERSION.jar models
-cd ..
-
-rm -rdf $tmpdir
-
+    cd ${tmpdir}
+    rm -rdf ../target/illinois-srl-models-verb-${parser}-${VERSION}.jar
+    jar cf ../target/illinois-srl-models-verb-${parser}-${VERSION}.jar models
+    cd ..
+    rm ${tmpdir}/models/*
+done
+rm -rdf ${tmpdir}
 
 tmpdir=tmp-Srl-nom-$RANDOM
 
-rm -rdf $tmpdir
-mkdir -p $tmpdir/models
+rm -rdf ${tmpdir}
+mkdir -p ${tmpdir}/models
 
-cp ./models/Nom* $tmpdir/models
-cp ./models/lexicon.Nom.* $tmpdir/models
+for parser in STANFORD CHARNIAK; do
+    cp ./models/Nom*${parser}* ${tmpdir}/models
 
-cd $tmpdir
-rm -rdf ../target/illinoisSRL-nom-models-$VERSION.jar
-jar cf ../target/illinoisSRL-nom-models-$VERSION.jar models
-cd ..
-
-rm -rdf $tmpdir
-
+    cd ${tmpdir}
+    rm -rdf ../target/illinois-srl-models-nom-${parser}-${VERSION}.jar
+    jar cf ../target/illinois-srl-models-nom-${parser}-${VERSION}.jar models
+    cd ..
+    rm ${tmpdir}/models/*
+done
+rm -rdf ${tmpdir}
