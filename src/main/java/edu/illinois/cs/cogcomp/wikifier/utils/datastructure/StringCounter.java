@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
 /**
  * Simple utility class for counting strings.
+ * 
  * @author cheng88, upadhya3
  *
  */
@@ -49,6 +50,7 @@ public class StringCounter {
 
 	/**
 	 * returns the hashmap string-->counts
+	 * 
 	 * @return
 	 */
 	public Map<String, Integer> getCountMap() {
@@ -78,6 +80,16 @@ public class StringCounter {
 
 	public void reset() {
 		counter.clear();
+	}
+
+	public List<Pair<String, Double>> getTopK(int k) {
+		List<Pair<String, Double>> ret = new ArrayList<Pair<String, Double>>();
+
+		for (String key : counter.keySet()) {
+			ret.add(new Pair<String, Double>(key, 1.0 * counter.get(key)));
+		}
+		Collections.sort(ret, highScoreFirst);
+		return ret.subList(0, Math.min(k, ret.size()));
 	}
 
 	/**
@@ -135,4 +147,15 @@ public class StringCounter {
 		}
 
 	};
+
+	public static void main(String[] args) {
+		String text = "The nursery rhyme was first published by the Boston publishing firm Marsh, Capen & Lyon, as an original poem by Sarah Josepha Hale on May 24, 1830, and was inspired by an actual incident.As a young girl, Mary Sawyer (later Mrs. Mary Tyler) kept a pet lamb, which she took to school one day at the suggestion of her brother.";
+		String[] split = text.split(" ");
+		StringCounter c = new StringCounter();
+		for(String s:split)
+		{
+			c.count(s);
+		}
+		System.out.println(c.getTopK(10));
+	}
 }
