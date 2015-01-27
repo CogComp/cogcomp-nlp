@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>wikiutils</artifactId>
-  <version>1.0</version> 
+  <version>1.0.0</version> 
 
   <repositories>
     <repository>
@@ -37,6 +37,12 @@
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
       <version>1.18.0-rc</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>1.4.182</version>
     </dependency>
 
     <dependency>
