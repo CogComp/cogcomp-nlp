@@ -308,7 +308,7 @@
     <repository>
       <id>CogcompSoftware</id>
       <name>CogcompSoftware</name>
-      <url>scp://upadhya3@bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+      <url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
     </repository>
   </distributionManagement>
   <properties>
