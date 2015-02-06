@@ -39,7 +39,7 @@ public class XMLModelExample {
 		fieldC = c;
 	}
 
-	public void setEnclosed(EnclosedObject s1 )
+	public void setEnclosed(EnclosedObject s1)
 	{
 		this.obj=s1;
 	}
