@@ -16,7 +16,9 @@ import edu.illinois.cs.cogcomp.wikifier.utils.db.DBHelper.Column;
  * Running this will create a db for you at the location specified by dbFile
  * Once you are done populating, you can view the db by connecting to it by
  * running java -cp target/dependency/h2-1.4.182.jar org.h2.tools.Server -web
- * -webPort 9090 and connecting to the dbURL
+ * -webPort 9090 and connecting to the dbURL. The username is blank, dbURL
+ * should have absolute system path (eg.
+ * "jdbc:h2:/Users/Shyam/java_code/wikiutils/database").
  * 
  * @author upadhya3
  *
@@ -30,6 +32,13 @@ public class DBExample {
 
 	private static DBExample instance;
 
+	/***
+	 * if db does not exist, it will create one!
+	 * 
+	 * @param dbFile
+	 * @param tableName
+	 * @return
+	 */
 	public static DBExample getInstance(String dbFile, String tableName) {
 		if (instance == null) {
 			instance = new DBExample(dbFile, tableName);
@@ -105,8 +114,7 @@ public class DBExample {
 	}
 
 	public static void main(String[] args) throws SQLException {
-		DBExample db = DBExample.getInstance("/scratch/upadhya3/database",
-				"myTable");
+		DBExample db = DBExample.getInstance("./database", "myTable");
 		Random random = new Random(0);
 		for (int i = 0; i < 10; i++)
 			db.addItem(new SomeItem(random.nextInt(), random.nextInt(), random
