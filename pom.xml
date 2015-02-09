@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>wikiutils</artifactId>
-  <version>1.0.0</version> 
+  <version>1.0.1</version> 
 
   <repositories>
     <repository>
