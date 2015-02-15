@@ -2,6 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 
 import java.util.*;
 
+import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,12 +77,14 @@ public class IllinoisPreprocessor
     private boolean useChunker;
     private boolean useStanfordParse;
     private boolean useNer;
-    
+    private boolean useNerExt;
+
     private IllinoisTokenizerHandler tokenizer;
     private IllinoisPOSHandler pos;
     private IllinoisLemmatizerHandler lemmatizer;
     private IllinoisChunkerHandler chunker;
     private IllinoisNerExtHandler ner;
+    private IllinoisNerExtHandler nerExt;
     private StanfordCoreNLP stanfordPipeline;
     
 //    private boolean respectTokenization;
@@ -103,7 +106,8 @@ public class IllinoisPreprocessor
         useChunker = rm_.getBoolean( PipelineVars.USE_CHUNKER );
         useLemmatizer = rm_.getBoolean( PipelineVars.USE_LEMMA );
         useNer = rm_.getBoolean( PipelineVars.USE_NER );
-        
+        useNerExt = rm_.getBoolean( PipelineVars.USE_NEREXT );
+
         tokenizer = new IllinoisTokenizerHandler();
 
     	if ( !usePos )
@@ -135,9 +139,16 @@ public class IllinoisPreprocessor
         
         if ( useNer )
         {
-        	String nerConfig = rm_.getString( PipelineVars.NER_CONFIG );
+        	String nerConfig = rm_.getString( PipelineVars.NER_CONLL_CONFIG );
         	ner = new IllinoisNerExtHandler( nerConfig );
         }
+
+        if ( useNerExt )
+        {
+            String nerConfig = rm_.getString( PipelineVars.NER_ONTONOTES_CONFIG );
+            nerExt = new IllinoisNerExtHandler( nerConfig );
+        }
+
         if (useStanfordParse) {
         	Properties props = new Properties();
         	props.put("annotators", "tokenize, ssplit, pos, parse");
@@ -240,7 +251,14 @@ public class IllinoisPreprocessor
         	Labeling nerView  = ner.labelRecord( record );
         	labelViews.put( CuratorViewNames.ner, nerView );
         }
-        
+
+
+        if ( useNerExt )
+        {
+            Labeling nerView  = nerExt.labelRecord( record );
+            labelViews.put( AdditionalViewNames.nerExt, nerView );
+        }
+
         // XXX We're assuming here that our tokenizer and the Stanford one will agree
         if ( useStanfordParse )
         {

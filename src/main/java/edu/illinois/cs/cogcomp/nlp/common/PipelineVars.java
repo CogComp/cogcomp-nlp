@@ -12,6 +12,8 @@ public class PipelineVars
     public static final String RESPECT_TOKENIZATION = "respectTokenization";
     public static final String USE_LEMMA = "useLemmatizer";
 	public static final String USE_NER = "useNer"; 
-	public static final String NER_CONFIG = "nerConfigFile";
-    
+// NER with larger label set
+    public static final String USE_NEREXT = "useNerExt";
+    public static final java.lang.String NER_CONLL_CONFIG = "nerConllConfigFile";
+    public static final String NER_ONTONOTES_CONFIG = "nerOntonotesConfigFile";
 }

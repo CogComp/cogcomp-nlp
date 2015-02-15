@@ -35,7 +35,7 @@ public class StanfordToForest {
 	public static Forest convert(StanfordCoreNLP pipeline, Record record) throws TException {
 		Forest parseForest = new Forest();
 		parseForest.setSource("stanfordparser");
-		
+
 		Labeling sentenceLabeling = record.getLabelViews().get(CuratorViewNames.sentences);
 		Labeling tokenLabeling = record.getLabelViews().get(CuratorViewNames.tokens);
 		convertRawToTokenized(tokenLabeling, sentenceLabeling);

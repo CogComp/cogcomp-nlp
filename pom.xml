@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-nlp-pipeline</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1-SNAPSHOT</version>
 	<name>Illinois NLP Pipeline</name>
 	<description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
 	<properties>
@@ -35,11 +35,6 @@
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>edison</artifactId>
 			<version>0.7.4</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-pos</artifactId>
-			<version>2.0.1</version>
 		</dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -89,13 +84,20 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-ner</artifactId>
-			<version>2.8.2</version>
+			<version>2.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-ner</artifactId>
 			<version>2.6</version>
 			<classifier>models-conll</classifier>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-ner</artifactId>
+			<version>2.6</version>
+			<classifier>models-ontonotes</classifier>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

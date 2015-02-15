@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.Forest;
 import edu.illinois.cs.cogcomp.thrift.base.Labeling;
@@ -80,6 +81,7 @@ public class IllinoisPreprocessorTest
 		boolean isChunkOk = false;
 		boolean isLemmaOk = false;
 		boolean isNerOk = false;
+		boolean isNerExtOk = false;
 		boolean isParseOk;
 //		Set< String > views = rec.getLabelViews().keySet();
 
@@ -152,7 +154,22 @@ public class IllinoisPreprocessorTest
 
 			CuratorDataUtils.printLabeling( System.out, ner, text );
 			System.out.println();
-//		} 
+
+
+		Labeling nerExt = rec.getLabelViews().get( AdditionalViewNames.nerExt );
+
+		List< Span > nerExtTags = nerExt.getLabels();
+
+		if ( nerExtTags.size() > 0 )
+			isNerExtOk = true;
+
+		assertTrue( isNerExtOk );
+
+		CuratorDataUtils.printLabeling( System.out, ner, text );
+		System.out.println();
+
+
+//		}
 //		
 //		if ( views.contains( CuratorViewNames.stanfordParse ) )
 //		{

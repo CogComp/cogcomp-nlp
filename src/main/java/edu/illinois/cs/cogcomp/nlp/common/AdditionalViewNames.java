@@ -24,5 +24,6 @@ public class AdditionalViewNames {
 //	public static final String lemmaPorter = "lemma_porter";
 //	public static final String lemmaKp = "lemma_kp";
 //	public static final String ccgLemma = "illinois_lemma";
-    
+
+    public static final String nerExt = "ner-ext";
 }
