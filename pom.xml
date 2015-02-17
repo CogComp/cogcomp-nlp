@@ -26,19 +26,25 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>coreUtilities</artifactId>
-			<version>0.2.5</version>
+			<version>0.2.8</version>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>LBJava</artifactId>
-			<version>1.0</version>
+			<version>1.0.3</version>
 		</dependency>
-
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>edison</artifactId>
-			<version>0.4</version>
+			<version>0.7.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinoisSRL</artifactId>
+			<version>4.1.1</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

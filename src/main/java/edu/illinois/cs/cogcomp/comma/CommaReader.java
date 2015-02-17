@@ -1,10 +1,16 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,41 +19,83 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.naming.ServiceUnavailableException;
+
+import org.apache.thrift.TException;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
+import edu.illinois.cs.cogcomp.edison.data.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Queries;
+import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.edison.sentences.Relation;
+import edu.illinois.cs.cogcomp.edison.sentences.Sentence;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.edison.sentences.TokenizerUtilities.SentenceViewGenerators;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.srl.data.PropbankReader;
+import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 
 /**
  * Data reader for the comma dataset of Srikumar et al.
  */
 public class CommaReader implements Parser {
-	private Scanner scanner;
 	private final String annotationFile;
 	private List<Comma> commas;
+	public List<Boolean> annotated;
 	private int currentComma;
-
+	List<TextAnnotation> taList;
 	public CommaReader(String annotationFile){
 		this.annotationFile = annotationFile;
 		commas = new ArrayList<Comma>();
-		readData();
+		annotated = new ArrayList<Boolean>();
+		
+		//File f = new File("data/CommaTA.ser");
+		File f = new File("data/CommaTAGoldFinal.ser");
+
+		if (f.exists()) {
+			System.out.println("File exists");
+			try {
+				readSerData(f);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("File not found!");
+			try {
+				readData();
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
 	}
 
-	private void readData() {
-		
-		List<TextAnnotation> taList = getTAList();
+	@SuppressWarnings("unchecked")
+	private void readSerData(File f) throws IOException{
+		FileInputStream fileIn = new FileInputStream(f);
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		try {
+			commas = (List<Comma>)in.readObject();
+			annotated = (List<Boolean>)in.readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(1);
+		}
+		in.close();
+		fileIn.close();
+	}
+
+	private void readData() throws ServiceUnavailableException, AnnotationFailedException, TException, IOException{
+		taList = getTAList();
 		Map<String, TextAnnotation>taMap = new HashMap<String, TextAnnotation>();
 		PrintWriter writer;
-		try {
-			writer = new PrintWriter("data/annotations", "UTF-8");
-		} catch (Exception e){
-			throw new RuntimeException(e);
-		}
+		writer = new PrintWriter("data/annotations", "UTF-8");
 		int i=1;
 		for(TextAnnotation ta : taList){
 			writer.println(i++ + "\t" + ta.getId() + "\t" + ta.getText());
@@ -55,93 +103,194 @@ public class CommaReader implements Parser {
 		}
 		writer.close();
 		
-		try {
-			scanner = new Scanner(new File(annotationFile));
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+		Scanner scanner = new Scanner(new File(annotationFile));
 		String line;
-		int misses = 1;
+		
+		int count = 0;
+		int misses=0;
+		int failures = 0, successes = 0, skipped = 0;
 		while (scanner.hasNext()) {
+			count++;
+			
 			// A list of commas positions and their labels
 			List<Comma> commaList = new ArrayList<Comma>();
-
+			List<Boolean> annotatedList = new ArrayList<Boolean>();
 			line = scanner.nextLine().trim();
-			assert line.startsWith("%%%");
+			assert line.startsWith("%%%"):line;
 
 			// Next line is the sentence id (in PTB), ignore for now
 			String  textId = scanner.nextLine();
-			
-			
+			//int textIdx = Integer.parseInt(textId.substring(textId.indexOf('.')+1));
 
-			
-			
 			String rawText = scanner.nextLine().trim();
-
-			/*try {
-				String sentenceIdx = textId.split("\\.")[1];
-
-				int textNum = Integer.parseInt(sentenceIdx);
-				if (!taList.get(textNum).equals(rawText))
-					System.out.println(textId);
-			} catch (Exception e) {
-				System.out.println(textId + "\tunexpected format");
-			}*/
-			
 			
 			boolean skip=false;
-			if(!taMap.containsKey(rawText)){
+			TextAnnotation goldTA=null, TA=null;
+			boolean annotationFailed = false;
+			
+			if(taMap.containsKey(rawText)){
+				goldTA = taMap.get(rawText);
+				TA = new TextAnnotation(goldTA.getCorpusId(), goldTA.getId(), Arrays.asList(goldTA.getTokenizedText()));
+				annotationFailed = addAnnotations(TA);
+				if(annotationFailed)
+					failures++;
+				else
+					successes++;
+			}
+			else{
 				skip = true;
-				//System.out.println(textId + "\t" + rawText);
-				misses++;
+				skipped++;
 			}
 			
 			
 			line = scanner.nextLine().trim();
-			assert line.length() == 0;
+			assert line.length() == 0:line;
 
 			line = scanner.nextLine().trim();
-			assert line.equals("ANNOTATION:");
+			assert line.equals("ANNOTATION:"):line;
 
 			line = scanner.nextLine().trim();
 
 			Map<Integer, Set<Integer>> labeledCommas = getLabeledCommas(line);
 
 			line = scanner.nextLine().trim();
-			assert line.length() == 0;
+			assert line.length() == 0:line;
 
 			line = scanner.nextLine().trim();
-			assert line.equals("COMMAS: " + labeledCommas.size() + " Total") : rawText
-					+ "\n" + labeledCommas.size() + "\n" + line;
+			assert line.equals("COMMAS: " + labeledCommas.size() + " Total") : line + "\nVS\n" + "COMMAS: " + labeledCommas.size() + " Total\n" + "rawText = " + rawText;
 
 			for (int commaId : Sorters.sortSet(labeledCommas.keySet())) {
 				line = scanner.nextLine().trim();
-				assert line.startsWith(commaId + ".");
+				assert line.startsWith(commaId + "."):line;
 
-				String relationName = line.split("\\]")[0].split("\\[")[1]
-						.trim();
-
-				for (int commaIndex : labeledCommas.get(commaId))
-					if(!skip)
-						commaList.add(new Comma(commaIndex, relationName, rawText, taMap.get(rawText)));
-
+				String commaLabel = line.split("\\]")[0].split("\\[")[1].trim();
+				for (int commaIndex : labeledCommas.get(commaId)){
+					if (!skip){
+						commaList.add(new Comma(commaIndex, commaLabel, rawText, TA, goldTA));
+						annotatedList.add(annotationFailed);
+					}
+				}
 				String tmp = line.substring(line.indexOf(":") + 1,
 						line.indexOf(" relation")).trim();
 				int numRelations = Integer.parseInt(tmp);
 
-				// Skip the rest of the lines
-				for (int relationId = 0; relationId < numRelations + 1; relationId++)
+				// Skip the relations and the comment
+				line = scanner.nextLine();
+				assert line.startsWith("(Comments:"):line;
+				for (int relationId = 0; relationId < numRelations; relationId++)
 					scanner.nextLine();
 
-				// Skip the final (empty) line
+				// Skip the empty line after a comma group
 				line = scanner.nextLine().trim();
-
-				assert line.length() == 0;
+				assert line.length() == 0:line;
 			}
+			
 			commas.addAll(commaList);
+			annotated.addAll(annotatedList);
+			if(skip)
+				System.out.println(count + " SKIPPED(" + skipped + ")");
+			else if(annotationFailed)
+				System.out.println(count + " ANNOTATION FAILED("+ failures+ ")");
+			else
+				System.out.println(count + " SUCCESFUL(" + successes + ")");
 		}
+		writeSerData();
+		scanner.close();
+	}
+	
+	public void writeSerData() throws IOException{
+		FileOutputStream fileOut = new FileOutputStream("data/CommaTAGoldFinal.ser");
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(commas);
+		out.writeObject(annotated);
+		out.close();
+		fileOut.close();
+	}
+	
+	public static boolean addAnnotations(TextAnnotation ta){
+		String curatorHost = "trollope.cs.illinois.edu";
+		int curatorPort = 9010;
+		boolean respoectTokenization = true;
+		CuratorClient client = new CuratorClient(curatorHost, curatorPort, respoectTokenization);
+		
+		// Should the curator's cache be forcibly updated?
+		boolean forceUpdate = false;
+		boolean annotationFailed = false;
+		
+		try{
+			client.addNamedEntityView(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addChunkView(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addStanfordParse(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addPOSView(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addBerkeleyParse(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addCharniakParse(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addSRLNomView(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		try{
+			client.addSRLVerbView(ta, forceUpdate);
+		}catch(Exception e){
+			annotationFailed=true;
+			e.printStackTrace();
+		}
+		
+		return annotationFailed;
 	}
 
+	public TextAnnotation getMatchingTA(String rawText){
+		TextAnnotation best=null;
+		int bestScore=0;
+		
+		String[] rawTokens = rawText.split("\\s+");
+		System.out.println();
+		for (TextAnnotation ta : taList) {
+			int score = 0;
+			String text = ta.getText();
+			for (String token : rawTokens) {
+				if (text.contains(token))
+					score++;
+
+				if (score > bestScore) {
+					best = ta;
+					bestScore = score;
+				}
+			}
+		}
+		return best;
+	}
+	
 	@Override
 	public Object next() {
 		if (commas.size() > currentComma)
@@ -156,7 +305,6 @@ public class CommaReader implements Parser {
 
 	@Override
 	public void close() {
-		scanner.close();
 	}
 
 	private Map<Integer, Set<Integer>> getLabeledCommas(String annotation) {
@@ -182,15 +330,21 @@ public class CommaReader implements Parser {
 		String[] sections = { "00" };
 		List<TextAnnotation> taList = new ArrayList<TextAnnotation>();
 		PennTreebankReader ptbr;
+		PrintWriter writer;
 		try {
-			ptbr = new PennTreebankReader("data/pennTreeBank", sections);
+			writer = new PrintWriter("t3.txt", "UTF-8");
+			ptbr = new PennTreebankReader("data/pennTreeBank/treebank-3/parsed/mrg/wsj", sections);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+		
 		for (TextAnnotation ta : ptbr) {
-			taList.add(ta);
+			if(ta!=null){
+				taList.add(ta);
+				writer.println(ta);
+			}
 		}
-
+		writer.close();
 		Collections.sort(taList, new Comparator<TextAnnotation>() {
 
 			@Override
@@ -206,38 +360,31 @@ public class CommaReader implements Parser {
 		return taList;
 	}
 	
+	public Comma getMatchingComma(String s){
+		for(Comma c : commas){
+			if(c.goldTA.getText().contains(s))
+				return c;
+		}
+		return null;
+	}
+	
 	public static void main(String[] args) throws Exception {
 		CommaReader reader = new CommaReader("data/comma_resolution_data.txt");
 		Comma sentence;
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		reader.next();
-		while ((sentence = (Comma) reader.next()) != null){
-			TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
-			
-			/*List<Constituent> posViewComma = sentence.ta.getView("POS").getConstituentsCoveringSpan(sentence.commaPosition, sentence.commaPosition+1);
-				System.out.println(posViewComma);
-				TreeView parseView= (TreeView) sentence.ta.getView(ViewNames.PARSE_GOLD);
-				System.out.println(parseView);
-				System.out.println("---------------------");
-				Constituent comma = null;
-				comma = parseView.getParsePhrase(parseView.where(Queries.sameSpanAsConstituent(posViewComma.get(0))).iterator().next());
-				
-				System.out.println("constituent match = " + comma);
-				for(Constituent sibiling : parseView.where(Queries.isSiblingOf(comma)))
-					System.out.println(sibiling);
-				Constituent leftSib = parseView.where(Queries.isSiblingOf(comma)).where(Queries.adjacentToBefore(comma)).iterator().next();
-				Constituent rightSib = parseView.where(Queries.isSiblingOf(comma)).where(Queries.adjacentToAfter(comma)).iterator().next();
-				System.out.println("left sibiling = " + leftSib);
-				System.out.println("right sibiling = " + rightSib);*/
-				break;
+		//String s = "In one feature , called `` In the Dumpster";
+		String s[] = {
+				"In one feature , called `` In the Dumpster",
+				""
+		};
+		Comma c = reader.getMatchingComma(s);
+		if(c == null)
+			System.out.println("FML!!!!!");
+		else{
+			System.out.println(c.goldTA.getView(ViewNames.PARSE_GOLD));
+			System.out.println(c.goldTA.getView(ViewNames.POS));
+			System.out.println(c.goldTA.getView(ViewNames.NER));
+			System.out.println(c.goldTA.getView(ViewNames.SRL_VERB));
+			System.out.println(c.goldTA.getView(ViewNames.SHALLOW_PARSE));
 		}
 	}
 }

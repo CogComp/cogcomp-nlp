@@ -2567,7 +2567,7 @@ But other than the fact that besuboru is played with a ball and a bat , it 's un
 ANNOTATION:
 But other than the fact that besuboru is played with a ball and a bat [3], it 's unrecognizable : Fans politely return foul balls to stadium ushers ; the strike zone expands depending on the size of the hitter ; ties are permitted -- even welcomed -- since they honorably sidestep the shame of defeat ; players must abide by strict rules of conduct even in their personal lives -- players for the Tokyo Giants [1], for example [2], must always wear ties when on the road . 
 
-COMMAS: 2 Total
+COMMAS: 3 Total
 1. [Other]: 0 relations
 (Comments: )
 
@@ -5029,7 +5029,7 @@ sec00.861
 ANNOTATION:
 `` The unavailability of federal funds [1], and the climate in which the decision was made [2], certainly do n't provide any incentive for one of the more visible foundations to provide support [3], '' he said . 
 
-COMMAS: 2 Total
+COMMAS: 3 Total
 1. [List]: 1 relation
 (Comments: )
 [``] [The unavailability of federal funds , and the climate in which the decision was made ,] [certainly do n't provide any incentive for one of the more visible foundations to provide support , '' he said .]
@@ -5623,7 +5623,7 @@ The defense lawyers ' group formed a task force this week , chaired by New York 
 ANNOTATION:
 The defense lawyers ' group formed a task force this week [1], chaired by New York attorney Gerald Lefcourt [2], to deal with the matter . 
 
-COMMAS: 1 Total
+COMMAS: 2 Total
 1. [Other]: 0 relations
 (Comments: )
 
@@ -11204,7 +11204,7 @@ sec00.1489
 ANNOTATION:
 `` Today [1], a banker is worrying about local [2], regional and money-center { banks } [3], as well as thrifts and credit unions [4], '' says Ms. Moore at Synergistics Research . 
 
-COMMAS: 3 Total
+COMMAS: 4 Total
 1. [Other]: 0 relations
 (Comments: )
 
@@ -12021,7 +12021,7 @@ The less complicated version of playing tunes on bells , as do the carillons of 
 ANNOTATION:
 The less complicated version of playing tunes on bells [1], as do the carillons of continental Europe [2], is considered by the English to be childish [3], fit only for foreigners . 
 
-COMMAS: 2 Total
+COMMAS: 3 Total
 1. [Other]: 0 relations
 (Comments: )
 
@@ -14309,7 +14309,7 @@ Weatherly Securities Corp. , New York , and three of its principals -- Dell Euge
 ANNOTATION:
 Weatherly Securities Corp. [1], New York [1], and three of its principals -- Dell Eugene Keehn and William Northy Prater Jr. [2], both of Mercer Island [3], Wash. [2,6], and Thomas Albert McFall [4], of Red Bank [5], N.J . -- consented to a fine of $ 20,000 . 
 
-COMMAS: 5 Total
+COMMAS: 6 Total
 1. [Locative]: 2 relations
 (Comments: )
 [Weatherly Securities Corp. ] {is located in} [ New York ]
@@ -14399,7 +14399,7 @@ W.N. Whelen & Co. , of Georgetown , Del. , and its president , William N. Whelen
 ANNOTATION:
 W.N. Whelen & Co. [1], of Georgetown [2], Del. [1,5], and its president [3], William N. Whelen Jr. [4], also of Georgetown [3], were barred from transacting principal trades for 90 days and were jointly fined $ 15,000 . 
 
-COMMAS: 4 Total
+COMMAS: 5 Total
 1. [Entity attribute]: 2 relations
 (Comments: )
 [W.N. Whelen & Co. ] {is} [of Georgetown , Del. ]
@@ -14422,7 +14422,7 @@ COMMAS: 4 Total
 [William N. Whelen Jr.] {is} [also of Georgetown]
 
 5. [List]: 1 relation
-(Comments)
+(Comments: )
 [W.N. Whelen & Co. , of Georgetown , Del. , and its president , William N. Whelen Jr. , also of Georgetown ,][ were barred from transacting principal trades for 90 days and were jointly fined $ 15,000 ] 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

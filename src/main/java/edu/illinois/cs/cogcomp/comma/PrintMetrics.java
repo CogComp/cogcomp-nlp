@@ -12,10 +12,12 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 public class PrintMetrics extends TestDiscrete implements TestingMetric {
 	int iteration = 0;
 	int total_iterations;
+	String outputFile;
 	
-	public PrintMetrics(int total_iterations){
+	public PrintMetrics(int total_iterations, String outputFile){
 		super();
 		this.total_iterations = total_iterations;
+		this.outputFile = outputFile;
 	}
 	
 	public String getName() {
@@ -30,9 +32,8 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
 			printPerformance(System.out);
 			try {
 				PrintStream experimentResults = new PrintStream(
-					     new FileOutputStream("experimentResults.txt", true));
+					     new FileOutputStream(outputFile, true));
 				printPerformance(experimentResults);
-				experimentResults.println();
 				experimentResults.println();
 				experimentResults.println();
 			} catch (FileNotFoundException e) {
