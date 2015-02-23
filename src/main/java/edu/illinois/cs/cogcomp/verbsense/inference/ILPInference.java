@@ -52,7 +52,7 @@ public class ILPInference extends AbstractILPInference<SentenceStructure> {
 
 		ta = predicates.get(0).getTextAnnotation();
 
-		viewName = manager.getPredictedViewName();
+		viewName = SenseManager.getPredictedViewName();
 
 		instance = new SentenceInstance(instances);
 		numPredicates = instance.numPredicates();

@@ -42,7 +42,7 @@ public class ILPOutput implements ILPOutputGenerator {
 		Set<String> validSenseLabels = manager.getLegalSenses(lemma);
 		for (String label : validSenseLabels) {
 			String varName = ILPInference.getSenseVariableIdentifier(
-					manager.getPredictedViewName(), predicateId, label);
+					SenseManager.getPredictedViewName(), predicateId, label);
 
 			int var = variableManager.getVariable(varName);
 

@@ -101,7 +101,9 @@ public class VerbSenseLabeler {
 	public TokenLabelView getPrediction(TextAnnotation ta) throws Exception {
 		log.debug("Input: {}", ta.getText());
 		List<Constituent> predicates = manager.getPredicateDetector().getPredicates(ta);
-		if (predicates.isEmpty()) return null;
+		// If there are no verb identified, return an empty TokenLabelView
+		if (predicates.isEmpty())
+			return new TokenLabelView(SenseManager.getPredictedViewName(), Constants.systemIdentifier, ta, 1.0);
 
 		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.CuttingPlaneGurobi);
 		ILPInference inference = manager.getInference(solver, predicates);

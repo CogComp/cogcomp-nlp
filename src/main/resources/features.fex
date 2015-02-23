@@ -8,7 +8,6 @@
 	  conflated-pos
 	  gerunds
 	  nom
-	  ne-embedding
 	  brown-clusters-1000
 	  de-verbal-suffixes
 	  de-nom-nouns
@@ -40,5 +39,3 @@
   (list my-features
 	(conjoin lemma my-features)))
 
-			     
-						
