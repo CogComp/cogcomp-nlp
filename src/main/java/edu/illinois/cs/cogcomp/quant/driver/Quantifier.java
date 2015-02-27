@@ -1,7 +1,9 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 import java.io.*;
 
+import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
@@ -26,8 +28,8 @@ public class Quantifier {
 		wordSplitPat[1] = Pattern.compile("(\\S)-"); 
 		wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)"); 
 		// Punctuation
-		wordSplitPat[3] = Pattern.compile("(\\S)([\\:\\;\\!\\?])");
-		wordSplitPat[4] = Pattern.compile("([\\:\\;\\!\\?])(\\S)");
+		wordSplitPat[3] = Pattern.compile("(\\S)([:;!\\?])");
+		wordSplitPat[4] = Pattern.compile("([:;!\\?])(\\S)");
 		// Separate commas from words, but not from within numbers
 		wordSplitPat[15] = Pattern.compile("(\\S),(\\s|$)");
 		wordSplitPat[16] = Pattern.compile("(^|\\s),(\\S)");
@@ -158,15 +160,10 @@ public class Quantifier {
 	    String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;
-	    String prediction="", prevWord="";
-	    int startPos=0, endPos=0, tokenPos=0;
+	    String prediction;
+		int startPos=0, endPos, tokenPos=0;
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-//	    	if( tokenPos>0 ){
-//	    		if( !taCurator.getToken(tokenPos).contains(w.form) && 
-//	    				!taCurator.getToken(tokenPos).contains(prevWord))
-//	    			tokenPos++;
-//	    	}
 	    	prediction = chunker.discreteValue(w);
 	    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 	    							&& !previous.endsWith(prediction.substring(2))){
@@ -188,16 +185,14 @@ public class Quantifier {
     			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
     			QuantSpan span = new QuantSpan(null, startPos, endPos);
     			if(standardized) {
-    				span.object = normalizer.parse(chunk, 
-    						chunker.discreteValue(w).substring(2));
+    				span.object = normalizer.parse(chunk, chunker.discreteValue(w).substring(2));
     			}
     			quantSpans.add(span);
     			inChunk = false;
     			chunk = "";
     		}
     		previous = prediction;
-    		prevWord = w.form;
-    		if(taCurator.getToken(tokenPos).trim().endsWith(w.form.trim())){
+			if(taCurator.getToken(tokenPos).trim().endsWith(w.form.trim())){
     			tokenPos++;
     		}
 	    }
@@ -205,7 +200,6 @@ public class Quantifier {
 	}
 	
 	public String getAnnotatedString(String text, boolean standardized){
-		
 		String ans = "";
 		TextAnnotation ta = new TextAnnotation("", "", text);
 		List<QuantSpan> quantSpans = getSpans(text, standardized);
@@ -222,12 +216,22 @@ public class Quantifier {
 		}
 	    return ans;
 	}
-	
 
+	public void addQuantifierView(TextAnnotation ta) {
+		assert (ta.hasView(ViewNames.SENTENCE));
+		SpanLabelView quantifierView = new SpanLabelView(ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);
+		List<QuantSpan> quantSpans = getSpans(ta.getTokenizedText(), true);
+		for (QuantSpan span : quantSpans) {
+			int startToken = ta.getTokenIdFromCharacterOffset(span.start);
+			int endToken = ta.getTokenIdFromCharacterOffset(span.end);
+			quantifierView.addSpanLabel(startToken, endToken, span.object.toString(), 1d);
+		}
+		ta.addView(ViewNames.QUANTITIES, quantifierView);
+	}
 	
 	public static void main(String args[])throws Throwable {
-		String inputFile=null;
-		String standardized=null;
+		String inputFile;
+		String standardized;
 		Quantifier quantifier = new Quantifier();
 		if (args.length < 2){
 			System.err.println(
