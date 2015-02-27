@@ -59,7 +59,7 @@ public class Quantity implements Serializable{
 		if(q.units.toLowerCase().contains("percent") || 
 				q.units.toLowerCase().contains("%") ) {
 			q.value *= 0.01;
-			q.units = "times";
+			q.units = "percent";
 		}
 		if(q.units.toLowerCase().contains("cents")) {
 			q.value *= 0.01;
