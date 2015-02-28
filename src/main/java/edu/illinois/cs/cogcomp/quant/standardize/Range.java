@@ -16,6 +16,7 @@ public class Range implements Serializable{
 	private static final long serialVersionUID = 9176815857805433578L;
 	public Quantity begins;
 	public Quantity ends;
+	public String phrase;
 	static Map<String,Integer[]> vague = new HashMap<String,Integer[]>();
 	public static Pattern rangeRulePat, vaguePat;
 	
@@ -96,10 +97,12 @@ public class Range implements Serializable{
 		Range range = null;
 		range = RangeRule( phrase );
 		if(range != null) {
+			range.phrase = phrase;
 			return range;
 		}
 		range = VagueNumericRange( phrase );
 		if(range != null) {
+			range.phrase = phrase;
 			return range;
 		}
 		return range;

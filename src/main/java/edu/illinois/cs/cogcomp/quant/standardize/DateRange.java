@@ -10,6 +10,7 @@ public class DateRange implements Serializable{
 	private static final long serialVersionUID = -5569548960218363583L;
 	public Date begins;
 	public Date ends;
+	public String phrase;
 	public static Pattern periodPat, thisNextDatePat, pastLastDatePat, fromToDatePat,
 	fromDatePat, justYearPat1, justYearPat2;
 	

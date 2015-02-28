@@ -23,28 +23,15 @@ public class Quantifier {
 		wordSplitPat = new Pattern[25];
 		// Dashes
 		wordSplitPat[0] = Pattern.compile("-(\\D)"); 
-		wordSplitPat[1] = Pattern.compile("(\\S)-"); 
+		wordSplitPat[1] = Pattern.compile("(\\S)-");
 		wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)"); 
-		// Punctuation
-		wordSplitPat[3] = Pattern.compile("(\\S)([\\:\\;\\!\\?])");
-		wordSplitPat[4] = Pattern.compile("([\\:\\;\\!\\?])(\\S)");
-		// Separate commas from words, but not from within numbers
-		wordSplitPat[15] = Pattern.compile("(\\S),(\\s|$)");
-		wordSplitPat[16] = Pattern.compile("(^|\\s),(\\S)");
-		wordSplitPat[17] = Pattern.compile("(\\D),(\\S)");
-		wordSplitPat[18] = Pattern.compile("(\\S),(\\D)");
-		// Smoosh times together
-		wordSplitPat[19] = Pattern.compile("(\\d\\d?)\\s*:\\s*(\\d\\d)(\\W|$)");
-		// Keep thing that look like abbrev, honorific together
-		wordSplitPat[20] = Pattern.compile("(^|\\s)([A-Z][a-z]*)\\s*\\.");
-		// Weird things with dates
-		wordSplitPat[21] = Pattern.compile("(\\d),(\\d{4,})(\\W)");
-		// Separate words from closing punctuation
-		wordSplitPat[22] = Pattern.compile("(\\w)(\\.)(\\W*)$");
-        // 1990 s -> 1990s
-		wordSplitPat[23] = Pattern.compile("(\\d\\d\\d\\d|\\d\\d)\\s*s(\\s+|$)");
-		//' 90 -> '90
-		wordSplitPat[24] = Pattern.compile("'\\s*(\\d\\d)($|\\W)");
+		// Remove commas from within numbers
+		wordSplitPat[3] = Pattern.compile("(\\d),(\\d)");
+		// Remove dollar signs
+		wordSplitPat[4] = Pattern.compile("\\$(\\d)");
+		wordSplitPat[5] = Pattern.compile("(\\d)\\$");
+		// Percentages
+		wordSplitPat[6] = Pattern.compile("(\\d)%");
 	}
 	
 	public static String wordsplitSentence( String sentence ){
@@ -69,77 +56,23 @@ public class Quantifier {
 		matcher = wordSplitPat[3].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" "+matcher.group(2));
+					+matcher.group(2));
 		}
 		
 		matcher = wordSplitPat[4].matcher(sentence);
 		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" "+matcher.group(2));
+			sentence = sentence.replace(matcher.group(), "$ "+matcher.group(1));
 		}
 		
-		// Separate commas from words, but not from within numbers
-		matcher = wordSplitPat[15].matcher(sentence);
+		matcher = wordSplitPat[5].matcher(sentence);
 		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" ,"+matcher.group(2));
-		}
-		matcher = wordSplitPat[16].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+", "+matcher.group(2));
-		}
-		matcher = wordSplitPat[17].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" , "+matcher.group(2));
-		}
-		matcher = wordSplitPat[18].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" , "+matcher.group(2));
+			sentence = sentence.replace(matcher.group(), matcher.group(1)+" $");
 		}
 		
-		// Smoosh times together
-		matcher = wordSplitPat[19].matcher(sentence);
+		matcher = wordSplitPat[6].matcher(sentence);
 		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+":"+matcher.group(2)+matcher.group(3));
+			sentence = sentence.replace(matcher.group(), matcher.group(1)+" %");
 		}
-		
-		// Keep thing that look like abbrev, honorific together
-		matcher = wordSplitPat[20].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)+
-							matcher.group(2)+".");
-		}
-		
-		// Weird things with dates
-		matcher = wordSplitPat[21].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" , "+matcher.group(2)+matcher.group(3));
-		}
-		
-		// Separate words from closing punctuation
-		matcher = wordSplitPat[22].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)
-					+" "+matcher.group(2)+" "+matcher.group(3));
-		}
-		
-        // 1990 s -> 1990s
-		matcher = wordSplitPat[23].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), matcher.group(1)+"s ");
-		}
-		
-		//' 90 -> '90
-		matcher = wordSplitPat[24].matcher(sentence);
-		while( matcher.find()){
-			sentence = sentence.replace(matcher.group(), "'"+
-								matcher.group(1)+matcher.group(2));
-		}	
 		return sentence;
 	}
 	
@@ -150,6 +83,7 @@ public class Quantifier {
 		String sentences[] = new String[taQuant.getNumberOfSentences()];
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
 			sentences[i] = taQuant.getSentence(i).getText();
+//			System.out.println("Sentence : "+taQuant.getSentence(i));
 		}
 		
 		Chunker chunker = new Chunker();
@@ -158,7 +92,7 @@ public class Quantifier {
 	    String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;
-	    String prediction="", prevWord="";
+	    String prediction="";
 	    int startPos=0, endPos=0, tokenPos=0;
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
@@ -168,6 +102,7 @@ public class Quantifier {
 //	    			tokenPos++;
 //	    	}
 	    	prediction = chunker.discreteValue(w);
+//	    	System.out.println("Word : "+w.form+" Label : "+prediction);
 	    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 	    							&& !previous.endsWith(prediction.substring(2))){
 	    		if( !inChunk ){
@@ -196,7 +131,6 @@ public class Quantifier {
     			chunk = "";
     		}
     		previous = prediction;
-    		prevWord = w.form;
     		if(taCurator.getToken(tokenPos).trim().endsWith(w.form.trim())){
     			tokenPos++;
     		}
@@ -211,11 +145,13 @@ public class Quantifier {
 		List<QuantSpan> quantSpans = getSpans(text, standardized);
 		int quantIndex = 0;
 		for(int i=0; i<ta.size(); ++i) {
-			if(quantSpans.get(quantIndex).start == ta.getTokenCharacterOffset(i).getFirst()) {
+			if(quantSpans.get(quantIndex).start == 
+					ta.getTokenCharacterOffset(i).getFirst()) {
 				ans += " [ ";
 			}
 			ans += ta.getToken(i) + " ";
-			if(quantSpans.get(quantIndex).end == ta.getTokenCharacterOffset(i).getSecond()) {
+			if(quantSpans.get(quantIndex).end == 
+					ta.getTokenCharacterOffset(i).getSecond()) {
 				ans += " ] " + quantSpans.get(quantIndex) + " ";
 				if(quantIndex < quantSpans.size()-1) quantIndex++;
 			}
@@ -242,6 +178,7 @@ public class Quantifier {
 		String txt = "", str;
 		while( (str = br.readLine())!=null )
 			txt+=str+" ";
+		br.close();
 		
 		if( standardized.equals("Y") || standardized.equals("y") )
 			System.out.println(quantifier.getAnnotatedString(txt,true));

@@ -31,4 +31,11 @@ public class QuantDemo {
 		return "{\n\t\"begin\" : "+getJSONFromQuantity(r.numerator)+
 				",\n\t\"end\" : "+getJSONFromQuantity(r.denominator)+"\n}\n";
 	}
+	
+	public static void main(String args[]) {
+		Quantifier quantifier = new Quantifier();
+		System.out.println(quantifier.getSpans(
+				"March oil down 1.9%, to settle at $51.16/bbl on Nymex.", 
+				true));
+	}
 }

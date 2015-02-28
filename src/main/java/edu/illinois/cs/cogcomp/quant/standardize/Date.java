@@ -13,6 +13,7 @@ public class Date implements Serializable{
 	
 	private static final long serialVersionUID = 742632977601215490L;
 	public int month, day, year;
+	public String phrase;
 	public boolean missing_day=true, missing_month=true, missing_year=true;
 	public String bound;
 	

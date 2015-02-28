@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class Ratio implements Serializable{ 
 	private static final long serialVersionUID = 9205085634972499157L;
 	public Quantity numerator, denominator;
+	public String phrase;
 	public static Pattern ratioRulePat, explicitRatioPat;
 	
 	Ratio(Quantity x, Quantity y) {
@@ -73,10 +74,12 @@ public class Ratio implements Serializable{
 		Ratio ratio;
 		ratio = RatioRule(phrase);
 		if(ratio != null) {
+			ratio.phrase = phrase;
 			return ratio;
 		}
 		ratio = explicitRatio(phrase);
 		if(ratio != null) {
+			ratio.phrase = phrase;
 			return ratio;
 		}
 		return null;
