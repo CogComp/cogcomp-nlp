@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.sentences.TokenizerUtilities;
+import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -14,7 +17,18 @@ import edu.illinois.cs.cogcomp.quant.standardize.DateRange;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 
 public class QuantTest {
-	
+
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testQuantifierView() {
+		Quantifier quantifier = new Quantifier();
+		TextAnnotation ta = new TextAnnotation("", "", "It was May 2008.",
+				TokenizerUtilities.SentenceViewGenerators.WhiteSpaceSentenceViewGenerator);
+		quantifier.addQuantifierView(ta);
+		Assert.assertEquals(true, ta.hasView(ViewNames.QUANTITIES));
+		Assert.assertEquals("[= Date(05/XX/2008)]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(0).getLabel());
+	}
+
 	@SuppressWarnings("deprecation")
 	@Test
 	public void testDateNormalization() {
