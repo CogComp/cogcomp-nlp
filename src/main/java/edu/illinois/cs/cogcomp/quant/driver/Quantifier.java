@@ -98,38 +98,45 @@ public class Quantifier {
 	    int startPos=0, endPos=0, tokenPos=0;
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-	    	prediction = chunker.discreteValue(w);
-//	    	System.out.println("Word : "+w.form+" Label : "+prediction);
-	    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
-	    							&& !previous.endsWith(prediction.substring(2))){
-	    		if( !inChunk ){
-	    			inChunk = true;
-	    			startPos = taCurator.getTokenCharacterOffset(tokenPos).getFirst();
-	    		}	
-	    	}
-	    	if( inChunk ){
-	    		chunk += w.form+" ";
-	    	}
-    		if (!prediction.equals("O")
-    					&& (w.next == null
-    					|| chunker.discreteValue(w.next).equals("O")
-    					|| chunker.discreteValue(w.next).startsWith("B-")
-    					|| !chunker.discreteValue(w.next).endsWith(
-    							prediction.substring(2)))){
-    			
-    			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
-    			QuantSpan span = new QuantSpan(null, startPos, endPos);
-    			if(standardized) {
-    				span.object = normalizer.parse(chunk, chunker.discreteValue(w).substring(2));
-    			}
-    			quantSpans.add(span);
-    			inChunk = false;
-    			chunk = "";
-    		}
-    		previous = prediction;
-    		if(taCurator.getToken(tokenPos).trim().endsWith(w.form.trim())){
-    			tokenPos++;
-    		}
+		    	prediction = chunker.discreteValue(w);
+	//	    	System.out.println("Word : "+w.form+" Label : "+prediction);
+		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
+		    							&& !previous.endsWith(prediction.substring(2))){
+		    		if( !inChunk && tokenPos < taCurator.size()){
+		    			inChunk = true;
+		    			startPos = taCurator.getTokenCharacterOffset(tokenPos).getFirst();
+		    		}	
+		    	}
+		    	if( inChunk ){
+		    		chunk += w.form+" ";
+		    	}
+	    		if (!prediction.equals("O")
+	    					&& tokenPos < taCurator.size()
+	    					&& (w.next == null
+	    					|| chunker.discreteValue(w.next).equals("O")
+	    					|| chunker.discreteValue(w.next).startsWith("B-")
+	    					|| !chunker.discreteValue(w.next).endsWith(
+	    							prediction.substring(2)))){
+	    			
+	    			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
+	    			QuantSpan span = new QuantSpan(null, startPos, endPos);
+	    			try { 
+		    			if(standardized) {
+		    				span.object = normalizer.parse(chunk, 
+		    						chunker.discreteValue(w).substring(2));
+		    			}
+	    			} catch (Exception e) {
+	    				
+	    			}
+	    			quantSpans.add(span);
+	    			inChunk = false;
+	    			chunk = "";
+	    		}
+	    		previous = prediction;
+	    		if(tokenPos < taCurator.size() && taCurator.getToken(tokenPos).trim().
+	    				endsWith(w.form.trim())){
+	    			tokenPos++;
+	    		}
 	    }
 		return quantSpans;
 	}
@@ -156,7 +163,8 @@ public class Quantifier {
 
 	public void addQuantifierView(TextAnnotation ta) {
 		assert (ta.hasView(ViewNames.SENTENCE));
-		SpanLabelView quantifierView = new SpanLabelView(ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);
+		SpanLabelView quantifierView = new SpanLabelView(
+				ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);
 		List<QuantSpan> quantSpans = getSpans(ta.getTokenizedText(), true);
 		for (QuantSpan span : quantSpans) {
 			int startToken = ta.getTokenIdFromCharacterOffset(span.start);

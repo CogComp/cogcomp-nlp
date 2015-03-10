@@ -245,7 +245,7 @@ public class Numbers implements Serializable {
 			}
 		}
 		if(num == 0.0) {
-			return null;
+			return new Quantity(null, 1.0, null);
 		}
 		// Dont have to find units if not the first call
 		if(returnUnits) {

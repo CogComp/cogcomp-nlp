@@ -39,7 +39,7 @@ public class QuantSpan implements Serializable{
 			return ((Range)object).toString()+":"+ip;
 		}
 		if(object instanceof Quantity) {
-			return ((Quantity)object).toStringWithUnits()+":"+ip;
+			return ((Quantity)object).toString()+":"+ip;
 		}
 		return "";
 	}
