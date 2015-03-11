@@ -99,7 +99,7 @@ public class Quantifier {
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
 		    	prediction = chunker.discreteValue(w);
-	//	    	System.out.println("Word : "+w.form+" Label : "+prediction);
+		    	System.out.println("Word : "+w.form+" Label : "+prediction);
 		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 		    							&& !previous.endsWith(prediction.substring(2))){
 		    		if( !inChunk && tokenPos < taCurator.size()){
@@ -126,7 +126,7 @@ public class Quantifier {
 		    						chunker.discreteValue(w).substring(2));
 		    			}
 	    			} catch (Exception e) {
-	    				
+	    				e.printStackTrace();
 	    			}
 	    			quantSpans.add(span);
 	    			inChunk = false;

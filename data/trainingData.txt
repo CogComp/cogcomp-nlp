@@ -22851,3 +22851,68 @@ drop - O
 to - O 
 283,000 - B-NUMBER 
 . - O 
+
+She - O
+shares - O
+4 - B-NUMBER
+with - O
+Joshua - O
+. - O
+
+He - O
+shares - O
+3 - B-NUMBER
+with - O
+Theresa - O
+. - O
+
+Then - O
+he - O
+blew - O
+up - O
+thirteen - B-NUMBER 
+more - I-NUMBER
+balloons - I-NUMBER
+. - O
+
+The - O
+clown - O
+blew - O
+up - O
+forty - B-NUMBER
+- - I-NUMBER
+seven - I-NUMBER
+balloons - I-NUMBER
+. - O
+
+Our - O
+class - O
+got - O
+fifty - B-NUMBER
+- - I-NUMBER
+four - I-NUMBER
+books - I-NUMBER
+from - O
+the - O
+library - O
+. - O
+
+There - O
+are - O
+sixty - B-NUMBER
+- - I-NUMBER
+four - I-NUMBER
+pigs - I-NUMBER
+in - O
+the - O
+barn - O
+. - O
+
+Now - O
+there - O
+are - O
+eighty - B-NUMBER
+- - I-NUMBER
+six - I-NUMBER
+pigs - I-NUMBER
+. - O

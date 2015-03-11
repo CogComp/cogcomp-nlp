@@ -245,7 +245,7 @@ public class Numbers implements Serializable {
 			}
 		}
 		if(num == 0.0) {
-			return new Quantity(null, 1.0, null);
+			return new Quantity(null, 1.0, "");
 		}
 		// Dont have to find units if not the first call
 		if(returnUnits) {
@@ -255,7 +255,7 @@ public class Numbers implements Serializable {
 			}
 			return new Quantity(null, num, unit.trim());
 		} else {
-			return new Quantity(null, num, null);
+			return new Quantity(null, num, "");
 		}
 	}
 	

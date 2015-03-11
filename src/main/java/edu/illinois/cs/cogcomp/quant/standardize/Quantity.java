@@ -25,6 +25,7 @@ public class Quantity implements Serializable{
 	
 	public static Quantity extractQuantity(String phrase){
 		if(phrase == null || phrase.equals("")) {
+			// Should not happen
 			return null;
 		}
 		String[] strArr = Bounds.extractBound(phrase);

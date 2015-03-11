@@ -180,10 +180,10 @@ discrete% SubhroFeatures(Token word) <-
 	
 	
 	String writtenNumber =  "twelve|seven|trillion|ten|seventeen|two|four|sixty|"+
-							 "zero|eighteen|thirteen|dozen|one|fourty|fifty|twenty"+
-							 "six|three|eleven|hundred|thousand|million|eighty"+
-							 "fourteen|five|nineteen|sixteen|fifteen|seventy|billion"+
-							 "thirty|ninety|nine|eight";
+			     "zero|eighteen|thirteen|dozen|one|fourty|fifty|twenty"+
+			     "six|three|eleven|hundred|thousand|million|eighty"+
+			     "fourteen|five|nineteen|sixteen|fifteen|seventy|billion"+
+			     "thirty|ninety|nine|eight";
 							 
 	String digits = "(\\d+)";
 	String four_digits = "(\\d\\d\\d\\d)";
@@ -195,16 +195,21 @@ discrete% SubhroFeatures(Token word) <-
 	String numeric = "((?:\\d{1,3}(?:\\,\\d{3})*|\\d+)(?:\\.\\d+)?)";
 	String doftw = "(?:Mon|Tues?|Wed(?:nes)?|Thurs?|Fri|Satui?r?|Sun)(?:day|\\.)";
 	String month = "(?:jan(?:uary)?|febr?(?:uary)?|mar(?:ch)?|apr(?:il)?"+
-					"|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|"+
-					"dec(?:ember)?)\\.?";
+		       "|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|"+
+		       "dec(?:ember)?)\\.?";
 	String dayWords = "(?: today|tomorrow|yesterday|morning|afternoon|evening)";
 	String possibleYear = "(?:\\d\\d\\d\\d(?:\\s*s)?|\\'?\\d\\d(?:\\s*?s)?)";
-	String time = "(\\d\\d?)\\s*?(?:(\\:)?\\s*?(\\d\\d))?\\s*([ap]\\.m\\.?|[ap]m|[ap])?\\s*(?:\\(?(GMT|EST|PST|CST)?\\)?)?(?:\\W|$)";
+	String time = "(\\d\\d?)\\s*?(?:(\\:)?\\s*?(\\d\\d))?\\s*([ap]\\.m\\.?|[ap]m|[a"+
+	       	      "p])?\\s*(?:\\(?(GMT|EST|PST|CST)?\\)?)?(?:\\W|$)";
 
 
-
-	Pattern pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+	Pattern pattern = Pattern.compile(digits, Pattern.CASE_INSENSITIVE);
 	Matcher matcher = pattern.matcher(word.form);
+	if( matcher.matches() )
+		sense "[digits]";
+	
+	pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.form);
 	if( matcher.matches() )
 		sense "[numeric]";
 	
