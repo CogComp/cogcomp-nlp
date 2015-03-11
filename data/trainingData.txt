@@ -22916,3 +22916,67 @@ eighty - B-NUMBER
 six - I-NUMBER
 pigs - I-NUMBER
 . - O
+
+Thirteen - B-NUMBER 
+more - I-NUMBER
+boys - I-NUMBER
+went - O
+down - O
+the - O
+slide - O
+. - O
+
+Thirteen - B-NUMBER
+ducks - I-NUMBER
+are - O
+swimming - O
+in - O
+a - O
+lake - O
+. - O
+
+Thirty - B-NUMBER  
+dogs - I-NUMBER
+are - O
+barking - O
+. - O
+
+Then - O
+, - O
+he - O
+ate - O
+seventeen - B-NUMBER 
+more - I-NUMBER
+. - O
+
+I - O
+walk - O
+1 - B-NUMBER
+mile - I-NUMBER
+every - O
+15 - B-NUMBER
+minutes - I-NUMBER
+. - O
+
+The - O 
+restaurant - O  
+served - O 
+3 - B-NUMBER
+cakes - I-NUMBER
+yesterday - B-DATE 
+. - O 
+
+Park - O 
+workers - O 
+will - O 
+plant - O 
+3 - B-NUMBER
+dogwood - I-NUMBER
+trees - I-NUMBER
+today - B-DATE
+and - O 
+2 - B-NUMBER
+dogwood - I-NUMBER
+trees - I-NUMBER
+tomorrow - B-DATE
+. - O 

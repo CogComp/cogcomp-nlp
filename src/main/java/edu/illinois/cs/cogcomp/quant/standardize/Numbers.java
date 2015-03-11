@@ -191,6 +191,7 @@ public class Numbers implements Serializable {
 	public static Quantity extractNumberFromTokenizedWords(
 			List<String> tokens, boolean returnUnits) {
 		Matcher matcher;
+		System.out.println("Input to extractNumberFromTokenizedWords : "+tokens);
 		if(tokens.size() == 1) {
 			matcher = decimalPat.matcher(tokens.get(0));
 			if(matcher.find()) {
@@ -210,7 +211,7 @@ public class Numbers implements Serializable {
 				if(tokens.get(i).equals(order)) {
 					num += extractNumberFromTokenizedWords(numberForOrder, false).value*
 							str2num.get(order);
-//					System.out.println(num);
+					System.out.println("Token : "+tokens.get(i)+" Num : "+num);
 					indexOfLastOrder = i;
 					indexOfLastNumber = i;
 					break;
@@ -243,9 +244,10 @@ public class Numbers implements Serializable {
 				num += 1.0/fractions.get(tokens.get(i));
 				indexOfLastNumber = i;
 			}
+			System.out.println("Token : "+tokens.get(i)+" Num : "+num);
 		}
 		if(num == 0.0) {
-			return new Quantity(null, 1.0, "");
+			return null;
 		}
 		// Dont have to find units if not the first call
 		if(returnUnits) {
@@ -277,7 +279,6 @@ public class Numbers implements Serializable {
 		if(matcher.find()) {
 			quantity = new Quantity(null, Double.parseDouble(matcher.group()), 
 					phrase.substring(matcher.end()));
-
 //			System.out.println("Extract number: "+quantity.value);
 			return postProcessing(quantity);
 		}
