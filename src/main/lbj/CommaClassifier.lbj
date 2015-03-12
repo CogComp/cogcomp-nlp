@@ -49,57 +49,57 @@ discrete% UnigramSecondRightPOSFeature(Comma c) <- {
 
 
 discrete% UnigramLeftChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToLeftOfComma(1), true, false);
+    sense Comma.getNotation(c.getChunkToLeftOfComma(1));
 }
 
 discrete% UnigramSecondLeftChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToLeftOfComma(2), true, false);
+  sense Comma.getNotation(c.getChunkToLeftOfComma(2));
 }
 
 discrete% UnigramRightChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToRightOfComma(1), true, false);
+    sense Comma.getNotation(c.getChunkToRightOfComma(1));
 }
 
 discrete% UnigramSecondRightChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToRightOfComma(2), true, false);
+  sense Comma.getNotation(c.getChunkToRightOfComma(2));
 }
 
 
 
 discrete% UnigramLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(1), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfComma(1));
 }
 
 discrete% UnigramSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfComma(2), true, false);
+  sense Comma.getNotation(c.getPhraseToLeftOfComma(2));
 }
 
 discrete% UnigramRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfComma(1), true, false);
+    sense Comma.getNotation(c.getPhraseToRightOfComma(1));
 }
 
 discrete% UnigramSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfComma(2), true, false);
+  sense Comma.getNotation(c.getPhraseToRightOfComma(2));
 }
 
 discrete% CommaParentFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(0), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfParent(0));
 }
 
 discrete% UnigramParentLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(1), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfParent(1));
 }
 
 discrete% UnigramParentSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfParent(2), true, false);
+  sense Comma.getNotation(c.getPhraseToLeftOfParent(2));
 }
 
 discrete% UnigramParentRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfParent(1), true, false);
+    sense Comma.getNotation(c.getPhraseToRightOfParent(1));
 }
 
 discrete% UnigramParentSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfParent(2), true, false);
+  sense Comma.getNotation(c.getPhraseToRightOfParent(2));
 }
 
 

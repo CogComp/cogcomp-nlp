@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
@@ -19,11 +18,17 @@ public class Comma implements Serializable {
     public int commaPosition;
     private TextAnnotation goldTA;
     private TextAnnotation TA;
-    /** Whether to use gold-standard labels; for now this is tied to whether we are training. */
-    private static final boolean GOLD = CommaClassifier.isTraining;
+    private static boolean GOLD, NERlexicalise, POSlexicalise;
 
     private static final long serialVersionUID = 715976951486905421l;
 
+    /**
+     * A default constructor used during training.
+     * @param commaPosition The token index of the comma
+     * @param role The gold-standard role of the comma
+     * @param sentence The tokenized string of the sentence
+     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
+     */
     public Comma(int commaPosition, String role, String sentence, TextAnnotation TA) {
         this.commaPosition = commaPosition;
         if (role != null) {
@@ -33,15 +38,35 @@ public class Comma implements Serializable {
         }
         this.sentence = sentence.split("\\s+");
         this.TA = TA;
+        CommaProperties properties = CommaProperties.getInstance();
+        GOLD = properties.useGold();
+        NERlexicalise = properties.lexicaliseNER();
+        POSlexicalise = properties.lexicalisePOS();
     }
-    
+
+    /**
+     * A constructor used during training, if gold-standard feature annotations are available.
+     * @param commaPosition The token index of the comma
+     * @param role The gold-standard role of the comma
+     * @param sentence The tokenized string of the sentence
+     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
+     * @param goldTA The TextAnnotation containing gold-standard views for training
+     */
     public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, TextAnnotation goldTA) {
         this(commaPosition, role, sentence, TA);
     	this.goldTA = goldTA;
     }
 
+    /**
+     * A constructor used at test time (for prediction only). Assumes no gold label;
+     * @param commaPosition The token index of the comma
+     * @param sentence The tokenized string of the sentence
+     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
+     */
     public Comma(int commaPosition, String sentence, TextAnnotation TA) {
         this(commaPosition, null, sentence, TA);
+        // Since we know there is going to be no gold structures available
+        GOLD = false;
     }
 
     public String getRole() {
@@ -129,7 +154,7 @@ public class Comma implements Serializable {
 
     public Constituent getPhraseToLeftOfComma(int distance){
     	TreeView parseView;
-    	if(GOLD)
+    	if (GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
@@ -140,7 +165,7 @@ public class Comma implements Serializable {
     
     public Constituent getPhraseToRightOfComma(int distance){
     	TreeView parseView;
-    	if(GOLD)
+    	if (GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
@@ -151,7 +176,7 @@ public class Comma implements Serializable {
     
     public Constituent getPhraseToLeftOfParent(int distance){
     	TreeView parseView;
-    	if(GOLD)
+    	if (GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
@@ -162,7 +187,7 @@ public class Comma implements Serializable {
 
     public Constituent getPhraseToRightOfParent(int distance){
     	TreeView parseView;
-    	if(GOLD)
+    	if (GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
@@ -213,7 +238,7 @@ public class Comma implements Serializable {
     	return rightSibling;
     }
     
-    public static String getNotation(Constituent c, boolean POSlexicalise, boolean NERlexicalise){
+    public static String getNotation(Constituent c){
     	if(c == null)
     		return "NULL";
     	String notation = c.getLabel();

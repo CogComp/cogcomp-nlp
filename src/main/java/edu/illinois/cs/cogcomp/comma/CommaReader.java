@@ -19,13 +19,17 @@ public class CommaReader implements Parser {
     private final String annotationFile;
     private List<Comma> commas;
     private int currentComma;
-    private static final String treebankHome = "/shared/corpora/corporaWeb/treebanks/eng/pennTreebank/treebank-3/parsed/mrg/wsj";
-    private static final String propbankHome = "/shared/corpora/corporaWeb/treebanks/eng/propbank_1/data";
-    private static final String nombankHome = "/shared/corpora/corporaWeb/treebanks/eng/nombank";
+    private static String treebankHome, propbankHome, nombankHome;
 
     public CommaReader(String annotationFile) {
         this.annotationFile = annotationFile;
         this.commas = new ArrayList<Comma>();
+
+        CommaProperties properties = CommaProperties.getInstance();
+        treebankHome = properties.getPTBHDir();
+        propbankHome = properties.getPropbankDir();
+        nombankHome = properties.getNombankDir();
+
         try {
             this.annotator = new Annotator(true, true);
         } catch (Exception e) {

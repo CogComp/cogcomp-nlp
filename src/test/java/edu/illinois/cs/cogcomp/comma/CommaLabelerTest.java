@@ -1,19 +1,19 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.edison.sentences.*;
+import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import junit.framework.TestCase;
 
 import java.util.Arrays;
 
 public class CommaLabelerTest extends TestCase {
-    private CommaClassifier classifier;
+    private CommaLabeler classifier;
     private TextAnnotation ta;
 
     public void setUp() throws Exception {
         super.setUp();
-        classifier = new CommaClassifier();
+        classifier = new CommaLabeler();
         ta = new TextAnnotation("","", Arrays.asList("Mary , the clever scientist , was walking ."));
 
         TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
@@ -35,31 +35,9 @@ public class CommaLabelerTest extends TestCase {
         ta.addView(parse.getViewName(), parse);
     }
 
-    public void testGetCommaSRL() {
+    public void testGetCommaSRL() throws AnnotationFailedException {
         // Create the Comma structure
-        PredicateArgumentView srlView = new PredicateArgumentView("SRL_COMMA", "Test", ta, 1.0d);
-        String text = ta.getText();
-        for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {
-            if (!comma.getLabel().equals(",")) continue;
-            Comma commaStruct = new Comma(comma.getStartSpan(), text, ta);
-            String label = classifier.discreteValue(classifier.classify(commaStruct));
-            Constituent predicate = new Constituent(label, "SRL_COMMA", ta, comma.getStartSpan(), comma.getEndSpan());
-            srlView.addConstituent(predicate);
-            Constituent leftArg = commaStruct.getPhraseToLeftOfComma(1);
-            if (leftArg != null) {
-                Constituent leftArgConst = new Constituent(leftArg.getLabel(), "SRL_COMMA", ta,
-                        leftArg.getStartSpan(), leftArg.getEndSpan());
-                srlView.addConstituent(leftArgConst);
-                srlView.addRelation(new Relation("LeftOf" + label, predicate, leftArgConst, 1.0d));
-            }
-            Constituent rightArg = commaStruct.getPhraseToRightOfComma(1);
-            if (rightArg != null) {
-                Constituent rightArgConst = new Constituent(rightArg.getLabel(), "SRL_COMMA", ta,
-                        rightArg.getStartSpan(), rightArg.getEndSpan());
-                srlView.addConstituent(rightArgConst);
-                srlView.addRelation(new Relation("RightOf" + label, predicate, rightArgConst, 1.0d));
-            }
-        }
+        PredicateArgumentView srlView = classifier.getCommaSRL(ta);
         assertEquals(",:\n    LeftOfOther: Mary\n    RightOfOther: the clever scientist\n,:\n" +
                 "    LeftOfOther: the clever scientist\n", srlView.toString());
     }
