@@ -38,39 +38,32 @@ public class Quantifier {
 	
 	public static String wordsplitSentence( String sentence ){
 		Matcher matcher;
-		
 		matcher = wordSplitPat[0].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), "- "+matcher.group(1));
 		}
-		
 		matcher = wordSplitPat[1].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)+" -");
 		}
-		
 		matcher = wordSplitPat[2].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)
 					+" - "+matcher.group(2));
 		}
-		
 		matcher = wordSplitPat[3].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)
 					+matcher.group(2));
 		}
-		
 		matcher = wordSplitPat[4].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), "$ "+matcher.group(1));
 		}
-		
 		matcher = wordSplitPat[5].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)+" $");
 		}
-		
 		matcher = wordSplitPat[6].matcher(sentence);
 		while( matcher.find()){
 			sentence = sentence.replace(matcher.group(), matcher.group(1)+" %");
@@ -87,7 +80,6 @@ public class Quantifier {
 			sentences[i] = taQuant.getSentence(i).getText();
 //			System.out.println("Sentence : "+taQuant.getSentence(i));
 		}
-		
 		Chunker chunker = new Chunker();
 	    Parser parser = new PlainToTokenParser(new WordSplitter(
 	    		new SentenceSplitter(sentences)));

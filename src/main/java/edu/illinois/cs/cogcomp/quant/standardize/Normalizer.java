@@ -52,7 +52,7 @@ public class Normalizer implements Serializable {
 				return quantity;
 			}
 		}
-		return parse(phrase);
+		return null;
 	}
 	
 	public Object parse(String phrase) {

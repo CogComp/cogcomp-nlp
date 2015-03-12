@@ -22980,3 +22980,80 @@ dogwood - I-NUMBER
 trees - I-NUMBER
 tomorrow - B-DATE
 . - O 
+
+He - O 
+gave - O 
+3 - B-NUMBER
+to - O 
+Jessica - O  
+and - O 
+6 - B-NUMBER
+to - O 
+Sara - O 
+. - O 
+
+The - O  
+restaurant - O 
+served - O 
+3 - B-NUMBER
+cakes - I-NUMBER
+yesterday - B-DATE
+. - O 
+
+Only - O   
+3 - B-NUMBER 
+were - O 
+actually - O 
+served - O 
+. - O 
+
+Keith - O  
+bought - O 
+22 - B-NUMBER
+of - I-NUMBER
+Fred - I-NUMBER
+'s - I-NUMBER
+baseball - I-NUMBER
+cards - I-NUMBER
+. - O 
+
+45 - B-NUMBER
+of - I-NUMBER
+the - I-NUMBER
+gems - I-NUMBER
+were - O 
+diamonds - O 
+, - O 
+and - O 
+the - O 
+rest - O 
+were - O 
+rubies - O 
+. - O 
+
+He - O 
+gave - O 
+52 - B-NUMBER
+of - I-NUMBER
+the - I-NUMBER
+seashells - I-NUMBER
+to - O 
+Jason - O 
+. - O 
+
+He - O 
+lost - O 
+3 - B-NUMBER
+of - I-NUMBER
+the - I-NUMBER
+violet - I-NUMBER
+balloons - I-NUMBER
+. - O 
+
+He - O
+gave - O
+2 - B-NUMBER
+to - O
+his - O
+friends - O 
+. - O
