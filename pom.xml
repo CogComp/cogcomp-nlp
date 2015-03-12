@@ -1,69 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>edu.illinois.cs.cogcomp</groupId>
-	<artifactId>illinois-comma</artifactId>
-	<version>1.0-SNAPSHOT</version>
+    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <artifactId>illinois-comma</artifactId>
+    <version>1.1</version>
 
-	<repositories>
-		<repository>
-			<id>CogcompSoftware</id>
-			<name>CogcompSoftware</name>
-			<url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>CogcompSoftware</id>
-			<name>CogcompSoftware</name>
-			<url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <repositories>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<dependencies>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>coreUtilities</artifactId>
-			<version>0.2.8</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>coreUtilities</artifactId>
+            <version>0.2.8</version>
+        </dependency>
 
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>LBJava</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>edison</artifactId>
-			<version>0.7.4</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinoisSRL</artifactId>
-			<version>4.1.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>edu.illinois.cs.cogcomp</groupId>
-				<artifactId>lbj-maven-plugin</artifactId>
-				<version>1.1</version>
-				<configuration>
-					<lbjInputFileList>
-						<param>src/main/lbj/CommaClassifier.lbj</param>
-					</lbjInputFileList>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>LBJava</artifactId>
+            <version>1.0.3</version>
+        </dependency>
 
-					<source>1.5</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>edison</artifactId>
+            <version>0.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>edu.illinois.cs.cogcomp</groupId>
+                <artifactId>lbj-maven-plugin</artifactId>
+                <version>1.1</version>
+                <configuration>
+                    <lbjInputFileList>
+                        <param>src/main/lbj/CommaClassifier.lbj</param>
+                    </lbjInputFileList>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

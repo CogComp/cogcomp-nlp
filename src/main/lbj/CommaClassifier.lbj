@@ -1,4 +1,6 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.lbj;
+import edu.illinois.cs.cogcomp.comma.Comma;
+import edu.illinois.cs.cogcomp.comma.CommaReader;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.Relation;
@@ -26,225 +28,107 @@ discrete% UnigramSecondRightFeature(Comma c) <- {
 	sense c.getWordToRight(2);
 }
 
-discrete% BigramRightFeature(Comma c) <- {
-    sense c.getWordToRight(2) + "-" + c.getWordToRight(1);
-}
-
-discrete% OneWordWindowFeature(Comma c) <- {
-    sense c.getWordToLeft(1) + "-" + c.getWordToRight(1);
-}
-
-discrete% TwoWordWindowFeature(Comma c) <- {
-    String left = c.getWordToLeft(2) + "-" + c.getWordToLeft(1);
-    String right = c.getWordToRight(2) + "-" + c.getWordToRight(1);
-    sense left + "-" + right;
-}
-
-
 
 
 discrete% UnigramLeftPOSFeature(Comma c) <- {
-    sense c.getPOSToLeft(1, true);
+    sense c.getPOSToLeft(1);
 }
 
 discrete% UnigramSecondLeftPOSFeature(Comma c) <- {
-  sense c.getPOSToLeft(2, true);
-}
-
-discrete% BigramLeftPOSFeature(Comma c) <- {
-    sense c.getPOSToLeft(2, true) + "-" + c.getPOSToLeft(1, true);
+    sense c.getPOSToLeft(2);
 }
 
 discrete% UnigramRightPOSFeature(Comma c) <- {
-    sense c.getPOSToRight(1, true);
+    sense c.getPOSToRight(1);
 }
 
 discrete% UnigramSecondRightPOSFeature(Comma c) <- {
-  sense c.getPOSToRight(2, true);
+    sense c.getPOSToRight(2);
 }
-
-discrete% BigramRightPOSFeature(Comma c) <- {
-    sense c.getPOSToRight(2, true) + "-" + c.getPOSToRight(1, true);
-}
-
-discrete% OnePOSWindowFeature(Comma c) <- {
-    sense c.getPOSToLeft(1, true) + "-" + c.getPOSToRight(1, true);
-}
-
-discrete% TwoPOSWindowFeature(Comma c) <- {
-    String left = c.getPOSToLeft(2, true) + "-" + c.getPOSToLeft(1, true);
-    String right = c.getPOSToRight(2, true) + "-" + c.getPOSToRight(1, true);
-    sense left + "-" + right;
-}
-
 
 
 
 discrete% UnigramLeftChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToLeftOfComma(1, true), true, false);
+    sense Comma.getNotation(c.getChunkToLeftOfComma(1), true, false);
 }
 
 discrete% UnigramSecondLeftChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToLeftOfComma(2, true), true, false);
-}
-
-discrete% BigramLeftChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToLeftOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getChunkToLeftOfComma(1, true), true, false);
+  sense Comma.getNotation(c.getChunkToLeftOfComma(2), true, false);
 }
 
 discrete% UnigramRightChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToRightOfComma(1, true), true, false);
+    sense Comma.getNotation(c.getChunkToRightOfComma(1), true, false);
 }
 
 discrete% UnigramSecondRightChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToRightOfComma(2, true), true, false);
+  sense Comma.getNotation(c.getChunkToRightOfComma(2), true, false);
 }
-
-discrete% BigramRightChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToRightOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getChunkToRightOfComma(1, true), true, false);
-}
-
-discrete% OneChunkWindowFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToLeftOfComma(1, true), true, false) + "-" + Comma.getNotation(c.getChunkToRightOfComma(1, true), true, false);
-}
-
-discrete% TwoChunkWindowFeature(Comma c) <- {
-    String left = Comma.getNotation(c.getChunkToLeftOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getChunkToLeftOfComma(1, true), true, false);
-    String right = Comma.getNotation(c.getChunkToRightOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getChunkToRightOfComma(1, true), true, false);
-    sense left + "-" + right;
-}
-
 
 
 
 discrete% UnigramLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(1, true), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfComma(1), true, false);
 }
 
 discrete% UnigramSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfComma(2, true), true, false);
-}
-
-discrete% BigramLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getPhraseToLeftOfComma(1, true), true, false);
+  sense Comma.getNotation(c.getPhraseToLeftOfComma(2), true, false);
 }
 
 discrete% UnigramRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfComma(1, true), true, false);
+    sense Comma.getNotation(c.getPhraseToRightOfComma(1), true, false);
 }
 
 discrete% UnigramSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfComma(2, true), true, false);
-}
-
-discrete% BigramRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getPhraseToRightOfComma(1, true), true, false);
-}
-
-discrete% OnePhraseWindowFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(1, true), true, false) + "-" + Comma.getNotation(c.getPhraseToRightOfComma(1, true), true, false);
-}
-
-discrete% TwoPhraseWindowFeature(Comma c) <- {
-    String left = Comma.getNotation(c.getPhraseToLeftOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getPhraseToLeftOfComma(1, true), true, false);
-    String right = Comma.getNotation(c.getPhraseToRightOfComma(2, true), true, false) + "-" + Comma.getNotation(c.getPhraseToRightOfComma(1, true), true, false);
-    sense left + "-" + right;
-}
-
-discrete% ParseTreeFeature(Comma c) <- {
-    String commaLevelNodes = c.getNodesAtCommaLevel(false);
-    String tree = "";
-    int distance = 0;
-    Constituent phrase;
-    String label;
-    do{
-      phrase = c.getPhraseToLeftOfParent(distance, true);
-      label = Comma.getNotation(phrase, true, false) + " - ";
-      tree = phrase + tree;
-      distance++;
-    }while(phrase!=null);
-
-    tree = tree + "(" + commaLevelNodes + ")";
-
-    distance = 1;
-    do{
-      phrase = c.getPhraseToLeftOfParent(distance, true);
-      label = " - " + Comma.getNotation(phrase, true, false);
-      tree = phrase + tree;
-      distance++;
-    }while(phrase!=null);
-
-    sense tree;
-}
-
-discrete% CommaLevelNodesFeature(Comma c) <- {
-    sense c.getNodesAtCommaLevel(false);
+  sense Comma.getNotation(c.getPhraseToRightOfComma(2), true, false);
 }
 
 discrete% CommaParentFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(0, true), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfParent(0), true, false);
 }
 
 discrete% UnigramParentLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(1, true), true, false);
+    sense Comma.getNotation(c.getPhraseToLeftOfParent(1), true, false);
 }
 
 discrete% UnigramParentSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfParent(2, true), true, false);
-}
-
-discrete% BigramParentLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(2, true), true, false) + "-" + Comma.getNotation(c.getPhraseToLeftOfParent(1, true), true, false);
+  sense Comma.getNotation(c.getPhraseToLeftOfParent(2), true, false);
 }
 
 discrete% UnigramParentRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfParent(1, true), true, false);
+    sense Comma.getNotation(c.getPhraseToRightOfParent(1), true, false);
 }
 
 discrete% UnigramParentSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfParent(2, true), true, false);
-}
-
-
-
-
-discrete% UnigramLexicalisedLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(1, true), true, false);
-}
-
-discrete% UnigramLexicalisedRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfComma(1, true), true, false);
+  sense Comma.getNotation(c.getPhraseToRightOfParent(2), true, false);
 }
 
 
 
 discrete% SRLFeature(Comma c) <- {
-  Relation rel = CommaHelper.getSRL(c);
-  PredicateArgumentView pav = (PredicateArgumentView)c.TA.getView(ViewNames.SRL_VERB);
-  if(rel!=null)
-    sense pav.getPredicateLemma(rel.getSource()) + rel.getRelationName();
+    List SRLs = c.getContainingSRLs();
+    for (int i = 0; i < SRLs.size(); i++) {
+        String s = (String) SRLs.get(i);
+        sense s;
+    }
 }
 
 
+
+discrete% ParseParentFeatures(Comma c) <- CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature
+
+discrete% ParseFeatures(Comma c) <- UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+discrete% POSFeatures(Comma c) <- UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
 
 discrete CommaLabel(Comma c) <- { return c.getRole(); }
 
 /** A learned text classifier; its definition comes from data. */
 discrete CommaClassifier(Comma c) <-
 learn CommaLabel
-  using ParseTreeFeature
-
-
-
-
-
-
-
-
+  using ParseFeatures, ParseParentFeatures, POSFeatures
 
   from new CommaReader("data/comma_resolution_data.txt")
   100 rounds
-//  with new NaiveBayes()
   cval 5 "random"
 
   with SparseNetworkLearner {
@@ -254,7 +138,7 @@ learn CommaLabel
     baseLTU = new SparseAveragedPerceptron(p);
   }
 
-  testingMetric new PrintMetrics(5, "todo/Gold-Combine.result")
+  testingMetric new PrintMetrics(5)
 
   progressOutput 0
 end

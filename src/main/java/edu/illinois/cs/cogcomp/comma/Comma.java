@@ -1,42 +1,36 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-
+import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.Queries;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.edison.sentences.*;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A data structure containing all the information related to a comma.
  */
-public class Comma implements Serializable{
+public class Comma implements Serializable {
     private String[] sentence;
     private String role;
     public int commaPosition;
-    TextAnnotation goldTA;
-    TextAnnotation TA;
+    private TextAnnotation goldTA;
+    private TextAnnotation TA;
+    /** Whether to use gold-standard labels; for now this is tied to whether we are training. */
+    private static final boolean GOLD = CommaClassifier.isTraining;
+
+    private static final long serialVersionUID = 715976951486905421l;
 
     public Comma(int commaPosition, String role, String sentence, TextAnnotation TA) {
         this.commaPosition = commaPosition;
-        if (role.equals("Entity attribute")) this.role = "Attribute";
-        else if (role.equals("Entity substitute")) this.role = "Substitute";
-        else this.role = role;
+        if (role != null) {
+            if (role.equals("Entity attribute")) this.role = "Attribute";
+            else if (role.equals("Entity substitute")) this.role = "Substitute";
+            else this.role = role;
+        }
         this.sentence = sentence.split("\\s+");
         this.TA = TA;
     }
@@ -44,6 +38,10 @@ public class Comma implements Serializable{
     public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, TextAnnotation goldTA) {
         this(commaPosition, role, sentence, TA);
     	this.goldTA = goldTA;
+    }
+
+    public Comma(int commaPosition, String sentence, TextAnnotation TA) {
+        this(commaPosition, null, sentence, TA);
     }
 
     public String getRole() {
@@ -64,38 +62,27 @@ public class Comma implements Serializable{
         return sentence[commaPosition - distance];
     }
     
-    public String getPOSToLeft(int distance, boolean gold){
+    public String getPOSToLeft(int distance){
 		TokenLabelView posView;
-		if (gold)
+		if (GOLD)
 			posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
 		else
 			posView = (TokenLabelView) TA.getView(ViewNames.POS);
 		return posView.getLabel(commaPosition - distance);
 	}
     
-    public String getPOSToRight(int distance, boolean gold){
+    public String getPOSToRight(int distance){
     	TokenLabelView posView;
-		if (gold)
+		if (GOLD)
 			posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
 		else
 			posView = (TokenLabelView) TA.getView(ViewNames.POS);
     	return posView.getLabel(commaPosition + distance);
     }
 
-    public Constituent getChunkToRightOfComma(int distance, boolean gold){
-    	if(!this.TA.hasView(ViewNames.SHALLOW_PARSE)){
-    		CuratorClient client = new CuratorClient("trollope.cs.illinois.edu", 9010);
-    		try {
-				client.addChunkView(this.TA, false);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
-    	}
-    	
+    public Constituent getChunkToRightOfComma(int distance){
     	SpanLabelView chunkView;
-    	if(gold)
+    	if (GOLD)
     		chunkView = (SpanLabelView) goldTA.getView(ViewNames.SHALLOW_PARSE);
     	else
     		chunkView = (SpanLabelView) TA.getView(ViewNames.SHALLOW_PARSE);
@@ -116,25 +103,12 @@ public class Comma implements Serializable{
 		return chunk;
     }
     
-    public Constituent getChunkToLeftOfComma(int distance, boolean gold){
-    	if(!this.TA.hasView(ViewNames.SHALLOW_PARSE)){
-    		CuratorClient client = new CuratorClient("trollope.cs.illinois.edu", 9010);
-    		try {
-				client.addChunkView(this.TA, false);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				System.exit(1);
-			}
-    	}
-    	
+    public Constituent getChunkToLeftOfComma(int distance){
     	SpanLabelView chunkView;
-    	if(gold)
+    	if (GOLD)
     		chunkView = (SpanLabelView) goldTA.getView(ViewNames.SHALLOW_PARSE);
     	else
-    		chunkView = (SpanLabelView) TA.getView(ViewNames.SHALLOW_PARSE);;
-    	
-		//Constituent comma = covers.get(0);
+    		chunkView = (SpanLabelView) TA.getView(ViewNames.SHALLOW_PARSE);
 		
 		List<Constituent> chunksToLeft = chunkView.getSpanLabels(0, commaPosition+1);
 		System.out.println(chunksToLeft);
@@ -153,101 +127,50 @@ public class Comma implements Serializable{
 		return chunk;
     }
 
-    public Constituent getPhraseToLeftOfComma(int distance, boolean gold){
+    public Constituent getPhraseToLeftOfComma(int distance){
     	TreeView parseView;
-    	if(gold)
+    	if(GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
 		Constituent comma = getCommaConstituentFromTree(parseView);
-		
-		Constituent phraseToLeft = getSibilingToLeft(distance, comma, parseView);
-		return phraseToLeft;
+
+        return getSiblingToLeft(distance, comma, parseView);
     }
     
-    public Constituent getPhraseToRightOfComma(int distance, boolean gold){
+    public Constituent getPhraseToRightOfComma(int distance){
     	TreeView parseView;
-    	if(gold)
+    	if(GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
 		Constituent comma = getCommaConstituentFromTree(parseView);
-		
-		Constituent phraseToRight= getSibilingToRight(distance, comma, parseView);
-		return phraseToRight;
+
+        return getSiblingToRight(distance, comma, parseView);
     }
     
-    public Constituent getPhraseToLeftOfParent(int distance, boolean gold){
+    public Constituent getPhraseToLeftOfParent(int distance){
     	TreeView parseView;
-    	if(gold)
+    	if(GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 		Constituent parent = TreeView.getParent(comma);
-		Constituent phraseToLeft = getSibilingToLeft(distance, parent, parseView);
-		return phraseToLeft;
+        return getSiblingToLeft(distance, parent, parseView);
     }
 
-    public Constituent getPhraseToRightOfParent(int distance, boolean gold){
+    public Constituent getPhraseToRightOfParent(int distance){
     	TreeView parseView;
-    	if(gold)
+    	if(GOLD)
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 		Constituent parent = TreeView.getParent(comma);
-		Constituent phraseToRight= getSibilingToRight(distance, parent, parseView);
-		return phraseToRight;
+        return getSiblingToRight(distance, parent, parseView);
     }
-    
-    public String getNodesAtCommaLevel(boolean gold){
-    	TreeView parseView;
-    	if(gold)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
-    	else
-    		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
-		Constituent comma = getCommaConstituentFromTree(parseView);
-		IQueryable<Constituent> nodesAtSameLevel = parseView.where(Queries.isSiblingOf(comma)).orderBy(new Comparator<Constituent>() {
-			@Override
-			public int compare(Constituent o1, Constituent o2) {
-				return o1.getStartSpan() - o2.getStartSpan();
-			}
-		});
-		
-		Iterator<Constituent> it = nodesAtSameLevel.iterator();
-		Constituent curr = it.next();
-		String feature = curr.getLabel();
-		while (it.hasNext()){
-			curr = it.next();
-			feature += " " + curr.getLabel();
-		} 
-		return feature;
-    }
-    
-    public String getNodesAtParentLevel(boolean gold){
-    	TreeView parseView;
-    	if(gold)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
-    	else
-    		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
-		Constituent comma = getCommaConstituentFromTree(parseView);
-		Constituent commaParent = TreeView.getParent(comma);
-		IQueryable<Constituent> nodesAtParentLevel = parseView.where(Queries.isSiblingOf(commaParent)).orderBy(new Comparator<Constituent>() {
-			@Override
-			public int compare(Constituent o1, Constituent o2) {
-				return o1.getStartSpan() - o2.getStartSpan();
-			}
-		});
-		
-		Iterator<Constituent> it = nodesAtParentLevel.iterator();
-		String feature = it.next().getLabel();
-		while (it.hasNext()){
-			feature += " " + it.next().getLabel();
-		}
-		return feature;
-    }
-    
+
     public Constituent getCommaConstituentFromTree(TreeView parseView){
 		Constituent comma = null;
 		for(Constituent c: parseView.getConstituents()){
@@ -264,34 +187,33 @@ public class Comma implements Serializable{
 		return comma;
     }
     
-    public Constituent getSibilingToLeft(int distance, Constituent c, TreeView parseView){
-    	Constituent leftSibiling = c;
-    	IQueryable<Constituent> sibilings = parseView.where(Queries.isSiblingOf(c)); 
+    public Constituent getSiblingToLeft(int distance, Constituent c, TreeView parseView){
+    	Constituent leftSibling = c;
+    	IQueryable<Constituent> siblings = parseView.where(Queries.isSiblingOf(c));
     	while(distance-- > 0){
-    		Iterator<Constituent> leftSibilingIt = sibilings.where(Queries.adjacentToBefore(leftSibiling)).iterator();
-    		if(leftSibilingIt.hasNext())
-    			leftSibiling = leftSibilingIt.next();
+    		Iterator<Constituent> leftSiblingIt = siblings.where(Queries.adjacentToBefore(leftSibling)).iterator();
+    		if(leftSiblingIt.hasNext())
+    			leftSibling = leftSiblingIt.next();
     		else
     			return null;
     	}
-    	return leftSibiling;
+    	return leftSibling;
     }
     
-    public Constituent getSibilingToRight(int distance, Constituent c, TreeView parseView){
-    	Constituent rightSibiling = c;
-    	IQueryable<Constituent> sibilings = parseView.where(Queries.isSiblingOf(c)); 
+    public Constituent getSiblingToRight(int distance, Constituent c, TreeView parseView){
+    	Constituent rightSibling = c;
+    	IQueryable<Constituent> siblings = parseView.where(Queries.isSiblingOf(c));
     	while(distance-- > 0){
-    		Iterator<Constituent> rightSibilingIt = sibilings.where(Queries.adjacentToAfter(rightSibiling)).iterator();
-    		if(rightSibilingIt.hasNext())
-    			rightSibiling = rightSibilingIt.next();
+    		Iterator<Constituent> rightSiblingIt = siblings.where(Queries.adjacentToAfter(rightSibling)).iterator();
+    		if(rightSiblingIt.hasNext())
+    			rightSibling = rightSiblingIt.next();
     		else
     			return null;
     	}
-    	return rightSibiling;
+    	return rightSibling;
     }
     
     public static String getNotation(Constituent c, boolean POSlexicalise, boolean NERlexicalise){
-    	
     	if(c == null)
     		return "NULL";
     	String notation = c.getLabel();
@@ -307,23 +229,37 @@ public class Comma implements Serializable{
 					notation += " " + WordHelpers.getPOS(TA, tokenId);
 	    }
     	
-    	
-    	
 		return notation;
     }
     
-    /*public Relation getSRL(){
-    	PredicateArgumentView pav = (PredicateArgumentView)TA.getView(ViewNames.SRL_VERB);
-		List<Relation> rels = new ArrayList<Relation>();
-		for(Constituent pred : pav.getPredicates()){
-			rels.addAll(pav.getArguments(pred));
-		}
-		for(Relation rel : rels){
-			if(rel.getTarget().getEndSpan()>commaPosition && rel.getTarget().getStartSpan()>=commaPosition)
-				return rel;
-		}
-		return null;
-    }*/
+    public List<String> getContainingSRLs() {
+        List<String> list = new ArrayList<String>();
+        TextAnnotation srlTA = (GOLD)? goldTA : TA;
+    	PredicateArgumentView pav;
+        pav = (PredicateArgumentView)srlTA.getView(ViewNames.SRL_VERB);
+        for(Constituent pred : pav.getPredicates()) {
+            for (Relation rel : pav.getArguments(pred)) {
+                if (rel.getTarget().getEndSpan() > commaPosition && rel.getTarget().getStartSpan() >= commaPosition)
+                    list.add(pav.getPredicateLemma(rel.getSource()) + rel.getRelationName());
+            }
+        }
+        pav = (PredicateArgumentView)srlTA.getView(ViewNames.SRL_NOM);
+        for(Constituent pred : pav.getPredicates()) {
+            for (Relation rel : pav.getArguments(pred)) {
+                if (rel.getTarget().getEndSpan() > commaPosition && rel.getTarget().getStartSpan() >= commaPosition)
+                    list.add(pav.getPredicateLemma(rel.getSource()) + rel.getRelationName());
+            }
+        }
+        // We don't have gold prepSRL (for now)
+        pav = (PredicateArgumentView)TA.getView(ViewNames.SRL_PREP);
+        for(Constituent pred : pav.getPredicates()) {
+            for (Relation rel : pav.getArguments(pred)) {
+                if (rel.getTarget().getEndSpan() > commaPosition && rel.getTarget().getStartSpan() >= commaPosition)
+                    list.add(pav.getPredicateLemma(rel.getSource()) + rel.getRelationName());
+            }
+        }
+		return list;
+    }
 
     public static String getNamedEntityTag(Constituent c){
     	TextAnnotation TA = c.getTextAnnotation();
