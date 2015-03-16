@@ -39,6 +39,6 @@ public class CommaLabelerTest extends TestCase {
         // Create the Comma structure
         PredicateArgumentView srlView = classifier.getCommaSRL(ta);
         assertEquals(",:\n    LeftOfOther: Mary\n    RightOfOther: the clever scientist\n,:\n" +
-                "    LeftOfOther: the clever scientist\n", srlView.toString());
+                "    LeftOfSubstitute: the clever scientist\n", srlView.toString());
     }
 }
