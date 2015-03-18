@@ -142,10 +142,6 @@ discrete ParseTreeFeature(Comma c) <- {
       distance++;
     }while(!phrase.equals("NULL"));
     
-    /*String treeLevelPhrases = Comma.getNotation(c.getPhraseToLeftOfParent(2)) + Comma.getNotation(c.getPhraseToLeftOfParent(1)) + Comma.getNotation(c.getPhraseToLeftOfParent(0)) + Comma.getNotation(c.getPhraseToRightOfParent(1)) + Comma.getNotation(c.getPhraseToRightOfParent(2));
-	String commaLevelPhrases = Comma.getNotation(c.getPhraseToLeftOfComma(2)) + Comma.getNotation(c.getPhraseToLeftOfComma(1)) + Comma.getNotation(c.getPhraseToRightOfComma(1)) + Comma.getNotation(c.getPhraseToRightOfComma(2));
-	String tree = treeLevelPhrases + commaLevelPhrases;*/
-	System.out.println(tree);
     return tree;
 }
 
