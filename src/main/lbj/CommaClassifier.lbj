@@ -111,7 +111,6 @@ discrete% SRLFeature(Comma c) <- {
 
 discrete ParseTreeFeature(Comma c) <- {
     String tree = "";
-    String commaLevelNodes = c.getNodesAtCommaLevel();
     int distance = 0;
     String phrase;
     do{
