@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
  */
 public class CommaLabeler {
     public static final String VIEW_NAME = "SRL_COMMA";
-    private String[] requiredViews = new String[]{ViewNames.PARSE_STANFORD, ViewNames.POS};
+    private static String[] requiredViews = new String[]{ViewNames.PARSE_STANFORD, ViewNames.POS};
     private CommaClassifier classifier;
 
     public CommaLabeler () {
@@ -32,7 +32,7 @@ public class CommaLabeler {
         for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {
             if (!comma.getLabel().equals(",")) continue;
             Comma commaStruct = new Comma(comma.getStartSpan(), text, ta);
-            String label = classifier.discreteValue(classifier.classify(commaStruct));
+            String label = classifier.discreteValue(commaStruct);
             Constituent predicate = new Constituent(label, VIEW_NAME, ta, comma.getStartSpan(), comma.getEndSpan());
             srlView.addConstituent(predicate);
             Constituent leftArg = commaStruct.getPhraseToLeftOfComma(1);
@@ -51,5 +51,9 @@ public class CommaLabeler {
             }
         }
         return srlView;
+    }
+
+    public String[] getRequiredViews() {
+        return requiredViews;
     }
 }
