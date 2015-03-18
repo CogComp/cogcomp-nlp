@@ -1,7 +1,11 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
+import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.edison.sentences.Relation;
+import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 
 /**

@@ -8,98 +8,94 @@ import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
 import java.util.List;
 import java.util.ArrayList;
 
-discrete% UnigramLeftFeature(Comma c) <- {
-    sense c.getWordToLeft(1);
+discrete UnigramLeftFeature(Comma c) <- {
+    return c.getWordToLeft(1);
 }
 
-discrete% UnigramSecondLeftFeature(Comma c) <- {
-	sense c.getWordToLeft(2);
+discrete UnigramSecondLeftFeature(Comma c) <- {
+	return c.getWordToLeft(2);
 }
 
-discrete% BigramLeftFeature(Comma c) <- {
-    sense c.getWordToLeft(2) + "-" + c.getWordToLeft(1);
+discrete UnigramRightFeature(Comma c) <- {
+    return c.getWordToRight(1);
 }
 
-discrete% UnigramRightFeature(Comma c) <- {
-    sense c.getWordToRight(1);
-}
-
-discrete% UnigramSecondRightFeature(Comma c) <- {
-	sense c.getWordToRight(2);
+discrete UnigramSecondRightFeature(Comma c) <- {
+	return c.getWordToRight(2);
 }
 
 
 
-discrete% UnigramLeftPOSFeature(Comma c) <- {
-    sense c.getPOSToLeft(1);
+discrete UnigramLeftPOSFeature(Comma c) <- {
+    return c.getPOSToLeft(1);
 }
 
-discrete% UnigramSecondLeftPOSFeature(Comma c) <- {
-    sense c.getPOSToLeft(2);
+discrete UnigramSecondLeftPOSFeature(Comma c) <- {
+    return c.getPOSToLeft(2);
 }
 
-discrete% UnigramRightPOSFeature(Comma c) <- {
-    sense c.getPOSToRight(1);
+discrete UnigramRightPOSFeature(Comma c) <- {
+    return c.getPOSToRight(1);
 }
 
-discrete% UnigramSecondRightPOSFeature(Comma c) <- {
-    sense c.getPOSToRight(2);
-}
-
-
-
-discrete% UnigramLeftChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToLeftOfComma(1));
-}
-
-discrete% UnigramSecondLeftChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToLeftOfComma(2));
-}
-
-discrete% UnigramRightChunkFeature(Comma c) <- {
-    sense Comma.getNotation(c.getChunkToRightOfComma(1));
-}
-
-discrete% UnigramSecondRightChunkFeature(Comma c) <- {
-  sense Comma.getNotation(c.getChunkToRightOfComma(2));
+discrete UnigramSecondRightPOSFeature(Comma c) <- {
+    return c.getPOSToRight(2);
 }
 
 
 
-discrete% UnigramLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfComma(1));
+discrete UnigramLeftChunkFeature(Comma c) <- {
+    return Comma.getNotation(c.getChunkToLeftOfComma(1));
 }
 
-discrete% UnigramSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfComma(2));
+discrete UnigramSecondLeftChunkFeature(Comma c) <- {
+  return Comma.getNotation(c.getChunkToLeftOfComma(2));
 }
 
-discrete% UnigramRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfComma(1));
+discrete UnigramRightChunkFeature(Comma c) <- {
+    return Comma.getNotation(c.getChunkToRightOfComma(1));
 }
 
-discrete% UnigramSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfComma(2));
+discrete UnigramSecondRightChunkFeature(Comma c) <- {
+  return Comma.getNotation(c.getChunkToRightOfComma(2));
 }
 
-discrete% CommaParentFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(0));
+
+
+discrete UnigramLeftPhraseFeature(Comma c) <- {
+    return Comma.getNotation(c.getPhraseToLeftOfComma(1));
 }
 
-discrete% UnigramParentLeftPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToLeftOfParent(1));
+discrete UnigramSecondLeftPhraseFeature(Comma c) <- {
+  return Comma.getNotation(c.getPhraseToLeftOfComma(2));
 }
 
-discrete% UnigramParentSecondLeftPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToLeftOfParent(2));
+discrete UnigramRightPhraseFeature(Comma c) <- {
+    return Comma.getNotation(c.getPhraseToRightOfComma(1));
 }
 
-discrete% UnigramParentRightPhraseFeature(Comma c) <- {
-    sense Comma.getNotation(c.getPhraseToRightOfParent(1));
+discrete UnigramSecondRightPhraseFeature(Comma c) <- {
+  return Comma.getNotation(c.getPhraseToRightOfComma(2));
 }
 
-discrete% UnigramParentSecondRightPhraseFeature(Comma c) <- {
-  sense Comma.getNotation(c.getPhraseToRightOfParent(2));
+discrete CommaParentFeature(Comma c) <- {
+    return Comma.getNotation(c.getPhraseToLeftOfParent(0));
+}
+
+discrete UnigramParentLeftPhraseFeature(Comma c) <- {
+    return Comma.getNotation(c.getPhraseToLeftOfParent(1));
+}
+
+discrete UnigramParentSecondLeftPhraseFeature(Comma c) <- {
+  return Comma.getNotation(c.getPhraseToLeftOfParent(2));
+}
+
+discrete UnigramParentRightPhraseFeature(Comma c) <- {
+    return Comma.getNotation(c.getPhraseToRightOfParent(1));
+}
+
+discrete UnigramParentSecondRightPhraseFeature(Comma c) <- {
+  return Comma.getNotation(c.getPhraseToRightOfParent(2));
 }
 
 
@@ -113,10 +109,63 @@ discrete% SRLFeature(Comma c) <- {
 }
 
 
+discrete ParseTreeFeature(Comma c) <- {
+    String tree = "";
+    String commaLevelNodes = c.getNodesAtCommaLevel();
+    int distance = 0;
+    String phrase;
+    do{
+      phrase = Comma.getNotation(c.getPhraseToLeftOfParent(distance));
+      tree = phrase + tree;
+      distance++;
+    }while(!phrase.equals("NULL"));
+
+    String commaLevelPhrases = "";
+    distance = 0;
+	do{
+      phrase = Comma.getNotation(c.getPhraseToLeftOfComma(distance));
+      commaLevelPhrases =  phrase + commaLevelPhrases;
+      distance++;
+    }while(!phrase.equals("NULL"));
+    
+	distance = 1;
+    do{
+      phrase = Comma.getNotation(c.getPhraseToRightOfComma(distance));
+      commaLevelPhrases = commaLevelPhrases + phrase;
+      distance++;
+    }while(!phrase.equals("NULL"));
+	tree += "(" + commaLevelPhrases + ")";
+
+    distance = 1;
+    do{
+      phrase = Comma.getNotation(c.getPhraseToRightOfParent(distance));
+      tree = tree + phrase;
+      distance++;
+    }while(!phrase.equals("NULL"));
+    
+    /*String treeLevelPhrases = Comma.getNotation(c.getPhraseToLeftOfParent(2)) + Comma.getNotation(c.getPhraseToLeftOfParent(1)) + Comma.getNotation(c.getPhraseToLeftOfParent(0)) + Comma.getNotation(c.getPhraseToRightOfParent(1)) + Comma.getNotation(c.getPhraseToRightOfParent(2));
+	String commaLevelPhrases = Comma.getNotation(c.getPhraseToLeftOfComma(2)) + Comma.getNotation(c.getPhraseToLeftOfComma(1)) + Comma.getNotation(c.getPhraseToRightOfComma(1)) + Comma.getNotation(c.getPhraseToRightOfComma(2));
+	String tree = treeLevelPhrases + commaLevelPhrases;*/
+	System.out.println(tree);
+    return tree;
+}
+
+
+
+discrete BigramLeftPhraseFeature(Comma c) <- UnigramSecondLeftPhraseFeature && UnigramLeftPhraseFeature
+
+discrete BigramRightPhraseFeature(Comma c) <- UnigramSecondRightPhraseFeature && UnigramRightPhraseFeature
+
+discrete BigramParentLeftPhraseFeature(Comma c) <- UnigramParentSecondLeftPhraseFeature && UnigramParentLeftPhraseFeature
+
+discrete BigramParentRightPhraseFeature(Comma c) <- UnigramParentSecondRightPhraseFeature && UnigramParentRightPhraseFeature
+
 
 discrete% ParseParentFeatures(Comma c) <- CommaParentFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature
 
 discrete% ParseFeatures(Comma c) <- UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
+
+discrete% BigramParseFeatures(Comma c) <- BigramLeftPhraseFeature, BigramRightPhraseFeature, BigramParentLeftPhraseFeature, BigramParentRightPhraseFeature
 
 discrete% POSFeatures(Comma c) <- UnigramSecondLeftPOSFeature, UnigramSecondRightPOSFeature, UnigramLeftPOSFeature, UnigramRightPOSFeature
 
@@ -125,7 +174,7 @@ discrete CommaLabel(Comma c) <- { return c.getRole(); }
 /** A learned text classifier; its definition comes from data. */
 discrete CommaClassifier(Comma c) <-
 learn CommaLabel
-  using ParseFeatures, ParseParentFeatures, POSFeatures
+  using ParseFeatures, ParseParentFeatures, POSFeatures, ParseTreeFeature, BigramParseFeatures
 
   from new CommaReader("data/comma_resolution_data.txt")
   100 rounds

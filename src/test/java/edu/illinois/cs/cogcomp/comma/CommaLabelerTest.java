@@ -11,7 +11,8 @@ public class CommaLabelerTest extends TestCase {
     private CommaLabeler classifier;
     private TextAnnotation ta;
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         super.setUp();
         classifier = new CommaLabeler();
         ta = new TextAnnotation("","", Arrays.asList("Mary , the clever scientist , was walking ."));

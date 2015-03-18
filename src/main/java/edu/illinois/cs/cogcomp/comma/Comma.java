@@ -22,6 +22,15 @@ public class Comma implements Serializable {
 
     private static final long serialVersionUID = 715976951486905421l;
 
+    
+    static {
+    	CommaProperties properties = CommaProperties.getInstance();
+        GOLD = properties.useGold();
+        NERlexicalise = properties.lexicaliseNER();
+        POSlexicalise = properties.lexicalisePOS();
+    }
+    
+    
     /**
      * A default constructor used during training.
      * @param commaPosition The token index of the comma
@@ -38,10 +47,6 @@ public class Comma implements Serializable {
         }
         this.sentence = sentence.split("\\s+");
         this.TA = TA;
-        CommaProperties properties = CommaProperties.getInstance();
-        GOLD = properties.useGold();
-        NERlexicalise = properties.lexicaliseNER();
-        POSlexicalise = properties.lexicalisePOS();
     }
 
     /**
@@ -106,11 +111,10 @@ public class Comma implements Serializable {
     }
 
     public Constituent getChunkToRightOfComma(int distance){
-    	SpanLabelView chunkView;
-    	if (GOLD)
-    		chunkView = (SpanLabelView) goldTA.getView(ViewNames.SHALLOW_PARSE);
-    	else
-    		chunkView = (SpanLabelView) TA.getView(ViewNames.SHALLOW_PARSE);
+    	//We don't have gold SHALLOW_PARSE
+    	TextAnnotation chunkTA = TA;
+    	SpanLabelView chunkView = (SpanLabelView) chunkTA.getView(ViewNames.SHALLOW_PARSE);
+    	
     	
 		List<Constituent> chunksToRight= chunkView.getSpanLabels(commaPosition+1, TA.getTokens().length);
 		Collections.sort(chunksToRight, new Comparator<Constituent>() {
@@ -129,11 +133,10 @@ public class Comma implements Serializable {
     }
     
     public Constituent getChunkToLeftOfComma(int distance){
-    	SpanLabelView chunkView;
-    	if (GOLD)
-    		chunkView = (SpanLabelView) goldTA.getView(ViewNames.SHALLOW_PARSE);
-    	else
-    		chunkView = (SpanLabelView) TA.getView(ViewNames.SHALLOW_PARSE);
+    	//We don't have gold SHALLOW_PARSE
+    	TextAnnotation chunkTA = TA;
+    	SpanLabelView chunkView = (SpanLabelView) chunkTA.getView(ViewNames.SHALLOW_PARSE);
+    	
 		
 		List<Constituent> chunksToLeft = chunkView.getSpanLabels(0, commaPosition+1);
 		System.out.println(chunksToLeft);
@@ -287,6 +290,7 @@ public class Comma implements Serializable {
     }
 
     public static String getNamedEntityTag(Constituent c){
+    	//We don't have gold NER
     	TextAnnotation TA = c.getTextAnnotation();
     	List<String> NETags = TA.getView(ViewNames.NER).getLabelsCovering(c);
     	String result = NETags.size()==0? "NULL" : NETags.get(0);
