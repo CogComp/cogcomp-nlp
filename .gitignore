@@ -56,3 +56,5 @@ src/main/java/edu/illinois/cs/cogcomp/comma/lbj/POSFeatures.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/ParseParentFeatures.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaClassifier$$1.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/ParseFeatures.java
+src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramParentRightPhraseFeature.java
+src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramParseFeatures.java

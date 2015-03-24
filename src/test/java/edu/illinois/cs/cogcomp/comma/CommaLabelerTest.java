@@ -39,7 +39,7 @@ public class CommaLabelerTest extends TestCase {
     public void testGetCommaSRL() throws AnnotationFailedException {
         // Create the Comma structure
         PredicateArgumentView srlView = classifier.getCommaSRL(ta);
-        assertEquals(",:\n    LeftOfOther: Mary\n    RightOfOther: the clever scientist\n,:\n" +
+        assertEquals(",:\n    LeftOfSubstitute: Mary\n    RightOfSubstitute: the clever scientist\n,:\n" +
                 "    LeftOfSubstitute: the clever scientist\n", srlView.toString());
     }
 }
