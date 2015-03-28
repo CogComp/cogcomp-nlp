@@ -19,7 +19,7 @@ public class Comma implements Serializable {
     private TextAnnotation goldTA;
     private TextAnnotation TA;
     private static boolean GOLD, NERlexicalise, POSlexicalise;
-
+    private Sentence s;
     private static final long serialVersionUID = 715976951486905421l;
 
     
@@ -38,7 +38,7 @@ public class Comma implements Serializable {
      * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA) {
+    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, Sentence s) {
         this.commaPosition = commaPosition;
         if (role != null) {
             if (role.equals("Entity attribute")) this.role = "Attribute";
@@ -47,6 +47,7 @@ public class Comma implements Serializable {
         }
         this.sentence = sentence.split("\\s+");
         this.TA = TA;
+        this.s = s;
     }
 
     /**
@@ -57,8 +58,8 @@ public class Comma implements Serializable {
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      * @param goldTA The TextAnnotation containing gold-standard views for training
      */
-    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, TextAnnotation goldTA) {
-        this(commaPosition, role, sentence, TA);
+    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, TextAnnotation goldTA, Sentence s) {
+        this(commaPosition, role, sentence, TA, s);
     	this.goldTA = goldTA;
     }
 
@@ -68,8 +69,8 @@ public class Comma implements Serializable {
      * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String sentence, TextAnnotation TA) {
-        this(commaPosition, null, sentence, TA);
+    public Comma(int commaPosition, String sentence, TextAnnotation TA, Sentence s) {
+        this(commaPosition, null, sentence, TA, s);
         // Since we know there is going to be no gold structures available
         GOLD = false;
     }
@@ -78,6 +79,10 @@ public class Comma implements Serializable {
         return role;
     }
 
+    public Sentence getSentence() {
+        return s;
+    }
+    
     public String getWordToRight(int distance) {
         // Dummy symbol for sentence end (in case comma is the second to last word in the sentence)
         if (commaPosition + distance >= sentence.length)

@@ -11,6 +11,9 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.collections.map.HashedMap;
+import org.joda.time.field.DividedDateTimeField;
+
 /**
  * Data reader for the comma dataset of Srikumar et al.
  */
@@ -126,6 +129,7 @@ public class CommaReader implements Parser {
             assert line.equals("COMMAS: " + labeledCommas.size() + " Total") : line + "\nVS\n" + "COMMAS: " +
                     labeledCommas.size() + " Total\n" + "rawText = " + rawText;
 
+            Sentence sentence  = new Sentence();
             for (int commaId : Sorters.sortSet(labeledCommas.keySet())) {
                 line = scanner.nextLine().trim();
                 assert line.startsWith(commaId + "."):line;
@@ -133,7 +137,9 @@ public class CommaReader implements Parser {
                 String commaLabel = line.split("\\]")[0].split("\\[")[1].trim();
                 for (int commaIndex : labeledCommas.get(commaId)){
                     if (!skip) {
-                        commaList.add(new Comma(commaIndex, commaLabel, rawText, TA, goldTA));
+                    	Comma c = new Comma(commaIndex, commaLabel, rawText, TA, goldTA, sentence);
+                    	sentence.addComma(c);;
+                        commaList.add(c);
                     }
                 }
                 String tmp = line.substring(line.indexOf(":") + 1, line.indexOf(" relation")).trim();
@@ -157,12 +163,12 @@ public class CommaReader implements Parser {
             if (failures > 0)
                 System.out.print(" ANNOTATION FAILED(" + failures + ")");
         }
-        writeSerData();
+        writeSerCommas(commas, "data/CommaTAGoldFinal.ser");
         scanner.close();
     }
 
-    public void writeSerData() throws IOException{
-        FileOutputStream fileOut = new FileOutputStream("data/CommaTAGoldFinal.ser");
+    public static void writeSerCommas(List<Comma> commas, String filename) throws IOException{
+        FileOutputStream fileOut = new FileOutputStream(filename);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(commas);
         out.close();
@@ -251,6 +257,44 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        new CommaReader("data/comma_resolution_data.txt");
+        CommaReader cr = new CommaReader("data/comma_resolution_data.txt");
+        Comma c;
+        Set<Sentence> sentenceSet = new HashSet<Sentence>();
+        while((c=(Comma)cr.next()) != null)
+        {
+        	Sentence s = c.getSentence();
+        	sentenceSet.add(s);
+        }
+        divideTDT(sentenceSet);
     }
+    
+    public static void divideTDT(Collection<Sentence> sentences) throws IOException{
+    	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);
+    	double train = 0.7;
+    	double dev = 0.1;
+    	double test = 0.2;
+    	int numSentences = sentenceList.size();
+    	Collection<Sentence> trainSentences = sentenceList.subList(0, (int) (numSentences * train));
+    	Collection<Sentence> devSentences = sentenceList.subList((int) (numSentences * train), (int) (numSentences * (train+dev)));
+    	Collection<Sentence> testSentences = sentenceList.subList((int) (numSentences * (train+dev)), numSentences);
+    	
+    	List<Comma> trainCommas = new ArrayList<Comma>();
+    	List<Comma> devCommas = new ArrayList<Comma>();
+    	List<Comma> testCommas = new ArrayList<Comma>();
+    	
+    	for(Sentence s: trainSentences)
+    		trainCommas.addAll(s.getCommas());
+    	
+    	for(Sentence s: devSentences)
+    		devCommas.addAll(s.getCommas());
+
+    	for(Sentence s: testSentences)
+   			testCommas.addAll(s.getCommas());
+
+    	System.out.println("hello");
+    	writeSerCommas(trainCommas, "data/train_commas.ser");
+    	writeSerCommas(trainCommas, "data/dev_commas.ser");
+    	writeSerCommas(trainCommas, "data/test_commas.ser");
+    }
+    
 }

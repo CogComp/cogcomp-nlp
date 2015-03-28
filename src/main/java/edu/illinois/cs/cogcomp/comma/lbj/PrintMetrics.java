@@ -29,10 +29,14 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
 	public String getName() {
 		return "Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete";
 	}
-
+	
+	@Override
 	public double test(Classifier classifier, Classifier oracle, Parser parser) {
+		Classifier jc  = new JointCommaClassifier();
+		//Classifier jc  = new LocalCommaClassifier();
+		
 		iteration++;
-		TestDiscrete tester = TestDiscrete.testDiscrete(classifier, oracle, parser);
+		TestDiscrete tester = TestDiscrete.testDiscrete(jc, oracle, parser);
 		reportAll(tester);
 		if(iteration == total_iterations){
 			printPerformance(System.out);

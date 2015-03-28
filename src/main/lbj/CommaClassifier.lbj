@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
 import edu.illinois.cs.cogcomp.comma.Comma;
+import edu.illinois.cs.cogcomp.comma.Sentence;
 import edu.illinois.cs.cogcomp.comma.CommaReader;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
@@ -167,7 +168,7 @@ discrete% POSFeatures(Comma c) <- UnigramSecondLeftPOSFeature, UnigramSecondRigh
 discrete CommaLabel(Comma c) <- { return c.getRole(); }
 
 /** A learned text classifier; its definition comes from data. */
-discrete CommaClassifier(Comma c) <-
+discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
   using ParseFeatures, ParseParentFeatures, POSFeatures, ParseTreeFeature, BigramParseFeatures
 
@@ -181,8 +182,67 @@ learn CommaLabel
     p.thickness = 3;
     baseLTU = new SparseAveragedPerceptron(p);
   }
+  //evaluate discreteValue(c)
+
 
   testingMetric new PrintMetrics(5)
-
+  
+  preExtract "false"
+	
   progressOutput 0
 end
+
+
+
+
+
+//substitute commas must occur in pairs or must be the last comma in the sentence.
+constraint substitutePair (Sentence s)
+{
+	forall (Comma c in s.getCommas())
+		((LocalCommaClassifier(c) :: "Substitute") => 
+											(((s.getPreviousComma(c) !: "null") /\ (LocalCommaClassifier(s.getPreviousComma(c)) :: "Substitute"))
+											  \/ (s.getNextComma(c) :: "null")
+											  \/ (LocalCommaClassifier(s.getNextComma(c)) :: "Substitute")));
+}
+
+
+//one exception is "champaign, IL, USA". Here the 2 commas are for two different located in's as compared to "Champaign, IL, is a nice city" where the 2 commas are for one 'located in'
+constraint locativePair (Sentence s)
+{
+	forall (Comma c in s.getCommas())
+		((LocalCommaClassifier(c) :: "Locative") => 
+											((LocalCommaClassifier(s.getPreviousComma(c)) :: "Locative")
+											  \/ (LocalCommaClassifier(s.getNextComma(c)) :: "Locative")
+											  \/ (s.getNextComma(c) :: "null")));
+}
+
+
+//if a comma is followed by an 'and', it is a list comma
+//can't simply check for next POS tag to be a CC. conflicts with wsj 0015mrg 8 substitute
+constraint oxfordComma (Sentence s)
+{
+	forall (Comma c in s.getCommas())
+		((UnigramRightFeature(c) :: "and") => 
+											(LocalCommaClassifier(c) :: "List"));
+}
+
+
+//if the commas on either side of a comma are list commas it is a list comma?
+constraint listCommas (Sentence s)
+{
+	forall (Comma c in s.getCommas())
+		(((LocalCommaClassifier(s.getPreviousComma(c)) :: "List") 
+		 /\(LocalCommaClassifier(s.getNextComma(c)) :: "List")) =>
+																	(LocalCommaClassifier(c) :: "List"));
+}
+
+inference JointCommaSRL head Sentence s {
+	Comma c {return c.getSentence();}
+	subjectto {@oxfordComma(s);}
+	//subjectto {@substitutePair(s) /\ @locativePair(s) /\ @oxfordComma(s) /\ @listCommas(s);}
+	with new ILPInference(new GurobiHook())
+}
+
+discrete JointCommaClassifier (Comma c) <- 
+	JointCommaSRL(LocalCommaClassifier)
