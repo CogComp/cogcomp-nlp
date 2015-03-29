@@ -20,12 +20,14 @@ import org.joda.time.field.DividedDateTimeField;
 public class CommaReader implements Parser {
     private Annotator annotator;
     private final String annotationFile;
+    private final String serializedFile;
     private List<Comma> commas;
     private int currentComma;
     private static String treebankHome, propbankHome, nombankHome;
 
-    public CommaReader(String annotationFile) {
+    public CommaReader(String annotationFile, String serializedFile) {
         this.annotationFile = annotationFile;
+        this.serializedFile = serializedFile;
         this.commas = new ArrayList<Comma>();
 
         CommaProperties properties = CommaProperties.getInstance();
@@ -41,7 +43,7 @@ public class CommaReader implements Parser {
         }
 
         //File f = new File("data/CommaTA.ser");
-        File f = new File("data/CommaTAGoldFinal.ser");
+        File f = new File(serializedFile);
 
         if (f.exists()) {
             System.out.println("File exists");
@@ -163,7 +165,7 @@ public class CommaReader implements Parser {
             if (failures > 0)
                 System.out.print(" ANNOTATION FAILED(" + failures + ")");
         }
-        writeSerCommas(commas, "data/CommaTAGoldFinal.ser");
+        writeSerCommas(commas, serializedFile);
         scanner.close();
     }
 
@@ -257,7 +259,7 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        CommaReader cr = new CommaReader("data/comma_resolution_data.txt");
+        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/comma_resolution_data.txt");
         Comma c;
         Set<Sentence> sentenceSet = new HashSet<Sentence>();
         while((c=(Comma)cr.next()) != null)

@@ -172,7 +172,7 @@ discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
   using ParseFeatures, ParseParentFeatures, POSFeatures, ParseTreeFeature, BigramParseFeatures
 
-  from new CommaReader("data/comma_resolution_data.txt")
+  from new CommaReader("data/comma_resolution_data.txt", "data/comma_resolution_data.txt")
   100 rounds
   cval 5 "random"
 
