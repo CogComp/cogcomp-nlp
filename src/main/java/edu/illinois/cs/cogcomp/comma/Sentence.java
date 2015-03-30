@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class Sentence implements Serializable{
 	Collection<Comma> commas;
-	
+	private static final long serialVersionUID = 2522617554768671153l;
 	public Sentence(){
 		commas = new ArrayList<Comma>();
 	}
@@ -18,6 +18,50 @@ public class Sentence implements Serializable{
 	
 	public Collection<Comma> getCommas(){
 		return commas;
+	}
+	
+	public Collection<Comma> getCommasExceptLast(){
+		Collection<Comma> commasExceptLast = new ArrayList<Comma>();
+		int lastCommaIdx = -1;
+		for(Comma c: commas)
+			if(c.commaPosition > lastCommaIdx)
+				lastCommaIdx = c.commaPosition;
+		for(Comma c: commas)
+			if(c.commaPosition < lastCommaIdx)
+				commasExceptLast.add(c);
+		return commasExceptLast;
+	}
+	
+	public Collection<Comma> getFirstCommasWhichAreNotLast(){
+		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<Comma>();
+		int lastCommaIdx = -1;
+		int firstCommaIdx = Integer.MAX_VALUE;
+		for(Comma c: commas){
+			if(c.commaPosition > lastCommaIdx)
+				lastCommaIdx = c.commaPosition;
+			if(c.commaPosition < firstCommaIdx)
+				firstCommaIdx = c.commaPosition;
+		}
+		for(Comma c: commas)
+			if(c.commaPosition < lastCommaIdx && c.commaPosition == firstCommaIdx)
+				firstCommasWhichAreNotLast.add(c);
+		return firstCommasWhichAreNotLast;
+	}
+	
+	public Collection<Comma> getMiddleCommas(){
+		Collection<Comma> middleCommas = new ArrayList<Comma>();
+		int lastCommaIdx = -1;
+		int firstCommaIdx = Integer.MAX_VALUE;
+		for(Comma c: commas){
+			if(c.commaPosition > lastCommaIdx)
+				lastCommaIdx = c.commaPosition;
+			if(c.commaPosition < firstCommaIdx)
+				firstCommaIdx = c.commaPosition;
+		}
+		for(Comma c: commas)
+			if(c.commaPosition < lastCommaIdx && c.commaPosition > firstCommaIdx)
+				middleCommas.add(c);
+		return middleCommas;
 	}
 	
 	public Comma getNextComma(Comma curr_c){

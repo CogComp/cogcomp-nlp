@@ -259,15 +259,15 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/comma_resolution_data.txt");
-        Comma c;
+        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser");
+        /*Comma c;
         Set<Sentence> sentenceSet = new HashSet<Sentence>();
         while((c=(Comma)cr.next()) != null)
         {
         	Sentence s = c.getSentence();
         	sentenceSet.add(s);
         }
-        divideTDT(sentenceSet);
+        divideTDT(sentenceSet);*/
     }
     
     public static void divideTDT(Collection<Sentence> sentences) throws IOException{
