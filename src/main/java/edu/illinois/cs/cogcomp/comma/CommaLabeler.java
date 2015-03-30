@@ -1,6 +1,6 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.sentences.Relation;
@@ -14,10 +14,10 @@ import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 public class CommaLabeler {
     public static final String VIEW_NAME = "SRL_COMMA";
     private static String[] requiredViews = new String[]{ViewNames.PARSE_STANFORD, ViewNames.POS};
-    private CommaClassifier classifier;
+    private LocalCommaClassifier classifier;
 
     public CommaLabeler () {
-        classifier = new CommaClassifier();
+        classifier = new LocalCommaClassifier();
     }
 
     public PredicateArgumentView getCommaSRL(TextAnnotation ta) throws AnnotationFailedException {
@@ -31,7 +31,9 @@ public class CommaLabeler {
         String text = ta.getText();
         for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {
             if (!comma.getLabel().equals(",")) continue;
-            Comma commaStruct = new Comma(comma.getStartSpan(), text, ta);
+            Sentence sentenceStruct = new Sentence();
+            Comma commaStruct = new Comma(comma.getStartSpan(), text, ta, sentenceStruct);
+            sentenceStruct.addComma(commaStruct);
             String label = classifier.discreteValue(commaStruct);
             Constituent predicate = new Constituent(label, VIEW_NAME, ta, comma.getStartSpan(), comma.getEndSpan());
             srlView.addConstituent(predicate);

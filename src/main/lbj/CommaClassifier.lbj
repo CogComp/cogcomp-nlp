@@ -208,32 +208,37 @@ constraint substitutePairMiddleCommas (Sentence s)
 												\/(LocalCommaClassifier(s.getPreviousComma(c)) :: "Substitute")));
 }
 
-
-
-
-
-
-
-
 //substitute commas must occur in pairs or must be the last comma in the sentence.
 constraint substitutePair (Sentence s)
 {
-	forall (Comma c in s.getCommasExceptLast())
-		((LocalCommaClassifier(c) :: "Substitute") => 
-											(((s.getPreviousComma(c) !: "null") /\ (LocalCommaClassifier(s.getPreviousComma(c)) :: "Substitute"))
-											  \/ (s.getNextComma(c) :: "null")
-											  \/ (LocalCommaClassifier(s.getNextComma(c)) :: "Substitute")));
+	(@substitutePairFirstComma(s) /\ @substitutePairMiddleCommas(s));
 }
 
+
+
+
+
+
+
+constraint locativePairFirstComma (Sentence s)
+{
+	forall (Comma c in s.getFirstCommasWhichAreNotLast())
+		((LocalCommaClassifier(c) :: "Locative") => (LocalCommaClassifier(s.getNextComma(c)) :: "Locative"));
+}
+
+
+constraint locativePairMiddleCommas (Sentence s)
+{
+	forall (Comma c in s.getMiddleCommas())
+		((LocalCommaClassifier(c) :: "Locative") => 
+												((LocalCommaClassifier(s.getNextComma(c)) :: "Locative")
+												\/(LocalCommaClassifier(s.getPreviousComma(c)) :: "Locative")));
+}
 
 //one exception is "champaign, IL, USA". Here the 2 commas are for two different located in's as compared to "Champaign, IL, is a nice city" where the 2 commas are for one 'located in'
 constraint locativePair (Sentence s)
 {
-	forall (Comma c in s.getCommas())
-		((LocalCommaClassifier(c) :: "Locative") => 
-											((LocalCommaClassifier(s.getPreviousComma(c)) :: "Locative")
-											  \/ (LocalCommaClassifier(s.getNextComma(c)) :: "Locative")
-											  \/ (s.getNextComma(c) :: "null")));
+	@locativePairFirstComma(s) /\ @locativePairMiddleCommas(s);
 }
 
 
@@ -250,7 +255,7 @@ constraint oxfordComma (Sentence s)
 //if the commas on either side of a comma are list commas it is a list comma?
 constraint listCommas (Sentence s)
 {
-	forall (Comma c in s.getCommas())
+	forall (Comma c in s.getMiddleCommas())
 		(((LocalCommaClassifier(s.getPreviousComma(c)) :: "List") 
 		 /\(LocalCommaClassifier(s.getNextComma(c)) :: "List")) =>
 																	(LocalCommaClassifier(c) :: "List"));
@@ -258,7 +263,8 @@ constraint listCommas (Sentence s)
 
 inference JointCommaSRL head Sentence s {
 	Comma c {return c.getSentence();}
-	subjectto {@oxfordComma(s) /\ @substitutePairFirstComma(s) /\ @substitutePairMiddleCommas(s);}
+	subjectto {@oxfordComma(s) /\ @substitutePair(s);}
+	//subjectto {@oxfordComma(s) /\ @substitutePairFirstComma(s) /\ @substitutePairMiddleCommas(s);}
 	//subjectto {@substitutePair(s) /\ @locativePair(s) /\ @oxfordComma(s) /\ @listCommas(s);}
 	with new ILPInference(new GurobiHook())
 }

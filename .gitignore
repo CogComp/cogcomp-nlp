@@ -5,6 +5,11 @@ target
 .project
 .settings
 
+# ignore serialzed and other development data files
+data
+# track original comma nnotation file
+!data/comma_resolution_data.txt
+
 # LBJ-generated files
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightPOSFeature.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoPOSWindowFeature.java

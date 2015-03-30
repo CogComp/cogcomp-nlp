@@ -9,6 +9,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.io.Serializable;
 import java.util.*;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * A data structure containing all the information related to a comma.
  */
@@ -82,6 +84,20 @@ public class Comma implements Serializable {
     public Sentence getSentence() {
         return s;
     }
+    
+	public String getText() {
+		List<String> tokens = Arrays.asList(sentence);
+		return StringUtils.join(tokens.subList(0, commaPosition), ' ')
+				+ "["
+				+ role
+				+ "] "
+				+ StringUtils.join(
+						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+	}
+	
+	public TextAnnotation getTextAnnotation(boolean gold){
+		return gold?goldTA:TA;
+	}
     
     public String getWordToRight(int distance) {
         // Dummy symbol for sentence end (in case comma is the second to last word in the sentence)

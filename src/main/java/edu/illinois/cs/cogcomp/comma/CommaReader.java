@@ -1,5 +1,26 @@
 package edu.illinois.cs.cogcomp.comma;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
 import edu.illinois.cs.cogcomp.edison.data.srl.NombankReader;
@@ -7,12 +28,6 @@ import edu.illinois.cs.cogcomp.edison.data.srl.PropbankReader;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-
-import java.io.*;
-import java.util.*;
-
-import org.apache.commons.collections.map.HashedMap;
-import org.joda.time.field.DividedDateTimeField;
 
 /**
  * Data reader for the comma dataset of Srikumar et al.
@@ -260,17 +275,17 @@ public class CommaReader implements Parser {
 
     public static void main(String[] args) throws IOException {
         CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser");
-        /*Comma c;
+        Comma c;
         Set<Sentence> sentenceSet = new HashSet<Sentence>();
         while((c=(Comma)cr.next()) != null)
         {
         	Sentence s = c.getSentence();
         	sentenceSet.add(s);
         }
-        divideTDT(sentenceSet);*/
+        divideTDT(sentenceSet, FileUtils.readFileToString(new File("data/comma_resolution_data.txt")));
     }
     
-    public static void divideTDT(Collection<Sentence> sentences) throws IOException{
+    public static void divideTDT(Collection<Sentence> sentences, String textSource) throws IOException{
     	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);
     	double train = 0.7;
     	double dev = 0.1;
@@ -297,6 +312,24 @@ public class CommaReader implements Parser {
     	writeSerCommas(trainCommas, "data/train_commas.ser");
     	writeSerCommas(trainCommas, "data/dev_commas.ser");
     	writeSerCommas(trainCommas, "data/test_commas.ser");
+    	
+    	String trainText = textSource.substring(0, nthIndexOf(textSource, "%%%", (int) (numSentences * train)));
+    	String devText = textSource.substring(nthIndexOf(textSource, "%%%", (int) (numSentences * train)), nthIndexOf(textSource, "%%%", (int) (numSentences * (train+dev))));
+    	String testText = textSource.substring(nthIndexOf(textSource, "%%%", (int) (numSentences * (train+dev))), textSource.length());
+    	
+    	FileUtils.writeStringToFile(new File("data/train_commas.txt"), trainText);
+    	FileUtils.writeStringToFile(new File("data/dev_commas.txt"), devText);
+    	FileUtils.writeStringToFile(new File("data/test_commas.txt"), testText);
     }
     
+    public static int nthIndexOf(String source, String sought, int n) {
+        int index = source.indexOf(sought);
+        if (index == -1) return -1;
+
+        for (int i = 1; i < n; i++) {
+            index = source.indexOf(sought, index + 1);
+            if (index == -1) return -1;
+        }
+        return index;
+    }
 }
