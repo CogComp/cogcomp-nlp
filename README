@@ -12,3 +12,91 @@ Generate data by runnning CommaReader. It should shuffle the data inside divideT
 lbj:clean
 lbj:compile
 Run ClassifierComparison to get the results table for each of the constraints on the test data
+
+
+
+EXPECTED RESULTS:
+create TDT split using seed:long seed = 4901945429246723620L; 
+				    	Collections.shuffle(sentenceList, new Random(seed));
+output of lbj's cval:
+File contained 1372 commas
+Training LocalCommaClassifier
+  LocalCommaClassifier: Cross Validation: k = 5, Split = random, Rounds = 100
+  LocalCommaClassifier: Training against subset 0 at Tue Apr 07 05:33:16 CDT 2015
+  LocalCommaClassifier:   Subset 0 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.87636
+  LocalCommaClassifier: Training against subset 1 at Tue Apr 07 05:33:16 CDT 2015
+  LocalCommaClassifier:   Subset 1 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.86182
+  LocalCommaClassifier: Training against subset 2 at Tue Apr 07 05:33:16 CDT 2015
+  LocalCommaClassifier:   Subset 2 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.87226
+  LocalCommaClassifier: Training against subset 3 at Tue Apr 07 05:33:17 CDT 2015
+  LocalCommaClassifier:   Subset 3 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.86861
+  LocalCommaClassifier: Training against subset 4 at Tue Apr 07 05:33:17 CDT 2015
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     77.838 74.227 75.989    194    185
+List          87.156 84.821 85.973    224    218
+Locative      84.000 87.500 85.714     72     75
+Other         90.909 90.909 90.909    605    605
+Substitute    85.121 88.809 86.926    277    289
+------------------------------------------------
+Accuracy      86.953   -      -      -      1372
+  LocalCommaClassifier:   Subset 4 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.86861
+  LocalCommaClassifier:   95.0% confidence interval after 100 rounds: 0.86953 +/- 0.00667
+
+output of ClassifierComparison.java:
+File contained 372 commas
+LocalCommaClassifier
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     66.129 91.111 76.636     45     62
+List          87.805 70.588 78.261     51     41
+Locative      70.000 93.333 80.000     15     20
+Other         96.257 92.784 94.488    194    187
+Substitute    87.097 80.597 83.721     67     62
+------------------------------------------------
+Accuracy      87.366   -      -      -       372
+
+SubstitutePairConstrainedCommaClassifier
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     61.905 86.667 72.222     45     63
+List          86.047 72.549 78.723     51     43
+Locative      66.667 93.333 77.778     15     21
+Other         94.709 92.268 93.473    194    189
+Substitute    82.143 68.657 74.797     67     56
+------------------------------------------------
+Accuracy      84.677   -      -      -       372
+
+LocativePairConstrainedCommaClassifier
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     66.129 91.111 76.636     45     62
+List          85.714 70.588 77.419     51     42
+Locative      77.778 93.333 84.848     15     18
+Other         95.745 92.784 94.241    194    188
+Substitute    87.097 80.597 83.721     67     62
+------------------------------------------------
+Accuracy      87.366   -      -      -       372
+
+ListCommasConstrainedCommaClassifier
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     66.129 91.111 76.636     45     62
+List          87.805 70.588 78.261     51     41
+Locative      70.000 93.333 80.000     15     20
+Other         96.257 92.784 94.488    194    187
+Substitute    87.097 80.597 83.721     67     62
+------------------------------------------------
+Accuracy      87.366   -      -      -       372
+
+OxfordCommaConstrainedCommaClassifier
+  Label    Precision Recall   F1   LCount PCount
+------------------------------------------------
+Attribute     66.129 91.111 76.636     45     62
+List          87.805 70.588 78.261     51     41
+Locative      70.000 93.333 80.000     15     20
+Other         96.257 92.784 94.488    194    187
+Substitute    87.097 80.597 83.721     67     62
+------------------------------------------------
+Accuracy      87.366   -      -      -       372
+
