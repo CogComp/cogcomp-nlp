@@ -61,9 +61,10 @@ public class CommaReader implements Parser {
         File f = new File(serializedFile);
 
         if (f.exists()) {
-            System.out.println("File exists");
+            System.out.println(serializedFile + " exists");
             try {
                 readSerData(f);
+                System.out.println("Done reading\nFile contained " + commas.size() + " commas");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -310,8 +311,8 @@ public class CommaReader implements Parser {
 
     	System.out.println("hello");
     	writeSerCommas(trainCommas, "data/train_commas.ser");
-    	writeSerCommas(trainCommas, "data/dev_commas.ser");
-    	writeSerCommas(trainCommas, "data/test_commas.ser");
+    	writeSerCommas(devCommas, "data/dev_commas.ser");
+    	writeSerCommas(testCommas, "data/test_commas.ser");
     	
     	String trainText = textSource.substring(0, nthIndexOf(textSource, "%%%", (int) (numSentences * train)));
     	String devText = textSource.substring(nthIndexOf(textSource, "%%%", (int) (numSentences * train)), nthIndexOf(textSource, "%%%", (int) (numSentences * (train+dev))));

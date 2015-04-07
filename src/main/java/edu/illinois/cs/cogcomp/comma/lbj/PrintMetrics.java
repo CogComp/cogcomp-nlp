@@ -32,11 +32,8 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
 	
 	@Override
 	public double test(Classifier classifier, Classifier oracle, Parser parser) {
-		Classifier jc  = new JointCommaClassifier();
-		//Classifier jc  = new LocalCommaClassifier();
-		
 		iteration++;
-		TestDiscrete tester = TestDiscrete.testDiscrete(jc, oracle, parser);
+		TestDiscrete tester = TestDiscrete.testDiscrete(classifier, oracle, parser);
 		reportAll(tester);
 		if(iteration == total_iterations){
 			printPerformance(System.out);

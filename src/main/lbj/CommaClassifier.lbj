@@ -172,7 +172,8 @@ discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
   using ParseFeatures, ParseParentFeatures, POSFeatures, ParseTreeFeature, BigramParseFeatures
 
-  from new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser")
+  //from new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser")
+  from new CommaReader("data/train_commas.txt", "data/train_commas.ser")
   100 rounds
   cval 5 "random"
 
@@ -182,12 +183,12 @@ learn CommaLabel
     p.thickness = 3;
     baseLTU = new SparseAveragedPerceptron(p);
   }
-  //evaluate discreteValue(c)
 
+	//evaluate (new OxfordCommaConstrainedCommaClassifier()).featureValue(c)
 
   testingMetric new PrintMetrics(5)
   
-  preExtract "false"
+  //preExtract "false"
 	
   progressOutput 0
 end
@@ -214,18 +215,11 @@ constraint substitutePair (Sentence s)
 	(@substitutePairFirstComma(s) /\ @substitutePairMiddleCommas(s));
 }
 
-
-
-
-
-
-
 constraint locativePairFirstComma (Sentence s)
 {
 	forall (Comma c in s.getFirstCommasWhichAreNotLast())
 		((LocalCommaClassifier(c) :: "Locative") => (LocalCommaClassifier(s.getNextComma(c)) :: "Locative"));
 }
-
 
 constraint locativePairMiddleCommas (Sentence s)
 {
@@ -241,7 +235,6 @@ constraint locativePair (Sentence s)
 	@locativePairFirstComma(s) /\ @locativePairMiddleCommas(s);
 }
 
-
 //if a comma is followed by an 'and', it is a list comma
 //can't simply check for next POS tag to be a CC. conflicts with wsj 0015mrg 8 substitute
 constraint oxfordComma (Sentence s)
@@ -250,7 +243,6 @@ constraint oxfordComma (Sentence s)
 		((UnigramRightFeature(c) :: "and") => 
 											(LocalCommaClassifier(c) :: "List"));
 }
-
 
 //if the commas on either side of a comma are list commas it is a list comma?
 constraint listCommas (Sentence s)
@@ -261,13 +253,38 @@ constraint listCommas (Sentence s)
 																	(LocalCommaClassifier(c) :: "List"));
 }
 
-inference JointCommaSRL head Sentence s {
+
+
+inference OxfordCommaConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
-	subjectto {@oxfordComma(s) /\ @substitutePair(s);}
-	//subjectto {@oxfordComma(s) /\ @substitutePairFirstComma(s) /\ @substitutePairMiddleCommas(s);}
-	//subjectto {@substitutePair(s) /\ @locativePair(s) /\ @oxfordComma(s) /\ @listCommas(s);}
+	subjectto {@oxfordComma(s);}
 	with new ILPInference(new GurobiHook())
 }
+discrete OxfordCommaConstrainedCommaClassifier (Comma c) <- 
+	OxfordCommaConstrainedInference(LocalCommaClassifier)
 
-discrete JointCommaClassifier (Comma c) <- 
-	JointCommaSRL(LocalCommaClassifier)
+inference SubstitutePairConstrainedInference head Sentence s {
+	Comma c {return c.getSentence();}
+	subjectto {@substitutePair(s);}
+	with new ILPInference(new GurobiHook())
+}
+discrete SubstitutePairConstrainedCommaClassifier (Comma c) <- 
+	SubstitutePairConstrainedInference(LocalCommaClassifier)	
+
+inference LocativePairConstrainedInference head Sentence s {
+	Comma c {return c.getSentence();}
+	subjectto {@locativePair(s);}
+	with new ILPInference(new GurobiHook())
+}
+discrete LocativePairConstrainedCommaClassifier (Comma c) <- 
+	LocativePairConstrainedInference(LocalCommaClassifier)
+	
+inference ListCommasConstrainedInference head Sentence s {
+	Comma c {return c.getSentence();}
+	subjectto {@listCommas(s);}
+	with new ILPInference(new GurobiHook())
+}
+discrete ListCommasConstrainedCommaClassifier (Comma c) <- 
+	ListCommasConstrainedInference(LocalCommaClassifier)
+	
+
