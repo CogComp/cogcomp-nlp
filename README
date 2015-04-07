@@ -1,0 +1,14 @@
+NOTES:
+LocalCommaClassifier is being trained on train_commas
+Constraints are applied one at a time
+All constraints seem to be hurting performance
+The oxfordComma constraint is not working as expected and for some reason is not respected by the jointClassifier
+	Example of Comma Constraint not being respected:
+	"Biscayne Securities Corp. , of Lauderhill , Fla. ,[Attribute] and a principal of the firm , Alvin Rosenblum of Plantation , Fla. , were jointly fined $ 20,000 and given 10-day suspensions for allegedly selling securities at unfair prices ."
+
+
+TO RUN:
+Generate data by runnning CommaReader. It should shuffle the data inside divideTDT. the txt files will be wrong. Only use *.ser
+lbj:clean
+lbj:compile
+Run ClassifierComparison to get the results table for each of the constraints on the test data

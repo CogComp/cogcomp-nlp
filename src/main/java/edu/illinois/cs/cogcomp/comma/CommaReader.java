@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -288,6 +289,9 @@ public class CommaReader implements Parser {
     
     public static void divideTDT(Collection<Sentence> sentences, String textSource) throws IOException{
     	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);
+    	Collections.shuffle(sentenceList);
+    	
+    	
     	double train = 0.7;
     	double dev = 0.1;
     	double test = 0.2;
@@ -309,7 +313,8 @@ public class CommaReader implements Parser {
     	for(Sentence s: testSentences)
    			testCommas.addAll(s.getCommas());
 
-    	System.out.println("hello");
+    	
+    	
     	writeSerCommas(trainCommas, "data/train_commas.ser");
     	writeSerCommas(devCommas, "data/dev_commas.ser");
     	writeSerCommas(testCommas, "data/test_commas.ser");
