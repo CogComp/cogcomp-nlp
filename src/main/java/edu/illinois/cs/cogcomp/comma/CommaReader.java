@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -289,7 +290,9 @@ public class CommaReader implements Parser {
     
     public static void divideTDT(Collection<Sentence> sentences, String textSource) throws IOException{
     	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);
-    	Collections.shuffle(sentenceList);
+    	
+    	long seed = 4901945429246723620L; 
+    	Collections.shuffle(sentenceList, new Random(seed));
     	
     	
     	double train = 0.7;
