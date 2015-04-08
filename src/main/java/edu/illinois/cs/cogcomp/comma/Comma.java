@@ -1,15 +1,31 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+
+import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
+import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
+import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.edison.sentences.Queries;
+import edu.illinois.cs.cogcomp.edison.sentences.Relation;
+import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
+import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
+import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
+import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 /**
  * A data structure containing all the information related to a comma.
@@ -87,7 +103,7 @@ public class Comma implements Serializable {
     
 	public String getText() {
 		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(tokens.subList(0, commaPosition), ' ')
+		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
 				+ "["
 				+ role
 				+ "] "
@@ -262,6 +278,45 @@ public class Comma implements Serializable {
     	return rightSibling;
     }
     
+    
+    /**
+     * 
+     * @return the list of commas that are children of the parent of the current comma, i.e. siblings of the current comma.
+     */
+    public List<Comma> getSiblingCommas(){
+    	TreeView parseView;
+    	if (GOLD)
+    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    	else
+    		parseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
+    	List<Constituent> commaConstituents = new ArrayList<Constituent>();
+    	Map<Constituent, Comma> constituentCommaMap = new HashMap<Constituent, Comma>();
+		for(Comma c : s.getCommas()){
+			Constituent commaConstituent = c.getCommaConstituentFromTree(parseView);
+			commaConstituents.add(commaConstituent);
+			constituentCommaMap.put(commaConstituent, c);
+		}
+		QueryableList<Constituent> qlCommas = new QueryableList<Constituent>(commaConstituents);
+		Iterable<Constituent> siblingCommaConstituents = qlCommas.where(Queries.isSiblingOf(this.getCommaConstituentFromTree(parseView)));
+		List<Comma> siblingCommas =  new ArrayList<Comma>();
+		for(Constituent commaConstituent : siblingCommaConstituents)
+			siblingCommas.add(constituentCommaMap.get(commaConstituent));
+		return siblingCommas;
+	}
+    
+    /**
+     * 
+     * @return the first comma by position from the list of sibling commas
+     */
+    public Comma getSiblingCommaHead(){
+    	List<Comma> siblingCommas = getSiblingCommas();
+    	Comma head = siblingCommas.get(0);
+    	for(Comma c : siblingCommas)
+    		if(c.commaPosition < head.commaPosition)
+    			head = c;
+		return head;
+	}
+    
     public static String getNotation(Constituent c){
     	if(c == null)
     		return "NULL";
@@ -320,6 +375,5 @@ public class Comma implements Serializable {
     	return result;
     }
 }
-
 
 

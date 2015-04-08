@@ -197,16 +197,16 @@ end
 
 constraint substitutePairFirstComma (Sentence s)
 {
-	forall (Comma c in s.getFirstCommasWhichAreNotLast())
-		((LocalCommaClassifier(c) :: "Substitute") => (LocalCommaClassifier(s.getNextComma(c)) :: "Substitute"));
+	forall (Comma c in s.getFirstSiblingCommasWhichAreNotLast())
+		((LocalCommaClassifier(c) :: "Substitute") => (LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Substitute"));
 }
 
 constraint substitutePairMiddleCommas (Sentence s)
 {
-	forall (Comma c in s.getMiddleCommas())
+	forall (Comma c in s.getMiddleSiblingCommas())
 		((LocalCommaClassifier(c) :: "Substitute") => 
-												((LocalCommaClassifier(s.getNextComma(c)) :: "Substitute")
-												\/(LocalCommaClassifier(s.getPreviousComma(c)) :: "Substitute")));
+												((LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Substitute")
+												\/(LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "Substitute")));
 }
 
 //substitute commas must occur in pairs or must be the last comma in the sentence.
@@ -217,16 +217,16 @@ constraint substitutePair (Sentence s)
 
 constraint locativePairFirstComma (Sentence s)
 {
-	forall (Comma c in s.getFirstCommasWhichAreNotLast())
-		((LocalCommaClassifier(c) :: "Locative") => (LocalCommaClassifier(s.getNextComma(c)) :: "Locative"));
+	forall (Comma c in s.getFirstSiblingCommasWhichAreNotLast())
+		((LocalCommaClassifier(c) :: "Locative") => (LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Locative"));
 }
 
 constraint locativePairMiddleCommas (Sentence s)
 {
-	forall (Comma c in s.getMiddleCommas())
+	forall (Comma c in s.getMiddleSiblingCommas())
 		((LocalCommaClassifier(c) :: "Locative") => 
-												((LocalCommaClassifier(s.getNextComma(c)) :: "Locative")
-												\/(LocalCommaClassifier(s.getPreviousComma(c)) :: "Locative")));
+												((LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Locative")
+												\/(LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "Locative")));
 }
 
 //one exception is "champaign, IL, USA". Here the 2 commas are for two different located in's as compared to "Champaign, IL, is a nice city" where the 2 commas are for one 'located in'
@@ -247,9 +247,9 @@ constraint oxfordComma (Sentence s)
 //if the commas on either side of a comma are list commas it is a list comma?
 constraint listCommas (Sentence s)
 {
-	forall (Comma c in s.getMiddleCommas())
-		(((LocalCommaClassifier(s.getPreviousComma(c)) :: "List") 
-		 /\(LocalCommaClassifier(s.getNextComma(c)) :: "List")) =>
+	forall (Comma c in s.getMiddleSiblingCommas())
+		(((LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "List") 
+		 /\(LocalCommaClassifier(s.getNextSiblingComma(c)) :: "List")) =>
 																	(LocalCommaClassifier(c) :: "List"));
 }
 
