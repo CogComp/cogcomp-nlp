@@ -39,7 +39,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>2.0.1</version>
+            <version>2.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-pos</artifactId>
+            <version>2.0.2</version>
             <classifier>model</classifier>
         </dependency>
 		<dependency>
@@ -55,8 +60,14 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-chunker</artifactId>
-            <version>2.0.0</version>
+            <version>2.0.1</version>
 		</dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-chunker</artifactId>
+            <version>2.0.1</version>
+            <classifier>model</classifier>
+        </dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-lemmatizer</artifactId>

@@ -10,7 +10,7 @@ CONFIG="config"
 TEST="test"
 
 RUNSCRIPT="runPreprocessor.sh"
-CONFIG_FILE="$CONFIG/pipelineConfig.txt"
+CONFIG_FILE="$CONFIG/pipeline-config.properties"
 TEST_IN="$TEST/testIn.txt"
 TEST_OUT_TXT="$TEST/testOut.txt"
 TEST_OUT_SER="$TEST/testOut.ser"
