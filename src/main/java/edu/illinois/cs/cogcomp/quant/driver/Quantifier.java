@@ -91,7 +91,7 @@ public class Quantifier {
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
 		    	prediction = chunker.discreteValue(w);
-		    	System.out.println("Word : "+w.form+" Label : "+prediction);
+//		    	System.out.println("Word : "+w.form+" Label : "+prediction);
 		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 		    							&& !previous.endsWith(prediction.substring(2))){
 		    		if( !inChunk && tokenPos < taCurator.size()){
@@ -181,14 +181,16 @@ public class Quantifier {
 		
 		BufferedReader br = new BufferedReader(new FileReader(new File(inputFile)));
 		String txt = "", str;
-		while( (str = br.readLine())!=null )
+		while( (str = br.readLine())!=null ) {
 			txt+=str+" ";
+		}
 		br.close();
 		
-		if( standardized.equals("Y") || standardized.equals("y") )
+		if( standardized.equals("Y") || standardized.equals("y") ) {
 			System.out.println(quantifier.getAnnotatedString(txt,true));
-		else
+		} else {
 			System.out.println(quantifier.getAnnotatedString(txt,false));
+		}
 	}
 	
 }
