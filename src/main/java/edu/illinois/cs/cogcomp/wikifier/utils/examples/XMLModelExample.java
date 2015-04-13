@@ -1,5 +1,8 @@
 package edu.illinois.cs.cogcomp.wikifier.utils.examples;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,6 +28,7 @@ public class XMLModelExample {
 	public String fieldB;
 	private String fieldC; // does not matter its private, a field is a field
 	private EnclosedObject obj;
+	public List<EnclosedObject> lists;
 	
 	/**
 	 * Used for JAXB calls only. This is important. JAXB wont work if you do not
@@ -46,6 +50,10 @@ public class XMLModelExample {
 	public static void main(String[] args) {
 		XMLModelExample ob = new XMLModelExample("1", "2", "3");
 		ob.setEnclosed(new EnclosedObject("xyz"));
+		ob.lists=new ArrayList<EnclosedObject>();
+		ob.lists.add(new EnclosedObject("ijk"));
+		ob.lists.add(new EnclosedObject("pqr"));
+		ob.lists.add(new EnclosedObject("mno"));
 		try {
 			XmlModel.write(ob, "somefile.xml");
 		} catch (JAXBException e) {
