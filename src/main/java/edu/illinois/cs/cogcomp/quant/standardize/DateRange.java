@@ -68,8 +68,8 @@ public class DateRange implements Serializable{
 				Date.presentDate.get(Calendar.MONTH), 
 				Date.presentDate.get(Calendar.DAY_OF_MONTH));
 		if(matcher.find()){
-			String a = matcher.group(2);
-			String b = matcher.group(3);
+			String a = matcher.group(1);
+			String b = matcher.group(2);
 			if(a.equals("this")) {
 				return new DateRange(Date.getRelativeDate(b, -1, present), present);
 			}
