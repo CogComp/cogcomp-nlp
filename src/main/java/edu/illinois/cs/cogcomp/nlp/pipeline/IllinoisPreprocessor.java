@@ -3,8 +3,10 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.core.constants.ConfigNames;
+import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
 import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import org.apache.thrift.TException;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -198,9 +200,11 @@ public class IllinoisPreprocessor
 
     /**
      * A complementary method to {@code processTextToTextAnnotation(String, String, String, boolean)}
-     * that appends the newly created views to an existing TextAnnotation
+     *    that appends the newly created views to an existing TextAnnotation
+     * Non-standard (i.e., not explicitly handled by Edison) are added. If not found when expected (config
+     *    flag for that view is set to true), logs an error but does not throw exception.
      *
-     * TODO: check that the newly created views point to the correct TextAnnotation object!
+     * TODO: check that the newly created views point to the correct TextAnnotation object, if necessary!
      * @param ta The TextAnnotation to be labeled
      * @param isWhitespaced_ Whether the ta is tokenized
      * @return The original TextAnnotation with the new views from the TextPrepocessor
@@ -215,6 +219,20 @@ public class IllinoisPreprocessor
 		for (String view : taTemp.getAvailableViews()) {
 			ta.addView(view, taTemp.getView(view));
 		}
+
+        // need to explicitly add views not known to Edison to the textannotation
+
+        if ( useNerExt )
+        {
+            boolean allowOverlappingSpans = false;
+            Labeling nerExtLabeling = rec.getLabelViews().get( AdditionalViewNames.nerExt );
+            if ( null == nerExtLabeling )
+                logger.error( "no '" + AdditionalViewNames.nerExt + "' view present although useNerExt is 'true'." );
+            else {
+                SpanLabelView newView = CuratorDataStructureInterface.alignLabelingToSpanLabelView(AdditionalViewNames.nerExt, ta, nerExtLabeling, false);
+                ta.addView(AdditionalViewNames.nerExt, newView );
+            }
+        }
 		return ta;
 	}
     

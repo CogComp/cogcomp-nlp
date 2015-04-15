@@ -2,7 +2,7 @@ usePos	true
 useChunker	true
 useLemmatizer	true
 useNer	true
-useNerExt   false
+useNerExt   true
 useStanfordParse true
 jwnlConfigFile	config/jwnl_properties.xml
 lemmaCacheFile  data/lemmaCache.txt

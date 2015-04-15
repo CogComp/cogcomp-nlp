@@ -157,7 +157,6 @@ public class IllinoisPreprocessorTest
 
 
 		Labeling nerExt = rec.getLabelViews().get( AdditionalViewNames.nerExt );
-
 		List< Span > nerExtTags = nerExt.getLabels();
 
 		if ( nerExtTags.size() > 0 )
