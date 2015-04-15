@@ -2,6 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 
 import java.util.*;
 
+import edu.illinois.cs.cogcomp.core.constants.ConfigNames;
 import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -86,11 +87,15 @@ public class IllinoisPreprocessor
     private IllinoisNerExtHandler ner;
     private IllinoisNerExtHandler nerExt;
     private StanfordCoreNLP stanfordPipeline;
-    
+
+    private Map< String, Boolean > supportedViews;
+
 //    private boolean respectTokenization;
     
     private Logger logger = LoggerFactory.getLogger( IllinoisPreprocessor.class );
-    
+    private Set< String > activeViews;
+    private boolean forceCacheUpdate;
+
     /**
      * ResourceManager is read from a config file that specifies which 
      *    annotation resources are active. 
@@ -107,6 +112,8 @@ public class IllinoisPreprocessor
         useLemmatizer = rm_.getBoolean( PipelineVars.USE_LEMMA );
         useNer = rm_.getBoolean( PipelineVars.USE_NER );
         useNerExt = rm_.getBoolean( PipelineVars.USE_NEREXT );
+        forceCacheUpdate = rm_.getBoolean( PipelineVars.FORCE_CACHE_UPDATE );
+        setSupportedViews();
 
         tokenizer = new IllinoisTokenizerHandler();
 
@@ -192,6 +199,8 @@ public class IllinoisPreprocessor
     /**
      * A complementary method to {@code processTextToTextAnnotation(String, String, String, boolean)}
      * that appends the newly created views to an existing TextAnnotation
+     *
+     * TODO: check that the newly created views point to the correct TextAnnotation object!
      * @param ta The TextAnnotation to be labeled
      * @param isWhitespaced_ Whether the ta is tokenized
      * @return The original TextAnnotation with the new views from the TextPrepocessor
@@ -221,7 +230,9 @@ public class IllinoisPreprocessor
         Record record = createRecord( rawText_, isWhitespaced_ );
         Map<String, Labeling> labelViews = record.getLabelViews();
         Map<String, Forest> parseViews = record.getParseViews();
-        
+
+//        for ( String viewName : supportedViews.keySet() )
+//        {
         if ( usePos )
         {
             Labeling posResult = pos.labelRecord( record );
@@ -315,5 +326,67 @@ public class IllinoisPreprocessor
         }
         
         return record;
+    }
+
+
+    /**
+     *  this indicates views that can be populated by the preprocessor.
+     *  CachingAnnotationService expects each key to represent an available service,
+     *     and the boolean flag associated with each value to indicate whether the
+     *     cached version of that view (if any) should be replaced.
+     */
+    protected void setSupportedViews()
+    {
+        if ( null == this.supportedViews) {
+            this.supportedViews = new HashMap<String, Boolean>();
+        }
+        if ( supportedViews.isEmpty() )
+        {
+            if ( usePos )
+                supportedViews.put(CuratorViewNames.pos, forceCacheUpdate );
+            if ( useStanfordParse )
+                supportedViews.put(CuratorViewNames.stanfordParse, forceCacheUpdate);
+            if ( useChunker )
+                supportedViews.put(CuratorViewNames.chunk, forceCacheUpdate);
+            if( useLemmatizer )
+                supportedViews.put(CuratorViewNames.lemma, forceCacheUpdate);
+            if ( useNer )
+                supportedViews.put(CuratorViewNames.ner, forceCacheUpdate);
+            if ( useNerExt )
+                supportedViews.put(AdditionalViewNames.nerExt, forceCacheUpdate );
+        }
+
+        setActiveViews();
+    }
+
+    private void setActiveViews()
+    {
+        if ( null == activeViews )
+            activeViews = new HashSet<String>();
+
+        activeViews.addAll( supportedViews.keySet() );
+
+    }
+
+    protected Map< String, Boolean > getSupportedViews()
+    {
+        return supportedViews;
+    }
+
+
+    /**
+     * build a basic TextAnnotation object (token and sentence views) using the specified information
+     *
+     * @param corpusId
+     * @param docId
+     * @param text
+     * @param isWhitespaced  if 'true', assume sentences are
+     * @return
+     * @throws TException
+     * @throws AnnotationFailedException
+     */
+    public TextAnnotation createTextAnnotation(String corpusId, String docId, String text, boolean isWhitespaced ) throws TException, AnnotationFailedException {
+        Record rec = createRecord( text, isWhitespaced );
+        return CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId, docId, rec );
     }
 }

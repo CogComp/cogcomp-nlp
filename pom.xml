@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>coreUtilities</artifactId>
-			<version>0.2</version>
+			<version>0.2.9</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
@@ -71,7 +71,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-lemmatizer</artifactId>
-			<version>0.0.9</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -81,7 +81,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>curator-utils</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.4</version>
 			<!--TODO Remove this when curator-utils declares log4j12-1.5.8 optional-->
 			<exclusions>
 				<exclusion>
@@ -122,7 +122,11 @@
 			<version>1.1</version>
 			<scope>runtime</scope>
 		</dependency>
-
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>cachingcurator</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
+        </dependency>
 		<!-- Stanford Core NLP, used for its parser (for SRL) -->
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
@@ -209,7 +213,7 @@
 		<repository>
 			<id>CogcompSoftware</id>
 			<name>CogcompSoftware</name>
-			<url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
 	</distributionManagement>
 

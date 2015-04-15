@@ -16,4 +16,5 @@ public class PipelineVars
     public static final String USE_NEREXT = "useNerExt";
     public static final java.lang.String NER_CONLL_CONFIG = "nerConllConfigFile";
     public static final String NER_ONTONOTES_CONFIG = "nerOntonotesConfigFile";
+    public static final java.lang.String FORCE_CACHE_UPDATE = "forceCacheUpdate";
 }

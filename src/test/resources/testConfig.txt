@@ -2,7 +2,7 @@ usePos	true
 useChunker	true
 useLemmatizer	true
 useNer	true
-useNerExt   true
+useNerExt   false
 useStanfordParse true
 jwnlConfigFile	config/jwnl_properties.xml
 lemmaCacheFile  data/lemmaCache.txt
@@ -11,3 +11,6 @@ maxLemmaCacheEntries    100
 wordnetPath data/WordNet
 nerConllConfigFile  config/ner-conll-config.properties
 nerOntonotesConfigFile  config/ner-ontonotes-config.properties
+respectTokenization false
+throwExceptionIfNotCached   false
+forceCacheUpdate    false

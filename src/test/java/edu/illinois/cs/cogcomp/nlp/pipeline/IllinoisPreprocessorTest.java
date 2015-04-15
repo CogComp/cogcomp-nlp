@@ -82,7 +82,7 @@ public class IllinoisPreprocessorTest
 		boolean isLemmaOk = false;
 		boolean isNerOk = false;
 		boolean isNerExtOk = false;
-		boolean isParseOk;
+		boolean isParseOk = false;
 //		Set< String > views = rec.getLabelViews().keySet();
 
 //		if ( views.contains( CuratorViewNames.pos ) && views.contains( CuratorViewNames.tokens ) )
