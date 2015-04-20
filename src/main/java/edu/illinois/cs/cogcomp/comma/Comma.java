@@ -101,7 +101,7 @@ public class Comma implements Serializable {
         return s;
     }
     
-	public String getText() {
+	public String getAnnotatedText() {
 		List<String> tokens = Arrays.asList(sentence);
 		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
 				+ "["
@@ -109,6 +109,10 @@ public class Comma implements Serializable {
 				+ "] "
 				+ StringUtils.join(
 						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+	}
+	
+	public String getText(){
+		return StringUtils.join(sentence, " ");
 	}
 	
 	public TextAnnotation getTextAnnotation(boolean gold){
@@ -323,10 +327,29 @@ public class Comma implements Serializable {
     	String notation = c.getLabel();
     	
     	if(NERlexicalise)
-    		notation += " -" + getNamedEntityTag(c);
+    		notation += "-" + getNamedEntityTag(c);
     	
     	if(POSlexicalise){
-			notation += " -";
+			notation += "-";
+			IntPair span = c.getSpan();
+			TextAnnotation TA = c.getTextAnnotation();
+			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
+					notation += " " + WordHelpers.getPOS(TA, tokenId);
+	    }
+    	
+		return notation;
+    }
+    
+    public static String getStrippedNotation(Constituent c){
+    	if(c == null)
+    		return "NULL";
+    	String notation = c.getLabel().split("-", 2)[0];
+    	
+    	if(NERlexicalise)
+    		notation += "-" + getNamedEntityTag(c);
+    	
+    	if(POSlexicalise){
+			notation += "-";
 			IntPair span = c.getSpan();
 			TextAnnotation TA = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)

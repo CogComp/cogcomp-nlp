@@ -40,17 +40,17 @@ public class Annotator {
         }
     }
 
-    public TextAnnotation preProcess(String text) throws AnnotationFailedException, TException,
+    public TextAnnotation preProcess(String corpusId, String id, String text) throws AnnotationFailedException, TException,
             ServiceUnavailableException {
         TextAnnotation ta;
         if (useCurator) {
             if (tokenized)
-                ta = new TextAnnotation("", "", Arrays.asList(text));
-            else ta = curator.getTextAnnotation("", "", text, forceUpdate);
+                ta = new TextAnnotation(corpusId, id, Arrays.asList(text));
+            else ta = curator.getTextAnnotation(corpusId, id, text, forceUpdate);
             addViewsFromCurator(ta);
         }
         else {
-            ta = illinoisPreprocessor.processTextToTextAnnotation("", "", text, tokenized);
+            ta = illinoisPreprocessor.processTextToTextAnnotation(corpusId, id, text, tokenized);
             addAdditionalViewsFromPipeline(ta);
         }
         return ta;

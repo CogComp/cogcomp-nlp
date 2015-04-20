@@ -12,93 +12,208 @@ TO RUN:
 Generate data by runnning CommaReader. It should shuffle the data inside divideTDT. the txt files will be wrong. Only use *.ser
 lbj:clean
 lbj:compile
-Run ClassifierComparison to get the results table for each of the constraints on the test data
+Run ClassifierComparison to get the results table for each of constrained local classifiers on the test data
+Run StrucutredCommaClassifier to get structured prediction results from a HMM
 
 
 
 EXPECTED RESULTS(Constraints in sibling commas only):
-Result of lbj cval:
-File contained 1372 commas
-Training LocalCommaClassifier
-  LocalCommaClassifier: Cross Validation: k = 5, Split = random, Rounds = 100
-  LocalCommaClassifier: Training against subset 0 at Tue Apr 07 21:57:49 CDT 2015
-  LocalCommaClassifier:   Subset 0 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.85091
-  LocalCommaClassifier: Training against subset 1 at Tue Apr 07 21:57:49 CDT 2015
-  LocalCommaClassifier:   Subset 1 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.83636
-  LocalCommaClassifier: Training against subset 2 at Tue Apr 07 21:57:49 CDT 2015
-  LocalCommaClassifier:   Subset 2 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.86861
-  LocalCommaClassifier: Training against subset 3 at Tue Apr 07 21:57:50 CDT 2015
-  LocalCommaClassifier:   Subset 3 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.87956
-  LocalCommaClassifier: Training against subset 4 at Tue Apr 07 21:57:50 CDT 2015
+Result of lbj cval(20 fold):
   Label    Precision Recall   F1   LCount PCount
 ------------------------------------------------
-Attribute     77.473 72.680 75.000    194    182
-List          85.135 84.375 84.753    224    222
-Locative      84.000 87.500 85.714     72     75
-Other         90.365 89.917 90.141    605    602
-Substitute    84.880 89.170 86.972    277    291
+Attribute     78.090 75.543 76.796    184    178
+List          87.097 77.512 82.025    209    186
+Locative      78.571 83.544 80.982     79     84
+Other         90.187 92.051 91.109    629    642
+Substitute    84.407 87.676 86.010    284    295
 ------------------------------------------------
-Accuracy      86.297   -      -      -      1372
-  LocalCommaClassifier:   Subset 4 Accuracy. In addition to reporting accuracy, this class will also print the result of lbjava.classify.TestDiscrete: 0.87956
-  LocalCommaClassifier:   95.0% confidence interval after 100 rounds: 0.863 +/- 0.02352
-  LocalCommaClassifier: Training on entire training set
+Accuracy      86.282   -      -      -      1385
+LocalCommaClassifier:   95.0% confidence interval after 100 rounds: 0.86291 +/- 0.02496
 
-Result of ClassifierComparison.java(Comma Sibling constraints):
-data/test_commas.ser exists
-Done reading
-File contained 372 commas
+Result of ClassifierComparison:
 LocalCommaClassifier
-  Label    Precision Recall   F1   LCount PCount
-------------------------------------------------
-Attribute     66.129 91.111 76.636     45     62
-List          87.805 70.588 78.261     51     41
-Locative      70.000 93.333 80.000     15     20
-Other         96.257 92.784 94.488    194    187
-Substitute    87.097 80.597 83.721     67     62
-------------------------------------------------
-Accuracy      87.366   -      -      -       372
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     80.000  74.074 76.923     27     25
+List          86.364  67.857 76.000     28     22
+Locative      75.000 100.000 85.714      9     12
+Other         91.011  91.011 91.011     89     89
+Substitute    80.000  93.333 86.154     30     35
+-------------------------------------------------
+Accuracy      85.792    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.741 0.000    0.000 0.148      0.111
+List           0.000 0.679    0.107 0.143      0.071
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.022    0.000 0.910      0.022
+Substitute     0.033 0.033    0.000 0.000      0.933
 
 SubstitutePairConstrainedCommaClassifier
-  Label    Precision Recall   F1   LCount PCount
-------------------------------------------------
-Attribute     64.516 88.889 74.766     45     62
-List          87.805 70.588 78.261     51     41
-Locative      70.000 93.333 80.000     15     20
-Other         96.257 92.784 94.488    194    187
-Substitute    85.484 79.104 82.171     67     62
-------------------------------------------------
-Accuracy      86.828   -      -      -       372
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     80.000  74.074 76.923     27     25
+List          82.609  67.857 74.510     28     23
+Locative      75.000 100.000 85.714      9     12
+Other         91.011  91.011 91.011     89     89
+Substitute    79.412  90.000 84.375     30     34
+-------------------------------------------------
+Accuracy      85.246    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.741 0.000    0.000 0.148      0.111
+List           0.000 0.679    0.107 0.143      0.071
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.022    0.000 0.910      0.022
+Substitute     0.033 0.067    0.000 0.000      0.900
 
 LocativePairConstrainedCommaClassifier
   Label    Precision Recall    F1   LCount PCount
 -------------------------------------------------
-Attribute     66.129  91.111 76.636     45     62
-List          87.805  70.588 78.261     51     41
-Locative      75.000 100.000 85.714     15     20
-Other         96.257  92.784 94.488    194    187
-Substitute    87.097  80.597 83.721     67     62
+Attribute     80.000  74.074 76.923     27     25
+List          86.364  67.857 76.000     28     22
+Locative      69.231 100.000 81.818      9     13
+Other         91.011  91.011 91.011     89     89
+Substitute    82.353  93.333 87.500     30     34
 -------------------------------------------------
-Accuracy      87.634    -      -      -       372
+Accuracy      85.792    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.741 0.000    0.000 0.148      0.111
+List           0.000 0.679    0.107 0.143      0.071
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.022    0.011 0.910      0.011
+Substitute     0.033 0.033    0.000 0.000      0.933
 
 ListCommasConstrainedCommaClassifier
-  Label    Precision Recall   F1   LCount PCount
-------------------------------------------------
-Attribute     66.129 91.111 76.636     45     62
-List          87.805 70.588 78.261     51     41
-Locative      70.000 93.333 80.000     15     20
-Other         96.257 92.784 94.488    194    187
-Substitute    87.097 80.597 83.721     67     62
-------------------------------------------------
-Accuracy      87.366   -      -      -       372
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     80.000  74.074 76.923     27     25
+List          86.364  67.857 76.000     28     22
+Locative      75.000 100.000 85.714      9     12
+Other         91.011  91.011 91.011     89     89
+Substitute    80.000  93.333 86.154     30     35
+-------------------------------------------------
+Accuracy      85.792    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.741 0.000    0.000 0.148      0.111
+List           0.000 0.679    0.107 0.143      0.071
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.022    0.000 0.910      0.022
+Substitute     0.033 0.033    0.000 0.000      0.933
 
 OxfordCommaConstrainedCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     80.000  74.074 76.923     27     25
+List          86.364  67.857 76.000     28     22
+Locative      75.000 100.000 85.714      9     12
+Other         91.011  91.011 91.011     89     89
+Substitute    80.000  93.333 86.154     30     35
+-------------------------------------------------
+Accuracy      85.792    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.741 0.000    0.000 0.148      0.111
+List           0.000 0.679    0.107 0.143      0.071
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.022    0.000 0.910      0.022
+Substitute     0.033 0.033    0.000 0.000      0.933
+
+
+
+ON AUTO:
+lbj cval(20)
   Label    Precision Recall   F1   LCount PCount
 ------------------------------------------------
-Attribute     66.129 91.111 76.636     45     62
-List          87.805 70.588 78.261     51     41
-Locative      70.000 93.333 80.000     15     20
-Other         96.257 92.784 94.488    194    187
-Substitute    87.097 80.597 83.721     67     62
+Attribute     75.740 69.565 72.521    184    169
+List          74.611 68.900 71.642    209    193
+Locative      70.930 77.215 73.939     79     86
+Other         86.465 86.328 86.396    629    628
+Substitute    76.699 83.451 79.933    284    309
 ------------------------------------------------
-Accuracy      87.366   -      -      -       372
+Accuracy      80.361   -      -      -      1385
+LocalCommaClassifier:   95.0% confidence interval after 100 rounds: 0.80356 +/- 0.02289
 
+
+On ClassifierComparison:
+LocalCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     75.000  66.667 70.588     27     24
+List          85.714  64.286 73.469     28     21
+Locative      81.818 100.000 90.000      9     11
+Other         87.234  92.135 89.617     89     94
+Substitute    75.758  83.333 79.365     30     33
+-------------------------------------------------
+Accuracy      83.060    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.667 0.037    0.000 0.222      0.074
+List           0.036 0.643    0.036 0.143      0.143
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.011    0.000 0.921      0.022
+Substitute     0.033 0.033    0.033 0.067      0.833
+
+SubstitutePairConstrainedCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     75.000  66.667 70.588     27     24
+List          90.000  64.286 75.000     28     20
+Locative      75.000 100.000 85.714      9     12
+Other         87.234  92.135 89.617     89     94
+Substitute    78.788  86.667 82.540     30     33
+-------------------------------------------------
+Accuracy      83.607    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.667 0.037    0.000 0.222      0.074
+List           0.036 0.643    0.071 0.143      0.107
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.011    0.000 0.921      0.022
+Substitute     0.033 0.000    0.033 0.067      0.867
+
+LocativePairConstrainedCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     75.000  66.667 70.588     27     24
+List          85.000  60.714 70.833     28     20
+Locative      81.818 100.000 90.000      9     11
+Other         87.234  92.135 89.617     89     94
+Substitute    76.471  86.667 81.250     30     34
+-------------------------------------------------
+Accuracy      83.060    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.667 0.037    0.000 0.222      0.074
+List           0.036 0.607    0.071 0.143      0.143
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.011    0.000 0.921      0.022
+Substitute     0.033 0.033    0.000 0.067      0.867
+
+ListCommasConstrainedCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     75.000  66.667 70.588     27     24
+List          85.714  64.286 73.469     28     21
+Locative      81.818 100.000 90.000      9     11
+Other         87.234  92.135 89.617     89     94
+Substitute    75.758  83.333 79.365     30     33
+-------------------------------------------------
+Accuracy      83.060    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.667 0.037    0.000 0.222      0.074
+List           0.036 0.643    0.036 0.143      0.143
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.011    0.000 0.921      0.022
+Substitute     0.033 0.033    0.033 0.067      0.833
+
+OxfordCommaConstrainedCommaClassifier
+  Label    Precision Recall    F1   LCount PCount
+-------------------------------------------------
+Attribute     75.000  66.667 70.588     27     24
+List          85.714  64.286 73.469     28     21
+Locative      81.818 100.000 90.000      9     11
+Other         87.234  92.135 89.617     89     94
+Substitute    75.758  83.333 79.365     30     33
+-------------------------------------------------
+Accuracy      83.060    -      -      -       183
+Confusion  Attribute List  Locative Other Substitute
+Attribute      0.667 0.037    0.000 0.222      0.074
+List           0.036 0.643    0.036 0.143      0.143
+Locative       0.000 0.000    1.000 0.000      0.000
+Other          0.045 0.011    0.000 0.921      0.022
+Substitute     0.033 0.033    0.033 0.067      0.833

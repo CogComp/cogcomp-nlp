@@ -7,21 +7,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
@@ -29,6 +29,7 @@ import edu.illinois.cs.cogcomp.edison.data.srl.NombankReader;
 import edu.illinois.cs.cogcomp.edison.data.srl.PropbankReader;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.edison.sentences.TokenizerUtilities.SentenceViewGenerators;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
@@ -39,19 +40,34 @@ public class CommaReader implements Parser {
     private final String annotationFile;
     private final String serializedFile;
     private List<Comma> commas;
-    private int currentComma;
+    private List<Sentence> sentences;
+    Iterator<Comma> commaIt;
     private static String treebankHome, propbankHome, nombankHome;
-
-    public CommaReader(String annotationFile, String serializedFile) {
+    //private static final long seed = 4901945429246723613L;
+    //private static final long seed = 4901945429246723122L;
+    private static final long seed = 4931844729243128132L;
+    Ordering ordering;
+    public static enum Ordering{
+    	RANDOM_COMMA,
+    	ORDERED_COMMA,
+    	ORIGINAL_COMMA,
+    	RANDOM_SENTENCE,
+    	ORDERED_SENTENCE,
+    	ORIGINAL_SENTENCE
+    }
+    
+    
+    public CommaReader(String annotationFile, String serializedFile, Ordering ordering) {
         this.annotationFile = annotationFile;
         this.serializedFile = serializedFile;
         this.commas = new ArrayList<Comma>();
-
+        this.ordering = ordering;
+        
         CommaProperties properties = CommaProperties.getInstance();
         treebankHome = properties.getPTBHDir();
         propbankHome = properties.getPropbankDir();
         nombankHome = properties.getNombankDir();
-
+        
         try {
             this.annotator = new Annotator(true, true);
         } catch (Exception e) {
@@ -79,6 +95,25 @@ public class CommaReader implements Parser {
                 System.exit(1);
             }
         }
+
+        switch (ordering) {
+		case ORDERED_COMMA:
+			Collections.shuffle(commas, new Random(seed));
+			break;
+		case RANDOM_COMMA:
+			Collections.shuffle(commas);
+			break;
+		case ORDERED_SENTENCE:
+			Collections.shuffle(sentences, new Random(seed));
+			break;
+		case RANDOM_SENTENCE:
+			Collections.shuffle(sentences);
+			break;
+		default://ORIGINAL_COMMA or ORIGINAL_SENTENCE
+			break;
+		}
+        
+        reset();
     }
 
     @SuppressWarnings("unchecked")
@@ -93,6 +128,13 @@ public class CommaReader implements Parser {
         }
         in.close();
         fileIn.close();
+        Set<Sentence> sentenceSet = new LinkedHashSet<Sentence>();
+        for(Comma c: commas)
+        {
+        	Sentence s = c.getSentence();
+        	sentenceSet.add(s);
+        }
+        sentences = new ArrayList<Sentence>(sentenceSet);
     }
 
     private void readData() throws IOException {
@@ -121,7 +163,7 @@ public class CommaReader implements Parser {
             if(taMap.containsKey(textId)){
                 goldTA = taMap.get(textId);
                 try {
-                    TA = annotator.preProcess(rawText);
+                    TA = annotator.preProcess(goldTA.getCorpusId(), textId, rawText);
                 } catch (Exception e) {
                     failures++;
                 }
@@ -193,18 +235,52 @@ public class CommaReader implements Parser {
         out.writeObject(commas);
         out.close();
         fileOut.close();
+        System.out.println("Wrote " + commas.size() + " commas to " + filename);
     }
 
     @Override
     public Object next() {
-        if (commas.size() > currentComma)
-            return commas.get(currentComma++);
+        if(commaIt.hasNext())
+        	return commaIt.next();
         return null;
     }
 
     @Override
     public void reset() {
-        currentComma = 0;
+		if (ordering.equals(Ordering.ORDERED_SENTENCE)
+				|| ordering.equals(Ordering.RANDOM_SENTENCE)
+				|| ordering.equals(Ordering.ORIGINAL_SENTENCE)) {
+			commaIt = new Iterator<Comma>() {
+				Iterator<Sentence> sentenceIt = sentences.iterator();
+				Iterator<Comma> commasInCurrSentenceIt = new ArrayList<Comma>()
+						.iterator();
+
+				@Override
+				public void remove() {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public Comma next() {
+					if (hasNext())
+						return commasInCurrSentenceIt.next();
+					else
+						throw new NoSuchElementException();
+				}
+
+				@Override
+				public boolean hasNext() {
+					while (!commasInCurrSentenceIt.hasNext()
+							&& sentenceIt.hasNext()) {
+						commasInCurrSentenceIt = sentenceIt.next().getCommas()
+								.iterator();
+					}
+					return commasInCurrSentenceIt.hasNext();
+				}
+			};
+		}
+		else
+			commaIt = commas.iterator();
     }
 
     @Override
@@ -277,27 +353,24 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser");
-        Comma c;
-        Set<Sentence> sentenceSet = new HashSet<Sentence>();
-        while((c=(Comma)cr.next()) != null)
-        {
-        	Sentence s = c.getSentence();
-        	sentenceSet.add(s);
-        }
-        divideTDT(sentenceSet, FileUtils.readFileToString(new File("data/comma_resolution_data.txt")));
+        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.RANDOM_SENTENCE);
+        divideTDT(cr.getSentences(), FileUtils.readFileToString(new File("data/comma_resolution_data.txt")));
+    }
+    
+    public List<Sentence> getSentences(){
+    	return sentences;
+    }
+    
+    public List<Comma> getCommas(){
+    	return commas;
     }
     
     public static void divideTDT(Collection<Sentence> sentences, String textSource) throws IOException{
-    	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);
-    	
-    	long seed = 4901945429246723620L; 
-    	Collections.shuffle(sentenceList, new Random(seed));
-    	
-    	
     	double train = 0.7;
     	double dev = 0.1;
     	double test = 0.2;
+
+    	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);    
     	int numSentences = sentenceList.size();
     	Collection<Sentence> trainSentences = sentenceList.subList(0, (int) (numSentences * train));
     	Collection<Sentence> devSentences = sentenceList.subList((int) (numSentences * train), (int) (numSentences * (train+dev)));
@@ -309,26 +382,27 @@ public class CommaReader implements Parser {
     	
     	for(Sentence s: trainSentences)
     		trainCommas.addAll(s.getCommas());
-    	
     	for(Sentence s: devSentences)
     		devCommas.addAll(s.getCommas());
-
     	for(Sentence s: testSentences)
    			testCommas.addAll(s.getCommas());
 
-    	
-    	
     	writeSerCommas(trainCommas, "data/train_commas.ser");
     	writeSerCommas(devCommas, "data/dev_commas.ser");
     	writeSerCommas(testCommas, "data/test_commas.ser");
     	
-    	String trainText = textSource.substring(0, nthIndexOf(textSource, "%%%", (int) (numSentences * train)));
-    	String devText = textSource.substring(nthIndexOf(textSource, "%%%", (int) (numSentences * train)), nthIndexOf(textSource, "%%%", (int) (numSentences * (train+dev))));
-    	String testText = textSource.substring(nthIndexOf(textSource, "%%%", (int) (numSentences * (train+dev))), textSource.length());
     	
-    	FileUtils.writeStringToFile(new File("data/train_commas.txt"), trainText);
-    	FileUtils.writeStringToFile(new File("data/dev_commas.txt"), devText);
-    	FileUtils.writeStringToFile(new File("data/test_commas.txt"), testText);
+    	
+    	/*List<String> sentenceText = Arrays.asList(textSource.split("%%%+"));
+    	Collections.shuffle(sentenceText, new Random(seed));
+    	
+    	List<String> trainText = sentenceText.subList(0, (int) (numSentences * train));
+    	List<String> devText = sentenceText.subList((int) (numSentences * train), (int) (numSentences * (train+dev)));
+    	List<String> testText = sentenceText.subList((int) (numSentences * (train+dev)), numSentences);
+    	
+    	FileUtils.writeLines(new File("data/train_commas.txt"), trainText);
+    	FileUtils.writeLines(new File("data/dev_commas.txt"), devText);
+    	FileUtils.writeLines(new File("data/test_commas.txt"), testText);*/
     }
     
     public static int nthIndexOf(String source, String sought, int n) {
