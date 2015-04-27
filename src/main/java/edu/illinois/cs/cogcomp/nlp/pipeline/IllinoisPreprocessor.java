@@ -1,11 +1,15 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
+import java.net.SocketException;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.core.constants.ConfigNames;
+import edu.illinois.cs.cogcomp.curator.RecordGenerator;
 import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
 import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
+import edu.illinois.cs.cogcomp.thrift.base.*;
 import org.apache.thrift.TException;
+import org.apache.thrift.transport.TTransportException;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +28,9 @@ import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.curator.Identifier;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import edu.illinois.cs.cogcomp.thrift.base.Clustering;
-import edu.illinois.cs.cogcomp.thrift.base.Forest;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.View;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import weka.filters.unsupervised.attribute.Add;
 
 /**
  * IllinoisPreprocessor is intended to provide a simple one-stop
@@ -71,7 +71,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  * @author mssammon
  *
  */
-public class IllinoisPreprocessor
+public class IllinoisPreprocessor extends RecordGenerator
 {
 	private static final String NAME = IllinoisPreprocessor.class.getCanonicalName();
     //    private boolean useSegmenter;
@@ -245,62 +245,72 @@ public class IllinoisPreprocessor
 
 	public Record processText( String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
     {
-        Record record = createRecord( rawText_, isWhitespaced_ );
-        Map<String, Labeling> labelViews = record.getLabelViews();
-        Map<String, Forest> parseViews = record.getParseViews();
+        Record record = createRecord(rawText_, isWhitespaced_);
 
 //        for ( String viewName : supportedViews.keySet() )
 //        {
         if ( usePos )
         {
-            Labeling posResult = pos.labelRecord( record );
-            labelViews.put( CuratorViewNames.pos, posResult );
+            addView(record, CuratorViewNames.pos);
         }
         
         if ( useChunker )
         {
-        	Labeling chunkerResult = chunker.labelRecord( record );
-        	labelViews.put( CuratorViewNames.chunk, chunkerResult );
+            addView(record, CuratorViewNames.chunk);
         }
 
         
         if ( useLemmatizer )
-        {
-            Labeling lemmaView = lemmatizer.labelRecord( record );
-            
-            labelViews.put( CuratorViewNames.lemma, lemmaView );
-//            labelViews.put( AdditionalViewNames.lemmaWnPlus, lemmaViews.get( 1 ) );
-//            labelViews.put( AdditionalViewNames.lemmaPorter, lemmaViews.get( 2 ) );
-//            labelViews.put( CuratorViewNames.lemmaKp, lemmaViews.get( 3 ) );
-            
-        }
-        
-        if ( useNer )
-        {
-        	Labeling nerView  = ner.labelRecord( record );
-        	labelViews.put( CuratorViewNames.ner, nerView );
-        }
+            addView( record, CuratorViewNames.lemma );
 
+        if ( useNer )
+            addView( record, CuratorViewNames.ner );
 
         if ( useNerExt )
+            addView( record, AdditionalViewNames.nerExt );
+
+
+        // XXX We're assuming here that our tokenizer and the Stanford one will agree
+        if ( useStanfordParse )
+            addView( record, CuratorViewNames.stanfordParse );
+
+        return record;
+    }
+
+    private Record addView(Record record, String viewName) throws TException, AnnotationFailedException {
+        Map<String, Labeling> labelViews = record.getLabelViews();
+        Map<String, Forest> parseViews = record.getParseViews();
+        if (CuratorViewNames.pos.equals(viewName) && null != pos ) {
+            Labeling posResult = pos.labelRecord(record);
+            labelViews.put(CuratorViewNames.pos, posResult);
+        } else if (CuratorViewNames.chunk.equals(viewName) && null != chunker ) {
+            Labeling chunkerResult = chunker.labelRecord(record);
+            labelViews.put(CuratorViewNames.chunk, chunkerResult);
+        } else if (CuratorViewNames.stanfordParse.equals(viewName) && null != stanfordPipeline ) {
+            Forest parseView = StanfordToForest.convert(stanfordPipeline, record);
+            parseViews.put(CuratorViewNames.stanfordParse, parseView);
+        }
+        else if (AdditionalViewNames.nerExt.equals( viewName ) && null != nerExt )
         {
             Labeling nerView  = nerExt.labelRecord( record );
             labelViews.put( AdditionalViewNames.nerExt, nerView );
         }
-
-        // XXX We're assuming here that our tokenizer and the Stanford one will agree
-        if ( useStanfordParse )
+        else if ( CuratorViewNames.ner.equals( viewName ) && null != ner )
         {
-        	Forest parseView = StanfordToForest.convert(stanfordPipeline, record);
-        	parseViews.put(CuratorViewNames.stanfordParse, parseView);
+            Labeling nerView = ner.labelRecord(record );
+            labelViews.put( CuratorViewNames.ner, nerView );
         }
-        
+        else if ( CuratorViewNames.lemma.equals( viewName ) && null != lemmatizer )
+        {
+            Labeling lemmaView = lemmatizer.labelRecord( record );
+            labelViews.put( CuratorViewNames.lemma, lemmaView );
+        }
+        else
+            throw new AnnotationFailedException( "ERROR: " + NAME + ".addView(): no resource corresponding to '" + viewName + "' was found." );
         return record;
     }
-	
-	
 
-	/**
+    /**
      * creates and tokenizes/sentence-splits input text. 
      * 
      * @param rawText_ the text to annotate
@@ -406,5 +416,24 @@ public class IllinoisPreprocessor
     public TextAnnotation createTextAnnotation(String corpusId, String docId, String text, boolean isWhitespaced ) throws TException, AnnotationFailedException {
         Record rec = createRecord( text, isWhitespaced );
         return CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId, docId, rec );
+    }
+
+    /**
+     *
+     * @param record   a Record with the text to process, plus token and sentence views
+     * @param viewName   the view to populate in the input record
+     * @param isForceUpdate   if 'true', force the processor to update the cache, if any
+     * @return
+     * @throws TTransportException
+     * @throws ServiceUnavailableException
+     * @throws AnnotationFailedException
+     * @throws TException
+     * @throws SocketException
+     */
+    @Override
+    public Record getRecordFromProcessor(Record record, String viewName, boolean isForceUpdate) throws TTransportException, ServiceUnavailableException, AnnotationFailedException, TException, SocketException {
+        record = addView( record, viewName );
+
+        return record;
     }
 }

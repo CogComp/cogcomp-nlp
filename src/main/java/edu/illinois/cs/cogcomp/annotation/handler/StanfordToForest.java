@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import edu.illinois.cs.cogcomp.nlp.curator.Pair;
 import org.apache.thrift.TException;
 
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
@@ -34,7 +35,9 @@ public class StanfordToForest {
 	
 	public static Forest convert(StanfordCoreNLP pipeline, Record record) throws TException {
 		Forest parseForest = new Forest();
+//        Forest dependencyForest = new Forest();
 		parseForest.setSource("stanfordparser");
+//        dependencyForest.setSource( "stanfordparser" );
 
 		Labeling sentenceLabeling = record.getLabelViews().get(CuratorViewNames.sentences);
 		Labeling tokenLabeling = record.getLabelViews().get(CuratorViewNames.tokens);
@@ -43,43 +46,43 @@ public class StanfordToForest {
 		
 		// The (tokenized) sentence offset in case we have more than one sentences in the record
     	int offset = 0;
-    	for (int sentInd = 0; sentInd < sentenceLabeling.getLabels().size(); ++sentInd) {
-    		Span rawSentSpan = sentenceLabeling.getLabels().get(sentInd);
-    		// We need to feed the tokenized sentence
-    		String rawText = record.getRawText();
-    		String sentenceText = "";
-    		List<Span> spans = tokenLabeling.getLabels();
-            for (int i = 0; i < spans.size(); ++i) {
-                Span pos = spans.get(i);
-                if (pos.getStart() < rawSentSpan.getStart() || pos.getEnding() > rawSentSpan.getEnding())
-                	continue;
-                sentenceText += rawText.substring(pos.getStart(), pos.getEnding()) + " ";
+            for (int sentInd = 0; sentInd < sentenceLabeling.getLabels().size(); ++sentInd) {
+                Span rawSentSpan = sentenceLabeling.getLabels().get(sentInd);
+                // We need to feed the tokenized sentence
+                String rawText = record.getRawText();
+                String sentenceText = "";
+                List<Span> spans = tokenLabeling.getLabels();
+                for (int i = 0; i < spans.size(); ++i) {
+                    Span pos = spans.get(i);
+                    if (pos.getStart() < rawSentSpan.getStart() || pos.getEnding() > rawSentSpan.getEnding())
+                        continue;
+                    sentenceText += rawText.substring(pos.getStart(), pos.getEnding()) + " ";
+                }
+                Annotation document = new Annotation(sentenceText.trim());
+                pipeline.annotate(document);
+
+                offset = tokenizedSentenceStarts.get(sentInd);
+                // For each sentence (in the document) create a thrift.base.Tree
+                List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+                // XXX Given the ssplit.eolonly option we set during the pipeline initialization
+                // there should be only one sentence here
+                for(CoreMap sentence: sentences) {
+                    edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeAnnotation.class);
+                    // Convert from Stanford Tree to thrift.base.Tree
+                    for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
+                        Tree tree = new Tree();
+                        Node top = generateNode(pt, tree, offset);
+                        tree.getNodes().add(top);
+                        tree.setTop(tree.getNodes().size() - 1);
+                        if (!parseForest.isSetTrees()) {
+                            parseForest.setTrees(new ArrayList<Tree>());
+                        }
+                        parseForest.getTrees().add(tree);
+                    }
+                }
             }
-    		Annotation document = new Annotation(sentenceText.trim());
-    		pipeline.annotate(document);
-    		
-    		offset = tokenizedSentenceStarts.get(sentInd);
-    		// For each sentence (in the document) create a thrift.base.Tree
-    		List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-    		// XXX Given the ssplit.eolonly option we set during the pipeline initialization 
-    		// there should be only one sentence here
-    		for(CoreMap sentence: sentences) {
-    			edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeAnnotation.class);
-    			// Convert from Stanford Tree to thrift.base.Tree
-    			for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
-    				Tree tree = new Tree();
-    				Node top = generateNode(pt, tree, offset);
-    				tree.getNodes().add(top);
-    				tree.setTop(tree.getNodes().size() - 1);
-    				if (!parseForest.isSetTrees()) {
-    					parseForest.setTrees(new ArrayList<Tree>());
-    				}
-    				parseForest.getTrees().add(tree);
-    			}
-    		}
-    	}
-		
-		return parseForest;
+        return parseForest;
+//		return new Pair<Forest, Forest>( parseForest, dependencyForest);
 	}
 
 	/**
