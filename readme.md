@@ -15,6 +15,20 @@ Usage
 
 Using MapDB
 -----
+
+```
+	// creates a hashmap named "freebase_cache" stored on disk under "data/freebaseRawResponseCache/" and returns it. 
+	// if a disk based map named "freebase_cache" was already stored there, then simply reopens that map.
+	// so basically just use this.
+	Map<String, String> map = MapDB.newDefaultDb("data/freebaseRawResponseCache/",
+	"freebase_cache").make().getHashMap("freebase_cache");
+	System.out.println(map.size());
+	for (String key : map.keySet()) {
+	    // System.out.println(map.get(key));
+	   fb.lookup(key);
+	}
+```
+
 Using H2 Database helper
 -----
 Using Lucene
@@ -74,6 +88,7 @@ You can easily call commonly used Lucene classes from the static utility library
 		doc.add(new TextField("title", title, Field.Store.YES));
 		doc.add(new StringField("isbn", isbn, Field.Store.YES));
 		doc.add(new Field("text", text, Lucene.FULL_INDEX));
+		// need above otherwise cannot call tf idf functions. This stores tf idf vectors
 		w.addDocument(doc);
 	}
 ```
