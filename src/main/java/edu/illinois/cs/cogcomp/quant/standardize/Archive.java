@@ -1,5 +1,4 @@
 package edu.illinois.cs.cogcomp.quant.standardize;
-import java.io.Serializable;
 import java.util.regex.*;  
 import java.util.*;
  
@@ -12,7 +11,6 @@ import java.util.*;
 
 public class Archive {
 	
-	private static final long serialVersionUID = -137855562064208958L;
 	public static Pattern dollarRewritePat, removesPat, inAPat, ofPat, 
 	dateCheckPat, yuckyHyphenPat, teenagerPat, stNdPat, percentPat, secondsPat, perSecondPat, 
 	secondPerPat, mostPat, severalPat, ofOfPat, monthOfPat;

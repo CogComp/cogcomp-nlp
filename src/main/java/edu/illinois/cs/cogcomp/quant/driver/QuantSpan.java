@@ -11,9 +11,6 @@ import edu.illinois.cs.cogcomp.quant.standardize.Ratio;
 
 public class QuantSpan implements Serializable{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5787092712439863265L;
 	public int start, end;
 	public Object object;

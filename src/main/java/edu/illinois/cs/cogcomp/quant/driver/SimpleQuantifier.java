@@ -25,11 +25,4 @@ public class SimpleQuantifier {
 		return qsList;
 	}
 	
-	public static void main(String args[])throws Throwable {
-		SimpleQuantifier quantifier = new SimpleQuantifier();
-		List<QuantSpan> quantities = 
-				quantifier.getSpans("John has 5 apples and 3 oranges");
-		System.out.println(Arrays.asList(quantities));
-	}
-	
 }

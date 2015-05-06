@@ -1,7 +1,5 @@
 package edu.illinois.cs.cogcomp.quant.standardize;
 import java.io.Serializable;
-import java.util.*;
-import java.util.regex.*;
 /**
  * 
  * @author Subhro Roy 
@@ -29,20 +27,16 @@ public class Quantity implements Serializable{
 			return null;
 		}
 		String[] strArr = Bounds.extractBound(phrase);
-//		System.out.println("Bounds :" + Arrays.asList(strArr));
 		Quantity q = Numbers.extractNumber(strArr[1]);
 		if(q == null) {
 			q = new Quantity("=", 1.0, phrase.trim());
 		}
-//		System.out.println("Quantity : "+q);
 		q.bound = strArr[0];
 		if(q.value==null){
 			q.value = 1.0;
 		}	
 		q.phrase = phrase;
-//		System.out.println("Quantity : "+q);
 		unitNormalization(q);
-//		System.out.println("Quantity : "+q.phrase.contains("\\%"));
 		return q;
 	}
 	
@@ -78,12 +72,12 @@ public class Quantity implements Serializable{
 		}
 	}
 	
-	public String toString(){
+	public String toString1() {
 		return "["+this.bound+" "+this.value+"]";
 	}
 	
-	public String toStringWithUnits(){
-		return "["+this.bound+" "+this.value+" Unit :"+this.units+" Phrase: "+phrase+"]";
+	public String toString() {
+		return "["+this.bound+" "+this.value+" "+this.units+"]";
 	}
 	
 	public static void main(String args[]) {

@@ -78,7 +78,6 @@ public class Quantifier {
 		String sentences[] = new String[taQuant.getNumberOfSentences()];
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
 			sentences[i] = taQuant.getSentence(i).getText();
-//			System.out.println("Sentence : "+taQuant.getSentence(i));
 		}
 		Chunker chunker = new Chunker();
 	    Parser parser = new PlainToTokenParser(new WordSplitter(
@@ -91,7 +90,6 @@ public class Quantifier {
 	    
 	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
 		    	prediction = chunker.discreteValue(w);
-//		    	System.out.println("Word : "+w.form+" Label : "+prediction);
 		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 		    							&& !previous.endsWith(prediction.substring(2))){
 		    		if( !inChunk && tokenPos < taCurator.size()){

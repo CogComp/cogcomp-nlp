@@ -3,8 +3,6 @@ package edu.illinois.cs.cogcomp.quant.standardize;
 import java.io.Serializable;
 import java.util.regex.*;
 import java.util.*;
-import java.util.regex.*;  
-import java.util.*;
  
 /**
  * Converts pure numbers to normalized form
@@ -211,7 +209,7 @@ public class Numbers implements Serializable {
 				if(tokens.get(i).equals(order)) {
 					num += extractNumberFromTokenizedWords(numberForOrder, false).value*
 							str2num.get(order);
-					System.out.println("Token : "+tokens.get(i)+" Num : "+num);
+//					System.out.println("Token : "+tokens.get(i)+" Num : "+num);
 					indexOfLastOrder = i;
 					indexOfLastNumber = i;
 					break;
