@@ -33,21 +33,10 @@ This will be nearly as fast as a memory based map in terms of access, but just n
 
 For read-only writing to mapDB map use,
 ```
-	DBMaker dbmaker=MapDB.newDefaultDb(wikititle2freebaseMidcacheLocation,"freebase_cache")
+	DBMaker dbmaker=MapDB.newDefaultDb(wikititle2freebaseMidcacheLocation,"freebase_cache");
 	DB db=MapDB.DBConfig.READ_ONLY.configure(dbmaker).make();
 	Map<String, String> readonlyMap=db.getHashMap("freebase_cache");
 ```
-
-Faster insertion into map using pump,
-
-```
-	Map newMap = db.createTreeMap("map")
-	    .pumpSource(randomIterator)  //source of data to import
-            .pumpBatchSize(1000000)      //sort data from source, batch size must be set so it fits into memory
-	    .make()
-```
-It has linear speed with number of records. It will sort data even if they do not fit into memory. Read [this](http://stackoverflow.com/questions/25538711/how-to-sort-items-for-faster-insertion-in-the-mapdb-btree)
-
 
 Using H2 Database helper
 -----
