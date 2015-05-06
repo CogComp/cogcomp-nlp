@@ -15,6 +15,7 @@ Usage
 
 Using MapDB
 -----
+Simple use case - a disk based map for your too-large-to-fit-in-memory hashMap needs.
 
 ```
 	// creates a hashmap named "freebase_cache" stored on disk under "data/freebaseRawResponseCache/" and returns it. 
@@ -27,6 +28,14 @@ Using MapDB
 	    // System.out.println(map.get(key));
 	   fb.lookup(key);
 	}
+```
+This will be nearly as fast as a memory based map in terms of access, but just not stored in memory.
+
+For read-only writing to mapDB map use,
+```
+	DBMaker dbmaker=MapDB.newDefaultDb(wikititle2freebaseMidcacheLocation,"freebase_cache")
+	DB db=MapDB.DBConfig.READ_ONLY.configure(dbmaker).make();
+	Map<String, String> readonlyMap=db.getHashMap("freebase_cache");
 ```
 
 Using H2 Database helper
