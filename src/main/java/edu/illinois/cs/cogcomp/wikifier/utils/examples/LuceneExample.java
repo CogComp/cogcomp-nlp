@@ -11,7 +11,7 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
 
-import edu.illinois.cs.cogcomp.wikifier.utils.lucene.Lucene;
+import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 
 public class LuceneExample {
 

@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.db;
+package edu.illinois.cs.cogcomp.bigdata.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,7 +10,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.illinois.cs.cogcomp.wikifier.utils.db.DBHelper.Column;
+import edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
 
 /**
  * Running this will create a db for you at the location specified by dbFile

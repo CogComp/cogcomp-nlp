@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.db;
+package edu.illinois.cs.cogcomp.bigdata.database;
 
 public class SomeItem {
 	public int task;

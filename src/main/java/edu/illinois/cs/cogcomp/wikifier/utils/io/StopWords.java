@@ -12,7 +12,7 @@ import org.apache.lucene.analysis.util.CharArraySet;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
-import edu.illinois.cs.cogcomp.wikifier.utils.lucene.Lucene;
+import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 /**
  * Utilities for interfacing different sources of stop words
  * definitions

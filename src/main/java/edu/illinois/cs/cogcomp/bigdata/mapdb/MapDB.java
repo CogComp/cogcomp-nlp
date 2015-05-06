@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.io;
+package edu.illinois.cs.cogcomp.bigdata.mapdb;
 
 import java.io.File;
 import java.util.ArrayList;

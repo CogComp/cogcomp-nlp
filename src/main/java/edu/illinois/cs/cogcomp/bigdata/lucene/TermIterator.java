@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.lucene;
+package edu.illinois.cs.cogcomp.bigdata.lucene;
 
 import java.io.IOException;
 
