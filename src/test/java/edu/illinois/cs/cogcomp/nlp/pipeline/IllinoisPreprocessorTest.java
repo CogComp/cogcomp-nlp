@@ -83,6 +83,7 @@ public class IllinoisPreprocessorTest
 		boolean isNerOk = false;
 		boolean isNerExtOk = false;
 		boolean isParseOk = false;
+        boolean isDepOk = false;
 //		Set< String > views = rec.getLabelViews().keySet();
 
 //		if ( views.contains( CuratorViewNames.pos ) && views.contains( CuratorViewNames.tokens ) )
@@ -173,11 +174,12 @@ public class IllinoisPreprocessorTest
 //		if ( views.contains( CuratorViewNames.stanfordParse ) )
 //		{
 			Forest parseView = rec.getParseViews().get( CuratorViewNames.stanfordParse );
+            Forest depView = rec.getParseViews().get( CuratorViewNames.stanfordDep );
 			Labeling sentView = rec.getLabelViews().get( CuratorViewNames.sentences );
 			
 			// Check that we have as many trees as sentences
 			isParseOk = parseView.getTreesSize() == sentView.getLabelsSize();
-			
+//			isDepOk = depView.getTreesSize() == sentView.getLabelsSize();
 			assertTrue( isParseOk );
 //		}
 

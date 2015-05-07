@@ -3,34 +3,29 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 import java.net.SocketException;
 import java.util.*;
 
-import edu.illinois.cs.cogcomp.core.constants.ConfigNames;
+import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.curator.RecordGenerator;
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
+import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
+import edu.illinois.cs.cogcomp.edison.sentences.*;
 import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
+import edu.illinois.cs.cogcomp.nlp.curator.Pair;
 import edu.illinois.cs.cogcomp.thrift.base.*;
+import edu.illinois.cs.cogcomp.thrift.base.View;
+import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
+import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransportException;
-import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.illinois.cs.cogcomp.annotation.handler.IllinoisChunkerHandler;
-import edu.illinois.cs.cogcomp.annotation.handler.IllinoisLemmatizerHandler;
-import edu.illinois.cs.cogcomp.annotation.handler.IllinoisNerExtHandler;
-import edu.illinois.cs.cogcomp.annotation.handler.IllinoisPOSHandler;
-import edu.illinois.cs.cogcomp.annotation.handler.IllinoisTokenizerHandler;
-import edu.illinois.cs.cogcomp.annotation.handler.StanfordToForest;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.Whitespacer;
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface;
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.curator.Identifier;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import weka.filters.unsupervised.attribute.Add;
 
 /**
  * IllinoisPreprocessor is intended to provide a simple one-stop
@@ -74,6 +69,8 @@ import weka.filters.unsupervised.attribute.Add;
 public class IllinoisPreprocessor extends RecordGenerator
 {
 	private static final String NAME = IllinoisPreprocessor.class.getCanonicalName();
+    private ParserAnnotator parseAnnotator;
+    private POSTaggerAnnotator posAnnotator;
     //    private boolean useSegmenter;
     private boolean usePos;
     private boolean useLemmatizer;
@@ -97,6 +94,7 @@ public class IllinoisPreprocessor extends RecordGenerator
     private Logger logger = LoggerFactory.getLogger( IllinoisPreprocessor.class );
     private Set< String > activeViews;
     private boolean forceCacheUpdate;
+
 
     /**
      * ResourceManager is read from a config file that specifies which 
@@ -159,14 +157,17 @@ public class IllinoisPreprocessor extends RecordGenerator
         }
 
         if (useStanfordParse) {
-        	Properties props = new Properties();
-        	props.put("annotators", "tokenize, ssplit, pos, parse");
         	// Add options to avoid splitting and tokenization errors
         	// XXX Need to make sure sentence is given to parser with tokenization
+            Properties props = new Properties();
+            props.put("annotators", "tokenize, ssplit, pos, parse");
         	props.put("tokenize.whitespace", "true");
         	props.put("ssplit.eolonly", "true");
-
-        	stanfordPipeline = new StanfordCoreNLP(props);
+//            props.put( "annotators", "pos, parse") ;
+//            props.put("parse.originalDependencies", true);
+//            posAnnotator = new POSTaggerAnnotator("pos", props);
+//            parseAnnotator = new ParserAnnotator("parse", props);
+            stanfordPipeline = new StanfordCoreNLP(props);
         }
         	
     }
@@ -186,13 +187,39 @@ public class IllinoisPreprocessor extends RecordGenerator
     public TextAnnotation processTextToTextAnnotation( String corpusId_, String textId_, String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
     {
     	Record rec = processText( rawText_, isWhitespaced_ );
-    	TextAnnotation ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId_, textId_, rec );
-  
+    	TextAnnotation ta = null;
+
+
+        ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId_, textId_, rec );
+
         if ( useLemmatizer )
         {
         	addLabelingToTextAnnotation( rec, CuratorViewNames.lemma, ta );
 //        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaWn, ta );
 //        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaPorter, ta );
+        }
+        if ( useNerExt )
+        {
+            boolean allowOverlappingSpans = false;
+            Labeling nerExtLabeling = rec.getLabelViews().get( AdditionalViewNames.nerExt );
+            if ( null == nerExtLabeling )
+                logger.error( "no '" + AdditionalViewNames.nerExt + "' view present although useNerExt is 'true'." );
+            else {
+                SpanLabelView newView = CuratorDataStructureInterface.alignLabelingToSpanLabelView(AdditionalViewNames.nerExt, ta, nerExtLabeling, false);
+                ta.addView(AdditionalViewNames.nerExt, newView );
+            }
+        }
+        if ( useStanfordParse )
+        {
+            try {
+                TreeView depParse = HeadFinderDependencyViewGenerator.getDependencyTree(ta, ViewNames.PARSE_STANFORD, ViewNames.DEPENDENCY_STANFORD);
+                ta.addView(ViewNames.DEPENDENCY_STANFORD, depParse);
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+                logger.error( "couldn't add view '" + ViewNames.DEPENDENCY_STANFORD  + "': " + e.getMessage() );
+            }
         }
     	return ta;
     }
@@ -221,6 +248,8 @@ public class IllinoisPreprocessor extends RecordGenerator
 		}
 
         // need to explicitly add views not known to Edison to the textannotation
+        if ( useLemmatizer )
+            addLabelingToTextAnnotation( rec, CuratorViewNames.lemma, ta );
 
         if ( useNerExt )
         {
@@ -250,14 +279,10 @@ public class IllinoisPreprocessor extends RecordGenerator
 //        for ( String viewName : supportedViews.keySet() )
 //        {
         if ( usePos )
-        {
             addView(record, CuratorViewNames.pos);
-        }
-        
+
         if ( useChunker )
-        {
             addView(record, CuratorViewNames.chunk);
-        }
 
         
         if ( useLemmatizer )
@@ -287,8 +312,8 @@ public class IllinoisPreprocessor extends RecordGenerator
             Labeling chunkerResult = chunker.labelRecord(record);
             labelViews.put(CuratorViewNames.chunk, chunkerResult);
         } else if (CuratorViewNames.stanfordParse.equals(viewName) && null != stanfordPipeline ) {
-            Forest parseView = StanfordToForest.convert(stanfordPipeline, record);
-            parseViews.put(CuratorViewNames.stanfordParse, parseView);
+            Forest parse = StanfordToForest.convert( stanfordPipeline,  record);
+            parseViews.put(CuratorViewNames.stanfordParse, parse);
         }
         else if (AdditionalViewNames.nerExt.equals( viewName ) && null != nerExt )
         {
