@@ -13,6 +13,11 @@ import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
+/**
+ * utils class which helps in creating a database using h2.
+ * @author cogcomp
+ *
+ */
 public class DBHelper {
 
 	private static final String sqlDriver = "org.h2.Driver";

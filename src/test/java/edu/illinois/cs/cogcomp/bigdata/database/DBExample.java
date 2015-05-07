@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import junit.framework.TestCase;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,13 +25,16 @@ import edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
  * @author upadhya3
  *
  */
-public class DBExample {
+
+// this is an example database created using DBHelper
+public class DBExample{
 	private String dbFile;
 	private String tableName;
 	private static PreparedStatement insertSt;
 	private static final Logger logger = LoggerFactory
 			.getLogger(DBExample.class);
 
+	// make sure we only have one instance of the db
 	private static DBExample instance;
 
 	/***
@@ -52,6 +57,7 @@ public class DBExample {
 		this.tableName = tableName;
 		logger.info("Checking for database at " + dbFile);
 		boolean create = DBHelper.dbFileExists(dbFile);
+		// if not found create one!
 		logger.info("cache {} found", create ? "not " : "");
 
 		DBHelper.initializeConnection(dbFile);
@@ -101,7 +107,7 @@ public class DBExample {
 		}
 	}
 
-	private void addItem(SomeItem item) throws SQLException {
+	public void addItem(SomeItem item) throws SQLException {
 		insertSt.clearParameters();
 		insertSt.setInt(1, item.task);
 		insertSt.setInt(2, item.dataset);
@@ -113,12 +119,5 @@ public class DBExample {
 
 	}
 
-	public static void main(String[] args) throws SQLException {
-		DBExample db = DBExample.getInstance("./database", "myTable");
-		Random random = new Random(0);
-		for (int i = 0; i < 10; i++)
-			db.addItem(new SomeItem(random.nextInt(), random.nextInt(), random
-					.nextInt(), random.nextInt(), random.nextInt(), random
-					.nextInt()));
-	}
+	
 }
