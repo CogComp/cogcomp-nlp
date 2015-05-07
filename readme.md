@@ -51,6 +51,17 @@ It has linear speed with number of records. It will sort data even if they do no
 
 Using H2 Database helper
 -----
+Look at  `DBExample`  in test package `edu.illinois.cs.cogcomp.bigdata.database`.
+This shows how to create a db for you at the location specified by dbFile
+Once you are done populating, you can view the db by connecting to it by running
+```
+java -cp target/dependency/h2-1.4.182.jar org.h2.tools.Server -web -webPort 9090
+```
+and connecting to the dbURL. The default username is blank, dbURL
+should have absolute system path
+(eg. `"jdbc:h2:/Users/Shyam/java_code/wikiutils/database"`).
+
+
 Using Lucene
 -----
 You can easily call commonly used Lucene classes from the static utility library Lucene. It also houses functions for getting term freqs and the like.

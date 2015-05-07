@@ -27,7 +27,7 @@ import edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
  */
 
 // this is an example database created using DBHelper
-public class DBExample{
+public class DBExample {
 	private String dbFile;
 	private String tableName;
 	private static PreparedStatement insertSt;
@@ -119,5 +119,4 @@ public class DBExample{
 
 	}
 
-	
 }
