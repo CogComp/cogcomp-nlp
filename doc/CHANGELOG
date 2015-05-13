@@ -1,5 +1,11 @@
+Version 5.1
+Added JUnit tests
+Removed unnecessary dependencies
+Switched to illinois-nlp-pipeline-0.1.2
+Minor fixes
+
 Version 5.0
-TODO (standalone + plus cleanup + ready to add Prep)
+Standalone SRL using illinois-nlp-pipeline
 
 Version 4.1.1
 Switched to edison-0.7.1 and LBJava-1.0

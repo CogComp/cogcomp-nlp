@@ -5,7 +5,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-srl</artifactId>
 	<packaging>jar</packaging>
-	<version>5.0</version>
+	<version>5.1</version>
 
 	<url>http://cogcomp.cs.illinois.edu</url>
 
@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-nlp-pipeline</artifactId>
-			<version>0.0.9</version>
+			<version>0.1.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -76,13 +76,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.2.140</version>
@@ -91,7 +84,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>edison</artifactId>
-			<version>0.7.4</version>
+			<version>0.7.8</version>
 		</dependency>
 
 		<dependency>
@@ -101,34 +94,18 @@
 		</dependency>
 
 		<dependency>
-			<groupId>commons-configuration</groupId>
-			<artifactId>commons-configuration</artifactId>
-			<version>1.6</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>commons-digester</artifactId>
-					<groupId>commons-digester</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>commons-beanutils-core</artifactId>
-					<groupId>commons-beanutils</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.4</version>
-		</dependency>
-
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.1</version>
 			<optional>true</optional>
 		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>org.tartarus</groupId>
+            <artifactId>snowball</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 
 	<build>
@@ -174,7 +151,7 @@
 		<repository>
 			<id>CogcompSoftware</id>
 			<name>CogcompSoftware</name>
-			<url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
 	</distributionManagement>
 
