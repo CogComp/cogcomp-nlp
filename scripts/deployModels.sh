@@ -10,7 +10,7 @@ mvn deploy:deploy-file \
     -Dversion=${VERSION} \
     -Dclassifier=models-nom-charniak \
     -Dpackaging=jar \
-    -Durl=scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
+    -Durl=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
     -DrepositoryId=CogcompSoftware
 
 echo "Deploying illinois-srl-models-nom-STANFORD-${VERSION}.jar"
@@ -21,7 +21,7 @@ mvn deploy:deploy-file \
     -Dversion=${VERSION} \
     -Dclassifier=models-nom-stanford \
     -Dpackaging=jar \
-    -Durl=scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
+    -Durl=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
     -DrepositoryId=CogcompSoftware
 
 echo "Deploying illinois-srl-models-verb-CHARNIAK-${VERSION}.jar"
@@ -32,7 +32,7 @@ mvn deploy:deploy-file \
     -Dversion=${VERSION} \
     -Dclassifier=models-verb-charniak \
     -Dpackaging=jar \
-    -Durl=scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
+    -Durl=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
     -DrepositoryId=CogcompSoftware
 
 echo "Deploying illinois-srl-models-verb-STANFORD-${VERSION}.jar"
@@ -43,5 +43,5 @@ mvn deploy:deploy-file \
     -Dversion=${VERSION} \
     -Dclassifier=models-verb-stanford \
     -Dpackaging=jar \
-    -Durl=scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
+    -Durl=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
     -DrepositoryId=CogcompSoftware

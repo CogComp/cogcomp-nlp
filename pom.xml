@@ -5,7 +5,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-srl</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1</version>
+	<version>5.1.1</version>
 
 	<url>http://cogcomp.cs.illinois.edu</url>
 
@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-nlp-pipeline</artifactId>
-			<version>0.1.2-SNAPSHOT</version>
+			<version>0.1.1</version>
 		</dependency>
 
 		<dependency>
