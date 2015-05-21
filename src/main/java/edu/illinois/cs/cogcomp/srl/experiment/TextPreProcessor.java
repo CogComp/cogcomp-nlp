@@ -25,7 +25,8 @@ public class TextPreProcessor {
 	private final IllinoisPreprocessor illinoisPreprocessor;
 	private String defaultParser;
 
-	public TextPreProcessor(boolean tokenized) throws Exception {
+	public TextPreProcessor(String configFile, boolean tokenized) throws Exception {
+		SRLProperties.initialize(configFile);
 		SRLProperties config = SRLProperties.getInstance();
 		defaultParser = config.getDefaultParser();
 		this.useCurator = config.useCurator();
@@ -47,9 +48,9 @@ public class TextPreProcessor {
 		}
 	}
 
-	public static void initialize(boolean tokenized) {
+	public static void initialize(String configFile, boolean tokenized) {
 		try {
-			instance = new TextPreProcessor(tokenized);
+			instance = new TextPreProcessor(configFile, tokenized);
 		} catch (Exception e) {
 			log.error("Unable to initialize the text pre-processor");
 			e.printStackTrace();
@@ -59,9 +60,9 @@ public class TextPreProcessor {
 
 	public static TextPreProcessor getInstance() {
 		if (instance == null) {
-			// Start a new TextPreProcessor with default values (no Curator, no tokenization)
+			// Start a new TextPreProcessor with default values (no Curator, no tokenization) and default config
 			try {
-				instance = new TextPreProcessor(false);
+				instance = new TextPreProcessor("srl-config.properties", false);
 			} catch (Exception e) {
 				log.error("Unable to initialize the text pre-processor");
 				e.printStackTrace();

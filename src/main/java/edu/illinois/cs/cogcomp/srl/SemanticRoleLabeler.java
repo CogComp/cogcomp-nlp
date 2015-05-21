@@ -94,7 +94,7 @@ public class SemanticRoleLabeler {
 		properties = SRLProperties.getInstance();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(false);
+		TextPreProcessor.initialize(configFile, false);
 
 		log.info("Creating {} manager", srlType);
 		manager = Main.getManager(SRLType.valueOf(srlType), false);

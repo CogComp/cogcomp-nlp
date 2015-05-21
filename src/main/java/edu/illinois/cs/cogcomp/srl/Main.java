@@ -50,6 +50,7 @@ public class Main {
 
 	private static String defaultParser;
 	private static SRLProperties properties;
+	private static String configFile;
 
 
 	@CommandIgnore
@@ -67,7 +68,8 @@ public class Main {
 		} else {
 			long start_time = System.currentTimeMillis();
 			try {
-				SRLProperties.initialize(arguments[0]);
+				configFile = arguments[0];
+				SRLProperties.initialize(configFile);
 				properties = SRLProperties.getInstance();
 
 				defaultParser = SRLProperties.getInstance().getDefaultParser();
@@ -178,7 +180,7 @@ public class Main {
 		Counter<String> addedViews = new Counter<String>();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(true);
+		TextPreProcessor.initialize(configFile, true);
 
 		int count = 0;
 		while (dataset.hasNext()) {

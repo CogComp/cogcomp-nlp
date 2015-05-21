@@ -57,7 +57,6 @@ public class SRLProperties {
 	}
 
 	public static SRLProperties getInstance() {
-
 		if (theInstance == null) {
 			System.out.println("SRL config not initialized. Loading srl-config.properties from the classpath");
 			try {
