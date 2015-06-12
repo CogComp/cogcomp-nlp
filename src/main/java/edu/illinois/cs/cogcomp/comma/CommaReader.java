@@ -43,9 +43,9 @@ public class CommaReader implements Parser {
     private List<Sentence> sentences;
     Iterator<Comma> commaIt;
     private static String treebankHome, propbankHome, nombankHome;
-    //private static final long seed = 4901945429246723613L;
-    //private static final long seed = 4901945429246723122L;
-    private static final long seed = 4931844729243128132L;
+    //private static final long seed = 4931844729243128135L;//CURRENT seed
+    //private static final long seed = 4901945429246723613L;//ANALYZED seed
+    private static final long seed = 492029518L;
     Ordering ordering;
     public static enum Ordering{
     	RANDOM_COMMA,
@@ -353,7 +353,7 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.RANDOM_SENTENCE);
+        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", Ordering.RANDOM_SENTENCE);
         divideTDT(cr.getSentences(), FileUtils.readFileToString(new File("data/comma_resolution_data.txt")));
     }
     

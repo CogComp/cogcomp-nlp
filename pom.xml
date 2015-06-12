@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>edison</artifactId>
-			<version>0.7.7</version>
+			<version>0.7.8-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -68,7 +68,7 @@
 				<configuration>
 					<lbjInputFileList>
 						<param>src/main/lbj/CommaClassifier.lbj</param>
-						<!-- <param>src/main/lbj/JointCommaSRL.lbj</param> -->
+			<!-- 			<param>src/main/lbj/BayraktarClassifier.lbj</param> -->
 					</lbjInputFileList>
 				</configuration>
 			</plugin>

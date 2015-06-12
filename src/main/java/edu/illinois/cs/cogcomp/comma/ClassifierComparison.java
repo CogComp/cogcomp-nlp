@@ -1,21 +1,27 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.zip.CRC32;
 
 import edu.illinois.cs.cogcomp.comma.CommaReader.Ordering;
+import edu.illinois.cs.cogcomp.comma.lbj.BayraktarLabelFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.CommaLabel;
+import edu.illinois.cs.cogcomp.comma.lbj.DependencyFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ListCommasConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier$$1;
 import edu.illinois.cs.cogcomp.comma.lbj.LocativePairConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.OxfordCommaConstrainedCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.POSFeatures;
+import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
+import edu.illinois.cs.cogcomp.comma.lbj.ParseTreeFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.SubstitutePairConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
-import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.Accuracy;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
@@ -36,7 +42,7 @@ public class ClassifierComparison {
 		classifiers.add(new OxfordCommaConstrainedCommaClassifier());
 
 		//Parser parser = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.ORIGINAL_SENTENCE);
-		Parser parser = new CommaReader("data/dev_commas.txt", "data/dev_commas.ser", Ordering.ORIGINAL_SENTENCE);
+		Parser parser = new CommaReader("data/test_commas.txt", "data/test_commas.ser", Ordering.ORIGINAL_SENTENCE);
 		ErrorAnalysis ea = new ErrorAnalysis("data/comma_resolution_data.txt", parser);
 		parser.reset();
 		for (Classifier classifier : classifiers) {
@@ -48,7 +54,7 @@ public class ClassifierComparison {
 				td.reportPrediction(prediction, gold);
 				if(!gold.equals(prediction)){
 					String textId = c.getTextAnnotation(true).getId();
-					String filename = "data/errors/" + classifier.name + "/" + textId.replaceAll("\\W+", "_") + "_" + c.commaPosition;
+					String filename = "data/errors/" + classifier.name + "/" + textId.replaceAll("\\W+", "_") + "/" + c.commaPosition;
 					FeatureVector fv = featureExtractor.classify(c);
 					ErrorAnalysis.logPredictionError(filename, c.getAnnotatedText(), prediction, gold, ea.getInstanceInfo(textId), fv);
 				}
@@ -58,8 +64,7 @@ public class ClassifierComparison {
 			parser.reset();
 			System.out.println();
 		}
-
-		 //structuredCVal();
+		//structuredCVal();
 	}
 	
 	public static void structuredCVal() throws Exception{
@@ -67,19 +72,20 @@ public class ClassifierComparison {
 		//Parser parser = new CommaReader("data/train_commas.txt", "data/train_commas.ser", Ordering.ORDERED_SENTENCE);
 		int k = 20;
 		FoldParser foldParser = new FoldParser(parser, k, SplitPolicy.sequential, 0, false);
-		TestDiscrete cvalResult = new TestDiscrete();
+		EvaluateDiscrete cvalResult = new EvaluateDiscrete();
 		for(int i=0; i<k; foldParser.setPivot(++i)){
 			foldParser.setFromPivot(false);
 			foldParser.reset();
 			SLModel model = StructuredCommaClassifier.trainSequenceCommaModel(foldParser, "config/DCD.config", null);
 			foldParser.setFromPivot(true);
 			foldParser.reset();
-			TestDiscrete evaluator = StructuredCommaClassifier.testSequenceCommaModel(model, foldParser, false);
+			EvaluateDiscrete evaluator = StructuredCommaClassifier.testSequenceCommaModel(model, foldParser, false);
 			cvalResult.reportAll(evaluator);
 		}
 		
 		System.out.println("\nSTRUCTURED CVAL RESULTS");
 		cvalResult.printPerformance(System.out);
+		cvalResult.printConfusion(System.out);
 		System.out.println();
 	}
 	
@@ -95,4 +101,71 @@ public class ClassifierComparison {
 		
 		System.out.println();
 	}
+	
+	/*public static void featureEngineering(){
+		LocalCommaClassifier learner = new LocalCommaClassifier();
+		//CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.ORDERED_SENTENCE);
+		CommaReader trainCR = new CommaReader("data/train_commas.txt", "data/train_commas.ser", CommaReader.Ordering.ORDERED_SENTENCE);
+		Comma[] trainCommas = (Comma[]) trainCR.getCommas().toArray();
+		CommaReader testCR = new CommaReader("data/test_commas.txt", "data/test_commas.ser", Ordering.ORIGINAL_SENTENCE);
+		
+		ParseFeatures __ParseFeatures = new ParseFeatures();
+		ParseTreeFeature __ParseTreeFeature = new ParseTreeFeature();
+		POSFeatures __POSFeatures = new POSFeatures();
+		DependencyFeatures __DependencyFeatures = new DependencyFeatures();
+		BayraktarLabelFeature __BayraktarLabelFeature = new BayraktarLabelFeature();
+		
+		List<Classifier> features = new ArrayList<Classifier>();
+		features.add( __ParseFeatures);
+		features.add( __ParseTreeFeature);
+		features.add( __POSFeatures);
+		features.add( __DependencyFeatures);
+		features.add( __BayraktarLabelFeature);
+		Collection<Collection<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 0, 2);
+		System.out.println(ablatedFeatures);
+		
+		
+		FeatureVector[] _ParseFeatureVectors = __ParseFeatures.classify(trainCommas);
+		FeatureVector[] _ParseTreeFeatureVectors = __ParseTreeFeature.classify(trainCommas);
+		FeatureVector[] _POSFeatureVectors = __POSFeatures.classify(trainCommas);
+		FeatureVector[] _DependencyFeatureVectors = __DependencyFeatures.classify(trainCommas);
+		FeatureVector[] _BayraktarLabelFeatureVectors = __BayraktarLabelFeature.classify(trainCommas);
+		
+		
+		for(Collection<Classifier> featureSet: ablatedFeatures){
+			learner.forget();
+			FeatureVector[] featureVectors = new FeatureVector[trainCommas.length];
+			for(int i=0; i< trainCommas.length; i++){
+				FeatureVector result = new FeatureVector();
+				for()
+				result.addFeatures(v);
+				featureVectors[i] = 
+			}
+				
+			learner.learn(trainCommas.toArray());
+		}
+	}
+	
+	public static <T> Collection<Collection<T>> getSubsetsOfSizeAtLeastK(List<T> superSet, int idx, int k){
+		Collection<Collection<T>> subsetsBiggerThanK = new ArrayList<Collection<T>>();
+		int size = superSet.size() - idx;
+		if(size<k || size<=0){
+			subsetsBiggerThanK.add(new ArrayList<T>());
+			return subsetsBiggerThanK;
+			
+		}
+		
+		Collection<Collection<T>> subPowerSetOn = getSubsetsOfSizeAtLeastK(superSet, idx+1, Math.max(0, k-1));
+		Collection<Collection<T>> subPowerSetOff = new ArrayList<Collection<T>>();
+		for(Collection<T> set: subPowerSetOn){
+			if(set.size()>=k){
+				Collection<T> duplicate = new ArrayList<T>(set);
+				subPowerSetOff.add(duplicate);
+			}
+			set.add(superSet.get(idx));
+		}
+		subsetsBiggerThanK.addAll(subPowerSetOff);
+		subsetsBiggerThanK.addAll(subPowerSetOn);
+		return subsetsBiggerThanK;
+	}*/
 }

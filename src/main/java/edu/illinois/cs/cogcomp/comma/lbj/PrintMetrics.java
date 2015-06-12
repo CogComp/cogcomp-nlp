@@ -4,12 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+import edu.illinois.cs.cogcomp.comma.Comma;
+import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.TestingMetric;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
-public class PrintMetrics extends TestDiscrete implements TestingMetric {
+public class PrintMetrics extends EvaluateDiscrete implements TestingMetric {
 	int iteration = 0;
 	int total_iterations;
 	String outputFile;
@@ -32,11 +34,13 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
 	
 	@Override
 	public double test(Classifier classifier, Classifier oracle, Parser parser) {
+		//Comma.setGold(false);
 		iteration++;
-		TestDiscrete tester = TestDiscrete.testDiscrete(classifier, oracle, parser);
-		reportAll(tester);
+		EvaluateDiscrete evaluator = EvaluateDiscrete.evaluateDiscrete(classifier, oracle, parser);
+		reportAll(evaluator);
 		if(iteration == total_iterations){
 			printPerformance(System.out);
+			printConfusion(System.out);
             if (outputFile != null) {
                 try {
                     PrintStream experimentResults = new PrintStream(
@@ -44,12 +48,14 @@ public class PrintMetrics extends TestDiscrete implements TestingMetric {
                     printPerformance(experimentResults);
                     experimentResults.println();
                     experimentResults.println();
+                    printConfusion(experimentResults);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     System.exit(1);
                 }
             }
 		}
-		return tester.getOverallStats()[3];
+		//Comma.setGold(true);
+		return evaluator.getOverallStats()[3];
 	}
 }

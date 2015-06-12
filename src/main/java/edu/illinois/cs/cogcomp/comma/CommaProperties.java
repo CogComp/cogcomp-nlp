@@ -30,6 +30,10 @@ public class CommaProperties extends ResourceManager {
     public boolean useGold() {
         return getBoolean("USE_GOLD");
     }
+    
+    public boolean useNewLabelSet() {
+        return getBoolean("USE_NEW_LABEL_SET");
+    }
 
     public String getPTBHDir() {
         return getString("PTB_DIR");
@@ -41,6 +45,10 @@ public class CommaProperties extends ResourceManager {
 
     public String getNombankDir() {
         return getString("NOMBANK_DIR");
+    }
+    
+    public String getConstituentParser() {
+        return getString("CONSTITUENT_PARSER");
     }
 
     public boolean lexicaliseNER() {

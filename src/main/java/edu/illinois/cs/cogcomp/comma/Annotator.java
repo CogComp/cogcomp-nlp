@@ -61,9 +61,13 @@ public class Annotator {
         curator.addNamedEntityView(ta, forceUpdate);
         curator.addChunkView(ta, forceUpdate);
         curator.addStanfordParse(ta, forceUpdate);
+        curator.addBerkeleyParse(ta, forceUpdate);
+        curator.addCharniakParse(ta, forceUpdate);
         curator.addPOSView(ta, forceUpdate);
         curator.addSRLVerbView(ta, forceUpdate);
         curator.addSRLNomView(ta, forceUpdate);
+        curator.addStanfordDependencyView(ta, forceUpdate);
+        curator.addEasyFirstDependencyView(ta, forceUpdate);
         // PrepSRL doesn't have a wrapper
         curator.addPredicateArgumentView(ta, forceUpdate, "prep", ViewNames.SRL_PREP);
     }
