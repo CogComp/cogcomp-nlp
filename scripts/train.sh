@@ -1,2 +1,2 @@
 mvn dependency:copy-dependencies
-mvn lbjava:clean lbjava:compile compile
+mvn lbjava:clean; mvn lbjava:compile; mvn compile
