@@ -39,7 +39,7 @@ public class CommaParser implements Parser {
 		while(hasNext()){
 			Comma comma = currTAsCommaIterator.next();
 			String bayraktarPattern = comma.getBayraktarPattern();
-			if(BayraktarPatternLabeler.isBayraktarLabelAvailable(bayraktarPattern))
+			if(BayraktarPatternLabeler.isLabelAvailable(bayraktarPattern))
 				return comma;
 		}
 		return null;

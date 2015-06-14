@@ -34,7 +34,9 @@ public class PrintMetrics extends EvaluateDiscrete implements TestingMetric {
 	
 	@Override
 	public double test(Classifier classifier, Classifier oracle, Parser parser) {
-		//Comma.setGold(false);
+		Comma.setGold(false);
+//		TestDiscrete evaluator = TestDiscrete.testDiscrete(classifier, oracle, parser);
+		
 		iteration++;
 		EvaluateDiscrete evaluator = EvaluateDiscrete.evaluateDiscrete(classifier, oracle, parser);
 		reportAll(evaluator);
@@ -55,7 +57,8 @@ public class PrintMetrics extends EvaluateDiscrete implements TestingMetric {
                 }
             }
 		}
-		//Comma.setGold(true);
-		return evaluator.getOverallStats()[3];
+
+		Comma.setGold(true);
+		return evaluator.getOverallStats()[0];
 	}
 }

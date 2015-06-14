@@ -311,39 +311,41 @@ discrete% POSFeatures(Comma c) <- UnigramLeftPOSFeature && UnigramRightPOSFeatur
 discrete% DependencyFeatures(Comma c) <- RightToLeftDependencies , LeftToRightDependencies
 
 discrete CommaLabel(Comma c) <- { 
-	return c.getRole();
+	return c.getVivekNaveenRole();
 }
 
 /** A learned text classifier; its definition comes from data. */
 discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
 
-	//using POSFeatures, DependencyFeatures, StrippedParseFeatures, StrippedParseTreeFeature, BayraktarLabelFeature//GOlD-AUTO
+	//using POSFeatures, DependencyFeatures, StrippedParseFeatures, StrippedParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//Use for GOlD-AUTO evaluation
 	
-	//using POSFeatures, DependencyFeatures, ParseFeatures, ParseTreeFeature, BayraktarLabelFeature//Actual
+	using  ParseFeatures, ParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature
 	
-	using POSFeatures, DependencyFeatures, ParseFeatures, ParseTreeFeature, BayraktarPatternFeature
+	with SparseNetworkLearner {
+	    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
+	    //p.learningRate = {{.010 -> 0.030 : 0.002}};
+	    //p.thickness = {{2.0 -> 4.6 : 0.2}};
+	    //p.learningRate = 0.024;//AUTO-AUTO
+	    //p.thickness = 3.6;//AUTO-AUTO
+	    //p.learningRate = 0.014;//GOLD-GOLD
+	    //p.thickness = 3.4;//GOLD-GOLD
+	    p.learningRate = 0.024;//GOLD-AUTO
+	    p.thickness = 3.9;//GOLD-AUTO
+	    baseLTU = new SparseAveragedPerceptron(p);
+	}
+	from
+		new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE)
+		//from new CommaReader("data/train_commas.txt", "data/train_commas.ser", CommaReader.Ordering.ORDERED_SENTENCE)
+		//{{ 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190}} rounds
+		//90 rounds//AUTO-AUTO
+		//160 rounds//GOLD-GOLD
+		120 rounds//GOLD-AUTO
+		
+	cval 5 "random"
 
-	 
-  from new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE)
-  //from new CommaReader("data/train_commas.txt", "data/train_commas.ser", CommaReader.Ordering.ORDERED_SENTENCE)
-  125 rounds
-  cval 20 "random"
-
-  with SparseNetworkLearner {
-    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
-    p.learningRate = .01;
-    p.thickness = 3;
-    baseLTU = new SparseAveragedPerceptron(p);
-  }
-
-	//evaluate (new OxfordCommaConstrainedCommaClassifier()).featureValue(c)
-
-	//testingMetric new PrintMetrics(20)
-  
-  //preExtract "false"
-	
-  progressOutput 0
+	testingMetric new PrintMetrics(5)
+	progressOutput 0
 end
 
 

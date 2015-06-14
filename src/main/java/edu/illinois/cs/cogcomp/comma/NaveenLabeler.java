@@ -18,20 +18,24 @@ public class NaveenLabeler {
 		}
 		String id = scanner.nextLine();
 		String line;
-		while(id!=null){
+		while(scanner.hasNextLine()){
 			line = scanner.nextLine();//sentenceText
 			assert line.length()>0;
 			String naveenLabel = scanner.nextLine();
-			naveenLabel = naveenLabel.split("-")[0];
+			naveenLabel = naveenLabel.split("-")[0].split("\\+")[0];
 			otherCommaIdToNaveenLabel.put(id, naveenLabel);
 			while(!scanner.nextLine().isEmpty());
-			while((id=scanner.nextLine()).isEmpty());
+			while(scanner.hasNextLine() && (id=scanner.nextLine()).isEmpty());
 		}
 		scanner.close();
 	}
 	
 	public static String getNaveenLabel(Comma c){
 		String id = c.getCommaID();
+		return otherCommaIdToNaveenLabel.get(id);
+	}
+	
+	public static String getNaveenLabel(String id){
 		return otherCommaIdToNaveenLabel.get(id);
 	}
 }

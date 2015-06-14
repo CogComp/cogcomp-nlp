@@ -40,7 +40,7 @@ public class BayraktarPatternLabeler {
      * @param comma The comma whose Bayraktar label is required
      * @return the Bayraktar-label as specified in the annotation files
      */
-	public static String getBayraktarLabel(Comma comma){
+	public static String getLabel(Comma comma){
 		String bayraktarPattern = comma.getBayraktarPattern();
 		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern);
 	}
@@ -50,16 +50,25 @@ public class BayraktarPatternLabeler {
      * @param comma The bayraktar pattern whose label is required
      * @return the Bayraktar-label as specified in the annotation files
      */
-	public static String getBayraktarLabel(String bayraktarPattern){
+	public static String getLabel(String bayraktarPattern){
 		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern);
 	}
 	
-	public static boolean isBayraktarLabelAvailable(String bayraktarPattern){
-		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)==null;
+	public static boolean isLabelAvailable(String bayraktarPattern){
+		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)!=null;
+	}
+	
+	public static boolean isLabelAvailable(Comma comma){
+		String bayraktarPattern = comma.getBayraktarPattern();
+		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)!=null;
 	}
 	
 	public static boolean isNewLabel(String label){
 		String[] newLabels = {"Complementary", "Interrupter", "Introductory", "Quotation"};
 		return ArrayUtils.contains(newLabels, label);
+	}
+	
+	public static int deleteGetTotalPatternsAnnotated(){
+		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.size();
 	}
 }

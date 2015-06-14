@@ -102,7 +102,7 @@ public class ClassifierComparison {
 		System.out.println();
 	}
 	
-	/*public static void featureEngineering(){
+	public static void featureEngineering(){
 		LocalCommaClassifier learner = new LocalCommaClassifier();
 		//CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.ORDERED_SENTENCE);
 		CommaReader trainCR = new CommaReader("data/train_commas.txt", "data/train_commas.ser", CommaReader.Ordering.ORDERED_SENTENCE);
@@ -121,28 +121,27 @@ public class ClassifierComparison {
 		features.add( __POSFeatures);
 		features.add( __DependencyFeatures);
 		features.add( __BayraktarLabelFeature);
-		Collection<Collection<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 0, 2);
+		Collection<Collection<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 0, 4);
 		System.out.println(ablatedFeatures);
 		
 		
-		FeatureVector[] _ParseFeatureVectors = __ParseFeatures.classify(trainCommas);
+		/*FeatureVector[] _ParseFeatureVectors = __ParseFeatures.classify(trainCommas);
 		FeatureVector[] _ParseTreeFeatureVectors = __ParseTreeFeature.classify(trainCommas);
 		FeatureVector[] _POSFeatureVectors = __POSFeatures.classify(trainCommas);
 		FeatureVector[] _DependencyFeatureVectors = __DependencyFeatures.classify(trainCommas);
 		FeatureVector[] _BayraktarLabelFeatureVectors = __BayraktarLabelFeature.classify(trainCommas);
-		
+		*/
 		
 		for(Collection<Classifier> featureSet: ablatedFeatures){
 			learner.forget();
 			FeatureVector[] featureVectors = new FeatureVector[trainCommas.length];
 			for(int i=0; i< trainCommas.length; i++){
 				FeatureVector result = new FeatureVector();
-				for()
-				result.addFeatures(v);
-				featureVectors[i] = 
+				for(Classifier classifier: featureSet)
+					result.addFeatures(classifier.classify(trainCommas[i]));
+				featureVectors[i] = result;
 			}
-				
-			learner.learn(trainCommas.toArray());
+			learner.learn(featureVectors);
 		}
 	}
 	
@@ -167,5 +166,5 @@ public class ClassifierComparison {
 		subsetsBiggerThanK.addAll(subPowerSetOff);
 		subsetsBiggerThanK.addAll(subPowerSetOn);
 		return subsetsBiggerThanK;
-	}*/
+	}
 }

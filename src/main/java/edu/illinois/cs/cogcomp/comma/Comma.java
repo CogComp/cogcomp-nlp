@@ -130,7 +130,7 @@ public class Comma implements Serializable {
 
     public String getVivekNaveenRole(){
     	String vivekLabel = role;
-    	if(vivekLabel.equals("Other"))
+    	if(vivekLabel.equals("Other") && USE_NEW_LABEL_SET)
     		return NaveenLabeler.getNaveenLabel(this);
     	else
 			return vivekLabel;
@@ -153,11 +153,21 @@ public class Comma implements Serializable {
         return s;
     }
     
-	public String getAnnotatedText() {
+	public String getVivekAnnotatedText() {
 		List<String> tokens = Arrays.asList(sentence);
 		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
 				+ "["
 				+ role
+				+ "] "
+				+ StringUtils.join(
+						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+	}
+	
+	public String getVivekNaveenAnnotatedText() {
+		List<String> tokens = Arrays.asList(sentence);
+		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
+				+ "["
+				+ getVivekNaveenRole()
 				+ "] "
 				+ StringUtils.join(
 						tokens.subList(commaPosition + 1, tokens.size()), ' ');
@@ -493,7 +503,7 @@ public class Comma implements Serializable {
     }
     
     public String getBayraktarLabel() {
-    	String bayraktarLabel = BayraktarPatternLabeler.getBayraktarLabel(this);
+    	String bayraktarLabel = BayraktarPatternLabeler.getLabel(this);
     	if(bayraktarLabel==null)
     		return "Other";
     	else

@@ -17,7 +17,9 @@ import org.apache.commons.collections.map.MultiValueMap;
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.CommaReader;
 import edu.illinois.cs.cogcomp.comma.utils.Prac;
+import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
@@ -61,19 +63,19 @@ public class BayraktarAnnotationGenerationHelper {
      * 
      * @return a MultiValueMap mapping bayraktar-patterns to Commas taht produce the bayraktar-pattern
      */
-    public static MultiValueMap getBayraktarPatternToCommas(){
+    public static MultiValueMap getBayraktarPatternToPTBCommas(){
     	List<TextAnnotation> tas = getPTBTAList();
     	List<Comma> commas = new ArrayList<Comma>();
     	for(TextAnnotation ta : tas){
     		List<Comma> commasInTa = CommaLabeler.getCommas(ta); 
     		commas.addAll(commasInTa);
     	}
-    	MultiValueMap bayraktarPatternToTA = new MultiValueMap();
+    	MultiValueMap bayraktarPatternToCommas = new MultiValueMap();
     	for(Comma comma : commas){
     		String bayraktarPattern = comma.getBayraktarPattern();
-    		bayraktarPatternToTA.put(bayraktarPattern, comma);
+    		bayraktarPatternToCommas.put(bayraktarPattern, comma);
     	}
-    	return bayraktarPatternToTA;
+    	return bayraktarPatternToCommas;
     }
 
     
@@ -86,9 +88,9 @@ public class BayraktarAnnotationGenerationHelper {
      */
     public static boolean present(String bayraktarPattern, List<Comma> exampleCommas){
     	String data = exampleCommas.size() + "\t" + bayraktarPattern + "\n"
-    			+ exampleCommas.get(0).getAnnotatedText() + "\n"
-    			+ exampleCommas.get(1).getAnnotatedText() + "\n"
-    			+ exampleCommas.get(2).getAnnotatedText() + "\n"
+    			+ exampleCommas.get(0).getVivekAnnotatedText() + "\n"
+    			+ exampleCommas.get(1).getVivekAnnotatedText() + "\n"
+    			+ exampleCommas.get(2).getVivekAnnotatedText() + "\n"
     			+ Prac.pennString(((TreeView)exampleCommas.get(0).getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0));
     	System.out.println(data);
 
@@ -110,7 +112,7 @@ public class BayraktarAnnotationGenerationHelper {
     		System.out.println("COMMAND IS ---------------------------- " + cmd);
     		switch (cmd) {
     		case 0:
-    			System.out.println(exampleCommas.get(currSentence++).getAnnotatedText());
+    			System.out.println(exampleCommas.get(currSentence++).getVivekAnnotatedText());
     			break;
     		case 1:
     			System.out.println(Prac.pennString(((TreeView)exampleCommas.get(currParse++).getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0)));
@@ -138,11 +140,41 @@ public class BayraktarAnnotationGenerationHelper {
     	
     }
     
+    
+    
+    public static void counterCleaner(List<Entry<String, ArrayList<Comma>>> sortedPatterns){
+    	int annotatedPatternsCounter = 0;
+    	int commaCoverageCounter=0;
+    	int totalCommas = 0;
+    	for(Entry<String, ArrayList<Comma>> entry : sortedPatterns){
+    		String pattern = entry.getKey();
+    		if(BayraktarPatternLabeler.isLabelAvailable(pattern)){
+    			commaCoverageCounter+=entry.getValue().size();
+    			annotatedPatternsCounter++;
+    			/*try {
+    				String label = BayraktarPatternLabeler.getLabel(pattern);
+	    			PrintWriter patternFile = new PrintWriter(new BufferedWriter(new FileWriter("data/Valid-Bayraktar-SyntaxToLabel/" + label, true)));
+					patternFile.println(pattern);
+					patternFile.close();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}*/
+    		}
+    		totalCommas+=entry.getValue().size();
+    	}
+    	System.out.println("# patterns in PTB = " + sortedPatterns.size());
+    	System.out.println("# patterns that have been annoted = " + BayraktarPatternLabeler.deleteGetTotalPatternsAnnotated());
+    	System.out.println("# patterns in PTB that have annotations = " + annotatedPatternsCounter);
+    	System.out.println("# commas in PTB = " + totalCommas);
+    	System.out.println("% of PTB commas that have annotaitons = " + commaCoverageCounter/(double)totalCommas);
+    }
+    
     public static void main(String[] args){
-    	MultiValueMap syntaxPatternToTA = getBayraktarPatternToCommas();
+    	MultiValueMap syntaxPatternToCommas = getBayraktarPatternToPTBCommas();
     	@SuppressWarnings("unchecked")
-		List<Entry<String, ArrayList<Comma>>> sortedPatterns = new ArrayList<Entry<String,ArrayList<Comma>>>(syntaxPatternToTA.entrySet());
-    	Collections.sort(sortedPatterns, new Comparator<Entry<String, ArrayList<Comma>>>(){
+		List<Entry<String, ArrayList<Comma>>> sortedPatterns = new ArrayList<Entry<String,ArrayList<Comma>>>(syntaxPatternToCommas.entrySet());
+    	counterCleaner(sortedPatterns);
+    	/*Collections.sort(sortedPatterns, new Comparator<Entry<String, ArrayList<Comma>>>(){
 			@Override
 			public int compare(Entry<String, ArrayList<Comma>> o1,
 					Entry<String, ArrayList<Comma>> o2) {
@@ -151,13 +183,13 @@ public class BayraktarAnnotationGenerationHelper {
     	});
     	
     	
-    	int totalCount = syntaxPatternToTA.totalSize();
+    	int totalCount = syntaxPatternToCommas.totalSize();
     	int annotatedPatternFrequency = 0;
     	int annotatedFrequency = 0;
     	for(Entry<String, ArrayList<Comma>> entry : sortedPatterns){
     		int patternFrequency = entry.getValue().size();
     		
-    		boolean annottaionFound = BayraktarPatternLabeler.isBayraktarLabelAvailable(entry.getKey()); 
+    		boolean annottaionFound = BayraktarPatternLabeler.isLabelAvailable(entry.getKey()); 
     		if(true == annottaionFound || true==present(entry.getKey(), entry.getValue())){
     			annotatedPatternFrequency += patternFrequency;
     			annotatedFrequency++;	
@@ -167,6 +199,6 @@ public class BayraktarAnnotationGenerationHelper {
     	
     	
     	System.out.println("total patterns annotated = " + annotatedFrequency);
-    	System.out.println("total occurances annotated = " + annotatedPatternFrequency/(double)totalCount);
+    	System.out.println("total occurances annotated = " + annotatedPatternFrequency/(double)totalCount);*/
 	}
 }
