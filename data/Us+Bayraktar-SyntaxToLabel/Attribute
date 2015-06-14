@@ -1,0 +1,60 @@
+NP --> NP , VP ,
+NP --> NP , VP
+NP --> NP , ADJP ,
+#moved to complemetary
+#example sentence: He has a point he wants to make , and he makes it , with a great deal of force .
+#VP --> *** NP , PP
+NP --> NP , ADJP
+NP --> NP , PP ,
+S --> S , VP
+NP --> *** , PP
+NP --> *** PP , PP
+NP --> NP , PP
+NP --> NP ADJP , VP
+NP --> *** , ADJP ,
+NP --> *** PP , PP ,
+NP --> NP , VP , SBAR
+NP --> NP , ADVP ,
+NP --> NP , SBAR
+NP --> NP , SBAR ,
+NP --> NP , SBARQ ,
+NP --> NP , ADVP
+NP --> *** , SBAR
+NP --> “ *** , ”
+NP --> *** , SBAR ,
+NP --> NP , S
+NP --> NP , S ,
+NP --> *** , SBARQ ,
+S --> NP , *** VP
+NP --> NP , SBARQ
+NP --> *** “ *** , ”
+SINV --> VP NP , S
+VP --> VP , NP
+
+NP --> NP PP , SBAR ,
+
+NP --> NP PP , SBAR
+
+NP --> NP , ADVP NP
+
+#bayraktar errors that have been fixed
+S --> NP , S , VP .
+
+#doubtful fix
+#moved from interrupter
+#example sentence: TextAnnotation: First Commonwealth Securities Corp. , of New Orleans , and its president , Kenneth J. Canepa , also of New Orleans , consented to a $ 10,000 fine .
+NP --> *** , PP ,
+
+#doubtful fix
+#moved from complementary
+#example sentence: Timex had requested duty-free treatment for many types of watches ,[Attribute] covered by 58 different U.S. tariff classifications .
+NP --> NP PP , VP
+
+#moved from coplementary
+VP --> *** NP PP , NP
+
+#moved from list
+ADJP --> *** , ***
+
+#moved from substitute
+NP --> NP , *** NP ,

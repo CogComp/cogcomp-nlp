@@ -1,0 +1,73 @@
+NP --> *** , ***
+NP --> *** , *** ,
+NP --> *** , *** and ***
+NP --> *** , *** , ***
+NP --> *** , *** , *** and ***
+NP --> NP , NP and NP
+NP --> NP , NP , NP and NP
+NP --> NP , NP , and NP
+VP --> VP , and VP
+NP --> NP , and NP
+VP --> VP , *** VP
+NP --> NP , NP , NP , NP and NP
+NP --> NP , NP , NP , and NP
+NP --> NP , NP , NP , NP , NP and NP
+NP --> NP , NP , NP
+VP --> VP , VP and VP
+NP --> NP , and NP ,
+NP --> NP , NP , NP , NP , NP , NP and NP
+PP --> PP , and PP
+NP --> NP , NP , NP , NP , NP , NP , and NP
+NP --> NP , NP , NP , NP
+VP --> VP , VP , and VP
+VP --> VP , VP
+PP --> PP , PP
+NP --> NP , NP or NP
+NP --> NP , NP , and NP ,
+NP --> NP , NP , NP , NP , and NP
+NP --> NP , NP , NP , NP , NP , NP and NP ,
+X --> X , and X
+VP --> VP , VP , VP and VP
+X --> X , *** X
+VP --> VP , VP , VP , VP , and VP
+S --> NP VP , S
+S --> NP VP , SBAR
+S --> S , SINV .
+SBAR --> SBAR , and SBAR
+X --> VP , and X
+S --> *** S , S
+X --> X , *** VP
+S --> S , S
+S --> S , and S
+S --> S , *** S
+S --> S , S .
+S --> S , *** S .
+S --> S , and S .
+S --> S , SINV
+#moved to complementary
+#S --> S , NP VP .
+S --> S , S , and S
+S --> `` S , and S , ''
+SBAR --> SBAR , *** SBAR
+S --> `` S , *** S , ''
+S --> S , S and S
+#moved to attribute
+#ADJP --> *** , ***
+NP --> *** , *** PP
+ADJP --> *** , *** , ***
+ADJP --> ADJP , ADJP
+
+NP --> NP , CONJP NP
+NX --> NX , NX and NX
+
+NP --> *** , *** & ***
+
+NP --> *** , ADJP ***
+
+#moved from Interrupter
+#example sentence: Peter Marcus , an analyst with PaineWebber Inc. , said that a downturn in the appliance industry , coupled with sluggish automotive sales , hurt USX results .
+NP --> NP PP , VP ,
+
+#moved from substitute
+#takes the form "x, not y"
+NP --> NP , *** NP
