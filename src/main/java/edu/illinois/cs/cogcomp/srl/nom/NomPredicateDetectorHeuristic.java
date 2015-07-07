@@ -80,7 +80,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 				opt = testTokenVariations(lemma);
 
-				if (!opt.isPresent()) {
+				if (!opt.isPresent() && !lemma.matches("-*")) {
 					opt = testWithDelim(lemma, '-');
 				}
 
