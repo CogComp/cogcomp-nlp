@@ -210,7 +210,9 @@ public class NewStanfordToForest {
      * @param parse
      * @param offset    the index of the last token of the previous sentence. Needed to adjust dependency indexes to node list positions.
      * @param input
-     * @return
+     * @return  a tree corresponding to a single sentence. Tree nodes will have correct absolute char offsets wrt
+     *            the original text; but dependency node offsets are relative to the *sentence* (position in the list
+     *            of nodes just for this sentence, start index of zero).
      * @throws TException
      */
     private static synchronized List<Tree> parseToDependencyTree(

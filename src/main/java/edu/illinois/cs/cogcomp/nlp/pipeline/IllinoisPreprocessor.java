@@ -160,21 +160,22 @@ public class IllinoisPreprocessor extends RecordGenerator
         	// Add options to avoid splitting and tokenization errors
         	// XXX Need to make sure sentence is given to parser with tokenization
             Properties props = new Properties();
-            props.put("annotators", "tokenize, ssplit, pos, parse");
-        	props.put("tokenize.whitespace", "true");
-        	props.put("ssplit.eolonly", "true");
-//            props.put( "annotators", "pos, parse") ;
-//            props.put("parse.originalDependencies", true);
-//            posAnnotator = new POSTaggerAnnotator("pos", props);
-//            parseAnnotator = new ParserAnnotator("parse", props);
-            stanfordPipeline = new StanfordCoreNLP(props);
+//            props.put("annotators", "tokenize, ssplit, pos, parse");
+//        	props.put("tokenize.whitespace", "true");
+//        	props.put("ssplit.eolonly", "true");
+            props.put( "annotators", "pos, parse") ;
+            props.put("parse.originalDependencies", true);
+            posAnnotator = new POSTaggerAnnotator("pos", props);
+            parseAnnotator = new ParserAnnotator("parse", props);
+//            stanfordPipeline = new StanfordCoreNLP(props);
         }
         	
     }
     
     /**
      * generates a TextAnnotation from the input raw text, setting the corpus and text ID fields in 
-     *   the TextAnnotation with the specified values.
+     *   the TextAnnotation with the specified values.  Explicitly creates views not covered in the Edison
+     *   CuratorDataStructureInterface Record -> TextAnnotation conversion method.
      *   
      * @param corpusId_ The corpus ID
      * @param textId_ The text ID
@@ -186,11 +187,11 @@ public class IllinoisPreprocessor extends RecordGenerator
      */
     public TextAnnotation processTextToTextAnnotation( String corpusId_, String textId_, String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
     {
-    	Record rec = processText( rawText_, isWhitespaced_ );
+    	Record rec = processText(rawText_, isWhitespaced_);
     	TextAnnotation ta = null;
 
-
-        ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId_, textId_, rec );
+//        boolean isAbsolute = false;
+        ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId_, textId_, rec ); //, isAbsolute );
 
         if ( useLemmatizer )
         {
@@ -209,18 +210,20 @@ public class IllinoisPreprocessor extends RecordGenerator
                 ta.addView(AdditionalViewNames.nerExt, newView );
             }
         }
-        if ( useStanfordParse )
-        {
-            try {
-                TreeView depParse = HeadFinderDependencyViewGenerator.getDependencyTree(ta, ViewNames.PARSE_STANFORD, ViewNames.DEPENDENCY_STANFORD);
-                ta.addView(ViewNames.DEPENDENCY_STANFORD, depParse);
-            }
-            catch( Exception e )
-            {
-                e.printStackTrace();
-                logger.error( "couldn't add view '" + ViewNames.DEPENDENCY_STANFORD  + "': " + e.getMessage() );
-            }
-        }
+
+// MS: not needed as we explicitly generate stanford dependency parse in this version of pipeline
+//        if ( useStanfordParse )
+//        {
+//            try {
+//                TreeView depParse = HeadFinderDependencyViewGenerator.getDependencyTree(ta, ViewNames.PARSE_STANFORD, ViewNames.DEPENDENCY_STANFORD);
+//                ta.addView(ViewNames.DEPENDENCY_STANFORD, depParse);
+//            }
+//            catch( Exception e )
+//            {
+//                e.printStackTrace();
+//                logger.error( "couldn't add view '" + ViewNames.DEPENDENCY_STANFORD  + "': " + e.getMessage() );
+//            }
+//        }
     	return ta;
     }
     
@@ -240,8 +243,9 @@ public class IllinoisPreprocessor extends RecordGenerator
      */
 	public TextAnnotation processTextAnnotation(TextAnnotation ta, boolean isWhitespaced_)
 			throws AnnotationFailedException, TException {
-		Record rec = processText( ta.getText(), isWhitespaced_ );
-		TextAnnotation taTemp = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( "", "", rec );
+		Record rec = processText(ta.getText(), isWhitespaced_);
+        boolean isParseIndexingAbsolute = false; //whether parse/dependency Tree objects created by Edison from Thrift Trees use absolute indexes or sentence-local indexes
+		TextAnnotation taTemp = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "", rec ); //, isParseIndexingAbsolute);
 		// Now taTemp should have only the new views created by the Preprocessor
 		for (String view : taTemp.getAvailableViews()) {
 			ta.addView(view, taTemp.getView(view));
@@ -295,7 +299,6 @@ public class IllinoisPreprocessor extends RecordGenerator
             addView( record, AdditionalViewNames.nerExt );
 
 
-        // XXX We're assuming here that our tokenizer and the Stanford one will agree
         if ( useStanfordParse )
             addView( record, CuratorViewNames.stanfordParse );
 
@@ -311,9 +314,15 @@ public class IllinoisPreprocessor extends RecordGenerator
         } else if (CuratorViewNames.chunk.equals(viewName) && null != chunker ) {
             Labeling chunkerResult = chunker.labelRecord(record);
             labelViews.put(CuratorViewNames.chunk, chunkerResult);
-        } else if (CuratorViewNames.stanfordParse.equals(viewName) && null != stanfordPipeline ) {
-            Forest parse = StanfordToForest.convert( stanfordPipeline,  record);
-            parseViews.put(CuratorViewNames.stanfordParse, parse);
+        } else if (CuratorViewNames.stanfordParse.equals(viewName) &&
+                (null != stanfordPipeline || ( null != this.posAnnotator && null != this.parseAnnotator ) )
+                )
+        {
+//            Forest parse = StanfordToForest.convert( stanfordPipeline,  record);
+//            parseViews.put(CuratorViewNames.stanfordParse, parse);
+            Pair<Forest, Forest> parses = NewStanfordToForest.convert(this.posAnnotator, this.parseAnnotator, record);
+            parseViews.put(CuratorViewNames.stanfordParse, parses.first);
+            parseViews.put(CuratorViewNames.stanfordDep, parses.second );
         }
         else if (AdditionalViewNames.nerExt.equals( viewName ) && null != nerExt )
         {

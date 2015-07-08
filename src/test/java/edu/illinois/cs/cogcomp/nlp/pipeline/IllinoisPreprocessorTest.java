@@ -1,9 +1,12 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
+import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
+import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.Forest;
@@ -14,6 +17,7 @@ import edu.illinois.cs.cogcomp.util.CuratorDataUtils;
 import org.apache.thrift.TException;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,23 +31,33 @@ public class IllinoisPreprocessorTest
 
 	private static final String CONFIG = "src/test/resources/testConfig.txt";
 
-	private IllinoisPreprocessor prep;
+	private static IllinoisPreprocessor prep;
+
+    @BeforeClass
+    public static void setUpBeforeClass()
+    {
+
+        ResourceManager rm = null;
+        try
+        {
+            rm = new ResourceManager( CONFIG );
+        }
+        catch ( IOException e )
+        {
+            e.printStackTrace();
+            System.exit( -1 );
+        }
+        try {
+            prep = new IllinoisPreprocessor( rm );
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit( -1 );
+        }
+    }
 
 	@Before
 	public void setUp() throws Exception
-	{
-		ResourceManager rm = null;
-		try
-		{
-			rm = new ResourceManager( CONFIG );
-		}
-		catch ( IOException e )
-		{
-			e.printStackTrace();
-			System.exit( -1 );
-		}
-		prep = new IllinoisPreprocessor( rm );
-	}
+	{}
 
 	@After
 	public void tearDown() throws Exception
@@ -84,104 +98,80 @@ public class IllinoisPreprocessorTest
 		boolean isNerExtOk = false;
 		boolean isParseOk = false;
         boolean isDepOk = false;
-//		Set< String > views = rec.getLabelViews().keySet();
+        Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
+        Labeling toks = rec.getLabelViews().get(CuratorViewNames.tokens);
 
-//		if ( views.contains( CuratorViewNames.pos ) && views.contains( CuratorViewNames.tokens ) )
-//		{
-			Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
-			Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
+        List< Span > tokens = toks.getLabels();
+        List< Span >  posTags = lab.getLabels();
 
-			List< Span > tokens = toks.getLabels();
-			List< Span >  posTags = lab.getLabels();
+        if ( ( tokens.size() != posTags.size() ) || tokens.size() != 21 )
+        {
+            System.err.println( "ERROR: tokens, pos have different/incorrect sizes." );
+        }
+        else
+            isPosOk = true;
 
-			if ( ( tokens.size() != posTags.size() ) || tokens.size() != 21 )
-			{
-				System.err.println( "ERROR: tokens, pos have different/incorrect sizes." );
-			}
-			else 
-				isPosOk = true;
+        assertTrue(isPosOk);
 
-			assertTrue( isPosOk );
+        CuratorDataUtils.printLabeling(System.out, lab, text);
+        System.out.println();
+        Labeling chunk = rec.getLabelViews().get(CuratorViewNames.chunk);
+        List< Span > chunkTags = chunk.getLabels();
 
-			CuratorDataUtils.printLabeling( System.out, lab, text );
-			System.out.println();
-//		}   
+        if ( chunkTags.size() > 0 )
+            isChunkOk = true;
 
-//		if ( views.contains( CuratorViewNames.chunk ) )
-//		{
-			Labeling chunk = rec.getLabelViews().get( CuratorViewNames.chunk );
-			List< Span > chunkTags = chunk.getLabels();
+        assertTrue(isChunkOk);
 
-			if ( chunkTags.size() > 0 )
-				isChunkOk = true;
-
-			assertTrue( isChunkOk );
-
-			CuratorDataUtils.printLabeling( System.out, chunk, text );
-			System.out.println();
-//		}
-//
-//		if ( views.contains( AdditionalViewNames.ccgLemma ) && views.contains( CuratorViewNames.tokens ) )
-//		{
-//			Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
-			Labeling lemma = rec.getLabelViews().get( CuratorViewNames.lemma );
-
-//			List< Span > tokens = toks.getLabels();
-
-			int numSpans = lemma.getLabelsSize();
-
-			if ( numSpans == tokens.size() )
-				isLemmaOk = true;
-
-			assertTrue( isLemmaOk );
-
-			System.out.println( "found " + numSpans + " lemma nodes, "  + tokens.size() + " tokens." );
-
-			System.out.println( CuratorViewNames.lemma + " VIEW: " );
-			CuratorDataUtils.printLabeling( System.out, lemma, text );
-
-//		}  
-
-//		if ( views.contains( CuratorViewNames.ner ) )
-//		{
-			Labeling ner = rec.getLabelViews().get( CuratorViewNames.ner );
-
-			List< Span > nerTags = ner.getLabels();
-
-			if ( nerTags.size() > 0 )
-				isNerOk = true;
-
-			assertTrue( isNerOk );
-
-			CuratorDataUtils.printLabeling( System.out, ner, text );
-			System.out.println();
+        CuratorDataUtils.printLabeling(System.out, chunk, text);
+        System.out.println();
+        Labeling lemma = rec.getLabelViews().get( CuratorViewNames.lemma );
 
 
-		Labeling nerExt = rec.getLabelViews().get( AdditionalViewNames.nerExt );
+        int numSpans = lemma.getLabelsSize();
+
+        if ( numSpans == tokens.size() )
+            isLemmaOk = true;
+
+        assertTrue(isLemmaOk);
+
+        System.out.println( "found " + numSpans + " lemma nodes, "  + tokens.size() + " tokens." );
+
+        System.out.println(CuratorViewNames.lemma + " VIEW: ");
+        CuratorDataUtils.printLabeling( System.out, lemma, text );
+
+        Labeling ner = rec.getLabelViews().get(CuratorViewNames.ner);
+
+        List< Span > nerTags = ner.getLabels();
+
+        if ( nerTags.size() > 0 )
+            isNerOk = true;
+
+        assertTrue(isNerOk);
+
+        CuratorDataUtils.printLabeling(System.out, ner, text);
+        System.out.println();
+
+
+        Labeling nerExt = rec.getLabelViews().get(AdditionalViewNames.nerExt);
 		List< Span > nerExtTags = nerExt.getLabels();
 
 		if ( nerExtTags.size() > 0 )
 			isNerExtOk = true;
 
-		assertTrue( isNerExtOk );
+		assertTrue(isNerExtOk);
 
-		CuratorDataUtils.printLabeling( System.out, ner, text );
+		CuratorDataUtils.printLabeling(System.out, ner, text);
 		System.out.println();
 
 
-//		}
-//		
-//		if ( views.contains( CuratorViewNames.stanfordParse ) )
-//		{
-			Forest parseView = rec.getParseViews().get( CuratorViewNames.stanfordParse );
-            Forest depView = rec.getParseViews().get( CuratorViewNames.stanfordDep );
-			Labeling sentView = rec.getLabelViews().get( CuratorViewNames.sentences );
-			
-			// Check that we have as many trees as sentences
-			isParseOk = parseView.getTreesSize() == sentView.getLabelsSize();
-//			isDepOk = depView.getTreesSize() == sentView.getLabelsSize();
-			assertTrue( isParseOk );
-//		}
+        Forest parseView = rec.getParseViews().get( CuratorViewNames.stanfordParse );
+        Forest depView = rec.getParseViews().get( CuratorViewNames.stanfordDep );
+        Labeling sentView = rec.getLabelViews().get( CuratorViewNames.sentences );
+
+        // Check that we have as many trees as sentences
+        isParseOk = parseView.getTreesSize() == sentView.getLabelsSize();
+        assertTrue( isParseOk );
 
 		TextAnnotation ta = null;
 
@@ -201,7 +191,17 @@ public class IllinoisPreprocessorTest
 		{
 			System.out.println( "word: " + ta.getToken( c.getStartSpan() ) + ", lemma: " + c.getLabel() );
 		}
-	}
+
+        TreeView depTaView = (TreeView ) ta.getView( ViewNames.DEPENDENCY_STANFORD );
+
+        for ( Constituent t : depTaView.getConstituents() )
+        {
+            System.out.println( "Dependency constituent '" + t.getLabel() +"' for string '" + t.getSurfaceString() + "':" );
+            System.out.println( "Token offsets: " + t.getStartSpan() + ", " + t.getEndSpan() );
+            System.out.println( "Char offsets: " + t.getStartCharOffset() + ", " + t.getEndCharOffset() +
+                    " (corresponds to string '" + ta.getText().substring( t.getStartCharOffset() , t.getEndCharOffset() ) + "')" );
+        }
+ 	}
 
 
 
