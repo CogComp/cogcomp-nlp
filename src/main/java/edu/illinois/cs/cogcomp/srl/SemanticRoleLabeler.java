@@ -139,7 +139,7 @@ public class SemanticRoleLabeler {
 
 		if (predicates.isEmpty()) return null;
 
-		ISRLInference inference = new SRLLagrangeInference(manager, ta, predicates, true, 100);
+		ISRLInference inference = new SRLLagrangeInference(manager, ta, predicates, true, properties.getMaxInferenceRounds());
 
 		return inference.getOutputView();
 	}
