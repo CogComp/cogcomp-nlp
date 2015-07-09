@@ -201,6 +201,27 @@ public class IllinoisPreprocessorTest
             System.out.println( "Char offsets: " + t.getStartCharOffset() + ", " + t.getEndCharOffset() +
                     " (corresponds to string '" + ta.getText().substring( t.getStartCharOffset() , t.getEndCharOffset() ) + "')" );
         }
+
+        // check that whitespacing behavior is non-threatening, i.e. doesn't result in immediate exceptions
+
+        try {
+            boolean isTokenized = true;
+            TextAnnotation newTa = prep.createTextAnnotation( "test", "test", ta.getTokenizedText(), isTokenized );
+            newTa = prep.processTextAnnotation( newTa, true );
+        } catch (AnnotationFailedException e) {
+            e.printStackTrace();
+            fail( "Exception creating TextAnnotation for text '" + text + "'." );
+        } catch (TException e) {
+            e.printStackTrace();
+            fail( "Exception creating TextAnnotation for text '" + text + "'." );
+        }
+        List< Constituent > dupLemmaConstituents = ta.getView( CuratorViewNames.lemma ).getConstituents();
+
+        for ( Constituent c: dupLemmaConstituents )
+        {
+            System.out.println( "word: " + ta.getToken( c.getStartSpan() ) + ", lemma: " + c.getLabel() );
+        }
+
  	}
 
 

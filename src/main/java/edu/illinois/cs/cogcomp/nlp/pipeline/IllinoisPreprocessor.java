@@ -236,15 +236,22 @@ public class IllinoisPreprocessor extends RecordGenerator
      *
      * TODO: check that the newly created views point to the correct TextAnnotation object, if necessary!
      * @param ta The TextAnnotation to be labeled
-     * @param isWhitespaced_ Whether the ta is tokenized
+     * @param processTextAsWhitespaced_ if true, call pipeline elements with forced tokenization according to
+     *                                  the TextAnnotation argument's existing tokenization
      * @return The original TextAnnotation with the new views from the TextPrepocessor
      * @throws AnnotationFailedException
      * @throws TException
      */
-	public TextAnnotation processTextAnnotation(TextAnnotation ta, boolean isWhitespaced_)
+	public TextAnnotation processTextAnnotation(TextAnnotation ta, boolean processTextAsWhitespaced_)
 			throws AnnotationFailedException, TException {
-		Record rec = processText(ta.getText(), isWhitespaced_);
-        boolean isParseIndexingAbsolute = false; //whether parse/dependency Tree objects created by Edison from Thrift Trees use absolute indexes or sentence-local indexes
+
+        String text = ta.getText();
+        if (processTextAsWhitespaced_ )
+            text = ta.getTokenizedText();
+		Record rec = processText(text, processTextAsWhitespaced_);
+
+
+//        boolean isParseIndexingAbsolute = false; //whether parse/dependency Tree objects created by Edison from Thrift Trees use absolute indexes or sentence-local indexes
 		TextAnnotation taTemp = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "", rec ); //, isParseIndexingAbsolute);
 		// Now taTemp should have only the new views created by the Preprocessor
 		for (String view : taTemp.getAvailableViews()) {
