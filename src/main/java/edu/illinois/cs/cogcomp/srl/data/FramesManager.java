@@ -139,6 +139,8 @@ public class FramesManager {
 
 			String sense = roleSet.getAttribute("id");
 
+            String senseName = roleSet.getAttribute("name");
+
 			// WTF frame makers?
 			if (sense.equals("lionise.01"))
 				sense = "lionize.01";
@@ -158,7 +160,7 @@ public class FramesManager {
 
 			sense = sense.replaceAll(lemma + ".", "");
 
-			fData.addSense(sense, verbClass);
+			fData.addSense(sense, senseName, verbClass);
 
 			NodeList roles = roleSet.getElementsByTagName("role");
 

@@ -12,6 +12,7 @@ public class FrameData {
 	private static class SenseFrameData {
 		Map<String, ArgumentData> argDescription = new HashMap<String, ArgumentData>();
 		String verbClass = "UNKNOWN";
+		String senseName;
 		List<Example> examples = new ArrayList<Example>();
 	}
 
@@ -48,9 +49,10 @@ public class FrameData {
 		return lemma;
 	}
 
-	public void addSense(String sense, String verbClass) {
+	public void addSense(String sense, String senseName, String verbClass) {
 		this.senseFrameData.put(sense, new SenseFrameData());
 		this.senseFrameData.get(sense).verbClass = verbClass;
+		this.senseFrameData.get(sense).senseName = senseName;
 	}
 
 	public Set<String> getSenses() {
@@ -92,4 +94,10 @@ public class FrameData {
 			l.addAll(this.getArgsForSense(s));
 		return l;
 	}
+
+    public String getSenseName(String sense) {
+        assert this.senseFrameData.containsKey(sense) : sense
+                + " missing for predicate lemma " + this.lemma;
+        return this.senseFrameData.get(sense).senseName;
+    }
 }
