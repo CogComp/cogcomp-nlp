@@ -19,7 +19,7 @@ public class SRLProperties {
 	private static SRLProperties theInstance;
 	private PropertiesConfiguration config;
 	private final String curatorHost;
-	private final int curatorPort;
+	private final int curatorPort, maxInferenceRounds;
 	private final String wordNetFile;
 
 	private SRLProperties(URL url) throws ConfigurationException {
@@ -34,6 +34,8 @@ public class SRLProperties {
 				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
 			WordNetManager.loadConfigAsClasspathResource(true);
 		}
+
+        maxInferenceRounds = config.getInt("MaxInferenceRounds");
 	}
 
 	public static void initialize(String configFile) throws Exception {
@@ -164,4 +166,8 @@ public class SRLProperties {
 	public int getCuratorPort() {
 		return curatorPort;
 	}
+
+    public int getMaxInferenceRounds() {
+        return maxInferenceRounds;
+    }
 }
