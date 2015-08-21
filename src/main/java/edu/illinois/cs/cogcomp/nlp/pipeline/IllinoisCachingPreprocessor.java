@@ -83,7 +83,7 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      */
     private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, Map< String, CachingAnnotator > extraViewGenerators ) throws CachingCuratorException
     {
-        initialize(getRequestedViews(illinoisPreprocessor),
+        super(getRequestedViews(illinoisPreprocessor),
                 rm.getBoolean(THROW_EXCEPTION_IF_NOT_CACHED),
                 rm.getBoolean(RESPECT_TOKENIZATION),
                 extraViewGenerators
@@ -136,7 +136,7 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      * @throws CachingCuratorException
      */
     private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, boolean throwExceptionIfNotCached, boolean respectTokenization, Map<String, CachingAnnotator> extraViewProviders, IllinoisPreprocessor preprocessor ) throws CachingCuratorException {
-        initialize(requestedViews, throwExceptionIfNotCached, respectTokenization, extraViewProviders);
+        super(requestedViews, throwExceptionIfNotCached, respectTokenization, extraViewProviders);
         initializeCurrentStatus();
     }
 
