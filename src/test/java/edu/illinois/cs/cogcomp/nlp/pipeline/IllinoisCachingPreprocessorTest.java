@@ -37,7 +37,7 @@ public class IllinoisCachingPreprocessorTest
             e.printStackTrace();
             System.exit( -1 );
         }
-        prep = IllinoisCachingPreprocessor.getInstance( rm, null );
+        prep = IllinoisCachingPreprocessor.getInstance( CONFIG, null );
 
         IllinoisCachingPreprocessor.openCache();
 

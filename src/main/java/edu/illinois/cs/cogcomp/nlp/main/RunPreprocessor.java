@@ -1,9 +1,13 @@
 package edu.illinois.cs.cogcomp.nlp.main;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import org.apache.thrift.TException;
 
@@ -22,12 +26,13 @@ public class RunPreprocessor
 
     public RunPreprocessor( String config ) throws Exception {
         ResourceManager rm = new ResourceManager( config );
-        pipeline = new IllinoisPreprocessor( rm );
+        TextAnnotationBuilderInterface  taBuilder = new TextAnnotationBuilder( new IllinoisTokenizer() );
+        pipeline = new IllinoisPreprocessor( rm, taBuilder );
     }
 
-	public TextAnnotation runPreprocessorOnFile( String fileName, String corpusId, String textId, boolean isWhitespaced ) throws FileNotFoundException, TException, AnnotationFailedException {
+	public TextAnnotation runPreprocessorOnFile( String fileName, String corpusId, String textId ) throws FileNotFoundException, AnnotatorException {
         String text = LineIO.slurp( fileName );
-        TextAnnotation ta = pipeline.processTextToTextAnnotation( corpusId, textId, text, isWhitespaced );
+        TextAnnotation ta = pipeline.processTextToTextAnnotation( corpusId, textId, text );
         return ta;
 	}
 
@@ -53,13 +58,11 @@ public class RunPreprocessor
         }
         try {
 
-            TextAnnotation ta = rp.runPreprocessorOnFile(inFile, corpusId, textId,  false);
+            TextAnnotation ta = rp.runPreprocessorOnFile(inFile, corpusId, textId);
             System.out.println( ta.toString() );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        } catch (TException e) {
-            e.printStackTrace();
-        } catch (AnnotationFailedException e) {
+        } catch (AnnotatorException e) {
             e.printStackTrace();
         }
 

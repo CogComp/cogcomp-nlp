@@ -2,22 +2,15 @@ package edu.illinois.cs.cogcomp.annotation.handler;
 
 import java.util.*;
 
-import edu.illinois.cs.cogcomp.nlp.curator.Pair;
-import edu.stanford.nlp.ling.*;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.trees.*;
 import edu.stanford.nlp.util.ArrayCoreMap;
-import org.apache.thrift.TException;
-
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
-import edu.illinois.cs.cogcomp.thrift.base.Forest;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Node;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.base.Tree;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
@@ -45,19 +38,10 @@ public class NewStanfordToForest {
      * @param
      * @param record
      * @return a pair of Forests, the first being the constituency parse and the second the dependency parse
-     * @throws TException
+     * @throws AnnotatorException
      */
-	public static Pair< Forest, Forest > convert(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, Record record) throws TException {
-		Forest parseForest = new Forest();
-        Forest depForest = new Forest();
-		parseForest.setSource("stanfordparser");
-        depForest.setSource( "stanfordparser" );
+	public static TextAnnotation annotate(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, TextAnnotation record) throws AnnotatorException {
 
-		Labeling sentenceLabeling = record.getLabelViews().get(CuratorViewNames.sentences);
-		Labeling tokenLabeling = record.getLabelViews().get(CuratorViewNames.tokens);
-//		convertRawToTokenized(tokenLabeling, sentenceLabeling);
-//		assert tokenizedSentenceStarts.size() == sentenceLabeling.getLabels().size();
-//
 		// The (tokenized) sentence offset in case we have more than one sentences in the record
         List< CoreMap > sentences = buildStanfordSentences( record );
         Annotation document = new Annotation( sentences );
@@ -101,16 +85,16 @@ public class NewStanfordToForest {
 		return new Pair<Forest, Forest>( parseForest, depForest);
 	}
 
-    private static List<CoreMap> buildStanfordSentences(Record record) {
-        Labeling tokens = record.getLabelViews().get(CuratorViewNames.tokens);
-        Labeling sentences = record.getLabelViews().get(CuratorViewNames.sentences);
-        String rawText = record.getRawText();
+    private static List<CoreMap> buildStanfordSentences(TextAnnotation record) {
+        View tokens = record.getView(ViewNames.TOKENS);
+        View sentences = record.getView( ViewNames.POS );
+        String rawText = record.getText();
 
         List<CoreMap> stanfordSentences = new LinkedList<CoreMap>();
         List<CoreLabel> stanfordTokens = new LinkedList<CoreLabel>();
         int tokIndex = 0;
         int sentIndex = 0;
-        Span currentSentence = sentences.getLabels().get( 0 );
+        Constituent currentSentence = sentences.getConstituents().get(0);
         String sentText = rawText.substring( currentSentence.getStart(), currentSentence.getEnding() );
 
         CoreLabelTokenFactory tf = new CoreLabelTokenFactory();
@@ -172,10 +156,10 @@ public class NewStanfordToForest {
 	 * @param tree Curator Tree
 	 * @param offset Offset of where we are in the rawText
 	 * @return top Node of the Tree
-	 * @throws TException
+	 * @throws AnnotatorException
 	 */
 	private static Node generateNode(edu.stanford.nlp.trees.Tree parse, 
-			Tree tree, int offset) throws TException {
+			Tree tree, int offset) throws AnnotatorException {
 		if (!tree.isSetNodes()) {
 			tree.setNodes(new ArrayList<Node>());
 		}
@@ -213,11 +197,11 @@ public class NewStanfordToForest {
      * @return  a tree corresponding to a single sentence. Tree nodes will have correct absolute char offsets wrt
      *            the original text; but dependency node offsets are relative to the *sentence* (position in the list
      *            of nodes just for this sentence, start index of zero).
-     * @throws TException
+     * @throws AnnotatorException
      */
     private static synchronized List<Tree> parseToDependencyTree(
             edu.stanford.nlp.trees.Tree parse, int offset, CoreMap input)
-            throws TException {
+            throws AnnotatorException {
  //       List<LabeledWord> sentence = parse.labeledYield();
         List<CoreLabel> stanfordTokens = input.get(CoreAnnotations.TokensAnnotation.class);
         TreebankLanguagePack tlp = new PennTreebankLanguagePack();
@@ -377,7 +361,7 @@ public class NewStanfordToForest {
     }
 
     private static Tree extractTree(List<Node> allNodes, int headindex)
-            throws TException {
+            throws AnnotatorException {
         List<Node> nodes = new ArrayList<Node>();
         Node head = extractNode(allNodes, nodes, headindex);
         nodes.add(head);
@@ -407,9 +391,9 @@ public class NewStanfordToForest {
      * @param word
      * @param offset
      * @return
-     * @throws TException
+     * @throws AnnotatorException
      */
-    private static Span wordToSpan(Word word, int offset) throws TException {
+    private static Span wordToSpan(Word word, int offset) throws AnnotatorException {
         Span span = new Span();
         span.setStart(word.beginPosition() + offset);
         span.setEnding(word.endPosition() + offset);

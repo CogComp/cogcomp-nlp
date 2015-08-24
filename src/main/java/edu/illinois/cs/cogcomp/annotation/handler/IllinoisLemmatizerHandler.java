@@ -3,10 +3,13 @@ package edu.illinois.cs.cogcomp.annotation.handler;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import edu.illinois.cs.cogcomp.annotation.server.IllinoisAbstractServer;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
-import net.didion.jwnl.JWNLException;
 
+import edu.illinois.cs.cogcomp.transitional.CuratorDataStructureInterface;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +32,13 @@ import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
  *
  */
 
-public class IllinoisLemmatizerHandler extends IllinoisAbstractHandler
-        implements Labeler.Iface
+public class IllinoisLemmatizerHandler extends PipelineAnnotator
 {
     private static final String NAME = IllinoisLemmatizerHandler.class.getCanonicalName();
     private static final String PUBLIC_NAME = "IllinoisLemmatizer";
-    private static final String VERSION = "0.2";
-    
+    private static final String VERSION = "0.3";
+    private static final String[] REQUIRED_VIEWS = {ViewNames.POS};
+
     private IllinoisLemmatizer lemmatizer;
 //    private List< LemmaType > lemmaTypes;
     
@@ -43,12 +46,12 @@ public class IllinoisLemmatizerHandler extends IllinoisAbstractHandler
 	private String corpusId;
 	private String textId;
     
-    public IllinoisLemmatizerHandler( String configFile_ ) throws FileNotFoundException, JWNLException, IOException
+    public IllinoisLemmatizerHandler( String configFile_ ) throws FileNotFoundException, IOException
     {
         this( new ResourceManager( configFile_ ) );
     }
     
-    public IllinoisLemmatizerHandler( ResourceManager rm_ ) throws JWNLException, IllegalArgumentException, IOException
+    public IllinoisLemmatizerHandler( ResourceManager rm_ ) throws IllegalArgumentException, IOException
     {
         super( PUBLIC_NAME, VERSION, PUBLIC_NAME + "-" + VERSION );
 
@@ -62,41 +65,20 @@ public class IllinoisLemmatizerHandler extends IllinoisAbstractHandler
 //        AugmentedLemmatizer.init( rm_ );
         lemmatizer = new IllinoisLemmatizer( rm_ );
     }
-    
-    /**
-     * Returns a Labeling containing spans labeled with word lemmas based on 
-     *   a re-implementation of the Edison WNPlus lemmatizer (wordnet lemmas
-     *   plus verb and deverbal noun lemmas).
-     */
-    
-    public Labeling labelRecord( Record record ) 
-        throws AnnotationFailedException, TException
-    {
-        Labeling lemmaView = null;
-        
-        String errMsg = null;
-        
-        try
-        {
-	        lemmaView = lemmatizer.createLemmaRecordView( record, this.corpusId, this.textId );
-//			lemmaViews = new LinkedList< Labeling >();
-//			lemmaViews.add( lemmaView );
-        }
-        catch ( IOException e )
-        {
-	        e.printStackTrace();
-	        errMsg = e.getMessage();
-        }
 
-        if ( null != errMsg )
-        {
-        	throw new AnnotationFailedException( "ERROR: " + NAME + ".labelRecord(): " +
-        			"caught exception while requesting AugmentedLemmatizer view: " + 
-        			errMsg );
-        }
-        
-//        record.labelViews.put( AugmentedLemmatizer.LEMMA_VIEW, lemmaView );
-        return lemmaView;
+
+    @Override
+    public String getViewName() {
+        return ViewNames.LEMMA;
     }
 
+    @Override
+    public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
+        return lemmatizer.getView( textAnnotation );
+    }
+
+    @Override
+    public String[] getRequiredViews() {
+        return REQUIRED_VIEWS;
+    }
 }

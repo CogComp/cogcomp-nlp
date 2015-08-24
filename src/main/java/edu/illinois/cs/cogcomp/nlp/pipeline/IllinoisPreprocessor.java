@@ -3,28 +3,19 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 import java.net.SocketException;
 import java.util.*;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
-import edu.illinois.cs.cogcomp.curator.RecordGenerator;
-import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
-import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
-import edu.illinois.cs.cogcomp.nlp.curator.Pair;
-import edu.illinois.cs.cogcomp.thrift.base.*;
-import edu.illinois.cs.cogcomp.thrift.base.View;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
-import org.apache.thrift.TException;
-import org.apache.thrift.transport.TTransportException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.curator.Whitespacer;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
-import edu.illinois.cs.cogcomp.nlp.curator.Identifier;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 /**
@@ -66,9 +57,10 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  * @author mssammon
  *
  */
-public class IllinoisPreprocessor extends RecordGenerator
+public class IllinoisPreprocessor
 {
 	private static final String NAME = IllinoisPreprocessor.class.getCanonicalName();
+    private final TextAnnotationBuilderInterface textAnnotationBuilder;
     private ParserAnnotator parseAnnotator;
     private POSTaggerAnnotator posAnnotator;
     //    private boolean useSegmenter;
@@ -79,7 +71,6 @@ public class IllinoisPreprocessor extends RecordGenerator
     private boolean useNer;
     private boolean useNerExt;
 
-    private IllinoisTokenizerHandler tokenizer;
     private IllinoisPOSHandler pos;
     private IllinoisLemmatizerHandler lemmatizer;
     private IllinoisChunkerHandler chunker;
@@ -103,8 +94,9 @@ public class IllinoisPreprocessor extends RecordGenerator
      * @param rm_ The ResourceManager object
      * @throws Exception
      */
-    public IllinoisPreprocessor( ResourceManager rm_ ) throws Exception
+    public IllinoisPreprocessor( ResourceManager rm_, TextAnnotationBuilderInterface taBuilder ) throws Exception
     {
+        this.textAnnotationBuilder = taBuilder;
 //        respectTokenization = rm_.getBoolean( PipelineVars.RESPECT_TOKENIZATION );
         usePos = rm_.getBoolean( PipelineVars.USE_POS );
         useStanfordParse = rm_.getBoolean( PipelineVars.USE_STANFORD_PARSE );
@@ -115,7 +107,7 @@ public class IllinoisPreprocessor extends RecordGenerator
         forceCacheUpdate = rm_.getBoolean( PipelineVars.FORCE_CACHE_UPDATE );
         setSupportedViews();
 
-        tokenizer = new IllinoisTokenizerHandler();
+
 
     	if ( !usePos )
     	{
@@ -173,229 +165,71 @@ public class IllinoisPreprocessor extends RecordGenerator
     }
     
     /**
-     * generates a TextAnnotation from the input raw text, setting the corpus and text ID fields in 
-     *   the TextAnnotation with the specified values.  Explicitly creates views not covered in the Edison
-     *   CuratorDataStructureInterface Record -> TextAnnotation conversion method.
-     *   
+     * generates a TextAnnotation from the input raw text.
+     *
      * @param corpusId_ The corpus ID
      * @param textId_ The text ID
      * @param rawText_ The raw string
-     * @param isWhitespaced_ Whether the ta is tokenized
      * @return The TextAnnotation object
-     * @throws AnnotationFailedException
-     * @throws TException
+     * @throws AnnotatorException
      */
-    public TextAnnotation processTextToTextAnnotation( String corpusId_, String textId_, String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
-    {
-    	Record rec = processText(rawText_, isWhitespaced_);
-    	TextAnnotation ta = null;
+    public TextAnnotation processTextToTextAnnotation( String corpusId_, String textId_, String rawText_ ) throws AnnotatorException {
+        TextAnnotation record = this.textAnnotationBuilder.createTextAnnotation(corpusId_, textId_, rawText_);
 
-//        boolean isAbsolute = false;
-        ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId_, textId_, rec ); //, isAbsolute );
+        return processTextAnnotation(record);
 
-        if ( useLemmatizer )
-        {
-        	addLabelingToTextAnnotation( rec, CuratorViewNames.lemma, ta );
-//        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaWn, ta );
-//        	addLabelingToTextAnnotation( rec, AdditionalViewNames.lemmaPorter, ta );
-        }
-        if ( useNerExt )
-        {
-            boolean allowOverlappingSpans = false;
-            Labeling nerExtLabeling = rec.getLabelViews().get( AdditionalViewNames.nerExt );
-            if ( null == nerExtLabeling )
-                logger.error( "no '" + AdditionalViewNames.nerExt + "' view present although useNerExt is 'true'." );
-            else {
-                SpanLabelView newView = CuratorDataStructureInterface.alignLabelingToSpanLabelView(AdditionalViewNames.nerExt, ta, nerExtLabeling, false);
-                ta.addView(AdditionalViewNames.nerExt, newView );
-            }
-        }
-
-// MS: not needed as we explicitly generate stanford dependency parse in this version of pipeline
-//        if ( useStanfordParse )
-//        {
-//            try {
-//                TreeView depParse = HeadFinderDependencyViewGenerator.getDependencyTree(ta, ViewNames.PARSE_STANFORD, ViewNames.DEPENDENCY_STANFORD);
-//                ta.addView(ViewNames.DEPENDENCY_STANFORD, depParse);
-//            }
-//            catch( Exception e )
-//            {
-//                e.printStackTrace();
-//                logger.error( "couldn't add view '" + ViewNames.DEPENDENCY_STANFORD  + "': " + e.getMessage() );
-//            }
-//        }
-    	return ta;
     }
-    
 
     /**
-     * A complementary method to {@code processTextToTextAnnotation(String, String, String, boolean)}
-     *    that appends the newly created views to an existing TextAnnotation
-     * Non-standard (i.e., not explicitly handled by Edison) are added. If not found when expected (config
-     *    flag for that view is set to true), logs an error but does not throw exception.
+     * Annotates record argument with views according to annotators with which this object is instantiated.
      *
-     * TODO: check that the newly created views point to the correct TextAnnotation object, if necessary!
-     * @param ta The TextAnnotation to be labeled
-     * @param processTextAsWhitespaced_ if true, call pipeline elements with forced tokenization according to
-     *                                  the TextAnnotation argument's existing tokenization
-     * @return The original TextAnnotation with the new views from the TextPrepocessor
-     * @throws AnnotationFailedException
-     * @throws TException
+     * @param record TextAnnotation object to annotate
+     * @return The annotated TextAnnotation object
+     * @throws AnnotatorException
      */
-	public TextAnnotation processTextAnnotation(TextAnnotation ta, boolean processTextAsWhitespaced_)
-			throws AnnotationFailedException, TException {
 
-        String text = ta.getText();
-        if (processTextAsWhitespaced_ )
-            text = ta.getTokenizedText();
-		Record rec = processText(text, processTextAsWhitespaced_);
-
-
-//        boolean isParseIndexingAbsolute = false; //whether parse/dependency Tree objects created by Edison from Thrift Trees use absolute indexes or sentence-local indexes
-		TextAnnotation taTemp = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "", rec ); //, isParseIndexingAbsolute);
-		// Now taTemp should have only the new views created by the Preprocessor
-		for (String view : taTemp.getAvailableViews()) {
-			ta.addView(view, taTemp.getView(view));
-		}
-
-        // need to explicitly add views not known to Edison to the textannotation
-        if ( useLemmatizer )
-            addLabelingToTextAnnotation( rec, CuratorViewNames.lemma, ta );
-
-        if ( useNerExt )
-        {
-            boolean allowOverlappingSpans = false;
-            Labeling nerExtLabeling = rec.getLabelViews().get( AdditionalViewNames.nerExt );
-            if ( null == nerExtLabeling )
-                logger.error( "no '" + AdditionalViewNames.nerExt + "' view present although useNerExt is 'true'." );
-            else {
-                SpanLabelView newView = CuratorDataStructureInterface.alignLabelingToSpanLabelView(AdditionalViewNames.nerExt, ta, nerExtLabeling, false);
-                ta.addView(AdditionalViewNames.nerExt, newView );
-            }
-        }
-		return ta;
-	}
-    
-    private void addLabelingToTextAnnotation(Record rec_, String viewName_, TextAnnotation ta_ ) 
-    {
-    	Labeling lemmas = rec_.getLabelViews().get( viewName_ );
-    	TokenLabelView tlv = CuratorDataStructureInterface.alignLabelingToTokenLabelView( viewName_, ta_, lemmas);
-    	ta_.addView(viewName_, tlv);
-	}
-
-	public Record processText( String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
-    {
-        Record record = createRecord(rawText_, isWhitespaced_);
-
-//        for ( String viewName : supportedViews.keySet() )
-//        {
+    public TextAnnotation processTextAnnotation( TextAnnotation record ) throws AnnotatorException {
         if ( usePos )
-            addView(record, CuratorViewNames.pos);
+            pos.labelRecord( record );
 
         if ( useChunker )
-            addView(record, CuratorViewNames.chunk);
+            chunker.labelRecord( record );
 
-        
+
         if ( useLemmatizer )
-            addView( record, CuratorViewNames.lemma );
+            lemmatizer.labelRecord( record );
 
         if ( useNer )
-            addView( record, CuratorViewNames.ner );
+            ner.labelRecord( record );
 
         if ( useNerExt )
-            addView( record, AdditionalViewNames.nerExt );
+            nerExt.labelRecord(record);
 
 
         if ( useStanfordParse )
-            addView( record, CuratorViewNames.stanfordParse );
-
+            if (null != stanfordPipeline || ( null != this.posAnnotator && null != this.parseAnnotator ) )
+            {
+                NewStanfordToForest.annotate(this.posAnnotator, this.parseAnnotator, record);
+            }
+            else
+            {
+                String msg = "ERROR: " + NAME + ".processText(): stanford parse view(s) requested, but no stanford " +
+                        "parse annotator instantiated.";
+                logger.error( msg );
+                throw new AnnotatorException( msg );
+            }
         return record;
     }
-
-    private Record addView(Record record, String viewName) throws TException, AnnotationFailedException {
-        Map<String, Labeling> labelViews = record.getLabelViews();
-        Map<String, Forest> parseViews = record.getParseViews();
-        if (CuratorViewNames.pos.equals(viewName) && null != pos ) {
-            Labeling posResult = pos.labelRecord(record);
-            labelViews.put(CuratorViewNames.pos, posResult);
-        } else if (CuratorViewNames.chunk.equals(viewName) && null != chunker ) {
-            Labeling chunkerResult = chunker.labelRecord(record);
-            labelViews.put(CuratorViewNames.chunk, chunkerResult);
-        } else if (CuratorViewNames.stanfordParse.equals(viewName) &&
-                (null != stanfordPipeline || ( null != this.posAnnotator && null != this.parseAnnotator ) )
-                )
-        {
-//            Forest parse = StanfordToForest.convert( stanfordPipeline,  record);
-//            parseViews.put(CuratorViewNames.stanfordParse, parse);
-            Pair<Forest, Forest> parses = NewStanfordToForest.convert(this.posAnnotator, this.parseAnnotator, record);
-            parseViews.put(CuratorViewNames.stanfordParse, parses.first);
-            parseViews.put(CuratorViewNames.stanfordDep, parses.second );
-        }
-        else if (AdditionalViewNames.nerExt.equals( viewName ) && null != nerExt )
-        {
-            Labeling nerView  = nerExt.labelRecord( record );
-            labelViews.put( AdditionalViewNames.nerExt, nerView );
-        }
-        else if ( CuratorViewNames.ner.equals( viewName ) && null != ner )
-        {
-            Labeling nerView = ner.labelRecord(record );
-            labelViews.put( CuratorViewNames.ner, nerView );
-        }
-        else if ( CuratorViewNames.lemma.equals( viewName ) && null != lemmatizer )
-        {
-            Labeling lemmaView = lemmatizer.labelRecord( record );
-            labelViews.put( CuratorViewNames.lemma, lemmaView );
-        }
-        else
-            throw new AnnotationFailedException( "ERROR: " + NAME + ".addView(): no resource corresponding to '" + viewName + "' was found." );
-        return record;
-    }
-
-    /**
-     * creates and tokenizes/sentence-splits input text. 
-     * 
-     * @param rawText_ the text to annotate
-     * @param isWhitespaced_ if true, determines sentence boundaries using newlines and token boundaries from other
-     *     whitespace
-     * @return  a Record with rawText, sentence and token views set.
-     * @throws TException 
-     * @throws AnnotationFailedException 
-     */
     
-    public Record createRecord( String rawText_, boolean isWhitespaced_ ) throws AnnotationFailedException, TException
+
+
+
+	public TextAnnotation processText( String rawText_ ) throws AnnotatorException
     {
-        Record record = new Record();
-        record.setRawText( rawText_ );
-        record.setWhitespaced( isWhitespaced_ );
-        record.setLabelViews(new HashMap<String, Labeling>());
-        record.setClusterViews(new HashMap<String, Clustering>());
-        record.setParseViews(new HashMap<String, Forest>());
-        record.setViews(new HashMap<String, View>());
-        record.setIdentifier(Identifier.getId( rawText_, isWhitespaced_ ) );
-            
-        if ( isWhitespaced_ )
-        {
-            List< String > inputs = new LinkedList< String >();
-
-            String[] sentences = rawText_.split( System.getProperty( "line.separator" ) );
-
-            Collections.addAll(inputs, sentences);
-            
-            Labeling sents = Whitespacer.sentences( inputs );
-            record.getLabelViews().put( CuratorViewNames.sentences, sents );
-            Labeling tokens = Whitespacer.tokenize( inputs );
-            record.getLabelViews().put( CuratorViewNames.tokens, tokens );
-        }
-        else
-        {
-            List< Labeling > segmentedViews = tokenizer.labelRecord( record );
-
-            record.getLabelViews().put( CuratorViewNames.sentences, segmentedViews.get( 0 ) );
-            record.getLabelViews().put( CuratorViewNames.tokens, segmentedViews.get( 1 ) );
-        }
-        
-        return record;
+        return processTextToTextAnnotation("dummyId", "dummyId", rawText_);
     }
+
+
 
 
     /**
@@ -412,17 +246,23 @@ public class IllinoisPreprocessor extends RecordGenerator
         if ( supportedViews.isEmpty() )
         {
             if ( usePos )
-                supportedViews.put(CuratorViewNames.pos, forceCacheUpdate );
-            if ( useStanfordParse )
-                supportedViews.put(CuratorViewNames.stanfordParse, forceCacheUpdate);
+                supportedViews.put(ViewNames.POS, forceCacheUpdate );
+
+            if ( useStanfordParse ) {
+                supportedViews.put(ViewNames.PARSE_STANFORD, forceCacheUpdate);
+                supportedViews.put( ViewNames.DEPENDENCY_STANFORD, forceCacheUpdate );
+            }
             if ( useChunker )
-                supportedViews.put(CuratorViewNames.chunk, forceCacheUpdate);
+                supportedViews.put(ViewNames.SHALLOW_PARSE, forceCacheUpdate);
+
             if( useLemmatizer )
-                supportedViews.put(CuratorViewNames.lemma, forceCacheUpdate);
+                supportedViews.put(ViewNames.LEMMA, forceCacheUpdate);
+
             if ( useNer )
-                supportedViews.put(CuratorViewNames.ner, forceCacheUpdate);
+                supportedViews.put(ViewNames.NER_CONLL, forceCacheUpdate);
+
             if ( useNerExt )
-                supportedViews.put(AdditionalViewNames.nerExt, forceCacheUpdate );
+                supportedViews.put(ViewNames.NER_ONTONOTES, forceCacheUpdate );
         }
 
         setActiveViews();
@@ -442,39 +282,4 @@ public class IllinoisPreprocessor extends RecordGenerator
         return supportedViews;
     }
 
-
-    /**
-     * build a basic TextAnnotation object (token and sentence views) using the specified information
-     *
-     * @param corpusId
-     * @param docId
-     * @param text
-     * @param isWhitespaced  if 'true', assume sentences are
-     * @return
-     * @throws TException
-     * @throws AnnotationFailedException
-     */
-    public TextAnnotation createTextAnnotation(String corpusId, String docId, String text, boolean isWhitespaced ) throws TException, AnnotationFailedException {
-        Record rec = createRecord( text, isWhitespaced );
-        return CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( corpusId, docId, rec );
-    }
-
-    /**
-     *
-     * @param record   a Record with the text to process, plus token and sentence views
-     * @param viewName   the view to populate in the input record
-     * @param isForceUpdate   if 'true', force the processor to update the cache, if any
-     * @return
-     * @throws TTransportException
-     * @throws ServiceUnavailableException
-     * @throws AnnotationFailedException
-     * @throws TException
-     * @throws SocketException
-     */
-    @Override
-    public Record getRecordFromProcessor(Record record, String viewName, boolean isForceUpdate) throws TTransportException, ServiceUnavailableException, AnnotationFailedException, TException, SocketException {
-        record = addView( record, viewName );
-
-        return record;
-    }
 }

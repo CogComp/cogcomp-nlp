@@ -1,11 +1,9 @@
 package edu.illinois.cs.cogcomp.nlp.util;
 
-import edu.illinois.cs.cogcomp.edison.sentences.Sentence;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 /**

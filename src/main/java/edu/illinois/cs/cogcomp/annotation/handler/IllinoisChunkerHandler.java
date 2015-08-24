@@ -8,19 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.thrift.TException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
 import edu.illinois.cs.cogcomp.lbj.chunk.Chunker;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
 
 
 /**
@@ -28,18 +24,20 @@ import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
  * @author James Clarke
  *
  */
-public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements Labeler.Iface 
+public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotator
 {
 	private final Logger logger = LoggerFactory.getLogger(IllinoisChunkerHandler.class);
 	private Chunker tagger = new Chunker();
-	private String posfield = CuratorViewNames.pos;
-	private String tokensfield = CuratorViewNames.tokens;
-	private String sentencesfield = CuratorViewNames.sentences;
+	private String posfield = ViewNames.POS;
+	private String tokensfield = ViewNames.TOKENS;
+	private String sentencesfield = ViewNames.SENTENCE;
 
-	public IllinoisChunkerHandler() {
-		this("");
-	}
-	
+
+    public IllinoisChunkerHandler()
+    {
+        this( "" );
+    }
+
 	public IllinoisChunkerHandler(String configFilename) {
 
         super("Illinois Chunker", "0.3", "illinoischunker");
@@ -47,11 +45,11 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 		logger.info("Loading Chunker model..");
 		tagger.discreteValue(new Token(new Word("The"), null, ""));
 		logger.info("Chunker ready");
-		// XXX If no configuration file is give use the default values from CuratorViewNames
+		// XXX If no configuration file is give use the default values from ViewNames
 		if (configFilename.trim().equals("")) {
-			tokensfield = CuratorViewNames.tokens;
-			sentencesfield = CuratorViewNames.sentences;
-			posfield = CuratorViewNames.pos;
+			tokensfield = ViewNames.TOKENS;
+			sentencesfield = ViewNames.SENTENCE;
+			posfield = ViewNames.POS;
 		}
 		else {
 			Properties config = new Properties();
@@ -62,38 +60,42 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 	        } catch (IOException e) {
 	        	logger.warn("Error reading configuration file. {}", configFilename);
 	        }
-			tokensfield = config.getProperty("tokens.field", CuratorViewNames.tokens );
-			sentencesfield = config.getProperty("sentences.field", CuratorViewNames.sentences );
-			posfield = config.getProperty("pos.field", CuratorViewNames.pos );
+			tokensfield = config.getProperty("tokens.field", ViewNames.TOKENS );
+			sentencesfield = config.getProperty("sentences.field", ViewNames.SENTENCE );
+			posfield = config.getProperty("pos.field", ViewNames.POS );
 		}
 	}
-	
-	public Labeling labelRecord(Record record) throws AnnotationFailedException,
-			TException {
-		if (!record.getLabelViews().containsKey(tokensfield) && !record.getLabelViews().containsKey(sentencesfield)) {
-			throw new TException("Record must be tokenized and sentence split first");
+
+
+    @Override
+    public String getViewName() {
+        return ViewNames.SHALLOW_PARSE;
+    }
+
+    @Override
+    public View getView( TextAnnotation record ) throws AnnotatorException {
+		if (!record.hasView(tokensfield) || !record.hasView(sentencesfield)) {
+            String msg = getIdentifier() + ".getView(): Record must be tokenized and sentence split first.";
+		    logger.error( msg );
+        	throw new AnnotatorException( msg);
 		}
-		if (!record.getLabelViews().containsKey(posfield)) {
-			throw new TException("Record must be POS tagged.");
-		}
-		long startTime = System.currentTimeMillis();
-		
-		List<Span> tags = record.getLabelViews().get(posfield).getLabels();
-		String rawText = record.getRawText();
 
-		logger.debug( "IllinoisChunkerHandler.labelRecord(): rawText is '" + rawText + "'" );
+		List<Constituent> tags = record.getView(posfield).getConstituents();
+		String rawText = record.getText();
 
-		List<Token> lbjTokens = recordToLBJTokensPos(record);
-		Labeling labeling = new Labeling();
 
-		List<Span> labels = new ArrayList<Span>();
-		
-		Span label = null;
+		List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens( record );
+
+        View chunkView = new SpanLabelView( ViewNames.SHALLOW_PARSE, this.getIdentifier(), record, 1.0 );
+
+        int currentChunkStart = 0;
+        int currentChunkEnd = 0;
+
 		String clabel = "";
-		Span previous = null;
+		Constituent previous = null;
 		int tcounter = 0;
 		for (Token lbjtoken : lbjTokens) {
-			Span current = tags.get(tcounter);
+			Constituent current = tags.get(tcounter);
 			tagger.discreteValue(lbjtoken);
 			logger.debug("{} {}", lbjtoken.toString(), lbjtoken.type);
 			if (lbjtoken.type.charAt(0) == 'I') {
@@ -101,31 +103,41 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 					lbjtoken.type = "B" + lbjtoken.type.substring(1);
 				}
 			}
-			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && label != null) {
-				label.setEnding(previous.getEnding());
-				labels.add(label);
-				label = null;
+			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && clabel != null) {
+
+                currentChunkEnd = previous.getEndSpan();
+                Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
+				chunkView.addConstituent(label);
+                clabel = null;
 			}
+
 			if (lbjtoken.type.charAt(0) == 'B') {
-				label = new Span();
-				label.setStart(current.getStart());
+				currentChunkStart = current.getStartSpan();
 				clabel = lbjtoken.type.substring(2);
-				label.setLabel(clabel);
 			}
 			previous = current;
 			tcounter++;
 		}
-		if (label != null) {
-			label.setEnding(previous.getEnding());
-			labels.add(label);
+		if (clabel != null) {
+            currentChunkEnd = previous.getEndSpan();
+            Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
+            chunkView.addConstituent(label);
 		}
-		labeling.setLabels(labels);
-		labeling.setSource(getSourceIdentifier());
+        record.addView( ViewNames.SHALLOW_PARSE, chunkView );
 
-		long endTime = System.currentTimeMillis();
-		logger.debug("Tagged input in {}ms", endTime - startTime);
-		return labeling;
+		return chunkView;
 	}
+
+    /**
+     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService} to check for pre-requisites before calling
+     * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
+     *
+     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
+     */
+    @Override
+    public String[] getRequiredViews() {
+        return new String[0];
+    }
 
 //	public String getName() throws TException {
 //		return "Illinois Chunker";
@@ -143,53 +155,5 @@ public class IllinoisChunkerHandler extends IllinoisAbstractHandler implements L
 //		return "illinoischunker-"+getVersion();
 //	}
 	
-	/**
-	 * Converts a Record to LBJ Tokens with POS information.
-	 */
-	private List<Token> recordToLBJTokensPos(Record record) {
-		List<Token> lbjTokens = new LinkedList<Token>();
-		int j = 0;
-		List<Span> tags = record.getLabelViews().get(posfield).getLabels();
-		String rawText = record.getRawText();
-		for (Span sentence : record.getLabelViews().get(sentencesfield).getLabels()) {
-			Word wprevious = null;
-			Token tprevious = null;
-			boolean opendblquote = true;
-			Span tag;
-			do {
-				tag = tags.get(j);
-				Word wcurrent;
-				String token = rawText.substring(tag.getStart(), tag.getEnding());
-				if (token.equals("\"")) {
-					token = opendblquote ? "``" : "''";
-					opendblquote = !opendblquote;
-				} else if (token.equals("(")) {
-					token = "-LRB-";
-				} else if (token.equals(")")) {
-					token = "-RRB-";
-				} else if (token.equals("{")) {
-					token = "-LCB-";
-				} else if (token.equals("}")) {
-					token = "-RCB-";
-				} else if (token.equals("[")) {
-					token = "-LSB-";
-				} else if (token.equals("]")) {
-					token = "-RSB-";
-				}
-				wcurrent = new Word(token, wprevious);
-				wcurrent.partOfSpeech = tag.getLabel();
-				Token tcurrent = new Token(wcurrent, tprevious, "");
-				lbjTokens.add(tcurrent);
-				if (tprevious != null) {
-					tprevious.next = tcurrent;
-				}
-				wprevious = wcurrent;
-				tprevious = tcurrent;
-				j++;
-			} while (tag.getEnding() < sentence.getEnding());
-
-		}
-		return lbjTokens;
-	}
 
 }

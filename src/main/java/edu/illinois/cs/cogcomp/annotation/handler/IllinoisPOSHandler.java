@@ -1,19 +1,17 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
-import org.apache.thrift.TException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -21,7 +19,8 @@ import java.util.List;
  * @author James Clarke
  *
  */
-public class IllinoisPOSHandler extends IllinoisAbstractHandler implements Labeler.Iface {
+public class IllinoisPOSHandler extends PipelineAnnotator
+{
 	
 //	private static final String NAME = IllinoisPOSHandler.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(IllinoisPOSHandler.class);
@@ -37,116 +36,63 @@ public class IllinoisPOSHandler extends IllinoisAbstractHandler implements Label
 		tagger.discreteValue(new Token(new Word("The"), null, ""));
 		logger.info("POS Tagger ready");
 
-        tokensfield = CuratorViewNames.tokens;
-        sentencesfield = CuratorViewNames.sentences;
+        tokensfield = ViewNames.TOKENS;
+        sentencesfield = ViewNames.SENTENCE;
 	}
 	
-	public Labeling labelRecord(Record record) throws TException {
-		if (!record.getLabelViews().containsKey(tokensfield) && !record.getLabelViews().containsKey(sentencesfield)) {
-			throw new TException("Record must be tokenized and sentence split first");
+
+    /**
+     *  annotates TextAnnotation with POS view and returns the new POS view.
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public View getView(TextAnnotation record) throws AnnotatorException
+    {
+       	if (!record.hasView( tokensfield ) && !record.hasView(sentencesfield))
+        {
+			throw new AnnotatorException("Record must be tokenized and sentence split first");
 		}
 		long startTime = System.currentTimeMillis();
-		List<Token> input = recordToLBJTokens(record);
-		List<Span> tokens = record.getLabelViews().get(tokensfield).getLabels();
+		List<Token> input = LBJavaUtils.recordToLBJTokens(record);
 
-		Labeling labeling = new Labeling();
 
-		List<Span> labels = new ArrayList<Span>();
-		
+        List< Constituent > tokens = record.getView( ViewNames.TOKENS ).getConstituents();
+        View posView = new View( ViewNames.POS, getAnnotatorName(), record, 1.0 );
 		int tcounter = 0;
 		for (int i = 0; i < input.size(); i++) {
 			Token lbjtoken = input.get(i);
 			tagger.discreteValue(lbjtoken);
-			Span token = tokens.get(tcounter);
-			Span label = new Span();
-			label.setLabel(lbjtoken.partOfSpeech);
-			label.setStart(token.getStart());
-			label.setEnding(token.getEnding());
-			labels.add(label);
+			Constituent token = tokens.get(tcounter);
+			Constituent label = new Constituent(lbjtoken.label, ViewNames.POS, record, token.getStartSpan(), token.getEndSpan());
+			posView.addConstituent(label);
 			tcounter++;
 		}
-		labeling.setLabels(labels);
-		labeling.setSource( CuratorViewNames.pos );
 		long endTime = System.currentTimeMillis();
 		logger.debug("Tagged input in {}ms", endTime-startTime);
-		return labeling;
+
+        record.addView( ViewNames.POS, posView );
+
+		return posView;
 	}
 
 
-	
-	/**
-	 * Converts a record into LBJ Tokens for use with LBJ classifiers.
-	 * 
-	 * @param record
-	 * @return
-	 */
-	private List<Token> recordToLBJTokens(Record record) {
-		List<Token> lbjTokens = new LinkedList<Token>();
-		List<List<String>> sentences = tokensAsStrings(record.getLabelViews().get(tokensfield)
-				.getLabels(), record.getLabelViews().get(sentencesfield).getLabels(), record
-				.getRawText());
+    @Override
+    public String getViewName() {
+        return ViewNames.POS;
+    }
 
-		for (List<String> sentence : sentences) {
-			boolean opendblquote = true;
-			Word wprevious = null;
-			Token tprevious = null;
-			for (String token : sentence) {
-				if (token.equals("\"")) {
-					token = opendblquote ? "``" : "''";
-					opendblquote = !opendblquote;
-				} else if (token.equals("(")) {
-					token = "-LRB-";
-				} else if (token.equals(")")) {
-					token = "-RRB-";
-				} else if (token.equals("{")) {
-					token = "-LCB-";
-				} else if (token.equals("}")) {
-					token = "-RCB-";
-				} else if (token.equals("[")) {
-					token = "-LSB-";
-				} else if (token.equals("]")) {
-					token = "-RSB-";
-				}
 
-				Word wcurrent;
-				wcurrent = new Word(token, wprevious);
-				Token tcurrent = new Token(wcurrent, tprevious, "");
-				lbjTokens.add(tcurrent);
-				if (tprevious != null) {
-					tprevious.next = tcurrent;
-				}
-				wprevious = wcurrent;
-				tprevious = tcurrent;
-			}
-		}
-		return lbjTokens;
-	}
-	
-	/**
-	 * Converts sentences and tokens represented as spans into a list of lists
-	 * of string.
-	 * 
-	 * @param tokens
-	 * @param sentences
-	 * @param rawText
-	 * @return
-	 */
-	private static List<List<String>> tokensAsStrings(List<Span> tokens,
-			List<Span> sentences, String rawText) {
-		List<List<String>> strTokens = new ArrayList<List<String>>();
-		int sentNum = 0;
-		Span sentence = sentences.get(sentNum);
-		strTokens.add(new ArrayList<String>());
-		for (Span token : tokens) {
-			if (token.getStart() >= sentence.getEnding()) {
-				strTokens.add(new ArrayList<String>());
-				sentNum++;
-				sentence = sentences.get(sentNum);
-			}
-			strTokens.get(sentNum).add(
-					rawText.substring(token.getStart(), token.getEnding()));
-		}
-		return strTokens;
-	}
 
+    /**
+     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService} to check for pre-requisites before calling
+     * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
+     *
+     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
+     */
+    @Override
+    public String[] getRequiredViews() {
+        return new String[0];
+    }
 }

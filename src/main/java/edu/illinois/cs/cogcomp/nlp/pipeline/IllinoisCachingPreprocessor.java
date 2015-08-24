@@ -1,13 +1,15 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import edu.illinois.cs.cogcomp.cachingcurator.CachingAnnotator;
-import edu.illinois.cs.cogcomp.cachingcurator.CachingAnnotatorService;
-import edu.illinois.cs.cogcomp.cachingcurator.CachingCuratorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.common.CuratorViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.View;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
@@ -58,16 +60,22 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
         mappedViewNames.put( CuratorViewNames.stanfordParse, ViewNames.PARSE_STANFORD );
     }
 
-    public static IllinoisCachingPreprocessor getInstance( String config, Map< String, CachingAnnotator > extraViewGenerators ) throws Exception {
-        return getInstance(new ResourceManager(config), extraViewGenerators );
+
+    public static IllinoisCachingPreprocessor getInstance( String config,  Map< String, Annotator> extraViewGenerators ) throws Exception {
+        return getInstance(new ResourceManager(config), new TextAnnotationBuilder(new IllinoisTokenizer() ), extraViewGenerators );
+
+    }
+
+    public static IllinoisCachingPreprocessor getInstance( String config, TextAnnotationBuilderInterface taBuilder,  Map< String, Annotator> extraViewGenerators ) throws Exception {
+        return getInstance(new ResourceManager(config), taBuilder, extraViewGenerators );
 
     }
 
 
-    public static IllinoisCachingPreprocessor getInstance( ResourceManager rm, Map< String, CachingAnnotator > extraViewGenerators ) throws Exception {
+    public static IllinoisCachingPreprocessor getInstance( ResourceManager rm, TextAnnotationBuilderInterface taBuilder, Map< String, Annotator > extraViewGenerators ) throws Exception {
         if ( null == THE_INSTANCE )
         {
-            THE_INSTANCE = new IllinoisCachingPreprocessor( new IllinoisPreprocessor( rm ), rm, extraViewGenerators );
+            THE_INSTANCE = new IllinoisCachingPreprocessor( new IllinoisPreprocessor( rm, taBuilder ), rm, taBuilder, extraViewGenerators );
         }
 
         return THE_INSTANCE;
@@ -79,13 +87,12 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      * @param illinoisPreprocessor
      * @param rm
      * @param extraViewGenerators
-     * @throws CachingCuratorException
+     * @throws AnnotatorException
      */
-    private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, Map< String, CachingAnnotator > extraViewGenerators ) throws CachingCuratorException
-    {
+    private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, TextAnnotationBuilderInterface taBuilder, Map< String, Annotator > extraViewGenerators ) throws AnnotatorException {
         super(getRequestedViews(illinoisPreprocessor),
+                taBuilder,
                 rm.getBoolean(THROW_EXCEPTION_IF_NOT_CACHED),
-                rm.getBoolean(RESPECT_TOKENIZATION),
                 extraViewGenerators
         );
 
@@ -131,12 +138,11 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      *
      * @param requestedViews
      * @param throwExceptionIfNotCached
-     * @param respectTokenization
      * @param extraViewProviders
-     * @throws CachingCuratorException
+     * @throws edu.illinois.cs.cogcomp.annotation.AnnotatorException
      */
-    private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, boolean throwExceptionIfNotCached, boolean respectTokenization, Map<String, CachingAnnotator> extraViewProviders, IllinoisPreprocessor preprocessor ) throws CachingCuratorException {
-        super(requestedViews, throwExceptionIfNotCached, respectTokenization, extraViewProviders);
+    private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, TextAnnotationBuilderInterface taBuilder, boolean throwExceptionIfNotCached, Map<String, Annotator> extraViewProviders, IllinoisPreprocessor preprocessor ) throws AnnotatorException {
+        super(requestedViews, taBuilder, throwExceptionIfNotCached, extraViewProviders);
         initializeCurrentStatus();
     }
 
@@ -156,33 +162,33 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
         supportedViews.addAll( activeViews.keySet() );
     }
 
-    /**
-     * ugly first cut at making this work. The current implementation generates a Record with ALL active
-     *    annotations in the first call for a given text and builds/stores the corresponding TextAnnotation.
-     *    the requests for uncached views then simply returns the corresponding view from the complete
-     *    TextAnnotation.
-     * This approach means there is inefficiency if you process a given text with some subset of available
-     *    resources, then later process again with additional resources -- the initial steps are repeated.
-     *
-     * @param textAnnotation
-     * @param viewName
-     */
-    @Override
-    protected void requestUncachedView(TextAnnotation textAnnotation, String viewName ) {
-        if ( !isProcessed( textAnnotation.getText(), viewName ) ) {
-//            if ( textAnnotation != currentTextAnnotation)
-                process(textAnnotation);
-        }
+//    /**
+//     * ugly first cut at making this work. The current implementation generates a Record with ALL active
+//     *    annotations in the first call for a given text and builds/stores the corresponding TextAnnotation.
+//     *    the requests for uncached views then simply returns the corresponding view from the complete
+//     *    TextAnnotation.
+//     * This approach means there is inefficiency if you process a given text with some subset of available
+//     *    resources, then later process again with additional resources -- the initial steps are repeated.
+//     *
+//     * @param textAnnotation
+//     * @param viewName
+//     */
+//    @Override
+//    protected void requestUncachedView(TextAnnotation textAnnotation, String viewName ) {
+//        if ( !isProcessed( textAnnotation.getText(), viewName ) ) {
+////            if ( textAnnotation != currentTextAnnotation)
+//                process(textAnnotation);
+//        }
+//
+//        addViewFromTo(viewName, currentTextAnnotation, textAnnotation);
+//    }
 
-        addViewFromTo(viewName, currentTextAnnotation, textAnnotation);
-    }
 
-
-    private void addViewFromTo(String viewName, TextAnnotation currentTa, TextAnnotation newTa ) {
-
-        View v = currentTa.getView( viewName );
-        newTa.addView( viewName, v );
-    }
+//    private void addViewFromTo(String viewName, TextAnnotation currentTa, TextAnnotation newTa ) {
+//
+//        View v = currentTa.getView( viewName );
+//        newTa.addView( viewName, v );
+//    }
 
 
 
@@ -226,22 +232,22 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
     }
 
 
-
-    @Override
-    protected TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text) {
-        TextAnnotation ta = null;
-        try {
-            ta = preprocessor.createTextAnnotation( corpusId, docId, text, this.respectTokenization );
-        } catch (TException e) {
-            e.printStackTrace();
-            logger.error( "Couldn't create TextAnnotation for text '" + text + "': " + e.getMessage() );
-        } catch (AnnotationFailedException e) {
-            e.printStackTrace();
-            logger.error("Couldn't create TextAnnotation for text '" + text + "': " + e.getMessage());
-        }
-
-        return ta;
-    }
+//
+//    @Override
+//    protected TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text) {
+//        TextAnnotation ta = null;
+//        try {
+//            ta = preprocessor.createTextAnnotation( corpusId, docId, text, this.respectTokenization );
+//        } catch (TException e) {
+//            e.printStackTrace();
+//            logger.error( "Couldn't create TextAnnotation for text '" + text + "': " + e.getMessage() );
+//        } catch (AnnotationFailedException e) {
+//            e.printStackTrace();
+//            logger.error("Couldn't create TextAnnotation for text '" + text + "': " + e.getMessage());
+//        }
+//
+//        return ta;
+//    }
 
 
 }
