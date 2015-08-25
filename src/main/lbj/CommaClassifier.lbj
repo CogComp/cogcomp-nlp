@@ -1,10 +1,8 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
+
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.CommaReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import java.util.List;
 import java.util.ArrayList;
 

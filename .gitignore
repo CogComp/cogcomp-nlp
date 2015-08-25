@@ -1,11 +1,17 @@
+### IntelliJ
 .idea
 illinois-comma.iml
 target
+
+### Eclipse
 .classpath
 .project
 .settings
 
-# LBJ-generated files
+### Preprocessor cache
+data/CommaTAGoldFinal.ser
+
+### LBJava-generated files
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightPOSFeature.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoPOSWindowFeature.java
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramParentSecondRightPhraseFeature.java

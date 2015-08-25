@@ -1,12 +1,12 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
-import edu.illinois.cs.cogcomp.edison.data.srl.NombankReader;
-import edu.illinois.cs.cogcomp.edison.data.srl.PropbankReader;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
 
 import java.io.*;
 import java.util.*;
@@ -15,7 +15,7 @@ import java.util.*;
  * Data reader for the comma dataset of Srikumar et al.
  */
 public class CommaReader implements Parser {
-    private Annotator annotator;
+    private PreProcessor preProcessor;
     private final String annotationFile;
     private List<Comma> commas;
     private int currentComma;
@@ -23,7 +23,7 @@ public class CommaReader implements Parser {
 
     public CommaReader(String annotationFile) {
         this.annotationFile = annotationFile;
-        this.commas = new ArrayList<Comma>();
+        this.commas = new ArrayList<>();
 
         CommaProperties properties = CommaProperties.getInstance();
         treebankHome = properties.getPTBHDir();
@@ -31,7 +31,7 @@ public class CommaReader implements Parser {
         nombankHome = properties.getNombankDir();
 
         try {
-            this.annotator = new Annotator(true, true);
+            this.preProcessor = new PreProcessor();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -83,14 +83,14 @@ public class CommaReader implements Parser {
             count++;
 
             // A list of commas positions and their labels
-            List<Comma> commaList = new ArrayList<Comma>();
+            List<Comma> commaList = new ArrayList<>();
             line = scanner.nextLine().trim();
             assert line.startsWith("%%%"):line;
 
             // Next line is the sentence id (in PTB)
             String textId = scanner.nextLine();
 
-            String rawText = scanner.nextLine().trim();
+            String[] tokenizedText = scanner.nextLine().trim().split("\\s+");
 
             boolean skip=false;
             TextAnnotation goldTA = null, TA = null;
@@ -98,7 +98,7 @@ public class CommaReader implements Parser {
             if(taMap.containsKey(textId)){
                 goldTA = taMap.get(textId);
                 try {
-                    TA = annotator.preProcess(rawText);
+                    TA = preProcessor.preProcess(Collections.singletonList(tokenizedText));
                 } catch (Exception e) {
                     failures++;
                 }
@@ -124,7 +124,7 @@ public class CommaReader implements Parser {
 
             line = scanner.nextLine().trim();
             assert line.equals("COMMAS: " + labeledCommas.size() + " Total") : line + "\nVS\n" + "COMMAS: " +
-                    labeledCommas.size() + " Total\n" + "rawText = " + rawText;
+                    labeledCommas.size() + " Total\n" + "rawText = " + Arrays.toString(tokenizedText);
 
             for (int commaId : Sorters.sortSet(labeledCommas.keySet())) {
                 line = scanner.nextLine().trim();
@@ -133,7 +133,7 @@ public class CommaReader implements Parser {
                 String commaLabel = line.split("\\]")[0].split("\\[")[1].trim();
                 for (int commaIndex : labeledCommas.get(commaId)){
                     if (!skip) {
-                        commaList.add(new Comma(commaIndex, commaLabel, rawText, TA, goldTA));
+                        commaList.add(new Comma(commaIndex, commaLabel, tokenizedText, TA, goldTA));
                     }
                 }
                 String tmp = line.substring(line.indexOf(":") + 1, line.indexOf(" relation")).trim();
@@ -185,7 +185,7 @@ public class CommaReader implements Parser {
     public void close() {}
 
     private Map<Integer, Set<Integer>> getLabeledCommas(String annotation) {
-        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        Map<Integer, Set<Integer>> map = new HashMap<>();
         String[] parts = annotation.split("\\s+");
 
         for (int tokenId = 0; tokenId < parts.length; tokenId++) {
@@ -209,7 +209,7 @@ public class CommaReader implements Parser {
      * @return A map of 'gold' {@link TextAnnotation} indexed by their IDs
      */
     public Map<String, TextAnnotation> getTAMap() {
-        Map<String, TextAnnotation> taMap = new HashMap<String, TextAnnotation>();
+        Map<String, TextAnnotation> taMap = new HashMap<>();
         Iterator<TextAnnotation> ptbReader, propbankReader, nombankReader;
 
         String[] sections = { "00" };

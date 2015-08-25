@@ -2,9 +2,9 @@ package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -38,14 +38,22 @@ public class Comma implements Serializable {
      * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA) {
+    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA) {
         this.commaPosition = commaPosition;
         if (role != null) {
-            if (role.equals("Entity attribute")) this.role = "Attribute";
-            else if (role.equals("Entity substitute")) this.role = "Substitute";
-            else this.role = role;
+            switch (role) {
+                case "Entity attribute":
+                    this.role = "Attribute";
+                    break;
+                case "Entity substitute":
+                    this.role = "Substitute";
+                    break;
+                default:
+                    this.role = role;
+                    break;
+            }
         }
-        this.sentence = sentence.split("\\s+");
+        this.sentence = sentence;
         this.TA = TA;
     }
 
@@ -57,7 +65,7 @@ public class Comma implements Serializable {
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      * @param goldTA The TextAnnotation containing gold-standard views for training
      */
-    public Comma(int commaPosition, String role, String sentence, TextAnnotation TA, TextAnnotation goldTA) {
+    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, TextAnnotation goldTA) {
         this(commaPosition, role, sentence, TA);
     	this.goldTA = goldTA;
     }
@@ -68,7 +76,7 @@ public class Comma implements Serializable {
      * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String sentence, TextAnnotation TA) {
+    public Comma(int commaPosition, String[] sentence, TextAnnotation TA) {
         this(commaPosition, null, sentence, TA);
         // Since we know there is going to be no gold structures available
         GOLD = false;
@@ -205,7 +213,7 @@ public class Comma implements Serializable {
 			if(c.isConsituentInRange(commaPosition, commaPosition+1)){
 				try {
 					comma = parseView.getParsePhrase(c);
-				} catch (EdisonException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					System.exit(1);
 				}
@@ -254,14 +262,14 @@ public class Comma implements Serializable {
 			IntPair span = c.getSpan();
 			TextAnnotation TA = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
-					notation += " " + WordHelpers.getPOS(TA, tokenId);
+					notation += " " + POSUtils.getPOS(TA, tokenId);
 	    }
     	
 		return notation;
     }
     
     public List<String> getContainingSRLs() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         TextAnnotation srlTA = (GOLD)? goldTA : TA;
     	PredicateArgumentView pav;
         pav = (PredicateArgumentView)srlTA.getView(ViewNames.SRL_VERB);
@@ -292,7 +300,7 @@ public class Comma implements Serializable {
     public static String getNamedEntityTag(Constituent c){
     	//We don't have gold NER
     	TextAnnotation TA = c.getTextAnnotation();
-    	List<String> NETags = TA.getView(ViewNames.NER).getLabelsCovering(c);
+    	List<String> NETags = TA.getView(ViewNames.NER_CONLL).getLabelsCovering(c);
     	String result = NETags.size()==0? "NULL" : NETags.get(0);
     	for(int i = 1; i<NETags.size(); i++)
     		result += " " + NETags.get(i);
