@@ -1,28 +1,25 @@
 package edu.illinois.cs.cogcomp.nlp.main;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.thrift.TException;
-
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.io.RecordFileIO;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import edu.illinois.cs.cogcomp.thrift.base.Forest;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.base.Tree;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-import edu.illinois.cs.cogcomp.util.CuratorDataUtils;
 
 /**
  * allows user to run a test driver from the command line that checks output of views is
@@ -76,7 +73,7 @@ public class PreprocessorTester
         
         try
         {
-            prep = new IllinoisPreprocessor( rm );
+            prep = new IllinoisPreprocessor( rm, new TextAnnotationBuilder(new IllinoisTokenizer()));
         }
         catch ( Exception e )
         {
@@ -95,30 +92,25 @@ public class PreprocessorTester
             e1.printStackTrace();
         } 
         
-        Record rec = null;
+        TextAnnotation rec = null;
         try
         {
-            rec = prep.processText( text, false );
+            rec = prep.processText( text );
         }
-        catch ( AnnotationFailedException e )
+        catch (AnnotatorException e)
         {
             e.printStackTrace();
             System.exit( -1 );
         }
-        catch ( TException e )
-        {
-            e.printStackTrace();
-            System.exit( -1 );
-        }
+
+
+        View lab = rec.getView(ViewNames.POS);
+        View chunk = rec.getView(ViewNames.SHALLOW_PARSE);
+        View toks = rec.getView(ViewNames.TOKENS);
+        View lemmaLab = rec.getView(ViewNames.LEMMA);
         
-        
-        Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
-        Labeling chunk = rec.getLabelViews().get( CuratorViewNames.chunk );
-        Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
-        Labeling lemmaLab = rec.getLabelViews().get( CuratorViewNames.lemma );
-        
-        List< Span > tokens = toks.getLabels();
-        List< Span >  posTags = lab.getLabels();
+        List<Constituent> tokens = toks.getConstituents();
+        List< Constituent >  posTags = lab.getConstituents();
 //        List< Span > lemmas = lemmaLab.getLabels();
 
         if ( tokens.size() != posTags.size() )
@@ -126,18 +118,13 @@ public class PreprocessorTester
             System.err.println( "ERROR: tokens, pos have different sizes." );
             System.exit( -1 );
         }
-        
-        CuratorDataUtils.printLabeling( out, lab, text );
-        out.println();
-        
-        CuratorDataUtils.printLabeling( out, chunk, text );
-        
-        CuratorDataUtils.printLabeling( out, lemmaLab, text );
-        
-        
-        TextAnnotation ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord( "test", "test", rec );
 
-        Set< String > viewList = ta.getAvailableViews();
+        out.println(lab);
+        out.println(chunk);
+        out.println(lemmaLab);
+
+
+        Set< String > viewList = rec.getAvailableViews();
         
         System.err.println( "## Views in record: " ); // doesn't contain lemma view...
         
@@ -146,52 +133,31 @@ public class PreprocessorTester
         
         System.err.println();
         
-        Forest parse = rec.getParseViews().get( CuratorViewNames.stanfordParse );
+        TreeView parse = (TreeView) rec.getView(ViewNames.PARSE_STANFORD);
         
         int numParseLeaves = 0;
         
-        if ( parse.getTrees().size() > 0 )
+        if ( rec.getNumberOfSentences() > 0 )
         {
-            for ( Tree parseTree : parse.getTrees() )            
+            for ( int sentenceId = 0; sentenceId < rec.getNumberOfSentences(); sentenceId++ )
             {
-                numParseLeaves += CuratorDataUtils.printTree( out, parseTree, text );
+                Tree<String> parseTree = parse.getTree(sentenceId);
+                numParseLeaves += parseTree.getYield().size();
+                out.println(parseTree);
                 out.println( "-----------" );
             }
         }
 
-//        Forest dep = rec.getParseViews().get( CuratorViewNames.stanfordDep );
-//        
-//        int numDepLeaves = 0;
-//        
-//        if ( dep.getTrees().size() > 0 )
-//        {
-//            for ( Tree depTree : dep.getTrees() )            
-//            {
-//                numDepLeaves += CuratorDataUtils.printTree( out, depTree, text );
-//                out.println( "-----------" );
-//            }
-//        }
-
-        
-        Labeling ccgLemmas = rec.getLabelViews().get( CuratorViewNames.lemma );
-        
-        if ( null != ccgLemmas )
-            if ( ccgLemmas.getLabelsSize() > 0 )
-            {
-                CuratorDataUtils.printLabeling( out, ccgLemmas, text );
-                out.println( "-----------" );                
-            }
-  
-        Labeling ner = rec.getLabelViews().get( CuratorViewNames.ner );
+        View ner = rec.getView(ViewNames.NER_CONLL);
         int numNer = 0;
         
         if ( null != ner )
         {
-        	numNer = ner.getLabelsSize();
+        	numNer = ner.getNumberOfConstituents();
         	
             if ( numNer > 0 )
             {
-                CuratorDataUtils.printLabeling( out, ner, text );
+                out.println(ner);
                 out.println( "-----------" );                
             }
         }
@@ -205,8 +171,7 @@ public class PreprocessorTester
         out.println( "Number of POS tags: " + posTags.size() );
         out.println( "Number of Parse leaves: " + numParseLeaves );
 //        out.println( "Number of Dependency leaves: " + numDepLeaves );
-        out.println( "Number of CCG Lemmas: " + ccgLemmas.getLabelsSize() );
-        out.println( "Number of Named Entities: " + ner.getLabelsSize() );
+        out.println( "Number of Named Entities: " + ner.getNumberOfConstituents() );
         
 //        if ( numParseLeaves != tokens.size() || numParseLeaves != posTags.size() )
 //        {
@@ -217,15 +182,9 @@ public class PreprocessorTester
         boolean forceOverwrite = true;
         try
         {
-	        RecordFileIO.serializeRecordToFile( rec, serOutFile, forceOverwrite );
+	        SerializationHelper.serializeTextAnnotationToFile(rec, serOutFile, forceOverwrite);
         }
         catch ( IOException e )
-        {
-	        e.printStackTrace();
-	        System.err.println("Couldn't serialize record to file '" + serOutFile + "': " +
-	        		e.getMessage() );
-        }
-        catch ( TException e )
         {
 	        e.printStackTrace();
 	        System.err.println("Couldn't serialize record to file '" + serOutFile + "': " +

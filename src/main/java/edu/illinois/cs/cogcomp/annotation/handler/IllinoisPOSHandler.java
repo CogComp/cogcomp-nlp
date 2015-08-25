@@ -61,11 +61,10 @@ public class IllinoisPOSHandler extends PipelineAnnotator
         List< Constituent > tokens = record.getView( ViewNames.TOKENS ).getConstituents();
         View posView = new View( ViewNames.POS, getAnnotatorName(), record, 1.0 );
 		int tcounter = 0;
-		for (int i = 0; i < input.size(); i++) {
-			Token lbjtoken = input.get(i);
+		for (Token lbjtoken : input) {
 			tagger.discreteValue(lbjtoken);
 			Constituent token = tokens.get(tcounter);
-			Constituent label = new Constituent(lbjtoken.label, ViewNames.POS, record, token.getStartSpan(), token.getEndSpan());
+			Constituent label = new Constituent(tagger.discreteValue(lbjtoken), ViewNames.POS, record, token.getStartSpan(), token.getEndSpan());
 			posView.addConstituent(label);
 			tcounter++;
 		}

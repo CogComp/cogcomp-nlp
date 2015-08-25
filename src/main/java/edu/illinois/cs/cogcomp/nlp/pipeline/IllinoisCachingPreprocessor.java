@@ -218,6 +218,7 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
             processedTa = preprocessor.processTextAnnotation(ta );
         } catch (AnnotatorException e) {
             e.printStackTrace();
+            logger.error( "Couldn't process TextAnnotation with text '" + ta.getText() + "'." );
         }
 
 

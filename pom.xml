@@ -68,18 +68,6 @@
 			<artifactId>commons-io</artifactId>
 			<version>1.3.2</version>
 		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>curator-utils</artifactId>
-			<version>0.0.4</version>
-			<!--TODO Remove this when curator-utils declares log4j12-1.5.8 optional-->
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-log4j12</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
 		<!-- NER and its dependencies -->
 		<dependency>

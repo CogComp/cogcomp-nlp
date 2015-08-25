@@ -1,20 +1,13 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.nlp.common.AdditionalViewNames;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import edu.illinois.cs.cogcomp.thrift.base.Forest;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-import edu.illinois.cs.cogcomp.util.CuratorDataUtils;
-import org.apache.thrift.TException;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -48,7 +41,8 @@ public class IllinoisPreprocessorTest
             System.exit( -1 );
         }
         try {
-            prep = new IllinoisPreprocessor( rm );
+            TextAnnotationBuilder textAnnotationBuilder = new TextAnnotationBuilder(new IllinoisTokenizer());
+            prep = new IllinoisPreprocessor( rm, textAnnotationBuilder);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit( -1 );
@@ -64,167 +58,7 @@ public class IllinoisPreprocessorTest
 	{
 	}
 
-	/**
-	 * tests whether a two-sentence text span is processed to create the expected views: tokens, sentences, 
-	 *    pos tags, ner and stanford parse/dependency trees.  It verifies that the views agree by checking whether
-	 *    there are the same number of tokens, pos tags, and parse tree leaves. Dependency parse skips prepositions
-	 *    and possessive markers -- and maybe other tokens too -- so only bounds are checked.  
-	 */
-	@Test
-	public void testProcessText()
-	{
-
-		String text = "The CIA leaders thought Marin's father had left the building already. (But the humans were wrong.)" ;
-
-		Record rec = null;
-		try
-		{
-			rec = prep.processText( text, false );
-		}
-		catch ( AnnotationFailedException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-		catch ( TException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-		boolean isPosOk = false;
-		boolean isChunkOk = false;
-		boolean isLemmaOk = false;
-		boolean isNerOk = false;
-		boolean isNerExtOk = false;
-		boolean isParseOk = false;
-        boolean isDepOk = false;
-        Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
-        Labeling toks = rec.getLabelViews().get(CuratorViewNames.tokens);
-
-        List< Span > tokens = toks.getLabels();
-        List< Span >  posTags = lab.getLabels();
-
-        if ( ( tokens.size() != posTags.size() ) || tokens.size() != 21 )
-        {
-            System.err.println( "ERROR: tokens, pos have different/incorrect sizes." );
-        }
-        else
-            isPosOk = true;
-
-        assertTrue(isPosOk);
-
-        CuratorDataUtils.printLabeling(System.out, lab, text);
-        System.out.println();
-        Labeling chunk = rec.getLabelViews().get(CuratorViewNames.chunk);
-        List< Span > chunkTags = chunk.getLabels();
-
-        if ( chunkTags.size() > 0 )
-            isChunkOk = true;
-
-        assertTrue(isChunkOk);
-
-        CuratorDataUtils.printLabeling(System.out, chunk, text);
-        System.out.println();
-        Labeling lemma = rec.getLabelViews().get( CuratorViewNames.lemma );
-
-
-        int numSpans = lemma.getLabelsSize();
-
-        if ( numSpans == tokens.size() )
-            isLemmaOk = true;
-
-        assertTrue(isLemmaOk);
-
-        System.out.println( "found " + numSpans + " lemma nodes, "  + tokens.size() + " tokens." );
-
-        System.out.println(CuratorViewNames.lemma + " VIEW: ");
-        CuratorDataUtils.printLabeling( System.out, lemma, text );
-
-        Labeling ner = rec.getLabelViews().get(CuratorViewNames.ner);
-
-        List< Span > nerTags = ner.getLabels();
-
-        if ( nerTags.size() > 0 )
-            isNerOk = true;
-
-        assertTrue(isNerOk);
-
-        CuratorDataUtils.printLabeling(System.out, ner, text);
-        System.out.println();
-
-
-        Labeling nerExt = rec.getLabelViews().get(AdditionalViewNames.nerExt);
-		List< Span > nerExtTags = nerExt.getLabels();
-
-		if ( nerExtTags.size() > 0 )
-			isNerExtOk = true;
-
-		assertTrue(isNerExtOk);
-
-		CuratorDataUtils.printLabeling(System.out, ner, text);
-		System.out.println();
-
-
-        Forest parseView = rec.getParseViews().get( CuratorViewNames.stanfordParse );
-        Forest depView = rec.getParseViews().get( CuratorViewNames.stanfordDep );
-        Labeling sentView = rec.getLabelViews().get( CuratorViewNames.sentences );
-
-        // Check that we have as many trees as sentences
-        isParseOk = parseView.getTreesSize() == sentView.getLabelsSize();
-        assertTrue( isParseOk );
-
-		TextAnnotation ta = null;
-
-		try {
-			ta = prep.processTextToTextAnnotation( "test", "test", text, false);
-		} catch (AnnotationFailedException e) {
-			e.printStackTrace();
-			fail( "Exception creating TextAnnotation for text '" + text + "'." );
-		} catch (TException e) {
-			e.printStackTrace();
-			fail( "Exception creating TextAnnotation for text '" + text + "'." );
-		}
-
-		List< Constituent > lemmaConstituents = ta.getView( CuratorViewNames.lemma ).getConstituents();
-
-		for ( Constituent c: lemmaConstituents )
-		{
-			System.out.println( "word: " + ta.getToken( c.getStartSpan() ) + ", lemma: " + c.getLabel() );
-		}
-
-        TreeView depTaView = (TreeView ) ta.getView( ViewNames.DEPENDENCY_STANFORD );
-
-        for ( Constituent t : depTaView.getConstituents() )
-        {
-            System.out.println( "Dependency constituent '" + t.getLabel() +"' for string '" + t.getSurfaceString() + "':" );
-            System.out.println( "Token offsets: " + t.getStartSpan() + ", " + t.getEndSpan() );
-            System.out.println( "Char offsets: " + t.getStartCharOffset() + ", " + t.getEndCharOffset() +
-                    " (corresponds to string '" + ta.getText().substring( t.getStartCharOffset() , t.getEndCharOffset() ) + "')" );
-        }
-
-        // check that whitespacing behavior is non-threatening, i.e. doesn't result in immediate exceptions
-
-        try {
-            boolean isTokenized = true;
-            TextAnnotation newTa = prep.createTextAnnotation( "test", "test", ta.getTokenizedText(), isTokenized );
-            newTa = prep.processTextAnnotation( newTa, true );
-        } catch (AnnotationFailedException e) {
-            e.printStackTrace();
-            fail( "Exception creating TextAnnotation for text '" + text + "'." );
-        } catch (TException e) {
-            e.printStackTrace();
-            fail( "Exception creating TextAnnotation for text '" + text + "'." );
-        }
-        List< Constituent > dupLemmaConstituents = ta.getView( CuratorViewNames.lemma ).getConstituents();
-
-        for ( Constituent c: dupLemmaConstituents )
-        {
-            System.out.println( "word: " + ta.getToken( c.getStartSpan() ) + ", lemma: " + c.getLabel() );
-        }
-
- 	}
-
-
+    //TODO There is currently no way to test a WS version of the preprocessor
 
 	/**
 	 * tests whether a two-sentence text span is processed to create the expected views: tokens, sentences, 
@@ -234,43 +68,34 @@ public class IllinoisPreprocessorTest
 	 * This method uses pre-tokenized inputs and tests the Preprocessor's whitespace mode.  
 	 */
 	@Test
-	public void testProcessWsText()
+	public void testProcessText()
 	{
+        String text = "The CIA leaders thought Marin's father had left the building already. (But the humans were wrong.)" ;
 
-		//        String text = "The CIA thought Marin 's father had left the building already. But they were wrong . " ;
-		String text = "The CIA leaders thought Marin 's father had left the building already ." + 
-				System.getProperty( "line.separator" ) + "( But the humans were wrong . )" ;
-
-		Record rec = null;
-		try
-		{
-			rec = prep.processText( text, true );
-		}
-		catch ( AnnotationFailedException e )
-		{
+		TextAnnotation ta = null;
+		try {
+			ta = prep.processText( text );
+		} catch (AnnotatorException e) {
 			e.printStackTrace();
 			fail( e.getMessage() );
 		}
-		catch ( TException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
+
+        checkTextAnnotation(ta);
+
 		boolean isPosOk = false;
 		//        boolean isDepOk = false;
 		//        boolean isParseOk = false;
 
-		if ( rec.getLabelViews().containsKey( CuratorViewNames.pos ) &&
-				rec.getLabelViews().containsKey( CuratorViewNames.tokens ) 
-				//                &&
-				//                rec.getParseViews().containsKey( CuratorViewNames.stanfordDep )
+		if ( ta.hasView( ViewNames.POS ) && ta.hasView(ViewNames.TOKENS)
+//				                &&
+//				                ta.hasView( ViewNames.DEPENDENCY_STANFORD )
 				)
 		{
-			Labeling lab = rec.getLabelViews().get( CuratorViewNames.pos );
-			Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
+			View poss = ta.getView(ViewNames.POS);
+			View toks = ta.getView(ViewNames.TOKENS);
 
-			List< Span > tokens = toks.getLabels();
-			List< Span >  posTags = lab.getLabels();
+			List< Constituent > tokens = toks.getConstituents();
+			List< Constituent >  posTags = poss.getConstituents();
 
 
 			if ( ( tokens.size() != posTags.size() ) ||
@@ -281,11 +106,10 @@ public class IllinoisPreprocessorTest
 			else 
 				isPosOk = true;
 
+            System.out.println(poss);
+            System.out.println();
 
-			CuratorDataUtils.printLabeling( System.out, lab, text );
-			System.out.println();
-
-			//            Forest parse = rec.getParseViews().get( CuratorViewNames.stanfordParse );
+			//            Forest parse = ta.getParseViews().get( ViewNames.stanfordParse );
 			//            
 			//            int numLeaves = 0;
 			//            
@@ -298,7 +122,7 @@ public class IllinoisPreprocessorTest
 			//
 			//            System.out.println( "Found " + numLeaves + " parse leaves, " + tokens.size() + " tokens." );
 			//
-			//            Forest dep = rec.getParseViews().get( CuratorViewNames.stanfordDep );
+			//            Forest dep = ta.getParseViews().get( ViewNames.stanfordDep );
 			//            
 			//            int numDepNodes = 0;
 			//            
@@ -318,93 +142,28 @@ public class IllinoisPreprocessorTest
 		//        assertTrue( isDepOk );
 	}
 
-
-	/**
-	 * tests whether a record created from a text string has the right number of 
-	 *   sentences and tokens. 
-	 */
-	@Test
-	public void testCreateRecord()
-	{
-		String text = "The CIA leaders thought Marin's father had left the building already. (But the humans were wrong.)" ;
-
-		Record rec = null;
-		try
-		{
-			rec = prep.createRecord( text, false );
-		}
-		catch ( AnnotationFailedException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-		catch ( TException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-
-		boolean isRecOk = checkRecord( rec );
-
-		assertTrue( isRecOk );
-
-	}
-
-
-	/**
-	 * tests whether a record created from a text string has the right number of 
-	 *   sentences and tokens. 
-	 */
-	@Test
-	public void testWsCreateRecord()
-	{
-		String text = "The CIA leaders thought Marin 's father had left the building already ." + 
-				System.getProperty( "line.separator" ) + "( But the humans were wrong . )" ;
-
-		Record rec = null;
-		try
-		{
-			rec = prep.createRecord( text, true );
-		}
-		catch ( AnnotationFailedException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-		catch ( TException e )
-		{
-			e.printStackTrace();
-			fail( e.getMessage() );
-		}
-
-		boolean isRecordOk = checkRecord( rec );
-
-		assertTrue( isRecordOk );
-
-	}
-
-	private boolean checkRecord( Record rec )
+	private boolean checkTextAnnotation(TextAnnotation ta)
 	{
 		boolean isTokViewOk = false;
-		if ( rec.getLabelViews().containsKey( CuratorViewNames.tokens ) )
+		if ( ta.hasView(ViewNames.TOKENS) )
 		{
-			Labeling toks = rec.getLabelViews().get( CuratorViewNames.tokens );
-			System.err.println( "## tokens view has " + toks.getLabelsSize() + " tokens." );
+			View toks = ta.getView(ViewNames.TOKENS);
+			System.err.println( "## tokens view has " + toks.getNumberOfConstituents() + " tokens." );
 
-			if ( toks.getLabels().size() == 21 )
+			if ( toks.getNumberOfConstituents() == 21 )
 				isTokViewOk = true;
 		}
 
 
 		boolean isSentViewOk = false;
 
-		if ( rec.getLabelViews().containsKey( CuratorViewNames.sentences ) )
+		if ( ta.hasView(ViewNames.SENTENCE) )
 		{
-			Labeling sents = rec.getLabelViews().get( CuratorViewNames.sentences );
+			View sents = ta.getView(ViewNames.SENTENCE);
 
-			System.err.println( "## sentences view has " + sents.getLabelsSize() + " sentences." );
+			System.err.println( "## sentences view has " + sents.getNumberOfConstituents() + " sentences." );
 
-			if ( sents.getLabelsSize() == 2 )
+			if ( sents.getNumberOfConstituents() == 2 )
 				isSentViewOk = true;
 		}
 

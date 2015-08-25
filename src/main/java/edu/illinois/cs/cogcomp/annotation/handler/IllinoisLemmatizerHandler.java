@@ -1,24 +1,16 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
-
-import edu.illinois.cs.cogcomp.transitional.CuratorDataStructureInterface;
-import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-import edu.illinois.cs.cogcomp.thrift.labeler.Labeler;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * wraps Illinois Lemmatizer for use as Curator Component. 

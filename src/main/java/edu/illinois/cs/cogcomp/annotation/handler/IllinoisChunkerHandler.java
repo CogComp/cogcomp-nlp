@@ -105,10 +105,12 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 			}
 			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && clabel != null) {
 
-                currentChunkEnd = previous.getEndSpan();
-                Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
-				chunkView.addConstituent(label);
-                clabel = null;
+				if (previous != null) {
+					currentChunkEnd = previous.getEndSpan();
+					Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
+					chunkView.addConstituent(label);
+					clabel = null;
+				}
 			}
 
 			if (lbjtoken.type.charAt(0) == 'B') {

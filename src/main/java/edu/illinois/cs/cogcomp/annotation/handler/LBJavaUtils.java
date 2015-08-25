@@ -5,8 +5,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,9 +20,6 @@ public class LBJavaUtils {
     /**
      * Converts a record into LBJ Tokens for use with LBJ classifiers.
      * If part of speech is present in record, it is added to the LBJ tokens.
-     *
-     * @param record
-     * @return
      */
     public static List<Token> recordToLBJTokens(TextAnnotation record) {
         List<Token> lbjTokens = new LinkedList<Token>();
@@ -83,11 +78,6 @@ public class LBJavaUtils {
     /**
      * Converts sentences and tokens represented as spans into a list of lists
      * of string.
-     *
-     * @param tokens
-     * @param sentences
-     * @param rawText
-     * @return
      */
     public static List<List<String>> tokensAsStrings(List<Constituent> tokens,
                                                       List<Constituent> sentences,

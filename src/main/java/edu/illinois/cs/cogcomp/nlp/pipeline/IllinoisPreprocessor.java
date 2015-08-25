@@ -1,9 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import java.net.SocketException;
 import java.util.*;
 
-import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
@@ -181,35 +179,36 @@ public class IllinoisPreprocessor
     }
 
     /**
-     * Annotates record argument with views according to annotators with which this object is instantiated.
+     * Annotates TextAnnotation argument with views according to annotators with which this object is instantiated.
      *
-     * @param record TextAnnotation object to annotate
+     * @param ta TextAnnotation object to annotate
      * @return The annotated TextAnnotation object
      * @throws AnnotatorException
      */
 
-    public TextAnnotation processTextAnnotation( TextAnnotation record ) throws AnnotatorException {
+    public TextAnnotation processTextAnnotation( TextAnnotation ta ) throws AnnotatorException {
         if ( usePos )
-            pos.labelRecord( record );
+            pos.labelRecord( ta );
 
         if ( useChunker )
-            chunker.labelRecord( record );
+            chunker.labelRecord( ta );
 
 
         if ( useLemmatizer )
-            lemmatizer.labelRecord( record );
+            lemmatizer.labelRecord( ta );
 
-        if ( useNer )
-            ner.labelRecord( record );
-
-        if ( useNerExt )
-            nerExt.labelRecord(record);
+        //TODO Add these as TextAnnotation-based handlers
+//        if ( useNer )
+//            ner.labelRecord( ta );
+//
+//        if ( useNerExt )
+//            nerExt.labelRecord(ta);
 
 
         if ( useStanfordParse )
             if (null != stanfordPipeline || ( null != this.posAnnotator && null != this.parseAnnotator ) )
             {
-                NewStanfordToForest.annotate(this.posAnnotator, this.parseAnnotator, record);
+                StanfordParseHandler.annotate(this.posAnnotator, this.parseAnnotator, ta);
             }
             else
             {
@@ -218,7 +217,7 @@ public class IllinoisPreprocessor
                 logger.error( msg );
                 throw new AnnotatorException( msg );
             }
-        return record;
+        return ta;
     }
     
 
