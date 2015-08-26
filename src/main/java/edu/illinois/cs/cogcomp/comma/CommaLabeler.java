@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.lbj.CommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 /**
  * An interface for providing a comma {@link PredicateArgumentView}
@@ -33,6 +34,7 @@ public class CommaLabeler implements Annotator {
             Comma commaStruct = new Comma(comma.getStartSpan(), tokenizedText, ta);
             String label = classifier.discreteValue(commaStruct);
             Constituent predicate = new Constituent(label, VIEW_NAME, ta, comma.getStartSpan(), comma.getEndSpan());
+            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, label);
             srlView.addConstituent(predicate);
             Constituent leftArg = commaStruct.getPhraseToLeftOfComma(1);
             if (leftArg != null) {

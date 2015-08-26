@@ -2,10 +2,7 @@ package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
 import junit.framework.TestCase;
@@ -45,7 +42,13 @@ public class CommaLabelerTest extends TestCase {
     public void testGetCommaSRL() throws AnnotatorException {
         // Create the Comma structure
         PredicateArgumentView srlView = (PredicateArgumentView) classifier.getView(ta);
-        assertEquals(",:\n    LeftOfSubstitute: Mary\n    RightOfSubstitute: the clever scientist\n,:\n" +
-                "    LeftOfSubstitute: the clever scientist\n", srlView.toString());
+        assertEquals(2, srlView.getPredicates().size());
+        Constituent pred1 = srlView.getPredicates().get(0);
+        assertEquals("Substitute", srlView.getPredicateSense(pred1));
+        assertEquals(2, srlView.getArguments(pred1).size());
+        assertEquals("Mary", srlView.getArguments(pred1).get(0).getTarget().getSurfaceString());
+        Constituent pred2 = srlView.getPredicates().get(1);
+        assertEquals(1, srlView.getArguments(pred2).size());
+        assertEquals("LeftOfSubstitute", srlView.getArguments(pred2).get(0).getRelationName());
     }
 }
