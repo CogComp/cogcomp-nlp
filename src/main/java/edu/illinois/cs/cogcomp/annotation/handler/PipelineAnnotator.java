@@ -69,12 +69,12 @@ abstract public class PipelineAnnotator implements Annotator
         return true;
     }
 
-    public TextAnnotation labelRecord(TextAnnotation record) throws AnnotatorException
+    public TextAnnotation labelTextAnnotation(TextAnnotation ta) throws AnnotatorException
     {
         long startTime = System.currentTimeMillis();
-        logger.debug( NAME + ".labelRecord() (" + getIdentifier() + "): raw text is '" + record.getText() + "'" );
+        logger.debug( NAME + ".labelTextAnnotation() (" + getIdentifier() + "): raw text is '" + ta.getText() + "'" );
 
-        if ( !checkRequiredViews( this.getRequiredViews(), record ) )
+        if ( !checkRequiredViews( this.getRequiredViews(), ta ) )
         {
             String msg = getIdentifier() + ".getView(): Record is missing a required view (one of " +
                     StringUtils.join(this.getRequiredViews(), ", ") + ").";
@@ -82,15 +82,15 @@ abstract public class PipelineAnnotator implements Annotator
             throw new AnnotatorException( msg );
         }
 
-        View v = getView(record);
+        View v = getView(ta);
 
-        if ( !record.hasView( v.getViewName() ) )
-            record.addView( v.getViewName(), v );
+        if ( !ta.hasView( v.getViewName() ) )
+            ta.addView( v.getViewName(), v );
 
         long endTime = System.currentTimeMillis();
         logger.debug( getIdentifier() + ": Tagged input in {}ms", endTime - startTime);
 
-        return record;
+        return ta;
     }
 
 }

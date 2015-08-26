@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 public class IllinoisPreprocessorTest
 {
 
-	private static final String CONFIG = "src/test/resources/testConfig.txt";
+	private static final String CONFIG = "src/test/resources/testConfig.properties";
 
 	private static IllinoisPreprocessor prep;
 

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class IllinoisCachingPreprocessorTest
 {
-    private static final String CONFIG = "src/test/resources/testConfig.txt";
+    private static final String CONFIG = "src/test/resources/testConfig.properties";
 
     private static Logger logger = LoggerFactory.getLogger( IllinoisCachingPreprocessorTest.class );
 

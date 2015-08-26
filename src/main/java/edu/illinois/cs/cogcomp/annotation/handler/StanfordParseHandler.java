@@ -14,22 +14,34 @@ import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
+import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.ArrayCoreMap;
 import edu.stanford.nlp.util.CoreMap;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class StanfordParseHandler {
+public class StanfordParseHandler extends PipelineAnnotator {
 
-    /**
-     * given the input record, read off the text and generate a stanford constituency and dependency parse
-     */
-    public static TextAnnotation annotate(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, TextAnnotation record) throws AnnotatorException {
-        TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordConverter", record, 1d);
+    private POSTaggerAnnotator posAnnotator;
+    private ParserAnnotator parseAnnotator;
+
+    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
+        super("Stanford Parser", "3.3.1", "stanfordparse");
+        this.posAnnotator = posAnnotator;
+        this.parseAnnotator = parseAnnotator;
+    }
+
+    @Override
+    public String getViewName() {
+        return ViewNames.PARSE_STANFORD;
+    }
+
+    @Override
+    public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
+        TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
-        List<CoreMap> sentences = buildStanfordSentences(record);
+        List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
         Annotation document = new Annotation(sentences);
         posAnnotator.annotate(document);
         parseAnnotator.annotate(document);
@@ -37,16 +49,19 @@ public class StanfordParseHandler {
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
-            //edu.stanford.nlp.trees.Tree
-            edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeAnnotation.class);
-            // Convert from Stanford Tree to thrift.base.Tree
-            Tree<String> tree = new Tree<String>();
+            edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+            Tree<String> tree = new Tree<String>(stanfordTree.value());
             for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
-                tree.addSubtree(generateNode(pt, tree));
+                tree.addSubtree(generateNode(pt));
             }
             treeView.setParseTree(sentenceId, tree);
         }
-        return null;
+        return treeView;
+    }
+
+    @Override
+    public String[] getRequiredViews() {
+        return new String[]{ViewNames.SENTENCE, ViewNames.TOKENS};
     }
 
     protected static List<CoreMap> buildStanfordSentences(TextAnnotation ta) {
@@ -109,19 +124,17 @@ public class StanfordParseHandler {
      * Returns the top Node of the tree.
      *
      * @param parse  Stanford Tree
-     * @param tree   Curator Tree
      * @return top Node of the Tree
      */
-    private static Tree<String> generateNode(edu.stanford.nlp.trees.Tree parse, Tree<String> tree) {
-        List<Tree<String>> nodes = tree.getChildren(); // tree is the curator Tree we are building
+    private static Tree<String> generateNode(edu.stanford.nlp.trees.Tree parse) {
         Tree<String> node = new Tree<String>(parse.value());
 
         for (edu.stanford.nlp.trees.Tree pt : parse.getChildrenAsList()) {
             if (pt.isLeaf()) {
                 node.addLeaf(pt.nodeString());
-            } else { //generate child of parse, the current node in tree
-                Tree<String> child = generateNode(pt, tree);
-                nodes.add(child);
+            } else {
+                //generate child of parse, the current node in tree
+                node.addSubtree(generateNode(pt));
             }
         }
         return node;
