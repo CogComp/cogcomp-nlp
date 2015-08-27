@@ -1,0 +1,512 @@
+
+67	NP --> NP PP , PP
+TextAnnotation: Both Newsweek and U.S. News have been gaining circulation in recent years without heavy use of electronic giveaways to subscribers , such as telephones or watches .
+TextAnnotation: To further load the stakes , Mr. Lane dreamed up a highly improbable romance for the Artist , with a young woman who owns her own children 's shop and who lives in an expensive high-rise apartment building .
+TextAnnotation: J.L. Henry & Co. , Miami , and a principal of the firm , Henry I. Otero of Miami , were jointly fined $ 30,000 and expelled , for alleged improper use of a customer 's funds , among other things .
+(S1
+    (S
+       (NP-SBJ (DT Both)
+               (NP (NNP Newsweek))
+               (CC and)
+               (NP (NNP U.S.) (NNP News)))
+       (VP (VBP have)
+           (VP (VBN been)
+               (VP (VBG gaining)
+                   (NP (NN circulation))
+                   (PP-TMP (IN in)
+                           (NP (JJ recent) (NNS years)))
+                   (PP-MNR (IN without)
+                           (NP
+                               (NP (JJ heavy) (NN use))
+                               (PP (IN of)
+                                   (NP
+                                       (NP (JJ electronic) (NNS giveaways))
+                                       (PP-DIR (TO to)
+                                               (NP (NNS subscribers)))
+                                       (, ,)
+                                       (PP (JJ such) (IN as)
+                                           (NP (NNS telephones)
+                                               (CC or)
+                                               (NNS watches))))))))))
+       (. .)))
+
+
+
+59	VP --> *** NP PP , SBAR
+TextAnnotation: Under a 1934 law , the Johnson Debt Default Act , as amended , it 's illegal for Americans to extend credit to countries in default to the U.S. government , unless they are members of the World Bank and International Monetary Fund .
+TextAnnotation: The heated talk stirred up by recent Japanese investments in the U.S. is focusing attention on the differences in investment climate , even though it 's only one of many subjects to be covered in the bilateral talks , known as the Structural Impediments Initiative .
+TextAnnotation: A buffet breakfast was held in the museum , where food and drinks are banned to everyday visitors .
+(S1
+    (S
+       (PP-LOC (IN Under)
+               (NP
+                   (NP (DT a) (CD 1934) (NN law))
+                   (, ,)
+                   (NP
+                       (NP (DT the) (NNP Johnson) (NNP Debt) (NNP Default) (NNP Act))
+                       (PRN (, ,)
+                            (SBAR (RB as)
+                                  (S
+                                     (NP-SBJ-1 (-NONE- *))
+                                     (VP (VBN amended)
+                                         (NP (-NONE- *-1)))))
+                            (, ,)))))
+       (NP-SBJ
+               (NP (PRP it))
+               (SBAR (-NONE- *EXP*-2)))
+       (VP (VBZ 's)
+           (ADJP-PRD (JJ illegal))
+           (SBAR-2 (IN for)
+                   (S
+                      (NP-SBJ (NNS Americans))
+                      (VP (TO to)
+                          (VP (VB extend)
+                              (NP (NN credit))
+                              (PP-CLR (TO to)
+                                      (NP
+                                          (NP (NNS countries))
+                                          (PP (IN in)
+                                              (NP
+                                                  (NP (NN default))
+                                                  (PP (TO to)
+                                                      (NP (DT the) (NNP U.S.) (NN government)))))))
+                              (, ,)
+                              (SBAR-ADV (IN unless)
+                                        (S
+                                           (NP-SBJ (PRP they))
+                                           (VP (VBP are)
+                                               (NP-PRD
+                                                       (NP (NNS members))
+                                                       (PP (IN of)
+                                                           (NP (DT the)
+                                                               (NX
+                                                                   (NX (NNP World) (NNP Bank))
+                                                                   (CC and)
+                                                                   (NX (NNP International) (NNP Monetary) (NNP Fund))))))))))))))
+       (. .)))
+
+
+
+30	VP --> *** S , SBAR
+TextAnnotation: Still , bankers expect packaging to flourish , primarily because more customers are demanding that financial services be tailored to their needs .
+TextAnnotation: The speed of his transaction is n't to be feared either , because faster and cleaner execution is desirable , not loathsome .
+TextAnnotation: Even with mutual funds , the little investor continues to tolerate high fees , high commissions and poor performance , while index-fund managers slowly amass a better record with lower fees , lower commissions and less risk .
+(S1
+    (S
+       (ADVP (RB Still))
+       (, ,)
+       (NP-SBJ (NNS bankers))
+       (VP (VBP expect)
+           (S
+              (NP-SBJ (NN packaging))
+              (VP (TO to)
+                  (VP (VB flourish))))
+           (, ,)
+           (SBAR-PRP
+                     (ADVP (RB primarily))
+                     (IN because)
+                     (S
+                        (NP-SBJ (JJR more) (NNS customers))
+                        (VP (VBP are)
+                            (VP (VBG demanding)
+                                (SBAR (IN that)
+                                      (S
+                                         (NP-SBJ-124 (JJ financial) (NNS services))
+                                         (VP (VB be)
+                                             (VP (VBN tailored)
+                                                 (NP (-NONE- *-124))
+                                                 (PP-CLR (TO to)
+                                                         (NP (PRP$ their) (NNS needs))))))))))))
+       (. .)))
+
+
+
+29	VP --> *** ADJP , SBAR
+TextAnnotation: In addition to the extra privacy of these trades , the transactions can often be less expensive to execute , because the parties do n't have to pay a floor brokerage fee or a specialist 's fee .
+TextAnnotation: The other side , he argues , `` knows Giuliani has always been pro-choice , even though he has personal reservations .
+TextAnnotation: The Old Guard 's assault on program trading and its practitioners has been fierce and broad-based , in part because some Old Guard members feel their very livelihood is at stake .
+(S1
+    (S
+       (PP (IN In)
+           (NP
+               (NP (NN addition))
+               (PP (TO to)
+                   (NP
+                       (NP (DT the) (JJ extra) (NN privacy))
+                       (PP (IN of)
+                           (NP (DT these) (NNS trades)))))))
+       (, ,)
+       (NP-SBJ (DT the) (NNS transactions))
+       (VP (MD can)
+           (ADVP-TMP (RB often))
+           (VP (VB be)
+               (ADJP-PRD (RBR less) (JJ expensive)
+                         (S
+                            (NP-SBJ (-NONE- *))
+                            (VP (TO to)
+                                (VP (VB execute)))))
+               (, ,)
+               (SBAR-PRP (IN because)
+                         (S
+                            (NP-SBJ-1 (DT the) (NNS parties))
+                            (VP (VBP do) (RB n't)
+                                (VP (VB have)
+                                    (S
+                                       (NP-SBJ (-NONE- *-1))
+                                       (VP (TO to)
+                                           (VP (VB pay)
+                                               (NP
+                                                   (NP (DT a) (NN floor) (NN brokerage) (NN fee))
+                                                   (CC or)
+                                                   (NP
+                                                       (NP (DT a) (NN specialist) (POS 's))
+                                                       (NN fee))))))))))))
+       (. .)))
+
+
+
+27	VP --> *** SBAR , S
+TextAnnotation: In the first three months of 1990 , the Treasury estimates that it will have to raise between $ 45 billion and $ 50 billion , assuming that it decides to aim for a $ 10 billion cash balance at the end of March .
+TextAnnotation: Mrs. Yeargin concedes that she went over the questions in the earlier class , adding : `` I wanted to help all '' students .
+TextAnnotation: But the New York Stock Exchange chairman said he does n't support reinstating a `` collar '' on program trading , arguing that firms could get around such a limit .
+(S1
+    (S
+       (PP-TMP (IN In)
+               (NP
+                   (NP (DT the) (JJ first) (CD three) (NNS months))
+                   (PP (IN of)
+                       (NP (CD 1990)))))
+       (, ,)
+       (NP-SBJ (DT the) (NNP Treasury))
+       (VP (VBZ estimates)
+           (SBAR (IN that)
+                 (S
+                    (NP-SBJ-1 (PRP it))
+                    (VP (MD will)
+                        (VP (VB have)
+                            (S
+                               (NP-SBJ (-NONE- *-1))
+                               (VP (TO to)
+                                   (VP (VB raise)
+                                       (NP
+                                           (QP (IN between) ($ $) (CD 45) (CD billion)
+                                               (CC and)
+                                               ($ $) (CD 50) (CD billion))
+                                           (-NONE- *U*)))))))))
+           (, ,)
+           (S-ADV
+                  (NP-SBJ (-NONE- *))
+                  (VP (VBG assuming)
+                      (SBAR (IN that)
+                            (S
+                               (NP-SBJ-2 (PRP it))
+                               (VP (VBZ decides)
+                                   (S
+                                      (NP-SBJ (-NONE- *-2))
+                                      (VP (TO to)
+                                          (VP (VB aim)
+                                              (PP-CLR (IN for)
+                                                      (NP
+                                                          (NP (DT a)
+                                                              (ADJP
+                                                                    (QP ($ $) (CD 10) (CD billion))
+                                                                    (-NONE- *U*))
+                                                              (NN cash) (NN balance))
+                                                          (PP-TMP (IN at)
+                                                                  (NP
+                                                                      (NP (DT the) (NN end))
+                                                                      (PP (IN of)
+                                                                          (NP (NNP March))))))))))))))))
+       (. .)))
+
+
+
+24	VP --> *** ADJP , PP
+TextAnnotation: The Ministry of International Trade and Industry summoned executives from the companies to `` make sure they understood '' the concern about such practices , according to a government spokesman .
+TextAnnotation: But analysts said early results from the reorganization have been disappointing , especially in Europe , and there were signs that the board became impatient .
+TextAnnotation: Despite the modest gains , traders said the market remains dull , with investors remaining cautiously on the sidelines .
+(S1
+    (S
+       (NP-SBJ-1
+                 (NP (DT The) (NNP Ministry))
+                 (PP (IN of)
+                     (NP
+                         (NP (NNP International) (NNP Trade))
+                         (CC and)
+                         (NP (NNP Industry)))))
+       (VP (VBD summoned)
+           (NP
+               (NP (NNS executives))
+               (PP (IN from)
+                   (NP (DT the) (NNS companies))))
+           (S-PRP
+                  (NP-SBJ (-NONE- *-1))
+                  (VP (TO to) (`` ``)
+                      (VP (VB make)
+                          (ADJP (JJ sure)
+                                (SBAR (-NONE- 0)
+                                      (S
+                                         (NP-SBJ (PRP they))
+                                         (VP (VBD understood) ('' '')
+                                             (NP
+                                                 (NP (DT the) (NN concern))
+                                                 (PP (IN about)
+                                                     (NP (JJ such) (NNS practices))))))))
+                          (, ,)
+                          (PP (VBG according)
+                              (PP (TO to)
+                                  (NP (DT a) (NN government) (NN spokesman))))))))
+       (. .)))
+
+
+
+24	VP --> *** S , PP
+TextAnnotation: Yields on money-market mutual funds continued to slide , amid signs that portfolio managers expect further declines in interest rates .
+TextAnnotation: The Soviets are widely believed to need additional supplies , despite running up record one-month purchases of 310 million bushels of corn in October .
+TextAnnotation: The general public may not know his name , but he 's famous -- make that infamous -- in advertising circles : A marketing consultant , he pioneered slashing ad agency commissions , to the delight of advertising clients and the dismay of agencies .
+(S1
+    (S
+       (NP-SBJ-1
+                 (NP (NNS Yields))
+                 (PP (IN on)
+                     (NP (JJ money-market) (JJ mutual) (NNS funds))))
+       (VP (VBD continued)
+           (S
+              (NP-SBJ (-NONE- *-1))
+              (VP (TO to)
+                  (VP (VB slide))))
+           (, ,)
+           (PP-LOC (IN amid)
+                   (NP (NNS signs)
+                       (SBAR (IN that)
+                             (S
+                                (NP-SBJ (NN portfolio) (NNS managers))
+                                (VP (VBP expect)
+                                    (NP
+                                        (NP (JJ further) (NNS declines))
+                                        (PP-LOC (IN in)
+                                                (NP (NN interest) (NNS rates))))))))))
+       (. .)))
+
+
+
+23	NP --> NP PP , VP
+TextAnnotation: Common wisdom suggests a single-digit rate of growth , reflecting a weakening in the economy and corporate profits .
+TextAnnotation: Mr. Bromwich , 35 , also has served as deputy chief and chief of the narcotics unit for the U.S. attorney 's office for the Southern District of New York , based in Manhattan .
+TextAnnotation: In addition , the U.S. this year offered its own plan for cooperation around the Pacific rim in a major speech by Secretary of State James Baker , following up a proposal made in January by Australian Prime Minister Bob Hawke .
+(S1
+    (S
+       (NP-SBJ (JJ Common) (NN wisdom))
+       (VP (VBZ suggests)
+           (NP
+               (NP (DT a) (JJ single-digit) (NN rate))
+               (PP (IN of)
+                   (NP (NN growth)))
+               (, ,)
+               (VP (VBG reflecting)
+                   (NP
+                       (NP (DT a) (NN weakening))
+                       (PP-LOC (IN in)
+                               (NP
+                                   (NP (DT the) (NN economy))
+                                   (CC and)
+                                   (NP (JJ corporate) (NNS profits))))))))
+       (. .)))
+
+
+
+64	VP --> *** S , S
+TextAnnotation: The wine was shipped in six-bottle cases instead of the usual 12 , but even at that it was spread thin , going to 62 retailers in 28 states .
+TextAnnotation: William G. Kuhns , former chairman and chief executive officer of General Public Utilities Corp. , was elected a director of this maker of industrial and construction equipment , increasing board membership to 10 .
+TextAnnotation: Koito has refused to grant Mr. Pickens seats on its board , asserting he is a greenmailer trying to pressure Koito 's other shareholders into buying him out at a profit .
+(S1
+    (S
+       (S
+          (NP-SBJ-97 (DT The) (NN wine))
+          (VP (VBD was)
+              (VP (VBN shipped)
+                  (NP (-NONE- *-97))
+                  (PP-MNR (IN in)
+                          (NP
+                              (NP (JJ six-bottle) (NNS cases))
+                              (PP (RB instead) (IN of)
+                                  (NP (DT the) (JJ usual) (CD 12))))))))
+       (, ,)
+       (CC but)
+       (S
+          (PP
+              (ADVP (RB even))
+              (IN at)
+              (NP (IN that)))
+          (NP-SBJ-98 (PRP it))
+          (VP (VBD was)
+              (VP (VBN spread)
+                  (S
+                     (NP-SBJ (-NONE- *-98))
+                     (ADJP-PRD (JJ thin)))
+                  (, ,)
+                  (S-ADV
+                         (NP-SBJ (-NONE- *-98))
+                         (VP (VBG going)
+                             (PP-DIR (TO to)
+                                     (NP
+                                         (NP (CD 62) (NNS retailers))
+                                         (PP-LOC (IN in)
+                                                 (NP (CD 28) (NNS states))))))))))
+       (. .)))
+
+
+
+21	VP --> *** ADVP , S
+TextAnnotation: Totally absorbed , the ringers stare straight ahead , using peripheral vision ( they call it `` rope-sight '' ) to watch the other ropes and thus time their pulls .
+TextAnnotation: But in recent days , Columbia has edged up , closing at 5 1/4 , up 3/8 , yesterday on revived speculation that the thrift might restructure .
+TextAnnotation: Yesterday , the stock market rose strongly , creating a more defensive attitude among precious metals traders , he said .
+(S1
+    (S
+       (S-ADV
+              (NP-SBJ (-NONE- *-1))
+              (ADJP-PRD (RB Totally) (VBN absorbed)))
+       (, ,)
+       (NP-SBJ-1 (DT the) (NNS ringers))
+       (VP (VBP stare)
+           (ADVP-DIR (RB straight) (RB ahead))
+           (, ,)
+           (S-ADV
+                  (NP-SBJ-2 (-NONE- *-1))
+                  (VP (VBG using)
+                      (NP
+                          (NP (JJ peripheral) (NN vision))
+                          (PRN (-LRB- -LRB-)
+                               (S
+                                  (NP-SBJ (PRP they))
+                                  (VP (VBP call)
+                                      (S
+                                         (NP-SBJ (PRP it))
+                                         (`` ``)
+                                         (NP-PRD (NN rope-sight))
+                                         ('' ''))))
+                               (-RRB- -RRB-)))
+                      (S-PRP
+                             (NP-SBJ (-NONE- *-2))
+                             (VP (TO to)
+                                 (VP
+                                     (VP (VB watch)
+                                         (NP (DT the) (JJ other) (NNS ropes)))
+                                     (CC and)
+                                     (ADVP (RB thus))
+                                     (VP (VB time)
+                                         (NP (PRP$ their) (NNS pulls)))))))))
+       (. .)))
+
+
+
+21	VP --> *** ADJP , S
+TextAnnotation: Left to its own devices , index arbitrage will become more and more efficient , making it harder and harder to do profitably .
+TextAnnotation: The interactions between health and homelessness are complex , defying sweeping generalizations as to `` cause '' or `` effect . ''
+TextAnnotation: Some takeover experts were skeptical , saying it was possible that Mr. Steinberg made the filing only to help boost the value of any remaining Reliance stake in UAL .
+(S1
+    (S
+       (S-ADV
+              (NP-SBJ-3 (-NONE- *-1))
+              (VP (VBN Left)
+                  (NP (-NONE- *-3))
+                  (PP-CLR (TO to)
+                          (NP (PRP$ its) (JJ own) (NNS devices)))))
+       (, ,)
+       (NP-SBJ-1 (NN index) (NN arbitrage))
+       (VP (MD will)
+           (VP (VB become)
+               (ADJP-PRD
+                         (ADVP (RBR more)
+                               (CC and)
+                               (RBR more))
+                         (JJ efficient))
+               (, ,)
+               (S-ADV
+                      (NP-SBJ (-NONE- *-1))
+                      (VP (VBG making)
+                          (S
+                             (NP-SBJ (PRP it))
+                             (ADJP-PRD (JJR harder)
+                                       (CC and)
+                                       (JJR harder)
+                                       (SBAR
+                                             (WHNP-2 (-NONE- 0))
+                                             (S
+                                                (NP-SBJ (-NONE- *))
+                                                (VP (TO to)
+                                                    (VP (VB do)
+                                                        (NP (-NONE- *T*-2))
+                                                        (ADVP-MNR (RB profitably))))))))))))
+       (. .)))
+
+
+
+19	VP --> *** NP PP PP , PP
+TextAnnotation: The firm and Mr. Whelen allegedly sold securities to the public at unfair prices , among other alleged violations .
+TextAnnotation: Moving rapidly through school , he graduated Phi Beta Kappa from the University of Kentucky at age 18 , after spending only 2 1/2 years in college .
+TextAnnotation: The company also took hits in the fourth quarters of 1989 and 1988 on a fixed-price weapons-modernization development program -- probably the C-130 gunship , according to analysts .
+(S1
+    (S
+       (NP-SBJ
+               (NP (DT The) (NN firm))
+               (CC and)
+               (NP (NNP Mr.) (NNP Whelen)))
+       (ADVP (RB allegedly))
+       (VP (VBD sold)
+           (NP (NNS securities))
+           (PP-CLR (TO to)
+                   (NP (DT the) (NN public)))
+           (PP-CLR (IN at)
+                   (NP (JJ unfair) (NNS prices)))
+           (, ,)
+           (PP (IN among)
+               (NP (JJ other) (JJ alleged) (NNS violations))))
+       (. .)))
+
+
+
+18	VP --> *** SBAR , SBAR
+TextAnnotation: Bank of New England Corp. said it has held talks with potential merger partners outside New England , although it added that nothing is imminent and it has n't received any formal offers .
+TextAnnotation: Many people believe the growth in dividends will slow next year , although a minority see double-digit gains continuing .
+TextAnnotation: Advocates said the 90-cent-an-hour rise , to $ 4.25 an hour by April 1991 , is too small for the working poor , while opponents argued that the increase will still hurt small business and cost many thousands of jobs .
+(S1
+    (S
+       (NP-SBJ
+               (NAC (NNP Bank)
+                    (PP (IN of)
+                        (NP (NNP New) (NNP England))))
+               (NNP Corp.))
+       (VP (VBD said)
+           (SBAR (-NONE- 0)
+                 (S
+                    (NP-SBJ (PRP it))
+                    (VP (VBZ has)
+                        (VP (VBN held)
+                            (NP
+                                (NP (NNS talks))
+                                (PP (IN with)
+                                    (NP
+                                        (NP (JJ potential) (NN merger) (NNS partners))
+                                        (PP-LOC (IN outside)
+                                                (NP (NNP New) (NNP England))))))))))
+           (, ,)
+           (SBAR-ADV (IN although)
+                     (S
+                        (NP-SBJ (PRP it))
+                        (VP (VBD added)
+                            (SBAR (IN that)
+                                  (S
+                                     (S
+                                        (NP-SBJ (NN nothing))
+                                        (VP (VBZ is)
+                                            (ADJP-PRD (JJ imminent))))
+                                     (CC and)
+                                     (S
+                                        (NP-SBJ (PRP it))
+                                        (VP (VBZ has) (RB n't)
+                                            (VP (VBN received)
+                                                (NP (DT any) (JJ formal) (NNS offers)))))))))))
+       (. .)))
+
+

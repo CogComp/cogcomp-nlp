@@ -35,7 +35,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 /**
  * Data reader for the comma dataset of Srikumar et al.
  */
-public class CommaReader implements Parser {
+public class VivekAnnotationCommaParser implements Parser {
     private Annotator annotator;
     private final String annotationFile;
     private final String serializedFile;
@@ -57,7 +57,7 @@ public class CommaReader implements Parser {
     }
     
     
-    public CommaReader(String annotationFile, String serializedFile, Ordering ordering) {
+    public VivekAnnotationCommaParser(String annotationFile, String serializedFile, Ordering ordering) {
         this.annotationFile = annotationFile;
         this.serializedFile = serializedFile;
         this.commas = new ArrayList<Comma>();
@@ -353,7 +353,7 @@ public class CommaReader implements Parser {
     }
 
     public static void main(String[] args) throws IOException {
-        CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", Ordering.RANDOM_SENTENCE);
+        VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", "data/CommaFullView.ser", Ordering.RANDOM_SENTENCE);
         divideTDT(cr.getSentences(), FileUtils.readFileToString(new File("data/comma_resolution_data.txt")));
     }
     

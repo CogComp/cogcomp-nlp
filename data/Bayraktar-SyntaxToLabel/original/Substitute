@@ -1,0 +1,19 @@
+NP --> NP , NP ,
+NP --> NP , NP
+NP --> NP , or NP ,
+NP --> NP , or NP
+NP --> NP , *** NP
+NP --> NP , *** NP ,
+NP --> NP , NP , PP
+NP --> NP , NP , NP ,
+NP --> NP , NP , SBAR
+NP --> *** NP , NP , ***
+NP --> NP NP ,
+NP --> NP , NP *** NP
+NP --> NP , ***
+NP --> NP -LRB- NP , NP -RRB-
+NP --> *** , NP , ***
+NP --> NP , NP , SBARQ ,
+NP --> NP , NP , SBAR ,
+NP --> *** , NP
+NP --> -LRB- NP , NP -RRB-

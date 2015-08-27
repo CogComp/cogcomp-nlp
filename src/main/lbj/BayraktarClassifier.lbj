@@ -157,7 +157,7 @@ discrete BayraktarLabel(Comma c) <- {
 }
 
 discrete VivekLabel(Comma c) <- { 
-	return c.getRole();
+	return c.getVivekBayraktarRole();
 }
 
 discrete BayraktarClassifier(Comma c) <-

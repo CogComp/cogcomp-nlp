@@ -1,0 +1,34 @@
+S --> NP , VP .
+TextAnnotation: Wilbur Ross Jr. of Rothschild Inc. , the financial adviser to the troubled company 's equity holders , said the withdrawal of New England Electric might speed up the reorganization process .
+TextAnnotation: The demise of the 238,000-circulation Herald , once the nation 's largest afternoon newspaper with circulation exceeding 700,000 , turns the country 's second-largest city into a one-newspaper town , at least in some senses .
+TextAnnotation: Lewis C. Veraldi , the father of the team that created the highly successful Ford Taurus and Mercury Sable cars , retired early after experiencing recent heart problems .
+(S1
+    (S
+       (NP-SBJ
+               (NP (NNP Wilbur) (NNP Ross) (NNP Jr.))
+               (PP (IN of)
+                   (NP
+                       (NP (NNP Rothschild) (NNP Inc.))
+                       (, ,)
+                       (NP
+                           (NP (DT the) (JJ financial) (NN adviser))
+                           (PP (TO to)
+                               (NP
+                                   (NP (DT the) (JJ troubled) (NN company) (POS 's))
+                                   (NN equity) (NNS holders)))))))
+       (, ,)
+       (VP (VBD said)
+           (SBAR (-NONE- 0)
+                 (S
+                    (NP-SBJ
+                            (NP (DT the) (NN withdrawal))
+                            (PP (IN of)
+                                (NP (NNP New) (NNP England) (NNP Electric))))
+                    (VP (MD might)
+                        (VP (VB speed)
+                            (PRT (RP up))
+                            (NP (DT the) (NN reorganization) (NN process)))))))
+       (. .)))
+
+       
+       

@@ -6,31 +6,32 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections.map.MultiValueMap;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.CommaReader;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
-import edu.illinois.cs.cogcomp.comma.utils.Prac;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
+import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 public class BayraktarEvaluation {
 	
 	public static void main(String[] args){
-		//printBayraktarBaselinePerformance();
-		verify();
+		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
+		printBayraktarBaselinePerformance(parser, true);
 	}
 	
-	
-	public static void verify(){
-		CommaReader reader = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE);
+	/**
+	 * checks if the bayraktar label of an annotated pattern is the same as the most frequent label among commas with the same bayraktar pattern
+	 * If it is not, then the commas with that pattern are printed out
+	 */
+	public static void verifyBayraktarLabelEqualsMostFrequentVivekNaveenLabel(){
+		VivekAnnotationCommaParser reader = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
 		List<Comma> vivekCommas = reader.getCommas();
 		MultiValueMap patternToVivekCommas = new MultiValueMap();
 		for(Comma comma: vivekCommas){
@@ -43,24 +44,15 @@ public class BayraktarEvaluation {
 		
 		//MultiValueMap syntaxPatternToPTBCommas = BayraktarAnnotationGenerationHelper.getBayraktarPatternToPTBCommas();
 		for(Entry<String, ArrayList<Comma>> entry: vivekPatterns){
-			ConcurrentMap<String, AtomicInteger> labelToCounts = new ConcurrentHashMap<String, AtomicInteger>();
+			Counter<String> labelCounts = new Counter<String>();
 			String pattern = entry.getKey();
 			String bayraktarLabel = BayraktarPatternLabeler.getLabel(pattern);
 			if(bayraktarLabel==null) continue;
 			for(Comma comma : entry.getValue()){
 				String vivekLabel = comma.getVivekNaveenRole();
-				labelToCounts.putIfAbsent(vivekLabel, new AtomicInteger(0));
-				labelToCounts.get(vivekLabel).incrementAndGet();
+				labelCounts.incrementCount(vivekLabel);
 			}
-			String frequentLabel = null;
-			int frequency = 0;
-			for(String vivekLabel: labelToCounts.keySet()){
-				int currFrequency = labelToCounts.get(vivekLabel).get();
-				if(currFrequency>frequency){
-					frequentLabel = vivekLabel;
-					frequency = currFrequency;
-				}
-			}
+			String frequentLabel = labelCounts.getMax().getFirst();
 			if(!frequentLabel.equals(bayraktarLabel)){
 				System.out.println("\n\n\n" + pattern + "\t" + bayraktarLabel);
 				for(Comma comma : entry.getValue()){
@@ -80,8 +72,11 @@ public class BayraktarEvaluation {
 		System.out.println("\n\n\nERROR COUNT = " + errorCount);
 	}
 	
-	public static void errorAnalysis() {
-		CommaReader reader = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE);
+	/**
+	 * for each annotated pattern, if there is a single comma whose VivekNaveen label differs, print all of them for further analysis 
+	 */
+	public static void analyseErrors() {
+		VivekAnnotationCommaParser reader = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
 		List<Comma> commas = reader.getCommas();
 		MultiValueMap patternToComma = new MultiValueMap();
 		for(Comma comma: commas){
@@ -102,7 +97,7 @@ public class BayraktarEvaluation {
 				@Override
 				public int compare(Comma o1, Comma o2) {
 					// TODO Auto-generated method stub
-					return o1.getRole().compareTo(o2.getRole());
+					return o1.getVivekBayraktarRole().compareTo(o2.getVivekBayraktarRole());
 				}
 				
 			});
@@ -110,7 +105,7 @@ public class BayraktarEvaluation {
 			if(bayraktarLabel!=null){
 				boolean mismatch = false;
 				for(Comma occurance : patternOccournces){
-					if(!occurance.getRole().equals(newToOldLabel(bayraktarLabel))){
+					if(!occurance.getVivekNaveenRole().equals(bayraktarLabel)){
 						mismatch=true;
 						break;
 					}
@@ -132,7 +127,7 @@ public class BayraktarEvaluation {
 							System.out.println(tas.get(currText++));
 							break;
 						case 1:
-							System.out.println(Prac.pennString(((TreeView)tas.get(currParse++).getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0)));
+							System.out.println(PrettyPrint.pennString(((TreeView)tas.get(currParse++).getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0)));
 							break;
 						case 2:
 							break;
@@ -145,44 +140,23 @@ public class BayraktarEvaluation {
 		scanner.close();
 	}
 	
-	public static void printBayraktarBaselinePerformance(){
-		CommaReader reader = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE);
-		List<Comma> commas = reader.getCommas();
+	/**
+	 * prints bayraktar baseline performance based on only those commas whose bayraktar patterns have been annotated 
+	 */
+	public static void printBayraktarBaselinePerformance(Parser parser, boolean testOnGold){
+		parser.reset();
 		EvaluateDiscrete bayraktarEvalaution = new EvaluateDiscrete();
-		CommaProperties properties = CommaProperties.getInstance();
-        boolean USE_NEW_LABEL_SET = properties.useNewLabelSet();
-		for(Comma comma: commas){
+		Comma comma;
+		while((comma = (Comma) parser.next()) != null){
 			if(!BayraktarPatternLabeler.isLabelAvailable(comma)) continue;
-			String goldLabel;
+			Comma.useGoldFeatures(true);
+			String goldLabel = comma.getVivekNaveenRole();
+			Comma.useGoldFeatures(testOnGold);
 			String bayraktarPrediction = comma.getBayraktarLabel();
-			if(USE_NEW_LABEL_SET)
-				goldLabel = comma.getVivekNaveenRole();
-			else{
-				goldLabel = comma.getRole();
-				bayraktarPrediction = newToOldLabel(bayraktarPrediction);
-			}
 			bayraktarEvalaution.reportPrediction(bayraktarPrediction, goldLabel);
 		}
-		System.out.println("Bayraktar");
+		System.out.println("Bayraktar baseline performance on only those commas whose patterns have been annotated");
 		bayraktarEvalaution.printPerformance(System.out);
 		bayraktarEvalaution.printConfusion(System.out);
 	}
-	
-	public static void printTreeforId(String id){
-		List<TextAnnotation> tas = BayraktarAnnotationGenerationHelper.getPTBTAList();
-		for(TextAnnotation ta : tas){
-			if(ta.getId().equals(id)){
-				System.out.println(ta);
-				System.out.println(Prac.pennString(((TreeView)ta.getView(ViewNames.PARSE_GOLD)).getTree(0)));
-			}
-		}
-	}
-	
-	public static String newToOldLabel(String newLabel){
-		if(BayraktarPatternLabeler.isNewLabel(newLabel))
-			return "Other";
-		else
-			return newLabel;
-	}
-	
 }

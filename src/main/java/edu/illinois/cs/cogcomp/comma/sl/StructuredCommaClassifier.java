@@ -4,8 +4,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.HashMap;
 
-import edu.illinois.cs.cogcomp.comma.CommaReader;
-import edu.illinois.cs.cogcomp.comma.CommaReader.Ordering;
+import edu.illinois.cs.cogcomp.comma.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
 import edu.illinois.cs.cogcomp.comma.ErrorAnalysis;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
@@ -70,32 +71,30 @@ public class StructuredCommaClassifier {
 		return model;
 	}
 	
-	public static EvaluateDiscrete testSequenceCommaModel(SLModel model, Parser test, boolean errorAnalysis) throws Exception{
-		return testSequenceCommaModel(model, test, null, errorAnalysis);
+	public static EvaluateDiscrete testSequenceCommaModel(SLModel model, Parser test) throws Exception{
+		return testSequenceCommaModel(model, test, null);
 	}
 	
-	public static EvaluateDiscrete testSequenceCommaModel(String modelPath, Parser test, boolean errorAnalysis) throws Exception{
+	public static EvaluateDiscrete testSequenceCommaModel(String modelPath, Parser test) throws Exception{
 		SLModel model = SLModel.loadModel(modelPath);
-		return testSequenceCommaModel(model, test, null, errorAnalysis);
+		return testSequenceCommaModel(model, test, null);
 	}
 	
-	public static EvaluateDiscrete testSequenceCommaModel(SLModel model, Parser test, String predictionFileName, boolean errorAnalysis)
+	public static EvaluateDiscrete testSequenceCommaModel(SLModel model, Parser test, String predictionFileName)
 			throws Exception {
 		model.lm.setAllowNewFeatures(false);
 		CommaIOManager.numFeatures = Integer.valueOf(model.config.get("numFeatures"));
 		CommaIOManager.numLabels = Integer.valueOf(model.config.get("numLabels"));
 		SLProblem sp = CommaIOManager.readProblem(test, model.lm);
 		long start_time = System.currentTimeMillis();
-
+		
 		
 		EvaluateDiscrete SLEvaluator = new EvaluateDiscrete();
 		BufferedWriter writer = null;
 		if(predictionFileName!=null){
 			writer = new BufferedWriter(new FileWriter(predictionFileName));
 		}
-		ErrorAnalysis ea = null;
-		if(errorAnalysis)
-			ea = new ErrorAnalysis("data/comma_resolution_data.txt", test);
+		
 		for (int i = 0; i < sp.instanceList.size(); i++) {
 
 			SequenceLabel gold = (SequenceLabel) sp.goldStructureList
@@ -107,14 +106,7 @@ public class StructuredCommaClassifier {
 					writer.write(String.valueOf(prediction.tags[j]+1)+"\n");
 				}
 			}
-			if(errorAnalysis && !gold.equals(prediction)){
-				//String textId = c.getTextAnnotation(true).getId();
-				String textId = String.valueOf(sp.instanceList.get(i).hashCode());
-				String filename = "data/errors/StructuredClassifier/" + textId.replaceAll("\\W+", "_");
-				//ErrorAnalysis.logPredictionError(filename, "",prediction.toString(), gold.toString(), ea.getInstanceInfo(textId));
-			}
 			
-            
 			for (int j = 0; j < prediction.tags.length; j++) {
 				String predictedTag = model.lm.getLabelString(prediction.tags[j]);
 				String goldTag = model.lm.getLabelString(gold.tags[j]);
@@ -133,12 +125,12 @@ public class StructuredCommaClassifier {
 	}
 
 	public static void main(String args[]) throws Exception{
-		Parser train = new CommaReader("data/train_commas.txt", "data/train_commas.ser", Ordering.ORDERED_SENTENCE);
-		Parser test = new CommaReader("data/dev_commas.txt", "data/dev_commas.ser", Ordering.ORIGINAL_SENTENCE);
+		Parser train = new VivekAnnotationCommaParser("data/train_commas.txt", CommaProperties.getInstance().getTrainCommasSerialized(), Ordering.ORDERED_SENTENCE);
+		Parser test = new VivekAnnotationCommaParser("data/test_commas.txt", CommaProperties.getInstance().getTestCommasSerialized(), Ordering.ORDERED_SENTENCE);
 		SLModel model = trainSequenceCommaModel(train, "config/DCD.config", null);
 		train.reset();
 		//testSequenceCommaModel("data/output/seqCommaModel", test).printPerformance(System.out);
-		EvaluateDiscrete ed = testSequenceCommaModel(model, test, false);
+		EvaluateDiscrete ed = testSequenceCommaModel(model, test);
 		ed.printConfusion(System.out);
 		ed.printPerformance(System.out);
 	}

@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaReader;
-import edu.illinois.cs.cogcomp.comma.CommaReader.Ordering;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
@@ -17,9 +17,9 @@ import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.stanford.nlp.ling.Label;
 
-public class Prac {
+public class PrettyPrint {
 	public static void main(String[] args) throws IOException {
-		CommaReader cr = new CommaReader("data/dev_commas.txt", "data/dev_commas.ser", Ordering.ORIGINAL_SENTENCE);
+		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/dev_commas.txt", "data/dev_commas.ser", Ordering.ORIGINAL_SENTENCE);
 		List<Comma> commas = cr.getCommas();
 		for (Comma c : commas) {
 			TreeView treeView = (TreeView) c.getTextAnnotation(true).getView(

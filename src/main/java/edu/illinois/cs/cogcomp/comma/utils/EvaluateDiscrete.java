@@ -11,6 +11,11 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.lbjava.util.TableFormat;
 
+/**
+ * Provides all the functionality of TestDiscrete and additionally a confusion matrix
+ * @author navari
+ *
+ */
 public class EvaluateDiscrete extends TestDiscrete{
 	HashMap<String, HashMap<String, Integer>> confusionMatrix;
 	public EvaluateDiscrete() {

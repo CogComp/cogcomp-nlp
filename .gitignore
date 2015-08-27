@@ -5,10 +5,16 @@ target
 .project
 .settings
 
-# ignore serialzed and other development data files
-data
-# track original comma nnotation file
-!data/comma_resolution_data.txt
+#used for testing and error analysis. All data files required for experiments, including serialzed files, are included
+data/CommaTAGoldFinal.ser
+data/errors.analyzed
+data/errors_NER
+data/full_annotation
+data/delete
+data/errors.ner
+data/examples
+data/output
+
 
 # LBJ-generated files
 src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightPOSFeature.java

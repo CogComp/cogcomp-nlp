@@ -1,0 +1,27 @@
+S --> “ S , ” SINV
+S --> “ S , ” S
+S --> “ NP VP , ”
+S --> “ NP *** VP , ”
+S --> “ S , ” SINV .
+S --> S , “ SINV
+S --> “ S , ” S .
+SINV --> “ S , ” VP NP .
+S --> S , “ S
+S --> “ S , ” NP VP .
+VP --> *** , “ S
+S --> “ PP , S , ”
+S --> NP “ *** VP , ”
+
+#moved to copmlementary
+#S --> `` S , NP VP .
+#moved to introductory
+#S --> ADVP , NP VP . ''
+SINV --> `` S , '' VP NP .
+S --> `` S , '' NP VP .
+VP --> *** , `` S
+
+SINV --> S , '' VP NP .
+
+S --> `` NP VP , ''
+
+S --> S , '' NP VP .

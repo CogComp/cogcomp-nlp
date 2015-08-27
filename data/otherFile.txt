@@ -2385,7 +2385,7 @@ Interrupter-Said
 
 Other 18 wsj/00/wsj_0063.mrg:16
 Temple also said Sea Containers ' plan raises `` numerous legal , regulatory , financial and fairness issues ,[Other] '' but did n't elaborate .
-Quotation
+Complementary
 
 
 Other 8 wsj/00/wsj_0063.mrg:18
@@ -2480,7 +2480,7 @@ Introductory
 
 Other 18 wsj/00/wsj_0067.mrg:4
 Richard Driscoll , vice chairman of Bank of New England , told the Dow Jones Professional Investor Report ,[Other] `` Certainly , there are those outside the region who think of us prospectively as a good partner .
-Quotation
+Quotation-LeftSaid
 
 
 Other 2 wsj/00/wsj_0067.mrg:6
@@ -3770,7 +3770,8 @@ Complementary-Said
 
 Other 28 wsj/00/wsj_0089.mrg:50
 It hopes to speak to students at theological colleges about the joys of bell ringing and will shortly publish a booklet for every vicar in the country entitled ,[Other] `` The Bells in Your Care . ''
-Quotation
+Other
+Quotation or Other?
 
 
 Other 3 wsj/00/wsj_0089.mrg:51
@@ -3820,7 +3821,9 @@ Introductory
 
 Other 14 wsj/00/wsj_0089.mrg:63
 Another women wrote from Sheffield to say that in her 60 years of ringing ,[Other] `` I have never known a lady to faint in the belfry .
-Quotation
+Quotation-Intorductory+Said
+RandomQuotes
+Introductory or Said?
 
 
 Other 8 wsj/00/wsj_0089.mrg:64
@@ -3931,8 +3934,9 @@ Quotation-RightSaid
 
 Other 2 wsj/00/wsj_0090.mrg:22
 In fact ,[Other] `` the market has always tanked .
-Quotation
+Introductory
 RandomQuotes
+Rest of the sentence is missing?
 
 
 Other 6 wsj/00/wsj_0090.mrg:24

@@ -1,0 +1,32 @@
+VP --> *** PP , ADVP
+S --> NP VP , VP
+S --> S , VP .
+S --> NP VP , PP
+VP --> *** PP , PP
+VP --> *** NP , VP
+VP --> *** NP PP , PP
+VP --> *** NP , ADVP
+S --> NP *** VP , PP
+VP --> *** NP PP , VP
+S --> NP *** VP , VP
+VP --> *** PP , VP
+VP --> *** NP PP , ADVP
+VP --> *** , PP
+VP --> *** PP , ADVP ,
+S --> NP VP , ADVP
+S --> S , PP
+VP --> *** NP PP , NP
+S --> NP *** VP , S
+VP --> *** , S
+S --> S , SBAR
+VP --> *** NP , S
+S --> NP *** VP , SBAR
+VP --> *** NP PP , S
+VP --> *** PP , SBAR
+VP --> *** NP , SBAR
+VP --> *** PP , S
+S --> S , SBAR .
+S --> NP VP ,
+S --> NP *** VP , S .
+S --> *** VP , S
+S --> NP VP , NP

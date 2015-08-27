@@ -1,21 +1,18 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import java_cup.internal_error;
-
 import org.apache.commons.lang3.StringUtils;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
+import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
@@ -51,15 +48,7 @@ public class Comma implements Serializable {
 
     private static boolean GOLD, NERlexicalise, POSlexicalise, USE_NEW_LABEL_SET;
     private static String CONSTITUENT_PARSER;
-    
-    public static void setGold(boolean useGold){
-    	GOLD = useGold;
-    }
-    
-    public String getCommaID(){
-    	return role + " " + commaPosition + " " + goldTA.getId();
-    }
-    
+
     static {
     	CommaProperties properties = CommaProperties.getInstance();
         GOLD = properties.useGold();
@@ -67,6 +56,14 @@ public class Comma implements Serializable {
         NERlexicalise = properties.lexicaliseNER();
         POSlexicalise = properties.lexicalisePOS();
         CONSTITUENT_PARSER = properties.getConstituentParser();
+    }
+    
+    public static void useGoldFeatures(boolean useGold){
+    	GOLD = useGold;
+    }
+    
+    public String getCommaID(){
+    	return role + " " + commaPosition + " " + goldTA.getId();
     }
     
     public Comma(int commaPosition, String role, String rawText) throws Exception {
@@ -128,6 +125,9 @@ public class Comma implements Serializable {
         goldTA = TA;
     }
 
+    /**
+     * @return The label as annotated by Vivek. If Vivek's label was Other, and the USE_NEW_LABEL_SET is true, then the refined label is returned 
+     */
     public String getVivekNaveenRole(){
     	String vivekLabel = role;
     	if(vivekLabel.equals("Other") && USE_NEW_LABEL_SET)
@@ -136,13 +136,23 @@ public class Comma implements Serializable {
 			return vivekLabel;
     }
     
-    public String getRole() {
+    /**
+     * @return The label as annotated by Vivek. If Vivek's label was Other, the USE_NEW_LABEL_SET is true, and the annotation for the Bayraktar-patterns is available, then the Bayraktar label is returned
+     */
+    public String getVivekBayraktarRole() {
     	String vivekLabel = role;
     	String bayraktarLabel = getBayraktarLabel();
     	if(USE_NEW_LABEL_SET && vivekLabel.equals("Other") && BayraktarPatternLabeler.isNewLabel(bayraktarLabel))
     		return bayraktarLabel;
     	else
 			return vivekLabel;
+    }
+    
+    /**
+     * @return The original label as annotated by Vivek.
+     */
+    public String getVivekRole(){
+    	return role;
     }
     
     public int getPosition(){
@@ -185,6 +195,36 @@ public class Comma implements Serializable {
 	
 	public String getText(){
 		return StringUtils.join(sentence, " ");
+	}
+	
+	public String getAllViews(){
+		StringBuilder info = new StringBuilder();
+		if(goldTA!=null){
+			info.append("\n\nPARSE_GOLD\n");
+			TreeView tv = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+			info.append(PrettyPrint.pennString(tv.getTree(0)));
+		}
+		if(TA!=null){
+			info.append("\n\nPARSE_STANFORD\n");
+			TreeView tv1 = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
+			info.append(PrettyPrint.pennString(tv1.getTree(0)));
+			info.append("\n\nPARSE_CHARNIAK\n");
+			TreeView tv2 = (TreeView) TA.getView(ViewNames.PARSE_CHARNIAK);
+			info.append(PrettyPrint.pennString(tv2.getTree(0)));
+			info.append("\n\nNER\n");
+			info.append(TA.getView(ViewNames.NER));
+			info.append("\n\nSHALLOW_PARSE\n");
+			info.append(TA.getView(ViewNames.SHALLOW_PARSE));
+			info.append("\n\nPOS\n");
+			info.append(TA.getView(ViewNames.POS));
+			info.append("\n\nSRL_VERB\n");
+			info.append(TA.getView(ViewNames.SRL_VERB));
+			info.append("\n\nSRL_NORM\n");
+			info.append(TA.getView(ViewNames.SRL_NOM));
+			info.append("\n\nSRL_PREP\n");
+			info.append(TA.getView(ViewNames.SRL_PREP));
+		}
+		return info.toString();
 	}
 	
 	public TextAnnotation getTextAnnotation(boolean gold){
@@ -355,7 +395,7 @@ public class Comma implements Serializable {
 		}
 		return comma;
     }
-    
+
     public Constituent getSiblingToLeft(int distance, Constituent c, TreeView parseView){
     	Constituent leftSibling = c;
     	IQueryable<Constituent> siblings = parseView.where(Queries.isSiblingOf(c));
@@ -368,7 +408,7 @@ public class Comma implements Serializable {
     	}
     	return leftSibling;
     }
-    
+
     public Constituent getSiblingToRight(int distance, Constituent c, TreeView parseView){
     	Constituent rightSibling = c;
     	IQueryable<Constituent> siblings = parseView.where(Queries.isSiblingOf(c));
@@ -381,8 +421,8 @@ public class Comma implements Serializable {
     	}
     	return rightSibling;
     }
-    
-    
+
+
     /**
      * 
      * @return the list of commas that are children of the parent of the current comma, i.e. siblings of the current comma.
@@ -505,7 +545,7 @@ public class Comma implements Serializable {
     public String getBayraktarLabel() {
     	String bayraktarLabel = BayraktarPatternLabeler.getLabel(this);
     	if(bayraktarLabel==null)
-    		return "Other";
+    		return "Other";//assigning majority label
     	else
     		return bayraktarLabel;
 		
@@ -575,5 +615,3 @@ public class Comma implements Serializable {
     	role = newRole;
     }
 }
-
-

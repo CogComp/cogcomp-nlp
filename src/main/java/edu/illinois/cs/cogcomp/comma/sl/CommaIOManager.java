@@ -14,10 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier$$1;
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceInstance;
 import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceLabel;
@@ -125,53 +126,14 @@ public class CommaIOManager {
 		return sp;
 	}
 	
-	public static int LabelStringToInt(String labelString) throws Exception{
-		int labelInt = -1;
-		if(labelString.equals("Attribute"))
-			labelInt = 1111;
-		else if(labelString.equals("Substitute"))
-			labelInt = 2222;
-		else if(labelString.equals("Locative"))
-			labelInt = 3333;
-		else if(labelString.equals("List"))
-			labelInt = 4444;
-		else if(labelString.equals("Other"))
-			labelInt = 5555;
-		else 
-			throw new Exception("invalid label: " + labelString);
-		return labelInt;
-	}
-	
-	public static String LabelIntToString(int labelInt) throws Exception {
-		String labelString = "?????";
-		switch (labelInt) {
-		case 1111:
-			labelString = "Attribute";
-			break;
-		case 2222:
-			labelString = "Substitute";
-			break;
-		case 3333:
-			labelString = "Locative";
-			break;
-		case 4444:
-			labelString = "List";
-			break;
-		case 5555:
-			labelString = "Other";
-			break;
-		default:
-			throw new Exception("invalid label int: " + labelInt);
-		}
-		return labelString;
-	}
-	
 	public static String commaToSLString(Comma comma){
-		Classifier extractor = new LocalCommaClassifier$$1();
+		Learner toBeLearnt = new LocalCommaClassifier();
+		Classifier extractor = toBeLearnt.getExtractor();
+		Classifier labeler = toBeLearnt.getLabeler();
 		StringBuffer line = new StringBuffer();
-		line.append(comma.getRole());
-		//line.append(" qid:" + comma.getSentence().hashCode());
-		line.append(" qid:" + comma.getSiblingCommaHead().hashCode());
+		line.append(labeler.discreteValue(comma));
+		//line.append(" qid:" + comma.getSiblingCommaHead().hashCode());//Use this for HMM on only sibling commas
+		line.append(" qid:" + comma.getSentence().getId().hashCode());//USe this for HMM for all commas
 		FeatureVector fv = extractor.classify(comma);
 		for(int i = 0; i < fv.featuresSize(); i++)
 			line.append(" " + fv.getFeature(i).toStringNoPackage().replaceAll("\\s+", ""));

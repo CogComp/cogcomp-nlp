@@ -3,10 +3,13 @@ package edu.illinois.cs.cogcomp.comma;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.edison.sentences.Relation;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 
 /**
  * An interface for providing a comma {@link PredicateArgumentView}
@@ -14,7 +17,7 @@ import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 public class CommaLabeler {
     public static final String VIEW_NAME = "SRL_COMMA";
     private static String[] requiredViews;
-/*    private LocalCommaClassifier classifier;
+    private LocalCommaClassifier classifier;
 
     
     public CommaLabeler () {
@@ -59,7 +62,7 @@ public class CommaLabeler {
             }
         }
         return srlView;
-    }*/
+    }
     
     /**
      * 

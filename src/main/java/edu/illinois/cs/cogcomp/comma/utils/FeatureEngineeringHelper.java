@@ -10,8 +10,9 @@ import java.util.TreeMap;
 import org.junit.After;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaReader;
-import edu.illinois.cs.cogcomp.comma.CommaReader.Ordering;
+import edu.illinois.cs.cogcomp.comma.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
+import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
 import edu.illinois.cs.cogcomp.comma.lbj.BayraktarLabelFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.BayraktarPatternFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.DependencyFeatures;
@@ -19,6 +20,7 @@ import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.POSFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseTreeFeature;
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier.Parameters;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVectorReturner;
@@ -37,7 +39,7 @@ public class FeatureEngineeringHelper {
 	}
 	public static void featureEngineering(){
 		LocalCommaClassifier learner = new LocalCommaClassifier();
-		CommaReader cr = new CommaReader("data/comma_resolution_data.txt", "data/CommaFullView.ser", CommaReader.Ordering.ORDERED_SENTENCE);
+		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.RANDOM_SENTENCE);
 		List<Comma> trainCommaList = cr.getCommas();
 		Comma[] trainCommas = (Comma[]) trainCommaList.toArray(new Comma[trainCommaList.size()]);
 		
@@ -53,15 +55,17 @@ public class FeatureEngineeringHelper {
 		features.add( __ParseFeatures);
 		features.add( __ParseTreeFeature);
 		features.add( __POSFeatures);
-		features.add( __DependencyFeatures);
 		features.add( __BayraktarLabelFeature);
 		features.add( __BayraktarPatternFeature);
-		Collection<List<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 1);
+		Collection<List<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 4);
 		System.out.println(ablatedFeatures);
 		
 		
 		for(Collection<Classifier> featureSet: ablatedFeatures){
+			edu.illinois.cs.cogcomp.lbjava.learn.Learner.Parameters tunedParameters = learner.getParameters();
+			System.out.println(tunedParameters);
 			learner.forget();
+			learner.setParameters(tunedParameters);
 			learner.setExtractor(new FeatureVectorReturner());
 			learner.setLabeler(new LabelVectorReturner());
 			FeatureVector[] featureVectors = new FeatureVector[trainCommas.length];
@@ -78,7 +82,7 @@ public class FeatureEngineeringHelper {
 			BatchTrainer trainer = new BatchTrainer(learner, featureVectorParser);
 			int[] rounds = {125};
 			int k=5;
-			SplitPolicy splitPolicy = SplitPolicy.random;
+			SplitPolicy splitPolicy = SplitPolicy.sequential;
 			double alpha=0.05;
 			TestingMetric metric = new Accuracy(false);
 			boolean statusMessages = false;

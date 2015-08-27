@@ -10,7 +10,7 @@ import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
 import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
-public class CommaParser implements Parser {
+public class PennTreebankCommaParser implements Parser {
 	private TextAnnotationReader taReader;
 	private Iterator<Comma> currTAsCommaIterator;
 	private static String treebankHome;
@@ -19,12 +19,12 @@ public class CommaParser implements Parser {
         treebankHome = properties.getPTBHDir();
 	}
 	
-	public CommaParser(TextAnnotationReader taReader) {
+	public PennTreebankCommaParser(TextAnnotationReader taReader) {
 		this.taReader = taReader;
 		reset();
 	}
 	
-	public CommaParser() {
+	public PennTreebankCommaParser() {
 		try {
 			String[] sections = { "00", "01", "02" , "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" , "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"};
 			this.taReader = new PennTreebankReader(treebankHome, sections);
@@ -72,7 +72,7 @@ public class CommaParser implements Parser {
 	
 	
 	public static void main(String[] args){
-		Parser cp = new CommaParser();
+		Parser cp = new PennTreebankCommaParser();
 		while(true){
 			Comma comma = (Comma) cp.next();
 			System.out.println(comma.getTextAnnotation(false).getId());

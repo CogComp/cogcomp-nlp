@@ -1,0 +1,26 @@
+false	23	PRN --> , NP VP ,
+TextAnnotation: The more accounts customers have , Mr. Sullivan says , the more likely they are to be attracted to a package -- and to be loyal to the bank that offers it .
+TextAnnotation: Further , he said , the company does n't have the capital needed to build the business over the next year or two .
+TextAnnotation: In the past , they say , the strongest dividend growth has often come at times when the stock-market party was almost over .
+
+false	266	PRN --> , S ,
+TextAnnotation: First Union , he says , now has packages for seven customer groups .
+TextAnnotation: We have , and I 'm sure others have , considered what our options are , and we 've had conversations with people who in the future might prove to be interesting partners . ''
+TextAnnotation: That process of sorting out specifics is likely to take time , the Japanese say , no matter how badly the U.S. wants quick results .
+(S1
+    (S-1
+         (NP-SBJ (NNP First) (NNP Union))
+         (PRN (, ,)
+              (S
+                 (NP-SBJ (PRP he))
+                 (VP (VBZ says)
+                     (SBAR (-NONE- 0)
+                           (S (-NONE- *T*-1)))))
+              (, ,))
+         (ADVP-TMP (RB now))
+         (VP (VBZ has)
+             (NP
+                 (NP (NNS packages))
+                 (PP (IN for)
+                     (NP (CD seven) (NN customer) (NNS groups)))))
+         (. .)))

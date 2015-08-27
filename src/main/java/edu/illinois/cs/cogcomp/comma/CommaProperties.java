@@ -35,6 +35,38 @@ public class CommaProperties extends ResourceManager {
         return getBoolean("USE_NEW_LABEL_SET");
     }
 
+    public String getOtherRelabeledFile() {
+        return getString("OTHER_RELABELED_FILE");
+    }
+    
+    public String getAllCommasSerialized() {
+        return getString("SERIALIZED_DIR") + "/" + getString("SERIALIZED_ALL_COMMAS_FILE");
+    }
+    
+    public String getTrainCommasSerialized() {
+    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_TRAIN_COMMAS_FILE");
+    }
+    
+    public String getDevCommasSerialized() {
+    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_DEV_COMMAS_FILE");
+    }
+    
+    public String getTestCommasSerialized() {
+    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_TEST_COMMAS_FILE");
+    }
+    
+    public String getOriginalVivekAnnotationFile(){
+    	return getString("ORIGINAL_VIVEK_ANNOTATIONS_FILE");
+    }
+    
+    public String getOTHERRefinedFile(){
+    	return getString("OTHER_REFINED_FILE");
+    }
+    
+    public String getBayraktarAnnotationsDir(){
+    	return getString("BAYRAKTAR_ANNOTATIONS_DIR");
+    }
+    
     public String getPTBHDir() {
         return getString("PTB_DIR");
     }
