@@ -1,4 +1,6 @@
-package edu.illinois.cs.cogcomp.bigdata.database;
+package main.java.edu.illinois.cs.cogcomp.bigdata.database;
+
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,11 +9,6 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
 /**
  * utils class which helps in creating a database using h2.

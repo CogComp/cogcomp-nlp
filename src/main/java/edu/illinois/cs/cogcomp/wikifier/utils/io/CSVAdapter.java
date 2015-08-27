@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.io;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.io;
 
 import java.util.ArrayList;
 import java.util.Arrays;

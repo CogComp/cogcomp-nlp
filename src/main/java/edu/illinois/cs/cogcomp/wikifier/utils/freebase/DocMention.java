@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.freebase;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.freebase;
 
 public class DocMention {
 	String doc;

@@ -1,9 +1,9 @@
-package edu.illinois.cs.cogcomp.bigdata.database;
+package test.java.edu.illinois.cs.cogcomp.bigdata.database;
+
+import junit.framework.TestCase;
 
 import java.sql.SQLException;
 import java.util.Random;
-
-import junit.framework.TestCase;
 
 public class DBTest extends TestCase {
 

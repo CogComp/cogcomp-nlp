@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.spelling;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.spelling;
 
 import java.io.File;
 import java.io.FileInputStream;

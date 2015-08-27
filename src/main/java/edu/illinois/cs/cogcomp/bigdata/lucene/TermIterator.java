@@ -1,11 +1,11 @@
-package edu.illinois.cs.cogcomp.bigdata.lucene;
-
-import java.io.IOException;
+package main.java.edu.illinois.cs.cogcomp.bigdata.lucene;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.SlowCompositeReaderWrapper;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
+
+import java.io.IOException;
 
 /**
  * Iterates over all the terms 

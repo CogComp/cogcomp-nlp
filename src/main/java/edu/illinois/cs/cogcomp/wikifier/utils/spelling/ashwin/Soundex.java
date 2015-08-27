@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.spelling.ashwin;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.spelling.ashwin;
 
 public class Soundex {
 	

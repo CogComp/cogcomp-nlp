@@ -1,5 +1,6 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.spelling.ashwin;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.spelling.ashwin;
 
+import main.java.edu.illinois.cs.cogcomp.wikifier.utils.spelling.AbstractSurfaceQueryEngine;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +14,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import edu.illinois.cs.cogcomp.wikifier.utils.spelling.AbstractSurfaceQueryEngine;
 
 /**
  * 

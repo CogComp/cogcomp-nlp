@@ -1,18 +1,17 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.io;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.io;
 
-import java.io.IOException;
+import main.java.edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.util.CharArraySet;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
-import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 /**
  * Utilities for interfacing different sources of stop words
  * definitions

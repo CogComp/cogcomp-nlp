@@ -1,5 +1,6 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.examples;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.examples;
 
+import main.java.edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 import java.io.IOException;
 import java.util.Map;
 
@@ -10,8 +11,6 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
-
-import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 
 public class LuceneExample {
 

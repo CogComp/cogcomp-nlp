@@ -1,18 +1,15 @@
-package edu.illinois.cs.cogcomp.bigdata.database;
+package test.java.edu.illinois.cs.cogcomp.bigdata.database;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import main.java.edu.illinois.cs.cogcomp.bigdata.database.DBHelper;
+import main.java.edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import junit.framework.TestCase;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
 
 /**
  * Running this will create a db for you at the location specified by dbFile

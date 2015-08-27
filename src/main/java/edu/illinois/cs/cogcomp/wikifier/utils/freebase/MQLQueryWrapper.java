@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.freebase;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.freebase;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONArray;

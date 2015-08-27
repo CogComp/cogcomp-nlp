@@ -17,7 +17,7 @@
 //import edu.illinois.cs.cogcomp.wikifier.common.GlobalParameters;
 //import edu.illinois.cs.cogcomp.wikifier.utils.WikiTitleUtils;
 //import edu.illinois.cs.cogcomp.wikifier.utils.lucene.Lucene;
-//import edu.illinois.cs.cogcomp.wikifier.utils.spelling.ashwin.AshwinSpellChecker;
+//import AshwinSpellChecker;
 //
 //public class MySpellChecker extends AbstractSurfaceQueryEngine
 //{

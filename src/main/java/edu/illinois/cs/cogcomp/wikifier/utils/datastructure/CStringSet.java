@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
 
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import gnu.trove.set.hash.TCustomHashSet;

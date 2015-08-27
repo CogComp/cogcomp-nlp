@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
+package main.java.edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
 
 import java.util.ArrayList;
 import java.util.Collections;
