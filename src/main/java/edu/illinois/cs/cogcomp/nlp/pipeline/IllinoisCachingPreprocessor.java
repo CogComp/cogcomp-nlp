@@ -7,11 +7,10 @@ import edu.illinois.cs.cogcomp.common.CuratorViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +25,12 @@ import java.util.Map;
  *
  * Created by mssammon on 4/13/15.
  */
-public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
+public class IllinoisCachingPreprocessor extends CachingAnnotatorService
 {
 
     private static final java.lang.String RESPECT_TOKENIZATION = "respectTokenization";
     private static final java.lang.String THROW_EXCEPTION_IF_NOT_CACHED = "throwExceptionIfNotCached";
+    public static final java.lang.String CACHE_DIR = "cacheDir";
     private static IllinoisCachingPreprocessor THE_INSTANCE;
     private static Map<String, Boolean> activeViews;
     private static boolean useEdisonNames;
@@ -89,7 +89,7 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      * @param extraViewGenerators
      * @throws AnnotatorException
      */
-    private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, TextAnnotationBuilderInterface taBuilder, Map< String, Annotator > extraViewGenerators ) throws AnnotatorException {
+    private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, TextAnnotationBuilderInterface taBuilder, Map<String, Annotator> extraViewGenerators) throws AnnotatorException {
         super(getRequestedViews(illinoisPreprocessor),
                 taBuilder,
                 rm.getBoolean(THROW_EXCEPTION_IF_NOT_CACHED),
@@ -141,7 +141,7 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
      * @param extraViewProviders
      * @throws edu.illinois.cs.cogcomp.annotation.AnnotatorException
      */
-    private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, TextAnnotationBuilderInterface taBuilder, boolean throwExceptionIfNotCached, Map<String, Annotator> extraViewProviders, IllinoisPreprocessor preprocessor ) throws AnnotatorException {
+    private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, TextAnnotationBuilderInterface taBuilder, boolean throwExceptionIfNotCached, Map<String, Annotator> extraViewProviders, IllinoisPreprocessor preprocessor) throws AnnotatorException {
         super(requestedViews, taBuilder, throwExceptionIfNotCached, extraViewProviders);
         initializeCurrentStatus();
     }
@@ -162,33 +162,33 @@ public class IllinoisCachingPreprocessor  extends CachingAnnotatorService
         supportedViews.addAll( activeViews.keySet() );
     }
 
-//    /**
-//     * ugly first cut at making this work. The current implementation generates a Record with ALL active
-//     *    annotations in the first call for a given text and builds/stores the corresponding TextAnnotation.
-//     *    the requests for uncached views then simply returns the corresponding view from the complete
-//     *    TextAnnotation.
-//     * This approach means there is inefficiency if you process a given text with some subset of available
-//     *    resources, then later process again with additional resources -- the initial steps are repeated.
-//     *
-//     * @param textAnnotation
-//     * @param viewName
-//     */
-//    @Override
-//    protected void requestUncachedView(TextAnnotation textAnnotation, String viewName ) {
-//        if ( !isProcessed( textAnnotation.getText(), viewName ) ) {
-////            if ( textAnnotation != currentTextAnnotation)
-//                process(textAnnotation);
-//        }
-//
-//        addViewFromTo(viewName, currentTextAnnotation, textAnnotation);
-//    }
+    /**
+     * ugly first cut at making this work. The current implementation generates a Record with ALL active
+     *    annotations in the first call for a given text and builds/stores the corresponding TextAnnotation.
+     *    the requests for uncached views then simply returns the corresponding view from the complete
+     *    TextAnnotation.
+     * This approach means there is inefficiency if you process a given text with some subset of available
+     *    resources, then later process again with additional resources -- the initial steps are repeated.
+     *
+     * @param textAnnotation
+     * @param viewName
+     */
+    @Override
+    protected void requestUncachedView(TextAnnotation textAnnotation, String viewName ) {
+        if ( !isProcessed( textAnnotation.getText(), viewName ) ) {
+//            if ( textAnnotation != currentTextAnnotation)
+                process(textAnnotation);
+        }
+
+        addViewFromTo(viewName, currentTextAnnotation, textAnnotation);
+    }
 
 
-//    private void addViewFromTo(String viewName, TextAnnotation currentTa, TextAnnotation newTa ) {
-//
-//        View v = currentTa.getView( viewName );
-//        newTa.addView( viewName, v );
-//    }
+    private void addViewFromTo(String viewName, TextAnnotation currentTa, TextAnnotation newTa ) {
+
+        View v = currentTa.getView( viewName );
+        newTa.addView( viewName, v );
+    }
 
 
 

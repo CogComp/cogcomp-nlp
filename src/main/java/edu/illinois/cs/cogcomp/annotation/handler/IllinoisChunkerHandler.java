@@ -74,8 +74,8 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 
     @Override
     public View getView( TextAnnotation record ) throws AnnotatorException {
-		if (!record.hasView(tokensfield) || !record.hasView(sentencesfield)) {
-            String msg = getIdentifier() + ".getView(): Record must be tokenized and sentence split first.";
+		if (!record.hasView(tokensfield) || !record.hasView(sentencesfield) || !record.hasView( posfield )) {
+            String msg = getIdentifier() + ".getView(): Record must be tokenized, sentence split, and POS-tagged first.";
 		    logger.error( msg );
         	throw new AnnotatorException( msg);
 		}
@@ -138,7 +138,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
      */
     @Override
     public String[] getRequiredViews() {
-        return new String[0];
+        return new String[] { ViewNames.POS };
     }
 
 //	public String getName() throws TException {

@@ -134,6 +134,8 @@ public class IllinoisPreprocessor
         {
         	String nerConfig = rm_.getString( PipelineVars.NER_CONLL_CONFIG );
             //TODO What is modelType? Can it be used as a CoNLL vs Ontonotes?
+            // MS: that's the idea, but NERAnnotator is not set up to allow this.
+            // for now, we'll just use CoNLL.
         	ner = new IllinoisNerHandler( nerConfig, ViewNames.NER_CONLL );
         }
 

@@ -79,6 +79,8 @@ A tarball with the dependencies is provided at the same page on the CCG web site
 
 The list of dependencies is as follows:
 
+//TODO: update
+
 cogcomp-common-resources-1.2.jar
 commons-cli-1.2.jar
 commons-codec-1.8.jar
@@ -110,7 +112,10 @@ slf4j-log4j12-1.5.8.jar
 snowball-1.0.jar
 trove4j-3.0.3.jar
 
-You will also need configuration files for the NER.
+You will also need configuration files for the NER. If you use IllinoisCachingPreprocessor -- which, as its
+name suggests, caches data you have processed, you will need an ehcache configuration file.
+The complete Illinois NLP Pipeline package includes these configuration files, though you may wish to
+change them to alter the relevant behaviors.
 
 ==============================
 

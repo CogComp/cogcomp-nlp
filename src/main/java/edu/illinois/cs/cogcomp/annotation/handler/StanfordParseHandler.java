@@ -20,11 +20,26 @@ import edu.stanford.nlp.util.CoreMap;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 public class StanfordParseHandler extends PipelineAnnotator {
 
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
+
+    static Properties stanfordProps;
+
+    static {
+        stanfordProps = new Properties();
+        stanfordProps.put( "annotators", "pos, parse") ;
+        stanfordProps.put("parse.originalDependencies", true);
+    }
+
+
+    public StanfordParseHandler()
+    {
+        this( new POSTaggerAnnotator("pos", stanfordProps ), new ParserAnnotator( "parse", stanfordProps ) );
+    }
 
     public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
         super("Stanford Parser", "3.3.1", "stanfordparse");

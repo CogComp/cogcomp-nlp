@@ -23,17 +23,20 @@ import java.util.Properties;
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Create a pipeline simply from a set of handlers (Annotators) and
+ *    CachingAnnotatorService.
+ *
  * Created by mssammon on 4/14/15.
  */
-public class IllinoisCachingPreprocessorTest
+public class IllinoisNewPipelineTest
 {
     private static final String CONFIG = "src/test/resources/testConfig.properties";
     private static final String NER_CONLL_CONFIG = "config/ner-conll-config.properties";
     private static final String LEMMA_CONFIG = "config/lemmatizer-config.properties";
 
-    private static Logger logger = LoggerFactory.getLogger( IllinoisCachingPreprocessorTest.class );
+    private static Logger logger = LoggerFactory.getLogger( IllinoisNewPipelineTest.class );
 
-    private IllinoisCachingPreprocessor prep;
+    private CachingAnnotatorService prep;
 
     private String text;
 
@@ -53,44 +56,42 @@ public class IllinoisCachingPreprocessorTest
 
         TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( new IllinoisTokenizer() );
 
-//        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-//        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-//        IllinoisNerHandler ner = new IllinoisNerHandler( NER_CONLL_CONFIG, ViewNames.NER_CONLL );
-//        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( LEMMA_CONFIG );
-//
-//
-//        Properties stanfordProps = new Properties();
-//        stanfordProps.put( "annotators", "pos, parse") ;
-//        stanfordProps.put("parse.originalDependencies", true);
-//
-//        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-//        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-//
-//        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-//        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-//
-//        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-//
-//        extraViewGenerators.put( ViewNames.POS, pos );
-//        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-//        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-//        extraViewGenerators.put( ViewNames.NER_CONLL, ner );
-//        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-//        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-//
-//        boolean throwExceptionIfUncached = false;
+        IllinoisPOSHandler pos = new IllinoisPOSHandler();
+        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
+        IllinoisNerHandler ner = new IllinoisNerHandler( NER_CONLL_CONFIG, ViewNames.NER_CONLL );
+        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( LEMMA_CONFIG );
 
-//        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-//        for ( String view : extraViewGenerators.keySet() )
-//            requestedViews.put( view, false );
 
-        Map<String, Annotator> extraViewGenerators = null;
+        Properties stanfordProps = new Properties();
+        stanfordProps.put( "annotators", "pos, parse") ;
+        stanfordProps.put("parse.originalDependencies", true);
 
-        prep = IllinoisCachingPreprocessor.getInstance(CONFIG, taBuilder, extraViewGenerators);
+        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
+        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
 
+        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
+        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
+
+        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
+
+        extraViewGenerators.put( ViewNames.POS, pos );
+        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
+        extraViewGenerators.put( ViewNames.LEMMA, lemma );
+        extraViewGenerators.put( ViewNames.NER_CONLL, ner );
+        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
+        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
+
+        boolean throwExceptionIfUncached = false;
+
+        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
+        for ( String view : extraViewGenerators.keySet() )
+            requestedViews.put( view, false );
+
+        prep = new CachingAnnotatorService(requestedViews, taBuilder, throwExceptionIfUncached, extraViewGenerators );
+        //prep = IllinoisCachingPreprocessor.getInstance(CONFIG, taBuilder, extraViewGenerators);
         String cacheDir = rm.getString( IllinoisCachingPreprocessor.CACHE_DIR );
 
-        IllinoisCachingPreprocessor.openCache(cacheDir);
+        CachingAnnotatorService.openCache(cacheDir);
 
         text = "The priest stared at John for a long time, startled at his disclosure. " +
                 "The Altman Inn had long been a topic of public vexation for the St. Francis seminary, " +

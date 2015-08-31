@@ -1,17 +1,20 @@
-Version 0.0.8
-Switched to Git for version control
-Made logback-classing an optional dependency
-Changed the names of the config files for better uniformity
+0.1.1  * updated to support caching using new cachingannotator
+       * updated dependencies
+       * fixed bug in TextAnnotation returned by some methods that missed
+	 non-standard Edison view (nerExt)
+
+Version 0.1.0
+Switched to illinois-ner-2.8.2 (less STDOUT pollution)
 
 Version 0.0.9
 Switched to edison-0.7.4 (extracts LEMMA view from Record)
 Switched to illinois-lemmatizer-0.0.9 (uses CuratorViewNames.lemma)
 Switched to illinois-ner-2.8.1
 
-Version 0.1.0
-Switched to illinois-ner-2.8.2 (less STDOUT pollution)
+Version 0.0.8
+Switched to Git for version control
+Made logback-classing an optional dependency
+Changed the names of the config files for better uniformity
 
-0.1.1  * updated to support caching using new cachingannotator 
-       * updated dependencies
-       * fixed bug in TextAnnotation returned by some methods that missed 
-	 non-standard Edison view (nerExt)
+
+
