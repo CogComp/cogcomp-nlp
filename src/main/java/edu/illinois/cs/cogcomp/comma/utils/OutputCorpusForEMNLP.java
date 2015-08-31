@@ -6,9 +6,11 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import edu.illinois.cs.cogcomp.comma.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
 import edu.illinois.cs.cogcomp.comma.Sentence;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
  * Used for outputting the corpus with the label refinements for submission to EMPNLP
@@ -16,8 +18,8 @@ import edu.illinois.cs.cogcomp.comma.Sentence;
 public class OutputCorpusForEMNLP {
 	public static void main(String[] args) throws IOException{
 		String data = "";
-		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.ORIGINAL_SENTENCE);
-		List<Sentence> sentences = cr.getSentences();
+		VivekAnnotationCommaParser commaParser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORIGINAL_SENTENCE);
+		List<Sentence> sentences = commaParser.getSentences();
 		for(Sentence sentence : sentences){
 			data += sentence.getId() + "\n" + sentence.getAnnotatedText()
 					+ "\n\n";

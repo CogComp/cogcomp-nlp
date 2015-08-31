@@ -2,6 +2,7 @@ package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarEvaluation;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.PrintMetrics;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
@@ -14,13 +15,13 @@ import edu.illinois.cs.cogcomp.sl.core.SLModel;
 
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
-		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.RANDOM_SENTENCE);
-		/*System.out.println("GOLD GOLD");
+		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
+		System.out.println("GOLD GOLD");
 		localCVal(true, true, parser, 160, 0.014, 0, 3.4);
 		System.out.println("GOLD AUTO");
 		localCVal(true, false, parser, 120, 0.024, 0, 3.9);
 		System.out.println("AUTO AUTO");
-		localCVal(false, false, parser, 90, 0.024, 0, 3.6);*/
+		localCVal(false, false, parser, 90, 0.024, 0, 3.6);
 		Comma.useGoldFeatures(true);
 		System.out.println("STRUCTURED GOLD");
 		structuredCVal(parser);
@@ -111,5 +112,12 @@ public class ClassifierComparison {
 		}
 		performanceRecord.printPerformance(System.out);
 		//sperformanceRecord.printConfusion(System.out);
+		
+		/*parser.reset();
+		learner.forget();
+		BatchTrainer otherTrainer = new BatchTrainer(learner, parser);
+		//Lexicon lexicon = otherTrainer.preExtract(null);
+		//learner.setLexicon(lexicon);
+		otherTrainer.crossValidation(new int[]{learningRounds}, k, SplitPolicy.sequential, 0.05, new PrintMetrics(k), false);*/
 	}
 }

@@ -273,6 +273,13 @@ discrete CommaSiblingsFeature(Comma c) <- {
     return commaLevelPhrases;
 }
 
+/*
+discrete% POSYieldFeatures(Comma c) <- {
+	List posNgramStrings = c.getPOSNGrams();
+	for(int i = 0; i<posNgramStrings.size(); i++)
+		sense posNgramStrings.get(i);
+}*/
+
 discrete BayraktarPatternFeature(Comma c) <- {
 	return c.getBayraktarPattern();
 }
@@ -282,33 +289,37 @@ discrete BayraktarLabelFeature(Comma c) <- {
 }
 
 
+
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CONSTRUCTING BIGRAMS FROM UNGRAMS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 discrete BigramLeftPhraseFeature(Comma c) <- UnigramSecondLeftPhraseFeature && UnigramLeftPhraseFeature
 discrete BigramRightPhraseFeature(Comma c) <- UnigramSecondRightPhraseFeature && UnigramRightPhraseFeature
 discrete BigramLeftRightPhraseFeature(Comma c) <- UnigramLeftPhraseFeature && UnigramRightPhraseFeature
 discrete BigramParentLeftPhraseFeature(Comma c) <- UnigramParentSecondLeftPhraseFeature && UnigramParentLeftPhraseFeature
 discrete BigramParentRightPhraseFeature(Comma c) <- UnigramParentSecondRightPhraseFeature && UnigramParentRightPhraseFeature
+//BigramParentLeftRightPhraseFeature is not necessary as the parent is always a comma
 
 discrete BigramLeftStrippedPhraseFeature(Comma c) <- UnigramSecondLeftStrippedPhraseFeature && UnigramLeftStrippedPhraseFeature
 discrete BigramRightStrippedPhraseFeature(Comma c) <- UnigramSecondRightStrippedPhraseFeature && UnigramRightStrippedPhraseFeature
 discrete BigramLeftRightStrippedPhraseFeature(Comma c) <- UnigramLeftStrippedPhraseFeature && UnigramRightStrippedPhraseFeature
 discrete BigramParentLeftStrippedPhraseFeature(Comma c) <- UnigramParentSecondLeftStrippedPhraseFeature && UnigramParentLeftStrippedPhraseFeature
 discrete BigramParentRightStrippedPhraseFeature(Comma c) <- UnigramParentSecondRightStrippedPhraseFeature && UnigramParentRightStrippedPhraseFeature
+//BigramParentLeftRightStrippedPhraseFeature is not necessary as the parent is always a comma
 
 
-
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GROUPING PARSE FEATURES INTO PARENT FEATURES AND SIBLING FEATURES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 discrete% StrippedParentParseFeatures(Comma c) <- CommaParentStrippedPhraseFeature, UnigramParentLeftStrippedPhraseFeature, UnigramParentSecondLeftStrippedPhraseFeature, UnigramParentRightStrippedPhraseFeature, UnigramParentSecondRightStrippedPhraseFeature
-discrete% StrippedSiblingParseFeatures(Comma c) <- UnigramSecondLeftStrippedPhraseFeature, UnigramSecondRightStrippedPhraseFeature, UnigramLeftStrippedPhraseFeature, UnigramRightStrippedPhraseFeature
-discrete% StrippedBigramParseFeatures(Comma c) <- BigramLeftStrippedPhraseFeature, BigramRightStrippedPhraseFeature, BigramLeftRightStrippedPhraseFeature
+discrete% StrippedSiblingParseFeatures(Comma c) <- UnigramSecondLeftStrippedPhraseFeature, UnigramSecondRightStrippedPhraseFeature, UnigramLeftStrippedPhraseFeature, UnigramRightStrippedPhraseFeature, BigramLeftStrippedPhraseFeature, BigramRightStrippedPhraseFeature, BigramLeftRightStrippedPhraseFeature
 
 discrete% ParentParseFeatures(Comma c) <- CommaParentPhraseFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, BigramParentLeftPhraseFeature, BigramParentRightPhraseFeature 
-discrete% SiblingParseFeatures(Comma c) <- UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature
-discrete% BigramParseFeatures(Comma c) <- BigramLeftPhraseFeature, BigramRightPhraseFeature, BigramLeftRightPhraseFeature
+discrete% SiblingParseFeatures(Comma c) <- UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature, BigramLeftRightPhraseFeature
 
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~FINAL FEATURE GROUPS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 discrete% ChunkFeatures(Comma c) <- UnigramLeftChunkFeature && UnigramSecondLeftChunkFeature, UnigramRightChunkFeature && UnigramSecondRightChunkFeature, UnigramLeftChunkFeature && UnigramRightChunkFeature
-discrete% StrippedParseFeatures(Comma c) <- StrippedSiblingParseFeatures, BigramLeftStrippedPhraseFeature, BigramRightStrippedPhraseFeature, BigramLeftRightStrippedPhraseFeature
-discrete% ParseFeatures(Comma c) <- SiblingParseFeatures, BigramParseFeatures
+discrete% StrippedParseFeatures(Comma c) <- StrippedSiblingParseFeatures, StrippedParentParseFeatures
+discrete% ParseFeatures(Comma c) <- SiblingParseFeatures, ParentParseFeatures
 discrete% POSFeatures(Comma c) <- UnigramLeftPOSFeature && UnigramRightPOSFeature, UnigramLeftPOSFeature && UnigramSecondLeftPOSFeature, UnigramRightPOSFeature && UnigramSecondRightPOSFeature
-
 discrete% DependencyFeatures(Comma c) <- RightToLeftDependencies , LeftToRightDependencies
 
 discrete CommaLabel(Comma c) <- { 
@@ -319,18 +330,20 @@ discrete CommaLabel(Comma c) <- {
 discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
 
-	using POSFeatures, DependencyFeatures, StrippedParseFeatures, StrippedParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//Use for GOlD-AUTO evaluation
+	//using POSFeatures, DependencyFeatures, StrippedParseFeatures, StrippedParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//Use for GOlD-AUTO evaluation
 	
-	//using  POSFeatures, ParseFeatures, ParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature
-	/*
+	//using  POSFeatures, ParseFeatures, ParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//CommaSiblingsFeature, DependencyFeatures, ChunkFeatures
+	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures
+
 	with SparseNetworkLearner {
 	    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
-	    //p.learningRate = {{.010 -> 0.030 : 0.002}};
-	    //p.thickness = {{2.0 -> 4.6 : 0.2}};
+	    p.learningRate = {{.010 -> 0.030 : 0.002}};
+	    p.thickness = {{0.0 -> 4.5 : 0.5}};
+	    p.threshold = {{0.0 -> 5.0 : 0.2}};
 	    //p.learningRate = 0.024;//AUTO-AUTO
 	    //p.thickness = 3.6;//AUTO-AUTO
-	    p.learningRate = 0.014;//GOLD-GOLD
-	    p.thickness = 3.4;//GOLD-GOLD
+	    //p.learningRate = 0.014;//GOLD-GOLD
+	    //p.thickness = 3.4;//GOLD-GOLD
 	    //p.learningRate = 0.024;//GOLD-AUTO
 	    //p.thickness = 3.9;//GOLD-AUTO
 	    baseLTU = new SparseAveragedPerceptron(p);
@@ -338,16 +351,14 @@ learn CommaLabel
 	from
 		new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE)
 		//from new VivekAnnotationCommaParser("data/train_commas.txt", "data/train_commas.ser", VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE)
-		//{{ 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190}} rounds
+		{{ 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190}} rounds
 		//90 rounds//AUTO-AUTO
-		160 rounds//GOLD-GOLD
+		//160 rounds//GOLD-GOLD
 		//120 rounds//GOLD-AUTO
 		
-	cval 5 "random"
-	//preExtract false
+	cval 5 "sequential" //NEVER FUCKING USE RANDOM
 	testingMetric new PrintMetrics(5)
-	progressOutput 0
-	*/
+	progressOutput 10000000
 end
 
 

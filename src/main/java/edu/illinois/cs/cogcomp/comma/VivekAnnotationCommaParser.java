@@ -21,6 +21,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
@@ -87,7 +88,7 @@ public class VivekAnnotationCommaParser implements Parser {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("File not found!");
+            System.out.println("File(" + f.getPath() + ") not found!");
             try {
                 readData();
             } catch (Exception e) {
@@ -105,9 +106,13 @@ public class VivekAnnotationCommaParser implements Parser {
 			break;
 		case ORDERED_SENTENCE:
 			Collections.shuffle(sentences, new Random(seed));
+			reset();
+	    	commas = IteratorUtils.toList(commaIt);
 			break;
 		case RANDOM_SENTENCE:
 			Collections.shuffle(sentences);
+			reset();
+	    	commas = IteratorUtils.toList(commaIt);
 			break;
 		default://ORIGINAL_COMMA or ORIGINAL_SENTENCE
 			break;

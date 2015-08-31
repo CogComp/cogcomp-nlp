@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
@@ -16,6 +18,9 @@ import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
+import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
@@ -262,6 +267,36 @@ public class Comma implements Serializable {
 			posView = (TokenLabelView) TA.getView(ViewNames.POS);
     	return posView.getLabel(commaPosition + distance);
     }
+    
+    /*public List<String> getPOSNGrams(int ngramLength, int width){
+    	TreeView parseView;
+    	TokenLabelView posView;
+    	if (GOLD)
+    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    	else
+    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+		Constituent comma = getCommaConstituentFromTree(parseView);
+		Constituent parent = TreeView.getParent(comma);
+		List<Constituent> siblings = IteratorUtils.toList(parseView.where(Queries.isSiblingOf(comma)).iterator());
+		List<String> posNgramStrings = new ArrayList<String>();
+		posNgramStrings.addAll(getPOSNGramsAroundPosition(siblings.get(0).getStartSpan(), width, ngramLength));
+		posNgramStrings.addAll(getPOSNGramsAroundPosition(commaPosition, width, ngramLength));
+		posNgramStrings.addAll(getPOSNGramsAroundPosition(siblings.get(siblings.size()-1).getEndSpan(), width, ngramLength));
+    }
+    
+    public List<String> getPOSNGramsAroundPosition(int position, int width, int ngramLength){
+    	TokenLabelView posView;
+    	if (GOLD)
+    		posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
+    	else
+			posView = (TokenLabelView) TA.getView(ViewNames.POS);
+		List<Constituent> POSConstituentsAroundPosition= posView.getConstituentsCoveringSpan(position - width, position + width + 1);
+		Set<Feature> posNgramFeatures = FeatureNGramUtility.getLabelNgramsOrdered(POSConstituentsAroundPosition, ngramLength);
+		List<String> posNgramStrings = new ArrayList<String>();
+		for(Feature posFeature : posNgramFeatures)
+			posNgramStrings.add(posFeature.toString());
+		return posNgramStrings;
+    }*/
 
     public Constituent getChunkToRightOfComma(int distance){
     	//We don't have gold SHALLOW_PARSE
