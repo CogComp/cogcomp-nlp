@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.common.CuratorViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * Created by mssammon on 4/13/15.
  */
-public class IllinoisCachingPreprocessor extends CachingAnnotatorService
+public class IllinoisCachingPreprocessor extends AnnotatorService
 {
 
     private static final java.lang.String RESPECT_TOKENIZATION = "respectTokenization";
@@ -92,8 +92,11 @@ public class IllinoisCachingPreprocessor extends CachingAnnotatorService
     private IllinoisCachingPreprocessor(IllinoisPreprocessor illinoisPreprocessor, ResourceManager rm, TextAnnotationBuilderInterface taBuilder, Map<String, Annotator> extraViewGenerators) throws AnnotatorException {
         super(getRequestedViews(illinoisPreprocessor),
                 taBuilder,
-                rm.getBoolean(THROW_EXCEPTION_IF_NOT_CACHED),
-                extraViewGenerators
+                extraViewGenerators,
+                rm.getString( AnnotatorService.CACHE_DIR ),
+                rm.getBoolean( AnnotatorService.THROW_EXCEPTION_IF_NOT_CACHED ),
+                rm.getInt( AnnotatorService.CACHE_HEAP_SIZE ),
+                rm.getInt( AnnotatorService.CACHE_DISK_SIZE )
         );
 
         preprocessor = illinoisPreprocessor;
@@ -135,6 +138,7 @@ public class IllinoisCachingPreprocessor extends CachingAnnotatorService
 
     /**
      * to be called only by buildInstance()
+     * uses default cache values; use IllinoisPipelineFactory instead
      *
      * @param requestedViews
      * @param throwExceptionIfNotCached
@@ -142,7 +146,7 @@ public class IllinoisCachingPreprocessor extends CachingAnnotatorService
      * @throws edu.illinois.cs.cogcomp.annotation.AnnotatorException
      */
     private IllinoisCachingPreprocessor(Map<String, Boolean> requestedViews, TextAnnotationBuilderInterface taBuilder, boolean throwExceptionIfNotCached, Map<String, Annotator> extraViewProviders, IllinoisPreprocessor preprocessor) throws AnnotatorException {
-        super(requestedViews, taBuilder, throwExceptionIfNotCached, extraViewProviders);
+        super(requestedViews, taBuilder,  extraViewProviders);
         initializeCurrentStatus();
     }
 

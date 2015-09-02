@@ -1,10 +1,12 @@
 package edu.illinois.cs.cogcomp.nlp.main;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
@@ -22,17 +24,16 @@ public class RunPreprocessor
 {
     private static final String NAME = RunPreprocessor.class.getCanonicalName();
 
-    private IllinoisPreprocessor pipeline;
+    private AnnotatorService pipeline;
 
     public RunPreprocessor( String config ) throws Exception {
         ResourceManager rm = new ResourceManager( config );
-        TextAnnotationBuilderInterface  taBuilder = new TextAnnotationBuilder( new IllinoisTokenizer() );
-        pipeline = new IllinoisPreprocessor( rm, taBuilder );
+        pipeline = IllinoisPipelineFactory.buildPipeline(rm);
     }
 
-	public TextAnnotation runPreprocessorOnFile( String fileName, String corpusId, String textId ) throws FileNotFoundException, AnnotatorException {
+	public TextAnnotation runPreprocessorOnFile( String fileName ) throws FileNotFoundException, AnnotatorException {
         String text = LineIO.slurp( fileName );
-        TextAnnotation ta = pipeline.processTextToTextAnnotation( corpusId, textId, text );
+        TextAnnotation ta = pipeline.provideTextAnnotation( text );
         return ta;
 	}
 
@@ -46,8 +47,6 @@ public class RunPreprocessor
         String config = args[ 0 ];
         String inFile = args[ 1 ];
         File file = new File( inFile );
-        String corpusId = "test";
-        String textId = file.getName();
 
         RunPreprocessor rp = null;
         try {
@@ -58,7 +57,7 @@ public class RunPreprocessor
         }
         try {
 
-            TextAnnotation ta = rp.runPreprocessorOnFile(inFile, corpusId, textId);
+            TextAnnotation ta = rp.runPreprocessorOnFile(inFile);
             System.out.println( ta.toString() );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -70,8 +69,8 @@ public class RunPreprocessor
     }
 
 
-	public void runPreprocessorOnDirectory( String dirName_, String outDir_ )
-	{
-		
-	}
+//	public void runPreprocessorOnDirectory( String dirName_, String outDir_ )
+//	{
+//
+//	}
 }

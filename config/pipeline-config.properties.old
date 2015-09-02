@@ -1,0 +1,14 @@
+forceCacheUpdate=false
+usePos=true
+useChunker=true
+useLemmatizer=true
+useNer=true
+useNerExt=false
+useStanfordParse=true
+useStanfordDep=true
+lemmaCacheFile=data/lemmaCache.txt
+updateLemmaCacheFile=false
+maxLemmaCacheEntries=10000
+wordnetPath=data/WordNet
+nerConllConfigFile=config/ner-conll-config.properties
+nerOntonotesConfigFile=config/ner-ontonotes-config.properties

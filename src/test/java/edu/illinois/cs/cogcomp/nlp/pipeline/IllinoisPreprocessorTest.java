@@ -29,8 +29,8 @@ public class IllinoisPreprocessorTest
     @BeforeClass
     public static void setUpBeforeClass()
     {
-
         ResourceManager rm = null;
+
         try
         {
             rm = new ResourceManager( CONFIG );

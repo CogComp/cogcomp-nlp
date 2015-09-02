@@ -53,6 +53,8 @@ import java.util.*;
  * @author mssammon
  *
  */
+
+@Deprecated
 public class IllinoisPreprocessor
 {
 	private static final String NAME = IllinoisPreprocessor.class.getCanonicalName();

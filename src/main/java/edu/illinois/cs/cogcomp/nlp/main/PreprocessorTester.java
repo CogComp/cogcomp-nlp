@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.main;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -10,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
@@ -69,11 +71,11 @@ public class PreprocessorTester
 	        System.exit( -1 );
         }
         
-        IllinoisPreprocessor prep = null;
+        AnnotatorService prep = null;
         
         try
         {
-            prep = new IllinoisPreprocessor( rm, new TextAnnotationBuilder(new IllinoisTokenizer()));
+            prep = IllinoisPipelineFactory.buildPipeline( rm );
         }
         catch ( Exception e )
         {
@@ -95,7 +97,7 @@ public class PreprocessorTester
         TextAnnotation rec = null;
         try
         {
-            rec = prep.processText( text );
+            rec = prep.provideTextAnnotation( text );
         }
         catch (AnnotatorException e)
         {

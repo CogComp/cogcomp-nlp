@@ -1,6 +1,6 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
@@ -90,7 +90,7 @@ public class IllinoisCachingPreprocessorTest
 
         String cacheDir = rm.getString( IllinoisCachingPreprocessor.CACHE_DIR );
 
-        IllinoisCachingPreprocessor.openCache(cacheDir);
+//        IllinoisCachingPreprocessor.openCache(cacheDir);
 
         text = "The priest stared at John for a long time, startled at his disclosure. " +
                 "The Altman Inn had long been a topic of public vexation for the St. Francis seminary, " +
@@ -115,7 +115,7 @@ public class IllinoisCachingPreprocessorTest
 
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
-        prep.getCachedTextAnnotation(text);
+        prep.provideTextAnnotation(text);
         end = System.currentTimeMillis();
 
         long firsttotal = end - start;
@@ -124,7 +124,7 @@ public class IllinoisCachingPreprocessorTest
         int n = 5;
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
-            prep.getCachedTextAnnotation(text);
+            prep.provideTextAnnotation(text);
             end = System.currentTimeMillis();
 
             duration = end - start;
@@ -134,6 +134,8 @@ public class IllinoisCachingPreprocessorTest
 
         long avg = total / n;
         logger.debug("Average = " + avg + " milliseconds");
+
+        prep.closeCache();
 
         assertTrue(avg < firsttotal);
 

@@ -30,7 +30,7 @@ public class StanfordDepHandler extends PipelineAnnotator{
 
     @Override
     public String getViewName() {
-        return ViewNames.PARSE_STANFORD;
+        return ViewNames.DEPENDENCY_STANFORD;
     }
 
     @Override

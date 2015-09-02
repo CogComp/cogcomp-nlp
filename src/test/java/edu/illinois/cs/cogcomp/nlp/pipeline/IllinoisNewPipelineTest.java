@@ -1,26 +1,20 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService;
-import edu.illinois.cs.cogcomp.annotation.handler.*;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
-import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
-import edu.stanford.nlp.pipeline.ParserAnnotator;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import edu.illinois.cs.cogcomp.nlp.util.EdisonPrintAlignedAnnotation;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Create a pipeline simply from a set of handlers (Annotators) and
@@ -30,18 +24,16 @@ import static org.junit.Assert.assertTrue;
  */
 public class IllinoisNewPipelineTest
 {
-    private static final String CONFIG = "src/test/resources/testConfig.properties";
-    private static final String NER_CONLL_CONFIG = "config/ner-conll-config.properties";
-    private static final String LEMMA_CONFIG = "config/lemmatizer-config.properties";
+    private static final String CONFIG = "src/test/resources/pipeline-full-config.properties";
 
     private static Logger logger = LoggerFactory.getLogger( IllinoisNewPipelineTest.class );
 
-    private CachingAnnotatorService prep;
+    private static AnnotatorService prep;
 
-    private String text;
+    private static String text;
 
-    @Before
-    public void setUp() throws Exception
+    @BeforeClass
+    public static void setUpOnce() throws Exception
     {
         ResourceManager rm = null;
         try
@@ -54,49 +46,18 @@ public class IllinoisNewPipelineTest
             System.exit( -1 );
         }
 
-        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( new IllinoisTokenizer() );
-
-        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-        IllinoisNerHandler ner = new IllinoisNerHandler( NER_CONLL_CONFIG, ViewNames.NER_CONLL );
-        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( LEMMA_CONFIG );
-
-
-        Properties stanfordProps = new Properties();
-        stanfordProps.put( "annotators", "pos, parse") ;
-        stanfordProps.put("parse.originalDependencies", true);
-
-        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-
-        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-
-        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-
-        extraViewGenerators.put( ViewNames.POS, pos );
-        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-        extraViewGenerators.put( ViewNames.NER_CONLL, ner );
-        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-
-        boolean throwExceptionIfUncached = false;
-
-        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-        for ( String view : extraViewGenerators.keySet() )
-            requestedViews.put( view, false );
-
-        prep = new CachingAnnotatorService(requestedViews, taBuilder, throwExceptionIfUncached, extraViewGenerators );
-        //prep = IllinoisCachingPreprocessor.getInstance(CONFIG, taBuilder, extraViewGenerators);
-        String cacheDir = rm.getString( IllinoisCachingPreprocessor.CACHE_DIR );
-
-        CachingAnnotatorService.openCache(cacheDir);
+        prep = IllinoisPipelineFactory.buildPipeline( rm );
 
         text = "The priest stared at John for a long time, startled at his disclosure. " +
                 "The Altman Inn had long been a topic of public vexation for the St. Francis seminary, " +
                 "and Ivor McDougal had long maintained that the relative ineffectiveness of Bishop Godfrey " +
                 "could be traced to his long unhappy years there." ;
+    }
+
+    @AfterClass
+    public static void finalTeardown()
+    {
+        prep.closeCache();
     }
 
     @After
@@ -106,17 +67,28 @@ public class IllinoisNewPipelineTest
 
 
     @Test
-    public void testCacheTiming() throws Exception {
+    public void testCacheTiming()
+    {
         logger.debug("starting testCacheTiming test");
 
         // so that it is slow!
-        prep.removeKeyFromCache(text);
+        try {
+            prep.removeKeyFromCache(text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         long start, end, duration, total = 0;
 
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
-        prep.getCachedTextAnnotation(text);
+        try {
+            prep.provideTextAnnotation(text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
         end = System.currentTimeMillis();
 
         long firsttotal = end - start;
@@ -125,7 +97,13 @@ public class IllinoisNewPipelineTest
         int n = 5;
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
-            prep.getCachedTextAnnotation(text);
+            try {
+                prep.provideTextAnnotation(text);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail( e.getMessage() );
+
+            }
             end = System.currentTimeMillis();
 
             duration = end - start;
@@ -140,4 +118,33 @@ public class IllinoisNewPipelineTest
 
     }
 
+    @Test
+    public void TestPipelineProcessing()
+    {
+        try {
+            prep.removeKeyFromCache(text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        TextAnnotation ta = null;
+        try {
+            ta = prep.provideTextAnnotation(text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        assertTrue(ta.hasView(ViewNames.NER_CONLL));
+        assertTrue( ta.hasView( ViewNames.POS ) );
+        assertTrue( ta.hasView( ViewNames.PARSE_STANFORD ) );
+        assertTrue( ta.hasView( ViewNames.DEPENDENCY_STANFORD ) );
+        assertTrue( ta.hasView( ViewNames.SHALLOW_PARSE ) );
+        assertTrue( ta.hasView( ViewNames.LEMMA ) );
+        assertTrue( ta.hasView( ViewNames.SENTENCE ) );
+
+        assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 5);
+
+    }
 }
