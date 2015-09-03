@@ -103,7 +103,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>0.0.2-SNAPSHOT</version>
+            <version>0.0.2</version>
         </dependency>
 		<!-- Stanford Core NLP, used for its parser (for SRL) -->
 		<dependency>
