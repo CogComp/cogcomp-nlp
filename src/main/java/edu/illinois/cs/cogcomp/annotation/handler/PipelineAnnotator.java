@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A replacement for Curator's AbstractHandler
+ * A replacement for Curator's AbstractHandler; provides simple behavior shared by pipeline components.
+ *
  * Created by mssammon on 8/24/15.
  */
 abstract public class PipelineAnnotator implements Annotator
@@ -42,8 +43,7 @@ abstract public class PipelineAnnotator implements Annotator
     }
 
     /**
-     * return an identifier (short name + identifier) with no whitespace
-     * @return
+     * @return  an identifier (short name + identifier) with no whitespace
      */
     public String getIdentifier()
     {
@@ -51,8 +51,7 @@ abstract public class PipelineAnnotator implements Annotator
     }
 
     /**
-     * return a descriptive name, may contain whitespace
-     * @return
+     * @return   a descriptive name, may contain whitespace
      */
     public String getFullName()
     {
@@ -69,6 +68,13 @@ abstract public class PipelineAnnotator implements Annotator
         return true;
     }
 
+    /**
+     * add a view to a TextAnnotation argument.
+     *
+     * @param ta    the TextAnnotation to augment
+     * @return  the augmented TextAnnotation
+     * @throws AnnotatorException   if prerequisite views are not present.
+     */
     public TextAnnotation labelTextAnnotation(TextAnnotation ta) throws AnnotatorException
     {
         long startTime = System.currentTimeMillis();

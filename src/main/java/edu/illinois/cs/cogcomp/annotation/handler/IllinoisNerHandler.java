@@ -8,6 +8,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import java.io.IOException;
 
 /**
+ * Wraps illinois-ner as an illinois-core-utilities Annotator, for use as a pipeline component.
+ *
  * Created by mssammon on 8/24/15.
  */
 public class IllinoisNerHandler extends PipelineAnnotator

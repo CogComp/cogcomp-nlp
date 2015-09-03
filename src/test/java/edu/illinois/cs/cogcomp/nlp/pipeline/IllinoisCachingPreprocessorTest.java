@@ -1,14 +1,9 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.annotation.handler.*;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
-import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
-import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import static org.junit.Assert.assertTrue;
 
@@ -53,44 +46,11 @@ public class IllinoisCachingPreprocessorTest
 
         TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( new IllinoisTokenizer() );
 
-//        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-//        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-//        IllinoisNerHandler ner = new IllinoisNerHandler( NER_CONLL_CONFIG, ViewNames.NER_CONLL );
-//        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( LEMMA_CONFIG );
-//
-//
-//        Properties stanfordProps = new Properties();
-//        stanfordProps.put( "annotators", "pos, parse") ;
-//        stanfordProps.put("parse.originalDependencies", true);
-//
-//        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-//        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-//
-//        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-//        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-//
-//        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-//
-//        extraViewGenerators.put( ViewNames.POS, pos );
-//        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-//        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-//        extraViewGenerators.put( ViewNames.NER_CONLL, ner );
-//        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-//        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-//
-//        boolean throwExceptionIfUncached = false;
-
-//        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-//        for ( String view : extraViewGenerators.keySet() )
-//            requestedViews.put( view, false );
 
         Map<String, Annotator> extraViewGenerators = null;
 
         prep = IllinoisCachingPreprocessor.getInstance(CONFIG, taBuilder, extraViewGenerators);
 
-        String cacheDir = rm.getString( IllinoisCachingPreprocessor.CACHE_DIR );
-
-//        IllinoisCachingPreprocessor.openCache(cacheDir);
 
         text = "The priest stared at John for a long time, startled at his disclosure. " +
                 "The Altman Inn had long been a topic of public vexation for the St. Francis seminary, " +
@@ -115,16 +75,19 @@ public class IllinoisCachingPreprocessorTest
 
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
-        prep.provideTextAnnotation(text);
+        boolean forceUpdate = true; // usually, 'false' in actual use
+        prep.createAnnotatedTextAnnotation( text, forceUpdate );
         end = System.currentTimeMillis();
 
         long firsttotal = end - start;
         logger.debug("original annotation cost: " + firsttotal + " milliseconds");
 
+        forceUpdate = false;
+
         int n = 5;
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
-            prep.provideTextAnnotation(text);
+            prep.createAnnotatedTextAnnotation( text, false );
             end = System.currentTimeMillis();
 
             duration = end - start;

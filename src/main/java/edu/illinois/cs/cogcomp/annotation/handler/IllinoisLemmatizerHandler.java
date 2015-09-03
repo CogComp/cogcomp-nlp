@@ -13,13 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
- * wraps Illinois Lemmatizer for use as Curator Component. 
- * The Lemmatizer adds 4 views: WNPLUS, WORDNET, PORTER, and KP. 
- * 
- * The config file for Curator will contain a MultiLabeler entry for this 
- *    annotator, and the field names should reflect these lemmatizer types 
- *    and respect their order.
- *    
+ * wraps Illinois Lemmatizer in an illinois-core-utilities Annotator,
+ *    for use as a Pipeline component.
+ *
  * @author mssammon
  *
  */
@@ -32,13 +28,10 @@ public class IllinoisLemmatizerHandler extends PipelineAnnotator
     private static final String[] REQUIRED_VIEWS = {ViewNames.POS};
 
     private IllinoisLemmatizer lemmatizer;
-//    private List< LemmaType > lemmaTypes;
-    
+
     private final Logger logger = LoggerFactory.getLogger( IllinoisLemmatizerHandler.class );
-	private String corpusId;
-	private String textId;
-    
-    public IllinoisLemmatizerHandler( String configFile_ ) throws FileNotFoundException, IOException
+
+    public IllinoisLemmatizerHandler( String configFile_ ) throws IOException
     {
         this( new ResourceManager( configFile_ ) );
     }
@@ -47,14 +40,6 @@ public class IllinoisLemmatizerHandler extends PipelineAnnotator
     {
         super( PUBLIC_NAME, VERSION, PUBLIC_NAME + "-" + VERSION );
 
-//        lemmaTypes = new LinkedList< LemmaType >();
-//        
-//        lemmaTypes.add( LemmaType.WNPLUS );
-//        lemmaTypes.add( LemmaType.WORDNET );
-//        lemmaTypes.add( LemmaType.PORTER );
-//        lemmaTypes.add( LemmaType.KP );
-
-//        AugmentedLemmatizer.init( rm_ );
         lemmatizer = new IllinoisLemmatizer( rm_ );
     }
 

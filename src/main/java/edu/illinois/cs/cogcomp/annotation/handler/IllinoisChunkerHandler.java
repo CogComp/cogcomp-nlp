@@ -3,8 +3,6 @@ package edu.illinois.cs.cogcomp.annotation.handler;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -20,11 +18,11 @@ import edu.illinois.cs.cogcomp.lbj.chunk.Chunker;
 
 
 /**
- * Wraps the Illinois Chunker (Shallow Parser) into a Labeler.Iface
- * @author James Clarke
+ * Wraps the Illinois Chunker (Shallow Parser) in an illinois-core-utilities Annotator
+ * @author James Clarke, Mark Sammons
  *
  */
-public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotator
+public class IllinoisChunkerHandler extends PipelineAnnotator
 {
 	private final Logger logger = LoggerFactory.getLogger(IllinoisChunkerHandler.class);
 	private Chunker tagger = new Chunker();
@@ -81,7 +79,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 		}
 
 		List<Constituent> tags = record.getView(posfield).getConstituents();
-		String rawText = record.getText();
+//		String rawText = record.getText();
 
 
 		List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens( record );
@@ -99,7 +97,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 			tagger.discreteValue(lbjtoken);
 			logger.debug("{} {}", lbjtoken.toString(), lbjtoken.type);
 			if (lbjtoken.type.charAt(0) == 'I') {
-				if (!clabel.equals(lbjtoken.type.substring(2))) {
+				if (null != lbjtoken.type && !clabel.equals(lbjtoken.type.substring(2))) {
 					lbjtoken.type = "B" + lbjtoken.type.substring(1);
 				}
 			}
@@ -120,7 +118,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 			previous = current;
 			tcounter++;
 		}
-		if (clabel != null) {
+		if (clabel != null && null != previous ) {
             currentChunkEnd = previous.getEndSpan();
             Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
             chunkView.addConstituent(label);
@@ -131,7 +129,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator implements Annotat
 	}
 
     /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService} to check for pre-requisites before calling
+     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to check for pre-requisites before calling
      * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator

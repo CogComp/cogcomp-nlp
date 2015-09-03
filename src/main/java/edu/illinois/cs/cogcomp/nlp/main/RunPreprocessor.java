@@ -2,16 +2,10 @@ package edu.illinois.cs.cogcomp.nlp.main;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import org.apache.thrift.TException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,8 +27,8 @@ public class RunPreprocessor
 
 	public TextAnnotation runPreprocessorOnFile( String fileName ) throws FileNotFoundException, AnnotatorException {
         String text = LineIO.slurp( fileName );
-        TextAnnotation ta = pipeline.provideTextAnnotation( text );
-        return ta;
+        boolean forceUpdate = true; // in actual use, this will usually be 'false'
+        return pipeline.createAnnotatedTextAnnotation(text, forceUpdate);
 	}
 
     public static void main( String[] args )

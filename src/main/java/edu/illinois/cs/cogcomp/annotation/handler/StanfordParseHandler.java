@@ -22,6 +22,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a pipeline
+ *    component.
+ *
+ * Created by James Clarke and Christos Christodoulopoulos.
+ */
+
 public class StanfordParseHandler extends PipelineAnnotator {
 
     private POSTaggerAnnotator posAnnotator;

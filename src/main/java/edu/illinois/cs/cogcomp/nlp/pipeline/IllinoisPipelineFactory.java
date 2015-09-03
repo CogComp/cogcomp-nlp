@@ -7,7 +7,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -18,6 +17,8 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * Builds an AnnotatorService object with all available CCG NLP components.
+ *
  * Created by mssammon on 8/31/15.
  */
 public class IllinoisPipelineFactory
@@ -36,16 +37,22 @@ public class IllinoisPipelineFactory
      *      probably, a set of ViewName values to 'true'/'false' entries,
      *      which would allow more or less direct use of Annotator-specified
      *      dependencies to activate components.
-     *    CachingAnnotatorService will check these dependencies at run-time,
+     *      CachingAnnotatorService will check these dependencies at run-time,
      *      so if you don't provide a prerequisite for some component, you'll know.
-     * @param rm
-     * @return
+     *
+     * TODO:
+     *    add a "addAnnotator( Annotator )" method that checks supported views and requirements of new
+     *      annotator, and if they are compatible, adds the annotator to the pipeline.
+     *
+     * TODO:
+     *    when NER is updated, set it up to allow multiple different NER components with different models
+     * @param rm    ResourceManager with properties for config files, caching behavior
+     * @return  an AnnotatorService object with a suite of NLP components.
      * @throws IOException
      */
 
     public static AnnotatorService buildPipeline( ResourceManager rm ) throws IOException, AnnotatorException {
         String nerConfig = rm.getString( NER_CONFIG );
-        String nerView = rm.getString( NER_VIEW );
         String lemmaConfig = rm.getString( LEMMA_CONFIG );
 
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
@@ -76,18 +83,10 @@ public class IllinoisPipelineFactory
         extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
         extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
 
-        boolean throwExceptionIfUncached = false;
-
         Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
         for ( String view : extraViewGenerators.keySet() )
             requestedViews.put( view, false );
 
-//        String cacheDir = rm.getString( IllinoisCachingPreprocessor.CACHE_DIR );
-        AnnotatorService pipeline = new AnnotatorService(requestedViews, taBuilder, extraViewGenerators, rm);
-        //prep = IllinoisCachingPreprocessor.getInstance(CONFIG, taBuilder, extraViewGenerators);
-
-//        AnnotatorService.openCache(cacheDir);
-
-        return pipeline;
+        return new AnnotatorService(taBuilder, extraViewGenerators, rm);
     }
 }

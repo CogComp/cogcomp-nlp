@@ -23,6 +23,7 @@ import edu.illinois.cs.cogcomp.thrift.base.Span;
  * @author James Clarke
  * 
  */
+@Deprecated
 public class IllinoisTokenizerHandler extends IllinoisAbstractHandler implements MultiLabeler.Iface {
 
     public IllinoisTokenizerHandler(){

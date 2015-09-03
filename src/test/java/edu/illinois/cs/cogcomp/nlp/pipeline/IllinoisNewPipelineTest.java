@@ -84,7 +84,8 @@ public class IllinoisNewPipelineTest
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
         try {
-            prep.provideTextAnnotation(text);
+            boolean forceUpdate = true;
+            prep.createAnnotatedTextAnnotation(text, forceUpdate);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -95,10 +96,11 @@ public class IllinoisNewPipelineTest
         logger.debug("original annotation cost: " + firsttotal + " milliseconds");
 
         int n = 5;
+        boolean forceUpdate = false;
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
             try {
-                prep.provideTextAnnotation(text);
+                prep.createAnnotatedTextAnnotation( text, forceUpdate );
             } catch (AnnotatorException e) {
                 e.printStackTrace();
                 fail( e.getMessage() );
@@ -110,6 +112,7 @@ public class IllinoisNewPipelineTest
             logger.debug("duration is: " + duration + " milliseconds");
             total += duration;
         }
+
 
         long avg = total / n;
         logger.debug("Average = " + avg + " milliseconds");
@@ -130,7 +133,8 @@ public class IllinoisNewPipelineTest
 
         TextAnnotation ta = null;
         try {
-            ta = prep.provideTextAnnotation(text);
+            boolean forceUpdate = false;
+            ta = prep.createAnnotatedTextAnnotation(text, forceUpdate );
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );

@@ -12,9 +12,6 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -95,9 +92,11 @@ public class PreprocessorTester
         } 
         
         TextAnnotation rec = null;
+        boolean forceUpdate = true;
+
         try
         {
-            rec = prep.provideTextAnnotation( text );
+            rec = prep.createAnnotatedTextAnnotation( text, forceUpdate );
         }
         catch (AnnotatorException e)
         {

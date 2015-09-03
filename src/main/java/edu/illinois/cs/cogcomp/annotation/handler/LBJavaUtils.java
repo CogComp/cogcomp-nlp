@@ -11,8 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * Convenience classes for mapping between data structures used by Curator and LBJ.
+ * Obsolete (?) when using new AnnotatorService pipeline architecture.
+ *
  * Created by mssammon on 8/24/15.
  */
+@Deprecated
 public class LBJavaUtils {
 
 

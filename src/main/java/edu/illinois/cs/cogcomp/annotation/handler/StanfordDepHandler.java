@@ -18,6 +18,12 @@ import edu.stanford.nlp.util.CoreMap;
 
 import java.util.List;
 
+/**
+ * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a pipeline
+ *    component.
+ *
+ * Created by James Clarke and Christos Christodoulopoulos.
+ */
 public class StanfordDepHandler extends PipelineAnnotator{
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;

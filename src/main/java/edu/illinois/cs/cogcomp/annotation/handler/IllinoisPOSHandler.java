@@ -15,8 +15,8 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * Wraps the Illinois part-of-speech tagger in a Labeler.Iface.
- * @author James Clarke
+ * Wraps the Illinois part-of-speech tagger in an illinois-core-utilites Annotator, to be a pipeline component.
+ * @author James Clarke, Mark Sammons
  *
  */
 public class IllinoisPOSHandler extends PipelineAnnotator
@@ -44,8 +44,8 @@ public class IllinoisPOSHandler extends PipelineAnnotator
     /**
      *  annotates TextAnnotation with POS view and returns the new POS view.
      *
-     * @param record
-     * @return
+     * @param record    TextAnnotation to annotate
+     * @return  newly created POS view
      */
     @Override
     public View getView(TextAnnotation record) throws AnnotatorException
@@ -85,7 +85,7 @@ public class IllinoisPOSHandler extends PipelineAnnotator
 
 
     /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.CachingAnnotatorService} to check for pre-requisites before calling
+     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to check for pre-requisites before calling
      * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
