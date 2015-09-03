@@ -24,9 +24,9 @@ import java.util.Properties;
 public class IllinoisPipelineFactory
 {
 
-    private static final String NER_CONFIG = "nerConfig";
+    private static final String NER_CONLL_CONFIG = "nerConllConfig";
     private static final String LEMMA_CONFIG = "lemmaConfig";
-    private static final java.lang.String NER_VIEW = "nerViewName";
+    private static final java.lang.String NER_ONTONOTES_CONFIG = "nerOntonotesConfig";
 
     /**
      * Builds a complete pipeline with all the tools currently available,
@@ -51,8 +51,11 @@ public class IllinoisPipelineFactory
      * @throws IOException
      */
 
-    public static AnnotatorService buildPipeline( ResourceManager rm ) throws IOException, AnnotatorException {
-        String nerConfig = rm.getString( NER_CONFIG );
+    public static AnnotatorService buildPipeline( ResourceManager rm ) throws IOException, AnnotatorException
+    {
+        String nerConllConfig = rm.getString( NER_CONLL_CONFIG );
+        String nerOntonotesConfig = rm.getString( NER_ONTONOTES_CONFIG );
+
         String lemmaConfig = rm.getString( LEMMA_CONFIG );
 
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
@@ -60,7 +63,8 @@ public class IllinoisPipelineFactory
 
         IllinoisPOSHandler pos = new IllinoisPOSHandler();
         IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-        IllinoisNerHandler ner = new IllinoisNerHandler( nerConfig, ViewNames.NER_CONLL );
+        IllinoisNerHandler nerConll = new IllinoisNerHandler( nerConllConfig, ViewNames.NER_CONLL );
+        IllinoisNerHandler nerOntonotes = new IllinoisNerHandler( nerOntonotesConfig, ViewNames.NER_ONTONOTES );
         IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( lemmaConfig );
 
 
@@ -79,7 +83,8 @@ public class IllinoisPipelineFactory
         extraViewGenerators.put( ViewNames.POS, pos );
         extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
         extraViewGenerators.put( ViewNames.LEMMA, lemma );
-        extraViewGenerators.put( ViewNames.NER_CONLL, ner );
+        extraViewGenerators.put( ViewNames.NER_CONLL, nerConll );
+        extraViewGenerators.put( ViewNames.NER_ONTONOTES, nerOntonotes);
         extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
         extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
 
