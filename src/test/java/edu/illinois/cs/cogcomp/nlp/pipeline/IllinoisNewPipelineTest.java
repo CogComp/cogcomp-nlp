@@ -141,6 +141,7 @@ public class IllinoisNewPipelineTest
         }
 
         assertTrue(ta.hasView(ViewNames.NER_CONLL));
+        assertTrue(ta.hasView(ViewNames.NER_ONTONOTES));
         assertTrue( ta.hasView( ViewNames.POS ) );
         assertTrue( ta.hasView( ViewNames.PARSE_STANFORD ) );
         assertTrue( ta.hasView( ViewNames.DEPENDENCY_STANFORD ) );
