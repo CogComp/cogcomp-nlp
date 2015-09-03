@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.comma.ClassifierComparison;
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
@@ -17,6 +18,7 @@ import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.POSFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseTreeFeature;
+import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
@@ -24,6 +26,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVectorReturner;
 import edu.illinois.cs.cogcomp.lbjava.classify.LabelVectorReturner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Accuracy;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.TestingMetric;
 import edu.illinois.cs.cogcomp.lbjava.parse.ArrayParser;
@@ -35,11 +38,11 @@ public class FeatureEngineeringHelper {
 	static double threshold = 0;
 	static double thickness = 3.6;
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		featureEngineering();
 	}
 	
-	public static void featureEngineering(){
+	public static void featureEngineering() throws Exception{
 		LocalCommaClassifier learner = new LocalCommaClassifier();
 		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
 		List<Comma> commaList = cr.getCommas();
@@ -69,7 +72,17 @@ public class FeatureEngineeringHelper {
 		@SuppressWarnings("unused")
 		Classifier extractor = learner.getExtractor();
 		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<Pair<Double,String>>();
-		for(Collection<Classifier> featureSet: ablatedFeatures){
+		
+		for(List<Classifier> featureSet: ablatedFeatures){
+			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler, "config/DCD.config");
+			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, cr);
+			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
+			
+			Pair<Double, String> performanceFeaturePair = new Pair<Double, String>(structuredPerformance.getOverallStats()[2], featureSet.toString());
+			performanceFeaturePairs.add(performanceFeaturePair);
+		}
+		
+		/*for(Collection<Classifier> featureSet: ablatedFeatures){
 			learner.forget();
 			learner.setLTU(new SparseAveragedPerceptron(learningRate, threshold, thickness));
 			learner.setExtractor(new FeatureVectorReturner());
@@ -99,6 +112,7 @@ public class FeatureEngineeringHelper {
 			performanceFeaturePairs.add(performanceFeaturePair);
 			//System.out.println(featureSet + ";" + perfromance[0][0] + ";" + perfromance[0][1]);
 		}
+		*/
 		Collections.sort(performanceFeaturePairs, new Comparator<Pair<Double, String>>() {
 			@Override
 			public int compare(Pair<Double, String> o1, Pair<Double, String> o2) {

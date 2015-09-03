@@ -153,7 +153,7 @@ public class Sentence implements Serializable{
 	public static class CommaSequence implements IInstance{
 		public final List<Comma> sortedCommas;
 		public final IFeatureVector baseFeatures[];
-		public CommaSequence(List<Comma> commas, Lexiconer lexicon, Classifier lbjExtractor){
+		public CommaSequence(List<Comma> commas, Lexiconer lexicon, List<Classifier> lbjExtractors){
 			Collections.sort(commas, new Comparator<Comma>(){
 				@Override
 				public int compare(Comma o1, Comma o2) {
@@ -164,7 +164,9 @@ public class Sentence implements Serializable{
 			
 			baseFeatures = new IFeatureVector[sortedCommas.size()];
 			for(int i=0; i<sortedCommas.size(); i++){
-				FeatureVector lbjFeatureVector = lbjExtractor.classify(sortedCommas.get(i));
+				FeatureVector lbjFeatureVector = new FeatureVector();
+				for(Classifier lbjExtractor : lbjExtractors)
+					lbjFeatureVector.addFeatures(lbjExtractor.classify(sortedCommas.get(i)));
 				FeatureVectorBuffer slFeatureVectorBuffer = new FeatureVectorBuffer();
 				for(int j=0; j<lbjFeatureVector.featuresSize(); j++){
 					String featureString = lbjFeatureVector.getFeature(j).toString();

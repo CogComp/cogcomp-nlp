@@ -18,10 +18,7 @@ import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 public class CommaIOManager {
 	public static final String unknownFeature = "unknwonfeature";
-	public static final Learner localCommaClassifier = new LocalCommaClassifier();
-	public static final Classifier lbjExtractor = localCommaClassifier.getExtractor();
-	public static final Classifier lbjLabeler = localCommaClassifier.getLabeler();
-	public static SLProblem readProblem(List<Sentence> sentences, Lexiconer lexicon){
+	public static SLProblem readProblem(List<Sentence> sentences, Lexiconer lexicon, List<Classifier> lbjExtractors, Classifier lbjLabeler){
 		if (lexicon.isAllowNewFeatures())
 			lexicon.addFeature(unknownFeature); 
 		//TODO lexicon.addLabel("occupy-zero-label-for-some-reason");
@@ -30,7 +27,7 @@ public class CommaIOManager {
 		
 		//READ PROBLEM
 		for(Sentence sentence: sentences){
-			List<CommaSequence> commaSequences = getCommaSequences(sentence, lexicon);
+			List<CommaSequence> commaSequences = getCommaSequences(sentence, lexicon, lbjExtractors);
 			for(CommaSequence commaSequence : commaSequences){
 				CommaLabelSequence labelSequence = new CommaLabelSequence(commaSequence, lexicon, lbjLabeler);
 				sp.addExample(commaSequence, labelSequence);
@@ -40,12 +37,12 @@ public class CommaIOManager {
 		return sp;
 	}
 	
-	public static List<CommaSequence> getCommaSequences(Sentence sentence, Lexiconer lexicon){
+	public static List<CommaSequence> getCommaSequences(Sentence sentence, Lexiconer lexicon, List<Classifier> lbjExtractors){
 		LinkedList<Comma> allCommasInSentence = new LinkedList<Comma>(sentence.getCommas());
 		List<CommaSequence> commaSequences = new ArrayList<Sentence.CommaSequence>();
 		boolean isCommaStructureFullSentence = CommaProperties.getInstance().isCommaStructureFullSentence();
 		if(isCommaStructureFullSentence){
-			commaSequences.add(new CommaSequence(allCommasInSentence, lexicon, lbjExtractor));
+			commaSequences.add(new CommaSequence(allCommasInSentence, lexicon, lbjExtractors));
 		}
 		else{
 			while(!allCommasInSentence.isEmpty()){
@@ -60,7 +57,7 @@ public class CommaIOManager {
 						unusedCommasIt.remove();
 					}
 				}
-				commaSequences.add(new CommaSequence(commasInCurrentStructure, lexicon, lbjExtractor));
+				commaSequences.add(new CommaSequence(commasInCurrentStructure, lexicon, lbjExtractors));
 			}
 		}
 		return commaSequences;
