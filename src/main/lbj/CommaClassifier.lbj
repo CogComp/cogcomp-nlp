@@ -337,21 +337,22 @@ learn CommaLabel
 
 	with SparseNetworkLearner {
 	    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
-	    p.learningRate = {{.010 -> 0.030 : 0.002}};
-	    p.thickness = {{0.0 -> 4.5 : 0.5}};
-	    p.threshold = {{0.0 -> 5.0 : 0.2}};
-	    //p.learningRate = 0.024;//AUTO-AUTO
-	    //p.thickness = 3.6;//AUTO-AUTO
+	    //p.learningRate = {{.000 -> 0.010 : 0.001}};
+	    //p.thickness = {{0.0 -> 5.0 : 0.5}};
+	    //p.threshold = {{-5.0 -> 5.0 : 1}};
+	    p.learningRate = 0.024;//AUTO-AUTO
+	    p.thickness = 3.6;//AUTO-AUTO
 	    //p.learningRate = 0.014;//GOLD-GOLD
 	    //p.thickness = 3.4;//GOLD-GOLD
 	    //p.learningRate = 0.024;//GOLD-AUTO
 	    //p.thickness = 3.9;//GOLD-AUTO
 	    baseLTU = new SparseAveragedPerceptron(p);
 	}
+	/*
 	from
-		new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE)
-		//from new VivekAnnotationCommaParser("data/train_commas.txt", "data/train_commas.ser", VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE)
-		{{ 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190}} rounds
+		new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.RANDOM_SENTENCE)
+		200 rounds
+		//{{250, 300, 350, 400, 500, 600}} rounds
 		//90 rounds//AUTO-AUTO
 		//160 rounds//GOLD-GOLD
 		//120 rounds//GOLD-AUTO
@@ -359,6 +360,8 @@ learn CommaLabel
 	cval 5 "sequential" //NEVER FUCKING USE RANDOM
 	testingMetric new PrintMetrics(5)
 	progressOutput 10000000
+	
+	*/
 end
 
 

@@ -1,5 +1,9 @@
 package edu.illinois.cs.cogcomp.comma;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarEvaluation;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.PrintMetrics;
@@ -16,22 +20,29 @@ import edu.illinois.cs.cogcomp.sl.core.SLModel;
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
 		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
-		System.out.println("GOLD GOLD");
-		localCVal(true, true, parser, 160, 0.014, 0, 3.4);
+		/*System.out.println("GOLD GOLD");
+		//localCVal(true, true, parser, 160, 0.014, 0, 3.4);
+		localCVal(true, true, parser, 200, 0.024, 0, 3.9);
 		System.out.println("GOLD AUTO");
-		localCVal(true, false, parser, 120, 0.024, 0, 3.9);
+		localCVal(true, false, parser, 200, 0.024, 0, 3.9);
 		System.out.println("AUTO AUTO");
 		localCVal(false, false, parser, 90, 0.024, 0, 3.6);
-		Comma.useGoldFeatures(true);
+		Comma.useGoldFeatures(true);*/
 		System.out.println("STRUCTURED GOLD");
 		structuredCVal(parser);
 		Comma.useGoldFeatures(false);
 		System.out.println("STRUCTURED AUTO");
 		structuredCVal(parser);
-		System.out.println("BAYRAKTAR GOLD");
-		BayraktarEvaluation.printBayraktarBaselinePerformance(parser, true);
+		/*System.out.println("BAYRAKTAR GOLD");
+		EvaluateDiscrete bayraktarGold = BayraktarEvaluation.getBayraktarBaselinePerformance(parser, true);
+		System.out.println(bayraktarGold.getOverallStats()[2]);
+		//bayraktarGold.printPerformance(System.out);
+		//bayraktarGold.printConfusion(System.out);
 		System.out.println("BAYRAKTAR AUTO");
-		BayraktarEvaluation.printBayraktarBaselinePerformance(parser, false);
+		EvaluateDiscrete bayraktarAuto = BayraktarEvaluation.getBayraktarBaselinePerformance(parser, false);
+		System.out.println(bayraktarAuto.getOverallStats()[2]);*/
+		//bayraktarAuto.printPerformance(System.out);
+		//bayraktarAuto.printConfusion(System.out);
 	}
 	
 	public static void errorAnalysis(){
@@ -77,14 +88,24 @@ public class ClassifierComparison {
 		for(int i=0; i<k; foldParser.setPivot(++i)){
 			foldParser.setFromPivot(false);
 			foldParser.reset();
-			SLModel model = StructuredCommaClassifier.trainSequenceCommaModel(foldParser, "config/DCD.config", null);
+			LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<Sentence>();
+			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
+				trainSentences.add(((Comma)comma).getSentence());
+			}
+			//System.out.println("NUMBER OF TRAIN " + trainSentences.size());
+			SLModel model = StructuredCommaClassifier.trainSequenceCommaModel(new ArrayList<Sentence>(trainSentences), "config/commaDCD.config", null);
 			foldParser.setFromPivot(true);
 			foldParser.reset();
-			EvaluateDiscrete evaluator = StructuredCommaClassifier.testSequenceCommaModel(model, foldParser);
+			LinkedHashSet<Sentence> testSentences = new LinkedHashSet<Sentence>();
+			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
+				testSentences.add(((Comma)comma).getSentence());
+			}
+			//System.out.println("NUMBER OF TEST " + testSentences.size());
+			EvaluateDiscrete evaluator = StructuredCommaClassifier.testSequenceCommaModel(model, new ArrayList<Sentence>(testSentences), null);
 			cvalResult.reportAll(evaluator);
 		}
-		
-		cvalResult.printPerformance(System.out);
+		System.out.println(cvalResult.getOverallStats()[2]);
+		//cvalResult.printPerformance(System.out);
 		//cvalResult.printConfusion(System.out);
 	}
 	
@@ -110,7 +131,8 @@ public class ClassifierComparison {
 			EvaluateDiscrete currentPerformance = EvaluateDiscrete.evaluateDiscrete(learner, learner.getLabeler(), foldParser);
 			performanceRecord.reportAll(currentPerformance);
 		}
-		performanceRecord.printPerformance(System.out);
+		System.out.println(performanceRecord.getOverallStats()[2]);
+		//performanceRecord.printPerformance(System.out);
 		//sperformanceRecord.printConfusion(System.out);
 		
 		/*parser.reset();

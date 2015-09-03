@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.comma.lbj;
+package edu.illinois.cs.cogcomp.comma.utils;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;

@@ -1,10 +1,11 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
-import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceInstance;
-import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceLabel;
+import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
+import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
+import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 
 /**
@@ -16,24 +17,28 @@ public class CommaSequenceInferenceSolver extends
 		AbstractInferenceSolver {
 
 	private static final long serialVersionUID = 1L;	
+	private final Lexiconer lexicon;
+	public CommaSequenceInferenceSolver(Lexiconer lexicon) {
+		this.lexicon = lexicon;
+	}
 
 	@Override
 	public Object clone(){
-		return new CommaSequenceInferenceSolver();
+		return new CommaSequenceInferenceSolver(lexicon);
 	}
 	
 	@Override
 	public IStructure getLossAugmentedBestStructure(
 			WeightVector wv, IInstance input, IStructure gold)
 			throws Exception {
-		SequenceLabel goldLabeledSeq = (SequenceLabel) gold;
+		CommaLabelSequence goldLabeledSeq = (CommaLabelSequence) gold;
 		
 		// initialization
-		SequenceInstance seq = (SequenceInstance) input;
+		CommaSequence seq = (CommaSequence) input;
 		
-		int numOflabels = CommaIOManager.numLabels;
+		int numOflabels = lexicon.getNumOfLabels();
+		int numOfEmissionFeatures = lexicon.getNumOfFeature();
 		int numOfTokens = seq.baseFeatures.length;
-		int numOfEmissionFeatures = CommaIOManager.numFeatures;
 		
 		float[][] dpTable = new float[2][numOflabels];
 		int[][] path = new int[numOfTokens][numOflabels];
@@ -44,7 +49,7 @@ public class CommaSequenceInferenceSolver extends
 		for (int j = 0; j < numOflabels; j++) {
 			float priorScore = wv.get(numOfEmissionFeatures * numOflabels + j);
 			float zeroOrderScore = wv.dotProduct(seq.baseFeatures[0], j*numOfEmissionFeatures)+
-					((gold !=null && j != goldLabeledSeq.tags[0])?1:0);
+					((gold !=null && j != goldLabeledSeq.labelIds[0])?1:0);
 			dpTable[0][j] = priorScore + zeroOrderScore; 	 
 			path[0][j] = -1;
 		}
@@ -52,7 +57,7 @@ public class CommaSequenceInferenceSolver extends
 		for (int i = 1; i < numOfTokens; i++) {
 			for (int j = 0; j < numOflabels; j++) {
 				float zeroOrderScore =  wv.dotProduct(seq.baseFeatures[i], j*numOfEmissionFeatures)
-						+ ((gold!=null && j != goldLabeledSeq.tags[i])?1:0);
+						+ ((gold!=null && j != goldLabeledSeq.labelIds[i])?1:0);
 				
 				float bestScore = Float.NEGATIVE_INFINITY;
 				for (int k = 0; k < numOflabels; k++) {
@@ -78,7 +83,7 @@ public class CommaSequenceInferenceSolver extends
 		
 		for (int i = numOfTokens - 1; i >= 1; i--) 
 			tags[i-1] = path[i][tags[i]];
-		return new SequenceLabel(tags);
+		return new CommaLabelSequence(tags, lexicon);
 	}
 		
 	@Override
@@ -88,10 +93,10 @@ public class CommaSequenceInferenceSolver extends
 	}
 	@Override
 	public float getLoss(IInstance ins, IStructure goldStructure,  IStructure structure){
-		SequenceLabel goldLabeledSeq = (SequenceLabel) goldStructure;
+		CommaLabelSequence goldLabeledSeq = (CommaLabelSequence) goldStructure;
 		float loss = 0;
-		for (int i = 0; i < goldLabeledSeq.tags.length; i++)
-			if (((SequenceLabel) structure).tags[i] != goldLabeledSeq.tags[i])
+		for (int i = 0; i < goldLabeledSeq.labelIds.length; i++)
+			if (((CommaLabelSequence) structure).labelIds[i] != goldLabeledSeq.labelIds[i])
 				loss += 1.0f;
 		return loss;
 	}

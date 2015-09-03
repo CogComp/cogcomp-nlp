@@ -1,15 +1,20 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
-import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceIOManager;
-import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceInstance;
-import edu.illinois.cs.cogcomp.sl.applications.sequence.SequenceLabel;
+import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
+import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 
 public class CommaSequenceFeatureGenerator extends AbstractFeatureGenerator {
+	private static final long serialVersionUID = 1L;
+	public final Lexiconer lexicon;
+	public CommaSequenceFeatureGenerator(Lexiconer lexicon) {
+		this.lexicon = lexicon;
+	}
 	/**
 	 * This function returns a feature vector \Phi(x,y) based on an instance-structure pair.
 	 * 
@@ -19,30 +24,58 @@ public class CommaSequenceFeatureGenerator extends AbstractFeatureGenerator {
 
 	@Override
 	public IFeatureVector getFeatureVector(IInstance x, IStructure y) {
-		FeatureVectorBuffer fv = new FeatureVectorBuffer();
-		SequenceInstance ins = (SequenceInstance) x;
-		int[] tags = ((SequenceLabel) y).tags;
+		//lexicon should have been completely built while reading the problem instances itself
+		assert false == lexicon.isAllowNewFeatures();
 		
-		int len = ins.size();
+		CommaSequence commaSequence = (CommaSequence) x;
+		CommaLabelSequence commaLabelSequence = (CommaLabelSequence) y;
+		
+		FeatureVectorBuffer fv = new FeatureVectorBuffer();
+		int len = commaSequence.sortedCommas.size();
+		/*for(Comma comma : commaSequence.sortedCommas){
+			FeatureVector lbjFeatureVector = lbjExtractor.classify(comma);
+			for(int i=0; i<lbjFeatureVector.featuresSize(); i++){
+				String emittedFeatureString = lbjFeatureVector.getFeature(i).toString();
+				lexicon.addFeature(emittedFeatureString);
+				fv.addFeature(lexicon.getFeatureId(emittedFeatureString), 1);
+			}
+		}
+		
+		String startLabel = commaLabelSequence.commaLabels.get(0);
+		lexicon.addFeature(startLabel);
+		fv.addFeature(lexicon.getFeatureId(startLabel), 1);
+		
+		for(int i=1; i<commaLabelSequence.commaLabels.size(); i++){
+			String previousLabel = commaLabelSequence.commaLabels.get(i-1);
+			String currentLabel = commaLabelSequence.commaLabels.get(i);
+			String transitionFeatureString = previousLabel + "---" + currentLabel;
+			lexicon.addFeature(transitionFeatureString);
+			fv.addFeature(lexicon.getFeatureId(transitionFeatureString), 1);
+		}*/
+		
+		
+		int[] tags = commaLabelSequence.labelIds;
+		IFeatureVector[] baseFeatures = commaSequence.baseFeatures;
+		int numOfEmissionFeatures = lexicon.getNumOfFeature();
+		int numOfLabels = lexicon.getNumOfLabels();
 		
 		// add emission features.....
-		int numOfEmissionFeatures = CommaIOManager.numFeatures;
-		for (int i = 0; i < len; i++) {
-			fv.addFeature(ins.baseFeatures[i], numOfEmissionFeatures * tags[i]);
+		for (int i = 0; i < len; i++) {	
+			fv.addFeature(baseFeatures[i], numOfEmissionFeatures * tags[i]);
 		}
 
-		// add prior features
-		int numOfLabels = CommaIOManager.numLabels;
+		// add prior feature
 		int emissionOffset = numOfEmissionFeatures * numOfLabels;
-		fv.addFeature(emissionOffset + tags[0], 1.0);
+		fv.addFeature(emissionOffset + tags[0], 1.0f);
 
 		// add transition features
 		int priorEmissionOffset = emissionOffset + numOfLabels;
 		// calculate transition features
 		for (int i = 1; i < len; i++) {
-			fv.addFeature(priorEmissionOffset + (tags[i - 1] * 
+			fv.addFeature(priorEmissionOffset + (tags[i - 1] * //TODO can't allow label-id of 0 because if either label is 0, the product will be 0
 					numOfLabels + tags[i]), 1.0f);					
 		}
+		
 		return fv.toFeatureVector(); 		
 	}
 

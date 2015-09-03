@@ -483,6 +483,17 @@ public class Comma implements Serializable {
 		return siblingCommas;
 	}
     
+    public boolean isSibling(Comma otherComma){
+    	TreeView parseView;
+    	if (GOLD)
+    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    	else
+    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    	Constituent thisCommaConstituent = getCommaConstituentFromTree(parseView);
+    	Constituent otherCommmaConstituent = otherComma.getCommaConstituentFromTree(parseView);
+    	return parseView.getParent(thisCommaConstituent) == parseView.getParent(otherCommmaConstituent);
+    }
+    
     /**
      * 
      * @return the first comma by position from the list of sibling commas

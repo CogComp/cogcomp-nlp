@@ -31,6 +31,10 @@ public class CommaProperties extends ResourceManager {
         return getBoolean("USE_GOLD");
     }
     
+    public boolean isCommaStructureFullSentence() {
+    	return getBoolean("IS_COMMA_STRUCUTRE_FULL_SENTENCE");
+    }
+    
     public boolean useNewLabelSet() {
         return getBoolean("USE_NEW_LABEL_SET");
     }

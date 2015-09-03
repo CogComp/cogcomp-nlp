@@ -23,7 +23,8 @@ public class BayraktarEvaluation {
 	
 	public static void main(String[] args){
 		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
-		printBayraktarBaselinePerformance(parser, true);
+		EvaluateDiscrete bayraktarBaseline = getBayraktarBaselinePerformance(parser, true);
+		bayraktarBaseline.printPerformance(System.out);
 	}
 	
 	/**
@@ -143,7 +144,7 @@ public class BayraktarEvaluation {
 	/**
 	 * prints bayraktar baseline performance based on only those commas whose bayraktar patterns have been annotated 
 	 */
-	public static void printBayraktarBaselinePerformance(Parser parser, boolean testOnGold){
+	public static EvaluateDiscrete getBayraktarBaselinePerformance(Parser parser, boolean testOnGold){
 		parser.reset();
 		EvaluateDiscrete bayraktarEvalaution = new EvaluateDiscrete();
 		Comma comma;
@@ -155,8 +156,6 @@ public class BayraktarEvaluation {
 			String bayraktarPrediction = comma.getBayraktarLabel();
 			bayraktarEvalaution.reportPrediction(bayraktarPrediction, goldLabel);
 		}
-		System.out.println("Bayraktar baseline performance on only those commas whose patterns have been annotated");
-		bayraktarEvalaution.printPerformance(System.out);
-		bayraktarEvalaution.printConfusion(System.out);
+		return bayraktarEvalaution;
 	}
 }
