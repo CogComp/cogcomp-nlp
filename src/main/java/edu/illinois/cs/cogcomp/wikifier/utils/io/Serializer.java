@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.io;
+package edu.illinois.cs.cogcomp.wikifier.utils.io;
 
 /**
  *

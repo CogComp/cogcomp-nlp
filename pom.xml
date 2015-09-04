@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>big-data-utils</artifactId>
-  <version>1.0.1</version> 
+  <version>1.0.2</version> 
 
   <repositories>
     <repository>
@@ -34,6 +34,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <version>1.4.185</version>
@@ -57,10 +63,15 @@
       <version>1.1</version>
     </dependency>
 
+    <!-- <dependency> -->
+    <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
+    <!--   <artifactId>edison</artifactId> -->
+    <!--   <version>0.7.2</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>edison</artifactId>
-      <version>0.7.2</version>
+      <artifactId>illinois-core-utilities</artifactId>
+      <version>1.2.15</version>
     </dependency>
 
     <dependency>
@@ -136,16 +147,16 @@
       <version>2.9.1</version> </plugin> </plugins> </reporting -->
 
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>test</testSourceDirectory>
-    <resources>
-      <resource>
-	<directory>src</directory>
-	<excludes>
-	  <exclude>**/*.java</exclude>
-	</excludes>
-      </resource>
-    </resources>
+    <!-- <sourceDirectory>src</sourceDirectory> -->
+    <!-- <testSourceDirectory>test</testSourceDirectory> -->
+    <!-- <resources> -->
+    <!--   <resource> -->
+    <!-- 	<directory>src</directory> -->
+    <!-- 	<excludes> -->
+    <!-- 	  <exclude>**/*.java</exclude> -->
+    <!-- 	</excludes> -->
+    <!--   </resource> -->
+    <!-- </resources> -->
     <plugins>
       <!-- <plugin>
 	   <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -309,7 +320,7 @@
     <repository>
       <id>CogcompSoftware</id>
       <name>CogcompSoftware</name>
-      <url>scp://upadhya3@bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+      <url>scp://upadhya3@bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
     </repository>
   </distributionManagement>
   <properties>

@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.freebase;
+package edu.illinois.cs.cogcomp.wikifier.utils.freebase;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -142,7 +142,7 @@ public class FreebaseSearch {
 	public static void main(String[] args) throws Exception {
 		FreebaseSearch fb = new FreebaseSearch();
 		String[] answers = fb.query("obama");
-		Arrays.asList(answers).forEach(x -> System.out.println(x));
+//		Arrays.asList(answers).forEach(x -> System.out.println(x));
 
 		// for(FreebaseAnswer term:fb.lookup("Obama"))
 		// {

@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.bigdata.mapdb;
+package edu.illinois.cs.cogcomp.bigdata.mapdb;
 
 import java.io.File;
 import java.util.ArrayList;

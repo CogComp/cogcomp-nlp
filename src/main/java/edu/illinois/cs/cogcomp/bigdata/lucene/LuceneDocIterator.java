@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.bigdata.lucene;
+package edu.illinois.cs.cogcomp.bigdata.lucene;
 
 import java.io.IOException;
 import java.util.Iterator;

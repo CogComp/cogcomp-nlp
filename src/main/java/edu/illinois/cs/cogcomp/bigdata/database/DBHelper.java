@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.bigdata.database;
+package edu.illinois.cs.cogcomp.bigdata.database;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 

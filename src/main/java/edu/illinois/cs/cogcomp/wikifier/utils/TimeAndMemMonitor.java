@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils;
+package edu.illinois.cs.cogcomp.wikifier.utils;
 
 public class TimeAndMemMonitor {
 	public static long usedMemory()

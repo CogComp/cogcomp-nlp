@@ -1,6 +1,6 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.io;
+package edu.illinois.cs.cogcomp.wikifier.utils.io;
 
-import main.java.edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
+import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 
 import java.util.ArrayList;
 import java.util.HashSet;

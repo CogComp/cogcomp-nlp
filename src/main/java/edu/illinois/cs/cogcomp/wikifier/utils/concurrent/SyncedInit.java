@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.concurrent;
+package edu.illinois.cs.cogcomp.wikifier.utils.concurrent;
 
 import java.util.concurrent.locks.ReentrantLock;
 
