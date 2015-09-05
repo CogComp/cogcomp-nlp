@@ -1,11 +1,14 @@
+### IntelliJ
 .idea
 illinois-comma.iml
 target
+
+### Eclipse
 .classpath
 .project
 .settings
 
-#used for testing and error analysis. All data files required for experiments, including serialzed files, are included
+#used for testing and error analysis. All data files required for experiments, including preprocessor caches, are included
 data/CommaTAGoldFinal.ser
 data/errors.analyzed
 data/errors_NER

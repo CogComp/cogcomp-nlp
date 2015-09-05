@@ -3,19 +3,14 @@ package edu.illinois.cs.cogcomp.comma.utils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.stanford.nlp.ling.Label;
 
 public class PrettyPrint {
 	public static void main(String[] args) throws IOException {

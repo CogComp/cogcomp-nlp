@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,23 +20,22 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.io.FileUtils;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
-import edu.illinois.cs.cogcomp.edison.data.srl.NombankReader;
-import edu.illinois.cs.cogcomp.edison.data.srl.PropbankReader;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenizerUtilities.SentenceViewGenerators;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
 
 /**
  * Data reader for the comma dataset of Srikumar et al.
  */
 public class VivekAnnotationCommaParser implements Parser {
-    private Annotator annotator;
+	private PreProcessor preProcessor;
     private final String annotationFile;
     private final String serializedFile;
     private List<Comma> commas;
@@ -45,7 +43,7 @@ public class VivekAnnotationCommaParser implements Parser {
     Iterator<Comma> commaIt;
     private static String treebankHome, propbankHome, nombankHome;
     //private static final long seed = 4931844729243128135L;//CURRENT seed
-    //private static final long seed = 4901945429246723613L;//ANALYZED seed
+    //private static final long seed = 4901945429246723613L;//ANALYZED seed3 
     private static final long seed = 492029518L;
     Ordering ordering;
     public static enum Ordering{
@@ -61,7 +59,7 @@ public class VivekAnnotationCommaParser implements Parser {
     public VivekAnnotationCommaParser(String annotationFile, String serializedFile, Ordering ordering) {
         this.annotationFile = annotationFile;
         this.serializedFile = serializedFile;
-        this.commas = new ArrayList<Comma>();
+        this.commas = new ArrayList<>();
         this.ordering = ordering;
         
         CommaProperties properties = CommaProperties.getInstance();
@@ -70,7 +68,7 @@ public class VivekAnnotationCommaParser implements Parser {
         nombankHome = properties.getNombankDir();
         
         try {
-            this.annotator = new Annotator(true, true);
+        	this.preProcessor = new PreProcessor();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -107,12 +105,16 @@ public class VivekAnnotationCommaParser implements Parser {
 		case ORDERED_SENTENCE:
 			Collections.shuffle(sentences, new Random(seed));
 			reset();
-	    	commas = IteratorUtils.toList(commaIt);
+			commas = new ArrayList<>();
+			while(commaIt.hasNext())
+				commas.add(commaIt.next());
 			break;
 		case RANDOM_SENTENCE:
 			Collections.shuffle(sentences);
 			reset();
-	    	commas = IteratorUtils.toList(commaIt);
+			commas = new ArrayList<>();
+			while(commaIt.hasNext())
+				commas.add(commaIt.next());
 			break;
 		default://ORIGINAL_COMMA or ORIGINAL_SENTENCE
 			break;
@@ -133,13 +135,13 @@ public class VivekAnnotationCommaParser implements Parser {
         }
         in.close();
         fileIn.close();
-        Set<Sentence> sentenceSet = new LinkedHashSet<Sentence>();
+        Set<Sentence> sentenceSet = new LinkedHashSet<>();
         for(Comma c: commas)
         {
         	Sentence s = c.getSentence();
         	sentenceSet.add(s);
         }
-        sentences = new ArrayList<Sentence>(sentenceSet);
+        sentences = new ArrayList<>(sentenceSet);
     }
 
     private void readData() throws IOException {
@@ -153,14 +155,14 @@ public class VivekAnnotationCommaParser implements Parser {
             count++;
 
             // A list of commas positions and their labels
-            List<Comma> commaList = new ArrayList<Comma>();
+            List<Comma> commaList = new ArrayList<>();
             line = scanner.nextLine().trim();
             assert line.startsWith("%%%"):line;
 
             // Next line is the sentence id (in PTB)
             String textId = scanner.nextLine();
 
-            String rawText = scanner.nextLine().trim();
+            String[] tokenizedText = scanner.nextLine().trim().split("\\s+");
 
             boolean skip=false;
             TextAnnotation goldTA = null, TA = null;
@@ -168,7 +170,7 @@ public class VivekAnnotationCommaParser implements Parser {
             if(taMap.containsKey(textId)){
                 goldTA = taMap.get(textId);
                 try {
-                    TA = annotator.preProcess(goldTA.getCorpusId(), textId, rawText);
+                    TA = preProcessor.preProcess(Collections.singletonList(tokenizedText));
                 } catch (Exception e) {
                     failures++;
                 }
@@ -194,7 +196,7 @@ public class VivekAnnotationCommaParser implements Parser {
 
             line = scanner.nextLine().trim();
             assert line.equals("COMMAS: " + labeledCommas.size() + " Total") : line + "\nVS\n" + "COMMAS: " +
-                    labeledCommas.size() + " Total\n" + "rawText = " + rawText;
+                    labeledCommas.size() + " Total\n" + "rawText = " + StringUtils.join(" ", tokenizedText);
 
             Sentence sentence  = new Sentence();
             for (int commaId : Sorters.sortSet(labeledCommas.keySet())) {
@@ -204,7 +206,7 @@ public class VivekAnnotationCommaParser implements Parser {
                 String commaLabel = line.split("\\]")[0].split("\\[")[1].trim();
                 for (int commaIndex : labeledCommas.get(commaId)){
                     if (!skip) {
-                    	Comma c = new Comma(commaIndex, commaLabel, rawText, TA, goldTA, sentence);
+                    	Comma c = new Comma(commaIndex, commaLabel, tokenizedText, TA, goldTA, sentence);
                     	sentence.addComma(c);;
                         commaList.add(c);
                     }
@@ -257,8 +259,7 @@ public class VivekAnnotationCommaParser implements Parser {
 				|| ordering.equals(Ordering.ORIGINAL_SENTENCE)) {
 			commaIt = new Iterator<Comma>() {
 				Iterator<Sentence> sentenceIt = sentences.iterator();
-				Iterator<Comma> commasInCurrSentenceIt = new ArrayList<Comma>()
-						.iterator();
+				Iterator<Comma> commasInCurrSentenceIt = new ArrayList<Comma>().iterator();
 
 				@Override
 				public void remove() {
@@ -292,7 +293,7 @@ public class VivekAnnotationCommaParser implements Parser {
     public void close() {}
 
     private Map<Integer, Set<Integer>> getLabeledCommas(String annotation) {
-        Map<Integer, Set<Integer>> map = new HashMap<Integer, Set<Integer>>();
+        Map<Integer, Set<Integer>> map = new HashMap<>();
         String[] parts = annotation.split("\\s+");
 
         for (int tokenId = 0; tokenId < parts.length; tokenId++) {
@@ -316,7 +317,7 @@ public class VivekAnnotationCommaParser implements Parser {
      * @return A map of 'gold' {@link TextAnnotation} indexed by their IDs
      */
     public Map<String, TextAnnotation> getTAMap() {
-        Map<String, TextAnnotation> taMap = new HashMap<String, TextAnnotation>();
+        Map<String, TextAnnotation> taMap = new HashMap<>();
         Iterator<TextAnnotation> ptbReader, propbankReader, nombankReader;
 
         String[] sections = { "00" };
@@ -375,15 +376,15 @@ public class VivekAnnotationCommaParser implements Parser {
     	double dev = 0.1;
     	double test = 0.2;
 
-    	List<Sentence> sentenceList = new ArrayList<Sentence>(sentences);    
+    	List<Sentence> sentenceList = new ArrayList<>(sentences);    
     	int numSentences = sentenceList.size();
     	Collection<Sentence> trainSentences = sentenceList.subList(0, (int) (numSentences * train));
     	Collection<Sentence> devSentences = sentenceList.subList((int) (numSentences * train), (int) (numSentences * (train+dev)));
     	Collection<Sentence> testSentences = sentenceList.subList((int) (numSentences * (train+dev)), numSentences);
     	
-    	List<Comma> trainCommas = new ArrayList<Comma>();
-    	List<Comma> devCommas = new ArrayList<Comma>();
-    	List<Comma> testCommas = new ArrayList<Comma>();
+    	List<Comma> trainCommas = new ArrayList<>();
+    	List<Comma> devCommas = new ArrayList<>();
+    	List<Comma> testCommas = new ArrayList<>();
     	
     	for(Sentence s: trainSentences)
     		trainCommas.addAll(s.getCommas());

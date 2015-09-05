@@ -5,7 +5,7 @@
 
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-comma</artifactId>
-	<version>1.1</version>
+	<version>3.0.0</version>
 
 	<repositories>
 		<repository>
@@ -24,21 +24,28 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>coreUtilities</artifactId>
-			<version>0.2.8</version>
+			<artifactId>illinois-core-utilities</artifactId>
+			<version>1.2.14-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>LBJava</artifactId>
-			<version>1.0.3</version>
+			<version>1.0.4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<version>0.2</version>
 			<artifactId>illinois-sl</artifactId>
+			<version>0.2.3</version>
 		</dependency>
 
 		<dependency>
@@ -49,29 +56,60 @@
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>edison</artifactId>
-			<version>0.7.8-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-nlp-pipeline</artifactId>
-			<version>0.1.0</version>
+			<artifactId>illinois-caching-curator</artifactId>
+			<version>2.0.0</version>
 		</dependency>
 	</dependencies>
+
 	<build>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+				<version>2.6</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
-				<groupId>edu.illinois.cs.cogcomp</groupId>
-				<artifactId>lbj-maven-plugin</artifactId>
-				<version>1.1</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
 				<configuration>
-					<lbjInputFileList>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>edu.illinois.cs.cogcomp</groupId>
+				<artifactId>lbjava-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<lbjavaInputFileList>
 						<param>src/main/lbj/CommaClassifier.lbj</param>
-			<!-- 			<param>src/main/lbj/BayraktarClassifier.lbj</param> -->
-					</lbjInputFileList>
+					</lbjavaInputFileList>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>CogcompSoftware</id>
+			<name>CogcompSoftware</name>
+			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+		</repository>
+	</distributionManagement>
 </project>

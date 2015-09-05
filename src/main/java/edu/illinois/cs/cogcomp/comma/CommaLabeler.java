@@ -3,18 +3,21 @@ package edu.illinois.cs.cogcomp.comma;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 /**
  * An interface for providing a comma {@link PredicateArgumentView}
  */
-public class CommaLabeler {
+public class CommaLabeler implements Annotator{
     public static final String VIEW_NAME = "SRL_COMMA";
     private static String[] requiredViews;
     private LocalCommaClassifier classifier;
@@ -32,11 +35,12 @@ public class CommaLabeler {
         requiredViews = new String[]{CONSTITUENT_PARSER, ViewNames.POS};
     }
 
-    public PredicateArgumentView getCommaSRL(TextAnnotation ta) throws AnnotationFailedException {
+    @Override
+	public View getView(TextAnnotation ta) throws AnnotatorException {
         // Check that we have the required views
         for (String requiredView : requiredViews) {
             if (!ta.hasView(requiredView))
-                throw new AnnotationFailedException("Missing required view " + requiredView);
+                throw new AnnotatorException("Missing required view " + requiredView);
         }
         // Create the Comma structure
         List<Comma> commas = getCommas(ta);
@@ -45,6 +49,7 @@ public class CommaLabeler {
             String label = classifier.discreteValue(comma);
             int position = comma.getPosition();
             Constituent predicate = new Constituent(label, VIEW_NAME, ta, position, position+1);
+            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, label);
             srlView.addConstituent(predicate);
             Constituent leftArg = comma.getPhraseToLeftOfComma(1);
             if (leftArg != null) {
@@ -63,6 +68,11 @@ public class CommaLabeler {
         }
         return srlView;
     }
+
+	@Override
+	public String getViewName() {
+		return VIEW_NAME;
+	}
     
     /**
      * 
@@ -72,10 +82,10 @@ public class CommaLabeler {
     public static List<Comma> getCommas(TextAnnotation ta){
     	List<Comma> commas = new ArrayList<Comma>();
     	Sentence sentenceStruct = new Sentence();
-    	String text = ta.getText();
+    	String[] tokenizedText = ta.getTokens();
     	for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {
             if (!comma.getLabel().equals(",")) continue;
-            Comma commaStruct = new Comma(comma.getStartSpan(), text, ta, sentenceStruct);
+            Comma commaStruct = new Comma(comma.getStartSpan(), tokenizedText, ta, sentenceStruct);
             sentenceStruct.addComma(commaStruct);
             commas.add(commaStruct);
     	}

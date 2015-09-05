@@ -1,11 +1,13 @@
 package edu.illinois.cs.cogcomp.comma;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
+import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
 import junit.framework.TestCase;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 public class CommaLabelerTest extends TestCase {
     private CommaLabeler classifier;
@@ -15,7 +17,8 @@ public class CommaLabelerTest extends TestCase {
 	public void setUp() throws Exception {
         super.setUp();
         classifier = new CommaLabeler();
-        ta = new TextAnnotation("","", Arrays.asList("Mary , the clever scientist , was walking ."));
+        String[] sentence = "Mary , the clever scientist , was walking .".split("\\s+");
+        ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(sentence));
 
         TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
         tlv.addTokenLabel(0, "NNP", 1d);
@@ -36,10 +39,16 @@ public class CommaLabelerTest extends TestCase {
         ta.addView(parse.getViewName(), parse);
     }
 
-    public void testGetCommaSRL() throws AnnotationFailedException {
+    public void testGetCommaSRL() throws AnnotatorException {
         // Create the Comma structure
-        PredicateArgumentView srlView = classifier.getCommaSRL(ta);
-        assertEquals(",:\n    LeftOfOther: Mary\n    RightOfOther: the clever scientist\n,:\n" +
-                "    LeftOfSubstitute: the clever scientist\n", srlView.toString());
+        PredicateArgumentView srlView = (PredicateArgumentView) classifier.getView(ta);
+        assertEquals(2, srlView.getPredicates().size());
+        Constituent pred1 = srlView.getPredicates().get(0);
+        assertEquals("Substitute", srlView.getPredicateSense(pred1));
+        assertEquals(2, srlView.getArguments(pred1).size());
+        assertEquals("Mary", srlView.getArguments(pred1).get(0).getTarget().getSurfaceString());
+        Constituent pred2 = srlView.getPredicates().get(1);
+        assertEquals(1, srlView.getArguments(pred2).size());
+        assertEquals("LeftOfSubstitute", srlView.getArguments(pred2).get(0).getRelationName());
     }
 }

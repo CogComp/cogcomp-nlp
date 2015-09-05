@@ -8,12 +8,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 
 import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 
 public class NaveenLabeler {
 	private static Map<String, String> otherCommaIdToNaveenLabel = new HashMap<String, String>();

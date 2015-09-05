@@ -5,10 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
-import edu.illinois.cs.cogcomp.edison.data.TextAnnotationReader;
-import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 
 public class PennTreebankCommaParser implements Parser {
 	private TextAnnotationReader taReader;

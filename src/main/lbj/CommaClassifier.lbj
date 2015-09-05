@@ -4,10 +4,7 @@ import edu.illinois.cs.cogcomp.comma.Sentence;
 import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import java.util.List;
 import java.util.ArrayList;
 

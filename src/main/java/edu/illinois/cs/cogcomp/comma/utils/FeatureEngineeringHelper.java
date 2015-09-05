@@ -68,14 +68,13 @@ public class FeatureEngineeringHelper {
 		Collection<List<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 3);
 		System.out.println(ablatedFeatures);
 		
-		Comma.useGoldFeatures(false);
 		@SuppressWarnings("unused")
 		Classifier extractor = learner.getExtractor();
 		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<Pair<Double,String>>();
 		
 		for(List<Classifier> featureSet: ablatedFeatures){
 			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler, "config/DCD.config");
-			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, cr);
+			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, cr, false);
 			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
 			
 			Pair<Double, String> performanceFeaturePair = new Pair<Double, String>(structuredPerformance.getOverallStats()[2], featureSet.toString());

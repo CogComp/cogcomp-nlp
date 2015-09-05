@@ -4,18 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
 
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
-import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
 import edu.illinois.cs.cogcomp.comma.utils.VivekAnnotationHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;

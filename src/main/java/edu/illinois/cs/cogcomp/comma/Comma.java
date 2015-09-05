@@ -8,35 +8,26 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
 import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.Queries;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseUtils;
-import edu.stanford.nlp.parser.lexparser.Reranker;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
 /**
  * A data structure containing all the information related to a comma.
@@ -71,39 +62,32 @@ public class Comma implements Serializable {
     	return role + " " + commaPosition + " " + goldTA.getId();
     }
     
-    public Comma(int commaPosition, String role, String rawText) throws Exception {
-        this.commaPosition = commaPosition;
-        if (role != null) {
-            if (role.equals("Entity attribute")) this.role = "Attribute";
-            else if (role.equals("Entity substitute")) this.role = "Substitute";
-            else this.role = role;
-        }
-        this.sentence = rawText.split("\\s+");
-        Annotator annotator = new Annotator(true, true);
-        TextAnnotation TA = annotator.preProcess("Custom", "Custom", rawText);
-        this.TA = TA;
-    }
-    
-    
-    
     /**
      * A default constructor used during training.
      * @param commaPosition The token index of the comma
      * @param role The gold-standard role of the comma
-     * @param rawText The tokenized string of the sentence
+     * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String role, String rawText, TextAnnotation TA, Sentence s) {
-        this.commaPosition = commaPosition;
+    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, Sentence s) {
+    	this.commaPosition = commaPosition;
         if (role != null) {
-            if (role.equals("Entity attribute")) this.role = "Attribute";
-            else if (role.equals("Entity substitute")) this.role = "Substitute";
-            else this.role = role;
+            switch (role) {
+                case "Entity attribute":
+                    this.role = "Attribute";
+                    break;
+                case "Entity substitute":
+                    this.role = "Substitute";
+                    break;
+                default:
+                    this.role = role;
+                    break;
+            }
         }
-        this.sentence = rawText.split("\\s+");
+        this.sentence = sentence;
         this.TA = TA;
-        this.s = s;
     }
+
 
     /**
      * A constructor used during training, if gold-standard feature annotations are available.
@@ -113,8 +97,8 @@ public class Comma implements Serializable {
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      * @param goldTA The TextAnnotation containing gold-standard views for training
      */
-    public Comma(int commaPosition, String role, String rawText, TextAnnotation TA, TextAnnotation goldTA, Sentence s) {
-        this(commaPosition, role, rawText, TA, s);
+    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, TextAnnotation goldTA, Sentence s) {
+        this(commaPosition, role, sentence, TA, s);
     	this.goldTA = goldTA;
     }
 
@@ -124,10 +108,9 @@ public class Comma implements Serializable {
      * @param rawText The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String rawText, TextAnnotation TA, Sentence s) {
-        this(commaPosition, null, rawText, TA, s);
-        // Since we know there is going to be no gold structures available
-        goldTA = TA;
+    public Comma(int commaPosition, String[] sentence, TextAnnotation TA, Sentence s) {
+        this(commaPosition, null, sentence, TA, s);
+        useGoldFeatures(false);
     }
 
     /**
@@ -170,36 +153,36 @@ public class Comma implements Serializable {
     
 	public String getVivekAnnotatedText() {
 		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
 				+ "["
 				+ role
 				+ "] "
-				+ StringUtils.join(
-						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
 	}
 	
 	public String getVivekNaveenAnnotatedText() {
 		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
 				+ "["
 				+ getVivekNaveenRole()
 				+ "] "
-				+ StringUtils.join(
-						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
 	}
 	
 	public String getBayraktarAnnotatedText() {
 		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(tokens.subList(0, commaPosition+1), ' ')
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
 				+ "["
 				+ getBayraktarLabel()
 				+ "] "
-				+ StringUtils.join(
-						tokens.subList(commaPosition + 1, tokens.size()), ' ');
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
 	}
 	
 	public String getText(){
-		return StringUtils.join(sentence, " ");
+		return StringUtils.join(" ", sentence);
 	}
 	
 	public String getAllViews(){
@@ -421,7 +404,7 @@ public class Comma implements Serializable {
 			if(c.isConsituentInRange(commaPosition, commaPosition+1)){
 				try {
 					comma = parseView.getParsePhrase(c);
-				} catch (EdisonException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					System.exit(1);
 				}
@@ -520,7 +503,7 @@ public class Comma implements Serializable {
 			IntPair span = c.getSpan();
 			TextAnnotation TA = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
-					notation += " " + WordHelpers.getPOS(TA, tokenId);
+					notation += " " + POSUtils.getPOS(TA, tokenId);
 	    }
     	
 		return notation;
@@ -539,7 +522,7 @@ public class Comma implements Serializable {
 			IntPair span = c.getSpan();
 			TextAnnotation TA = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
-					notation += " " + WordHelpers.getPOS(TA, tokenId);
+					notation += " " + POSUtils.getPOS(TA, tokenId);
 	    }
     	
 		return notation;
