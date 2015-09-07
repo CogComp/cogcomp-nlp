@@ -30,15 +30,30 @@ public class CommaLabelerTest extends TestCase {
         tlv.addTokenLabel(6, "VBD", 1d);
         tlv.addTokenLabel(7, "VBG", 1d);
         tlv.addTokenLabel(8, ". ", 1d);
-        ta.addView(ViewNames.POS, tlv);
 
-        TreeView parse = new TreeView(ViewNames.PARSE_STANFORD, "Test", ta, 1.0);
+
+        TreeView parse = new TreeView(CommaProperties.getInstance().getConstituentParser(), "Test", ta, 1.0);
         String treeString = "(ROOT (S (NP (NP (NNP Mary)) (, ,) (NP (DT the) (JJ clever) (NN scientist)) (, ,)) " +
                 "(VP (VBD was) (VP (VBG walking)))  (. .)))";
         parse.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(treeString));
+        
+        SpanLabelView ner = new SpanLabelView(ViewNames.NER_CONLL, "Test", ta, 1.0);
+        ner.addSpanLabel(0, 1, "PER", 1.0);
+        
+        SpanLabelView shallowParse = new SpanLabelView(ViewNames.SHALLOW_PARSE, "Test", ta, 1.0);
+        shallowParse.addSpanLabel(0, 1, "NP", 1.0);
+        shallowParse.addSpanLabel(2, 5, "NP", 1.0);
+        shallowParse.addSpanLabel(6, 8, "VP", 1.0);
+        
+        //TODO dependency parse
+        //TODO SRL view
+        
+        ta.addView(tlv.getViewName(), tlv);
         ta.addView(parse.getViewName(), parse);
+        ta.addView(ner.getViewName(), ner);
+        ta.addView(shallowParse.getViewName(), shallowParse);
     }
-
+    
     public void testGetCommaSRL() throws AnnotatorException {
         // Create the Comma structure
         PredicateArgumentView srlView = (PredicateArgumentView) classifier.getView(ta);

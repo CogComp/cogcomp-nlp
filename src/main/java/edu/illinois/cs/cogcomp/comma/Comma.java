@@ -200,7 +200,7 @@ public class Comma implements Serializable {
 			TreeView tv2 = (TreeView) TA.getView(ViewNames.PARSE_CHARNIAK);
 			info.append(PrettyPrint.pennString(tv2.getTree(0)));
 			info.append("\n\nNER\n");
-			info.append(TA.getView(ViewNames.NER));
+			info.append(TA.getView(ViewNames.NER_CONLL));
 			info.append("\n\nSHALLOW_PARSE\n");
 			info.append(TA.getView(ViewNames.SHALLOW_PARSE));
 			info.append("\n\nPOS\n");
@@ -512,7 +512,7 @@ public class Comma implements Serializable {
     public String getStrippedNotation(Constituent c){
     	if(c == null)
     		return "NULL";
-    	String notation = c.getLabel().split("-", 2)[0];
+    	String notation = c.getLabel().split("-")[0];
     	
     	if(NERlexicalise)
     		notation += "-" + getNamedEntityTag(c);
@@ -559,7 +559,7 @@ public class Comma implements Serializable {
 
     public String getNamedEntityTag(Constituent c){
     	//We don't have gold NER
-    	List<Constituent> NEs = TA.getView(ViewNames.NER).getConstituentsCovering(c);
+    	List<Constituent> NEs = TA.getView(ViewNames.NER_CONLL).getConstituentsCovering(c);
     	String result = "";
     	/*String result = NEs.size()==0? "NO-NER" : NEs.get(0).getLabel();
     	for(int i = 1; i<NEs.size(); i++)
