@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,8 +17,10 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 
 /**
@@ -31,7 +34,9 @@ public class FreebaseSearch {
 	static int counter = 0;
 	private String apikey;
 	private String cacheLocation;
+	private String rdfCacheLocation;
 	static final String defaultCacheLocation = "/shared/bronte/tac2014/data/freebaseRawResponseCache/SearchResponse";
+	static final String defaultRdfCacheLocation = "/shared/bronte/tac2014/data/freebaseRawResponseCache/RdfResponse";
 
 	static final String defaultApikey = "AIzaSyAclVmmn2FbIc6PiN9poGfNTt2CcyU6x48"; // has
 																					// 10k
@@ -50,6 +55,7 @@ public class FreebaseSearch {
 	public FreebaseSearch() {
 		this.apikey = defaultApikey;
 		this.cacheLocation = defaultCacheLocation;
+		this.rdfCacheLocation = defaultRdfCacheLocation;
 	}
 
 	public FreebaseSearch(String cacheLocation, String key) {
@@ -65,7 +71,7 @@ public class FreebaseSearch {
 		// First, try the cache.
 		String checksum = QueryMQL.getMD5Checksum(query);
 		if (IOUtils.exists(cacheLocation + "/" + checksum + ".cached")) {
-			System.out.println("Found!");
+//			System.out.println("Found!");
 			return parseJson(FileUtils.readFileToString(new File(cacheLocation
 					+ "/" + checksum + ".cached"), "UTF-8"));
 		} else {
@@ -76,6 +82,36 @@ public class FreebaseSearch {
 			return parseJson(tmp);
 
 		}
+	}
+
+	/**
+	 * Query Freebase by ID
+	 * @param query: in the form of m/09c7w0
+	 * @return
+	 * @throws Exception
+	 */
+	public List<String> lookupRdf(String query){
+		// First, try the cache.
+		String checksum = QueryMQL.getMD5Checksum(query);
+		String filename = rdfCacheLocation + "/" + checksum + ".cached";
+		if (IOUtils.exists(filename)) {
+//			System.out.println("Found!");
+			try {
+				return LineIO.read(filename);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Caching");
+			List<String> tmp = queryByID(query);
+			try {
+				FileUtils.writeStringToFile(new File(filename), tmp.stream().collect(joining("\n")), "UTF-8");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return tmp;
+		}
+		return null;
 	}
 
 	private List<FreebaseAnswer> parseJson(String ans) {
@@ -91,6 +127,38 @@ public class FreebaseSearch {
 		return output;
 	}
 
+	private List<String> queryByID(String query) {
+		counter++;
+		logger.info("NOT IN FREEBASE CACHE, QUERYING ... " + counter + " times");
+		String url = null;
+		try {
+			url = String.format("https://www.googleapis.com/freebase/v1/rdf/" + query + "?key=" + apikey, URLEncoder.encode(query, "UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		System.out.println("QUERY URL: " + url);
+		URLConnection conn = null;
+		InputStream in;
+		try {
+			conn = new URL(url).openConnection();
+			in = conn.getInputStream();
+		} catch (IOException e) {
+			return new ArrayList<>();
+		}
+
+		// Read the response
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+		List<String> ret = new ArrayList<>();
+		String line;
+		try {
+			while ((line = reader.readLine()) != null)
+				ret.add(line.trim());
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return ret;
+	}
 	private String getQueryResponse(String query) throws MalformedURLException,
 			IOException {
 		counter++;
@@ -141,8 +209,9 @@ public class FreebaseSearch {
 
 	public static void main(String[] args) throws Exception {
 		FreebaseSearch fb = new FreebaseSearch();
-		String[] answers = fb.query("obama");
-		Arrays.asList(answers).forEach(x -> System.out.println(x));
+		List<FreebaseAnswer> answers = fb.lookup("Barack_Obama");
+		String mid = answers.get(0).getMid().substring(1);
+//		Arrays.asList(answers).forEach(x -> System.out.println(x));
 
 		// for(FreebaseAnswer term:fb.lookup("Obama"))
 		// {

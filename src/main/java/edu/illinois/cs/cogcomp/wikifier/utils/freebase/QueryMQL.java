@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.net.SocketTimeoutException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -278,6 +279,38 @@ public class QueryMQL {
 //		return ans;
 //	}
 
+	public String lookupMidFromTitle(MQLQueryWrapper mql)
+			throws Exception {
+		JSONObject response;
+		String mqlQuery = mql.MQLquery;
+		logger.debug("QUERY IS " + mqlQuery);
+		String title = mql.value;
+		String checksum = getMD5Checksum(title);
+		// first check mid in cache
+		if (IOUtils.exists(typeCacheLocation + "/" + checksum + ".cached")) {
+			found++;
+			logger.info("Found! "+found);
+			JSONParser jsonParser = new JSONParser();
+			response = (JSONObject) jsonParser.parse(FileUtils
+					.readFileToString(new File(typeCacheLocation + "/"
+							+ checksum + ".cached"), "UTF-8"));
+		} else {
+			response = getResponse(mqlQuery);
+			if (response == null)
+				return null;
+			cacheMiss++;
+			logger.info("Caching "+cacheMiss);
+			FileUtils.writeStringToFile(new File(typeCacheLocation + "/"
+					+ checksum + ".cached"), response.toString(), "UTF-8");
+		}
+
+		JSONObject result = (JSONObject) response.get("result");
+
+		if (result != null) {
+			return (String) result.get("mid");
+		}
+		return null;
+	}
 
 	public List<String> lookupTypeFromTitle(MQLQueryWrapper mql)
 			throws Exception {
@@ -319,7 +352,7 @@ public class QueryMQL {
 	/**
 	 * returns the mid for a wiki title
 	 * 
-	 * @param query
+	 * @param mql
 	 * @return
 	 * @throws Exception
 	 */
@@ -352,8 +385,13 @@ public class QueryMQL {
 			return null;
 	}
 
-	public static String getMD5Checksum(String query) throws Exception {
-		MessageDigest complete = MessageDigest.getInstance("MD5");
+	public static String getMD5Checksum(String query){
+		MessageDigest complete = null;
+		try {
+			complete = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 		complete.update(query.getBytes(), 0, query.getBytes().length);
 		byte[] b = complete.digest();
 		String result = "";
@@ -409,7 +447,6 @@ public class QueryMQL {
 	/**
 	 * Create queries with mid for type i.e. mid -> type
 	 * 
-	 * @param mid
 	 * @return
 	 */
 //	@Deprecated
@@ -449,7 +486,7 @@ public class QueryMQL {
 	}
 
 	public static void main(String[] args) throws Exception {
-		QueryMQL mql = new QueryMQL("","",QueryMQL.defaultApikey);
+		QueryMQL mql = new QueryMQL();
 //		System.out.println(encodeMQL("Darker_than_darkness-style93-"));
 //		System.out.println(encodeMQL("Frank_Black_93-03"));
 //		System.exit(-1);
@@ -474,8 +511,12 @@ public class QueryMQL {
 //					"/wikipedia/en", QueryMQL.encodeMQL(title)));
 //			System.out.println(type);
 //		}
-		List<String> type = mql.lookupTypeFromTitle(mql.buildQuery(
+		String mid = mql.lookupMidFromTitle(mql.buildQuery(
 				"/wikipedia/en", QueryMQL.encodeMQL("Benjamin_Franklin")));
+//		String mid = mql.lookupMid(mql.buildQuery(
+//				"/wikipedia/en", QueryMQL.encodeMQL("xyzabc")));
+		System.out.println(mid);
+//		System.out.println(mid);
 		// for (String title : lines) {
 		// title=title.split("\\t")[0];
 		// System.out.println(title);
