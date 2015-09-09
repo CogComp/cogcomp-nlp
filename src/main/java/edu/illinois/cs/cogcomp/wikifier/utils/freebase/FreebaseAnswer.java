@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.freebase;
+package edu.illinois.cs.cogcomp.wikifier.utils.freebase;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

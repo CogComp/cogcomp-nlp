@@ -1,6 +1,6 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.examples;
+package edu.illinois.cs.cogcomp.wikifier.utils.examples;
 
-import main.java.edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
+import edu.illinois.cs.cogcomp.bigdata.lucene.Lucene;
 import java.io.IOException;
 import java.util.Map;
 

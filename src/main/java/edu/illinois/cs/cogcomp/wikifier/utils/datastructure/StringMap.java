@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
+package edu.illinois.cs.cogcomp.wikifier.utils.datastructure;
 
 import gnu.trove.map.hash.TCustomHashMap;
 import gnu.trove.set.hash.TCustomHashSet;

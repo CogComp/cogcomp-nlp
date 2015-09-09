@@ -1,4 +1,4 @@
-package main.java.edu.illinois.cs.cogcomp.wikifier.utils.concurrent;
+package edu.illinois.cs.cogcomp.wikifier.utils.concurrent;
 
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntIntHashMap;
