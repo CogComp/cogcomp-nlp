@@ -4,9 +4,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +24,12 @@ public class IllinoisCachingPreprocessorTest
 
     private static Logger logger = LoggerFactory.getLogger( IllinoisCachingPreprocessorTest.class );
 
-    private IllinoisCachingPreprocessor prep;
+    private static IllinoisCachingPreprocessor prep;
 
-    private String text;
+    private static String text;
 
-    @Before
-    public void setUp() throws Exception
+    @BeforeClass
+    public static void setUp() throws Exception
     {
         ResourceManager rm = null;
         try
@@ -63,6 +61,11 @@ public class IllinoisCachingPreprocessorTest
     {
     }
 
+    @AfterClass
+    public static void cleanUp()
+    {
+        prep.closeCache();
+    }
 
     @Test
     public void testCacheTiming() throws Exception {
@@ -97,8 +100,6 @@ public class IllinoisCachingPreprocessorTest
 
         long avg = total / n;
         logger.debug("Average = " + avg + " milliseconds");
-
-        prep.closeCache();
 
         assertTrue(avg < firsttotal);
 

@@ -24,6 +24,7 @@ import java.util.Map;
  *
  * Created by mssammon on 4/13/15.
  */
+@Deprecated
 public class IllinoisCachingPreprocessor extends AnnotatorService
 {
     public static final java.lang.String CACHE_DIR = "cacheDir";

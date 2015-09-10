@@ -150,6 +150,5 @@ public class IllinoisNewPipelineTest
         assertTrue( ta.hasView( ViewNames.SENTENCE ) );
 
         assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 5);
-
     }
 }
