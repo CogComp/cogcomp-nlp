@@ -56,7 +56,7 @@ public class FeatureEngineeringHelper {
 		BayraktarLabelFeature __BayraktarLabelFeature = new BayraktarLabelFeature();
 		BayraktarPatternFeature __BayraktarPatternFeature = new BayraktarPatternFeature();
 		
-		List<Classifier> features = new ArrayList<Classifier>();
+		List<Classifier> features = new ArrayList<>();
 		Classifier labeler = learner.getLabeler();
 		features.add(__ParseFeatures);//Sibling and Parent
 		features.add(__ParseTreeFeature);
@@ -70,14 +70,14 @@ public class FeatureEngineeringHelper {
 		
 		@SuppressWarnings("unused")
 		Classifier extractor = learner.getExtractor();
-		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<Pair<Double,String>>();
+		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<>();
 		
 		for(List<Classifier> featureSet: ablatedFeatures){
 			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler, "config/DCD.config");
 			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, cr, false);
 			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
 			
-			Pair<Double, String> performanceFeaturePair = new Pair<Double, String>(structuredPerformance.getOverallStats()[2], featureSet.toString());
+			Pair<Double, String> performanceFeaturePair = new Pair<>(structuredPerformance.getOverallStats()[2], featureSet.toString());
 			performanceFeaturePairs.add(performanceFeaturePair);
 		}
 		
@@ -138,7 +138,7 @@ public class FeatureEngineeringHelper {
 	}
 	
 	public static <T> List<List<T>> getSubsetsOfSizeAtLeastK(List<T> superSet, int k, int idx){
-		List<List<T>> subsetsBiggerThanK = new ArrayList<List<T>>();
+		List<List<T>> subsetsBiggerThanK = new ArrayList<>();
 		int size = superSet.size() - idx;
 		if(size<k || size<=0){
 			subsetsBiggerThanK.add(new ArrayList<T>());
@@ -147,10 +147,10 @@ public class FeatureEngineeringHelper {
 		}
 		
 		List<List<T>> subPowerSetOn = getSubsetsOfSizeAtLeastK(superSet, Math.max(0, k-1), idx+1);
-		List<List<T>> subPowerSetOff = new ArrayList<List<T>>();
+		List<List<T>> subPowerSetOff = new ArrayList<>();
 		for(List<T> set: subPowerSetOn){
 			if(set.size()>=k){
-				List<T> duplicate = new ArrayList<T>(set);
+				List<T> duplicate = new ArrayList<>(set);
 				subPowerSetOff.add(duplicate);
 			}
 			set.add(superSet.get(idx));

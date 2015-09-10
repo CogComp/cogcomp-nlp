@@ -23,7 +23,7 @@ public class BayraktarPatternLabeler {
     	CommaProperties properties = CommaProperties.getInstance();
     	USE_NEW_LABEL_SET = properties.useNewLabelSet();
     	String[] labels = {"Attribute", "Complementary", "Interrupter", "Introductory", "List", "Quotation", "Substitute", "Locative"};
-    	BAYRAKTAR_PATTERN_TO_COMMA_LABEL = new HashMap<String, String>();
+    	BAYRAKTAR_PATTERN_TO_COMMA_LABEL = new HashMap<>();
     	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir();
 		for(String label : labels){
 			File file = new File(ANNOTATION_SOURCE_DIR + label);
@@ -58,7 +58,7 @@ public class BayraktarPatternLabeler {
 	
 	/**
      * 
-     * @param comma The bayraktar pattern whose label is required
+     * @param bayraktarPattern The bayraktar pattern whose label is required
      * @return the Bayraktar-label as specified in the annotation files
      */
 	public static String getLabel(String bayraktarPattern){

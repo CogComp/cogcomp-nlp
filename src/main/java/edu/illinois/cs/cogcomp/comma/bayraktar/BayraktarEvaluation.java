@@ -43,7 +43,7 @@ public class BayraktarEvaluation {
 
 		int errorCount = 0;
 		for(String pattern: patternToVivekCommas.keySet()){
-			Counter<String> labelCounts = new Counter<String>();
+			Counter<String> labelCounts = new Counter<>();
 			String bayraktarLabel = BayraktarPatternLabeler.getLabel(pattern);
 			if(bayraktarLabel==null) continue;
 			for(Comma comma : patternToVivekCommas.get(pattern)){

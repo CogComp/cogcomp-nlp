@@ -26,7 +26,7 @@ public class Sentence implements Serializable{
 	Collection<Comma> commas;
 	private static final long serialVersionUID = 2522617554768671153l;
 	public Sentence(){
-		commas = new ArrayList<Comma>();
+		commas = new ArrayList<>();
 	}
 	
 	public void addComma(Comma c){
@@ -38,7 +38,7 @@ public class Sentence implements Serializable{
 	}
 	
 	public Collection<Comma> getFirstCommasWhichAreNotLast(){
-		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<Comma>();
+		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<>();
 		for (Comma c : commas)
 			if(getNextComma(c)!=null && getPreviousComma(c)==null)
 				firstCommasWhichAreNotLast.add(c);
@@ -46,7 +46,7 @@ public class Sentence implements Serializable{
 	}
 	
 	public Collection<Comma> getMiddleCommas(){
-		Collection<Comma> middleCommas = new ArrayList<Comma>();
+		Collection<Comma> middleCommas = new ArrayList<>();
 		for (Comma c : commas)
 			if(getNextComma(c)!=null && getPreviousComma(c)!=null)
 				middleCommas.add(c);
@@ -78,7 +78,7 @@ public class Sentence implements Serializable{
 	}
 	
 	public Collection<Comma> getFirstSiblingCommasWhichAreNotLast(){
-		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<Comma>();
+		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<>();
 		for (Comma c : commas)
 			if(getNextSiblingComma(c)!=null && getPreviousSiblingComma(c)==null)
 				firstCommasWhichAreNotLast.add(c);
@@ -87,7 +87,7 @@ public class Sentence implements Serializable{
 	}
 	
 	public Collection<Comma> getMiddleSiblingCommas(){
-		Collection<Comma> middleCommas = new ArrayList<Comma>();
+		Collection<Comma> middleCommas = new ArrayList<>();
 		for (Comma c : commas)
 			if(getNextSiblingComma(c)!=null && getPreviousSiblingComma(c)!=null)
 				middleCommas.add(c);
@@ -127,7 +127,7 @@ public class Sentence implements Serializable{
 	public String getAnnotatedText(){
 		String text = commas.iterator().next().getText();
 		String[] tokens = text.split("\\s+");
-		List<Comma> sortedCommas = new ArrayList<Comma>(commas);
+		List<Comma> sortedCommas = new ArrayList<>(commas);
 		Collections.sort(sortedCommas, new Comparator<Comma>(){
 			@Override
 			public int compare(Comma o1, Comma o2) {
@@ -192,7 +192,7 @@ public class Sentence implements Serializable{
 		 * @param lexicon
 		 */
 		public CommaLabelSequence(CommaSequence commaSequence, Lexiconer lexicon, Classifier lbjLabeler){
-			labels = new ArrayList<String>();
+			labels = new ArrayList<>();
 			for(Comma comma : commaSequence.sortedCommas)
 				labels.add(lbjLabeler.discreteValue(comma));
 			
@@ -214,7 +214,7 @@ public class Sentence implements Serializable{
 		public CommaLabelSequence(int[] labelIds, Lexiconer lexicon){
 			this.labelIds = labelIds;
 			
-			labels = new ArrayList<String>();
+			labels = new ArrayList<>();
 			for(int i = 0; i<labelIds.length; i++){
 				labels.add(lexicon.getLabelString(labelIds[i]));
 			}

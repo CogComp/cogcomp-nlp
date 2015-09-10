@@ -30,7 +30,7 @@ public class StructuredCommaClassifier extends SLModel{
 	
 	/**
 	 * 
-	 * @param lbjLearner the LBJava learner whose extractor and labeler we can use to build instances
+	 * @param lbjLabeler the LBJava learner whose extractor and labeler we can use to build instances
 	 * @param configFilePath path to config file for the structured learner
 	 * @throws Exception
 	 */
@@ -121,7 +121,7 @@ public class StructuredCommaClassifier extends SLModel{
 	public static void main(String args[]) throws Exception{
 		VivekAnnotationCommaParser train = new VivekAnnotationCommaParser("data/train_commas.txt", CommaProperties.getInstance().getTrainCommasSerialized(), Ordering.ORDERED_SENTENCE);
 		VivekAnnotationCommaParser test = new VivekAnnotationCommaParser("data/test_commas.txt", CommaProperties.getInstance().getTestCommasSerialized(), Ordering.ORDERED_SENTENCE);
-		List<Classifier> lbjExtractors = new ArrayList<Classifier>();
+		List<Classifier> lbjExtractors = new ArrayList<>();
 		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
 		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
 		StructuredCommaClassifier model = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");

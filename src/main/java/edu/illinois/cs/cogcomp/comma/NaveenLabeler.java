@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 
 public class NaveenLabeler {
-	private static Map<String, String> otherCommaIdToNaveenLabel = new HashMap<String, String>();
+	private static Map<String, String> otherCommaIdToNaveenLabel = new HashMap<>();
 	
 	static {
 		CommaProperties commaProperties = CommaProperties.getInstance();
@@ -81,7 +81,7 @@ public class NaveenLabeler {
 	public static void annotationHelper(){
 		VivekAnnotationCommaParser reader = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
 		List<Comma> commas = reader.getCommas();
-		Map<String, Comma> idToComma = new HashMap<String, Comma>();
+		Map<String, Comma> idToComma = new HashMap<>();
 		for(Comma comma: commas)
 			idToComma.put(comma.getCommaID(), comma);
 		

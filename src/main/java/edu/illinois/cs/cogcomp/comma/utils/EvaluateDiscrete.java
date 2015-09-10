@@ -19,7 +19,7 @@ import edu.illinois.cs.cogcomp.lbjava.util.TableFormat;
 public class EvaluateDiscrete extends TestDiscrete{
 	HashMap<String, HashMap<String, Integer>> confusionMatrix;
 	public EvaluateDiscrete() {
-		confusionMatrix = new HashMap<String, HashMap<String,Integer>>();
+		confusionMatrix = new HashMap<>();
 	}
 	
 	@Override
@@ -28,14 +28,14 @@ public class EvaluateDiscrete extends TestDiscrete{
 		super.reportPrediction(p, l);
 		HashMap<String, Integer> predictionHistogramForL = confusionMatrix.get(l);
 		if(predictionHistogramForL == null){
-			predictionHistogramForL = new HashMap<String, Integer>();
+			predictionHistogramForL = new HashMap<>();
 			confusionMatrix.put(l, predictionHistogramForL);
 		}
 		histogramAdd(predictionHistogramForL, p, 1);
 	}
 	
 	public void printConfusion(PrintStream out){
-		List<String> labels = new ArrayList<String>(confusionMatrix.keySet());
+		List<String> labels = new ArrayList<>(confusionMatrix.keySet());
 		Collections.sort(labels);
 		int numLabels = labels.size();
 		Double[][]confusion = new Double[numLabels][];
@@ -66,7 +66,7 @@ public class EvaluateDiscrete extends TestDiscrete{
 			HashMap<String, Integer> addToLabelHist = addTo.get(label);
 			HashMap<String, Integer> addFromLabelHist = addFrom.get(label);
 			if(addToLabelHist == null){
-				addToLabelHist = new HashMap<String, Integer>();
+				addToLabelHist = new HashMap<>();
 				addTo.put(label, addToLabelHist);
 			}
 			histogramAddAll(addToLabelHist, addFromLabelHist);

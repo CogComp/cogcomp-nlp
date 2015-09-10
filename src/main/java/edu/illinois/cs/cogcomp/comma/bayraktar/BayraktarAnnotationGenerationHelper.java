@@ -41,7 +41,7 @@ public class BayraktarAnnotationGenerationHelper {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    	List<Comma> commas = new ArrayList<Comma>();
+    	List<Comma> commas = new ArrayList<>();
     	while(ptbReader.hasNext()){
     		TextAnnotation ta = ptbReader.next();
     		List<Comma> commasInTa = CommaLabeler.getCommas(ta); 

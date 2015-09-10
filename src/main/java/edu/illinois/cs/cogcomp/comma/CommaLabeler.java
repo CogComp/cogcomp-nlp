@@ -80,7 +80,7 @@ public class CommaLabeler implements Annotator{
      * @return a list of Commas. Each comma in the list corresponds to a comma in the sentence represented by ta
      */
     public static List<Comma> getCommas(TextAnnotation ta){
-    	List<Comma> commas = new ArrayList<Comma>();
+    	List<Comma> commas = new ArrayList<>();
     	Sentence sentenceStruct = new Sentence();
     	String[] tokenizedText = ta.getTokens();
     	for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {

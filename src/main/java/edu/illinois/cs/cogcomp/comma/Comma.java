@@ -93,7 +93,7 @@ public class Comma implements Serializable {
      * A constructor used during training, if gold-standard feature annotations are available.
      * @param commaPosition The token index of the comma
      * @param role The gold-standard role of the comma
-     * @param rawText The tokenized string of the sentence
+     * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      * @param goldTA The TextAnnotation containing gold-standard views for training
      */
@@ -105,7 +105,7 @@ public class Comma implements Serializable {
     /**
      * A constructor used at test time (for prediction only). Assumes no gold label;
      * @param commaPosition The token index of the comma
-     * @param rawText The tokenized string of the sentence
+     * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
     public Comma(int commaPosition, String[] sentence, TextAnnotation TA, Sentence s) {
@@ -364,7 +364,7 @@ public class Comma implements Serializable {
     public String[] getLeftToRightDependencies(){
     	TreeView depTreeView = (TreeView) TA.getView(ViewNames.DEPENDENCY_STANFORD);
     	List<Constituent> constituentsOnLeft = depTreeView.getConstituentsCoveringSpan(0, commaPosition); 
-		List<Relation> ltors = new ArrayList<Relation>();
+		List<Relation> ltors = new ArrayList<>();
 		
 		for (Constituent constituent : constituentsOnLeft) {
 			for (Relation relation : constituent.getOutgoingRelations()) {
@@ -383,7 +383,7 @@ public class Comma implements Serializable {
     public String[] getRightToLeftDependencies(){
     	TreeView depTreeView = (TreeView) TA.getView(ViewNames.DEPENDENCY_STANFORD);
     	List<Constituent> constituentsOnLeft = depTreeView.getConstituentsCoveringSpan(0, commaPosition); 
-		List<Relation> rtols = new ArrayList<Relation>();
+		List<Relation> rtols = new ArrayList<>();
 		
 		for (Constituent constituent : constituentsOnLeft) {
 			for (Relation relation : constituent.getIncomingRelations()) {
@@ -451,16 +451,16 @@ public class Comma implements Serializable {
     		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
     	else
     		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
-    	List<Constituent> commaConstituents = new ArrayList<Constituent>();
-    	Map<Constituent, Comma> constituentCommaMap = new HashMap<Constituent, Comma>();
+    	List<Constituent> commaConstituents = new ArrayList<>();
+    	Map<Constituent, Comma> constituentCommaMap = new HashMap<>();
 		for(Comma c : s.getCommas()){
 			Constituent commaConstituent = c.getCommaConstituentFromTree(parseView);
 			commaConstituents.add(commaConstituent);
 			constituentCommaMap.put(commaConstituent, c);
 		}
-		QueryableList<Constituent> qlCommas = new QueryableList<Constituent>(commaConstituents);
+		QueryableList<Constituent> qlCommas = new QueryableList<>(commaConstituents);
 		Iterable<Constituent> siblingCommaConstituents = qlCommas.where(Queries.isSiblingOf(this.getCommaConstituentFromTree(parseView)));
-		List<Comma> siblingCommas =  new ArrayList<Comma>();
+		List<Comma> siblingCommas = new ArrayList<>();
 		for(Constituent commaConstituent : siblingCommaConstituents)
 			siblingCommas.add(constituentCommaMap.get(commaConstituent));
 		return siblingCommas;
@@ -529,7 +529,7 @@ public class Comma implements Serializable {
     }
     
     public List<String> getContainingSRLs() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         TextAnnotation srlTA = (GOLD)? goldTA : TA;
     	PredicateArgumentView pav;
         pav = (PredicateArgumentView)srlTA.getView(ViewNames.SRL_VERB);

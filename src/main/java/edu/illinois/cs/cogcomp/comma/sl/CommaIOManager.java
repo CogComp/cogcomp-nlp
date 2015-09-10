@@ -1,21 +1,18 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import edu.illinois.cs.cogcomp.comma.Comma;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.Sentence;
 import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
 import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
-import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
-import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 public class CommaIOManager {
 	public static final String unknownFeature = "unknwonfeature";
 	public static SLProblem readProblem(List<Sentence> sentences, Lexiconer lexicon, List<Classifier> lbjExtractors, Classifier lbjLabeler){
@@ -38,8 +35,8 @@ public class CommaIOManager {
 	}
 	
 	public static List<CommaSequence> getCommaSequences(Sentence sentence, Lexiconer lexicon, List<Classifier> lbjExtractors){
-		LinkedList<Comma> allCommasInSentence = new LinkedList<Comma>(sentence.getCommas());
-		List<CommaSequence> commaSequences = new ArrayList<Sentence.CommaSequence>();
+		LinkedList<Comma> allCommasInSentence = new LinkedList<>(sentence.getCommas());
+		List<CommaSequence> commaSequences = new ArrayList<>();
 		boolean isCommaStructureFullSentence = CommaProperties.getInstance().isCommaStructureFullSentence();
 		if(isCommaStructureFullSentence){
 			commaSequences.add(new CommaSequence(allCommasInSentence, lexicon, lbjExtractors));
@@ -47,7 +44,7 @@ public class CommaIOManager {
 		else{
 			while(!allCommasInSentence.isEmpty()){
 				Comma currentComma = allCommasInSentence.pollFirst();
-				List<Comma> commasInCurrentStructure = new LinkedList<Comma>();
+				List<Comma> commasInCurrentStructure = new LinkedList<>();
 				commasInCurrentStructure.add(currentComma);
 				Iterator<Comma> unusedCommasIt= allCommasInSentence.iterator();
 				while(unusedCommasIt.hasNext()){

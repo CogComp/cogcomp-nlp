@@ -9,7 +9,7 @@ import java.util.Scanner;
 import edu.illinois.cs.cogcomp.comma.CommaProperties;
 
 public class VivekAnnotationHelper {
-	Map<String, String> annotationIdToAnnotation = new HashMap<String, String>();
+	Map<String, String> annotationIdToAnnotation = new HashMap<>();
 	
 	public VivekAnnotationHelper(){
 		instantiate();

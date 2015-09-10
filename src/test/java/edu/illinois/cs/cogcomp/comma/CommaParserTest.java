@@ -15,7 +15,7 @@ public class CommaParserTest  extends TestCase{
 	@Test
 	public void testOrderOfCommasInOrderedSentenceOrderCommaParser() {
 		Parser orderedSentenceOrderCommaParser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", serializedDataFileName, VivekAnnotationCommaParser.Ordering.RANDOM_SENTENCE);
-		Set<Sentence> seenSentences = new HashSet<Sentence>();
+		Set<Sentence> seenSentences = new HashSet<>();
 		Comma comma = (Comma) orderedSentenceOrderCommaParser.next();
 		Sentence previousSentence = comma.getSentence();
 		seenSentences.add(comma.getSentence());
@@ -31,7 +31,7 @@ public class CommaParserTest  extends TestCase{
 	@Test
 	public void testOrderOfCommasInRandomSentenceOrderCommaParser(){
 		Parser randomSentenceOrderCommaParser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", serializedDataFileName, VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
-		Set<Sentence> seenSentences = new HashSet<Sentence>();
+		Set<Sentence> seenSentences = new HashSet<>();
 		Comma comma = (Comma) randomSentenceOrderCommaParser.next();
 		Sentence previousSentence = comma.getSentence();
 		seenSentences.add(comma.getSentence());

@@ -28,7 +28,7 @@ public class ClassifierComparison {
 		System.out.println("AUTO AUTO");
 		localCVal(false, false, parser, 90, 0.024, 0, 3.6);
 
-		List<Classifier> lbjExtractors = new ArrayList<Classifier>();
+		List<Classifier> lbjExtractors = new ArrayList<>();
 		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
 		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
 		System.out.println("STRUCTURED GOLD");
@@ -96,20 +96,20 @@ public class ClassifierComparison {
 		for(int i=0; i<k; foldParser.setPivot(++i)){
 			foldParser.setFromPivot(false);
 			foldParser.reset();
-			LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<Sentence>();
+			LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<>();
 			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
 				trainSentences.add(((Comma)comma).getSentence());
 			}
 			//System.out.println("NUMBER OF TRAIN " + trainSentences.size());
-			model.train(new ArrayList<Sentence>(trainSentences), null);
+			model.train(new ArrayList<>(trainSentences), null);
 			foldParser.setFromPivot(true);
 			foldParser.reset();
-			LinkedHashSet<Sentence> testSentences = new LinkedHashSet<Sentence>();
+			LinkedHashSet<Sentence> testSentences = new LinkedHashSet<>();
 			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
 				testSentences.add(((Comma)comma).getSentence());
 			}
 			//System.out.println("NUMBER OF TEST " + testSentences.size());
-			EvaluateDiscrete evaluator = model.test(new ArrayList<Sentence>(testSentences), null);
+			EvaluateDiscrete evaluator = model.test(new ArrayList<>(testSentences), null);
 			cvalResult.reportAll(evaluator);
 		}
 		//System.out.println(cvalResult.getOverallStats()[2]);
@@ -152,7 +152,7 @@ public class ClassifierComparison {
 	public static void reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting() throws Exception{
 		VivekAnnotationCommaParser train = new VivekAnnotationCommaParser("data/train_commas.txt", CommaProperties.getInstance().getTrainCommasSerialized(), Ordering.ORDERED_SENTENCE);
 		VivekAnnotationCommaParser test = new VivekAnnotationCommaParser("data/test_commas.txt", CommaProperties.getInstance().getTestCommasSerialized(), Ordering.ORDERED_SENTENCE);
-		List<Classifier> lbjExtractors = new ArrayList<Classifier>();
+		List<Classifier> lbjExtractors = new ArrayList<>();
 		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
 		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
 		StructuredCommaClassifier model = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");
