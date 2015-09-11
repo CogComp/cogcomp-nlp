@@ -4,7 +4,9 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.EdisonPrintAlignedAnnotation;
 import org.junit.*;
 import org.slf4j.Logger;
@@ -24,7 +26,7 @@ import static org.junit.Assert.fail;
  */
 public class IllinoisNewPipelineTest
 {
-    private static final String CONFIG = "src/test/resources/pipeline-full-config.properties";
+//    private static final String CONFIG = "src/test/resources/pipeline-full-config.properties";
 
     private static Logger logger = LoggerFactory.getLogger( IllinoisNewPipelineTest.class );
 
@@ -35,18 +37,21 @@ public class IllinoisNewPipelineTest
     @BeforeClass
     public static void setUpOnce() throws Exception
     {
-        ResourceManager rm = null;
-        try
-        {
-            rm = new ResourceManager( CONFIG );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-            System.exit( -1 );
-        }
+        ResourceManager pipelineRm = new PipelineConfigurator().getDefaultConfig();
+        ResourceManager annotatorServiceRm = new AnnotatorServiceConfigurator().getConfig( pipelineRm );
 
-        prep = IllinoisPipelineFactory.buildPipeline( rm );
+//        try
+//        {
+//            ResourceManager nonDefaultRm = new ResourceManager( CONFIG );
+//            rm = ( new PipelineConfigurator() ).getConfig( nonDefaultRm );
+//        }
+//        catch ( IOException e )
+//        {
+//            e.printStackTrace();
+//            System.exit( -1 );
+//        }
+
+        prep = IllinoisPipelineFactory.buildPipeline( annotatorServiceRm );
 
         text = "The priest stared at John for a long time, startled at his disclosure. " +
                 "The Altman Inn had long been a topic of public vexation for the St. Francis seminary, " +

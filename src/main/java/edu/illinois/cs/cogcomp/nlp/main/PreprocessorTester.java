@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 
 import java.io.File;
@@ -45,16 +46,16 @@ public class PreprocessorTester
         String textOutFile = args_[ 2 ];
         String serOutFile = args_[3];
         
-        ResourceManager rm = null;
-        try
-        {
-            rm = new ResourceManager( configFile );
-        }
-        catch ( IOException e )
-        {
-            e.printStackTrace();
-            System.exit( -1 );
-        }
+        ResourceManager rm = ( new PipelineConfigurator() ).getDefaultConfig();
+//        try
+//        {
+//            rm = new ResourceManager( configFile );
+//        }
+//        catch ( IOException e )
+//        {
+//            e.printStackTrace();
+//            System.exit( -1 );
+//        }
        
         PrintStream out =  null;
         
