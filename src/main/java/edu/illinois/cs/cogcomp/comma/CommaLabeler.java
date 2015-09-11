@@ -32,7 +32,7 @@ public class CommaLabeler implements Annotator{
         	CONSTITUENT_PARSER = ViewNames.PARSE_GOLD;
         else
         	CONSTITUENT_PARSER = properties.getConstituentParser();
-        requiredViews = new String[]{CONSTITUENT_PARSER, ViewNames.POS};
+        requiredViews = new String[]{CONSTITUENT_PARSER, ViewNames.POS, ViewNames.SHALLOW_PARSE};
     }
 
     @Override

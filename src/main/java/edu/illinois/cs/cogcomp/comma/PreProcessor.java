@@ -39,6 +39,7 @@ public class PreProcessor {
         curator.addTextAnnotationView(ta, ViewNames.NER_CONLL);
         curator.addTextAnnotationView(ta, ViewNames.SHALLOW_PARSE);
         curator.addTextAnnotationView(ta, ViewNames.PARSE_STANFORD);
+        curator.addTextAnnotationView(ta, ViewNames.PARSE_CHARNIAK);
         curator.addTextAnnotationView(ta, ViewNames.POS);
         curator.addTextAnnotationView(ta, ViewNames.SRL_VERB);
         curator.addTextAnnotationView(ta, ViewNames.SRL_NOM);

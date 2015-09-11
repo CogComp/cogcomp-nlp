@@ -57,6 +57,7 @@ public class NaveenLabeler {
 	 * used for manually relabeling the commas
 	 */
 	public static void createFileOfOtherCommas(){
+		CommaProperties properties = CommaProperties.getInstance();
 		VivekAnnotationCommaParser reader = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
 		List<Comma> commas = reader.getCommas();
 		String otherTextFileData = "";

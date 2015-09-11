@@ -68,6 +68,7 @@ public class Comma implements Serializable {
      * @param role The gold-standard role of the comma
      * @param sentence The tokenized string of the sentence
      * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
+     * @param s The Sentence struct to which the comma belongs
      */
     public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, Sentence s) {
     	this.commaPosition = commaPosition;
@@ -86,6 +87,7 @@ public class Comma implements Serializable {
         }
         this.sentence = sentence;
         this.TA = TA;
+        this.s = s;
     }
 
 
@@ -559,7 +561,8 @@ public class Comma implements Serializable {
 
     public String getNamedEntityTag(Constituent c){
     	//We don't have gold NER
-    	List<Constituent> NEs = TA.getView(ViewNames.NER_CONLL).getConstituentsCovering(c);
+    	SpanLabelView nerView = (SpanLabelView)TA.getView(ViewNames.NER_CONLL);
+    	List<Constituent> NEs = nerView.getConstituentsCovering(c);
     	String result = "";
     	/*String result = NEs.size()==0? "NO-NER" : NEs.get(0).getLabel();
     	for(int i = 1; i<NEs.size(); i++)

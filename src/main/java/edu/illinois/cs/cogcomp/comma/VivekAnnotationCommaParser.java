@@ -59,7 +59,6 @@ public class VivekAnnotationCommaParser implements Parser {
     public VivekAnnotationCommaParser(String annotationFile, String serializedFile, Ordering ordering) {
         this.annotationFile = annotationFile;
         this.serializedFile = serializedFile;
-        this.commas = new ArrayList<>();
         this.ordering = ordering;
         
         CommaProperties properties = CommaProperties.getInstance();
@@ -95,6 +94,8 @@ public class VivekAnnotationCommaParser implements Parser {
             }
         }
 
+        sentences = getSentences(commas);
+
         switch (ordering) {
 		case ORDERED_COMMA:
 			Collections.shuffle(commas, new Random(seed));
@@ -123,6 +124,16 @@ public class VivekAnnotationCommaParser implements Parser {
         reset();
     }
 
+    public static List<Sentence> getSentences(List<Comma> commas){
+    	Set<Sentence> sentenceSet = new LinkedHashSet<>();
+        for(Comma c: commas)
+        {
+        	Sentence s = c.getSentence();
+        	sentenceSet.add(s);
+        }
+        return new ArrayList<>(sentenceSet);
+    }
+    
     @SuppressWarnings("unchecked")
     private void readSerData(File f) throws IOException {
         FileInputStream fileIn = new FileInputStream(f);
@@ -135,16 +146,11 @@ public class VivekAnnotationCommaParser implements Parser {
         }
         in.close();
         fileIn.close();
-        Set<Sentence> sentenceSet = new LinkedHashSet<>();
-        for(Comma c: commas)
-        {
-        	Sentence s = c.getSentence();
-        	sentenceSet.add(s);
-        }
-        sentences = new ArrayList<>(sentenceSet);
     }
 
     private void readData() throws IOException {
+    	commas = new ArrayList<>();
+    	
         Map<String, TextAnnotation> taMap = getTAMap();
         Scanner scanner = new Scanner(new File(annotationFile));
         String line;
@@ -172,6 +178,7 @@ public class VivekAnnotationCommaParser implements Parser {
                 try {
                     TA = preProcessor.preProcess(Collections.singletonList(tokenizedText));
                 } catch (Exception e) {
+                	skip = true;
                     failures++;
                 }
             }
@@ -224,20 +231,22 @@ public class VivekAnnotationCommaParser implements Parser {
                 line = scanner.nextLine().trim();
                 assert line.length() == 0:line;
             }
-
             commas.addAll(commaList);
             System.out.print(count);
             if (skipped > 0)
                 System.out.print(" SKIPPED(" + skipped + ")");
             if (failures > 0)
                 System.out.print(" ANNOTATION FAILED(" + failures + ")");
+            
         }
         writeSerCommas(commas, serializedFile);
         scanner.close();
     }
 
     public static void writeSerCommas(List<Comma> commas, String filename) throws IOException{
-        FileOutputStream fileOut = new FileOutputStream(filename);
+    	File file = new File(filename);
+    	file.getParentFile().mkdirs();
+        FileOutputStream fileOut = new FileOutputStream(file);
         ObjectOutputStream out = new ObjectOutputStream(fileOut);
         out.writeObject(commas);
         out.close();
