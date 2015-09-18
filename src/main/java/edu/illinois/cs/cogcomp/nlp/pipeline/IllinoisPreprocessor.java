@@ -25,7 +25,7 @@ import java.util.*;
  * usePos	[true|false]
  * useChunker	[true|false]
  * useLemmatizer	[true|false]
- * useNer	[true|false]
+ * useNerConll	[true|false]
  * useStanfordParse [true|false]
  * nerConfigFile   config/ner-conll-config.properties
  * lemmaCacheFile  data/lemmaCache.txt
@@ -64,8 +64,8 @@ public class IllinoisPreprocessor
     private boolean useChunker;
     private boolean useStanfordParse;
     private boolean useStanfordDep;
-    private boolean useNer;
-    private boolean useNerExt;
+    private boolean useNerConll;
+    private boolean useNerOntonotes;
 
     private IllinoisPOSHandler pos;
     private IllinoisLemmatizerHandler lemmatizer;
@@ -98,8 +98,9 @@ public class IllinoisPreprocessor
         useStanfordDep = rm_.getBoolean( PipelineVars.USE_STANFORD_DEP );
         useChunker = rm_.getBoolean( PipelineVars.USE_CHUNKER );
         useLemmatizer = rm_.getBoolean( PipelineVars.USE_LEMMA );
-        useNer = rm_.getBoolean( PipelineVars.USE_NER );
-        useNerExt = rm_.getBoolean( PipelineVars.USE_NEREXT );
+        useNerConll = rm_.getBoolean( PipelineVars.USE_NER_CONLL );
+
+        useNerOntonotes = rm_.getBoolean( PipelineVars.USE_NER_ONTONOTES );
         forceCacheUpdate = rm_.getBoolean( PipelineVars.FORCE_CACHE_UPDATE );
         setSupportedViews();
 
@@ -132,7 +133,7 @@ public class IllinoisPreprocessor
         if ( useLemmatizer )
             lemmatizer = new IllinoisLemmatizerHandler( rm_ );
         
-        if ( useNer )
+        if (useNerConll)
         {
         	String nerConfig = rm_.getString( PipelineVars.NER_CONLL_CONFIG );
             //TODO What is modelType? Can it be used as a CoNLL vs Ontonotes?
@@ -141,7 +142,7 @@ public class IllinoisPreprocessor
         	ner = new IllinoisNerHandler( nerConfig, ViewNames.NER_CONLL );
         }
 
-//        if ( useNerExt )
+//        if ( useNerOntonotes )
 //        {
 //            String nerConfig = rm_.getString( PipelineVars.NER_ONTONOTES_CONFIG );
 //            nerExt = new IllinoisNerExtHandler( nerConfig );
@@ -204,10 +205,10 @@ public class IllinoisPreprocessor
         if ( useLemmatizer )
             lemmatizer.labelTextAnnotation(ta);
 
-        if ( useNer )
+        if (useNerConll)
             ner.labelTextAnnotation(ta);
 //
-//        if ( useNerExt )
+//        if ( useNerOntonotes )
 //            nerExt.labelTextAnnotation(ta);
 
         if ( useStanfordParse )
@@ -256,10 +257,10 @@ public class IllinoisPreprocessor
             if( useLemmatizer )
                 supportedViews.put(ViewNames.LEMMA, forceCacheUpdate);
 
-            if ( useNer )
+            if (useNerConll)
                 supportedViews.put(ViewNames.NER_CONLL, forceCacheUpdate);
 
-            if ( useNerExt )
+            if (useNerOntonotes)
                 supportedViews.put(ViewNames.NER_ONTONOTES, forceCacheUpdate );
         }
 

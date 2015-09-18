@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-nlp-pipeline</artifactId>
-	<version>0.1.6</version>
+	<version>0.1.7-SNAPSHOT</version>
 	<name>Illinois NLP Pipeline</name>
 	<description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
 	<properties>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-core-utilities</artifactId>
-			<version>1.2.18-SNAPSHOT</version>
+			<version>1.2.18</version>
 		</dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -47,11 +47,6 @@
             <version>2.0.2</version>
             <classifier>model</classifier>
         </dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>curator-interfaces</artifactId>
-			<version>0.7</version>
-		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-chunker</artifactId>

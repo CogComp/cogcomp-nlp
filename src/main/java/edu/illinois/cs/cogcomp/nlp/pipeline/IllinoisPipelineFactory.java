@@ -6,6 +6,8 @@ import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
@@ -53,6 +55,12 @@ public class IllinoisPipelineFactory
 
     public static AnnotatorService buildPipeline( ResourceManager rm ) throws IOException, AnnotatorException
     {
+//        final boolean usePos = rm.getBoolean( PipelineVars.USE_POS );
+//        final boolean useNerConll = rm.getBoolean( PipelineVars.USE_NER_CONLL );
+//        final boolean useNerOntonotes = rm.getBoolean( PipelineVars.USE_NER_ONTONOTES );
+
+        String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE );
+        String maxParseSentenceLength = rm.getString( PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH );
         String nerConllConfig = rm.getString( NER_CONLL_CONFIG );
         String nerOntonotesConfig = rm.getString( NER_ONTONOTES_CONFIG );
 
@@ -71,6 +79,8 @@ public class IllinoisPipelineFactory
         Properties stanfordProps = new Properties();
         stanfordProps.put( "annotators", "pos, parse") ;
         stanfordProps.put("parse.originalDependencies", true);
+        stanfordProps.put( "parse.maxlen", maxParseSentenceLength );
+        stanfordProps.put( "parse.maxtime", timePerSentence ); // per sentence? could be per document but no idea from stanford javadoc
 
         POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
         ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
