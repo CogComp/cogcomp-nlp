@@ -95,11 +95,21 @@ public class IllinoisChunkerHandler extends PipelineAnnotator
 		for (Token lbjtoken : lbjTokens) {
 			Constituent current = tags.get(tcounter);
 			tagger.discreteValue(lbjtoken);
-			logger.debug("{} {}", lbjtoken.toString(), lbjtoken.type);
-			if (lbjtoken.type.charAt(0) == 'I') {
-				if (null != lbjtoken.type && !clabel.equals(lbjtoken.type.substring(2))) {
+			logger.debug("{} {}", lbjtoken.toString(), ( null == lbjtoken.type ) ? "NULL" : lbjtoken.type ) ;
+
+            // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
+			if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {
+                if ( lbjtoken.type.length() < 3 )
+                    throw new IllegalArgumentException("Chunker word label '" + lbjtoken.type + "' is too short!" );
+				if ( null == clabel ) // we must have just seen an Outside tag and possibly completed a chunk
+                {
+                    // modify lbjToken.type for later ifs
 					lbjtoken.type = "B" + lbjtoken.type.substring(1);
 				}
+                else if ( clabel.length() >= 3 && !clabel.equals(lbjtoken.type.substring(2) ) ) {
+                    // trying to avoid mysterious null pointer exception...
+                    lbjtoken.type = "B" + lbjtoken.type.substring(1);
+                }
 			}
 			if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && clabel != null) {
 
@@ -108,7 +118,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator
 					Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
 					chunkView.addConstituent(label);
 					clabel = null;
-				}
+				} // else no chunk in progress (we are at the start of the doc)
 			}
 
 			if (lbjtoken.type.charAt(0) == 'B') {

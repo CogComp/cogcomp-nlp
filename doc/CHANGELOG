@@ -1,3 +1,6 @@
+0.1.7   * added configuration for Stanford components -- timeout and sentence length
+        * added test cases for text causing problems to Stanford components
+
 0.1.5  * added IllinoisPipelineFactory to build light-weight pipeline
        * added handlers to wrap existing NLP components
        * various bug fixes 

@@ -36,6 +36,10 @@ public class StanfordParseHandler extends PipelineAnnotator {
 
     static Properties stanfordProps;
 
+
+    /**
+     * default config options for stanford.  Factory uses its own properties.
+     */
     static {
         stanfordProps = new Properties();
         stanfordProps.put( "annotators", "pos, parse") ;
@@ -70,7 +74,10 @@ public class StanfordParseHandler extends PipelineAnnotator {
         sentences = document.get(SentencesAnnotation.class);
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
+
             CoreMap sentence = sentences.get(sentenceId);
+
+
             edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
             Tree<String> tree = new Tree<String>(stanfordTree.value());
             for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {

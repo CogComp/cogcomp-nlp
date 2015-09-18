@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
@@ -12,6 +13,7 @@ import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
@@ -156,4 +158,97 @@ public class IllinoisNewPipelineTest
 
         assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 5);
     }
+
+
+    /**
+     * this text has no punctuation, and caused OOM exception when no limit on sentence length was
+     *    passed to the stanford parser on construction. Maybe all our tools should have this
+     *    option too...
+     */
+    @Test
+    public void horribleNewsgroupTextNoPunc()
+    {
+        String inputFile = "src/test/resources/newsgroupNoPunc.txt";
+
+        String text = null;
+        try {
+            text = LineIO.slurp(inputFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        TextAnnotation basicTextAnnotation = null;
+        try {
+            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        String key = AnnotatorService.getCacheKey(basicTextAnnotation, ViewNames.PARSE_STANFORD );
+
+        try {
+            prep.removeKeyFromCache( key );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        try {
+            prep.addView( basicTextAnnotation, ViewNames.PARSE_STANFORD, true );
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+        System.out.println(basicTextAnnotation.toString());
+
+    }
+
+    @Test
+    public void stanfordFailTest()
+    {
+        String inputFile = "src/test/resources/stanfordFailExample.txt";
+
+        String text = null;
+        try {
+            text = LineIO.slurp(inputFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        TextAnnotation basicTextAnnotation = null;
+        try {
+            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        String key = AnnotatorService.getCacheKey(basicTextAnnotation, ViewNames.DEPENDENCY_STANFORD );
+
+        try {
+            prep.removeKeyFromCache( key );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        try {
+            prep.addView( basicTextAnnotation, ViewNames.DEPENDENCY_STANFORD, true );
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            System.out.println( "Expected exception from stanford. ");
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            System.out.println( "maybe not an expected problem: " + e.getMessage() );
+            fail( e.getMessage() );
+        }
+        System.out.println(basicTextAnnotation.toString());
+    }
+
 }
