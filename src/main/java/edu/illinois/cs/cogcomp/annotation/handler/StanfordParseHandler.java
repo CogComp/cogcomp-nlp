@@ -38,7 +38,7 @@ public class StanfordParseHandler extends PipelineAnnotator {
 
 
     /**
-     * default config options for stanford.  Factory uses its own properties.
+     * default config options for stanford.  Factory uses its own properties object.
      */
     static {
         stanfordProps = new Properties();
