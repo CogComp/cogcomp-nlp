@@ -1,4 +1,4 @@
-package test.java.edu.illinois.cs.cogcomp.bigdata.database;
+package edu.illinois.cs.cogcomp.bigdata.database;
 
 public class SomeItem {
 	public int task;

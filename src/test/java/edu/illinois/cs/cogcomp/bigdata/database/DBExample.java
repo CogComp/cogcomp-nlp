@@ -1,10 +1,10 @@
-package test.java.edu.illinois.cs.cogcomp.bigdata.database;
+package edu.illinois.cs.cogcomp.bigdata.database;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import main.java.edu.illinois.cs.cogcomp.bigdata.database.DBHelper;
-import main.java.edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
+import edu.illinois.cs.cogcomp.bigdata.database.DBHelper;
+import edu.illinois.cs.cogcomp.bigdata.database.DBHelper.Column;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
