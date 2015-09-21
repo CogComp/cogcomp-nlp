@@ -6,15 +6,16 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.nlp.util.EdisonPrintAlignedAnnotation;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -249,6 +250,41 @@ public class IllinoisNewPipelineTest
             fail( e.getMessage() );
         }
         System.out.println(basicTextAnnotation.toString());
+    }
+
+    @Test
+    public void testCacheDisabled()
+    {
+        Properties props = new Properties();
+        props.setProperty( AnnotatorServiceConfigurator.DISABLE_CACHE, Configurator.TRUE );
+
+        ResourceManager pipelineRm = new PipelineConfigurator().getConfig( new ResourceManager( props ));
+
+
+/**
+ * instantiating a second pipeline should result in an error if there is already an instance
+ *     with an active cache in the same VM
+ */
+        AnnotatorService secondPipeline = null;
+        try {
+            secondPipeline = IllinoisPipelineFactory.buildPipeline(pipelineRm);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        boolean forceUpdate = false;
+        try {
+            secondPipeline.createAnnotatedTextAnnotation( text, forceUpdate );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+
+        }
+
     }
 
 }
