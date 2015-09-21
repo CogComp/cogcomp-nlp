@@ -42,6 +42,6 @@ public class PipelineConfigurator extends Configurator
         props.setProperty( STFRD_MAX_SENTENCE_LENGTH, DEFAULT_MAX_PARSE_SENTENCE_LENGTH );
 
 //        return ( new AnnotatorServiceConfigurator() ).getConfig(new ResourceManager( props ));
-        return new ResourceManager(props);
+        return ( new AnnotatorServiceConfigurator().getConfig( new ResourceManager( props ) ) );
     }
 }
