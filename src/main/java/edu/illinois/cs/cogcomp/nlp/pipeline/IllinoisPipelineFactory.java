@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -48,17 +49,34 @@ public class IllinoisPipelineFactory
      *
      * TODO:
      *    when NER is updated, set it up to allow multiple different NER components with different models
-     * @param rm    ResourceManager with properties for config files, caching behavior
+     * @param nonDefaultRm    ResourceManager with properties for config files, caching behavior
      * @return  an AnnotatorService object with a suite of NLP components.
      * @throws IOException
      */
 
-    public static AnnotatorService buildPipeline( ResourceManager rm ) throws IOException, AnnotatorException
+    public static AnnotatorService buildPipeline( ResourceManager nonDefaultRm ) throws IOException, AnnotatorException
     {
-//        final boolean usePos = rm.getBoolean( PipelineVars.USE_POS );
-//        final boolean useNerConll = rm.getBoolean( PipelineVars.USE_NER_CONLL );
-//        final boolean useNerOntonotes = rm.getBoolean( PipelineVars.USE_NER_ONTONOTES );
+        ResourceManager rm = ( new PipelineConfigurator().getConfig( nonDefaultRm ) );
+        Map< String, Annotator > annotators = buildAnnotators( rm );
+        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
 
+
+        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
+        for ( String view : annotators.keySet() )
+            requestedViews.put( view, false );
+
+        return new BasicAnnotatorService(taBuilder, annotators, rm);
+    }
+
+
+    /**
+     * instantiate a set of annotators for use in an AnnotatorService object
+     * @param nonDefaultRm ResourceManager with all non-default values for Annotators
+     * @return
+     */
+    public static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm) throws IOException {
+        ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
         String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE );
         String maxParseSentenceLength = rm.getString( PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH );
         String nerConllConfig = rm.getString( NER_CONLL_CONFIG );
@@ -66,8 +84,6 @@ public class IllinoisPipelineFactory
 
         String lemmaConfig = rm.getString( LEMMA_CONFIG );
 
-        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
 
         IllinoisPOSHandler pos = new IllinoisPOSHandler();
         IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
@@ -88,7 +104,7 @@ public class IllinoisPipelineFactory
         StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
         StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
 
-        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
+        Map< String, Annotator> extraViewGenerators = new HashMap<>();
 
         extraViewGenerators.put( ViewNames.POS, pos );
         extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
@@ -98,10 +114,6 @@ public class IllinoisPipelineFactory
         extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
         extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
 
-        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-        for ( String view : extraViewGenerators.keySet() )
-            requestedViews.put( view, false );
-
-        return new AnnotatorService(taBuilder, extraViewGenerators, rm);
+        return extraViewGenerators;
     }
 }

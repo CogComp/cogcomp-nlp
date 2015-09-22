@@ -31,7 +31,9 @@ public class IllinoisNerHandler extends PipelineAnnotator
 
     @Override
     public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
-        return nerAnnotator.getView( textAnnotation );
+        View nerView = nerAnnotator.getView( textAnnotation );
+        textAnnotation.addView( nerAnnotator.getViewName(), nerView );
+        return nerView;
     }
 
     @Override
