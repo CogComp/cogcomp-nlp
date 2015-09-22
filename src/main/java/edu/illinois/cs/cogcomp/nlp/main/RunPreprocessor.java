@@ -38,7 +38,7 @@ public class RunPreprocessor
 	public TextAnnotation runPreprocessorOnFile( String fileName ) throws FileNotFoundException, AnnotatorException {
         String text = LineIO.slurp( fileName );
         boolean forceUpdate = true; // in actual use, this will usually be 'false'
-        return pipeline.createAnnotatedTextAnnotation(text, forceUpdate);
+        return pipeline.createAnnotatedTextAnnotation("", "", text, forceUpdate);
 	}
 
     public static void main( String[] args )
