@@ -87,11 +87,16 @@ public class StanfordParseHandler extends PipelineAnnotator {
                         textAnnotation.getSentence(sentenceId).getText());
             else {
                 edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-                tree = new Tree<>(stanfordTree.value());
-                for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
-                    tree.addSubtree(generateNode(pt));
+                if (null == stanfordTree)
+                    logger.warn("Stanford Parser did not annotate sentence '" + sentenceId + "' for text '" +
+                            textAnnotation.getSentence(sentenceId).getText());
+                else {
+                    tree = new Tree<>(stanfordTree.value());
+                    for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
+                        tree.addSubtree(generateNode(pt));
+                    }
+                    treeView.setParseTree(sentenceId, tree);
                 }
-                treeView.setParseTree(sentenceId, tree);
             }
         }
 
