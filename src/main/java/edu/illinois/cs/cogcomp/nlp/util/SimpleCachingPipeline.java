@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
@@ -220,6 +221,17 @@ public class SimpleCachingPipeline implements AnnotatorService
     @Override
     public boolean addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate, boolean forceUpdate) throws AnnotatorException {
         boolean isUpdated = false;
+
+        String cacheFile = null;
+        try {
+            cacheFile = getSavePath( this.pathToSaveCachedFiles, ta.getText() );
+            if (IOUtils.exists( cacheFile ) )
+                ta = SerializationHelper.deserializeTextAnnotationFromFile(cacheFile );
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AnnotatorException( e.getMessage() );
+        }
+
         for (String viewName : viewsToAnnotate) {
             isUpdated = addView(ta, viewName, forceUpdate) || isUpdated;
         }
@@ -229,7 +241,8 @@ public class SimpleCachingPipeline implements AnnotatorService
             String outFile = null;
             try {
                 outFile = getSavePath( pathToSaveCachedFiles, ta.getText() );
-                SerializationHelper.serializeTextAnnotationToFile( ta, outFile, isUpdated );
+                // must update file, so force overwrite
+                SerializationHelper.serializeTextAnnotationToFile( ta, outFile, true );
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new AnnotatorException( e.getMessage() );
