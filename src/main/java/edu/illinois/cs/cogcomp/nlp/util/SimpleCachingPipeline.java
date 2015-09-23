@@ -108,7 +108,7 @@ public class SimpleCachingPipeline implements AnnotatorService
         else if ( throwExceptionIfNotCached )
             throwNotCachedException( corpusId, docId, text );
 
-        return createTextAnnotationAndCache( corpusId, docId, text );
+        return textAnnotationBuilder.createTextAnnotation(corpusId, docId, text);
     }
 
     private void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
@@ -169,30 +169,24 @@ public class SimpleCachingPipeline implements AnnotatorService
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, boolean forceUpdate) throws AnnotatorException {
 
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, forceUpdate);
-        boolean isUpdated = false;
 
         Set<String> viewsToAnnotate = new HashSet<>();
         viewsToAnnotate.addAll(viewProviders.keySet());
 
-        for (String viewName : this.viewProviders.keySet()) {
-            isUpdated = addView(ta, viewName, forceUpdate) || isUpdated;
-        }
-
-        if ( isUpdated || forceUpdate )
-        {
-            String outFile = null;
-            try {
-                outFile = getSavePath( pathToSaveCachedFiles, text );
-                SerializationHelper.serializeTextAnnotationToFile( ta, outFile, isUpdated );
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new AnnotatorException( e.getMessage() );
-            }
-        }
+        addViewsAndCache( ta, viewsToAnnotate, forceUpdate );
 
         return ta;
     }
 
+
+    /**
+     * DOES NOT CACHE THE ADDED VIEW!!!
+     * @param textAnnotation
+     * @param viewName
+     * @param forceUpdate
+     * @return
+     * @throws AnnotatorException
+     */
     @Override
     public boolean addView(TextAnnotation textAnnotation, String viewName, boolean forceUpdate) throws AnnotatorException
     {
@@ -204,12 +198,15 @@ public class SimpleCachingPipeline implements AnnotatorService
 
         if ( !textAnnotation.hasView( viewName )  )
         {
+            if ( !viewProviders.containsKey( viewName ) )
+                throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
+
             isUpdated = true;
             Annotator annotator = viewProviders.get( viewName );
 
             for ( String prereqView : annotator.getRequiredViews() )
             {
-                isUpdated = isUpdated || addView( textAnnotation, prereqView, forceUpdate );
+                isUpdated = addView( textAnnotation, prereqView, forceUpdate ) || isUpdated;
             }
 
             annotator.getView(textAnnotation);
@@ -217,6 +214,27 @@ public class SimpleCachingPipeline implements AnnotatorService
 
         if ( isUpdated && throwExceptionIfNotCached )
             throwNotCachedException( textAnnotation.getCorpusId(), textAnnotation.getId(), textAnnotation.getText() );
+        return isUpdated;
+    }
+
+    @Override
+    public boolean addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate, boolean forceUpdate) throws AnnotatorException {
+        boolean isUpdated = false;
+        for (String viewName : viewsToAnnotate) {
+            isUpdated = addView(ta, viewName, forceUpdate) || isUpdated;
+        }
+
+        if ( isUpdated || forceUpdate )
+        {
+            String outFile = null;
+            try {
+                outFile = getSavePath( pathToSaveCachedFiles, ta.getText() );
+                SerializationHelper.serializeTextAnnotationToFile( ta, outFile, isUpdated );
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new AnnotatorException( e.getMessage() );
+            }
+        }
         return isUpdated;
     }
 
