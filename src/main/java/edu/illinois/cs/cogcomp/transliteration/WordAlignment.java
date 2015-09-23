@@ -1,24 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+package edu.illinois.cs.cogcomp.transliteration;
 
-namespace SPTransliteration
-{
-    [Serializable]
-    internal struct WordAlignment
+import java.io.Serializable;
+
+    class WordAlignment implements Serializable
     {
         /// <summary>
-        /// Each string had exactly one word.
+        /// Each String had exactly one word.
         /// </summary>
         public int oneToOne;
 
         /// <summary>
-        /// There was an equal number of more than one words in each string.
+        /// There was an equal number of more than one words in each String.
         /// </summary>
         public int equalNumber;
 
         /// <summary>
-        /// There were more words in one string than the other.
+        /// There were more words in one String than the other.
         /// </summary>
         public int unequalNumber;
 
@@ -29,31 +26,36 @@ namespace SPTransliteration
             this.unequalNumber = unequalNumber;
         }
 
-        public override string ToString()
+        @Override
+        public String toString()
         {
             return oneToOne + ":" + equalNumber + ":" + unequalNumber;
         }
 
-        public WordAlignment(string wordAlignmentString)
+        public WordAlignment(String wordAlignmentString)
         {
-            string[] values = wordAlignmentString.Split(':');
-            oneToOne = int.Parse(values[0]);
-            equalNumber = int.Parse(values[1]);
-            unequalNumber = int.Parse(values[2]);
+            String[] values = wordAlignmentString.split(":");
+            oneToOne = Integer.parseInt(values[0]);
+            equalNumber = Integer.parseInt(values[1]);
+            unequalNumber = Integer.parseInt(values[2]);
         }
 
-        public override bool Equals(object obj)
+        @Override
+        public int equals(Object obj)
         {
-            if (obj is WordAlignment)
+            if (obj == WordAlignment)
                 return (this == (WordAlignment)obj);
             else
-                return false;
+                return 0;
         }
 
-        public override int GetHashCode()
+        @Override
+        public int hashCode()
         {
             return oneToOne ^ (equalNumber << 10) ^ (equalNumber >> 22) ^ (unequalNumber << 21) ^ (unequalNumber >> 11);
         }
+
+        // FIXME: uh oh... java has no operator support.
 
         public static WordAlignment operator + (WordAlignment wa1, WordAlignment wa2)
         {
@@ -65,7 +67,7 @@ namespace SPTransliteration
             return new WordAlignment(wa1.oneToOne - wa2.oneToOne, wa1.equalNumber - wa2.equalNumber, wa1.unequalNumber - wa2.unequalNumber);
         }
 
-        public static bool operator ==(WordAlignment wa1, WordAlignment wa2)
+        public static Boolean operator ==(WordAlignment wa1, WordAlignment wa2)
         {
             return wa1.oneToOne == wa2.oneToOne && wa1.equalNumber == wa2.equalNumber && wa1.unequalNumber == wa2.unequalNumber;
         }

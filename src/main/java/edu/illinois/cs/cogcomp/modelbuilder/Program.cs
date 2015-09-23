@@ -12,9 +12,9 @@ namespace ModelBuilder
 {
     class Program
     {
-        const string modelPath = @"C:\Users\jpaster2\Desktop\WikiTransliteration\Models\";
-        const string dataPath = @"C:\Users\jpaster2\Desktop\WikiTransliteration\Data\";
-        static void Main(string[] args)
+        const String modelPath = @"C:\Users\jpaster2\Desktop\WikiTransliteration\Models\";
+        const String dataPath = @"C:\Users\jpaster2\Desktop\WikiTransliteration\Data\";
+        static void Main(String[] args)
         {
             HeTest();
             //BuildModels(int.Parse(args[0]), int.Parse(args[1]));
@@ -22,17 +22,17 @@ namespace ModelBuilder
 
         static void HeTest()
         {
-            string evalFile = @"C:\Users\jpaster2\Desktop\WikiTransliteration\eval\heEval.txt";
+            String evalFile = @"C:\Users\jpaster2\Desktop\WikiTransliteration\eval\heEval.txt";
             
-            string[] lines = File.ReadAllLines(evalFile);
+            String[] lines = File.ReadAllLines(evalFile);
             List<Example> examples = new List<Example>();
-            foreach (string line in lines)
+            foreach (String line in lines)
             {
-                string[] parts = line.Split('\t');
+                String[] parts = line.Split('\t');
                 examples.Add(new Example(Example.NormalizeHebrew( parts[0].Trim().ToLower() ), Example.NormalizeHebrew( parts[1].Trim().ToLower()) ));
             }
 
-            foreach (string modelFile in Directory.GetFiles(modelPath))
+            foreach (String modelFile in Directory.GetFiles(modelPath))
             {
                 if (Path.GetFileName(modelFile).StartsWith("enhe"))
                 {
@@ -52,17 +52,17 @@ namespace ModelBuilder
         static void BuildModels(int id, int count)
         {            
             int counter = 0;
-            foreach (string file in Directory.GetFiles(dataPath))
+            foreach (String file in Directory.GetFiles(dataPath))
             {
                 if (counter++ % count != id) continue;
 
-                string filename = Path.GetFileNameWithoutExtension(file);
-                string[] lines = File.ReadAllLines(file);                
+                String filename = Path.GetFileNameWithoutExtension(file);
+                String[] lines = File.ReadAllLines(file);
                 Console.WriteLine(file + " = " + lines.Length);
                 List<Example> examples = new List<Example>();
-                foreach (string line in lines)
+                foreach (String line in lines)
                 {                    
-                    string[] parts = line.Split('\t');
+                    String[] parts = line.Split('\t');
                     if (parts[0].Length > 15 || parts[1].Length > 15) continue; //drop super-words
                     examples.Add(new Example(Example.NormalizeHebrew( parts[0] ), Example.NormalizeHebrew( parts[1] )));
                 }
@@ -109,7 +109,7 @@ namespace ModelBuilder
             return correct / testing.Count; //return MRR
         }
 
-        public static void Train(List<Example> training, List<Example> testing, bool reversed, string filename)
+        public static void Train(List<Example> training, List<Example> testing, bool reversed, String filename)
         {
             BinaryFormatter formatter = new BinaryFormatter();
             if (reversed)

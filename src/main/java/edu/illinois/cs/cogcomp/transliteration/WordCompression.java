@@ -1,363 +1,184 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Pasternack.Collections.Generic.Specialized;
-using Pasternack.Collections.Generic;
-using Pasternack.Utility;
-using Pasternack;
-using System.IO;
+package edu.illinois.cs.cogcomp.transliteration;
 
-namespace SPTransliteration
-{
-    internal static class WordCompression
-    {
-        public static void SaveSet(Set<string> set, string filename)
-        {
-            StreamWriter writer = new StreamWriter(filename);
-            foreach (string word in set)
-                writer.WriteLine(word);
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
-            writer.Close();
-        }
+class WordCompression {
+    public static void SaveSet(HashSet<String> set, String filename) {
+        StreamWriter writer = new StreamWriter(filename);
+        for (String word : set)
+            writer.WriteLine(word);
 
-        public static List<string> GetNgrams(string example)
-        {
-            Dictionary<string, bool> ngramList = new Dictionary<string, bool>();
-            for (int n = 1; n <= example.Length; n++)
-                for (int i = 0; i <= example.Length - n; i++)
-                    ngramList[example.Substring(i, n)] = true;
+        writer.Close();
+    }
 
-            return new List<string>(ngramList.Keys);
-        }
-
-        private static int MinChunkCount(string example, Set<string> chunks)
-        {
-            //jon
-            int[] counts = new int[example.Length+1];
-            for (int i = example.Length - 1; i >= 0; i--)
-            {
-                counts[i] = int.MaxValue;
-                int maxLength = example.Length-i;
-                for (int j = 1; j <= maxLength; j++)
-                {
-                    if (chunks.Contains(example.Substring(i, j)))
-                        counts[i] = Math.Min(1 + counts[i + j], counts[i]);
-                }
+    public static List<String> GetNgrams(String example) {
+        HashMap<String, Boolean> ngramList = new HashMap<>();
+        for (int n = 1; n <= example.length(); n++)
+            for (int i = 0; i <= example.length() - n; i++) {
+                ngramList.put(example.substring(i, n), true);
             }
 
-            return counts[0];
+        return new ArrayList<>(ngramList.keySet());
+    }
+
+    private static int MinChunkCount(String example, HashSet<String> chunks) {
+        //jon
+        int[] counts = new int[example.length() + 1];
+        for (int i = example.length() - 1; i >= 0; i--) {
+            counts[i] = int.MaxValue;
+            int maxLength = example.length() - i;
+            for (int j = 1; j <= maxLength; j++) {
+                if (chunks.contains(example.substring(i, j)))
+                    counts[i] = Math.min(1 + counts[i + j], counts[i]);
+            }
         }
 
-        private static string[] MinChunks(string example, Set<string> chunks)
-        {
-            //jon
-            int[] counts = new int[example.Length + 1];
-            string[] bestString = new string[example.Length];
-            for (int i = example.Length - 1; i >= 0; i--)
-            {
-                counts[i] = int.MaxValue;
-                int maxLength = example.Length - i;
-                for (int j = 1; j <= maxLength; j++)
-                {
-                    string ss = example.Substring(i, j);
-                    if (chunks.Contains(ss))
-                    {
-                        int addCount = 1 + counts[i + j];
-                        if (addCount < counts[i])
-                        {
-                            counts[i] = addCount;
-                            bestString[i] = ss;
-                        }
+        return counts[0];
+    }
+
+    private static String[] MinChunks(String example, HashSet<String> chunks) {
+        //jon
+        int[] counts = new int[example.length() + 1];
+        String[] bestString = new String[example.length()];
+        for (int i = example.length() - 1; i >= 0; i--) {
+            counts[i] = int.MaxValue;
+            int maxLength = example.length() - i;
+            for (int j = 1; j <= maxLength; j++) {
+                String ss = example.substring(i, j);
+                if (chunks.contains(ss)) {
+                    int addCount = 1 + counts[i + j];
+                    if (addCount < counts[i]) {
+                        counts[i] = addCount;
+                        bestString[i] = ss;
                     }
                 }
             }
-
-            if (bestString[0] == null) return null;
-
-            string[] result = new string[counts[0]];
-
-            int nextOffset = 0;
-            for (int i = 0; i < result.Length; i++)
-            {
-                result[i] = bestString[nextOffset];
-                nextOffset += result[i].Length;
-            }
-
-            return result;
         }
 
-        //private static int MinChunkCount(string example, Set<string> chunks, Dictionary<string, int> memoizationTable)
-        //{
-        //    if (example.Length == 0) return 0;
+        if (bestString[0] == null) return null;
 
-        //    int minimum = int.MaxValue;
+        String[] result = new String[counts[0]];
 
-        //    for (int i = 1; i <= example.Length; i++)
-        //    {
-        //        if (chunks.Contains(example.Substring(0, i)))
-        //            minimum = Math.Min(minimum, 1+MinChunkCount(example.Substring(i), chunks, memoizationTable));
-        //    }
+        int nextOffset = 0;
+        for (int i = 0; i < result.length; i++) {
+            result[i] = bestString[nextOffset];
+            nextOffset += result[i].length();
+        }
 
-        //    memoizationTable[example] = minimum;
-        //    return minimum;
-        //}
+        return result;
+    }
 
-        //public static void Compress2(SparseDoubleVector<string> examples)
-        //{
-        //    InternDictionary<string> internTable = new InternDictionary<string>();
+    public static void Compress(SparseDoubleVector<String> examples) {
+        InternDictionary<String> internTable = new InternDictionary<String>();
 
-        //    //build a map from substrings to words
-        //    Dictionary<string, List<string>> substringMap = new Dictionary<string, List<string>>();
-        //    foreach (string example in examples.Keys)
-        //        foreach (string ngram in GetNgrams(example))
-        //        {
-        //            List<string> wordList;
-        //            if (!substringMap.TryGetValue(ngram, out wordList))
-        //                wordList = substringMap[ngram] = new List<string>();
+        //build a map from substrings to words
+        HashMap<String, List<String>> substringMap = new HashMap<String, List<String>>();
+        for (String example : examples.Keys)
+            for (String ngram : GetNgrams(example)) {
+                List<String> wordList;
+                if (!substringMap.TryGetValue(ngram, out wordList))
+                    wordList = substringMap[ngram] = new List<String>();
 
-        //            wordList.Add(example);
-        //        }
+                wordList.Add(example);
+            }
 
-        //    //initialize the chunk set
-        //    SparseDoubleVector<string> chunks = new SparseDoubleVector<string>();
-        //    foreach (string ngram in substringMap.Keys)
-        //        if (ngram.Length == 1) chunks.Add(ngram, 0);
+        //initialize the chunk set
+        HashSet<String> chunks = new HashSet<String>();
+        for (String ngram : substringMap.Keys)
+            if (ngram.Length == 1) chunks.Add(ngram);
 
-        //    Dictionary<string, int> chunksRequired = new Dictionary<string, int>(examples.Count);
-        //    int totalSegments = 0;
-        //    foreach (string example in examples.Keys)
-        //        totalSegments += ((int)examples[example]) * (chunksRequired[example] = MinChunkCount(example, chunks));
+        HashMap<String, Integer> chunksRequired = new HashMap<String, int>(examples.Count);
+        int totalSegments = 0;
+        for (String example : examples.Keys)
+        totalSegments += ((int) examples[example]) * (chunksRequired[example] = MinChunkCount(example, chunks));
 
-        //    int chunksLength = chunks.Count;
+        int chunksLength = chunks.size();
 
-        //    double currentScore = totalSegments * Math.Log(chunks.Count, 2) + 8 * (chunksLength + chunks.Count); //initial score
+        double currentScore = totalSegments * Math.Log(chunks.size(), 2) + 8 * (chunksLength + chunks.size()); //initial score
 
-        //    Console.WriteLine("Initial score = " + currentScore + "; " + totalSegments + " segments; " + chunks.Count + " chunks.");
+        System.out.println("Initial score = " + currentScore + "; " + totalSegments + " segments; " + chunks.size() + " chunks.");
 
-        //    int round = 0;
+        int round = 0;
 
-        //    while (true)
-        //    {
-        //        round++;
+        while (true) {
+            round++;
 
-        //        double bestScore = currentScore;
-        //        string bestMove = null;
-        //        //Set<string> chunksCopy = new Set<string>(chunks);
-        //        foreach (string ngram in examples.Keys)
-        //        {
-        //            if (chunks.Contains(ngram))
-        //            {
-        //                chunks.Remove(ngram); //try deleting it
-        //                chunksLength -= ngram.Length;
-        //            }
-        //            else
-        //            {
-        //                chunks.Add(ngram); //try adding it
-        //                chunksLength += ngram.Length;
-        //            }
-
-        //            int chunkChange = 0;
-        //            bool impossible = false;
-        //            foreach (string example in substringMap[ngram])
-        //            {
-        //                int cc = MinChunkCount(example, chunks);
-        //                if (cc == int.MaxValue)
-        //                {
-        //                    impossible = true;
-        //                    break;
-        //                }
-        //                chunkChange += ((int)examples[example]) * (cc - chunksRequired[example]);
-        //            }
-
-        //            if (!impossible)
-        //            {
-        //                double newScore = (totalSegments + chunkChange) * Math.Log(chunks.Count, 2) + 8 * (chunksLength + chunks.Count);
-        //                if (newScore < bestScore)
-        //                {
-        //                    bestScore = newScore;
-        //                    bestMove = ngram;
-        //                }
-        //            }
-
-        //            if (chunks.Contains(ngram))
-        //            {
-        //                chunks.Remove(ngram); //try deleting it
-        //                chunksLength -= ngram.Length;
-        //            }
-        //            else
-        //            {
-        //                chunks.Add(ngram); //try adding it
-        //                chunksLength += ngram.Length;
-        //            }
-
-
-        //        }
-
-        //        if (bestMove == null)
-        //        {
-        //            Console.WriteLine("Finished.  Local max found.  Return to quit.");
-        //            SaveSet(chunks, @"C:\Data\WikiTransliteration\Segmentation\chunks.txt");
-        //            Console.ReadLine();
-        //            return;
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine("Compressing (round " + round + "): Old score = " + currentScore + "; new score = " + bestScore);
-        //            Console.WriteLine("Segments per word: " + (((double)totalSegments) / examples.Count) + "; " + totalSegments + " segments; " + chunks.Count + " chunks (length = " + chunksLength + ")");
-        //            if (!chunks.Contains(bestMove)) Console.WriteLine("Adding " + bestMove);
-        //            else Console.WriteLine("Removing " + bestMove);
-        //            Console.WriteLine();
-
-        //            currentScore = bestScore;
-
-        //            if (chunks.Contains(bestMove))
-        //            {
-        //                chunks.Remove(bestMove); //try deleting it
-        //                chunksLength -= bestMove.Length;
-        //            }
-        //            else
-        //            {
-        //                chunks.Add(bestMove); //try adding it
-        //                chunksLength += bestMove.Length;
-        //            }
-
-        //            foreach (string example in substringMap[bestMove])
-        //            {
-        //                int cc = MinChunkCount(example, chunks);
-        //                totalSegments += ((int)examples[example]) * (cc - chunksRequired[example]);
-        //                chunksRequired[example] = cc;
-        //            }
-        //        }
-        //    }
-        //}
-
-        public static void Compress(SparseDoubleVector<string> examples)
-        {
-            InternDictionary<string> internTable = new InternDictionary<string>();
-
-            //build a map from substrings to words
-            Dictionary<string, List<string>> substringMap = new Dictionary<string, List<string>>();
-            foreach (string example in examples.Keys)
-                foreach (string ngram in GetNgrams(example))
-                {
-                    List<string> wordList;
-                    if (!substringMap.TryGetValue(ngram, out wordList))
-                        wordList = substringMap[ngram] = new List<string>();
-
-                    wordList.Add(example);
-                }
-
-            //initialize the chunk set
-            Set<string> chunks = new Set<string>();
-            foreach (string ngram in substringMap.Keys)
-                if (ngram.Length == 1) chunks.Add(ngram);
-
-            Dictionary<string, int> chunksRequired = new Dictionary<string, int>(examples.Count);
-            int totalSegments = 0;
-            foreach (string example in examples.Keys)
-                totalSegments += ((int)examples[example]) * (chunksRequired[example] = MinChunkCount(example, chunks));
-
-            int chunksLength = chunks.Count;
-
-            double currentScore = totalSegments * Math.Log(chunks.Count, 2) + 8*(chunksLength+chunks.Count); //initial score
-
-            Console.WriteLine("Initial score = " + currentScore + "; " + totalSegments + " segments; " + chunks.Count + " chunks.");
-
-            int round = 0;
-
-            while (true)
+            double bestScore = currentScore;
+            String bestMove = null;
+            //Set<String> chunksCopy = new Set<String>(chunks);
+            for (String ngram : examples.Keys)
             {
-                round++;
-
-                double bestScore = currentScore;
-                string bestMove = null;
-                //Set<string> chunksCopy = new Set<string>(chunks);
-                foreach (string ngram in examples.Keys)
-                {
-                    if (chunks.Contains(ngram))      
-                    {              
-                        chunks.Remove(ngram); //try deleting it
-                        chunksLength-=ngram.Length;
-                    }
-                    else
-                    {
-                        chunks.Add(ngram); //try adding it
-                        chunksLength+=ngram.Length;
-                    }
-
-                    int chunkChange = 0;
-                    bool impossible = false;
-                    foreach (string example in substringMap[ngram])                    
-                    {
-                        int cc = MinChunkCount(example,chunks);
-                        if (cc == int.MaxValue)
-                        {
-                            impossible=true;
-                            break;
-                        }
-                        chunkChange += ((int)examples[example]) * (cc - chunksRequired[example]);
-                    }
-                    
-                    if (!impossible)
-                    {
-                        double newScore = (totalSegments + chunkChange) * Math.Log(chunks.Count, 2) + 8* (chunksLength+chunks.Count);
-                        if (newScore < bestScore)
-                        {
-                            bestScore = newScore;
-                            bestMove = ngram;
-                        }
-                    }
-
-                    if (chunks.Contains(ngram))      
-                    {              
-                        chunks.Remove(ngram); //try deleting it
-                        chunksLength-=ngram.Length;
-                    }
-                    else
-                    {
-                        chunks.Add(ngram); //try adding it
-                        chunksLength+=ngram.Length;
-                    }
-                        
-                    
+                if (chunks.contains(ngram)) {
+                    chunks.Remove(ngram); //try deleting it
+                    chunksLength -= ngram.Length;
+                } else {
+                    chunks.Add(ngram); //try adding it
+                    chunksLength += ngram.Length;
                 }
 
-                if (bestMove == null)
-                {
-                    Console.WriteLine("Finished.  Local max found.  Return to quit.");
-                    SaveSet(chunks, @"C:\Data\WikiTransliteration\Segmentation\chunks.txt");
-                    Console.ReadLine();
-                    return;
+                int chunkChange = 0;
+                Boolean impossible = false;
+                for (String example : substringMap[ngram]) {
+                    int cc = MinChunkCount(example, chunks);
+                    if (cc == int.MaxValue) {
+                        impossible = true;
+                        break;
+                    }
+                    chunkChange += ((int) examples[example]) * (cc - chunksRequired[example]);
                 }
-                else
-                {
-                    Console.WriteLine("Compressing (round " + round + "): Old score = " + currentScore + "; new score = " + bestScore);
-                    Console.WriteLine("Segments per word: " + ( ((double)totalSegments)/examples.Count) + "; " + totalSegments + " segments; " + chunks.Count + " chunks (length = " + chunksLength + ")");
-                    if (!chunks.Contains(bestMove)) Console.WriteLine("Adding " + bestMove);
-                    else Console.WriteLine("Removing " + bestMove);
-                    Console.WriteLine();
 
-                    currentScore = bestScore;
+                if (!impossible) {
+                    double newScore = (totalSegments + chunkChange) * Math.log(chunks.size(), 2) + 8 * (chunksLength + chunks.size());
+                    if (newScore < bestScore) {
+                        bestScore = newScore;
+                        bestMove = ngram;
+                    }
+                }
 
-                    if (chunks.Contains(bestMove))
-                    {
-                        chunks.Remove(bestMove); //try deleting it
-                        chunksLength -= bestMove.Length;
-                    }
-                    else
-                    {
-                        chunks.Add(bestMove); //try adding it
-                        chunksLength += bestMove.Length;
-                    }
+                if (chunks.contains(ngram)) {
+                    chunks.remove(ngram); //try deleting it
+                    chunksLength -= ngram.Length;
+                } else {
+                    chunks.add(ngram); //try adding it
+                    chunksLength += ngram.Length;
+                }
 
-                    foreach (string example in substringMap[bestMove])
-                    {
-                        int cc = MinChunkCount(example, chunks);                        
-                        totalSegments += ((int)examples[example]) * (cc - chunksRequired[example]);
-                        chunksRequired[example] = cc;
-                    }
+
+            }
+
+            if (bestMove == null) {
+                System.out.println("Finished.  Local max found.  Return to quit.");
+                SaveSet(chunks, @ "C:\Data\WikiTransliteration\Segmentation\chunks.txt");
+                Console.ReadLine();
+                return;
+            } else {
+                System.out.println("Compressing (round " + round + "): Old score = " + currentScore + "; new score = " + bestScore);
+                System.out.println("Segments per word: " + (((double) totalSegments) / examples.Count) + "; " + totalSegments + " segments; " + chunks.size() + " chunks (length = " + chunksLength + ")");
+                if (!chunks.contains(bestMove))
+                    System.out.println("Adding " + bestMove);
+                else System.out.println("Removing " + bestMove);
+                System.out.println();
+
+                currentScore = bestScore;
+
+                if (chunks.contains(bestMove)) {
+                    chunks.remove(bestMove); //try deleting it
+                    chunksLength -= bestMove.Length;
+                } else {
+                    chunks.add(bestMove); //try adding it
+                    chunksLength += bestMove.Length;
+                }
+
+                for (String example : substringMap[bestMove]) {
+                    int cc = MinChunkCount(example, chunks);
+                    totalSegments += ((int) examples[example]) * (cc - chunksRequired[example]);
+                    chunksRequired[example] = cc;
                 }
             }
         }
     }
 }
+

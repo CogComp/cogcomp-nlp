@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Pasternack.Utility;
+package edu.illinois.cs.cogcomp.transliteration;
 
-namespace SPTransliteration
-{
-    internal abstract class TransliterationModel
-    {
-        public abstract double GetProbability(string word1, string word2);
-        public abstract TransliterationModel LearnModel(List<Triple<string, string, double>> examples);
-    }
+import edu.illinois.cs.cogcomp.core.datastructures.Triple;
+
+import java.util.List;
+
+abstract class TransliterationModel {
+    public abstract double GetProbability(String word1, String word2);
+
+    public abstract TransliterationModel LearnModel(List<Triple<String, String, Double>> examples);
 }
+

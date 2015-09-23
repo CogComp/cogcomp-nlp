@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+package edu.illinois.cs.cogcomp.transliteration;
 
-namespace SPTransliteration
-{
-    internal enum FallbackStrategy
-    {
-        Standard = 0,
-        Average = 1,
-        NotDuringTraining = 2
-    }
+enum FallbackStrategy {
+    Standard,
+    Average,
+    NotDuringTraining
 }
+
