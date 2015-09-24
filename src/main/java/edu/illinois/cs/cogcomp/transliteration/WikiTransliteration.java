@@ -949,7 +949,7 @@ class WikiTransliteration {
         return result;
     }
 
-    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Pair<String, String>, double> probs, HashMap<String, HashMap<String, double>> memoizationTable, int pruneToSize) {
+    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Pair<String, String>, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
         TopList<Double, String> result = new TopList<Double, String>(topK);
         HashMap<String, Double> rProbs = Predict2(word1, maxSubstringLength, probMap, probs, memoizationTable, pruneToSize);
         double probSum = 0;

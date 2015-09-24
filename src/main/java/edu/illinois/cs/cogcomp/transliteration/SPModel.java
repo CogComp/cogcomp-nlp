@@ -78,17 +78,17 @@ public class SPModel
             else
             {
                 writer.write(languageModel.size());
-                for(Map.Entry<String, Double> pair : languageModel)
+                for(String key : languageModel.keySet())
                 {
                     // TODO what are the data types here?
-                    writer.writeChars(pair.getKey());
-                    writer.writeDouble(pair.getValue());
+                    writer.writeChars(key);
+                    writer.writeDouble(languageModel.get(key));
                 }
             }
 
             writer.write(ngramSize);
 
-            writer.write(trainingExamples.Count);
+            writer.write(trainingExamples.size());
             for(Triple<String, String, Double> triple : trainingExamples)
             {
                 writer.writeChars(triple.getFirst());
@@ -101,47 +101,30 @@ public class SPModel
             writer.flush();
         }
 
-        /// <summary>
-        /// Deserializes an SPModel from a stream.
-        /// </summary>
-        /// <param name="stream"></param>
-        public SPModel(InputStream stream) throws IOException {
-            DataInputStream reader = new DataInputStream(stream);
-            int lml = reader.readInt();
-            if (lml == -1) languageModel = null;
-            else
-            {
-                languageModel = new HashMap<>(lml);
-                for (int i = 0; i < lml; i++)
-                    languageModel.put(reader.ReadString(), reader.ReadDouble());
-            }
-
-            ngramSize = reader.readInt();
-
-            int tec = reader.readInt();
-            trainingExamples = new ArrayList<>(tec);
-            for (int i = 0; i < tec; i++)
-                trainingExamples.add(new Triple<String, String, Double>(reader.ReadString(), reader.ReadString(), reader.readDouble()));
-
-            probs = ReadTableFromReader(reader);
-
-            /*
-            pruned = ReadTableFromReader(reader);
-
-            //DEBUG:
-            pruned = null;
-
-            int pmc = reader.ReadInt32();
-            if (pmc == -1)
-                probMap = null;
-            else
-            {
-                probMap = new Map<String,String>();
-                for (int i = 0; i < pmc; i++)
-                    probMap.Add(reader.ReadString(),reader.ReadString());
-            }            
-             */
-        }
+        /**
+         * Deserializes an SPModel from a stream. SWM: ignore this for now.
+         */
+//        public SPModel(InputStream stream) throws IOException {
+//            DataInputStream reader = new DataInputStream(stream);
+//            int lml = reader.readInt();
+//            if (lml == -1) languageModel = null;
+//            else
+//            {
+//                languageModel = new HashMap<>(lml);
+//                for (int i = 0; i < lml; i++)
+//                    languageModel.put(reader.ReadString(), reader.ReadDouble());
+//            }
+//
+//            ngramSize = reader.readInt();
+//
+//            int tec = reader.readInt();
+//            trainingExamples = new ArrayList<>(tec);
+//            for (int i = 0; i < tec; i++)
+//                trainingExamples.add(new Triple<String, String, Double>(reader.ReadString(), reader.ReadString(), reader.readDouble()));
+//
+//            probs = ReadTableFromReader(reader);
+//
+//        }
 
         /// <summary>
         /// The maximimum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
@@ -168,14 +151,14 @@ public class SPModel
             set { segmentFactor = value; }
         }
 
-        /// <summary>
-        /// Creates a new model for generating transliterations (creating new words in the target language from a word in the source language).      
-        /// Remember to Train() the model before calling Generate().
-        /// </summary>
-        /// <param name="examples">The training examples to learn from.</param>        
+        /**
+         * Creates a new model for generating transliterations (creating new words in the target language from a word in the source language).
+         * Remember to Train() the model before calling Generate().
+         * @param examples The training examples to learn from.
+         */
         public SPModel(Collection<Example> examples)
         {
-            trainingExamples = new ArrayList<Triple<String,String,Double>>(examples.size());
+            trainingExamples = new ArrayList<>(examples.size());
             for(Example example : examples)
                 trainingExamples.add(example.Triple);
         }
@@ -201,25 +184,13 @@ public class SPModel
             set { ngramSize = value; }
         }
 
-        /*
-        public void Train(IDictionary<String,String> trainingPairs)
-        {
-            List<KeyValuePair<String,String>> pairs = new List<KeyValuePair<String,String>>(trainingPairs.Count);
-            foreach (KeyValuePair<String,String> pair in trainingPairs)
-                pairs.Add(pair);
-
-            Train(Program.ConvertExamples(pairs));
-        }*/
-
-        /// <summary>
-        /// Trains the model for the specified number of iterations.
-        /// </summary>
-        /// <param name="emIterations">The number of iterations to train for.</param>
+        /**
+         * Trains the model for the specified number of iterations.
+         * @param emIterations The number of iterations to train for.
+         */
         public void Train(int emIterations)
         {
             List<Triple<String, String, Double>> trainingTriples = trainingExamples;
-
-            List<List<KeyValuePair<Pair<String, String>, Double>>> exampleCounts;
 
             pruned = null;
             multiprobs = null;
@@ -237,20 +208,20 @@ public class SPModel
             }
         }
 
-        /// <summary>
-        /// Calculates the probability P(T|S), that is, the probability that transliteratedWord is a transliteration of sourceWord.
-        /// </summary>
-        /// <param name="sourceWord">The word is the source language</param>
-        /// <param name="transliteratedWord">The purported transliteration of the source word, in the target language</param>
-        /// <returns>P(T|S)</returns>
+        /**
+         * Calculates the probability P(T|S), that is, the probability that transliteratedWord is a transliteration of sourceWord.
+         * @param sourceWord The word is the source language
+         * @param transliteratedWord The purported transliteration of the source word, in the target language
+         * @return P(T|S)
+         */
         public double Probability(String sourceWord, String transliteratedWord)
         {
             if (multiprobs==null) {
                 multiprobs = probs * segmentFactor;
             }
 
-            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new Dictionary<Pair<String, String>, double>(), minProductionProbability)
-                            / Program.segSums[sourceWord.Length - 1][transliteratedWord.Length - 1];
+            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new Dictionary<Pair<String, String>, Double>(), minProductionProbability)
+                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
         }
 
         /// <summary>
@@ -263,7 +234,7 @@ public class SPModel
         /// </summary>
         /// <param name="sourceWord">The word to transliterate.</param>
         /// <returns>A TopList containing the most likely transliterations of the word.</returns>
-        public TopList<double,String> Generate(String sourceWord)
+        public TopList<Double,String> Generate(String sourceWord)
         {
             if (probs == null) throw new NullPointerException("Must train at least one iteration before generating transliterations");
 
@@ -274,8 +245,7 @@ public class SPModel
                 probMap = WikiTransliteration.GetProbMap(pruned);     
             }                        
                         
-             TopList<double, String> result = new TopList<double,String>(maxCandidates);
-             result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new Dictionary<String, Dictionary<String, double>>(), maxCandidates);
+             TopList<Double, String> result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new HashMap<String, Dictionary<String, Double>>(), maxCandidates);
                 
             if (languageModel != null)
             {

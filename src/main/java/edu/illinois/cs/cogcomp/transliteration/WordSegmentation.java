@@ -1,6 +1,8 @@
 package edu.illinois.cs.cogcomp.transliteration;
 
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.HashMap;
 
 class WordSegmentation
@@ -33,7 +35,7 @@ class WordSegmentation
 
         private static String PadExample(String example, int contextSize)
         {
-            return new String('_', contextSize) + example + new String('_', contextSize);
+            return StringUtils.repeat('_', contextSize) + example + StringUtils.repeat('_', contextSize);
         }
 
         private static Triple<String,String,String> GetContextTriple(String originalWord, int index, int length, int contextSize)
@@ -46,7 +48,7 @@ class WordSegmentation
         public static SparseDoubleVector<Triple<String,String,String>> GetNgramCounts(SparseDoubleVector<String> examples, int contextSize, InternDictionary<String> internTable)
         {
             SparseDoubleVector<Triple<String,String,String>> result = new SparseDoubleVector<Triple<String,String,String>>();
-            for (KeyValuePair<String, double> example in examples)
+            for (KeyValuePair<String, Double> example : examples)
             {
                 String paddedExample = PadExample(example.Key, contextSize);
                 for (int n = 1; n <= example.Key.Length; n++)
@@ -63,7 +65,7 @@ class WordSegmentation
 
             writer.Write(vector.Count);
 
-            for (KeyValuePair<String, double> pair in vector)
+            for (KeyValuePair<String, double> pair : vector)
             {
                 writer.Write(pair.Key); writer.Write(pair.Value);
             }
@@ -87,7 +89,7 @@ class WordSegmentation
         {
             SparseDoubleVector<String> result = new SparseDoubleVector<String>();
 
-            for (String example in examples.Keys)
+            for (String example : examples.Keys)
                 result.Add(examples[example], GetSegCounts(example, new Dictionary<String, SparseDoubleVector<String>>()) / Math.Pow(2, example.Length - 1));
 
             return result;
@@ -137,7 +139,7 @@ class WordSegmentation
             String normalized = stIn.Normalize(NormalizationForm.FormD);
             StringBuilder sb = new StringBuilder();
 
-            for (char c in normalized)
+            for (char c : normalized)
             {
                 UnicodeCategory uc = CharUnicodeInfo.GetUnicodeCategory(c);
                 if (uc != UnicodeCategory.NonSpacingMark)
@@ -154,9 +156,9 @@ class WordSegmentation
 
             SparseDoubleVector<String> occurences = GetNgramCounts(examples);
 
-            for (String example in examples.Keys)
+            for (String example : examples.Keys)
             {
-                Pair<SparseDoubleVector<String>, double> raw = GetSegCounts(example, CountSyllables(example), probs, new Dictionary<Pair<int,String>,Pair<SparseDoubleVector<String>,double>>());
+                Pair<SparseDoubleVector<String>, Double> raw = GetSegCounts(example, CountSyllables(example), probs, new Dictionary<Pair<int,String>,Pair<SparseDoubleVector<String>,double>>());
                 
                 int i;
 
@@ -177,9 +179,9 @@ class WordSegmentation
 
             SparseDoubleVector<String> occurences = GetNgramCounts(examples);
 
-            for (String example in examples.Keys)
+            for (String example : examples.Keys)
             {
-                Pair<SparseDoubleVector<String>, double> raw = GetSyllabicSegCounts(example, probs, new Dictionary<String,Pair<SparseDoubleVector<String>,double>>());
+                Pair<SparseDoubleVector<String>, Double> raw = GetSyllabicSegCounts(example, probs, new Dictionary<String,Pair<SparseDoubleVector<String>,double>>());
 
                 int i;
 
@@ -211,7 +213,7 @@ class WordSegmentation
 
             //SparseDoubleVector<Triple<String,String,String>> occurences = GetNgramCounts(examples, contextSize, internTable);
 
-            for (String example in examples.Keys)
+            for (String example : examples.Keys)
             {
                 double weight = examples[example];
                 String paddedExample = PadExample(example,contextSize);
