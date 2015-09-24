@@ -1,19 +1,19 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.evaluation;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
-import edu.illinois.cs.cogcomp.comma.utils.VivekAnnotationHelper;
+import edu.illinois.cs.cogcomp.comma.utils.VivekAnnotationExtractor;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 
-public class ErrorAnalysis{
+public class ErrorAnalysisHelper{
     
     public static void logPredictionError(String filename, String sentenceText, String prediction, String gold, String info, FeatureVector fv){
     	File file = new File(filename);
@@ -39,7 +39,7 @@ public class ErrorAnalysis{
     
     public static void logClassifierErrors(Learner learner, Parser parser){
     	String directoryName = "data/errors/" + learner.name + "/";
-    	VivekAnnotationHelper vivekAnnotationHelper = new VivekAnnotationHelper();
+    	VivekAnnotationExtractor vivekAnnotationHelper = new VivekAnnotationExtractor();
 		EvaluateDiscrete ed = new EvaluateDiscrete();
 		Classifier oracle = learner.getLabeler();
 		parser.reset();
@@ -53,7 +53,7 @@ public class ErrorAnalysis{
 				String filename = directoryName + c.getCommaID();
 				FeatureVector fv = learner.getExtractor().classify(c);
 				String instanceInfo = vivekAnnotationHelper.getAnnotation(textId) + c.getAllViews();
-				ErrorAnalysis.logPredictionError(filename,
+				ErrorAnalysisHelper.logPredictionError(filename,
 						c.getVivekNaveenAnnotatedText(), prediction, gold,
 						instanceInfo, fv);
 			}
@@ -61,22 +61,4 @@ public class ErrorAnalysis{
 		ed.printPerformance(System.out);
 		ed.printConfusion(System.out);
     }
-    
-    public static void main(String[] args) throws IOException {
-    	/*Parser commaParser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
-        
-        Set<String> textIds = new HashSet<String>();
-        for(Comma c = (Comma) commaParser.next(); c!=null; c = (Comma) commaParser.next()){
-			TextAnnotation goldTA = c.getTextAnnotation(true);
-			textIds.add(goldTA.getId());
-        }
-        
-        for(String textID : textIds){
-			PrintWriter writer = new PrintWriter("data/full_annotation/" + (textID).replaceAll("\\W+", "_"));
-			writer.println(ea.getInstanceInfo(textID));
-			writer.close();
-        }*/
-    }
-    
-    
 }

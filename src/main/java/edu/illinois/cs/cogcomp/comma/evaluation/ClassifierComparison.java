@@ -1,15 +1,21 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.evaluation;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarEvaluation;
+import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.lbj.ListCommasConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocativePairConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.OxfordCommaConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.SubstitutePairConstrainedCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
+import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
+import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -21,9 +27,16 @@ import edu.illinois.cs.cogcomp.lbjava.parse.FoldParser;
 import edu.illinois.cs.cogcomp.lbjava.parse.FoldParser.SplitPolicy;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
+/**
+ * Run this first.
+ * It will print out the prediction performance of all the different models evaluated through 5 fold cval  
+ * @author navari
+ *
+ */
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
-		Parser parser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
+		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		CommaParser parser = new CommaParser(reader.getSentences(), Ordering.RANDOM, true);
 		System.out.println("GOLD GOLD");
 		localCVal(true, true, parser, 250, 0.003, 0, 2.0, false);
 		System.out.println("GOLD AUTO");
@@ -42,12 +55,12 @@ public class ClassifierComparison {
 		structuredCVal(autoStructured, parser, false, false);
 		
 		System.out.println("BAYRAKTAR GOLD");
-		EvaluateDiscrete bayraktarGold = BayraktarEvaluation.getBayraktarBaselinePerformance(parser, true);
+		EvaluateDiscrete bayraktarGold = getBayraktarBaselinePerformance(parser, true);
 		//System.out.println(bayraktarGold.getOverallStats()[2]);
 		bayraktarGold.printPerformance(System.out);
 		//bayraktarGold.printConfusion(System.out);
 		System.out.println("BAYRAKTAR AUTO");
-		EvaluateDiscrete bayraktarAuto = BayraktarEvaluation.getBayraktarBaselinePerformance(parser, false);
+		EvaluateDiscrete bayraktarAuto = getBayraktarBaselinePerformance(parser, false);
 		//System.out.println(bayraktarAuto.getOverallStats()[2]);
 		bayraktarAuto.printPerformance(System.out);
 		//bayraktarAuto.printConfusion(System.out);
@@ -186,6 +199,24 @@ public class ClassifierComparison {
 		performanceRecord.printPerformance(System.out);
 		//performanceRecord.printConfusion(System.out);
 		return performanceRecord;
+	}
+	
+	/**
+	 * prints bayraktar baseline performance based on only those commas whose bayraktar patterns have been annotated 
+	 */
+	public static EvaluateDiscrete getBayraktarBaselinePerformance(Parser parser, boolean testOnGold){
+		parser.reset();
+		EvaluateDiscrete bayraktarEvalaution = new EvaluateDiscrete();
+		Comma comma;
+		while((comma = (Comma) parser.next()) != null){
+			if(!BayraktarPatternLabeler.isLabelAvailable(comma)) continue;
+			Comma.useGoldFeatures(true);
+			String goldLabel = comma.getLabel();
+			Comma.useGoldFeatures(testOnGold);
+			String bayraktarPrediction = comma.getBayraktarLabel();
+			bayraktarEvalaution.reportPrediction(bayraktarPrediction, goldLabel);
+		}
+		return bayraktarEvalaution;
 	}
 	
 	/**

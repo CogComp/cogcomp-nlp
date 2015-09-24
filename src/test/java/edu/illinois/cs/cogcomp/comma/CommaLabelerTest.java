@@ -1,6 +1,8 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
@@ -61,7 +63,7 @@ public class CommaLabelerTest extends TestCase {
         Constituent pred1 = srlView.getPredicates().get(0);
         assertEquals("Substitute", srlView.getPredicateSense(pred1));
         assertEquals(2, srlView.getArguments(pred1).size());
-        assertEquals("Mary", srlView.getArguments(pred1).get(0).getTarget().getSurfaceString());
+        assertEquals("Mary", srlView.getArguments(pred1).get(0).getTarget().getSurfaceForm());
         Constituent pred2 = srlView.getPredicates().get(1);
         assertEquals(1, srlView.getArguments(pred2).size());
         assertEquals("LeftOfSubstitute", srlView.getArguments(pred2).get(0).getRelationName());

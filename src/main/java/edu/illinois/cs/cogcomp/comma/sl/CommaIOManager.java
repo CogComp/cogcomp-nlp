@@ -1,24 +1,22 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.Sentence;
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
-import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
-import edu.illinois.cs.cogcomp.sl.core.SLProblem;
-import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
+import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 public class CommaIOManager {
 	public static final String unknownFeature = "unknwonfeature";
 	public static SLProblem readProblem(List<Sentence> sentences, Lexiconer lexicon, List<Classifier> lbjExtractors, Classifier lbjLabeler){
 		if (lexicon.isAllowNewFeatures())
 			lexicon.addFeature(unknownFeature); 
-		//TODO lexicon.addLabel("occupy-zero-label-for-some-reason");
+		//lexicon.addLabel("occupy-zero-label-for-some-reason");
 		
 		SLProblem sp = new SLProblem();
 		

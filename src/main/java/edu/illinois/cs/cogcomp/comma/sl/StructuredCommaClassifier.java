@@ -1,19 +1,10 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.Sentence;
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
@@ -29,8 +20,9 @@ public class StructuredCommaClassifier extends SLModel{
 	private final Classifier lbjLabeler;
 	
 	/**
-	 * 
-	 * @param lbjLabeler the LBJava learner whose extractor and labeler we can use to build instances
+	 *
+	 * @param lbjExtractors the LBJava extractors we use to get features. Thus we are easily able to build features for sl
+	 * @param lbjLabeler the LBJava labeler we use to get labels
 	 * @param configFilePath path to config file for the structured learner
 	 * @throws Exception
 	 */
@@ -116,18 +108,5 @@ public class StructuredCommaClassifier extends SLModel{
 		}
 		
 		return SLEvaluator;
-	}
-
-	public static void main(String args[]) throws Exception{
-		VivekAnnotationCommaParser train = new VivekAnnotationCommaParser("data/train_commas.txt", CommaProperties.getInstance().getTrainCommasSerialized(), Ordering.ORDERED_SENTENCE);
-		VivekAnnotationCommaParser test = new VivekAnnotationCommaParser("data/test_commas.txt", CommaProperties.getInstance().getTestCommasSerialized(), Ordering.ORDERED_SENTENCE);
-		List<Classifier> lbjExtractors = new ArrayList<>();
-		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
-		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
-		StructuredCommaClassifier model = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");
-		model.train(train.getSentences(), null);
-		EvaluateDiscrete ed = model.test(train.getSentences(), null);
-		ed.printConfusion(System.out);
-		ed.printPerformance(System.out);
 	}
 }

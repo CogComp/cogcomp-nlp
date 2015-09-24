@@ -1,158 +1,53 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.Sentence;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import java.util.List;
 import java.util.ArrayList;
-
-discrete UnigramLeftFeature(Comma c) <- {
-    return c.getWordToLeft(1);
-}
-
-discrete UnigramSecondLeftFeature(Comma c) <- {
-	return c.getWordToLeft(2);
-}
 
 discrete UnigramRightFeature(Comma c) <- {
     return c.getWordToRight(1);
 }
 
-discrete UnigramSecondRightFeature(Comma c) <- {
-	return c.getWordToRight(2);
+//WORD
+discrete% WordFeatures(Comma c) <- {
+	String[] ngrams = c.getWordNgrams();
+	for(int i = 0; i<ngrams.length; i++)
+		sense ngrams[i];
 }
 
-
-
-discrete UnigramLeftPOSFeature(Comma c) <- {
-    return c.getPOSToLeft(1);
+//POS
+discrete% POSFeatures(Comma c) <- {
+	String[] ngrams = c.getPOSNgrams();
+	for(int i = 0; i<ngrams.length; i++)
+		sense ngrams[i];
 }
 
-discrete UnigramSecondLeftPOSFeature(Comma c) <- {
-    return c.getPOSToLeft(2);
+//CHUNK
+discrete% ChunkFeatures(Comma c) <- {
+	String[] ngrams = c.getChunkNgrams();
+	for(int i = 0; i<ngrams.length; i++)
+		sense ngrams[i];
 }
 
-discrete UnigramLexicalizedLeftPOSFeature(Comma c) <- {
-    String label =  c.getPOSToLeft(1);
-    if(label.equals("CC"))
-    	label += ":" + c.getWordToLeft(1);
-    return label;
+//SIBLING-PHRASE
+discrete% SiblingPhraseFeatures(Comma c) <- {
+	String[] ngrams = c.getSiblingPhraseNgrams();
+	for(int i = 0; i<ngrams.length; i++)
+		sense ngrams[i];
 }
 
-discrete UnigramRightPOSFeature(Comma c) <- {
-    return c.getPOSToRight(1);
+//PARENT-SIBLING-PHRASE
+discrete% ParentSiblingPhraseFeatures(Comma c) <- {
+	String[] ngrams = c.getParentSiblingPhraseNgrams();
+	for(int i = 0; i<ngrams.length; i++)
+		sense ngrams[i];
 }
 
-discrete UnigramSecondRightPOSFeature(Comma c) <- {
-    return c.getPOSToRight(2);
-}
-
-discrete UnigramLexicalizedRightPOSFeature(Comma c) <- {
-    String label =  c.getPOSToRight(1);
-    if(label.equals("CC"))
-    	label += ":" + c.getWordToRight(1);
-    return label;
-}
-
- 
-
-discrete UnigramLeftChunkFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getChunkToLeftOfComma(1));
-}
-
-discrete UnigramSecondLeftChunkFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getChunkToLeftOfComma(2));
-}
-
-discrete UnigramRightChunkFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getChunkToRightOfComma(1));
-}
-
-discrete UnigramSecondRightChunkFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getChunkToRightOfComma(2));
-}
-
-
-
-discrete UnigramLeftPhraseFeature(Comma c) <- {
-    return c.getNotation(c.getPhraseToLeftOfComma(1));
-}
-
-discrete UnigramSecondLeftPhraseFeature(Comma c) <- {
-  return c.getNotation(c.getPhraseToLeftOfComma(2));
-}
-
-discrete UnigramRightPhraseFeature(Comma c) <- {
-    return c.getNotation(c.getPhraseToRightOfComma(1));
-}
-
-discrete UnigramSecondRightPhraseFeature(Comma c) <- {
-  return c.getNotation(c.getPhraseToRightOfComma(2));
-}
-
-discrete CommaParentPhraseFeature(Comma c) <- {
-    return c.getNotation(c.getPhraseToLeftOfParent(0));
-}
-
-discrete UnigramParentLeftPhraseFeature(Comma c) <- {
-    return c.getNotation(c.getPhraseToLeftOfParent(1));
-}
-
-discrete UnigramParentSecondLeftPhraseFeature(Comma c) <- {
-  return c.getNotation(c.getPhraseToLeftOfParent(2));
-}
-
-discrete UnigramParentRightPhraseFeature(Comma c) <- {
-    return c.getNotation(c.getPhraseToRightOfParent(1));
-}
-
-discrete UnigramParentSecondRightPhraseFeature(Comma c) <- {
-  return c.getNotation(c.getPhraseToRightOfParent(2));
-}
-
-
-
-
-discrete UnigramLeftStrippedPhraseFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getPhraseToLeftOfComma(1));
-}
-
-discrete UnigramSecondLeftStrippedPhraseFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getPhraseToLeftOfComma(2));
-}
-
-discrete UnigramRightStrippedPhraseFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getPhraseToRightOfComma(1));
-}
-
-discrete UnigramSecondRightStrippedPhraseFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getPhraseToRightOfComma(2));
-}
-
-discrete CommaParentStrippedPhraseFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getPhraseToLeftOfParent(0));
-}
-
-discrete UnigramParentLeftStrippedPhraseFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getPhraseToLeftOfParent(1));
-}
-
-discrete UnigramParentSecondLeftStrippedPhraseFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getPhraseToLeftOfParent(2));
-}
-
-discrete UnigramParentRightStrippedPhraseFeature(Comma c) <- {
-    return c.getStrippedNotation(c.getPhraseToRightOfParent(1));
-}
-
-discrete UnigramParentSecondRightStrippedPhraseFeature(Comma c) <- {
-  return c.getStrippedNotation(c.getPhraseToRightOfParent(2));
-}
-
-
-
+//DEPENDENCY
 discrete% LeftToRightDependencies(Comma c) <- {
 	String[] ltor = c.getLeftToRightDependencies();
 	for(int i=0; i<ltor.length; i++)
@@ -164,9 +59,7 @@ discrete% RightToLeftDependencies(Comma c) <- {
 		sense rtol[i];
 }
 
-
-
-
+//SRL
 discrete% SRLFeature(Comma c) <- {
     List SRLs = c.getContainingSRLs();
     for (int i = 0; i < SRLs.size(); i++) {
@@ -270,13 +163,6 @@ discrete CommaSiblingsFeature(Comma c) <- {
     return commaLevelPhrases;
 }
 
-/*
-discrete% POSYieldFeatures(Comma c) <- {
-	List posNgramStrings = c.getPOSNGrams();
-	for(int i = 0; i<posNgramStrings.size(); i++)
-		sense posNgramStrings.get(i);
-}*/
-
 discrete BayraktarPatternFeature(Comma c) <- {
 	return c.getBayraktarPattern();
 }
@@ -285,79 +171,37 @@ discrete BayraktarLabelFeature(Comma c) <- {
 	return c.getBayraktarLabel();
 }
 
-
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CONSTRUCTING BIGRAMS FROM UNGRAMS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-discrete BigramLeftPhraseFeature(Comma c) <- UnigramSecondLeftPhraseFeature && UnigramLeftPhraseFeature
-discrete BigramRightPhraseFeature(Comma c) <- UnigramSecondRightPhraseFeature && UnigramRightPhraseFeature
-discrete BigramLeftRightPhraseFeature(Comma c) <- UnigramLeftPhraseFeature && UnigramRightPhraseFeature
-discrete BigramParentLeftPhraseFeature(Comma c) <- UnigramParentSecondLeftPhraseFeature && UnigramParentLeftPhraseFeature
-discrete BigramParentRightPhraseFeature(Comma c) <- UnigramParentSecondRightPhraseFeature && UnigramParentRightPhraseFeature
-//BigramParentLeftRightPhraseFeature is not necessary as the parent is always a comma
-
-discrete BigramLeftStrippedPhraseFeature(Comma c) <- UnigramSecondLeftStrippedPhraseFeature && UnigramLeftStrippedPhraseFeature
-discrete BigramRightStrippedPhraseFeature(Comma c) <- UnigramSecondRightStrippedPhraseFeature && UnigramRightStrippedPhraseFeature
-discrete BigramLeftRightStrippedPhraseFeature(Comma c) <- UnigramLeftStrippedPhraseFeature && UnigramRightStrippedPhraseFeature
-discrete BigramParentLeftStrippedPhraseFeature(Comma c) <- UnigramParentSecondLeftStrippedPhraseFeature && UnigramParentLeftStrippedPhraseFeature
-discrete BigramParentRightStrippedPhraseFeature(Comma c) <- UnigramParentSecondRightStrippedPhraseFeature && UnigramParentRightStrippedPhraseFeature
-//BigramParentLeftRightStrippedPhraseFeature is not necessary as the parent is always a comma
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GROUPING PARSE FEATURES INTO PARENT FEATURES AND SIBLING FEATURES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-discrete% StrippedParentParseFeatures(Comma c) <- CommaParentStrippedPhraseFeature, UnigramParentLeftStrippedPhraseFeature, UnigramParentSecondLeftStrippedPhraseFeature, UnigramParentRightStrippedPhraseFeature, UnigramParentSecondRightStrippedPhraseFeature
-discrete% StrippedSiblingParseFeatures(Comma c) <- UnigramSecondLeftStrippedPhraseFeature, UnigramSecondRightStrippedPhraseFeature, UnigramLeftStrippedPhraseFeature, UnigramRightStrippedPhraseFeature, BigramLeftStrippedPhraseFeature, BigramRightStrippedPhraseFeature, BigramLeftRightStrippedPhraseFeature
-
-discrete% ParentParseFeatures(Comma c) <- CommaParentPhraseFeature, UnigramParentLeftPhraseFeature, UnigramParentSecondLeftPhraseFeature, UnigramParentRightPhraseFeature, UnigramParentSecondRightPhraseFeature, BigramParentLeftPhraseFeature, BigramParentRightPhraseFeature 
-discrete% SiblingParseFeatures(Comma c) <- UnigramSecondLeftPhraseFeature, UnigramSecondRightPhraseFeature, UnigramLeftPhraseFeature, UnigramRightPhraseFeature, BigramLeftPhraseFeature, BigramRightPhraseFeature, BigramLeftRightPhraseFeature
-
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~FINAL FEATURE GROUPS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-discrete% ChunkFeatures(Comma c) <- UnigramLeftChunkFeature && UnigramSecondLeftChunkFeature, UnigramRightChunkFeature && UnigramSecondRightChunkFeature, UnigramLeftChunkFeature && UnigramRightChunkFeature
-discrete% StrippedParseFeatures(Comma c) <- StrippedSiblingParseFeatures, StrippedParentParseFeatures
-discrete% ParseFeatures(Comma c) <- SiblingParseFeatures, ParentParseFeatures
-discrete% POSFeatures(Comma c) <- UnigramLeftPOSFeature && UnigramRightPOSFeature, UnigramLeftPOSFeature && UnigramSecondLeftPOSFeature, UnigramRightPOSFeature && UnigramSecondRightPOSFeature
 discrete% DependencyFeatures(Comma c) <- RightToLeftDependencies , LeftToRightDependencies
 
+discrete% ParseFeatures(Comma c) <- SiblingPhraseFeatures , ParentSiblingPhraseFeatures
+
 discrete CommaLabel(Comma c) <- { 
-	return c.getVivekNaveenRole();
+	return c.getLabel();
 }
 
 /** A learned text classifier; its definition comes from data. */
 discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
-
-	//using POSFeatures, DependencyFeatures, StrippedParseFeatures, StrippedParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//Use for GOlD-AUTO evaluation
 	
-	//using  POSFeatures, ParseFeatures, ParseTreeFeature, BayraktarLabelFeature, BayraktarPatternFeature//CommaSiblingsFeature, DependencyFeatures, ChunkFeatures
-	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures
-
+	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures, WordFeatures
+	with new SparseNetworkLearner(new SparseAveragedPerceptron(0.003, 0, 3.5))
+	from new CommaParser(new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile()).getSentences(), CommaParser.Ordering.RANDOM, true)
+	/*
 	with SparseNetworkLearner {
 	    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
-	    //p.learningRate = {{.000 -> 0.010 : 0.001}};
-	    //p.thickness = {{0.0 -> 5.0 : 0.5}};
+	    //p.learningRate = {{.000 -> 0.010 : 0.002}};
+	    //p.thickness = {{0.0 -> 5.0 : 1}};
 	    //p.threshold = {{-5.0 -> 5.0 : 1}};
-	    p.learningRate = 0.024;//AUTO-AUTO
-	    p.thickness = 3.6;//AUTO-AUTO
-	    //p.learningRate = 0.014;//GOLD-GOLD
-	    //p.thickness = 3.4;//GOLD-GOLD
-	    //p.learningRate = 0.024;//GOLD-AUTO
-	    //p.thickness = 3.9;//GOLD-AUTO
 	    baseLTU = new SparseAveragedPerceptron(p);
 	}
-	/*
-	from
-		new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.RANDOM_SENTENCE)
-		200 rounds
-		//{{250, 300, 350, 400, 500, 600}} rounds
-		//90 rounds//AUTO-AUTO
-		//160 rounds//GOLD-GOLD
-		//120 rounds//GOLD-AUTO
-		
-	cval 5 "sequential" //NEVER FUCKING USE RANDOM
-	testingMetric new PrintMetrics(5)
-	progressOutput 10000000
 	
+	from
+		new CommaParser(new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile()))
+		250 rounds
+		//{{250, 300, 350, 400, 500, 600}} rounds
+		
+	cval 5 "sequential"//DONT USE RANDOM, else commas will from same sentence will be in both train and test set!!!!
+	progressOutput 100000
 	*/
 end
 
@@ -454,5 +298,3 @@ inference ListCommasConstrainedInference head Sentence s {
 }
 discrete ListCommasConstrainedCommaClassifier (Comma c) <- 
 	ListCommasConstrainedInference(LocalCommaClassifier)
-	
-

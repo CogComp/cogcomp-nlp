@@ -1,9 +1,12 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.annotators;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
@@ -43,9 +46,10 @@ public class CommaLabeler implements Annotator{
                 throw new AnnotatorException("Missing required view " + requiredView);
         }
         // Create the Comma structure
-        List<Comma> commas = getCommas(ta);
+        Sentence sentence = new Sentence(ta, ta);
+        
         PredicateArgumentView srlView = new PredicateArgumentView(VIEW_NAME, "illinois-comma", ta, 1.0d);
-        for (Comma comma : commas) {
+        for (Comma comma : sentence.getCommas()) {
             String label = classifier.discreteValue(comma);
             int position = comma.getPosition();
             Constituent predicate = new Constituent(label, VIEW_NAME, ta, position, position+1);
@@ -79,7 +83,7 @@ public class CommaLabeler implements Annotator{
      * @param ta the input TextAnnotation for whose sentence we want to create Commas
      * @return a list of Commas. Each comma in the list corresponds to a comma in the sentence represented by ta
      */
-    public static List<Comma> getCommas(TextAnnotation ta){
+/*    public static List<Comma> getCommas(TextAnnotation ta){
     	List<Comma> commas = new ArrayList<>();
     	Sentence sentenceStruct = new Sentence();
     	String[] tokenizedText = ta.getTokens();
@@ -91,7 +95,7 @@ public class CommaLabeler implements Annotator{
     	}
     	return commas;
     }
-
+*/
     public String[] getRequiredViews() {
         return requiredViews;
     }

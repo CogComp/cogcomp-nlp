@@ -9,8 +9,8 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 
 /**
  * Use this class to get labels for bayraktar-patterns which have been annotated
@@ -73,6 +73,11 @@ public class BayraktarPatternLabeler {
 		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)!=null;
 	}
 	
+	/**
+	 * checks if the given commas bayraktar pattern has been annotated
+	 * @param comma 
+	 * @return true if the bayraktar pattern has been annotated
+	 */
 	public static boolean isLabelAvailable(Comma comma){
 		String bayraktarPattern = comma.getBayraktarPattern();
 		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)!=null;
@@ -81,7 +86,7 @@ public class BayraktarPatternLabeler {
 	/**
 	 * checks whether the given label belongs to the set of labels included in the Bayraktar annotations that were not previously included in Vivek's annotations 
 	 * @param label: the label that is to be checked
-	 * @return true of the label does belong to the set of labels included in the Bayraktar annotations that were not previously included in Vivek's annotations. Else false
+	 * @return true if the label does belong to the set of labels included in the Bayraktar annotations that were not previously included in Vivek's annotations. Else false
 	 */
 	public static boolean isNewLabel(String label){
 		String[] newLabels = {"Complementary", "Interrupter", "Introductory", "Quotation"};

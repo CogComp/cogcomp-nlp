@@ -1,4 +1,5 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.datastructures;
+
 
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 
@@ -29,6 +30,14 @@ public class CommaProperties extends ResourceManager {
 
     public boolean useGold() {
         return getBoolean("USE_GOLD");
+    }
+    
+    public boolean allowMultiLabelCommas() {
+        return getBoolean("ALLOW_MULTI_LABEL_COMMAS");
+    }
+    
+    public boolean includeNullLabelCommas() {
+        return getBoolean("INCLUDE_NULL_LABEL_COMMAS");
     }
     
     public boolean isCommaStructureFullSentence() {

@@ -1,33 +1,12 @@
 package edu.illinois.cs.cogcomp.comma.utils;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 
-public class PrettyPrint {
-	public static void main(String[] args) throws IOException {
-		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/dev_commas.txt", "data/dev_commas.ser", Ordering.ORIGINAL_SENTENCE);
-		List<Comma> commas = cr.getCommas();
-		for (Comma c : commas) {
-			TreeView treeView = (TreeView) c.getTextAnnotation(true).getView(
-					ViewNames.PARSE_GOLD);
-			Tree<String> tree = treeView.getTree(0);
-			PrintWriter pw = new PrintWriter(System.out);
-			boolean printOnlyLabelValue = true;
-			display(tree, 0, false, false, false, true, printOnlyLabelValue, pw);
-			System.out.println("\n\n\n\n" + tree);
-			break;
-		}
-	}
-	
+public class PrettyPrintParseTree {
 	public static String pennString(Tree<String> tree){
 		StringWriter sw = new StringWriter();
 		display(tree, 0, false, false, false, true, true, new PrintWriter(sw));

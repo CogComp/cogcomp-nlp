@@ -6,11 +6,9 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.Sentence;
-import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
 
 /**
  * Used for outputting the corpus with the label refinements for submission to EMPNLP
@@ -18,8 +16,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 public class OutputCorpusForEMNLP {
 	public static void main(String[] args) throws IOException{
 		String data = "";
-		VivekAnnotationCommaParser commaParser = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORIGINAL_SENTENCE);
-		List<Sentence> sentences = commaParser.getSentences();
+		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		List<Sentence> sentences = reader.getSentences();
 		for(Sentence sentence : sentences){
 			data += sentence.getId() + "\n" + sentence.getAnnotatedText()
 					+ "\n\n";

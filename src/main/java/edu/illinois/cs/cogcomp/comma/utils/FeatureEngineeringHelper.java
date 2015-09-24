@@ -6,10 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.ClassifierComparison;
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.VivekAnnotationCommaParser;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.evaluation.ClassifierComparison;
 import edu.illinois.cs.cogcomp.comma.lbj.BayraktarLabelFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.BayraktarPatternFeature;
 import edu.illinois.cs.cogcomp.comma.lbj.ChunkFeatures;
@@ -18,21 +17,18 @@ import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.POSFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseTreeFeature;
+import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
+import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
+import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
-import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
-import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVectorReturner;
-import edu.illinois.cs.cogcomp.lbjava.classify.LabelVectorReturner;
-import edu.illinois.cs.cogcomp.lbjava.learn.Accuracy;
-import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
-import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
-import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
-import edu.illinois.cs.cogcomp.lbjava.learn.TestingMetric;
-import edu.illinois.cs.cogcomp.lbjava.parse.ArrayParser;
-import edu.illinois.cs.cogcomp.lbjava.parse.FoldParser.SplitPolicy;
-import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
+/**
+ * Used to get performance of the classifier over different subsets of features 
+ * @author navari
+ *
+ */
 public class FeatureEngineeringHelper {
 	static double learningRate = 0.024;
 	static double threshold = 0;
@@ -44,8 +40,9 @@ public class FeatureEngineeringHelper {
 	
 	public static void featureEngineering() throws Exception{
 		LocalCommaClassifier learner = new LocalCommaClassifier();
-		VivekAnnotationCommaParser cr = new VivekAnnotationCommaParser("data/comma_resolution_data.txt", CommaProperties.getInstance().getAllCommasSerialized(), VivekAnnotationCommaParser.Ordering.ORDERED_SENTENCE);
-		List<Comma> commaList = cr.getCommas();
+		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		CommaParser commaParser = new CommaParser(reader.getSentences(), Ordering.ORDERED, true);
+		List<Comma> commaList = reader.getCommas();
 		Comma[] commas = (Comma[]) commaList.toArray(new Comma[commaList.size()]);
 		
 		ParseFeatures __ParseFeatures = new ParseFeatures();
@@ -74,7 +71,7 @@ public class FeatureEngineeringHelper {
 		
 		for(List<Classifier> featureSet: ablatedFeatures){
 			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler, "config/DCD.config");
-			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, cr, false);
+			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, commaParser, false, false);
 			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
 			
 			Pair<Double, String> performanceFeaturePair = new Pair<>(structuredPerformance.getOverallStats()[2], featureSet.toString());

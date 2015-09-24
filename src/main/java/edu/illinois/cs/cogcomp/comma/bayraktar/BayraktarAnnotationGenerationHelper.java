@@ -14,17 +14,22 @@ import java.util.Scanner;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import edu.illinois.cs.cogcomp.comma.Comma;
-import edu.illinois.cs.cogcomp.comma.CommaLabeler;
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.readers.TextAnnotationReaderToSentenceReader;
+import edu.illinois.cs.cogcomp.comma.utils.PrettyPrintParseTree;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
 
-
+/**
+ * Provides cli interface to annotate bayraktar patterns
+ * at each iteration the most frequent un-annotated bayraktar pattern along with example sentences and parses are presented and the user must select a label for the pattern
+ * @author navari
+ *
+ */
 public class BayraktarAnnotationGenerationHelper {
 	
     /**
@@ -34,18 +39,18 @@ public class BayraktarAnnotationGenerationHelper {
     public static Multimap<String, Comma> getBayraktarPatternToPTBCommas(){
     	String treebankHome = CommaProperties.getInstance().getPTBHDir();
     	String[] sections = { "00", "01", "02" , "03", "04", "05", "06", "07", "08", "09", "10"};//, "11", "12" , "13", "14", "15", "16", "17", "18", "19", "20"};
-    	Iterator<TextAnnotation> ptbReader;
-    	try {
-            ptbReader = new PennTreebankReader(treebankHome, sections);
-        	//ptbReader = new PennTreebankReader(treebankHome);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    	PennTreebankReader ptbReader;
+		try {
+			ptbReader = new PennTreebankReader(treebankHome, sections);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+    	TextAnnotationReaderToSentenceReader sentenceReader = new TextAnnotationReaderToSentenceReader(ptbReader);
+    	
     	List<Comma> commas = new ArrayList<>();
-    	while(ptbReader.hasNext()){
-    		TextAnnotation ta = ptbReader.next();
-    		List<Comma> commasInTa = CommaLabeler.getCommas(ta); 
-    		commas.addAll(commasInTa);
+    	while(sentenceReader.hasNext()){
+    		Sentence sentence = sentenceReader.next();
+    		commas.addAll(sentence.getCommas());
     	}
     	Multimap<String, Comma> bayraktarPatternToCommas = HashMultimap.create();
     	for(Comma comma : commas){
@@ -71,7 +76,7 @@ public class BayraktarAnnotationGenerationHelper {
     			+ exammpleCommaTextIt.next().getVivekAnnotatedText() + "\n"
     			+ exammpleCommaTextIt.next().getVivekAnnotatedText() + "\n"
     			+ exammpleCommaTextIt.next().getVivekAnnotatedText() + "\n"
-    			+ PrettyPrint.pennString(((TreeView)exammpleCommaTextIt.next().getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0));
+    			+ PrettyPrintParseTree.pennString(((TreeView)exammpleCommaTextIt.next().getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0));
     	System.out.println(data);
 
     	String[] labels = {"Attribute", "Complementary", "Interrupter", "Introductory", "List", "Quotation", "Substitute", "Locative"};
@@ -90,7 +95,7 @@ public class BayraktarAnnotationGenerationHelper {
     			System.out.println(exammpleCommaTextIt.next().getVivekAnnotatedText());
     			break;
     		case 1:
-    			System.out.println(PrettyPrint.pennString(((TreeView)exammpleCommaParseIt.next().getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0)));
+    			System.out.println(PrettyPrintParseTree.pennString(((TreeView)exammpleCommaParseIt.next().getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0)));
     			break;
     		case 69:
     			return false;

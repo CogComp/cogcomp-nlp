@@ -1,7 +1,5 @@
 package edu.illinois.cs.cogcomp.comma.sl;
 
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaLabelSequence;
-import edu.illinois.cs.cogcomp.comma.Sentence.CommaSequence;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;

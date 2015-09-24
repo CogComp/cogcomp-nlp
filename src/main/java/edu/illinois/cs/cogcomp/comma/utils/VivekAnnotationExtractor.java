@@ -6,12 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import edu.illinois.cs.cogcomp.comma.CommaProperties;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 
-public class VivekAnnotationHelper {
+/**
+ * Used for retrieving annotations from Srikumar et al's data set for ad hoc queries
+ * given the annotation id from Srikumar et al's corpus, this can be used to extract the specified annotation 
+ * @author navari
+ *
+ */
+public class VivekAnnotationExtractor {
 	Map<String, String> annotationIdToAnnotation = new HashMap<>();
 	
-	public VivekAnnotationHelper(){
+	public VivekAnnotationExtractor(){
 		instantiate();
 	}
 	

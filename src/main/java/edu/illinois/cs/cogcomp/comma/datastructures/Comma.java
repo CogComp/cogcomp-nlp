@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.datastructures;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,8 +9,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
-import edu.illinois.cs.cogcomp.comma.utils.PrettyPrint;
+import edu.illinois.cs.cogcomp.comma.readers.RefinedLabelHelper;
+import edu.illinois.cs.cogcomp.comma.utils.NgramUtils;
+import edu.illinois.cs.cogcomp.comma.utils.PrettyPrintParseTree;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
@@ -33,116 +37,92 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
  * A data structure containing all the information related to a comma.
  */
 public class Comma implements Serializable {
-    private String[] sentence;
-    private String role;
-    public int commaPosition;
-    private TextAnnotation goldTA;
-    private TextAnnotation TA;
+    private final List<String> labels;
+    private final List<String> refinedLabels;
+    public final int commaPosition;
     private Sentence s;
-
-    private static final long serialVersionUID = 715976951486905421l;
-
-    private static boolean GOLD, NERlexicalise, POSlexicalise, USE_NEW_LABEL_SET;
-    private static String CONSTITUENT_PARSER;
-
-    static {
-    	CommaProperties properties = CommaProperties.getInstance();
-        GOLD = properties.useGold();
-        USE_NEW_LABEL_SET = properties.useNewLabelSet();
-        NERlexicalise = properties.lexicaliseNER();
-        POSlexicalise = properties.lexicalisePOS();
-        CONSTITUENT_PARSER = properties.getConstituentParser();
-    }
     
+    private static final long serialVersionUID = 715976951486905422l;
+    
+    //These properties are used while extracting features
+    private static boolean GOLD = CommaProperties.getInstance().useGold();
+    private static final boolean NERlexicalise = CommaProperties.getInstance().lexicaliseNER();
+    private static final boolean POSlexicalise = CommaProperties.getInstance().lexicalisePOS();
+    private static final boolean USE_REFINED_LABELS = CommaProperties.getInstance().useNewLabelSet();
+    private static final String CONSTITUENT_PARSER = CommaProperties.getInstance().getConstituentParser();//Which automatic parse to use
+
     public static void useGoldFeatures(boolean useGold){
     	GOLD = useGold;
     }
     
     public String getCommaID(){
-    	return role + " " + commaPosition + " " + goldTA.getId();
+    	return commaPosition + " " + s.goldTa.getId();
     }
     
     /**
-     * A default constructor used during training.
+     * Comma constructor when labels are known
      * @param commaPosition The token index of the comma
-     * @param role The gold-standard role of the comma
      * @param sentence The tokenized string of the sentence
-     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
-     * @param s The Sentence struct to which the comma belongs
      */
-    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, Sentence s) {
+    protected Comma(int commaPosition, Sentence s, List<String> labels, List<String> refinedLabels) {
     	this.commaPosition = commaPosition;
-        if (role != null) {
-            switch (role) {
-                case "Entity attribute":
-                    this.role = "Attribute";
-                    break;
-                case "Entity substitute":
-                    this.role = "Substitute";
-                    break;
-                default:
-                    this.role = role;
-                    break;
-            }
-        }
-        this.sentence = sentence;
-        this.TA = TA;
-        this.s = s;
+    	this.s = s;
+    	this.labels = labels;
+    	this.refinedLabels = refinedLabels;
     }
-
-
+    
+    
     /**
-     * A constructor used during training, if gold-standard feature annotations are available.
-     * @param commaPosition The token index of the comma
-     * @param role The gold-standard role of the comma
-     * @param sentence The tokenized string of the sentence
-     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
-     * @param goldTA The TextAnnotation containing gold-standard views for training
-     */
-    public Comma(int commaPosition, String role, String[] sentence, TextAnnotation TA, TextAnnotation goldTA, Sentence s) {
-        this(commaPosition, role, sentence, TA, s);
-    	this.goldTA = goldTA;
-    }
-
-    /**
-     * A constructor used at test time (for prediction only). Assumes no gold label;
+     * Comma constructor for when labels are not known
      * @param commaPosition The token index of the comma
      * @param sentence The tokenized string of the sentence
-     * @param TA The TextAnnotation containing all required views (POS, SRL, NER, etc)
      */
-    public Comma(int commaPosition, String[] sentence, TextAnnotation TA, Sentence s) {
-        this(commaPosition, null, sentence, TA, s);
-        useGoldFeatures(false);
+    protected Comma(int commaPostion, Sentence s){
+    	this(commaPostion, s, null, null);
     }
+    
 
     /**
-     * @return The label as annotated by Vivek. If Vivek's label was Other, and the USE_NEW_LABEL_SET is true, then the refined label is returned 
+     * @return The label as annotated by Vivek. If Vivek's label was Other, and the USE_REFINED_LABELS is true, then the refined label is returned 
      */
-    public String getVivekNaveenRole(){
-    	String vivekLabel = role;
-    	if(vivekLabel.equals("Other") && USE_NEW_LABEL_SET)
-    		return NaveenLabeler.getNaveenLabel(this);
+    public String getLabel(){
+    	if(USE_REFINED_LABELS)
+    		return refinedLabels.get(0);
     	else
-			return vivekLabel;
+    		return labels.get(0);
+    }
+    
+    public List<String> getLabels(){
+    	if(USE_REFINED_LABELS)
+    		return refinedLabels;
+    	else
+    		return labels;
     }
     
     /**
-     * @return The label as annotated by Vivek. If Vivek's label was Other, the USE_NEW_LABEL_SET is true, and the annotation for the Bayraktar-patterns is available, then the Bayraktar label is returned
+     * @return The label as annotated by Vivek. If Vivek's label was Other, the USE_REFINED_LABELS is true, and the annotation for the Bayraktar-patterns is available, then the Bayraktar label is returned
      */
-    public String getVivekBayraktarRole() {
-    	String vivekLabel = role;
-    	String bayraktarLabel = getBayraktarLabel();
-    	if(USE_NEW_LABEL_SET && vivekLabel.equals("Other") && BayraktarPatternLabeler.isNewLabel(bayraktarLabel))
-    		return bayraktarLabel;
+    public String getBayraktarRefinedLabel() {
+    	if(!USE_REFINED_LABELS || !BayraktarPatternLabeler.isLabelAvailable(getBayraktarPattern()))
+    		return getLabel();
+    	if(getLabel().equals("Other"))
+    		return BayraktarPatternLabeler.getLabel(getBayraktarPattern());
     	else
-			return vivekLabel;
+			return getLabel();
     }
     
-    /**
-     * @return The original label as annotated by Vivek.
-     */
-    public String getVivekRole(){
-    	return role;
+    public List<String> getBayraktarRefinedLabels() {
+    	if(!USE_REFINED_LABELS || !BayraktarPatternLabeler.isLabelAvailable(getBayraktarPattern()))
+    		return getLabels();
+    	
+    	String bayraktarLabel = BayraktarPatternLabeler.getLabel(getBayraktarPattern());
+    	List<String> bayraktarRefinedLabels = new ArrayList<>();
+    	for(String label : getLabels())
+    		if(label.equals("Other"))
+    			bayraktarRefinedLabels.add(bayraktarLabel);
+    	else
+			bayraktarRefinedLabels.add(label);
+    	return bayraktarRefinedLabels;
     }
     
     public int getPosition(){
@@ -153,103 +133,69 @@ public class Comma implements Serializable {
         return s;
     }
     
-	public String getVivekAnnotatedText() {
-		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
-				+ "["
-				+ role
-				+ "] "
-				+ StringUtils.join(" ", 
-						tokens.subList(commaPosition + 1, tokens.size()));
-	}
-	
-	public String getVivekNaveenAnnotatedText() {
-		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
-				+ "["
-				+ getVivekNaveenRole()
-				+ "] "
-				+ StringUtils.join(" ", 
-						tokens.subList(commaPosition + 1, tokens.size()));
-	}
-	
-	public String getBayraktarAnnotatedText() {
-		List<String> tokens = Arrays.asList(sentence);
-		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
-				+ "["
-				+ getBayraktarLabel()
-				+ "] "
-				+ StringUtils.join(" ", 
-						tokens.subList(commaPosition + 1, tokens.size()));
-	}
-	
-	public String getText(){
-		return StringUtils.join(" ", sentence);
-	}
-	
 	public String getAllViews(){
 		StringBuilder info = new StringBuilder();
-		if(goldTA!=null){
+		if(s.goldTa!=null){
 			info.append("\n\nPARSE_GOLD\n");
-			TreeView tv = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
-			info.append(PrettyPrint.pennString(tv.getTree(0)));
+			TreeView tv = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
+			info.append(PrettyPrintParseTree.pennString(tv.getTree(0)));
 		}
-		if(TA!=null){
+		if(s.ta!=null){
 			info.append("\n\nPARSE_STANFORD\n");
-			TreeView tv1 = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
-			info.append(PrettyPrint.pennString(tv1.getTree(0)));
+			TreeView tv1 = (TreeView) s.ta.getView(ViewNames.PARSE_STANFORD);
+			info.append(PrettyPrintParseTree.pennString(tv1.getTree(0)));
 			info.append("\n\nPARSE_CHARNIAK\n");
-			TreeView tv2 = (TreeView) TA.getView(ViewNames.PARSE_CHARNIAK);
-			info.append(PrettyPrint.pennString(tv2.getTree(0)));
+			TreeView tv2 = (TreeView) s.ta.getView(ViewNames.PARSE_CHARNIAK);
+			info.append(PrettyPrintParseTree.pennString(tv2.getTree(0)));
 			info.append("\n\nNER\n");
-			info.append(TA.getView(ViewNames.NER_CONLL));
+			info.append(s.ta.getView(ViewNames.NER_CONLL));
 			info.append("\n\nSHALLOW_PARSE\n");
-			info.append(TA.getView(ViewNames.SHALLOW_PARSE));
+			info.append(s.ta.getView(ViewNames.SHALLOW_PARSE));
 			info.append("\n\nPOS\n");
-			info.append(TA.getView(ViewNames.POS));
+			info.append(s.ta.getView(ViewNames.POS));
 			info.append("\n\nSRL_VERB\n");
-			info.append(TA.getView(ViewNames.SRL_VERB));
+			info.append(s.ta.getView(ViewNames.SRL_VERB));
 			info.append("\n\nSRL_NORM\n");
-			info.append(TA.getView(ViewNames.SRL_NOM));
+			info.append(s.ta.getView(ViewNames.SRL_NOM));
 			info.append("\n\nSRL_PREP\n");
-			info.append(TA.getView(ViewNames.SRL_PREP));
+			info.append(s.ta.getView(ViewNames.SRL_PREP));
 		}
 		return info.toString();
 	}
 	
 	public TextAnnotation getTextAnnotation(boolean gold){
-		return gold?goldTA:TA;
+		return gold?s.goldTa:s.ta;
 	}
     
     public String getWordToRight(int distance) {
         // Dummy symbol for sentence end (in case comma is the second to last word in the sentence)
-        if (commaPosition + distance >= sentence.length)
+        if (commaPosition + distance >= s.ta.getTokens().length)
             return "###";
-        return sentence[commaPosition + distance];
+        return s.ta.getToken(commaPosition + distance);
     }
 
     public String getWordToLeft(int distance) {
         // Dummy symbol for sentence start (in case comma is the second word in the sentence)
         if (commaPosition - distance < 0)
             return "$$$";
-        return sentence[commaPosition - distance];
+        return s.ta.getToken(commaPosition - distance);
     }
     
     public String getPOSToLeft(int distance){
 		TokenLabelView posView;
 		if (GOLD)
-			posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
+			posView = (TokenLabelView) s.goldTa.getView(ViewNames.POS);
 		else
-			posView = (TokenLabelView) TA.getView(ViewNames.POS);
+			posView = (TokenLabelView) s.ta.getView(ViewNames.POS);
 		return posView.getLabel(commaPosition - distance);
 	}
     
     public String getPOSToRight(int distance){
     	TokenLabelView posView;
 		if (GOLD)
-			posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
+			posView = (TokenLabelView) s.goldTa.getView(ViewNames.POS);
 		else
-			posView = (TokenLabelView) TA.getView(ViewNames.POS);
+			posView = (TokenLabelView) s.ta.getView(ViewNames.POS);
     	return posView.getLabel(commaPosition + distance);
     }
     
@@ -257,9 +203,9 @@ public class Comma implements Serializable {
     	TreeView parseView;
     	TokenLabelView posView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 		Constituent parent = TreeView.getParent(comma);
 		List<Constituent> siblings = IteratorUtils.toList(parseView.where(Queries.isSiblingOf(comma)).iterator());
@@ -272,9 +218,9 @@ public class Comma implements Serializable {
     public List<String> getPOSNGramsAroundPosition(int position, int width, int ngramLength){
     	TokenLabelView posView;
     	if (GOLD)
-    		posView = (TokenLabelView) goldTA.getView(ViewNames.POS);
+    		posView = (TokenLabelView) s.goldTa.getView(ViewNames.POS);
     	else
-			posView = (TokenLabelView) TA.getView(ViewNames.POS);
+			posView = (TokenLabelView) s.ta.getView(ViewNames.POS);
 		List<Constituent> POSConstituentsAroundPosition= posView.getConstituentsCoveringSpan(position - width, position + width + 1);
 		Set<Feature> posNgramFeatures = FeatureNGramUtility.getLabelNgramsOrdered(POSConstituentsAroundPosition, ngramLength);
 		List<String> posNgramStrings = new ArrayList<String>();
@@ -285,11 +231,10 @@ public class Comma implements Serializable {
 
     public Constituent getChunkToRightOfComma(int distance){
     	//We don't have gold SHALLOW_PARSE
-    	TextAnnotation chunkTA = TA;
-    	SpanLabelView chunkView = (SpanLabelView) chunkTA.getView(ViewNames.SHALLOW_PARSE);
+    	SpanLabelView chunkView = (SpanLabelView) s.ta.getView(ViewNames.SHALLOW_PARSE);
     	
     	
-		List<Constituent> chunksToRight= chunkView.getSpanLabels(commaPosition+1, TA.getTokens().length);
+		List<Constituent> chunksToRight= chunkView.getSpanLabels(commaPosition+1, s.ta.getTokens().length);
 		Collections.sort(chunksToRight,
 				TextAnnotationUtilities.constituentStartComparator);
 		
@@ -303,14 +248,13 @@ public class Comma implements Serializable {
     
     public Constituent getChunkToLeftOfComma(int distance){
     	//We don't have gold SHALLOW_PARSE
-    	TextAnnotation chunkTA = TA;
-    	SpanLabelView chunkView = (SpanLabelView) chunkTA.getView(ViewNames.SHALLOW_PARSE);
+    	SpanLabelView chunkView = (SpanLabelView) s.ta.getView(ViewNames.SHALLOW_PARSE);
     	
 		
-		List<Constituent> chunksToLeft = chunkView.getSpanLabels(0, commaPosition+1);
+		List<Constituent> chunksToLeft = chunkView.getSpanLabels(0, commaPosition + 1);
 		Collections.sort(chunksToLeft,
 				TextAnnotationUtilities.constituentStartComparator);
-		
+
 		Constituent chunk;
 		if(distance<=0 || distance>chunksToLeft.size())
 			chunk = null;
@@ -322,9 +266,9 @@ public class Comma implements Serializable {
     public Constituent getPhraseToLeftOfComma(int distance){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 
         return getSiblingToLeft(distance, comma, parseView);
@@ -333,9 +277,9 @@ public class Comma implements Serializable {
     public Constituent getPhraseToRightOfComma(int distance){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 
         return getSiblingToRight(distance, comma, parseView);
@@ -344,9 +288,9 @@ public class Comma implements Serializable {
     public Constituent getPhraseToLeftOfParent(int distance){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 		Constituent parent = TreeView.getParent(comma);
         return getSiblingToLeft(distance, parent, parseView);
@@ -355,16 +299,16 @@ public class Comma implements Serializable {
     public Constituent getPhraseToRightOfParent(int distance){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
 		Constituent comma = getCommaConstituentFromTree(parseView);
 		Constituent parent = TreeView.getParent(comma);
         return getSiblingToRight(distance, parent, parseView);
     }
     
     public String[] getLeftToRightDependencies(){
-    	TreeView depTreeView = (TreeView) TA.getView(ViewNames.DEPENDENCY_STANFORD);
+    	TreeView depTreeView = (TreeView) s.ta.getView(ViewNames.DEPENDENCY_STANFORD);
     	List<Constituent> constituentsOnLeft = depTreeView.getConstituentsCoveringSpan(0, commaPosition); 
 		List<Relation> ltors = new ArrayList<>();
 		
@@ -383,7 +327,7 @@ public class Comma implements Serializable {
     }
     
     public String[] getRightToLeftDependencies(){
-    	TreeView depTreeView = (TreeView) TA.getView(ViewNames.DEPENDENCY_STANFORD);
+    	TreeView depTreeView = (TreeView) s.ta.getView(ViewNames.DEPENDENCY_STANFORD);
     	List<Constituent> constituentsOnLeft = depTreeView.getConstituentsCoveringSpan(0, commaPosition); 
 		List<Relation> rtols = new ArrayList<>();
 		
@@ -450,9 +394,9 @@ public class Comma implements Serializable {
     public List<Comma> getSiblingCommas(){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
     	List<Constituent> commaConstituents = new ArrayList<>();
     	Map<Constituent, Comma> constituentCommaMap = new HashMap<>();
 		for(Comma c : s.getCommas()){
@@ -471,12 +415,12 @@ public class Comma implements Serializable {
     public boolean isSibling(Comma otherComma){
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
     	Constituent thisCommaConstituent = getCommaConstituentFromTree(parseView);
     	Constituent otherCommmaConstituent = otherComma.getCommaConstituentFromTree(parseView);
-    	return parseView.getParent(thisCommaConstituent) == parseView.getParent(otherCommmaConstituent);
+    	return TreeView.getParent(thisCommaConstituent) == TreeView.getParent(otherCommmaConstituent);
     }
     
     /**
@@ -503,9 +447,9 @@ public class Comma implements Serializable {
     	if(POSlexicalise){
 			notation += "-";
 			IntPair span = c.getSpan();
-			TextAnnotation TA = c.getTextAnnotation();
+			TextAnnotation ta = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
-					notation += " " + POSUtils.getPOS(TA, tokenId);
+					notation += " " + POSUtils.getPOS(ta, tokenId);
 	    }
     	
 		return notation;
@@ -522,9 +466,9 @@ public class Comma implements Serializable {
     	if(POSlexicalise){
 			notation += "-";
 			IntPair span = c.getSpan();
-			TextAnnotation TA = c.getTextAnnotation();
+			TextAnnotation ta = c.getTextAnnotation();
 			for (int tokenId = span.getFirst(); tokenId < span.getSecond(); tokenId++)
-					notation += " " + POSUtils.getPOS(TA, tokenId);
+					notation += " " + POSUtils.getPOS(ta, tokenId);
 	    }
     	
 		return notation;
@@ -532,7 +476,7 @@ public class Comma implements Serializable {
     
     public List<String> getContainingSRLs() {
         List<String> list = new ArrayList<>();
-        TextAnnotation srlTA = (GOLD)? goldTA : TA;
+        TextAnnotation srlTA = (GOLD)? s.goldTa : s.ta;
     	PredicateArgumentView pav;
         pav = (PredicateArgumentView)srlTA.getView(ViewNames.SRL_VERB);
         for(Constituent pred : pav.getPredicates()) {
@@ -549,7 +493,7 @@ public class Comma implements Serializable {
             }
         }
         // We don't have gold prepSRL (for now)
-        pav = (PredicateArgumentView)TA.getView(ViewNames.SRL_PREP);
+        pav = (PredicateArgumentView)s.ta.getView(ViewNames.SRL_PREP);
         for(Constituent pred : pav.getPredicates()) {
             for (Relation rel : pav.getArguments(pred)) {
                 if (rel.getTarget().getEndSpan() > commaPosition && rel.getTarget().getStartSpan() >= commaPosition)
@@ -561,7 +505,7 @@ public class Comma implements Serializable {
 
     public String getNamedEntityTag(Constituent c){
     	//We don't have gold NER
-    	SpanLabelView nerView = (SpanLabelView)TA.getView(ViewNames.NER_CONLL);
+    	SpanLabelView nerView = (SpanLabelView)s.ta.getView(ViewNames.NER_CONLL);
     	List<Constituent> NEs = nerView.getConstituentsCovering(c);
     	String result = "";
     	/*String result = NEs.size()==0? "NO-NER" : NEs.get(0).getLabel();
@@ -587,18 +531,18 @@ public class Comma implements Serializable {
     	String[] labels;
     	if (GOLD){
     		labels = new String[1];
-    		TreeView goldParseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		TreeView goldParseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     		String goldBayraktarPattern = getBayraktarPattern(goldParseView);
     		labels[0] = BayraktarPatternLabeler.getBayraktarLabel(goldBayraktarPattern);
     	}
     	else{
     		labels = new String[2];
     		
-    		TreeView charniakParseView = (TreeView) TA.getView(ViewNames.PARSE_CHARNIAK);
+    		TreeView charniakParseView = (TreeView) s.ta.getView(ViewNames.PARSE_CHARNIAK);
     		String charniakBayraktarPattern = getBayraktarPattern(charniakParseView);
     		labels[0] = BayraktarPatternLabeler.getBayraktarLabel(charniakBayraktarPattern);
     		
-    		TreeView stanfordParseView = (TreeView) TA.getView(ViewNames.PARSE_STANFORD);
+    		TreeView stanfordParseView = (TreeView) s.ta.getView(ViewNames.PARSE_STANFORD);
     		String stanfordBayraktarPattern = getBayraktarPattern(stanfordParseView);
     		labels[1] = BayraktarPatternLabeler.getBayraktarLabel(stanfordBayraktarPattern);
     		if(labels[0]==null)
@@ -610,9 +554,9 @@ public class Comma implements Serializable {
     public String getBayraktarPattern() {
     	TreeView parseView;
     	if (GOLD)
-    		parseView = (TreeView) goldTA.getView(ViewNames.PARSE_GOLD);
+    		parseView = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
     	else
-    		parseView = (TreeView) TA.getView(CONSTITUENT_PARSER);
+    		parseView = (TreeView) s.ta.getView(CONSTITUENT_PARSER);
     	return getBayraktarPattern(parseView);
     }
     
@@ -622,7 +566,7 @@ public class Comma implements Serializable {
 		Constituent parent = TreeView.getParent(comma);
 		if( !ParseTreeProperties.isPunctuationToken(parent.getLabel()) && ParseTreeProperties.isPreTerminal(parent)){
 			if(parent.getLabel().equals("CC"))
-				pattern = parent.getSurfaceString();
+				pattern = parent.getSurfaceForm();
 			else
 				pattern = "***";
 		} else
@@ -632,7 +576,7 @@ public class Comma implements Serializable {
 			Constituent child = childRelation.getTarget();
 			if( !POSUtils.isPOSPunctuation(child.getLabel()) && ParseTreeProperties.isPreTerminal(child)){
 				if(child.getLabel().equals("CC")){
-					pattern += " " + child.getSurfaceString();
+					pattern += " " + child.getSurfaceForm();
 				} else if(!pattern.endsWith("***"))
 					pattern += " ***";
 			} else
@@ -641,9 +585,116 @@ public class Comma implements Serializable {
 		return pattern;
     }
     
-    public void setRole(String newRole) throws Exception{
-    	if(role!=null)
-    		throw new Exception("Comma role is already set to " + role + " Cannot change to " + newRole);
-    	role = newRole;
+    public String[] getWordNgrams(){
+    	int window = 2;
+    	List<String> wordWindow = new ArrayList<>();
+    	for(int i = window; i>0; i--)
+    		wordWindow.add(getWordToLeft(i));
+    	for(int i = 1; i<=window; i++)
+    		wordWindow.add(getWordToRight(i));
+    	List<String> ngrams = new ArrayList<>();
+    	
+    	ngrams.addAll(NgramUtils.ngrams(1, wordWindow));
+    	//ngrams.addAll(FeatureUtils.ngrams(2, wordWindow));
+    	
+    	return ngrams.toArray(new String[0]);
     }
+    
+    public String[] getPOSNgrams(){
+    	int window = 5;
+    	List<String> posWindow = new ArrayList<>();
+    	for(int i = window; i>0; i--)
+    		posWindow.add(getPOSToLeft(i));
+    	for(int i = 1; i<=window; i++)
+    		posWindow.add(getPOSToRight(i));
+    	List<String> ngrams = new ArrayList<>();
+    	
+    	ngrams.addAll(NgramUtils.ngrams(2, posWindow));
+    	ngrams.addAll(NgramUtils.ngrams(3, posWindow));
+    	ngrams.addAll(NgramUtils.ngrams(4, posWindow));
+    	ngrams.addAll(NgramUtils.ngrams(5, posWindow));
+
+    	return ngrams.toArray(new String[0]);
+    }
+   
+    public String[] getChunkNgrams(){
+    	int window = 2;
+    	List<String> chunkWindow = new ArrayList<>();
+    	for(int i = window; i>0; i--)
+    		chunkWindow.add(getNotation(getChunkToLeftOfComma(i)));
+    	for(int i = 1; i<=window; i++)
+    		chunkWindow.add(getNotation(getChunkToRightOfComma(i)));
+    	List<String> ngrams = new ArrayList<>();
+    	
+    	ngrams.addAll(NgramUtils.ngrams(1, chunkWindow));
+    	ngrams.addAll(NgramUtils.ngrams(2, chunkWindow));
+
+    	return ngrams.toArray(new String[0]);
+    }
+    
+    public String[] getSiblingPhraseNgrams(){
+    	int window = 2;
+    	List<String> phraseWindow = new ArrayList<>();
+    	for(int i = window; i>0; i--)
+    		phraseWindow.add(getNotation(getPhraseToLeftOfComma(i)));
+    	for(int i = 1; i<=window; i++)
+    		phraseWindow.add(getNotation(getPhraseToRightOfComma(i)));
+    	List<String> ngrams = new ArrayList<>();
+    	
+    	ngrams.addAll(NgramUtils.ngrams(1, phraseWindow));
+    	ngrams.addAll(NgramUtils.ngrams(2, phraseWindow));
+    	
+    	return ngrams.toArray(new String[0]);
+    }
+    
+    public String[] getParentSiblingPhraseNgrams(){
+    	int window = 3;
+    	List<String> parentPhraseWindow = new ArrayList<>();
+    	for(int i = window; i>0; i--)
+    		parentPhraseWindow .add(getNotation(getPhraseToLeftOfParent(i)));
+    	parentPhraseWindow.add(getNotation(getPhraseToLeftOfParent(0)));
+    	for(int i = 1; i<=window; i++)
+    		parentPhraseWindow .add(getNotation(getPhraseToRightOfParent(i)));
+    	List<String> ngrams = new ArrayList<>();
+    	
+    	ngrams.addAll(NgramUtils.ngrams(1,parentPhraseWindow));
+    	ngrams.addAll(NgramUtils.ngrams(2, parentPhraseWindow));
+    	
+    	return ngrams.toArray(new String[0]);
+    }
+    
+    public String getVivekAnnotatedText() {
+		List<String> tokens = Arrays.asList(s.ta.getTokens());
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
+				+ "["
+				+ labels
+				+ "] "
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
+	}
+	
+	public String getVivekNaveenAnnotatedText() {
+		List<String> tokens = Arrays.asList(s.ta.getTokens());
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
+				+ "["
+				+ getLabel()
+				+ "] "
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
+	}
+	
+	public String getBayraktarAnnotatedText() {
+		List<String> tokens = Arrays.asList(s.ta.getTokens());
+		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
+				+ "["
+				+ getBayraktarLabel()
+				+ "] "
+				+ StringUtils.join(" ", 
+						tokens.subList(commaPosition + 1, tokens.size()));
+	}
+	
+	public String getText(){
+		return StringUtils.join(" ", s.ta.getTokens());
+	}
+
 }
