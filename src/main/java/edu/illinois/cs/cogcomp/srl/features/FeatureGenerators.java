@@ -1,19 +1,19 @@
 package edu.illinois.cs.cogcomp.srl.features;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
 import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.*;
 
@@ -83,7 +83,7 @@ public class FeatureGenerators {
 		public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
 			Set<Feature> features = new HashSet<Feature>();
-			String surfaceString = c.getSurfaceString();
+			String surfaceString = c.getSurfaceForm();
 
 			if (surfaceString.contains("-") && c.length() == 1) {
 				Constituent predicate = c.getIncomingRelations().get(0).getSource();
@@ -167,6 +167,9 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				return feats;
@@ -209,6 +212,9 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				return siblings;
@@ -255,6 +261,9 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 				return siblings;

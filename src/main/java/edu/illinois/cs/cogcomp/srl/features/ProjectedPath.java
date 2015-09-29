@@ -1,13 +1,13 @@
 package edu.illinois.cs.cogcomp.srl.features;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.HashSet;
@@ -31,7 +31,13 @@ public class ProjectedPath implements FeatureExtractor {
 		Set<Feature> feats = new HashSet<Feature>();
 
         // Clone this to avoid concurrency problems
-        Constituent c2 = parse.getParsePhrase(c).cloneForNewView("");
+        Constituent c2 = null;
+		try {
+			c2 = parse.getParsePhrase(c).cloneForNewView("");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (!c2.getLabel().equals("VP"))
 			return feats;
@@ -56,7 +62,13 @@ public class ProjectedPath implements FeatureExtractor {
 
 		if (found) {
             // Clone this to avoid concurrency problems
-            Constituent c1 = parse.getParsePhrase(c.getIncomingRelations().get(0).getSource()).cloneForNewView("");
+            Constituent c1 = null;
+			try {
+				c1 = parse.getParsePhrase(c.getIncomingRelations().get(0).getSource()).cloneForNewView("");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			String path = PathFeatureHelper.getFullParsePathString(c1, c2, 400);
 			feats.add(DiscreteFeature.create(path));
