@@ -1,10 +1,11 @@
 package edu.illinois.cs.cogcomp.srl.caches;
 
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.sentences.EdisonSerializationHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;
+
 import org.slf4j.Logger;
 
 import java.sql.Connection;
@@ -165,7 +166,7 @@ public class SentenceDBHandler {
 
 	private byte[] serialize(TextAnnotation ta) {
 		try {
-			return EdisonSerializationHelper.serializeToBytes(ta);
+			return SerializationHelper.serializeTextAnnotationToBytes(ta);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -173,7 +174,7 @@ public class SentenceDBHandler {
 
 	private TextAnnotation deserialize(byte[] bytes) {
 		try {
-			return EdisonSerializationHelper.deserializeFromBytes(bytes);
+			return SerializationHelper.deserializeTextAnnotationFromBytes(bytes);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

@@ -1,21 +1,34 @@
 package edu.illinois.cs.cogcomp.srl;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
+import org.apache.commons.configuration.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
-import edu.illinois.cs.cogcomp.edison.data.ColumnFormatWriter;
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.data.srl.NombankReader;
-import edu.illinois.cs.cogcomp.edison.data.srl.PropbankReader;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
 import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
 import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
@@ -37,13 +50,6 @@ import edu.illinois.cs.cogcomp.srl.learn.LearnerParameters;
 import edu.illinois.cs.cogcomp.srl.nom.NomSRLManager;
 import edu.illinois.cs.cogcomp.srl.utilities.PredicateArgumentEvaluator;
 import edu.illinois.cs.cogcomp.srl.verb.VerbSRLManager;
-import org.apache.commons.configuration.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.*;
 
 public class Main {
 	private final static Logger log = LoggerFactory.getLogger(Main.class);

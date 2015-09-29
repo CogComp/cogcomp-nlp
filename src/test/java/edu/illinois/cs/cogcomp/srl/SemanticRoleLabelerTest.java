@@ -1,7 +1,12 @@
 package edu.illinois.cs.cogcomp.srl;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import junit.framework.TestCase;
 
@@ -19,7 +24,7 @@ public class SemanticRoleLabelerTest extends TestCase {
     }
 
     public void testVerbSRL() throws Exception {
-        TextAnnotation ta = new TextAnnotation("", "", Arrays.asList("I do ."));
+        TextAnnotation ta = new TextAnnotation("", "", Arrays.asList("I do .");
 
         TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
         tlv.addTokenLabel(0, "PRP", 1d);
@@ -27,7 +32,7 @@ public class SemanticRoleLabelerTest extends TestCase {
         tlv.addTokenLabel(2, ".", 1d);
         ta.addView(ViewNames.POS, tlv);
 
-        ta.addView(ViewNames.NER, new SpanLabelView(ViewNames.NER, "test", ta, 1d));
+        ta.addView(ViewNames.NER_CONLL, new SpanLabelView(ViewNames.NER_CONLL, "test", ta, 1d));
 
         SpanLabelView chunks = new SpanLabelView(ViewNames.SHALLOW_PARSE, "test", ta, 1d);
         chunks.addSpanLabel(0, 1, "NP", 1d);

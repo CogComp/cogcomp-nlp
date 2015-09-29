@@ -1,50 +1,54 @@
 package edu.illinois.cs.cogcomp.srl.experiment;
 
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
-import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
-import edu.illinois.cs.cogcomp.edison.annotators.PseudoParse;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorClient;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
-import edu.illinois.cs.cogcomp.srl.SRLProperties;
-import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
-import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
+import edu.illinois.cs.cogcomp.srl.SRLProperties;
+
 public class TextPreProcessor {
-	private final static Logger log = LoggerFactory.getLogger(TextPreProcessor.class);
+	private final static Logger log = LoggerFactory
+			.getLogger(TextPreProcessor.class);
 
 	private static TextPreProcessor instance;
 	private static final boolean forceUpdate = false;
 	private final boolean useCurator;
 	private final boolean tokenized;
-	private final CuratorClient curator;
-	private final IllinoisPreprocessor illinoisPreprocessor;
+	private final AnnotatorService annotator;
+	public final static String[] requiredViews = { ViewNames.POS,
+			ViewNames.NER_CONLL, ViewNames.SHALLOW_PARSE,
+			ViewNames.PARSE_STANFORD };
 	private String defaultParser;
 
-	public TextPreProcessor(String configFile, boolean tokenized) throws Exception {
+	public TextPreProcessor(String configFile, boolean tokenized)
+			throws Exception {
 		SRLProperties.initialize(configFile);
 		SRLProperties config = SRLProperties.getInstance();
 		defaultParser = config.getDefaultParser();
 		this.useCurator = config.useCurator();
 		this.tokenized = tokenized;
+		ResourceManager rm = new ResourceManager(configFile);
 
 		if (useCurator) {
-			curator = new CuratorClient(config.getCuratorHost(), config.getCuratorPort(), tokenized);
-			illinoisPreprocessor = null;
-		}
-		else {
+			annotator = CuratorFactory.buildCuratorClient(rm);
+			// illinoisPreprocessor = null;
+		} else {
 			if (!defaultParser.equals("Stanford")) {
-				log.error("Illinois Pipeline works only with the Stanford parser.\n" +
-						"Please change the 'DefaultParser' parameter in the configuration file.");
+				log.error("Illinois Pipeline works only with the Stanford parser.\n"
+						+ "Please change the 'DefaultParser' parameter in the configuration file.");
 				System.exit(-1);
 			}
-			ResourceManager rm = new ResourceManager(config.getPipelineConfigFile());
-			illinoisPreprocessor = new IllinoisPreprocessor(rm);
-			curator = null;
+
+			// illinoisPreprocessor = new IllinoisPreprocessor(rm);
+			annotator = IllinoisPipelineFactory.buildPipeline(rm);
 		}
 	}
 
@@ -60,7 +64,8 @@ public class TextPreProcessor {
 
 	public static TextPreProcessor getInstance() {
 		if (instance == null) {
-			// Start a new TextPreProcessor with default values (no Curator, no tokenization) and default config
+			// Start a new TextPreProcessor with default values (no Curator, no
+			// tokenization) and default config
 			try {
 				instance = new TextPreProcessor("srl-config.properties", false);
 			} catch (Exception e) {
@@ -74,81 +79,25 @@ public class TextPreProcessor {
 
 	public TextAnnotation preProcessText(String text) throws Exception {
 		TextAnnotation ta;
-		if (useCurator) {
-			ta = curator.getTextAnnotation("", "", text, false);
-			addViewsFromCurator(ta, curator);
-		}
-		else {
-			ta = illinoisPreprocessor.processTextToTextAnnotation("", "", text, false);
-			addAdditionalViewsFromPipeline(ta);
-		}
+		ta = annotator.createBasicTextAnnotation("", "", text);
+		addViews(ta);
 		return ta;
 	}
 
 	public void preProcessText(TextAnnotation ta) throws Exception {
-		if (useCurator)
-			addViewsFromCurator(ta, curator);
-		else {
-			illinoisPreprocessor.processTextAnnotation(ta, tokenized);
-			addAdditionalViewsFromPipeline(ta);
-		}
+		addViews(ta);
 	}
 
-	/**
-	 * Adds required views (annotations) from Curator. Used both when training and testing.
-	 *
-	 * @param ta The {@link TextAnnotation} where the views will be added
-	 * @param curator The Curator client providing the views
-	 * @throws Exception
-	 */
-	private void addViewsFromCurator(TextAnnotation ta, CuratorClient curator)
-			throws Exception {
-		if (!ta.hasView(ViewNames.NER))
-			curator.addNamedEntityView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.SHALLOW_PARSE))
-			curator.addChunkView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.LEMMA))
-			curator.addLemmaView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.POS))
-			curator.addPOSView(ta, forceUpdate);
-
-		if (defaultParser.equals("Charniak") && !ta.hasView(ViewNames.PARSE_CHARNIAK)) {
-			curator.addCharniakParse(ta, forceUpdate);
-			ta.addView(ClauseViewGenerator.CHARNIAK);
-			ta.addView(PseudoParse.CHARNIAK);
-			ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK));
-		} else if (defaultParser.equals("Berkeley") && !ta.hasView(ViewNames.PARSE_BERKELEY)) {
-			curator.addBerkeleyParse(ta, forceUpdate);
-			ta.addView(ClauseViewGenerator.BERKELEY);
-			ta.addView(PseudoParse.BERKELEY);
-			ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_BERKELEY));
-		} else if (defaultParser.equals("Stanford") && !ta.hasView(ViewNames.PARSE_STANFORD)) {
-			curator.addStanfordParse(ta, forceUpdate);
+	private void addViews(TextAnnotation ta) throws AnnotatorException {
+		for (String view : requiredViews) {
+			if (!ta.hasView(view))
+				annotator.addView(ta, view);
+		}
+		if (!ta.hasView(ViewNames.CLAUSES_STANFORD))
 			ta.addView(ClauseViewGenerator.STANFORD);
-			ta.addView(PseudoParse.STANFORD);
-			ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_STANFORD));
-		}
-	}
+		if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_STANFORD))
+			ta.addView(new HeadFinderDependencyViewGenerator(
+					ViewNames.PARSE_STANFORD));
 
-	private void addAdditionalViewsFromPipeline(TextAnnotation ta) throws TException, AnnotationFailedException {
-		if (defaultParser.equals("Charniak")) {
-			if (!ta.hasView(ViewNames.CLAUSES_CHARNIAK))
-				ta.addView(ClauseViewGenerator.CHARNIAK);
-//			ta.addView(PseudoParse.CHARNIAK);
-			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_CHARNIAK))
-				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK));
-		} else if (defaultParser.equals("Berkeley")) {
-			if (!ta.hasView(ViewNames.CLAUSES_BERKELEY))
-				ta.addView(ClauseViewGenerator.BERKELEY);
-//			ta.addView(PseudoParse.BERKELEY);
-			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_BERKELEY))
-				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_BERKELEY));
-		} else if (defaultParser.equals("Stanford")) {
-			if (!ta.hasView(ViewNames.CLAUSES_STANFORD))
-				ta.addView(ClauseViewGenerator.STANFORD);
-//			ta.addView(PseudoParse.STANFORD);
-			if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_STANFORD))
-				ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_STANFORD));
-		}
 	}
 }

@@ -1,9 +1,13 @@
 package edu.illinois.cs.cogcomp.srl;
 
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorDataStructureInterface;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.curator.CuratorDataStructureInterface;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -13,14 +17,16 @@ import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLLagrangeInference;
 import edu.illinois.cs.cogcomp.thrift.base.Forest;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SemanticRoleLabeler {
-	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
+public class SemanticRoleLabeler implements Annotator {
+	private final static Logger log = LoggerFactory
+			.getLogger(SemanticRoleLabeler.class);
 	public final SRLManager manager;
 	private static SRLProperties properties;
 
@@ -42,7 +48,8 @@ public class SemanticRoleLabeler {
 			else {
 				for (SRLType type : SRLType.values()) {
 					srlType = type.name();
-					srlLabelers.add(new SemanticRoleLabeler(configFile, srlType));
+					srlLabelers
+							.add(new SemanticRoleLabeler(configFile, srlType));
 				}
 			}
 		} catch (Exception e) {
@@ -54,7 +61,8 @@ public class SemanticRoleLabeler {
 		do {
 			System.out.print("Enter text (underscore to quit): ");
 			input = System.console().readLine().trim();
-			if (input.equals("_")) return;
+			if (input.equals("_"))
+				return;
 
 			if (!input.isEmpty()) {
 				// XXX Assuming that all SRL types require the same views
@@ -86,7 +94,8 @@ public class SemanticRoleLabeler {
 		} while (!input.equals("_"));
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
+	public SemanticRoleLabeler(String configFile, String srlType)
+			throws Exception {
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
@@ -133,21 +142,52 @@ public class SemanticRoleLabeler {
 
 		List<Constituent> predicates;
 		if (manager.getSRLType() == SRLType.Verb)
-			predicates = manager.getHeuristicPredicateDetector().getPredicates(ta);
+			predicates = manager.getHeuristicPredicateDetector().getPredicates(
+					ta);
 		else
-			predicates = manager.getLearnedPredicateDetector().getPredicates(ta);
+			predicates = manager.getLearnedPredicateDetector()
+					.getPredicates(ta);
 
-		if (predicates.isEmpty()) return null;
+		if (predicates.isEmpty())
+			return null;
 
-		ISRLInference inference = new SRLLagrangeInference(manager, ta, predicates, true, properties.getMaxInferenceRounds());
+		ISRLInference inference = new SRLLagrangeInference(manager, ta,
+				predicates, true, properties.getMaxInferenceRounds());
 
 		return inference.getOutputView();
 	}
 
-	public Forest getSRLForest(Record record) throws Exception {
-		TextAnnotation ta = CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "", record);
-		PredicateArgumentView pav = getSRL(ta);
-		return CuratorDataStructureInterface.convertPredicateArgumentViewToForest(pav);
+	@Override
+	public String[] getRequiredViews() {
+		return TextPreProcessor.requiredViews;
 	}
+
+	@Override
+	public View getView(TextAnnotation ta) throws AnnotatorException {
+		try {
+			return getSRL(ta);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new AnnotatorException(e.getMessage());
+		}
+	}
+
+	@Override
+	public String getViewName() {
+		if (manager.getSRLType() == SRLType.Verb) {
+			return ViewNames.SRL_VERB;
+		} else if (manager.getSRLType() == SRLType.Nom)
+			return ViewNames.SRL_NOM;
+		return null;
+	}
+
+	// public Forest getSRLForest(Record record) throws Exception {
+	// TextAnnotation ta =
+	// CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "",
+	// record);
+	// PredicateArgumentView pav = getSRL(ta);
+	// return
+	// CuratorDataStructureInterface.convertPredicateArgumentViewToForest(pav);
+	// }
 
 }
