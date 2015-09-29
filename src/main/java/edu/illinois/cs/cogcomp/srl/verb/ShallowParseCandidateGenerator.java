@@ -1,6 +1,6 @@
 package edu.illinois.cs.cogcomp.srl.verb;
 
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentCandidateGenerator;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
