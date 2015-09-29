@@ -2,12 +2,12 @@ package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexReader;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
@@ -22,6 +22,7 @@ import edu.illinois.cs.cogcomp.srl.inference.SRLConstraints;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

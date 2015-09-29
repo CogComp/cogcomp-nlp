@@ -1,11 +1,11 @@
 package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.View;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;

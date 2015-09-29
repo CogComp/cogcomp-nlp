@@ -2,15 +2,15 @@ package edu.illinois.cs.cogcomp.srl.nom;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal;
-import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentCandidateGenerator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +42,7 @@ public class NomArgumentCandidateGenerator extends ArgumentCandidateGenerator {
 		int predicateSentenceStart = ta.getSentence(predicateSentenceId).getStartSpan();
 
 		// get the parse tree
-		Tree<String> tree = ParseHelper.getParseTree(manager.defaultParser, ta, predicateSentenceId);
+		Tree<String> tree = ParseUtils.getParseTree(manager.defaultParser, ta, predicateSentenceId);
 		Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils.getSpanLabeledTree(tree);
 
 		Constituent predicateClone = predicate.cloneForNewView(this.getCandidateViewName());

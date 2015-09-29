@@ -1,11 +1,12 @@
 package edu.illinois.cs.cogcomp.srl.jlis;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.utilities.Parallel;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.srl.core.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

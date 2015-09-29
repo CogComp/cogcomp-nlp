@@ -1,14 +1,17 @@
 package edu.illinois.cs.cogcomp.srl.nom;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexEntry;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexEntry.NomLexClasses;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexReader;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.srl.core.AbstractPredicateDetector;
+
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
@@ -63,7 +66,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 	@Override
 	public Option<String> getLemma(TextAnnotation ta, int tokenId) {
 
-		String pos = WordHelpers.getPOS(ta, tokenId);
+		String pos = POSUtils.getPOS(ta, tokenId);
 
 		boolean isNoun = POSUtils.isPOSNoun(pos);
 		if (!isNoun) {
@@ -76,7 +79,8 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 				opt = testTokenVariations(token);
 			} else {
 
-				String lemma = WordHelpers.getLemma(ta, tokenId);
+				TokenLabelView lemmaView = (TokenLabelView) ta.getView(ViewNames.LEMMA);
+				String lemma = lemmaView.getConstituentAtToken(tokenId).getLabel();
 
 				opt = testTokenVariations(lemma);
 

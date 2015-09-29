@@ -1,8 +1,8 @@
 package edu.illinois.cs.cogcomp.srl.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.srl.caches.SentenceDBHandler;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;

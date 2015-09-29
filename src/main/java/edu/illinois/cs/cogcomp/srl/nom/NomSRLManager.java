@@ -1,8 +1,9 @@
 package edu.illinois.cs.cogcomp.srl.nom;
 
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.data.FramesManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

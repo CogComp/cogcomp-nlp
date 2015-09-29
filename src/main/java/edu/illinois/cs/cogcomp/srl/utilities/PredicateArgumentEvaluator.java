@@ -2,11 +2,15 @@ package edu.illinois.cs.cogcomp.srl.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.experiments.EvaluationRecord;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.*;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
