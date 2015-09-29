@@ -1,17 +1,18 @@
 package edu.illinois.cs.cogcomp.srl.inference;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.infer.ilp.*;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceStructure;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

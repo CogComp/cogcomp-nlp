@@ -1,10 +1,10 @@
 package edu.illinois.cs.cogcomp.srl.inference.constraints;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPConstraint;
 import edu.illinois.cs.cogcomp.infer.ilp.InferenceVariableLexManager;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;

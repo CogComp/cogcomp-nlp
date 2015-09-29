@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.srl.inference.constraints;
 
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Queries;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPConstraint;
 import edu.illinois.cs.cogcomp.infer.ilp.InferenceVariableLexManager;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
