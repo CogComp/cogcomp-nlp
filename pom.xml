@@ -5,7 +5,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-srl</artifactId>
 	<packaging>jar</packaging>
-	<version>5.1.2</version>
+	<version>5.1.3</version>
 
 	<url>http://cogcomp.cs.illinois.edu</url>
 
@@ -42,9 +42,14 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-nlp-pipeline</artifactId>
-			<version>0.1.1</version>
+			<version>0.1.6</version>
 		</dependency>
 
+		<dependency>
+		  <groupId>edu.illinois.cs.cogcomp</groupId>
+		  <artifactId>illinois-caching-curator</artifactId>
+		  <version>2.1.1</version>
+		</dependency>
 		<dependency>
 			<groupId>com.gurobi</groupId>
 			<artifactId>gurobi</artifactId>
@@ -85,9 +90,10 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>edison</artifactId>
-			<version>0.7.8</version>
+			<version>1.7.9</version>
 		</dependency>
 
+		
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>inference</artifactId>
