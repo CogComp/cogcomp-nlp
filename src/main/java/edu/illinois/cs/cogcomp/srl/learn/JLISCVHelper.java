@@ -3,6 +3,7 @@ package edu.illinois.cs.cogcomp.srl.learn;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
 import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
@@ -66,7 +67,7 @@ public class JLISCVHelper {
 
 	public static LearnerParameters cvSSVMSerial(
 			AbstractInferenceSolver[] inference,
-			StructuredProblem sp, Tester<StructuredProblem> evaluator,
+			SLProblem sp, Tester<SLProblem> evaluator,
 			int nFolds) throws Exception {
 
 		log.info("Cross validation for struct SVM");
@@ -75,7 +76,7 @@ public class JLISCVHelper {
 		StructureProblemSplitter splitter = new StructureProblemSplitter(
 				structSplits);
 
-		CrossValidationHelper<StructuredProblem> cvHelper = new CrossValidationHelper<StructuredProblem>(
+		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
 				nFolds, inference, new RealMeasureAverager(), splitter,
 				new SSVMTrainer(), evaluator);
 
@@ -92,7 +93,7 @@ public class JLISCVHelper {
 
 	public static LearnerParameters cvSSVM(
 			AbstractInferenceSolver[] inference,
-			StructuredProblem sp, Tester<StructuredProblem> evaluator,
+			SLProblem sp, Tester<SLProblem> evaluator,
 			int nThreads, int nFolds) throws Exception {
 
 		log.info("Cross validation for struct SVM");
@@ -101,7 +102,7 @@ public class JLISCVHelper {
 		StructureProblemSplitter splitter = new StructureProblemSplitter(
 				structSplits);
 
-		CrossValidationHelper<StructuredProblem> cvHelper = new CrossValidationHelper<StructuredProblem>(
+		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
 				nFolds, inference, new RealMeasureAverager(), splitter,
 				new SSVMTrainer(), evaluator);
 
@@ -118,10 +119,10 @@ public class JLISCVHelper {
 
 }
 
-class SSVMTrainer implements Trainer<StructuredProblem> {
+class SSVMTrainer implements Trainer<SLProblem> {
 
 	@Override
-	public WeightVector train(StructuredProblem dataset,
+	public WeightVector train(SLProblem dataset,
 			LearnerParameters params,
 			AbstractInferenceSolver[] inference) throws Exception {
 		return JLISLearner.trainStructSVM(inference, dataset,
@@ -140,43 +141,43 @@ abstract class SingleListDatasetSplitter<DatasetType> implements
 }
 
 class StructureProblemSplitter extends
-		SingleListDatasetSplitter<StructuredProblem> {
+		SingleListDatasetSplitter<SLProblem> {
 
 	public StructureProblemSplitter(int[] splitIds) {
 		super(splitIds);
 	}
 
-	public Pair<StructuredProblem, StructuredProblem> getFoldData(
-			StructuredProblem problem, int foldId) {
+	public Pair<SLProblem, SLProblem> getFoldData(
+			SLProblem problem, int foldId) {
 
 		int testStart = splitIds[foldId];
 		int testEnd = splitIds[foldId + 1];
 
-		StructuredProblem train = new StructuredProblem();
-		StructuredProblem test = new StructuredProblem();
+		SLProblem train = new SLProblem();
+		SLProblem test = new SLProblem();
 
-		train.input_list = new ArrayList<IInstance>();
-		test.input_list = new ArrayList<IInstance>();
+		train.instanceList = new ArrayList<IInstance>();
+		test.instanceList = new ArrayList<IInstance>();
 
-		train.output_list = new ArrayList<IStructure>();
-		test.output_list = new ArrayList<IStructure>();
+		train.goldStructureList = new ArrayList<IStructure>();
+		test.goldStructureList = new ArrayList<IStructure>();
 
-		for (int i = 0; i < problem.input_list.size(); i++) {
+		for (int i = 0; i < problem.instanceList.size(); i++) {
 
-			IInstance x = problem.input_list.get(i);
-			IStructure y = problem.output_list.get(i);
+			IInstance x = problem.instanceList.get(i);
+			IStructure y = problem.goldStructureList.get(i);
 
 			if (i < testStart || i >= testEnd) {
-				train.input_list.add(x);
-				train.output_list.add(y);
+				train.instanceList.add(x);
+				train.goldStructureList.add(y);
 			} else {
-				test.input_list.add(x);
-				test.output_list.add(y);
+				test.instanceList.add(x);
+				test.goldStructureList.add(y);
 			}
 
 		}
 
-		return new Pair<StructuredProblem, StructuredProblem>(train, test);
+		return new Pair<SLProblem, SLProblem>(train, test);
 	}
 
 }

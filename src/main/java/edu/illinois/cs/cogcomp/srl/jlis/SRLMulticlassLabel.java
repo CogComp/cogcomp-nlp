@@ -17,7 +17,12 @@ public class SRLMulticlassLabel implements IStructure {
 		this.type = type;
 		this.manager = manager;
 	}
-
+	public Models getType(){
+		return type;
+	}
+	public SRLManager getManager(){
+		return manager;
+	}
 //	@Override
 //	public FeatureVector getFeatureVector() {
 //		FeatureVector feats = x.getCachedFeatureVector(type);

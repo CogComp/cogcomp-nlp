@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
+import edu.illinois.cs.cogcomp.srl.inference.SRLMulticlassInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,8 +144,9 @@ public class SemanticRoleLabeler implements Annotator {
 		if (predicates.isEmpty())
 			return null;
 
-		ISRLInference inference = new SRLILPInference(manager, ta,
-				predicates, true, properties.getMaxInferenceRounds());
+//		ISRLInference inference = new SRLILPInference(manager, ta,
+//				predicates, true, properties.getMaxInferenceRounds());
+		ISRLInference SRLMulticlassInference = new SRLMulticlassInference(manager,);
 
 		return inference.getOutputView();
 	}

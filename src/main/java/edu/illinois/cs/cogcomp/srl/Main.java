@@ -15,6 +15,7 @@ import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMLearner;
+import edu.illinois.cs.cogcomp.srl.jlis.SRLFeatureExtractor;
 import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -396,7 +397,7 @@ public class Main {
 //		initializeSolver(params);
 		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
 		params.NUMBER_OF_THREADS = numThreads;
-		Learner learner = LearnerFactory.getLearner(new SRLMulticlassInference(manager, model), , params);
+		Learner learner = LearnerFactory.getLearner(new SRLMulticlassInference(manager, model), new SRLFeatureExtractor(), params);
 		WeightVector w = learner.train(problem);
 		JLISLearner.saveWeightVector(w, manager.getModelFileName(model));
 	}
