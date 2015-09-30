@@ -38,9 +38,11 @@ public class TextPreProcessor {
 		ResourceManager rm = new ResourceManager(configFile);
 
 		if (useCurator) {
+			System.out.println("Using curator");
 			annotator = CuratorFactory.buildCuratorClient(rm);
 			// illinoisPreprocessor = null;
 		} else {
+			System.out.println("Using pipeline");
 			if (!defaultParser.equals("Stanford")) {
 				log.error("Illinois Pipeline works only with the Stanford parser.\n"
 						+ "Please change the 'DefaultParser' parameter in the configuration file.");

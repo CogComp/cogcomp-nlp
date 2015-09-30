@@ -1,25 +1,5 @@
 package edu.illinois.cs.cogcomp.srl;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
-import edu.illinois.cs.cogcomp.sl.core.SLParameters;
-import edu.illinois.cs.cogcomp.sl.core.SLProblem;
-import edu.illinois.cs.cogcomp.sl.learner.Learner;
-import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
-import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMLearner;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLFeatureExtractor;
-import org.apache.commons.configuration.ConfigurationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -35,6 +15,11 @@ import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
+import edu.illinois.cs.cogcomp.sl.core.SLParameters;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
+import edu.illinois.cs.cogcomp.sl.learner.Learner;
+import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
+import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMLearner;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.caches.SentenceDBHandler;
@@ -48,12 +33,19 @@ import edu.illinois.cs.cogcomp.srl.experiment.PruningPreExtractor;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLMulticlassInference;
+import edu.illinois.cs.cogcomp.srl.jlis.SRLFeatureExtractor;
 import edu.illinois.cs.cogcomp.srl.learn.IdentifierThresholdTuner;
 import edu.illinois.cs.cogcomp.srl.learn.JLISLearner;
-import edu.illinois.cs.cogcomp.srl.learn.LearnerParameters;
 import edu.illinois.cs.cogcomp.srl.nom.NomSRLManager;
 import edu.illinois.cs.cogcomp.srl.utilities.PredicateArgumentEvaluator;
 import edu.illinois.cs.cogcomp.srl.verb.VerbSRLManager;
+import org.apache.commons.configuration.ConfigurationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class Main {
 	private final static Logger log = LoggerFactory.getLogger(Main.class);

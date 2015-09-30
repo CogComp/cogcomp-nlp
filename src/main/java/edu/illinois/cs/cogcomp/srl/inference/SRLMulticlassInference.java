@@ -124,6 +124,6 @@ return best;
 
 	@Override
 	public Object clone() {
-		return super.clone();
+		return new SRLMulticlassInference(manager, type);
 	}
 }
