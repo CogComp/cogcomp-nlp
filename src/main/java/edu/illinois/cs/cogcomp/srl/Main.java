@@ -35,8 +35,6 @@ import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
-import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.caches.SentenceDBHandler;
@@ -372,7 +370,7 @@ public class Main {
 //		for (int i = 0; i < inference.length; i++)
 //			inference[i] = new SRLMulticlassInference(manager, model);
 
-		double c;
+		double c=0.01;
 		FeatureVectorCacheFile cache;
 
 		if (model == Models.Classifier) {

@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
 public class JLISLearner {
 
 	private final static Logger log = LoggerFactory
@@ -35,59 +34,56 @@ public class JLISLearner {
 		return WeightVectorUtils.load(modelName);
 	}
 
-	public static WeightVector trainStructSVM(
-			AbstractInferenceSolver[] inference,
-			SLProblem SLProblem, float c) throws Exception {
+//	public static WeightVector trainStructSVM(
+//			AbstractInferenceSolver[] inference, SLProblem SLProblem, float c)
+//			throws Exception {
+//
+//		// L2LossSSVMParalleDCDSolver learner = new
+//		// L2LossSSVMParalleDCDSolver();
+//
+//		// return learner.parallelTrainStructuredSVM(inference, SLProblem,
+//		// params);
+//	}
 
+//	public static LearnerParameters cvStructSVMSRL(SLProblem problem,
+//			AbstractInferenceSolver[] inference, int nFolds) throws Exception {
+//		Tester<SLProblem> evaluator = new Tester<SLProblem>() {
+//
+//			@Override
+//			public PerformanceMeasure evaluate(SLProblem testSet,
+//					WeightVector weight, AbstractInferenceSolver inference)
+//					throws Exception {
+//
+//				double p = JLISLearner.evaluateSRLLabel(inference, testSet,
+//						weight);
+//
+//				return new JLISCVHelper.RealMeasure(p);
+//
+//			}
+//		};
+//
+//		LearnerParameters bestParams = JLISCVHelper.cvSSVM(inference, problem,
+//				evaluator, inference.length, nFolds);
+//
+//		return bestParams;
+//	}
 
-		//L2LossSSVMParalleDCDSolver learner = new L2LossSSVMParalleDCDSolver();
+//	public static LearnerParameters cvStructSVM(SLProblem problem,
+//			AbstractInferenceSolver[] inference, int nFolds,
+//			Tester<SLProblem> evaluator) throws Exception {
+//		LearnerParameters bestParams = JLISCVHelper.cvSSVM(inference, problem,
+//				evaluator, inference.length, nFolds);
+//
+//		return bestParams;
+//	}
 
-		return learner.
-		return learner.parallelTrainStructuredSVM(inference, SLProblem, params);
-	}
-
-	public static LearnerParameters cvStructSVMSRL(SLProblem problem,
-			AbstractInferenceSolver[] inference, int nFolds)
-			throws Exception {
-		Tester<SLProblem> evaluator = new Tester<SLProblem>() {
-
-			@Override
-			public PerformanceMeasure evaluate(SLProblem testSet,
-					WeightVector weight,
-					AbstractInferenceSolver inference)
-					throws Exception {
-
-				double p = JLISLearner.evaluateSRLLabel(inference, testSet,
-						weight);
-
-				return new JLISCVHelper.RealMeasure(p);
-
-			}
-		};
-
-		LearnerParameters bestParams = JLISCVHelper.cvSSVM(inference, problem,
-				evaluator, inference.length, nFolds);
-
-		return bestParams;
-	}
-
-	public static LearnerParameters cvStructSVM(SLProblem problem,
-			AbstractInferenceSolver[] inference, int nFolds,
-			Tester<SLProblem> evaluator) throws Exception {
-		LearnerParameters bestParams = JLISCVHelper.cvSSVM(inference, problem,
-				evaluator, inference.length, nFolds);
-
-		return bestParams;
-	}
-
-	public static double evaluateSRLLabel(
-			AbstractInferenceSolver inference,
+	public static double evaluateSRLLabel(AbstractInferenceSolver inference,
 			SLProblem testSet, WeightVector weights) throws Exception {
 		EvaluationRecord evalRecord = new EvaluationRecord();
-		for (int i = 0; i < testSet.input_list.size(); i++) {
-			IInstance x = testSet.input_list.get(i);
+		for (int i = 0; i < testSet.instanceList.size(); i++) {
+			IInstance x = testSet.instanceList.get(i);
 
-			SRLMulticlassLabel gold = (SRLMulticlassLabel) testSet.output_list
+			SRLMulticlassLabel gold = (SRLMulticlassLabel) testSet.goldStructureList
 					.get(i);
 
 			SRLMulticlassLabel bestStructure = (SRLMulticlassLabel) inference
@@ -108,23 +104,23 @@ public class JLISLearner {
 		return evalRecord.getF1();
 	}
 
-	private static void initializeSolver(SLParameters params) {
-
-		// how precisely should the dual be solved
-		params.BINARY_DUAL_GAP = 0.1;
-		params.DUAL_GAP = 0.5;
-
-		params.TRAINMINI = true;
-		params.TRAINMINI_SIZE = 5000;
-
-		params.verbose_level = SLParameters.VLEVEL_MID;
-
-		params.MAX_SVM_ITER = 500;
-		// params.CLEAN_CACHE = false;
-		params.MAX_OUT_ITER = 25;
-
-		params.CALCULATE_REAL_OBJ = true;
-
-	}
+	// private static void initializeSolver(SLParameters params) {
+	//
+	// // how precisely should the dual be solved
+	// params.BINARY_DUAL_GAP = 0.1;
+	// params.DUAL_GAP = 0.5;
+	//
+	// params.TRAINMINI = true;
+	// params.TRAINMINI_SIZE = 5000;
+	//
+	// params.verbose_level = SLParameters.VLEVEL_MID;
+	//
+	// params.MAX_SVM_ITER = 500;
+	// // params.CLEAN_CACHE = false;
+	// params.MAX_OUT_ITER = 25;
+	//
+	// params.CALCULATE_REAL_OBJ = true;
+	//
+	// }
 
 }

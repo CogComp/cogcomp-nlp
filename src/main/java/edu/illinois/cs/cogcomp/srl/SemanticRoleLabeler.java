@@ -4,6 +4,8 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
+import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -11,6 +13,7 @@ import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLMulticlassInference;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,10 +146,10 @@ public class SemanticRoleLabeler implements Annotator {
 
 		if (predicates.isEmpty())
 			return null;
-
-//		ISRLInference inference = new SRLILPInference(manager, ta,
-//				predicates, true, properties.getMaxInferenceRounds());
-		ISRLInference SRLMulticlassInference = new SRLMulticlassInference(manager,);
+		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
+		ISRLInference inference = new SRLILPInference(s, manager, predicates);
+		// ISRLInference SRLMulticlassInference = new
+		// SRLMulticlassInference(manager,);
 
 		return inference.getOutputView();
 	}

@@ -4,8 +4,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
-import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.learn.CrossValidationHelper.DatasetSplitter;
 import edu.illinois.cs.cogcomp.srl.learn.CrossValidationHelper.PerformanceMeasureAverager;
@@ -65,71 +63,71 @@ public class JLISCVHelper {
 		return splitIdStarts;
 	}
 
-	public static LearnerParameters cvSSVMSerial(
-			AbstractInferenceSolver[] inference,
-			SLProblem sp, Tester<SLProblem> evaluator,
-			int nFolds) throws Exception {
+//	public static LearnerParameters cvSSVMSerial(
+//			AbstractInferenceSolver[] inference,
+//			SLProblem sp, Tester<SLProblem> evaluator,
+//			int nFolds) throws Exception {
+//
+//		log.info("Cross validation for struct SVM");
+//		int[] structSplits = getSplitLocations(nFolds, sp.size());
+//
+//		StructureProblemSplitter splitter = new StructureProblemSplitter(
+//				structSplits);
+//
+//		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
+//				nFolds, inference, new RealMeasureAverager(), splitter,
+//				new SSVMTrainer(), evaluator);
+//
+//		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
+//
+//		for (int i = -8; i < 0; i++) {
+//			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
+//		}
+//
+//		LearnerParameters learnerParameters = cvHelper.doCV(sp, params, false);
+//
+//		return learnerParameters;
+//	}
 
-		log.info("Cross validation for struct SVM");
-		int[] structSplits = getSplitLocations(nFolds, sp.size());
-
-		StructureProblemSplitter splitter = new StructureProblemSplitter(
-				structSplits);
-
-		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
-				nFolds, inference, new RealMeasureAverager(), splitter,
-				new SSVMTrainer(), evaluator);
-
-		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
-
-		for (int i = -8; i < 0; i++) {
-			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
-		}
-
-		LearnerParameters learnerParameters = cvHelper.doCV(sp, params, false);
-
-		return learnerParameters;
-	}
-
-	public static LearnerParameters cvSSVM(
-			AbstractInferenceSolver[] inference,
-			SLProblem sp, Tester<SLProblem> evaluator,
-			int nThreads, int nFolds) throws Exception {
-
-		log.info("Cross validation for struct SVM");
-		int[] structSplits = getSplitLocations(nFolds, sp.size());
-
-		StructureProblemSplitter splitter = new StructureProblemSplitter(
-				structSplits);
-
-		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
-				nFolds, inference, new RealMeasureAverager(), splitter,
-				new SSVMTrainer(), evaluator);
-
-		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
-
-		for (int i = -8; i < 0; i++) {
-			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
-		}
-
-		LearnerParameters learnerParameters = cvHelper.doCV(sp, params);
-
-		return learnerParameters;
-	}
-
-}
-
-class SSVMTrainer implements Trainer<SLProblem> {
-
-	@Override
-	public WeightVector train(SLProblem dataset,
-			LearnerParameters params,
-			AbstractInferenceSolver[] inference) throws Exception {
-		return JLISLearner.trainStructSVM(inference, dataset,
-				params.getcStruct());
-	}
+//	public static LearnerParameters cvSSVM(
+//			AbstractInferenceSolver[] inference,
+//			SLProblem sp, Tester<SLProblem> evaluator,
+//			int nThreads, int nFolds) throws Exception {
+//
+//		log.info("Cross validation for struct SVM");
+//		int[] structSplits = getSplitLocations(nFolds, sp.size());
+//
+//		StructureProblemSplitter splitter = new StructureProblemSplitter(
+//				structSplits);
+//
+//		CrossValidationHelper<SLProblem> cvHelper = new CrossValidationHelper<SLProblem>(
+//				nFolds, inference, new RealMeasureAverager(), splitter,
+//				new SSVMTrainer(), evaluator);
+//
+//		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
+//
+//		for (int i = -8; i < 0; i++) {
+//			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
+//		}
+//
+//		LearnerParameters learnerParameters = cvHelper.doCV(sp, params);
+//
+//		return learnerParameters;
+//	}
 
 }
+
+//class SSVMTrainer implements Trainer<SLProblem> {
+//
+//	@Override
+//	public WeightVector train(SLProblem dataset,
+//			LearnerParameters params,
+//			AbstractInferenceSolver[] inference) throws Exception {
+//		return JLISLearner.trainStructSVM(inference, dataset,
+//				params.getcStruct());
+//	}
+//
+//}
 
 abstract class SingleListDatasetSplitter<DatasetType> implements
 		DatasetSplitter<DatasetType> {
