@@ -2,22 +2,14 @@ package edu.illinois.cs.cogcomp.srl;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.curator.CuratorDataStructureInterface;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
-import edu.illinois.cs.cogcomp.srl.inference.SRLLagrangeInference;
-import edu.illinois.cs.cogcomp.thrift.base.Forest;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
-
+import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,7 +143,7 @@ public class SemanticRoleLabeler implements Annotator {
 		if (predicates.isEmpty())
 			return null;
 
-		ISRLInference inference = new SRLLagrangeInference(manager, ta,
+		ISRLInference inference = new SRLILPInference(manager, ta,
 				predicates, true, properties.getMaxInferenceRounds());
 
 		return inference.getOutputView();

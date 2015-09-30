@@ -1,8 +1,9 @@
 package edu.illinois.cs.cogcomp.srl.caches;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
+import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
@@ -41,7 +42,7 @@ public class FeatureVectorCacheFile implements Closeable,
 		writer = new BufferedWriter(new OutputStreamWriter(stream));
 	}
 
-	public synchronized void put(String lemma, int label, FeatureVector features)
+	public synchronized void put(String lemma, int label, IFeatureVector features)
 			throws Exception {
 
 		if (writer == null) {
@@ -49,8 +50,8 @@ public class FeatureVectorCacheFile implements Closeable,
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(lemma).append("\t").append(label).append("\t");
-		int[] idx = features.getIdx();
-		float[] value = features.getValue();
+		int[] idx = features.getIndices();
+		float[] value = features.getValues();
 		for (int i = 0; i < idx.length; i++) {
 			sb.append(idx[i]).append(":").append(value[i]).append(" ");
 		}
@@ -122,19 +123,19 @@ public class FeatureVectorCacheFile implements Closeable,
 	@Override
 	public void remove() {}
 
-	public StructuredProblem getStructuredProblem() {
+	public SLProblem getStructuredProblem() {
 		return getStructuredProblem(-1);
 	}
 
-	public StructuredProblem getStructuredProblem(int sizeLimit) {
+	public SLProblem getStructuredProblem(int sizeLimit) {
 		int count = 0;
-		StructuredProblem problem = new StructuredProblem();
+		SLProblem problem = new SLProblem();
 
 		log.info("Creating structured problem");
 		while (hasNext()) {
 			Pair<SRLMulticlassInstance, SRLMulticlassLabel> pair = next();
-			problem.input_list.add(pair.getFirst());
-			problem.output_list.add(pair.getSecond());
+			problem.instanceList.add(pair.getFirst());
+			problem.goldStructureList.add(pair.getSecond());
 
 			count++;
 			if (sizeLimit >= 0 && count >= sizeLimit)

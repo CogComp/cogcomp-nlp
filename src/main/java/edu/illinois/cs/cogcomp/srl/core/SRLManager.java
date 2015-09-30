@@ -545,7 +545,7 @@ public abstract class SRLManager {
 			}
 			else {
 				SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, type, this);
-				scores[label] = w.dotProduct(y.getFeatureVector());
+				scores[label] = w.dotProduct(x.getCachedFeatureVector(type),label * this.getModelInfo(type).getLexicon().size());
 			}
 		}
 

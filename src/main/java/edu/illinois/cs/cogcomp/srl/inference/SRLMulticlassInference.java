@@ -3,7 +3,7 @@ package edu.illinois.cs.cogcomp.srl.inference;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
-import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
+import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -27,7 +27,7 @@ public class SRLMulticlassInference extends AbstractInferenceSolver {
 	}
 
 	@Override
-	public Pair<IStructure, Double> getLossAugmentedBestStructure(
+	public IStructure getLossAugmentedBestStructure(
 			WeightVector weight, IInstance ins, IStructure goldStructure)
 					throws Exception {
 		SRLMulticlassInstance x = (SRLMulticlassInstance) ins;
@@ -65,7 +65,7 @@ public class SRLMulticlassInference extends AbstractInferenceSolver {
 			SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, type,
 					manager);
 
-			double score = weight.dotProduct(y.getFeatureVector());
+			double score = weight.dotProduct(x.getCachedFeatureVector(type),label * manager.getModelInfo(type).getLexicon().size());
 
 			if (stepThrough)
 				System.out.println("\t Score = " + score);
@@ -101,13 +101,29 @@ public class SRLMulticlassInference extends AbstractInferenceSolver {
 		}
 
 		assert best != null : type + "\t" + ins;
-		return new Pair<IStructure, Double>(best, loss);
+//		return new Pair<IStructure, Double>(best, loss);
+return best;
+	}
 
+	@Override
+	public float getLoss(IInstance ins, IStructure gold, IStructure pred) {
+		SRLMulticlassLabel yGold = (SRLMulticlassLabel) gold;
+		SRLMulticlassLabel ypred= (SRLMulticlassLabel) pred;
+		double l=0;
+			if (yGold.getLabel() != ypred.getLabel())
+				l++;
+
+		return 0;
 	}
 
 	@Override
 	public IStructure getBestStructure(WeightVector weight, IInstance ins)
 			throws Exception {
-		return getLossAugmentedBestStructure(weight, ins, null).getFirst();
+		return getLossAugmentedBestStructure(weight, ins, null);
+	}
+
+	@Override
+	public Object clone() {
+		return super.clone();
 	}
 }

@@ -17,7 +17,7 @@ public class SRLSentenceInstance implements IInstance {
 		}
 	}
 
-	@Override
+//	@Override
 	public double size() {
 		return size;
 	}

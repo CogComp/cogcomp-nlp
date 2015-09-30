@@ -1,7 +1,6 @@
 package edu.illinois.cs.cogcomp.srl.jlis;
 
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
@@ -20,10 +19,10 @@ public class SRLPredicateStructure implements IStructure {
 
 	}
 
-	@Override
-	public FeatureVector getFeatureVector() {
-		throw new RuntimeException("Not yet implemented!");
-	}
+//	@Override
+//	public FeatureVector getFeatureVector() {
+//		throw new RuntimeException("Not yet implemented!");
+//	}
 
 	public int getArgLabel(int candidateId) {
 		return argLabels[candidateId];

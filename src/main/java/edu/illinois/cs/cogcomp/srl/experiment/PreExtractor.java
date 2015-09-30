@@ -11,7 +11,8 @@ import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.jlis.*;
@@ -163,7 +164,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 		countFeatures(x);
 
 		synchronized (buffer) {
-			FeatureVector fv = x.getCachedFeatureVector(modelToExtract);
+			IFeatureVector fv = x.getCachedFeatureVector(modelToExtract);
 			assert fv != null;
 			buffer.add(new PreExtractRecord(x.getPredicateLemma(), y.getLabel(), fv));
 		}
@@ -230,7 +231,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 		}
 
 		x.cacheFeatureVector(modelToExtract,
-				new FeatureVector(ArrayUtilities.asIntArray(ids),
+				new SparseFeatureVector(ArrayUtilities.asIntArray(ids),
 						ArrayUtilities.asFloatArray(values)));
 	}
 

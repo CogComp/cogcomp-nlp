@@ -90,7 +90,7 @@ public class SRLPredicateInstance implements IInstance {
 		return senseInstance;
 	}
 
-	@Override
+//	@Override
 	public double size() {
 		return this.candidates.size() + 1;
 	}

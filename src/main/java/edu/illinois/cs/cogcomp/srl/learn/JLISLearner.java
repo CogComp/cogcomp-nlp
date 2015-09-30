@@ -1,11 +1,13 @@
 package edu.illinois.cs.cogcomp.srl.learn;
 
 import edu.illinois.cs.cogcomp.core.experiments.EvaluationRecord;
+import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
-import edu.illinois.cs.cogcomp.sl.core.IParameters;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
-import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
-import edu.illinois.cs.cogcomp.sl.learner.L2LossSVM.L2LossSSVMParalleLearner;
+import edu.illinois.cs.cogcomp.sl.core.SLParameters;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
+import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
+import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMLearner;
+import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMParalleDCDSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
 import edu.illinois.cs.cogcomp.srl.learn.CrossValidationHelper.Tester;
@@ -35,26 +37,22 @@ public class JLISLearner {
 
 	public static WeightVector trainStructSVM(
 			AbstractInferenceSolver[] inference,
-			StructuredProblem structuredProblem, double c) throws Exception {
+			SLProblem SLProblem, float c) throws Exception {
 
-		IParameters params = new IParameters();
-		params.c_struct = c;
-		initializeSolver(params);
 
-		L2LossSSVMParalleLearner learner = new L2LossSSVMParalleLearner();
-//		DCDSolver learner = new DCDSolver();
+		//L2LossSSVMParalleDCDSolver learner = new L2LossSSVMParalleDCDSolver();
 
-		return learner.parallelTrainStructuredSVM(inference, structuredProblem,
-				params);
+		return learner.
+		return learner.parallelTrainStructuredSVM(inference, SLProblem, params);
 	}
 
-	public static LearnerParameters cvStructSVMSRL(StructuredProblem problem,
+	public static LearnerParameters cvStructSVMSRL(SLProblem problem,
 			AbstractInferenceSolver[] inference, int nFolds)
 			throws Exception {
-		Tester<StructuredProblem> evaluator = new Tester<StructuredProblem>() {
+		Tester<SLProblem> evaluator = new Tester<SLProblem>() {
 
 			@Override
-			public PerformanceMeasure evaluate(StructuredProblem testSet,
+			public PerformanceMeasure evaluate(SLProblem testSet,
 					WeightVector weight,
 					AbstractInferenceSolver inference)
 					throws Exception {
@@ -73,9 +71,9 @@ public class JLISLearner {
 		return bestParams;
 	}
 
-	public static LearnerParameters cvStructSVM(StructuredProblem problem,
+	public static LearnerParameters cvStructSVM(SLProblem problem,
 			AbstractInferenceSolver[] inference, int nFolds,
-			Tester<StructuredProblem> evaluator) throws Exception {
+			Tester<SLProblem> evaluator) throws Exception {
 		LearnerParameters bestParams = JLISCVHelper.cvSSVM(inference, problem,
 				evaluator, inference.length, nFolds);
 
@@ -84,7 +82,7 @@ public class JLISLearner {
 
 	public static double evaluateSRLLabel(
 			AbstractInferenceSolver inference,
-			StructuredProblem testSet, WeightVector weights) throws Exception {
+			SLProblem testSet, WeightVector weights) throws Exception {
 		EvaluationRecord evalRecord = new EvaluationRecord();
 		for (int i = 0; i < testSet.input_list.size(); i++) {
 			IInstance x = testSet.input_list.get(i);
@@ -110,7 +108,7 @@ public class JLISLearner {
 		return evalRecord.getF1();
 	}
 
-	private static void initializeSolver(IParameters params) {
+	private static void initializeSolver(SLParameters params) {
 
 		// how precisely should the dual be solved
 		params.BINARY_DUAL_GAP = 0.1;
@@ -119,7 +117,7 @@ public class JLISLearner {
 		params.TRAINMINI = true;
 		params.TRAINMINI_SIZE = 5000;
 
-		params.verbose_level = IParameters.VLEVEL_MID;
+		params.verbose_level = SLParameters.VLEVEL_MID;
 
 		params.MAX_SVM_ITER = 500;
 		// params.CLEAN_CACHE = false;

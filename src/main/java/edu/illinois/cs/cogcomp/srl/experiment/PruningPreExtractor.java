@@ -3,7 +3,7 @@ package edu.illinois.cs.cogcomp.srl.experiment;
 import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.ModelInfo;
 import edu.illinois.cs.cogcomp.srl.core.Models;
@@ -61,7 +61,7 @@ public class PruningPreExtractor extends
 		SRLMulticlassInstance x = input.getFirst();
 		SRLMulticlassLabel y = input.getSecond();
 
-		FeatureVector features = x.getCachedFeatureVector(modelToExtract);
+		SparseFeatureVector features = (SparseFeatureVector)x.getCachedFeatureVector(modelToExtract);
 
 		ModelInfo modelInfo = manager.getModelInfo(modelToExtract);
 		Lexicon lexicon = modelInfo.getLexicon();
@@ -69,9 +69,9 @@ public class PruningPreExtractor extends
 		int threshold = manager.getPruneSize(modelToExtract);
 
 		Pair<int[], float[]> pair = lexicon.pruneFeaturesByCount(
-				features.getIdx(), features.getValue(), threshold);
+				features.getIndices(), features.getValues(), threshold);
 
-		features = new FeatureVector(pair.getFirst(), pair.getSecond());
+		features = new SparseFeatureVector(pair.getFirst(), pair.getSecond());
 
 		synchronized (buffer) {
 			buffer.add(new PreExtractRecord(x.getPredicateLemma(),

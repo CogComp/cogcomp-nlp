@@ -1,7 +1,6 @@
 package edu.illinois.cs.cogcomp.srl.jlis;
 
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
@@ -19,11 +18,11 @@ public class SRLMulticlassLabel implements IStructure {
 		this.manager = manager;
 	}
 
-	@Override
-	public FeatureVector getFeatureVector() {
-		FeatureVector feats = x.getCachedFeatureVector(type);
-		return feats.copyWithShift(label * manager.getModelInfo(type).getLexicon().size());
-	}
+//	@Override
+//	public FeatureVector getFeatureVector() {
+//		FeatureVector feats = x.getCachedFeatureVector(type);
+//		return feats.copyWithShift(label * manager.getModelInfo(type).getLexicon().size());
+//	}
 
 	public int getLabel() {
 		return label;

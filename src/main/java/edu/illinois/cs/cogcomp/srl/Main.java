@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import edu.illinois.cs.cogcomp.sl.core.SLParameters;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
+import edu.illinois.cs.cogcomp.sl.learner.Learner;
+import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
+import edu.illinois.cs.cogcomp.sl.learner.l2_loss_svm.L2LossSSVMLearner;
 import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -361,10 +366,10 @@ public class Main {
 
 		String featureSet = "" + modelInfo.featureManifest.getIncludedFeatures().hashCode();
 		String cacheFile = properties.getPrunedFeatureCacheFile(srlType, model, featureSet, defaultParser);
-		AbstractInferenceSolver[] inference = new AbstractInferenceSolver[numThreads];
+//		AbstractInferenceSolver[] inference = new AbstractInferenceSolver[numThreads];
 
-		for (int i = 0; i < inference.length; i++)
-			inference[i] = new SRLMulticlassInference(manager, model);
+//		for (int i = 0; i < inference.length; i++)
+//			inference[i] = new SRLMulticlassInference(manager, model);
 
 		double c;
 		FeatureVectorCacheFile cache;
@@ -375,19 +380,24 @@ public class Main {
 		}
 		else {
 			cache = new FeatureVectorCacheFile(cacheFile, model, manager);
-			StructuredProblem cvProblem = cache.getStructuredProblem(20000);
+			SLProblem cvProblem = cache.getStructuredProblem(20000);
 			cache.close();
-			LearnerParameters params = JLISLearner.cvStructSVMSRL(cvProblem, inference, 5);
-			c = params.getcStruct();
+//			LearnerParameters params = JLISLearner.cvStructSVMSRL(cvProblem, inference, 5);
+//			c = params.getcStruct();
 			log.info("c = {} for {} after cv", c, srlType + " " + model);
 		}
 
 		cache = new FeatureVectorCacheFile(cacheFile, model, manager);
 
-		StructuredProblem problem = cache.getStructuredProblem();
+		SLProblem problem = cache.getStructuredProblem();
 		cache.close();
-
-		WeightVector w = JLISLearner.trainStructSVM(inference, problem, c);
+		SLParameters params = new SLParameters();
+		params.C_FOR_STRUCTURE = (float) c;
+//		initializeSolver(params);
+		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
+		params.NUMBER_OF_THREADS = numThreads;
+		Learner learner = LearnerFactory.getLearner(new SRLMulticlassInference(manager, model), , params);
+		WeightVector w = learner.train(problem);
 		JLISLearner.saveWeightVector(w, manager.getModelFileName(model));
 	}
 
@@ -410,7 +420,7 @@ public class Main {
 
 		FeatureVectorCacheFile cache = new FeatureVectorCacheFile(cacheFile, Models.Identifier, manager);
 
-		StructuredProblem problem = cache.getStructuredProblem();
+		SLProblem problem = cache.getStructuredProblem();
 		cache.close();
 
 		IdentifierThresholdTuner tuner = new IdentifierThresholdTuner(manager, nF, problem);

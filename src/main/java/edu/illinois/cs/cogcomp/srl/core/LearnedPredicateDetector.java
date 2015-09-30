@@ -58,8 +58,10 @@ public class LearnedPredicateDetector extends AbstractPredicateDetector {
 
 			SRLMulticlassLabel y0 = new SRLMulticlassLabel(x, 0, Models.Predicate, manager);
 			SRLMulticlassLabel y1 = new SRLMulticlassLabel(x, 1, Models.Predicate, manager);
+			double score1= w.dotProduct(x.getCachedFeatureVector(Models.Predicate),1 * manager.getModelInfo(Models.Predicate).getLexicon().size());
+			double score2= w.dotProduct(x.getCachedFeatureVector(Models.Predicate));
 
-			double score = w.dotProduct(y1.getFeatureVector()) - w.dotProduct(y0.getFeatureVector());
+			double score = score1 - score2;
 
 			if (debug) {
 				System.out.println("Score = " + score);

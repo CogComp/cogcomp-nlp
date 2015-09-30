@@ -4,7 +4,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.math.Permutations;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentIdentifier;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
@@ -19,10 +19,10 @@ public class IdentifierThresholdTuner {
 	protected final double n_F;
 	private final int nThreads;
 	private final SRLManager manager;
-	private final StructuredProblem problem;
+	private final SLProblem problem;
 
 	public IdentifierThresholdTuner(SRLManager manager, double N_F,
-			StructuredProblem problem) {
+					SLProblem problem) {
 		this.manager = manager;
 
 		this.n_F = N_F;
@@ -54,9 +54,9 @@ public class IdentifierThresholdTuner {
 
 		for (int i = 0; i < this.problem.size(); i++) {
 
-			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.input_list
+			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.instanceList
 					.get(i);
-			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.output_list
+			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.goldStructureList
 					.get(i);
 
 			assert y.getLabel() == 0 || y.getLabel() == 1;

@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
 import java.util.ArrayList;
@@ -23,10 +22,10 @@ public class SRLSentenceStructure implements IStructure {
 		this.ys = ys;
 	}
 
-	@Override
-	public FeatureVector getFeatureVector() {
-		throw new RuntimeException("Not yet implemented!");
-	}
+//	@Override
+//	public FeatureVector getFeatureVector() {
+//		throw new RuntimeException("Not yet implemented!");
+//	}
 
 	public PredicateArgumentView getView(SRLManager manager, TextAnnotation ta) {
 		String viewName = manager.getPredictedViewName();
