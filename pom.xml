@@ -6,7 +6,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>inference</artifactId>
 	<packaging>jar</packaging>
-	<version>0.4.1</version>
+	<version>0.4.2</version>
 
 
 	<properties>
@@ -25,11 +25,11 @@
 
 
 	<dependencies>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>coreUtilities</artifactId>
-			<version>0.1.9</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- 	<groupId>edu.illinois.cs.cogcomp</groupId> -->
+		<!-- 	<artifactId>coreUtilities</artifactId> -->
+		<!-- 	<version>0.1.9</version> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>gurobi</groupId>
@@ -47,8 +47,8 @@
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>IllinoisSL-core</artifactId>
-			<version>0.1</version>
+			<artifactId>illinois-sl</artifactId>
+			<version>1.3.1</version>
 		</dependency>
 
 	</dependencies>
@@ -96,7 +96,7 @@
 		<repository>
 			<id>CogcompSoftware</id>
 			<name>CogcompSoftware</name>
-			<url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
 	</distributionManagement>
 
