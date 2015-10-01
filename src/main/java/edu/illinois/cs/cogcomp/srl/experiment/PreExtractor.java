@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
@@ -229,10 +230,8 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 				values.add(f.getValue());
 			}
 		}
-
-		x.cacheFeatureVector(modelToExtract,
-				new SparseFeatureVector(ArrayUtilities.asIntArray(ids),
-						ArrayUtilities.asFloatArray(values)));
+		FeatureVectorBuffer tmp = new FeatureVectorBuffer(ArrayUtilities.asIntArray(ids), ArrayUtilities.asFloatArray(values));
+		x.cacheFeatureVector(modelToExtract,tmp.toFeatureVector());
 	}
 
 	public void lockLexicon() {

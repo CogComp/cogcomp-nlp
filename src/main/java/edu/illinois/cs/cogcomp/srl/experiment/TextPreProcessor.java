@@ -24,7 +24,7 @@ public class TextPreProcessor {
 	private final boolean tokenized;
 	private final AnnotatorService annotator;
 	public final static String[] requiredViews = { ViewNames.POS,
-			ViewNames.NER_CONLL, ViewNames.SHALLOW_PARSE,
+			ViewNames.NER_CONLL,ViewNames.LEMMA, ViewNames.SHALLOW_PARSE,
 			ViewNames.PARSE_STANFORD };
 	private String defaultParser;
 
