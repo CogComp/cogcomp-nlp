@@ -21,7 +21,7 @@ public class IllinoisNerHandler extends PipelineAnnotator
 
     public IllinoisNerHandler(String config, String modelType) throws IOException {
         super( FULL_NAME_PREFIX + " " + modelType, VERSION, SHORT_NAME_PREFIX + " " + modelType );
-        this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( config );
+        this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( config ,modelType);
     }
 
     @Override
