@@ -16,7 +16,7 @@ public class IllinoisNerHandler extends PipelineAnnotator
 {
     private static final String SHORT_NAME_PREFIX = "NER";
     private static final String FULL_NAME_PREFIX = "Illinois Named Entity Tagger";
-    private static final String VERSION = "2.8.5-SNAPSHOT";
+    private static final String VERSION = "2.8.5";
     public NERAnnotator nerAnnotator;
 
     /**
