@@ -1,84 +1,85 @@
 ﻿package edu.illinois.cs.cogcomp.transliteration;
 
-/// <summary>
-/// Represents a training example for the transliteration model.  Examples may be weighted to make them more or less
-/// relatively important.
-/// </summary>
+import edu.illinois.cs.cogcomp.core.datastructures.Triple;
+
+/**
+ * Represents a training example for the transliteration model.  Examples may be weighted to make them more or less
+ * relatively important.
+ */
 public class Example {
-    /// <summary>
-    /// Normalizes a Hebrew word by replacing end-form characters with their in-word equivalents.
-    /// </summary>
-    /// <param name="hebrewWord"></param>
-    /// <returns></returns>
+
+    /**
+     * Normalizes a Hebrew word by replacing end-form characters with their in-word equivalents.
+     * @param hebrewWord
+     * @return
+     */
     public static String NormalizeHebrew(String hebrewWord) {
         return Program.NormalizeHebrew(hebrewWord);
     }
 
-    /// <summary>
-    /// Removes accents from characters.
-    /// This can be a useful fallback method if the model cannot make a prediction
-    /// over a given word because it has not seen a particular accented character before.
-    /// </summary>
-    /// <param name="word"></param>
-    /// <returns></returns>
+    /**
+     * Removes accents from characters.
+     * This can be a useful fallback method if the model cannot make a prediction
+     * over a given word because it has not seen a particular accented character before.
+     * @param word
+     * @return
+     */
     public static String StripAccents(String word) {
         return Program.StripAccent(word);
     }
 
-    /// <summary>
-    /// Creates a new training example with weight 1.
-    /// </summary>
-    /// <param name="sourceWord"></param>
-    /// <param name="transliteratedWord"></param>
+    /**
+     * Creates a new training example with weight 1.
+     * @param sourceWord
+     * @param transliteratedWord
+     */
     public Example(String sourceWord, String transliteratedWord)
     {
-        this(sourceWord,transliteratedWord,1);
+        this(sourceWord, transliteratedWord,1);
     }
 
-    /// <summary>
-    /// Creates a new training example with the specified weight.
-    /// </summary>
-    /// <param name="sourceWord"></param>
-    /// <param name="transliteratedWord"></param>
-    /// <param name="weight"></param>
+    /**
+     * Creates a new training example with the specified weight.
+     * @param sourceWord
+     * @param transliteratedWord
+     * @param weight
+     */
     public Example(String sourceWord, String transliteratedWord, double weight) {
         this.sourceWord = sourceWord;
         this.transliteratedWord = transliteratedWord;
         this.weight = weight;
     }
 
-    // SWM: what is this?
-    internal Triple<String, String,double> Triple
+    /**
+     * This used to be a field, with a get{} method.
+     * @return
+     */
+    Triple<String, String, Double> Triple()
     {
-        get {
-        return new Triple<String, String, double>(sourceWord, transliteratedWord, weight);
-    }
+        return new Triple<>(sourceWord, transliteratedWord, weight);
     }
 
-    /// <summary>
-    /// Gets a "reversed" copy of this example, with the source and transliterated words swapped.
-    /// </summary>
-    public Example Reverse
-
-    {
-        get {
+    /**
+     * Gets a "reversed" copy of this example, with the source and transliterated words swapped.
+     * This used to be a field, with a get() method.
+     */
+    public Example Reverse(){
         return new Example(transliteratedWord, sourceWord, weight);
     }
-    }
 
-    /// <summary>
-    /// The word in the source language.
-    /// </summary>
+    /**
+     * The word in the source language.
+     */
     public String sourceWord;
 
-    /// <summary>
-    /// The transliterated word.
-    /// </summary>
+    /**
+     * The transliterated word.
+     */
     public String transliteratedWord;
 
-    /// <summary>
-    /// The relative important of this example.  A weight of 1 means normal importance.
-    /// </summary>
+    /**
+     * The relative important of this example.  A weight of 1 means normal importance.
+     */
     public double weight;
 }
 

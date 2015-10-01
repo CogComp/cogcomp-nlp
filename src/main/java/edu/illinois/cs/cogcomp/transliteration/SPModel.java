@@ -1,24 +1,25 @@
 ﻿package edu.illinois.cs.cogcomp.transliteration;
 
-
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
+import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
+import edu.illinois.cs.cogcomp.utils.TopList;
 
 import java.io.*;
 import java.util.*;
 
-/// <summary>
-/// <para>Segmentation-Production Model for generating and discovery transliterations.
-/// Generation is the process of creating the transliteration of a word in a target language given the word in the source language.
-/// Discovery is the process of identifying a transliteration from a list of candidate words in the target language (this
-/// is facilitated here by obtaining the probability P(T|S)).</para>
-///
-/// <para>
-/// One useful idea (used in our paper) is that you can find Sqrt(P(T|S)*P(S|T)) rather than just P(T|S) alone, since
-/// you don't necessarily know a priori in what direction the word was originally translated (e.g. from English to Russian or Russian to English?).
-/// In our discovery experiments this geometric mean performed substantially better, although of course your results may vary.
-/// </para>
-/// </summary>
+/**
+ * <p>Segmentation-Production Model for generating and discovery transliterations.
+ * Generation is the process of creating the transliteration of a word in a target language given the word in the source language.
+ * Discovery is the process of identifying a transliteration from a list of candidate words in the target language (this
+ * is facilitated here by obtaining the probability P(T|S)).</p>
+ *
+ * <p>
+ * One useful idea (used in our paper) is that you can find Sqrt(P(T|S)*P(S|T)) rather than just P(T|S) alone, since
+ * you don't necessarily know a priori in what direction the word was originally translated (e.g. from English to Russian or Russian to English?).
+ * In our discovery experiments this geometric mean performed substantially better, although of course your results may vary.
+ * </p>
+ */
 public class SPModel
     {
         double minProductionProbability = 0.000000000000001;
@@ -47,8 +48,9 @@ public class SPModel
                 writer.write(-1);
             else
             {
-                writer.write(table.Count);
-                for (KeyValuePair<Pair<String, String>, Double> entry : table)
+                writer.write(table.size());
+                //for (KeyValuePair<Pair<String, String>, Double> entry : table)
+                for(entry : table)
                 {
                     writer.write(entry.Key.x);
                     writer.write(entry.Key.y);
@@ -60,12 +62,12 @@ public class SPModel
         private SparseDoubleVector<Pair<String, String>> ReadTableFromReader(DataInputStream reader) throws IOException {
             int count = reader.readInt();
             if (count == -1) return null;
-            SparseDoubleVector<Pair<String, String>> table = new SparseDoubleVector<Pair<String, String>>(count);
+            SparseDoubleVector<Pair<String, String>> table = new SparseDoubleVector<>(count);
             for (int i = 0; i < count; i++)
             {
                 // FIXME: this is readChar, probably should be readString??
                 Pair<String, String> keyPair = new Pair<>(reader.readChar() + "", reader.readChar() + "");
-                table.Add(keyPair, reader.readDouble());
+                table.put(keyPair, reader.readDouble());
             }
 
             return table;
@@ -102,7 +104,8 @@ public class SPModel
         }
 
         /**
-         * Deserializes an SPModel from a stream. SWM: ignore this for now.
+         * Deserializes an SPModel from a stream.
+         * SWM: ignore this for now.
          */
 //        public SPModel(InputStream stream) throws IOException {
 //            DataInputStream reader = new DataInputStream(stream);
@@ -126,30 +129,31 @@ public class SPModel
 //
 //        }
 
-        /// <summary>
-        /// The maximimum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
-        /// Larger values will possibly yield better transliterations, but will be more computationally expensive.
-        /// The default value is 100.
-        /// </summary>
-        public int MaxCandidates
-        {
-            get { return maxCandidates; }
-            set { maxCandidates = value; }
-        }
+        /**
+         * The maximimum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
+         * Larger values will possibly yield better transliterations, but will be more computationally expensive.
+         * The default value is 100.
+         * COMMENTED OUT BY SWM.
+         */
+//        public int MaxCandidates
+//        {
+//            get { return maxCandidates; }
+//            set { maxCandidates = value; }
+//        }
 
-        /// <summary>
-        /// <para>
-        /// The (0,1] segment factor determines the preference for longer segments by effectively penalizing the total number of segments used.
-        /// The probability of a transliteration is multiplied by SegmentFactor^[#segments].  Lower values prefer longer segments.  A value of 0.5, the default, is better for generation,
-        /// since productions from longer segments are more likely to be exactly correct; conversely, a value of 1 is better for discrimination.
-        /// </para>
-        /// <para>Set SegmentFactor before training begins.  Setting it after this time effectively changes the model while keeping the same parameters, which isn't a good idea.</para>
-        /// </summary>
-        public double SegmentFactor
-        {
-            get { return segmentFactor; }
-            set { segmentFactor = value; }
-        }
+
+        /**
+         * The (0,1] segment factor determines the preference for longer segments by effectively penalizing the total number of segments used.
+         * The probability of a transliteration is multiplied by SegmentFactor^[#segments].  Lower values prefer longer segments.  A value of 0.5, the default, is better for generation,
+         * since productions from longer segments are more likely to be exactly correct; conversely, a value of 1 is better for discrimination.
+         * Set SegmentFactor before training begins.  Setting it after this time effectively changes the model while keeping the same parameters, which isn't a good idea.</para>
+         * COMMENTED OUT BY SWM.
+         */
+//        public double SegmentFactor
+//        {
+//            get { return segmentFactor; }
+//            set { segmentFactor = value; }
+//        }
 
         /**
          * Creates a new model for generating transliterations (creating new words in the target language from a word in the source language).
@@ -160,7 +164,7 @@ public class SPModel
         {
             trainingExamples = new ArrayList<>(examples.size());
             for(Example example : examples)
-                trainingExamples.add(example.Triple);
+                trainingExamples.add(example.Triple());
         }
 
         /// <summary>
@@ -175,14 +179,15 @@ public class SPModel
             languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2); 
         }
 
-        /// <summary>
-        /// The size of the ngrams used by the language model (default: 4).  Irrelevant if no language model is created with SetLanguageModel.
-        /// </summary>
-        public int LanguageModelNgramSize
-        {
-            get { return ngramSize; }
-            set { ngramSize = value; }
-        }
+        /**
+         * The size of the ngrams used by the language model (default: 4).  Irrelevant if no language model is created with SetLanguageModel.
+         * COMMENTED OUT BY SWM.
+         */
+//        public int LanguageModelNgramSize
+//        {
+//            get { return ngramSize; }
+//            set { ngramSize = value; }
+//        }
 
         /**
          * Trains the model for the specified number of iterations.
@@ -197,13 +202,15 @@ public class SPModel
 
             if (probs == null)
             {
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, WeightingMode.None, NormalizationMode.None, false, out exampleCounts);
+                // FIXME: out variables
+                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false, out exampleCounts);
                 probs = Program.PSecondGivenFirst(probs);
             }
 
             for (int i = 0; i < emIterations; i++)            
             {
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs * segmentFactor : probs, WeightingMode.CountWeighted, NormalizationMode.None, true, out exampleCounts);            
+                // FIXME: out variables
+                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs * segmentFactor : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true, out exampleCounts);
                 probs = Program.PSecondGivenFirst(probs);
             }
         }
@@ -224,16 +231,16 @@ public class SPModel
                             / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
         }
 
-        /// <summary>
-        /// Generates a TopList of the most likely transliterations of the given word.
-        /// The TopList is like a SortedList sorted most-probable to least-probable with probabilities (doubles) as keys,
-        /// except that the keys may not be unique (multiple transliterations can be equiprobable).
-        /// The most likely transliteration is at index 0.
-        /// The number of transliterations returned in this manner will not exceed the maxCandidates property.
-        /// You must train the model before generating transliterations.
-        /// </summary>
-        /// <param name="sourceWord">The word to transliterate.</param>
-        /// <returns>A TopList containing the most likely transliterations of the word.</returns>
+        /**
+         * Generates a TopList of the most likely transliterations of the given word.
+         * The TopList is like a SortedList sorted most-probable to least-probable with probabilities (doubles) as keys,
+         * except that the keys may not be unique (multiple transliterations can be equiprobable).
+         * The most likely transliteration is at index 0.
+         * The number of transliterations returned in this manner will not exceed the maxCandidates property.
+         * You must train the model before generating transliterations.
+         * @param sourceWord The word to transliterate.
+         * @return A TopList containing the most likely transliterations of the word.
+         */
         public TopList<Double,String> Generate(String sourceWord)
         {
             if (probs == null) throw new NullPointerException("Must train at least one iteration before generating transliterations");
@@ -249,10 +256,10 @@ public class SPModel
                 
             if (languageModel != null)
             {
-                TopList<Double, String> fPredictions = new TopList<Double, String>(maxCandidates);
+                TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
                 for (KeyValuePair<Double, String> prediction : result)
                     //fPredictions.Add(prediction.Key * Math.Pow(WikiTransliteration.GetLanguageProbabilityViterbi(prediction.Value, languageModel, ngramSize),1d/(prediction.Value.Length)), prediction.Value);
-                    fPredictions.Add(prediction.Key * Math.Pow(WikiTransliteration.GetLanguageProbability(prediction.Value, languageModel, ngramSize), 1), prediction.Value);
+                    fPredictions.Add(prediction.Key * Math.pow(WikiTransliteration.GetLanguageProbability(prediction.Value, languageModel, ngramSize), 1), prediction.Value);
                 result = fPredictions;
             }
             

@@ -3,6 +3,8 @@ package edu.illinois.cs.cogcomp.transliteration;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
+import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
+import edu.illinois.cs.cogcomp.utils.TopList;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,8 +16,7 @@ import java.util.Map;
 
 class WikiTransliteration {
 
-
-    class ContextModel {
+    public class ContextModel {
         public SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionProbs;
         public SparseDoubleVector<Pair<String, String>> segProbs;
         public int segContextSize;
@@ -42,26 +43,13 @@ class WikiTransliteration {
         Interlanguage
     }
 
-    //[Serializable]
-    class WikiAlias {
-        public String alias;
-        public AliasType type;
-        public int count;
-
-        public WikiAlias(String alias, AliasType type, int count) {
-            this.alias = alias;
-            this.type = type;
-            this.count = count;
-        }
-    }
-
     private static HashMap<String, Boolean> languageCodeTable;
     public static final String[] languageCodes = new String[]{
             "aa", "ab", "ae", "af", "ak", "am", "an", "ar", "as", "av", "ay", "az", "ba", "be", "bg", "bh", "bi", "bm", "bn", "bo", "br", "bs", "ca", "ce", "ch", "co", "cr", "cs", "cu", "cv", "cy", "da", "de", "dv", "dz", "ee", "el", "en", "eo", "es", "et", "eu", "fa", "ff", "fi", "fj", "fo", "fr", "fy", "ga", "gd", "gl", "gn", "gu", "gv", "ha", "he", "hi", "ho", "hr", "ht", "hu", "hy", "hz", "ia", "id", "ie", "ig", "ii", "ik", "io", "is", "it", "iu", "ja", "jv", "ka", "kg", "ki", "kj", "kk", "kl", "km", "kn", "ko", "kr", "ks", "ku", "kv", "kw", "ky", "la", "lb", "lg", "li", "ln", "lo", "lt", "lu", "lv", "mg", "mh", "mi", "mk", "ml", "mn", "mr", "ms", "mt", "my", "na", "nb", "nd", "ne", "ng", "nl", "nn", "no", "nr", "nv", "ny", "oc", "oj", "om", "or", "os", "pa", "pi", "pl", "ps", "pt", "qu", "rm", "rn", "ro", "ru", "rw", "sa", "sc", "sd", "se", "sg", "sh", "si", "sk", "sl", "sm", "sn", "so", "sq", "sr", "ss", "st", "su", "sv", "sw", "ta", "te", "tg", "th", "ti", "tk", "tl", "tn", "to", "tr", "ts", "tt", "tw", "ty", "ug", "uk", "ur", "uz", "ve", "vi", "vo", "wa", "wo", "xh", "yi", "yo", "za", "zh", "zu"
     };
 
-    public static WikiTransliteration() {
-        languageCodeTable = new HashMap<String, Boolean>(languageCodes.length);
+    public WikiTransliteration() {
+        languageCodeTable = new HashMap<>(languageCodes.length);
         for (String code : languageCodes)
             languageCodeTable.put(code, true);
     }
@@ -124,38 +112,6 @@ class WikiTransliteration {
 
         return result;
     }
-
-    //public static HashMap<String, List<KeyValuePair<String, float>>> MakeTranslationTable(String sourceLanguageCode, IDictionary<String, List<WikiAlias>> sourceAliasTable, WikiRedirectTable sourceRedirectTable, String targetLanguageCode, IDictionary<String, List<WikiAlias>> targetAliasTable, WikiRedirectTable targetRedirectTable)
-    //{
-    //    targetLanguageCode+=":"; sourceLanguageCode +=":";
-    //    HashMap<String, String> sourceToTargetTranslations = new HashMap<String, String>();
-    //    for (KeyValuePair<String, List<WikiAlias>> pair : sourceAliasTable)
-    //    {
-    //        for (WikiAlias alias : pair.Value)
-    //        {
-    //            if (alias.type == AliasType.Interlanguage && alias.alias.StartsWith(targetLanguageCode,StringComparison.OrdinalIgnoreCase))
-    //            {
-    //                if (sourceToTargetTranslations.ContainsKey(pair.Key)) throw new InvalidDataException();
-    //                sourceToTargetTranslations[pair.Key] = alias.alias.Substring(targetLanguageCode.Length);
-    //            }
-    //        }
-    //    }
-
-    //    for (KeyValuePair<String, List<WikiAlias>> pair : targetAliasTable)
-    //    {
-    //        for (WikiAlias alias : pair.Value)
-    //        {
-    //            if (alias.type == AliasType.Interlanguage && alias.alias.StartsWith(sourceLanguageCode,StringComparison.OrdinalIgnoreCase))
-    //            {
-    //                if (sourceToTargetTranslations.ContainsKey(alias.alias.Substring(sourceLanguageCode.Length))
-    //                    && sourceToTargetTranslations[alias.alias.Substring(sourceLanguageCode.Length)] != pair.Key) throw new InvalidDataException();
-    //                sourceToTargetTranslations[alias.alias.Substring(sourceLanguageCode.Length)] = pair.Key;
-    //            }
-    //        }
-    //    }
-
-    //    return null;
-    //}
 
     // FIXME: uses out variables.
     public static List<KeyValuePair<String, String>> GetWordPairs(String term1, String term2, out int terms1Count, out int terms2Count) {
@@ -328,7 +284,7 @@ class WikiTransliteration {
         for (String template : disambigTemplates)
             dTL.Add(template.ToLower());
 
-        HashMap<String, List<WikiAlias>> result = new HashMap<String, List<WikiAlias>>();
+        HashMap<String, List<WikiAlias>> result = new HashMap<>();
 
         for (WikiPage page : reader.Pages) {
             page.Title = internTable.Intern(page.Title);
@@ -1743,84 +1699,6 @@ class WikiTransliteration {
         return bestProb;
     }
 
-    /// <summary>
-    /// Averages the possibilities for a given substring, rather than finds the maximum
-    /// </summary>
-    /// <param name="probability"></param>
-    /// <param name="productions"></param>
-    /// <param name="word1"></param>
-    /// <param name="word2"></param>
-    /// <param name="maxSubstringLength1"></param>
-    /// <param name="maxSubstringLength2"></param>
-    /// <param name="probs"></param>
-    /// <param name="weights"></param>
-    /// <param name="memoizationTable"></param>
-    /// <param name="weightByOthers">True to exclude the existing weight for a production when calculating its new weight (e.g. judge by how probably the remainder of the word can be produced, excluding that piece)</param>
-    /// <returns></returns>
-    //public static double FindWeightedAlignmentsAverage(double probability, List<Pair<String, String>> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, double> probs, HashMap<Pair<String, String>, double> weights, HashMap<Pair<String, String>, double> weightCounts, HashMap<Pair<String, String>, Pair<double, double>> memoizationTable, Boolean weightByOthers)
-    //{
-    //    if (word1.Length == 0 && word2.Length == 0) //record probabilities
-    //    {
-    //        for (Pair<String, String> production in productions)
-    //        {
-    //            double probValue = weightByOthers && probability > 0 ? probability/probs[production] : probability;
-    //            //weight the contribution to the average by its probability (square it)
-    //            Dictionaries.IncrementOrSet<Pair<String, String>>(weights, production, probValue*probValue, probValue*probValue);
-    //            Dictionaries.IncrementOrSet<Pair<String, String>>(weightCounts, production, probValue, probValue);
-    //        }
-    //        return 1;
-    //    }
-
-    //    //Check memoization table to see if we can return early
-    //    Pair<double, double> probPair;
-    //    if (memoizationTable.TryGetValue(new Pair<String, String>(word1, word2), out probPair))
-    //    {
-    //        if (probPair.x >= probability) //we ran against these words with a higher probability before;
-    //        {
-    //            probability *= probPair.y; //get entire production sequence probability
-
-    //            for (Pair<String, String> production in productions)
-    //            {
-    //                double probValue = weightByOthers && probability > 0 ? probability / probs[production] : probability;
-    //                //weight the contribution to the average by its probability (square it)
-    //                Dictionaries.IncrementOrSet<Pair<String, String>>(weights, production, probValue * probValue, probValue * probValue);
-    //                Dictionaries.IncrementOrSet<Pair<String, String>>(weightCounts, production, probValue, probValue);
-    //            }
-
-    //            return probPair.y;
-    //        }
-    //    }
-
-    //    int maxSubstringLength1f = Math.Min(word1.Length, maxSubstringLength1);
-    //    int maxSubstringLength2f = Math.Min(word2.Length, maxSubstringLength2);
-
-    //    double bestProb = 0;
-
-    //    for (int i = 1; i <= maxSubstringLength1f; i++) //for each possible substring in the first word...
-    //    {
-    //        String substring1 = word1.Substring(0, i);
-
-    //        for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
-    //        {
-    //            if ((word1.Length - i) * maxSubstringLength2 >= word2.Length - j && (word2.Length - j) * maxSubstringLength1 >= word1.Length - i) //if we get rid of these characters, can we still cover the remainder of word2?
-    //            {
-    //                String substring2 = word2.Substring(0, j);
-    //                Pair<String, String> production = new Pair<String, String>(substring1, substring2);
-    //                double prob = probs[production];
-
-    //                productions.Add(production);
-    //                double thisProb = prob * FindWeightedAlignmentsAverage(probability * prob, productions, word1.Substring(i), word2.Substring(j), maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, memoizationTable, weightByOthers);
-    //                productions.RemoveAt(productions.Count - 1);
-
-    //                if (thisProb > bestProb) bestProb = thisProb;
-    //            }
-    //        }
-    //    }
-
-    //    memoizationTable[new Pair<String, String>(word1, word2)] = new Pair<double, double>(probability, bestProb);
-    //    return bestProb;
-    //}
-
     public static double FindWeightedAlignmentsAverage(double probability, List<Pair<String, String>> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, double> probs, HashMap<Pair<String, String>, double> weights, HashMap<Pair<String, String>, double> weightCounts, Boolean weightByOthers) {
         if (probability == 0) return 0;
 
@@ -2356,5 +2234,4 @@ class WikiTransliteration {
 
         memoizationTable[new Pair<String, String>(word1, word2)] = true;
     }
-}
 }

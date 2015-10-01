@@ -1,5 +1,7 @@
 package edu.illinois.cs.cogcomp.transliteration;
 
+import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
