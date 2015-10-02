@@ -110,13 +110,6 @@
     </dependency>
 
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.1</version>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
       <groupId>org.tartarus</groupId>
       <artifactId>snowball</artifactId>
       <version>1.0</version>

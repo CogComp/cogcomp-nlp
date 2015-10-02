@@ -94,7 +94,7 @@ public class FeatureVectorCacheFile implements Closeable,
 		}
 	}
 
-	protected void openReader() throws IOException {
+	public void openReader() throws IOException {
 		GZIPInputStream zipin = new GZIPInputStream(new FileInputStream(file));
 		reader = new BufferedReader(new InputStreamReader(zipin));
 	}

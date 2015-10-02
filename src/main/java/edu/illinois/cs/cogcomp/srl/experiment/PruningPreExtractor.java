@@ -10,6 +10,8 @@ import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class PruningPreExtractor extends
 	protected final List<PreExtractRecord> buffer = new ArrayList<PreExtractRecord>();
 
 	private AtomicInteger counter = new AtomicInteger();
+	private Logger log = org.slf4j.LoggerFactory.getLogger(PruningPreExtractor.class);
 
 	public PruningPreExtractor(SRLManager manager, Models modelToExtract,
 			FeatureVectorCacheFile examples, FeatureVectorCacheFile cache,
@@ -115,7 +118,7 @@ public class PruningPreExtractor extends
 			cache.put(r.lemma, r.label, r.features);
 
 		}
-
+		log.info("Saving pruned feature cache done!");
 		cache.close();
 	}
 }

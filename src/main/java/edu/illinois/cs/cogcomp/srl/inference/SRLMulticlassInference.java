@@ -109,11 +109,11 @@ return best;
 	public float getLoss(IInstance ins, IStructure gold, IStructure pred) {
 		SRLMulticlassLabel yGold = (SRLMulticlassLabel) gold;
 		SRLMulticlassLabel ypred= (SRLMulticlassLabel) pred;
-		double l=0;
+		float l=0;
 			if (yGold.getLabel() != ypred.getLabel())
 				l++;
 
-		return 0;
+		return l;
 	}
 
 	@Override
