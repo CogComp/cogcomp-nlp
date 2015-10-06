@@ -422,14 +422,15 @@ public class Main {
 		cache.close();
 
 		SLParameters params = new SLParameters();
+		params.loadConfigFile("config/learning.properties");
 		params.C_FOR_STRUCTURE = (float) c;
-
 //		initializeSolver(params);
-
-		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
-		params.NUMBER_OF_THREADS = numThreads;
+//		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
+//		params.NUMBER_OF_THREADS = numThreads;
+		
 		SRLMulticlassInference infSolver = new SRLMulticlassInference(manager, model);
 		Learner learner = LearnerFactory.getLearner(infSolver, new SRLFeatureExtractor(), params);
+		log.info("Setting up solver, learning may take time if you have too many instances in SLProblem ....");
 		WeightVector w = learner.train(problem);
 		JLISLearner.saveWeightVector(w, manager.getModelFileName(model));
 		JLISLearner.evaluateSRLLabel(infSolver,problem,w);
