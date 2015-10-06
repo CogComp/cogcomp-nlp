@@ -104,18 +104,18 @@ public class Main {
 		if (Boolean.parseBoolean(cacheDatasets)) cacheDatasets();
 
 		// Step 2: Iterate between pre-extracting all the features needed for training and training
-		preExtract(srlType, "Sense");
-		train(srlType, "Sense");
+		// preExtract(srlType, "Sense");
+		// train(srlType, "Sense");
 
-		preExtract(srlType, "Identifier");
-		train(srlType, "Identifier");
+		// preExtract(srlType, "Identifier");
+		// train(srlType, "Identifier");
 //		tuneIdentifier(srlType);
 //
 		preExtract(srlType, "Classifier");
 		train(srlType, "Classifier");
 //
 //		// Step 3: Evaluate
-		evaluate(srlType);
+//		evaluate(srlType);
 	}
 
 	@CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
@@ -336,10 +336,15 @@ public class Main {
 			while (vectorCacheFile.hasNext()) {
 				Pair<SRLMulticlassInstance, SRLMulticlassLabel> pair=vectorCacheFile.next();
 				IFeatureVector cachedFeatureVector = pair.getFirst().getCachedFeatureVector(modelToExtract);
-				for (int i : cachedFeatureVector.getIndices()) {
-//					System.out.printf(i+" ");
-					manager.getModelInfo(modelToExtract).getLexicon().countFeature(i);
-				}
+				int length=cachedFeatureVector.getNumActiveFeatures();
+				for(int i=0;i<length;i++)
+				    {
+					manager.getModelInfo(modelToExtract).getLexicon().countFeature(cachedFeatureVector.getIdx(i));
+				    }
+				// 				for (int i : cachedFeatureVector.getIndices()) {
+// //					System.out.printf(i+" ");
+// 					manager.getModelInfo(modelToExtract).getLexicon().countFeature(i);
+// 				}
 
 			}
 			vectorCacheFile.close();
@@ -402,14 +407,25 @@ public class Main {
 		}
 
 		cache = new FeatureVectorCacheFile(cacheFile, model, manager);
-		SLModel slmodel = new SLModel();
-		SLProblem problem = cache.getStructuredProblem();
+//		SLModel slmodel = new SLModel();
+		SLProblem problem = null;
+		problem = cache.getStructuredProblem();
+
+//		if (model == Models.Classifier) {
+//			problem = cache.getStructuredProblem(50000);
+//		}
+//		else
+//		{
+//			problem = cache.getStructuredProblem();
+//		}
+
 		cache.close();
 
 		SLParameters params = new SLParameters();
 		params.C_FOR_STRUCTURE = (float) c;
 
 //		initializeSolver(params);
+
 		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
 		params.NUMBER_OF_THREADS = numThreads;
 		SRLMulticlassInference infSolver = new SRLMulticlassInference(manager, model);
