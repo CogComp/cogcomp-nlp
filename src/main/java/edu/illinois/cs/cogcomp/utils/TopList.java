@@ -1,5 +1,7 @@
 package edu.illinois.cs.cogcomp.utils;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+
 import java.util.AbstractList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -7,7 +9,7 @@ import java.util.Iterator;
 /**
  * Created by stephen on 9/24/15.
  */
-public class TopList<TKey, TValue> implements Iterable{
+public class TopList<TKey, TValue> implements Iterable<Pair<TKey, TValue>>{
 //public class TopList<TKey, TValue> : IList<KeyValuePair<TKey, TValue>>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable
 
     public TopList(int topK) {
@@ -15,8 +17,17 @@ public class TopList<TKey, TValue> implements Iterable{
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<Pair<TKey, TValue>> iterator() {
         return null;
+    }
+
+    public void add(Pair<TKey, TValue> p){
+
+    }
+
+
+    public int indexOf(TValue v){
+        return -1;
     }
 
     //:IList<TKey>,ICollection<TKey>,IEnumerable<TKey>,IEnumerable

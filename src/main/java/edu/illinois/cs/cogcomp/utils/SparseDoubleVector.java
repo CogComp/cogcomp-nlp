@@ -62,6 +62,24 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         throw new NotImplementedException("not yet implemented...");
     }
 
+    /**
+     * SWM: created to replicate operator method
+     * @param value
+     * @return
+     */
+    public SparseDoubleVector<TKey> divide(SparseDoubleVector<TKey> value){
+        throw new NotImplementedException("not yet implemented...");
+    }
+
+    /**
+     * SWM: created to replicate operator method
+     * @param value
+     * @return
+     */
+    public SparseDoubleVector<TKey> multiply(double value){
+        throw new NotImplementedException("not yet implemented...");
+    }
+
     public SparseDoubleVector<TKey> Abs(){
         throw new NotImplementedException("not yet implemented...");
     }

@@ -1,4 +1,4 @@
-﻿package edu.illinois.cs.cogcomp.transliteration;
+package edu.illinois.cs.cogcomp.transliteration;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
@@ -44,17 +44,19 @@ public class SPModel
 
         // binary writer is a c# class, sparsedoublevector is from pasternack.
         private void WriteToWriter(DataOutputStream writer, SparseDoubleVector<Pair<String, String>> table) throws IOException {
-            if (table == null)
+            if (table == null) {
                 writer.write(-1);
+            }
             else
             {
                 writer.write(table.size());
                 //for (KeyValuePair<Pair<String, String>, Double> entry : table)
-                for(entry : table)
+                for(Pair<String, String> key : table.keySet())
                 {
-                    writer.write(entry.Key.x);
-                    writer.write(entry.Key.y);
-                    writer.write(entry.Value);
+                    Double value = table.get(key);    
+                    writer.writeChars(key.getFirst());
+                    writer.writeChars(key.getSecond());
+                    writer.writeDouble(value);
                 }
             }
         }
@@ -107,27 +109,29 @@ public class SPModel
          * Deserializes an SPModel from a stream.
          * SWM: ignore this for now.
          */
-//        public SPModel(InputStream stream) throws IOException {
-//            DataInputStream reader = new DataInputStream(stream);
-//            int lml = reader.readInt();
-//            if (lml == -1) languageModel = null;
-//            else
-//            {
-//                languageModel = new HashMap<>(lml);
-//                for (int i = 0; i < lml; i++)
-//                    languageModel.put(reader.ReadString(), reader.ReadDouble());
-//            }
-//
-//            ngramSize = reader.readInt();
-//
-//            int tec = reader.readInt();
-//            trainingExamples = new ArrayList<>(tec);
-//            for (int i = 0; i < tec; i++)
-//                trainingExamples.add(new Triple<String, String, Double>(reader.ReadString(), reader.ReadString(), reader.readDouble()));
-//
-//            probs = ReadTableFromReader(reader);
-//
-//        }
+        public SPModel(InputStream stream) throws IOException {
+            DataInputStream reader = new DataInputStream(stream);
+            int lml = reader.readInt();
+            if (lml == -1) languageModel = null;
+            else
+            {
+                languageModel = new HashMap<>(lml);
+                for (int i = 0; i < lml; i++) {
+                    // FIXME: is this correct??? Should be ReadString
+                    languageModel.put(reader.readUTF(), reader.readDouble());
+                }
+            }
+
+            ngramSize = reader.readInt();
+
+            int tec = reader.readInt();
+            trainingExamples = new ArrayList<>(tec);
+            for (int i = 0; i < tec; i++)
+                trainingExamples.add(new Triple<String, String, Double>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
+
+            probs = ReadTableFromReader(reader);
+
+        }
 
         /**
          * The maximimum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
@@ -174,10 +178,10 @@ public class SPModel
         /// although practical results may vary.
         /// </summary>
         /// <param name="targetLanguageExamples">Example words from the target language you're transliterating into.</param>
-        public void SetLanguageModel(List<String> targetLanguageExamples)
-        {
-            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2); 
-        }
+//        public void SetLanguageModel(List<String> targetLanguageExamples)
+//        {
+//            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
+//        }
 
         /**
          * The size of the ngrams used by the language model (default: 4).  Irrelevant if no language model is created with SetLanguageModel.
@@ -193,27 +197,27 @@ public class SPModel
          * Trains the model for the specified number of iterations.
          * @param emIterations The number of iterations to train for.
          */
-        public void Train(int emIterations)
-        {
-            List<Triple<String, String, Double>> trainingTriples = trainingExamples;
-
-            pruned = null;
-            multiprobs = null;
-
-            if (probs == null)
-            {
-                // FIXME: out variables
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false, out exampleCounts);
-                probs = Program.PSecondGivenFirst(probs);
-            }
-
-            for (int i = 0; i < emIterations; i++)            
-            {
-                // FIXME: out variables
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs * segmentFactor : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true, out exampleCounts);
-                probs = Program.PSecondGivenFirst(probs);
-            }
-        }
+//        public void Train(int emIterations)
+//        {
+//            List<Triple<String, String, Double>> trainingTriples = trainingExamples;
+//
+//            pruned = null;
+//            multiprobs = null;
+//
+//            if (probs == null)
+//            {
+//                // FIXME: out variables
+//                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false, out exampleCounts);
+//                probs = Program.PSecondGivenFirst(probs);
+//            }
+//
+//            for (int i = 0; i < emIterations; i++)
+//            {
+//                // FIXME: out variables
+//                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs * segmentFactor : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true, out exampleCounts);
+//                probs = Program.PSecondGivenFirst(probs);
+//            }
+//        }
 
         /**
          * Calculates the probability P(T|S), that is, the probability that transliteratedWord is a transliteration of sourceWord.
@@ -221,15 +225,15 @@ public class SPModel
          * @param transliteratedWord The purported transliteration of the source word, in the target language
          * @return P(T|S)
          */
-        public double Probability(String sourceWord, String transliteratedWord)
-        {
-            if (multiprobs==null) {
-                multiprobs = probs * segmentFactor;
-            }
-
-            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new Dictionary<Pair<String, String>, Double>(), minProductionProbability)
-                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
-        }
+//        public double Probability(String sourceWord, String transliteratedWord)
+//        {
+//            if (multiprobs==null) {
+//                multiprobs = probs * segmentFactor;
+//            }
+//
+//            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new Dictionary<Pair<String, String>, Double>(), minProductionProbability)
+//                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+//        }
 
         /**
          * Generates a TopList of the most likely transliterations of the given word.
@@ -247,22 +251,22 @@ public class SPModel
 
             if (pruned==null)
             {
-                multiprobs = probs * segmentFactor;
+                multiprobs = probs.multiply(segmentFactor);
                 pruned = Program.PruneProbs(maxCandidates, multiprobs);
-                probMap = WikiTransliteration.GetProbMap(pruned);     
-            }                        
-                        
+                probMap = WikiTransliteration.GetProbMap(pruned);
+            }
+
              TopList<Double, String> result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new HashMap<String, Dictionary<String, Double>>(), maxCandidates);
-                
+
             if (languageModel != null)
             {
                 TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
-                for (KeyValuePair<Double, String> prediction : result)
-                    //fPredictions.Add(prediction.Key * Math.Pow(WikiTransliteration.GetLanguageProbabilityViterbi(prediction.Value, languageModel, ngramSize),1d/(prediction.Value.Length)), prediction.Value);
-                    fPredictions.Add(prediction.Key * Math.pow(WikiTransliteration.GetLanguageProbability(prediction.Value, languageModel, ngramSize), 1), prediction.Value);
+                for (Pair<Double, String> prediction : result) {
+                    fPredictions.add(prediction.getFirst() * Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1), prediction.getSecond());
+                }
                 result = fPredictions;
             }
-            
+
             return result;
         }
     }

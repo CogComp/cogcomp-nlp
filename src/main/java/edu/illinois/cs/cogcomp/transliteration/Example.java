@@ -1,4 +1,4 @@
-﻿package edu.illinois.cs.cogcomp.transliteration;
+package edu.illinois.cs.cogcomp.transliteration;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 
