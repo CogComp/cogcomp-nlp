@@ -1,14 +1,20 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 import java.io.*;
 
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -19,6 +25,29 @@ public class Quantifier {
 	
 	public Normalizer normalizer;
 	public static Pattern wordSplitPat[];
+	public static AnnotatorService pipeline;
+	
+	static {
+		ResourceManager rm = null;
+		try {
+			rm = new ResourceManager("pipeline.config");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
+        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
+        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
+        for ( String view : extraViewGenerators.keySet() )
+            requestedViews.put( view, false );
+        try {
+			pipeline =  new AnnotatorService(taBuilder, extraViewGenerators, rm);
+		} catch (AnnotatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public Quantifier() {
 		normalizer = new Normalizer();
@@ -71,9 +100,9 @@ public class Quantifier {
 		return sentence;
 	}
 	
-	public List<QuantSpan> getSpans(String text, boolean standardized) {
-		TextAnnotation taCurator = new TextAnnotation("", "", text);
-		TextAnnotation taQuant = new TextAnnotation("", "", wordsplitSentence(text).trim());
+	public List<QuantSpan> getSpans(String text, boolean standardized) throws AnnotatorException {
+		TextAnnotation taCurator = pipeline.createBasicTextAnnotation("", "", text);
+		TextAnnotation taQuant = pipeline.createBasicTextAnnotation("", "", wordsplitSentence(text).trim());
 		List<QuantSpan> quantSpans = new ArrayList<QuantSpan>();
 		String sentences[] = new String[taQuant.getNumberOfSentences()];
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
@@ -131,9 +160,9 @@ public class Quantifier {
 		return quantSpans;
 	}
 	
-	public String getAnnotatedString(String text, boolean standardized){
+	public String getAnnotatedString(String text, boolean standardized) throws Exception {
 		String ans = "";
-		TextAnnotation ta = new TextAnnotation("", "", text);
+		TextAnnotation ta = pipeline.createBasicTextAnnotation("", "", text);
 		List<QuantSpan> quantSpans = getSpans(text, standardized);
 		int quantIndex = 0;
 		for(int i=0; i<ta.size(); ++i) {
@@ -151,7 +180,7 @@ public class Quantifier {
 	    return ans;
 	}
 
-	public void addQuantifierView(TextAnnotation ta) {
+	public void addQuantifierView(TextAnnotation ta) throws Exception {
 		assert (ta.hasView(ViewNames.SENTENCE));
 		SpanLabelView quantifierView = new SpanLabelView(
 				ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);

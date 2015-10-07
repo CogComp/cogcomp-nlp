@@ -32,7 +32,7 @@ public class QuantDemo {
 				",\n\t\"end\" : "+getJSONFromQuantity(r.denominator)+"\n}\n";
 	}
 	
-	public static void main(String args[]) {
+	public static void main(String args[]) throws Exception {
 		Quantifier quantifier = new Quantifier();
 		System.out.println(quantifier.getSpans(
 				"March oil down 1.9%, to settle at $51.16/bbl on Nymex.", 

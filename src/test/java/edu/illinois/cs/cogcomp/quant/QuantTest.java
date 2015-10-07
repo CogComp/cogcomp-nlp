@@ -2,13 +2,12 @@ package edu.illinois.cs.cogcomp.quant;
 
 import java.util.Calendar;
 
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenizerUtilities;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import junit.framework.TestCase;
 
 import org.junit.Test;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.quant.standardize.Date;
 import edu.illinois.cs.cogcomp.quant.standardize.DateRange;
@@ -17,10 +16,9 @@ import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 public class QuantTest extends TestCase {
 
 	@Test
-	public void testQuantifierView() {
+	public void testQuantifierView() throws Exception {
 		Quantifier quantifier = new Quantifier();
-		TextAnnotation ta = new TextAnnotation("", "", "It was May 2008.",
-				TokenizerUtilities.SentenceViewGenerators.WhiteSpaceSentenceViewGenerator);
+		TextAnnotation ta = Quantifier.pipeline.createBasicTextAnnotation("", "", "It was May 2008.");
 		quantifier.addQuantifierView(ta);
 		assertTrue(ta.hasView(ViewNames.QUANTITIES));
 		assertTrue(isEqual("[= Date(05/XX/2008)]", ta.getView(ViewNames.QUANTITIES).getConstituents()
