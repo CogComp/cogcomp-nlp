@@ -25,6 +25,11 @@ public class TopList<TKey, TValue> implements Iterable<Pair<TKey, TValue>>{
 
     }
 
+    public void add(TKey t, TValue p){
+
+    }
+
+
 
     public int indexOf(TValue v){
         return -1;

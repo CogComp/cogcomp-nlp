@@ -5,6 +5,7 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
 import jdk.nashorn.internal.runtime.regexp.joni.Regex;
@@ -15,243 +16,183 @@ import java.util.*;
 
 class Program {
 
-        static void main(String[] args) throws FileNotFoundException {
-            //RussianDiscoveryTest(); return;
-            //ChineseDiscoveryTest(); return;
-            HebrewDiscoveryTest();
+    static void main(String[] args) throws FileNotFoundException {
+        //RussianDiscoveryTest(); return;
+        //ChineseDiscoveryTest(); return;
+        HebrewDiscoveryTest();
 
 
+    }
 
-        }
+    /*
+    static void MakeAliasTable(String wikiFile, String redirectTableFile, String tableFile, String tableKeyValueFile)
+    {
+        ICSharpCode.SharpZipLib.BZip2.BZip2InputStream bzipped =
+            new ICSharpCode.SharpZipLib.BZip2.BZip2InputStream(File.OpenRead(wikiFile));
+        WikiXMLReader reader = new WikiXMLReader(bzipped);
 
-        /*
-        static void MakeAliasTable(String wikiFile, String redirectTableFile, String tableFile, String tableKeyValueFile)
-        {
-            ICSharpCode.SharpZipLib.BZip2.BZip2InputStream bzipped =
-                new ICSharpCode.SharpZipLib.BZip2.BZip2InputStream(File.OpenRead(wikiFile));
-            WikiXMLReader reader = new WikiXMLReader(bzipped);
+        StreamReader redirectReader = new StreamReader(redirectTableFile);
+        WikiRedirectTable redirectTable = new WikiRedirectTable(redirectReader);
+        redirectReader.Close();
 
-            StreamReader redirectReader = new StreamReader(redirectTableFile);
-            WikiRedirectTable redirectTable = new WikiRedirectTable(redirectReader);
-            redirectReader.Close();
-
-            List<String> disambigs = new ArrayList<>();
-            WikiNamespace templateNS = new WikiNamespace("Template",10);
-            for (WikiNamespace ns : reader.WikiInfo.Namespaces)
-                if (ns.Key == 10)
-                {
-                    templateNS = ns;
-                    break;
-                }
-
-            String disambigMain = redirectTable.Redirect(templateNS.Name + ":Disambig");
-            disambigs.add(disambigMain);
-            HashMap<String,List<String>> inverted = redirectTable.InvertedTable;
-            if (inverted.containsKey(disambigMain))
-                for (String template : inverted[disambigMain])
-                    disambigs.add(template);
-
-            HashMap<String,List<WikiAlias>> result = WikiTransliteration.MakeAliasTable(reader, disambigs);
-
-            StreamDictionary<String,List<WikiAlias>> table = new StreamDictionary<String,List<WikiAlias>>(
-                result.Count*4,0.5,tableFile,null,tableKeyValueFile,null,null,null,null,null);
-
-
-            table.AddDictionary(result);
-
-            table.Close();
-        }
-
-        static WikiRedirectTable ReadRedirectTable(String filename)
-        {
-            StreamReader reader = new StreamReader(filename);
-            try
+        List<String> disambigs = new ArrayList<>();
+        WikiNamespace templateNS = new WikiNamespace("Template",10);
+        for (WikiNamespace ns : reader.WikiInfo.Namespaces)
+            if (ns.Key == 10)
             {
-                return new WikiRedirectTable(reader);
-            }
-            finally
-            {
-                reader.Close();
-            }
-        }
-
-        static BetterBufferedStream OpenBBS(String filename, int bufferSize)
-        {
-            return new BetterBufferedStream(File.Open(filename, FileMode.Open), bufferSize);
-        }
-
-        static FileStream OpenFS(String filename, int bufferSize, bool random)
-        {
-            return new FileStream(filename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read, bufferSize, random ? FileOptions.RandomAccess : FileOptions.None);
-        }
-
-        static void MakeTranslationMap(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceRedirectFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String targetRedirectFile, String translationMapFile)
-        {
-            StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
-            StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
-
-            HashMap<Pair<String, String>, Integer> weights;
-            Map<String,String> map = WikiTransliteration.MakeTranslationMap(sourceLanguageCode, sourceAliasTable, ReadRedirectTable(sourceRedirectFile), targetLanguageCode, targetAliasTable, ReadRedirectTable(targetRedirectFile), out weights);
-
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream fs = File.Create(translationMapFile);
-            bf.Serialize(fs, map);
-            bf.Serialize(fs, weights);
-            fs.Close();
-        }
-
-        static void MakeTranslationMap2(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceRedirectFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String targetRedirectFile, String translationMapFile)
-        {
-            StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
-            StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
-
-            HashMap<Pair<String, String>, WordAlignment> weights;
-            HashMap<String, bool> personTable;
-            Map<String, String> map = WikiTransliteration.MakeTranslationMap2(sourceLanguageCode, sourceAliasTable, ReadRedirectTable(sourceRedirectFile), targetLanguageCode, targetAliasTable, ReadRedirectTable(targetRedirectFile), out weights, null, null, false);
-
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream fs = File.Create(translationMapFile);
-            bf.Serialize(fs, map);
-            bf.Serialize(fs, weights);
-            fs.Close();
-        }
-
-        static void MakeTrainingList(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceCategoryGraphFile, String sourcePersondataFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String listFile, bool peopleOnly)
-        {
-            FileStream fs = File.OpenRead(sourceCategoryGraphFile);
-            WikiCategoryGraph graph = (peopleOnly ? WikiCategoryGraph.ReadFromStream(fs) : null);
-            fs.Close();
-
-            HashMap<String, bool> persondataTitles=null;
-
-            if (peopleOnly)
-            {
-                persondataTitles = new HashMap<String, bool>();
-                for (String line : File.ReadAllLines(sourcePersondataFile))
-                    persondataTitles[line.ToLower()] = true;
-            }
-            
-            StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);                        
-
-            StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
-
-            HashMap<Pair<String, String>, WordAlignment> weights;
-            
-            Map<String, String> map = WikiTransliteration.MakeTranslationMap2(sourceLanguageCode, sourceAliasTable, null, targetLanguageCode, targetAliasTable, null, out weights, graph, persondataTitles, targetLanguageCode == "zh");
-
-            targetAliasTable.Close();
-            sourceAliasTable.Close();
-
-            StreamWriter writer = new StreamWriter(listFile, false);
-            for (Pair<Pair<String, String>, WordAlignment> pair in weights)
-            {
-                //if (!personTable.ContainsKey(pair.Key.x)) continue; //not a person--ignore
-                //bool person = false;
-                //for (WikiAlias alias in sourceAliasTable[pair.Key.x])
-                //    if (alias.type == AliasType.Link && alias.alias.StartsWith("category:",StringComparison.OrdinalIgnoreCase) && (alias.alias.Contains("births") || alias.alias.Contains("deaths")))
-                //    {
-                //        person=true;
-                //        break;
-                //    }
-
-                //if (!person) continue;
-
-                writer.WriteLine(pair.Key.x + "\t" + pair.Key.y + "\t" + pair.Value.ToString());
+                templateNS = ns;
+                break;
             }
 
-            writer.Close();
+        String disambigMain = redirectTable.Redirect(templateNS.Name + ":Disambig");
+        disambigs.add(disambigMain);
+        HashMap<String,List<String>> inverted = redirectTable.InvertedTable;
+        if (inverted.containsKey(disambigMain))
+            for (String template : inverted[disambigMain])
+                disambigs.add(template);
+
+        HashMap<String,List<WikiAlias>> result = WikiTransliteration.MakeAliasTable(reader, disambigs);
+
+        StreamDictionary<String,List<WikiAlias>> table = new StreamDictionary<String,List<WikiAlias>>(
+            result.Count*4,0.5,tableFile,null,tableKeyValueFile,null,null,null,null,null);
+
+
+        table.AddDictionary(result);
+
+        table.Close();
+    }
+
+    static WikiRedirectTable ReadRedirectTable(String filename)
+    {
+        StreamReader reader = new StreamReader(filename);
+        try
+        {
+            return new WikiRedirectTable(reader);
+        }
+        finally
+        {
+            reader.Close();
+        }
+    }
+
+    static BetterBufferedStream OpenBBS(String filename, int bufferSize)
+    {
+        return new BetterBufferedStream(File.Open(filename, FileMode.Open), bufferSize);
+    }
+
+    static FileStream OpenFS(String filename, int bufferSize, bool random)
+    {
+        return new FileStream(filename, FileMode.Open, FileAccess.ReadWrite, FileShare.Read, bufferSize, random ? FileOptions.RandomAccess : FileOptions.None);
+    }
+
+    static void MakeTranslationMap(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceRedirectFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String targetRedirectFile, String translationMapFile)
+    {
+        StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+        StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+
+        HashMap<Pair<String, String>, Integer> weights;
+        Map<String,String> map = WikiTransliteration.MakeTranslationMap(sourceLanguageCode, sourceAliasTable, ReadRedirectTable(sourceRedirectFile), targetLanguageCode, targetAliasTable, ReadRedirectTable(targetRedirectFile), out weights);
+
+        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        FileStream fs = File.Create(translationMapFile);
+        bf.Serialize(fs, map);
+        bf.Serialize(fs, weights);
+        fs.Close();
+    }
+
+    static void MakeTranslationMap2(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceRedirectFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String targetRedirectFile, String translationMapFile)
+    {
+        StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+        StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+
+        HashMap<Pair<String, String>, WordAlignment> weights;
+        HashMap<String, bool> personTable;
+        Map<String, String> map = WikiTransliteration.MakeTranslationMap2(sourceLanguageCode, sourceAliasTable, ReadRedirectTable(sourceRedirectFile), targetLanguageCode, targetAliasTable, ReadRedirectTable(targetRedirectFile), out weights, null, null, false);
+
+        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        FileStream fs = File.Create(translationMapFile);
+        bf.Serialize(fs, map);
+        bf.Serialize(fs, weights);
+        fs.Close();
+    }
+
+    static void MakeTrainingList(String sourceLanguageCode, String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String sourceCategoryGraphFile, String sourcePersondataFile, String targetLanguageCode, String targetAliasTableFile, String targetAliasTableKeyValueFile, String listFile, bool peopleOnly)
+    {
+        FileStream fs = File.OpenRead(sourceCategoryGraphFile);
+        WikiCategoryGraph graph = (peopleOnly ? WikiCategoryGraph.ReadFromStream(fs) : null);
+        fs.Close();
+
+        HashMap<String, bool> persondataTitles=null;
+
+        if (peopleOnly)
+        {
+            persondataTitles = new HashMap<String, bool>();
+            for (String line : File.ReadAllLines(sourcePersondataFile))
+                persondataTitles[line.ToLower()] = true;
         }
 
-        static void FilterTrainingListLoose(String sourceListFile, String filteredListFile, bool removePureLatin, double minRatio, double minScore)
+        StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+
+        StreamDictionary<String, List<WikiAlias>> targetAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(targetAliasTableFile, 1000000), null, OpenBBS(targetAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+
+        HashMap<Pair<String, String>, WordAlignment> weights;
+
+        Map<String, String> map = WikiTransliteration.MakeTranslationMap2(sourceLanguageCode, sourceAliasTable, null, targetLanguageCode, targetAliasTable, null, out weights, graph, persondataTitles, targetLanguageCode == "zh");
+
+        targetAliasTable.Close();
+        sourceAliasTable.Close();
+
+        StreamWriter writer = new StreamWriter(listFile, false);
+        for (Pair<Pair<String, String>, WordAlignment> pair in weights)
         {
-            String[] lines = File.ReadAllLines(sourceListFile);
+            //if (!personTable.ContainsKey(pair.Key.x)) continue; //not a person--ignore
+            //bool person = false;
+            //for (WikiAlias alias in sourceAliasTable[pair.Key.x])
+            //    if (alias.type == AliasType.Link && alias.alias.StartsWith("category:",StringComparison.OrdinalIgnoreCase) && (alias.alias.Contains("births") || alias.alias.Contains("deaths")))
+            //    {
+            //        person=true;
+            //        break;
+            //    }
 
-            HashMap<String, String> pairMap = new HashMap<String, String>();
-            SparseDoubleVector<Pair<String, String>> scores = new SparseDoubleVector<Pair<String, String>>();
+            //if (!person) continue;
 
-            for (String line : lines)
-            {
-                String[] parts = line.split("\t");
-                pairMap.Add(parts[0], parts[1]);
-                WordAlignment wa = new WordAlignment(parts[2]);
-                double score = wa.oneToOne * 10 + wa.equalNumber * 5 + wa.unequalNumber;
-                scores[new Pair<String, String>(parts[0], parts[1])] = score;
-            }            
-
-            boolean progress = true;
-
-            StreamWriter writer = new StreamWriter(filteredListFile);
-            while (progress)
-            {
-                List<Pair<String, String>> pairs = new List<Pair<String, String>>();
-                List<Double> ratios = new List<Double>();
-
-                for (Pair<String, String> pair : pairMap)
-                {
-                    double ratio = double.PositiveInfinity;
-                    double pairScore = scores[pair];
-                    if (pairScore < 15) continue;
-                    bool goodPair = true;
-
-                    for (Pair<String, String> oPair in JoinEnumerable.Join<Pair<String, String>>(pairMap.GetPairsForKey(pair.Key), pairMap.GetPairsForValue(pair.Value)))
-                    {
-                        if (oPair.Key == pair.Key && oPair.Value == pair.Value) continue; //this is the example we're currently looking at
-                        double oScore = scores[oPair];
-                        ratio = Math.Min(ratio, pairScore / oScore);
-                        if (ratio < minRatio) break;
-                    }
-
-                    if (ratio < minRatio) continue; //no good
-                    pairs.Add(pair);
-                    ratios.Add(ratio);
-                }
-
-                progress = pairs.Count > 0;
-
-                for (Pair<String, String> pair : pairs)
-                {
-                    pairMap.Remove(pair);
-                    scores.Remove(pair);
-                }
-                Pair<String, String>[] pairArray = pairs.ToArray();
-                double[] ratioArray = ratios.ToArray();
-
-                Array.Sort<double, Pair<String, String>>(ratioArray, pairArray);
-                
-                for (int i = pairArray.Length - 1; i >= 0; i--)
-                    if (removePureLatin && IsLatin(pairArray[i].y)) continue; else writer.WriteLine(pairArray[i].x + "\t" + pairArray[i].y);
-
-            }
-
-            writer.Close();
+            writer.WriteLine(pair.Key.x + "\t" + pair.Key.y + "\t" + pair.Value.ToString());
         }
 
-        static void FilterTrainingList(String sourceListFile, String filteredListFile, bool removePureLatin)
+        writer.Close();
+    }
+
+    static void FilterTrainingListLoose(String sourceListFile, String filteredListFile, bool removePureLatin, double minRatio, double minScore)
+    {
+        String[] lines = File.ReadAllLines(sourceListFile);
+
+        HashMap<String, String> pairMap = new HashMap<String, String>();
+        SparseDoubleVector<Pair<String, String>> scores = new SparseDoubleVector<Pair<String, String>>();
+
+        for (String line : lines)
         {
-            String[] lines = File.ReadAllLines(sourceListFile);
+            String[] parts = line.split("\t");
+            pairMap.Add(parts[0], parts[1]);
+            WordAlignment wa = new WordAlignment(parts[2]);
+            double score = wa.oneToOne * 10 + wa.equalNumber * 5 + wa.unequalNumber;
+            scores[new Pair<String, String>(parts[0], parts[1])] = score;
+        }
 
-            Map<String, String> pairMap = new Map<String, String>();
-            SparseDoubleVector<Pair<String, String>> scores = new SparseDoubleVector<Pair<String, String>>();
+        boolean progress = true;
 
-            for (String line in lines)
-            {
-                String[] parts = line.Split('\t');
-                pairMap.Add(parts[0], parts[1]);
-                WordAlignment wa = new WordAlignment(parts[2]);
-                double score = wa.oneToOne * 10 + wa.equalNumber * 5 + wa.unequalNumber;
-                scores[new Pair<String, String>(parts[0], parts[1])] = score;
-            }
-
+        StreamWriter writer = new StreamWriter(filteredListFile);
+        while (progress)
+        {
             List<Pair<String, String>> pairs = new List<Pair<String, String>>();
-            List<double> ratios = new List<double>();
+            List<Double> ratios = new List<Double>();
 
-            for (Pair<String, String> pair in pairMap)
+            for (Pair<String, String> pair : pairMap)
             {
                 double ratio = double.PositiveInfinity;
                 double pairScore = scores[pair];
@@ -263,138 +204,194 @@ class Program {
                     if (oPair.Key == pair.Key && oPair.Value == pair.Value) continue; //this is the example we're currently looking at
                     double oScore = scores[oPair];
                     ratio = Math.Min(ratio, pairScore / oScore);
-                    if (ratio < 3) break;
+                    if (ratio < minRatio) break;
                 }
 
-                if (ratio < 3) continue; //no good
+                if (ratio < minRatio) continue; //no good
                 pairs.Add(pair);
-                ratios.Add(ratio);                
+                ratios.Add(ratio);
             }
 
+            progress = pairs.Count > 0;
+
+            for (Pair<String, String> pair : pairs)
+            {
+                pairMap.Remove(pair);
+                scores.Remove(pair);
+            }
             Pair<String, String>[] pairArray = pairs.ToArray();
             double[] ratioArray = ratios.ToArray();
 
             Array.Sort<double, Pair<String, String>>(ratioArray, pairArray);
 
-            StreamWriter writer = new StreamWriter(filteredListFile);
             for (int i = pairArray.Length - 1; i >= 0; i--)
                 if (removePureLatin && IsLatin(pairArray[i].y)) continue; else writer.WriteLine(pairArray[i].x + "\t" + pairArray[i].y);
 
-            writer.Close();
         }
 
-        static Regex latinRegex = new Regex("[0-9a-zA-Z]+", RegexOptions.Compiled);
-        static bool IsLatin(String word)
+        writer.Close();
+    }
+
+    static void FilterTrainingList(String sourceListFile, String filteredListFile, bool removePureLatin)
+    {
+        String[] lines = File.ReadAllLines(sourceListFile);
+
+        Map<String, String> pairMap = new Map<String, String>();
+        SparseDoubleVector<Pair<String, String>> scores = new SparseDoubleVector<Pair<String, String>>();
+
+        for (String line in lines)
         {
-            return latinRegex.IsMatch(word);
+            String[] parts = line.Split('\t');
+            pairMap.Add(parts[0], parts[1]);
+            WordAlignment wa = new WordAlignment(parts[2]);
+            double score = wa.oneToOne * 10 + wa.equalNumber * 5 + wa.unequalNumber;
+            scores[new Pair<String, String>(parts[0], parts[1])] = score;
         }
 
-        static void TestForMissedTranslations(String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String targetLanguageCode)
+        List<Pair<String, String>> pairs = new List<Pair<String, String>>();
+        List<double> ratios = new List<double>();
+
+        for (Pair<String, String> pair in pairMap)
         {
-            StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
-                5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+            double ratio = double.PositiveInfinity;
+            double pairScore = scores[pair];
+            if (pairScore < 15) continue;
+            bool goodPair = true;
 
-            targetLanguageCode += ":";
-            
-            int targetCount = 0;
-            int totalCount = 0;
-            int otherCount = 0;
-            for (Pair<String, List<WikiAlias>> pair in sourceAliasTable)
-            {                
-                bool target = false;
-                bool others = false;
-                for (WikiAlias alias in pair.Value)
-                {
-                    if (alias.type == AliasType.Interlanguage)
-                        if (alias.alias.StartsWith(targetLanguageCode, StringComparison.OrdinalIgnoreCase))
-                        {
-                            target = true;
-                        }
-                        else
-                        {
-                            others = true;
-                        }                                        
-                }
-
-                totalCount++;
-                if (!target && others) otherCount++;
-                if (target) targetCount++;
-            }
-
-            System.out.println("Total: " + totalCount);
-            System.out.println("Target: " + targetCount);
-            System.out.println("Others: " + otherCount);
-            Console.ReadLine();
-        }
-
-        public static Map<String, String> ReadTranslationMap(String translationMapFile, out HashMap<Pair<String, String>, int> weights)
-        {
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream fs = File.OpenRead(translationMapFile);
-            Map<String,String> map = (Map<String, String>)bf.Deserialize(fs);
-            weights = (HashMap<Pair<String, String>, int>)bf.Deserialize(fs);            
-            fs.Close();
-
-            return map;
-        }
-
-        public static Map<String, String> ReadTranslationMap2(String translationMapFile, out HashMap<Pair<String, String>, WordAlignment> weights)
-        {
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream fs = File.OpenRead(translationMapFile);
-            Map<String, String> map = (Map<String, String>)bf.Deserialize(fs);
-            weights = (HashMap<Pair<String, String>, WordAlignment>)bf.Deserialize(fs);
-            fs.Close();
-
-            return map;
-        }
-
-        static String FindClosest(Iterable<String> strings, String original)
-        {
-            int min = int.MaxValue;
-            int lengthDistance = int.MaxValue;
-            String result = null;
-            for (String str : strings)
+            for (Pair<String, String> oPair in JoinEnumerable.Join<Pair<String, String>>(pairMap.GetPairsForKey(pair.Key), pairMap.GetPairsForValue(pair.Value)))
             {
-                int aD;
-                int dist = WikiTransliteration.EditDistance<char>(str, original, out aD);
-                if (dist < min || (dist==min && Math.Abs(str.Length-original.Length) < lengthDistance))
-                {
-                    lengthDistance = Math.Abs(str.Length - original.Length);
-                    result = str;
-                    min = dist;
-                }
+                if (oPair.Key == pair.Key && oPair.Value == pair.Value) continue; //this is the example we're currently looking at
+                double oScore = scores[oPair];
+                ratio = Math.Min(ratio, pairScore / oScore);
+                if (ratio < 3) break;
             }
 
-            return result;
+            if (ratio < 3) continue; //no good
+            pairs.Add(pair);
+            ratios.Add(ratio);
         }
 
-        static List<Pair<String, Double>> FindDistances(Collection<String> strings, String original, int multiplier)
+        Pair<String, String>[] pairArray = pairs.ToArray();
+        double[] ratioArray = ratios.ToArray();
+
+        Array.Sort<double, Pair<String, String>>(ratioArray, pairArray);
+
+        StreamWriter writer = new StreamWriter(filteredListFile);
+        for (int i = pairArray.Length - 1; i >= 0; i--)
+            if (removePureLatin && IsLatin(pairArray[i].y)) continue; else writer.WriteLine(pairArray[i].x + "\t" + pairArray[i].y);
+
+        writer.Close();
+    }
+
+    static Regex latinRegex = new Regex("[0-9a-zA-Z]+", RegexOptions.Compiled);
+    static bool IsLatin(String word)
+    {
+        return latinRegex.IsMatch(word);
+    }
+
+    static void TestForMissedTranslations(String sourceAliasTableFile, String sourceAliasTableKeyValueFile, String targetLanguageCode)
+    {
+        StreamDictionary<String, List<WikiAlias>> sourceAliasTable = new StreamDictionary<String, List<WikiAlias>>(
+            5, 0.5, OpenBBS(sourceAliasTableFile, 1000000), null, OpenBBS(sourceAliasTableKeyValueFile, 1000000), null, null, null, null, null);
+
+        targetLanguageCode += ":";
+
+        int targetCount = 0;
+        int totalCount = 0;
+        int otherCount = 0;
+        for (Pair<String, List<WikiAlias>> pair in sourceAliasTable)
         {
-            if (original.length() > 5) original = original.substring(0, 5);
-            int editLength;
-            double fmultiplier = ((double)1) / multiplier;
-            List<Pair<String, Double>> result = new ArrayList<>(strings.size());
-            for (String s : strings)
-                result.add(new Pair<String, Double>(s, fmultiplier * (1 + WikiTransliteration.EditDistance <char>(s.Length > 5 ? s.Substring(0,5) : s, original, out editLength) + (Math.Abs(original.Length - s.Length))/((double)100))));
+            bool target = false;
+            bool others = false;
+            for (WikiAlias alias in pair.Value)
+            {
+                if (alias.type == AliasType.Interlanguage)
+                    if (alias.alias.StartsWith(targetLanguageCode, StringComparison.OrdinalIgnoreCase))
+                    {
+                        target = true;
+                    }
+                    else
+                    {
+                        others = true;
+                    }
+            }
 
-            return result;
+            totalCount++;
+            if (!target && others) otherCount++;
+            if (target) targetCount++;
         }
+
+        System.out.println("Total: " + totalCount);
+        System.out.println("Target: " + targetCount);
+        System.out.println("Others: " + otherCount);
+        Console.ReadLine();
+    }
+
+    public static Map<String, String> ReadTranslationMap(String translationMapFile, out HashMap<Pair<String, String>, int> weights)
+    {
+        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        FileStream fs = File.OpenRead(translationMapFile);
+        Map<String,String> map = (Map<String, String>)bf.Deserialize(fs);
+        weights = (HashMap<Pair<String, String>, int>)bf.Deserialize(fs);
+        fs.Close();
+
+        return map;
+    }
+
+    public static Map<String, String> ReadTranslationMap2(String translationMapFile, out HashMap<Pair<String, String>, WordAlignment> weights)
+    {
+        System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+        FileStream fs = File.OpenRead(translationMapFile);
+        Map<String, String> map = (Map<String, String>)bf.Deserialize(fs);
+        weights = (HashMap<Pair<String, String>, WordAlignment>)bf.Deserialize(fs);
+        fs.Close();
+
+        return map;
+    }
+
+    static String FindClosest(Iterable<String> strings, String original)
+    {
+        int min = int.MaxValue;
+        int lengthDistance = int.MaxValue;
+        String result = null;
+        for (String str : strings)
+        {
+            int aD;
+            int dist = WikiTransliteration.EditDistance<char>(str, original, out aD);
+            if (dist < min || (dist==min && Math.Abs(str.Length-original.Length) < lengthDistance))
+            {
+                lengthDistance = Math.Abs(str.Length - original.Length);
+                result = str;
+                min = dist;
+            }
+        }
+
+        return result;
+    }
+
+    static List<Pair<String, Double>> FindDistances(Collection<String> strings, String original, int multiplier)
+    {
+        if (original.length() > 5) original = original.substring(0, 5);
+        int editLength;
+        double fmultiplier = ((double)1) / multiplier;
+        List<Pair<String, Double>> result = new ArrayList<>(strings.size());
+        for (String s : strings)
+            result.add(new Pair<String, Double>(s, fmultiplier * (1 + WikiTransliteration.EditDistance <char>(s.Length > 5 ? s.Substring(0,5) : s, original, out editLength) + (Math.Abs(original.Length - s.Length))/((double)100))));
+
+        return result;
+    }
 */
-        public static String StripAccent(String stIn)
-        {
-            String strNFD = Normalizer.normalize(stIn, Normalizer.Form.NFD);
-            StringBuilder sb = new StringBuilder();
-            for (char ch : strNFD.toCharArray())
-            {
-                if (Character.getType(ch) != Character.NON_SPACING_MARK)
-                {
-                    sb.append(ch);
-                }
+    public static String StripAccent(String stIn) {
+        String strNFD = Normalizer.normalize(stIn, Normalizer.Form.NFD);
+        StringBuilder sb = new StringBuilder();
+        for (char ch : strNFD.toCharArray()) {
+            if (Character.getType(ch) != Character.NON_SPACING_MARK) {
+                sb.append(ch);
             }
-            return sb.toString();
+        }
+        return sb.toString();
 
-        } 
+    }
 /*
         static void TestAlexData()
         {
@@ -615,123 +612,118 @@ class Program {
         }
         */
 
-        public static void HebrewDiscoveryTest() throws FileNotFoundException {
-            List<Pair<String, String>> wordList = NormalizeHebrew(GetTabDelimitedPairs("/path/to/res/res/Hebrew/evalwords.txt"));
-            List<Pair<String, String>> trainList = NormalizeHebrew(GetTabDelimitedPairs("/path/to/res/res/Hebrew/train_EnglishHebrew.txt"));
-            List<Pair<String, String>> trainList2 = NormalizeHebrew(GetTabDelimitedPairs("/path/to/WikiTransliteration/Aliases/heExamples.txt"));
-            //List<Pair<String, String>> trainList2 = RemoveVeryLong(NormalizeHebrew(GetTabDelimitedPairs(@"C:\Data\WikiTransliteration\Aliases\heExamples-Lax.txt")), 20);
+    public static void HebrewDiscoveryTest() throws FileNotFoundException {
+        List<Pair<String, String>> wordList = NormalizeHebrew(GetTabDelimitedPairs("/path/to/res/res/Hebrew/evalwords.txt"));
+        List<Pair<String, String>> trainList = NormalizeHebrew(GetTabDelimitedPairs("/path/to/res/res/Hebrew/train_EnglishHebrew.txt"));
+        List<Pair<String, String>> trainList2 = NormalizeHebrew(GetTabDelimitedPairs("/path/to/WikiTransliteration/Aliases/heExamples.txt"));
+        //List<Pair<String, String>> trainList2 = RemoveVeryLong(NormalizeHebrew(GetTabDelimitedPairs(@"C:\Data\WikiTransliteration\Aliases\heExamples-Lax.txt")), 20);
 
-            List<Pair<String, String>> wordAndTrain = new ArrayList<>(wordList);
-            wordAndTrain.addAll(trainList);
+        List<Pair<String, String>> wordAndTrain = new ArrayList<>(wordList);
+        wordAndTrain.addAll(trainList);
 
-            HashMap<String, Boolean> usedExamples = new HashMap<>();
-            for (Pair<String, String> pair : wordAndTrain)
-            {
-                usedExamples.put(pair.getFirst(), true);
-            }
-            //trainList2 = TruncateList(trainList2, 2000);
-            for (Pair<String, String> pair : trainList2) {
-                if (!usedExamples.containsKey(pair.getFirst()))
-                    trainList.add(pair);
-            }
-
-            //DiscoveryTestDual(RemoveDuplicates(GetListValues(wordList)), trainList, LiftPairList(wordList), 15, 15);
-            //TestXMLData(trainList, wordList, 15, 15);
-
-
-            List<String> candidateList = GetListValues(wordList);
-            //wordList = GetRandomPartOfList(trainList, 50, 31);
-            candidateList.addAll(GetListValues(wordList));
-
-            DiscoveryEM(200, RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.None, false, CSPModel.SmoothMode.BySum, FallbackStrategy.NotDuringTraining, CSPModel.EMMode.Normal,false));
-            //DiscoveryEM(200, RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0, FallbackStrategy.Standard));
-
-            //DiscoveryTestDual(RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), 40, 40);
-            //DiscoveryTest(RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), 40, 40);
+        HashMap<String, Boolean> usedExamples = new HashMap<>();
+        for (Pair<String, String> pair : wordAndTrain) {
+            usedExamples.put(pair.getFirst(), true);
+        }
+        //trainList2 = TruncateList(trainList2, 2000);
+        for (Pair<String, String> pair : trainList2) {
+            if (!usedExamples.containsKey(pair.getFirst()))
+                trainList.add(pair);
         }
 
-        public static void ChineseDiscoveryTest() throws FileNotFoundException {
-
-            //List<Pair<String, String>> trainList = CharifyTargetWords(GetTabDelimitedPairs(@"C:\Users\jpaster2\Desktop\res\res\Chinese\chinese_full"),chMap);
-            List<Pair<String, String>> trainList = UndotTargetWords(GetTabDelimitedPairs("/path/to/res/res/Chinese/chinese_full"));
-            List<Pair<String, String>> wordList = GetRandomPartOfList(trainList, 700, 123);
-
-            //StreamWriter writer = new StreamWriter(@"C:\Users\jpaster2\Desktop\res\res\Chinese\chinese_test_pairs.txt");
-            //for (Pair<String,String> pair in wordList)
-            //    writer.WriteLine(pair.Key + "\t" + pair.Value);
-
-            //writer.Close();
-
-            List<String> candidates = GetListValues(wordList);
-            //wordList.RemoveRange(600, 100);
-            wordList = wordList.subList(0,600);
-
-            //DiscoveryTestDual(RemoveDuplicates(candidates), trainList, LiftPairList(wordList), 15, 15);
-            DiscoveryEM(200, RemoveDuplicates(candidates), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.Entropy, false, CSPModel.SmoothMode.BySource, FallbackStrategy.Standard, CSPModel.EMMode.Normal, false));
-            //TestXMLData(trainList, wordList, 15, 15);
+        //DiscoveryTestDual(RemoveDuplicates(GetListValues(wordList)), trainList, LiftPairList(wordList), 15, 15);
+        //TestXMLData(trainList, wordList, 15, 15);
 
 
+        List<String> candidateList = GetListValues(wordList);
+        //wordList = GetRandomPartOfList(trainList, 50, 31);
+        candidateList.addAll(GetListValues(wordList));
+
+        DiscoveryEM(200, RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.None, false, CSPModel.SmoothMode.BySum, FallbackStrategy.NotDuringTraining, CSPModel.EMMode.Normal, false));
+        //DiscoveryEM(200, RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0, FallbackStrategy.Standard));
+
+        //DiscoveryTestDual(RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), 40, 40);
+        //DiscoveryTest(RemoveDuplicates(candidateList), trainList, LiftPairList(wordList), 40, 40);
+    }
+
+    public static void ChineseDiscoveryTest() throws FileNotFoundException {
+
+        //List<Pair<String, String>> trainList = CharifyTargetWords(GetTabDelimitedPairs(@"C:\Users\jpaster2\Desktop\res\res\Chinese\chinese_full"),chMap);
+        List<Pair<String, String>> trainList = UndotTargetWords(GetTabDelimitedPairs("/path/to/res/res/Chinese/chinese_full"));
+        List<Pair<String, String>> wordList = GetRandomPartOfList(trainList, 700, 123);
+
+        //StreamWriter writer = new StreamWriter(@"C:\Users\jpaster2\Desktop\res\res\Chinese\chinese_test_pairs.txt");
+        //for (Pair<String,String> pair in wordList)
+        //    writer.WriteLine(pair.Key + "\t" + pair.Value);
+
+        //writer.Close();
+
+        List<String> candidates = GetListValues(wordList);
+        //wordList.RemoveRange(600, 100);
+        wordList = wordList.subList(0, 600);
+
+        //DiscoveryTestDual(RemoveDuplicates(candidates), trainList, LiftPairList(wordList), 15, 15);
+        DiscoveryEM(200, RemoveDuplicates(candidates), trainList, LiftPairList(wordList), new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.Entropy, false, CSPModel.SmoothMode.BySource, FallbackStrategy.Standard, CSPModel.EMMode.Normal, false));
+        //TestXMLData(trainList, wordList, 15, 15);
+
+
+    }
+
+    public static void RussianDiscoveryTest() throws FileNotFoundException {
+
+        List<String> candidateList = LineIO.read("/path/to/res/res/Russian/RussianWords");
+        for (int i = 0; i < candidateList.size(); i++)
+            candidateList.set(i, candidateList.get(i).toLowerCase());
+        //candidateList.Clear();
+
+        //HashMap<String, List<String>> evalList = GetAlexData(@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");//@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");
+        HashMap<String, List<String>> evalList = GetAlexData("/path/to/res/res/Russian/evalpairsShort.txt");//@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");
+
+        //List<Pair<String, String>> trainList = NormalizeHebrew(GetTabDelimitedPairs(@"C:\Users\jpaster2\Desktop\res\res\Hebrew\train_EnglishHebrew.txt"));
+        List<Pair<String, String>> trainList = GetTabDelimitedPairs("/path/to/WikiTransliteration/Aliases/ruExamples.txt");
+        //List<Pair<String, String>> trainList2 = RemoveVeryLong(NormalizeHebrew(GetTabDelimitedPairs(@"C:\Data\WikiTransliteration\Aliases\heExamples-Lax.txt")), 20);
+        List<Pair<String, String>> trainList2 = new ArrayList<>(trainList.size());
+
+        HashMap<String, Boolean> usedExamples = new HashMap<>();
+        for (String s : evalList.keySet())
+            usedExamples.put(s, true);
+
+        //trainList2 = TruncateList(trainList2, 2000);
+        for (Pair<String, String> pair : trainList)
+            if (!usedExamples.containsKey(pair.getFirst())) trainList2.add(pair);
+
+        DiscoveryEM(200, RemoveDuplicates(GetWords(evalList)), trainList2, evalList, new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.Entropy, false, CSPModel.SmoothMode.BySource, FallbackStrategy.Standard, CSPModel.EMMode.Normal, false));
+        //DiscoveryTestDual(RemoveDuplicates(candidateList), trainList2, evalList, 15, 15);
+        //DiscoveryTestDual(RemoveDuplicates(GetWords(evalList)), trainList2, evalList, 15, 15);
+
+    }
+
+    public static List<String> GetWords(HashMap<String, List<String>> dict) {
+        List<String> result = new ArrayList<>();
+        for (List<String> list : dict.values())
+            result.addAll(list);
+        return result;
+    }
+
+    public static HashMap<String, List<String>> LiftPairList(List<Pair<String, String>> list) {
+        HashMap<String, List<String>> result = new HashMap<>(list.size());
+        for (Pair<String, String> pair : list) {
+            ArrayList<String> tmp = new ArrayList<>();
+            tmp.add(pair.getSecond());
+            result.put(pair.getFirst(), tmp);
         }
 
-        public static void RussianDiscoveryTest() throws FileNotFoundException {
+        return result;
+    }
 
-            List<String> candidateList = LineIO.read("/path/to/res/res/Russian/RussianWords");
-            for (int i = 0; i < candidateList.size(); i++)
-                candidateList.set(i, candidateList.get(i).toLowerCase());
-            //candidateList.Clear();
-
-            //HashMap<String, List<String>> evalList = GetAlexData(@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");//@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");
-            HashMap<String, List<String>> evalList = GetAlexData("/path/to/res/res/Russian/evalpairsShort.txt");//@"C:\Users\jpaster2\Desktop\res\res\Russian\evalpairs.txt");
-
-            //List<Pair<String, String>> trainList = NormalizeHebrew(GetTabDelimitedPairs(@"C:\Users\jpaster2\Desktop\res\res\Hebrew\train_EnglishHebrew.txt"));
-            List<Pair<String, String>> trainList = GetTabDelimitedPairs("/path/to/WikiTransliteration/Aliases/ruExamples.txt");
-            //List<Pair<String, String>> trainList2 = RemoveVeryLong(NormalizeHebrew(GetTabDelimitedPairs(@"C:\Data\WikiTransliteration\Aliases\heExamples-Lax.txt")), 20);
-            List<Pair<String, String>> trainList2 = new ArrayList<>(trainList.size());
-
-            HashMap<String, Boolean> usedExamples = new HashMap<>();
-            for (String s : evalList.keySet())
-                usedExamples.put(s, true);
-
-            //trainList2 = TruncateList(trainList2, 2000);
-            for (Pair<String, String> pair : trainList)
-                if (!usedExamples.containsKey(pair.getFirst())) trainList2.add(pair);
-
-            DiscoveryEM(200, RemoveDuplicates(GetWords(evalList)), trainList2, evalList, new CSPModel(40, 0, 0, 0.000000000000001, CSPModel.SegMode.Entropy, false, CSPModel.SmoothMode.BySource, FallbackStrategy.Standard,CSPModel.EMMode.Normal,false));
-            //DiscoveryTestDual(RemoveDuplicates(candidateList), trainList2, evalList, 15, 15);
-            //DiscoveryTestDual(RemoveDuplicates(GetWords(evalList)), trainList2, evalList, 15, 15);
-
+    private static List<Pair<String, String>> UndotTargetWords(List<Pair<String, String>> list) {
+        List<Pair<String, String>> result = new ArrayList<>(list.size());
+        for (Pair<String, String> pair : list) {
+            result.add(new Pair<>(pair.getFirst(), pair.getSecond().replace(".", "")));
         }
 
-        public static List<String> GetWords(HashMap<String, List<String>> dict)
-        {
-            List<String> result = new ArrayList<>();
-            for (List<String> list : dict.values())
-                result.addAll(list);
-            return result;
-        }
-
-        public static HashMap<String, List<String>> LiftPairList(List<Pair<String, String>> list)
-        {
-            HashMap<String, List<String>> result = new HashMap<>(list.size());
-            for (Pair<String, String> pair : list) {
-                ArrayList<String> tmp = new ArrayList<>();
-                tmp.add(pair.getSecond());
-                result.put(pair.getFirst(), tmp);
-            }
-
-            return result;
-        }
-
-        private static List<Pair<String, String>> UndotTargetWords(List<Pair<String, String>> list)
-        {
-            List<Pair<String, String>> result = new ArrayList<>(list.size());
-            for (Pair<String, String> pair : list)
-            {
-                result.add(new Pair<>(pair.getFirst(), pair.getSecond().replace(".", "")));
-            }
-
-            return result;
-        }
+        return result;
+    }
 
 //        public static List<Pair<String, String>> TruncateList(List<Pair<String, String>> list, int maxCount)
 //        {
@@ -779,52 +771,59 @@ class Program {
 //            return result;
 //        }
 
-        private static List<String> RemoveDuplicates(List<String> list)
+    private static List<String> RemoveDuplicates(List<String> list) {
+        List<String> result = new ArrayList<>(list.size());
+        HashMap<String, Boolean> seen = new HashMap<>();
+        for (String s : list) {
+            if (seen.containsKey(s)) continue;
+            seen.put(s, true);
+            result.add(s);
+        }
+
+        return result;
+    }
+
+    private static List<Triple<String, String, Double>> ConvertExamples(List<Pair<String, String>> examples) {
+        List<Triple<String, String, Double>> fExamples = new ArrayList<>(examples.size());
+        for (Pair<String, String> pair : examples)
+            fExamples.add(new Triple<>(pair.getFirst(), pair.getSecond(), 1.0));
+
+        return fExamples;
+    }
+
+    /**
+     * Calculates a probability table for P(String2 | String1)
+     *
+     * @param ?
+     * @return
+     */
+        public static HashMap<Pair<String, String>, Double> PSecondGivenFirst(HashMap<Pair<String, String>, Double> counts)
         {
-            List<String> result = new ArrayList<>(list.size());
-            HashMap<String, Boolean> seen = new HashMap<>();
-            for (String s : list)
+            HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
+
+            HashMap<String, Integer> sourceCounts = new HashMap<>();
+            for (Pair<String, String> key : counts.keySet()) {
+
+                if(sourceCounts.containsKey(key.getFirst())){
+                    sourceCounts.put(key.getFirst(), sourceCounts.get(key.getFirst() + 1));
+                }else{
+                    sourceCounts.put(key.getFirst(), 1);
+                }
+
+
+            }
+
+            HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
+            for (Pair<String, String> pairkey : counts.keySet())
             {
-                if (seen.containsKey(s)) continue;
-                seen.put(s, true);
-                result.add(s);
+                double pairvalue = counts.get(pairkey);
+                //double value = totals1[pair.Key.x] == 0 ? ((double)1)/sourceCounts[pair.Key.x] : (pair.Value / totals1[pair.Key.x]);
+                double value = totals1.get(pairkey.getFirst()) == 0 ? 0 : (pairvalue / totals1.get(pairkey.getFirst()));
+                result.put(pairkey, value);
             }
 
             return result;
         }
-
-        private static List<Triple<String, String, Double>> ConvertExamples(List<Pair<String, String>> examples)
-        {
-            List<Triple<String, String, Double>> fExamples = new ArrayList<>(examples.size());
-            for (Pair<String, String> pair : examples)
-                fExamples.add(new Triple<>(pair.getFirst(), pair.getSecond(), 1.0));
-
-            return fExamples;
-        }
-
-        /**
-         * Calculates a probability table for P(String2 | String1)
-         * @param ?
-         * @return
-         */
-//        public static SparseDoubleVector<Pair<String, String>> PSecondGivenFirst(HashMap<Pair<String, String>, Double> counts)
-//        {
-//            HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
-//
-//            HashMap<String, Integer> sourceCounts = new HashMap<>();
-//            for (Pair<Pair<String, String>, Double> pair : counts)
-//                Dictionaries.IncrementOrSet<String>(sourceCounts, pair.Key.x, 1, 1);
-//
-//            HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(counts.Count);
-//            for (Pair<Pair<String, String>, Double> pair : counts)
-//            {
-//                //double value = totals1[pair.Key.x] == 0 ? ((double)1)/sourceCounts[pair.Key.x] : (pair.Value / totals1[pair.Key.x]);
-//                double value = totals1[pair.Key.x] == 0 ? 0 : (pair.Value / totals1[pair.Key.x]);
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
 
 //        public static HashMap<Triple<String, String, String>, Double> PSecondGivenFirst(HashMap<Triple<String, String, String>, Double> counts)
 //        {
@@ -852,9 +851,9 @@ class Program {
 //            return result;
 //        }
 
-        /// <summary>
-        /// Calculates a probability table for P(String2 | String1)
-        /// </summary>
+    /// <summary>
+    /// Calculates a probability table for P(String2 | String1)
+    /// </summary>
 //        public static HashMap<Pair<String, String>, double> PSecondGivenFirst(String word1, String word2, int maxSubstringLength, List<Pair<Pair<String, String>, double>> exampleProductions, Map<String,String> countsMap, HashMap<Pair<String, String>, double> counts)
 //        {
 //            HashMap<String, double> totals = new HashMap<String, double>();
@@ -881,9 +880,9 @@ class Program {
 //            return result;
 //        }
 
-        /// <summary>
-        /// Calculates a probability table for P(String2 | String1) * P(String1 | String2)
-        /// </summary>
+    /// <summary>
+    /// Calculates a probability table for P(String2 | String1) * P(String1 | String2)
+    /// </summary>
 //        public static SparseDoubleVector<Pair<String, String>> PMutualProduction(HashMap<Pair<String, String>, double> counts)
 //        {
 //            HashMap<String, double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
@@ -900,11 +899,11 @@ class Program {
 //            return result;
 //        }
 
-        /// <summary>
-        /// Calculates P(String1 of size n, String2)
-        /// </summary>
-        /// <param name="counts"></param>
-        /// <returns></returns>
+    /// <summary>
+    /// Calculates P(String1 of size n, String2)
+    /// </summary>
+    /// <param name="counts"></param>
+    /// <returns></returns>
 //        public static HashMap<Pair<String, String>, double> PSemiJoint(HashMap<Pair<String, String>, double> counts, int maxSubstringSize1)
 //        {
 //            double[] totals = new double[maxSubstringSize1];
@@ -922,9 +921,9 @@ class Program {
 //            return result;
 //        }
 
-        /// <summary>
-        /// Calculates a probability table for P(String1, String2)
-        /// </summary>
+    /// <summary>
+    /// Calculates a probability table for P(String1, String2)
+    /// </summary>
 //        public static SparseDoubleVector<Pair<String, String>> PJoint(HashMap<Pair<String, String>, Double> counts)
 //        {
 //            double total = 0;
@@ -993,18 +992,21 @@ class Program {
 //            return result;
 //        }
 
-//        private static HashMap<Pair<String, String>, double> SumNormalize(HashMap<Pair<String, String>, double> vector)
-//        {
-//            HashMap<Pair<String, String>, double> result = new HashMap<Pair<String, String>, double>(vector.Count);
-//            double sum=0;
-//            for (double value in vector.Values)
-//                sum += value;
-//
-//            for (Pair<Pair<String, String>, double> pair in vector)
-//                result[pair.Key] = pair.Value / sum;
-//
-//            return result;
-//        }
+        private static HashMap<Pair<String, String>, Double> SumNormalize(HashMap<Pair<String, String>, Double> vector)
+        {
+            HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(vector.size());
+            double sum=0;
+            for (double value : vector.values()) {
+                sum += value;
+            }
+
+            for (Pair<String, String> key : vector.keySet()) {
+                Double value = vector.get(key);
+                result.put(key, value / sum);
+            }
+
+            return result;
+        }
 
 //        private static List<Triple<String, String,WordAlignment>> GetTrainingExamples(String translationMapFile)
 //        {
@@ -1041,49 +1043,49 @@ class Program {
 //                else dict[val] = true;
 //        }
 
-        //public static void TestXMLData2(String trainingFile, String testFile, int maxSubstringLength1, int maxSubstringLength2)
-        //{
-        //    List<Pair<String, String>> trainingPairs = GetTaskPairs(trainingFile);
-        //    List<Pair<String, String>> testingPairs = GetTaskPairs(testFile);
+    //public static void TestXMLData2(String trainingFile, String testFile, int maxSubstringLength1, int maxSubstringLength2)
+    //{
+    //    List<Pair<String, String>> trainingPairs = GetTaskPairs(trainingFile);
+    //    List<Pair<String, String>> testingPairs = GetTaskPairs(testFile);
 
-        //    List<String> languageExamples = new List<String>(trainingPairs.Count);
-        //    for (Pair<String, String> pair in trainingPairs)
-        //        languageExamples.Add(pair.Value);
-        //    HashMap<String, int> ngramCounts = null;  WikiTransliteration.GetNgramCounts(3, languageExamples);
+    //    List<String> languageExamples = new List<String>(trainingPairs.Count);
+    //    for (Pair<String, String> pair in trainingPairs)
+    //        languageExamples.Add(pair.Value);
+    //    HashMap<String, int> ngramCounts = null;  WikiTransliteration.GetNgramCounts(3, languageExamples);
 
-        //    HashMap<Pair<String, String>, double> probs = MakeAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingPairs, null,false);
+    //    HashMap<Pair<String, String>, double> probs = MakeAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingPairs, null,false);
 
-        //    Map<String, String> probMap = WikiTransliteration.GetProbMap(probs);
-        //    //HashMap<String, Pair<String, double>> maxProbs = WikiTransliteration.GetMaxProbs(probs);
+    //    Map<String, String> probMap = WikiTransliteration.GetProbMap(probs);
+    //    //HashMap<String, Pair<String, double>> maxProbs = WikiTransliteration.GetMaxProbs(probs);
 
-        //    int correct = 0;
-        //    int contained = 0;
-        //    double mrr = 0;
-        //    for (Pair<String, String> pair in testingPairs)
-        //    {
-        //        TopList<double, String> predictions = WikiTransliteration.Predict(20, pair.Key, maxSubstringLength1, probMap,probs, new HashMap<String, TopList<double, String>>(),ngramCounts,3);
-        //        CheckTopList(predictions);
-        //        int position = predictions.Values.IndexOf(pair.Value);
-        //        if (position == 0)
-        //            correct++;
+    //    int correct = 0;
+    //    int contained = 0;
+    //    double mrr = 0;
+    //    for (Pair<String, String> pair in testingPairs)
+    //    {
+    //        TopList<double, String> predictions = WikiTransliteration.Predict(20, pair.Key, maxSubstringLength1, probMap,probs, new HashMap<String, TopList<double, String>>(),ngramCounts,3);
+    //        CheckTopList(predictions);
+    //        int position = predictions.Values.IndexOf(pair.Value);
+    //        if (position == 0)
+    //            correct++;
 
-        //        if (position >= 0)
-        //            contained++;
+    //        if (position >= 0)
+    //            contained++;
 
-        //        if (position < 0)
-        //            position = 20;
+    //        if (position < 0)
+    //            position = 20;
 
-        //        mrr += 1 / ((double)position + 1);
-        //    }
+    //        mrr += 1 / ((double)position + 1);
+    //    }
 
-        //    mrr /= testingPairs.Count;
+    //    mrr /= testingPairs.Count;
 
-        //    System.out.println(testingPairs.Count + " pairs tested in total.");
-        //    System.out.println(contained + " predictions contained (" + (((double)contained) / testingPairs.Count) + ")");
-        //    System.out.println(correct + " predictions exactly correct (" + (((double)correct) / testingPairs.Count) + ")");
-        //    System.out.println("MRR: " + mrr);
-        //    Console.ReadLine();
-        //}
+    //    System.out.println(testingPairs.Count + " pairs tested in total.");
+    //    System.out.println(contained + " predictions contained (" + (((double)contained) / testingPairs.Count) + ")");
+    //    System.out.println(correct + " predictions exactly correct (" + (((double)correct) / testingPairs.Count) + ")");
+    //    System.out.println("MRR: " + mrr);
+    //    Console.ReadLine();
+    //}
 
 //        public static void Reweight(HashMap<Pair<String, String>, double> rawProbs, List<Triple<String, String, double>> examples, List<List<Pair<Pair<String, String>, double>>> exampleCounts, int maxSubstringLength)
 //        {
@@ -1304,18 +1306,17 @@ class Program {
 //            return result;
 //        }
 //
-        public static List<Pair<String, String>> GetTabDelimitedPairs(String filename) throws FileNotFoundException {
-            List<Pair<String, String>> result = new ArrayList<>();
+    public static List<Pair<String, String>> GetTabDelimitedPairs(String filename) throws FileNotFoundException {
+        List<Pair<String, String>> result = new ArrayList<>();
 
-            for (String line : LineIO.read(filename))
-            {
-                String[] pair = line.trim().split("\t");
-                if (pair.length != 2) continue;
-                result.add(new Pair<>(pair[0].trim().toLowerCase(), pair[1].trim().toLowerCase()));
-            }
-
-            return result;
+        for (String line : LineIO.read(filename)) {
+            String[] pair = line.trim().split("\t");
+            if (pair.length != 2) continue;
+            result.add(new Pair<>(pair[0].trim().toLowerCase(), pair[1].trim().toLowerCase()));
         }
+
+        return result;
+    }
 
 //        private static HashMap<Pair<String, String>, Double> MakeAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Pair<String, String>> examples, HashMap<Pair<String, String>, double> probs, bool weightedAlignments)
 //        {
@@ -1385,66 +1386,74 @@ class Program {
 //            return result;
 //        }
 
-//        static HashMap<Pair<String, String>, HashMap<Pair<String, String>, double>> maxCache = new HashMap<Pair<String, String>, HashMap<Pair<String, String>, double>>();
-//
-//        internal static HashMap<Pair<String, String>, double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, double>> examples, HashMap<Pair<String, String>, double> probs, WeightingMode weightingMode , NormalizationMode normalization, bool getExampleCounts, out List<List<Pair<Pair<String,String>,double>>> exampleCounts)
-//        {
-//            Pasternack.Collections.Generic.Specialized.InternDictionary<String> internTable = new Pasternack.Collections.Generic.Specialized.InternDictionary<String>();
-//            HashMap<Pair<String, String>, Double> counts = new HashMap<Pair<String, String>, double>();
-//            exampleCounts = (getExampleCounts ? new List<List<Pair<Pair<String, String>, double>>>(examples.Count) : null);
-//
-//            int alignmentCount = 0;
-//            for (Triple<String, String, double> example : examples)
-//            {
-//                String sourceWord = example.x;
-//                String bestWord = example.y;
-//                if (sourceWord.Length * maxSubstringLength2 >= bestWord.Length && bestWord.Length * maxSubstringLength1 >= sourceWord.Length)
-//                {
-//                    alignmentCount++;
-//                    HashMap<Pair<String, String>, double> wordCounts;
-//                    if (weightingMode == WeightingMode.FindWeighted && probs != null)
-//                        wordCounts = WikiTransliteration.FindWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization);
-//                    //wordCounts = WikiTransliteration.FindWeightedAlignmentsAverage(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, true, normalization);
-//                    else if (weightingMode == WeightingMode.CountWeighted)
-//                        wordCounts = WikiTransliteration.CountWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization, false);
-//                    else if (weightingMode == WeightingMode.MaxAlignment)
-//                    {
-//                        HashMap<Pair<String, String>, double> cached = null;
-//                        if (!maxCache.TryGetValue(new Pair<String, String>(sourceWord, bestWord), out cached))
-//                            cached = new HashMap<Pair<String, String>, double>();
-//
-//                        Dictionaries.AddTo<Pair<String, String>>(probs, cached, -1);
-//
-//                        wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, false);
-//                        maxCache[new Pair<String, String>(sourceWord, bestWord)] = wordCounts;
-//
-//                        Dictionaries.AddTo<Pair<String, String>>(probs, cached, 1);
-//                    }
-//                    else if (weightingMode == WeightingMode.MaxAlignmentWeighted)
-//                        wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, true);
-//                    else //if (weightingMode == WeightingMode.None || weightingMode == WeightingMode.SuperficiallyWeighted)
-//                        wordCounts = WikiTransliteration.FindAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, internTable, normalization);
-//
-//                    if (weightingMode == WeightingMode.SuperficiallyWeighted && probs != null)
-//                        wordCounts = SumNormalize(Dictionaries.Multiply<Pair<String, String>>(wordCounts, probs));
-//
-//                    Dictionaries.AddTo<Pair<String, String>>(counts, wordCounts, example.z);
-//
-//                    if (getExampleCounts)
-//                    {
-//                        List<Pair<Pair<String, String>, double>> curExampleCounts = new List<Pair<Pair<String, String>, double>>(wordCounts.Count);
-//                        for (Pair<Pair<String, String>, double> pair in wordCounts)
-//                            curExampleCounts.Add(pair);
-//
-//                        exampleCounts.Add(curExampleCounts);
-//                    }
-//                }
-//                else
-//                    if (getExampleCounts) exampleCounts.Add(null);
-//            }
-//
-//            return counts;
-//        }
+    static HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> maxCache = new HashMap<>();
+
+    /**
+     * FIXME: uses out variable...
+     *
+     * @param maxSubstringLength1
+     * @param maxSubstringLength2
+     * @param examples
+     * @param probs
+     * @param weightingMode
+     * @param normalization
+     * @param getExampleCounts
+     * @return
+     */
+     static HashMap<Pair<String, String>, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Pair<String, String>, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
+        InternDictionary<String> internTable = new InternDictionary<>();
+        HashMap<Pair<String, String>, Double> counts = new HashMap<>();
+        List<List<Pair<Pair<String, String>, Double>>> exampleCounts = (getExampleCounts ? new ArrayList<List<Pair<Pair<String, String>, Double>>>(examples.size()) : null);
+
+        int alignmentCount = 0;
+        for (Triple<String, String, Double> example : examples) {
+            String sourceWord = example.getFirst();
+            String bestWord = example.getSecond();
+            if (sourceWord.length() * maxSubstringLength2 >= bestWord.length() && bestWord.length() * maxSubstringLength1 >= sourceWord.length()) {
+                alignmentCount++;
+                HashMap<Pair<String, String>, Double> wordCounts;
+                if (weightingMode == WeightingMode.FindWeighted && probs != null)
+                    wordCounts = WikiTransliteration.FindWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization);
+                    //wordCounts = WikiTransliteration.FindWeightedAlignmentsAverage(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, true, normalization);
+                else if (weightingMode == WeightingMode.CountWeighted)
+                    wordCounts = WikiTransliteration.CountWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization, false);
+                else if (weightingMode == WeightingMode.MaxAlignment) {
+
+                    HashMap<Pair<String, String>, Double> cached = maxCache.getOrDefault(new Pair<>(sourceWord, bestWord), new HashMap<Pair<String, String>, Double>());
+
+                    Dictionaries.AddTo<Pair<String, String>> (probs, cached, -1);
+
+                    wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, false);
+                    maxCache.put(new Pair<>(sourceWord, bestWord), wordCounts);
+
+                    Dictionaries.AddTo<Pair<String, String>> (probs, cached, 1);
+                } else if (weightingMode == WeightingMode.MaxAlignmentWeighted)
+                    wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, true);
+                else //if (weightingMode == WeightingMode.None || weightingMode == WeightingMode.SuperficiallyWeighted)
+                    wordCounts = WikiTransliteration.FindAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, internTable, normalization);
+
+                if (weightingMode == WeightingMode.SuperficiallyWeighted && probs != null) {
+                    wordCounts = SumNormalize(Dictionaries.Multiply < Pair < String, String >> (wordCounts, probs));
+                }
+
+                Dictionaries.AddTo<Pair<String, String>> (counts, wordCounts, example.getThird());
+
+                if (getExampleCounts) {
+                    List<Pair<Pair<String, String>, Double>> curExampleCounts = new ArrayList<>(wordCounts.size());
+                    for (Pair<String, String> key : wordCounts.keySet()) {
+                        Double value = wordCounts.get(key);
+                        curExampleCounts.add(new Pair<>(key, value));
+                    }
+
+                    exampleCounts.add(curExampleCounts);
+                }
+            } else if (getExampleCounts) {
+                exampleCounts.add(null);
+            }
+        }
+
+        return counts;
+    }
 
 //        public static ContextModel LearnContextModel(List<Triple<String, String, double>> examples, ContextModel model)
 //        {
@@ -1479,19 +1488,23 @@ class Program {
 //            return result;
 //        }
 
-        //public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionProbs)
-        //{
-        //    SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<Pair<Triple<String, String, String>, String>>();
-        //    SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<Triple<String, String, String>>();
-        //    for (Pair<Pair<Triple<String, String, String>, String>, double> pair in productionProbs)            
-        //        totals[pair.Key.x] += pair.Value;
+    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionProbs)
+    {
+        SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<>();
+        SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
+        for (Pair<Triple<String, String, String>, String> key : productionProbs.keySet()) {
+            Double value = productionProbs.get(key);
+            totals.put(key.getFirst(), totals.get(key.getFirst()) + value);
+        }
 
-        //    for (Pair<Pair<Triple<String, String, String>, String>, double> pair in productionProbs)
-        //        result[pair.Key] = pair.Value / totals[pair.Key.x];
+        for (Pair<Triple<String, String, String>, String> key : productionProbs.keySet()) {
+            Double value = productionProbs.get(key);
+            result.put(key, value / totals.get(key.getFirst()));
+        }
 
-        //    return result;
-            
-        //}
+        return result;
+
+    }
 
 //        private static HashMap<Triple<String, String,String>, Double> MakeRawAlignmentTableWithContext(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, double>> examples, HashMap<Triple<String, String, String>, double> probs, int contextSize, bool fallback, bool weightByContextOnly, NormalizationMode normalization, bool getExampleCounts, out List<List<Pair<Triple<String, String, String>, double>>> exampleCounts)
 //        {
@@ -1528,12 +1541,12 @@ class Program {
 //            return counts;
 //        }
 
-        /**
-         * Calculates a probability table for P(String2 | String1) * P(String1 | Length(String1)) == P(String2, String1 | Length(String1))
-         * @param counts
-         * @param maxSubstringLength
-         * @return
-         */
+    /**
+     * Calculates a probability table for P(String2 | String1) * P(String1 | Length(String1)) == P(String2, String1 | Length(String1))
+     * @param counts
+     * @param maxSubstringLength
+     * @return
+     */
 //        public static HashMap<Pair<String, String>, Double> PJointGivenLength(HashMap<Pair<String, String>, Double> counts, int maxSubstringLength)
 //        {
 //            double[] sums = GetSourceCountSumsByLength(counts, maxSubstringLength);
@@ -1563,12 +1576,12 @@ class Program {
 //            return result;
 //        }
 
-        /**
-         * Gets an array of totals of counts of the source substring by length.
-         * @param counts
-         * @param maxSubstringLength
-         * @return
-         */
+    /**
+     * Gets an array of totals of counts of the source substring by length.
+     * @param counts
+     * @param maxSubstringLength
+     * @return
+     */
 //        public static double[] GetSourceCountSumsByLength(HashMap<Pair<String, String>, Double> counts, int maxSubstringLength)
 //        {
 //            double[] result = new double[maxSubstringLength];
@@ -1597,7 +1610,7 @@ class Program {
 //            return result;
 //        }
 
-        //Create fallback for segmentation model
+    //Create fallback for segmentation model
 //        public static SparseDoubleVector<Pair<String, String>> CreateFallback(SparseDoubleVector<Pair<String, String>> segCounts, SparseDoubleVector<Pair<String, String>> notSegCounts, InternDictionary<String> internTable)
 //        {
 //            SparseDoubleVector<Pair<String, String>> segTotals = new SparseDoubleVector<Pair<String,String>>(segCounts.Count);
@@ -1618,61 +1631,61 @@ class Program {
 //            return segTotals / (segTotals + notSegTotals);
 //        }
 
-        /**
-         * Calculates a probability table for P(String2 | String1)
-         * @param counts
-         * @return
-         */
-//        public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts)
-//        {
-//            SparseDoubleVector<Triple<String,String,String>> totals = new SparseDoubleVector<Triple<String,String,String>>();
-//            for (Pair<Pair<Triple<String, String, String>, String>, double> pair in counts)
-//                totals[pair.Key.x] += pair.Value;
-//
-//            SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<Pair<Triple<String, String, String>, String>>(counts.Count);
-//            for (Pair<Pair<Triple<String, String, String>, String>, double> pair in counts)
-//            {
-//                double total = totals[pair.Key.x];
-//                result[pair.Key] = total == 0 ? 0 : pair.Value / total;
-//            }
-//
-//            return result;
-//        }
-
-        /**
-         * Returns a random subset of a list; the list provided is modified to remove the selected items.
-         * @param wordList
-         * @param count
-         * @param seed
-         * @return
-         */
-        public static List<Pair<String, String>> GetRandomPartOfList(List<Pair<String, String>> wordList, int count, int seed)
-        {
-            Random r = new Random(seed);
-
-            List<Pair<String,String>> randomList = new ArrayList<>(count);
-
-            for (int i = 0; i < count; i++)
-            {
-
-                int index = r.nextInt(wordList.size()); //r.Next(wordList.size());
-                randomList.add(wordList.get(index));
-                wordList.remove(index);
-            }
-
-            return randomList;
+    /**
+     * Calculates a probability table for P(String2 | String1)
+     * @param counts
+     * @return
+     */
+    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirstTriple(SparseDoubleVector<Pair<Triple<String, String, String>, String>> counts) {
+        SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
+        for (Pair<Triple<String, String, String>, String> key : counts.keySet()) {
+            Double value = counts.get(key);
+            totals.put(key.getFirst(), totals.get(key.getFirst()) + value);
         }
 
-        public static List<String> GetListValues(List<Pair<String, String>> wordList)
+        SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<Pair<Triple<String, String, String>, String>>(counts.size());
+        for (Pair<Triple<String, String, String>, String> key : counts.keySet())
         {
-            List<String> valueList = new ArrayList<>(wordList.size());
-            for (Pair<String, String> pair : wordList)
-                valueList.add(pair.getSecond());
-
-            return valueList;
+            Double value = counts.get(key);
+            double total = totals.get(key.getFirst());
+            result.put(key, total == 0 ? 0 : value / total);
         }
 
-//
+        return result;
+    }
+
+    /**
+     * Returns a random subset of a list; the list provided is modified to remove the selected items.
+     *
+     * @param wordList
+     * @param count
+     * @param seed
+     * @return
+     */
+    public static List<Pair<String, String>> GetRandomPartOfList(List<Pair<String, String>> wordList, int count, int seed) {
+        Random r = new Random(seed);
+
+        List<Pair<String, String>> randomList = new ArrayList<>(count);
+
+        for (int i = 0; i < count; i++) {
+
+            int index = r.nextInt(wordList.size()); //r.Next(wordList.size());
+            randomList.add(wordList.get(index));
+            wordList.remove(index);
+        }
+
+        return randomList;
+    }
+
+    public static List<String> GetListValues(List<Pair<String, String>> wordList) {
+        List<String> valueList = new ArrayList<>(wordList.size());
+        for (Pair<String, String> pair : wordList)
+            valueList.add(pair.getSecond());
+
+        return valueList;
+    }
+
+    //
 //        public static List<Pair<String, String>> InvertPairs(List<Pair<String, String>> pairs)
 //        {
 //            List<Pair<String, String>> result = new ArrayList<>(pairs.size());
@@ -1782,27 +1795,25 @@ class Program {
 //            System.out.println("Finished.");
 //        }
 //
-        public static void DiscoveryEM(int iterations, List<String> candidateWords, List<Pair<String, String>> trainingPairs, HashMap<String, List<String>> testingPairs, TransliterationModel model)
-        {
-            List<Triple<String, String, Double>> trainingTriples = ConvertExamples(trainingPairs);
+    public static void DiscoveryEM(int iterations, List<String> candidateWords, List<Pair<String, String>> trainingPairs, HashMap<String, List<String>> testingPairs, TransliterationModel model) {
+        List<Triple<String, String, Double>> trainingTriples = ConvertExamples(trainingPairs);
 
-            for (int i = 0; i < iterations; i++)
-            {
-                System.out.println("Iteration #" + i);
+        for (int i = 0; i < iterations; i++) {
+            System.out.println("Iteration #" + i);
 
-                long startTime = System.nanoTime();
-                System.out.print("Training...");
-                model = model.LearnModel(trainingTriples);
-                long endTime = System.nanoTime();
-                System.out.println("Finished in " + (startTime-endTime)/(1000000*1000) + " seconds.");
+            long startTime = System.nanoTime();
+            System.out.print("Training...");
+            model = model.LearnModel(trainingTriples);
+            long endTime = System.nanoTime();
+            System.out.println("Finished in " + (startTime - endTime) / (1000000 * 1000) + " seconds.");
 
-                DiscoveryEvaluation(testingPairs, candidateWords, model);
-            }
-
-            System.out.println("Finished.");
+            DiscoveryEvaluation(testingPairs, candidateWords, model);
         }
 
-//
+        System.out.println("Finished.");
+    }
+
+    //
 //        public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> LiftProbs(SparseDoubleVector<Pair<String, String>> probs)
 //        {
 //            SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<Pair<Triple<String, String, String>, String>>(probs.Count);
@@ -2089,38 +2100,37 @@ class Program {
 //            return result;
 //        }
 //
-        public static String NormalizeHebrew(String word)
-        {
-            word = word.replace('ן', 'נ');
-            word = word.replace('ך', 'כ');
-            word = word.replace('ץ', 'צ');
-            word = word.replace('ם', 'מ');
-            word = word.replace('ף', 'פ');
+    public static String NormalizeHebrew(String word) {
+        word = word.replace('ן', 'נ');
+        word = word.replace('ך', 'כ');
+        word = word.replace('ץ', 'צ');
+        word = word.replace('ם', 'מ');
+        word = word.replace('ף', 'פ');
 
-            return word;
-        }
+        return word;
+    }
 
-        public static List<Pair<String, String>> NormalizeHebrew(List<Pair<String, String>> pairs)
-        {
-            List<Pair<String, String>> result = new ArrayList<>(pairs.size());
+    public static List<Pair<String, String>> NormalizeHebrew(List<Pair<String, String>> pairs) {
+        List<Pair<String, String>> result = new ArrayList<>(pairs.size());
 
-            for (int i = 0; i < pairs.size(); i++)
-                result.add(new Pair<>(pairs.get(i).getFirst(), NormalizeHebrew(pairs.get(i).getSecond())));
+        for (int i = 0; i < pairs.size(); i++)
+            result.add(new Pair<>(pairs.get(i).getFirst(), NormalizeHebrew(pairs.get(i).getSecond())));
 
-            return result;
-        }
+        return result;
+    }
 
     /**
      * This is still broken...
+     *
      * @param path
      * @return
      * @throws FileNotFoundException
      */
-        static HashMap<String, List<String>> GetAlexData(String path) throws FileNotFoundException {
+    static HashMap<String, List<String>> GetAlexData(String path) throws FileNotFoundException {
 
-            HashMap<String, List<String>> result = new HashMap<>();
+        HashMap<String, List<String>> result = new HashMap<>();
 
-            // TODO: this is all broken.
+        // TODO: this is all broken.
 //            ArrayList<String> data = LineIO.read(path);
 //
 //            for (String line : data)
@@ -2145,9 +2155,10 @@ class Program {
 //
 //            }
 
-            return result;
-        }
-//
+        return result;
+    }
+
+    //
 //        public static List<Pair<String, String>> UnderscoreSurround(List<Pair<String, String>> pairs)
 //        {
 //            List<Pair<String, String>> result = new List<Pair<String, String>>(pairs.Count);
@@ -2416,34 +2427,38 @@ class Program {
 //            writer.Close();
 //        }
 //
-        public static HashMap<Pair<String, String>, Double> PruneProbs(int topK, HashMap<Pair<String, String>, Double> probs)
-        {
-            HashMap<String, List<Pair<String, Double>>> lists = new HashMap<>();
-            for (Pair<String, String> key : probs.keySet())
-            {
-                Double value = probs.get(key);
+    public static HashMap<Pair<String, String>, Double> PruneProbs(int topK, HashMap<Pair<String, String>, Double> probs) {
+        HashMap<String, List<Pair<String, Double>>> lists = new HashMap<>();
+        for (Pair<String, String> key : probs.keySet()) {
+            Double value = probs.get(key);
 
-                if (!lists.containsKey(key.getFirst())) {
-                    lists.put(key.getFirst(), new ArrayList<Pair<String, Double>>());
-                }
-
-                lists.get(key.getFirst()).add(new Pair<>(key.getSecond(), value));
+            if (!lists.containsKey(key.getFirst())) {
+                lists.put(key.getFirst(), new ArrayList<Pair<String, Double>>());
             }
 
-            HashMap<Pair<String, String>, Double> result = new HashMap<>();
-            for (Pair<String, List<Pair<String, Double>>> pair : lists)
-            {
-                pair.getSecond().Sort(new Comparison<Pair<String, Double>>(delegate(Pair < String, Double > x, Pair < String, Double > y) {
-                    return Math.Sign(y.y-x.y);
-                }));
-                int toAdd = Math.min(topK, pair.getSecond().size());
-                for (int i = 0; i < toAdd; i++) {
-                    result.put(new Pair<>(pair.getFirst(), pair.getSecond().get(i).getFirst()), pair.getSecond().get(i).getSecond());
-                }
-            }
-
-            return result;
+            lists.get(key.getFirst()).add(new Pair<>(key.getSecond(), value));
         }
+
+        HashMap<Pair<String, String>, Double> result = new HashMap<>();
+        for (String key : lists.keySet()) {
+            List<Pair<String, Double>> value = lists.get(key);
+            Collections.sort(value, new Comparator<Pair<String, Double>>() {
+                @Override
+                public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
+                    return (int) Math.copySign(1.0, o2.getSecond() - o1.getSecond());
+                }
+            });
+            //value.Sort(new Comparison<Pair<String, Double>>(delegate(Pair < String, Double > x, Pair < String, Double > y) {
+            //    return Math.Sign(y.y-x.y);
+            //}));
+            int toAdd = Math.min(topK, value.size());
+            for (int i = 0; i < toAdd; i++) {
+                result.put(new Pair<>(key, value.get(i).getFirst()), value.get(i).getSecond());
+            }
+        }
+
+        return result;
+    }
 //
 //        public static TopList<Double, String> TopProbs(HashMap<Pair<String, String>, Double> probs, String sourceSubstring)
 //        {
@@ -2624,57 +2639,55 @@ class Program {
 //            System.out.println("MRR: " + mrr);
 //        }
 
-        private static void DiscoveryEvaluation(HashMap<String, List<String>> testingPairs, List<String> candidates, TransliterationModel model)
-        {
-            int correct = 0;
-            //int contained = 0;
-            double mrr = 0;
-            int misses = 0;
+    private static void DiscoveryEvaluation(HashMap<String, List<String>> testingPairs, List<String> candidates, TransliterationModel model) {
+        int correct = 0;
+        //int contained = 0;
+        double mrr = 0;
+        int misses = 0;
 
-            for (String key : testingPairs.keySet())
-            {
-                List<String> value = testingPairs.get(key);
+        for (String key : testingPairs.keySet()) {
+            List<String> value = testingPairs.get(key);
 
-                //double[] scores = new double[candidates.size()];
-                final List<Double> scores = new ArrayList<>(candidates.size());
-                String[] words = candidates.toArray(new String[candidates.size()]);
+            //double[] scores = new double[candidates.size()];
+            final List<Double> scores = new ArrayList<>(candidates.size());
+            String[] words = candidates.toArray(new String[candidates.size()]);
 
-                final List<String> fakewords = new ArrayList<>(candidates);
+            final List<String> fakewords = new ArrayList<>(candidates);
 
-                for (int i = 0; i < words.length; i++)
-                    scores.set(i, model.GetProbability(key, words[i]));
+            for (int i = 0; i < words.length; i++)
+                scores.set(i, model.GetProbability(key, words[i]));
 
-                // sort the words according to the scores. Assume that the indices match up
-                //Array.Sort<double, String>(scores, words);
-                Collections.sort(candidates, new Comparator<String>() {
-                    public int compare(String left, String right) {
-                        return Double.compare(scores.get(fakewords.indexOf(left)), scores.get(fakewords.indexOf(right)));
-                    }
-                });
+            // sort the words according to the scores. Assume that the indices match up
+            //Array.Sort<double, String>(scores, words);
+            Collections.sort(candidates, new Comparator<String>() {
+                public int compare(String left, String right) {
+                    return Double.compare(scores.get(fakewords.indexOf(left)), scores.get(fakewords.indexOf(right)));
+                }
+            });
 
-                int index = 0;
-                for (int i = words.length - 1; i >= 0; i--)
-                    if (value.contains(words[i]))
-                    {
-                        index = i; break;
-                    }
+            int index = 0;
+            for (int i = words.length - 1; i >= 0; i--)
+                if (value.contains(words[i])) {
+                    index = i;
+                    break;
+                }
 
-                index = words.length - index;
+            index = words.length - index;
 
-                if (index == 1)
-                    correct++;
-                else
-                    misses++;
-                mrr += ((double)1) / index;
-            }
-
-            mrr /= testingPairs.size();
-
-            System.out.println(testingPairs.size() + " pairs tested in total; " + candidates.size() + " candidates.");
-            //System.out.println(contained + " predictions contained (" + (((double)contained) / testingPairs.Count) + ")");
-            System.out.println(correct + " predictions exactly correct (" + (((double)correct) / testingPairs.size()) + ")");
-            System.out.println("MRR: " + mrr);
+            if (index == 1)
+                correct++;
+            else
+                misses++;
+            mrr += ((double) 1) / index;
         }
+
+        mrr /= testingPairs.size();
+
+        System.out.println(testingPairs.size() + " pairs tested in total; " + candidates.size() + " candidates.");
+        //System.out.println(contained + " predictions contained (" + (((double)contained) / testingPairs.Count) + ")");
+        System.out.println(correct + " predictions exactly correct (" + (((double) correct) / testingPairs.size()) + ")");
+        System.out.println("MRR: " + mrr);
+    }
 //
 //        private static void EvaluateExamples(HashMap<String,List<String>> testingPairs, List<String> candidates, HashMap<Pair<String, String>, Double> probs, int maxSubstringLength, bool summedPredications, double minProductionProbability)
 //        {
@@ -3026,10 +3039,9 @@ class Program {
 //            return highestWord;
 //        }
 
-        public enum WeightingMode
-        {
-            None, FindWeighted, SuperficiallyWeighted, CountWeighted, MaxAlignment, MaxAlignmentWeighted
-        }
+    public enum WeightingMode {
+        None, FindWeighted, SuperficiallyWeighted, CountWeighted, MaxAlignment, MaxAlignmentWeighted
+    }
 //
 //        static void AlexTestTable()
 //        {
@@ -3435,4 +3447,4 @@ class Program {
 //
 //            reader.Close();
 //        }
-    }
+}

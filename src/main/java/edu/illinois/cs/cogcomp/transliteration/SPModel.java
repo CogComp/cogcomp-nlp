@@ -33,7 +33,7 @@ public class SPModel
         //private List<Triple<String,String,double>> trainingExamplesDual;
         private SparseDoubleVector<Pair<String, String>> probs = null;
         private SparseDoubleVector<Pair<String, String>> multiprobs = null;
-        private SparseDoubleVector<Pair<String, String>> pruned = null;
+        private HashMap<Pair<String, String>, Double> pruned = null; // used to be a SparseDoubleVector
         //private SparseDoubleVector<Pair<String, String>> probsDual = null;
         //private SparseDoubleVector<Pair<String, String>> prunedDual = null;
         private HashMap<String, String> probMap = null;
@@ -197,27 +197,28 @@ public class SPModel
          * Trains the model for the specified number of iterations.
          * @param emIterations The number of iterations to train for.
          */
-//        public void Train(int emIterations)
-//        {
-//            List<Triple<String, String, Double>> trainingTriples = trainingExamples;
-//
-//            pruned = null;
-//            multiprobs = null;
-//
-//            if (probs == null)
-//            {
-//                // FIXME: out variables
-//                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false, out exampleCounts);
-//                probs = Program.PSecondGivenFirst(probs);
-//            }
-//
-//            for (int i = 0; i < emIterations; i++)
-//            {
-//                // FIXME: out variables
-//                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs * segmentFactor : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true, out exampleCounts);
-//                probs = Program.PSecondGivenFirst(probs);
-//            }
-//        }
+        public void Train(int emIterations)
+        {
+            List<Triple<String, String, Double>> trainingTriples = trainingExamples;
+
+            pruned = null;
+            multiprobs = null;
+
+            if (probs == null)
+            {
+                // FIXME: out variables... is exampleCounts actually used anywhere???
+                List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
+                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false);
+                probs = Program.PSecondGivenFirst(probs);
+            }
+
+            for (int i = 0; i < emIterations; i++)
+            {
+                // FIXME: out variables
+                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true);
+                probs = Program.PSecondGivenFirst(probs);
+            }
+        }
 
         /**
          * Calculates the probability P(T|S), that is, the probability that transliteratedWord is a transliteration of sourceWord.
@@ -256,7 +257,7 @@ public class SPModel
                 probMap = WikiTransliteration.GetProbMap(pruned);
             }
 
-             TopList<Double, String> result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new HashMap<String, Dictionary<String, Double>>(), maxCandidates);
+            TopList<Double, String> result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new HashMap<String, HashMap<String, Double>>(), maxCandidates);
 
             if (languageModel != null)
             {
