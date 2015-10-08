@@ -17,35 +17,48 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
         this.topK = topK;
     }
 
-//    @Override
-//    public Iterator<Pair<TKey, TValue>> iterator() {
-//        return null;
-//    }
+    @Override
+    public String toString() {
+        return "TopList{" +
+                "ilist=" + ilist +
+                '}';
+    }
 
     /**
      * This sorts descending, according to key.
      * @param other
      */
     public void add(Pair<TKey, TValue> other){
+        if(ilist.size() == 0){
+            this.ilist.add(other);
+            return;
+        }
+
         int addat = -1;
+
         for(int i =0; i < ilist.size(); i++){
             Pair<TKey, TValue> mine = ilist.get(i);
 
             if(other.getFirst().compareTo(mine.getFirst()) > 0){
                 addat = i;
+                break;
             }
 
         }
 
         if(addat != -1){
             this.ilist.add(addat, other);
-            this.ilist.pollLast();
+
+            if(this.ilist.size() > topK) {
+                this.ilist.pollLast();
+            }
         }
 
     }
 
     public void add(TKey t, TValue p){
-        this.add(new Pair<>(t,p));
+        Pair<TKey, TValue> newp =new Pair<>(t,p);
+        this.add(newp);
     }
 
 
