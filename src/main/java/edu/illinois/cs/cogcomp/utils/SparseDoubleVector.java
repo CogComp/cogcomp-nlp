@@ -10,25 +10,22 @@ import java.util.Map;
 /**
  * Created by stephen on 9/24/15.
  */
-public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements Serializable,Iterable  {
+public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements Serializable  {
 
 
 //public class SparseDoubleVector<TKey> : IDictionary<TKey, double>, ICollection<KeyValuePair<TKey, double>>, IEnumerable<KeyValuePair<TKey, double>>, IEnumerable
 
     public SparseDoubleVector(){
-        throw new NotImplementedException("not yet implemented...");
+        super();
     }
 
-    public SparseDoubleVector(Map<TKey, Double> dictionary){
-        throw new NotImplementedException("not yet implemented...");
+    public SparseDoubleVector(Map<TKey, Double> dictionary) {
+        super(dictionary);
+        //this.putAll(dictionary);
     }
 
     public SparseDoubleVector(int capacity){
-        throw new NotImplementedException("not yet implemented...");
-    }
-
-    public SparseDoubleVector(SparseDoubleVector<TKey> vector){
-        throw new NotImplementedException("not yet implemented...");
+        super(capacity);
     }
 
     // Operators won't be implemented in Java.
@@ -59,16 +56,29 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
      * @return
      */
     public SparseDoubleVector<TKey> divide(double value){
-        throw new NotImplementedException("not yet implemented...");
+        SparseDoubleVector<TKey> ret = new SparseDoubleVector<>();
+
+        for(TKey t : this.keySet()){
+            ret.put(t, this.get(t) / value);
+        }
+
+        return ret;
     }
 
     /**
      * SWM: created to replicate operator method
+     * FIXME: NOT SURE IF THIS IS CORRECT.
      * @param value
      * @return
      */
     public SparseDoubleVector<TKey> divide(SparseDoubleVector<TKey> value){
-        throw new NotImplementedException("not yet implemented...");
+        SparseDoubleVector<TKey> ret = new SparseDoubleVector<>();
+
+        for(TKey k : this.keySet()){
+            ret.put(k, this.get(k) / value.getOrDefault(k, 1.0));
+        }
+
+        return ret;
     }
 
     /**
@@ -77,7 +87,13 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
      * @return
      */
     public SparseDoubleVector<TKey> multiply(double value){
-        throw new NotImplementedException("not yet implemented...");
+        SparseDoubleVector<TKey> ret = new SparseDoubleVector<>();
+
+        for(TKey t : this.keySet()){
+            ret.put(t, this.get(t) * value);
+        }
+
+        return ret;
     }
 
     public SparseDoubleVector<TKey> Abs(){
@@ -88,39 +104,52 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         throw new NotImplementedException("not yet implemented...");
     }
 
+    /**
+     * Add all elements of another vector to this vector, and multiply by a coefficient.
+     * @param coefficient
+     * @param values
+     */
     public void put(double coefficient, SparseDoubleVector<TKey> values){
-        throw new NotImplementedException("not yet implemented...");
+        for(TKey k : values.keySet()){
+            this.put(k, coefficient * values.get(k));
+        }
     }
 
-    public void put(TKey key, double value){
-        throw new NotImplementedException("not yet implemented...");
-    }
 
     public SparseDoubleVector<TKey> Ceiling(){
         throw new NotImplementedException("not yet implemented...");
     }
 
     public void Clear(){
-        throw new NotImplementedException("not yet implemented...");
+        this.clear();
     }
 
     public boolean ContainsKey(TKey key){
         throw new NotImplementedException("not yet implemented...");
     }
 
-    @Override
-    public boolean equals(Object obj){
-        throw new NotImplementedException("not yet implemented...");
-    }
+//    @Override
+//    public boolean equals(Object obj){
+//        throw new NotImplementedException("not yet implemented...");
+//    }
+//
+//
+//    @Override
+//    public int hashCode(){
+//        throw new NotImplementedException("not yet implemented...");
+//    }
 
-
-    @Override
-    public int hashCode(){
-        throw new NotImplementedException("not yet implemented...");
-    }
-
+    /**
+     * Takes the exponential of each element in the vector.
+     * @return
+     */
     public SparseDoubleVector<TKey> Exp(){
-        throw new NotImplementedException("not yet implemented...");
+        SparseDoubleVector<TKey> ret = new SparseDoubleVector<>();
+
+        for(TKey k : this.keySet()){
+            ret.put(k, Math.exp(this.get(k)));
+        }
+        return ret;
     }
 
     // Probably won't implement this.
@@ -164,8 +193,18 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         throw new NotImplementedException("not yet implemented...");
     }
 
+    /**
+     * Returns the p-norm of this vector.
+     * @param p
+     * @return
+     */
     public double PNorm(double p){
-        throw new NotImplementedException("not yet implemented...");
+        double ret = 0;
+        for(TKey t : this.keySet()){
+            ret += Math.pow(this.get(t), p);
+        }
+
+        return Math.pow(ret, 1/p);
     }
 
     public SparseDoubleVector<TKey> Pow(double exponent){
@@ -184,10 +223,10 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         throw new NotImplementedException("not yet implemented...");
     }
 
-    @Override
-    public Iterator<TKey> iterator() {
-        throw new NotImplementedException("not yet implemented...");
-    }
+//    @Override
+//    public Iterator<TKey> iterator() {
+//        return this.iterator();
+//    }
 
 
     // Won't implement this.

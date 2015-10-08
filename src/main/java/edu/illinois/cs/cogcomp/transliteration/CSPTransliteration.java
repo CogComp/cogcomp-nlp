@@ -29,6 +29,7 @@ class CSPTransliteration
                                 internTable.Intern(key.getFirst().getSecond()),
                                 internTable.Intern(key.getFirst().getThird().substring(0, key.getFirst().getThird().length() - i))), key.getSecond());
                 result.put(reskey, result.get(reskey) + value);
+
             }
         }
 
@@ -124,7 +125,7 @@ class CSPTransliteration
             result.segProbs = CreateFallback(PSegGivenFlatOccurence(counts.segCounts,examples,model.segContextSize),internTable); // counts.segCounts / counts.segCounts.PNorm(1);
         else if (model.segMode == CSPModel.SegMode.Entropy)
         {
-            SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<Triple<String, String, String>>();
+            SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
             for (Pair<Triple<String, String, String>, String> key : result.productionProbs.keySet())
             {
                 Double value = result.productionProbs.get(key);
@@ -197,7 +198,7 @@ class CSPTransliteration
             Double value = counts.get(key);
             double total = totals.get(key.getFirst());
             if (total == 0) {
-                result.put(key, 0);
+                result.put(key, 0.0);
             }else{
                 result.put(key, value/total);
             }

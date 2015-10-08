@@ -10,14 +10,25 @@ import java.util.HashMap;
 public class InternDictionary<T> extends HashMap<T,T> {
 
     public InternDictionary(){
-        throw new NotImplementedException("not implemented...");
+        // don't think I need anything here...
     }
 
+    /**
+     * The reason this works is that containsKey uses the .equals method, which actually compares contents. This way,
+     * we can save memory because fewer strings are actually stored, but also avoid some nasty bugs. That is, we may
+     * have two strings with different locations in memory, but the same contents (dynamically created strings). If
+     * the code uses a == operator, it will return false. This way, all strings with the same contents will be the same
+     * location in memory.
+     * @param obj
+     * @return
+     */
     public T Intern(T obj){
-        throw new NotImplementedException("not implemented...");
-    }
 
-    public boolean IsInterned(T obj){
-        throw new NotImplementedException("not implemented...");
+        if(!this.containsKey(obj)) {
+            this.put(obj, obj);
+        }
+
+        return this.get(obj);
+
     }
 }

@@ -5,6 +5,7 @@ import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.utils.Dictionaries;
 import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
@@ -1421,22 +1422,22 @@ class Program {
 
                     HashMap<Pair<String, String>, Double> cached = maxCache.getOrDefault(new Pair<>(sourceWord, bestWord), new HashMap<Pair<String, String>, Double>());
 
-                    Dictionaries.AddTo<Pair<String, String>> (probs, cached, -1);
+                    Dictionaries.AddTo(probs, cached, -1);
 
                     wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, false);
                     maxCache.put(new Pair<>(sourceWord, bestWord), wordCounts);
 
-                    Dictionaries.AddTo<Pair<String, String>> (probs, cached, 1);
+                    Dictionaries.AddTo(probs, cached, 1);
                 } else if (weightingMode == WeightingMode.MaxAlignmentWeighted)
                     wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, true);
                 else //if (weightingMode == WeightingMode.None || weightingMode == WeightingMode.SuperficiallyWeighted)
                     wordCounts = WikiTransliteration.FindAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, internTable, normalization);
 
                 if (weightingMode == WeightingMode.SuperficiallyWeighted && probs != null) {
-                    wordCounts = SumNormalize(Dictionaries.Multiply < Pair < String, String >> (wordCounts, probs));
+                    wordCounts = SumNormalize(Dictionaries.Multiply(wordCounts, probs));
                 }
 
-                Dictionaries.AddTo<Pair<String, String>> (counts, wordCounts, example.getThird());
+                Dictionaries.AddTo(counts, wordCounts, example.getThird());
 
                 if (getExampleCounts) {
                     List<Pair<Pair<String, String>, Double>> curExampleCounts = new ArrayList<>(wordCounts.size());
@@ -1714,51 +1715,51 @@ class Program {
 //
 //
 //
-//        static double Choose(double n, double k)
-//        {
-//            double result = 1;
-//
-//            for (double i = Math.max(k, n - k) + 1; i <= n; ++i)
-//                result *= i;
-//
-//            for (double i = 2; i <= Math.min(k, n - k); ++i)
-//                result /= i;
-//
-//            return result;
-//        }
-//
-//        public static double[][] SegmentationCounts(int maxLength)
-//        {
-//            double[][] result = new double[maxLength][];
-//            for (int i = 0; i < maxLength; i++)
-//            {
-//                result[i] = new double[i+1];
-//                for (int j = 0; j <= i; j++)
-//                    result[i][j] = Choose(i, j);
-//            }
-//
-//            return result;
-//        }
-//
-//        public static double[][] SegSums(int maxLength)
-//        {
-//            double[][] segmentationCounts = SegmentationCounts(maxLength);
-//            double[][] result = new double[maxLength][];
-//            for (int i = 0; i < maxLength; i++)
-//            {
-//                result[i] = new double[maxLength];
-//                for (int j = 0; j < maxLength; j++)
-//                {
-//                    int minIJ = Math.min(i, j);
-//                    for (int k = 0; k <= minIJ; k++)
-//                        result[i][j] += segmentationCounts[i][k] * segmentationCounts[j][k];// *Math.Pow(0.5, k + 1);
-//                }
-//            }
-//
-//            return result;
-//        }
-//
-//        public static double[][] segSums = SegSums(40);
+        static double Choose(double n, double k)
+        {
+            double result = 1;
+
+            for (double i = Math.max(k, n - k) + 1; i <= n; ++i)
+                result *= i;
+
+            for (double i = 2; i <= Math.min(k, n - k); ++i)
+                result /= i;
+
+            return result;
+        }
+
+        public static double[][] SegmentationCounts(int maxLength)
+        {
+            double[][] result = new double[maxLength][];
+            for (int i = 0; i < maxLength; i++)
+            {
+                result[i] = new double[i+1];
+                for (int j = 0; j <= i; j++)
+                    result[i][j] = Choose(i, j);
+            }
+
+            return result;
+        }
+
+        public static double[][] SegSums(int maxLength)
+        {
+            double[][] segmentationCounts = SegmentationCounts(maxLength);
+            double[][] result = new double[maxLength][];
+            for (int i = 0; i < maxLength; i++)
+            {
+                result[i] = new double[maxLength];
+                for (int j = 0; j < maxLength; j++)
+                {
+                    int minIJ = Math.min(i, j);
+                    for (int k = 0; k <= minIJ; k++)
+                        result[i][j] += segmentationCounts[i][k] * segmentationCounts[j][k];// *Math.Pow(0.5, k + 1);
+                }
+            }
+
+            return result;
+        }
+
+        public static double[][] segSums = SegSums(40);
 //
 //        public static void DiscoveryTest(List<String> candidateWords, List<Pair<String, String>> trainingPairs, HashMap<String, List<String>> testingPairs, int maxSubstringLength1, int maxSubstringLength2)
 //        {

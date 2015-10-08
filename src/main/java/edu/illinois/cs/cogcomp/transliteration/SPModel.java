@@ -208,15 +208,15 @@ public class SPModel
             {
                 // FIXME: out variables... is exampleCounts actually used anywhere???
                 List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false);
-                probs = Program.PSecondGivenFirst(probs);
+                probs = new SparseDoubleVector(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
+                probs = new SparseDoubleVector(Program.PSecondGivenFirst(probs));
             }
 
             for (int i = 0; i < emIterations; i++)
             {
                 // FIXME: out variables
-                probs = Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true);
-                probs = Program.PSecondGivenFirst(probs);
+                probs = new SparseDoubleVector(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true));
+                probs = new SparseDoubleVector(Program.PSecondGivenFirst(probs));
             }
         }
 
@@ -226,15 +226,15 @@ public class SPModel
          * @param transliteratedWord The purported transliteration of the source word, in the target language
          * @return P(T|S)
          */
-//        public double Probability(String sourceWord, String transliteratedWord)
-//        {
-//            if (multiprobs==null) {
-//                multiprobs = probs * segmentFactor;
-//            }
-//
-//            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new Dictionary<Pair<String, String>, Double>(), minProductionProbability)
-//                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
-//        }
+        public double Probability(String sourceWord, String transliteratedWord)
+        {
+            if (multiprobs==null) {
+                multiprobs = probs.multiply(segmentFactor);
+            }
+
+            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new HashMap<Pair<String, String>, Double>(), minProductionProbability)
+                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+        }
 
         /**
          * Generates a TopList of the most likely transliterations of the given word.
