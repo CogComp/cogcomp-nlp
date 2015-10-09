@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.modelbuilder;
+package edu.illinois.cs.cogcomp.transliteration;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-class Program {
+class Runner {
 
     static String dataPath = "Data/hebrewEnglishAlignment/";
 
@@ -22,10 +22,10 @@ class Program {
         String trainfile = dataPath + "he_train_pairs.txt";
         String testfile = dataPath + "he_test_pairs.txt";
 
-        BuildModels(trainfile, testfile);
+        RunTest(trainfile, testfile);
     }
 
-    static void BuildModels(String trainingfile, String testingfile) throws IOException {
+    static void RunTest(String trainingfile, String testingfile) throws IOException {
 
 
         List<String> lines = LineIO.read(trainingfile);
@@ -54,26 +54,9 @@ class Program {
         java.util.Collections.shuffle(training);
         java.util.Collections.shuffle(testing);
 
-        //List<Example> training = examples.subList(0, (int) (examples.size() * 0.8));
-        //List<Example> testing = examples.subList((int) (examples.size() * 0.8), (int) (examples.size() - examples.size() * 0.8));
-
         Train(training, testing);
 
-        //FileStream ms1 = File.Create(modelPath + "en" + filename + ".dat");
-        //formatter.Serialize(ms1, model);
-
-        //FileStream ms2 = File.Create(modelPath + filename.Insert(2,"en") + ".dat");
-        //formatter.Serialize(ms2, model2);
-
-
         System.out.println("Done");
-    }
-
-    public static void Reverse(List<Example> examples) {
-        for (int i = 0; i < examples.size(); i++) {
-            examples.set(i, examples.get(i).Reverse());
-        }
-
     }
 
     public static void TestGenerate(SPModel model, List<Example> testing) {
@@ -150,8 +133,7 @@ class Program {
         System.out.println("ACC=" + correctacc / (double)testing.size());
     }
 
-    public static void Train(List<Example> training, List<Example> testing) throws IOException {
-
+    public static void Train(List<Example> training, List<Example> testing) {
 
         SPModel model = new SPModel(training);
         for (int i = 0; i < 1; i++) {
