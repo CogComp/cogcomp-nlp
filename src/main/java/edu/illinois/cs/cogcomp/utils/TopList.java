@@ -19,8 +19,15 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
 
     @Override
     public String toString() {
+
+        String lst = "";
+        for(Pair<TKey, TValue> p : ilist){
+            lst += "@@" + p.getFirst() + " :: " + p.getSecond() + "@@";
+            lst += ", ";
+        }
+
         return "TopList{" +
-                "ilist=" + ilist +
+                "ilist=" + lst +
                 '}';
     }
 
@@ -46,12 +53,15 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
 
         }
 
+        // insert it
         if(addat != -1){
             this.ilist.add(addat, other);
+        }else{ // put it at the end if addat = -1
+            this.ilist.addLast(other);
+        }
 
-            if(this.ilist.size() > topK) {
-                this.ilist.pollLast();
-            }
+        if(this.ilist.size() > topK) {
+            this.ilist.pollLast();
         }
 
     }
@@ -61,9 +71,15 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
         this.add(newp);
     }
 
-
-
     public int indexOf(TValue v){
+        int i = 0;
+        for(Pair<TKey, TValue> p : this.ilist){
+            if(v.equals(p.getSecond())){
+                return i;
+            }
+            i++;
+        }
+
         return -1;
     }
 

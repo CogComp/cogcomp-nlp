@@ -804,14 +804,11 @@ class Program {
 
             HashMap<String, Integer> sourceCounts = new HashMap<>();
             for (Pair<String, String> key : counts.keySet()) {
-
                 if(sourceCounts.containsKey(key.getFirst())){
                     sourceCounts.put(key.getFirst(), sourceCounts.get(key.getFirst() + 1));
                 }else{
                     sourceCounts.put(key.getFirst(), 1);
                 }
-
-
             }
 
             HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
@@ -819,7 +816,8 @@ class Program {
             {
                 double pairvalue = counts.get(pairkey);
                 //double value = totals1[pair.Key.x] == 0 ? ((double)1)/sourceCounts[pair.Key.x] : (pair.Value / totals1[pair.Key.x]);
-                double value = totals1.get(pairkey.getFirst()) == 0 ? 0 : (pairvalue / totals1.get(pairkey.getFirst()));
+                double d = totals1.get(pairkey.getFirst()); // be careful of unboxing!
+                double value = d == 0 ? 0 : (pairvalue / d);
                 result.put(pairkey, value);
             }
 
@@ -2446,12 +2444,16 @@ class Program {
             Collections.sort(value, new Comparator<Pair<String, Double>>() {
                 @Override
                 public int compare(Pair<String, Double> o1, Pair<String, Double> o2) {
-                    return (int) Math.copySign(1.0, o2.getSecond() - o1.getSecond());
+                    double v = o2.getSecond() - o1.getSecond();
+                    if(v > 0){
+                        return 1;
+                    }else if (v < 0){
+                        return -1;
+                    }else{
+                        return 0;
+                    }
                 }
             });
-            //value.Sort(new Comparison<Pair<String, Double>>(delegate(Pair < String, Double > x, Pair < String, Double > y) {
-            //    return Math.Sign(y.y-x.y);
-            //}));
             int toAdd = Math.min(topK, value.size());
             for (int i = 0; i < toAdd; i++) {
                 result.put(new Pair<>(key, value.get(i).getFirst()), value.get(i).getSecond());

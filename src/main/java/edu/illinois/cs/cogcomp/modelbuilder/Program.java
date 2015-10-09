@@ -1,8 +1,10 @@
 package edu.illinois.cs.cogcomp.modelbuilder;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.transliteration.Example;
 import edu.illinois.cs.cogcomp.transliteration.SPModel;
+import edu.illinois.cs.cogcomp.utils.TopList;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
@@ -11,18 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Program {
-    static String modelPath = "/path/to/WikiTransliteration/Models/";
-    static String dataPath = "/path/to/WikiTransliteration/Data/";
+    static String modelPath = "Models/";
+    static String dataPath = "Data/";
 
-    static void main(String[] args) {
-        try {
-            HeTest();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //BuildModels(int.Parse(args[0]), int.Parse(args[1]));
+    public static void main(String[] args) throws IOException {
+//        try {
+//            HeTest();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        String trainfile = "Data/hebrewEnglishAlignment/he_train_pairs.txt";
+        String testfile = "Data/hebrewEnglishAlignment/he_test_pairs.txt";
+
+        BuildModels(trainfile, testfile);
     }
 
     static void HeTest() throws IOException {
@@ -44,50 +50,51 @@ class Program {
                 SPModel model = new SPModel(s);
                 s.close();
 
-                double mrr = Test(model, examples);
-                System.out.println(modelFile);
-                System.out.println(mrr);
-                System.out.println();
+                TestDiscovery(model, examples);
             }
         }
     }
 
-    static void BuildModels(int id, int count) throws IOException {
-        int counter = 0;
-        File dataDir = new File(dataPath);
-        for (File file : dataDir.listFiles()) {
-            if (counter++ % count != id) continue;
-            String filename = FilenameUtils.getBaseName(file.getName());
+    static void BuildModels(String trainingfile, String testingfile) throws IOException {
 
-            ArrayList<String> lines = LineIO.read(file.getName());
 
-            System.out.println(file + " = " + lines.size());
-
-            List<Example> examples = new ArrayList<>();
-            for (String line : lines) {
-                String[] parts = line.split("\t");
-                if (parts[0].length() > 15 || parts[1].length() > 15)
-                    continue; //drop super-words
-                examples.add(new Example(Example.NormalizeHebrew(parts[0]), Example.NormalizeHebrew(parts[1])));
-            }
-
-            System.out.println("Short examples: " + examples.size());
-
-            java.util.Collections.shuffle(examples);
-
-            List<Example> training = examples.subList(0, (int) (examples.size() * 0.8));
-            List<Example> testing = examples.subList((int) (examples.size() * 0.8), (int) (examples.size() - examples.size() * 0.8));
-
-            Train(training, testing, false, filename);
-
-            //FileStream ms1 = File.Create(modelPath + "en" + filename + ".dat");
-            //formatter.Serialize(ms1, model);
-
-            Train(training, testing, true, filename);
-
-            //FileStream ms2 = File.Create(modelPath + filename.Insert(2,"en") + ".dat");
-            //formatter.Serialize(ms2, model2);
+        List<String> lines = LineIO.read(trainingfile);
+        System.out.println(trainingfile + " = " + lines.size());
+        List<Example> training = new ArrayList<>();
+        for(String line : lines)
+        {
+            String[] parts = line.split("\t");
+            if (parts[0].length() > 15 || parts[1].length() > 15) continue; //drop super-words
+            training.add(new Example(Example.NormalizeHebrew(parts[0]), Example.NormalizeHebrew(parts[1])));
         }
+
+        lines = LineIO.read(testingfile);
+        System.out.println(testingfile + " = " + lines.size());
+        List<Example> testing = new ArrayList<>();
+        for (String line : lines)
+        {
+            String[] parts = line.split("\t");
+            if (parts[0].length() > 15 || parts[1].length() > 15) continue; //drop super-words
+            testing.add(new Example(Example.NormalizeHebrew(parts[0]), Example.NormalizeHebrew(parts[1])));
+        }
+
+        System.out.println("Training examples: " + training.size());
+        System.out.println("Testing examples: " + testing.size());
+
+        java.util.Collections.shuffle(training);
+        java.util.Collections.shuffle(testing);
+
+        //List<Example> training = examples.subList(0, (int) (examples.size() * 0.8));
+        //List<Example> testing = examples.subList((int) (examples.size() * 0.8), (int) (examples.size() - examples.size() * 0.8));
+
+        Train(training, testing);
+
+        //FileStream ms1 = File.Create(modelPath + "en" + filename + ".dat");
+        //formatter.Serialize(ms1, model);
+
+        //FileStream ms2 = File.Create(modelPath + filename.Insert(2,"en") + ".dat");
+        //formatter.Serialize(ms2, model2);
+
 
         System.out.println("Done");
     }
@@ -99,36 +106,89 @@ class Program {
 
     }
 
-    public static double Test(SPModel model, List<Example> testing) {
-        double correct = 0;
+    public static void TestGenerate(SPModel model, List<Example> testing) {
+        double correctmrr = 0;
+        double correctacc = 0;
         for (Example example : testing) {
             int index = (model.Generate(example.sourceWord).indexOf(example.transliteratedWord));
-            if (index >= 0)
-                correct += 1 / (index + 1);
-        }
+            if (index >= 0) {
+                correctmrr += 1.0 / (index + 1);
+                if(index == 0){
+                    correctacc += 1.0;
+                }
+            }
 
-        return correct / testing.size(); //return MRR
+            System.out.println();
+        }
+        System.out.println("MRR=" + correctmrr / testing.size());
+        System.out.println("ACC=" + correctacc / testing.size());
     }
 
-    public static void Train(List<Example> training, List<Example> testing, boolean reversed, String filename) throws IOException {
-        if (reversed) {
-            Reverse(training);
-            Reverse(testing);
+    public static void TestDiscovery(SPModel model, List<Example> testing) {
+        double correctmrr = 0;
+        double correctacc = 0;
+
+        List<String> possibilities = new ArrayList<>();
+        for(Example e : testing){
+            possibilities.add(e.transliteratedWord);
         }
 
-        System.out.println("Reversed: " + reversed);
+        List<String> outlines = new ArrayList<>();
+
+        for (Example example : testing) {
+
+            int topK = 30;
+            TopList<Double, String> ll = new TopList<>(topK);
+            for(String target : possibilities){
+                double prob = model.Probability(example.sourceWord, target);
+                ll.add(prob, target);
+            }
+
+
+            outlines.add(example.sourceWord);
+            for(Pair<Double, String> p : ll){
+                String s = p.getSecond();
+
+                if(s.equals(example.transliteratedWord)){
+                    s = "**" + s + "**";
+                }
+
+                outlines.add(s);
+            }
+            outlines.add("");
+
+
+
+            int index = ll.indexOf(example.transliteratedWord);
+            if (index >= 0) {
+                correctmrr += 1.0 / (index + 1);
+                if(index == 0){
+                    correctacc += 1.0;
+                }
+            }
+
+
+        }
+
+        try {
+            LineIO.write("out.txt", outlines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("MRR=" + correctmrr / (double)testing.size());
+        System.out.println("ACC=" + correctacc / (double)testing.size());
+    }
+
+    public static void Train(List<Example> training, List<Example> testing) throws IOException {
+
 
         SPModel model = new SPModel(training);
-        for (int i = 0; i < 20; i++) {
-            model.Train(1);
-            double mrr = Test(model, testing);
-            System.out.println("MRR #" + i + " == " + mrr);
+        for (int i = 0; i < 1; i++) {
+            int emiterations = 3;
+            model.Train(emiterations);
+            TestDiscovery(model, testing);
 
-            String outname = modelPath + (reversed ? "reverse-en" + filename : "en" + filename) + "-" + i + "-" + mrr + ".dat";
-            DataOutputStream ms2 = new DataOutputStream(new FileOutputStream(outname));
-            //formatter.Serialize(ms2, model);
-            model.WriteToStream(ms2);
-            ms2.close();
         }
     }
 }

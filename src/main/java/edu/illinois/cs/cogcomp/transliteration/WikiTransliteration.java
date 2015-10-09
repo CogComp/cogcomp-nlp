@@ -1236,17 +1236,22 @@ class WikiTransliteration {
 //        return maxProb;
 //    }
 //
+
+    /**
+     *
+     * @param counts
+     * @return
+     */
     public static HashMap<String, Double> GetAlignmentTotals1(HashMap<Pair<String, String>, Double> counts) {
         HashMap<String, Double> result = new HashMap<>();
         for (Pair<String, String> key : counts.keySet()) {
             Double value = counts.get(key);
 
             if(result.containsKey(key.getFirst())){
-                result.put(key.getFirst(), result.get(key.getFirst() + value));
+                result.put(key.getFirst(), result.get(key.getFirst()) + value);
             }else{
                 result.put(key.getFirst(), value);
             }
-
         }
 
         return result;
