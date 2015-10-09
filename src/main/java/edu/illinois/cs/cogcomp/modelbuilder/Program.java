@@ -13,46 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 class Program {
-    static String modelPath = "Models/";
-    static String dataPath = "Data/";
+
+    static String dataPath = "Data/hebrewEnglishAlignment/";
 
     public static void main(String[] args) throws IOException {
-//        try {
-//            HeTest();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
-        String trainfile = "Data/hebrewEnglishAlignment/he_train_pairs.txt";
-        String testfile = "Data/hebrewEnglishAlignment/he_test_pairs.txt";
+
+        String trainfile = dataPath + "he_train_pairs.txt";
+        String testfile = dataPath + "he_test_pairs.txt";
 
         BuildModels(trainfile, testfile);
-    }
-
-    static void HeTest() throws IOException {
-        String evalFile = "/path/to/WikiTransliteration/eval/heEval.txt";
-
-        ArrayList<String> lines = LineIO.read(evalFile);
-
-        List<Example> examples = new ArrayList<Example>();
-        for (String line : lines) {
-            String[] parts = line.split("\t");
-            examples.add(new Example(Example.NormalizeHebrew(parts[0].trim().toLowerCase()), Example.NormalizeHebrew(parts[1].trim().toLowerCase())));
-        }
-
-        File modelDir = new File(modelPath);
-        for (File modelFile : modelDir.listFiles()) {
-            if (modelFile.getName().startsWith("enhe")) {
-                //FileStream s = File.OpenRead(modelFile);
-                DataInputStream s = new DataInputStream(new FileInputStream(modelFile));
-                SPModel model = new SPModel(s);
-                s.close();
-
-                TestDiscovery(model, examples);
-            }
-        }
     }
 
     static void BuildModels(String trainingfile, String testingfile) throws IOException {
