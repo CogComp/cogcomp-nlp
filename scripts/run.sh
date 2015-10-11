@@ -4,7 +4,7 @@ mvn -q dependency:copy-dependencies
 
 CP=target/classes:config:target/dependency/*
 
-MEMORY="-Xmx25g"
+MEMORY="-Xmx100g"
 
 OPTIONS="-ea $MEMORY -cp $CP "
 
