@@ -1,6 +1,6 @@
 #!/bin/bash
-mvn clean compile
-mvn -q dependency:copy-dependencies
+# mvn clean compile
+# mvn -q dependency:copy-dependencies
 
 CP=target/classes:config:target/dependency/*
 

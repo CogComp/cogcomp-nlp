@@ -99,7 +99,7 @@ public class Main {
 
 	@CommandDescription(description = "Performs the full training & testing sequence for all SRL types",
 			usage = "expt [Verb | Nom] cacheDatasets=[true | false]")
-	public static void expt(String srlType, String cacheDatasets) throws Exception {
+	public static void expt(String srlType, String cacheDatasets, String learnerConfig) throws Exception {
 		// Step 1: Cache all the datasets we're going to use
 		if (Boolean.parseBoolean(cacheDatasets)) cacheDatasets();
 
@@ -111,11 +111,12 @@ public class Main {
 		// train(srlType, "Identifier");
 //		tuneIdentifier(srlType);
 //
-		preExtract(srlType, "Classifier");
-		train(srlType, "Classifier");
-//
-//		// Step 3: Evaluate
-//		evaluate(srlType);
+		// preExtract(srlType, "Classifier");
+		// train(srlType, "Classifier",learnerConfig);
+
+		// Step 3: Evaluate
+		evaluate(srlType);
+		System.out.println("All Done!");
 	}
 
 	@CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
@@ -367,7 +368,7 @@ public class Main {
 
 	@CommandDescription(description = "Trains a specific model and SRL type",
 			usage = "train [Verb | Nom] [Predicate | Sense | Identifier | Classifier]")
-	public static void train(String srlType_, String model_) throws Exception {
+	public static void train(String srlType_, String model_, String learnerConfig) throws Exception {
 		SRLType srlType = SRLType.valueOf(srlType_);
 		SRLManager manager = getManager(srlType, true);
 
@@ -421,18 +422,22 @@ public class Main {
 
 		cache.close();
 
+		log.info("Setting up solver, learning may take time if you have too many instances in SLProblem ....");
+
 		SLParameters params = new SLParameters();
-		params.loadConfigFile("config/learning.properties");
-		params.C_FOR_STRUCTURE = (float) c;
+		params.loadConfigFile(learnerConfig);
 //		initializeSolver(params);
-//		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
+		params.C_FOR_STRUCTURE = (float) c;
+
 //		params.NUMBER_OF_THREADS = numThreads;
-		
+//		params.L2_LOSS_SSVM_SOLVER_TYPE= L2LossSSVMLearner.SolverType.ParallelDCDSolver;
+//		params.CHECK_INFERENCE_OPT=false;
+
 		SRLMulticlassInference infSolver = new SRLMulticlassInference(manager, model);
 		Learner learner = LearnerFactory.getLearner(infSolver, new SRLFeatureExtractor(), params);
-		log.info("Setting up solver, learning may take time if you have too many instances in SLProblem ....");
 		WeightVector w = learner.train(problem);
 		JLISLearner.saveWeightVector(w, manager.getModelFileName(model));
+		System.out.printf("Saved model! yay!");
 		JLISLearner.evaluateSRLLabel(infSolver,problem,w);
 	}
 
@@ -512,8 +517,8 @@ public class Main {
 		manager.getModelInfo(Models.Classifier).loadWeightVector();
 
 		manager.getModelInfo(Models.Sense).loadWeightVector();
-
 		IResetableIterator<TextAnnotation> dataset = SentenceDBHandler.instance.getDataset(testSet);
+		log.info("All models weights loaded now!");
 
 		while (dataset.hasNext()) {
 			TextAnnotation ta = dataset.next();
@@ -523,17 +528,20 @@ public class Main {
 			//ta.addView(new HeadFinderDependencyViewGenerator(manager.defaultParser));
 			PredicateArgumentView gold = (PredicateArgumentView) ta.getView(manager.getGoldViewName());
 
+//			log.info("creating inference engine");
 			SRLILPInference inference = manager.getInference(solver, gold.getPredicates());
+//			log.info("done inference engine");
 
 			assert inference != null;
 			PredicateArgumentView prediction = inference.getOutputView();
 
+//			log.info("starting evaluation ...");
 			PredicateArgumentEvaluator.evaluate(gold, prediction, tester);
 			PredicateArgumentEvaluator.evaluateSense(gold, prediction, senseTester);
 
 			if (outDir != null) {
 				writer.printPredicateArgumentView(gold, goldWriter);
-				writer.printPredicateArgumentView(prediction, predWriter);
+//				writer.printPredicateArgumentView(prediction, predWriter);
 			}
 
 			count++;
@@ -544,7 +552,7 @@ public class Main {
 						+ tester.getAverageF1());
 			}
 		}
-
+		System.exit(-1);
 		long end = System.currentTimeMillis();
 		System.out.println(count + " sentences done. Took " + (end - start) + "ms");
 
