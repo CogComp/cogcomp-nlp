@@ -8,6 +8,7 @@ MEMORY="-Xmx100g"
 
 OPTIONS="-ea $MEMORY -cp $CP "
 
-MAINCLASS=edu.illinois.cs.cogcomp.srl.Main
+#MAINCLASS=edu.illinois.cs.cogcomp.srl.Main
+MAINCLASS=edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler
 
 time nice java $OPTIONS $MAINCLASS "$@"
