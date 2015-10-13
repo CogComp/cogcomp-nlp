@@ -69,11 +69,12 @@ public class IllinoisNomSRLHandler extends IllinoisAbstractHandler implements Pa
     public Forest parseRecord(Record record) throws AnnotationFailedException,
                                                     TException {
 	try {
-	    return srlSystem.getSRLForest(record);
+//	    return srlSystem.getSRLForest(record);
 	} catch(Exception e) {
 	    logger.error("Error annotating record", e);
 	    throw new AnnotationFailedException(e.getMessage());
 	}
+        return null;
     }
 
 
