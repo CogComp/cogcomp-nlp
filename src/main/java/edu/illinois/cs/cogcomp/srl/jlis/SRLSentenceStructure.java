@@ -47,8 +47,8 @@ public class SRLSentenceStructure implements IStructure {
 			String sense = manager.getSense(y.getSense());
 			predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, sense);
 
-			List<Constituent> args = new ArrayList<Constituent>();
-			List<String> relations = new ArrayList<String>();
+			List<Constituent> args = new ArrayList<>();
+			List<String> relations = new ArrayList<>();
 
 			List<SRLMulticlassInstance> candidateInstances = x.getCandidateInstances();
 

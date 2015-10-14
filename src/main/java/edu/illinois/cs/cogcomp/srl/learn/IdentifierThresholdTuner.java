@@ -46,7 +46,7 @@ public class IdentifierThresholdTuner {
 	public Pair<Double, Double> tuneIdentifierScale(List<Double> A,
 			List<Double> B) throws Exception {
 
-		List<Pair<Double, Boolean>> scores = new ArrayList<Pair<Double, Boolean>>();
+		List<Pair<Double, Boolean>> scores = new ArrayList<>();
 
 		int totalGold = 0;
 		int numExamples = 0;
@@ -68,7 +68,7 @@ public class IdentifierThresholdTuner {
 
 			double rawScore = rawScorer.getIdentifierRawScore(x);
 
-			scores.add(new Pair<Double, Boolean>(rawScore, goldLabel));
+			scores.add(new Pair<>(rawScore, goldLabel));
 			numExamples++;
 			if (numExamples % 10000 == 0) {
 				System.out.println(numExamples + " scores cached");
@@ -77,7 +77,7 @@ public class IdentifierThresholdTuner {
 
 		Map<Pair<Double, Double>, IntPair> perf = getPerformance(A, B, scores);
 
-		List<Pair<String, Double>> list = new ArrayList<Pair<String, Double>>();
+		List<Pair<String, Double>> list = new ArrayList<>();
 
 		double maxF = Double.NEGATIVE_INFINITY;
 		Pair<Double, Double> maxer = null;
@@ -114,7 +114,7 @@ public class IdentifierThresholdTuner {
 			output += "\t" + StringUtils.getFormattedTwoDecimal(f * 100);
 			// System.out.println(output);
 
-			list.add(new Pair<String, Double>(output, f));
+			list.add(new Pair<>(output, f));
 
 			if (f > maxF) {
 				maxF = f;
@@ -156,22 +156,22 @@ public class IdentifierThresholdTuner {
 
 		ExecutorService executor = Executors.newFixedThreadPool(nThreads);
 
-		List<FutureTask<Pair<Pair<Double, Double>, IntPair>>> tasks = new ArrayList<FutureTask<Pair<Pair<Double, Double>, IntPair>>>();
+		List<FutureTask<Pair<Pair<Double, Double>, IntPair>>> tasks = new ArrayList<>();
 
 		for (List<Double> element : Permutations.crossProduct(Arrays.asList(A,
 				B))) {
 
 			final double a = element.get(0);
 			final double b = element.get(1);
-			FutureTask<Pair<Pair<Double, Double>, IntPair>> task = new FutureTask<Pair<Pair<Double, Double>, IntPair>>(
-					new Callable<Pair<Pair<Double, Double>, IntPair>>() {
+			FutureTask<Pair<Pair<Double, Double>, IntPair>> task = new FutureTask<>(
+                    new Callable<Pair<Pair<Double, Double>, IntPair>>() {
 
-						@Override
-						public Pair<Pair<Double, Double>, IntPair> call()
-								throws Exception {
-							return getPerformance(a, b, scores);
-						}
-					});
+                        @Override
+                        public Pair<Pair<Double, Double>, IntPair> call()
+                                throws Exception {
+                            return getPerformance(a, b, scores);
+                        }
+                    });
 
 			tasks.add(task);
 			executor.execute(task);
@@ -180,7 +180,7 @@ public class IdentifierThresholdTuner {
 
 		executor.shutdown();
 
-		Map<Pair<Double, Double>, IntPair> map = new HashMap<Pair<Double, Double>, IntPair>();
+		Map<Pair<Double, Double>, IntPair> map = new HashMap<>();
 		for (FutureTask<Pair<Pair<Double, Double>, IntPair>> task : tasks) {
 			Pair<Pair<Double, Double>, IntPair> out = task.get();
 			map.put(out.getFirst(), out.getSecond());
@@ -214,7 +214,7 @@ public class IdentifierThresholdTuner {
 
 		IntPair perf = new IntPair(totalPredicted, totalCorrectTrue);
 
-		return new Pair<Pair<Double, Double>, IntPair>(
-				new Pair<Double, Double>(A, B), perf);
+		return new Pair<>(
+                new Pair<>(A, B), perf);
 	}
 }

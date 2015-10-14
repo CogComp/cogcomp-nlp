@@ -12,8 +12,6 @@ import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
-import edu.illinois.cs.cogcomp.srl.inference.SRLMulticlassInference;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SemanticRoleLabeler implements Annotator {
-	private final static Logger log = LoggerFactory
-			.getLogger(SemanticRoleLabeler.class);
+	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
 	public final SRLManager manager;
 	private static SRLProperties properties;
 
@@ -37,7 +34,7 @@ public class SemanticRoleLabeler implements Annotator {
 		srlType = arguments.length == 1 ? null : arguments[1];
 
 		String input;
-		List<SemanticRoleLabeler> srlLabelers = new ArrayList<SemanticRoleLabeler>();
+		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
 		try {
 			if (srlType != null)
 				srlLabelers.add(new SemanticRoleLabeler(configFile, srlType));
@@ -90,8 +87,7 @@ public class SemanticRoleLabeler implements Annotator {
 		} while (!input.equals("_"));
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType)
-			throws Exception {
+	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
@@ -116,12 +112,7 @@ public class SemanticRoleLabeler implements Annotator {
 		return properties.getSRLVersion();
 	}
 
-	public String getCuratorName() {
-		return "illinoisSRL";
-	}
-
-	private void loadModels() throws Exception {
-
+    private void loadModels() throws Exception {
 		for (Models m : Models.values()) {
 			if (manager.getSRLType() == SRLType.Verb && m == Models.Predicate)
 				continue;
@@ -138,18 +129,14 @@ public class SemanticRoleLabeler implements Annotator {
 
 		List<Constituent> predicates;
 		if (manager.getSRLType() == SRLType.Verb)
-			predicates = manager.getHeuristicPredicateDetector().getPredicates(
-					ta);
+			predicates = manager.getHeuristicPredicateDetector().getPredicates(ta);
 		else
-			predicates = manager.getLearnedPredicateDetector()
-					.getPredicates(ta);
+			predicates = manager.getLearnedPredicateDetector().getPredicates(ta);
 
 		if (predicates.isEmpty())
 			return null;
 		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
 		ISRLInference inference = new SRLILPInference(s, manager, predicates);
-		// ISRLInference SRLMulticlassInference = new
-		// SRLMulticlassInference(manager,);
 
 		return inference.getOutputView();
 	}
@@ -177,14 +164,5 @@ public class SemanticRoleLabeler implements Annotator {
 			return ViewNames.SRL_NOM;
 		return null;
 	}
-
-	// public Forest getSRLForest(Record record) throws Exception {
-	// TextAnnotation ta =
-	// CuratorDataStructureInterface.getTextAnnotationViewsFromRecord("", "",
-	// record);
-	// PredicateArgumentView pav = getSRL(ta);
-	// return
-	// CuratorDataStructureInterface.convertPredicateArgumentViewToForest(pav);
-	// }
 
 }

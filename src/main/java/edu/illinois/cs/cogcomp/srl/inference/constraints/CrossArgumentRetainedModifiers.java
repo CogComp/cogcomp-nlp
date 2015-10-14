@@ -86,7 +86,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 
 		// WARNING: Hairy code ahead. Read the comments carefully.
 
-		List<ILPConstraint> constraints = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> constraints = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
 
@@ -168,7 +168,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 					label = otherPredicateStructure.getArgLabel(otherCandidateId);
 				}
 
-				Set<Integer> vars = new HashSet<Integer>();
+				Set<Integer> vars = new HashSet<>();
 
 				// go over all the options. At each point, check if the
 				// constraint is satisfied. If so, don't add the constraint.
@@ -307,7 +307,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 
 	private static Map<String, Map<String, String>> loadValidViolations(
 			SRLType srlType) throws Exception {
-		Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> map = new HashMap<>();
 
 		String file = srlType + ".cross-predicate.modifiers";
 

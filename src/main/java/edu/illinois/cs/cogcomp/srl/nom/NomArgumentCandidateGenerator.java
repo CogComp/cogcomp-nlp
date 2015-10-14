@@ -49,7 +49,7 @@ public class NomArgumentCandidateGenerator extends ArgumentCandidateGenerator {
 
 		int predicatePosition = predicate.getStartSpan() - predicateSentenceStart;
 
-		Set<Constituent> out = new HashSet<Constituent>();
+		Set<Constituent> out = new HashSet<>();
 
 		// add all non terminals in the tree
 		for (Tree<Pair<String, IntPair>> c : TreeTraversal.depthFirstTraversal(spanLabeledTree)) {
@@ -135,7 +135,7 @@ public class NomArgumentCandidateGenerator extends ArgumentCandidateGenerator {
 		}
 
 		log.debug("Number of candidates for {} from heuristic: {}", predicate.toString(), out.toString());
-		return new ArrayList<Constituent>(out);
+		return new ArrayList<>(out);
 	}
 
 }

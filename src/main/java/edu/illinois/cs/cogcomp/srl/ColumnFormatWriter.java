@@ -62,7 +62,7 @@ public class ColumnFormatWriter {
 			PrintWriter out) {
 		// System.out.println("*" + pav + "*");
 
-		List<String[]> columns = new ArrayList<String[]>();
+		List<String[]> columns = new ArrayList<>();
 		convertPredicateArgView(pav.getTextAnnotation(), pav, columns, false);
 
 		String[][] tr = transpose(columns, pav.getTextAnnotation().size());
@@ -210,7 +210,7 @@ public class ColumnFormatWriter {
 	 */
 	private String[][] transformToColumns(TextAnnotation ta) {
 
-		List<String[]> columns = new ArrayList<String[]>();
+		List<String[]> columns = new ArrayList<>();
 
 		// first the words
 		String[] form = new String[ta.size()];
@@ -267,7 +267,7 @@ public class ColumnFormatWriter {
 		Collections.sort(nerConstituents,
 				TextAnnotationUtilities.constituentStartComparator);
 
-		Map<Integer, String> cc = new HashMap<Integer, String>();
+		Map<Integer, String> cc = new HashMap<>();
 		for (Constituent c : nerConstituents) {
 			for (int i = c.getStartSpan(); i < c.getEndSpan(); i++) {
 				if (i == c.getStartSpan())
@@ -312,7 +312,7 @@ public class ColumnFormatWriter {
 		Collections.sort(chunkConstituents,
 				TextAnnotationUtilities.constituentStartComparator);
 
-		Map<Integer, String> cc = new HashMap<Integer, String>();
+		Map<Integer, String> cc = new HashMap<>();
 		for (Constituent c : chunkConstituents) {
 			for (int i = c.getStartSpan(); i < c.getEndSpan(); i++) {
 				if (i == c.getStartSpan())
@@ -355,7 +355,7 @@ public class ColumnFormatWriter {
 	private void convertPredicateArgView(TextAnnotation ta,
 			PredicateArgumentView pav, List<String[]> columns, boolean addSense) {
 
-		List<Constituent> predicates = new ArrayList<Constituent>();
+		List<Constituent> predicates = new ArrayList<>();
 		if (pav != null)
 			predicates = pav.getPredicates();
 
@@ -382,8 +382,8 @@ public class ColumnFormatWriter {
 	 */
 	private void addPredicateInfo(List<String[]> columns,
 			List<Constituent> predicates, int size, boolean addSense) {
-		Map<Integer, String> senseMap = new HashMap<Integer, String>();
-		Map<Integer, String> lemmaMap = new HashMap<Integer, String>();
+		Map<Integer, String> senseMap = new HashMap<>();
+		Map<Integer, String> lemmaMap = new HashMap<>();
 
 		for (Constituent c : predicates) {
 			senseMap.put(c.getStartSpan(),
@@ -421,7 +421,7 @@ public class ColumnFormatWriter {
 	 */
 	private String[] addPredicateArgInfo(Constituent predicate,
 			List<Relation> args, int size) {
-		Map<Integer, String> paInfo = new HashMap<Integer, String>();
+		Map<Integer, String> paInfo = new HashMap<>();
 
 		paInfo.put(predicate.getStartSpan(), "(V*)");
 		for (Relation r : args) {

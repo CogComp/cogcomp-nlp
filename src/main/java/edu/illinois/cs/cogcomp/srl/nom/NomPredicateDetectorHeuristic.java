@@ -27,7 +27,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 	static {
 
-		nonStandard = new HashMap<String, String>();
+		nonStandard = new HashMap<>();
 
 		nonStandard.put("bondholder", "holder");
 		nonStandard.put("earthquake", "quake");
@@ -44,12 +44,12 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 		nonStandard.put("startup", "start-up");
 		nonStandard.put("eurobond", "bond");
 
-		pluralLemmas = new HashSet<String>();
+		pluralLemmas = new HashSet<>();
 		pluralLemmas.addAll(Arrays.asList("filers", "hundreds", "thousands",
 				"millions", "billions", "tens"));
 
 		// All NomLex classes are accounted for here.
-		classes = new HashSet<NomLexClasses>();
+		classes = new HashSet<>();
 		classes.addAll(NomLexEntry.VERBAL);
 		classes.addAll(NomLexEntry.ADJECTIVAL);
 		classes.addAll(NomLexEntry.NON_VERB_ADJ);
@@ -142,9 +142,9 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 			}
 			// hard coded lemma for bookmaker, steelmaker, downpayments, etc
 			if (token.endsWith("maker") || token.endsWith("makers"))
-				opt = new Option<String>("maker");
+				opt = new Option<>("maker");
 			else if (token.endsWith("payment") || token.endsWith("payments"))
-				opt = new Option<String>("payment");
+				opt = new Option<>("payment");
 		}
 
 		if (!opt.isPresent()) {
@@ -191,7 +191,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 			for (NomLexEntry e : entry) {
 				if (classes.contains(e.nomClass)) {
-					found = new Option<String>(token);
+					found = new Option<>(token);
 					break;
 				}
 			}

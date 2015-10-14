@@ -30,7 +30,7 @@ public class PruningPreExtractor extends
 	private SRLManager manager;
 	private Models modelToExtract;
 
-	protected final List<PreExtractRecord> buffer = new ArrayList<PreExtractRecord>();
+	protected final List<PreExtractRecord> buffer = new ArrayList<>();
 
 	private AtomicInteger counter = new AtomicInteger();
 	private Logger log = org.slf4j.LoggerFactory.getLogger(PruningPreExtractor.class);
@@ -108,7 +108,7 @@ public class PruningPreExtractor extends
 	@Override
 	protected List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> process(
 			Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
-		List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<Pair<SRLMulticlassInstance, SRLMulticlassLabel>>();
+		List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<>();
 		l.add(input);
 		return l;
 	}

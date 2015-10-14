@@ -18,17 +18,17 @@ public class BeVerbConstraints extends SRLILPConstraintGenerator {
 
 	public static final String name = "beVerbConstraints";
 
-	private final static Set<String> validArgs = new HashSet<String>(
-			Arrays.asList("A1", "AA", "AM", "AM-ADV", "AM-CAU", "AM-DIR",
-					"AM-DIS", "AM-EXT", "AM-LOC", "AM-MNR", "AM-MOD", "AM-NEG",
-					"AM-PNC", "AM-PRD", "AM-REC", "AM-TMP", "C-A0", "C-A1",
-					"C-A2", "C-A3", "C-AM-ADV", "C-AM-CAU", "C-AM-DIS",
-					"C-AM-EXT", "C-AM-LOC", "C-AM-MNR", "R-A0", "R-A1", "R-A2",
-					"R-A3", "R-AA", "R-AM-ADV", "R-AM-LOC", "R-AM-MNR",
-					"R-AM-PNC", "R-AM-TMP", "V", "C-V", SRLManager.NULL_LABEL,
-					"C-A4", "C-A5", "C-AM-DIR", "C-AM-NEG", "C-AM-PNC",
-					"C-AM-TMP", "R-A4", "R-AA", "R-AM-CAU", "R-AM-DIR",
-					"R-AM-EXT"));
+	private final static Set<String> validArgs = new HashSet<>(
+            Arrays.asList("A1", "AA", "AM", "AM-ADV", "AM-CAU", "AM-DIR",
+                    "AM-DIS", "AM-EXT", "AM-LOC", "AM-MNR", "AM-MOD", "AM-NEG",
+                    "AM-PNC", "AM-PRD", "AM-REC", "AM-TMP", "C-A0", "C-A1",
+                    "C-A2", "C-A3", "C-AM-ADV", "C-AM-CAU", "C-AM-DIS",
+                    "C-AM-EXT", "C-AM-LOC", "C-AM-MNR", "R-A0", "R-A1", "R-A2",
+                    "R-A3", "R-AA", "R-AM-ADV", "R-AM-LOC", "R-AM-MNR",
+                    "R-AM-PNC", "R-AM-TMP", "V", "C-V", SRLManager.NULL_LABEL,
+                    "C-A4", "C-A5", "C-AM-DIR", "C-AM-NEG", "C-AM-PNC",
+                    "C-AM-TMP", "R-A4", "R-AA", "R-AM-CAU", "R-AM-DIR",
+                    "R-AM-EXT"));
 
 	public BeVerbConstraints(SRLManager manager) {
 		super(manager, name, false);
@@ -47,7 +47,7 @@ public class BeVerbConstraints extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
 
@@ -66,7 +66,7 @@ public class BeVerbConstraints extends SRLILPConstraintGenerator {
 
 			int predicateToken = senseInstance.getConstituent().getStartSpan();
 
-			Set<String> allowedArgs = new HashSet<String>(validArgs);
+			Set<String> allowedArgs = new HashSet<>(validArgs);
 
 			boolean done = false;
 			if (predicateToken + 1 < ta.getSentence(predicate.getSentenceId())

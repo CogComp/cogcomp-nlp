@@ -28,7 +28,7 @@ public class ILPOutput implements ILPOutputGenerator {
 		SRLSentenceInstance instance = (SRLSentenceInstance) ins;
 
 		int numPredicates = instance.numPredicates();
-		List<SRLPredicateStructure> output = new ArrayList<SRLPredicateStructure>();
+		List<SRLPredicateStructure> output = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
 

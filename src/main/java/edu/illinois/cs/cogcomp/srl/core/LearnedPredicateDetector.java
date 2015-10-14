@@ -70,7 +70,7 @@ public class LearnedPredicateDetector extends AbstractPredicateDetector {
 		}
 
 		if (isPredicate) {
-			return new Option<String>(lemma);
+			return new Option<>(lemma);
 		} else
 			return Option.empty();
 

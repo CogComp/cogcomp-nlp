@@ -41,7 +41,7 @@ public class SRLPredicateInstance implements IInstance {
 
 		senseInstance = new SRLMulticlassInstance(predicateClone, predicateClone, manager);
 
-		List<SRLMulticlassInstance> list = new ArrayList<SRLMulticlassInstance>();
+		List<SRLMulticlassInstance> list = new ArrayList<>();
 
 		ArgumentCandidateGenerator candidateGenerator = manager.getArgumentCandidateGenerator();
 
@@ -64,7 +64,7 @@ public class SRLPredicateInstance implements IInstance {
 
 		ArgumentCandidateGenerator candidateGenerator = manager.getArgumentCandidateGenerator();
 
-		List<SRLMulticlassInstance> allCandidates = new ArrayList<SRLMulticlassInstance>();
+		List<SRLMulticlassInstance> allCandidates = new ArrayList<>();
 
 		for (Constituent c : candidateGenerator.generateCandidates(predicate)) {
 			allCandidates.add(new SRLMulticlassInstance(c, predicateClone, manager));
@@ -72,7 +72,7 @@ public class SRLPredicateInstance implements IInstance {
 
 		cacheIdentifierFeatures(allCandidates);
 
-		List<SRLMulticlassInstance> list = new ArrayList<SRLMulticlassInstance>();
+		List<SRLMulticlassInstance> list = new ArrayList<>();
 
 		for (SRLMulticlassInstance c : allCandidates) {
 			if (identifier.getIdentifierScaledDecision(c))
@@ -132,13 +132,13 @@ public class SRLPredicateInstance implements IInstance {
 	 *            Should the identifier also be cached?
 	 */
 	public void cacheAllFeatureVectors(boolean cacheIdentifier) {
-		List<Pair<SRLMulticlassInstance, Models>> list = new ArrayList<Pair<SRLMulticlassInstance, Models>>();
-		list.add(new Pair<SRLMulticlassInstance, Models>(senseInstance, Models.Sense));
+		List<Pair<SRLMulticlassInstance, Models>> list = new ArrayList<>();
+		list.add(new Pair<>(senseInstance, Models.Sense));
 		for (SRLMulticlassInstance x : this.getCandidateInstances()) {
-			list.add(new Pair<SRLMulticlassInstance, Models>(x, Models.Classifier));
+			list.add(new Pair<>(x, Models.Classifier));
 
 			if (cacheIdentifier)
-				list.add(new Pair<SRLMulticlassInstance, Models>(x, Models.Identifier));
+				list.add(new Pair<>(x, Models.Identifier));
 
 		}
 

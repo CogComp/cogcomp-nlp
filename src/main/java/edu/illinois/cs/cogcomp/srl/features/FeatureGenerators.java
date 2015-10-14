@@ -39,7 +39,7 @@ public class FeatureGenerators {
 					break;
 				}
 			}
-			Set<Feature> feats = new HashSet<Feature>();
+			Set<Feature> feats = new HashSet<>();
 
 			if (hasVerb) {
 				feats.add(DiscreteFeature.create(getName()));
@@ -82,7 +82,7 @@ public class FeatureGenerators {
 		@Override
 		public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-			Set<Feature> features = new HashSet<Feature>();
+			Set<Feature> features = new HashSet<>();
 			String surfaceString = c.getSurfaceForm();
 
 			if (surfaceString.contains("-") && c.length() == 1) {
@@ -130,7 +130,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				Set<Feature> feats = new HashSet<Feature>();
+				Set<Feature> feats = new HashSet<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(c);
 					// if the phrase is a PP, then the head word of its
@@ -187,7 +187,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				List<Constituent> siblings = new ArrayList<Constituent>();
+				List<Constituent> siblings = new ArrayList<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(input);
 					List<Relation> in = phrase.getIncomingRelations();
@@ -237,7 +237,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				List<Constituent> siblings = new ArrayList<Constituent>();
+				List<Constituent> siblings = new ArrayList<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(input);
 					List<Relation> in = phrase.getIncomingRelations();

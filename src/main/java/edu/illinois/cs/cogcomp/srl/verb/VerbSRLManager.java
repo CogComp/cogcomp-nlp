@@ -41,11 +41,11 @@ public class VerbSRLManager extends SRLManager {
 			"17", "18", "19", "20", "21" };
 
 	public final static Set<String> coreArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays.asList(coreArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(coreArguments)));
 
 	public static final Set<String> modifierArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays
-					.asList(modifierArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays
+                    .asList(modifierArguments)));
 
 	private ArgumentCandidateGenerator candidateGenerator;
 

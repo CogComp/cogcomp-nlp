@@ -50,7 +50,7 @@ final public class SRLILPInference extends
 
 		this.outputGenerator = new ILPOutput(manager);
 
-		List<SRLPredicateInstance> instances = new ArrayList<SRLPredicateInstance>();
+		List<SRLPredicateInstance> instances = new ArrayList<>();
 		for (Constituent predicate : predicates) {
 			Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
 			SRLPredicateInstance x;
@@ -161,7 +161,7 @@ final public class SRLILPInference extends
 				idScore = sc[1] - sc[0];
 
 
-				set = new HashSet<Integer>();
+				set = new HashSet<>();
 				for (int labelId = 0; labelId < scores.length; labelId++) {
 					String label = manager.getArgument(labelId);
 
@@ -194,7 +194,7 @@ final public class SRLILPInference extends
 			double[] senseScores = manager
 					.getScores(senseX, Models.Sense, true);
 
-			set = new HashSet<Integer>();
+			set = new HashSet<>();
 
 			for (int senseId = 0; senseId < senseScores.length; senseId++) {
 

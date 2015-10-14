@@ -1,173 +1,159 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>edu.illinois.cs.cogcomp</groupId>
-  <artifactId>illinois-srl</artifactId>
-  <packaging>jar</packaging>
-  <version>5.1.4</version>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <artifactId>illinois-srl</artifactId>
+    <packaging>jar</packaging>
+    <version>5.1.4</version>
 
-  <url>http://cogcomp.cs.illinois.edu</url>
+    <url>http://cogcomp.cs.illinois.edu</url>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-  </properties>
-  
-  <repositories>
-    <repository>
-      <id>CogcompSoftware</id>
-      <name>CogcompSoftware</name>
-      <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-    </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </repository>
+    </repositories>
 
-  <dependencies>
-    <!-- Include the pre-trained SRL models for running SemanticRoleLabeler -->
-    <!-- <dependency> -->
-    <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
-    <!--   <artifactId>illinois-srl</artifactId> -->
-    <!--   <classifier>models-verb-stanford</classifier> -->
-    <!--   <version>5.0</version> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
-    <!--   <artifactId>illinois-srl</artifactId> -->
-    <!--   <classifier>models-nom-stanford</classifier> -->
-    <!--   <version>5.0</version> -->
-    <!-- </dependency> -->
+    <dependencies>
+        <!-- Include the pre-trained SRL models for running SemanticRoleLabeler -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-srl</artifactId>
+            <classifier>models-verb-stanford</classifier>
+            <version>5.1.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-srl</artifactId>
+            <classifier>models-nom-stanford</classifier>
+            <version>5.1.4</version>
+            <scope>test</scope>
+        </dependency>
 
-    <!--The Illinois pipeline can be used instead -->
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-nlp-pipeline</artifactId>
-      <version>0.1.8-lemmatizer</version>
-    </dependency>
+        <!--The Illinois pipeline can be used instead -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>0.1.8-lemmatizer</version>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-core-utilities</artifactId>
-      <version>1.2.19</version>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-core-utilities</artifactId>
+            <version>1.2.18</version>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-caching-curator</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.gurobi</groupId>
-      <artifactId>gurobi</artifactId>
-      <version>6.0</version>
-      <optional>true</optional>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-caching-curator</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gurobi</groupId>
+            <artifactId>gurobi</artifactId>
+            <version>6.0</version>
+            <optional>true</optional>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-common-resources</artifactId>
-      <classifier>illinoisSRL</classifier>
-      <version>1.4</version>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-common-resources</artifactId>
+            <classifier>illinoisSRL</classifier>
+            <version>1.4</version>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-sl</artifactId>
-      <version>1.3.1</version>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-sl</artifactId>
+            <version>1.3.1</version>
+        </dependency>
 
-    <!-- <dependency> -->
-    <!--   <groupId>edu.illinois.cs.cogcomp</groupId> -->
-    <!--   <artifactId>IllinoisSL-core</artifactId> -->
-    <!--   <version>0.1-withJLIS</version> -->
-    <!--   <exclusions> -->
-    <!-- 	<exclusion> -->
-    <!-- 	  <groupId>ch.qos.logback</groupId> -->
-    <!-- 	  <artifactId>logback-core</artifactId> -->
-    <!-- 	</exclusion> -->
-    <!-- 	<exclusion> -->
-    <!-- 	  <groupId>ch.qos.logback</groupId> -->
-    <!-- 	  <artifactId>logback-classic</artifactId> -->
-    <!-- 	</exclusion> -->
-    <!--   </exclusions> -->
-    <!-- </dependency> -->
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.6</version>
-    </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
 
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <version>1.2.140</version>
-    </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.2.140</version>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>edison</artifactId>
-      <version>1.7.9</version>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>edison</artifactId>
+            <version>1.7.9</version>
+        </dependency>
 
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>inference</artifactId>
-      <version>0.4.2</version>
-    </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>inference</artifactId>
+            <version>0.4.2</version>
+        </dependency>
 
-    <dependency>
-      <groupId>org.tartarus</groupId>
-      <artifactId>snowball</artifactId>
-      <version>1.0</version>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.tartarus</groupId>
+            <artifactId>snowball</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 
-  <build>
-    <plugins>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<version>2.0.2</version>
-	<configuration>
-	  <source>1.6</source>
-	  <target>1.6</target>
-	</configuration>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-source-plugin</artifactId>
-	<version>2.1.2</version>
-	<executions>
-	  <execution>
-	    <id>attach-sources</id>
-	    <goals>
-	      <goal>jar</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
-    </plugins>
-    <resources>
-      <resource>
-	<directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>2.4</version>
-      </extension>
-    </extensions>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.4</version>
+            </extension>
+        </extensions>
+    </build>
 
-  <distributionManagement>
-    <repository>
-      <id>CogcompSoftware</id>
-      <name>CogcompSoftware</name>
-      <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-    </repository>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+        </repository>
+    </distributionManagement>
 
 </project>

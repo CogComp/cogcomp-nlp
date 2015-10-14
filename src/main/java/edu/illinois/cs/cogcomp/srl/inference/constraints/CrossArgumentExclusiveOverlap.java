@@ -53,7 +53,7 @@ public class CrossArgumentExclusiveOverlap extends SRLILPConstraintGenerator {
 
 		int numPredicates = x.numPredicates();
 
-		List<ILPConstraint> constraints = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> constraints = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
 

@@ -113,7 +113,7 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 
 		if (predicate) {
 
-			return new Option<String>(lemma);
+			return new Option<>(lemma);
 		} else {
 			return Option.empty();
 		}

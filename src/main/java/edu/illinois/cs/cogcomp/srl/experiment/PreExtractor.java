@@ -25,7 +25,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 	protected final FeatureVectorCacheFile cacheDB;
 
-	protected final List<PreExtractRecord> buffer = new ArrayList<PreExtractRecord>();
+	protected final List<PreExtractRecord> buffer = new ArrayList<>();
 
 	protected final SRLManager manager;
 	private AtomicInteger taCounter = new AtomicInteger();
@@ -71,7 +71,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 				AbstractPredicateDetector detector = manager.getHeuristicPredicateDetector();
 				List<Constituent> predicates = detector.getPredicates(ta);
 
-				Set<IntPair> gold = new HashSet<IntPair>();
+				Set<IntPair> gold = new HashSet<>();
 				if (ta.hasView(manager.getGoldViewName())) {
 					PredicateArgumentView pav = (PredicateArgumentView) ta.getView(manager.getGoldViewName());
 
@@ -212,8 +212,8 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 		Set<Feature> feats = modelInfo.fex.getFeatures(x.getConstituent());
 
 		// This is the only place where a new feature can be added to the lexicon.
-		List<Integer> ids = new ArrayList<Integer>();
-		List<Float> values = new ArrayList<Float>();
+		List<Integer> ids = new ArrayList<>();
+		List<Float> values = new ArrayList<>();
 		synchronized (lexicon) {
 			for (Feature f : feats) {
 				if (addNewFeatures) {

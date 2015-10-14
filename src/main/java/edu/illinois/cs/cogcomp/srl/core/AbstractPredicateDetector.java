@@ -30,7 +30,7 @@ public abstract class AbstractPredicateDetector {
 			throws Exception;
 
 	public List<Constituent> getPredicates(TextAnnotation ta) throws Exception {
-		List<Constituent> list = new ArrayList<Constituent>();
+		List<Constituent> list = new ArrayList<>();
 
 		for (int i = 0; i < ta.size(); i++) {
 

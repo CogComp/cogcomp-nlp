@@ -87,7 +87,7 @@ public class PredicateArgumentEvaluator {
 			Map<IntPair, Record> predictedLabels = getArgumentMap(prediction,
 					pp);
 
-			Set<IntPair> goldDone = new HashSet<IntPair>();
+			Set<IntPair> goldDone = new HashSet<>();
 
 			for (IntPair predictedSpan : predictedLabels.keySet()) {
 
@@ -123,7 +123,7 @@ public class PredicateArgumentEvaluator {
 
 					if (p.baseLabel.startsWith("AM")) {
 
-						Set<IntPair> set = new HashSet<IntPair>();
+						Set<IntPair> set = new HashSet<>();
 						set.addAll(gComponents.keySet());
 						set.addAll(pComponents.keySet());
 
@@ -145,8 +145,8 @@ public class PredicateArgumentEvaluator {
 
 						// all spans should be correct!
 						boolean allOK = p.baseLabel.equals(g.baseLabel);
-						Set<IntPair> goldSpansLeft = new HashSet<IntPair>(
-								gComponents.keySet());
+						Set<IntPair> goldSpansLeft = new HashSet<>(
+                                gComponents.keySet());
 						for (IntPair pSpan : pComponents.keySet()) {
 							if (gComponents.containsKey(pSpan))
 								goldSpansLeft.remove(pSpan);
@@ -180,7 +180,7 @@ public class PredicateArgumentEvaluator {
 
 		String baseLabel;
 
-		Map<IntPair, String> components = new HashMap<IntPair, String>();
+		Map<IntPair, String> components = new HashMap<>();
 
 		Record(int start, int end, String base) {
 			this.start = start;
@@ -207,13 +207,13 @@ public class PredicateArgumentEvaluator {
 		// Map<String, Record> records = new HashMap<String,
 		// PredicateArgumentEvaluator.Record>();
 
-		Set<IntPair> spans = new HashSet<IntPair>();
+		Set<IntPair> spans = new HashSet<>();
 
-		List<Pair<String, Constituent>> output = new ArrayList<Pair<String, Constituent>>();
+		List<Pair<String, Constituent>> output = new ArrayList<>();
 		for (Relation r : view.getArguments(predicate)) {
 			Constituent target = r.getTarget();
-			output.add(new Pair<String, Constituent>(r.getRelationName(),
-					target));
+			output.add(new Pair<>(r.getRelationName(),
+                    target));
 
 			if (spans.contains(target.getSpan()))
 				System.out.println("Error! Overlapping spans in "
@@ -232,13 +232,13 @@ public class PredicateArgumentEvaluator {
 			}
 		});
 
-		List<Record> records = new ArrayList<PredicateArgumentEvaluator.Record>();
+		List<Record> records = new ArrayList<>();
 		// add a label for the verb first
 		Record vRecord = new Record(predicate.getStartSpan(),
 				predicate.getEndSpan(), "V");
 		records.add(vRecord);
 
-		Map<String, Record> recordsSoFar = new HashMap<String, PredicateArgumentEvaluator.Record>();
+		Map<String, Record> recordsSoFar = new HashMap<>();
 		recordsSoFar.put("V", vRecord);
 
 		for (Pair<String, Constituent> pair : output) {
@@ -276,7 +276,7 @@ public class PredicateArgumentEvaluator {
 
 		}
 
-		Map<IntPair, Record> map = new HashMap<IntPair, PredicateArgumentEvaluator.Record>();
+		Map<IntPair, Record> map = new HashMap<>();
 
 		for (Record rec : records) {
 			map.put(new IntPair(rec.start, rec.end), rec);
@@ -296,7 +296,7 @@ public class PredicateArgumentEvaluator {
 
 	private static Map<Constituent, Constituent> getGoldToPredictionPredicateMapping(
 			PredicateArgumentView gold, PredicateArgumentView prediction) {
-		Map<Constituent, Constituent> goldToPredictionPredicateMapping = new HashMap<Constituent, Constituent>();
+		Map<Constituent, Constituent> goldToPredictionPredicateMapping = new HashMap<>();
 
 		for (Constituent gp : gold.getPredicates()) {
 
@@ -326,11 +326,11 @@ public class PredicateArgumentEvaluator {
 
 		EvaluationRecord record = tester.getEvaluationRecord();
 
-		List<String> l = new ArrayList<String>();
+		List<String> l = new ArrayList<>();
 		l.add(hash + "\tAll\t" + record.getGoldCount() + "\t"
 				+ record.getPredictedCount() + "\t" + record.getCorrectCount());
 
-		List<String> labels = new ArrayList<String>(tester.getLabels());
+		List<String> labels = new ArrayList<>(tester.getLabels());
 		Collections.sort(labels);
 
 		for (String label : labels) {
@@ -347,7 +347,7 @@ public class PredicateArgumentEvaluator {
 
 	public static Map<Integer, Map<String, EvaluationRecord>> loadResultCache(
 			String file) throws FileNotFoundException {
-		Map<Integer, Map<String, EvaluationRecord>> records = new HashMap<Integer, Map<String, EvaluationRecord>>();
+		Map<Integer, Map<String, EvaluationRecord>> records = new HashMap<>();
 		Scanner scanner = new Scanner(new File(file));
 
 		while (scanner.hasNextLine()) {
@@ -366,7 +366,7 @@ public class PredicateArgumentEvaluator {
 			if (records.containsKey(taId))
 				map = records.get(taId);
 			else {
-				map = new HashMap<String, EvaluationRecord>();
+				map = new HashMap<>();
 				records.put(taId, map);
 			}
 			EvaluationRecord record = new EvaluationRecord();

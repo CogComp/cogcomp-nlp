@@ -44,7 +44,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 		int sentenceStart = ta.getSentence(sentenceId).getStartSpan();
 		int predicatePosition = predicateClone.getStartSpan() - sentenceStart;
 
-		Set<Constituent> out = new HashSet<Constituent>();
+		Set<Constituent> out = new HashSet<>();
 
 		List<Tree<Pair<String, IntPair>>> yield = spanLabeledTree.getYield();
 
@@ -70,7 +70,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 			if (currentNode.isRoot())
 				done = true;
 			else {
-				List<Constituent> candidates = new ArrayList<Constituent>();
+				List<Constituent> candidates = new ArrayList<>();
 
 				for (Tree<Pair<String, IntPair>> sibling : currentNode.getParent().getChildren()) {
 					Pair<String, IntPair> siblingNode = sibling.getLabel();
@@ -108,7 +108,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 		}
 
 		// Punctuations maketh an argument not!
-		List<Constituent> output = new ArrayList<Constituent>();
+		List<Constituent> output = new ArrayList<>();
 		for (Constituent c : out) {
 			if (!ParseTreeProperties.isPunctuationToken(c.getSurfaceForm()))
 				output.add(c);

@@ -28,7 +28,7 @@ public class ProjectedPath implements FeatureExtractor {
 
 		TreeView parse = (TreeView) ta.getView(parseViewName);
 
-		Set<Feature> feats = new HashSet<Feature>();
+		Set<Feature> feats = new HashSet<>();
 
         // Clone this to avoid concurrency problems
         Constituent c2 = null;

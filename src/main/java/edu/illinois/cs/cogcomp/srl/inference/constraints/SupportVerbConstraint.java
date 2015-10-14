@@ -37,9 +37,9 @@ public class SupportVerbConstraint extends SRLILPConstraintGenerator {
 
     SRLSentenceInstance x = (SRLSentenceInstance) ins;
 
-    List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+    List<ILPConstraint> list = new ArrayList<>();
 
-    Set<Integer> predicatePosition = new HashSet<Integer>();
+    Set<Integer> predicatePosition = new HashSet<>();
     for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
       predicatePosition.add(x.predicates.get(predicateId)
               .getSenseInstance().getSpan().getFirst());
@@ -99,7 +99,7 @@ public class SupportVerbConstraint extends SRLILPConstraintGenerator {
   public List<ILPConstraint> getViolatedILPConstraints(IInstance x,
                                                        IStructure y, InferenceVariableLexManager variables) {
     // This constraint is always present
-    return new ArrayList<ILPConstraint>();
+    return new ArrayList<>();
   }
 
 }

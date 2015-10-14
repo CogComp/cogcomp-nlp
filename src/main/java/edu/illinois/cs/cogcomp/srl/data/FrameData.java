@@ -10,29 +10,29 @@ public class FrameData {
 	private String lemma;
 
 	private static class SenseFrameData {
-		Map<String, ArgumentData> argDescription = new HashMap<String, ArgumentData>();
+		Map<String, ArgumentData> argDescription = new HashMap<>();
 		String verbClass = "UNKNOWN";
 		String senseName;
-		List<Example> examples = new ArrayList<Example>();
+		List<Example> examples = new ArrayList<>();
 	}
 
 	private static class ArgumentData {
 		String description;
-		Set<String> vnTheta = new HashSet<String>();
+		Set<String> vnTheta = new HashSet<>();
 	}
 
 	private static class Example {
 		String text;
 		String name;
-		Map<String, String> argDescriptions = new HashMap<String, String>();
-		Map<String, String> argExamples = new HashMap<String, String>();
+		Map<String, String> argDescriptions = new HashMap<>();
+		Map<String, String> argExamples = new HashMap<>();
 	}
 
 	private Map<String, SenseFrameData> senseFrameData;
 
 	public FrameData(String lemma) {
 		this.lemma = lemma;
-		senseFrameData = new HashMap<String, SenseFrameData>();
+		senseFrameData = new HashMap<>();
 	}
 
 	public void addExample(String sense, String name, String text,
@@ -89,7 +89,7 @@ public class FrameData {
 	}
 
 	public Set<String> getLegalArguments() {
-		Set<String> l = new HashSet<String>();
+		Set<String> l = new HashSet<>();
 		for (String s : this.getSenses())
 			l.addAll(this.getArgsForSense(s));
 		return l;

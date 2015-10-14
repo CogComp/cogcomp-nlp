@@ -71,7 +71,7 @@ public abstract class SRLManager {
 
 	private ArgumentIdentifier identifier;
 
-	private final Set<SRLConstraints> constraints = new HashSet<SRLConstraints>();
+	private final Set<SRLConstraints> constraints = new HashSet<>();
 
 	private final Map<Models, ModelInfo> modelInfo;
 
@@ -83,18 +83,18 @@ public abstract class SRLManager {
 
 		initializeFeatureManifest(defaultParser);
 
-		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(getArgumentLabels())));
+		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<>(Arrays.asList(getArgumentLabels())));
 
 		senseToId = getLabelIdMap(getSenseLabels());
 		argToId = getLabelIdMap(getArgumentLabels());
 		this.knownLegalArguments = new LegalArguments(getSRLType() + ".legal.arguments");
 
-		this.legalArgumentsCache = new ConcurrentHashMap<String, Set<String>>();
+		this.legalArgumentsCache = new ConcurrentHashMap<>();
 
 		log.info("{} Arguments: " + Sorters.sortSet(argToId.keySet()), argToId.size());
 		log.info("{} senses: " + Sorters.sortSet(senseToId.keySet()), senseToId.size());
 
-		modelInfo = new HashMap<Models, ModelInfo>();
+		modelInfo = new HashMap<>();
 
 		// Load WN properties file from the classpath
 		WordNetManager.loadConfigAsClasspathResource(true);
@@ -164,7 +164,7 @@ public abstract class SRLManager {
 
 	protected HashMap<String, Integer> getLabelIdMap(String[] strings) {
 
-		HashMap<String, Integer> label2Id = new HashMap<String, Integer>();
+		HashMap<String, Integer> label2Id = new HashMap<>();
 		for (int i = 0; i < strings.length; i++) {
 			label2Id.put(strings[i], i);
 		}
@@ -339,7 +339,7 @@ public abstract class SRLManager {
 
 		zipin.close();
 
-		return new Pair<Double, Double>(A, B);
+		return new Pair<>(A, B);
 	}
 
 	private String getFeatureIdentifier(Models type) {
@@ -426,7 +426,7 @@ public abstract class SRLManager {
 
 		if (knownLegalArguments.hasLegalArguments(lemma)) {
 
-			Set<String> set = new HashSet<String>();
+			Set<String> set = new HashSet<>();
 
 			set.addAll(Arrays.asList("AM-ADV", "AM-DIS", "AM-LOC", "AM-MNR", "AM-MOD", "AM-NEG", "AM-TMP"));
 
@@ -454,12 +454,12 @@ public abstract class SRLManager {
 					return legalArgumentsCache.get(lemma);
 				else {
 
-					HashSet<String> set = new HashSet<String>(frameMan
-							.getFrame(lemma).getLegalArguments());
+					HashSet<String> set = new HashSet<>(frameMan
+                            .getFrame(lemma).getLegalArguments());
 
 					set.addAll(this.getModifierArguments());
 
-					for (String s : new ArrayList<String>(set)) {
+					for (String s : new ArrayList<>(set)) {
 						set.add("C-" + s);
 						set.add("R-" + s);
 					}
@@ -494,7 +494,7 @@ public abstract class SRLManager {
 				log.error("Unknown predicate {}. Allowing only sense 01", predicate);
 			}
 		}
-		return new HashSet<String>(Arrays.asList("01"));
+		return new HashSet<>(Arrays.asList("01"));
 
 	}
 
@@ -505,12 +505,12 @@ public abstract class SRLManager {
 	public Map<String, Set<String>> getLegalLabelsForSense(String lemma) {
 		FramesManager frameMan = getFrameManager();
 
-		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
+		Map<String, Set<String>> map = new HashMap<>();
 
 		if (frameMan.getPredicates().contains(lemma)) {
 			FrameData frame = frameMan.getFrame(lemma);
 			for (String sense : frame.getSenses()) {
-				Set<String> argsForSense = new HashSet<String>(frame.getArgsForSense(sense));
+				Set<String> argsForSense = new HashSet<>(frame.getArgsForSense(sense));
 				argsForSense.add(NULL_LABEL);
 
 				map.put(sense, argsForSense);

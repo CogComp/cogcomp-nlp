@@ -88,7 +88,7 @@ public class FeatureVectorCacheFile implements Closeable,
 			SRLMulticlassInstance x = new SRLMulticlassInstance(model, lemma, features);
 			SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, model, manager);
 
-			return new Pair<SRLMulticlassInstance, SRLMulticlassLabel>(x, y);
+			return new Pair<>(x, y);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

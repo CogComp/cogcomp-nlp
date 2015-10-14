@@ -34,7 +34,7 @@ public class SRLMulticlassInstance implements IInstance {
 		this.manager = manager;
 		predicateLemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
 
-		features = new ConcurrentHashMap<Models, IFeatureVector>();
+		features = new ConcurrentHashMap<>();
 	}
 
 	public SRLMulticlassInstance(Models model, String lemma, String features) {
@@ -42,7 +42,7 @@ public class SRLMulticlassInstance implements IInstance {
 		this.predicate = null;
 		this.predicateLemma = lemma;
 
-		this.features = new ConcurrentHashMap<Models, IFeatureVector>();
+		this.features = new ConcurrentHashMap<>();
 
 		this.cacheFeatureVector(model, getFeatureVector(features));
 	}
@@ -100,7 +100,7 @@ public class SRLMulticlassInstance implements IInstance {
 	}
 
 	public void cacheFeatureVector(Models model, Set<Feature> features) {
-		Map<String, Float> featureMap = new HashMap<String, Float>();
+		Map<String, Float> featureMap = new HashMap<>();
 		for (Feature f : features) {
 			featureMap.put(f.getName(), f.getValue());
 		}
