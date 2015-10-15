@@ -9,8 +9,6 @@ import edu.illinois.cs.cogcomp.utils.Dictionaries;
 import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-
 import java.io.FileNotFoundException;
 import java.text.Normalizer;
 import java.util.*;
@@ -1418,7 +1416,12 @@ class Program {
                     wordCounts = WikiTransliteration.CountWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization, false);
                 else if (weightingMode == WeightingMode.MaxAlignment) {
 
-                    HashMap<Pair<String, String>, Double> cached = maxCache.getOrDefault(new Pair<>(sourceWord, bestWord), new HashMap<Pair<String, String>, Double>());
+                    HashMap<Pair<String, String>, Double> cached = new HashMap<>();
+                    Pair<String, String> p = new Pair<>(sourceWord, bestWord);
+                    if(maxCache.containsKey(p)){
+                        cached = maxCache.get(p);
+                    }
+
 
                     Dictionaries.AddTo(probs, cached, -1);
 

@@ -2,6 +2,7 @@ package edu.illinois.cs.cogcomp.transliteration;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
 
@@ -28,21 +29,77 @@ public class SPModel
 
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
-        private int ngramSize = 4;
+
         private List<Triple<String,String,Double>> trainingExamples;
         //private List<Triple<String,String,double>> trainingExamplesDual;
+
+        /**
+         * This is the production probabilities table.
+         */
         private SparseDoubleVector<Pair<String, String>> probs = null;
+
+        /**
+         * This is the production probabilities table multiplied by the segmentfactor.
+         */
         private SparseDoubleVector<Pair<String, String>> multiprobs = null;
+
         private HashMap<Pair<String, String>, Double> pruned = null; // used to be a SparseDoubleVector
         //private SparseDoubleVector<Pair<String, String>> probsDual = null;
         //private SparseDoubleVector<Pair<String, String>> prunedDual = null;
         private HashMap<String, String> probMap = null;
         //private Map<String, String> probMapDual = null;
 
+        /**
+         * The maximum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
+         * Larger values will possibly yield better transliterations, but will be more computationally expensive.
+         * The default value is 100.
+         * COMMENTED OUT BY SWM.
+         */
         private int maxCandidates=100;
+
+        public int getMaxCandidates(){
+            return this.maxCandidates;
+        }
+
+        public void setMaxCandidates(int value){
+            this.maxCandidates = value;
+        }
+
+        /**
+         * The (0,1] segment factor determines the preference for longer segments by effectively penalizing the total number of segments used.
+         * The probability of a transliteration is multiplied by SegmentFactor^[#segments].  Lower values prefer longer segments.  A value of 0.5, the default, is better for generation,
+         * since productions from longer segments are more likely to be exactly correct; conversely, a value of 1 is better for discrimination.
+         * Set SegmentFactor before training begins.  Setting it after this time effectively changes the model while keeping the same parameters, which isn't a good idea.</para>
+         */
         private double segmentFactor = 0.5;
 
-        // binary writer is a c# class, sparsedoublevector is from pasternack.
+        public double getSegmentFactor(){
+            return segmentFactor;
+        }
+
+        public void setSegmentFactor(double value){
+            this.segmentFactor = value;
+        }
+
+        /**
+         * The size of the ngrams used by the language model (default: 4).  Irrelevant if no language model is created with SetLanguageModel.
+         */
+        private int ngramSize = 4;
+
+        public int getNgramSize(){
+            return this.ngramSize;
+        }
+
+        public void setNgramSize(int value){
+            this.ngramSize = value;
+        }
+
+        /**
+         * This writes the model out to file.
+         * @param writer
+         * @param table
+         * @throws IOException
+         */
         private void WriteToWriter(DataOutputStream writer, SparseDoubleVector<Pair<String, String>> table) throws IOException {
             if (table == null) {
                 writer.write(-1);
@@ -105,6 +162,17 @@ public class SPModel
             writer.flush();
         }
 
+
+        public void WriteProbs(String fname) throws IOException {
+            ArrayList<String> outlines = new ArrayList<>();
+            for(Pair<String, String> t : probs.keySet()){
+                outlines.add(t.getFirst() + "\t" + t.getSecond() + "\t" + probs.get(t));
+            }
+
+            LineIO.write(fname, outlines);
+
+        }
+
         /**
          * Deserializes an SPModel from a stream.
          * SWM: ignore this for now.
@@ -127,37 +195,13 @@ public class SPModel
             int tec = reader.readInt();
             trainingExamples = new ArrayList<>(tec);
             for (int i = 0; i < tec; i++)
-                trainingExamples.add(new Triple<String, String, Double>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
+                trainingExamples.add(new Triple<>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
 
             probs = ReadTableFromReader(reader);
 
         }
 
-        /**
-         * The maximimum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
-         * Larger values will possibly yield better transliterations, but will be more computationally expensive.
-         * The default value is 100.
-         * COMMENTED OUT BY SWM.
-         */
-//        public int MaxCandidates
-//        {
-//            get { return maxCandidates; }
-//            set { maxCandidates = value; }
-//        }
 
-
-        /**
-         * The (0,1] segment factor determines the preference for longer segments by effectively penalizing the total number of segments used.
-         * The probability of a transliteration is multiplied by SegmentFactor^[#segments].  Lower values prefer longer segments.  A value of 0.5, the default, is better for generation,
-         * since productions from longer segments are more likely to be exactly correct; conversely, a value of 1 is better for discrimination.
-         * Set SegmentFactor before training begins.  Setting it after this time effectively changes the model while keeping the same parameters, which isn't a good idea.</para>
-         * COMMENTED OUT BY SWM.
-         */
-//        public double SegmentFactor
-//        {
-//            get { return segmentFactor; }
-//            set { segmentFactor = value; }
-//        }
 
         /**
          * Creates a new model for generating transliterations (creating new words in the target language from a word in the source language).
@@ -171,26 +215,17 @@ public class SPModel
                 trainingExamples.add(example.Triple());
         }
 
-        /// <summary>
-        /// Creates and sets a simple (ngram) language model to use when generating transliterations.
-        /// The transliterations will then have probability == P(T|S)*P(T), where P(T) is the language model.
-        /// In principle this allows you to leverage the presumably vast number of words available in the target language,
-        /// although practical results may vary.
-        /// </summary>
-        /// <param name="targetLanguageExamples">Example words from the target language you're transliterating into.</param>
+        /**
+         *
+         * Creates and sets a simple (ngram) language model to use when generating transliterations.
+         * The transliterations will then have probability == P(T|S)*P(T), where P(T) is the language model.
+         * In principle this allows you to leverage the presumably vast number of words available in the target language,
+         * although practical results may vary.
+         * @param targetLanguageExamples Example words from the target language you're transliterating into.
+         */
 //        public void SetLanguageModel(List<String> targetLanguageExamples)
 //        {
 //            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
-//        }
-
-        /**
-         * The size of the ngrams used by the language model (default: 4).  Irrelevant if no language model is created with SetLanguageModel.
-         * COMMENTED OUT BY SWM.
-         */
-//        public int LanguageModelNgramSize
-//        {
-//            get { return ngramSize; }
-//            set { ngramSize = value; }
 //        }
 
         /**
@@ -208,15 +243,15 @@ public class SPModel
             {
                 // FIXME: out variables... is exampleCounts actually used anywhere???
                 List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
-                probs = new SparseDoubleVector(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
-                probs = new SparseDoubleVector(Program.PSecondGivenFirst(probs));
+                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
+                probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
 
             for (int i = 0; i < emIterations; i++)
             {
                 // FIXME: out variables
-                probs = new SparseDoubleVector(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true));
-                probs = new SparseDoubleVector(Program.PSecondGivenFirst(probs));
+                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true));
+                probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
         }
 
@@ -232,7 +267,8 @@ public class SPModel
                 multiprobs = probs.multiply(segmentFactor);
             }
 
-            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, new HashMap<Pair<String, String>, Double>(), minProductionProbability)
+            HashMap<Pair<String, String>, Double> memoizationTable = new HashMap<>();
+            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability)
                             / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
         }
 

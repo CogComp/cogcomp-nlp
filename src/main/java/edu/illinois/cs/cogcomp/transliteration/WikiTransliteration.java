@@ -7,7 +7,6 @@ import edu.illinois.cs.cogcomp.utils.Dictionaries;
 import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Array;
@@ -1344,62 +1343,62 @@ class WikiTransliteration {
 //    //    }
 //    //}
 //
-    public static HashMap<Pair<String, String>, Double> FindWeightedAlignments(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> memoizationTable, HashMap<Pair<String,String>,Double> probs)
-    {
-        HashMap<Pair<String, String>, Double> weights;
-
-        if(memoizationTable.containsKey(new Pair<>(word1, word2))){
-            return memoizationTable.get(new Pair<>(word1, word2));
-        }else{
-            weights = new HashMap<>();
-        }
-
-        int maxSubstringLength1 = Math.min(word1.length(), maxSubstringLength);
-        int maxSubstringLength2 = Math.min(word2.length(), maxSubstringLength);
-
-        for (int i = 1; i <= maxSubstringLength1; i++) //for each possible substring in the first word...
-        {
-            String substring1 = word1.substring(0, i);
-
-            for (int j = 1; j <= maxSubstringLength2; j++) //for possible substring in the second
-            {
-                if ((word1.length() - i) * maxSubstringLength >= word2.length() - j && (word2.length() - j) * maxSubstringLength >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
-                {
-                    String substring2 = word2.substring(0, j);
-                    double prob = probs.get(new Pair<>(substring1, substring2));
-
-                    HashMap<Pair<String,String>,Double> recursiveWeights = FindWeightedAlignments(substring1,substring2,maxSubstringLength,memoizationTable,probs);
-                    for (Pair<String,String> key : recursiveWeights.keySet())
-                    {
-                        Double value = recursiveWeights.get(key);
-                        double existingWeight;
-                        if(weights.containsKey(key)){
-                            existingWeight = weights.get(key);
-                            weights.put(key, Math.max(value*prob,existingWeight));
-                        }else{
-                            weights.put(key, value*prob);
-                        }
-
-                    }
-
-                    Pair<String, String> v = new Pair<>(substring1, word2.substring(0, j));
-                    if(weights.containsKey(v)){
-                        // increment
-                        weights.put(v, weights.get(v) + 1.0);
-                    }else{
-                        // set
-                        weights.put(v, 1.0);
-                    }
-
-                    // FIXME: not sure what this does...
-                    Dictionaries.AddTo(weights, FindWeightedAlignments(word1.substring(i), word2.substring(j), maxSubstringLength, memoizationTable,probs), 1);
-                }
-            }
-        }
-
-        memoizationTable.put(new Pair<>(word1, word2), weights);
-        return weights;
-    }
+//    public static HashMap<Pair<String, String>, Double> FindWeightedAlignments(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> memoizationTable, HashMap<Pair<String,String>,Double> probs)
+//    {
+//        HashMap<Pair<String, String>, Double> weights;
+//
+//        if(memoizationTable.containsKey(new Pair<>(word1, word2))){
+//            return memoizationTable.get(new Pair<>(word1, word2));
+//        }else{
+//            weights = new HashMap<>();
+//        }
+//
+//        int maxSubstringLength1 = Math.min(word1.length(), maxSubstringLength);
+//        int maxSubstringLength2 = Math.min(word2.length(), maxSubstringLength);
+//
+//        for (int i = 1; i <= maxSubstringLength1; i++) //for each possible substring in the first word...
+//        {
+//            String substring1 = word1.substring(0, i);
+//
+//            for (int j = 1; j <= maxSubstringLength2; j++) //for possible substring in the second
+//            {
+//                if ((word1.length() - i) * maxSubstringLength >= word2.length() - j && (word2.length() - j) * maxSubstringLength >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
+//                {
+//                    String substring2 = word2.substring(0, j);
+//                    double prob = probs.get(new Pair<>(substring1, substring2));
+//
+//                    HashMap<Pair<String,String>,Double> recursiveWeights = FindWeightedAlignments(substring1,substring2,maxSubstringLength,memoizationTable,probs);
+//                    for (Pair<String,String> key : recursiveWeights.keySet())
+//                    {
+//                        Double value = recursiveWeights.get(key);
+//                        double existingWeight;
+//                        if(weights.containsKey(key)){
+//                            existingWeight = weights.get(key);
+//                            weights.put(key, Math.max(value*prob,existingWeight));
+//                        }else{
+//                            weights.put(key, value*prob);
+//                        }
+//
+//                    }
+//
+//                    Pair<String, String> v = new Pair<>(substring1, word2.substring(0, j));
+//                    if(weights.containsKey(v)){
+//                        // increment
+//                        weights.put(v, weights.get(v) + 1.0);
+//                    }else{
+//                        // set
+//                        weights.put(v, 1.0);
+//                    }
+//
+//                    // FIXME: not sure what this does...
+//                    Dictionaries.AddTo(weights, FindWeightedAlignments(word1.substring(i), word2.substring(j), maxSubstringLength, memoizationTable,probs), 1);
+//                }
+//            }
+//        }
+//
+//        memoizationTable.put(new Pair<>(word1, word2), weights);
+//        return weights;
+//    }
 //
 //    public static void CheckDictionary(HashMap<Pair<String, String>, double> dict) {
 //        for (KeyValuePair<Pair<String, String>, double> pair : dict)
@@ -1447,7 +1446,7 @@ class WikiTransliteration {
         //    Console.WriteLine("Total == 0");
         for (Pair<String, String> key : counts.keySet()) {
             Double value = counts.get(key);
-            result.put(new Pair<String, String>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value);
+            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value);
         }
 
         return result;
@@ -1570,7 +1569,7 @@ class WikiTransliteration {
 //    }
 
     public static HashMap<String, Double> GetSourceSubstringMax(HashMap<Pair<String, String>, Double> counts) {
-        HashMap<String, Double> result = new HashMap<String, Double>(counts.size());
+        HashMap<String, Double> result = new HashMap<>(counts.size());
         for (Pair<String, String> key : counts.keySet()) {
             Double value = counts.get(key);
             if (result.containsKey(key.getFirst()))
@@ -1582,20 +1581,20 @@ class WikiTransliteration {
         return result;
     }
 
-    public static HashMap<Pair<String, String>, Double> NormalizeBySourceSubstringMax(HashMap<Pair<String, String>, Double> counts, InternDictionary<String> internTable) {
-        //HashMap<String, double> totals = GetAlignmentTotals1(counts);
-        HashMap<String, Double> ssMax = GetSourceSubstringMax(counts);
-        HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
-
-        //if (total <= 0 || double.IsNaN(total) || double.IsInfinity(total))
-        //    Console.WriteLine("Total == 0");
-        for (Pair<String, String> key : counts.keySet()) {
-            Double value = counts.get(key);
-            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), (value / ssMax.get(key.getFirst())) * ssMax.get(key.getFirst()));
-        }
-
-        return result;
-    }
+//    public static HashMap<Pair<String, String>, Double> NormalizeBySourceSubstringMax(HashMap<Pair<String, String>, Double> counts, InternDictionary<String> internTable) {
+//        //HashMap<String, double> totals = GetAlignmentTotals1(counts);
+//        HashMap<String, Double> ssMax = GetSourceSubstringMax(counts);
+//        HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
+//
+//        //if (total <= 0 || double.IsNaN(total) || double.IsInfinity(total))
+//        //    Console.WriteLine("Total == 0");
+//        for (Pair<String, String> key : counts.keySet()) {
+//            Double value = counts.get(key);
+//            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), (value / ssMax.get(key.getFirst())) * ssMax.get(key.getFirst()));
+//        }
+//
+//        return result;
+//    }
 
 //    public static HashMap<Triple<String, String, String>, Double> Normalize(String sourceWord, String targetWord, HashMap<Triple<String, String, String>, Double> counts, InternDictionary<String> internTable, NormalizationMode normalization) {
 //        if (normalization == NormalizationMode.BySourceSubstring)
@@ -2107,9 +2106,22 @@ class WikiTransliteration {
 //        return result;
 //    }
 //
-    //Finds the probability of word1 transliterating to word2 over all possible alignments
+    //
+
+    /**
+     * Finds the probability of word1 transliterating to word2 over all possible alignments
+     * This is Algorithm 1 in the paper.
+     * @param word1 Source word
+     * @param word2 Transliterated word
+     * @param maxSubstringLength1 constant field from SPModel
+     * @param maxSubstringLength2 constant field from SPModel
+     * @param probs map from production to weight??
+     * @param memoizationTable
+     * @param minProductionProbability
+     * @return
+     */
     public static double GetSummedAlignmentProbability(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, HashMap<Pair<String, String>, Double> memoizationTable, double minProductionProbability) {
-        double memoization;
+
         if(memoizationTable.containsKey(new Pair<>(word1, word2))){
             return memoizationTable.get(new Pair<>(word1, word2));
         }
@@ -2131,7 +2143,8 @@ class WikiTransliteration {
 
             for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
             {
-                if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
+                //if we get rid of these characters, can we still cover the remainder of word2?
+                if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i)
                 {
                     String substring2 = word2.substring(0, j);
                     Pair<String, String> production = new Pair<>(substring1, substring2);

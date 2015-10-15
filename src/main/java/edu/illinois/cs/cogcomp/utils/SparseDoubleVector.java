@@ -4,16 +4,13 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
+ * SparseDoubleVector: basically a hashmap.
  * Created by stephen on 9/24/15.
  */
 public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements Serializable  {
-
-
-//public class SparseDoubleVector<TKey> : IDictionary<TKey, double>, ICollection<KeyValuePair<TKey, double>>, IEnumerable<KeyValuePair<TKey, double>>, IEnumerable
 
     public SparseDoubleVector(){
         super();
@@ -75,7 +72,11 @@ public class SparseDoubleVector<TKey> extends HashMap<TKey, Double> implements S
         SparseDoubleVector<TKey> ret = new SparseDoubleVector<>();
 
         for(TKey k : this.keySet()){
-            ret.put(k, this.get(k) / value.getOrDefault(k, 1.0));
+            double denom = 1.0;
+            if(value.containsKey(k)) {
+                denom = value.get(k);
+            }
+            ret.put(k, this.get(k) / denom);
         }
 
         return ret;
