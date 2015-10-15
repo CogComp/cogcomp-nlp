@@ -31,13 +31,13 @@
             <version>5.1.4</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-srl</artifactId>
-            <classifier>models-nom-stanford</classifier>
-            <version>5.1.4</version>
-            <scope>test</scope>
-        </dependency>
+        <!-- <dependency> -->
+        <!--     <groupId>edu.illinois.cs.cogcomp</groupId> -->
+        <!--     <artifactId>illinois-srl</artifactId> -->
+        <!--     <classifier>models-nom-stanford</classifier> -->
+        <!--     <version>5.1.4</version> -->
+        <!--     <scope>test</scope> -->
+        <!-- </dependency> -->
 
         <!--The Illinois pipeline can be used instead -->
         <dependency>
