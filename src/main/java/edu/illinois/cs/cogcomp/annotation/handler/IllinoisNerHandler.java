@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
@@ -18,12 +19,8 @@ public class IllinoisNerHandler extends PipelineAnnotator
     private static final String FULL_NAME_PREFIX = "Illinois Named Entity Tagger";
     private static final String VERSION = "2.8.5-SNAPSHOT";
     public NERAnnotator nerAnnotator;
+    private String viewName;
 
-<<<<<<< HEAD
-    public IllinoisNerHandler(String config, String modelType) throws IOException {
-        super( FULL_NAME_PREFIX + " " + modelType, VERSION, SHORT_NAME_PREFIX + " " + modelType );
-        this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( config ,modelType);
-=======
     /**
      *
      * @param nonDefaultRm  a ResourceManager object containing any non-default NER flags
@@ -36,12 +33,12 @@ public class IllinoisNerHandler extends PipelineAnnotator
     public IllinoisNerHandler(ResourceManager nonDefaultRm, String viewName) throws IOException {
         super( FULL_NAME_PREFIX + " " + viewName, VERSION, SHORT_NAME_PREFIX + " " + viewName );
         this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( nonDefaultRm, viewName );
->>>>>>> updated to use new i-c-u, ner, etc.
+        this.viewName = viewName;
     }
 
     @Override
     public String getViewName() {
-        return ViewNames.NER_CONLL;
+        return viewName;
     }
 
     @Override
