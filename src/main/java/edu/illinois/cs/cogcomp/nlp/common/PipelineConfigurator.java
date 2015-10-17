@@ -6,9 +6,6 @@ import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 
 import java.util.Properties;
 
-/**
- * Created by mssammon on 9/11/15.
- */
 public class PipelineConfigurator extends Configurator
 {
 //    nerConllConfig   config/ner-conll-config-default.properties

@@ -78,7 +78,7 @@ public class StanfordDepHandler extends PipelineAnnotator{
 //                    e.printStackTrace();
                     }
                     int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
-                    Pair<String, Integer> nodePair = new Pair<String, Integer>(root.originalText(), tokenStart);
+                    Pair<String, Integer> nodePair = new Pair<>(root.originalText(), tokenStart);
                     tree = new Tree<>(nodePair);
                     populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
                 }
@@ -101,9 +101,9 @@ public class StanfordDepHandler extends PipelineAnnotator{
             return;
         for (IndexedWord child : depGraph.getChildren(root)) {
             int childPosition = getNodePosition(ta, child, sentId);
-            Pair<String, Integer> nodePair = new Pair<String, Integer>(child.originalText(), childPosition);
-            Tree<Pair<String, Integer>> childTree = new Tree<Pair<String, Integer>>(nodePair);
-            tree.addSubtree(childTree, new Pair<String,Integer>(depGraph.getEdge(root, child).toString(), childPosition));
+            Pair<String, Integer> nodePair = new Pair<>(child.originalText(), childPosition);
+            Tree<Pair<String, Integer>> childTree = new Tree<>(nodePair);
+            tree.addSubtree(childTree, new Pair<>(depGraph.getEdge(root, child).toString(), childPosition));
             populateChildren(depGraph, child, childTree, ta, sentId);
         }
     }
