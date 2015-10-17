@@ -27,7 +27,7 @@ import java.util.*;
  * useLemmatizer	[true|false]
  * useNerConll	[true|false]
  * useStanfordParse [true|false]
- * nerConfigFile   config/ner-conll-config.properties
+ * nerConfigFile   config/ner-conll-config-default.properties
  * lemmaCacheFile  data/lemmaCache.txt
  * updateLemmaCacheFile    true
  * maxLemmaCacheEntries    10000
@@ -37,9 +37,9 @@ import java.util.*;
  * If useChunker is 'true', usePos must also be 'true'.
  * IllinoisPreprocessor to provide. 
  * The flag 'nerConfigFile' specifies one of the two config
- *    files provided from the Illinois NER tool. "ner-conll-config.properties"
+ *    files provided from the Illinois NER tool. "ner-conll-config-default.properties"
  *    specifies the most standard 4-label model (PER, LOC, ORG, MISC),
- *    whereas "ner-ontonotes-config.properties" specifies a more complex
+ *    whereas "ner-ontonotes-config-default.properties" specifies a more complex
  *    18-label model (see the documentation for Illinois NER for 
  *    details). 
  * The next three flags specify properties of the lemmatizer cache; it will speed
@@ -70,7 +70,8 @@ public class IllinoisPreprocessor
     private IllinoisPOSHandler pos;
     private IllinoisLemmatizerHandler lemmatizer;
     private IllinoisChunkerHandler chunker;
-    private IllinoisNerHandler ner;
+    private IllinoisNerHandler nerConll;
+    private IllinoisNerHandler nerOntonotes;
     private StanfordParseHandler stanfordParse;
     private StanfordDepHandler stanfordDep;
 
@@ -135,18 +136,13 @@ public class IllinoisPreprocessor
         
         if (useNerConll)
         {
-        	String nerConfig = rm_.getString( PipelineVars.NER_CONLL_CONFIG );
-            //TODO What is modelType? Can it be used as a CoNLL vs Ontonotes?
-            // MS: that's the idea, but NERAnnotator is not set up to allow this.
-            // for now, we'll just use CoNLL.
-        	ner = new IllinoisNerHandler( nerConfig, ViewNames.NER_CONLL );
+        	nerConll = new IllinoisNerHandler( rm_, ViewNames.NER_CONLL );
         }
 
-//        if ( useNerOntonotes )
-//        {
-//            String nerConfig = rm_.getString( PipelineVars.NER_ONTONOTES_CONFIG );
-//            nerExt = new IllinoisNerExtHandler( nerConfig );
-//        }
+        if ( useNerOntonotes )
+        {
+            nerOntonotes = new IllinoisNerHandler( rm_, ViewNames.NER_ONTONOTES );
+        }
 
         if (useStanfordParse) {
         	// Add options to avoid splitting and tokenization errors
@@ -206,10 +202,10 @@ public class IllinoisPreprocessor
             lemmatizer.labelTextAnnotation(ta);
 
         if (useNerConll)
-            ner.labelTextAnnotation(ta);
-//
-//        if ( useNerOntonotes )
-//            nerExt.labelTextAnnotation(ta);
+            nerConll.labelTextAnnotation(ta);
+
+        if ( useNerOntonotes )
+            nerOntonotes.labelTextAnnotation(ta);
 
         if ( useStanfordParse )
            stanfordParse.labelTextAnnotation(ta);

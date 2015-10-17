@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 
 import java.io.IOException;
 
@@ -21,16 +21,16 @@ public class IllinoisNerHandler extends PipelineAnnotator
 
     /**
      *
-     * @param config
+     * @param nonDefaultRm  a ResourceManager object containing any non-default NER flags
      * @param viewName  the canonical name for this view.  Should usually be either ViewNames.NER_CONLL
      *                  or ViewNames.NER_ONTONOTES, but if you create a different NER model, you must
      *                  also create a new canonical name, extend the ViewNames class, and add the new
      *                  name as a constant there.
      * @throws IOException
      */
-    public IllinoisNerHandler(String config, String viewName) throws IOException {
+    public IllinoisNerHandler(ResourceManager nonDefaultRm, String viewName) throws IOException {
         super( FULL_NAME_PREFIX + " " + viewName, VERSION, SHORT_NAME_PREFIX + " " + viewName );
-        this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( config, viewName );
+        this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( nonDefaultRm, viewName );
     }
 
     @Override

@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService;
 import org.junit.*;
 import org.slf4j.Logger;
@@ -100,7 +101,7 @@ public class IllinoisNewPipelineTest
         start = System.currentTimeMillis();
         try {
             boolean forceUpdate = true;
-            prep.createAnnotatedTextAnnotation("", "", text, forceUpdate);
+            prep.createAnnotatedTextAnnotation("", "", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -115,7 +116,7 @@ public class IllinoisNewPipelineTest
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
             try {
-                prep.createAnnotatedTextAnnotation( "", "", text, forceUpdate );
+                prep.createAnnotatedTextAnnotation( "", "", text );
             } catch (AnnotatorException e) {
                 e.printStackTrace();
                 fail( e.getMessage() );
@@ -139,6 +140,7 @@ public class IllinoisNewPipelineTest
     @Test
     public void testPipelineProcessing()
     {
+        ( (SimpleCachingPipeline) prep ).setForceUpdate( true );
         if ( prep instanceof BasicAnnotatorService )
             try {
                 ( ( BasicAnnotatorService ) prep ).removeKeyFromCache(text);
@@ -149,8 +151,7 @@ public class IllinoisNewPipelineTest
 
         TextAnnotation ta = null;
         try {
-            boolean forceUpdate = false;
-            ta = prep.createAnnotatedTextAnnotation("", "", text, forceUpdate );
+            ta = prep.createAnnotatedTextAnnotation("", "", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -166,6 +167,9 @@ public class IllinoisNewPipelineTest
         assertTrue( ta.hasView( ViewNames.SENTENCE ) );
 
         assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 5);
+
+        ( (SimpleCachingPipeline) prep ).setForceUpdate( false );
+
     }
 
 
@@ -189,7 +193,7 @@ public class IllinoisNewPipelineTest
         boolean forceUpdate = true;
         TextAnnotation basicTextAnnotation = null;
         try {
-            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text, forceUpdate );
+            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -206,7 +210,7 @@ public class IllinoisNewPipelineTest
         }
 
         try {
-            prep.addView( basicTextAnnotation, ViewNames.PARSE_STANFORD, true );
+            prep.addView( basicTextAnnotation, ViewNames.PARSE_STANFORD );
         } catch (RuntimeException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -234,7 +238,7 @@ public class IllinoisNewPipelineTest
         TextAnnotation basicTextAnnotation = null;
         boolean forceUpdate = true;
         try {
-            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text, forceUpdate);
+            basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -250,7 +254,7 @@ public class IllinoisNewPipelineTest
         }
 
         try {
-            prep.addView( basicTextAnnotation, ViewNames.DEPENDENCY_STANFORD, true );
+            prep.addView( basicTextAnnotation, ViewNames.DEPENDENCY_STANFORD );
         } catch (RuntimeException e) {
             e.printStackTrace();
             System.out.println( "Expected exception from stanford. ");
