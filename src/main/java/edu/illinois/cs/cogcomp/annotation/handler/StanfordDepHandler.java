@@ -55,7 +55,7 @@ public class StanfordDepHandler extends PipelineAnnotator{
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
             SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
-            IndexedWord root = null;
+            IndexedWord root;
 
             try {
                 root = depGraph.getFirstRoot();
@@ -71,11 +71,13 @@ public class StanfordDepHandler extends PipelineAnnotator{
                 throw e;
             }
             int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
-            Pair<String, Integer> nodePair = new Pair<String, Integer>(root.originalText(), tokenStart);
-            Tree<Pair<String, Integer>> tree = new Tree<Pair<String, Integer>>(nodePair);
+            Pair<String, Integer> nodePair = new Pair<>(root.originalText(), tokenStart);
+            Tree<Pair<String, Integer>> tree = new Tree<>(nodePair);
             populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
             treeView.setDependencyTree(sentenceId, tree);
         }
+        textAnnotation.addView( getViewName(), treeView );
+
         return treeView;
     }
 
@@ -90,9 +92,9 @@ public class StanfordDepHandler extends PipelineAnnotator{
             return;
         for (IndexedWord child : depGraph.getChildren(root)) {
             int childPosition = getNodePosition(ta, child, sentId);
-            Pair<String, Integer> nodePair = new Pair<String, Integer>(child.originalText(), childPosition);
-            Tree<Pair<String, Integer>> childTree = new Tree<Pair<String, Integer>>(nodePair);
-            tree.addSubtree(childTree, new Pair<String,Integer>(depGraph.getEdge(root, child).toString(), childPosition));
+            Pair<String, Integer> nodePair = new Pair<>(child.originalText(), childPosition);
+            Tree<Pair<String, Integer>> childTree = new Tree<>(nodePair);
+            tree.addSubtree(childTree, new Pair<>(depGraph.getEdge(root, child).toString(), childPosition));
             populateChildren(depGraph, child, childTree, ta, sentId);
         }
     }

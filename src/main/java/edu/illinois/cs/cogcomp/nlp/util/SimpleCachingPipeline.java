@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.nlp.util;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
@@ -34,7 +34,8 @@ public class SimpleCachingPipeline implements AnnotatorService
 
     private final Map<String, Annotator> viewProviders;
     private final boolean throwExceptionIfNotCached;
-	public String pathToSaveCachedFiles = null;
+    public AnnotatorService processor = null;
+    public String pathToSaveCachedFiles = null;
     private TextAnnotationBuilder textAnnotationBuilder;
     private boolean forceUpdate;
 
@@ -104,23 +105,13 @@ public class SimpleCachingPipeline implements AnnotatorService
     }
 
 
-    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text) throws AnnotatorException {
-        TextAnnotation ta = textAnnotationBuilder.createTextAnnotation(corpusId, docId, text);
-        boolean forceUpdate = true;
-        String cacheFile;
-        try {
-            cacheFile = getSavePath( this.pathToSaveCachedFiles, text );
-            SerializationHelper.serializeTextAnnotationToFile(ta, cacheFile, forceUpdate );
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AnnotatorException( e.getMessage() );
-        }
-
-        return ta;
-    }
 
     /**
      * get the location of the file that corresponds to the given text and directory
+     * @param dir cache root
+     * @param text  text used as basis of key
+     * @return path to cached file location, whether it exists or not
+     * @throws Exception
      */
     public static String getSavePath(String dir, String text) throws Exception {
         String md5sum = getMD5Checksum(text);
@@ -137,6 +128,14 @@ public class SimpleCachingPipeline implements AnnotatorService
         return result;
     }
 
+
+    /**
+     *
+     * @param corpusId  a user-specified identifier for the collection the text comes from
+     * @param textId a user-specified identifier for the text
+     * @param text the text to annotate
+     * @return a TextAnnotation with views populated using the Annotators held by this object
+     */
     @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text) throws AnnotatorException {
 
@@ -159,6 +158,10 @@ public class SimpleCachingPipeline implements AnnotatorService
 
     /**
      * DOES NOT CACHE THE ADDED VIEW!!!
+     * @param textAnnotation textAnnotation to be modified
+     * @param viewName name of view to be added
+     * @return 'true' if textAnnotation was modified
+     * @throws AnnotatorException
      */
     @Override
     public boolean addView(TextAnnotation textAnnotation, String viewName) throws AnnotatorException
@@ -173,12 +176,12 @@ public class SimpleCachingPipeline implements AnnotatorService
             if ( !viewProviders.containsKey( viewName ) )
                 throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
 
-            isUpdated = true;
+            isUpdated = false;
             Annotator annotator = viewProviders.get( viewName );
 
             for ( String prereqView : annotator.getRequiredViews() )
             {
-                isUpdated = addView( textAnnotation, prereqView ) && isUpdated;
+                isUpdated = addView( textAnnotation, prereqView ) || isUpdated;
             }
 
             annotator.getView(textAnnotation);
@@ -193,14 +196,15 @@ public class SimpleCachingPipeline implements AnnotatorService
         boolean isUpdated = false;
 
         String cacheFile;
-        try {
-            cacheFile = getSavePath( this.pathToSaveCachedFiles, ta.getText() );
-            if (IOUtils.exists( cacheFile ) && !forceUpdate )
-                ta = SerializationHelper.deserializeTextAnnotationFromFile(cacheFile );
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new AnnotatorException( e.getMessage() );
-        }
+        if ( !forceUpdate )
+            try {
+                cacheFile = getSavePath( this.pathToSaveCachedFiles, ta.getText() );
+                if (IOUtils.exists( cacheFile ) && !forceUpdate )
+                    ta = SerializationHelper.deserializeTextAnnotationFromFile(cacheFile );
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new AnnotatorException( e.getMessage() );
+            }
 
         for (String viewName : viewsToAnnotate) {
             isUpdated = addView(ta, viewName ) || isUpdated;

@@ -7,13 +7,14 @@ import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import java.util.Properties;
 
 /**
+ * Default configuration for pipeline class
  * Created by mssammon on 9/11/15.
  */
 public class PipelineConfigurator extends Configurator
 {
-//    nerConllConfig   config/ner-conll-config.properties
-//    nerOntonotesConfig  config/ner-ontonotes-config.properties
-//    lemmaConfig config/lemmatizer-config.properties
+//    nerConllConfig   config/ner-conll-config-default.properties
+//    nerOntonotesConfig  config/ner-ontonotes-config-default.properties
+//    lemmaConfig config/lemmatizer-config-default.properties
 
     public static final String NER_CONLL_CONFIG = "nerConllConfig";
     public static final String NER_ONTONOTES_CONFIG = "nerOntonotesConfig";

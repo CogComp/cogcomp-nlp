@@ -70,6 +70,7 @@ public class IllinoisPipelineFactory
     /**
      * instantiate a set of annotators for use in an AnnotatorService object
      * @param nonDefaultRm ResourceManager with all non-default values for Annotators
+     * @return a Map from annotator view name to annotator
      */
     public static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm) throws IOException {
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);

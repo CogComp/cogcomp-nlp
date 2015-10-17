@@ -79,12 +79,13 @@ public class StanfordParseHandler extends PipelineAnnotator {
 
 
             edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-            Tree<String> tree = new Tree<String>(stanfordTree.value());
+            Tree<String> tree = new Tree<>(stanfordTree.value());
             for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
                 tree.addSubtree(generateNode(pt));
             }
             treeView.setParseTree(sentenceId, tree);
         }
+        textAnnotation.addView( getViewName(), treeView );
         return treeView;
     }
 
@@ -98,8 +99,8 @@ public class StanfordParseHandler extends PipelineAnnotator {
         View sentences = ta.getView(ViewNames.SENTENCE);
         String rawText = ta.getText();
 
-        List<CoreMap> stanfordSentences = new LinkedList<CoreMap>();
-        List<CoreLabel> stanfordTokens = new LinkedList<CoreLabel>();
+        List<CoreMap> stanfordSentences = new LinkedList<>();
+        List<CoreLabel> stanfordTokens = new LinkedList<>();
         int tokIndex = 0;
         int sentIndex = 0;
         Constituent currentSentence = sentences.getConstituents().get(0);
@@ -111,7 +112,7 @@ public class StanfordParseHandler extends PipelineAnnotator {
             if (tok.getStartSpan() >= currentSentence.getEndSpan()) {
                 CoreMap stanfordSentence = buildStanfordSentence(currentSentence, sentText, sentIndex++, stanfordTokens);
                 stanfordSentences.add(stanfordSentence);
-                stanfordTokens = new LinkedList<CoreLabel>();
+                stanfordTokens = new LinkedList<>();
                 currentSentence = sentences.getConstituents().get(sentIndex);
                 sentText = rawText.substring(currentSentence.getStartCharOffset(), currentSentence.getEndCharOffset());
             }
@@ -156,7 +157,7 @@ public class StanfordParseHandler extends PipelineAnnotator {
      * @return top Node of the Tree
      */
     private static Tree<String> generateNode(edu.stanford.nlp.trees.Tree parse) {
-        Tree<String> node = new Tree<String>(parse.value());
+        Tree<String> node = new Tree<>(parse.value());
 
         for (edu.stanford.nlp.trees.Tree pt : parse.getChildrenAsList()) {
             if (pt.isLeaf()) {
