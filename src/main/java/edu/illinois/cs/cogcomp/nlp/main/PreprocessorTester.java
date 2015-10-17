@@ -97,7 +97,7 @@ public class PreprocessorTester
 
         try
         {
-            rec = prep.createAnnotatedTextAnnotation("", "", text, forceUpdate );
+            rec = prep.createAnnotatedTextAnnotation("", "", text );
         }
         catch (AnnotatorException e)
         {

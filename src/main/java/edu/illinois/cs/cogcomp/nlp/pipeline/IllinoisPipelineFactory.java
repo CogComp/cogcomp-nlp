@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
@@ -27,9 +28,9 @@ import java.util.Properties;
 public class IllinoisPipelineFactory
 {
 
-    private static final String NER_CONLL_CONFIG = "nerConllConfig";
-    private static final String LEMMA_CONFIG = "lemmaConfig";
-    private static final java.lang.String NER_ONTONOTES_CONFIG = "nerOntonotesConfig";
+//    private static final String NER_CONLL_CONFIG = "nerConllConfig";
+//    private static final String LEMMA_CONFIG = "lemmaConfig";
+//    private static final java.lang.String NER_ONTONOTES_CONFIG = "nerOntonotesConfig";
 
     /**
      * Builds a complete pipeline with all the tools currently available,
@@ -57,16 +58,16 @@ public class IllinoisPipelineFactory
     public static AnnotatorService buildPipeline( ResourceManager nonDefaultRm ) throws IOException, AnnotatorException
     {
         ResourceManager rm = ( new PipelineConfigurator().getConfig( nonDefaultRm ) );
-        Map< String, Annotator > annotators = buildAnnotators( rm );
-        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
+//        Map< String, Annotator > annotators = buildAnnotators( rm );
+//        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+//        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
+//
+//
+//        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
+//        for ( String view : annotators.keySet() )
+//            requestedViews.put( view, false );
 
-
-        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-        for ( String view : annotators.keySet() )
-            requestedViews.put( view, false );
-
-        return new BasicAnnotatorService(taBuilder, annotators, rm);
+        return new SimpleCachingPipeline( rm );
     }
 
 
@@ -79,41 +80,52 @@ public class IllinoisPipelineFactory
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
         String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE );
         String maxParseSentenceLength = rm.getString( PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH );
-        String nerConllConfig = rm.getString( NER_CONLL_CONFIG );
-        String nerOntonotesConfig = rm.getString( NER_ONTONOTES_CONFIG );
+        Map< String, Annotator> viewGenerators = new HashMap<>();
 
-        String lemmaConfig = rm.getString( LEMMA_CONFIG );
+        if( rm.getBoolean( PipelineConfigurator.USE_POS ) ) {
+            IllinoisPOSHandler pos = new IllinoisPOSHandler();
+            viewGenerators.put(ViewNames.POS, pos);
+        }
+        if ( rm.getBoolean( PipelineConfigurator.USE_LEMMA ) )
+        {
+            IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( rm );
+            viewGenerators.put(ViewNames.LEMMA, lemma);
+        }
+        if ( rm.getBoolean( PipelineConfigurator.USE_SHALLOW_PARSE )) {
+            IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
+            viewGenerators.put(ViewNames.SHALLOW_PARSE, chunk);
+        }
+        if ( rm.getBoolean( PipelineConfigurator.USE_NER_CONLL ) ) {
+            IllinoisNerHandler nerConll = new IllinoisNerHandler(rm, ViewNames.NER_CONLL);
+            viewGenerators.put(ViewNames.NER_CONLL, nerConll);
+        }
+        if ( rm.getBoolean( PipelineConfigurator.USE_NER_ONTONOTES ) ) {
 
+            IllinoisNerHandler nerOntonotes = new IllinoisNerHandler(rm, ViewNames.NER_ONTONOTES);
+            viewGenerators.put(ViewNames.NER_ONTONOTES, nerOntonotes);
+        }
+        if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_DEP ) || rm.getBoolean( PipelineConfigurator.USE_STANFORD_PARSE ) )
+        {
+            Properties stanfordProps = new Properties();
+            stanfordProps.put( "annotators", "pos, parse") ;
+            stanfordProps.put("parse.originalDependencies", true);
+            stanfordProps.put( "parse.maxlen", maxParseSentenceLength );
+            stanfordProps.put( "parse.maxtime", timePerSentence ); // per sentence? could be per document but no idea from stanford javadoc
+            POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
+            ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
 
-        IllinoisPOSHandler pos = new IllinoisPOSHandler();
-        IllinoisChunkerHandler chunk = new IllinoisChunkerHandler();
-        IllinoisNerHandler nerConll = new IllinoisNerHandler( nerConllConfig, ViewNames.NER_CONLL );
-        IllinoisNerHandler nerOntonotes = new IllinoisNerHandler( nerOntonotesConfig, ViewNames.NER_ONTONOTES );
-        IllinoisLemmatizerHandler lemma = new IllinoisLemmatizerHandler( lemmaConfig );
+            if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_DEP ) )
+            {
+                StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
+                viewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
+            }
+            if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_PARSE ) )
+            {
+                StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
+                viewGenerators.put(ViewNames.PARSE_STANFORD, parser);
+            }
+        }
 
-
-        Properties stanfordProps = new Properties();
-        stanfordProps.put( "annotators", "pos, parse") ;
-        stanfordProps.put("parse.originalDependencies", true);
-        stanfordProps.put( "parse.maxlen", maxParseSentenceLength );
-        stanfordProps.put( "parse.maxtime", timePerSentence ); // per sentence? could be per document but no idea from stanford javadoc
-
-        POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
-        ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
-
-        StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
-        StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
-
-        Map< String, Annotator> extraViewGenerators = new HashMap<>();
-
-        extraViewGenerators.put( ViewNames.POS, pos );
-        extraViewGenerators.put( ViewNames.SHALLOW_PARSE, chunk );
-        extraViewGenerators.put( ViewNames.LEMMA, lemma );
-        extraViewGenerators.put( ViewNames.NER_CONLL, nerConll );
-        extraViewGenerators.put( ViewNames.NER_ONTONOTES, nerOntonotes);
-        extraViewGenerators.put( ViewNames.PARSE_STANFORD, parser );
-        extraViewGenerators.put( ViewNames.DEPENDENCY_STANFORD, depParser );
-
-        return extraViewGenerators;
+        return viewGenerators;
     }
 }

@@ -20,9 +20,7 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Created by mssammon on 9/21/15.
@@ -36,7 +34,11 @@ public class SimpleCachingPipelineTest
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
         Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.ACTIVE_VIEWS, "POS,SHALLOW_PARSE,NER_CONLL" );
+        props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES, Configurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_DEP, Configurator.TRUE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE, Configurator.FALSE );
+        props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE, Configurator.TRUE );
+
         props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR, "simple-annotation-cache" );
         props.setProperty( AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED, Configurator.FALSE );
         activeViews = new HashSet< String >();
@@ -52,6 +54,9 @@ public class SimpleCachingPipelineTest
     {
         String text = "The only way to limit a dog's creativity is to place a foul-smelling bone under its nose. " +
                 "For a cat, substitute a laser pointer for the bone.";
+
+        String corpusId = "test";
+        String textId = "testText";
 
         String fileName = null;
         try {
@@ -72,7 +77,7 @@ public class SimpleCachingPipelineTest
 
         boolean forceUpdate = true;
         try {
-            TextAnnotation annotatedText = processor.createAnnotatedTextAnnotation( "", "", text, forceUpdate );
+            TextAnnotation annotatedText = processor.createAnnotatedTextAnnotation( "", "", text );
 
             assertNotNull( annotatedText );
             assertTrue(annotatedText.hasView(ViewNames.POS));
@@ -108,11 +113,13 @@ public class SimpleCachingPipelineTest
         assertTrue( !( new File( fileName ) ).exists() );
 
         try {
-            ta = processor.createBasicTextAnnotation( "", "", text, forceUpdate );
+            TextAnnotation newTa = processor.createAnnotatedTextAnnotation(corpusId, textId, text );
 
-            boolean isUpdated = processor.addViewsAndCache( ta, activeViews, forceUpdate );
+//                    = processor.createBasicTextAnnotation( "", "", text, forceUpdate );
+//
+//            boolean isUpdated = processor.addViewsAndCache( ta, activeViews, forceUpdate );
 
-            assertTrue( isUpdated );
+            assertTrue( newTa.hasView( ViewNames.DEPENDENCY_STANFORD ));
         } catch (AnnotatorException e) {
             e.printStackTrace();
         }
@@ -130,6 +137,9 @@ public class SimpleCachingPipelineTest
 
         assertTrue( ta.hasView( ViewNames.NER_CONLL ) );
 
+    // checks that inactive components are not applied...
+        assertFalse( ta.hasView( ViewNames.PARSE_STANFORD ) );
 
     }
+
 }
