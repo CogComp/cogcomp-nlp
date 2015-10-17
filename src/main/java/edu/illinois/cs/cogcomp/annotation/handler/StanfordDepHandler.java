@@ -15,6 +15,8 @@ import edu.stanford.nlp.pipeline.ParserAnnotator;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ import java.util.List;
 public class StanfordDepHandler extends PipelineAnnotator{
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
+    private Logger logger = LoggerFactory.getLogger( StanfordDepHandler.class );
 
     public StanfordDepHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
         super("Stanford Dependency Parser", "3.3.1", "stanforddep");
@@ -51,14 +54,39 @@ public class StanfordDepHandler extends PipelineAnnotator{
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
-            SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
-            IndexedWord root = depGraph.getFirstRoot();
-            int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
-            Pair<String, Integer> nodePair = new Pair<String, Integer>(root.originalText(), tokenStart);
-            Tree<Pair<String, Integer>> tree = new Tree<Pair<String, Integer>>(nodePair);
-            populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
+            Tree<Pair<String, Integer>> tree = new Tree<>();
+            if (null == sentence)
+                logger.warn("Stanford Parser did not annotate sentence '" + sentenceId + "' for text '" +
+                        textAnnotation.getSentence(sentenceId).getText());
+            else {
+
+                SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
+                IndexedWord root = null;
+                if (null == depGraph)
+                    logger.warn("Stanford Dependency Parser did not annotate sentence '" + sentenceId + "' for text '" +
+                            textAnnotation.getSentence(sentenceId).getText());
+                else
+                {
+                    try {
+                        root = depGraph.getFirstRoot();
+                    } catch (RuntimeException e) {
+                        String msg = "ERROR in getting root of dep graph for sentence.  Sentence is:\n" +
+                                sentence.toString() + "'\nDependency graph is:\n" + depGraph.toCompactString() +
+                                "\nText is:\n" + textAnnotation.getText();
+                        logger.error(msg);
+                        System.err.println(msg);
+//                    e.printStackTrace();
+                    }
+                    int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
+                    Pair<String, Integer> nodePair = new Pair<>(root.originalText(), tokenStart);
+                    tree = new Tree<>(nodePair);
+                    populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
+                }
+            }
+
             treeView.setDependencyTree(sentenceId, tree);
         }
+        textAnnotation.addView( this.getViewName(), treeView );
         return treeView;
     }
 
@@ -73,9 +101,9 @@ public class StanfordDepHandler extends PipelineAnnotator{
             return;
         for (IndexedWord child : depGraph.getChildren(root)) {
             int childPosition = getNodePosition(ta, child, sentId);
-            Pair<String, Integer> nodePair = new Pair<String, Integer>(child.originalText(), childPosition);
-            Tree<Pair<String, Integer>> childTree = new Tree<Pair<String, Integer>>(nodePair);
-            tree.addSubtree(childTree, new Pair<String,Integer>(depGraph.getEdge(root, child).toString(), childPosition));
+            Pair<String, Integer> nodePair = new Pair<>(child.originalText(), childPosition);
+            Tree<Pair<String, Integer>> childTree = new Tree<>(nodePair);
+            tree.addSubtree(childTree, new Pair<>(depGraph.getEdge(root, child).toString(), childPosition));
             populateChildren(depGraph, child, childTree, ta, sentId);
         }
     }

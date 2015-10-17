@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 
 import java.io.File;
@@ -20,15 +21,24 @@ public class RunPreprocessor
 
     private AnnotatorService pipeline;
 
+    /**
+     * config may contain values that override defaults.
+     *
+     * @param config    config file specifying pipeline parameters. May contain values that override defaults.
+     * @throws Exception
+     */
     public RunPreprocessor( String config ) throws Exception {
-        ResourceManager rm = new ResourceManager( config );
-        pipeline = IllinoisPipelineFactory.buildPipeline(rm);
+        ResourceManager nonDefaultRm = new ResourceManager( config );
+
+        ResourceManager fullRm = ( new PipelineConfigurator() ).getConfig( nonDefaultRm );
+
+        pipeline = IllinoisPipelineFactory.buildPipeline(fullRm);
     }
 
 	public TextAnnotation runPreprocessorOnFile( String fileName ) throws FileNotFoundException, AnnotatorException {
         String text = LineIO.slurp( fileName );
         boolean forceUpdate = true; // in actual use, this will usually be 'false'
-        return pipeline.createAnnotatedTextAnnotation(text, forceUpdate);
+        return pipeline.createAnnotatedTextAnnotation("", "", text);
 	}
 
     public static void main( String[] args )
