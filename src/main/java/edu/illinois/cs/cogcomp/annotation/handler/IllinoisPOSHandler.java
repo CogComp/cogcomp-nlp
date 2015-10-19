@@ -2,9 +2,7 @@ package edu.illinois.cs.cogcomp.annotation.handler;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
@@ -59,7 +57,7 @@ public class IllinoisPOSHandler extends PipelineAnnotator
 
 
         List< Constituent > tokens = record.getView( ViewNames.TOKENS ).getConstituents();
-        View posView = new View( ViewNames.POS, getAnnotatorName(), record, 1.0 );
+		TokenLabelView posView = new TokenLabelView( ViewNames.POS, getAnnotatorName(), record, 1.0 );
 		int tcounter = 0;
 		for (Token lbjtoken : input) {
 			tagger.discreteValue(lbjtoken);

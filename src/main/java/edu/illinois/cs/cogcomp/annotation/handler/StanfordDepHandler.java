@@ -54,39 +54,30 @@ public class StanfordDepHandler extends PipelineAnnotator{
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
-            Tree<Pair<String, Integer>> tree = new Tree<>();
-            if (null == sentence)
-                logger.warn("Stanford Parser did not annotate sentence '" + sentenceId + "' for text '" +
-                        textAnnotation.getSentence(sentenceId).getText());
-            else {
+            SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
+            IndexedWord root;
 
-                SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
-                IndexedWord root = null;
-                if (null == depGraph)
-                    logger.warn("Stanford Dependency Parser did not annotate sentence '" + sentenceId + "' for text '" +
-                            textAnnotation.getSentence(sentenceId).getText());
-                else
-                {
-                    try {
-                        root = depGraph.getFirstRoot();
-                    } catch (RuntimeException e) {
-                        String msg = "ERROR in getting root of dep graph for sentence.  Sentence is:\n" +
-                                sentence.toString() + "'\nDependency graph is:\n" + depGraph.toCompactString() +
-                                "\nText is:\n" + textAnnotation.getText();
-                        logger.error(msg);
-                        System.err.println(msg);
-//                    e.printStackTrace();
-                    }
-                    int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
-                    Pair<String, Integer> nodePair = new Pair<>(root.originalText(), tokenStart);
-                    tree = new Tree<>(nodePair);
-                    populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
-                }
+            try {
+                root = depGraph.getFirstRoot();
             }
-
+            catch ( RuntimeException e )
+            {
+                String msg = "ERROR in getting root of dep graph for sentence.  Sentence is:\n" +
+                        sentence.toString() + "'\nDependency graph is:\n" + depGraph.toCompactString() +
+                        "\nText is:\n" + textAnnotation.getText();
+                logger.error( msg );
+                System.err.println( msg );
+                e.printStackTrace();
+                throw e;
+            }
+            int tokenStart = getNodePosition(textAnnotation, root, sentenceId);
+            Pair<String, Integer> nodePair = new Pair<>(root.originalText(), tokenStart);
+            Tree<Pair<String, Integer>> tree = new Tree<>(nodePair);
+            populateChildren(depGraph, root, tree, textAnnotation, sentenceId);
             treeView.setDependencyTree(sentenceId, tree);
         }
-        textAnnotation.addView( this.getViewName(), treeView );
+        textAnnotation.addView( getViewName(), treeView );
+
         return treeView;
     }
 

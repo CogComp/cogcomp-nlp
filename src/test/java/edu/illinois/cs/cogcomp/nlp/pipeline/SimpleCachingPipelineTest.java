@@ -21,6 +21,10 @@ import java.util.Properties;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests for SimpleCachingPipeline
+ * Created by mssammon on 9/21/15.
+ */
 public class SimpleCachingPipelineTest
 {
 
@@ -71,7 +75,7 @@ public class SimpleCachingPipelineTest
 
         assertTrue( !( new File( fileName ) ).exists() );
 
-		try {
+        try {
             TextAnnotation annotatedText = processor.createAnnotatedTextAnnotation( "", "", text );
 
             assertNotNull( annotatedText );
