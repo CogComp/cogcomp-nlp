@@ -91,11 +91,6 @@
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>LBJava</artifactId>
-			<version>1.0.3</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-common-resources</artifactId>
 			<version>1.1</version>
 			<scope>runtime</scope>
@@ -119,23 +114,16 @@
 		</dependency>
 	</dependencies>
 
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<links>
-						<link>http://download.oracle.com/javase/6/docs/api/</link>
-						<link>http://cogcomp.cs.illinois.edu/software/coreUtilities/apidocs/</link>
-					</links>
-					<show>public</show>
-				</configuration>
-
-			</plugin>
-		</plugins>
-	</reporting>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
 	<build>
 		<plugins>
 			<plugin>
@@ -193,6 +181,10 @@
 			<name>CogcompSoftware</name>
 			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
+        <site>
+            <id>CogcompSoftwareDoc</id>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${artifactId}</url>
+        </site>
 	</distributionManagement>
 
 </project>

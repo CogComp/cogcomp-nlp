@@ -236,7 +236,7 @@ public class IllinoisPreprocessor
     protected void setSupportedViews()
     {
         if ( null == this.supportedViews) {
-            this.supportedViews = new HashMap<String, Boolean>();
+            this.supportedViews = new HashMap<>();
         }
         if ( supportedViews.isEmpty() )
         {
@@ -266,7 +266,7 @@ public class IllinoisPreprocessor
     private void setActiveViews()
     {
         if ( null == activeViews )
-            activeViews = new HashSet<String>();
+            activeViews = new HashSet<>();
 
         activeViews.addAll( supportedViews.keySet() );
 

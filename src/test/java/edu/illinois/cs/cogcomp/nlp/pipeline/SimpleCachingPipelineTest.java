@@ -18,11 +18,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Properties;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 
 /**
+ * Tests for SimpleCachingPipeline
  * Created by mssammon on 9/21/15.
  */
 public class SimpleCachingPipelineTest
@@ -41,7 +41,7 @@ public class SimpleCachingPipelineTest
 
         props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR, "simple-annotation-cache" );
         props.setProperty( AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED, Configurator.FALSE );
-        activeViews = new HashSet< String >();
+        activeViews = new HashSet<>();
         activeViews.add( ViewNames.POS );
         activeViews.add( ViewNames.SHALLOW_PARSE );
         activeViews.add( ViewNames.NER_CONLL );
@@ -60,7 +60,7 @@ public class SimpleCachingPipelineTest
 
         String fileName = null;
         try {
-            fileName = (( SimpleCachingPipeline ) processor).getSavePath( ( (SimpleCachingPipeline) processor).pathToSaveCachedFiles, text);
+            fileName = SimpleCachingPipeline.getSavePath(((SimpleCachingPipeline) processor).pathToSaveCachedFiles, text);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -75,7 +75,6 @@ public class SimpleCachingPipelineTest
 
         assertTrue( !( new File( fileName ) ).exists() );
 
-        boolean forceUpdate = true;
         try {
             TextAnnotation annotatedText = processor.createAnnotatedTextAnnotation( "", "", text );
 
@@ -114,11 +113,6 @@ public class SimpleCachingPipelineTest
 
         try {
             TextAnnotation newTa = processor.createAnnotatedTextAnnotation(corpusId, textId, text );
-
-//                    = processor.createBasicTextAnnotation( "", "", text, forceUpdate );
-//
-//            boolean isUpdated = processor.addViewsAndCache( ta, activeViews, forceUpdate );
-
             assertTrue( newTa.hasView( ViewNames.DEPENDENCY_STANFORD ));
         } catch (AnnotatorException e) {
             e.printStackTrace();
@@ -137,7 +131,7 @@ public class SimpleCachingPipelineTest
 
         assertTrue( ta.hasView( ViewNames.NER_CONLL ) );
 
-    // checks that inactive components are not applied...
+		// checks that inactive components are not applied...
         assertFalse( ta.hasView( ViewNames.PARSE_STANFORD ) );
 
     }

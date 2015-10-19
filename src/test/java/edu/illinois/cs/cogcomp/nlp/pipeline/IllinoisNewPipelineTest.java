@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
@@ -16,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -87,20 +84,14 @@ public class IllinoisNewPipelineTest
         logger.debug("starting testCacheTiming test");
 
         // so that it is slow!
-        if ( prep instanceof BasicAnnotatorService )
-        try {
-            ( ( BasicAnnotatorService ) prep ).removeKeyFromCache(text);
-        } catch (AnnotatorException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
-
+        if ( prep instanceof SimpleCachingPipeline )
+            ((SimpleCachingPipeline) prep).setForceUpdate( true );
         long start, end, duration, total = 0;
 
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
         try {
-            boolean forceUpdate = true;
+
             prep.createAnnotatedTextAnnotation("", "", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
@@ -112,7 +103,6 @@ public class IllinoisNewPipelineTest
         logger.debug("original annotation cost: " + firsttotal + " milliseconds");
 
         int n = 5;
-        boolean forceUpdate = false;
         for (int j = 0; j < n; j++) {
             start = System.currentTimeMillis();
             try {
@@ -140,7 +130,7 @@ public class IllinoisNewPipelineTest
     @Test
     public void testPipelineProcessing()
     {
-        ( (SimpleCachingPipeline) prep ).setForceUpdate( true );
+        ( (SimpleCachingPipeline) prep ).setForceUpdate(true);
         if ( prep instanceof BasicAnnotatorService )
             try {
                 ( ( BasicAnnotatorService ) prep ).removeKeyFromCache(text);
@@ -162,13 +152,13 @@ public class IllinoisNewPipelineTest
         assertTrue( ta.hasView( ViewNames.POS ) );
         assertTrue( ta.hasView( ViewNames.PARSE_STANFORD ) );
         assertTrue( ta.hasView( ViewNames.DEPENDENCY_STANFORD ) );
-        assertTrue( ta.hasView( ViewNames.SHALLOW_PARSE ) );
+        assertTrue(ta.hasView(ViewNames.SHALLOW_PARSE));
         assertTrue( ta.hasView( ViewNames.LEMMA ) );
         assertTrue( ta.hasView( ViewNames.SENTENCE ) );
 
         assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 5);
 
-        ( (SimpleCachingPipeline) prep ).setForceUpdate( false );
+        ( (SimpleCachingPipeline) prep ).setForceUpdate(false);
 
     }
 
@@ -190,7 +180,6 @@ public class IllinoisNewPipelineTest
             e.printStackTrace();
             fail( e.getMessage() );
         }
-        boolean forceUpdate = true;
         TextAnnotation basicTextAnnotation = null;
         try {
             basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
@@ -211,9 +200,6 @@ public class IllinoisNewPipelineTest
 
         try {
             prep.addView( basicTextAnnotation, ViewNames.PARSE_STANFORD );
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            fail(e.getMessage());
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail( e.getMessage() );
@@ -236,7 +222,6 @@ public class IllinoisNewPipelineTest
         }
 
         TextAnnotation basicTextAnnotation = null;
-        boolean forceUpdate = true;
         try {
             basicTextAnnotation = prep.createBasicTextAnnotation("test", "test", text);
         } catch (AnnotatorException e) {

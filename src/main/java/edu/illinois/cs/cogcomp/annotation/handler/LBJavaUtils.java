@@ -26,7 +26,7 @@ public class LBJavaUtils {
      * If part of speech is present in record, it is added to the LBJ tokens.
      */
     public static List<Token> recordToLBJTokens(TextAnnotation record) {
-        List<Token> lbjTokens = new LinkedList<Token>();
+        List<Token> lbjTokens = new LinkedList<>();
         List<List<String>> sentences = tokensAsStrings(record.getView(ViewNames.TOKENS).getConstituents(),
                 record.getView( ViewNames.SENTENCE).getConstituents(),
                 record.getText());
@@ -86,7 +86,7 @@ public class LBJavaUtils {
     public static List<List<String>> tokensAsStrings(List<Constituent> tokens,
                                                       List<Constituent> sentences,
                                                       String rawText) {
-        List<List<String>> strTokens = new ArrayList<List<String>>();
+        List<List<String>> strTokens = new ArrayList<>();
         int sentNum = 0;
         Constituent sentence = sentences.get(sentNum);
         strTokens.add(new ArrayList<String>());

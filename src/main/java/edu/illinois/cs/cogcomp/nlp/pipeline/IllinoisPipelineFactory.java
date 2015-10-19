@@ -7,11 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService;
-import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 
@@ -74,7 +70,11 @@ public class IllinoisPipelineFactory
     /**
      * instantiate a set of annotators for use in an AnnotatorService object
      * @param nonDefaultRm ResourceManager with all non-default values for Annotators
+<<<<<<< HEAD
      * @return
+=======
+     * @return a Map from annotator view name to annotator
+>>>>>>> master
      */
     public static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm) throws IOException {
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
