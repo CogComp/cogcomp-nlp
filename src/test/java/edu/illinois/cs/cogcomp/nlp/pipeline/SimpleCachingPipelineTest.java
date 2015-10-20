@@ -34,13 +34,13 @@ public class SimpleCachingPipelineTest
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
         Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_STANFORD_DEP, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE, Configurator.FALSE );
-        props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE, Configurator.TRUE );
+        props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.TRUE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE );
+        props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.TRUE );
 
-        props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR, "simple-annotation-cache" );
-        props.setProperty( AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED, Configurator.FALSE );
+        props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR.key, "simple-annotation-cache" );
+        props.setProperty( AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED.key, Configurator.FALSE );
         activeViews = new HashSet<>();
         activeViews.add( ViewNames.POS );
         activeViews.add( ViewNames.SHALLOW_PARSE );
