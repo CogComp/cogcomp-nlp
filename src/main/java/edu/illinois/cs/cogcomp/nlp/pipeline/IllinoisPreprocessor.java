@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilderInterface;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -58,7 +58,7 @@ import java.util.*;
 public class IllinoisPreprocessor
 {
 	private static final String NAME = IllinoisPreprocessor.class.getCanonicalName();
-    private final TextAnnotationBuilderInterface textAnnotationBuilder;
+    private final TextAnnotationBuilder textAnnotationBuilder;
     private boolean usePos;
     private boolean useLemmatizer;
     private boolean useChunker;
@@ -91,7 +91,7 @@ public class IllinoisPreprocessor
      * @param rm_ The ResourceManager object
      * @throws Exception
      */
-    public IllinoisPreprocessor( ResourceManager rm_, TextAnnotationBuilderInterface taBuilder ) throws Exception
+    public IllinoisPreprocessor( ResourceManager rm_, TextAnnotationBuilder taBuilder ) throws Exception
     {
         this.textAnnotationBuilder = taBuilder;
         usePos = rm_.getBoolean( PipelineVars.USE_POS );
