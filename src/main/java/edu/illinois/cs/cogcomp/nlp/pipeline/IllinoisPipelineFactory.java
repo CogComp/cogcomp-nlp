@@ -48,9 +48,7 @@ public class IllinoisPipelineFactory
      *    when NER is updated, set it up to allow multiple different NER components with different models
      * @param nonDefaultRm    ResourceManager with properties for config files, caching behavior
      * @return  an AnnotatorService object with a suite of NLP components.
-     * @throws IOException
      */
-
     public static AnnotatorService buildPipeline( ResourceManager nonDefaultRm ) throws IOException, AnnotatorException
     {
         ResourceManager rm = ( new PipelineConfigurator().getConfig( nonDefaultRm ) );
@@ -64,6 +62,15 @@ public class IllinoisPipelineFactory
 //            requestedViews.put( view, false );
 
         return new SimpleCachingPipeline( rm );
+    }
+
+    /**
+     * Overloaded builder with default configuration.
+     * @return an {@link AnnotatorService} object with a suite of NLP components.
+     */
+    public static AnnotatorService buildPipeline() throws IOException, AnnotatorException
+    {
+        return new SimpleCachingPipeline(( new PipelineConfigurator().getDefaultConfig() ));
     }
 
 
