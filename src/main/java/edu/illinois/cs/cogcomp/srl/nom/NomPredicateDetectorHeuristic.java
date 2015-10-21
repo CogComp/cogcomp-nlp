@@ -1,13 +1,14 @@
 package edu.illinois.cs.cogcomp.srl.nom;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexEntry;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexEntry.NomLexClasses;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexReader;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.srl.core.AbstractPredicateDetector;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
@@ -24,7 +25,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 	static {
 
-		nonStandard = new HashMap<String, String>();
+		nonStandard = new HashMap<>();
 
 		nonStandard.put("bondholder", "holder");
 		nonStandard.put("earthquake", "quake");
@@ -41,12 +42,12 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 		nonStandard.put("startup", "start-up");
 		nonStandard.put("eurobond", "bond");
 
-		pluralLemmas = new HashSet<String>();
+		pluralLemmas = new HashSet<>();
 		pluralLemmas.addAll(Arrays.asList("filers", "hundreds", "thousands",
 				"millions", "billions", "tens"));
 
 		// All NomLex classes are accounted for here.
-		classes = new HashSet<NomLexClasses>();
+		classes = new HashSet<>();
 		classes.addAll(NomLexEntry.VERBAL);
 		classes.addAll(NomLexEntry.ADJECTIVAL);
 		classes.addAll(NomLexEntry.NON_VERB_ADJ);
@@ -63,20 +64,21 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 	@Override
 	public Option<String> getLemma(TextAnnotation ta, int tokenId) {
 
-		String pos = WordHelpers.getPOS(ta, tokenId);
+		String pos = POSUtils.getPOS(ta, tokenId);
 
 		boolean isNoun = POSUtils.isPOSNoun(pos);
 		if (!isNoun) {
 			return Option.empty();
 		} else {
 
-			Option<String> opt = Option.empty();
+			Option<String> opt;
 			String token = ta.getToken(tokenId).toLowerCase();
 			if (pluralLemmas.contains(token)) {
 				opt = testTokenVariations(token);
 			} else {
 
-				String lemma = WordHelpers.getLemma(ta, tokenId);
+				TokenLabelView lemmaView = (TokenLabelView) ta.getView(ViewNames.LEMMA);
+				String lemma = lemmaView.getConstituentAtToken(tokenId).getLabel();
 
 				opt = testTokenVariations(lemma);
 
@@ -117,7 +119,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 	private Option<String> testTokenVariations(String token) {
 
-		Option<String> opt = Option.empty();
+		Option<String> opt;
 		if (nomLex.isPlural(token)) {
 			token = nomLex.getSingular(token);
 		}
@@ -138,9 +140,9 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 			}
 			// hard coded lemma for bookmaker, steelmaker, downpayments, etc
 			if (token.endsWith("maker") || token.endsWith("makers"))
-				opt = new Option<String>("maker");
+				opt = new Option<>("maker");
 			else if (token.endsWith("payment") || token.endsWith("payments"))
-				opt = new Option<String>("payment");
+				opt = new Option<>("payment");
 		}
 
 		if (!opt.isPresent()) {
@@ -187,7 +189,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 			for (NomLexEntry e : entry) {
 				if (classes.contains(e.nomClass)) {
-					found = new Option<String>(token);
+					found = new Option<>(token);
 					break;
 				}
 			}

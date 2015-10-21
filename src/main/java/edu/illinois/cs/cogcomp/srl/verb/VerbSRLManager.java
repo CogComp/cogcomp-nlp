@@ -1,8 +1,9 @@
 package edu.illinois.cs.cogcomp.srl.verb;
 
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.data.FramesManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,11 +41,10 @@ public class VerbSRLManager extends SRLManager {
 			"17", "18", "19", "20", "21" };
 
 	public final static Set<String> coreArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays.asList(coreArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(coreArguments)));
 
 	public static final Set<String> modifierArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays
-					.asList(modifierArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(modifierArguments)));
 
 	private ArgumentCandidateGenerator candidateGenerator;
 

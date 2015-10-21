@@ -1,10 +1,11 @@
 package edu.illinois.cs.cogcomp.srl.core;
 
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 
 import java.util.List;
+
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
  * The base class for argument candidate generators.
@@ -27,8 +28,7 @@ public abstract class ArgumentCandidateGenerator {
 	protected Constituent getNewConstituent(TextAnnotation ta,
 			Constituent predicateClone, int start, int end) {
 
-		Constituent newConstituent = new Constituent("", 1.0,
-				getCandidateViewName(), ta, start, end);
+		Constituent newConstituent = new Constituent("", 1.0, getCandidateViewName(), ta, start, end);
 
 		new Relation("ChildOf", predicateClone, newConstituent, 1.0);
 		return newConstituent;

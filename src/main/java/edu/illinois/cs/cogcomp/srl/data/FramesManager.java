@@ -57,13 +57,13 @@ public class FramesManager {
 		return NOM_INSTANCE;
 	}
 
-	private static final Set<String> prepositions = new HashSet<String>(
-			Arrays.asList(new String[] { "about", "above", "across", "after",
-					"against", "along", "among", "around", "as", "at",
-					"before", "behind", "beneath", "beside", "between", "by",
-					"down", "during", "for", "from", "in", "inside", "into",
-					"like", "of", "off", "on", "onto", "over", "round",
-					"through", "to", "towards", "with" }));
+	private static final Set<String> prepositions = new HashSet<>(
+            Arrays.asList(new String[]{"about", "above", "across", "after",
+                    "against", "along", "among", "around", "as", "at",
+                    "before", "behind", "beneath", "beside", "between", "by",
+                    "down", "during", "for", "from", "in", "inside", "into",
+                    "like", "of", "off", "on", "onto", "over", "round",
+                    "through", "to", "towards", "with"}));
 
 	public static final String UNKNOWN_VERB_CLASS = "UNKNOWN";
 
@@ -80,7 +80,7 @@ public class FramesManager {
 
 	private void readFrameData(String dir) throws Exception {
 
-		frameData = new HashMap<String, FrameData>();
+		frameData = new HashMap<>();
 
 		File framesetFile = new File(dir + File.separator + "frameset.dtd");
 
@@ -202,8 +202,8 @@ public class FramesManager {
 
 			NodeList args = example.getElementsByTagName("arg");
 
-			Map<String, String> argDescriptions = new HashMap<String, String>();
-			Map<String, String> argExamples = new HashMap<String, String>();
+			Map<String, String> argDescriptions = new HashMap<>();
+			Map<String, String> argExamples = new HashMap<>();
 
 			for (int argId = 0; argId < args.getLength(); argId++) {
 				Element arg = (Element) args.item(argId);

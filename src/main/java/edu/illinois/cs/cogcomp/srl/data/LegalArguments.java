@@ -1,14 +1,15 @@
 package edu.illinois.cs.cogcomp.srl.data;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +23,7 @@ public class LegalArguments {
 
 	private final static Logger log = LoggerFactory.getLogger(LegalArguments.class);
 
-	private final Map<String, Set<String>> legalArgs = new HashMap<String, Set<String>>();
+	private final Map<String, Set<String>> legalArgs = new HashMap<>();
 
 	public LegalArguments(String file) throws Exception {
 		List<URL> list = IOUtils.lsResources(LegalArguments.class, file);
@@ -45,7 +46,7 @@ public class LegalArguments {
 
 				String lemma = strings[0].trim();
 
-				Set<String> set = new HashSet<String>(Arrays.asList(strings[1].split("\\s+")));
+				Set<String> set = new HashSet<>(Arrays.asList(strings[1].split("\\s+")));
 
 				set.add(SRLManager.NULL_LABEL);
 				legalArgs.put(lemma, Collections.unmodifiableSet(set));
@@ -67,7 +68,7 @@ public class LegalArguments {
 			SRLType SRLType) throws FileNotFoundException {
 
 		String outputFile = SRLType + ".legal.arguments";
-		Map<String, Set<String>> legalArgs = new HashMap<String, Set<String>>();
+		Map<String, Set<String>> legalArgs = new HashMap<>();
 
 		while (data.hasNext()) {
 			TextAnnotation ta = data.next();
@@ -79,7 +80,7 @@ public class LegalArguments {
 			for (Constituent predicate : srl.getPredicates()) {
 				String lemma = srl.getPredicateLemma(predicate);
 
-				Set<String> legal = new HashSet<String>();
+				Set<String> legal = new HashSet<>();
 
 				for (Relation r : srl.getArguments(predicate)) {
 					legal.add(r.getRelationName());

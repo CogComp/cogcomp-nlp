@@ -4,14 +4,15 @@ import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
+import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.jlis.*;
@@ -23,7 +24,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 	protected final FeatureVectorCacheFile cacheDB;
 
-	protected final List<PreExtractRecord> buffer = new ArrayList<PreExtractRecord>();
+	protected final List<PreExtractRecord> buffer = new ArrayList<>();
 
 	protected final SRLManager manager;
 	private AtomicInteger taCounter = new AtomicInteger();
@@ -47,13 +48,10 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 			manager.getModelInfo(Models.Identifier).loadWeightVector();
 
 		lexicon = manager.getModelInfo(modelToExtract).getLexicon();
-
-//		TextPreProcessor.initialize(true);
 	}
 
 	@Override
-	protected void initialize() {
-	}
+	protected void initialize() { }
 
 	@Override
 	protected boolean prerequisiteCheck(TextAnnotation ta) {
@@ -69,7 +67,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 				AbstractPredicateDetector detector = manager.getHeuristicPredicateDetector();
 				List<Constituent> predicates = detector.getPredicates(ta);
 
-				Set<IntPair> gold = new HashSet<IntPair>();
+				Set<IntPair> gold = new HashSet<>();
 				if (ta.hasView(manager.getGoldViewName())) {
 					PredicateArgumentView pav = (PredicateArgumentView) ta.getView(manager.getGoldViewName());
 
@@ -81,7 +79,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 					SRLMulticlassInstance predicateInstance = new SRLMulticlassInstance(c, c, manager);
 
 					int label = gold.contains(c.getSpan()) ? 1 : 0;
-					SRLMulticlassLabel y = new SRLMulticlassLabel(predicateInstance, label, Models.Predicate, manager);
+					SRLMulticlassLabel y = new SRLMulticlassLabel(label, Models.Predicate, manager);
 
 					consumeInstance(predicateInstance, y);
 
@@ -150,20 +148,14 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 	@Override
 	protected List<TextAnnotation> process(TextAnnotation ta) {
-		//TODO Check if this needed
-//		try {
-//			TextPreProcessor.getInstance().preProcessText(ta);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-		return Arrays.asList(ta);
+		return Collections.singletonList(ta);
 	}
 
 	protected void consumeInstance(SRLMulticlassInstance x, SRLMulticlassLabel y) throws Exception {
 		countFeatures(x);
 
 		synchronized (buffer) {
-			FeatureVector fv = x.getCachedFeatureVector(modelToExtract);
+			IFeatureVector fv = x.getCachedFeatureVector(modelToExtract);
 			assert fv != null;
 			buffer.add(new PreExtractRecord(x.getPredicateLemma(), y.getLabel(), fv));
 		}
@@ -210,8 +202,8 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 		Set<Feature> feats = modelInfo.fex.getFeatures(x.getConstituent());
 
 		// This is the only place where a new feature can be added to the lexicon.
-		List<Integer> ids = new ArrayList<Integer>();
-		List<Float> values = new ArrayList<Float>();
+		List<Integer> ids = new ArrayList<>();
+		List<Float> values = new ArrayList<>();
 		synchronized (lexicon) {
 			for (Feature f : feats) {
 				if (addNewFeatures) {
@@ -228,10 +220,8 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 				values.add(f.getValue());
 			}
 		}
-
-		x.cacheFeatureVector(modelToExtract,
-				new FeatureVector(ArrayUtilities.asIntArray(ids),
-						ArrayUtilities.asFloatArray(values)));
+		FeatureVectorBuffer tmp = new FeatureVectorBuffer(ArrayUtilities.asIntArray(ids), ArrayUtilities.asFloatArray(values));
+		x.cacheFeatureVector(modelToExtract,tmp.toFeatureVector());
 	}
 
 	public void lockLexicon() {

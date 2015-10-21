@@ -32,7 +32,7 @@ public class NoOverlapConstraint extends SRLILPConstraintGenerator {
 
 		String type = manager.getPredictedViewName();
 
-		final Map<Integer, Set<Integer>> wordToCandidateId = new HashMap<Integer, Set<Integer>>();
+		final Map<Integer, Set<Integer>> wordToCandidateId = new HashMap<>();
 
 		List<SRLMulticlassInstance> candidates = x.getCandidateInstances();
 
@@ -48,7 +48,7 @@ public class NoOverlapConstraint extends SRLILPConstraintGenerator {
 
 		}
 
-		Set<Set<Integer>> overlaps = new HashSet<Set<Integer>>();
+		Set<Set<Integer>> overlaps = new HashSet<>();
 		for (int wordId : wordToCandidateId.keySet()) {
 			overlaps.add(wordToCandidateId.get(wordId));
 		}
@@ -57,7 +57,7 @@ public class NoOverlapConstraint extends SRLILPConstraintGenerator {
 
 		int nullId = manager.getArgumentId(SRLManager.NULL_LABEL);
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (Set<Integer> cands : overlaps) {
 			if (cands.size() == 1)
@@ -109,7 +109,7 @@ public class NoOverlapConstraint extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
 			SRLPredicateInstance xp = x.predicates.get(predicateId);

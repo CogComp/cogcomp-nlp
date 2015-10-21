@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,16 +30,14 @@ public abstract class AbstractPredicateDetector {
 			throws Exception;
 
 	public List<Constituent> getPredicates(TextAnnotation ta) throws Exception {
-		List<Constituent> list = new ArrayList<Constituent>();
+		List<Constituent> list = new ArrayList<>();
 
 		for (int i = 0; i < ta.size(); i++) {
-
-			Option<String> opt = getLemma(ta, i);
+            Option<String> opt = getLemma(ta, i);
 
 			if (opt.isPresent()) {
 				Constituent c = new Constituent("", "", ta, i, i + 1);
-				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
-						opt.get());
+				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, opt.get());
 				list.add(c);
 			}
 		}

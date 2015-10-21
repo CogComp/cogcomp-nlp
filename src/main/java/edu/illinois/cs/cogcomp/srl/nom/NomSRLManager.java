@@ -1,8 +1,9 @@
 package edu.illinois.cs.cogcomp.srl.nom;
 
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.data.FramesManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +14,7 @@ import java.util.TreeSet;
 
 public class NomSRLManager extends SRLManager {
 
-	private final static Logger log = LoggerFactory
-			.getLogger(NomSRLManager.class);
+	private final static Logger log = LoggerFactory.getLogger(NomSRLManager.class);
 
 	// XXX: Don't change these arrays unless you know what you are doing. If you
 	// change the order of elements, or adding or removing elements, then you
@@ -37,11 +37,10 @@ public class NomSRLManager extends SRLManager {
 			"06", "07", "08", "09", "10", "11", "12", "13", "14" };
 
 	public final static Set<String> coreArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays.asList(coreArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(coreArguments)));
 
 	public static final Set<String> modifierArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<String>(Arrays
-					.asList(modifierArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(modifierArguments)));
 
 	private ArgumentCandidateGenerator candidateGenerator;
 	private final AbstractPredicateDetector heuristicPredicateDetector;
@@ -50,9 +49,7 @@ public class NomSRLManager extends SRLManager {
 		super(trainingMode, defaultParser);
 		candidateGenerator = new NomArgumentCandidateGenerator(this);
 
-		this.heuristicPredicateDetector = new NomPredicateDetectorHeuristic(
-				this);
-
+		this.heuristicPredicateDetector = new NomPredicateDetectorHeuristic(this);
 	}
 
 	@Override

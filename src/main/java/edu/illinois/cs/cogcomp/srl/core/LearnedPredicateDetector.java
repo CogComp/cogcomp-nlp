@@ -1,11 +1,11 @@
 package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.View;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
@@ -56,10 +56,12 @@ public class LearnedPredicateDetector extends AbstractPredicateDetector {
 			Set<Feature> features = manager.getModelInfo(Models.Predicate).fex.getFeatures(c);
 			x.cacheFeatureVector(Models.Predicate, features);
 
-			SRLMulticlassLabel y0 = new SRLMulticlassLabel(x, 0, Models.Predicate, manager);
-			SRLMulticlassLabel y1 = new SRLMulticlassLabel(x, 1, Models.Predicate, manager);
+			SRLMulticlassLabel y0 = new SRLMulticlassLabel(0, Models.Predicate, manager);
+			SRLMulticlassLabel y1 = new SRLMulticlassLabel(1, Models.Predicate, manager);
+			double score1= w.dotProduct(x.getCachedFeatureVector(Models.Predicate),1 * manager.getModelInfo(Models.Predicate).getLexicon().size());
+			double score2= w.dotProduct(x.getCachedFeatureVector(Models.Predicate));
 
-			double score = w.dotProduct(y1.getFeatureVector()) - w.dotProduct(y0.getFeatureVector());
+			double score = score1 - score2;
 
 			if (debug) {
 				System.out.println("Score = " + score);
@@ -68,7 +70,7 @@ public class LearnedPredicateDetector extends AbstractPredicateDetector {
 		}
 
 		if (isPredicate) {
-			return new Option<String>(lemma);
+			return new Option<>(lemma);
 		} else
 			return Option.empty();
 

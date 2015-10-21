@@ -2,11 +2,12 @@ package edu.illinois.cs.cogcomp.srl.jlis;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.ModelInfo;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -20,7 +21,7 @@ public class SRLMulticlassInstance implements IInstance {
 
 	private final Constituent c;
 
-	private final Map<Models, FeatureVector> features;
+	private final Map<Models, IFeatureVector> features;
 	private String predicateLemma;
 
 	private final Constituent predicate;
@@ -33,7 +34,7 @@ public class SRLMulticlassInstance implements IInstance {
 		this.manager = manager;
 		predicateLemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
 
-		features = new ConcurrentHashMap<Models, FeatureVector>();
+		features = new ConcurrentHashMap<>();
 	}
 
 	public SRLMulticlassInstance(Models model, String lemma, String features) {
@@ -41,12 +42,11 @@ public class SRLMulticlassInstance implements IInstance {
 		this.predicate = null;
 		this.predicateLemma = lemma;
 
-		this.features = new ConcurrentHashMap<Models, FeatureVector>();
+		this.features = new ConcurrentHashMap<>();
 
 		this.cacheFeatureVector(model, getFeatureVector(features));
 	}
 
-	@Override
 	public double size() {
 		return 1;
 	}
@@ -57,21 +57,20 @@ public class SRLMulticlassInstance implements IInstance {
 
 	@Override
 	public String toString() {
-		return "SRLMulticlassInstance [cand=" + c + ", predicate="
-				+ predicateLemma + "]";
+		return "SRLMulticlassInstance [cand=" + c + ", predicate=" + predicateLemma + "]";
 	}
 
-	public void cacheFeatureVector(Models m, FeatureVector f) {
+	public void cacheFeatureVector(Models m, IFeatureVector f) {
 		assert !features.containsKey(m);
 		features.put(m, f);
 	}
 
-	public FeatureVector getCachedFeatureVector(Models m) {
+	public IFeatureVector getCachedFeatureVector(Models m) {
 		assert features.containsKey(m);
 		return features.get(m);
 	}
 
-	private FeatureVector getFeatureVector(String features) {
+	private IFeatureVector getFeatureVector(String features) {
 		String[] parts = features.split(" ");
 		int[] idx = new int[parts.length];
 		float[] vals = new float[parts.length];
@@ -83,7 +82,7 @@ public class SRLMulticlassInstance implements IInstance {
 			vals[i] = Float.parseFloat(f[1]);
 		}
 
-		return new FeatureVector(idx, vals);
+		return new SparseFeatureVector(idx, vals);
 	}
 
 	public Constituent getConstituent() {
@@ -99,15 +98,13 @@ public class SRLMulticlassInstance implements IInstance {
 	}
 
 	public void cacheFeatureVector(Models model, Set<Feature> features) {
-		Map<String, Float> featureMap = new HashMap<String, Float>();
+		Map<String, Float> featureMap = new HashMap<>();
 		for (Feature f : features) {
 			featureMap.put(f.getName(), f.getValue());
 		}
 
 		ModelInfo modelInfo = manager.getModelInfo(model);
 		Pair<int[], float[]> feats = modelInfo.getLexicon().getFeatureVector(featureMap);
-
-		this.cacheFeatureVector(model, new FeatureVector(feats.getFirst(), feats.getSecond()));
-
+		this.cacheFeatureVector(model, new SparseFeatureVector(feats.getFirst(), feats.getSecond()));
 	}
 }

@@ -1,17 +1,18 @@
 package edu.illinois.cs.cogcomp.srl.inference;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.infer.ilp.*;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceStructure;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ final public class SRLILPInference extends
 
 		this.outputGenerator = new ILPOutput(manager);
 
-		List<SRLPredicateInstance> instances = new ArrayList<SRLPredicateInstance>();
+		List<SRLPredicateInstance> instances = new ArrayList<>();
 		for (Constituent predicate : predicates) {
 			Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
 			SRLPredicateInstance x;
@@ -57,8 +58,6 @@ final public class SRLILPInference extends
 			assert predicateClone.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
 
 			x = new SRLPredicateInstance(predicateClone, manager, manager.getArgumentIdentifier());
-			x.cacheAllFeatureVectors(false);
-
 			x.cacheAllFeatureVectors(false);
 
 			instances.add(x);
@@ -136,8 +135,6 @@ final public class SRLILPInference extends
 			SRLMulticlassInstance senseX = x.getSenseInstance();
 			List<SRLMulticlassInstance> candidates = x.getCandidateInstances();
 
-			// Constituent predicate = predicates.get(predicateId);
-
 			String lemma = senseX.getPredicateLemma();
 			assert lemma != null;
 
@@ -160,7 +157,7 @@ final public class SRLILPInference extends
 				idScore = sc[1] - sc[0];
 
 
-				set = new HashSet<Integer>();
+				set = new HashSet<>();
 				for (int labelId = 0; labelId < scores.length; labelId++) {
 					String label = manager.getArgument(labelId);
 
@@ -193,7 +190,7 @@ final public class SRLILPInference extends
 			double[] senseScores = manager
 					.getScores(senseX, Models.Sense, true);
 
-			set = new HashSet<Integer>();
+			set = new HashSet<>();
 
 			for (int senseId = 0; senseId < senseScores.length; senseId++) {
 
@@ -235,13 +232,11 @@ final public class SRLILPInference extends
 		addEqualityConstraint(xmp, vars, coeffs, 1.0);
 	}
 
-	public static String getArgumentVariableIdentifier(String type,
-													   int predicateId, int candidateId, String label) {
+	public static String getArgumentVariableIdentifier(String type, int predicateId, int candidateId, String label) {
 		return type + ":" + predicateId + ":" + candidateId + ":" + label;
 	}
 
-	public static String getSenseVariableIdentifier(String type,
-													int predicateId, String label) {
+	public static String getSenseVariableIdentifier(String type, int predicateId, String label) {
 		return type + ":sense:" + predicateId + ":" + label;
 	}
 

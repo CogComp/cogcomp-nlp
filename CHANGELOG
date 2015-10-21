@@ -1,3 +1,8 @@
+Version 5.1.4
+Switched entirely to illinois-sl for structured prediction (removed JLIS traces)
+Using the latest AnnotatorService from illinois-core-utilities for both Curator & pipeline annotation
+Major cleaning up
+
 Version 5.1
 Added JUnit tests
 Removed unnecessary dependencies

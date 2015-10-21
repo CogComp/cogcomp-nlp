@@ -22,7 +22,7 @@ class DBHelper {
 		}
 	}
 
-	private final static Map<String, Connection> connections = new HashMap<String, Connection>();
+	private final static Map<String, Connection> connections = new HashMap<>();
 
 	public static void createTable(String dbFile, String tableName,
 			String tableDefinition) throws SQLException {

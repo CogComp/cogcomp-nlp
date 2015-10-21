@@ -19,8 +19,8 @@ abstract public class SRLILPConstraintGenerator extends ILPConstraintGenerator {
 	}
 
 	protected Pair<int[], double[]> cleanupVariables(int[] vars, double[] coefs) {
-		List<Double> c = new ArrayList<Double>();
-		List<Integer> v = new ArrayList<Integer>();
+		List<Double> c = new ArrayList<>();
+		List<Integer> v = new ArrayList<>();
 
 		for (int i = 0; i < vars.length; i++) {
 			if (vars[i] >= 0) {
@@ -38,7 +38,7 @@ abstract public class SRLILPConstraintGenerator extends ILPConstraintGenerator {
 			d[i] = c.get(i);
 		}
 
-		return new Pair<int[], double[]>(v1, d);
+		return new Pair<>(v1, d);
 
 	}
 

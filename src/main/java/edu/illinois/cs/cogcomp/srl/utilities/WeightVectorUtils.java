@@ -13,12 +13,10 @@ import java.util.zip.GZIPOutputStream;
 
 public class WeightVectorUtils {
 
-	private final static Logger log = LoggerFactory
-			.getLogger(WeightVectorUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(WeightVectorUtils.class);
 
 	public static void save(String fileName, WeightVector wv) throws IOException {
-		BufferedOutputStream stream = new BufferedOutputStream(
-				new GZIPOutputStream(new FileOutputStream(fileName)));
+		BufferedOutputStream stream = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)));
 
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
 

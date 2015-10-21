@@ -2,14 +2,14 @@ package edu.illinois.cs.cogcomp.srl.verb;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentCandidateGenerator;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,14 +37,14 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 
 		TextAnnotation ta = predicateClone.getTextAnnotation();
 		int sentenceId = ta.getSentenceId(predicateClone);
-		Tree<String> tree = ParseHelper.getParseTree(manager.defaultParser, ta, sentenceId);
+		Tree<String> tree = ParseUtils.getParseTree(manager.defaultParser, ta, sentenceId);
 
 		Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils.getSpanLabeledTree(tree);
 
 		int sentenceStart = ta.getSentence(sentenceId).getStartSpan();
 		int predicatePosition = predicateClone.getStartSpan() - sentenceStart;
 
-		Set<Constituent> out = new HashSet<Constituent>();
+		Set<Constituent> out = new HashSet<>();
 
 		List<Tree<Pair<String, IntPair>>> yield = spanLabeledTree.getYield();
 
@@ -70,7 +70,7 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 			if (currentNode.isRoot())
 				done = true;
 			else {
-				List<Constituent> candidates = new ArrayList<Constituent>();
+				List<Constituent> candidates = new ArrayList<>();
 
 				for (Tree<Pair<String, IntPair>> sibling : currentNode.getParent().getChildren()) {
 					Pair<String, IntPair> siblingNode = sibling.getLabel();
@@ -108,9 +108,9 @@ public class XuePalmerCandidateGenerator extends ArgumentCandidateGenerator {
 		}
 
 		// Punctuations maketh an argument not!
-		List<Constituent> output = new ArrayList<Constituent>();
+		List<Constituent> output = new ArrayList<>();
 		for (Constituent c : out) {
-			if (!ParseTreeProperties.isPunctuationToken(c.getSurfaceString()))
+			if (!ParseTreeProperties.isPunctuationToken(c.getSurfaceForm()))
 				output.add(c);
 		}
 

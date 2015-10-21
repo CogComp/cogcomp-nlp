@@ -44,7 +44,7 @@ public class RArgConstraints extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
 
@@ -65,7 +65,7 @@ public class RArgConstraints extends SRLILPConstraintGenerator {
 
 		Set<String> coreArgs = manager.getCoreArguments();
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 		for (String arg : coreArgs) {
 			list.addAll(addRArgConstraint(manager, predicateId, variables, x,
 					y, arg));
@@ -85,7 +85,7 @@ public class RArgConstraints extends SRLILPConstraintGenerator {
 
 		log.debug("R-Arg constraint for {} for predicate {}", rArg, x);
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 		for (int otherCandidateId = 0; otherCandidateId < numCandidates; otherCandidateId++) {
 
 			if (y != null) {

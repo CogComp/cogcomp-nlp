@@ -2,11 +2,11 @@ package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.jlis.*;
 
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class SRLExampleGenerator {
 	}
 
 	public Pair<SRLSentenceInstance, SRLSentenceStructure> getExamples(TextAnnotation ta) throws Exception {
-		List<SRLPredicateInstance> predicates = new ArrayList<SRLPredicateInstance>();
-		List<SRLPredicateStructure> structures = new ArrayList<SRLPredicateStructure>();
+		List<SRLPredicateInstance> predicates = new ArrayList<>();
+		List<SRLPredicateStructure> structures = new ArrayList<>();
 
 		if (ta.hasView(manager.getGoldViewName()))
 			getTreebankExamples(ta, predicates, structures);
@@ -33,7 +33,7 @@ public class SRLExampleGenerator {
 		SRLSentenceInstance sx = new SRLSentenceInstance(predicates);
 		SRLSentenceStructure sy = new SRLSentenceStructure(sx, structures);
 
-		return new Pair<SRLSentenceInstance, SRLSentenceStructure>(sx, sy);
+		return new Pair<>(sx, sy);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class SRLExampleGenerator {
 	private Map<IntPair, String> getGoldArgumentSpanLabels(Constituent predicate) {
 		List<Relation> args = predicate.getOutgoingRelations();
 
-		Map<IntPair, String> argSpans = new HashMap<IntPair, String>();
+		Map<IntPair, String> argSpans = new HashMap<>();
 		for (Relation r : args) {
 			Constituent arg = r.getTarget();
 			argSpans.put(new IntPair(arg.getStartSpan(), arg.getEndSpan()), r.getRelationName());

@@ -1,8 +1,8 @@
 package edu.illinois.cs.cogcomp.srl.inference.constraints;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPConstraint;
 import edu.illinois.cs.cogcomp.infer.ilp.InferenceVariableLexManager;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.srl.data.LegalArguments;
 import edu.illinois.cs.cogcomp.srl.inference.SRLConstraints;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPConstraintGenerator;
 import edu.illinois.cs.cogcomp.srl.jlis.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,7 +86,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 
 		// WARNING: Hairy code ahead. Read the comments carefully.
 
-		List<ILPConstraint> constraints = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> constraints = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
 
@@ -167,7 +168,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 					label = otherPredicateStructure.getArgLabel(otherCandidateId);
 				}
 
-				Set<Integer> vars = new HashSet<Integer>();
+				Set<Integer> vars = new HashSet<>();
 
 				// go over all the options. At each point, check if the
 				// constraint is satisfied. If so, don't add the constraint.
@@ -306,7 +307,7 @@ public class CrossArgumentRetainedModifiers extends SRLILPConstraintGenerator {
 
 	private static Map<String, Map<String, String>> loadValidViolations(
 			SRLType srlType) throws Exception {
-		Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
+		Map<String, Map<String, String>> map = new HashMap<>();
 
 		String file = srlType + ".cross-predicate.modifiers";
 

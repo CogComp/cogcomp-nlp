@@ -1,13 +1,13 @@
 package edu.illinois.cs.cogcomp.srl.verb;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.edison.annotators.WordNetPlusLemmaViewGenerator;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.srl.core.AbstractPredicateDetector;
 
 public class VerbPredicateDetector extends AbstractPredicateDetector {
@@ -18,24 +18,23 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 
 	@Override
 	public Option<String> getLemma(TextAnnotation ta, int tokenId) {
-		String pos = WordHelpers.getPOS(ta, tokenId);
+		String pos = POSUtils.getPOS(ta, tokenId);
 		String token = ta.getToken(tokenId).toLowerCase();
-		String lemma = WordHelpers.getLemma(ta, tokenId);
-
+		TokenLabelView lemmaView = (TokenLabelView) ta.getView(ViewNames.LEMMA);
+		String lemma = lemmaView.getConstituentAtToken(tokenId).getLabel();
 		boolean predicate = false;
 
 		// any token that is a verb is a predicate
 		if (POSUtils.isPOSVerb(pos) && !pos.equals("AUX")) {
-
-			if (token.equals("'s") || token.equals("'re") || token.equals("'m"))
+            if (token.equals("'s") || token.equals("'re") || token.equals("'m"))
 				lemma = "be";
-			else if (token.equals("'d") || lemma.equals("wo")
-					|| lemma.equals("'ll"))
+			else if (token.equals("'d") || lemma.equals("wo") || lemma.equals("'ll"))
 				lemma = "xmodal";
 
 			predicate = true;
 
-			if (lemma.equals("xmodal") || pos.equals("MD") || token.equals("'ve")) // modals and some
+            // modals and some
+			if (lemma.equals("xmodal") || pos.equals("MD") || token.equals("'ve"))
 				predicate = false;
 
 			// ignore all instances of has + "to be" if they are followed by a
@@ -60,12 +59,12 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 				}
 
 				// ignore "have + be"
-				if (have && WordHelpers.getLemma(ta, tokenId + 1).equals("be")) {
+				if (have && lemmaView.getConstituentAtToken(tokenId+1).getLabel().equals("be")) {
 					predicate = false;
 				}
 
 				// ignore "have/do + verb"
-				if ((have || doVerb) && POSUtils.isPOSVerb(WordHelpers.getPOS(ta, tokenId + 1)))
+				if ((have || doVerb) && POSUtils.isPOSVerb(POSUtils.getPOS(ta, tokenId + 1)))
 					predicate = false;
 
 				// for some reason "according" in 'according to' is tagged as a
@@ -76,13 +75,12 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 			}
 
 			if (tokenId < ta.size() - 2) {
-
 				// ignore don't + V or haven't + V
 				if (doVerb || have) {
 					String nextToken = ta.getToken(tokenId + 1).toLowerCase();
 
 					if ((nextToken.equals("n't") || nextToken.equals("not"))
-							&& POSUtils.isPOSVerb(WordHelpers.getPOS(ta, tokenId + 2)))
+							&& POSUtils.isPOSVerb(POSUtils.getPOS(ta, tokenId + 2)))
 						predicate = false;
 
 				}
@@ -112,7 +110,7 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 
 		if (predicate) {
 
-			return new Option<String>(lemma);
+			return new Option<>(lemma);
 		} else {
 			return Option.empty();
 		}

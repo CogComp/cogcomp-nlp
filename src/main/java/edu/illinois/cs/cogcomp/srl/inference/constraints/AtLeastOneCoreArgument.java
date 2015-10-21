@@ -42,7 +42,7 @@ public class AtLeastOneCoreArgument extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
 			SRLPredicateInstance xp = x.predicates.get(predicateId);
@@ -63,7 +63,7 @@ public class AtLeastOneCoreArgument extends SRLILPConstraintGenerator {
 		String type = manager.getPredictedViewName();
 		int numCandidates = x.getCandidateInstances().size();
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		int[] vars = new int[numCandidates * coreArgs.size()];
 		double[] coefs = new double[vars.length];

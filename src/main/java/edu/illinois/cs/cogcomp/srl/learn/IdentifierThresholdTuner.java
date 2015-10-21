@@ -4,7 +4,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.math.Permutations;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
+import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentIdentifier;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
@@ -19,10 +19,9 @@ public class IdentifierThresholdTuner {
 	protected final double n_F;
 	private final int nThreads;
 	private final SRLManager manager;
-	private final StructuredProblem problem;
+	private final SLProblem problem;
 
-	public IdentifierThresholdTuner(SRLManager manager, double N_F,
-			StructuredProblem problem) {
+	public IdentifierThresholdTuner(SRLManager manager, double N_F, SLProblem problem) {
 		this.manager = manager;
 
 		this.n_F = N_F;
@@ -46,18 +45,15 @@ public class IdentifierThresholdTuner {
 	public Pair<Double, Double> tuneIdentifierScale(List<Double> A,
 			List<Double> B) throws Exception {
 
-		List<Pair<Double, Boolean>> scores = new ArrayList<Pair<Double, Boolean>>();
+		List<Pair<Double, Boolean>> scores = new ArrayList<>();
 
 		int totalGold = 0;
 		int numExamples = 0;
 		ArgumentIdentifier rawScorer = new ArgumentIdentifier(1.0, 0.0, manager);
 
 		for (int i = 0; i < this.problem.size(); i++) {
-
-			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.input_list
-					.get(i);
-			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.output_list
-					.get(i);
+			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.instanceList.get(i);
+			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.goldStructureList.get(i);
 
 			assert y.getLabel() == 0 || y.getLabel() == 1;
 
@@ -68,7 +64,7 @@ public class IdentifierThresholdTuner {
 
 			double rawScore = rawScorer.getIdentifierRawScore(x);
 
-			scores.add(new Pair<Double, Boolean>(rawScore, goldLabel));
+			scores.add(new Pair<>(rawScore, goldLabel));
 			numExamples++;
 			if (numExamples % 10000 == 0) {
 				System.out.println(numExamples + " scores cached");
@@ -77,14 +73,10 @@ public class IdentifierThresholdTuner {
 
 		Map<Pair<Double, Double>, IntPair> perf = getPerformance(A, B, scores);
 
-		List<Pair<String, Double>> list = new ArrayList<Pair<String, Double>>();
+		List<Pair<String, Double>> list = new ArrayList<>();
 
 		double maxF = Double.NEGATIVE_INFINITY;
 		Pair<Double, Double> maxer = null;
-
-		// System.out
-		// .println("(A, B)\ttotalGold\ttotalPredicted\tcorrect\tP\tR\tF"
-		// + n_F);
 
 		for (Entry<Pair<Double, Double>, IntPair> entry : perf.entrySet()) {
 			Pair<Double, Double> key = entry.getKey();
@@ -93,7 +85,7 @@ public class IdentifierThresholdTuner {
 			double totalPredicted = value.getFirst();
 			double correct = value.getSecond();
 
-			double precision = 0, recall = 0, f = 0;
+			double precision = 0, recall = 0, f;
 
 			if (totalPredicted > 0)
 				precision = correct / totalPredicted;
@@ -104,17 +96,15 @@ public class IdentifierThresholdTuner {
 			f = fN(precision, recall, n_F);
 
 			String output = key.toString();
-			output += "\t" + (int) (totalGold);
+			output += "\t" + totalGold;
 			output += "\t" + (int) (totalPredicted);
 			output += "\t" + (int) (correct);
 
-			output += "\t"
-					+ StringUtils.getFormattedTwoDecimal(precision * 100);
+			output += "\t" + StringUtils.getFormattedTwoDecimal(precision * 100);
 			output += "\t" + StringUtils.getFormattedTwoDecimal(recall * 100);
 			output += "\t" + StringUtils.getFormattedTwoDecimal(f * 100);
-			// System.out.println(output);
 
-			list.add(new Pair<String, Double>(output, f));
+			list.add(new Pair<>(output, f));
 
 			if (f > maxF) {
 				maxF = f;
@@ -156,22 +146,22 @@ public class IdentifierThresholdTuner {
 
 		ExecutorService executor = Executors.newFixedThreadPool(nThreads);
 
-		List<FutureTask<Pair<Pair<Double, Double>, IntPair>>> tasks = new ArrayList<FutureTask<Pair<Pair<Double, Double>, IntPair>>>();
+		List<FutureTask<Pair<Pair<Double, Double>, IntPair>>> tasks = new ArrayList<>();
 
 		for (List<Double> element : Permutations.crossProduct(Arrays.asList(A,
 				B))) {
 
 			final double a = element.get(0);
 			final double b = element.get(1);
-			FutureTask<Pair<Pair<Double, Double>, IntPair>> task = new FutureTask<Pair<Pair<Double, Double>, IntPair>>(
-					new Callable<Pair<Pair<Double, Double>, IntPair>>() {
+			FutureTask<Pair<Pair<Double, Double>, IntPair>> task = new FutureTask<>(
+                    new Callable<Pair<Pair<Double, Double>, IntPair>>() {
 
-						@Override
-						public Pair<Pair<Double, Double>, IntPair> call()
-								throws Exception {
-							return getPerformance(a, b, scores);
-						}
-					});
+                        @Override
+                        public Pair<Pair<Double, Double>, IntPair> call()
+                                throws Exception {
+                            return getPerformance(a, b, scores);
+                        }
+                    });
 
 			tasks.add(task);
 			executor.execute(task);
@@ -180,7 +170,7 @@ public class IdentifierThresholdTuner {
 
 		executor.shutdown();
 
-		Map<Pair<Double, Double>, IntPair> map = new HashMap<Pair<Double, Double>, IntPair>();
+		Map<Pair<Double, Double>, IntPair> map = new HashMap<>();
 		for (FutureTask<Pair<Pair<Double, Double>, IntPair>> task : tasks) {
 			Pair<Pair<Double, Double>, IntPair> out = task.get();
 			map.put(out.getFirst(), out.getSecond());
@@ -214,7 +204,6 @@ public class IdentifierThresholdTuner {
 
 		IntPair perf = new IntPair(totalPredicted, totalCorrectTrue);
 
-		return new Pair<Pair<Double, Double>, IntPair>(
-				new Pair<Double, Double>(A, B), perf);
+		return new Pair<>(new Pair<>(A, B), perf);
 	}
 }

@@ -1,7 +1,6 @@
 package edu.illinois.cs.cogcomp.srl.jlis;
 
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
@@ -20,10 +19,10 @@ public class SRLPredicateStructure implements IStructure {
 
 	}
 
-	@Override
-	public FeatureVector getFeatureVector() {
-		throw new RuntimeException("Not yet implemented!");
-	}
+//	@Override
+//	public FeatureVector getFeatureVector() {
+//		throw new RuntimeException("Not yet implemented!");
+//	}
 
 	public int getArgLabel(int candidateId) {
 		return argLabels[candidateId];
@@ -34,8 +33,7 @@ public class SRLPredicateStructure implements IStructure {
 	}
 
 	public SRLMulticlassLabel getClassifierMulticlassLabel(int candidateId) {
-		return new SRLMulticlassLabel(x.getCandidateInstances()
-				.get(candidateId), argLabels[candidateId], Models.Classifier, manager);
+		return new SRLMulticlassLabel(argLabels[candidateId], Models.Classifier, manager);
 	}
 
 	public SRLMulticlassLabel getIdentifierMulticlassLabel(int candidateId) {
@@ -43,11 +41,11 @@ public class SRLPredicateStructure implements IStructure {
 
 		int c = isNull ? 0 : 1;
 
-		return new SRLMulticlassLabel(x.getCandidateInstances().get(candidateId), c, Models.Identifier, manager);
+		return new SRLMulticlassLabel(c, Models.Identifier, manager);
 	}
 
 	public SRLMulticlassLabel getSenseMulticlassLabel() {
-		return new SRLMulticlassLabel(x.getSenseInstance(), sense, Models.Sense, manager);
+		return new SRLMulticlassLabel(sense, Models.Sense, manager);
 	}
 
 	@Override

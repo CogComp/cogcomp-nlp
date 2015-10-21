@@ -41,7 +41,7 @@ public class CArgConstraints extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 		log.debug("Adding C-Arg constriants");
 
 		int numPredicates = x.numPredicates();
@@ -64,7 +64,7 @@ public class CArgConstraints extends SRLILPConstraintGenerator {
 
 		List<Integer> candidateIds = getSortedCandidates(x);
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 		for (String arg : manager.getCoreArguments()) {
 			list.addAll(getCArgConstraint(manager, predicateId, variables,
 					candidateIds, arg, x, y));
@@ -87,7 +87,7 @@ public class CArgConstraints extends SRLILPConstraintGenerator {
 			int predicateId, InferenceVariableLexManager variables,
 			List<Integer> candidateIds, String arg, SRLPredicateInstance x,
 			SRLPredicateStructure y) {
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		String cArg = "C-" + arg;
 		int numCandidates = x.getCandidateInstances().size();
@@ -148,7 +148,7 @@ public class CArgConstraints extends SRLILPConstraintGenerator {
 	}
 
 	private List<Integer> getSortedCandidates(SRLPredicateInstance x) {
-		List<Integer> candidateIds = new ArrayList<Integer>();
+		List<Integer> candidateIds = new ArrayList<>();
 
 		final List<SRLMulticlassInstance> candidates = x
 				.getCandidateInstances();

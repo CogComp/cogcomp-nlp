@@ -1,19 +1,19 @@
 package edu.illinois.cs.cogcomp.srl.features;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.Relation;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TreeView;
 import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.*;
 
@@ -39,7 +39,7 @@ public class FeatureGenerators {
 					break;
 				}
 			}
-			Set<Feature> feats = new HashSet<Feature>();
+			Set<Feature> feats = new HashSet<>();
 
 			if (hasVerb) {
 				feats.add(DiscreteFeature.create(getName()));
@@ -62,7 +62,7 @@ public class FeatureGenerators {
 
 			new Relation("", cs, ce, 0);
 
-			return Arrays.asList(ce);
+			return Collections.singletonList(ce);
 
 		}
 
@@ -82,8 +82,8 @@ public class FeatureGenerators {
 		@Override
 		public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-			Set<Feature> features = new HashSet<Feature>();
-			String surfaceString = c.getSurfaceString();
+			Set<Feature> features = new HashSet<>();
+			String surfaceString = c.getSurfaceForm();
 
 			if (surfaceString.contains("-") && c.length() == 1) {
 				Constituent predicate = c.getIncomingRelations().get(0).getSource();
@@ -130,7 +130,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				Set<Feature> feats = new HashSet<Feature>();
+				Set<Feature> feats = new HashSet<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(c);
 					// if the phrase is a PP, then the head word of its
@@ -167,6 +167,8 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 				return feats;
@@ -184,7 +186,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				List<Constituent> siblings = new ArrayList<Constituent>();
+				List<Constituent> siblings = new ArrayList<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(input);
 					List<Relation> in = phrase.getIncomingRelations();
@@ -195,13 +197,12 @@ public class FeatureGenerators {
 						List<Relation> outgoingRelations = relation.getSource()
 								.getOutgoingRelations();
 
-						for (int i = 0; i < outgoingRelations.size(); i++) {
-							Relation r = outgoingRelations.get(i);
-							if (r.getTarget() == phrase) {
-								break;
-							}
-							prev = r.getTarget();
-						}
+                        for (Relation r : outgoingRelations) {
+                            if (r.getTarget() == phrase) {
+                                break;
+                            }
+                            prev = r.getTarget();
+                        }
 
 						if (prev != null)
 							siblings.add(prev);
@@ -209,6 +210,8 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 				return siblings;
@@ -231,7 +234,7 @@ public class FeatureGenerators {
 
 				TreeView parse = (TreeView) ta.getView(parseViewName);
 
-				List<Constituent> siblings = new ArrayList<Constituent>();
+				List<Constituent> siblings = new ArrayList<>();
 				try {
 					Constituent phrase = parse.getParsePhrase(input);
 					List<Relation> in = phrase.getIncomingRelations();
@@ -255,6 +258,8 @@ public class FeatureGenerators {
 
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 
 				return siblings;

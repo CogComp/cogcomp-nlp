@@ -34,7 +34,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 	public NoDuplicateCoreConstraint(SRLManager manager) {
 		super(manager, name, true);
 
-		argSet = new HashSet<String>(manager.getCoreArguments());
+		argSet = new HashSet<>(manager.getCoreArguments());
 
 		// XXX: This might be a bit dubious.
 		boolean nom = manager.getSRLType() == SRLType.Nom;
@@ -78,7 +78,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 		String type = manager.getPredictedViewName();
 		int numCandidates = x.getCandidateInstances().size();
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (String coreArgument : coreArgs) {
 
@@ -125,7 +125,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 		SRLSentenceInstance x = (SRLSentenceInstance) ins;
 		SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+		List<ILPConstraint> list = new ArrayList<>();
 
 		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
 			SRLPredicateInstance xp = x.predicates.get(predicateId);

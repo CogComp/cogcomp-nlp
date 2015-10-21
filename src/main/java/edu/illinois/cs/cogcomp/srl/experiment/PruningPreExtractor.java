@@ -3,13 +3,14 @@ package edu.illinois.cs.cogcomp.srl.experiment;
 import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
+import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.ModelInfo;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +29,10 @@ public class PruningPreExtractor extends
 	private SRLManager manager;
 	private Models modelToExtract;
 
-	protected final List<PreExtractRecord> buffer = new ArrayList<PreExtractRecord>();
+	protected final List<PreExtractRecord> buffer = new ArrayList<>();
 
 	private AtomicInteger counter = new AtomicInteger();
+	private Logger log = org.slf4j.LoggerFactory.getLogger(PruningPreExtractor.class);
 
 	public PruningPreExtractor(SRLManager manager, Models modelToExtract,
 			FeatureVectorCacheFile examples, FeatureVectorCacheFile cache,
@@ -61,7 +63,7 @@ public class PruningPreExtractor extends
 		SRLMulticlassInstance x = input.getFirst();
 		SRLMulticlassLabel y = input.getSecond();
 
-		FeatureVector features = x.getCachedFeatureVector(modelToExtract);
+		SparseFeatureVector features = (SparseFeatureVector)x.getCachedFeatureVector(modelToExtract);
 
 		ModelInfo modelInfo = manager.getModelInfo(modelToExtract);
 		Lexicon lexicon = modelInfo.getLexicon();
@@ -69,9 +71,9 @@ public class PruningPreExtractor extends
 		int threshold = manager.getPruneSize(modelToExtract);
 
 		Pair<int[], float[]> pair = lexicon.pruneFeaturesByCount(
-				features.getIdx(), features.getValue(), threshold);
+				features.getIndices(), features.getValues(), threshold);
 
-		features = new FeatureVector(pair.getFirst(), pair.getSecond());
+		features = new SparseFeatureVector(pair.getFirst(), pair.getSecond());
 
 		synchronized (buffer) {
 			buffer.add(new PreExtractRecord(x.getPredicateLemma(),
@@ -105,7 +107,7 @@ public class PruningPreExtractor extends
 	@Override
 	protected List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> process(
 			Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
-		List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<Pair<SRLMulticlassInstance, SRLMulticlassLabel>>();
+		List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<>();
 		l.add(input);
 		return l;
 	}
@@ -115,7 +117,7 @@ public class PruningPreExtractor extends
 			cache.put(r.lemma, r.label, r.features);
 
 		}
-
+		log.info("Saving pruned feature cache done!");
 		cache.close();
 	}
 }

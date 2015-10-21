@@ -57,10 +57,11 @@ public class ArgumentIdentifier extends Predicate<SRLMulticlassInstance> {
 		log.debug("Classifying {}", x);
 		WeightVector w = manager.getModelInfo(Models.Identifier).getWeights();
 
-		SRLMulticlassLabel y1 = new SRLMulticlassLabel(x, 1, Models.Identifier, manager);
-		SRLMulticlassLabel y0 = new SRLMulticlassLabel(x, 0, Models.Identifier, manager);
-
-		return (double) (w.dotProduct(y1.getFeatureVector()) - w.dotProduct(y0.getFeatureVector()));
+		SRLMulticlassLabel y1 = new SRLMulticlassLabel(1, Models.Identifier, manager);
+		SRLMulticlassLabel y0 = new SRLMulticlassLabel(0, Models.Identifier, manager);
+		double score1= w.dotProduct(x.getCachedFeatureVector(Models.Identifier),1 * manager.getModelInfo(Models.Identifier).getLexicon().size());
+		double score2= w.dotProduct(x.getCachedFeatureVector(Models.Identifier));
+		return (double) (score1 - score2);
 	}
 
 	@Override

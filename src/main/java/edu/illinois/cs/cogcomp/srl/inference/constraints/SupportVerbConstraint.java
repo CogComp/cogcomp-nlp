@@ -1,10 +1,10 @@
 package edu.illinois.cs.cogcomp.srl.inference.constraints;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPConstraint;
 import edu.illinois.cs.cogcomp.infer.ilp.InferenceVariableLexManager;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -37,9 +37,9 @@ public class SupportVerbConstraint extends SRLILPConstraintGenerator {
 
     SRLSentenceInstance x = (SRLSentenceInstance) ins;
 
-    List<ILPConstraint> list = new ArrayList<ILPConstraint>();
+    List<ILPConstraint> list = new ArrayList<>();
 
-    Set<Integer> predicatePosition = new HashSet<Integer>();
+    Set<Integer> predicatePosition = new HashSet<>();
     for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
       predicatePosition.add(x.predicates.get(predicateId)
               .getSenseInstance().getSpan().getFirst());
@@ -99,7 +99,7 @@ public class SupportVerbConstraint extends SRLILPConstraintGenerator {
   public List<ILPConstraint> getViolatedILPConstraints(IInstance x,
                                                        IStructure y, InferenceVariableLexManager variables) {
     // This constraint is always present
-    return new ArrayList<ILPConstraint>();
+    return new ArrayList<>();
   }
 
 }

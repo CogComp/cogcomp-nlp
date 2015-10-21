@@ -2,12 +2,12 @@ package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
-import edu.illinois.cs.cogcomp.edison.data.srl.NomLexReader;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
+import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
@@ -21,7 +21,6 @@ import edu.illinois.cs.cogcomp.srl.features.ProjectedPath;
 import edu.illinois.cs.cogcomp.srl.inference.SRLConstraints;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +69,7 @@ public abstract class SRLManager {
 
 	private ArgumentIdentifier identifier;
 
-	private final Set<SRLConstraints> constraints = new HashSet<SRLConstraints>();
+	private final Set<SRLConstraints> constraints = new HashSet<>();
 
 	private final Map<Models, ModelInfo> modelInfo;
 
@@ -82,18 +81,18 @@ public abstract class SRLManager {
 
 		initializeFeatureManifest(defaultParser);
 
-		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<String>(Arrays.asList(getArgumentLabels())));
+		allArgumentsSet = Collections.unmodifiableSet(new TreeSet<>(Arrays.asList(getArgumentLabels())));
 
 		senseToId = getLabelIdMap(getSenseLabels());
 		argToId = getLabelIdMap(getArgumentLabels());
 		this.knownLegalArguments = new LegalArguments(getSRLType() + ".legal.arguments");
 
-		this.legalArgumentsCache = new ConcurrentHashMap<String, Set<String>>();
+		this.legalArgumentsCache = new ConcurrentHashMap<>();
 
 		log.info("{} Arguments: " + Sorters.sortSet(argToId.keySet()), argToId.size());
 		log.info("{} senses: " + Sorters.sortSet(senseToId.keySet()), senseToId.size());
 
-		modelInfo = new HashMap<Models, ModelInfo>();
+		modelInfo = new HashMap<>();
 
 		// Load WN properties file from the classpath
 		WordNetManager.loadConfigAsClasspathResource(true);
@@ -116,7 +115,6 @@ public abstract class SRLManager {
 		for (Models m : Models.values()) {
 			ModelInfo info = new ModelInfo(this, m);
 			modelInfo.put(m, info);
-
 		}
 	}
 
@@ -163,7 +161,7 @@ public abstract class SRLManager {
 
 	protected HashMap<String, Integer> getLabelIdMap(String[] strings) {
 
-		HashMap<String, Integer> label2Id = new HashMap<String, Integer>();
+		HashMap<String, Integer> label2Id = new HashMap<>();
 		for (int i = 0; i < strings.length; i++) {
 			label2Id.put(strings[i], i);
 		}
@@ -338,7 +336,7 @@ public abstract class SRLManager {
 
 		zipin.close();
 
-		return new Pair<Double, Double>(A, B);
+		return new Pair<>(A, B);
 	}
 
 	private String getFeatureIdentifier(Models type) {
@@ -425,7 +423,7 @@ public abstract class SRLManager {
 
 		if (knownLegalArguments.hasLegalArguments(lemma)) {
 
-			Set<String> set = new HashSet<String>();
+			Set<String> set = new HashSet<>();
 
 			set.addAll(Arrays.asList("AM-ADV", "AM-DIS", "AM-LOC", "AM-MNR", "AM-MOD", "AM-NEG", "AM-TMP"));
 
@@ -453,12 +451,12 @@ public abstract class SRLManager {
 					return legalArgumentsCache.get(lemma);
 				else {
 
-					HashSet<String> set = new HashSet<String>(frameMan
-							.getFrame(lemma).getLegalArguments());
+					HashSet<String> set = new HashSet<>(frameMan
+                            .getFrame(lemma).getLegalArguments());
 
 					set.addAll(this.getModifierArguments());
 
-					for (String s : new ArrayList<String>(set)) {
+					for (String s : new ArrayList<>(set)) {
 						set.add("C-" + s);
 						set.add("R-" + s);
 					}
@@ -493,7 +491,7 @@ public abstract class SRLManager {
 				log.error("Unknown predicate {}. Allowing only sense 01", predicate);
 			}
 		}
-		return new HashSet<String>(Arrays.asList("01"));
+		return new HashSet<>(Collections.singletonList("01"));
 
 	}
 
@@ -504,12 +502,12 @@ public abstract class SRLManager {
 	public Map<String, Set<String>> getLegalLabelsForSense(String lemma) {
 		FramesManager frameMan = getFrameManager();
 
-		Map<String, Set<String>> map = new HashMap<String, Set<String>>();
+		Map<String, Set<String>> map = new HashMap<>();
 
 		if (frameMan.getPredicates().contains(lemma)) {
 			FrameData frame = frameMan.getFrame(lemma);
 			for (String sense : frame.getSenses()) {
-				Set<String> argsForSense = new HashSet<String>(frame.getArgsForSense(sense));
+				Set<String> argsForSense = new HashSet<>(frame.getArgsForSense(sense));
 				argsForSense.add(NULL_LABEL);
 
 				map.put(sense, argsForSense);
@@ -543,8 +541,7 @@ public abstract class SRLManager {
 				scores[label] = -50;
 			}
 			else {
-				SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, type, this);
-				scores[label] = w.dotProduct(y.getFeatureVector());
+                scores[label] = w.dotProduct(x.getCachedFeatureVector(type),label * this.getModelInfo(type).getLexicon().size());
 			}
 		}
 
