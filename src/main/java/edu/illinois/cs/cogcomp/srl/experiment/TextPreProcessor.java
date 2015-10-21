@@ -32,7 +32,7 @@ public class TextPreProcessor {
 
 		if (useCurator) {
 			log.info("Using curator");
-			annotator = CuratorFactory.buildCuratorClient(rm);
+			annotator = CuratorFactory.buildCuratorClient();
 		} else {
 			log.info("Using pipeline");
 			if (!defaultParser.equals("Stanford")) {
@@ -40,7 +40,7 @@ public class TextPreProcessor {
 						+ "Please change the 'DefaultParser' parameter in the configuration file.");
 				System.exit(-1);
 			}
-			annotator = IllinoisPipelineFactory.buildPipeline(rm);
+			annotator = IllinoisPipelineFactory.buildPipeline();
 		}
 	}
 
