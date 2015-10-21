@@ -17,12 +17,10 @@ public class SRLSentenceInstance implements IInstance {
 		}
 	}
 
-//	@Override
 	public double size() {
 		return size;
 	}
 
-	
 	public int numPredicates() {
 		return predicates.size();
 	}

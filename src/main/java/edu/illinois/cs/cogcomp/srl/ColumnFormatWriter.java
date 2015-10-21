@@ -70,46 +70,36 @@ public class ColumnFormatWriter {
 		printFormatted(tr, out, pav.getTextAnnotation());
 	}
 
-	private void printFormatted(String[][] columns, PrintWriter out,
-			TextAnnotation ta) {
-		// System.out.println(columns.length);
-		// System.out.println(columns[0].length);
-
+	private void printFormatted(String[][] columns, PrintWriter out, TextAnnotation ta) {
 		// leftOfStar: length of everything before the asterisk.
 		// rightOfStar: length of asterisk and what comes after.
 
 		int[] leftOfStar = new int[columns[0].length];
 		int[] rightOfStart = new int[columns[0].length];
 
-		for (int row = 0; row < columns.length; row++) {
+        for (String[] rowData : columns) {
+            for (int col = 0; col < rowData.length; col++) {
 
-			// System.out.println(row);
-			// System.out.println(Arrays.asList(columns[row]));
+                String word = rowData[col];
 
-			String[] rowData = columns[row];
+                int starPos = word.indexOf("*");
 
-			for (int col = 0; col < rowData.length; col++) {
+                int lenLeft, lenRight;
+                if (starPos < 0) {
+                    lenLeft = word.length();
+                    lenRight = -1;
+                } else {
+                    lenLeft = starPos + 1;
+                    lenRight = word.length() - starPos + 1;
+                }
 
-				String word = rowData[col];
+                if (leftOfStar[col] < lenLeft)
+                    leftOfStar[col] = lenLeft;
 
-				int starPos = word.indexOf("*");
-
-				int lenLeft, lenRight;
-				if (starPos < 0) {
-					lenLeft = word.length();
-					lenRight = -1;
-				} else {
-					lenLeft = starPos + 1;
-					lenRight = word.length() - starPos + 1;
-				}
-
-				if (leftOfStar[col] < lenLeft)
-					leftOfStar[col] = lenLeft;
-
-				if (rightOfStart[col] < lenRight)
-					rightOfStart[col] = lenRight;
-			}
-		}
+                if (rightOfStart[col] < lenRight)
+                    rightOfStart[col] = lenRight;
+            }
+        }
 
 		// System.out.println("here");
 
@@ -123,13 +113,6 @@ public class ColumnFormatWriter {
 				String[] rowData = columns[row];
 
 				out.print(rowData[0]);
-
-				// if (rowData.length == 1)
-				// {
-				// // System.out.println(rowData[0] + "\t" + row);
-				// out.println();
-				// continue;
-				// }
 
 				// print the spaces
 				for (int spCount = rowData[0].length(); spCount < leftOfStar[0]; spCount++)
@@ -181,10 +164,6 @@ public class ColumnFormatWriter {
 		}
 	}
 
-	/**
-	 * @param columns
-	 * @return
-	 */
 	private String[][] transpose(List<String[]> columns, int size) {
 		String[][] output = new String[size][];
 
@@ -204,12 +183,8 @@ public class ColumnFormatWriter {
 	/**
 	 * Return a table. Numrows = number of words. Num Cols depends on how many
 	 * predicate arg relations we have
-	 * 
-	 * @param ta
-	 * @return
 	 */
 	private String[][] transformToColumns(TextAnnotation ta) {
-
 		List<String[]> columns = new ArrayList<>();
 
 		// first the words
@@ -245,10 +220,6 @@ public class ColumnFormatWriter {
 		return transpose(columns, ta.size());
 	}
 
-	/**
-	 * @param ta
-	 * @return
-	 */
 	private static String[] getNEData(TextAnnotation ta) {
 
 		if (!ta.hasView(ViewNames.NER_CONLL)) {
@@ -260,7 +231,7 @@ public class ColumnFormatWriter {
 
 			return chunk;
 		}
-		SpanLabelView nerView = (SpanLabelView) ta.getView(ViewNames.NER);
+		SpanLabelView nerView = (SpanLabelView) ta.getView(ViewNames.NER_CONLL);
 
 		List<Constituent> nerConstituents = nerView.getConstituents();
 
@@ -304,13 +275,11 @@ public class ColumnFormatWriter {
 			return chunk;
 		}
 
-		SpanLabelView chunkView = (SpanLabelView) ta
-				.getView(ViewNames.SHALLOW_PARSE);
+		SpanLabelView chunkView = (SpanLabelView) ta.getView(ViewNames.SHALLOW_PARSE);
 
 		List<Constituent> chunkConstituents = chunkView.getConstituents();
 
-		Collections.sort(chunkConstituents,
-				TextAnnotationUtilities.constituentStartComparator);
+		Collections.sort(chunkConstituents, TextAnnotationUtilities.constituentStartComparator);
 
 		Map<Integer, String> cc = new HashMap<>();
 		for (Constituent c : chunkConstituents) {
@@ -337,16 +306,11 @@ public class ColumnFormatWriter {
 		return chunk;
 	}
 
-	/**
-	 * @param columns
-	 * @param ta
-	 */
 	private void addPredicateArgs(List<String[]> columns, TextAnnotation ta) {
 		PredicateArgumentView predArgView = null;
 
 		if (ta.hasView(predicateArgumentViewName))
-			predArgView = (PredicateArgumentView) ta
-					.getView(predicateArgumentViewName);
+			predArgView = (PredicateArgumentView) ta.getView(predicateArgumentViewName);
 
 		convertPredicateArgView(ta, predArgView, columns, true);
 
@@ -359,15 +323,15 @@ public class ColumnFormatWriter {
 		if (pav != null)
 			predicates = pav.getPredicates();
 
-		Collections.sort(predicates,
-				TextAnnotationUtilities.constituentStartComparator);
+		Collections.sort(predicates, TextAnnotationUtilities.constituentStartComparator);
 
 		int size = ta.size();
 
 		addPredicateInfo(columns, predicates, size, addSense);
 
 		for (Constituent predicate : predicates) {
-			List<Relation> args = pav.getArguments(predicate);
+            assert pav != null;
+            List<Relation> args = pav.getArguments(predicate);
 
 			String[] paInfo = addPredicateArgInfo(predicate, args, size);
 
@@ -375,21 +339,14 @@ public class ColumnFormatWriter {
 		}
 	}
 
-	/**
-	 * @param columns
-	 * @param predicates
-	 * @param size
-	 */
 	private void addPredicateInfo(List<String[]> columns,
 			List<Constituent> predicates, int size, boolean addSense) {
 		Map<Integer, String> senseMap = new HashMap<>();
 		Map<Integer, String> lemmaMap = new HashMap<>();
 
 		for (Constituent c : predicates) {
-			senseMap.put(c.getStartSpan(),
-					c.getAttribute(CoNLLColumnFormatReader.SenseIdentifer));
-			lemmaMap.put(c.getStartSpan(),
-					c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier));
+			senseMap.put(c.getStartSpan(), c.getAttribute(CoNLLColumnFormatReader.SenseIdentifer));
+			lemmaMap.put(c.getStartSpan(), c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier));
 		}
 
 		String[] sense = new String[size];
@@ -406,19 +363,11 @@ public class ColumnFormatWriter {
 			}
 		}
 
-		// System.out.println(Arrays.asList(sense));
-		// System.out.println(Arrays.asList(lemma));
 		if (addSense)
 			columns.add(sense);
 		columns.add(lemma);
 	}
 
-	/**
-	 * @param predicate
-	 * @param args
-	 * @param size
-	 * @return
-	 */
 	private String[] addPredicateArgInfo(Constituent predicate,
 			List<Relation> args, int size) {
 		Map<Integer, String> paInfo = new HashMap<>();
@@ -430,8 +379,7 @@ public class ColumnFormatWriter {
 			argPredicate = argPredicate.replaceAll("ARG", "A");
 			argPredicate = argPredicate.replaceAll("Support", "SUP");
 
-			for (int i = r.getTarget().getStartSpan(); i < r.getTarget()
-					.getEndSpan(); i++) {
+			for (int i = r.getTarget().getStartSpan(); i < r.getTarget().getEndSpan(); i++) {
 				paInfo.put(i, "*");
 				if (i == r.getTarget().getStartSpan())
 					paInfo.put(i, "(" + argPredicate + paInfo.get(i));
@@ -453,26 +401,17 @@ public class ColumnFormatWriter {
 		return paColumn;
 	}
 
-	/**
-	 * @param ta
-	 * @return
-	 */
 	private String[] getParse(TextAnnotation ta) {
 		String[] parse = new String[ta.size()];
 
 		for (int sentenceId = 0; sentenceId < ta.getNumberOfSentences(); sentenceId++) {
 
-			Tree<String> tree = ParseHelper.getParseTree(parseViewName, ta,
-					sentenceId);
+			Tree<String> tree = ParseHelper.getParseTree(parseViewName, ta, sentenceId);
 
 			Sentence sentence = ta.getSentence(sentenceId);
 
 			tree = ParseUtils.snipNullNodes(tree);
 			tree = ParseUtils.stripFunctionTags(tree);
-
-			// tree = tree.getChild(0);
-
-			// System.out.println("tree is :" + tree);
 
 			String[] treeLines = tree.toString().split("\n");
 

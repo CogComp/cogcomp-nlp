@@ -33,13 +33,11 @@ public abstract class AbstractPredicateDetector {
 		List<Constituent> list = new ArrayList<>();
 
 		for (int i = 0; i < ta.size(); i++) {
-
-			Option<String> opt = getLemma(ta, i);
+            Option<String> opt = getLemma(ta, i);
 
 			if (opt.isPresent()) {
 				Constituent c = new Constituent("", "", ta, i, i + 1);
-				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
-						opt.get());
+				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, opt.get());
 				list.add(c);
 			}
 		}

@@ -15,48 +15,38 @@ import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
 
 public class TextPreProcessor {
-	private final static Logger log = LoggerFactory
-			.getLogger(TextPreProcessor.class);
+	private final static Logger log = LoggerFactory.getLogger(TextPreProcessor.class);
 
 	private static TextPreProcessor instance;
-	private static final boolean forceUpdate = false;
-	private final boolean useCurator;
-	private final boolean tokenized;
-	private final AnnotatorService annotator;
+    private final AnnotatorService annotator;
 	public final static String[] requiredViews = { ViewNames.POS,
 			ViewNames.NER_CONLL,ViewNames.LEMMA, ViewNames.SHALLOW_PARSE,
 			ViewNames.PARSE_STANFORD };
-	private String defaultParser;
 
-	public TextPreProcessor(String configFile, boolean tokenized)
-			throws Exception {
+    public TextPreProcessor(String configFile) throws Exception {
 		SRLProperties.initialize(configFile);
 		SRLProperties config = SRLProperties.getInstance();
-		defaultParser = config.getDefaultParser();
-		this.useCurator = config.useCurator();
-		this.tokenized = tokenized;
+        String defaultParser = config.getDefaultParser();
+        boolean useCurator = config.useCurator();
 		ResourceManager rm = new ResourceManager(configFile);
 
 		if (useCurator) {
-			System.out.println("Using curator");
+			log.info("Using curator");
 			annotator = CuratorFactory.buildCuratorClient(rm);
-			// illinoisPreprocessor = null;
 		} else {
-			System.out.println("Using pipeline");
+			log.info("Using pipeline");
 			if (!defaultParser.equals("Stanford")) {
 				log.error("Illinois Pipeline works only with the Stanford parser.\n"
 						+ "Please change the 'DefaultParser' parameter in the configuration file.");
 				System.exit(-1);
 			}
-
-			// illinoisPreprocessor = new IllinoisPreprocessor(rm);
 			annotator = IllinoisPipelineFactory.buildPipeline(rm);
 		}
 	}
 
-	public static void initialize(String configFile, boolean tokenized) {
+	public static void initialize(String configFile) {
 		try {
-			instance = new TextPreProcessor(configFile, tokenized);
+			instance = new TextPreProcessor(configFile);
 		} catch (Exception e) {
 			log.error("Unable to initialize the text pre-processor");
 			e.printStackTrace();
@@ -69,7 +59,7 @@ public class TextPreProcessor {
 			// Start a new TextPreProcessor with default values (no Curator, no
 			// tokenization) and default config
 			try {
-				instance = new TextPreProcessor("srl-config.properties", false);
+				instance = new TextPreProcessor("srl-config.properties");
 			} catch (Exception e) {
 				log.error("Unable to initialize the text pre-processor");
 				e.printStackTrace();
@@ -98,8 +88,7 @@ public class TextPreProcessor {
 		if (!ta.hasView(ViewNames.CLAUSES_STANFORD))
 			ta.addView(ClauseViewGenerator.STANFORD);
 		if (!ta.hasView(ViewNames.DEPENDENCY + ":" + ViewNames.PARSE_STANFORD))
-			ta.addView(new HeadFinderDependencyViewGenerator(
-					ViewNames.PARSE_STANFORD));
+			ta.addView(new HeadFinderDependencyViewGenerator(ViewNames.PARSE_STANFORD));
 
 	}
 }

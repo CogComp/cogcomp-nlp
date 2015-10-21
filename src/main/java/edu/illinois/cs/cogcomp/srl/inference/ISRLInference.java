@@ -5,5 +5,5 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 
 public interface ISRLInference {
 
-	public PredicateArgumentView getOutputView() throws Exception;
+	PredicateArgumentView getOutputView() throws Exception;
 }

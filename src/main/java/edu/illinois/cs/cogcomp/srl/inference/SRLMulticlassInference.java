@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.srl.inference;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
@@ -22,11 +21,7 @@ public class SRLMulticlassInference extends AbstractInferenceSolver {
 		this.type = type;
 	}
 
-	public void stepThrough() {
-		stepThrough = true;
-	}
-
-	@Override
+    @Override
 	public IStructure getLossAugmentedBestStructure(
 			WeightVector weight, IInstance ins, IStructure goldStructure)
 					throws Exception {
@@ -62,7 +57,7 @@ public class SRLMulticlassInference extends AbstractInferenceSolver {
 				continue;
 			}
 
-			SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, type,
+			SRLMulticlassLabel y = new SRLMulticlassLabel(label, type,
 					manager);
 
 			double score = weight.dotProduct(x.getCachedFeatureVector(type),label * manager.getModelInfo(type).getLexicon().size());

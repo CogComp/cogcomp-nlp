@@ -60,8 +60,6 @@ final public class SRLILPInference extends
 			x = new SRLPredicateInstance(predicateClone, manager, manager.getArgumentIdentifier());
 			x.cacheAllFeatureVectors(false);
 
-			x.cacheAllFeatureVectors(false);
-
 			instances.add(x);
 		}
 
@@ -136,8 +134,6 @@ final public class SRLILPInference extends
 
 			SRLMulticlassInstance senseX = x.getSenseInstance();
 			List<SRLMulticlassInstance> candidates = x.getCandidateInstances();
-
-			// Constituent predicate = predicates.get(predicateId);
 
 			String lemma = senseX.getPredicateLemma();
 			assert lemma != null;
@@ -236,13 +232,11 @@ final public class SRLILPInference extends
 		addEqualityConstraint(xmp, vars, coeffs, 1.0);
 	}
 
-	public static String getArgumentVariableIdentifier(String type,
-													   int predicateId, int candidateId, String label) {
+	public static String getArgumentVariableIdentifier(String type, int predicateId, int candidateId, String label) {
 		return type + ":" + predicateId + ":" + candidateId + ":" + label;
 	}
 
-	public static String getSenseVariableIdentifier(String type,
-													int predicateId, String label) {
+	public static String getSenseVariableIdentifier(String type, int predicateId, String label) {
 		return type + ":sense:" + predicateId + ":" + label;
 	}
 

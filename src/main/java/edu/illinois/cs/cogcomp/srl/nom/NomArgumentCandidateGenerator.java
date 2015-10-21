@@ -21,8 +21,7 @@ import java.util.Set;
 
 public class NomArgumentCandidateGenerator extends ArgumentCandidateGenerator {
 
-	private final static Logger log = LoggerFactory
-			.getLogger(NomArgumentCandidateGenerator.class);
+	private final static Logger log = LoggerFactory.getLogger(NomArgumentCandidateGenerator.class);
 
 	public NomArgumentCandidateGenerator(NomSRLManager manager) {
 		super(manager);

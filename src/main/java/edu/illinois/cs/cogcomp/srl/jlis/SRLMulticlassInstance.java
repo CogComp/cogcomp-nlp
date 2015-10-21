@@ -47,7 +47,6 @@ public class SRLMulticlassInstance implements IInstance {
 		this.cacheFeatureVector(model, getFeatureVector(features));
 	}
 
-//	@Override
 	public double size() {
 		return 1;
 	}
@@ -58,8 +57,7 @@ public class SRLMulticlassInstance implements IInstance {
 
 	@Override
 	public String toString() {
-		return "SRLMulticlassInstance [cand=" + c + ", predicate="
-				+ predicateLemma + "]";
+		return "SRLMulticlassInstance [cand=" + c + ", predicate=" + predicateLemma + "]";
 	}
 
 	public void cacheFeatureVector(Models m, IFeatureVector f) {
@@ -108,6 +106,5 @@ public class SRLMulticlassInstance implements IInstance {
 		ModelInfo modelInfo = manager.getModelInfo(model);
 		Pair<int[], float[]> feats = modelInfo.getLexicon().getFeatureVector(featureMap);
 		this.cacheFeatureVector(model, new SparseFeatureVector(feats.getFirst(), feats.getSecond()));
-
 	}
 }

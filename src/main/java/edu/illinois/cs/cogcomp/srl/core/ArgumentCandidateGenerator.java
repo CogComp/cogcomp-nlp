@@ -28,8 +28,7 @@ public abstract class ArgumentCandidateGenerator {
 	protected Constituent getNewConstituent(TextAnnotation ta,
 			Constituent predicateClone, int start, int end) {
 
-		Constituent newConstituent = new Constituent("", 1.0,
-				getCandidateViewName(), ta, start, end);
+		Constituent newConstituent = new Constituent("", 1.0, getCandidateViewName(), ta, start, end);
 
 		new Relation("ChildOf", predicateClone, newConstituent, 1.0);
 		return newConstituent;

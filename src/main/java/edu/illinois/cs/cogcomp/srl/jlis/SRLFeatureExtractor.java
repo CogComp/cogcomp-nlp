@@ -7,16 +7,19 @@ import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
+import edu.illinois.cs.cogcomp.srl.experiment.PreExtractor;
 
 /**
- * Created by upadhya3 on 9/29/15.
+ * A wrapper for the feature extractor required by illinois-sl. The real feature extraction happens in
+ * {@link PreExtractor#consumeInstance(SRLMulticlassInstance, SRLMulticlassLabel)} during training
+ * and {@link SRLPredicateInstance#cacheAllFeatureVectors(boolean)} during testing.
+ *
+ * @author upadhya3
  */
 public class SRLFeatureExtractor extends AbstractFeatureGenerator {
 
-    public SRLFeatureExtractor()
-    {
+    public SRLFeatureExtractor() {}
 
-    }
     @Override
     public IFeatureVector getFeatureVector(IInstance x, IStructure y) {
         SRLMulticlassInstance mi = (SRLMulticlassInstance) x;
@@ -27,7 +30,6 @@ public class SRLFeatureExtractor extends AbstractFeatureGenerator {
         IFeatureVector fv = mi.getCachedFeatureVector(type);
         FeatureVectorBuffer fvb = new FeatureVectorBuffer(fv);
         fvb.shift(label * manager.getModelInfo(type).getLexicon().size());
-        IFeatureVector ans = fvb.toFeatureVector();
-        return ans;
+        return fvb.toFeatureVector();
     }
 }

@@ -95,7 +95,7 @@ public class SemanticRoleLabeler implements Annotator {
 		properties = SRLProperties.getInstance();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(configFile, false);
+		TextPreProcessor.initialize(configFile);
 
 		log.info("Creating {} manager", srlType);
 		manager = Main.getManager(SRLType.valueOf(srlType), false);

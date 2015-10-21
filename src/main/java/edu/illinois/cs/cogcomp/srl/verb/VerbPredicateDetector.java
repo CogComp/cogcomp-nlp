@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.annotators.WordNetPlusLemmaViewGenerator;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.srl.core.AbstractPredicateDetector;
@@ -27,16 +26,15 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 
 		// any token that is a verb is a predicate
 		if (POSUtils.isPOSVerb(pos) && !pos.equals("AUX")) {
-
-			if (token.equals("'s") || token.equals("'re") || token.equals("'m"))
+            if (token.equals("'s") || token.equals("'re") || token.equals("'m"))
 				lemma = "be";
-			else if (token.equals("'d") || lemma.equals("wo")
-					|| lemma.equals("'ll"))
+			else if (token.equals("'d") || lemma.equals("wo") || lemma.equals("'ll"))
 				lemma = "xmodal";
 
 			predicate = true;
 
-			if (lemma.equals("xmodal") || pos.equals("MD") || token.equals("'ve")) // modals and some
+            // modals and some
+			if (lemma.equals("xmodal") || pos.equals("MD") || token.equals("'ve"))
 				predicate = false;
 
 			// ignore all instances of has + "to be" if they are followed by a
@@ -77,7 +75,6 @@ public class VerbPredicateDetector extends AbstractPredicateDetector {
 			}
 
 			if (tokenId < ta.size() - 2) {
-
 				// ignore don't + V or haven't + V
 				if (doVerb || have) {
 					String nextToken = ta.getToken(tokenId + 1).toLowerCase();

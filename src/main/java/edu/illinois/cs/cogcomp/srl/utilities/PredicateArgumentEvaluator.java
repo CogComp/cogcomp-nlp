@@ -109,7 +109,7 @@ public class PredicateArgumentEvaluator {
 					tester.record(g.baseLabel, p.baseLabel);
 					goldDone.add(predictedSpan);
 				} else if (gComponents.size() > 1 && pComponents.size() == 1) {
-					// this is a strange thing abotu the standard evaluation
+					// this is a strange thing about the standard evaluation
 					// script. If the gold label contains a C-arg and the
 					// predicted label doesn't, then the script counts ONE
 					// overprediction (Even if the C-args and the arg of hte
@@ -198,15 +198,9 @@ public class PredicateArgumentEvaluator {
 	}
 
 	/**
-	 * This is an annoying function to write. It is probably VERY inefficient
-	 * too...
+	 * This is an annoying function to write. It is probably VERY inefficient too...
 	 */
-	public static Map<IntPair, Record> getArgumentMap(
-			PredicateArgumentView view, Constituent predicate) {
-
-		// Map<String, Record> records = new HashMap<String,
-		// PredicateArgumentEvaluator.Record>();
-
+	public static Map<IntPair, Record> getArgumentMap(PredicateArgumentView view, Constituent predicate) {
 		Set<IntPair> spans = new HashSet<>();
 
 		List<Pair<String, Constituent>> output = new ArrayList<>();
@@ -281,16 +275,6 @@ public class PredicateArgumentEvaluator {
 		for (Record rec : records) {
 			map.put(new IntPair(rec.start, rec.end), rec);
 		}
-
-		// System.out.println("PredicateArgumentEvaluator.getArgumentMap()");
-		// System.out.println(predicate);
-		//
-		// for (IntPair pair : map.keySet()) {
-		// Record m = map.get(pair);
-		//
-		// System.out.println(pair + ": " + m.baseLabel + "\t" + m.components);
-		// }
-
 		return map;
 	}
 
@@ -300,87 +284,13 @@ public class PredicateArgumentEvaluator {
 
 		for (Constituent gp : gold.getPredicates()) {
 
-			boolean found = false;
-			for (Constituent pp : prediction.getPredicates()) {
+            for (Constituent pp : prediction.getPredicates()) {
 				if (gp.getSpan().equals(pp.getSpan())) {
 					goldToPredictionPredicateMapping.put(gp, pp);
-					found = true;
-					break;
+                    break;
 				}
 			}
-
-			if (!found) {
-				// System.out.println("Predicate " + gp + " not found");
-				// System.out.println("Gold: " + gold);
-				// System.out.println("Pred: " + prediction);
-				// assert false;
-			}
-
 		}
 		return goldToPredictionPredicateMapping;
 	}
-
-	public static void addToResultCache(String file, TextAnnotation ta,
-			ClassificationTester tester) throws IOException {
-		int hash = ta.getTokenizedText().hashCode();
-
-		EvaluationRecord record = tester.getEvaluationRecord();
-
-		List<String> l = new ArrayList<>();
-		l.add(hash + "\tAll\t" + record.getGoldCount() + "\t"
-				+ record.getPredictedCount() + "\t" + record.getCorrectCount());
-
-		List<String> labels = new ArrayList<>(tester.getLabels());
-		Collections.sort(labels);
-
-		for (String label : labels) {
-			record = tester.getEvaluationRecord(label);
-
-			l.add(hash + "\t" + label + "\t" + record.getGoldCount() + "\t"
-					+ record.getPredictedCount() + "\t"
-					+ record.getCorrectCount());
-
-		}
-
-		LineIO.append(file, l);
-	}
-
-	public static Map<Integer, Map<String, EvaluationRecord>> loadResultCache(
-			String file) throws FileNotFoundException {
-		Map<Integer, Map<String, EvaluationRecord>> records = new HashMap<>();
-		Scanner scanner = new Scanner(new File(file));
-
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine().trim();
-			String[] parts = line.split("\t");
-			assert parts.length == 5;
-
-			int taId = Integer.parseInt(parts[0]);
-			String label = parts[1];
-			int goldCount = Integer.parseInt(parts[2]);
-			int predCount = Integer.parseInt(parts[3]);
-			int correctCount = Integer.parseInt(parts[4]);
-
-			Map<String, EvaluationRecord> map;
-
-			if (records.containsKey(taId))
-				map = records.get(taId);
-			else {
-				map = new HashMap<>();
-				records.put(taId, map);
-			}
-			EvaluationRecord record = new EvaluationRecord();
-			map.put(label, record);
-
-			record.incrementCorrect(correctCount);
-			record.incrementGold(goldCount);
-			record.incrementPredicted(predCount);
-
-		}
-
-		scanner.close();
-
-		return records;
-	}
-
 }

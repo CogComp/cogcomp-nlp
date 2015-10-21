@@ -19,25 +19,18 @@ public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
 	private PropertiesConfiguration config;
-	private final String curatorHost;
-	private final int curatorPort, maxInferenceRounds;
-	private final String wordNetFile;
+    private final String wordNetFile;
 
 	private SRLProperties(URL url) throws ConfigurationException {
 		config = new PropertiesConfiguration(url);
 
-		curatorHost = config.getString("CuratorHost", "");
-		curatorPort = config.getInt("CuratorPort", -1);
-
-		this.wordNetFile = config.getString("WordNetConfig");
+        this.wordNetFile = config.getString("WordNetConfig");
 
 		if (config.containsKey("LoadWordNetConfigFromClassPath")
 				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
 			WordNetManager.loadConfigAsClasspathResource(true);
 		}
-
-        maxInferenceRounds = config.getInt("MaxInferenceRounds");
-	}
+    }
 
 	public static void initialize(String configFile) throws Exception {
 		// first try to load the file from the file system
@@ -156,19 +149,7 @@ public class SRLProperties {
 		return Constants.systemVersion;
 	}
 
-	public String getPipelineConfigFile() {
-		return config.getString("PipelineConfigFile");
-	}
-
-	public String getCuratorHost() {
-		return curatorHost;
-	}
-
-	public int getCuratorPort() {
-		return curatorPort;
-	}
-
-    public int getMaxInferenceRounds() {
-        return maxInferenceRounds;
+    public String getLearnerConfig() {
+        return this.config.getString("LearnerConfig");
     }
 }

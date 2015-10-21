@@ -21,8 +21,7 @@ public class IdentifierThresholdTuner {
 	private final SRLManager manager;
 	private final SLProblem problem;
 
-	public IdentifierThresholdTuner(SRLManager manager, double N_F,
-					SLProblem problem) {
+	public IdentifierThresholdTuner(SRLManager manager, double N_F, SLProblem problem) {
 		this.manager = manager;
 
 		this.n_F = N_F;
@@ -53,11 +52,8 @@ public class IdentifierThresholdTuner {
 		ArgumentIdentifier rawScorer = new ArgumentIdentifier(1.0, 0.0, manager);
 
 		for (int i = 0; i < this.problem.size(); i++) {
-
-			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.instanceList
-					.get(i);
-			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.goldStructureList
-					.get(i);
+			SRLMulticlassInstance x = (SRLMulticlassInstance) this.problem.instanceList.get(i);
+			SRLMulticlassLabel y = (SRLMulticlassLabel) this.problem.goldStructureList.get(i);
 
 			assert y.getLabel() == 0 || y.getLabel() == 1;
 
@@ -82,10 +78,6 @@ public class IdentifierThresholdTuner {
 		double maxF = Double.NEGATIVE_INFINITY;
 		Pair<Double, Double> maxer = null;
 
-		// System.out
-		// .println("(A, B)\ttotalGold\ttotalPredicted\tcorrect\tP\tR\tF"
-		// + n_F);
-
 		for (Entry<Pair<Double, Double>, IntPair> entry : perf.entrySet()) {
 			Pair<Double, Double> key = entry.getKey();
 			IntPair value = entry.getValue();
@@ -93,7 +85,7 @@ public class IdentifierThresholdTuner {
 			double totalPredicted = value.getFirst();
 			double correct = value.getSecond();
 
-			double precision = 0, recall = 0, f = 0;
+			double precision = 0, recall = 0, f;
 
 			if (totalPredicted > 0)
 				precision = correct / totalPredicted;
@@ -104,15 +96,13 @@ public class IdentifierThresholdTuner {
 			f = fN(precision, recall, n_F);
 
 			String output = key.toString();
-			output += "\t" + (int) (totalGold);
+			output += "\t" + totalGold;
 			output += "\t" + (int) (totalPredicted);
 			output += "\t" + (int) (correct);
 
-			output += "\t"
-					+ StringUtils.getFormattedTwoDecimal(precision * 100);
+			output += "\t" + StringUtils.getFormattedTwoDecimal(precision * 100);
 			output += "\t" + StringUtils.getFormattedTwoDecimal(recall * 100);
 			output += "\t" + StringUtils.getFormattedTwoDecimal(f * 100);
-			// System.out.println(output);
 
 			list.add(new Pair<>(output, f));
 
@@ -214,7 +204,6 @@ public class IdentifierThresholdTuner {
 
 		IntPair perf = new IntPair(totalPredicted, totalCorrectTrue);
 
-		return new Pair<>(
-                new Pair<>(A, B), perf);
+		return new Pair<>(new Pair<>(A, B), perf);
 	}
 }

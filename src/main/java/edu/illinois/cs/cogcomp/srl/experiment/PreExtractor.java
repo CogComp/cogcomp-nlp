@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
-import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.*;
 import edu.illinois.cs.cogcomp.srl.jlis.*;
@@ -49,13 +48,10 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 			manager.getModelInfo(Models.Identifier).loadWeightVector();
 
 		lexicon = manager.getModelInfo(modelToExtract).getLexicon();
-
-//		TextPreProcessor.initialize(true);
 	}
 
 	@Override
-	protected void initialize() {
-	}
+	protected void initialize() { }
 
 	@Override
 	protected boolean prerequisiteCheck(TextAnnotation ta) {
@@ -83,7 +79,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 					SRLMulticlassInstance predicateInstance = new SRLMulticlassInstance(c, c, manager);
 
 					int label = gold.contains(c.getSpan()) ? 1 : 0;
-					SRLMulticlassLabel y = new SRLMulticlassLabel(predicateInstance, label, Models.Predicate, manager);
+					SRLMulticlassLabel y = new SRLMulticlassLabel(label, Models.Predicate, manager);
 
 					consumeInstance(predicateInstance, y);
 
@@ -152,13 +148,7 @@ public class PreExtractor extends ProducerConsumer<TextAnnotation> {
 
 	@Override
 	protected List<TextAnnotation> process(TextAnnotation ta) {
-		//TODO Check if this needed
-//		try {
-//			TextPreProcessor.getInstance().preProcessText(ta);
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-		return Arrays.asList(ta);
+		return Collections.singletonList(ta);
 	}
 
 	protected void consumeInstance(SRLMulticlassInstance x, SRLMulticlassLabel y) throws Exception {

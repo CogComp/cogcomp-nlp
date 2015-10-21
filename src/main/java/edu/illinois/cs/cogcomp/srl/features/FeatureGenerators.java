@@ -62,7 +62,7 @@ public class FeatureGenerators {
 
 			new Relation("", cs, ce, 0);
 
-			return Arrays.asList(ce);
+			return Collections.singletonList(ce);
 
 		}
 
@@ -168,7 +168,6 @@ public class FeatureGenerators {
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -198,13 +197,12 @@ public class FeatureGenerators {
 						List<Relation> outgoingRelations = relation.getSource()
 								.getOutgoingRelations();
 
-						for (int i = 0; i < outgoingRelations.size(); i++) {
-							Relation r = outgoingRelations.get(i);
-							if (r.getTarget() == phrase) {
-								break;
-							}
-							prev = r.getTarget();
-						}
+                        for (Relation r : outgoingRelations) {
+                            if (r.getTarget() == phrase) {
+                                break;
+                            }
+                            prev = r.getTarget();
+                        }
 
 						if (prev != null)
 							siblings.add(prev);
@@ -213,7 +211,6 @@ public class FeatureGenerators {
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -262,7 +259,6 @@ public class FeatureGenerators {
 				} catch (EdisonException e) {
 					throw new RuntimeException(e);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 

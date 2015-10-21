@@ -97,24 +97,30 @@ public class Main {
 
 	@CommandDescription(description = "Performs the full training & testing sequence for all SRL types",
 			usage = "expt [Verb | Nom] cacheDatasets=[true | false]")
-	public static void expt(String srlType, String cacheDatasets, String learnerConfig) throws Exception {
+	public static void expt(String srlType, String cacheDatasets) throws Exception {
 		// Step 1: Cache all the datasets we're going to use
 		if (Boolean.parseBoolean(cacheDatasets)) cacheDatasets();
 
 		// Step 2: Iterate between pre-extracting all the features needed for training and training
+
+        // We don't need to train a predicate classifier for Verb
+        if (SRLType.valueOf(srlType) == SRLType.Nom) {
+            preExtract(srlType, "Predicate");
+            train(srlType, "Predicate");
+        }
+
         preExtract(srlType, "Sense");
-        train(srlType, "Sense",learnerConfig);
+        train(srlType, "Sense");
 
         preExtract(srlType, "Identifier");
-        train(srlType, "Identifier",learnerConfig);
+        train(srlType, "Identifier");
         tuneIdentifier(srlType);
 
         preExtract(srlType, "Classifier");
-        train(srlType, "Classifier",learnerConfig);
+        train(srlType, "Classifier");
 
 		// Step 3: Evaluate
 		evaluate(srlType);
-		System.out.println("All Done!");
 	}
 
 	@CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
@@ -185,7 +191,7 @@ public class Main {
 		Counter<String> addedViews = new Counter<>();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(configFile, true);
+		TextPreProcessor.initialize(configFile);
 
 		int count = 0;
 		while (dataset.hasNext()) {
@@ -229,10 +235,20 @@ public class Main {
 	public static SRLManager getManager(SRLType srlType, boolean trainingMode) throws Exception {
 		String viewName;
 		if (defaultParser == null) defaultParser = SRLProperties.getInstance().getDefaultParser();
-		if (defaultParser.equals("Charniak")) viewName = ViewNames.PARSE_CHARNIAK;
-		else if (defaultParser.equals("Berkeley")) viewName = ViewNames.PARSE_BERKELEY;
-		else if (defaultParser.equals("Stanford")) viewName = ViewNames.PARSE_STANFORD;
-		else viewName = defaultParser;
+        switch (defaultParser) {
+            case "Charniak":
+                viewName = ViewNames.PARSE_CHARNIAK;
+                break;
+            case "Berkeley":
+                viewName = ViewNames.PARSE_BERKELEY;
+                break;
+            case "Stanford":
+                viewName = ViewNames.PARSE_STANFORD;
+                break;
+            default:
+                viewName = defaultParser;
+                break;
+        }
 
 		if (srlType == SRLType.Verb)
 			return new VerbSRLManager(trainingMode, viewName);
@@ -275,7 +291,6 @@ public class Main {
 
 		String allDataCacheFile = properties.getFeatureCacheFile(srlType,
 				modelToExtract, featureSet, defaultParser, dataset);
-		System.out.println("reading feature cache from " + allDataCacheFile);
 		FeatureVectorCacheFile featureCache = preExtract(numConsumers, manager,
 				modelToExtract, dataset, allDataCacheFile, false);
 
@@ -307,9 +322,6 @@ public class Main {
 		if (IOUtils.exists(cacheFile2)) {
 			log.warn("Old pruned cache file found. Not doing anything...");
 			return;
-//			log.warn("Old pruned cache file found. Deleting...");
-//			IOUtils.rm(cacheFile2);
-//			log.info("Done");
 		}
 
 		log.info("Pruning features. Saving pruned features to {}", cacheFile2);
@@ -358,7 +370,7 @@ public class Main {
 
 	@CommandDescription(description = "Trains a specific model and SRL type",
 			usage = "train [Verb | Nom] [Predicate | Sense | Identifier | Classifier]")
-	public static void train(String srlType_, String model_, String learnerConfig) throws Exception {
+	public static void train(String srlType_, String model_) throws Exception {
 		SRLType srlType = SRLType.valueOf(srlType_);
 		SRLManager manager = getManager(srlType, true);
 
@@ -392,7 +404,7 @@ public class Main {
 		log.info("Setting up solver, learning may take time if you have too many instances in SLProblem ....");
 
 		SLParameters params = new SLParameters();
-		params.loadConfigFile(learnerConfig);
+		params.loadConfigFile(properties.getLearnerConfig());
 		params.C_FOR_STRUCTURE = (float) c;
 
 		SRLMulticlassInference infSolver = new SRLMulticlassInference(manager, model);
@@ -504,12 +516,10 @@ public class Main {
 			count++;
 			if (count % 1000 == 0) {
 				long end = System.currentTimeMillis();
-				log.info(count + " sentences done. Took "
-						+ (end - start) + "ms, F1 so far = "
-						+ tester.getAverageF1());
+				log.info(count + " sentences done. Took " + (end - start) + "ms, " +
+                        "F1 so far = " + tester.getAverageF1());
 			}
 		}
-		System.exit(-1);
 		long end = System.currentTimeMillis();
 		System.out.println(count + " sentences done. Took " + (end - start) + "ms");
 

@@ -4,14 +4,12 @@ import edu.illinois.cs.cogcomp.core.datastructures.Option;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry;
 import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses;
 import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.srl.core.AbstractPredicateDetector;
-
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
@@ -73,7 +71,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 			return Option.empty();
 		} else {
 
-			Option<String> opt = Option.empty();
+			Option<String> opt;
 			String token = ta.getToken(tokenId).toLowerCase();
 			if (pluralLemmas.contains(token)) {
 				opt = testTokenVariations(token);
@@ -121,7 +119,7 @@ public class NomPredicateDetectorHeuristic extends AbstractPredicateDetector {
 
 	private Option<String> testTokenVariations(String token) {
 
-		Option<String> opt = Option.empty();
+		Option<String> opt;
 		if (nomLex.isPlural(token)) {
 			token = nomLex.getSingular(token);
 		}

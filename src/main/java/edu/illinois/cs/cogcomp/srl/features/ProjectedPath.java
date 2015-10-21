@@ -35,11 +35,11 @@ public class ProjectedPath implements FeatureExtractor {
 		try {
 			c2 = parse.getParsePhrase(c).cloneForNewView("");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		if (!c2.getLabel().equals("VP"))
+        assert c2 != null;
+        if (!c2.getLabel().equals("VP"))
 			return feats;
 
 		boolean found = false;
@@ -66,11 +66,11 @@ public class ProjectedPath implements FeatureExtractor {
 			try {
 				c1 = parse.getParsePhrase(c.getIncomingRelations().get(0).getSource()).cloneForNewView("");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			String path = PathFeatureHelper.getFullParsePathString(c1, c2, 400);
+            assert c1 != null;
+            String path = PathFeatureHelper.getFullParsePathString(c1, c2, 400);
 			feats.add(DiscreteFeature.create(path));
 		}
 

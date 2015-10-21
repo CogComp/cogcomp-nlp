@@ -21,8 +21,6 @@ import edu.illinois.cs.cogcomp.srl.features.ProjectedPath;
 import edu.illinois.cs.cogcomp.srl.inference.SRLConstraints;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -117,7 +115,6 @@ public abstract class SRLManager {
 		for (Models m : Models.values()) {
 			ModelInfo info = new ModelInfo(this, m);
 			modelInfo.put(m, info);
-
 		}
 	}
 
@@ -494,7 +491,7 @@ public abstract class SRLManager {
 				log.error("Unknown predicate {}. Allowing only sense 01", predicate);
 			}
 		}
-		return new HashSet<>(Arrays.asList("01"));
+		return new HashSet<>(Collections.singletonList("01"));
 
 	}
 
@@ -544,8 +541,7 @@ public abstract class SRLManager {
 				scores[label] = -50;
 			}
 			else {
-				SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, type, this);
-				scores[label] = w.dotProduct(x.getCachedFeatureVector(type),label * this.getModelInfo(type).getLexicon().size());
+                scores[label] = w.dotProduct(x.getCachedFeatureVector(type),label * this.getModelInfo(type).getLexicon().size());
 			}
 		}
 

@@ -17,8 +17,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SRLPredicateInstance implements IInstance {
-
-	private static final int FEATURE_EXTRACTION_N_THREADS = 10;
+	private static final int FEATURE_EXTRACTION_N_THREADS = Math.min(10, Runtime.getRuntime().availableProcessors());
 
 	private final static Logger log = LoggerFactory.getLogger(SRLPredicateInstance.class);
 
@@ -54,7 +53,6 @@ public class SRLPredicateInstance implements IInstance {
 	}
 
 	public SRLPredicateInstance(Constituent predicate, SRLManager manager, ArgumentIdentifier identifier) {
-
 		this.manager = manager;
 
         //XXX Generate a clone of the predicate to avoid changing the gold TA
@@ -90,7 +88,6 @@ public class SRLPredicateInstance implements IInstance {
 		return senseInstance;
 	}
 
-//	@Override
 	public double size() {
 		return this.candidates.size() + 1;
 	}
@@ -139,7 +136,6 @@ public class SRLPredicateInstance implements IInstance {
 
 			if (cacheIdentifier)
 				list.add(new Pair<>(x, Models.Identifier));
-
 		}
 
 		Parallel.Method<Pair<SRLMulticlassInstance, Models>> function =
@@ -154,7 +150,6 @@ public class SRLPredicateInstance implements IInstance {
 
 				try {
 					Set<Feature> feats = modelInfo.fex.getFeatures(x.getConstituent());
-
 					x.cacheFeatureVector(m, feats);
 				} catch (Exception e) {
 					log.error("Unable to extract features for {}", x, e);

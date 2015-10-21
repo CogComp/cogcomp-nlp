@@ -16,16 +16,10 @@ public class SRLSentenceStructure implements IStructure {
 	public final SRLSentenceInstance x;
 	public final List<SRLPredicateStructure> ys;
 
-	public SRLSentenceStructure(SRLSentenceInstance instance,
-								List<SRLPredicateStructure> ys) {
+	public SRLSentenceStructure(SRLSentenceInstance instance, List<SRLPredicateStructure> ys) {
 		this.x = instance;
 		this.ys = ys;
 	}
-
-//	@Override
-//	public FeatureVector getFeatureVector() {
-//		throw new RuntimeException("Not yet implemented!");
-//	}
 
 	public PredicateArgumentView getView(SRLManager manager, TextAnnotation ta) {
 		String viewName = manager.getPredictedViewName();

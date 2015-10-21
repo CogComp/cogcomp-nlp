@@ -44,8 +44,7 @@ public class VerbSRLManager extends SRLManager {
 			.unmodifiableSet(new TreeSet<>(Arrays.asList(coreArguments)));
 
 	public static final Set<String> modifierArgumentSet = Collections
-			.unmodifiableSet(new TreeSet<>(Arrays
-                    .asList(modifierArguments)));
+			.unmodifiableSet(new TreeSet<>(Arrays.asList(modifierArguments)));
 
 	private ArgumentCandidateGenerator candidateGenerator;
 

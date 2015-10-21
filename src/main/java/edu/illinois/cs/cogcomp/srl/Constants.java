@@ -5,7 +5,7 @@ package edu.illinois.cs.cogcomp.srl;
  * TODO Change this before shipping
  */
 public class Constants {
-	public final static String systemVersion = "5.1";
+	public final static String systemVersion = "5.4.1";
 
 	public final static String systemName = "illinoisSRL";
 

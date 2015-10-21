@@ -3,7 +3,6 @@ package edu.illinois.cs.cogcomp.srl.caches;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
-import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
@@ -86,7 +85,7 @@ public class FeatureVectorCacheFile implements Closeable,
 			String features = parts[2];
 
 			SRLMulticlassInstance x = new SRLMulticlassInstance(model, lemma, features);
-			SRLMulticlassLabel y = new SRLMulticlassLabel(x, label, model, manager);
+			SRLMulticlassLabel y = new SRLMulticlassLabel(label, model, manager);
 
 			return new Pair<>(x, y);
 		} catch (Exception e) {
