@@ -11,7 +11,7 @@ import com.google.common.collect.Multimap;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.utils.PrettyPrintParseTree;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
@@ -24,7 +24,7 @@ public class BayraktarErrorAnalysis {
 	 * If it is not, then the commas with that pattern are printed out
 	 */
 	public static void verifyBayraktarLabelEqualsMostFrequentVivekNaveenLabel(){
-		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
 		List<Comma> vivekCommas = reader.getCommas();
 		Multimap<String, Comma> patternToVivekCommas = HashMultimap.create();
 		for(Comma comma: vivekCommas){
@@ -57,7 +57,7 @@ public class BayraktarErrorAnalysis {
 	 * for each annotated pattern, if there is a single comma whose VivekNaveen label differs, print all of them for further analysis 
 	 */
 	public static void analyseErrors() {
-		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
 		List<Comma> commas = reader.getCommas();
 		Multimap<String, Comma> patternToCommas = HashMultimap.create();
 		for(Comma comma: commas){

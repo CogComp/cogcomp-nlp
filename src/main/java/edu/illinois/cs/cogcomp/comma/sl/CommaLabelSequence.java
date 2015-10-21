@@ -42,9 +42,9 @@ public class CommaLabelSequence implements IStructure{
 		this.labelIds = labelIds;
 		
 		labels = new ArrayList<>();
-		for(int i = 0; i<labelIds.length; i++){
-			labels.add(lexicon.getLabelString(labelIds[i]));
-		}
+        for (int labelId : labelIds) {
+            labels.add(lexicon.getLabelString(labelId));
+        }
 	}
 	
 	@Override

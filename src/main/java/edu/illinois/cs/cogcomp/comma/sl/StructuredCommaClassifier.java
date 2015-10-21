@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
@@ -23,16 +24,15 @@ public class StructuredCommaClassifier extends SLModel{
 	 *
 	 * @param lbjExtractors the LBJava extractors we use to get features. Thus we are easily able to build features for sl
 	 * @param lbjLabeler the LBJava labeler we use to get labels
-	 * @param configFilePath path to config file for the structured learner
 	 * @throws Exception
 	 */
-	public StructuredCommaClassifier(List<Classifier> lbjExtractors, Classifier lbjLabeler, String configFilePath) throws Exception {
+	public StructuredCommaClassifier(List<Classifier> lbjExtractors, Classifier lbjLabeler) throws Exception {
 		this.lbjExtractors = lbjExtractors;
 		this.lbjLabeler = lbjLabeler;
 		lm = new Lexiconer();
 		infSolver = new CommaSequenceInferenceSolver(lm);
 		para = new SLParameters();
-		para.loadConfigFile(configFilePath);
+		para.loadConfigFile(CommaProperties.getInstance().getLearnerConfig());
 		featureGenerator = new CommaSequenceFeatureGenerator(lm);
 	}
 	

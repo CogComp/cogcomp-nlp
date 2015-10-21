@@ -18,10 +18,9 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  */
 public class CommaParser implements Parser {
     private List<Comma> commas;
-    private List<Sentence> sentences;
     Iterator<Comma> commaIt;
 
-    public static enum Ordering{
+    public enum Ordering{
     	RANDOM,//random ordering
     	ORDERED,//seeded random. useful if you want the same order over multiple runs
     	ORIGINAL,//original order
@@ -35,7 +34,6 @@ public class CommaParser implements Parser {
   	 * @param orderCommasBySentence set to true if the all the commas of a sentence should be present before a comma from another sentence can be presented
   	 */
   	public CommaParser(List<Sentence> sentences, Ordering ordering, boolean orderCommasBySentence){
-    	this.sentences = sentences;
     	commas = new ArrayList<>();
     	if (orderCommasBySentence) {
 			switch (ordering) {
@@ -81,8 +79,4 @@ public class CommaParser implements Parser {
 
     @Override
     public void close() {}
-    
-    public List<Sentence> getSentences(){
-    	return sentences;
-    }
 }

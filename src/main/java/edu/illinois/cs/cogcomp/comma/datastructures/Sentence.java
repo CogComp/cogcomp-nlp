@@ -6,9 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import java_cup.internal_error;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 
 /**
@@ -26,8 +24,8 @@ public class Sentence implements Serializable{
 	 * helper for constructing sentences in which all commas have a single label
 	 */
 	public static Sentence makeSentence(TextAnnotation ta, TextAnnotation goldTa, List<String> singleLabels, List<String> singleRefinedLabels) throws Exception{
-		List<List<String>> commaLabels = new ArrayList<List<String>>();
-		List<List<String>> refinedCommaLabels = new ArrayList<List<String>>();
+		List<List<String>> commaLabels = new ArrayList<>();
+		List<List<String>> refinedCommaLabels = new ArrayList<>();
 		for(int i=0; i<singleLabels.size(); i++){
 			if(commaLabels.get(i) == null){
 				commaLabels.add(null);

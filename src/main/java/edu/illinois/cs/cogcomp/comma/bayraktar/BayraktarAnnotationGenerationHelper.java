@@ -86,8 +86,8 @@ public class BayraktarAnnotationGenerationHelper {
     		System.out.println((i+2) + " " + labels[i]);
     	System.out.println("Enter cmd: ");
     	
-    	int cmd = 0;
-    	while(cmd==0 || cmd==1){
+    	int cmd;
+    	while(true){
     		cmd = scanner.nextInt();
     		System.out.println("COMMAND IS ---------------------------- " + cmd);
     		switch (cmd) {
@@ -116,7 +116,6 @@ public class BayraktarAnnotationGenerationHelper {
     			return true;
     		}
 		}
-		return false;
     }
     
     /**
@@ -152,7 +151,7 @@ public class BayraktarAnnotationGenerationHelper {
     		int patternFrequency = pair.getSecond().size();
     		
     		boolean annottaionFound = BayraktarPatternLabeler.isLabelAvailable(pair.getFirst()); 
-    		if(true == annottaionFound || true==present(pair.getFirst(), pair.getSecond())){
+    		if(annottaionFound || present(pair.getFirst(), pair.getSecond())){
     			annotatedPatternFrequency += patternFrequency;
     			annotationCount++;	
     		}
@@ -163,28 +162,8 @@ public class BayraktarAnnotationGenerationHelper {
     	System.out.println("total patterns annotated = " + annotationCount);
     	System.out.println("% of occurrences annotated = " + annotatedPatternFrequency/(double)totalCount);
     }
-    
-    public static void printBayraktarAnnotationStatistics(){
-    	Multimap<String, Comma> syntaxPatternToCommas = getBayraktarPatternToPTBCommas();
-    	@SuppressWarnings("unchecked")
-    	int annotatedPatternsCounter = 0;
-    	int commaCoverageCounter=0;
-    	int totalCommas = 0;
-    	for(String pattern : syntaxPatternToCommas.keySet()){
-    		if(BayraktarPatternLabeler.isLabelAvailable(pattern)){
-    			commaCoverageCounter+=syntaxPatternToCommas.get(pattern).size();
-    			annotatedPatternsCounter++;
-    		}
-    		totalCommas+=syntaxPatternToCommas.get(pattern).size();
-    	}
-    	System.out.println("# patterns in PTB = " + syntaxPatternToCommas.size());
-    	System.out.println("# patterns that have been annoted = " + BayraktarPatternLabeler.deleteGetTotalPatternsAnnotated());
-    	System.out.println("# patterns in PTB that have annotations = " + annotatedPatternsCounter);
-    	System.out.println("# commas in PTB = " + totalCommas);
-    	System.out.println("% of PTB commas that have annotaitons = " + commaCoverageCounter/(double)totalCommas);
-    }
-    
-    
+
+
     public static void main(String[] args){
     	BayraktarAnnotationGenerationHelper annotationHelper = new BayraktarAnnotationGenerationHelper();
     	annotationHelper.startManualAnnotation();

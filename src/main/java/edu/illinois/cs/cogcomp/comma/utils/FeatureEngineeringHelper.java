@@ -19,7 +19,7 @@ import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
 import edu.illinois.cs.cogcomp.comma.lbj.ParseTreeFeature;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
@@ -40,10 +40,10 @@ public class FeatureEngineeringHelper {
 	
 	public static void featureEngineering() throws Exception{
 		LocalCommaClassifier learner = new LocalCommaClassifier();
-		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
 		CommaParser commaParser = new CommaParser(reader.getSentences(), Ordering.ORDERED, true);
 		List<Comma> commaList = reader.getCommas();
-		Comma[] commas = (Comma[]) commaList.toArray(new Comma[commaList.size()]);
+		Comma[] commas = commaList.toArray(new Comma[commaList.size()]);
 		
 		ParseFeatures __ParseFeatures = new ParseFeatures();
 		ParseTreeFeature __ParseTreeFeature = new ParseTreeFeature();
@@ -70,7 +70,7 @@ public class FeatureEngineeringHelper {
 		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<>();
 		
 		for(List<Classifier> featureSet: ablatedFeatures){
-			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler, "config/DCD.config");
+			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler);
 			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, commaParser, false, false);
 			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
 			
@@ -112,7 +112,7 @@ public class FeatureEngineeringHelper {
 		Collections.sort(performanceFeaturePairs, new Comparator<Pair<Double, String>>() {
 			@Override
 			public int compare(Pair<Double, String> o1, Pair<Double, String> o2) {
-				return (int) Math.signum(o1.getFirst().doubleValue() - o2.getFirst().doubleValue());
+				return (int) Math.signum(o1.getFirst() - o2.getFirst());
 			}
 		});
 		

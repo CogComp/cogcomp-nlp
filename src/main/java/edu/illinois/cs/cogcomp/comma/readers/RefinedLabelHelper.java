@@ -71,8 +71,8 @@ public class RefinedLabelHelper {
 	 */
 	public static void createFileOfOtherCommas(){
 		CommaProperties properties = CommaProperties.getInstance();
-		assert properties.useNewLabelSet()==false;
-		VivekAnnotationReader reader = new VivekAnnotationReader(properties.getOriginalVivekAnnotationFile());
+		assert !properties.useNewLabelSet();
+		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(properties.getOriginalSrikumarAnnotationFile());
 		List<Comma> commas = reader.getCommas();
 		String otherTextFileData = "";
 		for(Comma comma: commas){
@@ -88,23 +88,5 @@ public class RefinedLabelHelper {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	/**
-	 * input: comma-id of a comma
-	 * output: penntreebank based parse tree annotation of the sentence of the comma whose comma-id was provided
-	 */
-	public static void annotationHelper(){
-		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
-		List<Comma> commas = reader.getCommas();
-		Map<String, Comma> idToComma = new HashMap<>();
-		for(Comma comma: commas)
-			idToComma.put(comma.getCommaID(), comma);
-		
-		Scanner scanner = new Scanner(System.in);
-		while(true){
-			String id = scanner.nextLine();
-			Comma comma = idToComma.get(id);
-			System.out.println(PrettyPrintParseTree.pennString(((TreeView)comma.getTextAnnotation(true).getView(ViewNames.PARSE_GOLD)).getTree(0))+"\n\n\n");
-		}
-	}
+
 }

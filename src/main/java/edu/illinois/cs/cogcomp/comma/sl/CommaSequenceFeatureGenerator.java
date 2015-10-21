@@ -23,7 +23,7 @@ public class CommaSequenceFeatureGenerator extends AbstractFeatureGenerator {
 	@Override
 	public IFeatureVector getFeatureVector(IInstance x, IStructure y) {
 		//lexicon should have been completely built while reading the problem instances itself
-		assert false == lexicon.isAllowNewFeatures();
+		assert !lexicon.isAllowNewFeatures();
 		
 		CommaSequence commaSequence = (CommaSequence) x;
 		CommaLabelSequence commaLabelSequence = (CommaLabelSequence) y;

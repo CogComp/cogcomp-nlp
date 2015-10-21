@@ -27,7 +27,7 @@ public class BayraktarPatternLabeler {
     	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir();
 		for(String label : labels){
 			File file = new File(ANNOTATION_SOURCE_DIR + label);
-			List<String> lines = null;
+			List<String> lines;
 			try {
 				lines = FileUtils.readLines(file, null);
 			} catch (IOException e) {

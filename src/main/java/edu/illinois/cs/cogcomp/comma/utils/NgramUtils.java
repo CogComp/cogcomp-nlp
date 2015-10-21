@@ -12,7 +12,7 @@ public class NgramUtils {
 	 * @return list of n sized contiguous subsequences of words
 	 */
 	public static List<String> ngrams(int n, List<String> words) {
-        List<String> ngrams = new ArrayList<String>();
+        List<String> ngrams = new ArrayList<>();
         for (int i = 0; i < words.size() - n + 1; i++)
             ngrams.add("N" + n+ concat(words.subList(i, i+n)) + "I"+i);
         return ngrams;
@@ -21,7 +21,7 @@ public class NgramUtils {
 	private static String concat(List<String> words) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < words.size(); i++)
-            sb.append((i > 0 ? "@" : "") + words.get(i));
+            sb.append(i > 0 ? "@" : "").append(words.get(i));
         return sb.toString();
     }
 	

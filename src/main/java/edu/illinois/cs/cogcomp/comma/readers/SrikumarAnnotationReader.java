@@ -1,18 +1,5 @@
 package edu.illinois.cs.cogcomp.comma.readers;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
@@ -27,10 +14,14 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
 /**
  * Sentence reader for the comma annotation dataset of Srikumar et al.
  */
-public class VivekAnnotationReader implements IResetableIterator<Sentence>{
+public class SrikumarAnnotationReader implements IResetableIterator<Sentence>{
 	private PreProcessor preProcessor;
     private final String annotationFile;
     private List<Comma> commas;
@@ -40,7 +31,7 @@ public class VivekAnnotationReader implements IResetableIterator<Sentence>{
      
     
     
-    public VivekAnnotationReader(String annotationFile) {
+    public SrikumarAnnotationReader(String annotationFile) {
         this.annotationFile = annotationFile;
         CommaProperties properties = CommaProperties.getInstance();
         treebankHome = properties.getPTBHDir();
@@ -50,7 +41,6 @@ public class VivekAnnotationReader implements IResetableIterator<Sentence>{
         try {
         	this.preProcessor = new PreProcessor();
         	readData();
-        	this.preProcessor.closeCache();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);

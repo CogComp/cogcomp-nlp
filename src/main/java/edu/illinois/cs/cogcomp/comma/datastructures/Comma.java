@@ -1,37 +1,20 @@
 package edu.illinois.cs.cogcomp.comma.datastructures;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.print.attribute.standard.RequestingUserName;
-
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
-import edu.illinois.cs.cogcomp.comma.readers.RefinedLabelHelper;
 import edu.illinois.cs.cogcomp.comma.utils.NgramUtils;
 import edu.illinois.cs.cogcomp.comma.utils.PrettyPrintParseTree;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A data structure containing all the information related to a comma.
@@ -62,7 +45,7 @@ public class Comma implements Serializable {
     /**
      * Comma constructor when labels are known
      * @param commaPosition The token index of the comma
-     * @param sentence The tokenized string of the sentence
+     * @param s The tokenized string of the sentence
      */
     protected Comma(int commaPosition, Sentence s, List<String> labels, List<String> refinedLabels) {
     	this.commaPosition = commaPosition;
@@ -75,10 +58,10 @@ public class Comma implements Serializable {
     /**
      * Comma constructor for when labels are not known
      * @param commaPosition The token index of the comma
-     * @param sentence The tokenized string of the sentence
+     * @param s The tokenized string of the sentence
      */
-    protected Comma(int commaPostion, Sentence s){
-    	this(commaPostion, s, null, null);
+    protected Comma(int commaPosition, Sentence s){
+    	this(commaPosition, s, null, null);
     }
     
 
@@ -110,21 +93,7 @@ public class Comma implements Serializable {
     	else
 			return getLabel();
     }
-    
-    public List<String> getBayraktarRefinedLabels() {
-    	if(!USE_REFINED_LABELS || !BayraktarPatternLabeler.isLabelAvailable(getBayraktarPattern()))
-    		return getLabels();
-    	
-    	String bayraktarLabel = BayraktarPatternLabeler.getLabel(getBayraktarPattern());
-    	List<String> bayraktarRefinedLabels = new ArrayList<>();
-    	for(String label : getLabels())
-    		if(label.equals("Other"))
-    			bayraktarRefinedLabels.add(bayraktarLabel);
-    	else
-			bayraktarRefinedLabels.add(label);
-    	return bayraktarRefinedLabels;
-    }
-    
+
     public int getPosition(){
     	return commaPosition;
     }
@@ -140,27 +109,25 @@ public class Comma implements Serializable {
 			TreeView tv = (TreeView) s.goldTa.getView(ViewNames.PARSE_GOLD);
 			info.append(PrettyPrintParseTree.pennString(tv.getTree(0)));
 		}
-		if(s.ta!=null){
-			info.append("\n\nPARSE_STANFORD\n");
-			TreeView tv1 = (TreeView) s.ta.getView(ViewNames.PARSE_STANFORD);
-			info.append(PrettyPrintParseTree.pennString(tv1.getTree(0)));
-			info.append("\n\nPARSE_CHARNIAK\n");
-			TreeView tv2 = (TreeView) s.ta.getView(ViewNames.PARSE_CHARNIAK);
-			info.append(PrettyPrintParseTree.pennString(tv2.getTree(0)));
-			info.append("\n\nNER\n");
-			info.append(s.ta.getView(ViewNames.NER_CONLL));
-			info.append("\n\nSHALLOW_PARSE\n");
-			info.append(s.ta.getView(ViewNames.SHALLOW_PARSE));
-			info.append("\n\nPOS\n");
-			info.append(s.ta.getView(ViewNames.POS));
-			info.append("\n\nSRL_VERB\n");
-			info.append(s.ta.getView(ViewNames.SRL_VERB));
-			info.append("\n\nSRL_NORM\n");
-			info.append(s.ta.getView(ViewNames.SRL_NOM));
-			info.append("\n\nSRL_PREP\n");
-			info.append(s.ta.getView(ViewNames.SRL_PREP));
-		}
-		return info.toString();
+        info.append("\n\nPARSE_STANFORD\n");
+        TreeView tv1 = (TreeView) s.ta.getView(ViewNames.PARSE_STANFORD);
+        info.append(PrettyPrintParseTree.pennString(tv1.getTree(0)));
+        info.append("\n\nPARSE_CHARNIAK\n");
+        TreeView tv2 = (TreeView) s.ta.getView(ViewNames.PARSE_CHARNIAK);
+        info.append(PrettyPrintParseTree.pennString(tv2.getTree(0)));
+        info.append("\n\nNER\n");
+        info.append(s.ta.getView(ViewNames.NER_CONLL));
+        info.append("\n\nSHALLOW_PARSE\n");
+        info.append(s.ta.getView(ViewNames.SHALLOW_PARSE));
+        info.append("\n\nPOS\n");
+        info.append(s.ta.getView(ViewNames.POS));
+        info.append("\n\nSRL_VERB\n");
+        info.append(s.ta.getView(ViewNames.SRL_VERB));
+        info.append("\n\nSRL_NORM\n");
+        info.append(s.ta.getView(ViewNames.SRL_NOM));
+        info.append("\n\nSRL_PREP\n");
+        info.append(s.ta.getView(ViewNames.SRL_PREP));
+        return info.toString();
 	}
 	
 	public TextAnnotation getTextAnnotation(boolean gold){
@@ -597,7 +564,7 @@ public class Comma implements Serializable {
     	ngrams.addAll(NgramUtils.ngrams(1, wordWindow));
     	//ngrams.addAll(FeatureUtils.ngrams(2, wordWindow));
     	
-    	return ngrams.toArray(new String[0]);
+    	return ngrams.toArray(new String[ngrams.size()]);
     }
     
     public String[] getPOSNgrams(){
@@ -614,7 +581,7 @@ public class Comma implements Serializable {
     	ngrams.addAll(NgramUtils.ngrams(4, posWindow));
     	ngrams.addAll(NgramUtils.ngrams(5, posWindow));
 
-    	return ngrams.toArray(new String[0]);
+    	return ngrams.toArray(new String[ngrams.size()]);
     }
    
     public String[] getChunkNgrams(){
@@ -629,7 +596,7 @@ public class Comma implements Serializable {
     	ngrams.addAll(NgramUtils.ngrams(1, chunkWindow));
     	ngrams.addAll(NgramUtils.ngrams(2, chunkWindow));
 
-    	return ngrams.toArray(new String[0]);
+    	return ngrams.toArray(new String[ngrams.size()]);
     }
     
     public String[] getSiblingPhraseNgrams(){
@@ -644,7 +611,7 @@ public class Comma implements Serializable {
     	ngrams.addAll(NgramUtils.ngrams(1, phraseWindow));
     	ngrams.addAll(NgramUtils.ngrams(2, phraseWindow));
     	
-    	return ngrams.toArray(new String[0]);
+    	return ngrams.toArray(new String[ngrams.size()]);
     }
     
     public String[] getParentSiblingPhraseNgrams(){
@@ -660,7 +627,7 @@ public class Comma implements Serializable {
     	ngrams.addAll(NgramUtils.ngrams(1,parentPhraseWindow));
     	ngrams.addAll(NgramUtils.ngrams(2, parentPhraseWindow));
     	
-    	return ngrams.toArray(new String[0]);
+    	return ngrams.toArray(new String[ngrams.size()]);
     }
     
     public String getVivekAnnotatedText() {
@@ -692,9 +659,4 @@ public class Comma implements Serializable {
 				+ StringUtils.join(" ", 
 						tokens.subList(commaPosition + 1, tokens.size()));
 	}
-	
-	public String getText(){
-		return StringUtils.join(" ", s.ta.getTokens());
-	}
-
 }

@@ -30,36 +30,50 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.7</version>
+            <optional>true</optional>
+        </dependency>
+
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-core-utilities</artifactId>
-			<version>1.2.19</version>
+			<version>1.3.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>LBJava</artifactId>
-			<version>1.0.4</version>
+			<version>1.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-sl</artifactId>
-			<version>0.2.3</version>
+			<version>1.3.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>com.gurobi</groupId>
 			<artifactId>gurobi</artifactId>
 			<version>6.0</version>
+            <optional>true</optional>
 		</dependency>
 
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-caching-curator</artifactId>
-			<version>2.1.1</version>
+			<artifactId>illinois-curator</artifactId>
+			<version>3.1.1</version>
 		</dependency>
-	</dependencies>
+
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>0.1.9</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<extensions>
@@ -105,11 +119,26 @@
 		</plugins>
 	</build>
 
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
 	<distributionManagement>
 		<repository>
 			<id>CogcompSoftware</id>
 			<name>CogcompSoftware</name>
 			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
+        <site>
+            <id>CogcompSoftwareDoc</id>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
+        </site>
 	</distributionManagement>
 </project>

@@ -14,15 +14,15 @@ import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
  * @author navari
  *
  */
-public class VivekAnnotationExtractor {
+public class SrikumarAnnotationExtractor {
 	Map<String, String> annotationIdToAnnotation = new HashMap<>();
 	
-	public VivekAnnotationExtractor(){
+	public SrikumarAnnotationExtractor(){
 		instantiate();
 	}
 	
 	public void instantiate(){
-		String OriginalVivekAnnotationFileName = CommaProperties.getInstance().getOriginalVivekAnnotationFile();
+		String OriginalVivekAnnotationFileName = CommaProperties.getInstance().getOriginalSrikumarAnnotationFile();
 		Scanner scanner;
 		try {
 			scanner = new Scanner(new File(OriginalVivekAnnotationFileName));

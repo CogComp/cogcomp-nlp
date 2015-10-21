@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -185,24 +185,7 @@ learn CommaLabel
 	
 	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures, WordFeatures
 	with new SparseNetworkLearner(new SparseAveragedPerceptron(0.003, 0, 3.5))
-	from new CommaParser(new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile()).getSentences(), CommaParser.Ordering.RANDOM, true)
-	/*
-	with SparseNetworkLearner {
-	    SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
-	    //p.learningRate = {{.000 -> 0.010 : 0.002}};
-	    //p.thickness = {{0.0 -> 5.0 : 1}};
-	    //p.threshold = {{-5.0 -> 5.0 : 1}};
-	    baseLTU = new SparseAveragedPerceptron(p);
-	}
-	
-	from
-		new CommaParser(new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile()))
-		250 rounds
-		//{{250, 300, 350, 400, 500, 600}} rounds
-		
-	cval 5 "sequential"//DONT USE RANDOM, else commas will from same sentence will be in both train and test set!!!!
-	progressOutput 100000
-	*/
+	from new CommaParser(new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile()).getSentences(), CommaParser.Ordering.RANDOM, true)
 end
 
 

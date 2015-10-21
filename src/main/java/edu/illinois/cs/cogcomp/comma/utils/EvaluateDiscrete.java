@@ -44,8 +44,8 @@ public class EvaluateDiscrete extends TestDiscrete{
 			HashMap<String, Integer> predictionHistogramForL = confusionMatrix.get(labels.get(x));
 			for(int y = 0; y<numLabels; y++){
 				Integer count = predictionHistogramForL.get(labels.get(y));
-				double fraction = ((count==null) ? 0 : count.intValue())/(double)getLabeled(labels.get(x));
-				confusion[x][y] = new Double(fraction);
+				double fraction = ((count==null) ? 0 : count)/(double)getLabeled(labels.get(x));
+				confusion[x][y] = fraction;
 			}
 		}
 		

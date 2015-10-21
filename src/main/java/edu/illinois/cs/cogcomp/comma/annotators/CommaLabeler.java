@@ -1,20 +1,12 @@
 package edu.illinois.cs.cogcomp.comma.annotators;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 /**
@@ -77,25 +69,7 @@ public class CommaLabeler implements Annotator{
 	public String getViewName() {
 		return VIEW_NAME;
 	}
-    
-    /**
-     * 
-     * @param ta the input TextAnnotation for whose sentence we want to create Commas
-     * @return a list of Commas. Each comma in the list corresponds to a comma in the sentence represented by ta
-     */
-/*    public static List<Comma> getCommas(TextAnnotation ta){
-    	List<Comma> commas = new ArrayList<>();
-    	Sentence sentenceStruct = new Sentence();
-    	String[] tokenizedText = ta.getTokens();
-    	for (Constituent comma : ta.getView(ViewNames.POS).getConstituents()) {
-            if (!comma.getLabel().equals(",")) continue;
-            Comma commaStruct = new Comma(comma.getStartSpan(), tokenizedText, ta, sentenceStruct);
-            sentenceStruct.addComma(commaStruct);
-            commas.add(commaStruct);
-    	}
-    	return commas;
-    }
-*/
+
     public String[] getRequiredViews() {
         return requiredViews;
     }

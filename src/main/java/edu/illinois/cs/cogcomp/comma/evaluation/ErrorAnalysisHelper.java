@@ -6,7 +6,7 @@ import java.io.PrintWriter;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
-import edu.illinois.cs.cogcomp.comma.utils.VivekAnnotationExtractor;
+import edu.illinois.cs.cogcomp.comma.utils.SrikumarAnnotationExtractor;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
@@ -39,7 +39,7 @@ public class ErrorAnalysisHelper{
     
     public static void logClassifierErrors(Learner learner, Parser parser){
     	String directoryName = "data/errors/" + learner.name + "/";
-    	VivekAnnotationExtractor vivekAnnotationHelper = new VivekAnnotationExtractor();
+    	SrikumarAnnotationExtractor vivekAnnotationHelper = new SrikumarAnnotationExtractor();
 		EvaluateDiscrete ed = new EvaluateDiscrete();
 		Classifier oracle = learner.getLabeler();
 		parser.reset();

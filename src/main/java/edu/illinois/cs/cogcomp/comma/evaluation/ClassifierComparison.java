@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.comma.lbj.OxfordCommaConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.SubstitutePairConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.readers.VivekAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -35,7 +35,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  */
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
-		VivekAnnotationReader reader = new VivekAnnotationReader(CommaProperties.getInstance().getOriginalVivekAnnotationFile());
+		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
 		CommaParser parser = new CommaParser(reader.getSentences(), Ordering.RANDOM, true);
 		System.out.println("GOLD GOLD");
 		localCVal(true, true, parser, 250, 0.003, 0, 2.0, false);
@@ -44,71 +44,32 @@ public class ClassifierComparison {
 		System.out.println("AUTO AUTO");
 		localCVal(false, false, parser, 250, 0.003, 0, 3.5, false);
 
-		List<Classifier> lbjExtractors = new ArrayList<Classifier>();
+		List<Classifier> lbjExtractors = new ArrayList<>();
 		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
 		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
 		System.out.println("STRUCTURED GOLD");
-		StructuredCommaClassifier goldStructured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");
+		StructuredCommaClassifier goldStructured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler);
 		structuredCVal(goldStructured, parser, true, false);
 		System.out.println("STRUCTURED AUTO");
-		StructuredCommaClassifier autoStructured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");
+		StructuredCommaClassifier autoStructured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler);
 		structuredCVal(autoStructured, parser, false, false);
 		
 		System.out.println("BAYRAKTAR GOLD");
 		EvaluateDiscrete bayraktarGold = getBayraktarBaselinePerformance(parser, true);
-		//System.out.println(bayraktarGold.getOverallStats()[2]);
 		bayraktarGold.printPerformance(System.out);
-		//bayraktarGold.printConfusion(System.out);
 		System.out.println("BAYRAKTAR AUTO");
 		EvaluateDiscrete bayraktarAuto = getBayraktarBaselinePerformance(parser, false);
-		//System.out.println(bayraktarAuto.getOverallStats()[2]);
 		bayraktarAuto.printPerformance(System.out);
-		//bayraktarAuto.printConfusion(System.out);
-		
+
 		reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(parser, false);
 		
 		printConstrainedClassifierPerformance(parser);
 	}
 	
-	public static void errorAnalysis(){
-		/*Classifier oracle = new CommaLabel();
-		List<Classifier> classifiers = new ArrayList<Classifier>();
-		Classifier featureExtractor = new LocalCommaClassifier$$1();
-		classifiers.add(new LocalCommaClassifier());
-		classifiers.add(new SubstitutePairConstrainedCommaClassifier());
-		classifiers.add(new LocativePairConstrainedCommaClassifier());
-		classifiers.add(new ListCommasConstrainedCommaClassifier());
-		classifiers.add(new OxfordCommaConstrainedCommaClassifier());
-
-		//Parser parser = new CommaReader("data/comma_resolution_data.txt", "data/CommaTAGoldFinal.ser", Ordering.ORIGINAL_SENTENCE);
-		Parser parser = new CommaReader("data/test_commas.txt", "data/test_commas.ser", Ordering.ORIGINAL_SENTENCE);
-		ErrorAnalysis ea = new ErrorAnalysis("data/comma_resolution_data.txt", parser);
-		parser.reset();
-		for (Classifier classifier : classifiers) {
-			System.out.println(classifier.name);
-			EvaluateDiscrete td = new EvaluateDiscrete();
-			for(Comma c = (Comma) parser.next(); c!=null; c=(Comma) parser.next()){
-				String prediction = classifier.discreteValue(c);
-				String gold = oracle.discreteValue(c);
-				td.reportPrediction(prediction, gold);
-				if(!gold.equals(prediction)){
-					String textId = c.getTextAnnotation(true).getId();
-					String filename = "data/errors/" + classifier.name + "/" + textId.replaceAll("\\W+", "_") + "/" + c.commaPosition;
-					FeatureVector fv = featureExtractor.classify(c);
-					ErrorAnalysis.logPredictionError(filename, c.getAnnotatedText(), prediction, gold, ea.getInstanceInfo(textId), fv);
-				}
-			}
-			td.printPerformance(System.out);
-			td.printConfusion(System.out);
-			parser.reset();
-			System.out.println();
-		}*/
-	}
-	
 	public static void printConstrainedClassifierPerformance(Parser parser){
 		List<Pair<Classifier, EvaluateDiscrete>> classifiers = new ArrayList<>();
 		LocalCommaClassifier learner = new LocalCommaClassifier();
-		EvaluateDiscrete unonstrainedPerformance = new EvaluateDiscrete();
+		EvaluateDiscrete unconstrainedPerformance = new EvaluateDiscrete();
 		learner.setLTU(new SparseAveragedPerceptron(0.003, 0, 3.5));
 		classifiers.add(new Pair<Classifier, EvaluateDiscrete>(new SubstitutePairConstrainedCommaClassifier(), new EvaluateDiscrete()));
 		classifiers.add(new Pair<Classifier, EvaluateDiscrete>(new LocativePairConstrainedCommaClassifier(), new EvaluateDiscrete()));
@@ -129,7 +90,7 @@ public class ClassifierComparison {
 			learner.save();
 			foldParser.setFromPivot(true);
 			foldParser.reset();
-			unonstrainedPerformance.reportAll(EvaluateDiscrete.evaluateDiscrete(learner, learner.getLabeler(), foldParser));
+			unconstrainedPerformance.reportAll(EvaluateDiscrete.evaluateDiscrete(learner, learner.getLabeler(), foldParser));
 			for(Pair<Classifier, EvaluateDiscrete> pair: classifiers){
 				foldParser.reset();
 				pair.getSecond().reportAll(EvaluateDiscrete.evaluateDiscrete(pair.getFirst(), learner.getLabeler(), foldParser));
@@ -150,25 +111,23 @@ public class ClassifierComparison {
 		for(int i=0; i<k; foldParser.setPivot(++i)){
 			foldParser.setFromPivot(false);
 			foldParser.reset();
-			LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<Sentence>();
+			LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<>();
 			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
 				trainSentences.add(((Comma)comma).getSentence());
 			}
-			model.train(new ArrayList<Sentence>(trainSentences), null);
+			model.train(new ArrayList<>(trainSentences), null);
 			if(!testOnTrain)
 				foldParser.setFromPivot(true);
 			foldParser.reset();
-			LinkedHashSet<Sentence> testSentences = new LinkedHashSet<Sentence>();
+			LinkedHashSet<Sentence> testSentences = new LinkedHashSet<>();
 			for(Object comma = foldParser.next(); comma!=null; comma = foldParser.next()){
 				testSentences.add(((Comma)comma).getSentence());
 			}
-			EvaluateDiscrete evaluator = model.test(new ArrayList<Sentence>(testSentences), null);
+			EvaluateDiscrete evaluator = model.test(new ArrayList<>(testSentences), null);
 			cvalResult.reportAll(evaluator);
 		}
-		//System.out.println(cvalResult.getOverallStats()[2]);
 		cvalResult.printPerformance(System.out);
-		//cvalResult.printConfusion(System.out);
-		
+
 		return cvalResult;
 	}
 	
@@ -202,11 +161,11 @@ public class ClassifierComparison {
 	}
 	
 	/**
-	 * prints bayraktar baseline performance based on only those commas whose bayraktar patterns have been annotated 
+	 * prints Bayraktar baseline performance based on only those commas whose Bayraktar patterns have been annotated
 	 */
 	public static EvaluateDiscrete getBayraktarBaselinePerformance(Parser parser, boolean testOnGold){
 		parser.reset();
-		EvaluateDiscrete bayraktarEvalaution = new EvaluateDiscrete();
+		EvaluateDiscrete bayraktarEvaluation = new EvaluateDiscrete();
 		Comma comma;
 		while((comma = (Comma) parser.next()) != null){
 			if(!BayraktarPatternLabeler.isLabelAvailable(comma)) continue;
@@ -214,19 +173,19 @@ public class ClassifierComparison {
 			String goldLabel = comma.getLabel();
 			Comma.useGoldFeatures(testOnGold);
 			String bayraktarPrediction = comma.getBayraktarLabel();
-			bayraktarEvalaution.reportPrediction(bayraktarPrediction, goldLabel);
+			bayraktarEvaluation.reportPrediction(bayraktarPrediction, goldLabel);
 		}
-		return bayraktarEvalaution;
+		return bayraktarEvaluation;
 	}
 	
 	/**
 	 * Structured's higher performance on the train set and lower performance on test set is indicative of overfitting
 	 */
 	public static void reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(Parser parser, boolean useGoldFeatures) throws Exception{
-		List<Classifier> lbjExtractors = new ArrayList<Classifier>();
+		List<Classifier> lbjExtractors = new ArrayList<>();
 		lbjExtractors.add(new LocalCommaClassifier().getExtractor());
 		Classifier lbjLabeler = new LocalCommaClassifier().getLabeler();
-		StructuredCommaClassifier structured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler, "config/DCD.config");
+		StructuredCommaClassifier structured = new StructuredCommaClassifier(lbjExtractors, lbjLabeler);
 		
 		int learningRounds = 250;
 		double learningRate = 0.003;

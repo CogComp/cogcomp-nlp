@@ -1,16 +1,15 @@
 package edu.illinois.cs.cogcomp.comma.annotators;
 
-import java.util.List;
-import java.util.Properties;
-
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.curator.CuratorConfigNames;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+
+import java.util.List;
 
 /**
  * A class that contains all the necessary pre-processing for each sentence.
@@ -19,20 +18,11 @@ public class PreProcessor{
     private final AnnotatorService annotatorService;
 
     public PreProcessor() throws Exception {
-    	Properties cachingcuratorProperties = new Properties();
-    	cachingcuratorProperties.setProperty(CuratorConfigNames.CURATOR_HOST, "trollope.cs.illinois.edu");
-    	cachingcuratorProperties.setProperty(CuratorConfigNames.CURATOR_PORT, "9010");
-    	cachingcuratorProperties.setProperty(CuratorConfigNames.RESPECT_TOKENIZATION, "true");
-    	cachingcuratorProperties.setProperty(CuratorConfigNames.CURATOR_FORCE_UPDATE, "false");
-    	
-    	cachingcuratorProperties.setProperty(AnnotatorService.CACHE_DIR, AnnotatorService.DEFAULT_CACHE_DIR);
-    	cachingcuratorProperties.setProperty(AnnotatorService.CACHE_DISK_SIZE, "" + AnnotatorService.DEFAULT_CACHE_DISK_SIZE);
-    	cachingcuratorProperties.setProperty(AnnotatorService.CACHE_HEAP_SIZE, "" + AnnotatorService.DEFAULT_CACHE_HEAP_SIZE);
-    	cachingcuratorProperties.setProperty(AnnotatorService.SET_CACHE_SHUTDOWN_HOOK, "" + AnnotatorService.DEFAULT_SET_CACHE_SHUTDOWN_HOOK);
-    	cachingcuratorProperties.setProperty(AnnotatorService.THROW_EXCEPTION_IF_NOT_CACHED, "" + AnnotatorService.DEFAULT_THROW_EXCEPTION_IF_UNCACHED);
-    	
-    	ResourceManager cachingCuratorConfig = new ResourceManager(cachingcuratorProperties);
-        annotatorService = CuratorFactory.buildCuratorClient(cachingCuratorConfig);
+        // Initialise AnnotatorServices with default configurations
+        if (CommaProperties.getInstance().useCurator())
+            annotatorService = CuratorFactory.buildCuratorClient();
+        else
+            annotatorService = IllinoisPipelineFactory.buildPipeline();
     }
 
     public TextAnnotation preProcess(List<String[]> text) throws AnnotatorException{
@@ -50,9 +40,5 @@ public class PreProcessor{
         annotatorService.addView(ta, ViewNames.SRL_VERB);
         annotatorService.addView(ta, ViewNames.SRL_NOM);
         annotatorService.addView(ta, ViewNames.SRL_PREP);
-    }
-    
-    public void closeCache(){
-    	annotatorService.closeCache();
     }
 }

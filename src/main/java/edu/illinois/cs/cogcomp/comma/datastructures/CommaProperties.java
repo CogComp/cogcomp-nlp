@@ -41,7 +41,7 @@ public class CommaProperties extends ResourceManager {
     }
     
     public boolean isCommaStructureFullSentence() {
-    	return getBoolean("IS_COMMA_STRUCUTRE_FULL_SENTENCE");
+    	return getBoolean("IS_COMMA_STRUCTURE_FULL_SENTENCE");
     }
     
     public boolean useNewLabelSet() {
@@ -52,28 +52,8 @@ public class CommaProperties extends ResourceManager {
         return getString("OTHER_RELABELED_FILE");
     }
     
-    public String getAllCommasSerialized() {
-        return getString("SERIALIZED_DIR") + "/" + getString("SERIALIZED_ALL_COMMAS_FILE");
-    }
-    
-    public String getTrainCommasSerialized() {
-    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_TRAIN_COMMAS_FILE");
-    }
-    
-    public String getDevCommasSerialized() {
-    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_DEV_COMMAS_FILE");
-    }
-    
-    public String getTestCommasSerialized() {
-    	return getString("SERIALIZED_DIR") + "/" +  getString("SERIALIZED_TEST_COMMAS_FILE");
-    }
-    
-    public String getOriginalVivekAnnotationFile(){
-    	return getString("ORIGINAL_VIVEK_ANNOTATIONS_FILE");
-    }
-    
-    public String getOTHERRefinedFile(){
-    	return getString("OTHER_REFINED_FILE");
+    public String getOriginalSrikumarAnnotationFile(){
+    	return getString("ORIGINAL_SRIKUMAR_ANNOTATIONS_FILE");
     }
     
     public String getBayraktarAnnotationsDir(){
@@ -102,5 +82,13 @@ public class CommaProperties extends ResourceManager {
 
     public boolean lexicalisePOS() {
         return getBoolean("LEX_POS");
+    }
+
+    public boolean useCurator() {
+        return getBoolean("USE_CURATOR");
+    }
+
+    public String getLearnerConfig() {
+        return getString("LEARNER_CONFIG");
     }
 }

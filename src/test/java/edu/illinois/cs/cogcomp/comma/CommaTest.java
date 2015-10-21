@@ -1,11 +1,5 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.junit.Test;
-
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
@@ -18,12 +12,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
 import junit.framework.TestCase;
 
-public class CommaTest extends TestCase{
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class CommaTest extends TestCase {
 	private Comma[] commas;
 	private CommaProperties properties = CommaProperties.getInstance();
-	@Override
-	public void setUp() throws Exception {
-        super.setUp();
+
+    public void setUp() throws Exception {
         String[] tokens = "Says Gayle Key , a mathematics teacher , `` Hello world . ''".split("\\s+");
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(tokens));
         
@@ -74,34 +71,36 @@ public class CommaTest extends TestCase{
         ta.addView(ner.getViewName(), ner);
         ta.addView(shallowParse.getViewName(), shallowParse);
         
-        List<String> firstCommasLabels = Arrays.asList("Substitute");
-        List<String> firstCommasRefinedLabels = Arrays.asList("Substitute");
+        List<String> firstCommasLabels = Collections.singletonList("Substitute");
+        List<String> firstCommasRefinedLabels = Collections.singletonList("Substitute");
         List<String> secondCommasLabels = Arrays.asList("Substitute", "Other");
         List<String> secondCommasRefinedLabels = Arrays.asList("Substitute", "Quotation");
         
-        Sentence sentence = new Sentence(ta, null, Arrays.asList(firstCommasLabels, secondCommasLabels), Arrays.asList(firstCommasRefinedLabels, secondCommasRefinedLabels));
-        commas = sentence.getCommas().toArray(new Comma[0]);
+        Sentence sentence = new Sentence(ta, null, Arrays.asList(firstCommasLabels, secondCommasLabels), 
+                Arrays.asList(firstCommasRefinedLabels, secondCommasRefinedLabels));
+        List<Comma> sentenceCommas = sentence.getCommas();
+        commas = sentenceCommas.toArray(new Comma[sentenceCommas.size()]);
     }
-	
-	@Test
+
+
 	public void testLabels() {
 		assertEquals("Substitute", commas[0].getLabel());
 		if(properties.allowMultiLabelCommas()){
-			if(properties.useNewLabelSet()) 
+			if(properties.useNewLabelSet())
 				assertEquals(Arrays.asList("Substitute", "Quotation"), commas[1].getLabels());
 			else
 				assertEquals(Arrays.asList("Substitute", "Other"), commas[1].getLabels());
 		}
 		else {
 			assertEquals("Substitute", commas[1].getLabel());
-			if(properties.useNewLabelSet()) 
+			if(properties.useNewLabelSet())
 				assertEquals("Quotation", commas[2].getLabel());
 			else
-				assertEquals("Other", commas[1].getLabels());
+				assertEquals("Other", commas[1].getLabel());
 		}
 	}
-	
-	@Test
+
+
 	public void testMultiLabelCommas() {
 		int expectedNumberOfCommas;
 		if(properties.allowMultiLabelCommas())
@@ -111,13 +110,13 @@ public class CommaTest extends TestCase{
 		assertEquals(expectedNumberOfCommas, commas.length);
 	}
 
-	@Test
+
 	public void testBayraktarPattern(){
 		assertEquals("SINV --> VP NP , S . ''", commas[0].getBayraktarPattern());
 		assertEquals("VP --> *** , `` NP", commas[1].getBayraktarPattern());
 	}
-	
-	@Test
+
+
 	public void testGetWord(){
 		assertEquals("teacher", commas[1].getWordToLeft(1));
 		assertEquals("$$$", commas[1].getWordToLeft(8));
@@ -126,8 +125,8 @@ public class CommaTest extends TestCase{
 		assertEquals("Hello", commas[1].getWordToRight(2));
 		assertEquals("###", commas[1].getWordToRight(1000));
 	}
-	
-	@Test
+
+
 	public void testGetPOS(){
 		assertEquals("NN", commas[1].getPOSToLeft(1));
 		assertEquals("NN", commas[1].getPOSToLeft(2));
@@ -135,8 +134,8 @@ public class CommaTest extends TestCase{
 		assertEquals("UH", commas[1].getPOSToRight(2));
 		assertEquals("", commas[1].getPOSToRight(1000));
 	}
-	
-	@Test
+
+
 	public void testGetChunk(){
 		assertEquals("NP", commas[1].getChunkToLeftOfComma(1).getLabel());
 		assertEquals("NP", commas[1].getChunkToLeftOfComma(2).getLabel());
@@ -146,8 +145,8 @@ public class CommaTest extends TestCase{
 		assertEquals(null, commas[1].getChunkToLeftOfComma(-1));
 		assertEquals(null, commas[1].getChunkToLeftOfComma(4));
 	}
-	
-	@Test
+
+
 	public void testGetSiblingPhrase(){
 		assertEquals("VBZ", commas[1].getPhraseToLeftOfComma(1).getLabel());
 		assertEquals("``", commas[1].getPhraseToRightOfComma(1).getLabel());
@@ -157,15 +156,15 @@ public class CommaTest extends TestCase{
 		assertEquals(null, commas[1].getPhraseToLeftOfComma(4));
 		assertEquals(null, commas[1].getPhraseToRightOfComma(3));
 	}
-	
-	@Test
+
+
 	public void testGetParentSiblingPhrase(){
 		assertEquals("VP", commas[1].getPhraseToLeftOfParent(0).getLabel());
 		assertEquals("NP", commas[1].getPhraseToLeftOfParent(1).getLabel());
 		assertEquals(null, commas[1].getPhraseToLeftOfParent(2));
 		assertEquals(null, commas[1].getPhraseToRightOfParent(1));
 	}
-	
+
 	//TODO testGetLeftTORightDependencies
 	//TODO testGetRightToLeftDependencies
 	//TODO testGetSRLFeatures
