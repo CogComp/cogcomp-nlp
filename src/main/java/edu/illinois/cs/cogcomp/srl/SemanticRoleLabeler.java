@@ -37,12 +37,12 @@ public class SemanticRoleLabeler implements Annotator {
 		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
 		try {
 			if (srlType != null)
-				srlLabelers.add(new SemanticRoleLabeler(configFile, srlType));
+				srlLabelers.add(new SemanticRoleLabeler(configFile, srlType, true));
 			else {
 				for (SRLType type : SRLType.values()) {
 					srlType = type.name();
 					srlLabelers
-							.add(new SemanticRoleLabeler(configFile, srlType));
+							.add(new SemanticRoleLabeler(configFile, srlType, true));
 				}
 			}
 		} catch (Exception e) {
@@ -88,15 +88,21 @@ public class SemanticRoleLabeler implements Annotator {
 	}
 
 	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
+
+		this(configFile, srlType, false);
+	}
+
+	public SemanticRoleLabeler(String configFile, String srlType, boolean initialize) throws Exception {
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
 		SRLProperties.initialize(configFile);
 		properties = SRLProperties.getInstance();
 
-		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(configFile, false);
-
+		if(initialize) {
+			log.info("Initializing pre-processor");
+			TextPreProcessor.initialize(configFile, false);
+		}
 		log.info("Creating {} manager", srlType);
 		manager = Main.getManager(SRLType.valueOf(srlType), false);
 
