@@ -1,0 +1,934 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>The Edison Reference</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="The Edison Reference"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-01-30T14:44-0600"/>
+<meta name="author" content="Vivek Srikumar"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" src="org-info.js">
+/**
+ *
+ * @source: org-info.js
+ *
+ * @licstart  The following is the entire license notice for the
+ *  JavaScript code in org-info.js.
+ *
+ * Copyright (C) 2012  Sebastian Rose
+ *
+ *
+ * The JavaScript code in this tag is free software: you can
+ * redistribute it and/or modify it under the terms of the GNU
+ * General Public License (GNU GPL) as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option)
+ * any later version.  The code is distributed WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+ *
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ *
+ * @licend  The above is the entire license notice
+ * for the JavaScript code in org-info.js.
+ *
+ */
+</script>
+
+<script type="text/javascript">
+
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+
+<!--/*--><![CDATA[/*><!--*/
+org_html_manager.set("TOC_DEPTH", "2");
+org_html_manager.set("LINK_HOME", "");
+org_html_manager.set("LINK_UP", "");
+org_html_manager.set("LOCAL_TOC", "1");
+org_html_manager.set("VIEW_BUTTONS", "0");
+org_html_manager.set("MOUSE_HINT", "underline");
+org_html_manager.set("FIXED_TOC", "0");
+org_html_manager.set("TOC", "1");
+org_html_manager.set("VIEW", "info");
+org_html_manager.setup();  // activate after the parameters are set
+/*]]>*///-->
+</script>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">The Edison Reference</h1>
+
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Introduction</a>
+<ul>
+<li><a href="#sec-1-1">1.1 What is <i>Edison</i>?</a></li>
+<li><a href="#sec-1-2">1.2 License</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2 Getting Started</a>
+<ul>
+<li><a href="#sec-2-1">2.1 Usage with Maven</a></li>
+<li><a href="#sec-2-2">2.2 Installation without Maven</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3 Key concepts</a>
+<ul>
+<li><a href="#sec-3-1">3.1 TextAnnotation</a></li>
+<li><a href="#sec-3-2">3.2 Views</a></li>
+<li><a href="#sec-3-3">3.3 Different types of views</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">4 Feature Extraction</a>
+<ul>
+<li><a href="#sec-4-1">4.1 Concepts</a></li>
+<li><a href="#sec-4-2">4.2 Feature manifests and <code>.fex</code> definitions</a></li>
+<li><a href="#sec-4-3">4.3 List of pre-defined features</a></li>
+<li><a href="#sec-4-4">4.4 List of known transformers</a></li>
+<li><a href="#sec-4-5">4.5 List of feature operations</a></li>
+</ul>
+</li>
+<li><a href="#sec-5">5 NLP Helpers</a></li>
+<li><a href="#sec-6">6 Examples</a>
+<ul>
+<li><a href="#sec-6-1">6.1 Basic examples</a></li>
+<li><a href="#sec-6-2">6.2 Connecting to the Curator</a></li>
+<li><a href="#sec-6-3">6.3 Creating custom views</a></li>
+<li><a href="#sec-6-4">6.4 Integrating your own feature extractors</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> What is <i>Edison</i>?</h3>
+<div class="outline-text-3" id="text-1-1">
+
+
+<p>   
+   <i>Edison</i> is a Java library that is designed to help programming NLP
+   applications by providing a uniform representation of various NLP
+   annotations of text (like parse trees, parts of speech, semantic
+   roles, coreference, etc.) This uniform representation allows for
+   easy feature extraction that accesses several views.  In addition
+   to helping with feature extraction, the library also allows an easy
+   way to access the <a href="http://cogcomp.cs.illinois.edu/curator">Curator</a> to further speed up development.
+</p>
+<p>
+   This manual is designed to help get started with <i>Edison</i> and its
+   various features. <i>Edison</i> has been successfully used to facilitate
+   the representation and feature extraction for several higher level
+   NLP applications like semantic role labeling, coreference
+   resolution, textual entailment, paraphrasing and relation
+   extraction which use information across several views over text to
+   make a decision.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> License</h3>
+<div class="outline-text-3" id="text-1-2">
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Getting Started</h2>
+<div class="outline-text-2" id="text-2">
+
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Usage with Maven</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<p>   To use <i>Edison</i> with Maven, you need to include the following in your
+   <code>pom.xml</code>:
+</p>
+
+
+
+<pre class="src src-xml">&lt;<span style="color: #8cd0d3;">repositories</span>&gt;
+    &lt;<span style="color: #8cd0d3;">repository</span>&gt;
+        &lt;<span style="color: #8cd0d3;">id</span>&gt;CogcompSoftware&lt;/<span style="color: #8cd0d3;">id</span>&gt;
+        &lt;<span style="color: #8cd0d3;">name</span>&gt;CogcompSoftware&lt;/<span style="color: #8cd0d3;">name</span>&gt;
+        &lt;<span style="color: #8cd0d3;">url</span>&gt;http://cogcomp.cs.illinois.edu/m2repo/&lt;/<span style="color: #8cd0d3;">url</span>&gt;
+    &lt;/<span style="color: #8cd0d3;">repository</span>&gt;
+&lt;/<span style="color: #8cd0d3;">repositories</span>&gt; 
+</pre>
+
+
+<p>
+   Now, in the dependencies section of the pom file, add the following
+   dependency:
+</p>
+
+
+
+
+<pre class="src src-xml">&lt;<span style="color: #8cd0d3;">dependencies</span>&gt;
+.
+.
+    &lt;<span style="color: #8cd0d3;">dependency</span>&gt;
+        &lt;<span style="color: #8cd0d3;">groupId</span>&gt;edu.illinois.cs.cogcomp&lt;/<span style="color: #8cd0d3;">groupId</span>&gt;
+        &lt;<span style="color: #8cd0d3;">artifactId</span>&gt;edison&lt;/<span style="color: #8cd0d3;">artifactId</span>&gt;
+        &lt;<span style="color: #8cd0d3;">version</span>&gt;0.3&lt;/<span style="color: #8cd0d3;">version</span>&gt;
+        &lt;<span style="color: #8cd0d3;">type</span>&gt;jar&lt;/<span style="color: #8cd0d3;">type</span>&gt;
+        &lt;<span style="color: #8cd0d3;">scope</span>&gt;compile&lt;/<span style="color: #8cd0d3;">scope</span>&gt;
+    &lt;/<span style="color: #8cd0d3;">dependency</span>&gt;
+.
+.
+&lt;/<span style="color: #8cd0d3;">dependencies</span>&gt;
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Installation without Maven</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Key concepts</h2>
+<div class="outline-text-2" id="text-3">
+
+<p>In <i>Edison</i>, different annotations over text are called <code>Views</code>, each
+of which is a directed, labeled graph of <code>Constituents</code> (i.e., nodes)
+and <code>Relations</code> (i.e. directed, labeled edges). All the <code>Views</code> of a
+given text are managed by an object called a <code>TextAnnotation</code>.
+</p>
+<p>
+One key assumption in <i>Edison</i> is that the views can be defined in
+terms of the tokens of the text. In other words, the <code>TextAnnotation</code>
+object fixes a tokenization for the text when an object is created and
+all the views are defined in terms of this tokenization.
+</p>
+
+</div>
+
+<div id="outline-container-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> TextAnnotation</h3>
+<div class="outline-text-3" id="text-3-1">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Views</h3>
+<div class="outline-text-3" id="text-3-2">
+
+
+<p>
+<i>Edison</i> stores all information about a specific annotation over text
+in an object called <code>View</code>. In its most general sense, a <code>View</code> is a
+graph whose nodes are labeled spans of text. The edges between the
+nodes represent the relationships between them. A <code>TextAnnotation</code> can
+be thought of as a container of views, indexed by their names.
+</p>
+<p>
+The tokens are not stored in a <code>View</code>. The <code>TextAnnotation</code> knows the
+tokens of the text and each <code>Constituent</code> of every view is defined in
+terms of the tokens. A constituent can represent zero tokens or spans.
+</p>
+<p>
+Sentences are stored as a view. In the terminology above, the
+<code>Constituents</code> will correspond to the sentences. There are no
+<code>Relations</code> between them. (The ordering between the sentences is not
+explicitly represented because this can be inferred from the
+<code>Constituents</code> which refer to the tokens.) So the graph that this View
+represents is a degenerate graph, with only nodes and no edges.
+</p>
+
+</div>
+
+</div>
+
+<div id="outline-container-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Different types of views</h3>
+<div class="outline-text-3" id="text-3-3">
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Feature Extraction</h2>
+<div class="outline-text-2" id="text-4">
+
+
+</div>
+
+<div id="outline-container-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Concepts</h3>
+<div class="outline-text-3" id="text-4-1">
+
+<ul>
+<li>Feature extractors
+
+</li>
+<li>Feature input transformers
+
+</li>
+<li>Operations
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Feature manifests and <code>.fex</code> definitions</h3>
+<div class="outline-text-3" id="text-4-2">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-3" class="outline-3">
+<h3 id="sec-4-3"><span class="section-number-3">4.3</span> List of pre-defined features</h3>
+<div class="outline-text-3" id="text-4-3">
+
+
+<p>
+   This section lists the set of pre-defined feature extractors along
+   with their description and the <code>FeatureExtractor</code> that implements
+   them.
+</p>
+
+</div>
+
+<div id="outline-container-4-3-1" class="outline-4">
+<h4 id="sec-4-3-1"><span class="section-number-4">4.3.1</span> Bias feature</h4>
+<div class="outline-text-4" id="text-4-3-1">
+
+<p>    The keyword <i>bias</i> in a <code>.fex</code> specification includes a feature
+    that will always be present. This is useful to add a bias feature
+    for binary classification.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-4-3-2" class="outline-4">
+<h4 id="sec-4-3-2"><span class="section-number-4">4.3.2</span> Word features</h4>
+<div class="outline-text-4" id="text-4-3-2">
+
+<p>    The following list of feature extractors are operate on the last
+    word of the input constituent. They are all defined as static
+    members of the class <code>WordFeatureExtractorFactory</code>.
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left"><b>fex name</b></th><th scope="col" class="left"><b>Feature Extractor</b></th><th scope="col" class="left"><b>Description</b></th></tr>
+</thead>
+<tbody>
+<tr><td class="left"><i>capitalization</i></td><td class="left"><code>capitalization</code></td><td class="left">Adds the following two features: One with the word</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">in its actual case, and the second, an indicator</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">for whether the word is captitalized</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>conflated-pos</i></td><td class="left"><code>conflatedPOS</code></td><td class="left">The coarse POS tag (one of Noun, Verb, Adjective,</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">Adverb, Punctuation, Pronoun and Other)</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>de-adj-nouns</i></td><td class="left"><code>deAdjectivalAbstractNounsSuffixes</code></td><td class="left">An indicator for whether the word ends with a de-</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">adjectival suffix. The list of such suffixes is in</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left"><code>WordLists.DE_ADJ_SUFFIXES</code>.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>de-nom-nouns</i></td><td class="left"><code>deNominalNounProducingSuffixes</code></td><td class="left">An indicator for whether the word ends with a de-</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">nominal noun producing suffix. The list of such suffixes</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">is in <code>WordLists.DENOM_SUFFIXES</code>.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>de-verbal-suffixes</i></td><td class="left"><code>deVerbalSuffix</code></td><td class="left">An indicator for whether the word ends with a de-</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">verbal producing suffix. The list of such suffixes</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">is in <code>WordLists.DE_VERB_SUFFIXES</code>.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>gerunds</i></td><td class="left"><code>gerundMarker</code></td><td class="left">An indicator for whether the word ends with an <i>-ing</i>.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>known-prefixes</i></td><td class="left"><code>knownPrefixes</code></td><td class="left">An indicator for whether the word starts with one of</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">the following: <i>poly</i>, <i>ultra</i>, <i>post</i>, <i>multi</i>, <i>pre</i>, <i>fore</i>, <i>ante</i>,</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left"><i>pro</i>, <i>meta</i> or <i>out</i></td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>lemma</i></td><td class="left"><code>lemma</code></td><td class="left">The lemma of the word, taken from the LEMMA view</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">(that is, <code>ViewNames.LEMMA</code>)</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>nom</i></td><td class="left"><code>nominalizationMarker</code></td><td class="left">An indicator for whether the word is a nominalization</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>numbers</i></td><td class="left"><code>numberNormalizer</code></td><td class="left">An indicator for whether the word is a number</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>pos</i></td><td class="left"><code>pos</code></td><td class="left">The part of speech tag of the word (taken</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">from <code>ViewNames.POS</code>)</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>prefix-suffix</i></td><td class="left"><code>prefixSuffixes</code></td><td class="left">The first and last two, three characters in the lower</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">cased word</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>word</i></td><td class="left"><code>word</code></td><td class="left">The word, lower cased</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>wordCase</i></td><td class="left"><code>wordCase</code></td><td class="left">The word, without changing the case</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left"><i>date</i></td><td class="left"><code>dateMarker</code></td><td class="left">An indicator for whether the token is a valid date</td></tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-4-4" class="outline-3">
+<h3 id="sec-4-4"><span class="section-number-3">4.4</span> List of known transformers</h3>
+<div class="outline-text-3" id="text-4-4">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4-5" class="outline-3">
+<h3 id="sec-4-5"><span class="section-number-3">4.5</span> List of feature operations</h3>
+<div class="outline-text-3" id="text-4-5">
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> NLP Helpers</h2>
+<div class="outline-text-2" id="text-5">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> Examples</h2>
+<div class="outline-text-2" id="text-6">
+
+
+</div>
+
+<div id="outline-container-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> Basic examples</h3>
+<div class="outline-text-3" id="text-6-1">
+
+
+<p>
+   This set of examples goes over the basics of the Edison data
+   structures. Recollect that different annotations over text are
+   called <code>Views</code>, each of which is a graph of <code>Constituents</code> and
+   <code>Relations</code>. The object that manages views corresponding to a
+   single piece of text is called a <code>TextAnnotation</code>.
+</p>
+</div>
+
+<div id="outline-container-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1"><span class="section-number-4">6.1.1</span> Creating a <code>TextAnnotation</code></h4>
+<div class="outline-text-4" id="text-6-1-1">
+
+<ol>
+<li><b>Using the LBJ sentence splitter and tokenizer</b>
+
+<p>
+       The simplest way to define a <code>TextAnnotation</code> is to just give the
+       text to the constructor. Note that in the following example,
+       <code>text1</code> consists of three sentences. The corresponding <code>ta1</code> will
+       use the sentence slitter defined in the <a href="http://cogcomp.cs.illinois.edu/page/software_view/11">Learning based Java</a> (LBJ)
+       library to split the text into sentences and further apply the
+       LBJ tokenizer to tokenize the sentence.
+</p>
+
+
+
+<pre class="src src-java"><span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">text1</span> = <span style="color: #cc9393;">"Good afternoon, gentlemen. I am a HAL-9000 "</span>
+   + <span style="color: #cc9393;">"computer. I was born in Urbana, Il. in 1992"</span>;
+
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">corpus</span> = <span style="color: #cc9393;">"2001_ODYSSEY"</span>;
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">textId</span> = <span style="color: #cc9393;">"001"</span>;
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Create a TextAnnotation using the LBJ sentence </span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">splitter and tokenizers.</span>
+<span style="color: #8cd0d3;">TextAnnotation</span> <span style="color: #dfaf8f;">ta1</span> = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #8cd0d3;">TextAnnotation</span>(corpus, textId, text1); 
+</pre>
+
+</li>
+<li><b>Using pre-tokenized text</b>
+
+<p>
+       Quite often, our data source could specify the tokenization for
+       text. We can use this to create a <code>TextAnnotation</code> by specifying
+       the sentences and tokens manually. In this case, the input to the
+       constructor consists of the corpus, text identifier and a <code>List</code>
+       of strings. Each element in the list will be treated as a
+       sentence. This constructor assumes that the sentences in the list
+       are white-space tokenized.
+</p>
+
+
+
+<pre class="src src-java"><span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">textId2</span> = <span style="color: #cc9393;">"002"</span>;
+
+List&lt;String&gt; tokenizedSentences = Arrays.asList(
+                                  <span style="color: #cc9393;">"Good afternoon , gentlemen ."</span>, 
+                                  <span style="color: #cc9393;">"I am a HAL-9000 computer ."</span>,
+                                  <span style="color: #cc9393;">"I was born in Urbana , Il. in 1992 ."</span>);
+<span style="color: #8cd0d3;">TextAnnotation</span> <span style="color: #dfaf8f;">ta2</span> = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #8cd0d3;">TextAnnotation</span>(corpus, textId2, tokenizedSentences);
+</pre>
+
+
+</li>
+<li><b>Other ways</b>
+
+<p>
+       The <code>TextAnnotation</code> class has several constructors, but the
+       above examples cover the most important cases. Another
+       important use case is to to create a text annotation using the
+       Curator. This is covered in the section covering <a href="#sec-6-2">curator examples</a>.
+</p></li>
+</ol>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-1-2" class="outline-4">
+<h4 id="sec-6-1-2"><span class="section-number-4">6.1.2</span> Accessing the text and tokens</h4>
+<div class="outline-text-4" id="text-6-1-2">
+
+<p>    <i>Edison</i> keeps track of the raw text along with the tokens it
+    contains. So, we can get the original text using the function
+    <code>getText()</code> and also the tokenized text using the function
+    <code>getTokenizedText()</code>. The function <code>getToken(int tokenId)</code> gives
+    us the tokens in the text.
+</p>
+
+
+
+<pre class="src src-java"><span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Print the text. This prints the raw text that was used to</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">create the TextAnnotation object. In the case where the</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">second constructor is used, the text is printed whitespace</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">tokenized.</span>
+System.out.println(ta1.getText());
+System.out.println(ta2.getText());
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Print the tokenized text. The tokenization scheme is</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">specified by the constructor, which in the first example</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">defaults to the LBJ tokenizer, and in the second one is</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">specified manually.</span>
+System.out.println(ta1.getTokenizedText());
+System.out.println(ta2.getTokenizedText());
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Print the tokens</span>
+<span style="color: #f0dfaf; font-weight: bold;">for</span> (<span style="color: #8cd0d3;">int</span> <span style="color: #dfaf8f;">i</span> = 0; i &lt; ta.size(); i++) {
+    System.out.print(i + <span style="color: #cc9393;">":"</span> + ta.getToken(i) + <span style="color: #cc9393;">"\t"</span>);
+}
+System.out.println();
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-1-3" class="outline-4">
+<h4 id="sec-6-1-3"><span class="section-number-4">6.1.3</span> Accessing sentences</h4>
+<div class="outline-text-4" id="text-6-1-3">
+
+<p>    Each <code>TextAnnotation</code> knows the views it contains. To get these,
+    use the function <code>getAvailableViews()</code>, which returns a set of
+    strings representing the names of the views it contains.
+</p>
+
+<p>
+    The following code prints all the available views in the
+    <code>TextAnnotation</code> ta1 defined above. It then goes over each
+    sentence and prints them.
+</p>
+
+
+
+<pre class="src src-java">System.out.println(ta1.getAvailableViews());
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Print the sentences. The Sentence class has many of the same</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">methods as a TextAnnotation.</span>
+List&lt;Sentence&gt; sentences = ta1.sentences();
+
+System.out.println(sentences.size() + <span style="color: #cc9393;">" sentences found."</span>);
+
+<span style="color: #f0dfaf; font-weight: bold;">for</span> (<span style="color: #8cd0d3;">int</span> <span style="color: #dfaf8f;">i</span> = 0; i &lt; sentences.size(); i++) {
+    <span style="color: #8cd0d3;">Sentence</span> <span style="color: #dfaf8f;">sentence</span> = sentences.get(i);
+    System.out.println(sentence);
+}
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> Connecting to the Curator</h3>
+<div class="outline-text-3" id="text-6-2">
+
+
+
+</div>
+
+<div id="outline-container-6-2-1" class="outline-4">
+<h4 id="sec-6-2-1"><span class="section-number-4">6.2.1</span> Creating a <code>CuratorClient</code></h4>
+<div class="outline-text-4" id="text-6-2-1">
+
+<p>   The Curator acts as a central server that can annotate text using
+   several annotators. With Edison, we can connect to the Curator to
+   get those annotations and build our own NLP-driven
+   application. <i>Edison</i> can be thought of as a Java client of the
+   Curator.
+</p>
+<p>
+   The primary class we will use is the <code>CuratorClient</code>. To create a
+   <code>CuratorClient</code>, we need to specify the host and the port of the
+   curator server.  There are two ways to access the Curator: (1) With
+   the raw text and asking the curator to tokenize it for us, or, (2)
+   Pre-defining the tokenization and asking the curator to respect it.
+</p>
+<ol>
+<li><b>Raw text</b>
+
+<p>      
+      We could ask the Curator to provide us the tokenization and
+      sentences. We would use this when we want to process raw
+      text. The following example demonstrates this use case.
+</p>
+
+
+
+<pre class="src src-java"><span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">This is the text we want to annotate.</span>
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">text</span> = <span style="color: #cc9393;">"Good afternoon, gentlemen. I am a HAL-9000 "</span>
+    + <span style="color: #cc9393;">"computer. I was born in Urbana, Il. in 1992"</span>;
+
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">corpus</span> = <span style="color: #cc9393;">"2001_ODYSSEY"</span>;
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">textId</span> = <span style="color: #cc9393;">"001"</span>;
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">We need to specify a host and a port where the curator server is</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">running. Note: The following server does not exist and is used as</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">an example. </span>
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">curatorHost</span> = <span style="color: #cc9393;">"curator.cs.uiuc.edu"</span>;
+<span style="color: #8cd0d3;">int</span> <span style="color: #dfaf8f;">curatorPort</span> = 9090;
+
+<span style="color: #8cd0d3;">CuratorClient</span> <span style="color: #dfaf8f;">client</span>  = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #8cd0d3;">CuratorClient</span>(curatorHost, curatorPort);
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Should the Curator be forced to update its cache if the exact text</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">is already present? Unless you want to force the Curator to clean</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">up its cached version of this text, set this to false.</span>
+<span style="color: #8cd0d3;">boolean</span> <span style="color: #dfaf8f;">forceUpdate</span> = <span style="color: #bfebbf;">false</span>;
+
+<span style="color: #8cd0d3;">TextAnnotation</span> <span style="color: #dfaf8f;">ta</span> = client.getTextAnnotation(corpus, textId, text,
+                                             forceUpdate);
+</pre>
+
+
+</li>
+<li><b>Tokenized text</b>
+
+<p>
+      The other setting is when we have pre-tokenized text that we
+      want to process with the different annotators that the Curator
+      provides. In this case, we should ask the Curator to respect the
+      tokenization that the <code>TextAnnotation</code> specifies. To do so, we
+      need to use a different constructor for the <code>CuratorClient</code>.
+</p>
+
+
+
+<pre class="src src-java"><span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">This is the text we want to annotate.</span>
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">textId2</span> = <span style="color: #cc9393;">"002"</span>;
+
+List&lt;String&gt; tokenizedSentences = Arrays.asList(
+                                 <span style="color: #cc9393;">"Good afternoon , gentlemen ."</span>, 
+                                 <span style="color: #cc9393;">"I am a HAL-9000 computer ."</span>,
+                                 <span style="color: #cc9393;">"I was born in Urbana , Il. in 1992 ."</span>);
+
+<span style="color: #8cd0d3;">TextAnnotation</span> <span style="color: #dfaf8f;">ta</span> = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #8cd0d3;">TextAnnotation</span>(corpus, textId2, tokenizedSentences);
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">We need to specify a host and a port where the curator server is</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">running. Note: The following server does not exist and is used as</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">an example. </span>
+<span style="color: #8cd0d3;">String</span> <span style="color: #dfaf8f;">curatorHost</span> = <span style="color: #cc9393;">"curator.cs.uiuc.edu"</span>;
+<span style="color: #8cd0d3;">int</span> <span style="color: #dfaf8f;">curatorPort</span> = 9090;
+
+<span style="color: #8cd0d3;">CuratorClient</span> <span style="color: #dfaf8f;">client</span>  = <span style="color: #f0dfaf; font-weight: bold;">new</span> <span style="color: #8cd0d3;">CuratorClient</span>(curatorHost, curatorPort, <span style="color: #bfebbf;">true</span>);
+</pre>
+
+
+<p>
+      <b>Note</b>: If this constructor is used to access the curator, then
+      calling the function <code>getTextAnnotation</code> will trigger an
+      exception.
+</p></li>
+</ol>
+
+
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-2-2" class="outline-4">
+<h4 id="sec-6-2-2"><span class="section-number-4">6.2.2</span> Adding views from the Curator</h4>
+<div class="outline-text-4" id="text-6-2-2">
+
+<p>    Other than the creation of <code>TextAnnotation</code> objects, curator
+    clients created with the two constructors described above are
+    identical with respect to adding different views.
+</p>
+
+
+<pre class="src src-java"><span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Print the tokenized text</span>
+System.out.println(ta.getTokenizedText());
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Let's add the part of speech view and print it</span>
+client.addPOSView(ta, forceUpdate);
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">The view is stored as `ViewNames.POS`. The class ViewNames defines a</span>
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">set of standard names for different views.</span>
+System.out.println(ta.getView(<span style="color: #bfebbf;">ViewNames</span>.POS));
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Add the named entity view and print it.</span>
+client.addNamedEntityView(ta, forceUpdate);
+System.out.println(ta.getView(<span style="color: #bfebbf;">ViewNames</span>.NER));
+
+<span style="color: #7f9f7f;">// </span><span style="color: #7f9f7f;">Add the stanford dependency view and print the dependency tree</span>
+client.addStanfordDependencyView(ta, forceUpdate);
+System.out.println(ta.getView(<span style="color: #bfebbf;">ViewNames</span>.DEPENDENCY_STANFORD));
+</pre>
+
+
+<p>
+    At present the CuratorClient has accessors for the following
+    annotators: the Charniak and Berkeley parsers, coreference,
+    easy-first dependency parses, named entities, verb and nominal
+    SRL, Stanford constituent and dependency parsers and the Wikifier.
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-6-3" class="outline-3">
+<h3 id="sec-6-3"><span class="section-number-3">6.3</span> Creating custom views</h3>
+<div class="outline-text-3" id="text-6-3">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-6-4" class="outline-3">
+<h3 id="sec-6-4"><span class="section-number-3">6.4</span> Integrating your own feature extractors</h3>
+<div class="outline-text-3" id="text-6-4">
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-01-30T14:44-0600</p>
+<p class="author">Author: Vivek Srikumar</p>
+<p class="creator"><a href="http://orgmode.org">Org</a> version 7.9.2 with <a href="http://www.gnu.org/software/emacs/">Emacs</a> version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

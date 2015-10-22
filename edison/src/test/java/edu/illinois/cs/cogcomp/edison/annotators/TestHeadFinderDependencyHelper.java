@@ -1,0 +1,35 @@
+package edu.illinois.cs.cogcomp.edison.annotators;
+
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.illinois.cs.cogcomp.edison.utilities.TextAnnotationUtilities;
+import junit.framework.TestCase;
+
+public class TestHeadFinderDependencyHelper extends TestCase {
+
+	public final void testHeadFinderDependencyHelper() {
+		String s = "There is no recovery period -- it 's go , go , go .";
+
+		String treeString = "(S1 (S (S (NP (EX There))    (VP (AUX is)        (NP (DT no)            (NN recovery) " +
+				"           (NN period))))    (: --)    (S (NP (PRP it))       (VP (AUX 's)           (S (VP (VB go)  " +
+				"   (, ,)     (VB go)     (, ,)     (VB go)))))    (. .)))";
+
+		TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(s);
+
+		TreeView parse = new TreeView(ViewNames.PARSE_CHARNIAK, "", ta, 1.0);
+		parse.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(treeString));
+
+		ta.addView(ViewNames.PARSE_CHARNIAK, parse);
+
+		System.out.println(ta.getView(ViewNames.PARSE_CHARNIAK));
+
+		HeadFinderDependencyViewGenerator dep = new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK);
+
+		TreeView depTree = (TreeView) dep.getView(ta);
+		System.out.println(depTree);
+
+		assertEquals(depTree.getNumberOfConstituents(), ta.size());
+	}
+}

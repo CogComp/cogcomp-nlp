@@ -1,0 +1,5 @@
+removeRepeatPunctuation true
+replaceAdHocMarkup  true
+replaceBadApostrophe    true
+replaceControlSequence  true
+replaceUnderscores  true
