@@ -32,7 +32,7 @@ public class TextPreProcessor {
 
 		if (useCurator) {
 			log.info("Using curator");
-			annotator = CuratorFactory.buildCuratorClient();
+			annotator = CuratorFactory.buildCuratorClient(rm);
 		} else {
 			log.info("Using pipeline");
 			if (!defaultParser.equals("Stanford")) {
