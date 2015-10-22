@@ -1,0 +1,488 @@
+% Created 2013-01-30 Wed 14:40
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{soul}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{color}
+\usepackage[margin=1in]{geometry}
+\usepackage{listings}
+\providecommand{\alert}[1]{\textbf{#1}}
+
+\title{The Edison Reference}
+\author{Vivek Srikumar}
+\date{\today}
+\hypersetup{
+  pdfkeywords={},
+  pdfsubject={},
+  pdfcreator={Emacs Org-mode version 7.9.2}}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{tocdepth}{3}
+\tableofcontents
+\vspace*{1cm}
+
+
+\section{Introduction}
+\label{sec-1}
+\subsection{What is \emph{Edison}?}
+\label{sec-1-1}
+
+   
+   \emph{Edison} is a Java library that is designed to help programming NLP
+   applications by providing a uniform representation of various NLP
+   annotations of text (like parse trees, parts of speech, semantic
+   roles, coreference, etc.) This uniform representation allows for
+   easy feature extraction that accesses several views.  In addition
+   to helping with feature extraction, the library also allows an easy
+   way to access the \href{http://cogcomp.cs.illinois.edu/curator}{Curator} to further speed up development.
+
+   This manual is designed to help get started with \emph{Edison} and its
+   various features. \emph{Edison} has been successfully used to facilitate
+   the representation and feature extraction for several higher level
+   NLP applications like semantic role labeling, coreference
+   resolution, textual entailment, paraphrasing and relation
+   extraction which use information across several views over text to
+   make a decision.
+\subsection{License}
+\label{sec-1-2}
+\section{Getting Started}
+\label{sec-2}
+\subsection{Usage with Maven}
+\label{sec-2-1}
+
+   To use \emph{Edison} with Maven, you need to include the following in your
+   \texttt{pom.xml}:
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=XML}
+\begin{lstlisting}
+<repositories>
+    <repository>
+        <id>CogcompSoftware</id>
+        <name>CogcompSoftware</name>
+        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+    </repository>
+</repositories>
+\end{lstlisting}
+
+   Now, in the dependencies section of the pom file, add the following
+   dependency:
+
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=XML}
+\begin{lstlisting}
+<dependencies>
+.
+.
+    <dependency>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <artifactId>edison</artifactId>
+        <version>0.3</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
+.
+.
+</dependencies>
+\end{lstlisting}
+   
+\subsection{Installation without Maven}
+\label{sec-2-2}
+
+   
+\section{Key concepts}
+\label{sec-3}
+
+In \emph{Edison}, different annotations over text are called \texttt{Views}, each
+of which is a directed, labeled graph of \texttt{Constituents} (i.e., nodes)
+and \texttt{Relations} (i.e. directed, labeled edges). All the \texttt{Views} of a
+given text are managed by an object called a \texttt{TextAnnotation}.
+
+One key assumption in \emph{Edison} is that the views can be defined in
+terms of the tokens of the text. In other words, the \texttt{TextAnnotation}
+object fixes a tokenization for the text when an object is created and
+all the views are defined in terms of this tokenization.
+\subsection{TextAnnotation}
+\label{sec-3-1}
+\subsection{Views}
+\label{sec-3-2}
+
+
+\emph{Edison} stores all information about a specific annotation over text
+in an object called \texttt{View}. In its most general sense, a \texttt{View} is a
+graph whose nodes are labeled spans of text. The edges between the
+nodes represent the relationships between them. A \texttt{TextAnnotation} can
+be thought of as a container of views, indexed by their names.
+
+The tokens are not stored in a \texttt{View}. The \texttt{TextAnnotation} knows the
+tokens of the text and each \texttt{Constituent} of every view is defined in
+terms of the tokens. A constituent can represent zero tokens or spans.
+
+Sentences are stored as a view. In the terminology above, the
+\texttt{Constituents} will correspond to the sentences. There are no
+\texttt{Relations} between them. (The ordering between the sentences is not
+explicitly represented because this can be inferred from the
+\texttt{Constituents} which refer to the tokens.) So the graph that this View
+represents is a degenerate graph, with only nodes and no edges.
+\subsection{Different types of views}
+\label{sec-3-3}
+\section{Feature Extraction}
+\label{sec-4}
+\subsection{Concepts}
+\label{sec-4-1}
+
+\begin{itemize}
+\item Feature extractors
+\item Feature input transformers
+\item Operations
+\end{itemize}
+\subsection{Feature manifests and \texttt{.fex} definitions}
+\label{sec-4-2}
+\subsection{List of pre-defined features}
+\label{sec-4-3}
+
+
+   This section lists the set of pre-defined feature extractors along
+   with their description and the \texttt{FeatureExtractor} that implements
+   them.
+\subsubsection{Bias feature}
+\label{sec-4-3-1}
+
+    The keyword \emph{bias} in a \texttt{.fex} specification includes a feature
+    that will always be present. This is useful to add a bias feature
+    for binary classification.
+\subsubsection{Word features}
+\label{sec-4-3-2}
+
+    The following list of feature extractors are operate on the last
+    word of the input constituent. They are all defined as static
+    members of the class \texttt{WordFeatureExtractorFactory}.
+  
+{\footnotesize 
+
+\begin{center}
+\begin{tabular}{lll}
+ \textbf{fex name}          &  \textbf{Feature Extractor}                  &  \textbf{Description}                                                                                        \\
+\hline
+ \emph{capitalization}      &  \texttt{capitalization}                     &  Adds the following two features: One with the word                                                          \\
+                            &                                              &  in its actual case, and the second, an indicator                                                            \\
+                            &                                              &  for whether the word is captitalized                                                                        \\
+\hline
+ \emph{conflated-pos}       &  \texttt{conflatedPOS}                       &  The coarse POS tag (one of Noun, Verb, Adjective,                                                           \\
+                            &                                              &  Adverb, Punctuation, Pronoun and Other)                                                                     \\
+\hline
+ \emph{de-adj-nouns}        &  \texttt{deAdjectivalAbstractNounsSuffixes}  &  An indicator for whether the word ends with a de-                                                           \\
+                            &                                              &  adjectival suffix. The list of such suffixes is in                                                          \\
+                            &                                              &  \texttt{WordLists.DE\_ADJ\_SUFFIXES}.                                                                       \\
+\hline
+ \emph{de-nom-nouns}        &  \texttt{deNominalNounProducingSuffixes}     &  An indicator for whether the word ends with a de-                                                           \\
+                            &                                              &  nominal noun producing suffix. The list of such suffixes                                                    \\
+                            &                                              &  is in \texttt{WordLists.DENOM\_SUFFIXES}.                                                                   \\
+\hline
+ \emph{de-verbal-suffixes}  &  \texttt{deVerbalSuffix}                     &  An indicator for whether the word ends with a de-                                                           \\
+                            &                                              &  verbal producing suffix. The list of such suffixes                                                          \\
+                            &                                              &  is in \texttt{WordLists.DE\_VERB\_SUFFIXES}.                                                                \\
+\hline
+ \emph{gerunds}             &  \texttt{gerundMarker}                       &  An indicator for whether the word ends with an \emph{-ing}.                                                 \\
+\hline
+ \emph{known-prefixes}      &  \texttt{knownPrefixes}                      &  An indicator for whether the word starts with one of                                                        \\
+                            &                                              &  the following: \emph{poly}, \emph{ultra}, \emph{post}, \emph{multi}, \emph{pre}, \emph{fore}, \emph{ante},  \\
+                            &                                              &  \emph{pro}, \emph{meta} or \emph{out}                                                                       \\
+\hline
+ \emph{lemma}               &  \texttt{lemma}                              &  The lemma of the word, taken from the LEMMA view                                                            \\
+                            &                                              &  (that is, \texttt{ViewNames.LEMMA})                                                                         \\
+\hline
+ \emph{nom}                 &  \texttt{nominalizationMarker}               &  An indicator for whether the word is a nominalization                                                       \\
+\hline
+ \emph{numbers}             &  \texttt{numberNormalizer}                   &  An indicator for whether the word is a number                                                               \\
+\hline
+ \emph{pos}                 &  \texttt{pos}                                &  The part of speech tag of the word (taken                                                                   \\
+                            &                                              &  from \texttt{ViewNames.POS})                                                                                \\
+\hline
+ \emph{prefix-suffix}       &  \texttt{prefixSuffixes}                     &  The first and last two, three characters in the lower                                                       \\
+                            &                                              &  cased word                                                                                                  \\
+\hline
+ \emph{word}                &  \texttt{word}                               &  The word, lower cased                                                                                       \\
+\hline
+ \emph{wordCase}            &  \texttt{wordCase}                           &  The word, without changing the case                                                                         \\
+\hline
+ \emph{date}                &  \texttt{dateMarker}                         &  An indicator for whether the token is a valid date                                                          \\
+\hline
+\end{tabular}
+\end{center}
+
+
+}
+\subsection{List of known transformers}
+\label{sec-4-4}
+\subsection{List of feature operations}
+\label{sec-4-5}
+
+  
+\section{NLP Helpers}
+\label{sec-5}
+\section{Examples}
+\label{sec-6}
+\subsection{Basic examples}
+\label{sec-6-1}
+
+
+   This set of examples goes over the basics of the Edison data
+   structures. Recollect that different annotations over text are
+   called \texttt{Views}, each of which is a graph of \texttt{Constituents} and
+   \texttt{Relations}. The object that manages views corresponding to a
+   single piece of text is called a \texttt{TextAnnotation}.
+\subsubsection{Creating a \texttt{TextAnnotation}}
+\label{sec-6-1-1}
+
+\begin{enumerate}
+\item \textbf{Using the LBJ sentence splitter and tokenizer}
+
+       The simplest way to define a \texttt{TextAnnotation} is to just give the
+       text to the constructor. Note that in the following example,
+       \texttt{text1} consists of three sentences. The corresponding \texttt{ta1} will
+       use the sentence slitter defined in the \href{http://cogcomp.cs.illinois.edu/page/software_view/11}{Learning based Java} (LBJ)
+       library to split the text into sentences and further apply the
+       LBJ tokenizer to tokenize the sentence.
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
+   + "computer. I was born in Urbana, Il. in 1992";
+
+String corpus = "2001_ODYSSEY";
+String textId = "001";
+
+// Create a TextAnnotation using the LBJ sentence 
+// splitter and tokenizers.
+TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1);
+\end{lstlisting}
+\item \textbf{Using pre-tokenized text}
+
+       Quite often, our data source could specify the tokenization for
+       text. We can use this to create a \texttt{TextAnnotation} by specifying
+       the sentences and tokens manually. In this case, the input to the
+       constructor consists of the corpus, text identifier and a \texttt{List}
+       of strings. Each element in the list will be treated as a
+       sentence. This constructor assumes that the sentences in the list
+       are white-space tokenized.
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+String textId2 = "002";
+
+List<String> tokenizedSentences = Arrays.asList(
+                                  "Good afternoon , gentlemen .", 
+                                  "I am a HAL-9000 computer .",
+                                  "I was born in Urbana , Il. in 1992 .");
+TextAnnotation ta2 = new TextAnnotation(corpus, textId2, tokenizedSentences);
+\end{lstlisting}
+\item \textbf{Other ways}
+
+       The \texttt{TextAnnotation} class has several constructors, but the
+       above examples cover the most important cases. Another
+       important use case is to to create a text annotation using the
+       Curator. This is covered in the section covering \hyperref[sec-6-2]{curator examples}.
+\end{enumerate}
+\subsubsection{Accessing the text and tokens}
+\label{sec-6-1-2}
+
+    \emph{Edison} keeps track of the raw text along with the tokens it
+    contains. So, we can get the original text using the function
+    \texttt{getText()} and also the tokenized text using the function
+    \texttt{getTokenizedText()}. The function \texttt{getToken(int tokenId)} gives
+    us the tokens in the text.
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+// Print the text. This prints the raw text that was used to
+// create the TextAnnotation object. In the case where the
+// second constructor is used, the text is printed whitespace
+// tokenized.
+System.out.println(ta1.getText());
+System.out.println(ta2.getText());
+
+// Print the tokenized text. The tokenization scheme is
+// specified by the constructor, which in the first example
+// defaults to the LBJ tokenizer, and in the second one is
+// specified manually.
+System.out.println(ta1.getTokenizedText());
+System.out.println(ta2.getTokenizedText());
+
+// Print the tokens
+for (int i = 0; i < ta.size(); i++) {
+    System.out.print(i + ":" + ta.getToken(i) + "\t");
+}
+System.out.println();
+\end{lstlisting}
+\subsubsection{Accessing sentences}
+\label{sec-6-1-3}
+
+    Each \texttt{TextAnnotation} knows the views it contains. To get these,
+    use the function \texttt{getAvailableViews()}, which returns a set of
+    strings representing the names of the views it contains.
+
+
+    The following code prints all the available views in the
+    \texttt{TextAnnotation} ta1 defined above. It then goes over each
+    sentence and prints them.
+    
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+System.out.println(ta1.getAvailableViews());
+
+// Print the sentences. The Sentence class has many of the same
+// methods as a TextAnnotation.
+List<Sentence> sentences = ta1.sentences();
+
+System.out.println(sentences.size() + " sentences found.");
+
+for (int i = 0; i < sentences.size(); i++) {
+    Sentence sentence = sentences.get(i);
+    System.out.println(sentence);
+}
+\end{lstlisting}
+    
+\subsection{Connecting to the Curator}
+\label{sec-6-2}
+
+   The Curator acts as a central server that can annotate text using
+   several annotators. With Edison, we can connect to the Curator to
+   get those annotations and build our own NLP-driven
+   application. \emph{Edison} can be thought of as a Java client of the
+   Curator.
+
+   The primary class we will use is the \texttt{CuratorClient}. To create a
+   \texttt{CuratorClient}, we need to specify the host and the port of the
+   curator server.  There are two ways to access the Curator: (1) With
+   the raw text and asking the curator to tokenize it for us, or, (2)
+   Pre-defining the tokenization and asking the curator to respect it.
+
+\begin{enumerate}
+\item \textbf{Raw text}
+      
+      We could ask the Curator to provide us the tokenization and
+      sentences. We would use this when we want to process raw
+      text. The following example demonstrates this use case.
+      
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+// This is the text we want to annotate.
+String text = "Good afternoon, gentlemen. I am a HAL-9000 "
+    + "computer. I was born in Urbana, Il. in 1992";
+
+String corpus = "2001_ODYSSEY";
+String textId = "001";
+
+// We need to specify a host and a port where the curator server is
+// running. Note: The following server does not exist and is used as
+// an example. 
+String curatorHost = "curator.cs.uiuc.edu";
+int curatorPort = 9090;
+
+CuratorClient client  = new CuratorClient(curatorHost, curatorPort);
+
+// Should the Curator be forced to update its cache if the exact text
+// is already present? Unless you want to force the Curator to clean
+// up its cached version of this text, set this to false.
+boolean forceUpdate = false;
+
+TextAnnotation ta = client.getTextAnnotation(corpus, textId, text,
+                                             forceUpdate);
+\end{lstlisting}
+\item \textbf{Tokenized text}
+
+      The other setting is when we have pre-tokenized text that we
+      want to process with the different annotators that the Curator
+      provides. In this case, we should ask the Curator to respect the
+      tokenization that the \texttt{TextAnnotation} specifies. To do so, we
+      need to use a different constructor for the \texttt{CuratorClient}.
+
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+// This is the text we want to annotate.
+String textId2 = "002";
+
+List<String> tokenizedSentences = Arrays.asList(
+                                 "Good afternoon , gentlemen .", 
+                                 "I am a HAL-9000 computer .",
+                                 "I was born in Urbana , Il. in 1992 .");
+
+TextAnnotation ta = new TextAnnotation(corpus, textId2, tokenizedSentences);
+
+// We need to specify a host and a port where the curator server is
+// running. Note: The following server does not exist and is used as
+// an example. 
+String curatorHost = "curator.cs.uiuc.edu";
+int curatorPort = 9090;
+
+CuratorClient client  = new CuratorClient(curatorHost, curatorPort, true);
+\end{lstlisting}
+
+      \textbf{Note}: If this constructor is used to access the curator, then
+      calling the function \texttt{getTextAnnotation} will trigger an
+      exception.
+\end{enumerate}
+
+
+   
+\subsubsection{Adding views from the Curator}
+\label{sec-6-2-1}
+
+    Other than the creation of \texttt{TextAnnotation} objects, curator
+    clients created with the two constructors described above are
+    identical with respect to adding different views.
+
+\lstset{frame=lines,basicstyle=\footnotesize,numbers=left,captionpos=b,showstringspaces=false,numberstyle=\tiny,language=java}
+\begin{lstlisting}
+// Print the tokenized text
+System.out.println(ta.getTokenizedText());
+
+// Let's add the part of speech view and print it
+client.addPOSView(ta, forceUpdate);
+
+// The view is stored as `ViewNames.POS`. The class ViewNames defines a
+// set of standard names for different views.
+System.out.println(ta.getView(ViewNames.POS));
+
+// Add the named entity view and print it.
+client.addNamedEntityView(ta, forceUpdate);
+System.out.println(ta.getView(ViewNames.NER));
+
+// Add the stanford dependency view and print the dependency tree
+client.addStanfordDependencyView(ta, forceUpdate);
+System.out.println(ta.getView(ViewNames.DEPENDENCY_STANFORD));
+\end{lstlisting}
+
+    At present the CuratorClient has accessors for the following
+    annotators: the Charniak and Berkeley parsers, coreference,
+    easy-first dependency parses, named entities, verb and nominal
+    SRL, Stanford constituent and dependency parsers and the Wikifier.
+\subsection{Creating custom views}
+\label{sec-6-3}
+\subsection{Integrating your own feature extractors}
+\label{sec-6-4}
+
+\end{document}
