@@ -1,0 +1,27 @@
+S --> *** , S
+S --> *** , S .
+S --> “ *** , S , ”
+S --> *** , NP VP
+S --> PP , S
+S --> PP , S .
+S --> NP , S
+S --> ADVP , S
+S --> VP , S
+S --> NP , S .
+S --> *** PP , S
+S --> VP , S .
+S --> PP NP , S
+S --> ADJP , S
+S --> PP , NP VP
+S --> ADVP , S .
+S --> *** PP , S .
+S --> NP , PP , S
+S --> “ PP , S
+S --> PP , NP *** VP
+S --> *** NP , S
+S --> SBAR , S
+S --> SBAR , S .
+S --> *** SBAR , S
+S --> “ SBAR , S , ”
+S --> “ SBAR , S
+SBAR --> *** S , S

@@ -1,4 +1,5 @@
-package edu.illinois.cs.cogcomp.comma;
+package edu.illinois.cs.cogcomp.comma.datastructures;
+
 
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 
@@ -30,7 +31,35 @@ public class CommaProperties extends ResourceManager {
     public boolean useGold() {
         return getBoolean("USE_GOLD");
     }
+    
+    public boolean allowMultiLabelCommas() {
+        return getBoolean("ALLOW_MULTI_LABEL_COMMAS");
+    }
+    
+    public boolean includeNullLabelCommas() {
+        return getBoolean("INCLUDE_NULL_LABEL_COMMAS");
+    }
+    
+    public boolean isCommaStructureFullSentence() {
+    	return getBoolean("IS_COMMA_STRUCTURE_FULL_SENTENCE");
+    }
+    
+    public boolean useNewLabelSet() {
+        return getBoolean("USE_NEW_LABEL_SET");
+    }
 
+    public String getOtherRelabeledFile() {
+        return getString("OTHER_RELABELED_FILE");
+    }
+    
+    public String getOriginalSrikumarAnnotationFile(){
+    	return getString("ORIGINAL_SRIKUMAR_ANNOTATIONS_FILE");
+    }
+    
+    public String getBayraktarAnnotationsDir(){
+    	return getString("BAYRAKTAR_ANNOTATIONS_DIR");
+    }
+    
     public String getPTBHDir() {
         return getString("PTB_DIR");
     }
@@ -42,6 +71,10 @@ public class CommaProperties extends ResourceManager {
     public String getNombankDir() {
         return getString("NOMBANK_DIR");
     }
+    
+    public String getConstituentParser() {
+        return getString("CONSTITUENT_PARSER");
+    }
 
     public boolean lexicaliseNER() {
         return getBoolean("LEX_NER");
@@ -49,5 +82,13 @@ public class CommaProperties extends ResourceManager {
 
     public boolean lexicalisePOS() {
         return getBoolean("LEX_POS");
+    }
+
+    public boolean useCurator() {
+        return getBoolean("USE_CURATOR");
+    }
+
+    public String getLearnerConfig() {
+        return getString("LEARNER_CONFIG");
     }
 }

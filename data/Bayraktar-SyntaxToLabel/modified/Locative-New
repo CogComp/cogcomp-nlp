@@ -1,0 +1,100 @@
+
+16	S --> NP , NP VP .
+TextAnnotation: This year , the railroad holding company acquired 850 such railcars .
+TextAnnotation: Later yesterday , a Massachusetts senate committee approved a bill to allow national interstate banking by banks in the state beginning in 1991 .
+TextAnnotation: This year , the average of daily contracts traded totaled 9,118 , up from 4,645 a year earlier and from 917 in 1984 .
+(S1
+    (S
+       (NP-TMP (DT This) (NN year))
+       (, ,)
+       (NP-SBJ (DT the) (NN railroad) (VBG holding) (NN company))
+       (VP (VBN acquired)
+           (NP (CD 850) (JJ such) (NNS railcars)))
+       (. .)))
+
+
+116	NAC --> *** , *** ,
+TextAnnotation: The multilevel railcars , scheduled for delivery in 1990 , will be made by Thrall Manufacturing Co. , a Chicago Heights , Ill. , division of closely held Duchossois Industries Inc. , Elmhurst , Ill .
+TextAnnotation: Mr. Cray , who could n't be reached for comment , will work for the new Colorado Springs , Colo. , company as an independent contractor -- the arrangement he had with Cray Research .
+TextAnnotation: Related to that decision , the company said it was converting its Santa Clara , Calif. , factory to a research and development facility .
+(S1
+    (S
+       (NP-SBJ-1
+                 (NP (DT The) (JJ multilevel) (NNS railcars))
+                 (, ,)
+                 (VP (VBN scheduled)
+                     (NP (-NONE- *))
+                     (PP-CLR (IN for)
+                             (NP
+                                 (NP (NN delivery))
+                                 (PP-TMP (IN in)
+                                         (NP (CD 1990))))))
+                 (, ,))
+       (VP (MD will)
+           (VP (VB be)
+               (VP (VBN made)
+                   (NP (-NONE- *-1))
+                   (PP (IN by)
+                       (NP-LGS
+                               (NP (NNP Thrall) (NNP Manufacturing) (NNP Co.))
+                               (, ,)
+                               (NP
+                                   (NP (DT a)
+                                       (NAC-LOC (NNP Chicago) (NNP Heights) (, ,) (NNP Ill.) (, ,))
+                                       (NN division))
+                                   (PP (IN of)
+                                       (NP
+                                           (NP
+                                               (ADJP (RB closely) (VBN held))
+                                               (NNP Duchossois) (NNPS Industries) (NNP Inc.))
+                                           (, ,)
+                                           (NP-LOC
+                                                   (NP (NNP Elmhurst))
+                                                   (, ,)
+                                                   (NP (NNP Ill)))))))))))
+       (. .)))
+
+
+
+116	NAC --> *** , *** ,
+TextAnnotation: The multilevel railcars , scheduled for delivery in 1990 , will be made by Thrall Manufacturing Co. , a Chicago Heights , Ill. , division of closely held Duchossois Industries Inc. , Elmhurst , Ill .
+TextAnnotation: Mr. Cray , who could n't be reached for comment , will work for the new Colorado Springs , Colo. , company as an independent contractor -- the arrangement he had with Cray Research .
+TextAnnotation: Related to that decision , the company said it was converting its Santa Clara , Calif. , factory to a research and development facility .
+(S1
+    (S
+       (NP-SBJ-1
+                 (NP (DT The) (JJ multilevel) (NNS railcars))
+                 (, ,)
+                 (VP (VBN scheduled)
+                     (NP (-NONE- *))
+                     (PP-CLR (IN for)
+                             (NP
+                                 (NP (NN delivery))
+                                 (PP-TMP (IN in)
+                                         (NP (CD 1990))))))
+                 (, ,))
+       (VP (MD will)
+           (VP (VB be)
+               (VP (VBN made)
+                   (NP (-NONE- *-1))
+                   (PP (IN by)
+                       (NP-LGS
+                               (NP (NNP Thrall) (NNP Manufacturing) (NNP Co.))
+                               (, ,)
+                               (NP
+                                   (NP (DT a)
+                                       (NAC-LOC (NNP Chicago) (NNP Heights) (, ,) (NNP Ill.) (, ,))
+                                       (NN division))
+                                   (PP (IN of)
+                                       (NP
+                                           (NP
+                                               (ADJP (RB closely) (VBN held))
+                                               (NNP Duchossois) (NNPS Industries) (NNP Inc.))
+                                           (, ,)
+                                           (NP-LOC
+                                                   (NP (NNP Elmhurst))
+                                                   (, ,)
+                                                   (NP (NNP Ill)))))))))))
+       (. .)))
+
+

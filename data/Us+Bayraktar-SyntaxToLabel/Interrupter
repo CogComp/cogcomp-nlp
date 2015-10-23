@@ -1,0 +1,57 @@
+S --> NP , PP , VP
+#moved to attribute
+#example sentence: TextAnnotation: First Commonwealth Securities Corp. , of New Orleans , and its president , Kenneth J. Canepa , also of New Orleans , consented to a $ 10,000 fine .
+#NP --> *** , PP ,
+S --> NP , S , VP
+S --> *** , S , S
+S --> NP , PP , *** VP
+S --> NP , *** , VP
+S --> PP , S , S
+S --> *** , PP , S
+S --> NP , S , *** VP
+S --> NP , PP , VP .
+S --> PP , PP , S
+S --> NP , *** , VP .
+SBAR --> *** , S
+S --> NP , VP
+S --> NP , PP , *** VP .
+S --> NP , *** , *** VP
+S --> *** , SBAR , S
+VP --> *** , *** , SBAR
+S --> PP , S , S .
+S --> , PP , S
+S --> SBAR , S , S .
+S --> SBAR , S , S
+S --> S , S , *** S
+S --> PP , *** , S .
+S --> *** , S , S .
+VP --> *** , PP , NP
+VP --> *** , NP
+S --> PP , SBAR , S
+S --> NP , *** , *** VP .
+VP --> *** , SBAR
+VP --> *** , PP , SBAR
+#S --> NP , S , VP .
+VP --> *** , *** , NP
+S --> NP , S , *** VP .
+VP --> *** NP , PP , PP
+
+PRN --> , NP VP ,
+PRN --> , S ,
+PRN --> , PP ,
+
+S --> NP , ADVP , VP .
+
+S --> ADVP , PP , NP VP .
+
+S --> PP , ADVP , NP VP .
+
+PRN --> , SBAR ,
+
+PRN --> , ADVP ,
+
+SBAR --> WHNP , S
+
+#moved to list
+#example sentence: Peter Marcus , an analyst with PaineWebber Inc. , said that a downturn in the appliance industry , coupled with sluggish automotive sales , hurt USX results .
+#NP --> NP PP , VP ,

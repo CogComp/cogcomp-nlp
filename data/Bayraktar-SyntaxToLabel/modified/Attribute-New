@@ -1,0 +1,163 @@
+
+31	VP --> VP , NP
+TextAnnotation: Mr. Wilder did introduce such legislation 17 years ago , but he did so at the request of a constituent , a common legislative technique used by lawmakers .
+TextAnnotation: The oldest bell-ringing group in the country , the Ancient Society of College Youths , founded in 1637 , remains male-only , a fact that 's particularly galling to women because the group is the sole source of ringers for Britain 's most prestigious churches , St. Paul 's Cathedral and Westminster Abbey .
+TextAnnotation: But yesterday 's factory orders report had good news on that front : it said factory inventories fell 0.1 % in September , the first decline since February 1987 .
+(S1
+    (S
+       (S
+          (NP-SBJ (NNP Mr.) (NNP Wilder))
+          (VP (VBD did)
+              (VP (VB introduce)
+                  (NP (JJ such) (NN legislation))
+                  (ADVP-TMP
+                            (NP (CD 17) (NNS years))
+                            (RB ago)))))
+       (, ,)
+       (CC but)
+       (S
+          (NP-SBJ (PRP he))
+          (VP
+              (VP (VBD did)
+                  (ADVP-PRD (RB so))
+                  (PP (IN at)
+                      (NP
+                          (NP (DT the) (NN request))
+                          (PP (IN of)
+                              (NP (DT a) (NN constituent))))))
+              (, ,)
+              (NP
+                  (NP (DT a) (JJ common) (JJ legislative) (NN technique))
+                  (VP (VBN used)
+                      (NP (-NONE- *))
+                      (PP (IN by)
+                          (NP-LGS (NNS lawmakers)))))))
+       (. .)))
+
+
+
+24	NP --> NP PP , SBAR ,
+TextAnnotation: Sales of medium-sized cars , which benefited from price reductions arising from introduction of the consumption tax , more than doubled to 30,841 units from 13,056 in October 1988 .
+TextAnnotation: But Mr. Boesel of T. Rowe Price , who also expects 12 % growth in dividends next year , does n't think it will help the overall market all that much .
+TextAnnotation: But the former U.S. president 's sixth visit to China , during which he spoke at length with Chinese leaders , was nowhere near as successful at easing strains that have recently afflicted the Sino-U.S. relationship .
+(S1
+    (S
+       (NP-SBJ
+               (NP (NNS Sales))
+               (PP (IN of)
+                   (NP (JJ medium-sized) (NNS cars)))
+               (, ,)
+               (SBAR
+                     (WHNP-21 (WDT which))
+                     (S
+                        (NP-SBJ (-NONE- *T*-21))
+                        (VP (VBD benefited)
+                            (PP-CLR (IN from)
+                                    (NP
+                                        (NP (NN price) (NNS reductions))
+                                        (VP (VBG arising)
+                                            (PP-DIR (IN from)
+                                                    (NP
+                                                        (NP (NN introduction))
+                                                        (PP (IN of)
+                                                            (NP (DT the) (NN consumption) (NN tax)))))))))))
+               (, ,))
+       (VP
+           (ADVP (RBR more) (IN than))
+           (VBD doubled)
+           (PP-DIR (TO to)
+                   (NP (CD 30,841) (NNS units)))
+           (PP-DIR (IN from)
+                   (NP (CD 13,056))
+                   (PP-TMP (IN in)
+                           (NP (NNP October) (CD 1988)))))
+       (. .)))
+
+
+
+92	NP --> NP PP , SBAR
+TextAnnotation: Wine auctions have almost exhausted the limited supply of those wines , Mr. Shapiro continued : `` We 've seen a dramatic decrease in demand for wines from the '40s and '50s , which go for $ 300 to $ 400 a bottle .
+TextAnnotation: He and other critics say such coaching aids can defeat the purpose of standardized tests , which is to gauge learning progress .
+TextAnnotation: The warnings , issued to at least 100 criminal defense attorneys in several major cities in the last week , have led to an outcry by members of the organized bar , who claim the information is protected by attorney-client privilege .
+(S1
+    (S-1
+         (S
+            (NP-SBJ (NN Wine) (NNS auctions))
+            (VP (VBP have)
+                (ADVP (RB almost))
+                (VP (VBN exhausted)
+                    (NP
+                        (NP (DT the) (VBN limited) (NN supply))
+                        (PP (IN of)
+                            (NP (DT those) (NNS wines)))))))
+         (, ,)
+         (PRN
+              (S
+                 (NP-SBJ (NNP Mr.) (NNP Shapiro))
+                 (VP (VBD continued) (: :)
+                     (SBAR (-NONE- 0)
+                           (S (-NONE- *T*-1))))))
+         (`` ``)
+         (S
+            (NP-SBJ (PRP We))
+            (VP (VBP 've)
+                (VP (VBN seen)
+                    (NP
+                        (NP (DT a) (JJ dramatic) (NN decrease))
+                        (PP-LOC (IN in)
+                                (NP
+                                    (NP (NN demand))
+                                    (PP (IN for)
+                                        (NP
+                                            (NP (NNS wines))
+                                            (PP (IN from)
+                                                (NP (DT the) (CD '40s)
+                                                    (CC and)
+                                                    (CD '50s)))
+                                            (, ,)
+                                            (SBAR
+                                                  (WHNP-165 (WDT which))
+                                                  (S
+                                                     (NP-SBJ (-NONE- *T*-165))
+                                                     (VP (VBP go)
+                                                         (PP-CLR (IN for)
+                                                                 (NP
+                                                                     (NP
+                                                                         (QP ($ $) (CD 300) (TO to) ($ $) (CD 400))
+                                                                         (-NONE- *U*))
+                                                                     (NP-ADV (DT a) (NN bottle)))))))))))))))
+         (. .)))
+
+
+
+17	NP --> NP , ADVP NP
+TextAnnotation: The tension was evident on Wednesday evening during Mr. Nixon 's final banquet toast , normally an opportunity for reciting platitudes about eternal friendship .
+TextAnnotation: Another proposed reform is to have program traders answer to an `` uptick rule '' a reform instituted after the Great Crash of 1929 that protects against stocks being relentlessly beaten downward by those seeking to profit from lower prices , namely short sellers .
+TextAnnotation: The demise of the 238,000-circulation Herald , once the nation 's largest afternoon newspaper with circulation exceeding 700,000 , turns the country 's second-largest city into a one-newspaper town , at least in some senses .
+(S1
+    (S
+       (NP-SBJ (DT The) (NN tension))
+       (VP (VBD was)
+           (ADJP-PRD (JJ evident))
+           (PP-TMP (IN on)
+                   (NP (NNP Wednesday) (NN evening)))
+           (PP-TMP (IN during)
+                   (NP
+                       (NP
+                           (NP (NNP Mr.) (NNP Nixon) (POS 's))
+                           (JJ final) (NN banquet) (NN toast))
+                       (, ,)
+                       (ADVP-TMP (RB normally))
+                       (NP
+                           (NP (DT an) (NN opportunity))
+                           (PP (IN for)
+                               (S-NOM
+                                      (NP-SBJ (-NONE- *))
+                                      (VP (VBG reciting)
+                                          (NP
+                                              (NP (NNS platitudes))
+                                              (PP (IN about)
+                                                  (NP (JJ eternal) (NN friendship)))))))))))
+       (. .)))
+
+

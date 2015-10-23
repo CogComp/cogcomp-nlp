@@ -1,0 +1,4507 @@
+15 wsj/00/wsj_0015.mrg:4
+`` The refund pool ... may not be held hostage through another round of appeals ,[Quotation] '' Judge Curry said .
+Quotation-Said
+
+
+2 wsj/00/wsj_0015.mrg:8
+For 1988 ,[Introductory] Commonwealth Edison reported earnings of $ 737.5 million , or $ 3.01 a share .
+Introductory
+
+
+8 wsj/00/wsj_0015.mrg:10
+In New York Stock Exchange composite trading yesterday ,[Introductory] Commonwealth Edison closed at $ 38.375 , down 12.5 cents .
+Introductory
+
+
+5 wsj/00/wsj_0015.mrg:12
+In a disputed 1985 ruling ,[Introductory] the Commerce Commission said Commonwealth Edison could raise its electricity rates by $ 49 million to pay for the plant .
+Introductory
+
+
+2 wsj/00/wsj_0015.mrg:16
+In August ,[Introductory] the commission ruled that between $ 190 million and $ 195 million of the plant 's construction cost was unreasonable and should be refunded , plus interest .
+Introductory-Time
+
+
+27 wsj/00/wsj_0015.mrg:16
+In August , the commission ruled that between $ 190 million and $ 195 million of the plant 's construction cost was unreasonable and should be refunded ,[Complementary] plus interest .
+Complementary
+
+
+3 wsj/00/wsj_0015.mrg:17
+In his ruling ,[Introductory] Judge Curry added an additional $ 55 million to the commission 's calculations .
+Introductory
+
+
+2 wsj/00/wsj_0015.mrg:18
+Last month ,[Introductory] Judge Curry set the interest rate on the refund at 9 % .
+Introductory-Time
+
+
+28 wsj/00/wsj_0016.mrg:0
+Japan 's domestic sales of cars , trucks and buses in October rose 18 % from a year earlier to 500,004 units , a record for the month ,[List] the Japan Automobile Dealers ' Association said .
+Complementary-Said
+
+
+26 wsj/00/wsj_0017.mrg:1
+The new plant , located in Chinchon about 60 miles from Seoul , will help meet increasing and diversifying demand for control products in South Korea ,[List] the company said .
+Complementary-Said
+
+
+16 wsj/00/wsj_0018.mrg:1
+Not only is development of the new company 's initial machine tied directly to Mr. Cray ,[Other] so is its balance sheet .
+Other
+HELP - Correlative-Conjunction
+
+
+21 wsj/00/wsj_0018.mrg:3
+The documents also said that although the 64-year-old Mr. Cray has been working on the project for more than six years ,[Introductory] the Cray-3 machine is at least another year away from a fully operational prototype .
+Introductory
+
+
+1 wsj/00/wsj_0018.mrg:4
+Moreover ,[Introductory] there have been no orders for the Cray-3 so far , though the company says it is talking with several prospects .
+Introductory-Interrupter
+
+
+12 wsj/00/wsj_0018.mrg:4
+Moreover , there have been no orders for the Cray-3 so far ,[Other] though the company says it is talking with several prospects .
+Complementary
+Complementary-Clause
+
+
+17 wsj/00/wsj_0018.mrg:5
+While many of the risks were anticipated when Minneapolis-based Cray Research first announced the spinoff in May ,[Introductory] the strings it attached to the financing had n't been made public until yesterday .
+Introductory
+
+
+9 wsj/00/wsj_0018.mrg:6
+`` We did n't have much of a choice ,[Quotation] '' Cray Computer 's chief financial officer , Gregory Barnum , said in an interview .
+Quotation-RightSaid
+
+
+13 wsj/00/wsj_0018.mrg:13
+`` It has to be considered as an additional risk for the investor ,[Quotation] '' said Gary P. Smaby of Smaby Group Inc. , Minneapolis .
+Quotation-RightSaid
+
+
+8 wsj/00/wsj_0018.mrg:14
+`` Cray Computer will be a concept stock ,[Quotation] '' he said .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0018.mrg:16
+Besides the designer 's age ,[Introductory] other risk factors for Mr. Cray 's new company include the Cray-3 's tricky , unproven chip technology .
+Introductory
+
+
+2 wsj/00/wsj_0018.mrg:18
+In addition ,[Introductory] the Cray-3 will contain 16 processors -- twice as many as the largest current supercomputer .
+Introductory-Interrupter
+
+
+7 wsj/00/wsj_0018.mrg:19
+Cray Computer also will face intense competition ,[Attribute] not only from Cray Research , which has about 60 % of the world-wide supercomputer market and which is expected to roll out the C-90 machine , a direct competitor with the Cray-3 , in 1991 .
+Attribute
+
+
+5 wsj/00/wsj_0018.mrg:22
+Under terms of the spinoff ,[Introductory] Cray Research stockholders are to receive one Cray Computer share for every two Cray Research shares they own in a distribution expected to occur in about two weeks .
+Introductory
+
+
+1 wsj/00/wsj_0018.mrg:24
+Instead ,[Introductory] the companies will leave it up to the marketplace to decide .
+Introductory-Interrupter
+
+
+4 wsj/00/wsj_0018.mrg:27
+Along with the note ,[Introductory] Cray Research is transferring about $ 53 million in assets , primarily those related to the Cray-3 development , which has been a drain on Cray Research 's earnings .
+Introductory
+
+
+7 wsj/00/wsj_0018.mrg:29
+Without the Cray-3 research and development expenses ,[Introductory] the company would have been able to report a profit of $ 19.3 million for the first half of 1989 rather than the $ 5.9 million it posted .
+Introductory
+
+
+4 wsj/00/wsj_0018.mrg:30
+On the other hand ,[Other] had it existed then , Cray Computer would have incurred a $ 20.5 million loss .
+Introductory-Interrupter
+HELP - I think the first and the secon commas are Introductory
+
+
+9 wsj/00/wsj_0018.mrg:30
+On the other hand , had it existed then ,[Other] Cray Computer would have incurred a $ 20.5 million loss .
+Introductory-IF
+HELP - I think the first and the secon commas are Introductory
+
+
+3 wsj/00/wsj_0018.mrg:33
+At Cray Computer ,[Introductory] he will be paid $ 240,000 .
+Introductory
+
+
+5 wsj/00/wsj_0018.mrg:34
+Besides Messrs. Cray and Barnum ,[Introductory] other senior management at the company includes Neil Davenport , 47 , president and chief executive officer ; Joseph M. Blanchard , 37 , vice president , engineering ; Malcolm A. Hammerton , 40 , vice president , software ; and Douglas R. Wheeland , 45 , vice president , hardware .
+Introductory
+
+
+1 wsj/00/wsj_0020.mrg:1
+However ,[Introductory] five other countries -- China , Thailand , India , Brazil and Mexico -- will remain on that so-called priority watch list as a result of an interim review , U.S. Trade Representative Carla Hills announced .
+Introductory-Interrupter
+
+
+31 wsj/00/wsj_0020.mrg:1
+However , five other countries -- China , Thailand , India , Brazil and Mexico -- will remain on that so-called priority watch list as a result of an interim review ,[List] U.S. Trade Representative Carla Hills announced .
+Complementary-Said
+
+
+6 wsj/00/wsj_0020.mrg:2
+Under the new U.S. trade law ,[Introductory] those countries could face accelerated unfair-trade investigations and stiff trade sanctions if they do n't improve their protection of intellectual property by next spring .
+Introductory
+
+
+11 wsj/00/wsj_0020.mrg:7
+Seoul also has instituted effective search-and-seizure procedures to aid these teams ,[List] she said .
+Complementary-Said
+
+
+2 wsj/00/wsj_0020.mrg:10
+Saudi Arabia ,[Interrupter] for its part , has vowed to enact a copyright law compatible with international standards and to apply the law to computer software as well as to literary works , Mrs. Hills said .
+Interrupter
+
+
+6 wsj/00/wsj_0020.mrg:10
+Saudi Arabia , for its part ,[Interrupter] has vowed to enact a copyright law compatible with international standards and to apply the law to computer software as well as to literary works , Mrs. Hills said .
+Interrupter
+
+
+32 wsj/00/wsj_0020.mrg:10
+Saudi Arabia , for its part , has vowed to enact a copyright law compatible with international standards and to apply the law to computer software as well as to literary works ,[List] Mrs. Hills said .
+Complementary-Said
+
+
+9 wsj/00/wsj_0020.mrg:11
+These three countries are n't completely off the hook ,[Complementary] though .
+Complementary-Interrupter
+
+
+12 wsj/00/wsj_0020.mrg:15
+`` What this tells us is that U.S. trade law is working ,[Quotation] '' he said .
+Quotation-RightSaid
+
+
+4 wsj/00/wsj_0020.mrg:18
+She did n't elaborate ,[Interrupter] although earlier U.S. trade reports have complained of videocassette piracy in Malaysia and disregard for U.S. pharmaceutical patents in Turkey .
+Complementary-Although
+
+
+2 wsj/00/wsj_0020.mrg:20
+So far ,[Introductory] Mrs. Hills has n't deemed any cases bad enough to merit an accelerated investigation under the so-called special 301 provision of the act .
+Introductory
+
+
+17 wsj/00/wsj_0021.mrg:3
+`` Argentina aspires to reach a reduction of 50 % in the value of its external debt ,[Quotation] '' Mr. Rapanelli said through his spokesman , Miguel Alurralde .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0022.mrg:0
+( During its centennial year ,[Other] The Wall Street Journal will report events of the past century that stand as milestones of American business history . )
+Introductory
+
+
+3 wsj/00/wsj_0022.mrg:4
+Apple II owners ,[Interrupter] for example , had to use their television sets as screens and stored data on audiocassettes .
+Interrupter
+
+
+6 wsj/00/wsj_0022.mrg:4
+Apple II owners , for example ,[Interrupter] had to use their television sets as screens and stored data on audiocassettes .
+Interrupter
+
+
+2 wsj/00/wsj_0022.mrg:6
+In addition ,[Introductory] the Apple II was an affordable $ 1,298 .
+Introductory-Interrupter
+
+
+1 wsj/00/wsj_0022.mrg:16
+Today ,[Other] PC shipments annually total some $ 38.3 billion world-wide .
+Introductory-Time
+
+
+18 wsj/00/wsj_0025.mrg:1
+Following the acquisition of R.P. Scherer by a buy-out group led by Shearson Lehman Hutton earlier this year ,[Introductory] the maker of gelatin capsules decided to divest itself of certain of its non-encapsulating businesses .
+Introductory-Temporal
+
+
+1 wsj/00/wsj_0026.mrg:2
+Previously ,[Introductory] watch imports were denied such duty-free treatment .
+Introductory-Temporal
+
+
+10 wsj/00/wsj_0026.mrg:5
+Timex is a major U.S. producer and seller of watches ,[Attribute] including low-priced battery-operated watches assembled in the Philippines and other developing nations covered by the U.S. tariff preferences .
+Attribute
+
+
+37 wsj/00/wsj_0026.mrg:7
+Imports of the types of watches that now will be eligible for duty-free treatment totaled about $ 37.3 million in 1988 , a relatively small share of the $ 1.5 billion in U.S. watch imports that year ,[Other] according to an aide to U.S. Trade Representative Carla Hills .
+Complementary-Said
+HELP - is the comma also a Substitute?
+
+
+29 wsj/00/wsj_0027.mrg:0
+Magna International Inc. 's chief financial officer , James McAlpine , resigned and its chairman , Frank Stronach , is stepping in to help turn the automotive-parts manufacturer around ,[List] the company said .
+Complementary-Said
+
+
+25 wsj/00/wsj_0027.mrg:1
+Mr. Stronach will direct an effort to reduce overhead and curb capital spending `` until a more satisfactory level of profit is achieved and maintained ,[Quotation] '' Magna said .
+Quotation-RigthSaid
+
+
+15 wsj/00/wsj_0027.mrg:4
+The company has reported declines in operating profit in each of the past three years ,[Complementary] despite steady sales growth .
+Complementary-Attribute
+
+
+6 wsj/00/wsj_0027.mrg:6
+On the Toronto Stock Exchange yesterday ,[Introductory] Magna shares closed up 37.5 Canadian cents to C$ 9.625 .
+Introductory
+
+
+19 wsj/00/wsj_0027.mrg:7
+Mr. Stronach , founder and controlling shareholder of Magna , resigned as chief executive officer last year to seek ,[Other] unsuccessfully , a seat in Canada 's Parliament .
+Interrupter
+Interrupter-Intra-Attribute
+
+
+21 wsj/00/wsj_0027.mrg:7
+Mr. Stronach , founder and controlling shareholder of Magna , resigned as chief executive officer last year to seek , unsuccessfully ,[Other] a seat in Canada 's Parliament .
+Interrupter
+Interrupter-Intra-Attribute
+
+
+10 wsj/00/wsj_0027.mrg:10
+The company said Mr. Stronach will personally direct the restructuring ,[Other] assisted by Manfred Gingl , president and chief executive .
+Complementary-Attribute
+
+
+10 wsj/00/wsj_0027.mrg:12
+Magna said Mr. McAlpine resigned to pursue a consulting career ,[Complementary] with Magna as one of his clients .
+Complementary-Attribute
+
+
+16 wsj/00/wsj_0029.mrg:0
+Japanese investors nearly single-handedly bought up two new mortgage securities-based mutual funds totaling $ 701 million ,[List] the U.S. Federal National Mortgage Association said .
+Complementary-Said
+
+
+13 wsj/00/wsj_0029.mrg:1
+The purchases show the strong interest of Japanese investors in U.S. mortgage-based instruments ,[List] Fannie Mae 's chairman , David O. Maxwell , said at a news conference .
+Complementary-Said
+
+
+3 wsj/00/wsj_0029.mrg:4
+Earlier this year ,[Introductory] Japanese investors snapped up a similar , $ 570 million mortgage-backed securities mutual fund .
+Introductory-Time
+
+
+1 wsj/00/wsj_0029.mrg:8
+First ,[Introductory] they are designed to eliminate the risk of prepayment -- mortgage-backed securities can be retired early if interest rates decline , and such prepayment forces investors to redeploy their money at lower rates .
+Introductory-Temporal
+
+
+1 wsj/00/wsj_0029.mrg:9
+Second ,[Introductory] they channel monthly mortgage payments into semiannual payments , reducing the administrative burden on investors .
+Introductory-Temporal
+
+
+10 wsj/00/wsj_0029.mrg:9
+Second , they channel monthly mortgage payments into semiannual payments ,[Complementary] reducing the administrative burden on investors .
+Complementary-Attribute
+
+
+12 wsj/00/wsj_0029.mrg:12
+They also have become large purchasers of Fannie Mae 's corporate debt ,[Complementary] buying $ 2.4 billion in Fannie Mae bonds during the first nine months of the year , or almost a tenth of the total amount issued .
+Complementary-Elaboration
+
+
+17 wsj/00/wsj_0030.mrg:0
+James L. Pate , 54-year-old executive vice president , was named a director of this oil concern ,[Complementary] expanding the board to 14 members .
+Complementary-Attribute
+
+
+14 wsj/00/wsj_0031.mrg:0
+LTV Corp. said a federal bankruptcy court judge agreed to extend until March 8 ,[Substitute] 1990 , the period in which the steel , aerospace and energy products company has the exclusive right to file a reorganization plan .
+Other-TimeFormat
+
+
+12 wsj/00/wsj_0031.mrg:1
+The company is operating under Chapter 11 of the federal Bankruptcy Code ,[Complementary] giving it court protection from creditors ' lawsuits while it attempts to work out a plan to pay its debts .
+Complementary-Consequence
+
+
+5 wsj/00/wsj_0032.mrg:0
+Italian chemical giant Montedison S.p.A. ,[Interrupter] through its Montedison Acquisition N.V. indirect unit , began its $ 37-a-share tender offer for all the common shares outstanding of Erbamont N.V. , a maker of pharmaceuticals incorporated in the Netherlands .
+Interrupter
+
+
+13 wsj/00/wsj_0032.mrg:0
+Italian chemical giant Montedison S.p.A. , through its Montedison Acquisition N.V. indirect unit ,[Interrupter] began its $ 37-a-share tender offer for all the common shares outstanding of Erbamont N.V. , a maker of pharmaceuticals incorporated in the Netherlands .
+Interrupter
+
+
+27 wsj/00/wsj_0033.mrg:0
+Japan 's reserves of gold , convertible foreign currencies , and special drawing rights fell by a hefty $ 1.82 billion in October to $ 84.29 billion ,[List] the Finance Ministry said .
+Complementary-Said
+
+
+15 wsj/00/wsj_0034.mrg:2
+No fewer than 24 country funds have been launched or registered with regulators this year ,[Other] triple the level of all of 1988 , according to Charles E. Simon & Co. , a Washington-based research firm .
+Complementary-Attribute
+
+
+23 wsj/00/wsj_0034.mrg:2
+No fewer than 24 country funds have been launched or registered with regulators this year , triple the level of all of 1988 ,[Other] according to Charles E. Simon & Co. , a Washington-based research firm .
+Complementary-Said
+
+
+16 wsj/00/wsj_0034.mrg:7
+The recent explosion of country funds mirrors the `` closed-end fund mania '' of the 1920s ,[Interrupter] Mr. Foot says , when narrowly focused funds grew wildly popular .
+Interrupter-Intra
+
+
+20 wsj/00/wsj_0034.mrg:7
+The recent explosion of country funds mirrors the `` closed-end fund mania '' of the 1920s , Mr. Foot says ,[Interrupter] when narrowly focused funds grew wildly popular .
+Interrupter-Intra
+
+
+5 wsj/00/wsj_0034.mrg:9
+Unlike traditional open-end mutual funds ,[Introductory] most of these one-country portfolios are the `` closed-end '' type , issuing a fixed number of shares that trade publicly .
+Introductory
+
+
+17 wsj/00/wsj_0034.mrg:9
+Unlike traditional open-end mutual funds , most of these one-country portfolios are the `` closed-end '' type ,[Complementary] issuing a fixed number of shares that trade publicly .
+Complementary-Attribute
+
+
+18 wsj/00/wsj_0034.mrg:12
+`` People are looking to stake their claims '' now before the number of available nations runs out ,[Complementary] says Michael Porter , an analyst at Smith Barney , Harris Upham & Co. , New York .
+Complementary-Said
+
+
+13 wsj/00/wsj_0034.mrg:14
+As individual investors have turned away from the stock market over the years ,[Introductory] securities firms have scrambled to find new products that brokers find easy to sell .
+Introductory
+
+
+9 wsj/00/wsj_0034.mrg:17
+And many emerging markets have outpaced more mature markets ,[Attribute] such as the U.S. and Japan .
+Attribute-Example-HELP
+
+
+10 wsj/00/wsj_0034.mrg:22
+When the stock market dropped nearly 7 % Oct. 13 ,[Interrupter] for instance , the Mexico Fund plunged about 18 % and the Spain Fund fell 16 % .
+Interrupter-Intra
+
+
+13 wsj/00/wsj_0034.mrg:22
+When the stock market dropped nearly 7 % Oct. 13 , for instance ,[Interrupter] the Mexico Fund plunged about 18 % and the Spain Fund fell 16 % .
+Interrupter-Intra
+
+
+19 wsj/00/wsj_0034.mrg:25
+After trading at an average discount of more than 20 % in late 1987 and part of last year ,[Introductory] country funds currently trade at an average premium of 6 % .
+Introductory
+
+
+20 wsj/00/wsj_0034.mrg:27
+It 's probably worth paying a premium for funds that invest in markets that are partially closed to foreign investors ,[Other] such as South Korea , some specialists say .
+Attribute-Example-HELP
+
+
+25 wsj/00/wsj_0034.mrg:27
+It 's probably worth paying a premium for funds that invest in markets that are partially closed to foreign investors , such as South Korea ,[List] some specialists say .
+Complementary-Said
+
+
+10 wsj/00/wsj_0034.mrg:31
+`` I 'm very alarmed to see these rich valuations ,[Quotation] '' says Smith Barney 's Mr. Porter .
+Quotation-Said
+
+
+13 wsj/00/wsj_0034.mrg:32
+The newly fattened premiums reflect the increasingly global marketing of some country funds ,[List] Mr. Porter suggests .
+Complementary-Said
+
+
+13 wsj/00/wsj_0034.mrg:34
+`` There may be an international viewpoint cast on the funds listed here ,[Quotation] '' Mr. Porter says .
+Quotation-Said
+
+
+1 wsj/00/wsj_0034.mrg:35
+Nonetheless ,[Introductory] plenty of U.S. analysts and money managers are aghast at the lofty trading levels of some country funds .
+Introductory-Interrupter
+
+
+27 wsj/00/wsj_0035.mrg:0
+The U.S. and Soviet Union are holding technical talks about possible repayment by Moscow of $ 188 million in pre-Communist Russian debts owed to the U.S. government ,[List] the State Department said .
+Complementary-Said
+
+
+1 wsj/00/wsj_0035.mrg:2
+However ,[Interrupter] after two meetings with the Soviets , a State Department spokesman said that it 's `` too early to say '' whether that will happen .
+Introductory+Interrupter
+
+
+8 wsj/00/wsj_0035.mrg:2
+However , after two meetings with the Soviets ,[Interrupter] a State Department spokesman said that it 's `` too early to say '' whether that will happen .
+Introductory+Interrupter
+
+
+4 wsj/00/wsj_0035.mrg:3
+Coincident with the talks ,[Other] the State Department said it has permitted a Soviet bank to open a New York branch .
+Introductory
+
+
+10 wsj/00/wsj_0035.mrg:6
+Under a 1934 law , the Johnson Debt Default Act ,[Interrupter] as amended , it 's illegal for Americans to extend credit to countries in default to the U.S. government , unless they are members of the World Bank and International Monetary Fund .
+Complementary
+
+
+13 wsj/00/wsj_0035.mrg:6
+Under a 1934 law , the Johnson Debt Default Act , as amended ,[Interrupter] it 's illegal for Americans to extend credit to countries in default to the U.S. government , unless they are members of the World Bank and International Monetary Fund .
+Introductory
+
+
+30 wsj/00/wsj_0035.mrg:6
+Under a 1934 law , the Johnson Debt Default Act , as amended , it 's illegal for Americans to extend credit to countries in default to the U.S. government ,[Complementary] unless they are members of the World Bank and International Monetary Fund .
+Complementary
+
+
+12 wsj/00/wsj_0036.mrg:0
+In another reflection that the growth of the economy is leveling off ,[Introductory] the government said that orders for manufactured goods and spending on construction failed to rise in September .
+Introductory
+
+
+1 wsj/00/wsj_0036.mrg:1
+Meanwhile ,[Introductory] the National Association of Purchasing Management said its latest survey indicated that the manufacturing economy contracted in October for the sixth consecutive month .
+Introductory-Interrupter
+
+
+3 wsj/00/wsj_0036.mrg:4
+The purchasing managers ,[Other] however , also said that orders turned up in October after four months of decline .
+Interrupter-Outer
+
+
+5 wsj/00/wsj_0036.mrg:4
+The purchasing managers , however ,[Other] also said that orders turned up in October after four months of decline .
+Interrupter-Outer
+
+
+20 wsj/00/wsj_0036.mrg:5
+Factories booked $ 236.74 billion in orders in September , nearly the same as the $ 236.79 billion in August ,[List] the Commerce Department said .
+Complementary-Said
+
+
+15 wsj/00/wsj_0036.mrg:6
+If not for a 59.6 % surge in orders for capital goods by defense contractors ,[Introductory] factory orders would have fallen 2.1 % .
+Introductory-If
+
+
+4 wsj/00/wsj_0036.mrg:7
+In a separate report ,[Introductory] the department said construction spending ran at an annual rate of $ 415.6 billion , not significantly different from the $ 415.8 billion reported for August .
+Introductory
+
+
+4 wsj/00/wsj_0036.mrg:11
+At the same time ,[Introductory] the drop in interest rates since the spring has failed to revive the residential construction industry .
+Introductory
+
+
+3 wsj/00/wsj_0036.mrg:14
+By most measures ,[Introductory] the nation 's industrial sector is now growing very slowly -- if at all .
+Introductory
+
+
+7 wsj/00/wsj_0036.mrg:19
+Inventories are closely watched for such clues ,[Other] for instance .
+Complementary-Interrupter-Outer
+
+
+22 wsj/00/wsj_0036.mrg:21
+But yesterday 's factory orders report had good news on that front : it said factory inventories fell 0.1 % in September ,[Attribute] the first decline since February 1987 .
+Attribute-Action
+
+
+10 wsj/00/wsj_0036.mrg:22
+`` This conforms to the ` soft landing ' scenario ,[Quotation] '' said Elliott Platt , an economist at Donaldson , Lufkin & Jenrette Securities Corp .
+Quotation-Said
+
+
+7 wsj/00/wsj_0036.mrg:29
+Shipments have been relatively level since January ,[List] the Commerce Department noted .
+Complementary-Said
+
+
+15 wsj/00/wsj_0036.mrg:30
+Manufacturers ' backlogs of unfilled orders rose 0.5 % in September to $ 497.34 billion ,[Other] helped by strength in the defense capital goods sector .
+Complementary-Cause
+
+
+5 wsj/00/wsj_0036.mrg:32
+In its construction spending report ,[Introductory] the Commerce Department said residential construction , which accounts for nearly half of all construction spending , was off 0.9 % in September to an annual rate of $ 191.9 billion .
+Introductory
+
+
+23 wsj/00/wsj_0036.mrg:33
+David Berson , economist for the Mortgage Bankers Association , predicted the drop in interest rates eventually will boost spending on single-family homes ,[Other] but probably not until early next year .
+Complementary-Attribute
+
+
+4 wsj/00/wsj_0036.mrg:36
+After adjusting for inflation ,[Introductory] the Commerce Department said construction spending did n't change in September .
+Introductory
+
+
+8 wsj/00/wsj_0036.mrg:37
+For the first nine months of the year ,[Introductory] total construction spending ran about 2 % above last year 's level .
+Introductory-Time
+
+
+12 wsj/00/wsj_0036.mrg:42
+Although the purchasing managers ' index continues to indicate a slowing economy ,[Introductory] it is n't signaling an imminent recession , said Robert Bretz , chairman of the association 's survey committee and director of materials management at Pitney Bowes Inc. , Stamford , Conn .
+Introductory
+
+
+20 wsj/00/wsj_0036.mrg:42
+Although the purchasing managers ' index continues to indicate a slowing economy , it is n't signaling an imminent recession ,[Other] said Robert Bretz , chairman of the association 's survey committee and director of materials management at Pitney Bowes Inc. , Stamford , Conn .
+Complementary-Said
+
+
+11 wsj/00/wsj_0036.mrg:44
+The report offered new evidence that the nation 's export growth ,[Interrupter] though still continuing , may be slowing .
+Interrupter-Intra
+
+
+15 wsj/00/wsj_0036.mrg:44
+The report offered new evidence that the nation 's export growth , though still continuing ,[Interrupter] may be slowing .
+Interrupter-Intra
+
+
+13 wsj/00/wsj_0036.mrg:45
+Only 19 % of the purchasing managers reported better export orders in October ,[Complementary] down from 27 % in September .
+Complementary-Attribute
+
+
+10 wsj/00/wsj_0036.mrg:46
+And 8 % said export orders were down last month ,[Other] compared with 6 % the month before .
+Complementary
+
+
+5 wsj/00/wsj_0036.mrg:48
+For the fifth consecutive month ,[Introductory] purchasing managers said prices for the goods they purchased fell .
+Introductory-Time
+
+
+12 wsj/00/wsj_0036.mrg:52
+When demand is stronger than suppliers can handle and delivery times lengthen ,[Introductory] prices tend to rise .
+Introductory-Temporal
+
+
+4 wsj/00/wsj_0036.mrg:55
+For the first time ,[Introductory] the October survey polled members on imports .
+Introductory-Temporal
+
+
+9 wsj/00/wsj_0036.mrg:56
+It found that of the 73 % who import ,[Other] 10 % said they imported more in October and 12 % said they imported less than the previous month .
+Introductory
+
+
+11 wsj/00/wsj_0036.mrg:57
+While acknowledging one month 's figures do n't prove a trend ,[Introductory] Mr. Bretz said , `` It does lead you to suspect imports are going down , or at least not increasing that much . ''
+Introductory
+
+
+15 wsj/00/wsj_0036.mrg:57
+While acknowledging one month 's figures do n't prove a trend , Mr. Bretz said ,[Quotation] `` It does lead you to suspect imports are going down , or at least not increasing that much . ''
+Quotation-SaidLeft
+
+
+11 wsj/00/wsj_0036.mrg:59
+`` It 's an odd thing to put on the list ,[Quotation] '' Mr. Bretz noted .
+Quotation-SaidRight
+
+
+10 wsj/00/wsj_0036.mrg:60
+He said that for the second month in a row ,[Introductory] food processors reported a shortage of nonfat dry milk .
+Introductory
+
+
+18 wsj/00/wsj_0036.mrg:61
+They blamed increased demand for dairy products at a time of exceptionally high U.S. exports of dry milk ,[Attribute] coupled with very low import quotas .
+Attribute
+
+
+14 wsj/00/wsj_0036.mrg:64
+Here are the Commerce Department 's latest figures for manufacturers in billions of dollars ,[Other] seasonally adjusted .
+Complementary
+
+
+23 wsj/00/wsj_0037.mrg:0
+Judging from the Americana in Haruki Murakami 's `` A Wild Sheep Chase '' ( Kodansha , 320 pages , $ 18.95 ) ,[List] baby boomers on both sides of the Pacific have a lot in common .
+Introductory
+
+
+4 wsj/00/wsj_0037.mrg:1
+Although set in Japan ,[Introductory] the novel 's texture is almost entirely Western , especially American .
+Introductory
+
+
+13 wsj/00/wsj_0037.mrg:1
+Although set in Japan , the novel 's texture is almost entirely Western ,[List] especially American .
+Complementary-Attribute
+
+
+4 wsj/00/wsj_0037.mrg:6
+For an American reader ,[Introductory] part of the charm of this engaging novel should come in recognizing that Japan is n't the buttoned-down society of contemporary American lore .
+Introductory
+
+
+14 wsj/00/wsj_0037.mrg:8
+If `` A Wild Sheep Chase '' carries an implicit message for international relations ,[Introductory] it 's that the Japanese are more like us than most of us think .
+Introductory-If
+
+
+3 wsj/00/wsj_0037.mrg:13
+Along the way ,[Introductory] he meets a solicitous Christian chauffeur who offers the hero God 's phone number ; and the Sheep Man , a sweet , roughhewn figure who wears -- what else -- a sheepskin .
+Introductory
+
+
+19 wsj/00/wsj_0037.mrg:18
+In Robert Whiting 's `` You Gotta Have Wa '' ( Macmillan , 339 pages , $ 17.95 ) ,[Introductory] the Beatles give way to baseball , in the Nipponese version we would be hard put to call a `` game . ''
+Introductory
+
+
+26 wsj/00/wsj_0037.mrg:18
+In Robert Whiting 's `` You Gotta Have Wa '' ( Macmillan , 339 pages , $ 17.95 ) , the Beatles give way to baseball ,[Attribute] in the Nipponese version we would be hard put to call a `` game . ''
+Other-HELP
+
+
+5 wsj/00/wsj_0037.mrg:19
+As Mr. Whiting describes it ,[Introductory] Nipponese baseball is a `` mirror of Japan 's fabled virtues of hard work and harmony . ''
+Introductory
+
+
+76 wsj/00/wsj_0037.mrg:23
+But other than the fact that besuboru is played with a ball and a bat , it 's unrecognizable : Fans politely return foul balls to stadium ushers ; the strike zone expands depending on the size of the hitter ; ties are permitted -- even welcomed -- since they honorably sidestep the shame of defeat ; players must abide by strict rules of conduct even in their personal lives -- players for the Tokyo Giants ,[Interrupter] for example , must always wear ties when on the road .
+Interrupter-Intra
+
+
+79 wsj/00/wsj_0037.mrg:23
+But other than the fact that besuboru is played with a ball and a bat , it 's unrecognizable : Fans politely return foul balls to stadium ushers ; the strike zone expands depending on the size of the hitter ; ties are permitted -- even welcomed -- since they honorably sidestep the shame of defeat ; players must abide by strict rules of conduct even in their personal lives -- players for the Tokyo Giants , for example ,[Interrupter] must always wear ties when on the road .
+Interrupter-Intra
+
+
+15 wsj/00/wsj_0037.mrg:23
+But other than the fact that besuboru is played with a ball and a bat ,[Other] it 's unrecognizable : Fans politely return foul balls to stadium ushers ; the strike zone expands depending on the size of the hitter ; ties are permitted -- even welcomed -- since they honorably sidestep the shame of defeat ; players must abide by strict rules of conduct even in their personal lives -- players for the Tokyo Giants , for example , must always wear ties when on the road .
+Introductory-Help
+
+
+16 wsj/00/wsj_0037.mrg:25
+Despite the enormous sums of money they 're paid to stand up at a Japanese plate ,[Introductory] a good number decide it 's not worth it and run for home .
+Introductory
+
+
+11 wsj/00/wsj_0037.mrg:28
+In sometimes amusing , more often supercilious , even vicious passages ,[Introductory] Mr. Katzenstein describes how Sony invades even the most mundane aspects of its workers ' lives -- at the regimented office , where employees are assigned lunch partners -- and at `` home '' in the austere company dormitory run by a prying caretaker .
+Introductory
+
+
+15 wsj/00/wsj_0037.mrg:32
+But Sony ultimately took a lesson from the American management books and fired Mr. Katzenstein ,[Complementary] after he committed the social crime of making an appointment to see the venerable Akio Morita , founder of Sony .
+Complementary
+
+
+2 wsj/00/wsj_0037.mrg:37
+In Singapore ,[Introductory] a new law requires smokers to put out their cigarettes before entering restaurants , department stores and sports centers or face a $ 250 fine .
+Introductory
+
+
+9 wsj/00/wsj_0037.mrg:38
+Discos and private clubs are exempt from the ban ,[List] and smoking will be permitted in bars except during meal hours , an official said .
+List-Clause
+
+
+21 wsj/00/wsj_0037.mrg:38
+Discos and private clubs are exempt from the ban , and smoking will be permitted in bars except during meal hours ,[List] an official said .
+Complementary-Said
+
+
+2 wsj/00/wsj_0037.mrg:40
+In Malaysia ,[Introductory] Siti Zaharah Sulaiman , a deputy minister in the prime minister 's office , launched a `` No-Smoking Week '' at the Mara Institute of Technology near Kuala Lumpur and urged other schools to ban on-campus smoking .
+Introductory
+
+
+8 wsj/00/wsj_0040.mrg:4
+If Boeing goes ahead with the larger 767 ,[Introductory] the plane could hit the market in the mid-1990s .
+Introductory-If
+
+
+7 wsj/00/wsj_0041.mrg:1
+The irony is that the attack commercial ,[Interrupter] after getting a boost in last year 's presidential campaign , has come of age in an off-off election year with only a few contests scattered across the country .
+Interrupter-Attribute
+
+
+18 wsj/00/wsj_0041.mrg:1
+The irony is that the attack commercial , after getting a boost in last year 's presidential campaign ,[Interrupter] has come of age in an off-off election year with only a few contests scattered across the country .
+Interrupter-Attribute
+
+
+9 wsj/00/wsj_0041.mrg:2
+But in the three leading political contests of 1989 ,[Other] the negative ads have reached new levels of hostility , raising fears that this kind of mudslinging , empty of significant issues , is ushering in a new era of campaigns without content .
+Introductory
+
+
+19 wsj/00/wsj_0041.mrg:2
+But in the three leading political contests of 1989 , the negative ads have reached new levels of hostility ,[Complementary] raising fears that this kind of mudslinging , empty of significant issues , is ushering in a new era of campaigns without content .
+Complementary
+
+
+32 wsj/00/wsj_0041.mrg:2
+But in the three leading political contests of 1989 , the negative ads have reached new levels of hostility , raising fears that this kind of mudslinging , empty of significant issues ,[Other] is ushering in a new era of campaigns without content .
+Attribute
+
+
+2 wsj/00/wsj_0041.mrg:3
+`` Now ,[Other] '' says Joseph Napolitan , a pioneer in political television , `` the idea is to attack first , last and always . ''
+Interrupter-Quotation-Said
+
+
+27 wsj/00/wsj_0041.mrg:4
+A trend that started with the first stirrings of politics , accelerated with the dawn of the television age and became a sometimes-tawdry art form in 1988 ,[Other] has reached an entirely new stage .
+Other-longNP
+
+
+8 wsj/00/wsj_0041.mrg:5
+`` To get people 's attention these days ,[Other] '' says Douglas Bailey , a political consultant , `` your TV ad needs to be bold and entertaining , and , more often than not , that means confrontational .
+Interrupter-Quotation-Said
+
+
+28 wsj/00/wsj_0041.mrg:5
+`` To get people 's attention these days , '' says Douglas Bailey , a political consultant , `` your TV ad needs to be bold and entertaining ,[Other] and , more often than not , that means confrontational .
+List-Cluase
+
+
+30 wsj/00/wsj_0041.mrg:5
+`` To get people 's attention these days , '' says Douglas Bailey , a political consultant , `` your TV ad needs to be bold and entertaining , and ,[Other] more often than not , that means confrontational .
+Interrupter
+
+
+35 wsj/00/wsj_0041.mrg:5
+`` To get people 's attention these days , '' says Douglas Bailey , a political consultant , `` your TV ad needs to be bold and entertaining , and , more often than not ,[Introductory] that means confrontational .
+Interrupter
+
+
+1 wsj/00/wsj_0041.mrg:6
+And ,[Other] unlike a few years ago , you do n't even have to worry whether the ad is truthful . ''
+Introductory+Interrupter
+
+
+7 wsj/00/wsj_0041.mrg:6
+And , unlike a few years ago ,[Other] you do n't even have to worry whether the ad is truthful . ''
+Introductory+Interrupter
+
+
+2 wsj/00/wsj_0041.mrg:7
+In 1989 ,[Interrupter] as often as not , the principal fights in the major campaigns are prompted by the ads themselves .
+Introductory+Interrupter
+
+
+7 wsj/00/wsj_0041.mrg:7
+In 1989 , as often as not ,[Interrupter] the principal fights in the major campaigns are prompted by the ads themselves .
+Interrupter+Introductory
+
+
+3 wsj/00/wsj_0041.mrg:8
+Take a look ,[Interrupter] then , at the main attack commercials that set the tone for Tuesday 's elections in New York City , New Jersey and Virginia :
+Interrupter
+
+
+5 wsj/00/wsj_0041.mrg:8
+Take a look , then ,[Interrupter] at the main attack commercials that set the tone for Tuesday 's elections in New York City , New Jersey and Virginia :
+Interrupter
+
+
+13 wsj/00/wsj_0041.mrg:11
+`` David Dinkins failed to file his income taxes for four straight years ,[Quotation] '' says a disembodied male voice .
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0041.mrg:13
+Mr. Dinkins ,[Interrupter] the ad charges , also failed to report his campaign contributions accurately , hid his links to a failing insurance company and paid a convicted kidnapper `` through a phony organization with no members , no receipts and no office . ''
+Interrupter
+
+
+6 wsj/00/wsj_0041.mrg:13
+Mr. Dinkins , the ad charges ,[Interrupter] also failed to report his campaign contributions accurately , hid his links to a failing insurance company and paid a convicted kidnapper `` through a phony organization with no members , no receipts and no office . ''
+Interrupter
+
+
+3 wsj/00/wsj_0041.mrg:14
+`` David Dinkins ,[Other] '' says the kicker , `` Why does he always wait until he 's caught ? ''
+Interrupter-Quotation-Said
+
+
+8 wsj/00/wsj_0041.mrg:14
+`` David Dinkins , '' says the kicker ,[Other] `` Why does he always wait until he 's caught ? ''
+Interrupter-Quotation-Said
+
+
+3 wsj/00/wsj_0041.mrg:15
+`` Nasty innuendoes ,[Other] '' says John Siegal , Mr. Dinkins 's issues director , `` designed to prosecute a case of political corruption that simply does n't exist . ''
+Interrupter-Quotation-Said
+
+
+5 wsj/00/wsj_0041.mrg:16
+Stung by the Giuliani ads ,[Other] Mr. Dinkins 's TV consultants , Robert Shrum and David Doak , finally unleashed a negative ad of their own .
+Introductory
+
+
+6 wsj/00/wsj_0041.mrg:18
+`` Compare two candidates for mayor ,[Quotation] '' says the announcer .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0041.mrg:23
+`` Funny thing ,[Other] '' says the kicker , `` both these candidates are named Rudolph Giuliani . ''
+Interrupter-Quotation-Said
+
+
+8 wsj/00/wsj_0041.mrg:23
+`` Funny thing , '' says the kicker ,[Other] `` both these candidates are named Rudolph Giuliani . ''
+Interrupter-Quotation-Said
+
+
+12 wsj/00/wsj_0041.mrg:27
+Mr. Dinkins did fail to file his income taxes for four years ,[Other] but he insists he voluntarily admitted the `` oversight '' when he was being considered for a city job .
+List-Clause
+
+
+1 wsj/00/wsj_0041.mrg:31
+And ,[Other] says Mr. Dinkins , he did n't know the man his campaign paid for a get-out-the-vote effort had been convicted of kidnapping .
+Interrupter-Said
+
+
+5 wsj/00/wsj_0041.mrg:31
+And , says Mr. Dinkins ,[Other] he did n't know the man his campaign paid for a get-out-the-vote effort had been convicted of kidnapping .
+Interrupter-Said
+
+
+1 wsj/00/wsj_0041.mrg:32
+But ,[Other] say Mr. Dinkins 's managers , he did have an office and his organization did have members .
+Interrupter-Said
+
+
+7 wsj/00/wsj_0041.mrg:32
+But , say Mr. Dinkins 's managers ,[Other] he did have an office and his organization did have members .
+Interrupter-Said
+
+
+10 wsj/00/wsj_0041.mrg:38
+Against a shot of Monticello superimposed on an American flag ,[Introductory] an announcer talks about the `` strong tradition of freedom and individual liberty '' that Virginians have nurtured for generations .
+Introductory
+
+
+1 wsj/00/wsj_0041.mrg:39
+Then ,[Other] just as an image of the statue of Thomas Jefferson dissolves from the screen , the announcer continues : `` On the issue of abortion , Marshall Coleman wants to take away your right to choose and give it to the politicians . ''
+Interrupter-HELP
+
+
+16 wsj/00/wsj_0041.mrg:39
+Then , just as an image of the statue of Thomas Jefferson dissolves from the screen ,[Other] the announcer continues : `` On the issue of abortion , Marshall Coleman wants to take away your right to choose and give it to the politicians . ''
+Interrupter-HELP
+
+
+27 wsj/00/wsj_0041.mrg:39
+Then , just as an image of the statue of Thomas Jefferson dissolves from the screen , the announcer continues : `` On the issue of abortion ,[Introductory] Marshall Coleman wants to take away your right to choose and give it to the politicians . ''
+Introductory
+
+
+23 wsj/00/wsj_0041.mrg:40
+That commercial -- which said Mr. Coleman wanted to take away the right of abortion `` even in cases of rape and incest ,[Other] '' a charge Mr. Coleman denies -- changed the dynamics of the campaign , transforming it , at least in part , into a referendum on abortion .
+Interrupter
+
+
+37 wsj/00/wsj_0041.mrg:40
+That commercial -- which said Mr. Coleman wanted to take away the right of abortion `` even in cases of rape and incest , '' a charge Mr. Coleman denies -- changed the dynamics of the campaign ,[Complementary] transforming it , at least in part , into a referendum on abortion .
+Complementary
+
+
+40 wsj/00/wsj_0041.mrg:40
+That commercial -- which said Mr. Coleman wanted to take away the right of abortion `` even in cases of rape and incest , '' a charge Mr. Coleman denies -- changed the dynamics of the campaign , transforming it ,[Interrupter] at least in part , into a referendum on abortion .
+Interrupter
+
+
+45 wsj/00/wsj_0041.mrg:40
+That commercial -- which said Mr. Coleman wanted to take away the right of abortion `` even in cases of rape and incest , '' a charge Mr. Coleman denies -- changed the dynamics of the campaign , transforming it , at least in part ,[Interrupter] into a referendum on abortion .
+Interrupter
+
+
+3 wsj/00/wsj_0041.mrg:43
+A voice says ,[Other] `` C'mon , now , do n't you have boyfriends ? ''
+Quotation-LeftSaid
+
+
+6 wsj/00/wsj_0041.mrg:43
+A voice says , `` C'mon ,[Other] now , do n't you have boyfriends ? ''
+Other-Speech
+
+
+8 wsj/00/wsj_0041.mrg:43
+A voice says , `` C'mon , now ,[Other] do n't you have boyfriends ? ''
+Other-Speech
+
+
+12 wsj/00/wsj_0041.mrg:45
+So the next time Mr. Wilder talks about the rights of women ,[Other] ask him about this law he tried to pass . ''
+Introductory
+RANDOM-QUOTE
+
+
+9 wsj/00/wsj_0041.mrg:46
+Mr. Wilder did introduce such legislation 17 years ago ,[Other] but he did so at the request of a constituent , a common legislative technique used by lawmakers .
+List-Clause
+
+
+20 wsj/00/wsj_0041.mrg:46
+Mr. Wilder did introduce such legislation 17 years ago , but he did so at the request of a constituent ,[Attribute] a common legislative technique used by lawmakers .
+Complementary
+HELP - Substitute-Attribute
+%substiting a verb with a noun
+
+
+11 wsj/00/wsj_0041.mrg:47
+The legislation itself noted that it was introduced `` by request ,[Other] '' and in 1983 Mr. Wilder introduced a bill to protect rape victims from unfounded interrogation .
+List-Cluase
+
+
+19 wsj/00/wsj_0041.mrg:48
+`` People have grown tired of these ads and Coleman has gotten the stigma of being a negative campaigner ,[Quotation] '' says Mark Rozell , a political scientist at Mary Washington College .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0041.mrg:51
+By Tuesday night ,[Introductory] television stations were carrying new ads featuring Mr. Coleman himself raising questions about Mr. Wilder 's sensitivity to rape victims .
+Introductory
+
+
+8 wsj/00/wsj_0041.mrg:57
+Pictures of rusted oil drums swim into focus ,[Other] and the female voice purrs , `` That hazardous waste on his { Mr. Courter 's } property -- the neighbors are suing for consumer fraud . ''
+List-Cluase
+
+
+14 wsj/00/wsj_0041.mrg:57
+Pictures of rusted oil drums swim into focus , and the female voice purrs ,[Other] `` That hazardous waste on his { Mr. Courter 's } property -- the neighbors are suing for consumer fraud . ''
+Quotation-Said
+
+
+4 wsj/00/wsj_0041.mrg:59
+The only fraud involved ,[Other] cry Mr. Courter 's partisans , is the Florio commercial itself , and so the Courter campaign has responded with its own Pinocchio commercial , produced by Mr. Ailes .
+Interrupter-Said
+
+
+10 wsj/00/wsj_0041.mrg:59
+The only fraud involved , cry Mr. Courter 's partisans ,[Other] is the Florio commercial itself , and so the Courter campaign has responded with its own Pinocchio commercial , produced by Mr. Ailes .
+Interrupter-Said
+
+
+16 wsj/00/wsj_0041.mrg:59
+The only fraud involved , cry Mr. Courter 's partisans , is the Florio commercial itself ,[List] and so the Courter campaign has responded with its own Pinocchio commercial , produced by Mr. Ailes .
+List-Cluase
+
+
+3 wsj/00/wsj_0041.mrg:60
+In this one ,[Introductory] the screen fills with photographs of both candidates .
+Introductory
+
+
+4 wsj/00/wsj_0041.mrg:62
+`` Florio 's lying ,[Other] '' the voice goes on , because `` the barrel on Courter 's land ... contained heating oil , was cleaned up and caused no pollution . ''
+Interrupter-Quotation-Said
+
+
+10 wsj/00/wsj_0041.mrg:62
+`` Florio 's lying , '' the voice goes on ,[Other] because `` the barrel on Courter 's land ... contained heating oil , was cleaned up and caused no pollution . ''
+Interrupter-Quotation-Said
+
+
+23 wsj/00/wsj_0041.mrg:62
+`` Florio 's lying , '' the voice goes on , because `` the barrel on Courter 's land ... contained heating oil ,[List] was cleaned up and caused no pollution . ''
+List
+
+
+7 wsj/00/wsj_0041.mrg:66
+Barrels were dumped on the Courter property ,[Other] a complaint was made , but there is no evidence the barrels were a serious threat to the environment .
+List-Cluase
+
+
+2 wsj/00/wsj_0041.mrg:67
+Even so ,[Interrupter] according to Mr. Salmore , the ad was `` devastating '' because it raised questions about Mr. Courter 's credibility .
+Introductory+Interrupter+Said
+
+
+7 wsj/00/wsj_0041.mrg:67
+Even so , according to Mr. Salmore ,[Interrupter] the ad was `` devastating '' because it raised questions about Mr. Courter 's credibility .
+Introductory+Interrupter+Said
+
+
+2 wsj/00/wsj_0041.mrg:69
+In 1966 ,[Other] on route to a re-election rout of Democrat Frank O'Connor , GOP Gov. Nelson Rockefeller of New York appeared in person saying , `` If you want to keep the crime rates high , O'Connor is your man . ''
+Interrupter
+HELP - Introductory or Interrupter?
+
+
+13 wsj/00/wsj_0041.mrg:69
+In 1966 , on route to a re-election rout of Democrat Frank O'Connor ,[Other] GOP Gov. Nelson Rockefeller of New York appeared in person saying , `` If you want to keep the crime rates high , O'Connor is your man . ''
+Interrupter
+HELP - Introductory or Interrupter?
+
+
+25 wsj/00/wsj_0041.mrg:69
+In 1966 , on route to a re-election rout of Democrat Frank O'Connor , GOP Gov. Nelson Rockefeller of New York appeared in person saying ,[Quotation] `` If you want to keep the crime rates high , O'Connor is your man . ''
+Quotation-LeftSaid
+
+
+36 wsj/00/wsj_0041.mrg:69
+In 1966 , on route to a re-election rout of Democrat Frank O'Connor , GOP Gov. Nelson Rockefeller of New York appeared in person saying , `` If you want to keep the crime rates high ,[Introductory] O'Connor is your man . ''
+Introductory-If
+
+
+7 wsj/00/wsj_0042.mrg:1
+Seats currently are quoted at $ 331,000 ,[Attribute] bid , and $ 350,000 , asked .
+Attribute
+HELP - Is this a new type of comma used for abreviation
+
+
+13 wsj/00/wsj_0042.mrg:1
+Seats currently are quoted at $ 331,000 , bid , and $ 350,000 ,[Attribute] asked .
+Attribute
+HELP - Is this a new type of comma used for abreviation
+
+
+13 wsj/00/wsj_0042.mrg:2
+The record price for a full membership on the exchange is $ 550,000 ,[Complementary] set Aug. 31 , 1987 .
+Complementary-Attribute
+
+
+17 wsj/00/wsj_0042.mrg:2
+The record price for a full membership on the exchange is $ 550,000 , set Aug. 31 ,[List] 1987 .
+Other-TimeFormat
+
+
+5 wsj/00/wsj_0043.mrg:4
+In the past five years ,[Introductory] Japanese companies have tripled their commitments in Asia to $ 5.57 billion .
+Introductory-Time
+
+
+2 wsj/00/wsj_0043.mrg:5
+In Thailand ,[Interrupter] for example , the government 's Board of Investment approved $ 705.6 million of Japanese investment in 1988 , 10 times the U.S. investment figure for the year .
+Interrupter
+Introductory-Location
+
+
+5 wsj/00/wsj_0043.mrg:5
+In Thailand , for example ,[Interrupter] the government 's Board of Investment approved $ 705.6 million of Japanese investment in 1988 , 10 times the U.S. investment figure for the year .
+Interrupter
+
+
+21 wsj/00/wsj_0043.mrg:5
+In Thailand , for example , the government 's Board of Investment approved $ 705.6 million of Japanese investment in 1988 ,[Complementary] 10 times the U.S. investment figure for the year .
+Substitute
+
+
+5 wsj/00/wsj_0043.mrg:8
+In Taiwan and South Korea ,[Introductory] rising wages are forcing manufacturers to seek other overseas sites for labor-intensive production .
+Introductory-Location
+
+
+20 wsj/00/wsj_0043.mrg:9
+These nations , known as Asia 's `` little tigers , '' also are contributing to Southeast Asia 's integration ,[Other] but their influence will remain subordinate to Japan 's .
+List-Clause
+
+
+8 wsj/00/wsj_0043.mrg:10
+For recipient countries such as Thailand and Malaysia ,[Introductory] the investment will provide needed jobs and spur growth .
+Introductory
+
+
+6 wsj/00/wsj_0043.mrg:12
+Because of budget constraints in Washington ,[Introductory] the U.S. encourages Japan to share economic burdens in the region .
+Introductory-Reason
+
+
+4 wsj/00/wsj_0043.mrg:14
+In the coming decade ,[Interrupter] analysts say , U.S.-Japanese relations will be tested as Tokyo comes to terms with its new status as the region 's economic behemoth .
+Interrupter-Said
+
+
+7 wsj/00/wsj_0043.mrg:14
+In the coming decade , analysts say ,[Interrupter] U.S.-Japanese relations will be tested as Tokyo comes to terms with its new status as the region 's economic behemoth .
+Interrupter-Said
+
+
+4 wsj/00/wsj_0043.mrg:16
+In the past decade ,[Introductory] Japanese manufacturers concentrated on domestic production for export .
+Introductory-Time
+
+
+4 wsj/00/wsj_0043.mrg:16
+In the past decade ,[Introductory] Japanese manufacturers concentrated on domestic production for export .
+Introductory-Time
+
+
+3 wsj/00/wsj_0043.mrg:17
+In the 1990s ,[Other] spurred by rising labor costs and the strong yen , these companies will increasingly turn themselves into multinationals with plants around the world .
+Interrupter
+Introductory-Time
+
+
+13 wsj/00/wsj_0043.mrg:17
+In the 1990s , spurred by rising labor costs and the strong yen ,[Other] these companies will increasingly turn themselves into multinationals with plants around the world .
+Interrupter
+Introductory-Reason
+
+
+4 wsj/00/wsj_0043.mrg:18
+To capture the investment ,[List] Southeast Asian nations will move to accommodate Japanese business .
+Introductory-To
+
+
+26 wsj/00/wsj_0043.mrg:19
+These nations ' internal decisions `` will be made in a way not to offend their largest aid donor , largest private investor and largest lender ,[Quotation] '' says Richard Drobnick , director of the international business and research program at the University of Southern California 's Graduate School of Business .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0043.mrg:21
+But ,[Interrupter] analysts say , Asian cooperation is n't likely to parallel the European Common Market approach .
+Interrupter
+HELP-Introductory?
+
+4 wsj/00/wsj_0043.mrg:21
+But , analysts say ,[Interrupter] Asian cooperation is n't likely to parallel the European Common Market approach .
+Interrupter
+
+
+1 wsj/00/wsj_0043.mrg:22
+Rather ,[Introductory] Japanese investment will spur integration of certain sectors , says Kent Calder , a specialist in East Asian economies at the Woodrow Wilson School for Public and Internatonal Affairs at Princeton University .
+Introductory+Interrupter
+
+
+10 wsj/00/wsj_0043.mrg:22
+Rather , Japanese investment will spur integration of certain sectors ,[Other] says Kent Calder , a specialist in East Asian economies at the Woodrow Wilson School for Public and Internatonal Affairs at Princeton University .
+Complementary-Said
+
+
+2 wsj/00/wsj_0043.mrg:23
+In electronics ,[Other] for example , a Japanese company might make television picture tubes in Japan , assemble the sets in Malaysia and export them to Indonesia .
+Interrupter
+Introductory
+
+5 wsj/00/wsj_0043.mrg:23
+In electronics , for example ,[Other] a Japanese company might make television picture tubes in Japan , assemble the sets in Malaysia and export them to Indonesia .
+Interrupter
+
+
+20 wsj/00/wsj_0043.mrg:24
+`` The effect will be to pull Asia together not as a common market but as an integrated production zone ,[Quotation] '' says Goldman Sachs 's Mr. Hormats .
+Quotation-Said
+
+
+2 wsj/00/wsj_0043.mrg:28
+In addition ,[Other] the U.S. this year offered its own plan for cooperation around the Pacific rim in a major speech by Secretary of State James Baker , following up a proposal made in January by Australian Prime Minister Bob Hawke .
+Introductory
+
+
+27 wsj/00/wsj_0043.mrg:28
+In addition , the U.S. this year offered its own plan for cooperation around the Pacific rim in a major speech by Secretary of State James Baker ,[Attribute] following up a proposal made in January by Australian Prime Minister Bob Hawke .
+Complementary-Attribute
+
+
+3 wsj/00/wsj_0043.mrg:30
+`` In Asia ,[Other] as in Europe , a new order is taking shape , '' Mr. Baker said .
+Interrupter
+Introductory
+
+
+7 wsj/00/wsj_0043.mrg:30
+`` In Asia , as in Europe ,[Other] a new order is taking shape , '' Mr. Baker said .
+Interrupter
+Introductory
+
+
+14 wsj/00/wsj_0043.mrg:30
+`` In Asia , as in Europe , a new order is taking shape ,[Quotation] '' Mr. Baker said .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0043.mrg:31
+`` The U.S. ,[Interrupter] with its regional friends , must play a crucial role in designing its architecture . ''
+Interrupter
+
+
+8 wsj/00/wsj_0043.mrg:31
+`` The U.S. , with its regional friends ,[Interrupter] must play a crucial role in designing its architecture . ''
+Interrupter
+
+
+1 wsj/00/wsj_0043.mrg:34
+Moreover ,[Introductory] the Japanese government , now the world 's largest aid donor , is pumping far more assistance into the region than the U.S. is .
+Introductory-Interrupter
+
+
+12 wsj/00/wsj_0043.mrg:35
+While U.S. officials voice optimism about Japan 's enlarged role in Asia ,[Introductory] they also convey an undertone of caution .
+Introductory
+
+
+21 wsj/00/wsj_0043.mrg:36
+`` There 's an understanding on the part of the U.S. that Japan has to expand its functions '' in Asia ,[Other] says J. Michael Farren , undersecretary of commerce for trade .
+Quotation-RightSaid
+RandomQuotes
+
+
+11 wsj/00/wsj_0043.mrg:37
+`` If they approach it with a benevolent , altruistic attitude ,[Other] there will be a net gain for everyone . ''
+Introductory-If
+
+
+14 wsj/00/wsj_0043.mrg:41
+`` No one wants the U.S. to pick up its marbles and go home ,[Quotation] '' Mr. Hormats says .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0043.mrg:42
+For their part ,[Introductory] Taiwan and South Korea are expected to step up their own investments in the next decade to try to slow the Japanese juggernaut .
+Introductory
+
+
+14 wsj/00/wsj_0043.mrg:43
+`` They do n't want Japan to monopolize the region and sew it up ,[Quotation] '' says Chong-sik Lee , professor of East Asian politics at the University of Pennsylvania .
+Quotation-RightSaid
+
+
+18 wsj/00/wsj_0044.mrg:1
+While giving the Comprehensive Test of Basic Skills to ninth graders at Greenville High School last March 16 ,[Introductory] she spotted a student looking at crib sheets .
+Introductory
+
+
+7 wsj/00/wsj_0044.mrg:4
+At the end of World War II ,[Other] Germany surrendered before Japan ... .
+Introductory
+
+
+4 wsj/00/wsj_0044.mrg:6
+Virtually word for word ,[Introductory] the notes matched questions and answers on the social-studies section of the test the student was taking .
+Introductory
+
+
+2 wsj/00/wsj_0044.mrg:7
+In fact ,[Introductory] the student had the answers to almost all of the 40 questions in that section .
+Introductory-Interrupter
+
+
+5 wsj/00/wsj_0044.mrg:8
+The student surrendered the notes ,[Other] but not without a protest .
+List-Clause
+
+
+16 wsj/00/wsj_0044.mrg:9
+`` My teacher said it was OK for me to use the notes on the test ,[Quotation] '' he said .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0044.mrg:11
+Confronted ,[List] Mrs. Yeargin admitted she had given the questions and answers two days before the examination to two low-ability geography classes .
+Introductory
+
+
+2 wsj/00/wsj_0044.mrg:14
+In September ,[Introductory] she pleaded guilty and paid a $ 500 fine .
+Introductory
+
+
+59 wsj/00/wsj_0044.mrg:18
+In her wake she left the bitterness and anger of a principal who was her friend and now calls her a betrayer ; of colleagues who say she brought them shame ; of students and parents who defended her and insist she was treated harshly ; and of school-district officials stunned that despite the bald-faced nature of her actions ,[Introductory] she became something of a local martyr .
+Introductory
+
+
+15 wsj/00/wsj_0044.mrg:19
+Mrs. Yeargin 's case also casts some light on the dark side of school reform ,[Attribute] where pressures on teachers are growing and where high-stakes testing has enhanced the temptation to cheat .
+Attribute
+
+
+14 wsj/00/wsj_0044.mrg:23
+`` There is incredible pressure on school systems and teachers to raise test scores ,[Quotation] '' says Walt Haney , an education professor and testing specialist at Boston College .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0044.mrg:25
+And most disturbing ,[Other] it is educators , not students , who are blamed for much of the wrongdoing .
+Introductory
+
+
+7 wsj/00/wsj_0044.mrg:25
+And most disturbing , it is educators ,[List] not students , who are blamed for much of the wrongdoing .
+List
+
+
+10 wsj/00/wsj_0044.mrg:25
+And most disturbing , it is educators , not students ,[Complementary] who are blamed for much of the wrongdoing .
+Other-LongNP-HELP
+
+
+22 wsj/00/wsj_0044.mrg:27
+The group says standardized achievement test scores are greatly inflated because teachers often `` teach the test '' as Mrs. Yeargin did ,[Other] although most are never caught .
+Complementary
+
+
+9 wsj/00/wsj_0044.mrg:30
+After numerous occurrences of questionable teacher help to students ,[Introductory] Texas is revising its security practices .
+Introductory
+
+
+3 wsj/00/wsj_0044.mrg:33
+By using them ,[Other] teachers -- with administrative blessing -- telegraph to students beforehand the precise areas on which a test will concentrate , and sometimes give away a few exact questions and answers .
+Introductory
+
+
+7 wsj/00/wsj_0044.mrg:36
+Under the state 's Education Improvement Act ,[Introductory] low test scores can block students ' promotions or force entire districts into wrenching , state-supervised `` interventions '' that can mean firings .
+Introductory
+
+
+3 wsj/00/wsj_0044.mrg:37
+High test scores ,[Interrupter] on the other hand , bring recognition and extra money -- a new computer lab for a school , grants for special projects , a bonus for the superintendent .
+Interrupter-outer
+
+
+8 wsj/00/wsj_0044.mrg:37
+High test scores , on the other hand ,[Interrupter] bring recognition and extra money -- a new computer lab for a school , grants for special projects , a bonus for the superintendent .
+Interrupter-outer
+
+
+6 wsj/00/wsj_0044.mrg:39
+Since the reforms went in place ,[Interrupter] for example , no state has posted a higher rate of improvement on the Scholastic Aptitude Test than South Carolina , although the state still posts the lowest average score of the about 21 states who use the SAT as the primary college entrance examination .
+Interrupter
+
+
+9 wsj/00/wsj_0044.mrg:39
+Since the reforms went in place , for example ,[Interrupter] no state has posted a higher rate of improvement on the Scholastic Aptitude Test than South Carolina , although the state still posts the lowest average score of the about 21 states who use the SAT as the primary college entrance examination .
+Interrupter
+
+
+27 wsj/00/wsj_0044.mrg:39
+Since the reforms went in place , for example , no state has posted a higher rate of improvement on the Scholastic Aptitude Test than South Carolina ,[Complementary] although the state still posts the lowest average score of the about 21 states who use the SAT as the primary college entrance examination .
+Complementary
+
+
+6 wsj/00/wsj_0044.mrg:118
+The radio show `` enraged us ,[Quotation] '' says Mrs. Ward .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0044.mrg:119
+Partly because of the show ,[Interrupter] Mr. Watson says , the district decided not to recommend Mrs. Yeargin for a first-time offenders program that could have expunged the charges and the conviction from her record .
+Interrupter-Said
+
+
+9 wsj/00/wsj_0044.mrg:119
+Partly because of the show , Mr. Watson says ,[Interrupter] the district decided not to recommend Mrs. Yeargin for a first-time offenders program that could have expunged the charges and the conviction from her record .
+Interrupter-Said
+
+
+4 wsj/00/wsj_0044.mrg:122
+At Greenville High School ,[Interrupter] meanwhile , some students -- especially on the cheerleading squad -- were crushed .
+Interrupter
+
+
+6 wsj/00/wsj_0044.mrg:122
+At Greenville High School , meanwhile ,[Interrupter] some students -- especially on the cheerleading squad -- were crushed .
+Interrupter
+
+
+16 wsj/00/wsj_0044.mrg:123
+`` It 's hard to explain to a 17-year-old why someone they like had to go ,[Quotation] '' says Mrs. Ward .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0044.mrg:124
+Soon ,[Introductory] T-shirts appeared in the corridors that carried the school 's familiar red-and-white GHS logo on the front .
+Introductory
+
+
+3 wsj/00/wsj_0044.mrg:125
+On the back ,[Introductory] the shirts read , `` We have all the answers . ''
+Introductory
+
+
+7 wsj/00/wsj_0044.mrg:125
+On the back , the shirts read ,[Quotation] `` We have all the answers . ''
+Quotation-LeftSaid
+
+
+7 wsj/00/wsj_0044.mrg:127
+`` She did a lot of harm ,[Quotation] '' says Cathryn Rice , who had discovered the crib notes .
+Quotation-RightSaid
+
+
+7 wsj/00/wsj_0044.mrg:130
+Says Gayle Key , a mathematics teacher ,[Substitute] `` The incentive pay thing has opened up a can of worms .
+Quotation-LeftSaid
+HELP - Quotation-LeftSaid or Substitute?
+
+
+2 wsj/00/wsj_0044.mrg:133
+Mrs. Ward ,[Interrupter] for one , was relieved .
+Interrupter
+
+
+5 wsj/00/wsj_0044.mrg:133
+Mrs. Ward , for one ,[Interrupter] was relieved .
+Interrupter
+
+
+5 wsj/00/wsj_0045.mrg:0
+Since chalk first touched slate ,[Introductory] schoolchildren have wanted to know : What 's on the test ?
+Introductory
+
+
+2 wsj/00/wsj_0045.mrg:1
+These days ,[Introductory] students can often find the answer in test-coaching workbooks and worksheets their teachers give them in the weeks prior to taking standardized achievement tests .
+Introductory
+
+
+4 wsj/00/wsj_0045.mrg:5
+In many other instances ,[Introductory] there is almost no difference between the real test and Learning Materials .
+Introductory
+
+
+9 wsj/00/wsj_0045.mrg:7
+Close parallels between tests and practice tests are common ,[List] some educators and researchers say .
+Complementary-Said
+
+
+12 wsj/00/wsj_0045.mrg:10
+`` If I took { these preparation booklets } into my classroom ,[Introductory] I 'd have a hard time justifying to my students and parents that it was n't cheating , '' says John Kaminski , a Traverse City , Mich. , teacher who has studied test coaching .
+Introductory-If
+
+
+30 wsj/00/wsj_0045.mrg:10
+`` If I took { these preparation booklets } into my classroom , I 'd have a hard time justifying to my students and parents that it was n't cheating ,[Quotation] '' says John Kaminski , a Traverse City , Mich. , teacher who has studied test coaching .
+Quotation-RightSaid
+
+
+20 wsj/00/wsj_0045.mrg:12
+`` It 's as if France decided to give only French history questions to students in a European history class ,[List] and when everybody aces the test , they say their kids are good in European history , '' says John Cannell , an Albuquerque , N.M. , psychiatrist and founder of an educational research organization , Friends for Education , which has studied standardized testing .
+List-Clause
+
+
+27 wsj/00/wsj_0045.mrg:12
+`` It 's as if France decided to give only French history questions to students in a European history class , and when everybody aces the test ,[Introductory] they say their kids are good in European history , '' says John Cannell , an Albuquerque , N.M. , psychiatrist and founder of an educational research organization , Friends for Education , which has studied standardized testing .
+Introductory
+
+
+37 wsj/00/wsj_0045.mrg:12
+`` It 's as if France decided to give only French history questions to students in a European history class , and when everybody aces the test , they say their kids are good in European history ,[Quotation] '' says John Cannell , an Albuquerque , N.M. , psychiatrist and founder of an educational research organization , Friends for Education , which has studied standardized testing .
+Quotation-RigthSaid
+
+
+18 wsj/00/wsj_0045.mrg:16
+In Arizona , California , Florida , Louisiana , Maryland , New Jersey , South Carolina and Texas ,[Introductory] educators say they are common classroom tools .
+Introductory
+
+
+7 wsj/00/wsj_0045.mrg:23
+When referred to the questions that matched ,[Introductory] he said it was coincidental .
+Introductory
+
+
+22 wsj/00/wsj_0045.mrg:26
+Because many of these subskills -- the symmetry of geometrical figures , metric measurement of volume , or pie and bar graphs ,[Other] for example -- are only a small part of the total fifth-grade curriculum , Mr. Kaminski says , the preparation kits would n't replicate too many , if their real intent was general instruction or even general familiarization with test procedures .
+Interrupter
+
+
+36 wsj/00/wsj_0045.mrg:26
+Because many of these subskills -- the symmetry of geometrical figures , metric measurement of volume , or pie and bar graphs , for example -- are only a small part of the total fifth-grade curriculum ,[Interrupter] Mr. Kaminski says , the preparation kits would n't replicate too many , if their real intent was general instruction or even general familiarization with test procedures .
+Interrupter-Said
+
+
+40 wsj/00/wsj_0045.mrg:26
+Because many of these subskills -- the symmetry of geometrical figures , metric measurement of volume , or pie and bar graphs , for example -- are only a small part of the total fifth-grade curriculum , Mr. Kaminski says ,[Interrupter] the preparation kits would n't replicate too many , if their real intent was general instruction or even general familiarization with test procedures .
+Interrupter-Said
+
+
+49 wsj/00/wsj_0045.mrg:26
+Because many of these subskills -- the symmetry of geometrical figures , metric measurement of volume , or pie and bar graphs , for example -- are only a small part of the total fifth-grade curriculum , Mr. Kaminski says , the preparation kits would n't replicate too many ,[Complementary] if their real intent was general instruction or even general familiarization with test procedures .
+Complementary-HELP
+
+
+13 wsj/00/wsj_0045.mrg:29
+In CAT sections where students ' knowledge of two-letter consonant sounds is tested ,[Introductory] the authors noted that Scoring High concentrated on the same sounds that the test does -- to the exclusion of other sounds that fifth graders should know .
+Introductory
+
+
+8 wsj/00/wsj_0045.mrg:33
+When Scoring High first came out in 1979 ,[Introductory] it was a publication of Random House .
+Introductory
+
+
+6 wsj/00/wsj_0045.mrg:35
+In a 1985 advisory to educators ,[Introductory] McGraw-Hill said Scoring High should n't be used because it represented a `` parallel form '' of the CAT and CTBS tests .
+Introductory
+
+
+11 wsj/00/wsj_0047.mrg:6
+Both Dr. Mason and Dr. Sullivan oppose federal funding for abortion ,[Other] as does President Bush , except in cases where a woman 's life is threatened .
+Interrupter
+
+
+16 wsj/00/wsj_0047.mrg:6
+Both Dr. Mason and Dr. Sullivan oppose federal funding for abortion , as does President Bush ,[Other] except in cases where a woman 's life is threatened .
+Interrupter
+
+
+8 wsj/00/wsj_0047.mrg:8
+The department placed a moratorium on the research ,[Complementary] pending a review of scientific , legal and ethical issues .
+Complementary
+
+
+3 wsj/00/wsj_0047.mrg:15
+Earlier this week ,[Introductory] Dr. Sullivan tried to defuse these charges by stressing that candidates to head the NIH and the CDC will be judged by `` standards of scientific and administrative excellence , '' not politics .
+Introductory
+
+
+33 wsj/00/wsj_0047.mrg:15
+Earlier this week , Dr. Sullivan tried to defuse these charges by stressing that candidates to head the NIH and the CDC will be judged by `` standards of scientific and administrative excellence ,[Other] '' not politics .
+Attribute-Restrictive-HELP
+
+
+8 wsj/00/wsj_0047.mrg:17
+`` When scientific progress moves into uncharted ground ,[Introductory] there has to be a role for society to make judgments about its applications , '' says Myron Genel , associate dean of the Yale Medical School .
+Introductory
+
+
+23 wsj/00/wsj_0047.mrg:17
+`` When scientific progress moves into uncharted ground , there has to be a role for society to make judgments about its applications ,[Quotation] '' says Myron Genel , associate dean of the Yale Medical School .
+Quotation-RightSaid
+
+
+15 wsj/00/wsj_0047.mrg:18
+`` The disturbing thing about this abortion issue is that the debate has become polarized ,[Complementary] so that no mechanism exists '' for finding a middle ground .
+Complementary
+
+
+16 wsj/00/wsj_0047.mrg:21
+`` The unavailability of federal funds , and the climate in which the decision was made ,[List] certainly do n't provide any incentive for one of the more visible foundations to provide support , '' he said .
+Other-LongNP
+
+
+33 wsj/00/wsj_0047.mrg:21
+`` The unavailability of federal funds , and the climate in which the decision was made , certainly do n't provide any incentive for one of the more visible foundations to provide support ,[Quotation] '' he said .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0047.mrg:22
+Despite the flap over transplants ,[Introductory] federal funding of research involving fetal tissues will continue on a number of fronts .
+Introductory
+
+
+38 wsj/00/wsj_0047.mrg:23
+`` Such research may ultimately result in the ability to regenerate damaged tissues or to turn off genes that cause cancer '' or to regulate genes that cause Down 's syndrome , the leading cause of mental retardation ,[Complementary] according to an NIH summary .
+Complementary-Said
+
+
+4 wsj/00/wsj_0048.mrg:2
+In terms of volume ,[Introductory] it was an inauspicious beginning for November .
+Introductory
+
+
+11 wsj/00/wsj_0048.mrg:4
+In October , the busiest month of the year so far ,[Substitute] daily volume averaged roughly 145 million shares .
+Substitute
+
+
+13 wsj/00/wsj_0048.mrg:6
+The index of the 100 largest Nasdaq financial stocks rose modestly as well ,[Other] gaining 1.28 to 449.04 .
+Complementary
+
+
+15 wsj/00/wsj_0048.mrg:11
+The stocks of banking concerns based in Massachusetts were n't helped much by the announcement ,[Interrupter] traders said , because many of those concerns have financial problems tied to their real-estate loan portfolios , making them unattractive takeover targets .
+Interrupter-Said
+
+
+18 wsj/00/wsj_0048.mrg:11
+The stocks of banking concerns based in Massachusetts were n't helped much by the announcement , traders said ,[Interrupter] because many of those concerns have financial problems tied to their real-estate loan portfolios , making them unattractive takeover targets .
+Interrupter-Said
+
+
+33 wsj/00/wsj_0048.mrg:11
+The stocks of banking concerns based in Massachusetts were n't helped much by the announcement , traders said , because many of those concerns have financial problems tied to their real-estate loan portfolios ,[Complementary] making them unattractive takeover targets .
+Complementary
+
+
+17 wsj/00/wsj_0048.mrg:13
+`` A lot of the stocks that have been under water finally saw a reason to uptick ,[Quotation] '' said George Jennison , head trader of banking issues in Shearson Lehman Hutton 's OTC department .
+Quotation-RightSaid
+
+
+13 wsj/00/wsj_0048.mrg:20
+First Constitution has signed a merger agreement with WFRR L.P. and GHKM Corp. ,[Complementary] under which all of its common shares will be acquired for $ 25 each , or $ 273.5 million .
+Complementary
+
+
+17 wsj/00/wsj_0048.mrg:28
+He also said that after the charges , and `` assuming no dramatic fluctuation in interest rates ,[Other] the company expects to achieve near-record earnings in 1990 . ''
+Other-LongNP
+
+
+11 wsj/00/wsj_0048.mrg:32
+Since the British auto maker became a takeover target last month ,[Introductory] its ADRs have jumped about 78 % .
+Introductory
+
+
+4 wsj/00/wsj_0048.mrg:41
+In the year-earlier period ,[Introductory] SCI had net income of $ 4.8 million , or 23 cents a share , on revenue of $ 225.6 million .
+Introductory
+
+
+12 wsj/00/wsj_0049.mrg:6
+Many attorneys have returned incomplete forms to the IRS in recent years ,[Other] citing attorney-client privilege .
+Complementary
+
+
+3 wsj/00/wsj_0049.mrg:7
+Until last week ,[Introductory] the IRS rarely acted on the incomplete forms .
+Introductory
+
+
+8 wsj/00/wsj_0049.mrg:8
+`` This form forces a lawyer to become ,[Interrupter] in effect , a witness against his client , '' said Neal R. Sonnett , president of the National Association of Criminal Defense Lawyers .
+Interrupter
+
+
+11 wsj/00/wsj_0049.mrg:8
+`` This form forces a lawyer to become , in effect ,[Interrupter] a witness against his client , '' said Neal R. Sonnett , president of the National Association of Criminal Defense Lawyers .
+Interrupter
+
+
+17 wsj/00/wsj_0049.mrg:8
+`` This form forces a lawyer to become , in effect , a witness against his client ,[Quotation] '' said Neal R. Sonnett , president of the National Association of Criminal Defense Lawyers .
+Quotation-RightSaid
+
+
+14 wsj/00/wsj_0049.mrg:9
+`` The IRS is asking lawyers to red-flag a criminal problem to the government ,[Quotation] '' added Mr. Sonnett , a Miami lawyer who has heard from dozens of attorneys who received letters in recent days and has himself received the computer-generated IRS forms sent by certified mail .
+Quotation-RightSaid
+
+
+18 wsj/00/wsj_0049.mrg:13
+Filling out detailed forms about these individuals would tip the IRS off and spark action against the clients ,[List] he said .
+Complementary-Said
+
+
+11 wsj/00/wsj_0049.mrg:14
+The defense lawyers ' group formed a task force this week ,[Other] chaired by New York attorney Gerald Lefcourt , to deal with the matter .
+Interrupter
+
+
+19 wsj/00/wsj_0049.mrg:14
+The defense lawyers ' group formed a task force this week , chaired by New York attorney Gerald Lefcourt ,[Other] to deal with the matter .
+Interrupter
+
+
+3 wsj/00/wsj_0049.mrg:18
+At that meeting ,[Interrupter] he said , the Justice Department assured him that enforcement procedures would n't be threatened against attorneys without further review and advance notice .
+Interrupter-Said
+
+
+6 wsj/00/wsj_0049.mrg:18
+At that meeting , he said ,[Interrupter] the Justice Department assured him that enforcement procedures would n't be threatened against attorneys without further review and advance notice .
+Interrupter-Said
+
+
+8 wsj/00/wsj_0049.mrg:20
+But in the letters sent in recent days ,[Other] Christopher J. Lezovich of the IRS computing center in Detroit , told attorneys that `` failing to voluntarily submit the requested information could result in summons enforcement action being initiated . ''
+Introductory
+
+
+19 wsj/00/wsj_0049.mrg:20
+But in the letters sent in recent days , Christopher J. Lezovich of the IRS computing center in Detroit ,[Other] told attorneys that `` failing to voluntarily submit the requested information could result in summons enforcement action being initiated . ''
+Other-LongNP
+
+
+3 wsj/00/wsj_0049.mrg:21
+In some cases ,[Introductory] the IRS asked for information dating back to forms it received in 1985 .
+Introductory
+
+
+16 wsj/00/wsj_0049.mrg:22
+A spokesman for the IRS confirmed that `` there has been correspondence mailed about incomplete 8300s ,[Other] '' but he declined to say why the letters were sent to lawyers now .
+Complementary
+
+
+9 wsj/00/wsj_0049.mrg:24
+Lawyers worry that if they provide information about clients ,[Introductory] that data could quickly end up in the hands of prosecutors .
+Introductory-If
+
+
+6 wsj/00/wsj_0049.mrg:28
+In a number of recent cases ,[Introductory] federal courts have refused to recognize attorneys ' assertions that information relating to fees from clients should be confidential .
+Introductory
+
+
+1 wsj/00/wsj_0049.mrg:30
+Often ,[Introductory] judges ease into more lucrative private practice with little fanfare , but not federal Judge Raul A. Ramirez in Sacramento , Calif .
+Introductory
+
+
+12 wsj/00/wsj_0049.mrg:30
+Often , judges ease into more lucrative private practice with little fanfare ,[Other] but not federal Judge Raul A. Ramirez in Sacramento , Calif .
+Complementary
+
+
+2 wsj/00/wsj_0049.mrg:31
+On Tuesday ,[Introductory] the judge called a news conference to say he was quitting effective Dec. 31 to join a San Francisco law firm .
+Introductory
+
+
+17 wsj/00/wsj_0049.mrg:33
+`` A couple of my law clerks were going to pass me in three or four years ,[List] and I was afraid I was going to have to ask them for a loan , '' the judge quipped in an interview .
+List-Clause
+
+
+33 wsj/00/wsj_0049.mrg:33
+`` A couple of my law clerks were going to pass me in three or four years , and I was afraid I was going to have to ask them for a loan ,[Quotation] '' the judge quipped in an interview .
+Quotation-RightSaid
+
+
+9 wsj/00/wsj_0049.mrg:34
+Federal judges make $ 89,500 annually ; in February ,[Introductory] Congress rejected a bill that would have increased their pay by 50 % .
+Introductory
+
+
+6 wsj/00/wsj_0049.mrg:38
+When you become a federal judge ,[Other] all of a sudden you are relegated to a paltry sum . ''
+Introductory
+RandomQuotes
+
+
+4 wsj/00/wsj_0049.mrg:39
+At his new job ,[Other] as partner in charge of federal litigation in the Sacramento office of Orrick , Herrington & Sutcliffe , he will make out much better .
+Interrupter
+
+
+22 wsj/00/wsj_0049.mrg:39
+At his new job , as partner in charge of federal litigation in the Sacramento office of Orrick , Herrington & Sutcliffe ,[Other] he will make out much better .
+Interrupter
+
+
+15 wsj/00/wsj_0049.mrg:42
+Cartoonist Garry Trudeau is suing the Writers Guild of America East for $ 11 million ,[Complementary] alleging it mounted a `` campaign to harass and punish '' him for crossing a screenwriters ' picket line .
+Complementary
+
+
+3 wsj/00/wsj_0049.mrg:46
+In his lawsuit ,[Introductory] Mr. Trudeau says the strike illegally included Darkhorse , and the cartoonist refused to honor the strike against the company .
+Introductory
+
+
+5 wsj/00/wsj_0049.mrg:52
+In addition to the damages ,[Introductory] the suit seeks a court order preventing the guild from punishing or retaliating against Mr. Trudeau .
+Introductory
+
+
+29 wsj/00/wsj_0049.mrg:55
+A Department of Health and Human Services rule adopted in 1988 prohibits the use of so-called Title X funds for programs that assist a woman in obtaining an abortion ,[Attribute] such as abortion counseling and referrals .
+Interrupter-HELP:its an example. what should this comma be called?
+
+
+14 wsj/00/wsj_0049.mrg:57
+Title X funds are the single largest source of federal funding for family-planning services ,[Complementary] according to the opinion by the Second U.S. Circuit Court of Appeals in New York .
+Complementary-Said
+
+
+20 wsj/00/wsj_0049.mrg:60
+Dallas District Judge Jack Hampton had sparked calls for a judicial inquiry with his remarks to the press last December ,[Other] two weeks after sentencing an 18-year-old defendant to 30 years in state prison for killing two homosexual men in a city park .
+Substitute-HELP
+
+
+26 wsj/00/wsj_0049.mrg:62
+But Robert R. Murray , a special master appointed by the Texas Supreme Court , said Judge Hampton did n't breach any judicial standards of fairness ,[Complementary] although he did violate the state 's judicial code by commenting publicly on a pending case .
+Complementary
+
+
+12 wsj/00/wsj_0049.mrg:63
+Observing that the judge `` has never exhibited any bias or prejudice ,[Quotation] '' Mr. Murray concluded that he `` would be impartial in any case involving a homosexual or prostitute '' as a victim .
+Introductory
+
+
+4 wsj/00/wsj_0049.mrg:68
+In an eight-count indictment ,[Introductory] the government has charged GAF , a Wayne , N.J. , specialty chemical maker , and its Vice Chairman James T. Sherwin with attempting to manipulate the common stock of Union Carbide Corp. in advance of GAF 's planned sale of a large block of the stock in November 1986 .
+Introductory
+
+
+29 wsj/00/wsj_0049.mrg:73
+Michael R. Bromwich , a member since January 1987 of the three-lawyer trial team in the prosecution of Oliver North , became a partner in the Washington , D.C. ,[Locative] office of the 520-lawyer firm .
+Locative
+
+
+27 wsj/00/wsj_0051.mrg:0
+Fujitsu Ltd. 's top executive took the unusual step of publicly apologizing for his company 's making bids of just one yen for several local government projects ,[Complementary] while computer rival NEC Corp. made a written apology for indulging in the same practice .
+Complementary
+
+
+1 wsj/00/wsj_0051.mrg:1
+Meanwhile ,[Introductory] business and government leaders rebuked the computer makers , and fretted about the broader statement the companies ' actions make about Japanese cutthroat pricing .
+Introductory-Interrupter
+
+
+3 wsj/00/wsj_0051.mrg:6
+In both cases ,[Introductory] NEC lost the contract to Fujitsu , which made the same bid and won a tie-breaking lottery .
+Introductory-Interrupter
+
+
+24 wsj/00/wsj_0051.mrg:8
+The Ministry of International Trade and Industry summoned executives from the companies to `` make sure they understood '' the concern about such practices ,[Complementary] according to a government spokesman .
+Complementary-Said
+
+
+15 wsj/00/wsj_0051.mrg:9
+`` These cases lead to the loss of the firms ' social and international credibility ,[Quotation] '' a ministry statement said .
+Quotation-RightSaid
+
+
+11 wsj/00/wsj_0051.mrg:11
+`` We would like to apologize for having caused huge trouble ,[Other] '' Fujitsu President Takuma Yamamoto , read from a prepared statement as he stood before a packed news conference at his company 's downtown headquarters .
+Quotation-RightSaid
+
+
+17 wsj/00/wsj_0051.mrg:11
+`` We would like to apologize for having caused huge trouble , '' Fujitsu President Takuma Yamamoto ,[Other] read from a prepared statement as he stood before a packed news conference at his company 's downtown headquarters .
+Other-LongNP
+
+
+2 wsj/00/wsj_0051.mrg:12
+The bids ,[Interrupter] he added , were `` contrary to common sense . ''
+Interrupter-Said
+
+
+5 wsj/00/wsj_0051.mrg:12
+The bids , he added ,[Interrupter] were `` contrary to common sense . ''
+Interrupter-Said
+
+
+5 wsj/00/wsj_0051.mrg:13
+NEC released a statement saying ,[Quotation] `` We feel sorry for having caused trouble to society , '' a form of apology common in Japan for companies caught in embarrassing situations .
+Quotation-LeftSaid
+
+
+16 wsj/00/wsj_0051.mrg:13
+NEC released a statement saying , `` We feel sorry for having caused trouble to society ,[Other] '' a form of apology common in Japan for companies caught in embarrassing situations .
+Substitute
+
+
+8 wsj/00/wsj_0051.mrg:18
+But in one of the auctions in question ,[Introductory] International Business Machines Corp. made a bid substantially higher than the Fujitsu offer , according to the municipality .
+Introductory
+
+
+22 wsj/00/wsj_0051.mrg:18
+But in one of the auctions in question , International Business Machines Corp. made a bid substantially higher than the Fujitsu offer ,[Complementary] according to the municipality .
+Complementary-Said
+
+
+12 wsj/00/wsj_0051.mrg:20
+Foreigners complain that they have limited access to government procurement in Japan ,[Complementary] in part because Japanese companies unfairly undercut them .
+Complementary
+
+
+9 wsj/00/wsj_0051.mrg:22
+Asked whether the bidding flap would hurt U.S.-Japan relations ,[Introductory] Mr. Yamamoto said , `` this will be a minus factor . ''
+Introductory
+
+
+13 wsj/00/wsj_0051.mrg:22
+Asked whether the bidding flap would hurt U.S.-Japan relations , Mr. Yamamoto said ,[Quotation] `` this will be a minus factor . ''
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0051.mrg:25
+Then Wednesday ,[Other] Fujitsu said it made a similar bid to win a library contract in Nagano prefecture two weeks earlier .
+Introductory
+
+
+6 wsj/00/wsj_0051.mrg:26
+It also said that in July ,[Introductory] it bid 10,000 yen to design a system for the Saitama prefectural library , and two years ago , it bid one yen to plan the telecommunications system for Wakayama prefecture .
+Introductory-Time
+
+
+25 wsj/00/wsj_0051.mrg:26
+It also said that in July , it bid 10,000 yen to design a system for the Saitama prefectural library , and two years ago ,[Introductory] it bid one yen to plan the telecommunications system for Wakayama prefecture .
+Introductory-Time
+
+
+6 wsj/00/wsj_0051.mrg:32
+`` One yen is not ethical ,[Quotation] '' Michio Sasaki , an official at Keidanren , the Japan Federation of Economic Organizations , said .
+Quotation-RightSaid
+
+
+23 wsj/00/wsj_0052.mrg:5
+Price Communications Corp. completed the sale of four of its TV stations to NTG Inc. for $ 120 million in cash and notes ,[Complementary] retaining a 10 % equity stake in the new concern .
+Complementary
+
+
+2 wsj/00/wsj_0054.mrg:2
+Last October ,[Other] the company also bought a wheel-loader manufacturing plant in Heidelberg , West Germany , from Dresser .
+Introductory
+
+
+12 wsj/00/wsj_0057.mrg:0
+LSI Logic Corp. reported a surprise $ 35.7 million third-quarter net loss ,[Attribute] including a special restructuring charge that reflects a continuing industry-wide slowdown in semiconductor demand .
+Complementary
+
+
+2 wsj/00/wsj_0057.mrg:1
+In September ,[Introductory] the custom-chip maker said excess capacity and lagging billings would result in an estimated $ 2 million to $ 3 million net loss for the third quarter .
+Introductory
+
+
+27 wsj/00/wsj_0057.mrg:2
+But company officials said yesterday that they decided to take a $ 43 million pretax charge for the period to cover a restructuring of world-wide manufacturing operations ,[c] citing extended weakness in the market as well as a decision to switch to more economical production techniques .
+Complementary
+
+
+5 wsj/00/wsj_0057.mrg:3
+`` Over the summer months ,[Introductory] there has been a slowing in the rate of new orders from the computer sector , our primary market , '' said Wilfred J. Corrigan , chairman and chief executive officer .
+Introductory
+
+
+3 wsj/00/wsj_0057.mrg:4
+`` In addition ,[Other] recent industry forecasts for 1990 indicate a slow environment , at least until midyear . ''
+Introductory
+
+
+13 wsj/00/wsj_0057.mrg:4
+`` In addition , recent industry forecasts for 1990 indicate a slow environment ,[Attribute] at least until midyear . ''
+Complementary
+Attribute
+
+
+3 wsj/00/wsj_0057.mrg:5
+As a result ,[Introductory] the company said it decided to phase out its oldest capacity and `` make appropriate reductions '' in operating expenses .
+Introductory
+
+
+3 wsj/00/wsj_0057.mrg:8
+A year earlier ,[Introductory] it had profit of $ 7.5 million , or 18 cents a share .
+Introductory-Time
+
+
+4 wsj/00/wsj_0057.mrg:11
+Related to that decision ,[List] the company said it was converting its Santa Clara , Calif. , factory to a research and development facility .
+Introductory
+
+
+34 wsj/00/wsj_0057.mrg:13
+`` This is a company that has invested in capacity additions more aggressively than any other company in the industry and now the industry is growing more slowly and they are suddenly poorly positioned ,[Quotation] '' said Michael Stark , chip analyst at Robertson , Stephens & Co .
+Quotation-RightSaid
+
+
+28 wsj/00/wsj_0058.mrg:1
+William G. Kuhns , former chairman and chief executive officer of General Public Utilities Corp. , was elected a director of this maker of industrial and construction equipment ,[Complementary] increasing board membership to 10 .
+Complementary
+
+
+9 wsj/00/wsj_0059.mrg:0
+The dollar posted gains against all major currencies yesterday ,[Other] buoyed by persistent Japanese demand for U.S. bond issues .
+Complementary
+
+
+15 wsj/00/wsj_0059.mrg:1
+While market sentiment remains cautiously bearish on the dollar based on sluggish U.S. economic indicators ,[Introductory] dealers note that Japanese demand has helped underpin the dollar against the yen and has kept the U.S. currency from plunging below key levels against the mark .
+Introductory
+
+
+4 wsj/00/wsj_0059.mrg:2
+At the same time ,[Introductory] dealers said the U.S. unit has been locked into a relatively narrow range in recent weeks , in part because the hefty Japanese demand for dollars has been offset by the mark 's strength , resulting in a stalemate .
+Introductory
+
+
+21 wsj/00/wsj_0059.mrg:2
+At the same time , dealers said the U.S. unit has been locked into a relatively narrow range in recent weeks ,[Other] in part because the hefty Japanese demand for dollars has been offset by the mark 's strength , resulting in a stalemate .
+Complementary
+
+
+39 wsj/00/wsj_0059.mrg:2
+At the same time , dealers said the U.S. unit has been locked into a relatively narrow range in recent weeks , in part because the hefty Japanese demand for dollars has been offset by the mark 's strength ,[Complementary] resulting in a stalemate .
+Complementary
+
+
+12 wsj/00/wsj_0059.mrg:4
+`` Dollar-yen { trade } is the driving force in the market ,[Other] '' said Tom Trettien , a vice president with Banque Paribas in New York , `` but I 'm not convinced it will continue .
+Interrupter-Quotation-Said
+
+
+8 wsj/00/wsj_0059.mrg:5
+Who knows what will happen down the road ,[Other] in three to six months , if foreign investment starts to erode ? ''
+Substitute-HELP
+
+
+14 wsj/00/wsj_0059.mrg:5
+Who knows what will happen down the road , in three to six months ,[Other] if foreign investment starts to erode ? ''
+Substitute-HELP
+
+
+6 wsj/00/wsj_0059.mrg:6
+In late New York trading yesterday ,[Introductory] the dollar was quoted at 1.8500 marks , up from 1.8415 marks late Tuesday , and at 143.80 yen , up from 142.85 yen late Tuesday .
+Introductory
+
+
+3 wsj/00/wsj_0059.mrg:8
+In Tokyo Thursday ,[Introductory] the U.S. currency opened for trading at 143.93 yen , up from Wednesday 's Tokyo close of 143.08 yen .
+Introductory
+
+
+35 wsj/00/wsj_0059.mrg:12
+The forthcoming maturity in November of a 10-year Japanese government yen-denominated bond issue valued at about $ 16 billion has prompted speculation in the market that investors redeeming the bonds will diversify into dollar-denominated instruments ,[Complementary] according to Mr. Madison .
+Complementary-Said
+
+
+1 wsj/00/wsj_0059.mrg:14
+Meanwhile ,[Introductory] traders in Tokyo say that the prospect of lower U.S. interest rates has spurred dollar buying by Japanese institutions .
+Introductory-Interrupter
+
+
+7 wsj/00/wsj_0059.mrg:21
+On the Commodity Exchange in New York ,[Other] gold for current delivery settled at $ 374.20 an ounce , down 50 cents .
+Introductory
+
+
+7 wsj/00/wsj_0059.mrg:23
+In early trading in Hong Kong Thursday ,[Other] gold was quoted at $ 374.19 an ounce .
+Introductory
+
+
+7 wsj/00/wsj_0060.mrg:3
+But the ratings are considerably below expectations ,[Other] and some stations say they may not buy new episodes when their current contracts expire .
+List-Clause
+
+
+1 wsj/00/wsj_0060.mrg:4
+Meanwhile ,[Introductory] stations are fuming because , many of them say , the show 's distributor , Viacom Inc. , is giving an ultimatum : Either sign new long-term commitments to buy future episodes or risk losing `` Cosby '' to a competitor .
+Introductory-Interrupter
+
+
+6 wsj/00/wsj_0060.mrg:4
+Meanwhile , stations are fuming because ,[Interrupter] many of them say , the show 's distributor , Viacom Inc. , is giving an ultimatum : Either sign new long-term commitments to buy future episodes or risk losing `` Cosby '' to a competitor .
+Interrupter-Said
+
+
+11 wsj/00/wsj_0060.mrg:4
+Meanwhile , stations are fuming because , many of them say ,[Interrupter] the show 's distributor , Viacom Inc. , is giving an ultimatum : Either sign new long-term commitments to buy future episodes or risk losing `` Cosby '' to a competitor .
+Interrupter-Said
+
+
+4 wsj/00/wsj_0060.mrg:5
+At the same time ,[Introductory] Viacom is trying to persuade stations to make commitments to `` A Different World , '' a spin-off of `` Cosby '' whose reruns will become available in 1991 .
+Introductory
+
+
+6 wsj/00/wsj_0060.mrg:7
+`` We 're willing to negotiate ,[Quotation] '' says Dennis Gillespie , executive vice president of marketing .
+Quotation-RightSaid
+
+
+22 wsj/00/wsj_0060.mrg:12
+`` Cosby '' is down a full ratings point in the week of Oct. 2-8 over the same week a year ago ,[Other] according to A.C. Nielsen Co .
+Complementary-Said
+
+
+27 wsj/00/wsj_0060.mrg:14
+And executives at stations in such major markets as Washington ; Providence , R.I. ; Cleveland ; Raleigh , N.C. ; Minneapolis , and Louisville , Ky. ,[Substitute] say they may very well not renew `` Cosby . ''
+Other-LongNP
+
+
+17 wsj/00/wsj_0060.mrg:15
+Dick Lobo , the general manager of WTVJ , the NBC-owned station in Miami , for example ,[Interrupter] says the show has `` been a major disappointment to us . ''
+Interrupter
+
+
+7 wsj/00/wsj_0060.mrg:16
+`` At the prices we were charged ,[Other] there should have been some return for the dollar .
+Introductory
+RandomQuotes
+
+
+3 wsj/00/wsj_0060.mrg:19
+But he adds ,[Quotation] `` I feel pressured , disappointed , uncomfortable and , frankly , quite angry with Viacom .
+Quotation-RightSaid
+
+
+15 wsj/00/wsj_0060.mrg:19
+But he adds , `` I feel pressured , disappointed , uncomfortable and , frankly ,[Other] quite angry with Viacom .
+Interrupter
+
+
+9 wsj/00/wsj_0062.mrg:0
+In this era of frantic competition for ad dollars ,[Introductory] a lot of revenue-desperate magazines are getting pretty cozy with advertisers -- fawning over them in articles and offering pages of advertorial space .
+Introductory
+
+
+4 wsj/00/wsj_0062.mrg:7
+From an advertising standpoint ,[Introductory] the problem is these offenders are likely to be some of the same folks that are major magazine advertisers these days .
+Introductory
+
+
+2 wsj/00/wsj_0062.mrg:9
+Campbell Soup ,[Interrupter] for one , is furious its Souper Combo microwave product was chastised in the premiere `` In the Dumpster '' column .
+Interrupter
+
+
+5 wsj/00/wsj_0062.mrg:9
+Campbell Soup , for one ,[Interrupter] is furious its Souper Combo microwave product was chastised in the premiere `` In the Dumpster '' column .
+Interrupter
+
+
+15 wsj/00/wsj_0062.mrg:11
+`` It 's precisely the kind of product that 's created the municipal landfill monster ,[Quotation] '' the editors wrote .
+Quotation-RightSaid
+
+
+18 wsj/00/wsj_0062.mrg:12
+`` I think that this magazine is not only called Garbage , but it is practicing journalistic garbage ,[Quotation] '' fumes a spokesman for Campbell Soup .
+Quotation-RightSaid
+
+
+16 wsj/00/wsj_0062.mrg:14
+Modifications had been made to the Souper Combo product at the time the issue was printed ,[Interrupter] he says , making it less an offender than was portrayed .
+Interrupter-Said
+
+
+19 wsj/00/wsj_0062.mrg:14
+Modifications had been made to the Souper Combo product at the time the issue was printed , he says ,[Interrupter] making it less an offender than was portrayed .
+Interrupter-Said
+
+
+2 wsj/00/wsj_0062.mrg:15
+He admits ,[Interrupter] though , it is n't one of Campbell Soup 's better products in terms of recyclability .
+Interrupter
+
+
+4 wsj/00/wsj_0062.mrg:15
+He admits , though ,[Interrupter] it is n't one of Campbell Soup 's better products in terms of recyclability .
+Interrupter
+
+
+2 wsj/00/wsj_0062.mrg:16
+Campbell Soup ,[Interrupter] not surprisingly , does n't have any plans to advertise in the magazine , according to its spokesman .
+Interrupter
+
+
+5 wsj/00/wsj_0062.mrg:16
+Campbell Soup , not surprisingly ,[Interrupter] does n't have any plans to advertise in the magazine , according to its spokesman .
+Interrupter
+
+
+16 wsj/00/wsj_0062.mrg:16
+Campbell Soup , not surprisingly , does n't have any plans to advertise in the magazine ,[Complementary] according to its spokesman .
+Complementary-Said
+
+
+26 wsj/00/wsj_0062.mrg:18
+`` You really need the Campbell Soups of the world to be interested in your magazine if you 're going to make a run of it ,[Quotation] '' says Mike White , senior vice president and media director at DDB Needham , Chicago .
+Quotation-RightSaid
+
+
+21 wsj/00/wsj_0062.mrg:19
+`` The economics of magazine publishing pretty much require that you have a pretty solid base '' of big-time ad spenders ,[Quotation] he adds .
+Complementary-Said
+
+
+13 wsj/00/wsj_0062.mrg:20
+The first two issues featured ads from only a handful of big advertisers ,[Complementary] including General Electric and Adolph Coors , but the majority were from companies like Waste Management Inc. and Bumkins International , firms that do n't spend much money advertising and ca n't be relied on to support a magazine over the long haul .
+Complementary
+
+
+9 wsj/00/wsj_0062.mrg:22
+`` We do n't spend much on print advertising ,[Quotation] '' she says .
+Quotation-RightSaid
+
+
+15 wsj/00/wsj_0062.mrg:23
+But Ms. Poore , the magazine 's editor and publisher , contends Garbage can survive ,[Interrupter] at least initially , on subscription revenues .
+Interrupter
+
+
+19 wsj/00/wsj_0062.mrg:23
+But Ms. Poore , the magazine 's editor and publisher , contends Garbage can survive , at least initially ,[Interrupter] on subscription revenues .
+Interrupter
+
+
+3 wsj/00/wsj_0062.mrg:25
+( It is ,[Interrupter] of course , printed on recycled paper . )
+Interrupter
+
+
+6 wsj/00/wsj_0062.mrg:25
+( It is , of course ,[Interrupter] printed on recycled paper . )
+Interrupter
+
+
+4 wsj/00/wsj_0062.mrg:26
+According to Ms. Poore ,[Introductory] Old-House Journal Corp. , her publishing company , printed and sold all 126,000 copies of the premiere issue .
+Introductory
+
+
+9 wsj/00/wsj_0062.mrg:27
+The first and second issues sold out on newsstands ,[Interrupter] she says , and the magazine has orders for 93,000 subscriptions .
+Interrupter-Said
+
+
+12 wsj/00/wsj_0062.mrg:27
+The first and second issues sold out on newsstands , she says ,[Interrupter] and the magazine has orders for 93,000 subscriptions .
+Interrupter-Said
+
+
+14 wsj/00/wsj_0062.mrg:28
+Asked whether potential advertisers will be scared away by the magazine 's direct policy ,[List] Ms. Poore replies : `` I do n't know and I do n't care .
+Introductory
+
+
+9 wsj/00/wsj_0062.mrg:29
+I 'm not saying advertising revenue is n't important ,[Other] '' she says , `` but I could n't sleep at night '' if the magazine bowed to a company because they once took out an ad .
+Interrupter-Quotation-Said
+
+
+13 wsj/00/wsj_0062.mrg:29
+I 'm not saying advertising revenue is n't important , '' she says ,[Other] `` but I could n't sleep at night '' if the magazine bowed to a company because they once took out an ad .
+Interrupter-Quotation-Said
+
+
+2 wsj/00/wsj_0063.mrg:3
+In May ,[Other] the two companies , through their jointly owned holding company , Temple , offered $ 50 a share , or $ 777 million , for Sea Containers .
+Introductory
+
+
+6 wsj/00/wsj_0063.mrg:3
+In May , the two companies ,[Interrupter] through their jointly owned holding company , Temple , offered $ 50 a share , or $ 777 million , for Sea Containers .
+Interrupter
+
+
+15 wsj/00/wsj_0063.mrg:3
+In May , the two companies , through their jointly owned holding company , Temple ,[Interrupter] offered $ 50 a share , or $ 777 million , for Sea Containers .
+Interrupter
+
+
+2 wsj/00/wsj_0063.mrg:4
+In August ,[Introductory] Temple sweetened the offer to $ 63 a share , or $ 963 million .
+Introductory
+
+
+1 wsj/00/wsj_0063.mrg:5
+Yesterday ,[Introductory] Sea Containers ' chief executive officer , James Sherwood , said in an interview that , under the asset-sale plan , Sea Containers would end up with a cash surplus of approximately $ 620 million .
+Introductory
+
+
+11 wsj/00/wsj_0063.mrg:5
+Yesterday , Sea Containers ' chief executive officer , James Sherwood ,[Substitute] said in an interview that , under the asset-sale plan , Sea Containers would end up with a cash surplus of approximately $ 620 million .
+Substitute
+
+
+17 wsj/00/wsj_0063.mrg:5
+Yesterday , Sea Containers ' chief executive officer , James Sherwood , said in an interview that ,[Interrupter] under the asset-sale plan , Sea Containers would end up with a cash surplus of approximately $ 620 million .
+Introductory-Said
+
+
+22 wsj/00/wsj_0063.mrg:5
+Yesterday , Sea Containers ' chief executive officer , James Sherwood , said in an interview that , under the asset-sale plan ,[Introductory] Sea Containers would end up with a cash surplus of approximately $ 620 million .
+Introductory
+
+
+12 wsj/00/wsj_0063.mrg:6
+About $ 490 million of that would be allocated to the buy-back ,[Complementary] leaving about $ 130 million , he said .
+Complementary
+
+
+18 wsj/00/wsj_0063.mrg:6
+About $ 490 million of that would be allocated to the buy-back , leaving about $ 130 million ,[List] he said .
+Complementary-Said
+
+
+4 wsj/00/wsj_0063.mrg:7
+That $ 130 million ,[Interrupter] Mr. Sherwood said , `` gives us some flexibility in case Temple raises its bid .
+Interrupter-Said
+RandomQuotes
+
+
+8 wsj/00/wsj_0063.mrg:7
+That $ 130 million , Mr. Sherwood said ,[Interrupter] `` gives us some flexibility in case Temple raises its bid .
+Interrupter-Said
+
+
+1 wsj/00/wsj_0063.mrg:11
+Temple ,[Interrupter] however , harshly criticized Sea Containers ' plan yesterday , characterizing it as a `` highly conditional device designed to entrench management , confuse shareholders and prevent them from accepting our superior cash offer . ''
+Interrupter
+
+
+3 wsj/00/wsj_0063.mrg:11
+Temple , however ,[Interrupter] harshly criticized Sea Containers ' plan yesterday , characterizing it as a `` highly conditional device designed to entrench management , confuse shareholders and prevent them from accepting our superior cash offer . ''
+Interrupter
+
+
+11 wsj/00/wsj_0063.mrg:11
+Temple , however , harshly criticized Sea Containers ' plan yesterday ,[Other] characterizing it as a `` highly conditional device designed to entrench management , confuse shareholders and prevent them from accepting our superior cash offer . ''
+Complementary
+
+
+3 wsj/00/wsj_0063.mrg:13
+The lower figures ,[Interrupter] the spokesman said , would stem from preferred shares being converted to common stock and the possibility that Sea Containers ' subsidiaries might be required to place their shares in the open market .
+Interrupter-Said
+
+
+7 wsj/00/wsj_0063.mrg:13
+The lower figures , the spokesman said ,[Interrupter] would stem from preferred shares being converted to common stock and the possibility that Sea Containers ' subsidiaries might be required to place their shares in the open market .
+Interrupter-Said
+
+
+18 wsj/00/wsj_0063.mrg:16
+Temple also said Sea Containers ' plan raises `` numerous legal , regulatory , financial and fairness issues ,[Other] '' but did n't elaborate .
+Complementary
+
+
+8 wsj/00/wsj_0063.mrg:18
+In New York Stock Exchange composite trading yesterday ,[Introductory] Sea Containers closed at $ 62.625 , up 62.5 cents .
+Introductory
+
+
+11 wsj/00/wsj_0064.mrg:1
+The department proposed requiring stronger roofs for light trucks and minivans ,[Complementary] beginning with 1992 models .
+Complementary
+
+
+4 wsj/00/wsj_0064.mrg:4
+`` Today 's action ,[Other] '' Transportation Secretary Samuel Skinner said , `` represents another milestone in the ongoing program to promote vehicle occupant safety in light trucks and minivans through its extension of passenger car standards . ''
+Interrupter-Quotation-Said
+
+
+11 wsj/00/wsj_0064.mrg:4
+`` Today 's action , '' Transportation Secretary Samuel Skinner said ,[Other] `` represents another milestone in the ongoing program to promote vehicle occupant safety in light trucks and minivans through its extension of passenger car standards . ''
+Interrupter-Quotation-Said
+
+
+2 wsj/00/wsj_0064.mrg:5
+In September ,[Introductory] the department had said it will require trucks and minivans to be equipped with the same front-seat headrests that have long been required on passenger cars .
+Introductory
+
+
+16 wsj/00/wsj_0064.mrg:10
+`` But now , there seems to be a fairly systematic effort to address the problem ,[Quotation] '' said Chuck Hurley , vice president of communications for the Insurance Institute for Highway Safety .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0064.mrg:12
+Sen. John Danforth ( R. ,[Other] Mo . ) praised the department 's actions , noting that rollover crashes account for almost half of all light-truck deaths .
+Other
+
+
+14 wsj/00/wsj_0064.mrg:12
+Sen. John Danforth ( R. , Mo . ) praised the department 's actions ,[Complementary] noting that rollover crashes account for almost half of all light-truck deaths .
+Complementary
+
+
+12 wsj/00/wsj_0064.mrg:13
+`` We could prevent many of these fatalities with minimum roof-crush standards ,[Quotation] '' he said .
+Quotation-Said
+
+
+18 wsj/00/wsj_0064.mrg:14
+Sen. Danforth and others also want the department to require additional safety equipment in light trucks and minivans ,[Complementary] including air bags or automatic seat belts in front seats and improved side-crash protection .
+Complementary
+
+
+3 wsj/00/wsj_0064.mrg:17
+During the test ,[Introductory] the roof could n't be depressed more than five inches .
+Introductory
+
+
+2 wsj/00/wsj_0064.mrg:18
+In Detroit ,[Introductory] a Chrysler Corp. official said the company currently has no rear-seat lap and shoulder belts in its light trucks , but plans to begin phasing them in by the end of the 1990 model year .
+Introductory
+
+
+17 wsj/00/wsj_0064.mrg:19
+He said Chrysler fully expects to have them installed across its light-truck line by the Sept. 1 ,[Locative] 1991 , deadline .
+Other-TimeFormat
+
+
+19 wsj/00/wsj_0064.mrg:19
+He said Chrysler fully expects to have them installed across its light-truck line by the Sept. 1 , 1991 ,[Locative] deadline .
+Other-TimeFormat
+
+
+2 wsj/00/wsj_0065.mrg:2
+This year ,[Introductory] the railroad holding company acquired 850 such railcars .
+Introductory
+
+
+17 wsj/00/wsj_0067.mrg:0
+Bank of New England Corp. said it has held talks with potential merger partners outside New England ,[Complementary] although it added that nothing is imminent and it has n't received any formal offers .
+Complementary
+
+
+2 wsj/00/wsj_0067.mrg:2
+Later yesterday ,[Introductory] a Massachusetts senate committee approved a bill to allow national interstate banking by banks in the state beginning in 1991 .
+Introductory
+
+
+1 wsj/00/wsj_0067.mrg:3
+Currently ,[Introductory] both Massachusetts and Connecticut , where most of Bank of New England 's operations are , allow interstate banking only within New England .
+Introductory
+
+
+18 wsj/00/wsj_0067.mrg:4
+Richard Driscoll , vice chairman of Bank of New England , told the Dow Jones Professional Investor Report ,[Other] `` Certainly , there are those outside the region who think of us prospectively as a good partner .
+Quotation-LeftSaid
+
+
+2 wsj/00/wsj_0067.mrg:6
+He added ,[Quotation] `` There 's nothing very hot . ''
+Quotation-LeftSaid
+
+
+14 wsj/00/wsj_0067.mrg:9
+Bank of New England has been hit hard by the region 's real-estate slump ,[Other] with its net income declining 42 % to $ 121.6 million , or 61 cents a share , in the first nine months of 1989 from the year-earlier period .
+Complementary-Attribute
+
+
+18 wsj/00/wsj_0067.mrg:10
+The company recently said it would sell some operations and lay off 4 % of its work force ,[Other] altogether reducing employment to less than 16,000 from about 18,000 .
+Complementary
+
+
+4 wsj/00/wsj_0068.mrg:3
+In the year-ago quarter ,[Introductory] the company reported net income of $ 1.9 million , or 29 cents a share .
+Introductory
+
+
+29 wsj/00/wsj_0071.mrg:0
+When Warren Winiarski , proprietor of Stag 's Leap Wine Cellars in Napa Valley , announced a $ 75 price tag for his 1985 Cask 23 Cabernet this fall ,[Introductory] few wine shops and restaurants around the country balked .
+Introductory
+
+
+9 wsj/00/wsj_0071.mrg:1
+`` This is the peak of my wine-making experience ,[Other] '' Mr. Winiarski declared when he introduced the wine at a dinner in New York , `` and I wanted to single it out as such . ''
+Interrupter-Quotation-Said
+
+
+25 wsj/00/wsj_0071.mrg:1
+`` This is the peak of my wine-making experience , '' Mr. Winiarski declared when he introduced the wine at a dinner in New York ,[Other] `` and I wanted to single it out as such . ''
+Interrupter-Quotation-Said
+
+
+21 wsj/00/wsj_0071.mrg:2
+It is in my estimation the best wine Stag 's Leap has produced , and with fewer than 700 cases available ,[Introductory] it is sure to sell quickly .
+Introductory
+
+
+28 wsj/00/wsj_0071.mrg:5
+One of the fastest growing segments of the wine market is the category of superpremiums -- wines limited in production , of exceptional quality ( or so perceived ,[Other] at any rate ) , and with exceedingly high prices .
+Interrupter-HELP
+
+
+2 wsj/00/wsj_0071.mrg:6
+For years ,[Introductory] this group included a stable of classics -- Bordeaux first growths ( Lafite-Rothschild , Latour , Haut-Brion , Petrus ) , Grand Cru Burgundies ( Romanee-Conti and La Tache ) deluxe Champagnes ( Dom Perignon or Roederer Cristal ) , rarefied sweet wines ( Chateau Yquem or Trockenbeerenauslesen Rieslings from Germany , and Biondi-Santi Brunello Riserva from Tuscany ) .
+Introductory
+
+
+6 wsj/00/wsj_0071.mrg:8
+In the last year or so ,[Interrupter] however , this exclusive club has taken in a host of flashy new members .
+Interrupter
+
+
+8 wsj/00/wsj_0071.mrg:8
+In the last year or so , however ,[Interrupter] this exclusive club has taken in a host of flashy new members .
+Interrupter
+
+
+29 wsj/00/wsj_0071.mrg:9
+The classics have zoomed in price to meet the competition , and it almost seems that there 's a race on to come up with the priciest single bottle ,[Attribute] among current releases from every major wine region on the globe .
+Attribute-Restrictive
+
+
+5 wsj/00/wsj_0071.mrg:12
+These prices seem rather modest ,[Other] however , in light of other French wines from current vintages .
+Interrupter
+
+
+7 wsj/00/wsj_0071.mrg:12
+These prices seem rather modest , however ,[Other] in light of other French wines from current vintages .
+Interrupter
+
+
+2 wsj/00/wsj_0071.mrg:14
+In Champagne ,[Introductory] some of the prestige cuvees are inching toward $ 100 a bottle .
+Introductory
+
+
+8 wsj/00/wsj_0071.mrg:19
+E. Guigal 's 1982 Cote Rotie La Landonne ,[Interrupter] for example , is $ 120 .
+Interrupter
+
+
+11 wsj/00/wsj_0071.mrg:19
+E. Guigal 's 1982 Cote Rotie La Landonne , for example ,[Interrupter] is $ 120 .
+Interrupter
+
+
+12 wsj/00/wsj_0071.mrg:20
+None of France 's wine regions can steal a march on Burgundy ,[Complementary] however .
+Complementary
+
+
+4 wsj/00/wsj_0071.mrg:22
+With the 1985 vintage ,[Introductory] they soared higher : La Tache , $ 195 ; Richebourg , $ 180 ; Romanee-Conti , $ 225 .
+Introductory
+
+
+11 wsj/00/wsj_0071.mrg:22
+With the 1985 vintage , they soared higher : La Tache ,[Substitute] $ 195 ; Richebourg , $ 180 ; Romanee-Conti , $ 225 .
+Attribute
+
+
+16 wsj/00/wsj_0071.mrg:22
+With the 1985 vintage , they soared higher : La Tache , $ 195 ; Richebourg ,[Substitute] $ 180 ; Romanee-Conti , $ 225 .
+Attribute
+
+
+21 wsj/00/wsj_0071.mrg:22
+With the 1985 vintage , they soared higher : La Tache , $ 195 ; Richebourg , $ 180 ; Romanee-Conti ,[Substitute] $ 225 .
+Attribute
+
+
+17 wsj/00/wsj_0071.mrg:25
+Spain 's Vega Secilia Unico 1979 ( released only in its 10th year ) is $ 70 ,[Complementary] as is Australia 's Grange Hermitage 1982 .
+Complementary
+
+
+12 wsj/00/wsj_0071.mrg:26
+`` There are certain cult wines that can command these higher prices ,[Quotation] '' says Larry Shapiro of Marty 's , one of the largest wine shops in Dallas .
+Quotation-RightSaid
+
+
+11 wsj/00/wsj_0071.mrg:29
+Wine auctions have almost exhausted the limited supply of those wines ,[Other] Mr. Shapiro continued : `` We 've seen a dramatic decrease in demand for wines from the '40s and '50s , which go for $ 300 to $ 400 a bottle .
+Interrupter-Said
+RandomQuotes
+
+
+5 wsj/00/wsj_0071.mrg:30
+Some of the newer wines ,[Interrupter] even at $ 90 to $ 100 a bottle or so , almost offer a bargain . ''
+Interrupter
+
+
+17 wsj/00/wsj_0071.mrg:30
+Some of the newer wines , even at $ 90 to $ 100 a bottle or so ,[Interrupter] almost offer a bargain . ''
+Interrupter
+
+
+22 wsj/00/wsj_0071.mrg:33
+Owner Al Brownstein originally planned to sell it for $ 60 a bottle , but when a retailer in Southern California asked ,[Other] `` Is that wholesale or retail ? '' he re-thought the matter .
+Quotation-LeftSaid
+
+
+21 wsj/00/wsj_0071.mrg:35
+The wine was shipped in six-bottle cases instead of the usual 12 , but even at that it was spread thin ,[Complementary] going to 62 retailers in 28 states .
+Complementary
+
+
+7 wsj/00/wsj_0071.mrg:36
+`` We thought it was awfully expensive ,[Other] '' said Sterling Pratt , wine director at Schaefer 's in Skokie , Ill. , one of the top stores in suburban Chicago , `` but there are people out there with very different opinions of value .
+Interrupter-Said
+
+
+8 wsj/00/wsj_0071.mrg:39
+Even if there is consumer resistance at first ,[Introductory] a wine that wins high ratings from the critics will eventually move .
+Introductory
+
+
+7 wsj/00/wsj_0071.mrg:40
+`` There may be sticker-shock reaction initially ,[Other] '' said Mr. Pratt , `` but as the wine is talked about and starts to sell , they eventually get excited and decide it 's worth the astronomical price to add it to their collection . ''
+Interrupter-Quotation-Said
+
+
+12 wsj/00/wsj_0071.mrg:40
+`` There may be sticker-shock reaction initially , '' said Mr. Pratt ,[Other] `` but as the wine is talked about and starts to sell , they eventually get excited and decide it 's worth the astronomical price to add it to their collection . ''
+Interrupter-Quotation-Said
+
+
+25 wsj/00/wsj_0071.mrg:40
+`` There may be sticker-shock reaction initially , '' said Mr. Pratt , `` but as the wine is talked about and starts to sell ,[Other] they eventually get excited and decide it 's worth the astronomical price to add it to their collection . ''
+Introductory
+
+
+12 wsj/00/wsj_0071.mrg:41
+`` It 's just sort of a one-upsmanship thing with some people ,[Quotation] '' added Larry Shapiro .
+Quotation-RightSaid
+
+
+11 wsj/00/wsj_0071.mrg:46
+`` They wo n't buy if the quality is not there ,[Quotation] '' said Cedric Martin of Martin Wine Cellar in New Orleans .
+Quotation-RightSaid
+
+
+23 wsj/00/wsj_0071.mrg:48
+Mr. Martin has increased prices on some wines ( like Grgich Hills Chardonnay , now $ 32 ) just to slow down movement ,[Complementary] but he is beginning to see some resistance to high-priced red Burgundies and Cabernets and Chardonnays in the $ 30 to $ 40 range .
+List-Clause
+
+
+2 wsj/00/wsj_0071.mrg:49
+Image has ,[Interrupter] of course , a great deal to do with what sells and what does n't , and it ca n't be forced .
+Interrupter
+
+
+5 wsj/00/wsj_0071.mrg:49
+Image has , of course ,[Interrupter] a great deal to do with what sells and what does n't , and it ca n't be forced .
+Interrupter
+
+
+18 wsj/00/wsj_0071.mrg:50
+Wine merchants ca n't keep Roederer Cristal in stock , but they have to push Salon le Mesnil ,[Complementary] even lowering the price from $ 115 to $ 90 .
+Complementary
+
+
+17 wsj/00/wsj_0071.mrg:51
+It 's hardly a question of quality -- the 1982 Salon is a beautiful wine , but ,[Interrupter] as Mr. Pratt noted , people have their own ideas about value .
+Interrupter
+
+
+22 wsj/00/wsj_0071.mrg:51
+It 's hardly a question of quality -- the 1982 Salon is a beautiful wine , but , as Mr. Pratt noted ,[Interrupter] people have their own ideas about value .
+Interrupter
+
+
+7 wsj/00/wsj_0071.mrg:53
+In every major market in the U.S. ,[Other] for instance , you can buy '86 La Tache or Richebourg , virtually all of the first growth Bordeaux ( except Petrus ) , as well as Opus One and Dominus from California and , at the moment , the Stag 's Leap 1985 Cask 23 .
+Interrupter
+
+
+10 wsj/00/wsj_0071.mrg:53
+In every major market in the U.S. , for instance ,[Other] you can buy '86 La Tache or Richebourg , virtually all of the first growth Bordeaux ( except Petrus ) , as well as Opus One and Dominus from California and , at the moment , the Stag 's Leap 1985 Cask 23 .
+Interrupter
+
+
+42 wsj/00/wsj_0071.mrg:53
+In every major market in the U.S. , for instance , you can buy '86 La Tache or Richebourg , virtually all of the first growth Bordeaux ( except Petrus ) , as well as Opus One and Dominus from California and ,[Other] at the moment , the Stag 's Leap 1985 Cask 23 .
+Interrupter
+List-HELP
+
+
+46 wsj/00/wsj_0071.mrg:53
+In every major market in the U.S. , for instance , you can buy '86 La Tache or Richebourg , virtually all of the first growth Bordeaux ( except Petrus ) , as well as Opus One and Dominus from California and , at the moment ,[Other] the Stag 's Leap 1985 Cask 23 .
+Interrupter
+
+
+13 wsj/00/wsj_0071.mrg:54
+With the biggest wine-buying period of the year looming as the holidays approach ,[Introductory] it will be interesting to see how the superpremiums fare .
+Introductory
+
+
+18 wsj/00/wsj_0072.mrg:1
+A survey by the Fed 's 12 district banks shows economic growth has been sluggish in recent weeks ,[Other] while upward pressures on prices have moderated .
+Complementary
+
+
+6 wsj/00/wsj_0072.mrg:2
+`` The economy is clearly slowing ,[Quotation] '' says Robert Black , president of the Richmond Federal Reserve Bank .
+Quotation-RightSaid
+
+
+14 wsj/00/wsj_0072.mrg:3
+`` If you look at the third quarter as posting roughly 2.5 % growth ,[Introductory] I do see some slowing in the fourth quarter , '' agrees Kansas City Fed President Roger Guffey .
+Introductory-If
+
+
+24 wsj/00/wsj_0072.mrg:3
+`` If you look at the third quarter as posting roughly 2.5 % growth , I do see some slowing in the fourth quarter ,[Quotation] '' agrees Kansas City Fed President Roger Guffey .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0072.mrg:4
+Nevertheless ,[Introductory] both Mr. Guffey and Mr. Black say the slowdown so far is no cause for concern .
+Introductory
+
+
+26 wsj/00/wsj_0072.mrg:5
+`` We 're coming closer to achieving the stated objective of slowing the economy to a point where hopefully some downward trend in prices will occur ,[Quotation] '' said Mr. Guffey .
+Quotation-RightSaid
+
+
+22 wsj/00/wsj_0072.mrg:7
+`` I think the market had been expecting the Fed to ease sooner and a little more than it has to date ,[Quotation] '' said Robert Johnson , vice president of global markets for Bankers Trust Co .
+Quotation-RightSaid
+
+
+8 wsj/00/wsj_0072.mrg:9
+The report from the Fed found that manufacturing ,[Interrupter] in particular , has been weak in recent weeks .
+Interrupter
+
+
+11 wsj/00/wsj_0072.mrg:9
+The report from the Fed found that manufacturing , in particular ,[Interrupter] has been weak in recent weeks .
+Interrupter
+
+
+3 wsj/00/wsj_0072.mrg:10
+The Philadelphia Fed ,[Interrupter] for instance , reported that manufacturing activity `` continues to decline '' for the fourth month in a row .
+Interrupter
+
+
+6 wsj/00/wsj_0072.mrg:10
+The Philadelphia Fed , for instance ,[Interrupter] reported that manufacturing activity `` continues to decline '' for the fourth month in a row .
+Interrupter
+
+
+5 wsj/00/wsj_0072.mrg:11
+And in the Chicago district ,[Interrupter] the report said , `` a manufacturer of capital goods noted slower orders for some types , including defense equipment , petroleum equipment , food packaging machinery and material handling equipment . ''
+Interrupter-Said
+
+
+9 wsj/00/wsj_0072.mrg:11
+And in the Chicago district , the report said ,[Interrupter] `` a manufacturer of capital goods noted slower orders for some types , including defense equipment , petroleum equipment , food packaging machinery and material handling equipment . ''
+Interrupter-Said
+
+
+9 wsj/00/wsj_0072.mrg:12
+Retail sales also were reported slow in most districts ,[Other] particularly `` for discretionary , big-ticket items such as furniture , home appliances and consumer electronics . ''
+Complementary
+
+
+4 wsj/00/wsj_0072.mrg:14
+Despite the economic slowdown ,[Introductory] there are few clear signs that growth is coming to a halt .
+Introductory
+
+
+3 wsj/00/wsj_0072.mrg:15
+As a result ,[Introductory] Fed officials may be divided over whether to ease credit .
+Introductory
+
+
+8 wsj/00/wsj_0072.mrg:18
+`` There is always a chance of recession ,[Other] '' added Mr. Guffey , `` but if you ask me to put a percentage on it , I would think it 's well below a 50 % chance .
+Interrupter-Quotation-Said
+
+
+13 wsj/00/wsj_0072.mrg:18
+`` There is always a chance of recession , '' added Mr. Guffey ,[Other] `` but if you ask me to put a percentage on it , I would think it 's well below a 50 % chance .
+Interrupter-Quotation-Said
+
+
+26 wsj/00/wsj_0072.mrg:18
+`` There is always a chance of recession , '' added Mr. Guffey , `` but if you ask me to put a percentage on it ,[Introductory] I would think it 's well below a 50 % chance .
+Introductory-If
+
+
+3 wsj/00/wsj_0073.mrg:1
+Under the offer ,[Introductory] shareholders will receive one right for each 105 common shares owned .
+Introductory
+
+
+8 wsj/00/wsj_0075.mrg:2
+Unless it can raise money in financial markets ,[Interrupter] Mr. Basham said , the federal government wo n't have the cash to pay off $ 13.8 billion in Treasury bills that mature on Thursday .
+Interrupter-Said
+
+
+12 wsj/00/wsj_0075.mrg:2
+Unless it can raise money in financial markets , Mr. Basham said ,[Interrupter] the federal government wo n't have the cash to pay off $ 13.8 billion in Treasury bills that mature on Thursday .
+Interrupter-Said
+
+
+3 wsj/00/wsj_0075.mrg:3
+Without congressional action ,[Introductory] the Treasury ca n't sell any new securities -- even savings bonds .
+Introductory
+
+
+20 wsj/00/wsj_0075.mrg:4
+But despite partisan bickering over the debt ceiling , which has become entangled in the fight over cutting capital-gains taxes ,[Introductory] Congress is almost certain to act in time to avoid default .
+Introductory
+
+
+17 wsj/00/wsj_0075.mrg:5
+`` Each day that Congress fails to act ... will cause additional disruption in our borrowing schedule ,[Complementary] possibly resulting in higher interest costs to the taxpayer , '' Treasury Secretary Nicholas Brady said in a speech prepared for delivery last night to a group of bankers .
+Complementary
+
+
+27 wsj/00/wsj_0075.mrg:5
+`` Each day that Congress fails to act ... will cause additional disruption in our borrowing schedule , possibly resulting in higher interest costs to the taxpayer ,[Quotation] '' Treasury Secretary Nicholas Brady said in a speech prepared for delivery last night to a group of bankers .
+Quotation-RigthSaid
+
+
+10 wsj/00/wsj_0075.mrg:6
+`` To avoid these costs , and a possible default ,[Other] immediate action is imperative . ''
+Introductory-To
+
+
+19 wsj/00/wsj_0075.mrg:14
+None of the securities will be eligible for when-issued trading until Congress approves an increase in the debt ceiling ,[Complementary] clearing the way for a formal offering , Mr. Basham said .
+Complementary
+
+
+27 wsj/00/wsj_0075.mrg:14
+None of the securities will be eligible for when-issued trading until Congress approves an increase in the debt ceiling , clearing the way for a formal offering ,[List] Mr. Basham said .
+Complementary-Said
+
+
+26 wsj/00/wsj_0075.mrg:17
+The remaining $ 21.9 billion could be raised through the sale of short-term Treasury bills , two-year notes in November and five-year notes in early December ,[List] the Treasury said .
+Complementary-Said
+
+
+7 wsj/00/wsj_0075.mrg:18
+In the first three months of 1990 ,[Introductory] the Treasury estimates that it will have to raise between $ 45 billion and $ 50 billion , assuming that it decides to aim for a $ 10 billion cash balance at the end of March .
+Introductory
+
+
+25 wsj/00/wsj_0075.mrg:18
+In the first three months of 1990 , the Treasury estimates that it will have to raise between $ 45 billion and $ 50 billion ,[Complementary] assuming that it decides to aim for a $ 10 billion cash balance at the end of March .
+Complementary
+
+
+26 wsj/00/wsj_0076.mrg:2
+Reames , a maker and marketer of frozen noodles and pre-cooked pasta based in Clive , Iowa , has annual sales of about $ 11 million ,[List] Lancaster said .
+Complementary-Said
+
+
+13 wsj/00/wsj_0077.mrg:0
+Investors took advantage of Tuesday 's stock rally to book some profits yesterday ,[Other] leaving stocks up fractionally .
+Complementary
+
+
+9 wsj/00/wsj_0077.mrg:8
+But with the end of the year in sight ,[Other] money managers are eager to take profits and cut their risks of losing what for many have been exceptionally good returns in
+Introductory
+
+
+2 wsj/00/wsj_0077.mrg:10
+As expected ,[Introductory] a national purchasing managers ' report indicated the nation 's manufacturing sector continues to contract modestly .
+Introductory
+
+
+1 wsj/00/wsj_0080.mrg:3
+However ,[Introductory] it has n't yet made any proposals to shareholders .
+Introductory-Interrupter
+
+
+2 wsj/00/wsj_0080.mrg:4
+Late yesterday ,[Introductory] Georgia Gulf said it reviewed the NL proposal as well as interests from `` third parties '' regarding business combinations .
+Introductory-Time
+
+
+11 wsj/00/wsj_0080.mrg:8
+`` He has clamped on their ankle like a pit bull ,[Quotation] '' says Paul Leming , a vice president with Morgan Stanley & Co .
+Quotation-RightSaid
+
+
+12 wsj/00/wsj_0080.mrg:13
+Mr. Leming was n't surprised by the lower price cited by NL ,[Complementary] saying he believes that $ 55 a share is `` the most you can pay for Georgia Gulf before it becomes a bad acquisition . ''
+Complementary
+
+
+16 wsj/00/wsj_0080.mrg:14
+Georgia Gulf stock rose $ 1.75 a share yesterday to close at $ 51.25 a share ,[Other] while NL shares closed unchanged at $ 22.75 and Valhi rose 62.5 cents to $ 15 , all in New York Stock Exchange composite trading .
+Complementary
+
+
+33 wsj/00/wsj_0080.mrg:14
+Georgia Gulf stock rose $ 1.75 a share yesterday to close at $ 51.25 a share , while NL shares closed unchanged at $ 22.75 and Valhi rose 62.5 cents to $ 15 ,[Other] all in New York Stock Exchange composite trading .
+Complementary
+
+
+1 wsj/00/wsj_0080.mrg:16
+However ,[Introductory] the junk-bond market has collapsed in recent weeks , lessening the likelihood that such a transaction would succeed .
+Introductory-Interrupter
+
+
+10 wsj/00/wsj_0080.mrg:16
+However , the junk-bond market has collapsed in recent weeks ,[Complementary] lessening the likelihood that such a transaction would succeed .
+Complementary
+
+
+1 wsj/00/wsj_0080.mrg:17
+Now ,[Interrupter] he said , the group plans to put in `` several hundred million '' dollars in equity and finance the remainder with bank debt .
+Interrupter-Said
+
+
+4 wsj/00/wsj_0080.mrg:17
+Now , he said ,[Interrupter] the group plans to put in `` several hundred million '' dollars in equity and finance the remainder with bank debt .
+Interrupter-Said
+
+
+10 wsj/00/wsj_0080.mrg:19
+In a letter to Georgia Gulf President Jerry R. Satrum ,[Introductory] Mr. Martin asked Georgia Gulf to answer its offer by Tuesday .
+Introductory
+
+
+3 wsj/00/wsj_0080.mrg:22
+In other transactions ,[Introductory] Mr. Simmons has followed friendly offers with a hostile tender offer .
+Introductory
+
+
+4 wsj/00/wsj_0080.mrg:25
+In the third quarter ,[Introductory] Georgia Gulf earned $ 46.1 million , or $ 1.85 a share , down from $ 53 million , or $ 1.85 a share on fewer shares outstanding .
+Introductory-Time
+
+
+2 wsj/00/wsj_0081.mrg:2
+In May ,[Introductory] University Patents filed a suit in federal court in Philadelphia against Albert M. Kligman , a researcher and professor at the University of Pennsylvania School of Medicine who developed Retin-A in the 1960s to combat acne .
+Introductory
+
+
+5 wsj/00/wsj_0081.mrg:4
+In New Brunswick , N.J. ,[Substitute] a Johnson & Johnson spokesman declined comment .
+Locative
+
+
+21 wsj/00/wsj_0082.mrg:5
+The heated talk stirred up by recent Japanese investments in the U.S. is focusing attention on the differences in investment climate ,[Complementary] even though it 's only one of many subjects to be covered in the bilateral talks , known as the Structural Impediments Initiative .
+Complementary
+
+
+20 wsj/00/wsj_0082.mrg:6
+The Japanese `` should see this rhetoric as a signal of the need for a change in their own economy ,[Quotation] '' says Charles Dallara , U.S. assistant Treasury secretary , who has been in Tokyo this week informally discussing the impending negotiations with government and business leaders .
+Quotation-RightSaid
+
+
+12 wsj/00/wsj_0082.mrg:7
+`` We have a long history of maintaining an open direct-investment policy ,[Quotation] '' Mr. Dallara says .
+Quotation-RightSaid
+
+
+4 wsj/00/wsj_0082.mrg:12
+At the same time ,[Interrupter] though , he chastised the media for paying such close attention to Japanese investment when other foreign countries , notably Britain , are acquiring more American assets .
+Interrupter
+
+
+6 wsj/00/wsj_0082.mrg:12
+At the same time , though ,[Interrupter] he chastised the media for paying such close attention to Japanese investment when other foreign countries , notably Britain , are acquiring more American assets .
+Interrupter
+
+
+16 wsj/00/wsj_0082.mrg:13
+Fears that Japanese investors are buying up America have escalated sharply in the past several weeks ,[Other] with Sony Corp. 's purchase of Columbia Pictures Entertainment Inc. from Coca-Cola Co. and Mitsubishi Estate Co. 's acquisition of a 51 % holding in Rockefeller Group , the owner of some of midtown Manhattan 's most exclusive real estate .
+Complementary
+
+
+6 wsj/00/wsj_0082.mrg:14
+Even before those moves added fuel ,[Introductory] the fires of discontent had been well stoked by the highly publicized experience in Japan of one U.S. investor , T. Boone Pickens Jr .
+Introductory
+
+
+11 wsj/00/wsj_0082.mrg:17
+Koito has refused to grant Mr. Pickens seats on its board ,[Complementary] asserting he is a greenmailer trying to pressure Koito 's other shareholders into buying him out at a profit .
+Complementary
+
+
+29 wsj/00/wsj_0082.mrg:20
+While Mr. Dallara and Japanese officials say the question of investors ' access to the U.S. and Japanese markets may get a disproportionate share of the public 's attention ,[Introductory] a number of other important economic issues will be on the table at next week 's talks .
+Introductory
+
+
+27 wsj/00/wsj_0082.mrg:24
+`` We feel very strongly that we really need action across the full range of issues we 've identified , and we need it by next spring ,[Quotation] '' Mr. Dallara says .
+Quotation-RightSaid
+
+
+9 wsj/00/wsj_0082.mrg:27
+After the first set of meetings two months ago ,[Introductory] some U.S. officials complained that Japan had n't come up with specific changes it was prepared to make .
+Introductory
+
+
+13 wsj/00/wsj_0082.mrg:29
+`` Just to say the distribution system is wrong does n't mean anything ,[Quotation] '' says a Ministry of International Trade and Industry official .
+Quotation-RightSaid
+
+
+11 wsj/00/wsj_0082.mrg:31
+That process of sorting out specifics is likely to take time ,[Interrupter] the Japanese say , no matter how badly the U.S. wants quick results .
+Interrupter-Said
+
+
+15 wsj/00/wsj_0082.mrg:31
+That process of sorting out specifics is likely to take time , the Japanese say ,[Interrupter] no matter how badly the U.S. wants quick results .
+Interrupter-Said
+
+
+2 wsj/00/wsj_0082.mrg:32
+For instance ,[Other] at the first meeting the two sides could n't even agree on basic data used in price discussions .
+Introductory-Interrupter
+
+
+2 wsj/00/wsj_0082.mrg:33
+Since then ,[Introductory] a team of about 15 MITI and U.S. Commerce Department officials have crossed the globe gauging consumer prices .
+Introductory
+
+
+2 wsj/00/wsj_0082.mrg:34
+By Monday ,[Introductory] they hope to have a sheaf of documents both sides can trust .
+Introductory
+
+
+4 wsj/00/wsj_0082.mrg:35
+`` Little by little ,[Introductory] there is progress , '' says the MITI official .
+Introductory
+
+
+8 wsj/00/wsj_0082.mrg:35
+`` Little by little , there is progress ,[Quotation] '' says the MITI official .
+Quotation-RightSaid
+
+
+10 wsj/00/wsj_0083.mrg:0
+While worry grows about big Japanese investments in the U.S. ,[Introductory] Japan 's big trading companies are rapidly increasing their stake in America 's smaller business .
+Introductory
+
+
+2 wsj/00/wsj_0083.mrg:1
+For Japan ,[Introductory] the controversial trend improves access to American markets and technology .
+Introductory
+
+
+5 wsj/00/wsj_0083.mrg:2
+But for small American companies ,[Other] it also provides a growing source of capital and even marketing help .
+Introductory
+
+
+15 wsj/00/wsj_0083.mrg:4
+Partly to help clear the myriad obstacles facing any overseas company trying to penetrate Japan ,[List] tiny Candela turned to Mitsui & Co. , one of Japan 's largest trading companies , for investment .
+Introductory-To
+
+
+4 wsj/00/wsj_0083.mrg:5
+In a joint-venture deal ,[Introductory] Mitsui guided Candela through Tokyo 's bureaucratic maze .
+Introductory
+
+
+3 wsj/00/wsj_0083.mrg:7
+At last count ,[Introductory] Candela had sold $ 4 million of its medical devices in Japan .
+Introductory
+
+
+17 wsj/00/wsj_0083.mrg:9
+`` They view this as a growth area so they went about it with a systematic approach ,[Quotation] '' says Richard Olsen , a Candela vice president .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0083.mrg:10
+Indeed ,[Interrupter] for many Japanese trading companies , the favorite U.S. small business is one whose research and development can be milked for future Japanese use .
+Introductory+Interrupter-HELP
+Introductory
+
+
+7 wsj/00/wsj_0083.mrg:10
+Indeed , for many Japanese trading companies ,[Interrupter] the favorite U.S. small business is one whose research and development can be milked for future Japanese use .
+Introductory+Interrupter
+
+
+13 wsj/00/wsj_0083.mrg:11
+The Japanese companies bankroll many small U.S. companies with promising products or ideas ,[Complementary] frequently putting their money behind projects that commercial banks wo n't touch .
+Complementary
+
+
+16 wsj/00/wsj_0083.mrg:12
+Japanese companies have financed small and medium-sized U.S. firms for years , but in recent months ,[Introductory] the pace has taken off .
+Introductory
+
+
+7 wsj/00/wsj_0083.mrg:13
+In the first half of 1989 alone ,[Introductory] Japanese corporations invested $ 214 million in minority positions in U.S. companies , a 61 % rise from the figure for all of 1987 , reports Venture Economics Inc .
+Introductory
+
+
+32 wsj/00/wsj_0083.mrg:13
+In the first half of 1989 alone , Japanese corporations invested $ 214 million in minority positions in U.S. companies , a 61 % rise from the figure for all of 1987 ,[Other] reports Venture Economics Inc .
+Complementary-Said
+
+
+2 wsj/00/wsj_0083.mrg:15
+In addition ,[Interrupter] of course , some of the Japanese investments involved outright purchase of small U.S. firms .
+Interrupter
+
+
+5 wsj/00/wsj_0083.mrg:15
+In addition , of course ,[Interrupter] some of the Japanese investments involved outright purchase of small U.S. firms .
+Interrupter
+
+
+23 wsj/00/wsj_0083.mrg:16
+Heightened Japanese interest in American small business parallels an acceleration of investments giving Japanese companies control of large , highly visible U.S. corporations ,[Attribute] such as Columbia Pictures Entertainment Inc .
+Attribute-Example-HELP
+
+
+3 wsj/00/wsj_0083.mrg:17
+Only this week ,[Introductory] it was announced that Mitsubishi Estate Co. had acquired a 51 % stake in Rockefeller Group , which owns New York 's prestigious Rockefeller Center .
+Introductory
+
+
+8 wsj/00/wsj_0083.mrg:18
+While the small deals are far less conspicuous ,[Introductory] they add to Japanese penetration of the U.S. market .
+Introductory
+
+
+13 wsj/00/wsj_0083.mrg:19
+As the deals also improve Japanese access to American technology and market knowledge ,[Introductory] they feed American anxieties in this area , too .
+Introductory
+
+
+21 wsj/00/wsj_0083.mrg:19
+As the deals also improve Japanese access to American technology and market knowledge , they feed American anxieties in this area ,[Complementary] too .
+Complementary
+
+
+2 wsj/00/wsj_0083.mrg:22
+Last year ,[Introductory] Mitsubishi International Corp. , the New York-based arm of Mitsubishi Corp. , bought controlling interest in the glass company in a joint venture with Ronald Bodner , a glass industry executive and Mitsubishi consultant .
+Introductory
+
+
+15 wsj/00/wsj_0083.mrg:23
+The deal is chiefly designed to give Mitsubishi a window on the U.S. glass industry ,[Complementary] says Ichiro Wakui , an executive in Mitsubishi 's general merchandise department in New York .
+Complementary-Said
+
+
+12 wsj/00/wsj_0083.mrg:24
+`` It 's not just a simple investment in a small company ,[Quotation] '' Mr. Wakui says .
+Quotation-RightSaid
+
+
+16 wsj/00/wsj_0083.mrg:26
+Mitsubishi 's investment in Free State is `` very small ... less than $ 4 million ,[Quotation] '' Mr. Wakui says .
+Quotation-RightSaid
+RandomQuotes
+
+
+11 wsj/00/wsj_0083.mrg:31
+`` All the `` sogo-shosha '' are looking for new business ,[Other] '' says Arthur Klauser , adviser to the president of Mitsui , U.S.A. , using the Japanese term for the largest of the global trading houses .
+Quotation-RightSaid
+RandomQuotes
+
+
+25 wsj/00/wsj_0083.mrg:31
+`` All the `` sogo-shosha '' are looking for new business , '' says Arthur Klauser , adviser to the president of Mitsui , U.S.A. ,[Substitute] using the Japanese term for the largest of the global trading houses .
+Substitute
+
+
+22 wsj/00/wsj_0083.mrg:32
+Adds Takeshi Kondo , senior vice president of C. Itoh America Inc. : `` We have a great interest in making investments ,[Attribute] particularly in new ventures . ''
+Complementary
+
+
+1 wsj/00/wsj_0083.mrg:34
+Profit ,[Interrupter] at least in the short term , is usually a secondary goal .
+Interrupter
+
+
+8 wsj/00/wsj_0083.mrg:34
+Profit , at least in the short term ,[Interrupter] is usually a secondary goal .
+Interrupter
+
+
+13 wsj/00/wsj_0083.mrg:35
+`` Strategic objectives , not financial return , drive many of the deals ,[Quotation] '' says a Venture Economics spokesman .
+Quotation-RightSaid
+
+
+10 wsj/00/wsj_0083.mrg:37
+`` It 's the classic problem of the small businessman ,[Quotation] '' says Malcolm Davies , managing director of Trading Alliance Corp. of New York .
+Quotation-RightSaid
+
+
+12 wsj/00/wsj_0083.mrg:40
+Adds Mitsui 's Mr. Klauser : `` Unlike corporations in this country ,[Introductory] trading companies are n't so much interested in a high return on investment as they are on increasing trade flows .
+Introductory
+
+
+7 wsj/00/wsj_0083.mrg:41
+To the extent they can do this ,[Introductory] they 're quite content to get a return on investment of 1 % to 2 % . ''
+Introductory
+
+
+15 wsj/00/wsj_0083.mrg:44
+A 1 % to 2 % return on $ 17 billion `` ai n't hay ,[Quotation] '' Mr. Klauser says .
+Complementary-Said
+
+
+3 wsj/00/wsj_0085.mrg:0
+For 10 years ,[Introductory] Genie Driskill went to her neighborhood bank because it was convenient .
+Introductory
+
+
+3 wsj/00/wsj_0085.mrg:2
+But in August ,[Introductory] First Atlanta National Bank introduced its Crown Account , a package designed to lure customers such as Ms. Driskill .
+Introductory
+
+
+3 wsj/00/wsj_0085.mrg:3
+Among other things ,[Introductory] it included checking , safe deposit box and credit card -- all for free -- plus a good deal on installment loans .
+Introductory
+
+
+7 wsj/00/wsj_0085.mrg:5
+`` I deserve something for my loyalty ,[Quotation] '' she says .
+Quotation-RightSaid
+
+
+4 wsj/00/wsj_0085.mrg:8
+For nearly a decade ,[Introductory] banks have competed for customers primarily with the interest rates they pay on their deposits and charge on their loans .
+Introductory
+
+
+1 wsj/00/wsj_0085.mrg:11
+Instead ,[Introductory] they are trying to build customer loyalty by bundling their services into packages and targeting them to small segments of the population .
+Introductory-Interrupter
+
+
+14 wsj/00/wsj_0085.mrg:12
+`` You 're dead in the water if you are n't segmenting the market ,[Quotation] '' says Anne Moore , president of Synergistics Research Corp. , a bank consulting firm in Atlanta .
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0085.mrg:15
+In September ,[Introductory] Union Planters Corp. of Memphis , Tenn. , launched The Edge account , a package designed for the `` thirtysomething '' crowd with services that include a credit card and line of credit with no annual fees , and a full percentage point off on installment loans .
+Introductory-Time
+
+
+19 wsj/00/wsj_0085.mrg:16
+The theory : Such individuals , many with young children , are in their prime borrowing years -- and ,[Other] having borrowed from the bank , they may continue to use it for other services in later years .
+List-Clause
+
+
+25 wsj/00/wsj_0085.mrg:16
+The theory : Such individuals , many with young children , are in their prime borrowing years -- and , having borrowed from the bank ,[Other] they may continue to use it for other services in later years .
+Introductory
+
+
+3 wsj/00/wsj_0085.mrg:17
+For some time ,[Introductory] banks have been aiming packages at the elderly , the demographic segment with the highest savings .
+Introductory
+
+
+11 wsj/00/wsj_0085.mrg:20
+`` Varying age , geography and life-style differences create numerous sub-markets ,[Quotation] '' Ms. MacDonald says .
+Quotation-RightSaid
+
+
+14 wsj/00/wsj_0085.mrg:22
+`` An active 55-year-old in Boca Raton may care more about Senior Olympic games ,[Other] while a 75-year-old in Panama City may care more about a seminar on health , '' she says .
+Complementary
+
+
+29 wsj/00/wsj_0085.mrg:22
+`` An active 55-year-old in Boca Raton may care more about Senior Olympic games , while a 75-year-old in Panama City may care more about a seminar on health ,[Quotation] '' she says .
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0085.mrg:24
+In 1973 ,[Introductory] Wells Fargo & Co. of San Francisco launched the Gold Account , which included free checking , a credit card , safe-deposit box and travelers checks for a $ 3 monthly fee .
+Introductory-Time
+
+
+2 wsj/00/wsj_0085.mrg:27
+Many banks ,[Other] particularly smaller ones , were slow to computerize and could n't target market niches that would have made the programs more profitable .
+Interrupter
+
+
+6 wsj/00/wsj_0085.mrg:27
+Many banks , particularly smaller ones ,[Other] were slow to computerize and could n't target market niches that would have made the programs more profitable .
+Interrupter
+
+
+9 wsj/00/wsj_0085.mrg:28
+As banks ' earnings were squeezed in the mid-1970s ,[Introductory] the emphasis switched to finding ways to cut costs .
+Introductory
+
+
+10 wsj/00/wsj_0085.mrg:32
+Where a bank once offered a standard passbook savings account ,[Introductory] it began offering money-market accounts , certificates of deposit and interest-bearing checking , and staggering rates based on the size of deposits .
+Introductory
+
+
+2 wsj/00/wsj_0085.mrg:34
+`` Today ,[Introductory] a banker is worrying about local , regional and money-center { banks } , as well as thrifts and credit unions , '' says Ms. Moore at Synergistics Research .
+Introductory-Time
+
+
+24 wsj/00/wsj_0085.mrg:34
+`` Today , a banker is worrying about local , regional and money-center { banks } , as well as thrifts and credit unions ,[Quotation] '' says Ms. Moore at Synergistics Research .
+Quotation-RightSaid
+
+
+13 wsj/00/wsj_0085.mrg:37
+`` The average household will spread 19 accounts over a dozen financial institutions ,[Quotation] '' says Michael P. Sullivan , who runs his own bank consulting firm in Charlotte , N.C .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0085.mrg:40
+For their troubles ,[Introductory] the banks get a larger captive audience that is less likely to move at the drop of a rate .
+Introductory
+
+
+5 wsj/00/wsj_0085.mrg:41
+The more accounts customers have ,[Interrupter] Mr. Sullivan says , the more likely they are to be attracted to a package -- and to be loyal to the bank that offers it .
+Interrupter-Said
+
+
+9 wsj/00/wsj_0085.mrg:41
+The more accounts customers have , Mr. Sullivan says ,[Interrupter] the more likely they are to be attracted to a package -- and to be loyal to the bank that offers it .
+Interrupter-Said
+
+
+20 wsj/00/wsj_0085.mrg:45
+Chemical Bank spent more than $ 50 million to introduce its ChemPlus line , several packages aimed at different segments ,[Substitute] in 1986 , according to Thomas Jacob , senior vice president of marketing .
+Substitute-End
+
+
+23 wsj/00/wsj_0085.mrg:45
+Chemical Bank spent more than $ 50 million to introduce its ChemPlus line , several packages aimed at different segments , in 1986 ,[Other] according to Thomas Jacob , senior vice president of marketing .
+Complementary-Said
+
+
+16 wsj/00/wsj_0085.mrg:46
+`` It 's not easy to roll out something that comprehensive , and make it pay ,[Quotation] '' Mr. Jacob says .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0085.mrg:47
+Still ,[Introductory] bankers expect packaging to flourish , primarily because more customers are demanding that financial services be tailored to their needs .
+Introductory-Interrupter
+
+
+7 wsj/00/wsj_0085.mrg:47
+Still , bankers expect packaging to flourish ,[Complementary] primarily because more customers are demanding that financial services be tailored to their needs .
+Complementary
+
+
+3 wsj/00/wsj_0085.mrg:48
+`` These days ,[Introductory] banking customers walk in the door expecting you to have a package especially for them , '' Ms. Moore says .
+Introductory
+
+
+19 wsj/00/wsj_0085.mrg:48
+`` These days , banking customers walk in the door expecting you to have a package especially for them ,[Quotation] '' Ms. Moore says .
+Quotation-RightSaid
+
+
+8 wsj/00/wsj_0085.mrg:49
+Some banks are already moving in that direction ,[Complementary] according to Alvin T. Sale , marketing director at First Union Corp. in Charlotte .
+Complementary-Said
+
+
+2 wsj/00/wsj_0085.mrg:50
+First Union ,[Interrupter] he says , now has packages for seven customer groups .
+Interrupter-Said
+
+
+5 wsj/00/wsj_0085.mrg:50
+First Union , he says ,[Interrupter] now has packages for seven customer groups .
+Interrupter-Said
+
+
+1 wsj/00/wsj_0085.mrg:51
+Soon ,[Introductory] it will split those into 30 .
+Introductory
+
+
+1 wsj/00/wsj_0086.mrg:2
+Currently ,[Introductory] ShareData has about 4.1 million common shares outstanding .
+Introductory
+
+
+5 wsj/00/wsj_0087.mrg:9
+As a Foster Corporate Parent ,[Introductory] you 'll be helping a neighborhood S&L in areas crucial to its survival .
+Introductory
+
+
+4 wsj/00/wsj_0087.mrg:13
+At the same time ,[Introductory] you 'll give your Foster Savings Institution the gift of hope and freedom from the federal regulators who want to close its doors -- for good .
+Introductory
+
+
+5 wsj/00/wsj_0087.mrg:14
+As a Foster Corporate Parent ,[Introductory] you will experience the same joy felt by Robert Bass , Lewis Ranieri , William Simon and others , who find ways to help troubled savings institutions and their employees help themselves .
+Introductory
+
+
+4 wsj/00/wsj_0087.mrg:17
+Every day you delay ,[Introductory] a savings institution 's health -- and the federal budget deficit -- grows worse .
+Introductory
+
+
+1 wsj/00/wsj_0088.mrg:1
+Separately ,[Introductory] John Phelan told a closed House subcommittee meeting in Washington that he would support Securities and Exchange Commission halts of program trading during market emergencies .
+Introductory
+
+
+20 wsj/00/wsj_0088.mrg:2
+But the New York Stock Exchange chairman said he does n't support reinstating a `` collar '' on program trading ,[Complementary] arguing that firms could get around such a limit .
+Complementary
+
+
+5 wsj/00/wsj_0088.mrg:5
+With the limit in effect ,[Introductory] members would be able to execute trades at the limit price or at higher prices , but not below it .
+Introductory
+
+
+16 wsj/00/wsj_0088.mrg:7
+Late that afternoon the S&P 500 stock-index futures contract fell a total of 30 index points ,[Complementary] hitting a Merc circuit breaker limit that remained in effect for the rest of the trading session .
+Complementary
+
+
+5 wsj/00/wsj_0088.mrg:10
+But when the contract reopened ,[Introductory] the subsequent flood of sell orders that quickly knocked the contract down to the 30-point limit indicated that the intermediate limit of 20 points was needed to help keep stock and stock-index futures prices synchronized .
+Introductory
+
+
+2 wsj/00/wsj_0088.mrg:17
+In Washington ,[Introductory] House aides said Mr. Phelan told congressmen that the collar , which banned program trades through the Big Board 's computer when the Dow Jones Industrial Average moved 50 points , did n't work well .
+Introductory-Location
+
+
+5 wsj/00/wsj_0088.mrg:19
+In a post-hearing news conference ,[Introductory] Mr. Phelan , who has publicly expressed concern about market volatility , said he told the House finance and telecommunications subcommittee that he would support the program-trading halt proposal `` providing the SEC would be comfortable with the language '' in a bill .
+Introductory
+
+
+3 wsj/00/wsj_0088.mrg:23
+At one point ,[Introductory] Mr. Phelan angered the subcommittee 's chairman , Rep. Edward Markey ( D. , Mass. ) , by not going much beyond what already had been reported in the morning newspapers .
+Introductory
+
+
+17 wsj/00/wsj_0088.mrg:23
+At one point , Mr. Phelan angered the subcommittee 's chairman , Rep. Edward Markey ( D. ,[Substitute] Mass. ) , by not going much beyond what already had been reported in the morning newspapers .
+Other
+
+
+18 wsj/00/wsj_0088.mrg:24
+`` Markey said we could have done this in public '' because so little sensitive information was disclosed ,[Quotation] the aide said .
+Complementary-Said
+RandomQuotes
+
+
+17 wsj/00/wsj_0088.mrg:25
+Mr. Phelan then responded that he would have been happy just writing a report to the panel ,[List] the aide added .
+Complementary-Said
+
+
+6 wsj/00/wsj_0088.mrg:26
+At another point during the hearing ,[Other] Rep. Markey asked Mr. Phelan what would be discussed at a New York exchange board meeting today .
+Introductory
+
+
+5 wsj/00/wsj_0088.mrg:28
+That response annoyed Rep. Markey ,[Other] House aides said , and the congressman snapped back that there had been enough studies of the issue and that it was time for action on the matter .
+Interrupter-Said
+
+
+9 wsj/00/wsj_0088.mrg:28
+That response annoyed Rep. Markey , House aides said ,[Other] and the congressman snapped back that there had been enough studies of the issue and that it was time for action on the matter .
+Interrupter-Said
+
+
+9 wsj/00/wsj_0088.mrg:29
+Fifteen of the 26 subcommittee members attended the hearing ,[Other] most notably Rep. John Dingell ( D. , Mich. ) , the full House Energy and Commerce Committee chairman , who has been willing to let Mr. Markey carry the legislation in recent months .
+Other
+
+
+17 wsj/00/wsj_0088.mrg:29
+Fifteen of the 26 subcommittee members attended the hearing , most notably Rep. John Dingell ( D. ,[Substitute] Mich. ) , the full House Energy and Commerce Committee chairman , who has been willing to let Mr. Markey carry the legislation in recent months .
+Other
+
+
+4 wsj/00/wsj_0088.mrg:30
+Mr. Dingell expressed concern ,[Interrupter] sources said , about jurisdictional problems in regulating program trading , which uses futures to offset stock trades .
+Interrupter-Said
+
+
+7 wsj/00/wsj_0088.mrg:30
+Mr. Dingell expressed concern , sources said ,[Interrupter] about jurisdictional problems in regulating program trading , which uses futures to offset stock trades .
+Interrupter-Said
+
+
+15 wsj/00/wsj_0089.mrg:4
+The parishioners of St. Michael and All Angels stop to chat at the church door ,[Other] as members here always have .
+Complementary
+
+
+3 wsj/00/wsj_0089.mrg:5
+In the tower ,[Introductory] five men and women pull rhythmically on ropes attached to the same five bells that first sounded here in 1614 .
+Introductory
+
+
+11 wsj/00/wsj_0089.mrg:6
+But there is also a discordant , modern note in Aslacton ,[Other] though it ca n't be heard by the church-goers enjoying the peal of bells this cool autumn evening .
+Complementary
+
+
+1 wsj/00/wsj_0089.mrg:8
+Now ,[Introductory] only one local ringer remains : 64-year-old Derek Hammond .
+Introductory
+
+
+10 wsj/00/wsj_0089.mrg:11
+`` To ring for even one service at this tower ,[Other] we have to scrape , '' says Mr. Hammond , a retired water-authority worker .
+Introductory-To
+
+
+15 wsj/00/wsj_0089.mrg:11
+`` To ring for even one service at this tower , we have to scrape ,[Quotation] '' says Mr. Hammond , a retired water-authority worker .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0089.mrg:14
+History ,[Interrupter] after all , is not on his side .
+Interrupter
+
+
+4 wsj/00/wsj_0089.mrg:14
+History , after all ,[Interrupter] is not on his side .
+Interrupter
+
+
+9 wsj/00/wsj_0089.mrg:15
+According to a nationwide survey taken a year ago ,[Introductory] nearly a third of England 's church bells are no longer rung on Sundays because there is no one to ring them .
+Introductory
+
+
+9 wsj/00/wsj_0089.mrg:17
+The less complicated version of playing tunes on bells ,[Complementary] as do the carillons of continental Europe , is considered by the English to be childish , fit only for foreigners .
+Complementary
+
+
+17 wsj/00/wsj_0089.mrg:17
+The less complicated version of playing tunes on bells , as do the carillons of continental Europe ,[Complementary] is considered by the English to be childish , fit only for foreigners .
+Complementary
+
+
+26 wsj/00/wsj_0089.mrg:17
+The less complicated version of playing tunes on bells , as do the carillons of continental Europe , is considered by the English to be childish ,[List] fit only for foreigners .
+List
+
+
+9 wsj/00/wsj_0089.mrg:19
+Proper English bells are started off in `` rounds ,[Other] '' from the highest-pitched bell to the lowest -- a simple descending scale using , in larger churches , as many as 12 bells .
+Complementary
+HELP - List?
+
+
+24 wsj/00/wsj_0089.mrg:19
+Proper English bells are started off in `` rounds , '' from the highest-pitched bell to the lowest -- a simple descending scale using ,[Interrupter] in larger churches , as many as 12 bells .
+Interrupter
+
+
+28 wsj/00/wsj_0089.mrg:19
+Proper English bells are started off in `` rounds , '' from the highest-pitched bell to the lowest -- a simple descending scale using , in larger churches ,[Interrupter] as many as 12 bells .
+Interrupter
+
+
+1 wsj/00/wsj_0089.mrg:20
+Then ,[Other] at a signal , the ringers begin varying the order in which the bells sound without altering the steady rhythm of the striking .
+Interrupter
+HELP - Introductory?
+
+
+5 wsj/00/wsj_0089.mrg:20
+Then , at a signal ,[Other] the ringers begin varying the order in which the bells sound without altering the steady rhythm of the striking .
+Interrupter
+HELP - Introductory?
+
+
+10 wsj/00/wsj_0089.mrg:21
+Each variation , or change , can occur only once ,[List] the rules state .
+Complementary-Said
+
+
+7 wsj/00/wsj_0089.mrg:25
+Ten shirt-sleeved ringers stand in a circle ,[Other] one foot ahead of the other in a prize-fighter 's stance , each pulling a rope that disappears through a small hole in the high ceiling of the ringing chamber .
+List
+
+
+19 wsj/00/wsj_0089.mrg:25
+Ten shirt-sleeved ringers stand in a circle , one foot ahead of the other in a prize-fighter 's stance ,[Other] each pulling a rope that disappears through a small hole in the high ceiling of the ringing chamber .
+List
+
+
+8 wsj/00/wsj_0089.mrg:27
+Totally absorbed , the ringers stare straight ahead ,[Complementary] using peripheral vision ( they call it `` rope-sight '' ) to watch the other ropes and thus time their pulls .
+Complementary-Elaboration
+
+
+5 wsj/00/wsj_0089.mrg:28
+Far above in the belfry ,[Other] the huge bronze bells , mounted on wheels , swing madly through a full 360 degrees , starting and ending , surprisingly , in the inverted , or mouth-up position .
+Introductory
+
+
+22 wsj/00/wsj_0089.mrg:28
+Far above in the belfry , the huge bronze bells , mounted on wheels , swing madly through a full 360 degrees ,[Other] starting and ending , surprisingly , in the inverted , or mouth-up position .
+Complementary
+
+
+26 wsj/00/wsj_0089.mrg:28
+Far above in the belfry , the huge bronze bells , mounted on wheels , swing madly through a full 360 degrees , starting and ending ,[Interrupter] surprisingly , in the inverted , or mouth-up position .
+Interrupter
+
+
+28 wsj/00/wsj_0089.mrg:28
+Far above in the belfry , the huge bronze bells , mounted on wheels , swing madly through a full 360 degrees , starting and ending , surprisingly ,[Interrupter] in the inverted , or mouth-up position .
+Interrupter
+
+
+12 wsj/00/wsj_0089.mrg:29
+Skilled ringers use their wrists to advance or retard the next swing ,[Other] so that one bell can swap places with another in the following change .
+List-Cluase
+
+
+7 wsj/00/wsj_0089.mrg:30
+In a well-known detective-story involving church bells ,[Introductory] English novelist Dorothy L. Sayers described ringing as a `` passion { that } finds its satisfaction in mathematical completeness and mechanical perfection . ''
+Introductory
+
+
+1 wsj/00/wsj_0089.mrg:31
+Ringers ,[Interrupter] she added , are `` filled with the solemn intoxication that comes of intricate ritual faultlessly performed . ''
+Interrupter-Said
+
+
+4 wsj/00/wsj_0089.mrg:31
+Ringers , she added ,[Interrupter] are `` filled with the solemn intoxication that comes of intricate ritual faultlessly performed . ''
+Interrupter-Said
+
+
+9 wsj/00/wsj_0089.mrg:32
+`` Ringing does become a bit of an obsession ,[Quotation] '' admits Stephanie Pattenden , master of the band at St. Mary Abbot and one of England 's best female ringers .
+Quotation-RightSaid
+
+
+10 wsj/00/wsj_0089.mrg:33
+It is a passion that usually stays in the tower ,[Complementary] however .
+Complementary
+HELP-Interrupter?
+
+
+4 wsj/00/wsj_0089.mrg:34
+More often than not ,[Introductory] ringers think of the church as something stuck on the bottom of the belfry .
+Introductory
+
+
+14 wsj/00/wsj_0089.mrg:35
+When their changes are completed , and after they have worked up a sweat ,[Introductory] ringers often skip off to the local pub , leaving worship for others below .
+Introductory
+
+
+23 wsj/00/wsj_0089.mrg:35
+When their changes are completed , and after they have worked up a sweat , ringers often skip off to the local pub ,[Other] leaving worship for others below .
+Complementary-Consequence
+
+
+9 wsj/00/wsj_0089.mrg:37
+With membership of the Church of England steadily dwindling ,[Introductory] strong-willed vicars are pressing equally strong-willed and often non-religious ringers to attend services .
+Introductory
+
+
+3 wsj/00/wsj_0089.mrg:38
+Two years ago ,[Introductory] the Rev. Jeremy Hummerstone , vicar of Great Torrington , Devon , got so fed up with ringers who did n't attend service he sacked the entire band ; the ringers promptly set up a picket line in protest .
+Introductory-Time
+
+
+16 wsj/00/wsj_0089.mrg:39
+`` They were a self-perpetuating club that treated the tower as sort of a separate premises ,[Quotation] '' the Vicar Hummerstone says .
+Quotation-RightSaid
+
+
+9 wsj/00/wsj_0089.mrg:40
+An entirely new band rings today at Great Torrington ,[Complementary] several of whom are members of the congregation .
+Complementary-NPAttribute
+
+
+11 wsj/00/wsj_0089.mrg:43
+The vicar , W.D. Jones , refuses to talk about it ,[Complementary] saying it would `` reopen the wound . ''
+Complementary
+
+
+20 wsj/00/wsj_0089.mrg:45
+`` So crunch , crunch , crunch , bang , bang , bang -- here come the ringers from above ,[Other] making a very obvious exit while the congregation is at prayer , '' he says .
+Complementary-Attribute
+
+
+32 wsj/00/wsj_0089.mrg:45
+`` So crunch , crunch , crunch , bang , bang , bang -- here come the ringers from above , making a very obvious exit while the congregation is at prayer ,[Other] '' he says .
+Quotation-RightSaid
+
+
+9 wsj/00/wsj_0089.mrg:46
+Vicar Marshall admits to mixed feelings about this issue ,[Complementary] since he is both a vicar and an active bell-ringer himself .
+Complementary
+
+
+14 wsj/00/wsj_0089.mrg:47
+`` The sound of bells is a net to draw people into the church ,[Quotation] '' he says .
+Quotation-RightSaid
+
+
+22 wsj/00/wsj_0089.mrg:49
+The Central Council of Church Bell Ringers , a sort of parliament of ringing groups , aims to improve relations with vicars ,[Other] says John C. Baldwin , president .
+Complementary-Said
+
+
+28 wsj/00/wsj_0089.mrg:50
+It hopes to speak to students at theological colleges about the joys of bell ringing and will shortly publish a booklet for every vicar in the country entitled ,[Other] `` The Bells in Your Care . ''
+Other
+Quotation or Other?
+
+
+3 wsj/00/wsj_0089.mrg:51
+Says Mr. Baldwin ,[Other] `` We recognize that we may no longer have as high a priority in church life and experience . ''
+Quotation-LeftSaid
+
+
+12 wsj/00/wsj_0089.mrg:53
+One survey says that of the 100,000 trained bellringers in England today ,[Other] only 40,000 of them still ring .
+Introductory
+
+
+1 wsj/00/wsj_0089.mrg:54
+Also ,[Introductory] ringers do n't always live where the bells need to be rung -- like in small , rural parishes and inner-city churches .
+Introductory-Interrupter
+
+
+14 wsj/00/wsj_0089.mrg:55
+But the council 's program to attract and train ringers is only partly successful ,[Other] says Mr. Baldwin .
+Complementary-Said
+
+
+3 wsj/00/wsj_0089.mrg:56
+`` Right now ,[Introductory] we 're lucky if after five years we keep one new ringer out of 10 , '' he adds .
+Introductory
+
+
+19 wsj/00/wsj_0089.mrg:56
+`` Right now , we 're lucky if after five years we keep one new ringer out of 10 ,[Quotation] '' he adds .
+Quotation-Said
+
+
+5 wsj/00/wsj_0089.mrg:58
+They are n't accepted everywhere ,[Other] however .
+Interrupter
+
+
+3 wsj/00/wsj_0089.mrg:60
+This being Britain ,[Other] no woman has filed an equal-opportunity suit , but the extent of the problem surfaced this summer in a series of letters to `` The Ringing World , '' a weekly newspaper for ringers .
+Introductory
+
+
+7 wsj/00/wsj_0089.mrg:62
+In the torrent of replies that followed ,[Introductory] one woman ringer from Solihull observed that `` the average male ringer leaves quite a lot to be desired : badly dressed , decorated with acne and a large beer-belly , frequently unwashed and unbearably flatulent in peals . ''
+Introductory
+
+
+14 wsj/00/wsj_0089.mrg:63
+Another women wrote from Sheffield to say that in her 60 years of ringing ,[Other] `` I have never known a lady to faint in the belfry .
+Quotation-Intorductory+Said
+RandomQuotes
+Introductory or Said?
+
+
+8 wsj/00/wsj_0089.mrg:64
+I have seen one or two men die ,[List] bless them .
+Other-Clause
+
+
+17 wsj/00/wsj_0090.mrg:2
+But do n't breathe too easy : Those dividend increases may signal trouble ahead for stock prices ,[Other] some analysts warn .
+Complementary
+HELP-Complementary-Said?
+
+
+3 wsj/00/wsj_0090.mrg:3
+In the past ,[Interrupter] they say , the strongest dividend growth has often come at times when the stock-market party was almost over .
+Interrupter-Said
+
+
+6 wsj/00/wsj_0090.mrg:3
+In the past , they say ,[Interrupter] the strongest dividend growth has often come at times when the stock-market party was almost over .
+Interrupter-Said
+
+
+8 wsj/00/wsj_0090.mrg:4
+That can be a trap for unwary investors ,[Other] says Richard Bernstein , senior quantitative analyst at Merrill Lynch & Co .
+Complementary-Said
+
+
+3 wsj/00/wsj_0090.mrg:5
+Strong dividend growth ,[Interrupter] he says , is `` the black widow of valuation '' -- a reference to the female spiders that attract males and then kill them after mating .
+Interrupter-Said
+
+
+6 wsj/00/wsj_0090.mrg:5
+Strong dividend growth , he says ,[Interrupter] is `` the black widow of valuation '' -- a reference to the female spiders that attract males and then kill them after mating .
+Interrupter-Said
+
+
+2 wsj/00/wsj_0090.mrg:7
+`` Invariably ,[Introductory] those strong periods in the economy give way to recessionary environments , '' he says .
+Introductory
+
+
+14 wsj/00/wsj_0090.mrg:7
+`` Invariably , those strong periods in the economy give way to recessionary environments ,[Quotation] '' he says .
+Quotation-RightSaid
+
+
+1 wsj/00/wsj_0090.mrg:9
+Indeed ,[Introductory] analysts say that payouts have sometimes risen most sharply when prices were already on their way down from cyclical peaks .
+Introductory-Interrupter
+
+
+2 wsj/00/wsj_0090.mrg:10
+In 1976 ,[Interrupter] for example , dividends on the stocks in Standard & Poor 's 500-stock index soared 10 % , following much slower growth the year before .
+Interrupter
+
+
+5 wsj/00/wsj_0090.mrg:10
+In 1976 , for example ,[Interrupter] dividends on the stocks in Standard & Poor 's 500-stock index soared 10 % , following much slower growth the year before .
+Interrupter
+
+
+20 wsj/00/wsj_0090.mrg:10
+In 1976 , for example , dividends on the stocks in Standard & Poor 's 500-stock index soared 10 % ,[Complementary] following much slower growth the year before .
+Complementary-Attribute
+
+
+11 wsj/00/wsj_0090.mrg:13
+Payouts on the S&P 500 stocks rose 10 % in 1988 ,[Complementary] according to Standard & Poor 's Corp. , and Wall Street estimates for 1989 growth are generally between 9 % and 14 % .
+Complementary-Said
+
+
+11 wsj/00/wsj_0090.mrg:14
+Many people believe the growth in dividends will slow next year ,[Complementary] although a minority see double-digit gains continuing .
+Complementary
+
+
+1 wsj/00/wsj_0090.mrg:15
+Meanwhile ,[Introductory] many market watchers say recent dividend trends raise another warning flag : While dividends have risen smartly , their expansion has n't kept pace with even stronger advances in stock prices .
+Introductory-Interrupter
+
+
+19 wsj/00/wsj_0090.mrg:15
+Meanwhile , many market watchers say recent dividend trends raise another warning flag : While dividends have risen smartly ,[Introductory] their expansion has n't kept pace with even stronger advances in stock prices .
+Introductory
+
+
+3 wsj/00/wsj_0090.mrg:16
+As a result ,[Introductory] the market 's dividend yield -- dividends as a percentage of price -- has slid to a level that is fairly low and unenticing by historical standards .
+Introductory
+
+
+3 wsj/00/wsj_0090.mrg:17
+Put another way ,[Other] the decline in the yield suggests stocks have gotten pretty rich in price relative to the dividends they pay , some market analysts say .
+Introductory
+
+
+23 wsj/00/wsj_0090.mrg:17
+Put another way , the decline in the yield suggests stocks have gotten pretty rich in price relative to the dividends they pay ,[List] some market analysts say .
+Complementary-Said
+
+
+20 wsj/00/wsj_0090.mrg:21
+A drop below that 3 % benchmark `` has always been a strong warning sign that stocks are fully valued ,[Quotation] '' says Mr. Boesel of T. Rowe Price .
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0090.mrg:22
+In fact ,[Other] `` the market has always tanked .
+Introductory
+RandomQuotes
+Rest of the sentence is missing?
+
+
+6 wsj/00/wsj_0090.mrg:24
+There 's never been an exception ,[Other] '' says Gerald W. Perritt , a Chicago investment adviser and money manager , based on a review of six decades of stock-market data .
+Quotation-RightSaid
+RandomQuotes
+
+
+40 wsj/00/wsj_0090.mrg:27
+There have been only seven other times -- in 1929 , 1933 , 1961 , 1965 , 1968 , 1971 and 1972 -- when the yield on the S&P 500 dropped below 3 % for at least two consecutive months ,[Complementary] Mr. Perritt found .
+Complementary
+HELP - Complementary or Complementary-Said?
+
+
+4 wsj/00/wsj_0090.mrg:28
+And in each case ,[Interrupter] he says , a sharp drop in stock prices began within a year .
+Interrupter-Said
+
+
+7 wsj/00/wsj_0090.mrg:28
+And in each case , he says ,[Interrupter] a sharp drop in stock prices began within a year .
+Interrupter-Said
+
+
+1 wsj/00/wsj_0090.mrg:29
+Still ,[Introductory] some market analysts say the current 3.3 % reading is n't as troublesome as it might have been in years past .
+Introductory-Interrupter
+
+
+18 wsj/00/wsj_0090.mrg:30
+`` It 's not a very meaningful indicator currently because corporations are not behaving in a traditional manner ,[Quotation] '' says James H. Coxon , head of stock investments for Cigna Corp. , the Philadelphia-based insurer .
+Quotation-RightSaid
+
+
+2 wsj/00/wsj_0090.mrg:31
+In particular ,[Interrupter] Mr. Coxon says , businesses are paying out a smaller percentage of their profits and cash flow in the form of dividends than they have historically .
+Interrupter-Said
+
+
+6 wsj/00/wsj_0090.mrg:31
+In particular , Mr. Coxon says ,[Interrupter] businesses are paying out a smaller percentage of their profits and cash flow in the form of dividends than they have historically .
+Interrupter-Said
+
+
+1 wsj/00/wsj_0090.mrg:32
+So ,[Other] while stock prices may look fairly high relative to dividends , they are not excessive relative to the underlying corporate strength .
+Introductory
+
+
+12 wsj/00/wsj_0090.mrg:32
+So , while stock prices may look fairly high relative to dividends ,[Other] they are not excessive relative to the underlying corporate strength .
+Introductory
+
+
+4 wsj/00/wsj_0090.mrg:33
+Rather than increasing dividends ,[Introductory] some companies have used cash to buy back some of their shares , notes Steven G. Einhorn , co-chairman of the investment policy committee at Goldman , Sachs & Co .
+Introductory
+
+
+17 wsj/00/wsj_0090.mrg:33
+Rather than increasing dividends , some companies have used cash to buy back some of their shares ,[Other] notes Steven G. Einhorn , co-chairman of the investment policy committee at Goldman , Sachs & Co .
+Complementary-Said
+
+
+15 wsj/00/wsj_0090.mrg:35
+That is just a tad below the average of the past 40 years or so ,[List] he says .
+Complementary-Said
+
+
+2 wsj/00/wsj_0090.mrg:38
+PaineWebber Inc. ,[Interrupter] for instance , is forecasting growth in S&P 500 dividends of just under 5 % in 1990 , down from an estimated 11 % this year .
+Interrupter
+
+
+5 wsj/00/wsj_0090.mrg:38
+PaineWebber Inc. , for instance ,[Interrupter] is forecasting growth in S&P 500 dividends of just under 5 % in 1990 , down from an estimated 11 % this year .
+Interrupter
+
+
+37 wsj/00/wsj_0090.mrg:39
+In other years in which there have been moderate economic slowdowns -- the environment the firm expects in 1990 -- the change in dividends ranged from a gain of 4 % to a decline of 1 % ,[Other] according to PaineWebber analyst Thomas Doerflinger .
+Complementary-Said
+
+
+3 wsj/00/wsj_0090.mrg:40
+The minority argument ,[Interrupter] meanwhile , is that businesses have the financial wherewithal this time around to declare sharply higher dividends even if their earnings weaken .
+Interrupter
+
+
+5 wsj/00/wsj_0090.mrg:40
+The minority argument , meanwhile ,[Interrupter] is that businesses have the financial wherewithal this time around to declare sharply higher dividends even if their earnings weaken .
+Interrupter
+
+
+9 wsj/00/wsj_0090.mrg:44
+A total of 139 companies raised dividends in October ,[Other] basically unchanged from 138 a year ago , S&P said Wednesday .
+Complementary-Attribute
+
+
+17 wsj/00/wsj_0090.mrg:44
+A total of 139 companies raised dividends in October , basically unchanged from 138 a year ago ,[List] S&P said Wednesday .
+Complementary-Said
+
+
+12 wsj/00/wsj_0090.mrg:46
+While the S&P tally does n't measure the magnitude of dividend changes ,[Introductory] a further slippage in the number of dividend increases could be a harbinger of slower dividend growth next year .
+Introductory
+
+
+3 wsj/00/wsj_0090.mrg:47
+In any case ,[Introductory] opinion is mixed on how much of a boost the overall stock market would get even if dividend growth continues at double-digit levels .
+Introductory
+
+
+13 wsj/00/wsj_0090.mrg:50
+`` Having the dividend increases is a supportive element in the market outlook ,[Other] but I do n't think it 's a main consideration , '' he says .
+List+Clause
+
+
+24 wsj/00/wsj_0090.mrg:50
+`` Having the dividend increases is a supportive element in the market outlook , but I do n't think it 's a main consideration ,[Quotation] '' he says .
+Quotation-RightSaid
+
+
+39 wsj/00/wsj_0091.mrg:0
+Your Oct. 13 page-one story on the renewed plight of Western Union says that Western Union had lost its chance to be in the telephone business by turning down Alexander Graham Bell 's offer to it of his invention ,[Complementary] because it supposedly felt that voice communication would never replace the telegraph .
+Complementary
+
+
+37 wsj/00/wsj_0091.mrg:5
+It acquired Thomas Edison 's microphone patent and then immediately sued the Bell Co. claiming that the microphone invented by my grandfather , Emile Berliner , which had been sold to Bell for a princely $ 50,000 ,[Other] infringed upon Western Union 's Edison patent .
+Attribute
+
+
+16 wsj/00/wsj_0091.mrg:6
+When Bell established that the Berliner patent caveat was registered 10 days before Edison 's application ,[Introductory] Western Union dropped the lawsuit and agreed never to enter the telephone business -- the basis for the company 's current plight .
+Introductory
+
+
+1 wsj/00/wsj_0092.mrg:2
+Altogether ,[Introductory] NBI said it will eliminate 266 jobs at its Boulder headquarters , 176 field sales jobs and 50 jobs at its Canadian and United Kingdom headquarters .
+Introductory
+
+
+1 wsj/00/wsj_0092.mrg:5
+Further ,[Interrupter] he said , the company does n't have the capital needed to build the business over the next year or two .
+Introductory
+HELP- is it also an Interrupter-Said?
+
+
+4 wsj/00/wsj_0092.mrg:5
+Further , he said ,[Interrupter] the company does n't have the capital needed to build the business over the next year or two .
+Interrupter-Said
+
+
+8 wsj/00/wsj_0092.mrg:6
+`` We flat ran out of financing resources ,[Quotation] '' Mr. Jerritts said .
+Quotation-RightSaid
+
+
+3 wsj/00/wsj_0092.mrg:8
+As a result ,[Introductory] he said NBI will focus on servicing its installed base of systems , trying to provide maintenance for other manufacturers and expanding its software business , using some of the applications it developed for its hardware .
+Introductory
+
+
+29 wsj/00/wsj_0092.mrg:8
+As a result , he said NBI will focus on servicing its installed base of systems , trying to provide maintenance for other manufacturers and expanding its software business ,[Complementary] using some of the applications it developed for its hardware .
+Complementary
+
+
+8 wsj/00/wsj_0092.mrg:11
+In New York Stock Exchange composite trading yesterday ,[Introductory] NBI common closed at 93 cents a share , up 31 cents .
+Introductory
+
+
+10 wsj/00/wsj_0093.mrg:1
+But the former U.S. president 's sixth visit to China ,[Attribute] during which he spoke at length with Chinese leaders , was nowhere near as successful at easing strains that have recently afflicted the Sino-U.S. relationship .
+Attribute
+
+
+20 wsj/00/wsj_0093.mrg:1
+But the former U.S. president 's sixth visit to China , during which he spoke at length with Chinese leaders ,[Attribute] was nowhere near as successful at easing strains that have recently afflicted the Sino-U.S. relationship .
+Attribute
+
+
+2 wsj/00/wsj_0093.mrg:3
+The Chinese ,[Interrupter] in turn , took aim at American `` interference '' in China 's domestic affairs .
+Interrupter
+
+
+5 wsj/00/wsj_0093.mrg:3
+The Chinese , in turn ,[Interrupter] took aim at American `` interference '' in China 's domestic affairs .
+Interrupter
+
+
+1 wsj/00/wsj_0093.mrg:7
+Instead ,[Introductory] Mr. Nixon reminded his host , Chinese President Yang Shangkun , that Americans have n't forgiven China 's leaders for the military assault of June 3-4 that killed hundreds , and perhaps thousands , of demonstrators .
+Introductory-Interrupter
+
+
+6 wsj/00/wsj_0093.mrg:8
+`` Many in the United States ,[Other] including many friends of China , believe the crackdown was excessive and unjustified , '' Mr. Nixon told Mr. Yang , who was directly involved in ordering the attack .
+Attribute-HELP
+
+
+12 wsj/00/wsj_0093.mrg:8
+`` Many in the United States , including many friends of China ,[Other] believe the crackdown was excessive and unjustified , '' Mr. Nixon told Mr. Yang , who was directly involved in ordering the attack .
+Attribute-HELP
+
+
+20 wsj/00/wsj_0093.mrg:8
+`` Many in the United States , including many friends of China , believe the crackdown was excessive and unjustified ,[Quotation] '' Mr. Nixon told Mr. Yang , who was directly involved in ordering the attack .
+Quotation-RightSaid
+
+
+5 wsj/00/wsj_0093.mrg:11
+In talks with Mr. Nixon ,[Introductory] Chinese leaders expressed no regret for the killings , and even suggested that the U.S. was prominently involved in the demonstrations this spring .
+Introductory
+
+
+4 wsj/00/wsj_0093.mrg:12
+In a meeting Tuesday ,[Introductory] supreme leader , Deng Xiaoping , told Mr. Nixon , `` Frankly speaking , the U.S. was involved too deeply in the turmoil and counterrevolutionary rebellion which occurred in Beijing not long ago .
+Introductory-Time
+
+
+14 wsj/00/wsj_0093.mrg:12
+In a meeting Tuesday , supreme leader , Deng Xiaoping , told Mr. Nixon ,[Other] `` Frankly speaking , the U.S. was involved too deeply in the turmoil and counterrevolutionary rebellion which occurred in Beijing not long ago .
+Quotation-LeftSaid
+
+
+18 wsj/00/wsj_0093.mrg:12
+In a meeting Tuesday , supreme leader , Deng Xiaoping , told Mr. Nixon , `` Frankly speaking ,[Other] the U.S. was involved too deeply in the turmoil and counterrevolutionary rebellion which occurred in Beijing not long ago .
+Introductory
+
+
+4 wsj/00/wsj_0093.mrg:14
+Despite the harsh exchanges ,[Introductory] the U.S. and China still seem to be looking for a way to mend relations , which have deteriorated into what Mr. Nixon referred to as `` the greatest crisis in Chinese-American relations '' since his initial visit to China 17 years ago .
+Introductory
+
+
+7 wsj/00/wsj_0093.mrg:15
+In his return toast to Mr. Nixon ,[Introductory] Mr. Yang said the relationship had reached a `` stalemate . ''
+Introductory
+
+
+2 wsj/00/wsj_0093.mrg:17
+Shortly afterwards ,[Introductory] Mr. Bush imposed a series of anti-China sanctions , including suspension of most high-level talks , which could be codified in U.S. congressional legislation in the coming weeks .
+Introductory
+
+
+13 wsj/00/wsj_0093.mrg:20
+And he plans to brief the president at the end of the week ,[List] U.S. sources said .
+Complementary-Said
+
+
+9 wsj/00/wsj_0093.mrg:22
+According to an American member of the Nixon party ,[Introductory] the former president raised a number of controversial issues in his 20 hours of talks with top-level Chinese officials .
+Introductory
+
+
+3 wsj/00/wsj_0093.mrg:26
+In his talks ,[Introductory] the former president urged China 's leaders to acknowledge that their nation is part of the world community and welcome the infusion of outside contacts and ideas .
+Introductory
+
+
+6 wsj/00/wsj_0093.mrg:27
+`` Ideas are going over borders ,[List] and there 's no SDI ideological weapon that can shoot them down , '' he told a group of Americans at the U.S. Embassy on Wednesday .
+List-Clause
+
+
+19 wsj/00/wsj_0093.mrg:27
+`` Ideas are going over borders , and there 's no SDI ideological weapon that can shoot them down ,[Quotation] '' he told a group of Americans at the U.S. Embassy on Wednesday .
+Quotation-RightSaid
+
+
+4 wsj/00/wsj_0093.mrg:28
+There are no signs ,[Interrupter] however , of China 's yielding on key issues .
+Interrupter-Outer
+
+
+6 wsj/00/wsj_0093.mrg:28
+There are no signs , however ,[Interrupter] of China 's yielding on key issues .
+Interrupter-Outer
+
+
+5 wsj/00/wsj_0093.mrg:29
+But in one minor matter ,[Introductory] Mr. Nixon appears to have gained a concession .
+Introductory
+
+
+9 wsj/00/wsj_0093.mrg:30
+In a meeting with Premier Li Peng on Monday ,[Introductory] Mr. Nixon said that he hoped he would n't encounter guards with machine guns during his visit to the U.S. Embassy .
+Introductory
+
+
+2 wsj/00/wsj_0093.mrg:31
+Sure enough ,[Other] when he arrived at the embassy two days later , the machine-gun-toting guards were gone -- for the first time in five months .
+Introductory
+
+
+12 wsj/00/wsj_0093.mrg:31
+Sure enough , when he arrived at the embassy two days later ,[Other] the machine-gun-toting guards were gone -- for the first time in five months .
+Introductory
+
+
+4 wsj/00/wsj_0093.mrg:32
+A few blocks away ,[Other] at the U.S. ambassador 's residence , the guards encircling the compound also had discarded their Uzi-model arms for the first time since early June .
+Introductory-HELP
+
+
+11 wsj/00/wsj_0093.mrg:32
+A few blocks away , at the U.S. ambassador 's residence ,[Other] the guards encircling the compound also had discarded their Uzi-model arms for the first time since early June .
+Introductory-HELP
+
+
+1 wsj/00/wsj_0093.mrg:34
+Moreover ,[Introductory] police and soldiers continue to harass Americans , who have filed several protests with the Foreign Ministry in the past week .
+Introductory-Interrupter
+
+
+2 wsj/00/wsj_0093.mrg:35
+Several times ,[Introductory] Chinese guards have pointed their automatic rifles at young children of U.S. diplomats and clicked the trigger .
+Introductory
+
+
+14 wsj/00/wsj_0094.mrg:0
+Your Oct. 6 article `` Japan 's Financial Firms Lure Science Graduates '' states ,[Quotation] `` Industrial companies are accusing financial institutions of jeopardizing Japan 's economy by raising the salary stakes for new employees . ''
+Quotation-LeftSaid
+
+
+7 wsj/00/wsj_0094.mrg:2
+They are barking up the wrong tree ,[Complementary] because it is basically their fault they ca n't attract new employees .
+Complementary
+
+
+1 wsj/00/wsj_0094.mrg:8
+Unfortunately ,[Introductory] Japanese manufacturers have neither good working conditions nor good compensation packages .
+Introductory
+
+
+9 wsj/00/wsj_0094.mrg:12
+If the Japanese companies are seriously considering their survival ,[Introductory] they could do at least three things to improve the situation : raise salaries higher than those of financial institutions ; improve working conditions ( better offices and more vacations , for example ) ; accept and hire more labor from outside Japan .
+Introductory-If
+
+
+40 wsj/00/wsj_0094.mrg:12
+If the Japanese companies are seriously considering their survival , they could do at least three things to improve the situation : raise salaries higher than those of financial institutions ; improve working conditions ( better offices and more vacations ,[Other] for example ) ; accept and hire more labor from outside Japan .
+Complementary-Interrupter
+
+
+18 wsj/00/wsj_0095.mrg:0
+In reference to your Oct. 9 page-one article `` Barbara Bush Earns Even Higher Ratings Than the President ,[Other] '' it is regrettable that you must continually define blacks by our negatives : `` Among liberals , 60 % have positive views of her , while 50 % approve of the president 's job performance .
+Introductory
+
+
+36 wsj/00/wsj_0095.mrg:0
+In reference to your Oct. 9 page-one article `` Barbara Bush Earns Even Higher Ratings Than the President , '' it is regrettable that you must continually define blacks by our negatives : `` Among liberals ,[Introductory] 60 % have positive views of her , while 50 % approve of the president 's job performance .
+Introductory
+
+
+44 wsj/00/wsj_0095.mrg:0
+In reference to your Oct. 9 page-one article `` Barbara Bush Earns Even Higher Ratings Than the President , '' it is regrettable that you must continually define blacks by our negatives : `` Among liberals , 60 % have positive views of her ,[Complementary] while 50 % approve of the president 's job performance .
+Complementary
+
+
+2 wsj/00/wsj_0095.mrg:1
+In part ,[Introductory] this may reflect the fact that ` she speaks a more progressive language ' than her husband , as Columbia 's Prof . { Ethel } Klein puts it .
+Introductory
+
+
+20 wsj/00/wsj_0095.mrg:1
+In part , this may reflect the fact that ` she speaks a more progressive language ' than her husband ,[Complementary] as Columbia 's Prof . { Ethel } Klein puts it .
+Complementary-Said
+
+
+2 wsj/00/wsj_0095.mrg:2
+Among professionals ,[Introductory] 76 % have a favorable opinion of her , compared to 62 % who approve of her husband 's performance .
+Introductory
+
+
+11 wsj/00/wsj_0095.mrg:2
+Among professionals , 76 % have a favorable opinion of her ,[Complementary] compared to 62 % who approve of her husband 's performance .
+Complementary
+
+
+15 wsj/00/wsj_0095.mrg:3
+While a quarter of black voters disapprove of Mr. Bush 's handling of his job ,[Introductory] only 15 % have a negative view of his spouse . ''
+Introductory
+
+
+18 wsj/00/wsj_0095.mrg:5
+If the assumption is that it is surprising that so few blacks find Mr. and Mrs. Bush distasteful ,[Introductory] the positive view is even more newsworthy .
+Introductory-If
+
+
+1 wsj/00/wsj_0096.mrg:3
+Also ,[Introductory] Mr. Vargas was barred from association with any NASD member .
+Introductory-Interrupter
+
+
+27 wsj/00/wsj_0096.mrg:6
+J.L. Henry & Co. , Miami , and a principal of the firm , Henry I. Otero of Miami , were jointly fined $ 30,000 and expelled ,[Other] for alleged improper use of a customer 's funds , among other things .
+Other-Clause
+
+
+37 wsj/00/wsj_0096.mrg:6
+J.L. Henry & Co. , Miami , and a principal of the firm , Henry I. Otero of Miami , were jointly fined $ 30,000 and expelled , for alleged improper use of a customer 's funds ,[Complementary] among other things .
+Complementary
+
+
+1 wsj/00/wsj_0096.mrg:7
+Also ,[Introductory] Mr. Otero was barred from association with any NASD member .
+Introductory-Interrupter
+
+
+8 wsj/00/wsj_0096.mrg:8
+J.L. Henry has n't any Miami telephone listing ,[List] an operator said .
+Complementary-Said
+
+
+6 wsj/00/wsj_0096.mrg:11
+Biscayne has n't any telephone listing ,[List] an operator said .
+Complementary-Said
+
+
+6 wsj/00/wsj_0096.mrg:14
+While neither admitting nor denying wrongdoing ,[Introductory] Triton and Mr. Chase consented to findings of violations in connection with limited-partnership sales .
+Introductory
+
+
+5 wsj/00/wsj_0096.mrg:18
+Without admitting or denying wrongdoing ,[Introductory] they consented to findings of violations of escrow and record-keeping rules .
+Introductory
+
+
+1 wsj/00/wsj_0096.mrg:21
+Also ,[Quotation] Mr. Canepa received a two-week suspension `` in a principal capacity . ''
+Introductory-Interrupter
+
+
+5 wsj/00/wsj_0096.mrg:22
+Without admitting or denying wrongdoing ,[Introductory] they consented to findings that they had inaccurately represented the firm 's net capital , maintained inaccurate books and records , and made other violations .
+Introductory
+
+
+5 wsj/00/wsj_0096.mrg:25
+Without admitting or denying wrongdoing ,[Introductory] they consented to findings that they failed to return funds owed to customers in connection with a limited-partnership offering .
+Introductory
+
+
+12 wsj/00/wsj_0096.mrg:26
+Reached at his office , Mr. McFall , currently chairman , said ,[Quotation] `` An implication that we failed to return investor funds is inappropriate and inaccurate . ''
+Quotation-LeftSaid
+
+
+13 wsj/00/wsj_0096.mrg:27
+He described the situation as `` an escrow problem , a timing issue ,[Other] '' which he said was rapidly rectified , with no losses to customers .
+Attribute
+
+
+21 wsj/00/wsj_0096.mrg:27
+He described the situation as `` an escrow problem , a timing issue , '' which he said was rapidly rectified ,[Complementary] with no losses to customers .
+Complementary
+
+
+14 wsj/00/wsj_0096.mrg:29
+The firm and Mr. Whelen allegedly sold securities to the public at unfair prices ,[Complementary] among other alleged violations .
+Complementary
+
+
+13 wsj/00/wsj_0096.mrg:31
+The firm and the NASD differ over the meaning of markup and markdown ,[List] he added .
+Complementary-Said
+
+
+15 wsj/00/wsj_0096.mrg:32
+Shearson Lehman Hutton Inc. , New York , which is 62%-owned by American Express Co. ,[Substitute] consented to a $ 10,000 fine .
+Attribute
+
+
+5 wsj/00/wsj_0096.mrg:33
+Without admitting or denying wrongdoing ,[Introductory] the firm consented to findings that it failed to respond `` in a timely manner '' to the NASD 's requests for information in connection with a customer complaint .
+Introductory
+
+
+16 wsj/00/wsj_0096.mrg:35
+The following individuals were fined as indicated and barred from association with NASD members , or ,[Interrupter] where noted , suspended .
+Interrupter
+
+
+19 wsj/00/wsj_0096.mrg:35
+The following individuals were fined as indicated and barred from association with NASD members , or , where noted ,[Interrupter] suspended .
+Interrupter
+
+
+3 wsj/00/wsj_0096.mrg:36
+Except where noted ,[Introductory] none of these people could be reached for comment or had any comment .
+Introductory
+
+
+3 wsj/00/wsj_0096.mrg:39
+Mr. Felten said ,[Quotation] `` We got what amounted to a parking ticket , and by complaining about it , we ended up with a sizable fine and suspension . ''
+Quotation-LeftSaid
+
+
+19 wsj/00/wsj_0096.mrg:39
+Mr. Felten said , `` We got what amounted to a parking ticket , and by complaining about it ,[Introductory] we ended up with a sizable fine and suspension . ''
+Introductory
+
+
+10 wsj/00/wsj_0096.mrg:40
+The matter `` did n't involve anybody 's securities transactions ,[Quotation] '' he added .
+Quotation-RightSaid
+
+
+13 wsj/00/wsj_0096.mrg:45
+`` Insurance agents have been forced by their companies into becoming registered reps ,[Other] '' he said , `` but they are not providing compliance and security-type training so that we can avoid stupid mistakes . ''
+Interrupter
+Quotation-RightSaid
+
+
+17 wsj/00/wsj_0096.mrg:45
+`` Insurance agents have been forced by their companies into becoming registered reps , '' he said ,[Other] `` but they are not providing compliance and security-type training so that we can avoid stupid mistakes . ''
+Interrupter
+Quotation-LeftSaid
+
+
+11 wsj/00/wsj_0096.mrg:47
+`` I was n't ever actively engaged in any securities activities ,[Quotation] '' said Mr. Cutrer .
+Quotation-RightSaid
+
+
+10 wsj/00/wsj_0096.mrg:49
+It was just a stupid mistake to get the license ,[Other] '' he said , adding , `` I 'd just as soon not get into '' details of the settlement .
+Quotation-RightSaid
+
+
+14 wsj/00/wsj_0096.mrg:49
+It was just a stupid mistake to get the license , '' he said ,[Other] adding , `` I 'd just as soon not get into '' details of the settlement .
+Complementary
+
+
+16 wsj/00/wsj_0096.mrg:49
+It was just a stupid mistake to get the license , '' he said , adding ,[Quotation] `` I 'd just as soon not get into '' details of the settlement .
+Quotation-LeftSaid
+
+
+14 wsj/00/wsj_0097.mrg:0
+Program traders are fond of predicting that if they are blocked in the U.S. ,[Introductory] they will simply emigrate to foreign stock markets .
+Introductory-If
+
+
+2 wsj/00/wsj_0097.mrg:2
+Government officials ,[Interrupter] especially in Japan , probably would resist any onslaught of program trading by players trying to shrug off the U.S. furor over their activities and marching abroad with their business .
+Interrupter
+
+
+6 wsj/00/wsj_0097.mrg:2
+Government officials , especially in Japan ,[Interrupter] probably would resist any onslaught of program trading by players trying to shrug off the U.S. furor over their activities and marching abroad with their business .
+Interrupter
+
+
+13 wsj/00/wsj_0097.mrg:3
+Japan is `` very concerned '' about the possible effects of program trading ,[List] a senior Japanese official said after the Oct. 13 stock plunge in New York .
+Complementary-RightSaid
+
+
+

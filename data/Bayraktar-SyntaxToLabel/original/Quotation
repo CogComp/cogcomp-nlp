@@ -1,0 +1,13 @@
+S --> “ S , ” SINV
+S --> “ S , ” S
+S --> “ NP VP , ”
+S --> “ NP *** VP , ”
+S --> “ S , ” SINV .
+S --> S , “ SINV
+S --> “ S , ” S .
+SINV --> “ S , ” VP NP .
+S --> S , “ S
+S --> “ S , ” NP VP .
+VP --> *** , “ S
+S --> “ PP , S , ”
+S --> NP “ *** VP , ”

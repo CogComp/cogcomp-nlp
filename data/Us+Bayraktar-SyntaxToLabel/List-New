@@ -1,0 +1,129 @@
+false	22	NP --> NP , CONJP NP
+TextAnnotation: `` Today , a banker is worrying about local , regional and money-center { banks } , as well as thrifts and credit unions , '' says Ms. Moore at Synergistics Research .
+TextAnnotation: On the receiving end of the message were officials from giants like Du Pont and Maytag , along with lesser knowns like Trojan Steel and the Valley Queen Cheese Factory .
+TextAnnotation: Jay Goldinger , with Capital Insight Inc. , reasons that while the mark has posted significant gains against the yen as well -- the mark climbed to 77.70 yen from 77.56 yen late Tuesday in New York -- the strength of the U.S. bond market compared to its foreign counterparts has helped lure investors to dollar-denominated bonds , rather than mark bonds .
+(S1
+    (SINV (`` ``)
+          (S-TPC-1
+                   (NP-TMP (NN Today))
+                   (, ,)
+                   (NP-SBJ (DT a) (NN banker))
+                   (VP (VBZ is)
+                       (VP (VBG worrying)
+                           (PP-CLR (IN about)
+                                   (NP
+                                       (NP
+                                           (ADJP (JJ local) (, ,) (JJ regional)
+                                                 (CC and)
+                                                 (JJ money-center))
+                                           (-LRB- -LCB-) (NNS banks) (-RRB- -RCB-))
+                                       (, ,)
+                                       (CONJP (RB as) (RB well) (IN as))
+                                       (NP
+                                           (NP (NNS thrifts))
+                                           (CC and)
+                                           (NP (NN credit) (NNS unions))))))))
+          (, ,) ('' '')
+          (VP (VBZ says)
+              (S (-NONE- *T*-1)))
+          (NP-SBJ
+                  (NP (NNP Ms.) (NNP Moore))
+                  (PP-LOC (IN at)
+                          (NP (NNP Synergistics) (NNP Research))))
+          (. .)))
+23	NX --> NX , NX and NX
+TextAnnotation: The additional technology , personnel training and promotional effort can be expensive .
+TextAnnotation: The U.S. , claiming some success in its trade diplomacy , removed South Korea , Taiwan and Saudi Arabia from a list of countries it is closely watching for allegedly failing to honor U.S. patents , copyrights and other intellectual-property rights .
+TextAnnotation: These nations ' internal decisions `` will be made in a way not to offend their largest aid donor , largest private investor and largest lender , '' says Richard Drobnick , director of the international business and research program at the University of Southern California 's Graduate School of Business .
+(S1
+    (S
+       (NP-SBJ (DT The) (JJ additional)
+               (NX
+                   (NX (NN technology))
+                   (, ,)
+                   (NX (NNS personnel) (NN training))
+                   (CC and)
+                   (NX (JJ promotional) (NN effort))))
+       (VP (MD can)
+           (VP (VB be)
+               (ADJP-PRD (JJ expensive))))
+       (. .)))
+
+
+
+68	NP --> *** , *** & ***
+TextAnnotation: `` This is a company that has invested in capacity additions more aggressively than any other company in the industry and now the industry is growing more slowly and they are suddenly poorly positioned , '' said Michael Stark , chip analyst at Robertson , Stephens & Co .
+TextAnnotation: Rather than increasing dividends , some companies have used cash to buy back some of their shares , notes Steven G. Einhorn , co-chairman of the investment policy committee at Goldman , Sachs & Co .
+TextAnnotation: At his new job , as partner in charge of federal litigation in the Sacramento office of Orrick , Herrington & Sutcliffe , he will make out much better .
+(S1
+    (SINV (`` ``)
+          (S-TPC-2
+                   (S
+                      (NP-SBJ (DT This))
+                      (VP (VBZ is)
+                          (NP-PRD
+                                  (NP (DT a) (NN company))
+                                  (SBAR
+                                        (WHNP-146 (WDT that))
+                                        (S
+                                           (NP-SBJ (-NONE- *T*-146))
+                                           (VP (VBZ has)
+                                               (VP (VBN invested)
+                                                   (PP-CLR (IN in)
+                                                           (NP (NN capacity) (NNS additions)))
+                                                   (ADVP-MNR
+                                                             (ADVP (RBR more) (RB aggressively))
+                                                             (PP (IN than)
+                                                                 (NP
+                                                                     (NP (DT any) (JJ other) (NN company))
+                                                                     (PP-LOC (IN in)
+                                                                             (NP (DT the) (NN industry)))))))))))))
+                   (CC and)
+                   (S
+                      (ADVP-TMP (RB now))
+                      (S
+                         (NP-SBJ (DT the) (NN industry))
+                         (VP (VBZ is)
+                             (VP (VBG growing)
+                                 (ADVP-MNR (RBR more) (RB slowly)))))
+                      (CC and)
+                      (S
+                         (NP-SBJ (PRP they))
+                         (VP (VBP are)
+                             (ADVP-TMP (RB suddenly))
+                             (ADJP-PRD (RB poorly) (VBN positioned))))))
+          (, ,) ('' '')
+          (VP (VBD said)
+              (S (-NONE- *T*-2)))
+          (NP-SBJ
+                  (NP (NNP Michael) (NNP Stark))
+                  (, ,)
+                  (NP
+                      (NP (NN chip) (NN analyst))
+                      (PP-LOC (IN at)
+                              (NP (NNP Robertson) (, ,) (NNP Stephens)
+                                  (CC &)
+                                  (NNP Co)))))
+          (. .)))
+
+
+
+19	NP --> *** , ADJP ***
+TextAnnotation: Earlier this year , Japanese investors snapped up a similar , $ 570 million mortgage-backed securities mutual fund .
+TextAnnotation: Heightened Japanese interest in American small business parallels an acceleration of investments giving Japanese companies control of large , highly visible U.S. corporations , such as Columbia Pictures Entertainment Inc .
+TextAnnotation: It is generally expected to be the usual 10-year , four billion mark issue .
+(S1
+    (S
+       (NP-TMP (JJR Earlier) (DT this) (NN year))
+       (, ,)
+       (NP-SBJ (JJ Japanese) (NNS investors))
+       (VP (VBD snapped)
+           (PRT (RP up))
+           (NP (DT a) (JJ similar) (, ,)
+               (ADJP
+                     (QP ($ $) (CD 570) (CD million))
+                     (-NONE- *U*))
+               (JJ mortgage-backed) (NNS securities) (JJ mutual) (NN fund)))
+       (. .)))
+
+

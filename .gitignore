@@ -11,56 +11,17 @@ target
 ### Preprocessor cache
 data/CommaTAGoldFinal.ser
 
-### LBJava-generated files
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoPOSWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramParentSecondRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaParentFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/OnePhraseWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLeftFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramLeftFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaClassifier.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondRightFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/ParseTreeFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoPhraseWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondRightPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaLevelNodesFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLeftChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramParentLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLeftPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoWordWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramLeftPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondLeftPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/SRLFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramRightPOSFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/OnePOSWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramRightChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/OneChunkWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/TwoChunkWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramParentSecondLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLexicalisedRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramLeftChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondLeftChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramParentRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondLeftFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaClassifier.ex
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramRightFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramSecondRightChunkFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramParentLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/OneWordWindowFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/UnigramLexicalisedLeftPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaLabel.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/POSFeatures.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/ParseParentFeatures.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/CommaClassifier$$1.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/ParseFeatures.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramParentRightPhraseFeature.java
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj/BigramParseFeatures.java
+
+### Testing and error analysis.
+# All data files required for experiments, including preprocessor caches, are included
+data/errors.analyzed
+data/errors_NER
+data/full_annotation
+data/delete
+data/errors.ner
+data/examples
+data/output
+
+
+### LBJ-generated files
+src/main/java/edu/illinois/cs/cogcomp/comma/lbj

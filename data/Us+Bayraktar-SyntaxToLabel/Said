@@ -1,0 +1,32 @@
+#moved from Quotation
+S --> `` S , '' NP VP .
+
+#moved from Quotation
+SINV --> S , '' VP NP .
+
+#moved from Quotation
+SINV --> `` S , '' VP NP .
+
+#moved from Quotation
+VP --> *** , `` S
+
+#moved from Quotation
+S --> S , '' NP VP .
+
+#moved from Interrupter
+SBAR --> *** , S
+
+#moved from Interrupter
+PRN --> , NP VP ,
+
+#moved from Interrupter
+PRN --> , S ,
+
+#moved from Complementary
+S --> `` S , NP VP .
+
+#moved from Complementary
+S --> S , NP VP .
+
+#moved from Complementary
+VP --> *** PP , PP
