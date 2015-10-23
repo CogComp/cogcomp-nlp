@@ -6,6 +6,7 @@ Main project:
 
 Dev project: 
 [![Build Status](http://128.174.241.91:8080/job/Illinois-nlp-dev/6/badge/icon)](http://128.174.241.91:8080/job/Illinois-nlp-dev/6/)
+[![Build Status](https://semaphoreci.com/api/v1/projects/80f49761-69dc-4a02-8ea9-a6895338a115/580384/badge.svg)](https://semaphoreci.com/cogcomp-dev/illinois-cogcomp-nlp)
 
 CogComp's main NLP libraries
 
