@@ -44,7 +44,7 @@ public class PreProcessor{
         annotatorService.addView(ta, ViewNames.NER_CONLL);
         annotatorService.addView(ta, ViewNames.SHALLOW_PARSE);
         annotatorService.addView(ta, ViewNames.PARSE_STANFORD);
-        annotatorService.addView(ta, ViewNames.PARSE_CHARNIAK);
+        //annotatorService.addView(ta, ViewNames.PARSE_CHARNIAK);
         annotatorService.addView(ta, ViewNames.POS);
         //annotatorService.addView(ta, ViewNames.SRL_VERB);
         //annotatorService.addView(ta, ViewNames.SRL_NOM);
