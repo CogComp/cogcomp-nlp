@@ -1,22 +1,21 @@
-CONTENTS
-=================
+# Illinois Lemmatizer
 
-1 PURPOSE  
-1.1  The Illinois Lemmatizer 
-1.2  License 
-2 System requirements 
-3 Programmatic Use of the Lemmatizer
-3.1 Lemmatizing Single Words
-3.2 Lemmatizing Views
-4 Download contents 
-5 Compiling and Running the Illinois Lemmatizer
-6 Contact Information 
-7 Developer Notes
+## CONTENTS
 
-==============================
+1. PURPOSE  
+   1. The Illinois Lemmatizer 
+   2. License 
+2. System requirements 
+3. Programmatic Use of the Lemmatizer
+   1.  Lemmatizing Single Words
+   2.  Lemmatizing Views
+4. Download contents 
+5. Compiling and Running the Illinois Lemmatizer
+6. Contact Information 
+7. Developer Notes
 
 
-1. PURPOSE
+## 1. PURPOSE
 
 Lemmatizers/Stemmers are intended to simplify text at the token level. The
 underlying principle is that it can be helpful to treat uniformly all
@@ -48,22 +47,20 @@ While slower than stemmers, lemmatizers tend to produce more consistent,
 higher-quality output.  
 
 
-1.1 The Illinois Lemmatizer
+### 1.1 The Illinois Lemmatizer
 
 The Illinois Lemmatizer uses the JWNL library to access WordNet's
 dictionaries to identify word root forms, and also uses some additional
 resources to handle prefixes and some verb forms.
 
 
-1.2 License
+### 1.2 License
 
 The Illinois Lemmatizer is available under a Research and Academic 
 use license. For more details, visit the Curator website and click 
 the download link.
 
-==============================
-
-2. SYSTEM REQUIREMENTS
+## 2. SYSTEM REQUIREMENTS
 
 This software was developed on the following platform:
 
@@ -76,11 +73,9 @@ number of other libraries and packages. These are included as part of
 the tarball containing the Lemmatizer itself.
 
 
-==============================
+## 3. PROGRAMMATIC USE OF THE LEMMATIZER
 
-3. PROGRAMMATIC USE OF THE LEMMATIZER
-
-Create an IllinoisLemmatizer object. There are three constructors.
+Create an `IllinoisLemmatizer` object. There are three constructors.
 One has a boolean parameter that when true, will give outputs
 that match that of the Stanford lemmatizer for common words like
 "her" to "she" and "me" to "i". This can be useful when using
@@ -101,34 +96,35 @@ b) Lemmatize a Record data structure's tokens, creating a new view.
 a set of data structures for integrating the output of multiple NLP tools. 
 
 
-3.1 Lemmatizing Single Words
+### 3.1 Lemmatizing Single Words
 
-You will need to initialize the IllinoisLemmatizer:
+You will need to initialize the `IllinoisLemmatizer`:
 
+```
 IllinoisLemmatizer lem = new IllinoisLemmatizer();
-
+```
 The lemmatizer requires a single word and a Part of Speech (POS) tag. For information
-about Part of Speech tagging, see (http://cogcomp.cs.illinois.edu/page/demo_view/POS).
+about Part of Speech tagging, [see this link](http://cogcomp.cs.illinois.edu/page/demo_view/POS).
 
+```java 
 String lemma = lem.getSingleLemma( "leaders", "NNS" );
 System.out.println( lemma );
 // should return 'leader'
+```
 
 Note that there is also a version of this method that take as their arguments
 a TextAnnotation object and a token index (see the Edison library -- 
 http://cogcomp.cs.illinois.edu/page/software_view/Edison). 
 
 
-3.2 Lemmatizing Views
+### 3.2 Lemmatizing Views
 
 There are also methods for creating Lemma views in Records (Curator data structure --
-see http://cogcomp.cs.illinois.edu/page/software_view/Curator) and in TextAnnotations 
-(Edison data structure -- see http://cogcomp.cs.illinois.edu/page/software_view/Edison).
+visit [here](http://cogcomp.cs.illinois.edu/page/software_view/Curator) and in `TextAnnotations` 
+(Edison data structure -- visit [here](http://cogcomp.cs.illinois.edu/page/software_view/Edison).
 
 
-==============================
-
-4. DOWNLOAD CONTENTS
+## 4. DOWNLOAD CONTENTS
 
 The Illinois Lemmatizer is released as either a Curator component or as 
 part of the Illinois Preprocessor bundle. The Curator downloads a tarball 
@@ -136,26 +132,22 @@ as part of its installation process (from which it is to be assumed you
 have obtained this README). 
 
 The main directory has four sub-directories:
-
+```
 doc/ -- documentation (this README)
 src/ -- source files for the Lemmatizer as well as resources like WordNet-3.0
     and verb-lemDict.txt
 config -- example config file
 test/ -- input.txt and output.txt, used for making sure code is working as desired.
+```
 
-
-==============================
-
-5. COMPILING AND RUNNING THE ILLINOIS LEMMATIZER
+## 5. COMPILING AND RUNNING THE ILLINOIS LEMMATIZER
 
 We assume that people will run this as part of the Curator, or part of the
 Illinois Preprocessor.  If you are a developer, you can use Maven to get
 and compile this project.  
 
 
-==============================
-
-6. CONTACT INFORMATION
+### 6. CONTACT INFORMATION
 
 You can ask questions/report problems via the CCG's software newsgroup, which you 
 can sign up for here:
@@ -163,9 +155,7 @@ can sign up for here:
 http://lists.cs.uiuc.edu/mailman/listinfo/illinois-ml-nlp-users
 
 
-================================
-
-7. DEVELOPER NOTES
-
+### 7. DEVELOPER NOTES
+TODO 
 
 

@@ -116,10 +116,8 @@ public class PennTreebankReader extends TextAnnotationReader {
         if (currentSectionId < sections.length)
             return true;
 
-        if (currentFileId < currentSectionFiles.length)
-            return true;
+        return currentFileId < currentSectionFiles.length;
 
-        return false;
     }
 
     protected TextAnnotation makeTextAnnotation() throws AnnotatorException {
