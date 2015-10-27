@@ -19,7 +19,6 @@ public class DepthFirstSearch<T> extends GraphSearch<T> {
         super(new Queue<T>() {
 
             Stack<T> stack = new Stack<>();
-            ;
 
             public T element() {
                 return stack.peek();

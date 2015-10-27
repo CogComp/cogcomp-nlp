@@ -123,8 +123,6 @@ public class BrownClusterViewGenerator implements Annotator {
 		return ViewName + ":" + this.name;
 	}
 
-	;
-
 	@Override
 	public View getView(TextAnnotation ta) {
 

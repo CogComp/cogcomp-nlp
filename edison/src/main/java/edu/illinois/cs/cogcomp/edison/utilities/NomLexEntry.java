@@ -27,7 +27,7 @@ public class NomLexEntry {
 	 * These are the possible NOMBANK classes. (See Section 5.3 in
 	 * "Those Other Nombank Dictionaries"
 	 */
-	public static enum NomLexClasses {
+	public enum NomLexClasses {
 		ABILITY, ABLE_NOM, ATTRIBUTE, CRISSCROSS,
 
 		ENVIRONMENT, EVENT, FIELD, GROUP, HALLMARK,
@@ -36,7 +36,7 @@ public class NomLexEntry {
 
 		NOMLIKE, PARTITIVE, RELATIONAL, SHARE, TYPE,
 
-		VERSION, WORK_OF_ART, UNKNOWN_CLASS;
+		VERSION, WORK_OF_ART, UNKNOWN_CLASS
 	}
 
 	// this is the entry referenced by :NOMTYPE. This could be a structured
