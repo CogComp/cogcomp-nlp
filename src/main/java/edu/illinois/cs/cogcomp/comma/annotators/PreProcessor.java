@@ -23,15 +23,18 @@ public class PreProcessor{
 
     public PreProcessor() throws Exception {
         // Initialise AnnotatorServices with default configurations
+        Map<String, String> nonDefaultValues = new HashMap<>();
         if (CommaProperties.getInstance().useCurator()){
-        	Map<String, String> nonDefaultValues = new HashMap<>();
         	nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, CuratorConfigurator.TRUE);
         	nonDefaultValues.put(CuratorConfigurator.CURATOR_FORCE_UPDATE.key, CuratorConfigurator.TRUE);
-        	ResourceManager cachingCuratorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
-            annotatorService = CuratorFactory.buildCuratorClient(cachingCuratorConfig);
+        	ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
+            annotatorService = CuratorFactory.buildCuratorClient(curatorConfig);
         }
-        else
-            annotatorService = IllinoisPipelineFactory.buildPipeline();
+        else {
+            nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, CuratorConfigurator.TRUE);
+            ResourceManager pipelineConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
+            annotatorService = IllinoisPipelineFactory.buildPipeline(pipelineConfig);
+        }
     }
 
     public TextAnnotation preProcess(List<String[]> text) throws AnnotatorException{
@@ -41,13 +44,15 @@ public class PreProcessor{
     }
 
     private void addViewsFromAnnotatorService(TextAnnotation ta) throws AnnotatorException {
+        annotatorService.addView(ta, ViewNames.POS);
         annotatorService.addView(ta, ViewNames.NER_CONLL);
         annotatorService.addView(ta, ViewNames.SHALLOW_PARSE);
         annotatorService.addView(ta, ViewNames.PARSE_STANFORD);
-        //annotatorService.addView(ta, ViewNames.PARSE_CHARNIAK);
-        annotatorService.addView(ta, ViewNames.POS);
-        //annotatorService.addView(ta, ViewNames.SRL_VERB);
-        //annotatorService.addView(ta, ViewNames.SRL_NOM);
-        annotatorService.addView(ta, ViewNames.SRL_PREP);
+        if (CommaProperties.getInstance().useCurator()) {
+            annotatorService.addView(ta, ViewNames.PARSE_CHARNIAK);
+            annotatorService.addView(ta, ViewNames.SRL_VERB);
+            annotatorService.addView(ta, ViewNames.SRL_NOM);
+            annotatorService.addView(ta, ViewNames.SRL_PREP);
+        }
     }
 }

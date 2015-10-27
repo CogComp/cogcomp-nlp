@@ -78,6 +78,7 @@ public class SrikumarAnnotationReader implements IResetableIterator<Sentence>{
                 try {
                     ta = preProcessor.preProcess(Collections.singletonList(tokenizedText));
                 } catch (AnnotatorException e) {
+                    e.printStackTrace();
                 	skip = true;
                     failures++;
                 }
