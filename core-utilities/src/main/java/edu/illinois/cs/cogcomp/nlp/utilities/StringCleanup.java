@@ -144,5 +144,10 @@ public class StringCleanup {
         String latin1Str = normalizeToLatin1(origString_);
         return normalizeToEncoding(latin1Str, Charset.forName("ascii"));
     }
+    
+     static public String removeControlCharacters(String origString_) {
+        String outputStr = origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+        return outputStr;
+    }
 
 }
