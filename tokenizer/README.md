@@ -1,31 +1,26 @@
 # Illinois Tokenizer
 
-Yiming Jiang
-Mark Sammons
-
 This project is based on work by Yiming Jiang, who wrote the initial
 version and evaluated CCG and Stanford tokenizers against a corpus
 drawn from OntoNotes.
 
 It has been modified in the following way: additional classes were
 written to use illinois-core-utilities data structures. The underlying
-tokenizer is still the LBJava SentenceSplitter. The evaluation code
-has not been updated to use the new IllinoisTokenizer class (TODO).
+tokenizer is still the LBJava `SentenceSplitter`. The evaluation code
+has not been updated to use the new `IllinoisTokenizer` class (TODO).
 
 ## HOW TO USE IT
-
-The class e.i.c.c.cnlp.utility.TextAnnotationBuilder implements the 
-TextAnnotationBuilderInterface from illinois-core-utilities.  You can 
-use it to create a TextAnnotation object with SENTENCE and TOKEN views, or
-the builder can be provided as a constructor argument to a 
-CachingAnnotatorService that uses other annotators in pipeline fashion.
+        
+The class `edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder` 
+interface from illinois-core-utilities to create a `TextAnnotation` 
+object with `SENTENCE` and `TOKEN` views, other builder can be provided 
+as a constructor argument to a `CachingAnnotatorService` that uses other 
+annotators in pipeline fashion.
 
 
 ## Setup
 
 The StanfordTokenizer requires using a Java 8 runtime.
-
-
 
 
 ## Original Project Structure
@@ -60,7 +55,8 @@ takes gold standard Record and a sample Record
 Each JSON file is generated from *OntoNotesParser*. Each JSON file corresponds to each OntoNotes file.
 
 This is the format of JSON file.
-```json
+
+```
 {  
     "sentences": [  
     {  
@@ -80,8 +76,8 @@ This is the format of JSON file.
 ```
 
 **Format**:  
-"sentences" has an array of sentences, with sentence text and offsets.  
-"tokens" has an array of tokens with token text and offsets.  
+`"sentences"` has an array of sentences, with sentence text and offsets.  
+`"tokens"` has an array of tokens with token text and offsets.  
 
 ## Example Usage
 

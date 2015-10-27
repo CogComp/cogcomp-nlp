@@ -108,10 +108,7 @@ public class TreeView extends View {
         if (rootRelations.size() == 0) {
             isDependencyTree = false;
         } else {
-            if (rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING))
-                isDependencyTree = false;
-            else
-                isDependencyTree = true;
+            isDependencyTree = !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
         }
     }
 

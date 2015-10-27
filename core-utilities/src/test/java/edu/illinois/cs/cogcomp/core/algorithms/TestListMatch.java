@@ -11,7 +11,7 @@ public class TestListMatch extends TestCase {
 
     public void testRegexMatchesList() {
         String textString = "gcatcgcagagagtatacagtacg";
-        List<String> pattern = Arrays.asList(new String[]{"g", "a", "g"});
+        List<String> pattern = Arrays.asList("g", "a", "g");
 
 
         List<String> textSplit = new LinkedList<>();
@@ -31,7 +31,7 @@ public class TestListMatch extends TestCase {
     public void testRegexMatchesSeuss() {
 
         List<String> pattern = Arrays
-                .asList(new String[]{"do", "not", "like"});
+                .asList("do", "not", "like");
 
         List<String> text = new ArrayList<>(Arrays.asList("I", "do",
                 "not", "like", "them", "in", "a", "box", ".", "I", "do", "not",
@@ -56,8 +56,8 @@ public class TestListMatch extends TestCase {
 
     public void testRegexMatchesSeussSpecial() {
 
-        List<String> pattern = Arrays.asList(new String[]{"****", "*not",
-                "li+e"});
+        List<String> pattern = Arrays.asList("****", "*not",
+                "li+e");
 
         List<String> text = new ArrayList<>(Arrays.asList("I", "****",
                 "*not", "li+e", "them", "in", "a", "box", ".", "I", "****",
@@ -82,7 +82,7 @@ public class TestListMatch extends TestCase {
 
     public void testBMatchesList() {
         String textString = "gcatcgcagagagtatacagtacg";
-        List<String> pattern = Arrays.asList(new String[]{"g", "a", "g"});
+        List<String> pattern = Arrays.asList("g", "a", "g");
 
         List<String> text = Arrays.asList(textString.split("")).subList(1,
                 textString.length() + 1);
@@ -98,7 +98,7 @@ public class TestListMatch extends TestCase {
     public void testBMatchesSeuss() {
 
         List<String> pattern = Arrays
-                .asList(new String[]{"do", "not", "like"});
+                .asList("do", "not", "like");
 
         List<String> text = new ArrayList<>(Arrays.asList("I", "do",
                 "not", "like", "them", "in", "a", "box", ".", "I", "do", "not",
@@ -123,8 +123,8 @@ public class TestListMatch extends TestCase {
 
     public void testBMatchesSeussSpecial() {
 
-        List<String> pattern = Arrays.asList(new String[]{"****", "*not",
-                "li+e"});
+        List<String> pattern = Arrays.asList("****", "*not",
+                "li+e");
 
         List<String> text = new ArrayList<>(Arrays.asList("I", "****",
                 "*not", "li+e", "them", "in", "a", "box", ".", "I", "****",

@@ -24,10 +24,7 @@ public class LRUCache<K, V> {
         cache = new LinkedHashMap<K, V>(initialCapacity) {
             @Override
             protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-                if (this.size() > LRUCache.this.sizeLimit)
-                    return true;
-                else
-                    return false;
+                return this.size() > LRUCache.this.sizeLimit;
             }
         };
     }
