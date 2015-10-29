@@ -17,21 +17,13 @@
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.0</version>
         </dependency>
+
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>curator-interfaces</artifactId>
-            <version>0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
-            <version>0.8.0</version>
-        </dependency>
+
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>

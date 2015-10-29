@@ -55,7 +55,7 @@ public class IllinoisLemmatizer implements Annotator
 		wnLemmaReader = new WordnetLemmaReader(wnpath);
 		loadVerbMap();
 		loadExceptionMap();
-		contractions = new HashMap<String, String>();
+		contractions = new HashMap<>();
 		contractions.put("'d", "have");
 		contractions.put("'ll", "will");
 		contractions.put("'s", "'s");
@@ -64,7 +64,7 @@ public class IllinoisLemmatizer implements Annotator
 		contractions.put("'ve", "have"); 
 		//contractions.put("ca", "can");
 		
-		toStanford = new HashMap<String,String>();
+		toStanford = new HashMap<>();
 
 		toStanford.put("her","she");
 		toStanford.put("him","he");
@@ -76,7 +76,7 @@ public class IllinoisLemmatizer implements Annotator
 	}
 
 	private void loadExceptionMap() {
-		exceptionsMap = new HashMap<String,String>();
+		exceptionsMap = new HashMap<>();
 
         for (String line : readFromClasspath(exceptionsFile)) {
 			String[] parts = line.split("\\s+");
@@ -87,8 +87,8 @@ public class IllinoisLemmatizer implements Annotator
 	//load verb resources
 	private void loadVerbMap()
 	{
-		verbLemmaMap = new HashMap<String, String>();
-		verbBaseMap = new HashMap<String, String>();
+		verbLemmaMap = new HashMap<>();
+		verbBaseMap = new HashMap<>();
 
 		for (String line : readFromClasspath(verbLemmaFile)) {
 			String[] parts = line.split("\\s+");
