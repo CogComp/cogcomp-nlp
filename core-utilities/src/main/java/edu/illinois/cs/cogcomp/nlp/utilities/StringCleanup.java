@@ -144,5 +144,12 @@ public class StringCleanup {
         String latin1Str = normalizeToLatin1(origString_);
         return normalizeToEncoding(latin1Str, Charset.forName("ascii"));
     }
+    
+    /*Control Characters such as ^C, ^\, ^M etc. are a part of the C0 ASCII Control Character Set. These break our NER, COREF etc. (Eg. In John Smith Corpus) and are not needed in text documents. 
+     * This function removes the control characters in input string, i.e. almost all of ASCII characters 0 - 31, except the \n, \r and \t characters (which it keeps intact in the text). */
+     static public String removeControlCharacters(String origString_) {
+        String outputStr = origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
+        return outputStr;
+    }
 
 }
