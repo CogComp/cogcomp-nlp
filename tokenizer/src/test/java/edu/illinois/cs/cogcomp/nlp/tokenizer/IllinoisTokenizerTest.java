@@ -88,9 +88,7 @@ public class IllinoisTokenizerTest {
 
     }
 
-    private void doTokenizerTest(Tokenizer tokenizer, String sentence,
-                                 String[] tokens, IntPair[] offsets) {
-
+    private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens, IntPair[] offsets) {
         System.out.println(sentence);
         Pair<String[], IntPair[]> tokenize = tokenizer.tokenizeSentence(sentence);
 

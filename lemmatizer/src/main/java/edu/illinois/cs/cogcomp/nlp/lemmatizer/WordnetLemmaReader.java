@@ -30,10 +30,10 @@ public class WordnetLemmaReader {
             System.exit(-1);
         }
 
-        nounLemmas = new HashMap<String, String>();
-        verbLemmas = new HashMap<String, String>();
-        adjectiveLemmas = new HashMap<String, String>();
-        adverbLemmas = new HashMap<String, String>();
+        nounLemmas = new HashMap<>();
+        verbLemmas = new HashMap<>();
+        adjectiveLemmas = new HashMap<>();
+        adverbLemmas = new HashMap<>();
 
         // Read each file directly
         List<String> list = IllinoisLemmatizer.readFromClasspath(wordnetPath + "/noun.exc");
@@ -71,7 +71,7 @@ public class WordnetLemmaReader {
     }
 
     public Set<String> getLemmaAllPOS(String word) {
-        Set<String> lemmas = new HashSet<String>();
+        Set<String> lemmas = new HashSet<>();
         if (nounLemmas.containsKey(word)) lemmas.add(nounLemmas.get(word));
         if (verbLemmas.containsKey(word)) lemmas.add(verbLemmas.get(word));
         if (adjectiveLemmas.containsKey(word)) lemmas.add(adjectiveLemmas.get(word));
