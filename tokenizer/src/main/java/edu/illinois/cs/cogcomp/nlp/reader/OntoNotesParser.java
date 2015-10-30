@@ -30,7 +30,7 @@ public class OntoNotesParser {
             String currentLine, eachPlainSentence = "";
 
             OntoNotesDataModel currentDataModel = new OntoNotesDataModel();
-            sentences = new ArrayList<OntoNotesDataModel>();
+            sentences = new ArrayList<>();
 
             bufferedReader = new BufferedReader(new FileReader("./data/"+fileName));
 

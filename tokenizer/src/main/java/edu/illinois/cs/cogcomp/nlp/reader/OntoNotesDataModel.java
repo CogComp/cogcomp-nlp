@@ -11,9 +11,9 @@ public class OntoNotesDataModel {
     private int sentenceEndOffset;
 
     public OntoNotesDataModel() {
-        tokens = new ArrayList<String>();
-        startOffsets = new ArrayList<Integer>();
-        endOffsets = new ArrayList<Integer>();
+        tokens = new ArrayList<>();
+        startOffsets = new ArrayList<>();
+        endOffsets = new ArrayList<>();
     }
 
     public String getPlainSentence() {

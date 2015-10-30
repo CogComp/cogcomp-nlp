@@ -1,48 +1,21 @@
 package edu.illinois.cs.cogcomp.nlp.utility;
 
-import edu.illinois.cs.cogcomp.thrift.base.Labeling;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.thrift.curator.Record;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.reader.OntoNotesDataModel;
+import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Utility {
-    static public Record parseIntoCuratorRecord(ArrayList<OntoNotesDataModel> sentences) {
-        Record article = new Record();
-        Labeling sentencesLabeling = new Labeling();
-        Labeling tokensLabeling = new Labeling();
 
-        ArrayList<Span> sentencesList = new ArrayList<Span>();
-        ArrayList<Span> tokensList = new ArrayList<Span>();
-
-        for (int i = 0; i < sentences.size(); i++) {
-            for (int j = 0; j < sentences.get(i).getTokens().size(); j++) {
-                Span eachToken = new Span();
-                eachToken.setSource(sentences.get(i).getTokens().get(j));
-                eachToken.setStart(sentences.get(i).getStartOffsets().get(j));
-                eachToken.setEnding(sentences.get(i).getEndOffsets().get(j));
-                tokensList.add(eachToken);
-            }
-
-            Span eachSentence = new Span();
-            eachSentence.setSource(sentences.get(i).getPlainSentence());
-            eachSentence.setStart(sentences.get(i).getSentenceStartOffset());
-            eachSentence.setEnding(sentences.get(i).getSentenceEndOffset());
-            sentencesList.add(eachSentence);
-        }
-
-        sentencesLabeling.setLabels(sentencesList);
-        tokensLabeling.setLabels(tokensList);
-
-        article.putToLabelViews("sentences", sentencesLabeling);
-        article.putToLabelViews("tokens", tokensLabeling);
-
-//        System.out.println(article.getLabelViews().get("sentences").toString());
-//        System.out.println(article.getLabelViews().get("tokens").toString());
-
-        return article;
-    }
+	public static TextAnnotation parseIntoTextAnnotation(List<OntoNotesDataModel> sentences) {
+		List<String[]> tokenizedSentences = new ArrayList<>();
+		for (OntoNotesDataModel sent : sentences) {
+			tokenizedSentences.add(sent.getTokens().toArray(new String[sent.getTokens().size()]));
+		}
+		return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
+	}
 
     static public void computeCharacterOffsets(ArrayList<OntoNotesDataModel> sentences) {
         int sentence_start_offset = 0;
