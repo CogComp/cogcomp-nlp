@@ -99,7 +99,7 @@ public interface Tokenizer
      * @param sentence The sentence string
      * @return A {@link Pair} containing the array of tokens and their character offsets
      */
-    public Pair<String[], IntPair[]> tokenizeSentence(String sentence);
+	Pair<String[], IntPair[]> tokenizeSentence(String sentence);
 
 
     /**
@@ -108,6 +108,6 @@ public interface Tokenizer
      *    the IntPair[] is the corresponding list of character offsets with respect to <b>the
      *    original text</b>.
      */
-    public Tokenization tokenizeTextSpan(String textSpan);
+	Tokenization tokenizeTextSpan(String textSpan);
 
 }

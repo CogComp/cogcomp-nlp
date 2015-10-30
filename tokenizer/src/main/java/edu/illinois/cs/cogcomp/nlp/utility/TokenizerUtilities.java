@@ -21,7 +21,6 @@ import java.util.List;
 public class TokenizerUtilities {
 
     public static final Tokenizer lbjTokenizer = new IllinoisTokenizer();
-//    public static final Tokenizer whiteSpaceTokenizer = new WhitespaceTokenizer();
 
     /**
      * The elements of this enumeration generate views called {@code SENTENCE}.
@@ -50,9 +49,8 @@ public class TokenizerUtilities {
 
             @Override
             public View getView(TextAnnotation ta) {
-                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(ta,
-                        lbjTokenizer, "LBJ");
-            }
+                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(ta, lbjTokenizer, "LBJ");
+			}
 
             @Override
             public String[] getRequiredViews() {
@@ -60,40 +58,6 @@ public class TokenizerUtilities {
             }
         }
     }
-//        /**
-//         * This sentence view generator sentence splits on newlines and tokenizes on white space, using
-//         *     the {@link edu.illinois.cs.cogcomp.nlp.tokenizer.WhitespaceTokenizer}
-//         *
-//         */
-//        WhiteSpaceSentenceViewGenerator {
-//            @Override
-//            public String getViewName() {
-//                return ViewNames.SENTENCE;
-//            }
-//
-//            @Override
-//            public View getView(TextAnnotation input) {
-//                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(input,
-//                        edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.whiteSpaceTokenizer, "WhiteSpace");
-//            }
-//
-//            @Override
-//            public String[] getRequiredViews() {
-//                return new String[0];
-//            }
-//       };
-
-
-//        private static final String[] TOKENIZER_VIEWS = {ViewNames.SENTENCE, ViewNames.TOKENS};
-//
-//        /**
-//         * Returns the name of the sentence view ({@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE}.)
-//         */
-//        public String[] getViewNames() {
-//            return TOKENIZER_VIEWS;
-//        }
-//
-//    }
 
     public static IntPair[] getTokenOffsets(String sentence, String[] tokens) {
         List<IntPair> offsets = new ArrayList<>();
@@ -177,9 +141,6 @@ public class TokenizerUtilities {
         if ( tokens.size() != charOffsets.size() )
             throw new IllegalArgumentException( "tokens (" + tokens.size() + ") must equal charOffsets (" +
             charOffsets.size() + "), but does not.");
-
-//        input.setTokens(tokens.toArray(new String[tokens.size()]),
-//                charOffsets.toArray(new IntPair[charOffsets.size()]));
 
         SpanLabelView tokView = new SpanLabelView(ViewNames.TOKENS, source, input, 1.0 );
         SpanLabelView view = new SpanLabelView(ViewNames.SENTENCE, source, input, 1.0);

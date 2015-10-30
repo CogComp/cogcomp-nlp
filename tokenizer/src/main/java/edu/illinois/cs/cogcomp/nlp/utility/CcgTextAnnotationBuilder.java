@@ -21,17 +21,15 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
     private static final String DEFAULT_CORPUS_ID = "dummyCorpusId";
 
     private Tokenizer tokenizer;
-    private int maxSentenceLength;
 
-    /**
+	/**
      * instantiate a TextAnnotationBuilder.
      * @param tokenizer The Tokenizer that will split text into sentences and words.
      */
     public CcgTextAnnotationBuilder(Tokenizer tokenizer)
     {
         this.tokenizer = tokenizer;
-        maxSentenceLength = Integer.MAX_VALUE;
-    }
+	}
 
 
     @Override
@@ -45,7 +43,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
      *    process this text with other NLP components.
      *
      * @param text  the text to build the TextAnnotation
-     * @return  a TextAnnotation object with {@link ViewNames.SENTENCE} and {@link ViewNames.TOKENS} views and
+     * @return  a TextAnnotation object with {@link ViewNames#SENTENCE} and {@link ViewNames#TOKENS} views and
      *          default corpus id and text id fields.
      * @throws IllegalArgumentException  if the tokenizer has problems processing the text.
      */
@@ -68,8 +66,8 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
      * @param textId    a field in TextAnnotation that can be used by the client for book-keeping (e.g. identify a
      *                  specific document by some reference string)
      * @param text  the plain English text to process
-     * @return  a TextAnnotation object with {@link ViewNames.TOKENS} and
-     *          {@link ViewNames.SENTENCE} views.
+     * @return  a TextAnnotation object with {@link ViewNames#TOKENS} and
+     *          {@link ViewNames#SENTENCE} views.
      * @throws IllegalArgumentException if the tokenizer has problems with the input text.
      */
     @Override
@@ -100,7 +98,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
      * @param sentenceEndPositions  token offsets of sentence ends (one-past-the-end indexing)
      * @param sentenceViewGenerator the name of the source of the sentence split
      * @param sentenceViewScore a score that may indicate how reliable the sentence split information is
-     * @return  a TextAnnotation object with {@link ViewNames.TOKENS} and {@link ViewNames.SENTENCE} views.
+     * @return  a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE} views.
      */
     public static TextAnnotation buildTextAnnotation(String corpusId, String textId, String text, String[] tokens, int[] sentenceEndPositions,
                           String sentenceViewGenerator, double sentenceViewScore) {
