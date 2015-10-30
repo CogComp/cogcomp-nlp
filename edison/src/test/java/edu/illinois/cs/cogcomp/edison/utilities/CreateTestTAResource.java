@@ -1,14 +1,19 @@
 package edu.illinois.cs.cogcomp.edison.utilities;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.curator.CuratorClient;
+import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
+import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Prepares the test.ta file used for the Maven Tests
@@ -16,9 +21,7 @@ import java.util.List;
  * @author Christos Christodoulopoulos
  */
 public class CreateTestTAResource {
-	public static String CURATOR_HOST = "trollope.cs.illinois.edu";
-	public static int CURATOR_PORT = 9010;
-	private CuratorClient client;
+	private AnnotatorService annotator;
 	private List<String> testInputs;
 	private List<TextAnnotation> tas;
 
@@ -31,7 +34,10 @@ public class CreateTestTAResource {
 		try {
             // Respecting tokenization causes all sorts of problems
             // since the sentence below are not properly tokenized
-			client = new CuratorClient(CURATOR_HOST, CURATOR_PORT, false, false);
+			Map<String, String> nonDefaultValues = new HashMap<>();
+			nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, CuratorConfigurator.TRUE);
+			ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
+			annotator = CuratorFactory.buildCuratorClient(curatorConfig);
 			// Populate the annotation list
 			getTextAnnotations();
 
@@ -183,19 +189,19 @@ public class CreateTestTAResource {
 		int count = 0;
 		int total = testInputs.size();
 		for (String text : testInputs) {
-			TextAnnotation ta = client.getTextAnnotation(corpusId, textId, text);
-			client.addTextAnnotationView(ta, ViewNames.PARSE_CHARNIAK);
-			client.addTextAnnotationView(ta, ViewNames.PARSE_STANFORD);
-			client.addTextAnnotationView(ta, ViewNames.DEPENDENCY);
-			client.addTextAnnotationView(ta, ViewNames.DEPENDENCY_STANFORD);
-			client.addTextAnnotationView(ta, ViewNames.POS);
-			client.addTextAnnotationView(ta, ViewNames.LEMMA);
-			client.addTextAnnotationView(ta, ViewNames.SHALLOW_PARSE);
-			client.addTextAnnotationView(ta, ViewNames.NER_CONLL);
-			client.addTextAnnotationView(ta, ViewNames.COREF);
-			client.addTextAnnotationView(ta, ViewNames.SRL_VERB);
-			client.addTextAnnotationView(ta, ViewNames.SRL_NOM);
-			client.addTextAnnotationView(ta, ViewNames.QUANTITIES);
+			TextAnnotation ta = annotator.createBasicTextAnnotation(corpusId, textId, text);
+			annotator.addView(ta, ViewNames.PARSE_CHARNIAK);
+			annotator.addView(ta, ViewNames.PARSE_STANFORD);
+			annotator.addView(ta, ViewNames.DEPENDENCY);
+			annotator.addView(ta, ViewNames.DEPENDENCY_STANFORD);
+			annotator.addView(ta, ViewNames.POS);
+			annotator.addView(ta, ViewNames.LEMMA);
+			annotator.addView(ta, ViewNames.SHALLOW_PARSE);
+			annotator.addView(ta, ViewNames.NER_CONLL);
+			annotator.addView(ta, ViewNames.COREF);
+			annotator.addView(ta, ViewNames.SRL_VERB);
+			annotator.addView(ta, ViewNames.SRL_NOM);
+			annotator.addView(ta, ViewNames.QUANTITIES);
 			tas.add(ta);
 			count++;
 			if (count % 10 == 0) System.out.println("Finished " + count + "/" + total + " sentences");
