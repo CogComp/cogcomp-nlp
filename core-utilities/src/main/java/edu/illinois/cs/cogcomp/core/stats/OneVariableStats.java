@@ -48,6 +48,15 @@ public class OneVariableStats implements Serializable {
         return Math.sqrt(sigmax2 / num - m * m);
     }
 
+	/**
+	 * Calculate the standard error of the mean (SEM):
+	 * the standard deviation of the sample-mean's estimate of a population mean.
+	 * @return The SEM, which is {@link #std()} divided by the square root of the sample size.
+	 */
+	public double stdErr() {
+		return std()/Math.sqrt(num);
+	}
+
     public double min() {
         return this.min;
     }
