@@ -49,15 +49,15 @@ public class CommaProperties extends ResourceManager {
     }
 
     public String getOtherRelabeledFile() {
-        return getString("OTHER_RELABELED_FILE");
+        return getString("COMMASRL_DIR").trim() + "/otherFile.txt";
     }
     
     public String getOriginalSrikumarAnnotationFile(){
-    	return getString("ORIGINAL_SRIKUMAR_ANNOTATIONS_FILE");
+    	return getString("COMMASRL_DIR").trim() + "/Original-data-by-Srikumar-et-al/comma_resolution_data.txt";
     }
     
     public String getBayraktarAnnotationsDir(){
-    	return getString("BAYRAKTAR_ANNOTATIONS_DIR");
+    	return getString("COMMASRL_DIR").trim() + "/Bayraktar-SyntaxToLabel/modified";
     }
     
     public String getPTBHDir() {

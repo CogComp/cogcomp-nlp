@@ -62,7 +62,7 @@ public class BayraktarAnnotationGenerationHelper {
 
     
     Scanner scanner;
-    String bayraktarAnnotationsDir =  CommaProperties.getInstance().getBayraktarAnnotationsDir();
+    String bayraktarAnnotationsDir =  CommaProperties.getInstance().getBayraktarAnnotationsDir() + "/";
     /**
      * Present bayraktarPattern and example commas to user on console. The user can then choose from the provided labels to decide on an annotation.
      * @param bayraktarPattern the pattern that need to be annotated

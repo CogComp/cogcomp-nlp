@@ -24,7 +24,7 @@ public class BayraktarPatternLabeler {
     	USE_NEW_LABEL_SET = properties.useNewLabelSet();
     	String[] labels = {"Attribute", "Complementary", "Interrupter", "Introductory", "List", "Quotation", "Substitute", "Locative"};
     	BAYRAKTAR_PATTERN_TO_COMMA_LABEL = new HashMap<>();
-    	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir();
+    	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir() + "/";
 		for(String label : labels){
 			File file = new File(ANNOTATION_SOURCE_DIR + label);
 			List<String> lines;
