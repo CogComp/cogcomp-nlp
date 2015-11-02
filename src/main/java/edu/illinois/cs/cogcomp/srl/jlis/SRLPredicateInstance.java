@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.utilities.Parallel;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
+import edu.illinois.cs.cogcomp.srl.SRLProperties;
 import edu.illinois.cs.cogcomp.srl.core.*;
 
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class SRLPredicateInstance implements IInstance {
-	private static final int FEATURE_EXTRACTION_N_THREADS = Math.min(10, Runtime.getRuntime().availableProcessors());
+	private static int FEATURE_EXTRACTION_N_THREADS;
 
 	private final static Logger log = LoggerFactory.getLogger(SRLPredicateInstance.class);
 
@@ -158,6 +159,10 @@ public class SRLPredicateInstance implements IInstance {
 				}
 			}
 		};
+		SRLProperties props = SRLProperties.getInstance();
+		FEATURE_EXTRACTION_N_THREADS=Math.min(props.getNumFeatExtThreads(), Runtime.getRuntime().availableProcessors());
+
+		log.info("Using {} threads for feat. ext. "+FEATURE_EXTRACTION_N_THREADS);
 		try {
 			int timeout = 10;
 			Parallel.forLoop(FEATURE_EXTRACTION_N_THREADS, list, function, timeout, TimeUnit.MINUTES);
