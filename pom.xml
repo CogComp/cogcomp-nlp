@@ -5,7 +5,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-srl</artifactId>
     <packaging>jar</packaging>
-    <version>5.1.5</version>
+    <version>5.1.6</version>
 
     <url>http://cogcomp.cs.illinois.edu</url>
 
