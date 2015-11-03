@@ -69,14 +69,10 @@ public class LongestCommonSubsequence<T extends Comparable<T>> {
 
     private List<IntPair> getBackTrace(double[][] table, List<T> seq1, List<T> seq2, int i, int j) {
         if (i == 0 || j == 0) {
-
             return new ArrayList<>();
-
         } else if (compareTokens(seq1.get(i), seq2.get(j)) > 0) {
             List<IntPair> bt = getBackTrace(table, seq1, seq2, i - 1, j - 1);
-
             bt.add(new IntPair(i, j));
-
             return bt;
         } else {
             if (table[i][j - 1] > table[i - 1][j]) {
@@ -125,24 +121,17 @@ public class LongestCommonSubsequence<T extends Comparable<T>> {
     public static Map<Integer, Integer> getCharacterLCSMap(String s1, String s2) {
         LongestCommonSubsequence<String> lcs = new LongestCommonSubsequence<>();
 
-        List<String> sequence1 = Arrays.asList(s1.split(""));
-        List<String> sequence2 = Arrays.asList(s2.split(""));
-
-        sequence1 = sequence1.subList(1, sequence1.size());
-        sequence2 = sequence2.subList(1, sequence2.size());
+        List<String> sequence1 = Arrays.asList(s1.split("(?!^)"));
+        List<String> sequence2 = Arrays.asList(s2.split("(?!^)"));
 
         return lcs.getLCSMatchMap(sequence1, sequence2);
-
     }
 
     public static List<IntPair> getCharacterLCS(String s1, String s2) {
         LongestCommonSubsequence<String> lcs = new LongestCommonSubsequence<>();
 
-        List<String> sequence1 = Arrays.asList(s1.split(""));
-        List<String> sequence2 = Arrays.asList(s2.split(""));
-
-        sequence1 = sequence1.subList(1, sequence1.size());
-        sequence2 = sequence2.subList(1, sequence2.size());
+        List<String> sequence1 = Arrays.asList(s1.split("(?!^)"));
+        List<String> sequence2 = Arrays.asList(s2.split("(?!^)"));
 
         return lcs.getLCSMatch(sequence1, sequence2);
     }

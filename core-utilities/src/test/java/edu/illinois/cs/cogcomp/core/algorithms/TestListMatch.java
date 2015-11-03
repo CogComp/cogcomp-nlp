@@ -84,8 +84,7 @@ public class TestListMatch extends TestCase {
         String textString = "gcatcgcagagagtatacagtacg";
         List<String> pattern = Arrays.asList("g", "a", "g");
 
-        List<String> text = Arrays.asList(textString.split("")).subList(1,
-                textString.length() + 1);
+        List<String> text = Arrays.asList(textString.split("(?!^)"));
 
         ListMatch<String> matcher = new BoyerMooreHorspoolMatch<>(pattern);
         // ListMatch<String> matcher = new NaiveListMatcher<String>(pattern);
