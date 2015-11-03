@@ -1,11 +1,10 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 
+import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Vivek Srikumar
@@ -63,6 +62,10 @@ public class TextAnnotationUtilities {
                 return 0;
         }
     };
+
+    public static TextAnnotation createFromTokenizedString(String text) {
+        return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(text.split(" ")));
+    }
 
     public static String getTokenSequence(TextAnnotation ta, int start, int end) {
         return new Constituent("", "", ta, start, end).toString();
