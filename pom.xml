@@ -28,13 +28,13 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
             <classifier>models-verb-stanford</classifier>
-            <version>5.1.5</version>
+            <version>5.1.6</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
             <classifier>models-nom-stanford</classifier>
-            <version>5.1.5</version>
+            <version>5.1.6</version>
         </dependency>
 
         <!--The Illinois pipeline can be used instead -->
