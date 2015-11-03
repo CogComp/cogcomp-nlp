@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
     private final Map<String, Annotator> viewProviders;
     private final boolean throwExceptionIfNotCached;
     public String pathToSaveCachedFiles = null;
-    private CcgTextAnnotationBuilder textAnnotationBuilder;
+    private TextAnnotationBuilder textAnnotationBuilder;
     private boolean forceUpdate;
 
     public SimpleCachingPipeline(ResourceManager rm) throws IOException, AnnotatorException {
@@ -46,7 +47,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
         );
     }
 
-    public SimpleCachingPipeline(CcgTextAnnotationBuilder taBuilder, Map<String, Annotator> annotators,
+    public SimpleCachingPipeline(TextAnnotationBuilder taBuilder, Map<String, Annotator> annotators,
 
                                  ResourceManager rm)
             throws IOException, AnnotatorException {
@@ -55,7 +56,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
                 rm.getBoolean(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE));
     }
 
-    public SimpleCachingPipeline(CcgTextAnnotationBuilder taBuilder,
+    public SimpleCachingPipeline(TextAnnotationBuilder taBuilder,
                                  Map<String, Annotator> annotators,
                                  String cacheDir,
                                  boolean throwExceptionIfNotCached,
