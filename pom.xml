@@ -59,7 +59,7 @@
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>edison</artifactId>
+            <artifactId>illinois-edison</artifactId>
             <version>3.0.0</version>
         </dependency>
 
