@@ -1386,7 +1386,7 @@ class Program {
     static HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> maxCache = new HashMap<>();
 
     /**
-     * Perhaps this is the initialization of the prob table?
+     * Perhaps this is the initialization of the prob table? Why does it return boolean?
      *
      * @param maxSubstringLength1
      * @param maxSubstringLength2

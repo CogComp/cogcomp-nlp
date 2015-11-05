@@ -1320,10 +1320,14 @@ class WikiTransliteration {
         HashMap<Pair<String, String>, Boolean> alignments = new HashMap<>();
 
         // this populates the alignments hashmap.
+        // FIXME: why not assign to alignments here?
+        // FIXME: what is the empty hashmap that we pass in?
+        // FIXME: why is it boolean? Is the value ever false? What does it mean?
         FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, new HashMap<Pair<String, String>, Boolean>());
 
         int total = alignments.size();
 
+        // just converts from Boolean value to Double value.
         HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(alignments.size());
         for (Pair<String, String> key : alignments.keySet()) {
             result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), 1.0);

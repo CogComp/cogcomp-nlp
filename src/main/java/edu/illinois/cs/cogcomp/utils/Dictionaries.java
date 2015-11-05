@@ -25,6 +25,12 @@ public class Dictionaries {
         }
     }
 
+    /**
+     * Given two dictionaries, this adds the first to the second, multiplying each value in the second dictionary by valuesCoefficient.
+     * @param vector
+     * @param values
+     * @param valuesCoefficient
+     */
     public static void AddTo(HashMap<Pair<String, String>, Double> vector, HashMap<Pair<String, String>, Double> values, double valuesCoefficient) {
         for(Pair<String, String> k : values.keySet()){
             double v = valuesCoefficient*values.get(k);
