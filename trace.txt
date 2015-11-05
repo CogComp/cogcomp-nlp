@@ -1,0 +1,4 @@
+SPModel.train
+  Program.makeRawAlignmentTable
+    WikiTransliteration.FindAlignments
+      WikiTransliteration.FindAlignments (not same as above) (recursive)
