@@ -515,13 +515,13 @@ class WikiTransliteration {
 //        return GetAlignmentProbability(word1, word2, maxSubstringLength, probs, minProb, new HashMap<Pair<String, String>, double>(), minProductionProbability);
 //    }
 //
-    public static Pair<Double, List<Pair<String, String>>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, Double> probs, double minProb) {
-        Pair<Double, List<Pair<String, String>>> result = GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs, minProb, new HashMap<Pair<String, String>, Pair<Double, List<Pair<String, String>>>>());
+    public static Pair<Double, List<Production>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Production, Double> probs, double minProb) {
+        Pair<Double, List<Production>> result = GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs, minProb, new HashMap<Production, Pair<Double, List<Production>>>());
         return result;
     }
 //
-    public static Pair<Double, List<Pair<String, String>>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, Double> probs) {
-        return GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs, 0, new HashMap<Pair<String, String>, Pair<Double, List<Pair<String, String>>>>());
+    public static Pair<Double, List<Production>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Production, Double> probs) {
+        return GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs, 0, new HashMap<Production, Pair<Double, List<Production>>>());
     }
 
     /**
@@ -534,17 +534,17 @@ class WikiTransliteration {
      * @param memoizationTable
      * @return
      */
-    public static Pair<Double, List<Pair<String, String>>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, Double> probs, double floorProb, HashMap<Pair<String, String>, Pair<Double, List<Pair<String, String>>>> memoizationTable) {
-        List<Pair<String, String>> productions = new ArrayList<>();
-        Pair<String, String> bestPair = new Pair<>(null, null);
+    public static Pair<Double, List<Production>> GetAlignmentProbabilityDebug(String word1, String word2, int maxSubstringLength, HashMap<Production, Double> probs, double floorProb, HashMap<Production, Pair<Double, List<Production>>> memoizationTable) {
+        List<Production> productions = new ArrayList<>();
+        Production bestPair = new Production(null, null);
 
         if (word1.length() == 0 && word2.length() == 0) return new Pair<>(1.0, productions);
         if (word1.length() * maxSubstringLength < word2.length()) return new Pair<>(0.0, productions); //no alignment possible
         if (word2.length() * maxSubstringLength < word1.length()) return new Pair<>(0.0, productions);
 
-        Pair<Double, List<Pair<String, String>>> cached;
-        if (memoizationTable.containsKey(new Pair<>(word1, word2))) {
-            cached = memoizationTable.get(new Pair<>(word1, word2));
+        Pair<Double, List<Production>> cached;
+        if (memoizationTable.containsKey(new Production(word1, word2))) {
+            cached = memoizationTable.get(new Production(word1, word2));
             productions = cached.getSecond();
             return new Pair<>(cached.getFirst(), productions);
         }
@@ -558,21 +558,21 @@ class WikiTransliteration {
             String substring1 = word1.substring(0, i);
             for (int j = 0; j <= maxSubstringLength2; j++) {
                 double localProb;
-                if (probs.containsKey(new Pair<>(substring1, word2.substring(0, j)))) {
-                    localProb = probs.get(new Pair<>(substring1, word2.substring(0, j)));
+                if (probs.containsKey(new Production(substring1, word2.substring(0, j)))) {
+                    localProb = probs.get(new Production(substring1, word2.substring(0, j)));
                     //double localProb = ((double)count) / totals[substring1];
                     if (localProb < maxProb || localProb < floorProb)
                         continue; //this is a really bad transition--discard
 
-                    List<Pair<String, String>> outProductions;
-                    Pair<Double,List<Pair<String,String>>> ret = GetAlignmentProbabilityDebug(word1.substring(i), word2.substring(j), maxSubstringLength, probs, maxProb / localProb, memoizationTable);
+                    List<Production> outProductions;
+                    Pair<Double,List<Production>> ret = GetAlignmentProbabilityDebug(word1.substring(i), word2.substring(j), maxSubstringLength, probs, maxProb / localProb, memoizationTable);
                     outProductions = ret.getSecond();
 
                     localProb *= ret.getFirst();
                     if (localProb > maxProb) {
                         productions = outProductions;
                         maxProb = localProb;
-                        bestPair = new Pair<>(substring1, word2.substring(0, j));
+                        bestPair = new Production(substring1, word2.substring(0, j));
                     }
                 }
             }
@@ -581,14 +581,14 @@ class WikiTransliteration {
         productions = new ArrayList<>(productions); //clone it before modifying
         productions.add(0, bestPair);
 
-        memoizationTable.put(new Pair<>(word1, word2), new Pair<>(maxProb, productions));
+        memoizationTable.put(new Production(word1, word2), new Pair<>(maxProb, productions));
 
         return new Pair<>(maxProb, productions);
     }
 
-    public static HashMap<String, String> GetProbMap(HashMap<Pair<String, String>, Double> probs) {
+    public static HashMap<String, String> GetProbMap(HashMap<Production, Double> probs) {
         HashMap<String, String> result = new HashMap<>();
-        for (Pair<String, String> pair : probs.keySet())
+        for (Production pair : probs.keySet())
             result.put(pair.getFirst(), pair.getSecond());
 
         return result;
@@ -921,7 +921,7 @@ class WikiTransliteration {
 //        return result;
 //    }
 //
-    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Pair<String, String>, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
+    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
         TopList<Double, String> result = new TopList<>(topK);
         HashMap<String, Double> rProbs = Predict2(word1, maxSubstringLength, probMap, probs, memoizationTable, pruneToSize);
         double probSum = 0;
@@ -947,7 +947,7 @@ class WikiTransliteration {
 //        else return 1 << (characters - 1);
 //    }
 //
-    public static HashMap<String, Double> Predict2(String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Pair<String, String>, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
+    public static HashMap<String, Double> Predict2(String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
         HashMap<String, Double> result;
         if (word1.length() == 0) {
             result = new HashMap<>(1);
@@ -1241,9 +1241,9 @@ class WikiTransliteration {
      * @param counts
      * @return
      */
-    public static HashMap<String, Double> GetAlignmentTotals1(HashMap<Pair<String, String>, Double> counts) {
+    public static HashMap<String, Double> GetAlignmentTotals1(HashMap<Production, Double> counts) {
         HashMap<String, Double> result = new HashMap<>();
-        for (Pair<String, String> key : counts.keySet()) {
+        for (Production key : counts.keySet()) {
             Double value = counts.get(key);
 
             if(result.containsKey(key.getFirst())){
@@ -1316,21 +1316,21 @@ class WikiTransliteration {
      * @param normalization
      * @return
      */
-    public static HashMap<Pair<String, String>, Double> FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, InternDictionary<String> internTable, NormalizationMode normalization) {
-        HashMap<Pair<String, String>, Boolean> alignments = new HashMap<>();
+    public static HashMap<Production, Double> FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, InternDictionary<String> internTable, NormalizationMode normalization) {
+        HashMap<Production, Boolean> alignments = new HashMap<>();
 
         // this populates the alignments hashmap.
         // FIXME: why not assign to alignments here?
         // FIXME: what is the empty hashmap that we pass in?
         // FIXME: why is it boolean? Is the value ever false? What does it mean?
-        FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, new HashMap<Pair<String, String>, Boolean>());
+        FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, new HashMap<Production, Boolean>());
 
         int total = alignments.size();
 
         // just converts from Boolean value to Double value.
-        HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(alignments.size());
-        for (Pair<String, String> key : alignments.keySet()) {
-            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), 1.0);
+        HashMap<Production, Double> result = new HashMap<>(alignments.size());
+        for (Production key : alignments.keySet()) {
+            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), 1.0);
         }
 
         return Normalize(word1, word2, result, internTable, normalization);
@@ -1455,14 +1455,14 @@ class WikiTransliteration {
 //        return result;
 //    }
 //
-    public static HashMap<Pair<String, String>, Double> InternProductions(HashMap<Pair<String, String>, Double> counts, InternDictionary<String> internTable) {
-        HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(counts.size());
+    public static HashMap<Production, Double> InternProductions(HashMap<Production, Double> counts, InternDictionary<String> internTable) {
+        HashMap<Production, Double> result = new HashMap<>(counts.size());
 
         //if (total <= 0 || double.IsNaN(total) || double.IsInfinity(total))
         //    Console.WriteLine("Total == 0");
         for (Pair<String, String> key : counts.keySet()) {
             Double value = counts.get(key);
-            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value);
+            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value);
         }
 
         return result;
@@ -1483,16 +1483,16 @@ class WikiTransliteration {
 //        return result;
 //    }
 //
-    public static HashMap<Pair<String, String>, Double> NormalizeBySourceSubstring(HashMap<Pair<String, String>, Double> counts, InternDictionary<String> internTable) {
+    public static HashMap<Production, Double> NormalizeBySourceSubstring(HashMap<Production, Double> counts, InternDictionary<String> internTable) {
         HashMap<String, Double> totals = GetAlignmentTotals1(counts);
 
-        HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
+        HashMap<Production, Double> result = new HashMap<>(counts.size());
 
         //if (total <= 0 || double.IsNaN(total) || double.IsInfinity(total))
         //    Console.WriteLine("Total == 0");
-        for (Pair<String, String> key : counts.keySet()) {
+        for (Production key : counts.keySet()) {
             Double value = counts.get(key);
-            result.put(new Pair<>(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value / totals.get(key.getFirst()));
+            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value / totals.get(key.getFirst()));
         }
 
         return result;
@@ -1629,7 +1629,7 @@ class WikiTransliteration {
 //        return InternProductions(counts, internTable);
 //    }
 
-    public static HashMap<Pair<String, String>, Double> Normalize(String sourceWord, String targetWord, HashMap<Pair<String, String>, Double> counts, InternDictionary<String> internTable, NormalizationMode normalization) {
+    public static HashMap<Production, Double> Normalize(String sourceWord, String targetWord, HashMap<Production, Double> counts, InternDictionary<String> internTable, NormalizationMode normalization) {
         if (normalization == NormalizationMode.BySourceSubstring)
             return NormalizeBySourceSubstring(counts, internTable);
 //        else if (normalization == NormalizationMode.AllProductions)
@@ -1646,14 +1646,14 @@ class WikiTransliteration {
             return InternProductions(counts, internTable);
     }
 
-    public static HashMap<Pair<String, String>, Double> FindWeightedAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, InternDictionary<String> internTable, NormalizationMode normalization) {
-        HashMap<Pair<String, String>, Double> weights = new HashMap<>();
-        FindWeightedAlignments(1, new ArrayList<Pair<String, String>>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, new HashMap<Pair<String, String>, Pair<Double, Double>>());
+    public static HashMap<Production, Double> FindWeightedAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, InternDictionary<String> internTable, NormalizationMode normalization) {
+        HashMap<Production, Double> weights = new HashMap<>();
+        FindWeightedAlignments(1, new ArrayList<Production>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, new HashMap<Production, Pair<Double, Double>>());
 
         //CheckDictionary(weights);
 
-        HashMap<Pair<String, String>, Double> weights2 = new HashMap<>(weights.size());
-        for (Pair<String, String> wkey : weights.keySet()) {
+        HashMap<Production, Double> weights2 = new HashMap<>(weights.size());
+        for (Production wkey : weights.keySet()) {
             weights2.put(wkey, weights.get(wkey) == 0 ? 0 : weights.get(wkey) / probs.get(wkey));
         }
         //weights2[wPair.Key] = weights[wPair.Key] == 0 ? 0 : Math.Pow(weights[wPair.Key], 1d / word1.Length);
@@ -1662,18 +1662,17 @@ class WikiTransliteration {
         return Normalize(word1, word2, weights, internTable, normalization);
     }
 
-    public static HashMap<Pair<String, String>, Double> FindWeightedAlignmentsAverage(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, InternDictionary<String> internTable, Boolean weightByOthers, NormalizationMode normalization) {
-        HashMap<Pair<String, String>, Double> weights = new HashMap<>();
-        HashMap<Pair<String, String>, Double> weightCounts = new HashMap<>();
+    public static HashMap<Production, Double> FindWeightedAlignmentsAverage(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, InternDictionary<String> internTable, Boolean weightByOthers, NormalizationMode normalization) {
+        HashMap<Production, Double> weights = new HashMap<>();
+        HashMap<Production, Double> weightCounts = new HashMap<>();
         //FindWeightedAlignmentsAverage(1, new List<Pair<String, String>>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, new HashMap<Pair<String, String>, Pair<double, double>>(), weightByOthers);
-        FindWeightedAlignmentsAverage(1, new ArrayList<Pair<String, String>>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, weightByOthers);
+        FindWeightedAlignmentsAverage(1, new ArrayList<Production>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, weightByOthers);
 
         //CheckDictionary(weights);
 
-        HashMap<Pair<String, String>, Double> weights2 = new HashMap<Pair<String, String>, Double>(weights.size());
-        for (Pair<String, String> wkey : weights.keySet())
+        HashMap<Production, Double> weights2 = new HashMap<>(weights.size());
+        for (Production wkey : weights.keySet())
             weights2.put(wkey, weights.get(wkey) == 0 ? 0 : weights.get(wkey) / weightCounts.get(wkey));
-        //weights2[wPair.Key] = weights[wPair.Key] == 0 ? 0 : Math.Pow(weights[wPair.Key], 1d / word1.Length);
         weights = weights2;
 
         return Normalize(word1, word2, weights, internTable, normalization);
@@ -1741,10 +1740,10 @@ class WikiTransliteration {
 //        return bestProb;
 //    }
 //
-    public static double FindWeightedAlignments(double probability, List<Pair<String, String>> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, HashMap<Pair<String, String>, Double> weights, HashMap<Pair<String, String>, Pair<Double, Double>> memoizationTable) {
+    public static double FindWeightedAlignments(double probability, List<Production> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Double> weights, HashMap<Production, Pair<Double, Double>> memoizationTable) {
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
         {
-            for (Pair<String, String> production : productions) {
+            for (Production production : productions) {
                 if(weights.containsKey(production) && weights.get(production) > probability){
                     continue;
                 }else{
@@ -1757,13 +1756,13 @@ class WikiTransliteration {
         //Check memoization table to see if we can return early
         Pair<Double, Double> probPair;
 
-        if(memoizationTable.containsKey(new Pair<>(word1, word2))){
-            probPair = memoizationTable.get(new Pair<>(word1, word2));
+        if(memoizationTable.containsKey(new Production(word1, word2))){
+            probPair = memoizationTable.get(new Production(word1, word2));
             if (probPair.getFirst() >= probability) //we ran against these words with a higher probability before;
             {
                 probability *= probPair.getSecond(); //get entire production sequence probability
 
-                for (Pair<String, String> production : productions) {
+                for (Production production : productions) {
                     if(weights.containsKey(production) && weights.get(production) > probability){
                         continue;
                     }else{
@@ -1789,7 +1788,7 @@ class WikiTransliteration {
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
                 {
                     String substring2 = word2.substring(0, j);
-                    Pair<String, String> production = new Pair<>(substring1, substring2);
+                    Production production = new Production(substring1, substring2);
                     double prob = probs.get(production);
 
                     productions.add(production);
@@ -1801,16 +1800,16 @@ class WikiTransliteration {
             }
         }
 
-        memoizationTable.put(new Pair<>(word1, word2), new Pair<>(probability, bestProb));
+        memoizationTable.put(new Production(word1, word2), new Pair<>(probability, bestProb));
         return bestProb;
     }
 
-    public static double FindWeightedAlignmentsAverage(double probability, List<Pair<String, String>> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, HashMap<Pair<String, String>, Double> weights, HashMap<Pair<String, String>, Double> weightCounts, Boolean weightByOthers) {
+    public static double FindWeightedAlignmentsAverage(double probability, List<Production> productions, String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Double> weights, HashMap<Production, Double> weightCounts, Boolean weightByOthers) {
         if (probability == 0) return 0;
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
         {
-            for (Pair<String, String> production : productions) {
+            for (Production production : productions) {
                 double probValue = weightByOthers ? probability / probs.get(production) : probability;
                 //weight the contribution to the average by its probability (square it)
                 Dictionaries.IncrementOrSet(weights, production, probValue * probValue, probValue * probValue);
@@ -1833,7 +1832,7 @@ class WikiTransliteration {
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
                 {
                     String substring2 = word2.substring(0, j);
-                    Pair<String, String> production = new Pair<>(substring1, substring2);
+                    Production production = new Production(substring1, substring2);
                     double prob = probs.get(production);
 
                     productions.add(production);
@@ -1862,14 +1861,14 @@ class WikiTransliteration {
      * @param weighByProbability
      * @return
      */
-    public static HashMap<Pair<String, String>, Double> CountMaxAlignments(String word1, String word2, int maxSubstringLength, HashMap<Pair<String, String>, Double> probs, InternDictionary<String> internTable, Boolean weighByProbability) {
+    public static HashMap<Production, Double> CountMaxAlignments(String word1, String word2, int maxSubstringLength, HashMap<Production, Double> probs, InternDictionary<String> internTable, Boolean weighByProbability) {
         
-        Pair<Double,List<Pair<String,String>>> result1 = GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs);
+        Pair<Double,List<Production>> result1 = GetAlignmentProbabilityDebug(word1, word2, maxSubstringLength, probs);
         double prob = result1.getFirst();
-        List<Pair<String, String>> productions = result1.getSecond();
+        List<Production> productions = result1.getSecond();
         //CheckDictionary(weights);
 
-        HashMap<Pair<String, String>, Double> result = new HashMap<>(productions.size());
+        HashMap<Production, Double> result = new HashMap<>(productions.size());
 
         if (prob == 0) //no possible alignment for some reason
         {
@@ -1877,25 +1876,25 @@ class WikiTransliteration {
         }
 
         for (Pair<String, String> production : productions) {
-            Dictionaries.IncrementOrSet(result, new Pair<>(internTable.Intern(production.getFirst()), internTable.Intern(production.getSecond())), weighByProbability ? prob : 1, weighByProbability ? prob : 1);
+            Dictionaries.IncrementOrSet(result, new Production(internTable.Intern(production.getFirst()), internTable.Intern(production.getSecond())), weighByProbability ? prob : 1, weighByProbability ? prob : 1);
         }
 
 
         return result;
     }
 
-    public static HashMap<Pair<String, String>, Double> CountWeightedAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, InternDictionary<String> internTable, NormalizationMode normalization, Boolean weightByContextOnly) {
+    public static HashMap<Production, Double> CountWeightedAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, InternDictionary<String> internTable, NormalizationMode normalization, Boolean weightByContextOnly) {
         //HashMap<Pair<String, String>, double> weights = new HashMap<Pair<String, String>, double>();
         //HashMap<Pair<String, String>, double> weightCounts = new HashMap<Pair<String, String>, double>();
         //FindWeightedAlignmentsAverage(1, new List<Pair<String, String>>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, new HashMap<Pair<String, String>, Pair<double, double>>(), weightByOthers);
-        Pair<HashMap<Pair<String, String>, Double>, Double> thing = CountWeightedAlignmentsHelper(word1, word2, maxSubstringLength1, maxSubstringLength2, probs, new HashMap<Pair<String, String>, Pair<HashMap<Pair<String, String>, Double>, Double>>());
-        HashMap<Pair<String, String>, Double> weights = thing.getFirst();
+        Pair<HashMap<Production, Double>, Double> thing = CountWeightedAlignmentsHelper(word1, word2, maxSubstringLength1, maxSubstringLength2, probs, new HashMap<Production, Pair<HashMap<Production, Double>, Double>>());
+        HashMap<Production, Double> weights = thing.getFirst();
         double probSum = thing.getSecond(); //the sum of the probabilities of all possible alignments
 
         //CheckDictionary(weights);
 
-        HashMap<Pair<String, String>, Double> weights2 = new HashMap<>(weights.size());
-        for (Pair<String, String> key : weights.keySet()) {
+        HashMap<Production, Double> weights2 = new HashMap<>(weights.size());
+        for (Production key : weights.keySet()) {
             Double value = weights.get(key);
             if (weightByContextOnly) {
                 double originalProb = probs.get(key);
@@ -1913,18 +1912,18 @@ class WikiTransliteration {
 //    //Gets counts for productions by (conceptually) summing over all the possible alignments
 //    //and weighing each alignment (and its constituent productions) by the given probability table.
 //    //probSum is important (and memoized for input word pairs)--it keeps track and returns the sum of the probabilities of all possible alignments for the word pair
-    public static Pair<HashMap<Pair<String, String>, Double>, Double> CountWeightedAlignmentsHelper(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, HashMap<Pair<String, String>, Pair<HashMap<Pair<String, String>, Double>, Double>> memoizationTable) {
+    public static Pair<HashMap<Production, Double>, Double> CountWeightedAlignmentsHelper(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Pair<HashMap<Production, Double>, Double>> memoizationTable) {
         double probSum;
 
-        Pair<HashMap<Pair<String, String>, Double>, Double> memoization;
+        Pair<HashMap<Production, Double>, Double> memoization;
         //if (memoizationTable.TryGetValue(new Pair<>(word1, word2), out memoization)) {
-        if(memoizationTable.containsKey(new Pair<>(word1, word2))){
-            memoization = memoizationTable.get(new Pair<>(word1, word2));
+        if(memoizationTable.containsKey(new Production(word1, word2))){
+            memoization = memoizationTable.get(new Production(word1, word2));
             probSum = memoization.getSecond(); //stored probSum
             return new Pair<>(memoization.getFirst(), probSum); //table of probs
         }
 
-        HashMap<Pair<String, String>, Double> result = new HashMap<>();
+        HashMap<Production, Double> result = new HashMap<>();
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
         {
@@ -1946,12 +1945,12 @@ class WikiTransliteration {
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
                 {
                     String substring2 = word2.substring(0, j);
-                    Pair<String, String> production = new Pair<>(substring1, substring2);
+                    Production production = new Production(substring1, substring2);
                     //double prob = Math.Max(0.000000000000001, probs[production]);
                     double prob = probs.get(production);
 
-                    Pair<HashMap<Pair<String, String>, Double>,Double> thing = CountWeightedAlignmentsHelper(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable);
-                    HashMap<Pair<String, String>, Double> remainderCounts = thing.getFirst();
+                    Pair<HashMap<Production, Double>,Double> thing = CountWeightedAlignmentsHelper(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable);
+                    HashMap<Production, Double> remainderCounts = thing.getFirst();
                     Double remainderProbSum = thing.getSecond();
 
                     //record this production in our results
@@ -1962,7 +1961,7 @@ class WikiTransliteration {
                     probSum += remainderProbSum * prob;
 
                     //update all the productions that come later to take into account their preceeding production's probability
-                    for (Pair<String, String> key : remainderCounts.keySet()) {
+                    for (Production key : remainderCounts.keySet()) {
                         Double value = remainderCounts.get(key);
                         Dictionaries.IncrementOrSet(result, key, prob * value, prob * value);
                         //IncrementPair(result, pair.Key, pair.Value.x * prob, pair.Value.y * prob);
@@ -1971,7 +1970,7 @@ class WikiTransliteration {
             }
         }
 
-        memoizationTable.put(new Pair<>(word1, word2), new Pair<>(result, probSum));
+        memoizationTable.put(new Production(word1, word2), new Pair<>(result, probSum));
         return new Pair<>(result, probSum);
     }
 
@@ -2136,10 +2135,10 @@ class WikiTransliteration {
      * @param minProductionProbability
      * @return
      */
-    public static double GetSummedAlignmentProbability(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Double> probs, HashMap<Pair<String, String>, Double> memoizationTable, double minProductionProbability) {
+    public static double GetSummedAlignmentProbability(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Double> memoizationTable, double minProductionProbability) {
 
-        if(memoizationTable.containsKey(new Pair<>(word1, word2))){
-            return memoizationTable.get(new Pair<>(word1, word2));
+        if(memoizationTable.containsKey(new Production(word1, word2))){
+            return memoizationTable.get(new Production(word1, word2));
         }
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
@@ -2185,7 +2184,7 @@ class WikiTransliteration {
             }
         }
 
-        memoizationTable.put(new Pair<>(word1, word2), probSum);
+        memoizationTable.put(new Production(word1, word2), probSum);
         return probSum;
     }
 //
@@ -2355,8 +2354,8 @@ class WikiTransliteration {
      * @param alignments
      * @param memoizationTable
      */
-    public static void FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Boolean> alignments, HashMap<Pair<String, String>, Boolean> memoizationTable) {
-        if (memoizationTable.containsKey(new Pair<>(word1, word2)))
+    public static void FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Boolean> alignments, HashMap<Production, Boolean> memoizationTable) {
+        if (memoizationTable.containsKey(new Production(word1, word2)))
             return; //done
 
         int maxSubstringLength1f = Math.min(word1.length(), maxSubstringLength1);
@@ -2377,12 +2376,12 @@ class WikiTransliteration {
                 //if we get rid of these characters, can we still cover the remainder of word2?
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i)
                 {
-                    alignments.put(new Pair<>(substring1, word2.substring(0, j)), true);
+                    alignments.put(new Production(substring1, word2.substring(0, j)), true);
                     FindAlignments(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, alignments, memoizationTable);
                 }
             }
         }
 
-        memoizationTable.put(new Pair<>(word1, word2), true);
+        memoizationTable.put(new Production(word1, word2), true);
     }
 }

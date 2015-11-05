@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.utils;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.transliteration.Production;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.HashMap;
@@ -10,7 +11,7 @@ import java.util.HashMap;
  */
 public class Dictionaries {
 
-    public static void IncrementOrSet(HashMap<Pair<String, String>, Double> m, Pair<String, String> p, double incrementValue, double setValue){
+    public static void IncrementOrSet(HashMap<Production, Double> m, Production p, double incrementValue, double setValue){
         if(m.containsKey(p)){
             m.put(p, m.get(p) + incrementValue);
         }else{
@@ -18,8 +19,8 @@ public class Dictionaries {
         }
     }
 
-    public static void AddTo(HashMap<Pair<String, String>, Double> vector, HashMap<Pair<String, String>, Double> values, int valuesCoefficient) {
-        for(Pair<String, String> k : values.keySet()){
+    public static void AddTo(HashMap<Production, Double> vector, HashMap<Production, Double> values, int valuesCoefficient) {
+        for(Production k : values.keySet()){
             double v = valuesCoefficient*values.get(k);
             IncrementOrSet(vector, k, v, v);
         }
@@ -31,8 +32,8 @@ public class Dictionaries {
      * @param values
      * @param valuesCoefficient
      */
-    public static void AddTo(HashMap<Pair<String, String>, Double> vector, HashMap<Pair<String, String>, Double> values, double valuesCoefficient) {
-        for(Pair<String, String> k : values.keySet()){
+    public static void AddTo(HashMap<Production, Double> vector, HashMap<Production, Double> values, double valuesCoefficient) {
+        for(Production k : values.keySet()){
             double v = valuesCoefficient*values.get(k);
             IncrementOrSet(vector, k, v, v);
         }
@@ -44,10 +45,10 @@ public class Dictionaries {
      * @param vector2
      * @return
      */
-    public static HashMap<Pair<String, String>, Double> Multiply(HashMap<Pair<String, String>, Double> vector1, HashMap<Pair<String, String>, Double> vector2) {
-        HashMap<Pair<String, String>, Double> ret = new HashMap<>();
+    public static HashMap<Production, Double> Multiply(HashMap<Production, Double> vector1, HashMap<Production, Double> vector2) {
+        HashMap<Production, Double> ret = new HashMap<>();
 
-        for(Pair<String, String> p : vector1.keySet()){
+        for(Production p : vector1.keySet()){
             if(vector2.containsKey(p)){
                 ret.put(p, vector1.get(p) * vector2.get(p));
             }

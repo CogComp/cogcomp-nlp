@@ -796,7 +796,7 @@ class Program {
      * @param ?
      * @return
      */
-        public static HashMap<Pair<String, String>, Double> PSecondGivenFirst(HashMap<Pair<String, String>, Double> counts)
+        public static HashMap<Production, Double> PSecondGivenFirst(HashMap<Production, Double> counts)
         {
             HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
 
@@ -809,8 +809,8 @@ class Program {
                 }
             }
 
-            HashMap<Pair<String, String>, Double> result = new HashMap<>(counts.size());
-            for (Pair<String, String> pairkey : counts.keySet())
+            HashMap<Production, Double> result = new HashMap<>(counts.size());
+            for (Production pairkey : counts.keySet())
             {
                 double pairvalue = counts.get(pairkey);
                 //double value = totals1[pair.Key.x] == 0 ? ((double)1)/sourceCounts[pair.Key.x] : (pair.Value / totals1[pair.Key.x]);
@@ -989,15 +989,15 @@ class Program {
 //            return result;
 //        }
 
-        private static HashMap<Pair<String, String>, Double> SumNormalize(HashMap<Pair<String, String>, Double> vector)
+        private static HashMap<Production, Double> SumNormalize(HashMap<Production, Double> vector)
         {
-            HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(vector.size());
-            double sum=0;
+            HashMap<Production, Double> result = new HashMap<>(vector.size());
+            double sum = 0;
             for (double value : vector.values()) {
                 sum += value;
             }
 
-            for (Pair<String, String> key : vector.keySet()) {
+            for (Production key : vector.keySet()) {
                 Double value = vector.get(key);
                 result.put(key, value / sum);
             }
@@ -1383,7 +1383,7 @@ class Program {
 //            return result;
 //        }
 
-    static HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> maxCache = new HashMap<>();
+    static HashMap<Production, HashMap<Production, Double>> maxCache = new HashMap<>();
 
     /**
      * Perhaps this is the initialization of the prob table? Why does it return boolean?
@@ -1397,11 +1397,11 @@ class Program {
      * @param getExampleCounts
      * @return
      */
-     static HashMap<Pair<String, String>, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Pair<String, String>, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
+     static HashMap<Production, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Production, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
         InternDictionary<String> internTable = new InternDictionary<>();
-        HashMap<Pair<String, String>, Double> counts = new HashMap<>();
+        HashMap<Production, Double> counts = new HashMap<>();
 
-        List<List<Pair<Pair<String, String>, Double>>> exampleCounts = (getExampleCounts ? new ArrayList<List<Pair<Pair<String, String>, Double>>>(examples.size()) : null);
+        List<List<Pair<Production, Double>>> exampleCounts = (getExampleCounts ? new ArrayList<List<Pair<Production, Double>>>(examples.size()) : null);
 
         int alignmentCount = 0;
         for (Triple<String, String, Double> example : examples) {
@@ -1409,7 +1409,9 @@ class Program {
             String bestWord = example.getSecond(); // bestWord? Shouldn't it be target word?
             if (sourceWord.length() * maxSubstringLength2 >= bestWord.length() && bestWord.length() * maxSubstringLength1 >= sourceWord.length()) {
                 alignmentCount++;
-                HashMap<Pair<String, String>, Double> wordCounts;
+
+                HashMap<Production, Double> wordCounts;
+
                 if (weightingMode == WeightingMode.FindWeighted && probs != null)
                     wordCounts = WikiTransliteration.FindWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization);
                     //wordCounts = WikiTransliteration.FindWeightedAlignmentsAverage(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, true, normalization);
@@ -1417,17 +1419,16 @@ class Program {
                     wordCounts = WikiTransliteration.CountWeightedAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, probs, internTable, normalization, false);
                 else if (weightingMode == WeightingMode.MaxAlignment) {
 
-                    HashMap<Pair<String, String>, Double> cached = new HashMap<>();
-                    Pair<String, String> p = new Pair<>(sourceWord, bestWord);
+                    HashMap<Production, Double> cached = new HashMap<>();
+                    Production p = new Production(sourceWord, bestWord);
                     if(maxCache.containsKey(p)){
                         cached = maxCache.get(p);
                     }
 
-
-                    Dictionaries.AddTo(probs, cached, -1);
+                    Dictionaries.AddTo(probs, cached, -1.);
 
                     wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, false);
-                    maxCache.put(new Pair<>(sourceWord, bestWord), wordCounts);
+                    maxCache.put(new Production(sourceWord, bestWord), wordCounts);
 
                     Dictionaries.AddTo(probs, cached, 1);
                 } else if (weightingMode == WeightingMode.MaxAlignmentWeighted)
@@ -1444,8 +1445,8 @@ class Program {
                 Dictionaries.AddTo(counts, wordCounts, example.getThird());
 
                 if (getExampleCounts) {
-                    List<Pair<Pair<String, String>, Double>> curExampleCounts = new ArrayList<>(wordCounts.size());
-                    for (Pair<String, String> key : wordCounts.keySet()) {
+                    List<Pair<Production, Double>> curExampleCounts = new ArrayList<>(wordCounts.size());
+                    for (Production key : wordCounts.keySet()) {
                         Double value = wordCounts.get(key);
                         curExampleCounts.add(new Pair<>(key, value));
                     }
@@ -2432,9 +2433,9 @@ class Program {
 //            writer.Close();
 //        }
 //
-    public static HashMap<Pair<String, String>, Double> PruneProbs(int topK, HashMap<Pair<String, String>, Double> probs) {
+    public static HashMap<Production, Double> PruneProbs(int topK, HashMap<Production, Double> probs) {
         HashMap<String, List<Pair<String, Double>>> lists = new HashMap<>();
-        for (Pair<String, String> key : probs.keySet()) {
+        for (Production key : probs.keySet()) {
             Double value = probs.get(key);
 
             if (!lists.containsKey(key.getFirst())) {
@@ -2444,7 +2445,7 @@ class Program {
             lists.get(key.getFirst()).add(new Pair<>(key.getSecond(), value));
         }
 
-        HashMap<Pair<String, String>, Double> result = new HashMap<>();
+        HashMap<Production, Double> result = new HashMap<>();
         for (String key : lists.keySet()) {
             List<Pair<String, Double>> value = lists.get(key);
             Collections.sort(value, new Comparator<Pair<String, Double>>() {
@@ -2462,7 +2463,7 @@ class Program {
             });
             int toAdd = Math.min(topK, value.size());
             for (int i = 0; i < toAdd; i++) {
-                result.put(new Pair<>(key, value.get(i).getFirst()), value.get(i).getSecond());
+                result.put(new Production(key, value.get(i).getFirst()), value.get(i).getSecond());
             }
         }
 

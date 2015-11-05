@@ -36,14 +36,14 @@ public class SPModel
         /**
          * This is the production probabilities table.
          */
-        private SparseDoubleVector<Pair<String, String>> probs = null;
+        private SparseDoubleVector<Production> probs = null;
 
         /**
          * This is the production probabilities table multiplied by the segmentfactor.
          */
-        private SparseDoubleVector<Pair<String, String>> multiprobs = null;
+        private SparseDoubleVector<Production> multiprobs = null;
 
-        private HashMap<Pair<String, String>, Double> pruned = null; // used to be a SparseDoubleVector
+        private HashMap<Production, Double> pruned = null; // used to be a SparseDoubleVector
         //private SparseDoubleVector<Pair<String, String>> probsDual = null;
         //private SparseDoubleVector<Pair<String, String>> prunedDual = null;
         private HashMap<String, String> probMap = null;
@@ -132,35 +132,35 @@ public class SPModel
             return table;
         }
 
-        public void WriteToStream(OutputStream stream) throws IOException {
-            DataOutputStream writer = new DataOutputStream(stream);
-
-            if (languageModel == null) writer.write(-1);
-            else
-            {
-                writer.write(languageModel.size());
-                for(String key : languageModel.keySet())
-                {
-                    // TODO what are the data types here?
-                    writer.writeChars(key);
-                    writer.writeDouble(languageModel.get(key));
-                }
-            }
-
-            writer.write(ngramSize);
-
-            writer.write(trainingExamples.size());
-            for(Triple<String, String, Double> triple : trainingExamples)
-            {
-                writer.writeChars(triple.getFirst());
-                writer.writeChars(triple.getSecond());
-                writer.writeDouble(triple.getThird());
-            }
-
-            WriteToWriter(writer, probs);
-
-            writer.flush();
-        }
+//        public void WriteToStream(OutputStream stream) throws IOException {
+//            DataOutputStream writer = new DataOutputStream(stream);
+//
+//            if (languageModel == null) writer.write(-1);
+//            else
+//            {
+//                writer.write(languageModel.size());
+//                for(String key : languageModel.keySet())
+//                {
+//                    // TODO what are the data types here?
+//                    writer.writeChars(key);
+//                    writer.writeDouble(languageModel.get(key));
+//                }
+//            }
+//
+//            writer.write(ngramSize);
+//
+//            writer.write(trainingExamples.size());
+//            for(Triple<String, String, Double> triple : trainingExamples)
+//            {
+//                writer.writeChars(triple.getFirst());
+//                writer.writeChars(triple.getSecond());
+//                writer.writeDouble(triple.getThird());
+//            }
+//
+//            WriteToWriter(writer, probs);
+//
+//            writer.flush();
+//        }
 
         /**
          * This writes the production probabilities out to file in human-readable format.
@@ -190,29 +190,29 @@ public class SPModel
          * Deserializes an SPModel from a stream.
          * SWM: ignore this for now.
          */
-        public SPModel(InputStream stream) throws IOException {
-            DataInputStream reader = new DataInputStream(stream);
-            int lml = reader.readInt();
-            if (lml == -1) languageModel = null;
-            else
-            {
-                languageModel = new HashMap<>(lml);
-                for (int i = 0; i < lml; i++) {
-                    // FIXME: is this correct??? Should be ReadString
-                    languageModel.put(reader.readUTF(), reader.readDouble());
-                }
-            }
-
-            ngramSize = reader.readInt();
-
-            int tec = reader.readInt();
-            trainingExamples = new ArrayList<>(tec);
-            for (int i = 0; i < tec; i++)
-                trainingExamples.add(new Triple<>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
-
-            probs = ReadTableFromReader(reader);
-
-        }
+//        public SPModel(InputStream stream) throws IOException {
+//            DataInputStream reader = new DataInputStream(stream);
+//            int lml = reader.readInt();
+//            if (lml == -1) languageModel = null;
+//            else
+//            {
+//                languageModel = new HashMap<>(lml);
+//                for (int i = 0; i < lml; i++) {
+//                    // FIXME: is this correct??? Should be ReadString
+//                    languageModel.put(reader.readUTF(), reader.readDouble());
+//                }
+//            }
+//
+//            ngramSize = reader.readInt();
+//
+//            int tec = reader.readInt();
+//            trainingExamples = new ArrayList<>(tec);
+//            for (int i = 0; i < tec; i++)
+//                trainingExamples.add(new Triple<>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
+//
+//            probs = ReadTableFromReader(reader);
+//
+//        }
 
 
 
@@ -286,7 +286,7 @@ public class SPModel
                 multiprobs = probs.multiply(segmentFactor);
             }
 
-            HashMap<Pair<String, String>, Double> memoizationTable = new HashMap<>();
+            HashMap<Production, Double> memoizationTable = new HashMap<>();
             return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability)
                             / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
         }
