@@ -256,16 +256,26 @@ public class SPModel
 
             if (probs == null)
             {
+<<<<<<< HEAD
                 // FIXME: out variables... is exampleCounts actually used anywhere???
                 //List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
+=======
+                // FIXME: is exampleCounts actually used anywhere???
+                List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
+                boolean getExampleCounts = false;
+                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
+                        trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, getExampleCounts));
+>>>>>>> dff36e31160cde38cde88529386e8d04be716bc2
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
 
             for (int i = 0; i < emIterations; i++)
             {
-                // FIXME: out variables
-                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, true));
+
+                boolean getExampleCounts = true;
+                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
+                        trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, getExampleCounts));
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
         }
