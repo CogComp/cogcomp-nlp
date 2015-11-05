@@ -119,7 +119,6 @@ public abstract class IOUtils {
     /**
      * Filters the files contained in a directory.
      */
-
     public static String[] lsFiles(String directory, FilenameFilter filter)
             throws IOException {
         File dir = new File(directory);
