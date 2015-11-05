@@ -1305,9 +1305,21 @@ class WikiTransliteration {
 //
 //        return result;
 //    }
-//
+
+    /**
+     * This finds alignments between word1 and word2
+     * @param word1
+     * @param word2
+     * @param maxSubstringLength1
+     * @param maxSubstringLength2
+     * @param internTable
+     * @param normalization
+     * @return
+     */
     public static HashMap<Pair<String, String>, Double> FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, InternDictionary<String> internTable, NormalizationMode normalization) {
         HashMap<Pair<String, String>, Boolean> alignments = new HashMap<>();
+
+        // this populates the alignments hashmap.
         FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, new HashMap<Pair<String, String>, Boolean>());
 
         int total = alignments.size();
@@ -2329,6 +2341,16 @@ class WikiTransliteration {
 //        return counts;
 //    }
 //
+
+    /**
+     * This finds all possible alignments between word1 and word2 and populates the alignments hashmap with them.
+     * @param word1
+     * @param word2
+     * @param maxSubstringLength1
+     * @param maxSubstringLength2
+     * @param alignments
+     * @param memoizationTable
+     */
     public static void FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Pair<String, String>, Boolean> alignments, HashMap<Pair<String, String>, Boolean> memoizationTable) {
         if (memoizationTable.containsKey(new Pair<>(word1, word2)))
             return; //done
@@ -2348,7 +2370,8 @@ class WikiTransliteration {
 
             for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
             {
-                if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
+                //if we get rid of these characters, can we still cover the remainder of word2?
+                if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i)
                 {
                     alignments.put(new Pair<>(substring1, word2.substring(0, j)), true);
                     FindAlignments(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, alignments, memoizationTable);

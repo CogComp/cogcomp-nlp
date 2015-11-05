@@ -1386,7 +1386,7 @@ class Program {
     static HashMap<Pair<String, String>, HashMap<Pair<String, String>, Double>> maxCache = new HashMap<>();
 
     /**
-     * FIXME: uses out variable...
+     * Perhaps this is the initialization of the prob table?
      *
      * @param maxSubstringLength1
      * @param maxSubstringLength2
@@ -1400,12 +1400,13 @@ class Program {
      static HashMap<Pair<String, String>, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Pair<String, String>, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
         InternDictionary<String> internTable = new InternDictionary<>();
         HashMap<Pair<String, String>, Double> counts = new HashMap<>();
+
         List<List<Pair<Pair<String, String>, Double>>> exampleCounts = (getExampleCounts ? new ArrayList<List<Pair<Pair<String, String>, Double>>>(examples.size()) : null);
 
         int alignmentCount = 0;
         for (Triple<String, String, Double> example : examples) {
             String sourceWord = example.getFirst();
-            String bestWord = example.getSecond();
+            String bestWord = example.getSecond(); // bestWord? Shouldn't it be target word?
             if (sourceWord.length() * maxSubstringLength2 >= bestWord.length() && bestWord.length() * maxSubstringLength1 >= sourceWord.length()) {
                 alignmentCount++;
                 HashMap<Pair<String, String>, Double> wordCounts;
@@ -1431,8 +1432,10 @@ class Program {
                     Dictionaries.AddTo(probs, cached, 1);
                 } else if (weightingMode == WeightingMode.MaxAlignmentWeighted)
                     wordCounts = WikiTransliteration.CountMaxAlignments(sourceWord, bestWord, maxSubstringLength1, probs, internTable, true);
-                else //if (weightingMode == WeightingMode.None || weightingMode == WeightingMode.SuperficiallyWeighted)
+                else {//if (weightingMode == WeightingMode.None || weightingMode == WeightingMode.SuperficiallyWeighted)
+                    // This executes if probs is null
                     wordCounts = WikiTransliteration.FindAlignments(sourceWord, bestWord, maxSubstringLength1, maxSubstringLength2, internTable, normalization);
+                }
 
                 if (weightingMode == WeightingMode.SuperficiallyWeighted && probs != null) {
                     wordCounts = SumNormalize(Dictionaries.Multiply(wordCounts, probs));

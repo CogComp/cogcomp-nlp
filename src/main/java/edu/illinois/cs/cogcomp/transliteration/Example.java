@@ -8,25 +8,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.Triple;
  */
 public class Example {
 
-    /**
-     * Normalizes a Hebrew word by replacing end-form characters with their in-word equivalents.
-     * @param hebrewWord
-     * @return
-     */
-    public static String NormalizeHebrew(String hebrewWord) {
-        return Program.NormalizeHebrew(hebrewWord);
-    }
-
-    /**
-     * Removes accents from characters.
-     * This can be a useful fallback method if the model cannot make a prediction
-     * over a given word because it has not seen a particular accented character before.
-     * @param word
-     * @return
-     */
-    public static String StripAccents(String word) {
-        return Program.StripAccent(word);
-    }
 
     /**
      * Creates a new training example with weight 1.
@@ -35,7 +16,8 @@ public class Example {
      */
     public Example(String sourceWord, String transliteratedWord)
     {
-        this(sourceWord, transliteratedWord,1);
+
+        this(sourceWord, transliteratedWord, 1);
     }
 
     /**
@@ -65,6 +47,27 @@ public class Example {
      */
     public Example Reverse(){
         return new Example(transliteratedWord, sourceWord, weight);
+    }
+
+
+    /**
+     * Normalizes a Hebrew word by replacing end-form characters with their in-word equivalents.
+     * @param hebrewWord
+     * @return
+     */
+    public static String NormalizeHebrew(String hebrewWord) {
+        return Program.NormalizeHebrew(hebrewWord);
+    }
+
+    /**
+     * Removes accents from characters.
+     * This can be a useful fallback method if the model cannot make a prediction
+     * over a given word because it has not seen a particular accented character before.
+     * @param word
+     * @return
+     */
+    public static String StripAccents(String word) {
+        return Program.StripAccent(word);
     }
 
     /**
