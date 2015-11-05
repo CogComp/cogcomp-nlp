@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
@@ -190,18 +191,23 @@ public class SimpleCachingPipeline implements AnnotatorService {
         if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
             return false;
 
-        if (!textAnnotation.hasView(viewName) || forceUpdate) {
-            if (!viewProviders.containsKey(viewName))
-                throw new AnnotatorException("View '" + viewName + "' cannot be provided by this AnnotatorService.");
+        if ( !textAnnotation.hasView( viewName )  || forceUpdate )
+        {
+            isUpdated = true;
 
-            isUpdated = false;
-            Annotator annotator = viewProviders.get(viewName);
+            if ( !viewProviders.containsKey( viewName ) )
+                throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
 
-            for (String prereqView : annotator.getRequiredViews()) {
-                isUpdated = addView(textAnnotation, prereqView) || isUpdated;
+            Annotator annotator = viewProviders.get( viewName );
+
+            for ( String prereqView : annotator.getRequiredViews() )
+            {
+                addView( textAnnotation, prereqView );
             }
 
-            annotator.getView(textAnnotation);
+            View v = annotator.getView(textAnnotation);
+
+            textAnnotation.addView( annotator.getViewName(), v );
         }
 
         if (isUpdated && throwExceptionIfNotCached)
