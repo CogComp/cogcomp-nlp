@@ -1307,7 +1307,7 @@ class WikiTransliteration {
 //    }
 
     /**
-     * This finds alignments between word1 and word2
+     * This finds all possible alignments between word1 and word2
      * @param word1
      * @param word2
      * @param maxSubstringLength1
@@ -1317,23 +1317,22 @@ class WikiTransliteration {
      * @return
      */
     public static HashMap<Production, Double> FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, InternDictionary<String> internTable, NormalizationMode normalization) {
-        HashMap<Production, Boolean> alignments = new HashMap<>();
+        HashMap<Production, Double> alignments = new HashMap<>();
 
         // this populates the alignments hashmap.
         // FIXME: why not assign to alignments here?
-        // FIXME: what is the empty hashmap that we pass in?
         // FIXME: why is it boolean? Is the value ever false? What does it mean?
-        FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, new HashMap<Production, Boolean>());
-
-        int total = alignments.size();
+        HashSet<Production> memoizationtable = new HashSet<>();
+        FindAlignments(word1, word2, maxSubstringLength1, maxSubstringLength2, alignments, memoizationtable);
 
         // just converts from Boolean value to Double value.
-        HashMap<Production, Double> result = new HashMap<>(alignments.size());
-        for (Production key : alignments.keySet()) {
-            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), 1.0);
-        }
+        // FIXME: probably don't need this? What about interning??
+//        HashMap<Production, Double> result = new HashMap<>(alignments.size());
+//        for (Production key : alignments.keySet()) {
+//            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), 1.0);
+//        }
 
-        return Normalize(word1, word2, result, internTable, normalization);
+        return Normalize(word1, word2, alignments, internTable, normalization);
     }
 //
 //    public static HashMap<Pair<String, String>, double> CountAlignments(String word1, String word2, int maxSubstringLength, InternDictionary<String> internTable) {
@@ -2346,16 +2345,17 @@ class WikiTransliteration {
 //
 
     /**
-     * This finds all possible alignments between word1 and word2 and populates the alignments hashmap with them.
-     * @param word1
-     * @param word2
+     * This recursively finds all possible alignments between word1 and word2 and populates the alignments hashmap with them.
+     *
+     * @param word1 word or substring of a word
+     * @param word2 word or substring of a word
      * @param maxSubstringLength1
      * @param maxSubstringLength2
-     * @param alignments
+     * @param alignments this is the result
      * @param memoizationTable
      */
-    public static void FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Boolean> alignments, HashMap<Production, Boolean> memoizationTable) {
-        if (memoizationTable.containsKey(new Production(word1, word2)))
+    public static void FindAlignments(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> alignments, HashSet<Production> memoizationTable) {
+        if (memoizationTable.contains(new Production(word1, word2)))
             return; //done
 
         int maxSubstringLength1f = Math.min(word1.length(), maxSubstringLength1);
@@ -2365,23 +2365,17 @@ class WikiTransliteration {
         {
             String substring1 = word1.substring(0, i);
 
-            //if (i==1 && (word1.Length-i)*maxSubstringLength >= word2.Length) //if we get rid of these characters, can we still cover the remainder of word2?
-            //{
-            //    Dictionaries.IncrementOrSet<Pair<String, String>>(counts, new Pair<String, String>(substring1, ""), 1, 1);
-            //    Dictionaries.Add<Pair<String,String>>(counts, CountAlignments(word1.Substring(i), word2, maxSubstringLength, memoizationTable),1); //empty production
-            //}
-
             for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
             {
                 //if we get rid of these characters, can we still cover the remainder of word2?
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i)
                 {
-                    alignments.put(new Production(substring1, word2.substring(0, j)), true);
+                    alignments.put(new Production(substring1, word2.substring(0, j)), 1.0);
                     FindAlignments(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, alignments, memoizationTable);
                 }
             }
         }
 
-        memoizationTable.put(new Production(word1, word2), true);
+        memoizationTable.add(new Production(word1, word2));
     }
 }
