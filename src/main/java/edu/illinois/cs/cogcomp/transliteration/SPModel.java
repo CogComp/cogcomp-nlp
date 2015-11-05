@@ -162,15 +162,28 @@ public class SPModel
             writer.flush();
         }
 
-
-        public void WriteProbs(String fname) throws IOException {
+        /**
+         * This writes the production probabilities out to file in human-readable format.
+         * @param fname the name of the output file
+         * @param threshold only write probs above this threshold
+         * @throws IOException
+         */
+        public void WriteProbs(String fname, double threshold) throws IOException {
             ArrayList<String> outlines = new ArrayList<>();
             for(Pair<String, String> t : probs.keySet()){
-                outlines.add(t.getFirst() + "\t" + t.getSecond() + "\t" + probs.get(t));
+                if(probs.get(t) > threshold) {
+                    outlines.add(t.getFirst() + "\t" + t.getSecond() + "\t" + probs.get(t));
+                }
             }
-
             LineIO.write(fname, outlines);
+        }
 
+        /**
+         * This just calls WriteProbs(fname, threshold) with threshold of 0.
+         * @param fname the name of the output file.
+         */
+        public void WriteProbs(String fname) throws IOException {
+            WriteProbs(fname, 0.0);
         }
 
         /**
@@ -211,8 +224,10 @@ public class SPModel
         public SPModel(Collection<Example> examples)
         {
             trainingExamples = new ArrayList<>(examples.size());
-            for(Example example : examples)
+            for(Example example : examples) {
+                // Default weight of examples is 1
                 trainingExamples.add(example.Triple());
+            }
         }
 
         /**
