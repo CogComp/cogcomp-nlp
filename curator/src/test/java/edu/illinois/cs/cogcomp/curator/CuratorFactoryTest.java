@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 
 
 public class CuratorFactoryTest {
-    private static final String CONFIG_FILE = "src/test/resources/caching-curator.properties";
+    /*private static final String CONFIG_FILE = "src/test/resources/caching-curator.properties";
     private static final String TEXT_FILE = "src/test/resources/curatorTestInput.txt";
 
     private static final int NUM_TOKS = 19;
@@ -106,5 +106,5 @@ public class CuratorFactoryTest {
         assertEquals(NUM_SRL_FRAMES, ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB)).getPredicates().size());
         assertEquals(NUM_CHUNKS, ta.getView(ViewNames.SHALLOW_PARSE).getNumberOfConstituents());
         assertEquals(NUM_TOKS, ta.getView(ViewNames.LEMMA).getNumberOfConstituents());
-    }
+    }*/
 }
