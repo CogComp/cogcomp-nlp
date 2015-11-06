@@ -4,7 +4,7 @@
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>big-data-utils</artifactId>
   <version>1.0.4</version> 
-o
+
   <repositories>
     <repository>
       <id>CogcompSoftware</id>
@@ -104,11 +104,6 @@ o
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
       <version>14.0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
