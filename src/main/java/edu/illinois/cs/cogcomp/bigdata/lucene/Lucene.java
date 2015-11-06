@@ -14,18 +14,10 @@ import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.MultiFields;
-import org.apache.lucene.index.Terms;
-import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
-import org.apache.lucene.search.Query;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.similarities.DefaultSimilarity;
 import org.apache.lucene.search.similarities.TFIDFSimilarity;
 import org.apache.lucene.store.Directory;
@@ -107,7 +99,7 @@ public class Lucene {
 	 * @throws IOException
 	 */
 	public static IndexWriter writer(String pathToIndexDir,
-			IndexWriterConfig config) throws IOException {
+			IndexWriterConfig config) throws IOException{
 		return new IndexWriter(new MMapDirectory(new File(pathToIndexDir)),
 				config);
 	}
@@ -360,6 +352,80 @@ public class Lucene {
 			termFrequencies.put(termText, (float) termFreq);
 		}
 		return termFrequencies;
+	}
+
+	/**
+	 * returns tf-idf = (term_freq/inversve_doc_freq) for a given doc and a term.
+	 *
+	 * @param reader
+	 * @param docIdField
+	 * @param docId
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getTfIdf(IndexReader reader, String docIdField, String docId, String textField, String term) throws IOException {
+		IndexSearcher searcher = new IndexSearcher(reader);
+		QueryParser parser = new QueryParser(version, docIdField, KEYWORD);
+		Query q = new TermQuery(new Term(docIdField, docId));
+
+		ScoreDoc[] docs = searcher.search(q, 1).scoreDocs;
+		if (docs.length == 0) {
+			System.err.println("Document with docId : " + docId + "  not found!");
+			return 0.0;
+		} else {
+			int luceneDocId = docs[0].doc;  // Lucene DocId
+			double tf = getTf(reader, luceneDocId, textField, term);
+			double idf = getIdf(reader, textField, term);
+			if(idf != 0.0)
+				return tf/idf;
+		}
+		return 1.0;
+	}
+
+
+	/**
+	 * returns tf for a given term in a given doc
+	 *
+	 * @param reader
+	 * @param luceneDocId
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getTf(IndexReader reader, int luceneDocId, String textField, String term) throws IOException {
+		Map<String, Float> tfs = getTfs(reader, textField, luceneDocId);
+		if(tfs.containsKey(term))
+			return tfs.get(term);
+
+		else if(tfs.containsKey(term.toLowerCase()))
+			return tfs.get(term.toLowerCase());
+
+		else
+			return 0.0;
+	}
+
+	/**
+	 * returns idf for a given term
+	 *
+	 * @param reader
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getIdf(IndexReader reader, String textField, String term) throws IOException {
+		Map<String, Float> idfs = getIdfs(reader, textField);
+		if(idfs.containsKey(term))
+			return idfs.get(term);
+
+		else if(idfs.containsKey(term.toLowerCase()))
+			return idfs.get(term.toLowerCase());
+
+		else
+			return 0.0;
 	}
 
 }
