@@ -64,5 +64,12 @@
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
         </dependency>
+
+        <!-- Database driver for storing TextAnnotations -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.2.140</version>
+        </dependency>
     </dependencies>
 </project>
