@@ -379,12 +379,11 @@ public class Lucene {
 	 * @param reader
 	 * @param docIdField
 	 * @param docId
-	 * @param textField
-	 * @param term
 	 * @return
 	 * @throws IOException
 	 */
-	public static double getTfIdf(IndexReader reader, String docIdField, String docId, String textField, String term) throws IOException {
+	public static int getLuceneDocId(IndexReader reader, String docIdField, String docId) throws IOException {
+		int luceneDocId = -1;
 		IndexSearcher searcher = new IndexSearcher(reader);
 		QueryParser parser = new QueryParser(version, docIdField, KEYWORD);
 		Query q = new TermQuery(new Term(docIdField, docId));
@@ -392,16 +391,36 @@ public class Lucene {
 		ScoreDoc[] docs = searcher.search(q, 1).scoreDocs;
 		if (docs.length == 0) {
 			System.err.println("Document with docId : " + docId + "  not found!");
-			return 0.0;
+			return -1;
 		} else {
-			int luceneDocId = docs[0].doc;  // Lucene DocId
+			luceneDocId = docs[0].doc;  // Lucene DocId
+			return luceneDocId;
+		}
+	}
+
+	/**
+	 * returns tf-idf = (term_freq/inversve_doc_freq) for a given doc and a term.
+	 *
+	 * @param reader
+	 * @param docIdField
+	 * @param docId
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getTfIdf(IndexReader reader, String docIdField, String docId, String textField, String term) throws IOException {
+		int luceneDocId = getLuceneDocId(reader, docIdField, docId);  // Lucene DocId
+		if(luceneDocId >= 0) {
 			double tf = getTf(reader, luceneDocId, textField, term);
 			double idf = getIdf(reader, textField, term);
-			if(idf != 0.0)
-				return tf/idf;
+			if (idf != 0.0)
+				return tf / idf;
 			else
 				return 0.0;
 		}
+		else		// Document Not Found
+			return 0.0;
 	}
 
 	/**
