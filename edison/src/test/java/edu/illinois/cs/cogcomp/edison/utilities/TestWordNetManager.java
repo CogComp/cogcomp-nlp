@@ -18,7 +18,7 @@ public class TestWordNetManager extends TestCase {
 
 	protected void setUp() throws Exception {
 		WordNetManager.loadConfigAsClasspathResource(true);
-		wordnet = WordNetManager.getInstance("jwnl_properties.xml");
+		wordnet = WordNetManager.getInstance();
 
 	}
 
