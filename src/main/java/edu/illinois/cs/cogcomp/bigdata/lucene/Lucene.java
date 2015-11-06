@@ -358,6 +358,25 @@ public class Lucene {
 	 * returns tf-idf = (term_freq/inversve_doc_freq) for a given doc and a term.
 	 *
 	 * @param reader
+	 * @param luceneDocId
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getTfIdf(IndexReader reader, int luceneDocId, String textField, String term) throws IOException {
+		double tf = getTf(reader, luceneDocId, textField, term);
+		double idf = getIdf(reader, textField, term);
+		if(idf != 0.0)
+			return tf/idf;
+		else
+			return 0.0;
+	}
+
+	/**
+	 * returns tf-idf = (term_freq/inversve_doc_freq) for a given doc and a term.
+	 *
+	 * @param reader
 	 * @param docIdField
 	 * @param docId
 	 * @param textField
@@ -380,8 +399,9 @@ public class Lucene {
 			double idf = getIdf(reader, textField, term);
 			if(idf != 0.0)
 				return tf/idf;
+			else
+				return 0.0;
 		}
-		return 1.0;
 	}
 
 
