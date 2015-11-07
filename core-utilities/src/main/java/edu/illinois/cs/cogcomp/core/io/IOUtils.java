@@ -218,6 +218,16 @@ public abstract class IOUtils {
         return clean;
     }
 
+    public static boolean rmDir(String directory) throws IOException {
+        if (!exists(directory))
+            return false;
+
+        if (!isDirectory(directory))
+            throw new IOException(directory + " is not a directory!");
+
+        return (new File(directory)).delete();
+    }
+
     /**
      * Copy a file. This uses Java's NIO to defer the actual heavy lifting to the OS.
      */
