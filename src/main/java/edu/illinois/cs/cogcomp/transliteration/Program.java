@@ -13,6 +13,9 @@ import java.io.FileNotFoundException;
 import java.text.Normalizer;
 import java.util.*;
 
+
+import net.sourceforge.pinyin4j.PinyinHelper;
+
 class Program {
 
     static void main(String[] args) throws FileNotFoundException {
@@ -792,150 +795,30 @@ class Program {
 
     /**
      * Calculates a probability table for P(String2 | String1)
+     * This normalizes by source counts for each production.
+     *
+     * FIXME: This is identical to... WikiTransliteration.NormalizeBySourceSubstring
      *
      * @param ?
      * @return
      */
         public static HashMap<Production, Double> PSecondGivenFirst(HashMap<Production, Double> counts)
         {
+            // counts of first words in productions.
             HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
 
-            HashMap<String, Integer> sourceCounts = new HashMap<>();
-            for (Pair<String, String> key : counts.keySet()) {
-                if(sourceCounts.containsKey(key.getFirst())){
-                    sourceCounts.put(key.getFirst(), sourceCounts.get(key.getFirst() + 1));
-                }else{
-                    sourceCounts.put(key.getFirst(), 1);
-                }
-            }
-
             HashMap<Production, Double> result = new HashMap<>(counts.size());
-            for (Production pairkey : counts.keySet())
+            for (Production prod : counts.keySet()) // loop over all productions
             {
-                double pairvalue = counts.get(pairkey);
-                //double value = totals1[pair.Key.x] == 0 ? ((double)1)/sourceCounts[pair.Key.x] : (pair.Value / totals1[pair.Key.x]);
-                double d = totals1.get(pairkey.getFirst()); // be careful of unboxing!
-                double value = d == 0 ? 0 : (pairvalue / d);
-                result.put(pairkey, value);
+                double prodcount = counts.get(prod);
+                double sourcecounts = totals1.get(prod.getFirst()); // be careful of unboxing!
+                double value = sourcecounts == 0 ? 0 : (prodcount / sourcecounts);
+                result.put(prod, value);
             }
 
             return result;
         }
 
-//        public static HashMap<Triple<String, String, String>, Double> PSecondGivenFirst(HashMap<Triple<String, String, String>, Double> counts)
-//        {
-//            HashMap<Pair<String,String>, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
-//            HashMap<Triple<String, String, String>, Double> result = new HashMap<Triple<String, String, String>, double>(counts.Count);
-//            for (Pair<Triple<String, String, String>, double> pair in counts)
-//            {
-//                double value = pair.Value == 0 ? 0 : (pair.Value / totals1[pair.Key.XY]);
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
-//
-//        public static HashMap<Triple<String, String, String>, double> PFirstGivenSecond(HashMap<Triple<String, String, String>, double> counts)
-//        {
-//            HashMap<String, double> totals2 = WikiTransliteration.GetAlignmentTotals2(counts);
-//            HashMap<Triple<String, String, String>, double> result = new HashMap<Triple<String, String, String>, double>(counts.Count);
-//            for (Pair<Triple<String, String, String>, double> pair in counts)
-//            {
-//                double value = pair.Value == 0 ? 0 : (pair.Value / totals2[pair.Key.z]);
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
-
-    /// <summary>
-    /// Calculates a probability table for P(String2 | String1)
-    /// </summary>
-//        public static HashMap<Pair<String, String>, double> PSecondGivenFirst(String word1, String word2, int maxSubstringLength, List<Pair<Pair<String, String>, double>> exampleProductions, Map<String,String> countsMap, HashMap<Pair<String, String>, double> counts)
-//        {
-//            HashMap<String, double> totals = new HashMap<String, double>();
-//            for (Pair<Pair<String, String>, double> exampleProduction in exampleProductions)
-//            {
-//                if (totals.ContainsKey(exampleProduction.Key.x)) continue;
-//                double total = 0;
-//
-//                //loop over all the productions
-//                for (Pair<String, String> pair in countsMap.GetPairsForKey(exampleProduction.Key.x))
-//                    total += counts[pair];
-//
-//                totals[exampleProduction.Key.x] = total;
-//            }
-//
-//            HashMap<Pair<String, String>, double> result = new HashMap<Pair<String, String>, double>(exampleProductions.Count);
-//            for (Pair<Pair<String, String>, double> exampleProduction in exampleProductions)
-//            {
-//                double total = totals[exampleProduction.Key.x];
-//                if (exampleProduction.Value == 0 || total == 0) continue; //not a valid production
-//                result[exampleProduction.Key] = (exampleProduction.Value / total);
-//            }
-//
-//            return result;
-//        }
-
-    /// <summary>
-    /// Calculates a probability table for P(String2 | String1) * P(String1 | String2)
-    /// </summary>
-//        public static SparseDoubleVector<Pair<String, String>> PMutualProduction(HashMap<Pair<String, String>, double> counts)
-//        {
-//            HashMap<String, double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
-//            HashMap<String, double> totals2 = WikiTransliteration.GetAlignmentTotals2(counts);
-//            HashMap<Pair<String, String>, double> result = new HashMap<Pair<String, String>, double>(counts.Count);
-//            for (Pair<Pair<String, String>, double> pair in counts)
-//            {
-//                double value = (pair.Value / totals1[pair.Key.x]) * (pair.Value / totals2[pair.Key.y]);
-//                if (double.IsNaN(value) || double.IsInfinity(value))
-//                    value = 0; //assume it's impossible return null; // System.out.println("Bad!");
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
-
-    /// <summary>
-    /// Calculates P(String1 of size n, String2)
-    /// </summary>
-    /// <param name="counts"></param>
-    /// <returns></returns>
-//        public static HashMap<Pair<String, String>, double> PSemiJoint(HashMap<Pair<String, String>, double> counts, int maxSubstringSize1)
-//        {
-//            double[] totals = new double[maxSubstringSize1];
-//
-//            for (Pair<Pair<String, String>, double> pair in counts)
-//                totals[pair.Key.x.Length - 1] += pair.Value;
-//
-//            HashMap<Pair<String, String>, double> result = new HashMap<Pair<String, String>, double>(counts.Count);
-//            for (Pair<Pair<String, String>, double> pair in counts)
-//            {
-//                double value = pair.Value / totals[pair.Key.x.Length-1];
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
-
-    /// <summary>
-    /// Calculates a probability table for P(String1, String2)
-    /// </summary>
-//        public static SparseDoubleVector<Pair<String, String>> PJoint(HashMap<Pair<String, String>, Double> counts)
-//        {
-//            double total = 0;
-//            for (double val : counts.values())
-//                total += val;
-//
-//            HashMap<Pair<String, String>, Double> result = new HashMap<Pair<String, String>, Double>(counts.size());
-//            for (Pair<Pair<String, String>, Double> pair : counts)
-//            {
-//                double value = pair.Value / total;
-//                result[pair.Key] = value;
-//            }
-//
-//            return result;
-//        }
 
 //        private static HashMap<Pair<String, String>, Double> MakeAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String,String,double>> examples, HashMap<Pair<String, String>, double> probs, bool weightedAlignments)
 //        {
@@ -1386,7 +1269,10 @@ class Program {
     static HashMap<Production, HashMap<Production, Double>> maxCache = new HashMap<>();
 
     /**
-     * Perhaps this is the initialization of the prob table? Why does it return boolean?
+     * This returns a map of productions to counts. These are counts over the entire training corpus. These are all possible
+     * productions seen in training data. If a production does not show up in training, it will not be seen here.
+     *
+     * normalization parameter decides if it is normalized (typically not).
      *
      * @param maxSubstringLength1
      * @param maxSubstringLength2
@@ -2698,6 +2584,56 @@ class Program {
         System.out.println(correct + " predictions exactly correct (" + (((double) correct) / testingPairs.size()) + ")");
         System.out.println("MRR: " + mrr);
     }
+
+    public static SparseDoubleVector<Production> InitializeWithRomanization(SparseDoubleVector<Production> probs, List<Triple<String, String, Double>> trainingTriples, List<Example> testing) {
+
+//        List<String> hebtable;
+//        try {
+//             hebtable = LineIO.read("hebrewromanization.txt");
+//        } catch (FileNotFoundException e) {
+//            return probs;
+//        }
+//
+//        for(String line : hebtable){
+//            String[] sline = line.split(" ");
+//            String heb = sline[0];
+//            String eng = sline[1];
+//
+//            probs.put(new Production(eng, heb), 1.0);
+//        }
+
+        // get all values from training.
+        for(Triple<String, String, Double> t : trainingTriples){
+            String chinese = t.getSecond();
+            for(char c : chinese.toCharArray()){
+                // CHINESE
+                String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
+                for(String s : res) {
+                    // FIXME: strip number from s?
+                    String ss = s.substring(0,s.length()-1);
+                    probs.put(new Production(ss, c + ""), 1.);
+                }
+            }
+        }
+
+        // get all values from testing also
+        for(Example t : testing){
+            String chinese = t.transliteratedWord;
+            for(char c : chinese.toCharArray()){
+                // CHINESE
+                String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
+                for(String s : res) {
+                    // FIXME: strip number from s?
+                    String sss = s.substring(0,s.length()-1);
+                    probs.put(new Production(sss, c + ""), 1.);
+                }
+            }
+        }
+
+
+        return probs;
+    }
+
 //
 //        private static void EvaluateExamples(HashMap<String,List<String>> testingPairs, List<String> candidates, HashMap<Pair<String, String>, Double> probs, int maxSubstringLength, bool summedPredications, double minProductionProbability)
 //        {

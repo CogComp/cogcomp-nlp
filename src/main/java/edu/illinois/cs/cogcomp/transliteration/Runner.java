@@ -5,12 +5,14 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.transliteration.Example;
 import edu.illinois.cs.cogcomp.transliteration.SPModel;
 import edu.illinois.cs.cogcomp.utils.TopList;
+import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 class Runner {
 
@@ -19,8 +21,22 @@ class Runner {
     public static void main(String[] args) throws IOException {
 
 
-        String trainfile = dataPath + "he_train_pairs.txt";
-        String testfile = dataPath + "he_test_pairs.txt";
+        String chinese = "艾蓮娜";
+        for(char c : chinese.toCharArray()){
+            // CHINESE
+            String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
+            for(String s : res) {
+                System.out.println(s);
+            }
+        }
+
+
+
+//        String trainfile = dataPath + "he_train_pairs.txt";
+//        String testfile = dataPath + "he_test_pairs.txt";
+//
+        String trainfile = "Data/chinese-train.txt";
+        String testfile = "Data/chinese-test.txt";
 
         RunTest(trainfile, testfile);
     }
@@ -31,11 +47,14 @@ class Runner {
         List<String> lines = LineIO.read(trainingfile);
         System.out.println(trainingfile + " = " + lines.size());
         List<Example> training = new ArrayList<>();
+        Random r = new Random();
         for(String line : lines)
         {
             String[] parts = line.split("\t");
             if (parts[0].length() > 15 || parts[1].length() > 15) continue; //drop super-words
-            training.add(new Example(Example.NormalizeHebrew(parts[0]), Example.NormalizeHebrew(parts[1])));
+            if(r.nextDouble() < 1.0) {
+                training.add(new Example(Example.NormalizeHebrew(parts[0]), Example.NormalizeHebrew(parts[1])));
+            }
         }
 
         lines = LineIO.read(testingfile);
@@ -77,7 +96,7 @@ class Runner {
         System.out.println("ACC=" + correctacc / testing.size());
     }
 
-    public static void TestDiscovery(SPModel model, List<Example> testing) {
+    public static Pair<Double,Double> TestDiscovery(SPModel model, List<Example> testing) {
         double correctmrr = 0;
         double correctacc = 0;
 
@@ -129,19 +148,60 @@ class Runner {
             e.printStackTrace();
         }
 
-        System.out.println("MRR=" + correctmrr / (double)testing.size());
-        System.out.println("ACC=" + correctacc / (double)testing.size());
+        double mrr = correctmrr / (double)testing.size();
+        double acc = correctacc / (double)testing.size();
+        System.out.println("MRR=" + mrr);
+        System.out.println("ACC=" + acc);
+
+
+        return new Pair<>(mrr, acc);
     }
 
-    public static void Train(List<Example> training, List<Example> testing) {
+    public static void Train(List<Example> training, List<Example> testing) throws IOException {
 
-        SPModel model = new SPModel(training);
-        for (int i = 0; i < 1; i++) {
-            int emiterations = 3;
-            model.Train(emiterations);
-            TestDiscovery(model, testing);
+        // params
+        int emiterations = 15;
+        boolean rom = false; // use romanization or not.
+        int min = 50;
 
+        System.out.println("Actual Training: " + min);
+
+        double avgmrr= 0;
+        double avgacc = 0;
+        int num = 3;
+
+        for (int i = 0; i < num; i++) {
+
+            java.util.Collections.shuffle(training);
+            //java.util.Collections.shuffle(testing);
+
+
+            List<Example> training2 = new ArrayList<>();
+
+            for(Example e : training){
+                if(training2.size() == min){
+                    break;
+                }
+                training2.add(e);
+
+            }
+
+            SPModel model = new SPModel(training2);
+
+            model.Train(emiterations,rom, testing);
+            Pair<Double, Double> p = TestDiscovery(model, testing);
+            double mrr = p.getFirst();
+            double acc = p.getSecond();
+            avgmrr += mrr;
+            avgacc += acc;
+            model.WriteProbs("probs.txt");
         }
+
+        System.out.println("=============");
+        System.out.println("AVGMRR=" + avgmrr / num);
+        System.out.println("AVGacc=" + avgacc / num);
+
+
     }
 }
 

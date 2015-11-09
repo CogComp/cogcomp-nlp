@@ -23,7 +23,8 @@ public class TestTransliteration {
 
         SPModel model = new SPModel(examples);
 
-        model.Train(1);
+        boolean rom = false;
+        model.Train(1,rom, examples);
 
         System.out.println(model.Probability("this", "this"));
 

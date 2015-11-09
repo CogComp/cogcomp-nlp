@@ -2,3 +2,5 @@ SPModel.train
   Program.makeRawAlignmentTable
     WikiTransliteration.FindAlignments
       WikiTransliteration.FindAlignments (not same as above) (recursive)
+    WT.Normalize (normalization is none)
+  Program.PSecondGivenFirst

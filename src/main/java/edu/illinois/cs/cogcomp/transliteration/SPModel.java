@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
 
+
 import java.io.*;
 import java.util.*;
 
@@ -24,8 +25,8 @@ import java.util.*;
 public class SPModel
     {
         double minProductionProbability = 0.000000000000001;
-        int maxSubstringLength1 = 15;
-        int maxSubstringLength2 = 15;
+        int maxSubstringLength1 = 4;
+        int maxSubstringLength2 = 1;
 
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
@@ -53,7 +54,6 @@ public class SPModel
          * The maximum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
          * Larger values will possibly yield better transliterations, but will be more computationally expensive.
          * The default value is 100.
-         * COMMENTED OUT BY SWM.
          */
         private int maxCandidates=100;
 
@@ -246,30 +246,40 @@ public class SPModel
         /**
          * Trains the model for the specified number of iterations.
          * @param emIterations The number of iterations to train for.
+         * @param testing
          */
-        public void Train(int emIterations)
+        public void Train(int emIterations, boolean rom, List<Example> testing)
         {
             List<Triple<String, String, Double>> trainingTriples = trainingExamples;
 
             pruned = null;
             multiprobs = null;
 
+            // this is the initialization.
             if (probs == null)
             {
-                // FIXME: is exampleCounts actually used anywhere???
-                List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
                 boolean getExampleCounts = false;
+                // gets counts of productions, not normalized.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
                         trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, getExampleCounts));
+
+                // this just normalizes by the source string.
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
+
+                if(rom) {
+                    probs = Program.InitializeWithRomanization(probs, trainingTriples, testing);
+                }
             }
 
             for (int i = 0; i < emIterations; i++)
             {
 
                 boolean getExampleCounts = true;
+                // Difference is Weighting mode.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
                         trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, getExampleCounts));
+
+                // this just normalizes by the source string.
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
         }
