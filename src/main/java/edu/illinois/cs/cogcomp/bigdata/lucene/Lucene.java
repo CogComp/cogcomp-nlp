@@ -409,10 +409,7 @@ public class Lucene {
 	public static double getTfIdf(IndexReader reader, int luceneDocId, String textField, String term) throws IOException {
 		double tf = getTf(reader, luceneDocId, textField, term);
 		double idf = getIdf(reader, textField, term);
-		if(idf != 0.0)
-			return tf/idf;
-		else
-			return 0.0;
+		return tf*idf;
 	}
 
 	/**
@@ -427,6 +424,7 @@ public class Lucene {
 	 */
 	public static double getTf(IndexReader reader, int luceneDocId, String textField, String term) throws IOException {
 		Map<String, Float> tfs = getTfs(reader, textField, luceneDocId);
+		term = term.trim();
 		if(tfs.containsKey(term))
 			return tfs.get(term);
 
@@ -435,6 +433,22 @@ public class Lucene {
 
 		else
 			return 0.0;
+	}
+
+	/**
+	 * returns tf for a given term in a given doc
+	 *
+	 * @param reader
+	 * @param docIdField
+	 * @param docId
+	 * @param textField
+	 * @param term
+	 * @return
+	 * @throws IOException
+	 */
+	public static double getTf(IndexReader reader, String docIdField, String docId, String textField, String term) throws IOException {
+		int luceneDocId = getLuceneDocId(reader, docIdField, docId);
+		return getTf(reader, luceneDocId, textField, term);
 	}
 
 	/**
@@ -448,6 +462,7 @@ public class Lucene {
 	 */
 	public static double getIdf(IndexReader reader, String textField, String term) throws IOException {
 		Map<String, Float> idfs = getIdfs(reader, textField);
+		term = term.trim();
 		if(idfs.containsKey(term))
 			return idfs.get(term);
 
