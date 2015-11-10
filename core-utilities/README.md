@@ -83,10 +83,9 @@ of annotations over some text.
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
-    use the sentence slitter defined in the [Learning based Java](http://cogcomp.cs.illinois.edu/page/software_view/11) (LBJ)
+    use the sentence slitter defined in the [Learning based Java](http://cogcomp.cs.illinois.edu/page/software_view/11) (LBJava)
     library to split the text into sentences and further apply the
     LBJ tokenizer to tokenize the sentence.
-    
     
     ```java 
     String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
@@ -123,7 +122,9 @@ of annotations over some text.
 ### Views 
 
 The library stores all information about a specific annotation over text
-in an object called `View`. In its most general sense, a `View` is a
+in an object called `View`. 
+A `View` is a graph, where the nodes are `Constituents` and the edges are `Relations`.
+In its most general sense, a `View` is a
 graph whose nodes are labeled spans of text. The edges between the
 nodes represent the relationships between them. A `TextAnnotation` can
 be thought of as a container of views, indexed by their names.
@@ -139,11 +140,44 @@ explicitly represented because this can be inferred from the
 `Constituents` which refer to the tokens.) So the graph that this View
 represents is a degenerate graph, with only nodes and no edges.
 
-This prints the views that have been added so far: 
 
-```java 
-Syst1em.out.println(ta.getAvailableViews());
+This example shows how to use the `View` datastructure to create an arbitrary view. 
+
+```java
+String corpus = "2001_ODYSSEY";
+String textId = "001";
+String text1 = "Good afternoon, gentlemen. I am a HAL-9000 computer.";
+	
+TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1);
+
+View myView = new View("MyViewName", "MyViewGenerator", ta1, 0.121);
+ta1.addView("MyViewName", myView);
+
+Constituent m1 = new Constituent("M1", "MyViewName", ta1, 5, 6);
+myView.addConstituent(m1);
+
+Constituent m2 = new Constituent("M2", "MyViewName", ta1, 7, 10);
+myView.addConstituent(m2);
+
+Constituent m3 = new Constituent("M1", "MyViewName", ta1, 8, 9);
+myView.addConstituent(m3);
+
+Constituent m4 = new Constituent("M2", "MyViewName", ta1, 9, 10);
+myView.addConstituent(m4);
+
+Relation r1 = new Relation("Subject-Object", m1, m2, 0.001);
+myView.addRelation(r1);
+
+Relation r2 = new Relation("NameOf", m3, m4, 0.12);
+myView.addRelation(r2);
+
+System.out.println(myView.getConstituents());
+System.out.println(myView.getRelations());
+
+System.out.println(r1.getSource());
+System.out.println(r2.getTarget());
 ```
+
 
 ### Accessing the text and tokens
 Edison keeps track of the raw text along with the tokens it
@@ -215,4 +249,40 @@ for (Constituent c : shallowParseConstituents) {
             + c.getLabel() + " " + c.getSurfaceString());
 }
 ```
-    		
+
+### Creating complex features 
+
+One can combine the simple datastructures introduced so far and create relatively complex features. 
+Here we create features by combination of edge labels for dependency parsing and named-entity recognition. 
+
+```java 
+SpanLabelView ne = (SpanLabelView) ta.getView(ViewNames.NER);
+TreeView dependency = (TreeView) ta.getView(ViewNames.DEPENDENCY);
+
+System.out.println(dependency);
+System.out.println(ne);
+
+for (Constituent neConstituent : ne.getConstituents()) {
+    List<Constituent> depConstituents = (List<Constituent>) dependency
+            .where(Queries.containedInConstituent(neConstituent));
+
+    for (Constituent depConstituent : depConstituents) {
+        System.out.println("Outgoing relations");
+
+        for (Relation depRel : depConstituent.getOutgoingRelations()) {
+            System.out.println("\t" + neConstituent + "--"
+                    + depRel.getRelationName() + "--> "
+                    + depRel.getTarget());
+        }
+
+        System.out.println("Incoming relations");
+
+        for (Relation depRel : depConstituent.getIncomingRelations()) {
+            System.out
+                    .println("\t" + depRel.getSource() + "--"
+                            + depRel.getRelationName() + "--> "
+                            + neConstituent);
+        }
+    }
+}
+```
