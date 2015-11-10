@@ -46,7 +46,7 @@ You can later print the existing views:
 System.out.println(ta1.getAvailableViews());
 ```
 
-or access the views them direclty: 
+or access the views them directly: 
 
 ```java 
 TokenLabelView posView = (TokenLabelView) ta.getView(ViewNames.POS);
