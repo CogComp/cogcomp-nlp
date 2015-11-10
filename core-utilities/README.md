@@ -292,8 +292,8 @@ for (Constituent neConstituent : ne.getConstituents()) {
 `AnnotatorService` is our super-wrapper that provides access to different annotations and free caching. 
  Currently we have two classes implementing `AnnotatorService`: 
  
-    1. illinois-curator 
-    2. illinois-pipeline 
+  1. illinois-curator 
+  2. illinois-pipeline 
 
 
 The image below describes the different ways of creating 
