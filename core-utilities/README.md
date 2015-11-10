@@ -139,6 +139,14 @@ explicitly represented because this can be inferred from the
 `Constituents` which refer to the tokens.) So the graph that this View
 represents is a degenerate graph, with only nodes and no edges.
 
+This prints the views that have been added so far: 
+```java 
+System.out.println(ta.getAvailableViews());
+``
+
+    
+
+
 
 ### Accessing the text and tokens
 Edison keeps track of the raw text along with the tokens it
@@ -194,4 +202,20 @@ for (int i = 0; i < sentences.size(); i++) {
 ```
 
 ### Accessing Constituents    
-    
+
+This example gets all the shallow parse constituents. 
+In the shallow parse constituent, each chunk will have one constituent. 
+There are no relations between the chunks.
+
+```java     
+    SpanLabelView shallowParseView = (SpanLabelView) ta
+    				.getView(ViewNames.SHALLOW_PARSE);
+    				
+    List<Constituent> shallowParseConstituents = shallowParseView
+    				.getConstituents();
+    for (Constituent c : shallowParseConstituents) {
+        System.out.println(c.getStartSpan() + "-" + c.getEndSpan() + ":"
+                + c.getLabel() + " " + c.getSurfaceString());
+    }
+```
+    		
