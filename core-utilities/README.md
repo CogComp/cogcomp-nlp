@@ -4,26 +4,24 @@
 
   This library provides basic useful functionality in Java. The
   goals of this library are:
-
+  
   1. Augment the Java library with useful data structures and
      algorithms that can be used across many NLP projects.
-
   2. Add support for recurring experiment-related tasks like
      cross-validation and inter-annotator agreement.
-
   3. Provide other utility classes for reading files, interface to the
      shell, etc.
    
 ## Functionality
   * Data structures
-    - **TextAnnotation** (previously in *Edison*)
-    - **Record** support (used in *Curator*)
-    - **LBJava** data structures
-    - Pair and Triple classes
-    - Trees, where the nodes can be arbitrary objects and a utility
+    - [`TextAnnotation`](src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java) 
+    - `Record` (internal datastructure for [Curator](../curator/README.md))
+    - LBJava data structures
+    - `Pair` and `Triple` classes
+    - `Tree`s, where the nodes can be arbitrary objects and a utility
       class to read trees from the bracket notation (like the Penn
       Treebank notation.)
-    - Queryable list to support SQL like operations on the elements of
+    - `Queryable` list to support SQL like operations on the elements of
       the list
     - Bounded priority queue, to help with beam search
   * Experiment utilities
@@ -40,7 +38,7 @@
     - Graph search algorithms -- breadth first, depth first, uniform
       cost and beam.
   * IO
-    - **Corpus** readers (CoNLL, PTB, Ontonotes, etc.)
+    - Corpus readers (CoNLL, PTB, Ontonotes, etc.)
     - Reading a file, one line at a time
     - Utility functions like mkdir, ls, etc
   * Transformers 
@@ -61,13 +59,4 @@
     - A command line interface that uses Java reflection to expose
       static functions of a pre-defined class to the shell
     - And much more...
-
-## More information
-  1. The (possibly incomplete) javadoc of this library is in the doc
-     directory, which is under the main project directory.
-
-  2. The Wiki page for this library will contain example code. (This
-     does not exist as of now, but will be added soon.)
-
-  3. If that doesn't work, contact me.
 
