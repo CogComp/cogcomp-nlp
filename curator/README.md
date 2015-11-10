@@ -1,6 +1,8 @@
 # illinois-curator
-
-This package contains code for interacting with Curator, using the data structures from illinois-core-utilities.
+The Curator acts as a central server that can annotate text using
+several annotators. With this package, we can connect to the Curator to
+get those annotations and build our own NLP-driven
+application. This package contains code for interacting with Curator, using the data structures from illinois-core-utilities.
 
 illinois-curator implements the `AnnotatorService` interface, making it compatible with illinois-nlp-pipeline.
 
