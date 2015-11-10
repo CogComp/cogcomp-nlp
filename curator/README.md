@@ -39,3 +39,19 @@ annotator.addView(ta, ViewNames.NER_CONLL);
 ```
 
 These `View`s as well as the `TextAnnotation` object are now locally cached for faster future access.
+
+You can later print the existing views: 
+
+```java 
+System.out.println(ta1.getAvailableViews());
+```
+
+or access the views them direclty: 
+
+```java 
+TokenLabelView posView = (TokenLabelView) ta.getView(ViewNames.POS);
+
+for (int i = 0; i < ta.size(); i++) {
+    System.out.println(i + ":" + posView.getLabel(i));
+}
+```
