@@ -36,7 +36,7 @@ members of the class `WordFeatureExtractorFactory`.
   
   
 | Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
+| ------------- |---------------| ------|
 | col 3 is      | right-aligned | $1600 |
 | col 2 is      | centered      |   $12 |
 | zebra stripes | are neat      |    $1 |
@@ -100,6 +100,56 @@ members of the class `WordFeatureExtractorFactory`.
 |----------------------+-------------------------------------+-------------------------------------------------------------------------|
 | /date/               | =dateMarker=                        | An indicator for whether the token is a valid date                      |
 |----------------------+-------------------------------------+-------------------------------------------------------------------------|
+
+
+
+| *fex name*           | *Feature Extractor*                 | *Description*                                                           |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /capitalization/     | =capitalization=                    | Adds the following two features: One with the word                      |
+|                      |                                     | in its actual case, and the second, an indicator                        |
+|                      |                                     | for whether the word is captitalized                                    |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /conflated-pos/      | =conflatedPOS=                      | The coarse POS tag (one of Noun, Verb, Adjective,                       |
+|                      |                                     | Adverb, Punctuation, Pronoun and Other)                                 |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /de-adj-nouns/       | =deAdjectivalAbstractNounsSuffixes= | An indicator for whether the word ends with a de-                       |
+|                      |                                     | adjectival suffix. The list of such suffixes is in                      |
+|                      |                                     | =WordLists.DE_ADJ_SUFFIXES=.                                            |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /de-nom-nouns/       | =deNominalNounProducingSuffixes=    | An indicator for whether the word ends with a de-                       |
+|                      |                                     | nominal noun producing suffix. The list of such suffixes                |
+|                      |                                     | is in =WordLists.DENOM_SUFFIXES=.                                       |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /de-verbal-suffixes/ | =deVerbalSuffix=                    | An indicator for whether the word ends with a de-                       |
+|                      |                                     | verbal producing suffix. The list of such suffixes                      |
+|                      |                                     | is in =WordLists.DE_VERB_SUFFIXES=.                                     |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /gerunds/            | =gerundMarker=                      | An indicator for whether the word ends with an /-ing/.                  |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /known-prefixes/     | =knownPrefixes=                     | An indicator for whether the word starts with one of                    |
+|                      |                                     | the following: /poly/, /ultra/, /post/, /multi/, /pre/, /fore/, /ante/, |
+|                      |                                     | /pro/, /meta/ or /out/                                                  |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /lemma/              | =lemma=                             | The lemma of the word, taken from the LEMMA view                        |
+|                      |                                     | (that is, =ViewNames.LEMMA=)                                            |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /nom/                | =nominalizationMarker=              | An indicator for whether the word is a nominalization                   |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /numbers/            | =numberNormalizer=                  | An indicator for whether the word is a number                           |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /pos/                | =pos=                               | The part of speech tag of the word (taken                               |
+|                      |                                     | from =ViewNames.POS=)                                                   |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /prefix-suffix/      | =prefixSuffixes=                    | The first and last two, three characters in the lower                   |
+|                      |                                     | cased word                                                              |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /word/               | =word=                              | The word, lower cased                                                   |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /wordCase/           | =wordCase=                          | The word, without changing the case                                     |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| /date/               | =dateMarker=                        | An indicator for whether the token is a valid date                      |
+|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+
 
 
 ## List of known transformers
