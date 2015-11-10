@@ -9,14 +9,13 @@ resolution, textual entailment, paraphrasing and relation
 extraction which use information across several views over text to
 make a decision.
 
-
-
 ## Concepts
    - Feature extractors
    - Feature input transformers
    - Operations
 
 ## Feature manifests and `.fex` definitions
+TODO
 
 ## List of pre-defined features
 
@@ -53,4 +52,13 @@ members of the class `WordFeatureExtractorFactory`.
 | `wordCase`           | `wordCase`                          | The word, without changing the case                                     |
 | `date`               | `dateMarker`                        | An indicator for whether the token is a valid date                      |
 
+
+## List of known transformers
+TODO
+
+### List of feature operations
+TODO
+  
+## NLP Helpers
+TODO 
 
