@@ -140,6 +140,7 @@ explicitly represented because this can be inferred from the
 represents is a degenerate graph, with only nodes and no edges.
 
 This prints the views that have been added so far: 
+
 ```java 
 Syst1em.out.println(ta.getAvailableViews());
 ```
@@ -204,14 +205,14 @@ In the shallow parse constituent, each chunk will have one constituent.
 There are no relations between the chunks.
 
 ```java     
-    SpanLabelView shallowParseView = (SpanLabelView) ta
-    				.getView(ViewNames.SHALLOW_PARSE);
-    				
-    List<Constituent> shallowParseConstituents = shallowParseView
-    				.getConstituents();
-    for (Constituent c : shallowParseConstituents) {
-        System.out.println(c.getStartSpan() + "-" + c.getEndSpan() + ":"
-                + c.getLabel() + " " + c.getSurfaceString());
-    }
+SpanLabelView shallowParseView = (SpanLabelView) ta
+                .getView(ViewNames.SHALLOW_PARSE);
+                
+List<Constituent> shallowParseConstituents = shallowParseView
+                .getConstituents();
+for (Constituent c : shallowParseConstituents) {
+    System.out.println(c.getStartSpan() + "-" + c.getEndSpan() + ":"
+            + c.getLabel() + " " + c.getSurfaceString());
+}
 ```
     		
