@@ -1,7 +1,10 @@
 # illinois-edison
 
-`Edison` is a feature extraction framework that uses the data structures of [illinois-core-utilities](..`core-utilities`README.md)
+*Edison* is a feature extraction framework that uses the data structures of [illinois-core-utilities](..`core-utilities`README.md)
 to extract features used in NLP applications.
+We can define functions for feature extraction that use the tokens and one or more views. 
+This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 
+but also more complex features that combine information from several views.
 
 This library has been successfully used to facilitate the feature extraction for several higher level
 NLP applications like semantic role labeling, coreference
@@ -9,10 +12,30 @@ resolution, textual entailment, paraphrasing and relation
 extraction which use information across several views over text to
 make a decision.
 
+The library is using a Feature Extraction Language (FEX) as a declarative way of defining features. 
+that can be applied to text to generate features. 
+
 ## Concepts
    - Feature extractors
    - Feature input transformers
    - Operations
+
+## The `FeatureExtractor` interface
+Edison comes with several built-in feature extractors. 
+All feature extractors implement the interface `FeatureExtractor`, which provides two functions:
+
+   1. `getFeatures(Constituent)`: This function converts the input constituent into a set of Features.
+   2. `getName()`: Returns the name of the feature extractor.
+
+Feature extractors can be combined with each via operators to build newer ones. 
+For example, a valid operators to conjoin feature extractors with each other to 
+produce a new `FeatureExtractor`. Use the `FeatureUtilities.conjoin` to do this.
+
+## Defining Feature Extractors 
+You can build feature extractors in two ways:
+
+   1. You can manually build a feature extractor by implementing the FeatureExtractor interface.
+   2. You can use a pre-defined
 
 ## Feature manifests and `.fex` definitions
 TODO
