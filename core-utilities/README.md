@@ -1,6 +1,6 @@
 # illinois-core-utilities
 
-   /illinois-core-utilities/ is a Java library that is designed to help programming NLP
+   illinois-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
    annotations of text (like parse trees, parts of speech, semantic
    roles, coreference, etc.) 
@@ -67,19 +67,18 @@
     - And much more...
 
 
-## Brief Explanations 
+## Examples and Clarification 
 This set of examples goes over the basics of the data
 structures. Recollect that different annotations over text are
 called `Views`, each of which is a graph of `Constituents` and
 `Relations`. The object that manages views corresponding to a
 single piece of text is called a `TextAnnotation`.
    
-### `TextAnnotation`
+### Creating a `TextAnnotation`
 A `TextAnnotation` can be thought of as a container that stores different layers 
 of annotations over some text.
 
-### Creating a `TextAnnotation`
-    1. Using the LBJ sentence splitter and tokenizer
+  1. Using the LBJ sentence splitter and tokenizer
  
 The simplest way to define a `TextAnnotation` is to just give the
 text to the constructor. Note that in the following example,
@@ -101,7 +100,7 @@ String textId = "001";
 TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1); 
 ```
 
-    2. Using pre-tokenized text
+  2. Using pre-tokenized text
 
 Quite often, our data source could specify the tokenization for
 text. We can use this to create a `TextAnnotation` by specifying
@@ -139,3 +138,59 @@ Sentences are stored as a view. In the terminology above, the
 explicitly represented because this can be inferred from the
 `Constituents` which refer to the tokens.) So the graph that this View
 represents is a degenerate graph, with only nodes and no edges.
+
+
+### Accessing the text and tokens
+    Edison keeps track of the raw text along with the tokens it
+    contains. So, we can get the original text using the function
+    `getText()` and also the tokenized text using the function
+    `getTokenizedText()`. The function `getToken(int tokenId)` gives
+    us the tokens in the text.
+
+    ```java 
+    // Print the text. This prints the raw text that was used to
+    // create the TextAnnotation object. In the case where the
+    // second constructor is used, the text is printed whitespace
+    // tokenized.
+    System.out.println(ta1.getText());
+    System.out.println(ta2.getText());
+     
+    // Print the tokenized text. The tokenization scheme is
+    // specified by the constructor, which in the first example
+    // defaults to the LBJ tokenizer, and in the second one is
+    // specified manually.
+    System.out.println(ta1.getTokenizedText());
+    System.out.println(ta2.getTokenizedText());
+     
+    // Print the tokens
+    for (int i = 0; i < ta.size(); i++) {
+        System.out.print(i + ":" + ta.getToken(i) + "\t");
+    }
+    System.out.println();
+    ```
+    
+### Accessing sentences
+Each `TextAnnotation` knows the views it contains. To get these,
+use the function `getAvailableViews()`, which returns a set of
+strings representing the names of the views it contains.
+
+The following code prints all the available views in the
+`TextAnnotation` ta1 defined above. It then goes over each
+sentence and prints them.
+    
+    ```java 
+    System.out.println(ta1.getAvailableViews());
+     
+    // Print the sentences. The Sentence class has many of the same
+    // methods as a TextAnnotation.
+    List<Sentence> sentences = ta1.sentences();
+     
+    System.out.println(sentences.size() + " sentences found.");
+     
+    for (int i = 0; i < sentences.size(); i++) {
+        Sentence sentence = sentences.get(i);
+        System.out.println(sentence);
+    }
+    ```
+    
+    
