@@ -1,5 +1,10 @@
 # illinois-core-utilities
 
+   /illinois-core-utilities/ is a Java library that is designed to help programming NLP
+   applications by providing a uniform representation of various NLP
+   annotations of text (like parse trees, parts of speech, semantic
+   roles, coreference, etc.) 
+
 ## Overview
 
   This library provides basic useful functionality in Java. The
@@ -14,7 +19,8 @@
    
 ## Functionality
   * Data structures
-    - [`TextAnnotation`](src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java) 
+    - [`TextAnnotation`](src/main/java/edu/illinois/cs/cogcomp/core/datastructures/textannotation/TextAnnotation.java). 
+     The library also provides an easy way to access the [Curator](../curator/README.md).
     - `Record` (internal datastructure for [Curator](../curator/README.md))
     - LBJava data structures
     - `Pair` and `Triple` classes
@@ -60,3 +66,27 @@
       static functions of a pre-defined class to the shell
     - And much more...
 
+
+## Brief Explanations 
+### `TextAnnotation`
+A `TextAnnotation` can be thought of as a container that stores different layers 
+of annotations over some text.
+      
+### Views 
+
+The library stores all information about a specific annotation over text
+in an object called `View`. In its most general sense, a `View` is a
+graph whose nodes are labeled spans of text. The edges between the
+nodes represent the relationships between them. A `TextAnnotation` can
+be thought of as a container of views, indexed by their names.
+
+The tokens are not stored in a `View`. The `TextAnnotation` knows the
+tokens of the text and each `Constituent` of every view is defined in
+terms of the tokens. A constituent can represent zero tokens or spans.
+
+Sentences are stored as a view. In the terminology above, the
+`Constituents` will correspond to the sentences. There are no
+`Relations` between them. (The ordering between the sentences is not
+explicitly represented because this can be inferred from the
+`Constituents` which refer to the tokens.) So the graph that this View
+represents is a degenerate graph, with only nodes and no edges.
