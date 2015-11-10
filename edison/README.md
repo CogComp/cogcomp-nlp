@@ -37,10 +37,7 @@ members of the class `WordFeatureExtractorFactory`.
 
 | *fex name*           | *Feature Extractor*                 | *Description*                                                           |
 |:--------------------:|:-----------------------------------:|-------------------------------------------------------------------------|
-| `capitalization`     | `capitalization`                    | Adds the following two features: One with the word                      |
-|                      |                                     | in its actual case, and the second, an indicator                        |
-|                      |                                     | for whether the word is captitalized                                    |
-|----------------------|-------------------------------------|-------------------------------------------------------------------------|
+| `capitalization`     | `capitalization`                    | Adds the following two features: One with the word in its actual case, and the second, an indicator for whether the word is captitalized   |
 | `conflated-pos`      | `conflatedPOS`                      | The coarse POS tag (one of Noun, Verb, Adjective,                       |
 |                      |                                     | Adverb, Punctuation, Pronoun and Other)                                 |
 |----------------------|-------------------------------------|-------------------------------------------------------------------------|
