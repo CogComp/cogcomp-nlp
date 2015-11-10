@@ -286,3 +286,58 @@ for (Constituent neConstituent : ne.getConstituents()) {
     }
 }
 ```
+
+
+### Creating `AnnotatorService`
+`AnnotatorService` is our super-wrapper that provides access to different annotations and free caching. 
+ Currently we have two classes implementing `AnnotatorService`: 
+ 
+    1. illinois-curator 
+    2. illinois-pipeline 
+
+
+The image below describes the different ways of creating 
+`TextAnnotation` objects from either tokenized or raw text. 
+
+![schema 001](https://cloud.githubusercontent.com/assets/2441454/10808693/4132f746-7dbc-11e5-8d6a-b5fe1e8ed0b8.png)
+
+Below is an example of how to use `IllinoisPipelineFactory` to create new annotations. 
+
+```java 
+ResourceManager rm = new ResourceManager("config/project.properties")
+AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline(rm);
+// Or alternatively to use the curator: 
+// AnnotatorService annotator = CuratorPipeline.buildCurator(rm);
+```
+
+and then create a `TextAnnotation` component and add the `View`s you need:
+
+```java 
+TextAnnotation ta = annotator.createBasicTextAnnotation(corpusID, taID, "Some text that I want to process.");
+```
+
+Of course the real fun begins now! Using `AnnotatorService` you can add different annotation 
+Views using their canonical name:
+
+```java 
+annotator.addView(ta, ViewNames.POS);
+annotator.addView(ta, ViewNames.NER_CONLL);
+```
+
+These `View`s as well as the `TextAnnotation` object are now locally cached for faster future access.
+
+You can later print the existing views: 
+
+```java 
+System.out.println(ta1.getAvailableViews());
+```
+
+or access the views them directly: 
+
+```java 
+TokenLabelView posView = (TokenLabelView) ta.getView(ViewNames.POS);
+
+for (int i = 0; i < ta.size(); i++) {
+    System.out.println(i + ":" + posView.getLabel(i));
+}
+```
