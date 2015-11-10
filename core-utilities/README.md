@@ -141,33 +141,33 @@ represents is a degenerate graph, with only nodes and no edges.
 
 
 ### Accessing the text and tokens
-    Edison keeps track of the raw text along with the tokens it
-    contains. So, we can get the original text using the function
-    `getText()` and also the tokenized text using the function
-    `getTokenizedText()`. The function `getToken(int tokenId)` gives
-    us the tokens in the text.
+Edison keeps track of the raw text along with the tokens it
+contains. So, we can get the original text using the function
+`getText()` and also the tokenized text using the function
+`getTokenizedText()`. The function `getToken(int tokenId)` gives
+us the tokens in the text.
 
-    ```java 
-    // Print the text. This prints the raw text that was used to
-    // create the TextAnnotation object. In the case where the
-    // second constructor is used, the text is printed whitespace
-    // tokenized.
-    System.out.println(ta1.getText());
-    System.out.println(ta2.getText());
-     
-    // Print the tokenized text. The tokenization scheme is
-    // specified by the constructor, which in the first example
-    // defaults to the LBJ tokenizer, and in the second one is
-    // specified manually.
-    System.out.println(ta1.getTokenizedText());
-    System.out.println(ta2.getTokenizedText());
-     
-    // Print the tokens
-    for (int i = 0; i < ta.size(); i++) {
-        System.out.print(i + ":" + ta.getToken(i) + "\t");
-    }
-    System.out.println();
-    ```
+```java 
+// Print the text. This prints the raw text that was used to
+// create the TextAnnotation object. In the case where the
+// second constructor is used, the text is printed whitespace
+// tokenized.
+System.out.println(ta1.getText());
+System.out.println(ta2.getText());
+ 
+// Print the tokenized text. The tokenization scheme is
+// specified by the constructor, which in the first example
+// defaults to the LBJ tokenizer, and in the second one is
+// specified manually.
+System.out.println(ta1.getTokenizedText());
+System.out.println(ta2.getTokenizedText());
+ 
+// Print the tokens
+for (int i = 0; i < ta.size(); i++) {
+    System.out.print(i + ":" + ta.getToken(i) + "\t");
+}
+System.out.println();
+```
     
 ### Accessing sentences
 Each `TextAnnotation` knows the views it contains. To get these,
@@ -178,19 +178,19 @@ The following code prints all the available views in the
 `TextAnnotation` ta1 defined above. It then goes over each
 sentence and prints them.
     
-    ```java 
-    System.out.println(ta1.getAvailableViews());
-     
-    // Print the sentences. The Sentence class has many of the same
-    // methods as a TextAnnotation.
-    List<Sentence> sentences = ta1.sentences();
-     
-    System.out.println(sentences.size() + " sentences found.");
-     
-    for (int i = 0; i < sentences.size(); i++) {
-        Sentence sentence = sentences.get(i);
-        System.out.println(sentence);
-    }
-    ```
+```java 
+System.out.println(ta1.getAvailableViews());
+ 
+// Print the sentences. The Sentence class has many of the same
+// methods as a TextAnnotation.
+List<Sentence> sentences = ta1.sentences();
+ 
+System.out.println(sentences.size() + " sentences found.");
+ 
+for (int i = 0; i < sentences.size(); i++) {
+    Sentence sentence = sentences.get(i);
+    System.out.println(sentence);
+}
+```
     
     
