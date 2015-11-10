@@ -192,5 +192,6 @@ for (int i = 0; i < sentences.size(); i++) {
     System.out.println(sentence);
 }
 ```
-    
+
+### Accessing Constituents    
     
