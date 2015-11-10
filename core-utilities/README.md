@@ -80,45 +80,45 @@ of annotations over some text.
 
   1. Using the LBJ sentence splitter and tokenizer
  
-The simplest way to define a `TextAnnotation` is to just give the
-text to the constructor. Note that in the following example,
-`text1` consists of three sentences. The corresponding `ta1` will
-use the sentence slitter defined in the [[http://cogcomp.cs.illinois.edu/page/software_view/11][Learning based Java]] (LBJ)
-library to split the text into sentences and further apply the
-LBJ tokenizer to tokenize the sentence.
-
-
-```java 
-String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
-  + "computer. I was born in Urbana, Il. in 1992";
-
-String corpus = "2001_ODYSSEY";
-String textId = "001";
-
-// Create a TextAnnotation using the LBJ sentence 
-// splitter and tokenizers.
-TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1); 
-```
+    The simplest way to define a `TextAnnotation` is to just give the
+    text to the constructor. Note that in the following example,
+    `text1` consists of three sentences. The corresponding `ta1` will
+    use the sentence slitter defined in the [[http://cogcomp.cs.illinois.edu/page/software_view/11][Learning based Java]] (LBJ)
+    library to split the text into sentences and further apply the
+    LBJ tokenizer to tokenize the sentence.
+    
+    
+    ```java 
+    String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
+      + "computer. I was born in Urbana, Il. in 1992";
+    
+    String corpus = "2001_ODYSSEY";
+    String textId = "001";
+    
+    // Create a TextAnnotation using the LBJ sentence 
+    // splitter and tokenizers.
+    TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1); 
+    ```
 
   2. Using pre-tokenized text
 
-Quite often, our data source could specify the tokenization for
-text. We can use this to create a `TextAnnotation` by specifying
-the sentences and tokens manually. In this case, the input to the
-constructor consists of the corpus, text identifier and a `List`
-of strings. Each element in the list will be treated as a
-sentence. This constructor assumes that the sentences in the list
-are white-space tokenized.
-
-```java 
-String textId2 = "002";
-
-List<String> tokenizedSentences = Arrays.asList(
-             "Good afternoon , gentlemen .", 
-                 "I am a HAL-9000 computer .",
-             "I was born in Urbana , Il. in 1992 .");
-TextAnnotation ta2 = new TextAnnotation(corpus, textId2, tokenizedSentences);
-```
+    Quite often, our data source could specify the tokenization for
+    text. We can use this to create a `TextAnnotation` by specifying
+    the sentences and tokens manually. In this case, the input to the
+    constructor consists of the corpus, text identifier and a `List`
+    of strings. Each element in the list will be treated as a
+    sentence. This constructor assumes that the sentences in the list
+    are white-space tokenized.
+    
+    ```java 
+    String textId2 = "002";
+    
+    List<String> tokenizedSentences = Arrays.asList(
+                 "Good afternoon , gentlemen .", 
+                     "I am a HAL-9000 computer .",
+                 "I was born in Urbana , Il. in 1992 .");
+    TextAnnotation ta2 = new TextAnnotation(corpus, textId2, tokenizedSentences);
+    ```
       
 ### Views 
 
