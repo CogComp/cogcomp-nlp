@@ -142,7 +142,7 @@ represents is a degenerate graph, with only nodes and no edges.
 This prints the views that have been added so far: 
 ```java 
 Syst1em.out.println(ta.getAvailableViews());
-``
+```
 
 ### Accessing the text and tokens
 Edison keeps track of the raw text along with the tokens it
