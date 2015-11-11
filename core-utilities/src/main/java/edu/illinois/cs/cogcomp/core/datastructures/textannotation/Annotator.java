@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 
 /**
  * An interface for creating views of a specified name from a
@@ -16,7 +17,7 @@ public interface Annotator {
     public View getView(TextAnnotation ta) throws AnnotatorException;
 
     /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService} to check for pre-requisites before calling
+     * Can be used internally by {@link BasicAnnotatorService} to check for pre-requisites before calling
      * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator

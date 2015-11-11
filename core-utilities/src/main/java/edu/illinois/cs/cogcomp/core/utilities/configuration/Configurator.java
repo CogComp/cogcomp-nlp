@@ -1,4 +1,6 @@
-package edu.illinois.cs.cogcomp.core.utilities;
+package edu.illinois.cs.cogcomp.core.utilities.configuration;
+
+import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 
 import java.util.Enumeration;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.Properties;
  *      - new MyNewClass( myConfigurator.getDefaultConfig() )
  *      - new MyNewClass( Configurator.mergeProperties( myConfigurator, anotherConfigurator ) );
  *
- * See {@link edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator}
+ * See {@link AnnotatorServiceConfigurator}
  *    for an example of a Configurator extension.
  *
  * Created by mssammon on 8/3/15.
@@ -41,8 +43,8 @@ public abstract class Configurator {
 
     /**
      * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a list of
-     * default {@link edu.illinois.cs.cogcomp.core.utilities.Property} entries.
-     * @param properties The list default {@link edu.illinois.cs.cogcomp.core.utilities.Property} entries
+     * default {@link Property} entries.
+     * @param properties The list default {@link Property} entries
      * @return The {@link java.util.Properties} containing the defined properties
      */
     protected Properties generateProperties(Property[] properties) {

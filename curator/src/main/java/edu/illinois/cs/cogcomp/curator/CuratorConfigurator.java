@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.curator;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.Property;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class CuratorConfigurator extends Configurator {
     public static final Property CURATOR_HOST = new Property("curatorHost", "trollope.cs.illinois.edu");

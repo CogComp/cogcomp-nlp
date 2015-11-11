@@ -1,7 +1,11 @@
-package edu.illinois.cs.cogcomp.core.utilities;
+package edu.illinois.cs.cogcomp.annotation;
+
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
- * The default {@link edu.illinois.cs.cogcomp.core.utilities.Configurator} for {@link edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService}
+ * The default {@link Configurator} for {@link BasicAnnotatorService}
  *
  * @author Mark Sammons
  * @author Christos Christodoulopoulos

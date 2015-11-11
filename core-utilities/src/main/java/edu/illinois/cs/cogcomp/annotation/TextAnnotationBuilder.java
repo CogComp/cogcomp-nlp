@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
@@ -11,7 +10,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
  *    and {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#TOKENS}.
  *    <p/>
  * To create a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} from pre-tokenized text (e.g. from training corpora) please use
- * {@link edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder}.
+ * {@link BasicTextAnnotationBuilder}.
  */
 public interface TextAnnotationBuilder {
 
