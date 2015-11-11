@@ -25,8 +25,8 @@ import java.util.*;
 public class SPModel
     {
         double minProductionProbability = 0.000000000000001;
-        int maxSubstringLength1 = 4;
-        int maxSubstringLength2 = 1;
+        int maxSubstringLength1 = 5;
+        int maxSubstringLength2 = 5;
 
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
@@ -47,7 +47,7 @@ public class SPModel
         private HashMap<Production, Double> pruned = null; // used to be a SparseDoubleVector
         //private SparseDoubleVector<Pair<String, String>> probsDual = null;
         //private SparseDoubleVector<Pair<String, String>> prunedDual = null;
-        private HashMap<String, String> probMap = null;
+        private HashMap<String, HashSet<String>> probMap = null;
         //private Map<String, String> probMapDual = null;
 
         /**
@@ -187,32 +187,29 @@ public class SPModel
         }
 
         /**
-         * Deserializes an SPModel from a stream.
-         * SWM: ignore this for now.
+         * This is basically the reverse of the WriteProbs function.
          */
-//        public SPModel(InputStream stream) throws IOException {
-//            DataInputStream reader = new DataInputStream(stream);
-//            int lml = reader.readInt();
-//            if (lml == -1) languageModel = null;
-//            else
-//            {
-//                languageModel = new HashMap<>(lml);
-//                for (int i = 0; i < lml; i++) {
-//                    // FIXME: is this correct??? Should be ReadString
-//                    languageModel.put(reader.readUTF(), reader.readDouble());
-//                }
-//            }
-//
-//            ngramSize = reader.readInt();
-//
-//            int tec = reader.readInt();
-//            trainingExamples = new ArrayList<>(tec);
-//            for (int i = 0; i < tec; i++)
-//                trainingExamples.add(new Triple<>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
-//
-//            probs = ReadTableFromReader(reader);
-//
-//        }
+        public void ReadProbs(String fname) throws FileNotFoundException {
+            List<String> lines = LineIO.read(fname);
+
+            probs = new SparseDoubleVector<>();
+
+            for(String line : lines){
+                String[] sline = line.trim().split("\t");
+                probs.put(new Production(sline[0], sline[1]), Double.parseDouble(sline[2]));
+            }
+        }
+
+
+        /**
+         * This reads a model from file.
+         */
+        public SPModel(String fname) throws IOException {
+            if(probs != null){
+                probs.clear();
+            }
+            ReadProbs(fname);
+        }
 
 
 
@@ -238,10 +235,10 @@ public class SPModel
          * although practical results may vary.
          * @param targetLanguageExamples Example words from the target language you're transliterating into.
          */
-//        public void SetLanguageModel(List<String> targetLanguageExamples)
-//        {
-//            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
-//        }
+        public void SetLanguageModel(List<String> targetLanguageExamples)
+        {
+            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
+        }
 
         /**
          * Trains the model for the specified number of iterations.

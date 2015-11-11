@@ -1129,10 +1129,33 @@ class Program {
 //            return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, exampleSources, false);
 //        }
 //
-//        public static HashMap<String, double> GetNgramCounts(List<String> examples, int maxSubstringLength)
-//        {
-//            return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, false);
-//        }
+public static HashMap<String, Double> GetNgramCounts(List<String> examples, int maxSubstringLength)
+{
+    return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, false);
+}
+
+    /**
+     * Given a wikidata file, this
+     * @param fname
+     * @return
+     */
+    public static List<String> getForeignWords(String fname) throws FileNotFoundException {
+        List<String> lines = LineIO.read(fname);
+        List<String> words = new ArrayList<>();
+
+        for(String line : lines){
+            String[] parts = line.trim().split("\t");
+            String foreign = parts[0];
+
+            String[] fsplit = foreign.split(" ");
+            for(String word : fsplit){
+                words.add(word);
+            }
+        }
+
+        return words;
+    }
+
 //
 //        public static SparseDoubleVector<Pair<String, String>> MultiPair(HashMap<String, double> vector1, HashMap<Pair<String, String>, double> vector2)
 //        {
@@ -1325,7 +1348,7 @@ class Program {
                 }
 
                 if (weightingMode == WeightingMode.SuperficiallyWeighted && probs != null) {
-                    wordCounts = SumNormalize(Dictionaries.Multiply(wordCounts, probs));
+                    wordCounts = SumNormalize(Dictionaries.MultiplyDouble(wordCounts, probs));
                 }
 
                 Dictionaries.AddTo(counts, wordCounts, example.getThird());

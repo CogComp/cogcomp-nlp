@@ -121,10 +121,22 @@ class WikiTransliteration {
         return new Pair<>(maxProb, productions);
     }
 
-    public static HashMap<String, String> GetProbMap(HashMap<Production, Double> probs) {
-        HashMap<String, String> result = new HashMap<>();
-        for (Production pair : probs.keySet())
-            result.put(pair.getFirst(), pair.getSecond());
+    /**
+     * This is the same as probs, only in a more convenient format. Does not include weights on productions.
+     * @param probs production probabilities
+     * @return hashmap mapping from Production[0] => Production[1]
+     */
+    public static HashMap<String, HashSet<String>> GetProbMap(HashMap<Production, Double> probs) {
+        HashMap<String, HashSet<String>> result = new HashMap<>();
+        for (Production pair : probs.keySet()) {
+            if(!result.containsKey(pair.getFirst())){
+                result.put(pair.getFirst(), new HashSet<String>());
+            }
+            HashSet<String> set = result.get(pair.getFirst());
+            set.add(pair.getSecond());
+
+            result.put(pair.getFirst(), set);
+        }
 
         return result;
     }
@@ -137,9 +149,9 @@ class WikiTransliteration {
             double localProb = 1; // FIXME: is this the right thing to do?? Previously was no initialization.
             int n = ngramSize;
             //while (!ngramProbs.TryGetValue(paddedExample.substring(i - n + 1, n), out localProb)) {
-            while(ngramProbs.containsKey((paddedExample.substring(i-n+1,n)))){
+            while(ngramProbs.containsKey((paddedExample.substring(i - n + 1, i+1)))){
 
-                localProb = ngramProbs.get((paddedExample.substring(i-n+1,n)));
+                localProb = ngramProbs.get((paddedExample.substring(i-n+1,i+1)));
 
                 n--;
                 if (n == 0)
@@ -152,14 +164,28 @@ class WikiTransliteration {
     }
 
 
-    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
+    /**
+     * This is used in the generation process.
+     * @param topK number of candidates to return
+     * @param word1
+     * @param maxSubstringLength
+     * @param probMap a hashmap for productions, same as probs, but with no weights
+     * @param probs
+     * @param memoizationTable
+     * @param pruneToSize
+     * @return
+     */
+    public static TopList<Double, String> Predict2(int topK, String word1, int maxSubstringLength, Map<String, HashSet<String>> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
         TopList<Double, String> result = new TopList<>(topK);
+        // calls a helper function
         HashMap<String, Double> rProbs = Predict2(word1, maxSubstringLength, probMap, probs, memoizationTable, pruneToSize);
         double probSum = 0;
 
+        // gathers the total probability for normalization.
         for (double prob : rProbs.values())
             probSum += prob;
 
+        // this normalizes each value by the total prob.
         for (String key : rProbs.keySet()) {
             Double value = rProbs.get(key);
             result.add(new Pair<>(value / probSum, key));
@@ -168,7 +194,17 @@ class WikiTransliteration {
         return result;
     }
 
-    public static HashMap<String, Double> Predict2(String word1, int maxSubstringLength, Map<String, String> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
+    /**
+     * Helper function.
+     * @param word1
+     * @param maxSubstringLength
+     * @param probMap
+     * @param probs
+     * @param memoizationTable
+     * @param pruneToSize
+     * @return
+     */
+    public static HashMap<String, Double> Predict2(String word1, int maxSubstringLength, Map<String, HashSet<String>> probMap, HashMap<Production, Double> probs, HashMap<String, HashMap<String, Double>> memoizationTable, int pruneToSize) {
         HashMap<String, Double> result;
         if (word1.length() == 0) {
             result = new HashMap<>(1);
@@ -188,29 +224,26 @@ class WikiTransliteration {
             String substring1 = word1.substring(0, i);
 
             if (probMap.containsKey(substring1)) {
+
+                // recursion right here.
                 HashMap<String, Double> appends = Predict2(word1.substring(i), maxSubstringLength, probMap, probs, memoizationTable, pruneToSize);
 
                 //int segmentations = Segmentations( word1.Length - i );
 
-                // FIXME: what does this do? a key should only return a single pair!!!
-                //for (Pair<String, String> alignment : probMap.GetPairsForKey(substring1)) {
-                Pair<String, String> alignment = new Pair(substring1, probMap.get(substring1));
-                double alignmentProb = probs.get(alignment);
+                for (String tgt : probMap.get(substring1)) {
+                    Pair<String, String> alignment = new Pair<>(substring1, tgt);
 
-                for (String key : appends.keySet()) {
-                    Double value = appends.get(key);
-                    String word = alignment.getSecond() + key;
-                    //double combinedProb = (pair.Value/segmentations) * alignmentProb;
-                    double combinedProb = (value) * alignmentProb;
+                    double alignmentProb = probs.get(alignment);
 
-                    if (result.containsKey(word)) {
-                        result.put(word, result.get(word) + combinedProb);
-                    } else {
-                        result.put(word, combinedProb);
+                    for (String key : appends.keySet()) {
+                        Double value = appends.get(key);
+                        String word = alignment.getSecond() + key;
+                        //double combinedProb = (pair.Value/segmentations) * alignmentProb;
+                        double combinedProb = (value) * alignmentProb;
+
+                        // I hope this is an accurate translation...
+                        Dictionaries.IncrementOrSet(result, word, combinedProb, combinedProb);
                     }
-
-                    // I hope this is an accurate translation...
-                    //Dictionaries.IncrementOrSet<String> (result, word, combinedProb, combinedProb);
                 }
 
             }
@@ -249,6 +282,71 @@ class WikiTransliteration {
         memoizationTable.put(word1, result);
         return result;
     }
+
+    public static HashMap<String, Integer> GetNgramCounts(int n, Iterable<String> examples, Boolean pad) {
+        HashMap<String, Integer> result = new HashMap<>();
+        for (String example : examples) {
+            String paddedExample = (pad ? StringUtils.repeat('_', n - 1) + example : example);
+
+            for (int i = 0; i <= paddedExample.length() - n; i++) {
+                //System.out.println(i + ": " + n);
+                Dictionaries.IncrementOrSet(result, paddedExample.substring(i, i+n), 1, 1);
+            }
+        }
+
+        return result;
+    }
+
+    public static HashMap<String, Double> GetFixedSizeNgramProbs(int n, Iterable<String> examples) {
+        HashMap<String, Integer> ngramCounts = GetNgramCounts(n, examples, true);
+        HashMap<String, Integer> ngramTotals = new HashMap<>();
+        for (String key : ngramCounts.keySet()) {
+            int v = ngramCounts.get(key);
+            Dictionaries.IncrementOrSet(ngramTotals, key.substring(0, n - 1), v, v);
+        }
+
+        HashMap<String, Double> result = new HashMap<>(ngramCounts.size());
+        for (String key : ngramCounts.keySet()) {
+            int v = ngramCounts.get(key);
+            result.put(key, ((double) v) / ngramTotals.get(key.substring(0, n - 1)));
+        }
+
+        return result;
+    }
+
+    public static HashMap<String, Double> GetNgramProbs(int minN, int maxN, Iterable<String> examples) {
+        HashMap<String, Double> result = new HashMap<>();
+
+        for (int i = minN; i <= maxN; i++) {
+            HashMap<String, Double> map = GetFixedSizeNgramProbs(i, examples);
+            for (String key : map.keySet()) {
+                double value = map.get(key);
+                result.put(key, value);
+            }
+        }
+
+        return result;
+    }
+
+    public static HashMap<String, Double> GetNgramCounts(int minN, int maxN, Iterable<String> examples, Boolean padding) {
+        HashMap<String, Double> result = new HashMap<>();
+        for (int i = minN; i <= maxN; i++) {
+            HashMap<String, Integer> counts = GetNgramCounts(i, examples, padding);
+            int total = 0;
+            for (int v : counts.values()) {
+                total += v;
+            }
+
+            for (String key : counts.keySet()) {
+                int value = counts.get(key);
+                result.put(key, ((double) value) / total);
+            }
+        }
+
+        return result;
+    }
+
+
 
     /**
      * Given a map of productions and corresponding counts, get the counts of the source word in each
@@ -684,7 +782,7 @@ class WikiTransliteration {
     public static String[] GetLeftFallbackContexts(String word, int position, int contextSize) {
         String[] result = new String[contextSize + 1];
         for (int i = 0; i < result.length; i++)
-            result[i] = word.substring(position - i, i);
+            result[i] = word.substring(position - i, position);
 
         return result;
     }
@@ -692,17 +790,17 @@ class WikiTransliteration {
     public static String[] GetRightFallbackContexts(String word, int position, int contextSize) {
         String[] result = new String[contextSize + 1];
         for (int i = 0; i < result.length; i++)
-            result[i] = word.substring(position, i);
+            result[i] = word.substring(position, position+i);
 
         return result;
     }
 
     public static String GetLeftContext(String word, int position, int contextSize) {
-        return word.substring(position - contextSize, contextSize);
+        return word.substring(position - contextSize, position);
     }
 
     public static String GetRightContext(String word, int position, int contextSize) {
-        return word.substring(position, contextSize);
+        return word.substring(position, position+contextSize);
     }
 
     /**
