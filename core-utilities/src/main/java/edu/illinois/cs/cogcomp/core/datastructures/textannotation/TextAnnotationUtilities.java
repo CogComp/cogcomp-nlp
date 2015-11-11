@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 
 import java.io.PrintStream;
 import java.util.*;
