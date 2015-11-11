@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.utilities;
+package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;

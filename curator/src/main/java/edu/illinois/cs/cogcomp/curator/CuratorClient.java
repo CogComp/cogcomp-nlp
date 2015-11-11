@@ -1,13 +1,12 @@
 package edu.illinois.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewTypes;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
 import edu.illinois.cs.cogcomp.core.utilities.Identifier;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Curator;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
@@ -81,7 +80,7 @@ public class CuratorClient {
      * client that this constructor creates will use the names in {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}
      * for the various annotators when calling the curator.
      *
-     * @param rm The {@link edu.illinois.cs.cogcomp.core.utilities.ResourceManager} containing the properties for Curator
+     * @param rm The {@link ResourceManager} containing the properties for Curator
      */
     public CuratorClient(ResourceManager rm) {
         this.curatorHost = rm.getString(CuratorConfigurator.CURATOR_HOST);

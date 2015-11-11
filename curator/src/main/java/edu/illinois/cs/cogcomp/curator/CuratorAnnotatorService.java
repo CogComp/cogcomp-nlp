@@ -6,7 +6,7 @@ import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.*;
 
@@ -27,7 +27,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
     /**
      * Overloaded constructor with default configuration.
-     * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(edu.illinois.cs.cogcomp.core.utilities.ResourceManager)
+     * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
         this(new CuratorConfigurator().getDefaultConfig());
