@@ -83,7 +83,7 @@ public class View implements Serializable, IQueryable<Constituent> {
      * the constituent .
      */
     @SuppressWarnings("rawtypes")
-    protected ArrayList[] tokensToConstituents;
+    protected final ArrayList[] tokensToConstituents;
 
     /**
      * Creates a view for {@code text} called {@code viewName} which is created
