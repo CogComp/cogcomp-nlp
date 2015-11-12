@@ -87,7 +87,7 @@ class Runner {
     }
 
     static void interactive() throws IOException {
-        SPModel model = new SPModel("probs-hebrew.txt");
+        SPModel model = new SPModel("probs-arabic.txt");
 
         //List<String> arabicStrings = Program.getForeignWords(wikidata + "wikidata.Armenian");
         //model.SetLanguageModel(arabicStrings);
