@@ -241,6 +241,13 @@ public class SPModel
         }
 
         /**
+         * This initializes with rom=false and testing = empty list.
+         */
+        public void Train(int emIterations){
+            Train(emIterations, false, new ArrayList<Example>());
+        }
+
+        /**
          * Trains the model for the specified number of iterations.
          * @param emIterations The number of iterations to train for.
          * @param testing

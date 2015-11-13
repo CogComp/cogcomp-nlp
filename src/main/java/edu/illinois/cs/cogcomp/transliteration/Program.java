@@ -2640,15 +2640,17 @@ public static HashMap<String, Double> GetNgramCounts(List<String> examples, int 
         }
 
         // get all values from testing also
-        for(Example t : testing){
-            String chinese = t.transliteratedWord;
-            for(char c : chinese.toCharArray()){
-                // CHINESE
-                String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
-                for(String s : res) {
-                    // FIXME: strip number from s?
-                    String sss = s.substring(0,s.length()-1);
-                    probs.put(new Production(sss, c + ""), 1.);
+        for(MultiExample t : testing){
+            List<String> chineseWords = t.getTransliteratedWords();
+            for(String chinese : chineseWords) {
+                for (char c : chinese.toCharArray()) {
+                    // CHINESE
+                    String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
+                    for (String s : res) {
+                        // FIXME: strip number from s?
+                        String sss = s.substring(0, s.length() - 1);
+                        probs.put(new Production(sss, c + ""), 1.);
+                    }
                 }
             }
         }
