@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
  *         May 1, 2009
  */
 public class SearchTest extends TestCase {
