@@ -197,8 +197,8 @@ function commitBuildNumberChanges() {
   local BUILD_NUMBER_CHANGES_COMMIT_MESSAGE="Auto commit from CI - incremented build number from [${CURRENT_PROJECT_VERSION}] to [${NEXT_PROJECT_VERSION}]."
   git commit -m "${BUILD_NUMBER_CHANGES_COMMIT_MESSAGE}"
 
-  echo "Pushing changes to upstream..."
-  git push upstream
+  echo "Pushing changes to master..."
+  git push master
 }
 
 #################################################################################
