@@ -1,11 +1,6 @@
 #!/bin/bash
  
 #################################################################################
-# WARNING: DO NOT JUST RUN THIS SCRIPT BLINDLY. MAKE SURE YOU UNDERSTAND WHAT IT
-# IS DOING. IT *WILL* TRY TO COMMIT CHANGES. IT WILL ALSO TRY TO EAT YOUR
-# CHILDREN. IT MAY CAUSE THE SUN TO GO SUPERNOVA. I CLAIM NO RESPONSIBILITY FOR
-# WHATEVER HAPPENS AFTER YOU RUN THIS. NOW, CARRY ON. :-)
-#
 # This script, run from the root of a Maven single or multi-module project, will
 # update the pom files to increment the build number on the version.
 # If a newer version of a parent pom exists, that will also be updated to the
@@ -50,38 +45,22 @@ MAVEN_HELP_PLUGIN="org.apache.maven.plugins:maven-help-plugin:2.1.1"
 MAVEN_HELP_PLUGIN_EVALUATE_VERSION_GOAL="${MAVEN_HELP_PLUGIN}:evaluate -Dexpression=project.version"
 
 DRY_RUN=false
-ALLOW_OUTSIDE_JENKINS=false
-SKIP_BRANCH_SWITCH=false
 
 LAST_COMMIT_HASH=`git log -1 --pretty=format:"%H"`
 
 function printUsage() {
   echo "Usage: ${0} [option(s)]"
   echo
-  echo "  -b                Skip branch manipulation. This should not be used on Jenkins, and should normally be used locally."
-  echo "  -d                Dry run. Do everything except the commit process."
   echo "  -h                Show this help text."
-  echo "  -j                Skip the Jenkins check and allow a run outside of Jenkins (for testing purposes)."
   echo "  -v new_version    Override generated version to the specific version."
   echo "                    This should be in the format: major.minor.patch.build. (e.g. 2.8.1.0)"
 }
 
 while getopts ":v:bhdj" OPT; do
   case ${OPT} in
-    b)
-      SKIP_BRANCH_SWITCH=true
-      ;;
-    d)
-      DRY_RUN=true
-      SKIP_BRANCH_SWITCH=true
-      ALLOW_OUTSIDE_JENKINS=true
-      ;;
     h)
       printUsage
       exit 0
-      ;;
-    j)
-      ALLOW_OUTSIDE_JENKINS=true
       ;;
     v)
       NEXT_PROJECT_VERSION="${OPTARG}"
@@ -98,19 +77,6 @@ while getopts ":v:bhdj" OPT; do
       ;;
   esac
 done
-
-function validateCIServerRun() {
-  IS_JENKINS_SERVER=false
-  if [ ! -z "${JENKINS_URL}" ] ; then
-    echo "This job is being run on Jenkins. JENKINS_URL=${JENKINS_URL}"
-    IS_JENKINS_SERVER=true
-  fi
-
-  if [ ${IS_JENKINS_SERVER} = false ] ; then
-    echo "Detected that we're not on the Jenkins server. Exiting script with error status."
-    exit 10
-  fi
-}
 
 function validatePomExists() {
   CURRENT_DIRECTORY=`pwd`
@@ -205,13 +171,6 @@ function commitBuildNumberChanges() {
 # Here's where the fun begins.
 #################################################################################
 
-# Make sure this script is running on the continuous integration server.
-if [ ${ALLOW_OUTSIDE_JENKINS} = true ] ; then
-  echo "Skipping Jenkins validation for testing purposes."
-else
-  validateCIServerRun
-fi
-
 # Make sure that there's a pom that we can do anything with.
 validatePomExists
 
@@ -220,17 +179,6 @@ validatePomExists
 # TODO: don't do this yet... it's flaky and I need to figure out why.
 #       Assume master for now.
 LAST_COMMIT_BRANCH="master"
-
-# Jenkins uses the master branch to get the codebase, but the workspace itself
-# is shown to git as (no branch). To get around this, we must check out master
-# prior to actually touching any files.
-# TODO: This will obviously not work when the job isn't using master... so
-# we may need to deal with that at some point.
-if [ ${SKIP_BRANCH_SWITCH} = true ] ; then
-  echo "Skipping switch to [${LAST_COMMIT_BRANCH}] branch."
-else
-  switchToBranch
-fi
 
 #################################################################################
 # Update the project POMs with the new build number.
