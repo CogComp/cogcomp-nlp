@@ -23,40 +23,13 @@ public class WordNetManager {
 	Logger log = LoggerFactory.getLogger(WordNetManager.class);
 
 	// Initialize the database
-	protected WordNetManager(String propsFile) throws FileNotFoundException, JWNLException {
+	protected WordNetManager() throws JWNLException {
 		if (wordnet == null) {
 
 			synchronized (WordNetManager.class) {
 				if (wordnet == null) {
-					InputStream stream = ClassLoader.getSystemResourceAsStream(propsFile);
 
-					JWNL.initialize(stream);
-
-					// Create dictionary object
-					wordnet = Dictionary.getInstance();
-				}
-			}
-		}
-	}
-
-	protected WordNetManager(String propsFile, boolean classPath) throws JWNLException, FileNotFoundException {
-
-		if (wordnet == null) {
-			synchronized (WordNetManager.class) {
-				if (wordnet == null) {
-					InputStream stream;
-
-					log.info("Loading wordnet properties as a classpath resource: {}, Properties file: {}", classPath,
-							propsFile);
-					if (!classPath) {
-
-						stream = new FileInputStream(new File(propsFile));
-
-					} else {
-						stream = ClassLoader.getSystemResourceAsStream(propsFile);
-					}
-
-					JWNL.initialize(stream);
+					JWNL.initialize();
 
 					// Create dictionary object
 					wordnet = Dictionary.getInstance();
@@ -75,13 +48,13 @@ public class WordNetManager {
 		WordNetManager.loadAsResource = loadAsResource;
 	}
 
-	public static WordNetManager getInstance(String propsFile) throws FileNotFoundException, JWNLException {
+	public static WordNetManager getInstance() throws FileNotFoundException, JWNLException {
 		if (INSTANCE == null) {
 			synchronized (WordNetManager.class) {
-				if (INSTANCE == null) INSTANCE = new WordNetManager(propsFile, loadAsResource);
+				if (INSTANCE == null)
+					INSTANCE = new WordNetManager();
 			}
 		}
-
 		return INSTANCE;
 	}
 

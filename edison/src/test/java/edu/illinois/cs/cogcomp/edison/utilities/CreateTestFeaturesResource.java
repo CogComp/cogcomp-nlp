@@ -158,7 +158,7 @@ public class CreateTestFeaturesResource {
 		System.out.println("\tadding wordNet");
 		WordNetManager.loadConfigAsClasspathResource(true);
 		for (TextAnnotation ta : tas) {
-			addFeatures(ta, WordFeatureExtractorFactory.getWordNetFeatureExtractor("jwnl_properties.xml",
+			addFeatures(ta, WordFeatureExtractorFactory.getWordNetFeatureExtractor(
 					WordNetFeatureExtractor.WordNetFeatureClass.existsEntry,
 					WordNetFeatureExtractor.WordNetFeatureClass.synsetsFirstSense,
 					WordNetFeatureExtractor.WordNetFeatureClass.lexicographerFileNamesAllSenses));

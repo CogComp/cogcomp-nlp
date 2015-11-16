@@ -10,7 +10,6 @@ import java.util.List;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
  *         Jun 23, 2009
  */
 public class TreeGrepTest extends TestCase {
