@@ -31,7 +31,7 @@ public class CuratorFactoryTest {
 
     private AnnotatorService curator;
 
-    @Before
+    /*@Before
     public void setUp() throws Exception {
         text = LineIO.slurp(TEXT_FILE);
         curator = CuratorFactory.buildCuratorClient();
@@ -122,5 +122,5 @@ public class CuratorFactoryTest {
                 ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB)).getPredicates().size());
         assertEquals(NUM_CHUNKS, ta.getView(ViewNames.SHALLOW_PARSE).getNumberOfConstituents());
         assertEquals(NUM_TOKS, ta.getView(ViewNames.LEMMA).getNumberOfConstituents());
-    }
+    }*/
 }
