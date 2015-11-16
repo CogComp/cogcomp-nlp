@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.core.utilities;
+package edu.illinois.cs.cogcomp.core.utilities.configuration;
 
 import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
 
