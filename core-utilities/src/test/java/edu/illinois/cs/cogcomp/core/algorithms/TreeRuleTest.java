@@ -15,7 +15,6 @@ import java.util.Set;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
  *         Jun 24, 2009
  */
 public class TreeRuleTest extends TestCase {

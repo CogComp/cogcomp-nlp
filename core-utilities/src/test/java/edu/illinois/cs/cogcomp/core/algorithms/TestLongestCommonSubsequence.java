@@ -13,7 +13,6 @@ import java.util.Map;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
  *         Jul 7, 2009
  */
 public class TestLongestCommonSubsequence extends TestCase {
