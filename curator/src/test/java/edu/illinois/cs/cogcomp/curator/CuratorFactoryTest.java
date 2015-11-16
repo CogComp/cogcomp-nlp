@@ -117,7 +117,8 @@ public class CuratorFactoryTest {
         assertEquals(NUM_TOKS, ta.getView(ViewNames.POS).getNumberOfConstituents());
         // Currently, there is no way to access the number of trees in a TreeView (protected variable, no getter)
         assertEquals(56, ta.getView(ViewNames.PARSE_CHARNIAK).getNumberOfConstituents());
-        assertEquals(NUM_SRL_FRAMES, ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB)).getPredicates().size());
+        assertEquals(NUM_SRL_FRAMES,
+                ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB)).getPredicates().size());
         assertEquals(NUM_CHUNKS, ta.getView(ViewNames.SHALLOW_PARSE).getNumberOfConstituents());
         assertEquals(NUM_TOKS, ta.getView(ViewNames.LEMMA).getNumberOfConstituents());
     }
