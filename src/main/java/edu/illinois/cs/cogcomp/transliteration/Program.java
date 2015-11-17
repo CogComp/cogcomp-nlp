@@ -1129,13 +1129,20 @@ class Program {
 //            return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, exampleSources, false);
 //        }
 //
-public static HashMap<String, Double> GetNgramCounts(List<String> examples, int maxSubstringLength)
-{
-    return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, false);
-}
 
     /**
-     * Given a wikidata file, this
+     * Does this not need to have access to ngramsize? No. It gets all ngrams so it can backoff.
+     * @param examples
+     * @param maxSubstringLength
+     * @return
+     */
+    public static HashMap<String, Double> GetNgramCounts(List<String> examples, int maxSubstringLength)
+    {
+        return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, false);
+    }
+
+    /**
+     * Given a wikidata file, this gets all the words in the foreign language for the language model.
      * @param fname
      * @return
      */
@@ -1151,6 +1158,21 @@ public static HashMap<String, Double> GetNgramCounts(List<String> examples, int 
             for(String word : fsplit){
                 words.add(word);
             }
+        }
+
+        return words;
+    }
+
+    /**
+     * Given a wikidata file, this gets all the words in the foreign language for the language model.
+     * @return
+     */
+    public static List<String> getForeignWords(List<Example> examples) throws FileNotFoundException {
+
+        List<String> words = new ArrayList<>();
+
+        for(Example e : examples){
+            words.add(e.getTransliteratedWord());
         }
 
         return words;

@@ -5,6 +5,8 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.TopList;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import org.apache.commons.io.FilenameUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -27,6 +29,8 @@ class Runner {
     static String wikidata = "/shared/corpora/transliteration/wikidata/";
     static String NEWS = "/shared/corpora/transliteration/NEWS2015/";
     static String tl = "/shared/corpora/transliteration/";
+
+    private static Logger logger = LoggerFactory.getLogger(Runner.class);
 
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
 
@@ -75,8 +79,11 @@ class Runner {
         //String trainfile = tl + "chinese/zhExamples.train.500";
         //String testfile = tl + "chinese/zhExamples.test.500";
 
-        String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHi_11946.xml";
-        String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHi_997.xml";
+//        String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHi_11946.xml";
+//        String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHi_997.xml";
+
+        String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
+        String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
         String method = "NEWS";
 
@@ -98,7 +105,19 @@ class Runner {
             // FIXME: is this the right thing to do?? This way, a given word is allowed to take multiple forms in training.
             List<Example> training = new ArrayList<>();
             for(MultiExample me : trainingMulti){
-                training.addAll(me.toExampleList());
+                for(Example e : me.toExampleList()){
+                    String[] tls = e.getTransliteratedWord().split(" ");
+                    String[] ss = e.sourceWord.split(" ");
+
+                    if(tls.length != ss.length){
+                        System.err.println("Mismatched length: " + e.sourceWord);
+                        continue;
+                    }
+
+                    for(int i = 0; i < tls.length; i++){
+                        training.add(new Example(ss[i], tls[i]));
+                    }
+                }
             }
 
             List<MultiExample> testing = readNEWSData(testfile);
@@ -107,7 +126,6 @@ class Runner {
             System.out.println("Testing examples: " + testing.size());
 
             TrainAndTestNEWS(training, testing);
-
         }
 
 
@@ -209,7 +227,7 @@ class Runner {
             String[] etoks = english.split(" ");
 
             if(ftoks.length != etoks.length){
-                System.err.println("Mismatching length of tokens: " + english);
+                logger.error("Mismatching length of tokens: " + english);
                 continue;
             }
 
@@ -225,8 +243,6 @@ class Runner {
         double correctmrr = 0;
         double correctacc = 0;
         List<String> outlines = new ArrayList<>();
-
-        model.setMaxCandidates(10);
 
         for (MultiExample example : testing) {
             outlines.add("SourceWord: " + example.sourceWord + "");
@@ -361,6 +377,10 @@ class Runner {
             }
 
             SPModel model = new SPModel(training2);
+
+            List<String> langstrings = Program.getForeignWords(training2);
+            model.SetLanguageModel(langstrings);
+
             model.Train(emiterations,rom, testing);
 
             Pair<Double, Double> p = TestDiscovery(model, testing);
@@ -404,14 +424,21 @@ class Runner {
             }
 
             SPModel model = new SPModel(training2);
+            List<String> langstrings = Program.getForeignWords(training2);
+            model.SetLanguageModel(langstrings);
+            model.setMaxCandidates(20);
+            model.setNgramSize(2);
+
+            logger.info("Training with " + emiterations + " iterations.");
             model.Train(emiterations);
 
+            logger.info("Testing.");
             Pair<Double, Double> p = TestGenerate(model, testing);
             double mrr = p.getFirst();
             double acc = p.getSecond();
             avgmrr += mrr;
             avgacc += acc;
-            model.WriteProbs("probs.txt");
+            model.WriteProbs("probs.txt", 0.1);
         }
 
         System.out.println("=============");

@@ -142,25 +142,34 @@ class WikiTransliteration {
     }
 
 
+    /**
+     * Given a word, ngramProbs, and an ngramSize, this predicts the probability of the word with respect to this language model.
+     * @param word
+     * @param ngramProbs
+     * @param ngramSize
+     * @return
+     */
     public static double GetLanguageProbability(String word, HashMap<String, Double> ngramProbs, int ngramSize) {
         double probability = 1;
         String paddedExample = StringUtils.repeat('_', ngramSize - 1) + word;
         for (int i = ngramSize - 1; i < paddedExample.length(); i++) {
-            double localProb = 1; // FIXME: is this the right thing to do?? Previously was no initialization.
             int n = ngramSize;
             //while (!ngramProbs.TryGetValue(paddedExample.substring(i - n + 1, n), out localProb)) {
-            while(ngramProbs.containsKey((paddedExample.substring(i - n + 1, i+1)))){
 
-                localProb = ngramProbs.get((paddedExample.substring(i-n+1,i+1)));
-
+            // This is a backoff procedure.
+            String ss = paddedExample.substring(i-n+1, i+1);
+            Double localProb = ngramProbs.get(ss);
+            while(localProb == null){
                 n--;
                 if (n == 0)
-                    return 0;
+                    return 0; // final backoff probability. Be careful with this... can result in names with 0 probability if the LM isn't large enough.
+                ss = paddedExample.substring(i-n+1, i+1);
+                localProb = ngramProbs.get(ss);
             }
             probability *= localProb;
         }
 
-        return probability;
+        return probability / word.length();
     }
 
 

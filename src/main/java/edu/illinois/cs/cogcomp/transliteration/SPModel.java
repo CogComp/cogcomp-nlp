@@ -5,6 +5,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.io.*;
@@ -24,9 +26,10 @@ import java.util.*;
  */
 public class SPModel
     {
+        private Logger logger = LoggerFactory.getLogger(SPModel.class);
         double minProductionProbability = 0.000000000000001;
-        int maxSubstringLength1 = 5;
-        int maxSubstringLength2 = 5;
+        int maxSubstringLength1 = 15;
+        int maxSubstringLength2 = 15;
 
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
@@ -237,6 +240,7 @@ public class SPModel
          */
         public void SetLanguageModel(List<String> targetLanguageExamples)
         {
+            logger.info("Setting language model with " + targetLanguageExamples.size() + " words.");
             languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
         }
 
@@ -277,7 +281,7 @@ public class SPModel
 
             for (int i = 0; i < emIterations; i++)
             {
-
+                logger.info("Training, iteration=" + (i+1));
                 boolean getExampleCounts = true;
                 // Difference is Weighting mode.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
@@ -332,7 +336,8 @@ public class SPModel
             {
                 TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
                 for (Pair<Double, String> prediction : result) {
-                    fPredictions.add(prediction.getFirst() * Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1), prediction.getSecond());
+                    Double prob = Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1);
+                    fPredictions.add(prediction.getFirst() * prob, prediction.getSecond());
                 }
                 result = fPredictions;
             }
