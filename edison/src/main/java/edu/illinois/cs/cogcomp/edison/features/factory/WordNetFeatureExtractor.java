@@ -42,27 +42,27 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
 	 * will provide a check to ensure that the WordNetFeatureExtractor only sees
 	 * words.
 	 */
-	public WordNetFeatureExtractor(String jwnlConfigFile, boolean useLastWord) throws FileNotFoundException,
+	public WordNetFeatureExtractor(boolean useLastWord) throws FileNotFoundException,
 			JWNLException {
 		super(useLastWord);
 
 		featureClasses = new LinkedHashSet<>();
 
 		if (wnManager == null) {
-			wnManager = WordNetManager.getInstance(jwnlConfigFile);
+			wnManager = WordNetManager.getInstance();
 		}
 	}
 
 	/**
 	 * Creates a new WordNetFeatureExtractor. This constructor is equivalent to
-	 * calling {@code new WordNetFeatureExtractor(jwnlConfigFile, false)}.
+	 * calling {@code new WordNetFeatureExtractor(false)}.
 	 *
 	 * @throws JWNLException
 	 * @throws java.io.FileNotFoundException
-	 * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(String, boolean)
+	 * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
 	 */
-	public WordNetFeatureExtractor(String jwnlConfigFile) throws FileNotFoundException, JWNLException {
-		this(jwnlConfigFile, true);
+	public WordNetFeatureExtractor() throws FileNotFoundException, JWNLException {
+		this(true);
 	}
 
 	public void addFeatureType(WordNetFeatureClass name) {
