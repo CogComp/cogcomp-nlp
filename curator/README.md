@@ -1,33 +1,47 @@
 # illinois-curator
+The Curator acts as a central server that can annotate text using
+several annotators. With this package, we can connect to the Curator to
+get those annotations and build our own NLP-driven
+application. This package contains code for interacting with Curator, using the data structures from illinois-core-utilities.
 
-This package contains code for interacting with Curator, using the data structures from illinois-core-utilities.
 
-illinois-curator implements the `AnnotatorService` interface, making it compatible with illinois-nlp-pipeline.
+To use, first create a `CuratorAnnotatorService` to use the pipeline: 
 
-To use, first create a `CuratorAnnotatorService`:
-
-```
-ResourceManager rm = new CuratorConfigurator().getDefaultConfig(); 
-AnnotatorService curator = new CuratorAnnotatorService(rm);
+```java 
+ResourceManager rm = new ResourceManager("config/project.properties")
+AnnotatorService annotator = CuratorPipeline.buildCurator(rm);
+// Or alternatively to use the pipeline:
+// AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline(rm);
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:
 
-```
-TextAnnotation ta = curator.createBasicTextAnnotation("corpus", "id0", text);
-curator.addView(ta, ViewNames.POS);
-curator.addView(ta, ViewNames.NER);
+```java 
+TextAnnotation ta = annotator.createBasicTextAnnotation(corpusID, taID, "Some text that I want to process.");
 ```
 
-Alternatively, you can generate a fully annotated `TextAnnotation` with all the `View`s available in Curator:
+Of course the real fun begins now! Using `AnnotatorService` you can add different annotation 
+Views using their canonical name:
 
-```
-TextAnnotation ta = curator.createAnnotatedTextAnnotation("corpus", "id0", text);
+```java 
+annotator.addView(ta, ViewNames.POS);
+annotator.addView(ta, ViewNames.NER_CONLL);
 ```
 
-or with a specific set of views you need:
+These `View`s as well as the `TextAnnotation` object are now locally cached for faster future access.
 
+You can later print the existing views: 
+
+```java 
+System.out.println(ta1.getAvailableViews());
 ```
-Set<String> viewNames = new HashSet<String>(Arrays.asList({ViewNames.POS, ViewNames.NER}));
-TextAnnotation ta = curator.createBasicTextAnnotation("corpus", "id0", text, viewNames);
+
+or access the views them directly: 
+
+```java 
+TokenLabelView posView = (TokenLabelView) ta.getView(ViewNames.POS);
+
+for (int i = 0; i < ta.size(); i++) {
+    System.out.println(i + ":" + posView.getLabel(i));
+}
 ```

@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.utilities;
+package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -34,7 +34,7 @@ public class BasicTextAnnotationBuilderTest extends TestCase {
         List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
         assertEquals(3, sentences.size());
         Constituent secondSent = sentences.get( 1 );
-        String newB = secondSent.getSurfaceForm();
+        String newB = secondSent.getTokenizedSurfaceForm();
         assertEquals( sentB, newB);
 
         List<Constituent> tokens = ta.getView(ViewNames.TOKENS).getConstituents();
