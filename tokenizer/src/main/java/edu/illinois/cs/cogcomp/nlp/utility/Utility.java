@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.utility;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.reader.OntoNotesDataModel;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 
 import java.util.ArrayList;
 import java.util.List;

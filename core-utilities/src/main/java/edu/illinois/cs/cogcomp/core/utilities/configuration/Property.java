@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.core.utilities;
+package edu.illinois.cs.cogcomp.core.utilities.configuration;
 
 /**
  * A container for a property name and its default value to be using with {@link Configurator}s
