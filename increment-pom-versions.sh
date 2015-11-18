@@ -52,12 +52,16 @@ function printUsage() {
   echo "Usage: ${0} [option(s)]"
   echo
   echo "  -h                Show this help text."
+  echo "  -d                Dry run. Do everything except the commit process."
   echo "  -v new_version    Override generated version to the specific version."
   echo "                    This should be in the format: major.minor.patch.build. (e.g. 2.8.1.0)"
 }
 
 while getopts ":v:bhdj" OPT; do
   case ${OPT} in
+    d)
+      DRY_RUN=true
+      ;;
     h)
       printUsage
       exit 0
