@@ -145,7 +145,7 @@ public class TestWordFeatureFactory extends TestCase {
 		WordNetManager.loadConfigAsClasspathResource(true);
 		for (TextAnnotation ta : tas) {
 			runTest(ta, WordFeatureExtractorFactory
-					.getWordNetFeatureExtractor("jwnl_properties.xml", WordNetFeatureClass.existsEntry,
+					.getWordNetFeatureExtractor(WordNetFeatureClass.existsEntry,
 							WordNetFeatureClass.synsetsFirstSense,
 							WordNetFeatureClass.lexicographerFileNamesAllSenses));
 		}
