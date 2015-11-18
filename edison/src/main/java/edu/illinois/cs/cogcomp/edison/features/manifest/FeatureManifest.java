@@ -395,7 +395,7 @@ public class FeatureManifest {
 					"Requesting wordnet feature, but JWNL config file missing. " + "Please use FeatureManifest.setJWNLConfigFile(file)");
 		}
 		try {
-			WordNetFeatureExtractor wn = new WordNetFeatureExtractor(jwnlConfig);
+			WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
 
 			for (String label : wnLabels) {
 				if (!WordNetClasses.wnClasses.containsKey(label)) throw new EdisonException(
