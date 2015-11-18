@@ -17,7 +17,10 @@ function setPermissions() {
      chmod -R 775 "$i"/*
      chgrp -R cs_danr "$i"/*
   done
+  exit
 }
+
+## script begins here
 
 deploy
 
