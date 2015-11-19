@@ -42,7 +42,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
-            <version>0.1.9</version>
+            <version>0.1.14</version>
         </dependency>
 
         <!-- The following 3 projects are now developed under illinois-cogcomp-nlp -->
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.2.140</version>
+            <version>1.4.190</version>
         </dependency>
 
         <dependency>
