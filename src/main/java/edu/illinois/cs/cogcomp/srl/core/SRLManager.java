@@ -173,8 +173,6 @@ public abstract class SRLManager {
 		Feature.setUseAscii();
 		Feature.setKeepString();
 
-		FeatureManifest.setJWNLConfigFile(properties.getWordNetFile());
-
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
 
 		// These three are from Surdeanu etal.

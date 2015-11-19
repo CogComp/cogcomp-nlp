@@ -5,13 +5,14 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-srl</artifactId>
     <packaging>jar</packaging>
-    <version>5.1.6</version>
+    <version>5.1.7</version>
 
     <url>http://cogcomp.cs.illinois.edu</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <cogcomp-nlp-version>3.0.5</cogcomp-nlp-version>
     </properties>
 
     <repositories>
@@ -48,19 +49,19 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.0</version>
+            <version>${cogcomp-nlp-version}</version>
         </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.0</version>
+            <version>${cogcomp-nlp-version}</version>
         </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.0.0</version>
+            <version>${cogcomp-nlp-version}</version>
         </dependency>
 
         <dependency>
@@ -105,13 +106,6 @@
             <groupId>org.tartarus</groupId>
             <artifactId>snowball</artifactId>
             <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.7</version>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 

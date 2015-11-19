@@ -19,12 +19,9 @@ public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
 	private PropertiesConfiguration config;
-    private final String wordNetFile;
 
 	private SRLProperties(URL url) throws ConfigurationException {
 		config = new PropertiesConfiguration(url);
-
-        this.wordNetFile = config.getString("WordNetConfig");
 
 		if (config.containsKey("LoadWordNetConfigFromClassPath")
 				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
@@ -70,10 +67,6 @@ public class SRLProperties {
 
 	public boolean useCurator() {
 		return config.getBoolean("UseCurator");
-	}
-
-	public String getWordNetFile() {
-		return wordNetFile;
 	}
 
 	String getFeatureCacheFile(SRLType SRLType, Models type, String featureSet, String parser, Dataset dataset) {
