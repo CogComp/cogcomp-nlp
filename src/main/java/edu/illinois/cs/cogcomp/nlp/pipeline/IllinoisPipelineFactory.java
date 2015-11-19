@@ -5,7 +5,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;

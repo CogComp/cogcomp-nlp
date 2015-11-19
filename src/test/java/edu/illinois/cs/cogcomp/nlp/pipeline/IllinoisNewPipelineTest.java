@@ -2,14 +2,14 @@ package edu.illinois.cs.cogcomp.nlp.pipeline;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
+import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicAnnotatorService;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,7 @@ public class IllinoisNewPipelineTest
     public void testPipelineProcessing()
     {
         ( (SimpleCachingPipeline) prep ).setForceUpdate(true);
-        if ( prep instanceof BasicAnnotatorService )
+        if ( prep instanceof BasicAnnotatorService)
             try {
                 ( ( BasicAnnotatorService ) prep ).removeKeyFromCache(text);
         } catch (AnnotatorException e) {

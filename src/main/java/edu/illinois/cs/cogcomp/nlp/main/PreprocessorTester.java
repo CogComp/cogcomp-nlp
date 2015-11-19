@@ -9,8 +9,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 

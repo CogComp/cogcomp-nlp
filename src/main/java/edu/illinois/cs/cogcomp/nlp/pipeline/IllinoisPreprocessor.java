@@ -5,7 +5,7 @@ import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineVars;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -91,7 +91,7 @@ public class IllinoisPreprocessor
      * @param rm_ The ResourceManager object
      * @throws Exception
      */
-    public IllinoisPreprocessor( ResourceManager rm_, TextAnnotationBuilder taBuilder ) throws Exception
+    public IllinoisPreprocessor(ResourceManager rm_, TextAnnotationBuilder taBuilder ) throws Exception
     {
         this.textAnnotationBuilder = taBuilder;
         usePos = rm_.getBoolean( PipelineVars.USE_POS );

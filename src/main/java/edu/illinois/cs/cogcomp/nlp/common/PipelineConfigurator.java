@@ -1,9 +1,10 @@
 package edu.illinois.cs.cogcomp.nlp.common;
 
-import edu.illinois.cs.cogcomp.core.utilities.AnnotatorServiceConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.Property;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+
+import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * Default configuration for pipeline class

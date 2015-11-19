@@ -4,7 +4,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
