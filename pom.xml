@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-lemmatizer</artifactId>
-			<version>${cogcomp-nlp-version}</version>
+            <version>${cogcomp-nlp-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
