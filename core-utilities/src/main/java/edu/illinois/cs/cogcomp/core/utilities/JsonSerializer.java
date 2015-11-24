@@ -86,7 +86,7 @@ public class JsonSerializer extends AbstractSerializer {
         topKViews.add(readView(kView, ta));
       }
 
-      ta.addView(viewName, topKViews);
+      ta.addTopKView(viewName, topKViews);
     }
 
     return ta;

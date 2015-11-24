@@ -81,7 +81,6 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
                 tokenization.getTokens(),
                 tokenization.getSentenceEndTokenIndexes()
                 );
-
     }
 
     /**
