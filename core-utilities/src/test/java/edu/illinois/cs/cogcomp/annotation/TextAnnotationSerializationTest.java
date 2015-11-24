@@ -20,7 +20,8 @@ public class TextAnnotationSerializationTest extends TestCase {
 
   public void setUp() throws Exception {
     super.setUp();
-    String[] sentences = rawText.split("\\n");
+    System.out.println(rawText);
+    String[] sentences = rawText.split(System.lineSeparator());
     tokenizedSentences = new ArrayList<>(sentences.length);
     for (String sentTokens : sentences) {
       tokenizedSentences.add(sentTokens.split("\\s"));

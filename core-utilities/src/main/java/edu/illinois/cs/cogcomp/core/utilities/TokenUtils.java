@@ -5,7 +5,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utility functions related to tokens and tokenization.
+ */
 public class TokenUtils {
+
+  /**
+   * Takes a string and its tokenizied form, and returns an array of span index pairs.
+   * @param sentence raw input text
+   * @param tokens the tokenized form of the sentence
+   * @return array of span index pairs.
+   */
   public static IntPair[] getTokenOffsets(String sentence, String[] tokens) {
     List<IntPair> offsets = new ArrayList<>();
 
