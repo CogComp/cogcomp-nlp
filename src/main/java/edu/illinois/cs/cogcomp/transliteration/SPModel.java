@@ -5,6 +5,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import java.io.*;
 import java.util.*;
@@ -23,6 +26,7 @@ import java.util.*;
  */
 public class SPModel
     {
+        private Logger logger = LoggerFactory.getLogger(SPModel.class);
         double minProductionProbability = 0.000000000000001;
         int maxSubstringLength1 = 15;
         int maxSubstringLength2 = 15;
@@ -36,24 +40,23 @@ public class SPModel
         /**
          * This is the production probabilities table.
          */
-        private SparseDoubleVector<Pair<String, String>> probs = null;
+        private SparseDoubleVector<Production> probs = null;
 
         /**
          * This is the production probabilities table multiplied by the segmentfactor.
          */
-        private SparseDoubleVector<Pair<String, String>> multiprobs = null;
+        private SparseDoubleVector<Production> multiprobs = null;
 
-        private HashMap<Pair<String, String>, Double> pruned = null; // used to be a SparseDoubleVector
+        private HashMap<Production, Double> pruned = null; // used to be a SparseDoubleVector
         //private SparseDoubleVector<Pair<String, String>> probsDual = null;
         //private SparseDoubleVector<Pair<String, String>> prunedDual = null;
-        private HashMap<String, String> probMap = null;
+        private HashMap<String, HashSet<String>> probMap = null;
         //private Map<String, String> probMapDual = null;
 
         /**
          * The maximum number of candidate transliterations returned by Generate, as well as preserved in intermediate steps.
          * Larger values will possibly yield better transliterations, but will be more computationally expensive.
          * The default value is 100.
-         * COMMENTED OUT BY SWM.
          */
         private int maxCandidates=100;
 
@@ -132,35 +135,35 @@ public class SPModel
             return table;
         }
 
-        public void WriteToStream(OutputStream stream) throws IOException {
-            DataOutputStream writer = new DataOutputStream(stream);
-
-            if (languageModel == null) writer.write(-1);
-            else
-            {
-                writer.write(languageModel.size());
-                for(String key : languageModel.keySet())
-                {
-                    // TODO what are the data types here?
-                    writer.writeChars(key);
-                    writer.writeDouble(languageModel.get(key));
-                }
-            }
-
-            writer.write(ngramSize);
-
-            writer.write(trainingExamples.size());
-            for(Triple<String, String, Double> triple : trainingExamples)
-            {
-                writer.writeChars(triple.getFirst());
-                writer.writeChars(triple.getSecond());
-                writer.writeDouble(triple.getThird());
-            }
-
-            WriteToWriter(writer, probs);
-
-            writer.flush();
-        }
+//        public void WriteToStream(OutputStream stream) throws IOException {
+//            DataOutputStream writer = new DataOutputStream(stream);
+//
+//            if (languageModel == null) writer.write(-1);
+//            else
+//            {
+//                writer.write(languageModel.size());
+//                for(String key : languageModel.keySet())
+//                {
+//                    // TODO what are the data types here?
+//                    writer.writeChars(key);
+//                    writer.writeDouble(languageModel.get(key));
+//                }
+//            }
+//
+//            writer.write(ngramSize);
+//
+//            writer.write(trainingExamples.size());
+//            for(Triple<String, String, Double> triple : trainingExamples)
+//            {
+//                writer.writeChars(triple.getFirst());
+//                writer.writeChars(triple.getSecond());
+//                writer.writeDouble(triple.getThird());
+//            }
+//
+//            WriteToWriter(writer, probs);
+//
+//            writer.flush();
+//        }
 
         /**
          * This writes the production probabilities out to file in human-readable format.
@@ -187,31 +190,28 @@ public class SPModel
         }
 
         /**
-         * Deserializes an SPModel from a stream.
-         * SWM: ignore this for now.
+         * This is basically the reverse of the WriteProbs function.
          */
-        public SPModel(InputStream stream) throws IOException {
-            DataInputStream reader = new DataInputStream(stream);
-            int lml = reader.readInt();
-            if (lml == -1) languageModel = null;
-            else
-            {
-                languageModel = new HashMap<>(lml);
-                for (int i = 0; i < lml; i++) {
-                    // FIXME: is this correct??? Should be ReadString
-                    languageModel.put(reader.readUTF(), reader.readDouble());
-                }
+        public void ReadProbs(String fname) throws FileNotFoundException {
+            List<String> lines = LineIO.read(fname);
+
+            probs = new SparseDoubleVector<>();
+
+            for(String line : lines){
+                String[] sline = line.trim().split("\t");
+                probs.put(new Production(sline[0], sline[1]), Double.parseDouble(sline[2]));
             }
+        }
 
-            ngramSize = reader.readInt();
 
-            int tec = reader.readInt();
-            trainingExamples = new ArrayList<>(tec);
-            for (int i = 0; i < tec; i++)
-                trainingExamples.add(new Triple<>(reader.readUTF(), reader.readUTF(), reader.readDouble()));
-
-            probs = ReadTableFromReader(reader);
-
+        /**
+         * This reads a model from file.
+         */
+        public SPModel(String fname) throws IOException {
+            if(probs != null){
+                probs.clear();
+            }
+            ReadProbs(fname);
         }
 
 
@@ -238,44 +238,61 @@ public class SPModel
          * although practical results may vary.
          * @param targetLanguageExamples Example words from the target language you're transliterating into.
          */
-//        public void SetLanguageModel(List<String> targetLanguageExamples)
-//        {
-//            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
-//        }
+        public void SetLanguageModel(List<String> targetLanguageExamples)
+        {
+            logger.info("Setting language model with " + targetLanguageExamples.size() + " words.");
+            languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
+        }
+
+        /**
+         * This initializes with rom=false and testing = empty list.
+         */
+        public void Train(int emIterations){
+            Train(emIterations, false, new ArrayList<Example>());
+        }
 
         /**
          * Trains the model for the specified number of iterations.
          * @param emIterations The number of iterations to train for.
+         * @param testing
          */
-        public void Train(int emIterations)
+        public void Train(int emIterations, boolean rom, List<Example> testing)
         {
             List<Triple<String, String, Double>> trainingTriples = trainingExamples;
 
             pruned = null;
             multiprobs = null;
 
+            // this is the initialization.
             if (probs == null)
             {
-<<<<<<< HEAD
+
                 // FIXME: out variables... is exampleCounts actually used anywhere???
                 //List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
-=======
-                // FIXME: is exampleCounts actually used anywhere???
-                List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
+
                 boolean getExampleCounts = false;
+                // gets counts of productions, not normalized.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
                         trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, getExampleCounts));
->>>>>>> dff36e31160cde38cde88529386e8d04be716bc2
+
+                // this just normalizes by the source string.
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
+
+                if(rom) {
+                    probs = Program.InitializeWithRomanization(probs, trainingTriples, testing);
+                }
             }
 
             for (int i = 0; i < emIterations; i++)
             {
-
+                logger.info("Training, iteration=" + (i+1));
                 boolean getExampleCounts = true;
+                // Difference is Weighting mode.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
                         trainingTriples, segmentFactor != 1 ? probs.multiply(segmentFactor) : probs, Program.WeightingMode.CountWeighted, WikiTransliteration.NormalizationMode.None, getExampleCounts));
+
+                // this just normalizes by the source string.
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
             }
         }
@@ -292,7 +309,7 @@ public class SPModel
                 multiprobs = probs.multiply(segmentFactor);
             }
 
-            HashMap<Pair<String, String>, Double> memoizationTable = new HashMap<>();
+            HashMap<Production, Double> memoizationTable = new HashMap<>();
             return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability)
                             / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
         }
@@ -324,7 +341,8 @@ public class SPModel
             {
                 TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
                 for (Pair<Double, String> prediction : result) {
-                    fPredictions.add(prediction.getFirst() * Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1), prediction.getSecond());
+                    Double prob = Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1);
+                    fPredictions.add(prediction.getFirst() * prob, prediction.getSecond());
                 }
                 result = fPredictions;
             }

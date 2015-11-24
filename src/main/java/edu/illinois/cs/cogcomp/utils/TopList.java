@@ -17,6 +17,10 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
         this.topK = topK;
     }
 
+    public int size(){
+        return ilist.size();
+    }
+
     @Override
     public String toString() {
 
