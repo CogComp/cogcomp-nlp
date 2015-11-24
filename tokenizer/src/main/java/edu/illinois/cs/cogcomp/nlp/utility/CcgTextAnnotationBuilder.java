@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.TokenUtils;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 /**
@@ -83,9 +84,6 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
 
     }
 
-
-
-
     /**
      * instantiate a TextAnnotation using a SentenceViewGenerator to create an explicit Sentence view
      *
@@ -107,7 +105,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
             throw new IllegalArgumentException("Invalid sentence boundary. Last element should be the number of tokens");
 
 
-        IntPair[] offsets = TokenizerViewUtilities.getTokenOffsets(text, tokens);
+        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
 
         assert offsets.length == tokens.length;
 
