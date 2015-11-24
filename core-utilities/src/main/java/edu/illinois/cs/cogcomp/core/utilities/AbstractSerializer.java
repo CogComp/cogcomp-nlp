@@ -6,7 +6,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class AbstractEdisonSerializer {
+public class AbstractSerializer {
   protected static View createEmptyView(TextAnnotation ta, String viewClass,
                                         String viewName, String viewGenerator, double score)
       throws NoSuchMethodException, ClassNotFoundException,
