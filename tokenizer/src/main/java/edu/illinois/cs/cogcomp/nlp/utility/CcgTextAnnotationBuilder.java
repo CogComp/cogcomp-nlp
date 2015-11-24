@@ -107,7 +107,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
             throw new IllegalArgumentException("Invalid sentence boundary. Last element should be the number of tokens");
 
 
-        IntPair[] offsets = TokenizerUtilities.getTokenOffsets(text, tokens);
+        IntPair[] offsets = TokenizerViewUtilities.getTokenOffsets(text, tokens);
 
         assert offsets.length == tokens.length;
 

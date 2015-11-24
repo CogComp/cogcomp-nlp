@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author Vivek Srikumar
  */
-public class TokenizerUtilities {
+public class TokenizerViewUtilities {
 
     public static final Tokenizer lbjTokenizer = new IllinoisTokenizer();
 
@@ -49,7 +49,7 @@ public class TokenizerUtilities {
 
             @Override
             public View getView(TextAnnotation ta) {
-                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(ta, lbjTokenizer, "LBJ");
+                return TokenizerViewUtilities.addTokenView(ta, lbjTokenizer, "LBJ");
 			}
 
             @Override
@@ -58,55 +58,6 @@ public class TokenizerUtilities {
             }
         }
     }
-
-    public static IntPair[] getTokenOffsets(String sentence, String[] tokens) {
-        List<IntPair> offsets = new ArrayList<>();
-
-        int tokenId = 0;
-        int characterId = 0;
-
-        int tokenCharacterStart = 0;
-        int tokenLength = 0;
-
-        while (characterId < sentence.length() && Character.isWhitespace(sentence.charAt(characterId)))
-            characterId++;
-
-        while (characterId < sentence.length()) {
-            if (tokenLength == tokens[tokenId].length()) {
-                offsets.add(new IntPair(tokenCharacterStart, characterId));
-
-                while (characterId < sentence.length()
-                        && Character.isWhitespace(sentence.charAt(characterId)))
-                    characterId++;
-
-                tokenCharacterStart = characterId;
-                tokenLength = 0;
-                tokenId++;
-
-            } else {
-                assert sentence.charAt(characterId) == tokens[tokenId]
-                        .charAt(tokenLength) : sentence.charAt(characterId)
-                        + " expected, found "
-                        + tokens[tokenId].charAt(tokenLength)
-                        + " instead in sentence: " + sentence;
-
-                tokenLength++;
-                characterId++;
-
-            }
-        }
-
-        if (characterId == sentence.length()
-                && offsets.size() == tokens.length - 1) {
-            offsets.add(new IntPair(tokenCharacterStart, sentence.length()));
-        }
-
-        assert offsets.size() == tokens.length : offsets;
-
-        return offsets.toArray(new IntPair[offsets.size()]);
-    }
-
-
 
     public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer, String source) {
         SentenceSplitter splitter = new SentenceSplitter(new String[]{input.getText()});
