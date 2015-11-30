@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -19,7 +20,7 @@ import java.util.List;
  *
  * @author Gourab Kundu, Vivek Srikumar
  */
-public class PseudoParse implements Annotator {
+public class PseudoParse extends Annotator {
 
 	public static final PseudoParse STANFORD =
 			new PseudoParse(ViewNames.CLAUSES_STANFORD, ViewNames.PSEUDO_PARSE_STANFORD);
@@ -32,13 +33,14 @@ public class PseudoParse implements Annotator {
 	private final String clauseViewName;
 
 	public PseudoParse(String clauseViewName, String pseudoParseViewName) {
+		super( pseudoParseViewName, new String[]{ clauseViewName, ViewNames.POS, ViewNames.SHALLOW_PARSE });
 		this.clauseViewName = clauseViewName;
 		this.pseudoParseViewName = pseudoParseViewName;
 
 	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
+	public void addView(TextAnnotation ta) {
 		SpanLabelView cv = (SpanLabelView) ta.getView(clauseViewName);
 
 		List<Constituent> clauses = cv.getConstituents();
@@ -96,16 +98,8 @@ public class PseudoParse implements Annotator {
 
 		parseView.setParseTree(0, parseTree);
 
-		return parseView;
+		ta.addView( getViewName(), parseView );
 	}
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[]{clauseViewName, ViewNames.POS, ViewNames.SHALLOW_PARSE};
-	}
-
-	public String getViewName() {
-		return pseudoParseViewName;
-	}
 
 }

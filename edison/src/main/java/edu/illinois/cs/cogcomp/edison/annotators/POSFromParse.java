@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
@@ -10,7 +11,7 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
  *
  * @author Vivek Srikumar
  */
-public class POSFromParse implements Annotator {
+public class POSFromParse extends Annotator {
 
 	private final String parseViewName;
 
@@ -22,11 +23,12 @@ public class POSFromParse implements Annotator {
 	 *                      labels.
 	 */
 	public POSFromParse(String parseViewName) {
+		super( ViewNames.POS, new String[] { parseViewName } );
 		this.parseViewName = parseViewName;
 	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
+	public void addView(TextAnnotation ta) {
 		TokenLabelView posView = new TokenLabelView(ViewNames.POS, "ParsePOS", ta, 1.0);
 
 		int tokenId = 0;
@@ -45,17 +47,8 @@ public class POSFromParse implements Annotator {
 			}
 
 		}
-		return posView;
+		ta.addView( getViewName(), posView );
 	}
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[]{parseViewName};
-	}
-
-	@Override
-	public String getViewName() {
-		return ViewNames.POS;
-	}
 
 }

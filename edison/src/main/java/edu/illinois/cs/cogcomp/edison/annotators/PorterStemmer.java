@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -14,20 +14,27 @@ import org.tartarus.snowball.ext.englishStemmer;
  * @author Vivek Srikumar
  * @deprecated Use {@code illinois-lemmatizer} instead
  */
-public class PorterStemmer implements Annotator {
+public class PorterStemmer extends Annotator {
 
-	public static final PorterStemmer instance = new PorterStemmer();
+	private static PorterStemmer instance = null; // = new PorterStemmer();
 
 	private final static SnowballStemmer stemmer = new englishStemmer();
 
-	@Override
-	public String getViewName() {
-		return ViewNames.LEMMA;
+	public static PorterStemmer getInstance()
+	{
+		if ( null == instance )
+			instance = new PorterStemmer( ViewNames.LEMMA, new String[]{} );
+		return instance;
+	}
+
+	private PorterStemmer( String viewName, String[] prerequisiteViews )
+	{
+		super( viewName, prerequisiteViews );
 	}
 
 	@Override
-	public View getView(TextAnnotation input) {
-		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "PorterStemmer", input, 1.0);
+	public void addView(TextAnnotation input) {
+		TokenLabelView view = new TokenLabelView(getViewName(), "PorterStemmer", input, 1.0);
 
 		synchronized (instance) {
 			for (int i = 0; i < input.size(); i++) {
@@ -38,12 +45,8 @@ public class PorterStemmer implements Annotator {
 				view.addTokenLabel(i, stemmer.getCurrent(), 1.0);
 			}
 		}
-		return view;
+		input.addView( getViewName(), view );
 	}
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[0];
-	}
 
 }

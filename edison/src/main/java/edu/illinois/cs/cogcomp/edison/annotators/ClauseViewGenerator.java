@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -18,7 +19,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class ClauseViewGenerator implements Annotator {
+public class ClauseViewGenerator extends Annotator {
 
 	public static ClauseViewGenerator CHARNIAK =
 			new ClauseViewGenerator(ViewNames.PARSE_CHARNIAK, ViewNames.CLAUSES_CHARNIAK);
@@ -31,17 +32,14 @@ public class ClauseViewGenerator implements Annotator {
 	private final String clauseViewName;
 
 	public ClauseViewGenerator(String parseViewName, String clauseViewName) {
+		super( clauseViewName, new String[]{ parseViewName } );
 		this.parseViewName = parseViewName;
 		this.clauseViewName = clauseViewName;
 	}
 
-	@Override
-	public String getViewName() {
-		return clauseViewName;
-	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
+	public void addView(TextAnnotation ta) {
 		SpanLabelView view = new SpanLabelView(getViewName(), "From " + parseViewName, ta, 1.0, true);
 
 		TreeView parse = (TreeView) ta.getView(parseViewName);
@@ -76,7 +74,7 @@ public class ClauseViewGenerator implements Annotator {
 
 		}
 
-		return view;
+		ta.addView( getViewName(), view );
 	}
 
 	@Override
