@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -178,7 +179,7 @@ public class TestWordFeatureFactory extends TestCase {
 	public final void testGazetteerFeatures() throws Exception {
 		System.out.println("\tTesting gazetteer features");
 		WordFeatureExtractor fex = WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
-				new GazetteerViewGenerator("gazetteers", GazetteerViewGenerator.GazetterView));
+				new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
 
 		for (TextAnnotation ta : tas) {
 			runTest(ta, fex);

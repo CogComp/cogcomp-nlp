@@ -1,7 +1,8 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -24,12 +25,11 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
-public class BrownClusterViewGenerator implements Annotator {
+public class BrownClusterViewGenerator extends Annotator {
 	public final static String file100 = "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt";
 	public final static String file320 = "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt";
 	public final static String file1000 = "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
 	public final static String file3200 = "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
-	public static final String ViewName = "BrownClustersView";
 	private final Logger log = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
 
 	// private final Map<String, List<ListMatch<String>>> matchers;
@@ -49,6 +49,7 @@ public class BrownClusterViewGenerator implements Annotator {
 	}
 
 	public BrownClusterViewGenerator(String name, String file, boolean gzip) throws Exception {
+		super( ViewNames.BROWN_CLUSTERS, new String[]{} );
 		this.name = name;
 		this.file = file;
 		this.gzip = gzip;
@@ -118,17 +119,13 @@ public class BrownClusterViewGenerator implements Annotator {
 
 	}
 
-	@Override
-	public String getViewName() {
-		return ViewName + ":" + this.name;
-	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
+	public void addView(TextAnnotation ta) {
 
 		lazyLoadClusters();
 
-		SpanLabelView view = new SpanLabelView(ViewName, "BrownClusters", ta, 1.0, true);
+		SpanLabelView view = new SpanLabelView(ViewNames.BROWN_CLUSTERS, "BrownClusters", ta, 1.0, true);
 
 		Map<String, List<IntPair>> m = getMatchingSpans(ta);
 
@@ -158,7 +155,7 @@ public class BrownClusterViewGenerator implements Annotator {
 			}
 		}
 
-		return view;
+		ta.addView( getViewName(), view );
 	}
 
 	@Override
