@@ -3,13 +3,10 @@ package edu.illinois.cs.cogcomp.nlp.utility;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 import java.util.ArrayList;
@@ -18,46 +15,7 @@ import java.util.List;
 /**
  * @author Vivek Srikumar
  */
-public class TokenizerViewUtilities {
-
-    public static final Tokenizer lbjTokenizer = new IllinoisTokenizer();
-
-    /**
-     * The elements of this enumeration generate views called {@code SENTENCE}.
-     * Most of the time, you will not have to use this view generator.
-     * <p/>
-     * Each element of {@code SentenceViewGenerators} implements the
-     * {@code getViewGenerator()} function, which creates a view from a
-     * {@code TextAnnotation}.
-     * <p/>
-     * Elements of this enumeration, in addition to generating the view, <i>also
-     * tokenize</i> the sentence. Since a {@code TextAnnotation} can be
-     * tokenized only once, only elements of this enumeration should be used to
-     * tokenize sentences unless you want a custom tokenizer.
-     */
-    public enum SentenceViewGenerators implements Annotator {
-
-        /**
-         * This sentence view generator tokenizes text with the {@link edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer }
-         * and uses the LBJ sentence splitter to split sentences.
-         */
-        LBJSentenceViewGenerator {
-            @Override
-            public String getViewName() {
-                return ViewNames.SENTENCE;
-            }
-
-            @Override
-            public View getView(TextAnnotation ta) {
-                return TokenizerViewUtilities.addTokenView(ta, lbjTokenizer, "LBJ");
-			}
-
-            @Override
-            public String[] getRequiredViews() {
-                return new String[0];
-            }
-        }
-    }
+public class TokenizerUtilities {
 
     public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer, String source) {
         SentenceSplitter splitter = new SentenceSplitter(new String[]{input.getText()});
