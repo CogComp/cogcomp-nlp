@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -86,7 +87,13 @@ public class BrownClusterFeatureExtractor extends WordFeatureExtractor {
 
 		if (!ta.hasView(viewGenerator.getViewName())) {
 			synchronized (BrownClusterFeatureExtractor.class) {
-				View view = viewGenerator.getView(ta);
+				View view = null;
+				try {
+					view = viewGenerator.getView(ta);
+				} catch (AnnotatorException e) {
+					e.printStackTrace();
+					throw new EdisonException( e.getMessage() );
+				}
 				ta.addView(viewGenerator.getViewName(), view);
 			}
 		}
