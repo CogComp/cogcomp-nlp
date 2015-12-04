@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
@@ -27,7 +28,13 @@ public class TestHeadFinderDependencyHelper extends TestCase {
 
 		HeadFinderDependencyViewGenerator dep = new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK);
 
-		TreeView depTree = (TreeView) dep.getView(ta);
+		TreeView depTree = null;
+		try {
+			depTree = (TreeView) dep.getView(ta);
+		} catch (AnnotatorException e) {
+			e.printStackTrace();
+			fail( e.getMessage() );
+		}
 		System.out.println(depTree);
 
 		assertEquals(depTree.getNumberOfConstituents(), ta.size());
