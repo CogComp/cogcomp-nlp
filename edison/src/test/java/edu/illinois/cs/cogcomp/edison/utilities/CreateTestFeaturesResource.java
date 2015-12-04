@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.utilities;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -168,7 +169,7 @@ public class CreateTestFeaturesResource {
 	private void addGazetteerFeatures() throws Exception {
 		System.out.println("\tadding gazetteer features");
 		WordFeatureExtractor fex = WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
-				new GazetteerViewGenerator("gazetteers", GazetteerViewGenerator.GazetterView));
+				new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
 
 		for (TextAnnotation ta : tas) {
 			addFeatures(ta, fex);
