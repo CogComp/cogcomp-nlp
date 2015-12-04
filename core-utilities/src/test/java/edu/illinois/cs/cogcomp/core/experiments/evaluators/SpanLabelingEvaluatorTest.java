@@ -39,7 +39,7 @@ public class SpanLabelingEvaluatorTest {
         SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertTrue( Math.abs(splittingTester.getAverageF1() - 0.57) < 0.01 );
+        assertEquals( splittingTester.getAverageF1(), 0.57, 0.01 );
         assertEquals(0.5, splittingTester.getAverageAccuracy(), 0);
     }
 }
