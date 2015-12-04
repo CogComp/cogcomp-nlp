@@ -44,7 +44,7 @@ MAVEN_VERSIONS_PLUGIN_UPDATE_DEPENDENCIES_GOAL="${MAVEN_VERSIONS_PLUGIN}:use-lat
 MAVEN_HELP_PLUGIN="org.apache.maven.plugins:maven-help-plugin:2.1.1"
 MAVEN_HELP_PLUGIN_EVALUATE_VERSION_GOAL="${MAVEN_HELP_PLUGIN}:evaluate -Dexpression=project.version"
 
-DRY_RUN=false
+DRY_RUN=true
 
 LAST_COMMIT_HASH=`git log -1 --pretty=format:"%H"`
 
