@@ -93,14 +93,15 @@ public abstract class AbstractTextAnnotation implements Serializable {
         for ( int i = 0; i < viewNames.length; ++i )
             addView( viewNames[ i ], views[ i ] );
     }
-    /**
-     * Adds the top scoring value for the view identified by {@code viewName}.
-     */
-    public void addView(String viewName, View view) {
-        views.put(viewName, Collections.singletonList(view));
-    }
 
-    /**
+  /**
+   * Adds the top scoring value for the view identified by {@code viewName}.
+   */
+  public void addView(String viewName, View view) {
+    views.put(viewName, Collections.singletonList(view));
+  }
+
+  /**
      * Remove a given view
      */
     public void removeView(String viewName) {

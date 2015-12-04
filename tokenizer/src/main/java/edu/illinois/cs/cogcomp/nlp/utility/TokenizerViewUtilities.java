@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author Vivek Srikumar
  */
-public class TokenizerUtilities {
+public class TokenizerViewUtilities {
 
     public static final Tokenizer lbjTokenizer = new IllinoisTokenizer();
 
