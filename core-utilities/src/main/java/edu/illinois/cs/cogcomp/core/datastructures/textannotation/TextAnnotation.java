@@ -53,8 +53,6 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      */
     final SymbolTable symtab;
 
-
-
     public TextAnnotation(String corpusId, String id, String text,
                           IntPair[] characterOffsets, String[] tokens, int[] sentenceEndPositions) {
         super();
