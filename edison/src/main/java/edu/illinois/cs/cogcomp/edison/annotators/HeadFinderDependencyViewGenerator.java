@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -14,12 +15,13 @@ import java.util.Set;
 /**
  * @author Vivek Srikumar
  */
-public class HeadFinderDependencyViewGenerator implements Annotator {
+public class HeadFinderDependencyViewGenerator extends Annotator {
 	private final static Logger log = LoggerFactory.getLogger(HeadFinderDependencyViewGenerator.class);
 	static String viewGenerator = "HeadFinderDependencies";
 	private final String parseViewName;
 
-	public HeadFinderDependencyViewGenerator(String parseViewName) {
+	public HeadFinderDependencyViewGenerator(String parseViewName ) {
+		super(buildViewName(parseViewName), new String[]{ parseViewName } );
 		this.parseViewName = parseViewName;
 
 	}
@@ -78,17 +80,20 @@ public class HeadFinderDependencyViewGenerator implements Annotator {
 	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
-		return getDependencyTree(ta, parseViewName, getViewName());
+	public void addView(TextAnnotation ta) {
+		ta.addView( getViewName(), getDependencyTree(ta, parseViewName, getViewName()) );
 	}
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[]{parseViewName};
-	}
 
 	@Override
 	public String getViewName() {
-		return ViewNames.DEPENDENCY + ":" + parseViewName;
+		return buildViewName( parseViewName );
 	}
+
+
+
+    private static String buildViewName(String parseViewName )
+    {
+       return ViewNames.DEPENDENCY_HEADFINDER + ":" + parseViewName;
+    }
 }
