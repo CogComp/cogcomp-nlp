@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -10,7 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
  *
  * @author Vivek Srikumar
  */
-public class POSFromParse implements Annotator {
+public class POSFromParse extends Annotator {
 
     private final String parseViewName;
 
@@ -22,11 +23,12 @@ public class POSFromParse implements Annotator {
      *                      labels.
      */
     public POSFromParse(String parseViewName) {
+        super(ViewNames.POS, new String[]{ parseViewName } );
         this.parseViewName = parseViewName;
     }
 
     @Override
-    public View getView(TextAnnotation ta) {
+    public void addView(TextAnnotation ta) {
         TokenLabelView posView = new TokenLabelView(ViewNames.POS, "ParsePOS",
                 ta, 1.0);
 
@@ -48,12 +50,13 @@ public class POSFromParse implements Annotator {
             }
 
         }
-        return posView;
+        ta.addView( getViewName(), posView );
+//        return posView;
     }
 
     /**
      * Can be used internally by {@link BasicAnnotatorService} to check for pre-requisites before calling
-     * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
+     * any single (external) {@link Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
      */
