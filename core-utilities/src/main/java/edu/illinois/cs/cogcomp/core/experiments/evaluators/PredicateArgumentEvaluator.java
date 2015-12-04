@@ -2,10 +2,7 @@ package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
@@ -17,13 +14,13 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class PredicateArgumentEvaluator {
+public class PredicateArgumentEvaluator extends Evaluator {
     PredicateArgumentView gold, prediction;
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
-    public PredicateArgumentEvaluator(PredicateArgumentView gold, PredicateArgumentView prediction) {
-        this.gold = gold;
-        this.prediction = prediction;
+    public void setViews(View gold, View prediction) {
+        this.gold = (PredicateArgumentView)gold;
+        this.prediction = (PredicateArgumentView)prediction;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
     }
 
