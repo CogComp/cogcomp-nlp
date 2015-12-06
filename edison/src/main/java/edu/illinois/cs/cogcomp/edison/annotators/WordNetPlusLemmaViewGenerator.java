@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -38,7 +38,7 @@ import java.util.Scanner;
  * @author Vivek Srikumar
  * @deprecated Use {@code illinois-lemmatizer} instead
  */
-public class WordNetPlusLemmaViewGenerator implements Annotator {
+public class WordNetPlusLemmaViewGenerator extends Annotator {
 	public final static VerbLemmaDictionary lemmaDict;
 	private final static Logger log = LoggerFactory.getLogger(WordNetPlusLemmaViewGenerator.class);
 	private final static Map<String, String> contractions;
@@ -64,17 +64,14 @@ public class WordNetPlusLemmaViewGenerator implements Annotator {
 	private WordNetManager wn;
 
 	public WordNetPlusLemmaViewGenerator(WordNetManager wn) {
+		super( ViewNames.LEMMA, new String[]{});
 		this.wn = wn;
 	}
 
-	@Override
-	public String getViewName() {
-		return ViewNames.LEMMA;
-	}
 
 	@Override
-	public View getView(TextAnnotation ta) {
-		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "WordNetPlus", ta, 1.0);
+	public void addView(TextAnnotation ta) {
+		TokenLabelView view = new TokenLabelView(getViewName(), "WordNetPlus", ta, 1.0);
 		for (int i = 0; i < ta.size(); i++) {
 			String word = ta.getToken(i).toLowerCase().trim();
 
@@ -105,7 +102,7 @@ public class WordNetPlusLemmaViewGenerator implements Annotator {
 			view.addTokenLabel(i, lemma, 1.0);
 		}
 
-		return view;
+		ta.addView( getViewName(), view );
 
 	}
 

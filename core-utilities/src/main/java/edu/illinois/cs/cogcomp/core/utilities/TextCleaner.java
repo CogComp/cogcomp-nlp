@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

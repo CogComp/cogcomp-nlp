@@ -3,12 +3,12 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureNGramUtility;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.TextAnnotationUtilities;
 
 import java.util.Collections;
 import java.util.List;
