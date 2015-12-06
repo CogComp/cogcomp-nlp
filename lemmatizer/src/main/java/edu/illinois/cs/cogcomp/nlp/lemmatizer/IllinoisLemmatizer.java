@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -10,7 +10,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IllinoisLemmatizer implements Annotator
+public class IllinoisLemmatizer extends Annotator
 {
     public static String USE_STANFORD_LEMMA_CONVENTION = "useStanfordConvention";
 
@@ -49,9 +49,10 @@ public class IllinoisLemmatizer implements Annotator
         this(rm.getBoolean(USE_STANFORD_LEMMA_CONVENTION,(Boolean.toString(useStanford_default))), rm.getString("wnpath", wnpath_default));
 	}
 	
-	public IllinoisLemmatizer(boolean useStanford, String wnpath)
-	{	
-		this.useStanford = useStanford;
+	public IllinoisLemmatizer(boolean useStanfordConvention, String wnpath)
+	{
+		super( ViewNames.LEMMA, new String[]{ ViewNames.POS } );
+		this.useStanford = useStanfordConvention;
 		wnLemmaReader = new WordnetLemmaReader(wnpath);
 		loadVerbMap();
 		loadExceptionMap();
@@ -301,13 +302,9 @@ public class IllinoisLemmatizer implements Annotator
 	}
 
 
-    @Override
-    public String getViewName() {
-        return ViewNames.LEMMA;
-    }
 
     @Override
-    public View getView(TextAnnotation textAnnotation) throws AnnotatorException
+    public void addView(TextAnnotation textAnnotation) throws AnnotatorException
     {
         View v = null;
 
@@ -319,11 +316,7 @@ public class IllinoisLemmatizer implements Annotator
             throw new AnnotatorException( msg );
         }
 
-        return v;
+        textAnnotation.addView( getViewName(), v );
     }
 
-    @Override
-    public String[] getRequiredViews() {
-        return new String[0];
-    }
 }

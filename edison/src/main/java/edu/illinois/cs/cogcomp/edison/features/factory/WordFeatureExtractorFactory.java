@@ -396,20 +396,20 @@ public class WordFeatureExtractorFactory {
 		return token;
 	}
 
-	public static WordNetFeatureExtractor getWordNetFeatureExtractor(String jwnlConfigFile, WordNetFeatureClass... wordNetFeatureClasses) throws
+	public static WordNetFeatureExtractor getWordNetFeatureExtractor(WordNetFeatureClass... wordNetFeatureClasses) throws
 			EdisonException {
 		if (wnFeatureGenerator == null) {
 			synchronized (WordFeatureExtractorFactory.class) {
 				if (wnFeatureGenerator == null) {
 					try {
-						wnFeatureGenerator = new WordNetFeatureExtractor(jwnlConfigFile);
+						wnFeatureGenerator = new WordNetFeatureExtractor();
 
 						for (WordNetFeatureClass c : wordNetFeatureClasses)
 							wnFeatureGenerator.addFeatureType(c);
 
 					} catch (Exception e) {
 						throw new EdisonException(
-								"Error creating word feature extractor , properties = " + jwnlConfigFile, e);
+								"Error creating word feature extractor", e);
 					}
 				}
 			}

@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.0</version>
+    <version>3.0.8</version>
 
     <modules>
         <module>core-utilities</module>
@@ -17,11 +17,9 @@
         <module>curator</module>
     </modules>
 
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcompversion>3.0.0</cogcompversion>
     </properties>
 
     <repositories>
@@ -96,7 +94,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>2.4</version>
+                <version>2.10</version>
             </extension>
         </extensions>
     </build>

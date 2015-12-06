@@ -51,6 +51,7 @@ public abstract class AbstractTextAnnotation implements Serializable {
      * The list of views
      */
     protected Map<String, List<View>> views;
+
     /**
      * The tokenized text
      */
@@ -92,11 +93,19 @@ public abstract class AbstractTextAnnotation implements Serializable {
         for ( int i = 0; i < viewNames.length; ++i )
             addView( viewNames[ i ], views[ i ] );
     }
-    /**
-     * Adds the top scoring value for the view identified by {@code viewName}.
+
+  /**
+   * Adds the top scoring value for the view identified by {@code viewName}.
+   */
+  public void addView(String viewName, View view) {
+    views.put(viewName, Collections.singletonList(view));
+  }
+
+  /**
+     * Remove a given view
      */
-    public void addView(String viewName, View view) {
-        views.put(viewName, Collections.singletonList(view));
+    public void removeView(String viewName) {
+        views.remove(viewName);
     }
 
     /**
