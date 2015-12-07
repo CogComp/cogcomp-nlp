@@ -25,7 +25,7 @@ import java.net.URLEncoder;
  */
 public class NotificationSender {
     private static String API_KEY;
-    private static final String DEFAULT_URL = "https://nma.usk.bz";
+    private static final String DEFAULT_URL = "https://www.notifymyandroid.com";
     private static String APP_NAME = "CogComp project";
     private static String EVENT_NAME = "Experiment Complete";
 
