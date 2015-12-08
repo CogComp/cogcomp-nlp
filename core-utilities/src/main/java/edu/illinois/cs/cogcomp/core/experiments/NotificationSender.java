@@ -25,7 +25,7 @@ import java.net.URLEncoder;
  */
 public class NotificationSender {
     private static String API_KEY;
-    private static final String DEFAULT_URL = "https://nma.usk.bz";
+    private static final String DEFAULT_URL = "https://www.notifymyandroid.com";
     private static String APP_NAME = "CogComp project";
     private static String EVENT_NAME = "Experiment Complete";
 
@@ -142,7 +142,7 @@ public class NotificationSender {
         } else {
             return "There was a problem contacting NMA Servers. " +
                     "HTTP Response code different than 200(OK). " +
-                    "Try again or contact support@nma.bz if it persists.";
+                    "Try again or contact support@notifymyandroid.com if it persists.";
         }
     }
 
