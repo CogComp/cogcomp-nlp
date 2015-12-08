@@ -1,5 +1,7 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+this is a bug 
+
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
