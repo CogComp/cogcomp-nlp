@@ -50,7 +50,7 @@ public class ModelInfo {
 	}
 
 	public WeightVector getWeights() {
-		assert w != null;
+		loadWeightVector();
 		return w;
 	}
 

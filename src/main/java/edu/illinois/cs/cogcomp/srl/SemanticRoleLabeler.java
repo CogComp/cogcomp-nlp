@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.srl;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -10,7 +11,6 @@ import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
-import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SemanticRoleLabeler implements Annotator {
+public class SemanticRoleLabeler extends Annotator {
 	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
 	public final SRLManager manager;
 	private static SRLProperties properties;
@@ -93,6 +93,7 @@ public class SemanticRoleLabeler implements Annotator {
 	}
 
 	public SemanticRoleLabeler(String configFile, String srlType, boolean initialize) throws Exception {
+        super((srlType.equals("Verb")) ? ViewNames.SRL_VERB : ViewNames.SRL_NOM, TextPreProcessor.requiredViews);
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
@@ -142,33 +143,18 @@ public class SemanticRoleLabeler implements Annotator {
 		if (predicates.isEmpty())
 			return null;
 		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
-		ISRLInference inference = new SRLILPInference(s, manager, predicates);
+        SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
 		return inference.getOutputView();
 	}
 
 	@Override
-	public String[] getRequiredViews() {
-		return TextPreProcessor.requiredViews;
-	}
-
-	@Override
-	public View getView(TextAnnotation ta) throws AnnotatorException {
+	public void addView(TextAnnotation ta) throws AnnotatorException {
 		try {
-			return getSRL(ta);
+			ta.addView(viewName, getSRL(ta));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AnnotatorException(e.getMessage());
 		}
 	}
-
-	@Override
-	public String getViewName() {
-		if (manager.getSRLType() == SRLType.Verb) {
-			return ViewNames.SRL_VERB;
-		} else if (manager.getSRLType() == SRLType.Nom)
-			return ViewNames.SRL_NOM;
-		return null;
-	}
-
 }
