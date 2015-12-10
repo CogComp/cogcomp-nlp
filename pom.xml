@@ -15,6 +15,7 @@
         <module>lemmatizer</module>
         <module>edison</module>
         <module>curator</module>
+	<module>chunker</module>
     </modules>
 
     <properties>

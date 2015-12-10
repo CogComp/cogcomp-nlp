@@ -1,0 +1,186 @@
+package edu.illinois.cs.cogcomp.lbj.chunk;
+
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.illinois.cs.cogcomp.lbjava.nlp.*;
+import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
+import edu.illinois.cs.cogcomp.lbj.pos.POSWindow;
+
+
+/**
+  * Feature generator that senses the chunk tags of the previous two words.
+  * During training, labels are present, so the previous two chunk tags are
+  * simply read from the data.  Otherwise, the prediction of the
+  * {@link Chunker} is used.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete% PreviousTags(Token word) <-
+{
+  int i;
+  Token w = word;
+  for (i = 0; i > -2 && w.previous != null; --i) w = (Token) w.previous;
+
+  for (; w != word; w = (Token) w.next)
+  {
+    if (Chunker.isTraining) sense i++ : w.label;
+    else sense i++ : Chunker(w);
+  }
+}
+
+discrete% SOPrevious(Token word) <-
+{
+  int i;
+  Token w = word;
+  for (i = 0; i > -2 && w.previous != null; --i) w = (Token) w.previous;
+
+  String[] tags = new String[3];
+  String[] labels = new String[2];
+  i = 0;
+  for (; w != word; w = (Token) w.next) {
+      tags[i] = POSTagger(w);
+      if (Chunker.isTraining) 
+          labels[i] = w.label;
+      else
+          labels[i] = Chunker(w);
+      i++;
+  }
+  tags[i] = POSTagger(w);
+  
+  sense "ll" : labels[0] + "_" + labels[1];
+  sense "lt1" : labels[0] + "_" + tags[1];
+  sense "lt2" : labels[1] + "_" + tags[2];
+}
+
+
+/**
+  * Simply returns the value of this <code>Token</code>'s <code>label</code>
+  * field.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete ChunkLabel(Token word) <- { return word.label; }
+
+
+discrete% Mixed(Token word) <-
+{
+  int before = 2;
+  int after = 2;
+  int k = 2;
+  int i;
+  Token w = word, last = word;
+  for (i = 0; i <= after && last != null; ++i) last = (Token) last.next;
+  for (i = 0; i > -before && w.previous != null; --i) w = (Token) w.previous;
+  String[] tags = new String[before+after+1];
+  String[] forms = new String[before+after+1];
+  i = 0;
+  for (; w != last; w = (Token) w.next) {
+      tags[i] = POSTagger(w);
+      forms[i] = w.form;
+      i++;
+  }
+  
+  for (int j = 1; j < k; j++) {
+      for (int x = 0; i < 2; i++) {
+          boolean t = true;
+          for (i = 0; i < tags.length; i++) {
+              StringBuffer f = new StringBuffer();
+              for(int context=0; context <= j && i + context < tags.length; context++) {
+                  if (context != 0) f.append("_");
+                  if (t && x ==0) {
+                      f.append(tags[i+context]);
+                  } else {
+                      f.append(forms[i+context]);
+                  }
+                  t = !t;
+              }
+              sense i + "_" + j : f.toString();
+          }
+      }
+  }
+}
+
+
+discrete% POSWindowpp(Token word) <-
+{
+  int before = 3;
+  int after = 3;
+  int k = 3;
+  int i;
+  Token w = word, last = word;
+  for (i = 0; i <= after && last != null; ++i) last = (Token) last.next;
+  for (i = 0; i > -before && w.previous != null; --i) w = (Token) w.previous;
+  String[] tags = new String[before+after+1];
+  i = 0;
+  for (; w != last; w = (Token) w.next) tags[i++] = POSTagger(w);
+  
+  for (int j = 0; j < k; j++) {
+      for (i = 0; i < tags.length; i++) {
+          StringBuffer f = new StringBuffer();
+          for(int context=0; context <= j && i + context < tags.length; context++) {
+              if (context != 0) f.append("_");
+              f.append(tags[i+context]);
+          }
+          sense i + "_" + j : f.toString();
+      }
+  }
+}
+
+discrete% Formpp(Token word) <-
+{
+  int before = 2;
+  int after = 2;
+  int k = 2;
+  int i;
+  Token w = word, last = word;
+  for (i = 0; i <= after && last != null; ++i) last = (Token) last.next;
+  for (i = 0; i > -before && w.previous != null; --i) w = (Token) w.previous;
+  String[] forms = new String[before+after+1];
+  i = 0;
+  for (; w != last; w = (Token) w.next) forms[i++] = word.form;
+  
+  for (int j = 0; j < k; j++) {
+      for (i = 0; i < forms.length; i++) {
+          StringBuffer f = new StringBuffer();
+          for(int context=0; context <= j && i + context < forms.length; context++) {
+              if (context != 0) f.append("_");
+              f.append(forms[i+context]);
+          }
+          sense i + "_" + j : f.toString();
+      }
+  }
+}
+
+/**
+  * Learned classifier that predicts a BIO chunk tag given a word represented
+  * as a <code>Token</code>.  {@link PreviousTags} from
+  * this package and {@link POSWindow} from the
+  * <a href="http://l2r.cs.uiuc.edu/~cogcomp/asoftware.php?skey=FLBJPOS">LBJ
+  * POS tagger package</a> as well as <code>Forms</code>,
+  * <code>Capitalization</code>, <code>WordTypeInformation</code>, and
+  * <code>Affixes</code> from the LBJ library are used as features.  This
+  * classifier caches its prediction in the <code>Token.type</code> field, and
+  * it will simply return the value of this field as its prediction if it is
+  * non-null.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete Chunker(Token word) cachedin word.type <-
+learn ChunkLabel
+  using Forms, Capitalization, WordTypeInformation, Affixes, PreviousTags,
+        POSWindow, Mixed, POSWindowpp, Formpp, SOPrevious
+  from
+    new ChildrenFromVectors(new CoNLL2000Parser(Constants.trainingData))
+    50 rounds
+  with SparseNetworkLearner {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  testFrom new ChildrenFromVectors(new CoNLL2000Parser(Constants.testData))
+
+  progressOutput 300000
+end
+
