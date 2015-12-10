@@ -3,10 +3,10 @@ package edu.illinois.cs.cogcomp.edison.annotators;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.edison.utilities.TextAnnotationUtilities;
 import junit.framework.TestCase;
 
 public class ClauseViewGeneratorTest extends TestCase {

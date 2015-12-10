@@ -18,8 +18,6 @@ import java.util.*;
 
 public class FeatureManifest {
 	private final static Logger log = LoggerFactory.getLogger(FeatureManifest.class);
-
-	private static String jwnlConfig = null;
 	private ManifestParser parser;
 	private boolean compressedName;
 
@@ -33,10 +31,6 @@ public class FeatureManifest {
 		compressedName = false;
 
 		log.debug("Features: \n{}", getIncludedFeatures());
-	}
-
-	public static void setJWNLConfigFile(String file) {
-		jwnlConfig = file;
 	}
 
 	public static void setFeatureExtractor(String name, FeatureExtractor fex) {
@@ -68,7 +62,7 @@ public class FeatureManifest {
 		String label = tree.getLabel();
 
 		if (tree.isLeaf()) {
-			if (label.startsWith("wn")) return getWordNetFeatureExtractor(Arrays.asList(label), cf);
+			if (label.startsWith("wn")) return getWordNetFeatureExtractor(Collections.singletonList(label), cf);
 			else if (cf.containsKey(definition(label))) return cf.get(definition(label));
 			else return getLeafFeature(label, cf);
 		} else if (label.equals("list")) return processList(tree, cf);
@@ -203,8 +197,7 @@ public class FeatureManifest {
 			Tree<String> child = tree.getChild(childId++);
 			if (child.getLabel().startsWith(":")) {
 				childId++;
-				continue;
-			} else {
+            } else {
 				f.addFeatureExtractor(createFex(child, cf));
 				found = true;
 			}
@@ -390,12 +383,8 @@ public class FeatureManifest {
 		String uniqueLabel = uniquify(wnLabels);
 		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
 
-		if (jwnlConfig == null) {
-			throw new EdisonException(
-					"Requesting wordnet feature, but JWNL config file missing. " + "Please use FeatureManifest.setJWNLConfigFile(file)");
-		}
 		try {
-			WordNetFeatureExtractor wn = new WordNetFeatureExtractor(jwnlConfig);
+			WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
 
 			for (String label : wnLabels) {
 				if (!WordNetClasses.wnClasses.containsKey(label)) throw new EdisonException(

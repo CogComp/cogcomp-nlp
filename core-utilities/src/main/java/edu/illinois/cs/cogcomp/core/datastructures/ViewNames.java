@@ -88,6 +88,9 @@ public class ViewNames {
     public static final String PSEUDO_PARSE_CHARNIAK = "PSEUDO_PARSE_CHARNIAK";
     public static final String PSEUDO_PARSE_BERKELEY = "PSEUDO_PARSE_BERKELEY";
     public static final String PSEUDO_PARSE_STANFORD = "PSEUDO_PARSE_STANFORD";
+    public static final String GAZETTEER = "GAZETTEER";
+    public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
+    public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -105,9 +108,12 @@ public class ViewNames {
             case CLAUSES_CHARNIAK:
             case CLAUSES_STANFORD:
             case CLAUSES_BERKELEY:
+            case BROWN_CLUSTERS:
+            case GAZETTEER:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
+            case DEPENDENCY_HEADFINDER:
                 return ViewTypes.DEPENDENCY_VIEW;
             case PARSE_GOLD:
             case PARSE_CHARNIAK:
