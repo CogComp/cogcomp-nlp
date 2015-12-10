@@ -8,9 +8,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
+import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 
+import javax.swing.text.View;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -126,6 +128,25 @@ public class IllinoisPipelineFactory
             {
                 StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
                 viewGenerators.put(ViewNames.PARSE_STANFORD, parser);
+            }
+        }
+
+        if (rm.getBoolean( PipelineConfigurator.USE_SRL_VERB))
+        {
+            try{
+                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("config/srl-config.properties", "Verb"));
+            }
+            catch (Exception e)
+            {
+                throw new IOException("SRL verb cannot init .."+e.getMessage());
+            }
+        }
+        if(rm.getBoolean( PipelineConfigurator.USE_SRL_NOM))
+        {
+            try {
+                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("config/srl-config.properties", "Nom"));
+            } catch (Exception e) {
+                throw new IOException("SRL norm cannot init .."+e.getMessage());
             }
         }
 

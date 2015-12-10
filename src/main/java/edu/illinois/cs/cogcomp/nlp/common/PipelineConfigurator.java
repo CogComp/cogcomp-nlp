@@ -33,6 +33,8 @@ public class PipelineConfigurator extends Configurator
     public static final Property USE_NER_ONTONOTES = new Property("useNerOntonotes", TRUE);
     public static final Property USE_STANFORD_PARSE = new Property("useStanfordParse", TRUE);
     public static final Property USE_STANFORD_DEP = new Property("useStanfordDep", TRUE);
+    public static final Property USE_SRL_VERB = new Property("useSrlVerb", FALSE);
+    public static final Property USE_SRL_NOM = new Property("useSrlNom", FALSE);
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator

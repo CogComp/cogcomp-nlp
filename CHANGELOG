@@ -1,3 +1,4 @@
+0.1.15   * added ability to add standalone SRL (verb,nom) to pipeline
 0.1.9   * updated NER dependency, other dependencies
 
 0.1.8   * added configurability by specifying config flag for each annotator
