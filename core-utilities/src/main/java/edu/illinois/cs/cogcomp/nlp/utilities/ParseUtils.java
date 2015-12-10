@@ -96,8 +96,7 @@ public class ParseUtils {
      * @return A new tree where each node is the {@link Pair} of the original
      * node's label and the span that the node covers.
      */
-    public static Tree<Pair<String, IntPair>> getSpanLabeledTree(
-            Tree<String> parseTree) {
+    public static Tree<Pair<String, IntPair>> getSpanLabeledTree(Tree<String> parseTree) {
         return getSpanLabeledTree(parseTree, 0).getFirst();
     }
 
@@ -108,33 +107,26 @@ public class ParseUtils {
         // that this code might be slow. So a faster version is also in order.
 
         if (parseTree.isLeaf()) {
-
             IntPair span;
 
-            if (ParseTreeProperties.isNullLabel(parseTree.getParent()
-                    .getLabel())) {
+            if (ParseTreeProperties.isNullLabel(parseTree.getParent().getLabel())) {
                 span = new IntPair(currentLeafId, currentLeafId);
             } else {
                 span = new IntPair(currentLeafId, currentLeafId + 1);
                 currentLeafId++;
             }
 
-            Pair<String, IntPair> label = new Pair<>(
-                    parseTree.getLabel(), span);
-            Tree<Pair<String, IntPair>> tree = new Tree<>(
-                    label);
+            Pair<String, IntPair> label = new Pair<>(parseTree.getLabel(), span);
+            Tree<Pair<String, IntPair>> tree = new Tree<>(label);
 
-            Pair<Tree<Pair<String, IntPair>>, Integer> output = new Pair<>(
-                    tree, currentLeafId);
-            return output;
+            return new Pair<>(tree, currentLeafId);
         }
 
         List<Tree<Pair<String, IntPair>>> children = new ArrayList<>();
 
         int start = currentLeafId;
         for (Tree<String> child : parseTree.getChildren()) {
-            Pair<Tree<Pair<String, IntPair>>, Integer> tmp = getSpanLabeledTree(
-                    child, currentLeafId);
+            Pair<Tree<Pair<String, IntPair>>, Integer> tmp = getSpanLabeledTree(child, currentLeafId);
             currentLeafId = tmp.getSecond();
             children.add(tmp.getFirst());
         }
@@ -142,10 +134,8 @@ public class ParseUtils {
         int end = currentLeafId;
 
         IntPair span = new IntPair(start, end);
-        Pair<String, IntPair> label = new Pair<>(
-                parseTree.getLabel(), span);
-        Tree<Pair<String, IntPair>> output = new Tree<>(
-                label);
+        Pair<String, IntPair> label = new Pair<>(parseTree.getLabel(), span);
+        Tree<Pair<String, IntPair>> output = new Tree<>(label);
 
         for (Tree<Pair<String, IntPair>> child : children) {
             output.addSubtree(child);
@@ -154,8 +144,7 @@ public class ParseUtils {
         return new Pair<>(output, currentLeafId);
     }
 
-    private static boolean createSnippedTree(Tree<String> original,
-                                             Tree<String> newTree) {
+    private static boolean createSnippedTree(Tree<String> original, Tree<String> newTree) {
         assert original.getLabel().equals(newTree.getLabel());
 
         if (original.isLeaf())
@@ -300,8 +289,7 @@ public class ParseUtils {
      * sentence, then an array of size zero is returned to indicate that
      * the corresponding parse tree node does not have any siblings.
      */
-    public static String[] getAllPhraseSiblingLabels(String parseViewName,
-                                                     Constituent constituent) {
+    public static String[] getAllPhraseSiblingLabels(String parseViewName, Constituent constituent) {
         Tree<String> node = getParseTreeCovering(parseViewName, constituent);
         return getAllSiblingLabels(node);
     }

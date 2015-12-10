@@ -1,9 +1,5 @@
 #!/bin/bash
 
-function deploy(){
-  mvn deploy site-deploy
-}
-
 function setPermissions() {
   echo "We are about the set the permissions on bilbo ... "
   ssh bilbo.cs.illinois.edu
@@ -22,6 +18,8 @@ function setPermissions() {
 
 ## script begins here
 
-deploy
+mvn deploy
 
 setPermissions
+
+mvn site-deploy

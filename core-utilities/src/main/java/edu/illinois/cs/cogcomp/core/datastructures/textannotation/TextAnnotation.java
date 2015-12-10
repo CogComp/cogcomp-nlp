@@ -1,6 +1,4 @@
-package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
-
-this is a bug 
+package edu.illinois.cs.cogcomp.core.datastructures.textannotation; 
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
