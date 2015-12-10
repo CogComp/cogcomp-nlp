@@ -90,7 +90,6 @@
                         <link>http://download.oracle.com/javase/7/docs/api/</link>
                     </links>
                     <show>public</show>
-                    <additionalparam>-Xdoclint:none</additionalparam>
                 </configuration>
             </plugin>
         </plugins>
