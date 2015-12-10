@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.utilities;
 
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

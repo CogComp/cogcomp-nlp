@@ -119,7 +119,6 @@ public abstract class IOUtils {
     /**
      * Filters the files contained in a directory.
      */
-
     public static String[] lsFiles(String directory, FilenameFilter filter)
             throws IOException {
         File dir = new File(directory);
@@ -217,6 +216,16 @@ public abstract class IOUtils {
             }
         }
         return clean;
+    }
+
+    public static boolean rmDir(String directory) throws IOException {
+        if (!exists(directory))
+            return false;
+
+        if (!isDirectory(directory))
+            throw new IOException(directory + " is not a directory!");
+
+        return (new File(directory)).delete();
     }
 
     /**

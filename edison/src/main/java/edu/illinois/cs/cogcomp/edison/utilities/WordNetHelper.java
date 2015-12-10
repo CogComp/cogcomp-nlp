@@ -23,7 +23,7 @@ public class WordNetHelper {
 		if (wnManager != null) return;
 
 		try {
-			wnManager = WordNetManager.getInstance(wordNetPropertiesFile);
+			wnManager = WordNetManager.getInstance();
 		} catch (Exception e) {
 			log.error("Error loading WordNet using properties file: " + wordNetPropertiesFile, e);
 		}

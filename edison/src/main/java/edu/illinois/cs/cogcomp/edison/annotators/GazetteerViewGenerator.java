@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -11,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import gnu.trove.list.array.TIntArrayList;
@@ -33,9 +34,8 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
-public class GazetteerViewGenerator implements Annotator {
+public class GazetteerViewGenerator extends Annotator {
 	public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
-	public static final String GazetterView = "GazetteerView";
 	private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
 	private static final String PEOPLE_FAMOUS = "People.Famous";
 	private static final String STATES = "Locations.States";
@@ -52,12 +52,12 @@ public class GazetteerViewGenerator implements Annotator {
 					"People.Politicians.US.Presidents", "People.Politicians.US.VicePresidents");
 
 			gazetteersInstance = new GazetteerViewGenerator("resources/gazetteers/gazetteers",
-							GazetteerViewGenerator.GazetterView + "Gazetteers");
+							ViewNames.GAZETTEER + "Gazetteers");
 
 			GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
 
 			cbcInstance = new GazetteerViewGenerator("resources/cbcData/lists",
-					GazetteerViewGenerator.GazetterView + "CBC");
+					ViewNames.GAZETTEER + "CBC");
 
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -83,7 +83,7 @@ public class GazetteerViewGenerator implements Annotator {
 	}
 
 	public GazetteerViewGenerator(String directory, boolean gzip, String viewName) throws Exception {
-
+		super( viewName, new String[]{} );
 		this.directory = directory;
 		this.gzip = gzip;
 		this.viewName = viewName;
@@ -345,12 +345,7 @@ public class GazetteerViewGenerator implements Annotator {
 	}
 
 	@Override
-	public String getViewName() {
-		return this.viewName;
-	}
-
-	@Override
-	public View getView(TextAnnotation ta) {
+	public void addView(TextAnnotation ta) {
 
 		if (!this.loaded) {
 			synchronized (this) {
@@ -364,7 +359,7 @@ public class GazetteerViewGenerator implements Annotator {
 			}
 		}
 
-		SpanLabelView view = new SpanLabelView(GazetterView, "Gazetteers", ta, 1.0, true);
+		SpanLabelView view = new SpanLabelView(ViewNames.GAZETTEER, "Gazetteers", ta, 1.0, true);
 
 		TIntObjectHashMap<ArrayList<IntPair>> allSpans = hashAllSpans(ta);
 
@@ -375,7 +370,7 @@ public class GazetteerViewGenerator implements Annotator {
 			}
 		}
 
-		SpanLabelView newView = new SpanLabelView(GazetterView, "Gazetteers", ta, 1.0, true);
+		SpanLabelView newView = new SpanLabelView(ViewNames.GAZETTEER, "Gazetteers", ta, 1.0, true);
 
 		for (Constituent c : view) {
 			Pair<Constituent, SpanLabelView> input = new Pair<>(c, view);
@@ -392,7 +387,7 @@ public class GazetteerViewGenerator implements Annotator {
 			if (allow) newView.addSpanLabel(c.getStartSpan(), c.getEndSpan(), c.getLabel(), c.getConstituentScore());
 		}
 
-		return newView;
+		ta.addView( getViewName(), newView);
 	}
 
 	@Override

@@ -535,6 +535,26 @@ public class TreeView extends View {
                 this.getViewName(), this.getTextAnnotation(), start, end);
     }
 
+    public Tree<Constituent> getConstituentTree(int sentenceId) {
+        return getConstituentSubTree(ParseUtils.getSpanLabeledTree(getTree(sentenceId)));
+    }
+
+    private Tree<Constituent> getConstituentSubTree(Tree<Pair<String, IntPair>> parseTree) {
+        Pair<String, IntPair> rootLabel = parseTree.getLabel();
+        Constituent root = createConstituent(rootLabel);
+        Tree<Constituent> constituentTree = new Tree<>(root);
+        for (Tree<Pair<String, IntPair>> child : parseTree.getChildren()) {
+            if (child.isLeaf()) continue;
+            constituentTree.addSubtree(getConstituentSubTree(child));
+        }
+        return constituentTree;
+    }
+
+    private Constituent createConstituent(Pair<String, IntPair> rootLabel) {
+        IntPair span = rootLabel.getSecond();
+        return createNewConstituent(span.getFirst(), span.getSecond(), rootLabel.getFirst(), 1.0);
+    }
+
     /**
      * Finds the highest node in the parse tree that contains the input
      * constituent. This function is a useful mechanism to get a node from the

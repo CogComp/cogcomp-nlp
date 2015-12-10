@@ -119,7 +119,23 @@ public class View implements Serializable, IQueryable<Constituent> {
         }
 
         this.tokensToConstituents[tokenId].add(c);
+    }
 
+    private void removeTokenFromConstituentMapping(int tokenId, Constituent c) {
+
+        if (this.tokensToConstituents[tokenId] == null) {
+            this.tokensToConstituents[tokenId] = new ArrayList<>();
+        }
+
+        if( this.tokensToConstituents[tokenId].contains(c) )
+            this.tokensToConstituents[tokenId].remove(c);
+    }
+
+    private void removeAllTokenFromConstituentMapping(Constituent c) {
+
+        for( int tokenId = 0; tokenId < this.tokensToConstituents.length; tokenId++ ) {
+            removeTokenFromConstituentMapping(tokenId, c);
+        }
     }
 
     /**
@@ -140,6 +156,14 @@ public class View implements Serializable, IQueryable<Constituent> {
                 this.addTokenToConstituentMapping(token, constituent);
             }
         }
+    }
+
+    /**
+     * Removes a constituent from this view
+     */
+    public void removeConstituent(Constituent constituent) {
+        constituents.remove(constituent);
+        removeAllTokenFromConstituentMapping(constituent);
     }
 
     private void addRelatedConstituents(View restriction,
@@ -205,6 +229,13 @@ public class View implements Serializable, IQueryable<Constituent> {
         // "Target constituent of relation is invalid");
 
         relations.add(relation);
+    }
+
+    /**
+     * removes a relation from this view.
+     */
+    public void removeRelation(Relation relation) {
+        relations.remove(relation);
     }
 
     /**
