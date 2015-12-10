@@ -33,30 +33,43 @@ public class OneVariableStats implements Serializable {
         sigmax += d;
         sigmax2 += (d * d);
 
-        if (d > max)
+        if (d > max) {
             max = d;
-        if (d < min)
+        }
+        if (d < min) {
             min = d;
+        }
     }
 
     public double mean() {
         return (sigmax) / num;
     }
 
+    /**
+     * Calculate the Population Standard Deviation.
+     * $\sqrt(\frac{\sum(X-M)^2}{n})$
+     * @return Population Standard Deviation
+     */
     public double std() {
-        if (min == max) return 0;
+        if (min == max || num == 0) {
+            return 0;
+        }
         double m = mean();
         return Math.sqrt(sigmax2 / num - m * m);
     }
 
-	/**
-	 * Calculate the standard error of the mean (SEM):
-	 * the standard deviation of the sample-mean's estimate of a population mean.
-	 * @return The SEM, which is {@link #std()} divided by the square root of the sample size.
-	 */
-	public double stdErr() {
-		return std()/Math.sqrt(num);
-	}
+    /**
+     * Calculate the standard error of the mean (SEM): the standard deviation of the sample-mean's
+     * estimate of a population mean.
+     *
+     * @return The SEM, which is {@link #std()} divided by the square root of the sample size.
+     */
+    public double stdErr() {
+        if (num == 0) {
+            return 0;
+        }
+        return std() / Math.sqrt(num);
+    }
 
     public double min() {
         return this.min;
