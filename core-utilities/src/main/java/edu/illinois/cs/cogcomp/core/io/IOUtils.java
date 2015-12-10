@@ -104,16 +104,12 @@ public abstract class IOUtils {
      * List the files contained in a directory.
      */
     public static String[] lsFiles(String directory) throws IOException {
-        String[] tmp = ls(directory);
-
-        ArrayList<String> files = new ArrayList<>();
-
-        for (String s : tmp) {
-            if (isFile(directory + "/" + s))
-                files.add(s);
-        }
-
-        return files.toArray(new String[files.size()]);
+        return lsFiles(directory, new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return true;
+            }
+        });
     }
 
     /**
