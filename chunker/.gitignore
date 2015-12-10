@@ -1,0 +1,17 @@
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/PreviousTags.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/SOPrevious.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/ChunkLabel.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Mixed.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/POSWindowpp.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Formpp.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Chunker$$1.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Chunker.java
+
+Generating code for PreviousTags
+Generating code for SOPrevious
+Generating code for ChunkLabel
+Generating code for Mixed
+Generating code for POSWindowpp
+Generating code for Formpp
+Generating code for Chunker$$1
+Generating code for Chunker
