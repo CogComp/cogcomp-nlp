@@ -53,7 +53,7 @@ public class Counter<T extends Serializable> implements Serializable {
 
         argMax.update(object, increment);
 
-        argMax.update(object, -increment);
+        argMin.update(object, -increment);
 
         stats.add(increment);
     }
