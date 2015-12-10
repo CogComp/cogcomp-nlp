@@ -1,0 +1,185 @@
+package edu.illinois.cs.cogcomp.lbj.pos;
+
+import edu.illinois.cs.cogcomp.lbjava.nlp.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+
+
+/**
+  * Learned with {@link MikheevLearner}, this classifier records statistics on
+  * the POS tags that suffixes of lengths 3 and 4 are associated with.  Its
+  * {@link #classify(Object)} method does not return any features; all
+  * interaction is performed through the {@link #allowableTags(Word)} method.
+  * Only {@link wordForm} is used as a feature.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete MikheevTable(Token w) <-
+learn POSLabel
+  using wordForm
+  from new POSBracketToToken(Constants.trainingAndDevData)
+  with new MikheevLearner()
+  preExtract false
+end
+
+/**
+  * During the training of {@link POSTaggerUnknown}, return the value of
+  * {@link POSLabel}; otherwise, return the value of {@link baselineTarget}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOrBaselineU(Token w) cached <-
+{
+  if (POSTaggerUnknown.isTraining) return POSLabel(w);
+  return baselineTarget(w);
+}
+
+/**
+  * Produces the POS tag label of the word two before the target word.  During
+  * the training of {@link POSTaggerUnknown}, these labels are present in the
+  * data, so the value of {@link POSLabel} is simply returned.  Otherwise, the
+  * prediction made by {@link POSTaggerUnknown} is returned.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelTwoBeforeU(Token w) cached <-
+{
+  if (w.previous != null && w.previous.previous != null)
+  {
+    if (POSTaggerUnknown.isTraining) return POSLabel(w.previous.previous);
+    return POSTaggerUnknown(w.previous.previous);
+  }
+
+  return "";
+}
+
+/**
+  * Produces the POS tag label of the word one before the target word.  During
+  * the training of {@link POSTaggerUnknown}, these labels are present in the
+  * data, so the value of {@link POSLabel} is simply returned.  Otherwise, the
+  * prediction made by {@link POSTaggerUnknown} is returned.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOneBeforeU(Token w) cached <-
+{
+  if (w.previous != null)
+  {
+    if (POSTaggerUnknown.isTraining) return POSLabel(w.previous);
+    return POSTaggerUnknown(w.previous);
+  }
+
+  return "";
+}
+
+/**
+  * Returns the value of {@link labelOrBaselineU} on the next word.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOneAfterU(Token w) cached <-
+{
+  if (w.next != null) return labelOrBaselineU(w.next);
+  return "";
+}
+
+/**
+  * Returns the value of {@link labelOrBaselineU} on the word after the next
+  * word.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelTwoAfterU(Token w) cached <-
+{
+  if (w.next != null && w.next.next != null)
+    return labelOrBaselineU(w.next.next);
+  return "";
+}
+
+/**
+  * The classifier conjunction of {@link labelTwoBeforeU} and
+  * {@link labelOneBeforeU}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L2bL1bU(Token w) <- labelTwoBeforeU && labelOneBeforeU
+
+/**
+  * The classifier conjunction of {@link labelOneBeforeU} and
+  * {@link labelOneAfterU}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L1bL1aU(Token w) <- labelOneBeforeU && labelOneAfterU
+
+/**
+  * The classifier conjunction of {@link labelOneAfterU} and
+  * {@link labelTwoAfterU}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L1aL2aU(Token w) <- labelOneAfterU && labelTwoAfterU
+
+/**
+  * When {@link baselineTarget} has not observed the given word during
+  * training, this classifier extracts suffixes of the word of various
+  * lengths.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete% suffixFeatures(Token w) <-
+{
+  int length = w.form.length();
+  boolean unknown =
+    POSTaggerUnknown.isTraining
+      && new baselineTarget().observedCount(w.form)
+         <= POSLabeledUnknownWordParser.threshold
+    || !POSTaggerUnknown.isTraining && baselineTarget(w).equals("UNKNOWN");
+
+  if (unknown && length > 3 && Character.isLetter(w.form.charAt(length - 1)))
+  {
+    sense w.form.substring(length - 1).toLowerCase();
+
+    if (Character.isLetter(w.form.charAt(length - 2)))
+    {
+      sense w.form.substring(length - 2).toLowerCase();
+      if (length > 4 && Character.isLetter(w.form.charAt(length - 3)))
+        sense w.form.substring(length - 3).toLowerCase();
+    }
+  }
+}
+
+/**
+  * Predicting the part of speech of the given word, this classifier is
+  * intended to be applied only on words whose forms were <i>not</i> observed
+  * during training.  {@link wordForm}, {@link baselineTarget},
+  * {@link labelTwoBeforeU}, {@link labelOneBeforeU}, {@link labelOneAfterU},
+  * {@link labelTwoAfterU}, {@link L2bL1bU}, {@link L1bL1aU}, {@link L1aL2aU}
+  * and {@link suffixFeatures} are all used as features.  At test-time, the
+  * learning algorithm is restricted to return a prediction from the set of
+  * tags returned by the Mikheev rules (see {@link MikheevTable}), which were
+  * learned at training-time.  The prediction is cached in the
+  * <code>Word.partOfSpeech</code> field, and the value of that field will
+  * simply be returned whenever it is non-<code>null</code>.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete POSTaggerUnknown(Token w) cachedin w.partOfSpeech <-
+learn POSLabel
+  using wordForm, baselineTarget, labelTwoBeforeU, labelOneBeforeU,
+        labelOneAfterU, labelTwoAfterU, L2bL1bU, L1bL1aU, L1aL2aU,
+        suffixFeatures
+  from new POSLabeledUnknownWordParser(Constants.trainingAndDevData) 50 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 4;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  evaluate valueOf(w, MikheevTable.allowableTags(w))
+  progressOutput 50000
+end
+
