@@ -44,6 +44,7 @@ public class OneVariableStats implements Serializable {
     }
 
     public double std() {
+        if (min == max) return 0;
         double m = mean();
         return Math.sqrt(sigmax2 / num - m * m);
     }
