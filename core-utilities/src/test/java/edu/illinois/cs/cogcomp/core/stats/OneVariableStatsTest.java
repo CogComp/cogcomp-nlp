@@ -9,6 +9,7 @@ public class OneVariableStatsTest extends TestCase {
 
     public void testMean() throws Exception {
         OneVariableStats oneVariableStats = new OneVariableStats();
+        assertEquals(0.0, oneVariableStats.mean());
         oneVariableStats.add(1.0);
         oneVariableStats.add(2.0);
         oneVariableStats.add(3.0);

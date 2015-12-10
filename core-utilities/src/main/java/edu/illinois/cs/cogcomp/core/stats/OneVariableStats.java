@@ -42,12 +42,15 @@ public class OneVariableStats implements Serializable {
     }
 
     public double mean() {
+        if (num == 0) {
+            return 0;
+        }
         return (sigmax) / num;
     }
 
     /**
-     * Calculate the Population Standard Deviation.
-     * $\sqrt(\frac{\sum(X-M)^2}{n})$
+     * Calculate the Population Standard Deviation. $\sqrt(\frac{\sum(X-M)^2}{n})$
+     *
      * @return Population Standard Deviation
      */
     public double std() {
