@@ -68,6 +68,9 @@
                     <lbjavaInputFileList>
                         <param>${project.basedir}/src/main/lbj/chunk.lbj</param>
                     </lbjavaInputFileList>
+		    <gspFlag>${project.basedir}/src/main/java</gspFlag>
+		    <dFlag>${project.basedir}/target/classes</dFlag>
+		    <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
                 </configuration>
             </plugin>
         </plugins>
