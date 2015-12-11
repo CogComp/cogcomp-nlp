@@ -38,24 +38,15 @@ public class IllinoisLemmatizerHandler extends PipelineAnnotator
     
     public IllinoisLemmatizerHandler( ResourceManager rm_ ) throws IllegalArgumentException, IOException
     {
-        super( PUBLIC_NAME, VERSION, PUBLIC_NAME + "-" + VERSION );
+        super( PUBLIC_NAME, VERSION, PUBLIC_NAME + "-" + VERSION, ViewNames.LEMMA, new String[]{ ViewNames.POS } );
 
         lemmatizer = new IllinoisLemmatizer( rm_ );
     }
 
 
-    @Override
-    public String getViewName() {
-        return ViewNames.LEMMA;
-    }
 
     @Override
-    public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
-        return lemmatizer.getView( textAnnotation );
-    }
-
-    @Override
-    public String[] getRequiredViews() {
-        return REQUIRED_VIEWS;
+    public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
+        lemmatizer.addView( textAnnotation );
     }
 }

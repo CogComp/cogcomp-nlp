@@ -53,18 +53,14 @@ public class StanfordParseHandler extends PipelineAnnotator {
     }
 
     public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
-        super("Stanford Parser", "3.3.1", "stanfordparse");
+        super("Stanford Parser", "3.3.1", "stanfordparse", ViewNames.PARSE_STANFORD, new String[]{});
         this.posAnnotator = posAnnotator;
         this.parseAnnotator = parseAnnotator;
     }
 
-    @Override
-    public String getViewName() {
-        return ViewNames.PARSE_STANFORD;
-    }
 
     @Override
-    public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
+    public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
         TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
@@ -86,13 +82,9 @@ public class StanfordParseHandler extends PipelineAnnotator {
             treeView.setParseTree(sentenceId, tree);
         }
         textAnnotation.addView( getViewName(), treeView );
-        return treeView;
+        return;
     }
 
-    @Override
-    public String[] getRequiredViews() {
-        return new String[]{ViewNames.SENTENCE, ViewNames.TOKENS};
-    }
 
     protected static List<CoreMap> buildStanfordSentences(TextAnnotation ta) {
         View tokens = ta.getView(ViewNames.TOKENS);
