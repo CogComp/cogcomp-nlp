@@ -511,4 +511,13 @@ public class Constituent implements Serializable {
         return cloneC;
     }
 
+    public Constituent cloneForNewViewWithDestinationLabel(String newViewName, String Dlabel) {
+        Constituent cloneC = new Constituent(Dlabel, newViewName,
+                this.getTextAnnotation(), this.getStartSpan(),
+                this.getEndSpan());
+        for (String k : this.getAttributeKeys()) {
+            cloneC.addAttribute(k, this.getAttribute(k));
+        }
+        return cloneC;
+    }
 }
