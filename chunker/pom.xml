@@ -25,10 +25,15 @@
             <artifactId>LBJava</artifactId>
             <version>1.1.1</version>
         </dependency>
-	<dependency>
+	    <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-core-utilities</artifactId>
+            <version>3.0.10</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
