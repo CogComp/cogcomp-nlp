@@ -20,9 +20,10 @@ public class CcgTextAnnotationBuilderTest {
     @Test
     public void testBuilder() {
 
-        CcgTextAnnotationBuilder bldr = new CcgTextAnnotationBuilder( new IllinoisTokenizer() );
+        CcgTextAnnotationBuilder bldr = new CcgTextAnnotationBuilder(new IllinoisTokenizer());
 
-        final String sentA = "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   ";
+        final String sentA =
+                "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   ";
         final String sentB = "He is intolerant of intolerance!";
 
         final int refSentStartOffset = 71;
@@ -35,20 +36,21 @@ public class CcgTextAnnotationBuilderTest {
 
         TextAnnotation ta = bldr.createTextAnnotation("test", "test", text);
 
-        assertTrue( ta.hasView( ViewNames.SENTENCE ) );
-        assertTrue( ta.hasView( ViewNames.TOKENS ) );
+        assertTrue(ta.hasView(ViewNames.SENTENCE));
+        assertTrue(ta.hasView(ViewNames.TOKENS));
 
-        Constituent sent = ta.getView( ViewNames.SENTENCE ).getConstituents().get( 1 ); // second sentence
+        Constituent sent = ta.getView(ViewNames.SENTENCE).getConstituents().get(1); // second
+                                                                                    // sentence
 
-        assertEquals( sentB, sent.getSurfaceForm() );
-        assertEquals( refSentStartOffset, sent.getStartCharOffset() );
-        assertEquals( refSentEndOffset, sent.getEndCharOffset());
+        assertEquals(sentB, sent.getSurfaceForm());
+        assertEquals(refSentStartOffset, sent.getStartCharOffset());
+        assertEquals(refSentEndOffset, sent.getEndCharOffset());
 
-        Constituent tok = ta.getView( ViewNames.TOKENS ).getConstituents().get( 14 );
+        Constituent tok = ta.getView(ViewNames.TOKENS).getConstituents().get(14);
 
-        assertEquals( "intolerant", tok.getSurfaceForm() );
-        assertEquals( refTokStartOffset, tok.getStartCharOffset() );
-        assertEquals( refTokEndOffset, tok.getEndCharOffset() );
+        assertEquals("intolerant", tok.getSurfaceForm());
+        assertEquals(refTokStartOffset, tok.getStartCharOffset());
+        assertEquals(refTokEndOffset, tok.getEndCharOffset());
     }
 
 }
