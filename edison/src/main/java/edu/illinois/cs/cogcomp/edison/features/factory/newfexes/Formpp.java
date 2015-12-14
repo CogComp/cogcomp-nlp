@@ -30,26 +30,35 @@ public class Formpp implements FeatureExtractor {
 	this.viewName = viewName;
     }
    
-    public String[] getwindowkfrom(View TOKENS, int startspan, int endspan, int k){
-	
-	String window[] = new String[2*k+1];
-	
-	int startwin = startspan - k;
-	int endwin = endspan + k;
-	
-	if(endwin > TOKENS.getEndSpan()){
-	    endwin = TOKENS.getEndSpan();
-	}	
-	if(startwin < 0){
-	    startwin = 0;
-	}
-	
-	for(int i = startwin; i < endwin; i++){   
-	    
-	    window[i] = TOKENS.getConstituentsCoveringSpan(i, i+1).get(0).getSurfaceForm();
+    /**
+     *
+     * @param  TOKENS  The Tokens View of the TextAnnotation object
+     * @param  startspan The span at the beginning of the Constituent object
+     * @param  endspan The span at the end of the Constituent object
+     * @param  k The number of Tokens to the left and right of the current Constituent object to get
+     * @return Return the window of k Tokens to the left and k Tokens to the right of the current Constituent object
+     */
 
-	}
-	return window;
+    public String[] getWindowKFrom(View TOKENS, int startspan, int endspan, int k){
+	
+		String window[] = new String[2*k+1];
+		
+		int startwin = startspan - k;
+		int endwin = endspan + k;
+		
+		if(endwin > TOKENS.getEndSpan()){
+		    endwin = TOKENS.getEndSpan();
+		}	
+		if(startwin < 0){
+		    startwin = 0;
+		}
+		
+		for(int i = startwin; i < endwin; i++){   
+		    
+		    window[i] = TOKENS.getConstituentsCoveringSpan(i, i+1).get(0).getSurfaceForm();
+
+		}
+		return window;
     }
     
     @Override
@@ -71,7 +80,7 @@ public class Formpp implements FeatureExtractor {
 
 	
 	//All our constituents are words(tokens)	
-	String[] forms = getwindowkfrom(TOKENS, startspan, endspan, 2);
+	String[] forms = getWindowKFrom(TOKENS, startspan, endspan, 2);
 	
 	String __id, __value;
 	String classifier = "Formpp";
