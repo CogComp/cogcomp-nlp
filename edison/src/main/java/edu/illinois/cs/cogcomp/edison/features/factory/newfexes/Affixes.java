@@ -16,6 +16,10 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.util.*;
 
 /**
+ * 
+ * This feature extractor assumes that the TOKEN View have been generated.
+ * It generates features related to the prefixes and suffixes of the given
+ * constiteunt. This constient may not be a single word.
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  *
@@ -31,13 +35,6 @@ public class Affixes implements FeatureExtractor {
     }
     
     @Override
-    /**
-     * This feature extractor assumes that the TOKEN View have been generated in the 
-     * Constituents TextAnnotation. It will use its own POS tag and well as the POS tag
-     * and the SHALLOW_PARSE (Chunk) labels of the previous two tokens and return it as 
-     * a discrete feature. 
-     *
-     **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 	
 	String classifier = "Affixes";
@@ -46,30 +43,30 @@ public class Affixes implements FeatureExtractor {
 	
 	TOKENS = ta.getView(ViewNames.TOKENS);
 	
-	Set<Feature> __result = new LinkedHashSet<Feature>();
+	Set<Feature> result = new LinkedHashSet<Feature>();
 
-	String __id;
-	String __value;
+	String id;
+	String value;
 	String word = c.getSurfaceForm();
 	
 	for (int i = 3; i <= 4; ++i) {
 	    if (word.length() > i) {
-		__id = "p|";
-		__value = "" + (word.substring(0, i));
-		__result.add(new DiscreteFeature(classifier+":"+__id+"("+__value+")"));
+		id = "p|";
+		value = "" + (word.substring(0, i));
+		result.add(new DiscreteFeature(classifier+":"+id+"("+value+")"));
 	
 	    }
 	}
 	for (int i = 1; i <= 4; ++i) {
 	    if (word.length() > i) {
-		__id = "s|";
-		__value = "" + (word.substring(word.length() - i));
-		__result.add(new DiscreteFeature(classifier+":"+__id+"("+__value+")"));
+		id = "s|";
+		value = "" + (word.substring(word.length() - i));
+		result.add(new DiscreteFeature(classifier+":"+id+"("+value+")"));
 		
 	    }
 	}
 	
-	return __result;
+	return result;
     }
     
     @Override
