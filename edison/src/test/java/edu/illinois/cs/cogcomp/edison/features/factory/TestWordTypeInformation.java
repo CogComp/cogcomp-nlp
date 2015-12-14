@@ -1,0 +1,133 @@
+package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
+
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
+import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
+import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
+import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import junit.framework.TestCase;
+
+import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.Random;
+import java.io.Writer;
+
+
+/**
+ * Test class for SHALLOW PARSER WordTypeInformation Feature Extractor
+ *
+ * @author Paul Vijayakumar, Mazin Bokhari
+ */
+public class TestWordTypeInformation extends TestCase {
+
+    private static List<TextAnnotation> tas;
+    
+    static {
+	try {
+	    tas = IOUtils.readObjectAsResource(TestWordTypeInformation.class, "test.ta");
+	} catch (Exception e) {
+	    throw new RuntimeException(e);
+	}
+    }
+    
+    protected void setUp() throws Exception {
+	super.setUp();
+    }
+    
+    public final void testFormpp() throws EdisonException {
+	
+	System.out.println("WordTypeInformation");
+	//Using the first TA and a constituent between span of 0 - 20 as a test
+	TextAnnotation ta = tas.get(1);
+	View TOKENS = ta.getView("TOKENS");
+	
+	System.out.println("GOT TOKENS FROM TEXTAnn");
+	
+	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
+	String[] teststrings = new String[5];
+	
+	int i = 0, start = 1, end = 6;
+	
+	for(Constituent c: testlist){
+	    System.out.println(c.getSurfaceForm());
+	    if(i >= start && i < end){		
+		teststrings[i - start] = c.getSurfaceForm();
+	    }
+	    i++;
+	}
+	
+	System.out.println("Testlist size is "+testlist.size());
+
+	Constituent test = testlist.get(3);
+	
+	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+	
+       	WordTypeInformation wti = new WordTypeInformation("WordTypeInformation");
+	
+	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
+	
+	Set<Feature> feats = wti.getFeatures(test);
+	Set<String> __result = new LinkedHashSet<String>();
+	String __id;
+	String __value;
+	String classifier = "WordTypeInformation";
+	
+	if(feats == null){
+	    System.out.println("Feats are returning NULL.");
+	    assertFalse(true);
+	}
+	
+	System.out.println("Printing Set of Features");
+	for(Feature f: feats){
+	    System.out.println(f.getName());
+	}
+	
+	for(;(start < end && teststrings[start-1]!=null); start++){
+		
+	    boolean allCapitalized = true, allDigits = true, allNonLetters = true;
+	    
+	    for (int j = 0; j < teststrings[start-1].length(); ++j) {
+		
+		allCapitalized &= Character.isUpperCase(teststrings[start-1].charAt(j));
+		allDigits &= Character.isDigit(teststrings[start-1].charAt(j));
+		allNonLetters &= !Character.isLetter(teststrings[start-1].charAt(j));
+		
+	    }
+	    __id = classifier+":"+ ("c" + (start-1));
+	    __value = "(" + (allCapitalized) + ")";
+	    __result.add(__id+__value);
+	    __id = classifier+":"+ ("d" + (start-1));
+	    __value = "(" + (allDigits) + ")";
+	    __result.add(__id+__value);
+	    __id = classifier+":"+ ("c" + (start-1));
+	    __value = "(" + (allNonLetters) + ")";
+	    __result.add(__id+__value);
+	}
+	
+	for(Feature feat : feats){
+	    if(!__result.contains(feat.getName())){
+		assertFalse(true);
+	    }
+	}
+       
+	//System.exit(0);
+    }
+
+    private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
+	
+	for (TextAnnotation ta : tas) {
+	    for (String viewName : viewNames)
+		if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
+	}
+    }
+}
