@@ -22,6 +22,7 @@ import java.io.IOException;
 /**
  *
  * @author Paul Vijayakumar, Mazin Bokhari
+ * Extracts the POS Tags as well as the form (text) of tokens 2 before and 2 after from the given token and generates a discrete feature from it.
  *
  */
 public class Mixed implements FeatureExtractor {
