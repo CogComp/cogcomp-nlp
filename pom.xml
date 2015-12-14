@@ -20,6 +20,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<googleEclipseFormatterStyle>${project.basedir}/../core-utilities/src/main/resources/eclipse-java-google-style.xml</googleEclipseFormatterStyle>
     </properties>
 
     <repositories>
@@ -64,7 +65,14 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>com.marvinformatics.formatter</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+                <version>1.6.0.RC4</version>
+                <configuration>
+                    <configFile>${googleEclipseFormatterStyle}</configFile>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
