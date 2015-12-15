@@ -12,7 +12,8 @@ public class RecordUtils {
 
 
     public static List<String> getSentenceList(Record record) {
-        if (record.getLabelViews() == null || !record.getLabelViews().containsKey(ViewNames.SENTENCE))
+        if (record.getLabelViews() == null
+                || !record.getLabelViews().containsKey(ViewNames.SENTENCE))
             return null;
         List<String> sentenceList = new LinkedList<>();
         String rawText = record.getRawText();

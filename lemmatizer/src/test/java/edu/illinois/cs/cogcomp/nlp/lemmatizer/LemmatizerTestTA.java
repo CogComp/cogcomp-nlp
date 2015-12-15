@@ -22,29 +22,29 @@ public class LemmatizerTestTA {
     private static final String TEST_TEXT_ANNOTATION_FILE = "src/test/resources/serializedTA.ser";
 
     private TextAnnotation inputTa;
-	private IllinoisLemmatizer lem;
-    
-	@Test
-	public void simpleTest() {
-		String lemma = lem.getLemma( "putting", "VBG" );
-		assertTrue(lemma.equals("put"));
-		
-		lemma = lem.getLemma( "men", "NNS" );
-		assertTrue(lemma.equals("man"));
+    private IllinoisLemmatizer lem;
 
-		lemma = lem.getLemma( "retakes", "VBZ" );
-		assertTrue(lemma.equals("retake"));
-	}
-	
-	@Test
-	public void stanfordTest() {
-		IllinoisLemmatizer lem = new IllinoisLemmatizer(true,"WordNet-3.0/dict");
+    @Test
+    public void simpleTest() {
+        String lemma = lem.getLemma("putting", "VBG");
+        assertTrue(lemma.equals("put"));
 
-		String lemma = lem.getLemma( "me", "PRP" );
-		assertTrue(lemma.equals("i"));
-	}
+        lemma = lem.getLemma("men", "NNS");
+        assertTrue(lemma.equals("man"));
 
-	@Before
+        lemma = lem.getLemma("retakes", "VBZ");
+        assertTrue(lemma.equals("retake"));
+    }
+
+    @Test
+    public void stanfordTest() {
+        IllinoisLemmatizer lem = new IllinoisLemmatizer(true, "WordNet-3.0/dict");
+
+        String lemma = lem.getLemma("me", "PRP");
+        assertTrue(lemma.equals("i"));
+    }
+
+    @Before
     public void setUp() throws Exception {
         lem = new IllinoisLemmatizer();
         inputTa = SerializationHelper.deserializeTextAnnotationFromFile(TEST_TEXT_ANNOTATION_FILE);
@@ -54,59 +54,56 @@ public class LemmatizerTestTA {
     public void tearDown() throws Exception {
         inputTa = null;
     }
-    
+
     @Test
     public void testCreateWnLemmaView() {
         View lemmaView = null;
-        
-        try
-        {
-            lemmaView = lem.createLemmaView( inputTa );
-        }
-        catch ( IOException e )
-        {
-	        e.printStackTrace();
-	        fail( e.getMessage() );
-        }
-        
-        
-        //System.err.println( "Determining that TextAnnotation constituents use one-past-the-end indexing..." );
-        Constituent posC = inputTa.getView( ViewNames.POS ).getConstituents().get( 0 );
 
-        assertEquals( 0, posC.getStartSpan() );
-        assertEquals( 1, posC.getEndSpan() );
-        
+        try {
+            lemmaView = lem.createLemmaView(inputTa);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+
+        // System.err.println(
+        // "Determining that TextAnnotation constituents use one-past-the-end indexing..." );
+        Constituent posC = inputTa.getView(ViewNames.POS).getConstituents().get(0);
+
+        assertEquals(0, posC.getStartSpan());
+        assertEquals(1, posC.getEndSpan());
+
         boolean isTested = false;
-        //System.err.println( "Raw text: " + inputTa.getText() );
-        
-        if ( null != lemmaView )
-        {
-            List< Constituent > spans = inputTa.getView( ViewNames.LEMMA ).getConstituents();
+        // System.err.println( "Raw text: " + inputTa.getText() );
 
-            //printConstituents( System.out, spans );
+        if (null != lemmaView) {
+            List<Constituent> spans = inputTa.getView(ViewNames.LEMMA).getConstituents();
 
-            String the = spans.get( 0 ).getLabel(); // orig 'The'
-            String CIA = spans.get( 1 ).getLabel(); // orig 'men'
-            String thought = spans.get( 2 ).getLabel(); // orig 'have'
-            String had = spans.get( 6 ).getLabel(); // orig 'had'
-            String were = spans.get( 15 ).getLabel(); // orig 'examinations'
-            
-            assertEquals( the, "the" );
-            assertEquals( CIA, "cia" );
-            assertEquals( thought, "think" );
-            assertEquals( had, "have" );
-            assertEquals( were, "be" );
-            
+            // printConstituents( System.out, spans );
+
+            String the = spans.get(0).getLabel(); // orig 'The'
+            String CIA = spans.get(1).getLabel(); // orig 'men'
+            String thought = spans.get(2).getLabel(); // orig 'have'
+            String had = spans.get(6).getLabel(); // orig 'had'
+            String were = spans.get(15).getLabel(); // orig 'examinations'
+
+            assertEquals(the, "the");
+            assertEquals(CIA, "cia");
+            assertEquals(thought, "think");
+            assertEquals(had, "have");
+            assertEquals(were, "be");
+
             isTested = true;
         }
 
         assertTrue(isTested);
     }
-    
-    private void printConstituents( PrintStream out, List< Constituent > spans ) {
-        for ( Constituent c : spans )
-            out.print( c.getLabel() + ", " );
-        
+
+    private void printConstituents(PrintStream out, List<Constituent> spans) {
+        for (Constituent c : spans)
+            out.print(c.getLabel() + ", ");
+
         out.println();
     }
 
@@ -115,37 +112,33 @@ public class LemmatizerTestTA {
         View lemmaView = null;
         TextAnnotation ta = inputTa;
 
-        try
-        {
-            lemmaView = lem.createLemmaView( ta  );
-        }
-        catch (IOException e )
-        {
+        try {
+            lemmaView = lem.createLemmaView(ta);
+        } catch (IOException e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         }
         boolean isTested = false;
-        
-        if ( null != lemmaView )
-        {
-            List< Constituent > spans = lemmaView.getConstituents();
 
-            printConstituents( System.out, spans );
+        if (null != lemmaView) {
+            List<Constituent> spans = lemmaView.getConstituents();
 
-            String the = spans.get( 0 ).getLabel(); // orig 'The'
-            String CIA = spans.get( 1 ).getLabel(); // orig 'men'
-            String thought = spans.get( 2 ).getLabel(); // orig 'have'
-            String had = spans.get( 6 ).getLabel(); // orig 'had'
-            String were = spans.get( 15 ).getLabel(); // orig 'examinations'
-            
-            assertEquals( the, "the" );
-            assertEquals( CIA, "cia" );
-            assertEquals( thought, "think" );
-            assertEquals( had, "have" );
-            assertEquals( were, "be" );
-                      
+            printConstituents(System.out, spans);
+
+            String the = spans.get(0).getLabel(); // orig 'The'
+            String CIA = spans.get(1).getLabel(); // orig 'men'
+            String thought = spans.get(2).getLabel(); // orig 'have'
+            String had = spans.get(6).getLabel(); // orig 'had'
+            String were = spans.get(15).getLabel(); // orig 'examinations'
+
+            assertEquals(the, "the");
+            assertEquals(CIA, "cia");
+            assertEquals(thought, "think");
+            assertEquals(had, "have");
+            assertEquals(were, "be");
+
             isTested = true;
         }
-        assertTrue( isTested );
+        assertTrue(isTested);
     }
 }
