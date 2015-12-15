@@ -70,7 +70,10 @@
                 <artifactId>formatter-maven-plugin</artifactId>
 		<version>0.5.2</version>
                 <configuration>
-                    <configFile>${googleEclipseFormatterStyle}</configFile>
+			<configFile>${googleEclipseFormatterStyle}</configFile>
+			<excludes>
+				<exclude>**/Morpha.java</exclude>
+			</excludes>
                 </configuration>
             </plugin>
             <plugin>
