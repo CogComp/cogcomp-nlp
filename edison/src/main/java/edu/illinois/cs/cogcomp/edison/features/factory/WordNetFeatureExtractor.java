@@ -17,299 +17,321 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * This feature extractor generates the following WordNet based features from a
- * word: synonyms, synsets, hypernyms, hypernym-sets.
+ * This feature extractor generates the following WordNet based features from a word: synonyms,
+ * synsets, hypernyms, hypernym-sets.
  * <p/>
- * The behavior for multiple word constituents is just like the
- * {@link WordFeatureExtractor}:
+ * The behavior for multiple word constituents is just like the {@link WordFeatureExtractor}:
  * <p/>
- * If the input constituent is not a word, then the feature extractor can do one
- * of two things: If a flag is set in the constructor, then it will generate
- * features from the last word of the constituent. If the flag is not set, then
- * it will throw a {@code FeatureException}.
+ * If the input constituent is not a word, then the feature extractor can do one of two things: If a
+ * flag is set in the constructor, then it will generate features from the last word of the
+ * constituent. If the flag is not set, then it will throw a {@code FeatureException}.
  *
  * @author Vivek Srikumar
  */
 public class WordNetFeatureExtractor extends WordFeatureExtractor {
 
-	public static WordNetManager wnManager = null;
-	private final Set<WordNetFeatureClass> featureClasses;
+    public static WordNetManager wnManager = null;
+    private final Set<WordNetFeatureClass> featureClasses;
+
+    /**
+     * Creates a new WordNetFeatureExtractor.
+     * <p/>
+     * It is probably safest to the parameter {@code useLastWord} to true. This will provide a check
+     * to ensure that the WordNetFeatureExtractor only sees words.
+     */
+    public WordNetFeatureExtractor(boolean useLastWord) throws FileNotFoundException, JWNLException {
+        super(useLastWord);
 
-	/**
-	 * Creates a new WordNetFeatureExtractor.
-	 * <p/>
-	 * It is probably safest to the parameter {@code useLastWord} to true. This
-	 * will provide a check to ensure that the WordNetFeatureExtractor only sees
-	 * words.
-	 */
-	public WordNetFeatureExtractor(boolean useLastWord) throws FileNotFoundException,
-			JWNLException {
-		super(useLastWord);
+        featureClasses = new LinkedHashSet<>();
+
+        if (wnManager == null) {
+            wnManager = WordNetManager.getInstance();
+        }
+    }
+
+    /**
+     * Creates a new WordNetFeatureExtractor. This constructor is equivalent to calling
+     * {@code new WordNetFeatureExtractor(false)}.
+     *
+     * @throws JWNLException
+     * @throws java.io.FileNotFoundException
+     * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
+     */
+    public WordNetFeatureExtractor() throws FileNotFoundException, JWNLException {
+        this(true);
+    }
 
-		featureClasses = new LinkedHashSet<>();
+    public void addFeatureType(WordNetFeatureClass name) {
+        this.featureClasses.add(name);
+    }
 
-		if (wnManager == null) {
-			wnManager = WordNetManager.getInstance();
-		}
-	}
+    @Override
+    public Set<Feature> getWordFeatures(TextAnnotation ta, int tokenPosition)
+            throws EdisonException {
 
-	/**
-	 * Creates a new WordNetFeatureExtractor. This constructor is equivalent to
-	 * calling {@code new WordNetFeatureExtractor(false)}.
-	 *
-	 * @throws JWNLException
-	 * @throws java.io.FileNotFoundException
-	 * @see edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor#WordNetFeatureExtractor(boolean)
-	 */
-	public WordNetFeatureExtractor() throws FileNotFoundException, JWNLException {
-		this(true);
-	}
+        String token = ta.getToken(tokenPosition).toLowerCase().trim();
+        String pos = WordHelpers.getPOS(ta, tokenPosition);
 
-	public void addFeatureType(WordNetFeatureClass name) {
-		this.featureClasses.add(name);
-	}
+        POS wnPOS = WordNetHelper.getWNPOS(pos);
 
-	@Override
-	public Set<Feature> getWordFeatures(TextAnnotation ta, int tokenPosition) throws EdisonException {
+        if (wnPOS == null) {
+            return new LinkedHashSet<>();
+        }
 
-		String token = ta.getToken(tokenPosition).toLowerCase().trim();
-		String pos = WordHelpers.getPOS(ta, tokenPosition);
+        try {
+            IndexWord iw = wnManager.getIndexWord(wnPOS, token);
 
-		POS wnPOS = WordNetHelper.getWNPOS(pos);
+            Set<String> feats = new LinkedHashSet<>();
+            if (this.featureClasses.contains(WordNetFeatureClass.existsEntry)) {
+                if (iw != null) {
+                    feats.add("exists");
 
-		if (wnPOS == null) {
-			return new LinkedHashSet<>();
-		}
+                    if (POSUtils.isPOSNoun(pos))
+                        feats.add("nn+exists");
+                    else if (POSUtils.isPOSVerb(pos))
+                        feats.add("vb+exists");
+                    else if (POSUtils.isPOSAdjective(pos))
+                        feats.add("adj+exists");
+                    else if (POSUtils.isPOSAdverb(pos))
+                        feats.add("adv+exists");
+                }
 
-		try {
-			IndexWord iw = wnManager.getIndexWord(wnPOS, token);
+            }
 
-			Set<String> feats = new LinkedHashSet<>();
-			if (this.featureClasses.contains(WordNetFeatureClass.existsEntry)) {
-				if (iw != null) {
-					feats.add("exists");
+            if (iw == null)
+                return FeatureUtilities.getFeatures(feats);
 
-					if (POSUtils.isPOSNoun(pos)) feats.add("nn+exists");
-					else if (POSUtils.isPOSVerb(pos)) feats.add("vb+exists");
-					else if (POSUtils.isPOSAdjective(pos)) feats.add("adj+exists");
-					else if (POSUtils.isPOSAdverb(pos)) feats.add("adv+exists");
-				}
+            if (featureClasses.contains(WordNetFeatureClass.lemma))
+                feats.add("lemma:" + iw.getLemma());
 
-			}
+            boolean first = true;
+            for (Synset synset : iw.getSenses()) {
 
-			if (iw == null) return FeatureUtilities.getFeatures(feats);
+                if (first) {
+                    first = false;
 
-			if (featureClasses.contains(WordNetFeatureClass.lemma)) feats.add("lemma:" + iw.getLemma());
+                    addSynsetFeature(feats, synset, WordNetFeatureClass.synsetsFirstSense, "syns1:");
 
-			boolean first = true;
-			for (Synset synset : iw.getSenses()) {
+                    addLexFileNameFeature(feats, synset,
+                            WordNetFeatureClass.lexicographerFileNamesFirstSense, "lex-file1:");
 
-				if (first) {
-					first = false;
+                    addVerbFrameFeature(feats, synset, WordNetFeatureClass.verbFramesFirstSense,
+                            "verb-frame1:");
 
-					addSynsetFeature(feats, synset, WordNetFeatureClass.synsetsFirstSense, "syns1:");
+                    addSynonymFeature(feats, synset, WordNetFeatureClass.synonymsFirstSense,
+                            "syn1:");
 
-					addLexFileNameFeature(feats, synset, WordNetFeatureClass.lexicographerFileNamesFirstSense,
-							"lex-file1:");
+                    addRelatedWordsFeatures(feats, synset, PointerType.HYPERNYM,
+                            WordNetFeatureClass.hypernymsFirstSense, "hyp1:");
 
-					addVerbFrameFeature(feats, synset, WordNetFeatureClass.verbFramesFirstSense, "verb-frame1:");
+                    addRelatedWordsFeatures(feats, synset, PointerType.PART_HOLONYM,
+                            WordNetFeatureClass.partHolonymsFirstSense, "part-holo1:");
 
-					addSynonymFeature(feats, synset, WordNetFeatureClass.synonymsFirstSense, "syn1:");
+                    addRelatedWordsFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
+                            WordNetFeatureClass.substanceHolonymsFirstSense, "subs-holo1:");
 
-					addRelatedWordsFeatures(feats, synset, PointerType.HYPERNYM,
-							WordNetFeatureClass.hypernymsFirstSense, "hyp1:");
+                    addRelatedWordsFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
+                            WordNetFeatureClass.memberHolonymsFirstSense, "mem-holo1:");
+
+                    addRelatedWordsLexFileFeatures(feats, synset, PointerType.HYPERNYM,
+                            WordNetFeatureClass.hypernymFirstSenseLexicographerFileNames,
+                            "hyp1-lex-file:");
 
-					addRelatedWordsFeatures(feats, synset, PointerType.PART_HOLONYM,
-							WordNetFeatureClass.partHolonymsFirstSense, "part-holo1:");
+                    addRelatedWordsLexFileFeatures(feats, synset, PointerType.PART_HOLONYM,
+                            WordNetFeatureClass.partHolonymsFirstSenseLexicographerFileNames,
+                            "part-holo1-lex-file:");
+
+                    addRelatedWordsLexFileFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
+                            WordNetFeatureClass.substanceHolonymsFirstSenseLexicographerFileNames,
+                            "subst-holo1-lex-file:");
+
+                    addRelatedWordsLexFileFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
+                            WordNetFeatureClass.memberHolonymsFirstSenseLexicographerFileNames,
+                            "mem-holo1-lex-file:");
+
+                    addPointerFeature(feats, synset, WordNetFeatureClass.pointersFirstSense,
+                            "ptrs1:");
+
+                }
 
-					addRelatedWordsFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
-							WordNetFeatureClass.substanceHolonymsFirstSense, "subs-holo1:");
+                addSynsetFeature(feats, synset, WordNetFeatureClass.synsetsAllSenses, "syns:");
+
+                addLexFileNameFeature(feats, synset,
+                        WordNetFeatureClass.lexicographerFileNamesAllSenses, "lex-file:");
 
-					addRelatedWordsFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
-							WordNetFeatureClass.memberHolonymsFirstSense, "mem-holo1:");
+                addVerbFrameFeature(feats, synset, WordNetFeatureClass.verbFramesAllSenses,
+                        "vb-frame:");
+
+                addSynonymFeature(feats, synset, WordNetFeatureClass.synonymsAllSenses, "syn:");
+
+                addRelatedWordsFeatures(feats, synset, PointerType.HYPERNYM,
+                        WordNetFeatureClass.hypernymsAllSenses, "hyp:");
 
-					addRelatedWordsLexFileFeatures(feats, synset, PointerType.HYPERNYM,
-							WordNetFeatureClass.hypernymFirstSenseLexicographerFileNames, "hyp1-lex-file:");
+                addRelatedWordsFeatures(feats, synset, PointerType.PART_HOLONYM,
+                        WordNetFeatureClass.partHolonymsAllSenses, "part-holo:");
 
-					addRelatedWordsLexFileFeatures(feats, synset, PointerType.PART_HOLONYM,
-							WordNetFeatureClass.partHolonymsFirstSenseLexicographerFileNames, "part-holo1-lex-file:");
+                addRelatedWordsFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
+                        WordNetFeatureClass.substanceHolonymsAllSenses, "subst-holo:");
 
-					addRelatedWordsLexFileFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
-							WordNetFeatureClass.substanceHolonymsFirstSenseLexicographerFileNames,
-							"subst-holo1-lex-file:");
+                addRelatedWordsFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
+                        WordNetFeatureClass.memberHolonymsAllSenses, "mem-holo:");
+
+                addRelatedWordsLexFileFeatures(feats, synset, PointerType.HYPERNYM,
+                        WordNetFeatureClass.hypernymAllSensesLexicographerFileNames,
+                        "hyp-lex-file:");
 
-					addRelatedWordsLexFileFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
-							WordNetFeatureClass.memberHolonymsFirstSenseLexicographerFileNames, "mem-holo1-lex-file:");
+                addRelatedWordsLexFileFeatures(feats, synset, PointerType.PART_HOLONYM,
+                        WordNetFeatureClass.partHolonymsAllSensesLexicographerFileNames,
+                        "part-holo-lex-file:");
 
-					addPointerFeature(feats, synset, WordNetFeatureClass.pointersFirstSense, "ptrs1:");
+                addRelatedWordsLexFileFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
+                        WordNetFeatureClass.substanceHolonymsAllSensesLexicographerFileNames,
+                        "subst-holo-lex-file:");
 
-				}
+                addRelatedWordsLexFileFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
+                        WordNetFeatureClass.memberHolonymsAllSensesLexicographerFileNames,
+                        "mem-holo-lex-file:");
 
-				addSynsetFeature(feats, synset, WordNetFeatureClass.synsetsAllSenses, "syns:");
+                addPointerFeature(feats, synset, WordNetFeatureClass.pointersAllSenses, "ptrs:");
 
-				addLexFileNameFeature(feats, synset, WordNetFeatureClass.lexicographerFileNamesAllSenses, "lex-file:");
+            }
+            return FeatureUtilities.getFeatures(feats);
+        } catch (Exception ex) {
+            throw new EdisonException("Error accessing WordNet: " + ex.getMessage());
+        }
 
-				addVerbFrameFeature(feats, synset, WordNetFeatureClass.verbFramesAllSenses, "vb-frame:");
+    }
 
-				addSynonymFeature(feats, synset, WordNetFeatureClass.synonymsAllSenses, "syn:");
+    private void addPointerFeature(Set<String> f1, Synset synset, WordNetFeatureClass name,
+            String key) {
+        if (featureClasses.contains(name)) {
+            for (Pointer p : synset.getPointers()) {
+                f1.add(key + p.getType().getLabel());
+            }
+        }
+    }
 
-				addRelatedWordsFeatures(feats, synset, PointerType.HYPERNYM, WordNetFeatureClass.hypernymsAllSenses,
-						"hyp:");
+    private void addSynonymFeature(Set<String> f1, Synset synset, WordNetFeatureClass name,
+            String key) {
+        if (featureClasses.contains(name)) {
+            for (Word w : synset.getWords())
+                f1.add(key + w.getLemma());
+        }
+    }
 
-				addRelatedWordsFeatures(feats, synset, PointerType.PART_HOLONYM,
-						WordNetFeatureClass.partHolonymsAllSenses, "part-holo:");
+    private void addSynsetFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz,
+            String key) {
+        if (featureClasses.contains(clazz))
+            f1.add(key + synset.getKey().toString());
+    }
 
-				addRelatedWordsFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
-						WordNetFeatureClass.substanceHolonymsAllSenses, "subst-holo:");
+    private void addVerbFrameFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz,
+            String key) {
+        if (featureClasses.contains(clazz)) {
+            for (String frame : synset.getVerbFrames()) {
+                f1.add(key + frame);
+            }
+        }
 
-				addRelatedWordsFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
-						WordNetFeatureClass.memberHolonymsAllSenses, "mem-holo:");
+    }
 
-				addRelatedWordsLexFileFeatures(feats, synset, PointerType.HYPERNYM,
-						WordNetFeatureClass.hypernymAllSensesLexicographerFileNames, "hyp-lex-file:");
+    private void addLexFileNameFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz,
+            String key) {
+        if (featureClasses.contains(clazz))
+            f1.add(key + synset.getLexFileName());
+    }
 
-				addRelatedWordsLexFileFeatures(feats, synset, PointerType.PART_HOLONYM,
-						WordNetFeatureClass.partHolonymsAllSensesLexicographerFileNames, "part-holo-lex-file:");
+    private void addRelatedWordsFeatures(Set<String> f1, Synset synset, PointerType type,
+            WordNetFeatureClass name, String key) throws JWNLException {
+        if (featureClasses.contains(name)) {
+            Pointer[] pointers = synset.getPointers(type);
 
-				addRelatedWordsLexFileFeatures(feats, synset, PointerType.SUBSTANCE_HOLONYM,
-						WordNetFeatureClass.substanceHolonymsAllSensesLexicographerFileNames, "subst-holo-lex-file:");
+            for (Pointer p : pointers) {
+                Synset target = p.getTargetSynset();
 
-				addRelatedWordsLexFileFeatures(feats, synset, PointerType.MEMBER_HOLONYM,
-						WordNetFeatureClass.memberHolonymsAllSensesLexicographerFileNames, "mem-holo-lex-file:");
+                for (Word w : target.getWords()) {
+                    f1.add(key + w.getLemma());
+                }
 
-				addPointerFeature(feats, synset, WordNetFeatureClass.pointersAllSenses, "ptrs:");
+            }
+        }
+    }
 
-			}
-			return FeatureUtilities.getFeatures(feats);
-		} catch (Exception ex) {
-			throw new EdisonException("Error accessing WordNet: " + ex.getMessage());
-		}
+    private void addRelatedWordsLexFileFeatures(Set<String> f1, Synset synset, PointerType type,
+            WordNetFeatureClass name, String key) throws JWNLException {
+        if (featureClasses.contains(name)) {
+            Pointer[] pointers = synset.getPointers(type);
 
-	}
+            for (Pointer p : pointers) {
+                Synset target = p.getTargetSynset();
 
-	private void addPointerFeature(Set<String> f1, Synset synset, WordNetFeatureClass name, String key) {
-		if (featureClasses.contains(name)) {
-			for (Pointer p : synset.getPointers()) {
-				f1.add(key + p.getType().getLabel());
-			}
-		}
-	}
+                f1.add(key + target.getLexFileName());
 
-	private void addSynonymFeature(Set<String> f1, Synset synset, WordNetFeatureClass name, String key) {
-		if (featureClasses.contains(name)) {
-			for (Word w : synset.getWords())
-				f1.add(key + w.getLemma());
-		}
-	}
+            }
+        }
+    }
 
-	private void addSynsetFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz, String key) {
-		if (featureClasses.contains(clazz)) f1.add(key + synset.getKey().toString());
-	}
+    @Override
+    public String getName() {
+        return "#wn#";
+    }
 
-	private void addVerbFrameFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz, String key) {
-		if (featureClasses.contains(clazz)) {
-			for (String frame : synset.getVerbFrames()) {
-				f1.add(key + frame);
-			}
-		}
+    public enum WordNetFeatureClass {
+        existsEntry,
 
-	}
+        lemma,
 
-	private void addLexFileNameFeature(Set<String> f1, Synset synset, WordNetFeatureClass clazz, String key) {
-		if (featureClasses.contains(clazz)) f1.add(key + synset.getLexFileName());
-	}
+        synonymsFirstSense,
 
-	private void addRelatedWordsFeatures(Set<String> f1, Synset synset, PointerType type, WordNetFeatureClass name, String key) throws
-			JWNLException {
-		if (featureClasses.contains(name)) {
-			Pointer[] pointers = synset.getPointers(type);
+        hypernymsFirstSense,
 
-			for (Pointer p : pointers) {
-				Synset target = p.getTargetSynset();
+        synsetsFirstSense,
 
-				for (Word w : target.getWords()) {
-					f1.add(key + w.getLemma());
-				}
+        partHolonymsFirstSense,
 
-			}
-		}
-	}
+        substanceHolonymsFirstSense,
 
-	private void addRelatedWordsLexFileFeatures(Set<String> f1, Synset synset, PointerType type, WordNetFeatureClass name, String key) throws
-			JWNLException {
-		if (featureClasses.contains(name)) {
-			Pointer[] pointers = synset.getPointers(type);
+        memberHolonymsFirstSense,
 
-			for (Pointer p : pointers) {
-				Synset target = p.getTargetSynset();
+        pointersFirstSense,
 
-				f1.add(key + target.getLexFileName());
+        pointersAllSenses,
 
-			}
-		}
-	}
+        verbFramesFirstSense,
 
-	@Override
-	public String getName() {
-		return "#wn#";
-	}
+        synonymsAllSenses,
 
-	public enum WordNetFeatureClass {
-		existsEntry,
+        hypernymsAllSenses,
 
-		lemma,
+        partHolonymsAllSenses,
 
-		synonymsFirstSense,
+        substanceHolonymsAllSenses,
 
-		hypernymsFirstSense,
+        memberHolonymsAllSenses,
 
-		synsetsFirstSense,
+        synsetsAllSenses,
 
-		partHolonymsFirstSense,
+        lexicographerFileNamesFirstSense,
 
-		substanceHolonymsFirstSense,
+        lexicographerFileNamesAllSenses,
 
-		memberHolonymsFirstSense,
+        hypernymFirstSenseLexicographerFileNames,
 
-		pointersFirstSense,
+        hypernymAllSensesLexicographerFileNames,
 
-		pointersAllSenses,
+        partHolonymsFirstSenseLexicographerFileNames,
 
-		verbFramesFirstSense,
+        substanceHolonymsFirstSenseLexicographerFileNames,
 
-		synonymsAllSenses,
+        memberHolonymsFirstSenseLexicographerFileNames,
 
-		hypernymsAllSenses,
+        partHolonymsAllSensesLexicographerFileNames,
 
-		partHolonymsAllSenses,
+        substanceHolonymsAllSensesLexicographerFileNames,
 
-		substanceHolonymsAllSenses,
+        memberHolonymsAllSensesLexicographerFileNames,
 
-		memberHolonymsAllSenses,
+        verbFramesAllSenses
 
-		synsetsAllSenses,
-
-		lexicographerFileNamesFirstSense,
-
-		lexicographerFileNamesAllSenses,
-
-		hypernymFirstSenseLexicographerFileNames,
-
-		hypernymAllSensesLexicographerFileNames,
-
-		partHolonymsFirstSenseLexicographerFileNames,
-
-		substanceHolonymsFirstSenseLexicographerFileNames,
-
-		memberHolonymsFirstSenseLexicographerFileNames,
-
-		partHolonymsAllSensesLexicographerFileNames,
-
-		substanceHolonymsAllSensesLexicographerFileNames,
-
-		memberHolonymsAllSensesLexicographerFileNames,
-
-		verbFramesAllSenses
-
-	}
+    }
 }
