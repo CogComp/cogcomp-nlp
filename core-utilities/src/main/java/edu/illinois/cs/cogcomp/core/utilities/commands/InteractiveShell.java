@@ -7,14 +7,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
- * This class provides an easy way provide command line interface to the
- * program. It exposes all the static methods of a class (that is the template
- * parameter) to the command line interface.
+ * This class provides an easy way provide command line interface to the program. It exposes all the
+ * static methods of a class (that is the template parameter) to the command line interface.
  * <p/>
  * Additionally, it also prints documentation if necessary.
  * <p/>
  * Usage: Create a class called AllCommands
  * <p/>
+ * 
  * <pre>
  * class AllCommands {
  * <code>
@@ -27,20 +27,20 @@ import java.lang.reflect.Modifier;
  * </pre>
  * <p/>
  * Create the main function somewhere
+ * 
  * <pre>
  * public static void main(String[] args) throws Exception {
- * 	InteractiveShell&lt;AllCommands&gt; tester = new InteractiveShell&lt;AllCommands&gt;( AllCommands.class);
- *
- * 	if (args.length == 0)
- * 		tester.showDocumentation();
- * 	else
- * 		tester.runCommand(args);
+ *     InteractiveShell&lt;AllCommands&gt; tester = new InteractiveShell&lt;AllCommands&gt;(AllCommands.class);
+ * 
+ *     if (args.length == 0)
+ *         tester.showDocumentation();
+ *     else
+ *         tester.runCommand(args);
  * }
  * </pre>
  * <p/>
  * <p/>
- * Now, command line options can be added to the program by adding static
- * functions to AllCommands.
+ * Now, command line options can be added to the program by adding static functions to AllCommands.
  *
  * @param <T> The class that contains all the commands.
  * @author vivek
@@ -58,8 +58,8 @@ public class InteractiveShell<T> {
     }
 
     /**
-     * Displays the available static commands along with their documentation.
-     * The documentation is drawn from the function's CommandDescription.
+     * Displays the available static commands along with their documentation. The documentation is
+     * drawn from the function's CommandDescription.
      */
     public void showDocumentation() {
 
@@ -86,8 +86,7 @@ public class InteractiveShell<T> {
 
             while (end > start && end < input.length()) {
 
-                if (input.charAt(end - 1) == ' '
-                        || input.charAt(end - 1) == '\t')
+                if (input.charAt(end - 1) == ' ' || input.charAt(end - 1) == '\t')
                     break;
                 end--;
             }
@@ -114,13 +113,13 @@ public class InteractiveShell<T> {
     /**
      * Runs a command.
      * <p/>
-     * The command is specified by the first element of the argument and its
-     * parameters are the rest of the elements.
+     * The command is specified by the first element of the argument and its parameters are the rest
+     * of the elements.
      * <p/>
      * Note: This demands that all the parameters should be strings.
      *
-     * @param args An array of strings. The name of the command should be the
-     *             first element and its parameters should follow.
+     * @param args An array of strings. The name of the command should be the first element and its
+     *        parameters should follow.
      */
     public void runCommand(String[] args) throws Exception {
         if (args.length == 0) {
@@ -157,7 +156,8 @@ public class InteractiveShell<T> {
 
                             if (m.isAnnotationPresent(CommandDescription.class)) {
                                 System.out.println("Documentation");
-                                System.out.println(m.getAnnotation(CommandDescription.class).description());
+                                System.out.println(m.getAnnotation(CommandDescription.class)
+                                        .description());
                             } else {
                                 System.out.println("No documentation available for " + m.getName());
                             }
@@ -220,8 +220,8 @@ public class InteractiveShell<T> {
     }
 
     /**
-     * Gets the closest command to a the second parameter. Closeness is defined
-     * by Levnstein Distance.
+     * Gets the closest command to a the second parameter. Closeness is defined by Levnstein
+     * Distance.
      */
     private String getNearestCommand(Method[] list, String string) {
         ArgMax<String, Integer> closest = new ArgMax<>("", Integer.MIN_VALUE);
@@ -231,7 +231,8 @@ public class InteractiveShell<T> {
                 if (m.isAnnotationPresent(CommandIgnore.class))
                     continue;
 
-                closest.update(m.getName(), -LevensteinDistance.getLevensteinDistance(m.getName(), string));
+                closest.update(m.getName(),
+                        -LevensteinDistance.getLevensteinDistance(m.getName(), string));
             }
         }
 

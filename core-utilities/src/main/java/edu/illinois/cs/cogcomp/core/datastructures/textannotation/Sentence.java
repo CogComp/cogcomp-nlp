@@ -18,13 +18,14 @@ public class Sentence extends AbstractTextAnnotation implements Serializable {
     protected Constituent sentenceConstituent;
 
     @SuppressWarnings("serial")
-    protected final static ITransformer<View, Double> defaultViewScoreSplitter = new ITransformer<View, Double>() {
+    protected final static ITransformer<View, Double> defaultViewScoreSplitter =
+            new ITransformer<View, Double>() {
 
-        @Override
-        public Double transform(View input) {
-            return input.getScore();
-        }
-    };
+                @Override
+                public Double transform(View input) {
+                    return input.getScore();
+                }
+            };
 
     /**
      * Create a sentence out of a sentenceConstituent.
@@ -86,8 +87,7 @@ public class Sentence extends AbstractTextAnnotation implements Serializable {
 
     @Override
     public int hashCode() {
-        return this.sentenceConstituent.hashCode() * 43
-                + this.getTokenizedText().hashCode() * 31;
+        return this.sentenceConstituent.hashCode() * 43 + this.getTokenizedText().hashCode() * 31;
     }
 
     @Override
@@ -128,8 +128,9 @@ public class Sentence extends AbstractTextAnnotation implements Serializable {
             List<View> myViews = new ArrayList<>();
 
             for (View v : taViews) {
-                View restriction = v.getViewCoveringSpan(this.getStartSpan(),
-                        this.getEndSpan(), Sentence.defaultViewScoreSplitter);
+                View restriction =
+                        v.getViewCoveringSpan(this.getStartSpan(), this.getEndSpan(),
+                                Sentence.defaultViewScoreSplitter);
                 myViews.add(restriction);
             }
 
