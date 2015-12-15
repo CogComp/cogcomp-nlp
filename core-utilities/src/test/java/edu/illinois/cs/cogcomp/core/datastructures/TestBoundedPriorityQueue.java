@@ -7,8 +7,8 @@ import java.util.Comparator;
 public class TestBoundedPriorityQueue extends TestCase {
 
     public final void testBoundedPriorityQueue() {
-        BoundedPriorityQueue<Integer> queue = new BoundedPriorityQueue<>(2,
-                new Comparator<Integer>() {
+        BoundedPriorityQueue<Integer> queue =
+                new BoundedPriorityQueue<>(2, new Comparator<Integer>() {
                     @Override
                     public int compare(Integer o1, Integer o2) {
                         return (int) Math.signum(o1 - o2);

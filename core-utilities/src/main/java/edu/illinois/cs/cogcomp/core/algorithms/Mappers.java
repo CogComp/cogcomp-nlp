@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Provides methods to map over {@link Iterable}s and {@link Tree}s. Each method
- * also takes as input an {@link ITransformer} which transforms an individual
- * node of the iterable or the tree into a new object of a (possibly) different
- * type. The methods then return a new iterable or tree containing the new
- * objects.
+ * Provides methods to map over {@link Iterable}s and {@link Tree}s. Each method also takes as input
+ * an {@link ITransformer} which transforms an individual node of the iterable or the tree into a
+ * new object of a (possibly) different type. The methods then return a new iterable or tree
+ * containing the new objects.
  *
  * @author Vivek Srikumar
  */
@@ -24,7 +23,8 @@ public class Mappers {
         return items;
     }
 
-    public static <T, S> Tree<S> mapTree(final Tree<T> tree, final ITransformer<Tree<T>, S> transformer) {
+    public static <T, S> Tree<S> mapTree(final Tree<T> tree,
+            final ITransformer<Tree<T>, S> transformer) {
         Tree<S> t = new Tree<>(transformer.transform(tree));
 
         for (Tree<T> treeChild : tree.getChildren()) {
@@ -34,8 +34,7 @@ public class Mappers {
     }
 
     public static <T, S> Tree<S> mapTree(final Tree<T> tree,
-                                         final ITransformer<Tree<T>, S> nodeTransformer,
-                                         final ITransformer<T, S> edgeTransformer) {
+            final ITransformer<Tree<T>, S> nodeTransformer, final ITransformer<T, S> edgeTransformer) {
         Tree<S> t = new Tree<>(nodeTransformer.transform(tree));
 
         for (int i = 0; i < tree.getNumberOfChildren(); i++) {
@@ -49,14 +48,12 @@ public class Mappers {
     }
 
     public static <T, S> Tree<S> conditionalMapTree(Tree<T> tree,
-                                                    ITransformer<Tree<T>, S> transformer,
-                                                    ITransformer<Tree<T>, Boolean> predicate) {
+            ITransformer<Tree<T>, S> transformer, ITransformer<Tree<T>, Boolean> predicate) {
         Tree<S> t = new Tree<>(transformer.transform(tree));
 
         for (Tree<T> treeChild : tree.getChildren()) {
             if (predicate.transform(treeChild))
-                t.addSubtree(conditionalMapTree(treeChild, transformer,
-                        predicate));
+                t.addSubtree(conditionalMapTree(treeChild, transformer, predicate));
         }
         return t;
     }
@@ -77,8 +74,7 @@ public class Mappers {
     }
 
     public static <T, S> Tree<S> mapTreePostfixConditional(Tree<T> tree,
-                                                           ITransformer<Tree<T>, S> transformer,
-                                                           ITransformer<Tree<T>, Boolean> predicate) {
+            ITransformer<Tree<T>, S> transformer, ITransformer<Tree<T>, Boolean> predicate) {
         List<Tree<S>> children = new ArrayList<>();
 
         for (Tree<T> child : tree.getChildren()) {

@@ -11,8 +11,7 @@ public class MemoryMonitor {
     public static final long memLimit = Runtime.getRuntime().maxMemory();
 
     /**
-     * @return whether used memory is more than 75% of max available
-     * to JVM
+     * @return whether used memory is more than 75% of max available to JVM
      */
     public static boolean almostFull() {
         return memLimit * 3 / 4 < usedMemory();
@@ -22,7 +21,7 @@ public class MemoryMonitor {
      * Returns current memory usage in MB
      */
     public static void printMemoryUsage(String announcement) {
-//		runGC(r,10);
+        // runGC(r,10);
         System.out.printf(announcement + "memory usage: %sMB\n", memoryUsageInMB());
     }
 

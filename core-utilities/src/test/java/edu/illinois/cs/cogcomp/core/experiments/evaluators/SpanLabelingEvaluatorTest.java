@@ -19,8 +19,10 @@ public class SpanLabelingEvaluatorTest {
     public void setUp() throws Exception {
         splittingTester = new ClassificationTester();
         String[] viewsToAdd = {ViewNames.POS};
-        TextAnnotation goldTA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
-        TextAnnotation predictionTA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
+        TextAnnotation goldTA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        TextAnnotation predictionTA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
         gold = (SpanLabelView) goldTA.getView(ViewNames.POS);
         predicted = (SpanLabelView) predictionTA.getView(ViewNames.POS);
     }
@@ -39,7 +41,7 @@ public class SpanLabelingEvaluatorTest {
         SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertEquals( splittingTester.getAverageF1(), 0.57, 0.01 );
+        assertEquals(splittingTester.getAverageF1(), 0.57, 0.01);
         assertEquals(0.5, splittingTester.getAverageAccuracy(), 0);
     }
 }

@@ -9,11 +9,10 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * Create a counter for type T. T must be a type that implements a hash function
- * and equals.
+ * Create a counter for type T. T must be a type that implements a hash function and equals.
  * <p/>
- * A counter keeps track of the count of a family of objects. It also tracks the
- * max, argMax min, argMin.
+ * A counter keeps track of the count of a family of objects. It also tracks the max, argMax min,
+ * argMin.
  * <p/>
  *
  * @author Vivek Srikumar
@@ -83,21 +82,17 @@ public class Counter<T extends Serializable> implements Serializable {
     }
 
     public Pair<T, Double> getMax() {
-        for(Object k:counts.keys())
-        {
-            argMax.update((T)k,counts.get(k));
+        for (Object k : counts.keys()) {
+            argMax.update((T) k, counts.get(k));
         }
-        return new Pair<>(this.argMax.getArgmax(),
-                this.argMax.getMaxValue());
+        return new Pair<>(this.argMax.getArgmax(), this.argMax.getMaxValue());
     }
 
     public Pair<T, Double> getMin() {
-        for(Object k:counts.keys())
-        {
-            argMin.update((T)k,counts.get(k));
+        for (Object k : counts.keys()) {
+            argMin.update((T) k, counts.get(k));
         }
-        return new Pair<>(this.argMin.getArgmin(),
-                this.argMin.getMinValue());
+        return new Pair<>(this.argMin.getArgmin(), this.argMin.getMinValue());
     }
 
     public Set<T> items() {
