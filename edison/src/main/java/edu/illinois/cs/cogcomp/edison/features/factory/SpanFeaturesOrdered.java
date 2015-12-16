@@ -18,36 +18,39 @@ import java.util.Set;
  * @author Vivek Srikumar
  */
 public class SpanFeaturesOrdered implements FeatureExtractor {
-	public static SpanFeaturesOrdered POS_UNIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 1);
-	public static SpanFeaturesOrdered POS_BIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 2);
-	public static SpanFeaturesOrdered POS_TRIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 3);
-	public static SpanFeaturesOrdered SHALLOW_PARSE_UNIGRAMS = new SpanFeaturesOrdered(ViewNames.SHALLOW_PARSE, 1);
-	public static SpanFeaturesOrdered SHALLOW_PARSE_BIGRAMS = new SpanFeaturesOrdered(ViewNames.SHALLOW_PARSE, 2);
+    public static SpanFeaturesOrdered POS_UNIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 1);
+    public static SpanFeaturesOrdered POS_BIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 2);
+    public static SpanFeaturesOrdered POS_TRIGRAMS = new SpanFeaturesOrdered(ViewNames.POS, 3);
+    public static SpanFeaturesOrdered SHALLOW_PARSE_UNIGRAMS = new SpanFeaturesOrdered(
+            ViewNames.SHALLOW_PARSE, 1);
+    public static SpanFeaturesOrdered SHALLOW_PARSE_BIGRAMS = new SpanFeaturesOrdered(
+            ViewNames.SHALLOW_PARSE, 2);
 
-	private final String viewName;
-	private final int ngramLength;
+    private final String viewName;
+    private final int ngramLength;
 
-	/**
+    /**
 	 *
 	 */
-	public SpanFeaturesOrdered(String viewName, int ngramLength) {
-		this.viewName = viewName;
-		this.ngramLength = ngramLength;
-	}
+    public SpanFeaturesOrdered(String viewName, int ngramLength) {
+        this.viewName = viewName;
+        this.ngramLength = ngramLength;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		SpanLabelView chunks = (SpanLabelView) c.getTextAnnotation().getView(viewName);
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        SpanLabelView chunks = (SpanLabelView) c.getTextAnnotation().getView(viewName);
 
-		List<Constituent> list = SpanLabelsHelper.getConstituentsInBetween(chunks, c.getStartSpan(), c.getEndSpan());
+        List<Constituent> list =
+                SpanLabelsHelper.getConstituentsInBetween(chunks, c.getStartSpan(), c.getEndSpan());
 
-		Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
+        Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
 
-		return FeatureNGramUtility.getLabelNgramsOrdered(list, ngramLength);
-	}
+        return FeatureNGramUtility.getLabelNgramsOrdered(list, ngramLength);
+    }
 
-	@Override
-	public String getName() {
-		return "#ordered-span#" + viewName;
-	}
+    @Override
+    public String getName() {
+        return "#ordered-span#" + viewName;
+    }
 }

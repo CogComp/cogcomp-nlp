@@ -1,8 +1,8 @@
 package edu.illinois.cs.cogcomp.core.transformers;
 
 /**
- * A {@code Predicate} is a special {@link ITransformer} that converts an object
- * of type {@code T} into a {@code boolean}.
+ * A {@code Predicate} is a special {@link ITransformer} that converts an object of type {@code T}
+ * into a {@code boolean}.
  *
  * @author Vivek Srikumar
  *         <p/>

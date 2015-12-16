@@ -8,24 +8,18 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * a pattern to set default configuration options in a way that supports
- *   modular code, minimizes size of config files, but which makes defaults
- *   very explicit.  A lot of it is based on convention -- defining public static members
- *   for config flags and their default values. It's OK for some values to NOT have
- *   default values, in which case the constructor for the corresponding class
- *   will either take a ResourceManager or a config file or explicit parameters --
- *   ideally, the latter.
+ * a pattern to set default configuration options in a way that supports modular code, minimizes
+ * size of config files, but which makes defaults very explicit. A lot of it is based on convention
+ * -- defining public static members for config flags and their default values. It's OK for some
+ * values to NOT have default values, in which case the constructor for the corresponding class will
+ * either take a ResourceManager or a config file or explicit parameters -- ideally, the latter.
  *
- * Usage:
- *    - create class derived from Configurator, e.g. MyConfigurator.
- *    - specify flags and default values using public static constants.
- *    - when instantiating the corresponding object, instantiate a MyConfigurator
- *      object and either:
- *      - new MyNewClass( myConfigurator.getDefaultConfig() )
- *      - new MyNewClass( Configurator.mergeProperties( myConfigurator, anotherConfigurator ) );
+ * Usage: - create class derived from Configurator, e.g. MyConfigurator. - specify flags and default
+ * values using public static constants. - when instantiating the corresponding object, instantiate
+ * a MyConfigurator object and either: - new MyNewClass( myConfigurator.getDefaultConfig() ) - new
+ * MyNewClass( Configurator.mergeProperties( myConfigurator, anotherConfigurator ) );
  *
- * See {@link AnnotatorServiceConfigurator}
- *    for an example of a Configurator extension.
+ * See {@link AnnotatorServiceConfigurator} for an example of a Configurator extension.
  *
  * Created by mssammon on 8/3/15.
  */
@@ -37,13 +31,15 @@ public abstract class Configurator {
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
+     * 
      * @return a non-null ResourceManager with appropriate values set.
      */
     abstract public ResourceManager getDefaultConfig();
 
     /**
-     * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a list of
-     * default {@link Property} entries.
+     * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a
+     * list of default {@link Property} entries.
+     * 
      * @param properties The list default {@link Property} entries
      * @return The {@link java.util.Properties} containing the defined properties
      */
@@ -55,85 +51,87 @@ public abstract class Configurator {
     }
 
     /**
-     * get a Properties object with default values except for those provided
-     *    in the 'nonDefaultValues' argument
-     * @param nonDefaultValues  specify ONLY those values you wish to override
+     * get a Properties object with default values except for those provided in the
+     * 'nonDefaultValues' argument
+     * 
+     * @param nonDefaultValues specify ONLY those values you wish to override
      * @return a {@link ResourceManager} containing the defined properties
      */
-    public ResourceManager getConfig( Map< String, String > nonDefaultValues )
-    {
+    public ResourceManager getConfig(Map<String, String> nonDefaultValues) {
         ResourceManager props = getDefaultConfig();
         Properties nonDefProps = new Properties();
-        nonDefProps.putAll( nonDefaultValues );
+        nonDefProps.putAll(nonDefaultValues);
 
-        return mergeProperties( props, new ResourceManager( nonDefProps ) );
+        return mergeProperties(props, new ResourceManager(nonDefProps));
     }
 
 
     /**
-     * get a Properties object with default values except for those provided
-     *    in the 'nonDefaultValues' argument
-     * @param nonDefaultRm  specify ONLY those values you wish to override
+     * get a Properties object with default values except for those provided in the
+     * 'nonDefaultValues' argument
+     * 
+     * @param nonDefaultRm specify ONLY those values you wish to override
      * @return a {@link ResourceManager} containing the defined properties
      */
-    public ResourceManager getConfig( ResourceManager nonDefaultRm )
-    {
+    public ResourceManager getConfig(ResourceManager nonDefaultRm) {
         ResourceManager props = getDefaultConfig();
         Properties nonDefProps = new Properties();
 
-        Enumeration< String > keys = (Enumeration<String>) nonDefaultRm.getProperties().propertyNames();
+        Enumeration<String> keys =
+                (Enumeration<String>) nonDefaultRm.getProperties().propertyNames();
 
-        while ( keys.hasMoreElements() ) {
+        while (keys.hasMoreElements()) {
             String key = keys.nextElement();
             nonDefProps.put(key, nonDefaultRm.getString(key));
         }
-        return mergeProperties( props, new ResourceManager( nonDefProps ) );
+        return mergeProperties(props, new ResourceManager(nonDefProps));
     }
 
 
     /**
-     * combine two sets of properties to make a third Properties object; throw
-     *   exception if two properties clash (have same name)
+     * combine two sets of properties to make a third Properties object; throw exception if two
+     * properties clash (have same name)
+     * 
      * @param first ResourceManager with first set of properties
-     * @param second    ResourceManager with second set of properties
+     * @param second ResourceManager with second set of properties
      * @return a brand new ResourceManager with the union of the properties
      * @throws IllegalArgumentException if the same key appears in both objects
      */
-    public static ResourceManager mergeProperties( ResourceManager first, ResourceManager second )
-    {
+    public static ResourceManager mergeProperties(ResourceManager first, ResourceManager second) {
         Properties firstProps = first.getProperties();
         Properties secondProps = second.getProperties();
 
         Properties newProps = new Properties();
 
-        for ( String key: firstProps.stringPropertyNames() )
-            newProps.put( key, firstProps.getProperty( key ) );
+        for (String key : firstProps.stringPropertyNames())
+            newProps.put(key, firstProps.getProperty(key));
 
-        for ( String key: secondProps.stringPropertyNames() )
-        {
-//            if ( newProps.containsKey( key ) )
-//                throw new IllegalArgumentException( "ERROR: key '" + key + "' was already set in first ResourceManager." );
+        for (String key : secondProps.stringPropertyNames()) {
+            // if ( newProps.containsKey( key ) )
+            // throw new IllegalArgumentException( "ERROR: key '" + key +
+            // "' was already set in first ResourceManager." );
 
-            newProps.put( key, secondProps.getProperty( key ) );
+            newProps.put(key, secondProps.getProperty(key));
         }
 
-        return new ResourceManager( newProps );
+        return new ResourceManager(newProps);
     }
 
     /**
      * merge a list of ResourceManager objects
+     * 
      * @param rmList list of ResourceManager objects
      * @return single ResourceManager containing union of properties of objects in argument
      */
-    public static ResourceManager mergeProperties( List< ResourceManager > rmList )
-    {
-        if ( rmList.isEmpty() )
-            throw new IllegalArgumentException( "ERROR: called with empty list of ResourceManager as argument." );
+    public static ResourceManager mergeProperties(List<ResourceManager> rmList) {
+        if (rmList.isEmpty())
+            throw new IllegalArgumentException(
+                    "ERROR: called with empty list of ResourceManager as argument.");
 
-        ResourceManager finalRm = rmList.get( 0 );
+        ResourceManager finalRm = rmList.get(0);
 
-        for ( int i = 1; i < rmList.size(); ++i )
-            finalRm = Configurator.mergeProperties( finalRm, rmList.get( i ) );
+        for (int i = 1; i < rmList.size(); ++i)
+            finalRm = Configurator.mergeProperties(finalRm, rmList.get(i));
 
         return finalRm;
     }

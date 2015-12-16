@@ -14,7 +14,10 @@ public class CoreConfigNames {
     public static final String RESPECT_TOKENIZATION = "respectTokenization";
     /** A comma-separated list of views to add (see {@link ViewNames} for a complete list of views. */
     public static final String VIEWS_TO_ADD = "viewsToAdd";
-    /** Use this option to output the annotated {@link TextAnnotation} as plain text (instead of serialzed) */
+    /**
+     * Use this option to output the annotated {@link TextAnnotation} as plain text (instead of
+     * serialzed)
+     */
     public static final String OUTPUT_TO_TEXT = "outputToText";
     /** Force the Curator client to overwrite the generated output files */
     public static final String IS_FORCE_OVERWRITE = "forceUpdateOutputFile";

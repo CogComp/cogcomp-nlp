@@ -16,37 +16,35 @@ import org.tartarus.snowball.ext.englishStemmer;
  */
 public class PorterStemmer extends Annotator {
 
-	private static PorterStemmer instance = null; // = new PorterStemmer();
+    private static PorterStemmer instance = null; // = new PorterStemmer();
 
-	private final static SnowballStemmer stemmer = new englishStemmer();
+    private final static SnowballStemmer stemmer = new englishStemmer();
 
-	public static PorterStemmer getInstance()
-	{
-		if ( null == instance )
-			instance = new PorterStemmer( ViewNames.LEMMA, new String[]{} );
-		return instance;
-	}
+    public static PorterStemmer getInstance() {
+        if (null == instance)
+            instance = new PorterStemmer(ViewNames.LEMMA, new String[] {});
+        return instance;
+    }
 
-	private PorterStemmer( String viewName, String[] prerequisiteViews )
-	{
-		super( viewName, prerequisiteViews );
-	}
+    private PorterStemmer(String viewName, String[] prerequisiteViews) {
+        super(viewName, prerequisiteViews);
+    }
 
-	@Override
-	public void addView(TextAnnotation input) {
-		TokenLabelView view = new TokenLabelView(getViewName(), "PorterStemmer", input, 1.0);
+    @Override
+    public void addView(TextAnnotation input) {
+        TokenLabelView view = new TokenLabelView(getViewName(), "PorterStemmer", input, 1.0);
 
-		synchronized (instance) {
-			for (int i = 0; i < input.size(); i++) {
-				stemmer.setCurrent(input.getToken(i));
+        synchronized (instance) {
+            for (int i = 0; i < input.size(); i++) {
+                stemmer.setCurrent(input.getToken(i));
 
-				stemmer.stem();
+                stemmer.stem();
 
-				view.addTokenLabel(i, stemmer.getCurrent(), 1.0);
-			}
-		}
-		input.addView( getViewName(), view );
-	}
+                view.addTokenLabel(i, stemmer.getCurrent(), 1.0);
+            }
+        }
+        input.addView(getViewName(), view);
+    }
 
 
 }

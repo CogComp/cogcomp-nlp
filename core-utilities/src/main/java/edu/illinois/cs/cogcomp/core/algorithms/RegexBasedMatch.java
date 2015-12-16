@@ -35,8 +35,7 @@ public class RegexBasedMatch<E> extends ListMatch<E> {
     }
 
     /**
-     * Get a list of positions pointing into the input where the pattern
-     * matches.
+     * Get a list of positions pointing into the input where the pattern matches.
      */
     public List<Integer> matches(List<E> text) {
         List<Integer> matchPositions = new ArrayList<>();

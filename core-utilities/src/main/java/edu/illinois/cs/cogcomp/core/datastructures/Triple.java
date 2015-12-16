@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 
 /**
- * This utility class represents a triple of objects, the first one of type
- * {@code A}, the second of type {@code B}, and the third of type {@code C}. This class implements {@code
- * equals} and {@code hashcode} and can be used as keys to maps.
+ * This utility class represents a triple of objects, the first one of type {@code A}, the second of
+ * type {@code B}, and the third of type {@code C}. This class implements {@code equals} and
+ * {@code hashcode} and can be used as keys to maps.
  *
  * @param <A> The type of the first object in the triple.
  * @param <B> The type of the second object in the triple.

@@ -12,51 +12,50 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * This abstract feature extractor checks if the constituent's label in the
- * parse tree satisfies some property. If so, it adds the string specified in
- * the constructor as a feature.
+ * This abstract feature extractor checks if the constituent's label in the parse tree satisfies
+ * some property. If so, it adds the string specified in the constructor as a feature.
  *
  * @author Vivek Srikumar
  */
 public abstract class ParseLabelIdentifier implements FeatureExtractor {
 
-	private String label;
-	private String parseViewName;
+    private String label;
+    private String parseViewName;
 
-	public ParseLabelIdentifier(String parseViewName, String label) {
-		this.parseViewName = parseViewName;
-		this.label = label;
+    public ParseLabelIdentifier(String parseViewName, String label) {
+        this.parseViewName = parseViewName;
+        this.label = label;
 
-	}
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		TextAnnotation ta = c.getTextAnnotation();
-		TreeView parse = (TreeView) ta.getView(parseViewName);
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        TextAnnotation ta = c.getTextAnnotation();
+        TreeView parse = (TreeView) ta.getView(parseViewName);
 
-		String l;
-		try {
-			l = parse.getParsePhrase(c).getLabel();
-		} catch (Exception e) {
-			throw new EdisonException(e);
-		}
+        String l;
+        try {
+            l = parse.getParsePhrase(c).getLabel();
+        } catch (Exception e) {
+            throw new EdisonException(e);
+        }
 
-		boolean found = isLabelValid(l);
+        boolean found = isLabelValid(l);
 
-		Set<Feature> features = new LinkedHashSet<>();
-		if (found) {
-			features.add(DiscreteFeature.create(label));
-		}
+        Set<Feature> features = new LinkedHashSet<>();
+        if (found) {
+            features.add(DiscreteFeature.create(label));
+        }
 
-		return features;
+        return features;
 
-	}
+    }
 
-	protected abstract boolean isLabelValid(String l);
+    protected abstract boolean isLabelValid(String l);
 
-	@Override
-	public String getName() {
-		return "#" + parseViewName + "label?#";
-	}
+    @Override
+    public String getName() {
+        return "#" + parseViewName + "label?#";
+    }
 
 }
