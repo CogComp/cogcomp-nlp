@@ -10,8 +10,9 @@ public class StringCleanupTest extends TestCase {
     private static String suppSample = "A" + "\uD835\uDD0A" + "B" + "C";
     private static String halfWidthKatanaSample = "\uff81\uff6e\uff7a\uff9a\uff70\uff84";
     private static String diacriticSample = "—intérêt”";
-    private static String ctrlSample = "Test" + String.valueOf((char)3) + "String";
-    private static String combinedStr = suppSample + " " + halfWidthKatanaSample + " " + diacriticSample;
+    private static String ctrlSample = "Test" + String.valueOf((char) 3) + "String";
+    private static String combinedStr = suppSample + " " + halfWidthKatanaSample + " "
+            + diacriticSample;
 
     protected void setUp() throws Exception {
         super.setUp();

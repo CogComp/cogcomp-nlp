@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.core.datastructures.textannotation; 
+package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -13,8 +13,8 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * This class contains all annotation for a single piece of text (which could
- * contain more than one sentence.)
+ * This class contains all annotation for a single piece of text (which could contain more than one
+ * sentence.)
  * <p/>
  *
  * @author Vivek Srikumar
@@ -39,10 +39,9 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     protected List<Sentence> sentences;
 
     /**
-     * A map from character offset to the token id. This will be instantiated
-     * only when the function {@link
-     * edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation#getTokenIdFromCharacterOffset(int)} is called the first
-     * time.
+     * A map from character offset to the token id. This will be instantiated only when the function
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation#getTokenIdFromCharacterOffset(int)}
+     * is called the first time.
      */
     protected int[] characterOffsetsToTokens = null;
 
@@ -53,8 +52,8 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      */
     final SymbolTable symtab;
 
-    public TextAnnotation(String corpusId, String id, String text,
-                          IntPair[] characterOffsets, String[] tokens, int[] sentenceEndPositions) {
+    public TextAnnotation(String corpusId, String id, String text, IntPair[] characterOffsets,
+            String[] tokens, int[] sentenceEndPositions) {
         super();
 
         if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
@@ -77,8 +76,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         }
         this.addView(ViewNames.SENTENCE, view);
 
-        // Add a TOKENS view in order to access tokens the same way as everything else in the sentence
-        TokenLabelView tokenLabelView = new TokenLabelView(ViewNames.TOKENS, "UserSpecified", this, 1d);
+        // Add a TOKENS view in order to access tokens the same way as everything else in the
+        // sentence
+        TokenLabelView tokenLabelView =
+                new TokenLabelView(ViewNames.TOKENS, "UserSpecified", this, 1d);
 
         for (int i = 0; i < tokens.length; i++) {
             tokenLabelView.addConstituent(new Constituent("", ViewNames.TOKENS, this, i, i + 1));
@@ -116,11 +117,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     }
 
     /**
-     * Gets the index of the sentence that contains the token, indexed by
-     * tokenPosition. If no sentence contains the token, then this function
-     * throws an IllegalArgumentException. The sentence index can further be
-     * used to get the Sentence itself by calling {@link
-     * edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation#getSentence(int)}.
+     * Gets the index of the sentence that contains the token, indexed by tokenPosition. If no
+     * sentence contains the token, then this function throws an IllegalArgumentException. The
+     * sentence index can further be used to get the Sentence itself by calling
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation#getSentence(int)}
+     * .
      *
      * @param tokenId The index of the token whose sentenceId is needed
      * @return The index of the sentence that contains this token
@@ -162,8 +163,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     @Override
     public int hashCode() {
-        return this.corpusId.hashCode() * 13 + this.id.hashCode() * 17
-                + this.text.hashCode() * 19
+        return this.corpusId.hashCode() * 13 + this.id.hashCode() * 17 + this.text.hashCode() * 19
                 + (tokens == null ? 0 : Arrays.hashCode(tokens) * 43)
                 + (this.sentences().hashCode() * 31);
     }
@@ -220,11 +220,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     }
 
     /**
-     * Get the position of token that corresponds to the character offset that
-     * is passed as a parameter. This function could be useful when dealing with
-     * corpora that specify annotation in terms of character offsets. In
-     * particular, the CuratorClient uses this function to convert views
-     * from the Curator representation.
+     * Get the position of token that corresponds to the character offset that is passed as a
+     * parameter. This function could be useful when dealing with corpora that specify annotation in
+     * terms of character offsets. In particular, the CuratorClient uses this function to convert
+     * views from the Curator representation.
      */
     public int getTokenIdFromCharacterOffset(int characterOffset) {
         if (characterOffsetsToTokens == null) {
@@ -274,10 +273,8 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         }
 
         if (characterOffset < 0 || characterOffset > characterOffsetsToTokens.length) {
-            throw new IllegalArgumentException(
-                    "Invalid character offset. The character position "
-                            + characterOffset
-                            + " does not correspond to any token.");
+            throw new IllegalArgumentException("Invalid character offset. The character position "
+                    + characterOffset + " does not correspond to any token.");
         }
 
         // If the characterOffset is the number of characters (and hence doesn't
@@ -299,7 +296,9 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             synchronized (this) {
                 if (allSpans == null) {
 
-                    this.allSpans = TCollections.synchronizedMap(new TIntObjectHashMap<ArrayList<IntPair>>());
+                    this.allSpans =
+                            TCollections
+                                    .synchronizedMap(new TIntObjectHashMap<ArrayList<IntPair>>());
 
                     for (int start = 0; start < this.size() - 1; start++) {
                         StringBuilder sb = new StringBuilder();

@@ -52,7 +52,7 @@ public class PennTreebankPOSReader {
      * @return A {@link TextAnnotation} with a populated {@link ViewNames#POS} view
      */
     public TextAnnotation createTextAnnotation(String line, String lineId) {
-        String[] wordPOSPairs = line.substring(1, line.length()-1).split("\\)\\s+\\(");
+        String[] wordPOSPairs = line.substring(1, line.length() - 1).split("\\)\\s+\\(");
         List<String> words = new ArrayList<>();
         List<String> pos = new ArrayList<>();
         for (String wordPOSPair : wordPOSPairs) {
@@ -60,8 +60,11 @@ public class PennTreebankPOSReader {
             words.add(split[1]);
             pos.add(split[0]);
         }
-        List<String[]> tokenizedSentences = Collections.singletonList(words.toArray(new String[words.size()]));
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(corpusName, lineId, tokenizedSentences);
+        List<String[]> tokenizedSentences =
+                Collections.singletonList(words.toArray(new String[words.size()]));
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(corpusName, lineId,
+                        tokenizedSentences);
         TokenLabelView posView = new TokenLabelView(ViewNames.POS, ta);
         for (int i = 0; i < pos.size(); i++)
             posView.addTokenLabel(i, pos.get(i), 1.0);

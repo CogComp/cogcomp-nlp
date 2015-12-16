@@ -11,11 +11,12 @@ import org.apache.thrift.TException;
 import java.net.SocketException;
 
 /**
- * A single annotator object, corresponding to a {@link edu.illinois.cs.cogcomp.thrift.curator.Curator.Client}'s annotator. Multiple instances of this
- * class will be used as {@link Annotator}s in {@link CuratorAnnotatorService}.
+ * A single annotator object, corresponding to a
+ * {@link edu.illinois.cs.cogcomp.thrift.curator.Curator.Client}'s annotator. Multiple instances of
+ * this class will be used as {@link Annotator}s in {@link CuratorAnnotatorService}.
  *
- * The {@link #viewName} and {@link #requiredViews} fields are defined in Curator's configuration file
- * ({@code dist/configs/annotators.xml}).
+ * The {@link #viewName} and {@link #requiredViews} fields are defined in Curator's configuration
+ * file ({@code dist/configs/annotators.xml}).
  *
  * @author Christos Christodoulopoulos
  */
@@ -24,7 +25,7 @@ public class CuratorAnnotator extends Annotator {
 
 
     public CuratorAnnotator(CuratorClient curatorClient, String viewName, String[] requiredViews) {
-        super( viewName, requiredViews );
+        super(viewName, requiredViews);
         this.curatorClient = curatorClient;
     }
 
@@ -32,8 +33,9 @@ public class CuratorAnnotator extends Annotator {
     @Override
     public void addView(TextAnnotation ta) throws AnnotatorException {
         try {
-            ta.addView( viewName, curatorClient.getTextAnnotationView(ta, viewName) );
-        } catch (TException | AnnotationFailedException | SocketException | ServiceUnavailableException e) {
+            ta.addView(viewName, curatorClient.getTextAnnotationView(ta, viewName));
+        } catch (TException | AnnotationFailedException | SocketException
+                | ServiceUnavailableException e) {
             throw new AnnotatorException(e.getMessage());
         }
     }

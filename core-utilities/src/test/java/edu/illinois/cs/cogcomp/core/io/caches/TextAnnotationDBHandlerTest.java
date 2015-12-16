@@ -22,7 +22,7 @@ public class TextAnnotationDBHandlerTest {
     String sentA = "This is a text that contains pre-tokenized sentences .";
     String sentB = "For the purposes of this test , tokens are separated by whitespace .";
     String sentC = "Sentences are separated by newline characters .";
-    String rawText =  sentA + System.lineSeparator() + sentB + System.lineSeparator() + sentC;
+    String rawText = sentA + System.lineSeparator() + sentB + System.lineSeparator() + sentC;
     private List<String[]> tokenizedSentences;
 
     @Before
@@ -33,14 +33,14 @@ public class TextAnnotationDBHandlerTest {
             tokenizedSentences.add(sentTokens.split("\\s"));
         }
 
-        //There might be a cleaner way to get the true root directory
+        // There might be a cleaner way to get the true root directory
         String rootDir = System.getProperty("user.dir");
         if (!rootDir.contains("core-utilities"))
             rootDir += "/core-utilities";
         dbFile = rootDir + "/src/test/resources/test";
 
         datasetName = "TestData";
-        dbHandler = new TextAnnotationDBHandler(dbFile, new String[]{datasetName});
+        dbHandler = new TextAnnotationDBHandler(dbFile, new String[] {datasetName});
         try {
             dbHandler.initializeDatasets(dbFile);
         } catch (RuntimeException e) {
@@ -57,7 +57,8 @@ public class TextAnnotationDBHandlerTest {
 
     @Test
     public void testAddTextAnnotation() throws Exception {
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
         try {
             dbHandler.addTextAnnotation(datasetName, ta);
         } catch (RuntimeException e) {

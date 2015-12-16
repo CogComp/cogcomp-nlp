@@ -8,10 +8,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A SpanLabelView is a specialized view which corresponds to contiguous chunks
- * of tokens that have a label. Each chunk corresponds to a single
- * {@code Consituent}. In this view, there will be no {@code Relation}s between
- * the constituents.
+ * A SpanLabelView is a specialized view which corresponds to contiguous chunks of tokens that have
+ * a label. Each chunk corresponds to a single {@code Consituent}. In this view, there will be no
+ * {@code Relation}s between the constituents.
  * <p/>
  * This class is best suited for views like Shallow parse and Named Entities.
  *
@@ -31,23 +30,23 @@ public class SpanLabelView extends View {
 
     /**
      * Create a new SpanLabelView with default {@link #viewGenerator} and {@link #score}.
-     * @param viewName  the name of the view
+     * 
+     * @param viewName the name of the view
      * @param text the TextAnnotation to augment
      */
     public SpanLabelView(String viewName, TextAnnotation text) {
-        this(viewName, viewName+"-annotator", text, 1.0, false);
+        this(viewName, viewName + "-annotator", text, 1.0, false);
     }
 
     /**
      * Create a new SpanLabelView
      */
-    public SpanLabelView(String viewName, String viewGenerator,
-                         TextAnnotation text, double score) {
+    public SpanLabelView(String viewName, String viewGenerator, TextAnnotation text, double score) {
         this(viewName, viewGenerator, text, score, false);
     }
 
-    public SpanLabelView(String viewName, String viewGenerator,
-                         TextAnnotation text, double score, boolean allowOverlappingSpans) {
+    public SpanLabelView(String viewName, String viewGenerator, TextAnnotation text, double score,
+            boolean allowOverlappingSpans) {
         super(viewName, viewGenerator, text, score);
         this.allowOverlappingSpans = allowOverlappingSpans;
     }
@@ -60,30 +59,27 @@ public class SpanLabelView extends View {
     }
 
     /**
-     * Adds a new span to this view with a given label and score and returns the
-     * newly created constituent.
+     * Adds a new span to this view with a given label and score and returns the newly created
+     * constituent.
      * <p/>
-     * If this {@code SpanLabelView} was defined not to accept overlapping spans
-     * (in the constructor), then this function will throw an
-     * {@link IllegalArgumentException} when an attempt is made to label an
-     * already existing span.
+     * If this {@code SpanLabelView} was defined not to accept overlapping spans (in the
+     * constructor), then this function will throw an {@link IllegalArgumentException} when an
+     * attempt is made to label an already existing span.
      *
      * @param start the start of the span
-     * @param end   the end of the span
+     * @param end the end of the span
      * @param label the label of the span
      * @param score the score assigned to this label
      * @return the newly created constituent that labels the given span.
      */
-    public Constituent addSpanLabel(int start, int end, String label,
-                                    double score) {
+    public Constituent addSpanLabel(int start, int end, String label, double score) {
 
-        Constituent c = new Constituent(label, score, this.getViewName(),
-                this.getTextAnnotation(), start, end);
+        Constituent c =
+                new Constituent(label, score, this.getViewName(), this.getTextAnnotation(), start,
+                        end);
 
-        if (!allowOverlappingSpans
-                && this.getConstituentsCoveringSpan(start, end).size() != 0)
-            throw new IllegalArgumentException("Span [" + start + ", " + end
-                    + "] already labeled.");
+        if (!allowOverlappingSpans && this.getConstituentsCoveringSpan(start, end).size() != 0)
+            throw new IllegalArgumentException("Span [" + start + ", " + end + "] already labeled.");
 
         this.addConstituent(c);
 
@@ -117,7 +113,8 @@ public class SpanLabelView extends View {
 
         StringBuilder sb = new StringBuilder();
         for (Constituent c : constituents)
-            sb.append("[").append(c.getLabel()).append(" ").append(c.getTokenizedSurfaceForm()).append(" ] ");
+            sb.append("[").append(c.getLabel()).append(" ").append(c.getTokenizedSurfaceForm())
+                    .append(" ] ");
 
         return sb.toString();
     }

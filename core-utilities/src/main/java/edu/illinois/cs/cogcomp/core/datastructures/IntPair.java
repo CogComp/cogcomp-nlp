@@ -5,9 +5,8 @@ import java.util.Comparator;
 
 /**
  * This utility class represents a pair of integers. This is faster than using
- * {@code Pair<Integer, Integer>} because it does not do boxing and unboxing.
- * This class implements {@code equals} and {@code hashcode} and can be used as
- * keys to maps.
+ * {@code Pair<Integer, Integer>} because it does not do boxing and unboxing. This class implements
+ * {@code equals} and {@code hashcode} and can be used as keys to maps.
  *
  * @author Vivek Srikumar
  */
