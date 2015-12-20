@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * A simple reader for the bracketed version of the Penn Treebank corpus
@@ -21,6 +22,8 @@ import java.util.List;
  */
 public class PennTreebankPOSReader {
     private static Logger logger = LoggerFactory.getLogger(PennTreebankPOSReader.class);
+    private final static Pattern splitWordsPattern = Pattern.compile("\\)\\s+\\(");
+    private final static Pattern whitespacePattern = Pattern.compile("\\s+");
 
     private List<TextAnnotation> textAnnotations;
     protected final String corpusName;
@@ -52,11 +55,11 @@ public class PennTreebankPOSReader {
      * @return A {@link TextAnnotation} with a populated {@link ViewNames#POS} view
      */
     public TextAnnotation createTextAnnotation(String line, String lineId) {
-        String[] wordPOSPairs = line.substring(1, line.length() - 1).split("\\)\\s+\\(");
-        List<String> words = new ArrayList<>();
-        List<String> pos = new ArrayList<>();
+        String[] wordPOSPairs = splitWordsPattern.split(line.substring(1, line.length() - 1));
+        List<String> words = new ArrayList<>(wordPOSPairs.length);
+        List<String> pos = new ArrayList<>(wordPOSPairs.length);
         for (String wordPOSPair : wordPOSPairs) {
-            String[] split = wordPOSPair.split("\\s+");
+            String[] split = whitespacePattern.split(wordPOSPair);
             words.add(split[1]);
             pos.add(split[0]);
         }
