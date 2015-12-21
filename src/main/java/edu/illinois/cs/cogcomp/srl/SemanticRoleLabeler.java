@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.srl;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SemanticRoleLabeler implements Annotator {
+public class SemanticRoleLabeler extends Annotator {
 	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
 	public final SRLManager manager;
 	private static SRLProperties properties;
@@ -93,6 +94,7 @@ public class SemanticRoleLabeler implements Annotator {
 	}
 
 	public SemanticRoleLabeler(String configFile, String srlType, boolean initialize) throws Exception {
+		super( srlType, TextPreProcessor.requiredViews );
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
@@ -147,15 +149,13 @@ public class SemanticRoleLabeler implements Annotator {
 		return inference.getOutputView();
 	}
 
-	@Override
-	public String[] getRequiredViews() {
-		return TextPreProcessor.requiredViews;
-	}
 
 	@Override
-	public View getView(TextAnnotation ta) throws AnnotatorException {
+	public void addView(TextAnnotation ta) throws AnnotatorException {
 		try {
-			return getSRL(ta);
+            View srlView = getSRL(ta);
+            ta.addView( getViewName(), srlView);
+			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AnnotatorException(e.getMessage());
