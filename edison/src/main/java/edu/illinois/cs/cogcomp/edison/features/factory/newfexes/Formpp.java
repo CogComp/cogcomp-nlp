@@ -17,6 +17,7 @@ import java.util.*;
 /**
  *
  * @author Paul Vijayakumar, Mazin Bokhari
+ * Extracts the k Tokens to the left and k Tokens to the right of the Constituent object
  *
  */
 public class Formpp implements FeatureExtractor {
