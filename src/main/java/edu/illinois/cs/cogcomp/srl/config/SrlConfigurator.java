@@ -9,6 +9,13 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
+ * A configuration helper to allow centralization of config options in dependencies with
+ *    clear default settings (only values that override defaults need to be specified).
+ *
+ * NOTE: The parameters for Penn Treebank, Nombank, and Propbank are set to directories
+ *    on CCG servers, so must be overridden on other machines for uses of SRL that
+ *    require these corpora (presumably, for training only).
+ *
  * Created by mssammon on 12/21/15.
  */
 public class SrlConfigurator extends Configurator {
