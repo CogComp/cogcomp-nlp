@@ -1,7 +1,9 @@
 package edu.illinois.cs.cogcomp.srl;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;
@@ -12,17 +14,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
 public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
-	private PropertiesConfiguration config;
+	private ResourceManager config;
 
 	private SRLProperties(URL url) throws ConfigurationException {
-		config = new PropertiesConfiguration(url);
-
+//		config = new PropertiesConfiguration(url);
+		try {
+			config = new SrlConfigurator().getConfig( new ResourceManager( url.getFile()));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ConfigurationException( e.getCause() );
+		}
 		if (config.containsKey("LoadWordNetConfigFromClassPath")
 				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
 			WordNetManager.loadConfigAsClasspathResource(true);
@@ -61,7 +69,7 @@ public class SRLProperties {
 		return theInstance;
 	}
 
-	public PropertiesConfiguration getConfig() {
+	public ResourceManager getConfig() {
 		return config;
 	}
 
