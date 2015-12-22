@@ -17,26 +17,57 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 
 public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
 	private ResourceManager config;
 
+
+    /**
+     * if called with null url, will use default configuration.
+     * @param url
+     * @throws ConfigurationException
+     */
 	private SRLProperties(URL url) throws ConfigurationException {
 //		config = new PropertiesConfiguration(url);
-		try {
-			config = new SrlConfigurator().getConfig( new ResourceManager( url.getFile()));
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new ConfigurationException( e.getCause() );
-		}
+        this((null == url) ? null : url.getFile());
+    }
+
+    private SRLProperties( String configFile ) throws ConfigurationException {
+        ResourceManager rm = new ResourceManager( new Properties() );
+        if ( null != configFile )
+            try {
+                rm = new ResourceManager( configFile );
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new ConfigurationException( e.getCause() );
+            }
+
+			config = new SrlConfigurator().getConfig( rm );
 		if (config.containsKey("LoadWordNetConfigFromClassPath")
 				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
 			WordNetManager.loadConfigAsClasspathResource(true);
 		}
     }
 
+    /**
+     * If SRLProperties has not yet been instantiated, initialize an instance with default values.
+     * @throws Exception
+     */
+    public static void initialize() throws Exception {
+        initialize( null );
+    }
+
+    /**
+     *  If SRLProperties has not yet been instantiated, initialize
+     *    new instance with the non-default parameters specified in the configFile named in the argument,
+     *    and default parameters otherwise. If a null string is given as the argument, all default parameters
+     *    are used.
+     * @param configFile  if non-null, names a file in which non-default parameters are specified.
+     * @throws Exception
+     */
 	public static void initialize(String configFile) throws Exception {
 		// first try to load the file from the file system
 		URL url = null;
@@ -50,18 +81,33 @@ public class SRLProperties {
 		}
 
 		if (url == null) {
-			log.error("Cannot find configuration file at {}.", configFile);
-			throw new Exception("Cannot find configuration file.");
+            if ( null != configFile )
+            {
+                log.error("Cannot find configuration file at {}.", configFile);
+    			throw new Exception("Cannot find configuration file.");
+            }
 		}
 
 		theInstance = new SRLProperties(url);
 	}
 
+
+    public static SRLProperties getInstance( String config )
+    {
+        if ( theInstance == null )
+            try {
+                initialize( config );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return theInstance;
+    }
+
 	public static SRLProperties getInstance() {
 		if (theInstance == null) {
-			System.out.println("SRL config not initialized. Loading srl-config.properties from the classpath");
+			System.out.println("SRL config not initialized. Instantiating with default parameters.");
 			try {
-				initialize("srl-config.properties");
+				initialize();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

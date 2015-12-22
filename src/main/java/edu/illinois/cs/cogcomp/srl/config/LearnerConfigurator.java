@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 /**
  * A configuration helper to allow centralization of config options in dependencies with
  *    clear default settings (only values that override defaults need to be specified).
- *    
+ *
  * Created by mssammon on 12/21/15.
  */
 public class LearnerConfigurator extends Configurator {
