@@ -88,6 +88,10 @@ public class SemanticRoleLabeler extends Annotator {
 		} while (!input.equals("_"));
 	}
 
+	public SemanticRoleLabeler(String srlType) throws Exception {
+		this(null, srlType );
+	}
+
 	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
 
 		this(configFile, srlType, false);
@@ -103,7 +107,7 @@ public class SemanticRoleLabeler extends Annotator {
 
 		if(initialize) {
 			log.info("Initializing pre-processor");
-			TextPreProcessor.initialize(configFile);
+			TextPreProcessor.initialize(properties);
 		}
 		log.info("Creating {} manager", srlType);
 		manager = Main.getManager(SRLType.valueOf(srlType), false);
