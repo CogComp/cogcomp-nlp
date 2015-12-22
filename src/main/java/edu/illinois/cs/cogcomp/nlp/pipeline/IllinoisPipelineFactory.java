@@ -10,6 +10,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
+import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
@@ -129,6 +130,25 @@ public class IllinoisPipelineFactory
             {
                 StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
                 viewGenerators.put(ViewNames.PARSE_STANFORD, parser);
+            }
+        }
+
+        if (rm.getBoolean( PipelineConfigurator.USE_SRL_VERB))
+        {
+            try{
+                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("config/srl-config.properties", "Verb"));
+            }
+            catch (Exception e)
+            {
+                throw new IOException("SRL verb cannot init .."+e.getMessage());
+            }
+        }
+        if(rm.getBoolean( PipelineConfigurator.USE_SRL_NOM))
+        {
+            try {
+                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("config/srl-config.properties", "Nom"));
+            } catch (Exception e) {
+                throw new IOException("SRL norm cannot init .."+e.getMessage());
             }
         }
 
