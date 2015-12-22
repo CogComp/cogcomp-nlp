@@ -21,9 +21,10 @@ public class TextPreProcessor {
 			ViewNames.NER_CONLL,ViewNames.LEMMA, ViewNames.SHALLOW_PARSE,
 			ViewNames.PARSE_STANFORD };
 
-    public TextPreProcessor(String configFile) throws Exception {
-		SRLProperties.initialize(configFile);
-		SRLProperties config = SRLProperties.getInstance();
+	/**
+	* requires SRLProperties to have been instantiated already
+	 */
+    public TextPreProcessor( SRLProperties config ) throws Exception {
         String defaultParser = config.getDefaultParser();
         boolean useCurator = config.useCurator();
 
@@ -41,9 +42,22 @@ public class TextPreProcessor {
 		}
 	}
 
+    public static void initialize()
+    {
+        SRLProperties props = SRLProperties.getInstance();
+        initialize(props);
+    }
+
 	public static void initialize(String configFile) {
+        SRLProperties props = SRLProperties.getInstance(configFile);
+
+        initialize(props);
+    }
+
+    public static void initialize( SRLProperties props )
+    {
 		try {
-			instance = new TextPreProcessor(configFile);
+			instance = new TextPreProcessor( props );
 		} catch (Exception e) {
 			log.error("Unable to initialize the text pre-processor");
 			e.printStackTrace();
