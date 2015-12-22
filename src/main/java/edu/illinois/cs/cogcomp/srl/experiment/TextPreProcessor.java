@@ -4,11 +4,13 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
 import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +50,8 @@ public class TextPreProcessor {
         initialize(props);
     }
 
-	public static void initialize(String configFile) {
-        SRLProperties props = SRLProperties.getInstance(configFile);
+	public static void initialize(ResourceManager rm) {
+        SRLProperties props = SRLProperties.getInstance(rm);
 
         initialize(props);
     }
@@ -69,7 +71,7 @@ public class TextPreProcessor {
 		if (instance == null) {
 			// Start a new TextPreProcessor with default values (no Curator, no
 			// tokenization) and default config
-			initialize("srl-config.properties");
+			initialize( new SrlConfigurator().getDefaultConfig() );
 		}
 		return instance;
 	}

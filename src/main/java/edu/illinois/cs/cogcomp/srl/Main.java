@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
@@ -46,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -187,11 +189,11 @@ public class Main {
 		}
 	}
 
-	private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset) {
+	private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset) throws IOException {
 		Counter<String> addedViews = new Counter<>();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(configFile);
+		TextPreProcessor.initialize( new ResourceManager( configFile ));
 
 		int count = 0;
 		while (dataset.hasNext()) {

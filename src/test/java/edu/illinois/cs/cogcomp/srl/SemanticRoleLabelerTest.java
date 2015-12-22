@@ -61,8 +61,8 @@ public class SemanticRoleLabelerTest extends TestCase {
 
         ResourceManager rm = new ResourceManager( CONFIG );
 
-		verbSRL = new SemanticRoleLabeler(rm, SRLType.Verb.name());
-		nomSRL = new SemanticRoleLabeler(rm, SRLType.Nom.name());
+		verbSRL = new SemanticRoleLabeler(rm, "Verb");
+		nomSRL = new SemanticRoleLabeler(rm, "Nom");
 		defaultParser = SRLProperties.getInstance().getDefaultParser();
 
 

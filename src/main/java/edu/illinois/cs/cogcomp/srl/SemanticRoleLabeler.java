@@ -108,7 +108,8 @@ public class SemanticRoleLabeler extends Annotator {
 	}
 
 	public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean initialize) throws Exception {
-		super( srlType, TextPreProcessor.requiredViews );
+		super( getViewNameForType(srlType), TextPreProcessor.requiredViews );
+
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
@@ -120,10 +121,20 @@ public class SemanticRoleLabeler extends Annotator {
 			TextPreProcessor.initialize(properties);
 		}
 		log.info("Creating {} manager", srlType);
+
 		manager = Main.getManager(SRLType.valueOf(srlType), false);
 
 		log.info("Loading models");
 		loadModels();
+	}
+
+	private static String getViewNameForType(String srlType) {
+		if ( srlType.equals( SRLType.Verb.name() ) )
+			return ViewNames.SRL_VERB;
+		else if ( srlType.equals( SRLType.Nom.name() ) )
+			return ViewNames.SRL_NOM;
+		else
+			throw new IllegalArgumentException( "ERROR: type '" + srlType + "' not recognized." );
 	}
 
 	public String getSRLCuratorName() {

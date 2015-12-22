@@ -74,11 +74,11 @@ public class SRLProperties {
 	}
 
 
-    public static SRLProperties getInstance( String config )
+    public static SRLProperties getInstance( ResourceManager rm )
     {
         if ( theInstance == null )
             try {
-                initialize( new ResourceManager( config ));
+                initialize( rm );
             } catch (Exception e) {
                 e.printStackTrace();
             }
