@@ -4,9 +4,11 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -16,6 +18,7 @@ import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +33,14 @@ public class SemanticRoleLabeler extends Annotator {
 			System.exit(-1);
 		}
 		String configFile = arguments[0];
-		String srlType;
+        ResourceManager rm = null;
+        try {
+            rm = new SrlConfigurator().getConfig( new ResourceManager( configFile ) );
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit( -1 );
+        }
+        String srlType;
 		// If no second argument is provided it means we need all the SRL types
 		srlType = arguments.length == 1 ? null : arguments[1];
 
@@ -38,12 +48,12 @@ public class SemanticRoleLabeler extends Annotator {
 		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
 		try {
 			if (srlType != null)
-				srlLabelers.add(new SemanticRoleLabeler(configFile, srlType, true));
+				srlLabelers.add(new SemanticRoleLabeler(rm, srlType, true));
 			else {
 				for (SRLType type : SRLType.values()) {
 					srlType = type.name();
 					srlLabelers
-							.add(new SemanticRoleLabeler(configFile, srlType, true));
+							.add(new SemanticRoleLabeler(rm, srlType, true));
 				}
 			}
 		} catch (Exception e) {
@@ -89,20 +99,20 @@ public class SemanticRoleLabeler extends Annotator {
 	}
 
 	public SemanticRoleLabeler(String srlType) throws Exception {
-		this(null, srlType );
+		this( new SrlConfigurator().getDefaultConfig(), srlType );
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
+	public SemanticRoleLabeler(ResourceManager rm, String srlType) throws Exception {
 
-		this(configFile, srlType, false);
+		this(rm, srlType, false);
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType, boolean initialize) throws Exception {
+	public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean initialize) throws Exception {
 		super( srlType, TextPreProcessor.requiredViews );
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
-		SRLProperties.initialize(configFile);
+		SRLProperties.initialize(rm);
 		properties = SRLProperties.getInstance();
 
 		if(initialize) {

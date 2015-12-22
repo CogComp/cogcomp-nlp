@@ -26,30 +26,25 @@ public class SRLProperties {
 
 
     /**
-     * if called with null url, will use default configuration.
-     * @param url
-     * @throws ConfigurationException
+     * configFile must have all parameters set, ideally using the SrlConfigurator class.
+     * @param configFile file with configuration parameters
      */
-	private SRLProperties(URL url) throws ConfigurationException {
-//		config = new PropertiesConfiguration(url);
-        this((null == url) ? null : url.getFile());
+
+    private SRLProperties( String configFile ) throws ConfigurationException, IOException {
+        this(new ResourceManager(configFile));
     }
 
-    private SRLProperties( String configFile ) throws ConfigurationException {
-        ResourceManager rm = new ResourceManager( new Properties() );
-        if ( null != configFile )
-            try {
-                rm = new ResourceManager( configFile );
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new ConfigurationException( e.getCause() );
-            }
-
-			config = new SrlConfigurator().getConfig( rm );
-		if (config.containsKey("LoadWordNetConfigFromClassPath")
-				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
+    /**
+     * ResourceManager must have all parameters set, ideally using the SrlConfigurator class.
+     * @param rm
+     */
+    private SRLProperties( ResourceManager rm )
+    {
+        if (rm.containsKey("LoadWordNetConfigFromClassPath")
+				&& rm.getBoolean("LoadWordNetConfigFromClassPath")) {
 			WordNetManager.loadConfigAsClasspathResource(true);
 		}
+        config = rm;
     }
 
     /**
@@ -57,7 +52,7 @@ public class SRLProperties {
      * @throws Exception
      */
     public static void initialize() throws Exception {
-        initialize( null );
+        initialize( new SrlConfigurator().getDefaultConfig() );
     }
 
     /**
@@ -69,26 +64,14 @@ public class SRLProperties {
      * @throws Exception
      */
 	public static void initialize(String configFile) throws Exception {
+        initialize(new ResourceManager(configFile));
+    }
+
+    public static void initialize( ResourceManager rm )
+    {
 		// first try to load the file from the file system
-		URL url = null;
-		if (IOUtils.exists(configFile)) {
-			url = (new File(configFile)).toURI().toURL();
-		}
-		else {
-			List<URL> list = IOUtils.lsResources(SRLProperties.class, configFile);
-			if (list.size() > 0)
-				url = list.get(0);
-		}
 
-		if (url == null) {
-            if ( null != configFile )
-            {
-                log.error("Cannot find configuration file at {}.", configFile);
-    			throw new Exception("Cannot find configuration file.");
-            }
-		}
-
-		theInstance = new SRLProperties(url);
+		theInstance = new SRLProperties(rm);
 	}
 
 
@@ -96,7 +79,7 @@ public class SRLProperties {
     {
         if ( theInstance == null )
             try {
-                initialize( config );
+                initialize( new ResourceManager( config ));
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import junit.framework.TestCase;
@@ -17,7 +18,9 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 
 public class SemanticRoleLabelerTest extends TestCase {
-	private SemanticRoleLabeler verbSRL, nomSRL;
+    private static final String CONFIG = "src/test/resources/srl-config.properties";
+
+    private SemanticRoleLabeler verbSRL, nomSRL;
 	private String defaultParser;
 
 	public void setUp() throws Exception {
@@ -56,8 +59,10 @@ public class SemanticRoleLabelerTest extends TestCase {
 //        newPaths[newPaths.length-1] = pathToAdd;
 //        usrPathsField.set(null, newPaths);
 
-		verbSRL = new SemanticRoleLabeler("src/test/resources/srl-config.properties", SRLType.Verb.name());
-		nomSRL = new SemanticRoleLabeler("src/test/resources/srl-config.properties", SRLType.Nom.name());
+        ResourceManager rm = new ResourceManager( CONFIG );
+
+		verbSRL = new SemanticRoleLabeler(rm, SRLType.Verb.name());
+		nomSRL = new SemanticRoleLabeler(rm, SRLType.Nom.name());
 		defaultParser = SRLProperties.getInstance().getDefaultParser();
 
 
