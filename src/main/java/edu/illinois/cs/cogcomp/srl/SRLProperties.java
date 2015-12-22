@@ -52,7 +52,7 @@ public class SRLProperties {
      * @throws Exception
      */
     public static void initialize() throws Exception {
-        initialize( new SrlConfigurator().getDefaultConfig() );
+        initialize( new ResourceManager( new Properties()) );
     }
 
     /**
@@ -69,9 +69,8 @@ public class SRLProperties {
 
     public static void initialize( ResourceManager rm )
     {
-		// first try to load the file from the file system
-
-		theInstance = new SRLProperties(rm);
+		ResourceManager fullRm = new SrlConfigurator().getConfig(rm);
+		theInstance = new SRLProperties(fullRm);
 	}
 
 
