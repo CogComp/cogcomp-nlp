@@ -33,8 +33,8 @@ public class PipelineConfigurator extends Configurator
     public static final Property USE_NER_ONTONOTES = new Property("useNerOntonotes", TRUE);
     public static final Property USE_STANFORD_PARSE = new Property("useStanfordParse", TRUE);
     public static final Property USE_STANFORD_DEP = new Property("useStanfordDep", TRUE);
-    public static final Property USE_SRL_VERB = new Property("useSrlVerb", FALSE);
-    public static final Property USE_SRL_NOM = new Property("useSrlNom", FALSE);
+    public static final Property USE_SRL_VERB = new Property("useSrlVerb", TRUE);
+    public static final Property USE_SRL_NOM = new Property("useSrlNom", TRUE);
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -45,7 +45,7 @@ public class PipelineConfigurator extends Configurator
     public ResourceManager getDefaultConfig() {
         Property[] properties = {NER_CONLL_CONFIG, NER_ONTONOTES_CONFIG, LEMMA_CONFIG, STFRD_TIME_PER_SENTENCE,
                 STFRD_MAX_SENTENCE_LENGTH, SIMPLE_CACHE_DIR, USE_POS, USE_LEMMA, USE_SHALLOW_PARSE,
-                USE_NER_CONLL, USE_NER_ONTONOTES, USE_STANFORD_PARSE, USE_STANFORD_DEP};
+                USE_NER_CONLL, USE_NER_ONTONOTES, USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(generateProperties(properties))));
     }
 }

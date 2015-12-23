@@ -136,7 +136,7 @@ public class IllinoisPipelineFactory
         if (rm.getBoolean( PipelineConfigurator.USE_SRL_VERB))
         {
             try{
-                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("config/srl-config.properties", "Verb"));
+                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("Verb"));
             }
             catch (Exception e)
             {
@@ -146,7 +146,7 @@ public class IllinoisPipelineFactory
         if(rm.getBoolean( PipelineConfigurator.USE_SRL_NOM))
         {
             try {
-                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("config/srl-config.properties", "Nom"));
+                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("Nom"));
             } catch (Exception e) {
                 throw new IOException("SRL norm cannot init .."+e.getMessage());
             }
