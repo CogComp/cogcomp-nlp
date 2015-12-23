@@ -295,6 +295,11 @@ public class SPModel
             // this is the initialization.
             if (probs == null)
             {
+
+                // FIXME: out variables... is exampleCounts actually used anywhere???
+                //List<List<Pair<Pair<String, String>, Double>>> exampleCounts = new ArrayList<>();
+                probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2, trainingTriples, null, Program.WeightingMode.None, WikiTransliteration.NormalizationMode.None, false));
+
                 boolean getExampleCounts = false;
                 // gets counts of productions, not normalized.
                 probs = new SparseDoubleVector<>(Program.MakeRawAlignmentTable(maxSubstringLength1, maxSubstringLength2,
