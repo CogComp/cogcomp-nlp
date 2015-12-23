@@ -169,7 +169,7 @@ class WikiTransliteration {
             probability *= localProb;
         }
 
-        return probability / word.length();
+        return probability;
     }
 
 

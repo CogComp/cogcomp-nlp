@@ -60,6 +60,18 @@
             <version>1.7.13</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ibm.icu</groupId>
+            <artifactId>icu4j</artifactId>
+            <version>56.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>nplm-java</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
 
     </dependencies>
 

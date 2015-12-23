@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import java.util.*;
 
 /**
+ * This is sorted according to key.
  * Created by stephen on 9/24/15.
  */
 public class TopList<TKey extends Comparable<? super TKey>, TValue> implements Iterable<Pair<TKey, TValue>>{
@@ -86,6 +87,27 @@ public class TopList<TKey extends Comparable<? super TKey>, TValue> implements I
 
         return -1;
     }
+
+    /**
+     * Convert this TopList into a list.
+     * @return
+     */
+    public List<Pair<TKey, TValue>> toList(){
+        List<Pair<TKey, TValue>> out = new ArrayList<>(ilist.size());
+        for(Pair<TKey, TValue> p : ilist){
+            out.add(p);
+        }
+        return out;
+    }
+
+    /**
+     * Get the first value in the toplist. This is the one with the highest value.
+     * @return
+     */
+    public Pair<TKey, TValue> getFirst(){
+        return ilist.getFirst();
+    }
+
 
     @Override
     public Iterator<Pair<TKey, TValue>> iterator() {
