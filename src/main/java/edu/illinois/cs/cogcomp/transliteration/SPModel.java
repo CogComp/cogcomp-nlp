@@ -3,8 +3,10 @@ package edu.illinois.cs.cogcomp.transliteration;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.Triple;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.lm.NeuralLM;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +49,10 @@ public class SPModel
          */
         private SparseDoubleVector<Production> probs = null;
 
+        public SparseDoubleVector<Production> getProbs(){
+            return probs;
+        }
+
         /**
          * This is the production probabilities table multiplied by the segmentfactor.
          */
@@ -64,6 +70,21 @@ public class SPModel
          * The default value is 100.
          */
         private int maxCandidates=100;
+
+        /**
+         * Control whether or not to use a Neural Probabilistic Language Model
+         */
+        private boolean useNPLM = false;
+        private NeuralLM nplm;
+        private String nplmfile;
+        
+        public void setUseNPLM(boolean v){
+            this.useNPLM = v;
+        }
+
+        public void setNPLMfile(String fname){
+            this.nplmfile = fname;
+        }
 
         public int getMaxCandidates(){
             return this.maxCandidates;
@@ -178,6 +199,7 @@ public class SPModel
          */
         public void WriteProbs(String fname, double threshold) throws IOException {
             ArrayList<String> outlines = new ArrayList<>();
+
             List<Production> keys = new ArrayList<>(probs.keySet());
             Collections.sort(keys, new Comparator<Production>() {
                 @Override
@@ -226,8 +248,6 @@ public class SPModel
             ReadProbs(fname);
         }
 
-
-
         /**
          * Creates a new model for generating transliterations (creating new words in the target language from a word in the source language).
          * Remember to Train() the model before calling Generate().
@@ -255,6 +275,16 @@ public class SPModel
             logger.info("Setting language model with " + targetLanguageExamples.size() + " words.");
             languageModel = Program.GetNgramCounts(targetLanguageExamples, maxSubstringLength2);
         }
+
+        /**
+         * Creates the language model directly. This was intended for use with SRILM.
+         * @param lm
+         */
+        public void SetLanguageModel(HashMap<String,Double> lm){
+            logger.info("Setting language model with hashmap directly.");
+            languageModel = lm;
+        }
+
 
         /**
          * This initializes with rom=false and testing = empty list.
@@ -345,8 +375,7 @@ public class SPModel
          * @param sourceWord The word to transliterate.
          * @return A TopList containing the most likely transliterations of the word.
          */
-        public TopList<Double,String> Generate(String sourceWord)
-        {
+        public TopList<Double,String> Generate(String sourceWord) throws Exception {
             if (probs == null) throw new NullPointerException("Must train at least one iteration before generating transliterations");
 
             if (pruned==null)
@@ -358,15 +387,60 @@ public class SPModel
 
             TopList<Double, String> result = WikiTransliteration.Predict2(maxCandidates, sourceWord, maxSubstringLength2, probMap, pruned, new HashMap<String, HashMap<String, Double>>(), maxCandidates);
 
-            if (languageModel != null)
+            // code for using a Neural Language Model to rerank.
+            if (this.useNPLM){
+                //logger.info("Using NPLM");
+
+                if(this.nplm == null){
+                    this.nplm = NeuralLM.from_file(this.nplmfile);
+                }
+
+                if(languageModel != null){
+                    logger.warn("LanguageModel is not null, but NPLM is set. Using NPLM.");
+                }
+
+                TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
+                for (Pair<Double, String> prediction : result) {
+
+                    String word = prediction.getSecond();
+
+                    // log probability
+                    double pred_prob = 0;
+
+                    int numgrams = 0;
+                    int lmngramsize = 2;
+                    String paddedExample = StringUtils.repeat('_', lmngramsize - 1) + word;
+                    for (int i = lmngramsize - 1; i < paddedExample.length(); i++) {
+                        int n = lmngramsize;
+                        String ss = paddedExample.substring(i-n+1, i+1);
+
+                        char[] c = ss.toCharArray();
+                        double prob = nplm.ngram_prob(c);
+
+                        pred_prob += prob;
+                        numgrams++;
+                    }
+
+                    double reranked = Math.log(prediction.getFirst()) + pred_prob / numgrams;
+                    
+                    fPredictions.add(Math.exp(reranked), prediction.getSecond());
+                }
+                result = fPredictions;
+
+            }else if (languageModel != null)
             {
                 TopList<Double, String> fPredictions = new TopList<>(maxCandidates);
                 for (Pair<Double, String> prediction : result) {
                     Double prob = Math.pow(WikiTransliteration.GetLanguageProbability(prediction.getSecond(), languageModel, ngramSize), 1);
-                    fPredictions.add(prediction.getFirst() * prob, prediction.getSecond());
+                    double reranked = Math.log(prediction.getFirst()) + Math.log(prob) / prediction.getSecond().length();
+
+                    fPredictions.add(Math.exp(reranked), prediction.getSecond());
                 }
                 result = fPredictions;
             }
+
+
+
 
             return result;
         }
