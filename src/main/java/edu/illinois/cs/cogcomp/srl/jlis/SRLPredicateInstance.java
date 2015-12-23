@@ -162,7 +162,7 @@ public class SRLPredicateInstance implements IInstance {
 		SRLProperties props = SRLProperties.getInstance();
 		FEATURE_EXTRACTION_N_THREADS=Math.min(props.getNumFeatExtThreads(), Runtime.getRuntime().availableProcessors());
 
-		log.info("Using {} threads for feat. ext. "+FEATURE_EXTRACTION_N_THREADS);
+		log.debug("Using {} threads for feature ext.", FEATURE_EXTRACTION_N_THREADS);
 		try {
 			int timeout = 10;
 			Parallel.forLoop(FEATURE_EXTRACTION_N_THREADS, list, function, timeout, TimeUnit.MINUTES);
