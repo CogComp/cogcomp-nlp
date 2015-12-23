@@ -177,10 +177,16 @@ public class SemanticRoleLabeler extends Annotator {
 
 	@Override
 	public void addView(TextAnnotation ta) throws AnnotatorException {
+		// Check if all required views are present
+		for (String view : getRequiredViews()) {
+			if (!ta.hasView(view)) {
+				throw new AnnotatorException("Missing required view: " + view);
+			}
+		}
+
 		try {
             View srlView = getSRL(ta);
             ta.addView( getViewName(), srlView);
-			return ;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AnnotatorException(e.getMessage());
