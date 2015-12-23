@@ -43,8 +43,8 @@ class Runner {
 //            }
 //        }
 
-//        String trainfile = dataPath + "he_train_pairs.txt";
-//        String testfile = dataPath + "he_test_pairs.txt";
+        String trainfile = dataPath + "he_train_pairs.txt";
+        String testfile = dataPath + "he_test_pairs.txt";
 //
         //String trainfile = "Data/chinese-train.txt";
         //String testfile = "Data/chinese-test.txt";
@@ -82,10 +82,10 @@ class Runner {
 //        String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHi_11946.xml";
 //        String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHi_997.xml";
 
-        String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
-        String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
+        //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
+        //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
-        String method = "NEWS";
+        String method = "wikidata";
 
         if(method == "interactive"){
             interactive();
@@ -93,9 +93,9 @@ class Runner {
             List<Example> training = readWikiData(trainfile);
             List<Example> testing = readWikiData(testfile);
 
-
-            java.util.Collections.shuffle(training);
-            java.util.Collections.shuffle(testing);
+            logger.warn("Not shuffling train/test data!");
+            //java.util.Collections.shuffle(training);
+            //java.util.Collections.shuffle(testing);
 
             TrainAndTest(training, testing);
         }else if(method == "NEWS"){
@@ -364,7 +364,7 @@ class Runner {
 
         for (int i = 0; i < num; i++) {
 
-            java.util.Collections.shuffle(training);
+            //java.util.Collections.shuffle(training);
             //java.util.Collections.shuffle(testing);
 
             // this allows us to control the size of the training set (optionally smaller)

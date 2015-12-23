@@ -421,7 +421,7 @@ class WikiTransliteration {
 
         for (Production key : counts.keySet()) {
             Double value = counts.get(key);
-            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond())), value);
+            result.put(new Production(internTable.Intern(key.getFirst()), internTable.Intern(key.getSecond()), key.getOrigin()), value);
         }
 
         return result;
@@ -667,7 +667,7 @@ class WikiTransliteration {
             return result; //nothing learned //result.Add(new Pair<String,String>(internTable.Intern(word1),internTable.Intern(word2),
         }
 
-        for (Pair<String, String> production : productions) {
+        for (Production production : productions) {
             Dictionaries.IncrementOrSet(result, new Production(internTable.Intern(production.getFirst()), internTable.Intern(production.getSecond())), weighByProbability ? prob : 1, weighByProbability ? prob : 1);
         }
 
@@ -691,26 +691,22 @@ class WikiTransliteration {
         //HashMap<Pair<String, String>, double> weights = new HashMap<Pair<String, String>, double>();
         //HashMap<Pair<String, String>, double> weightCounts = new HashMap<Pair<String, String>, double>();
         //FindWeightedAlignmentsAverage(1, new List<Pair<String, String>>(), word1, word2, maxSubstringLength1, maxSubstringLength2, probs, weights, weightCounts, new HashMap<Pair<String, String>, Pair<double, double>>(), weightByOthers);
-        Pair<HashMap<Production, Double>, Double> thing = CountWeightedAlignmentsHelper(word1, word2, maxSubstringLength1, maxSubstringLength2, probs, new HashMap<Production, Pair<HashMap<Production, Double>, Double>>());
-        HashMap<Production, Double> weights = thing.getFirst();
-        double probSum = thing.getSecond(); //the sum of the probabilities of all possible alignments
+        Pair<HashMap<Production, Double>, Double> Q = CountWeightedAlignmentsHelper(word1, word2, maxSubstringLength1, maxSubstringLength2, probs, new HashMap<Production, Pair<HashMap<Production, Double>, Double>>());
+        HashMap<Production, Double> weights = Q.getFirst();
+        double probSum = Q.getSecond(); //the sum of the probabilities of all possible alignments
 
-        //CheckDictionary(weights);
-
-        HashMap<Production, Double> weights2 = new HashMap<>(weights.size());
+        // this is where the 1/y normalization happens for this word pair.
+        HashMap<Production, Double> weights_norm = new HashMap<>(weights.size());
         for (Production key : weights.keySet()) {
             Double value = weights.get(key);
             if (weightByContextOnly) {
                 double originalProb = probs.get(key);
-                weights2.put(key, value == 0 ? 0 : (value / originalProb) / (probSum - value + (value / originalProb)));
+                weights_norm.put(key, value == 0 ? 0 : (value / originalProb) / (probSum - value + (value / originalProb)));
             } else
-                weights2.put(key, value == 0 ? 0 : value / probSum);
+                weights_norm.put(key, value == 0 ? 0 : value / probSum);
         }
 
-        //weights2[wPair.Key] = weights[wPair.Key] == 0 ? 0 : Math.Pow(weights[wPair.Key], 1d / word1.Length);
-        weights = weights2;
-
-        return Normalize(word1, word2, weights, internTable, normalization);
+        return Normalize(word1, word2, weights_norm, internTable, normalization);
     }
 
     /**
@@ -718,25 +714,32 @@ class WikiTransliteration {
      * and weighing each alignment (and its constituent productions) by the given probability table.
      * probSum is important (and memoized for input word pairs)--it keeps track and returns the sum of the
      * probabilities of all possible alignments for the word pair
+     *
+     * This is Algorithm 3 in the paper.
+     *
      * @param word1
      * @param word2
      * @param maxSubstringLength1
      * @param maxSubstringLength2
      * @param probs
      * @param memoizationTable
-     * @return
+     * @return a hashmap and double as a pair. The double is y, a normalization constant. The hashmap is a table of substring pairs
+     * and their unnormalized counts
      */
     public static Pair<HashMap<Production, Double>, Double> CountWeightedAlignmentsHelper(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Pair<HashMap<Production, Double>, Double>> memoizationTable) {
         double probSum;
 
         Pair<HashMap<Production, Double>, Double> memoization;
-        if(memoizationTable.containsKey(new Production(word1, word2))){
-            memoization = memoizationTable.get(new Production(word1, word2));
-            probSum = memoization.getSecond(); //stored probSum
-            return new Pair<>(memoization.getFirst(), probSum); //table of probs
+        for(int orig = 0; orig < SPModel.numOrigins; orig++) {
+            if (memoizationTable.containsKey(new Production(word1, word2, orig))) {
+                memoization = memoizationTable.get(new Production(word1, word2, orig));
+                probSum = memoization.getSecond(); //stored probSum
+                return new Pair<>(memoization.getFirst(), probSum); //table of probs
+            }
         }
 
-        HashMap<Production, Double> result = new HashMap<>();
+        HashMap<Production, Double> result = new HashMap<>(); // this is C in Algorithm 3 in the paper
+        probSum = 0; // this is R in Algorithm 3 in the paper
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
         {
@@ -744,47 +747,47 @@ class WikiTransliteration {
             return new Pair<>(result,probSum); //end of the line
         }
 
-        probSum = 0;
-
         int maxSubstringLength1f = Math.min(word1.length(), maxSubstringLength1);
         int maxSubstringLength2f = Math.min(word2.length(), maxSubstringLength2);
 
-        for (int i = 1; i <= maxSubstringLength1f; i++) //for each possible substring in the first word...
-        {
-            String substring1 = word1.substring(0, i);
-
-            for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
+        for(int orig = 0; orig < SPModel.numOrigins; orig++) {
+            for (int i = 1; i <= maxSubstringLength1f; i++) //for each possible substring in the first word...
             {
-                if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
+                String substring1 = word1.substring(0, i);
+
+                for (int j = 1; j <= maxSubstringLength2f; j++) //for possible substring in the second
                 {
-                    String substring2 = word2.substring(0, j);
-                    Production production = new Production(substring1, substring2);
-                    //double prob = Math.Max(0.000000000000001, probs[production]);
-                    double prob = probs.get(production);
+                    if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i) //if we get rid of these characters, can we still cover the remainder of word2?
+                    {
+                        String substring2 = word2.substring(0, j);
 
-                    // recurse here.
-                    Pair<HashMap<Production, Double>,Double> thing = CountWeightedAlignmentsHelper(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable);
-                    HashMap<Production, Double> remainderCounts = thing.getFirst();
-                    Double remainderProbSum = thing.getSecond();
+                        Production production = new Production(substring1, substring2, orig);
+                        double prob = probs.get(production);
 
-                    //record this production in our results
-                    //IncrementPair(result, production, prob * remainderProbSum, 0);
-                    Dictionaries.IncrementOrSet(result, production, prob * remainderProbSum, prob * remainderProbSum);
+                        // recurse here. Result is Q in Algorithm 3
+                        Pair<HashMap<Production, Double>, Double> Q = CountWeightedAlignmentsHelper(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable);
 
-                    //update our probSum
-                    probSum += remainderProbSum * prob;
+                        HashMap<Production, Double> remainderCounts = Q.getFirst();
+                        Double remainderProbSum = Q.getSecond();
 
-                    //update all the productions that come later to take into account their preceding production's probability
-                    for (Production key : remainderCounts.keySet()) {
-                        Double value = remainderCounts.get(key);
-                        Dictionaries.IncrementOrSet(result, key, prob * value, prob * value);
-                        //IncrementPair(result, pair.Key, pair.Value.x * prob, pair.Value.y * prob);
+                        Dictionaries.IncrementOrSet(result, production, prob * remainderProbSum, prob * remainderProbSum);
+
+                        //update our probSum
+                        probSum += remainderProbSum * prob;
+
+                        //update all the productions that come later to take into account their preceding production's probability
+                        for (Production key : remainderCounts.keySet()) {
+                            Double value = remainderCounts.get(key);
+                            Dictionaries.IncrementOrSet(result, key, prob * value, prob * value);
+                        }
                     }
                 }
             }
         }
 
-        memoizationTable.put(new Production(word1, word2), new Pair<>(result, probSum));
+        for(int orig = 0; orig < SPModel.numOrigins; orig++) {
+            memoizationTable.put(new Production(word1, word2, orig), new Pair<>(result, probSum));
+        }
         return new Pair<>(result, probSum);
     }
 
@@ -824,10 +827,10 @@ class WikiTransliteration {
      * @param minProductionProbability
      * @return
      */
-    public static double GetSummedAlignmentProbability(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Double> memoizationTable, double minProductionProbability) {
+    public static double GetSummedAlignmentProbability(String word1, String word2, int maxSubstringLength1, int maxSubstringLength2, HashMap<Production, Double> probs, HashMap<Production, Double> memoizationTable, double minProductionProbability, int origin) {
 
-        if(memoizationTable.containsKey(new Production(word1, word2))){
-            return memoizationTable.get(new Production(word1, word2));
+        if(memoizationTable.containsKey(new Production(word1, word2, origin))){
+            return memoizationTable.get(new Production(word1, word2, origin));
         }
 
         if (word1.length() == 0 && word2.length() == 0) //record probabilities
@@ -851,7 +854,7 @@ class WikiTransliteration {
                 if ((word1.length() - i) * maxSubstringLength2 >= word2.length() - j && (word2.length() - j) * maxSubstringLength1 >= word1.length() - i)
                 {
                     String substring2 = word2.substring(0, j);
-                    Pair<String, String> production = new Pair<>(substring1, substring2);
+                    Production production = new Production(substring1, substring2, origin);
 
                     double prob = 0;
 
@@ -865,7 +868,7 @@ class WikiTransliteration {
 
                     prob = Math.max(prob, localMinProdProb);
 
-                    double remainderProbSum = GetSummedAlignmentProbability(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable, minProductionProbability);
+                    double remainderProbSum = GetSummedAlignmentProbability(word1.substring(i), word2.substring(j), maxSubstringLength1, maxSubstringLength2, probs, memoizationTable, minProductionProbability, origin);
 
                     //update our probSum
                     probSum += remainderProbSum * prob;
