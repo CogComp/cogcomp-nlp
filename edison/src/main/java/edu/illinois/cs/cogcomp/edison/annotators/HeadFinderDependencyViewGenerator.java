@@ -5,7 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadDependencyParser;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

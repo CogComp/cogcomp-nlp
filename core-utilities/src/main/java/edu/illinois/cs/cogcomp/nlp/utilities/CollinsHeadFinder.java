@@ -127,7 +127,6 @@ public class CollinsHeadFinder extends HeadFinderBase {
 
             if (prev.equals("CC")) {
                 int newHeadIndex = headChildId - 2;
-                // Tree<String> child = tree.getChild(newHeadIndex);
                 Constituent child = tree.getOutgoingRelations().get(newHeadIndex).getTarget();
 
                 while (newHeadIndex >= 0 && ParseTreeProperties.isPreTerminal(child)

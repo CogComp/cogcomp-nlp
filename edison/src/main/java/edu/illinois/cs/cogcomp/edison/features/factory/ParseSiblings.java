@@ -9,8 +9,8 @@ import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -75,7 +75,7 @@ public class ParseSiblings implements FeatureExtractor {
                 Constituent sibling = parent.getOutgoingRelations().get(position - 1).getTarget();
 
                 String phraseType = sibling.getLabel();
-                int headWord = CollinsHeadFinder.instance.getHeadWordPosition(sibling);
+                int headWord = CollinsHeadFinder.getInstance().getHeadWordPosition(sibling);
 
                 String token = ta.getToken(headWord).toLowerCase().trim();
                 String pos = WordHelpers.getPOS(ta, headWord);
@@ -90,7 +90,7 @@ public class ParseSiblings implements FeatureExtractor {
                 Constituent sibling = parent.getOutgoingRelations().get(position + 1).getTarget();
 
                 String phraseType = sibling.getLabel();
-                int headWord = CollinsHeadFinder.instance.getHeadWordPosition(sibling);
+                int headWord = CollinsHeadFinder.getInstance().getHeadWordPosition(sibling);
 
                 String token = ta.getToken(headWord).toLowerCase().trim();
                 String pos = WordHelpers.getPOS(ta, headWord);

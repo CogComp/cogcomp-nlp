@@ -8,8 +8,8 @@ import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -65,7 +65,7 @@ public class ParsePhraseType implements FeatureExtractor {
                 Constituent parent = phrase.getIncomingRelations().get(0).getSource();
                 parentLabel = parent.getLabel();
 
-                int parentHead = CollinsHeadFinder.instance.getHeadWordPosition(parent);
+                int parentHead = CollinsHeadFinder.getInstance().getHeadWordPosition(parent);
 
                 features.add(DiscreteFeature.create("pt:h:"
                         + ta.getToken(parentHead).toLowerCase().trim()));
