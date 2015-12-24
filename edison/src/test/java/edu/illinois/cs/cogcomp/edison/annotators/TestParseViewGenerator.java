@@ -8,7 +8,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadDependencyParser;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import junit.framework.TestCase;
 
 /**

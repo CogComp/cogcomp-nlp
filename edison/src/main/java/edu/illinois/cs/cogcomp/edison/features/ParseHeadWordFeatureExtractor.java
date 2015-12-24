@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.edison.features;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -40,7 +40,7 @@ public class ParseHeadWordFeatureExtractor implements FeatureExtractor {
         }
         Set<Feature> features = new LinkedHashSet<>();
 
-        int head = CollinsHeadFinder.instance.getHeadWordPosition(phrase);
+        int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
         Constituent c1 = new Constituent("", "", ta, head, head + 1);
 
         features.addAll(fex.getFeatures(c1));
