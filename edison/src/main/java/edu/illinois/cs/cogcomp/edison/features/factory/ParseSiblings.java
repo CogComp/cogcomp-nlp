@@ -9,8 +9,8 @@ import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -1,10 +1,11 @@
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.illinois.cs.cogcomp.nlp.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.ArrayList;
