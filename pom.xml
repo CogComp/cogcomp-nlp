@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.10</version>
+    <version>3.0.11</version>
 
     <modules>
         <module>core-utilities</module>
@@ -38,7 +38,7 @@
         </repository>
         <site>
             <id>CogcompSoftwareDoc</id>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/</url>
         </site>
     </distributionManagement>
 
