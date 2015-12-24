@@ -9,13 +9,12 @@ import edu.illinois.cs.cogcomp.core.utilities.TokenUtils;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 /**
- * A set of convenience methods for constructing TextAnnotations. Replaces a morass of specialized constructors
- *   in Edison to support use of illinois-core-utilities.
+ * A set of convenience methods for constructing TextAnnotations. Replaces a morass of specialized
+ * constructors in Edison to support use of illinois-core-utilities.
  *
  * Created by mssammon on 7/27/15.
  */
-public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
-{
+public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
     private static final String NAME = CcgTextAnnotationBuilder.class.getSimpleName();
 
     private static final String DEFAULT_TEXT_ID = "dummyTextId";
@@ -23,14 +22,14 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
 
     private Tokenizer tokenizer;
 
-	/**
+    /**
      * instantiate a TextAnnotationBuilder.
+     * 
      * @param tokenizer The Tokenizer that will split text into sentences and words.
      */
-    public CcgTextAnnotationBuilder(Tokenizer tokenizer)
-    {
+    public CcgTextAnnotationBuilder(Tokenizer tokenizer) {
         this.tokenizer = tokenizer;
-	}
+    }
 
 
     @Override
@@ -41,76 +40,78 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
     /**
      * create a TextAnnotation for the text argument, using the Tokenizer provided at construction.
      * The text should be free from html/xml tags and non-English characters, assuming you want to
-     *    process this text with other NLP components.
+     * process this text with other NLP components.
      *
-     * @param text  the text to build the TextAnnotation
-     * @return  a TextAnnotation object with {@link ViewNames#SENTENCE} and {@link ViewNames#TOKENS} views and
-     *          default corpus id and text id fields.
-     * @throws IllegalArgumentException  if the tokenizer has problems processing the text.
+     * @param text the text to build the TextAnnotation
+     * @return a TextAnnotation object with {@link ViewNames#SENTENCE} and {@link ViewNames#TOKENS}
+     *         views and default corpus id and text id fields.
+     * @throws IllegalArgumentException if the tokenizer has problems processing the text.
      */
     @Override
-    public TextAnnotation createTextAnnotation( String text ) throws IllegalArgumentException
-    {
+    public TextAnnotation createTextAnnotation(String text) throws IllegalArgumentException {
         return createTextAnnotation(DEFAULT_CORPUS_ID, DEFAULT_TEXT_ID, text);
     }
 
 
 
     /**
-     * Tokenize the input text (split into sentences and "words" within sentences) and populate a TextAnnotation object.
-     * Specifies token character offsets with respect to original text.
-     * Input text should be English and avoid html and xml tags, and non-English characters may cause problems if
-     *    you use the TextAnnotation as input to other NLP components.
+     * Tokenize the input text (split into sentences and "words" within sentences) and populate a
+     * TextAnnotation object. Specifies token character offsets with respect to original text. Input
+     * text should be English and avoid html and xml tags, and non-English characters may cause
+     * problems if you use the TextAnnotation as input to other NLP components.
      *
-     * @param corpusId  a field in TextAnnotation that can be used by the client for book-keeping (e.g. track
-     *                  texts from the same corpus)
-     * @param textId    a field in TextAnnotation that can be used by the client for book-keeping (e.g. identify a
-     *                  specific document by some reference string)
-     * @param text  the plain English text to process
-     * @return  a TextAnnotation object with {@link ViewNames#TOKENS} and
-     *          {@link ViewNames#SENTENCE} views.
+     * @param corpusId a field in TextAnnotation that can be used by the client for book-keeping
+     *        (e.g. track texts from the same corpus)
+     * @param textId a field in TextAnnotation that can be used by the client for book-keeping (e.g.
+     *        identify a specific document by some reference string)
+     * @param text the plain English text to process
+     * @return a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE}
+     *         views.
      * @throws IllegalArgumentException if the tokenizer has problems with the input text.
      */
     @Override
-    public TextAnnotation createTextAnnotation( String corpusId, String textId, String text ) throws IllegalArgumentException {
-        Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan( text );
-        return new TextAnnotation( corpusId,
-                textId,
-                text,
-                tokenization.getCharacterOffsets(),
-                tokenization.getTokens(),
-                tokenization.getSentenceEndTokenIndexes()
-                );
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text)
+            throws IllegalArgumentException {
+        Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan(text);
+        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
     /**
-     * instantiate a TextAnnotation using a SentenceViewGenerator to create an explicit Sentence view
+     * instantiate a TextAnnotation using a SentenceViewGenerator to create an explicit Sentence
+     * view
      *
-     * @param corpusId  a field in TextAnnotation that can be used by the client for book-keeping (e.g. track
-     *                  texts from the same corpus)
-     * @param textId    a field in TextAnnotation that can be used by the client for book-keeping (e.g. identify a
-     *                  specific document by some reference string)
-     * @param text  the plain English text to process
-     * @param tokens    the token Strings, in order from original text
-     * @param sentenceEndPositions  token offsets of sentence ends (one-past-the-end indexing)
+     * @param corpusId a field in TextAnnotation that can be used by the client for book-keeping
+     *        (e.g. track texts from the same corpus)
+     * @param textId a field in TextAnnotation that can be used by the client for book-keeping (e.g.
+     *        identify a specific document by some reference string)
+     * @param text the plain English text to process
+     * @param tokens the token Strings, in order from original text
+     * @param sentenceEndPositions token offsets of sentence ends (one-past-the-end indexing)
      * @param sentenceViewGenerator the name of the source of the sentence split
-     * @param sentenceViewScore a score that may indicate how reliable the sentence split information is
-     * @return  a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE} views.
+     * @param sentenceViewScore a score that may indicate how reliable the sentence split
+     *        information is
+     * @return a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE}
+     *         views.
      */
-    public static TextAnnotation buildTextAnnotation(String corpusId, String textId, String text, String[] tokens, int[] sentenceEndPositions,
-                          String sentenceViewGenerator, double sentenceViewScore) {
+    public static TextAnnotation buildTextAnnotation(String corpusId, String textId, String text,
+            String[] tokens, int[] sentenceEndPositions, String sentenceViewGenerator,
+            double sentenceViewScore) {
 
         if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
-            throw new IllegalArgumentException("Invalid sentence boundary. Last element should be the number of tokens");
+            throw new IllegalArgumentException(
+                    "Invalid sentence boundary. Last element should be the number of tokens");
 
 
         IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
 
         assert offsets.length == tokens.length;
 
-        TextAnnotation ta = new TextAnnotation( corpusId, textId, text, offsets, tokens, sentenceEndPositions );
+        TextAnnotation ta =
+                new TextAnnotation(corpusId, textId, text, offsets, tokens, sentenceEndPositions);
 
-        SpanLabelView view = new SpanLabelView(ViewNames.SENTENCE, sentenceViewGenerator, ta, sentenceViewScore);
+        SpanLabelView view =
+                new SpanLabelView(ViewNames.SENTENCE, sentenceViewGenerator, ta, sentenceViewScore);
 
         int start = 0;
         for (int s : sentenceEndPositions) {
@@ -119,44 +120,42 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder
         }
         ta.addView(ViewNames.SENTENCE, view);
 
-        SpanLabelView tokView = new SpanLabelView( ViewNames.TOKENS, sentenceViewGenerator, ta, sentenceViewScore );
+        SpanLabelView tokView =
+                new SpanLabelView(ViewNames.TOKENS, sentenceViewGenerator, ta, sentenceViewScore);
 
 
 
-        for ( int tokIndex = 0; tokIndex < tokens.length; ++ tokIndex )
-        {
-            tokView.addSpanLabel( tokIndex, tokIndex+1, tokens[tokIndex], 1d );
+        for (int tokIndex = 0; tokIndex < tokens.length; ++tokIndex) {
+            tokView.addSpanLabel(tokIndex, tokIndex + 1, tokens[tokIndex], 1d);
         }
 
-        ta.addView( ViewNames.TOKENS, tokView );
+        ta.addView(ViewNames.TOKENS, tokView);
 
         return ta;
     }
 
 
     /**
-     * Create a new text annotation using the given text, the tokens and the
-     * sentence boundary positions (only the ending positions), specified in
-     * terms of the tokens.
+     * Create a new text annotation using the given text, the tokens and the sentence boundary
+     * positions (only the ending positions), specified in terms of the tokens.
      * <p/>
-     * For example, for the text "Jack went up the hill. So did Jill.", the
-     * tokens would be the array {"Jack", "went", "up", "the", "hill", "."
-     * ,"So", "did", "Jill", "."} and the array of sentence boundary array would
-     * be {6, 11}. If the last element of the sentence boundary array is not
-     * equal to the size of the tokens array, an IllegalArgumentException is
-     * raised.
+     * For example, for the text "Jack went up the hill. So did Jill.", the tokens would be the
+     * array {"Jack", "went", "up", "the", "hill", "." ,"So", "did", "Jill", "."} and the array of
+     * sentence boundary array would be {6, 11}. If the last element of the sentence boundary array
+     * is not equal to the size of the tokens array, an IllegalArgumentException is raised.
      *
-     * @param corpusId             A string that identifies the corpus
-     * @param id                   A string that identifies this text
-     * @param text                 The text it self
-     * @param tokens               The array of tokens of this text
+     * @param corpusId A string that identifies the corpus
+     * @param id A string that identifies this text
+     * @param text The text it self
+     * @param tokens The array of tokens of this text
      * @param sentenceEndPositions The ending positions of sentences, specified as indices to the
-     *                             tokens array. Note that the end positions are exclusive -- for
-     *                             example, if the sentence ends at the 7th token, then the end
-     *                             position for that sentence would be 8.
+     *        tokens array. Note that the end positions are exclusive -- for example, if the
+     *        sentence ends at the 7th token, then the end position for that sentence would be 8.
      */
-    public TextAnnotation buildTextAnnotation(String corpusId, String id, String text, String[] tokens, int[] sentenceEndPositions) {
-        return CcgTextAnnotationBuilder.buildTextAnnotation(corpusId, id, text, tokens, sentenceEndPositions, "UserSpecified", 1.0d);
+    public TextAnnotation buildTextAnnotation(String corpusId, String id, String text,
+            String[] tokens, int[] sentenceEndPositions) {
+        return CcgTextAnnotationBuilder.buildTextAnnotation(corpusId, id, text, tokens,
+                sentenceEndPositions, "UserSpecified", 1.0d);
     }
 
 }

@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
- * A cache that removes the least recently used elements when it is full. This
- * implementation is <b>NOT</b> threadsafe.
+ * A cache that removes the least recently used elements when it is full. This implementation is
+ * <b>NOT</b> threadsafe.
  *
  * @author Vivek Srikumar
  */

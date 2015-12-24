@@ -17,8 +17,9 @@ import java.util.List;
  */
 public class TokenizerUtilities {
 
-    public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer, String source) {
-        SentenceSplitter splitter = new SentenceSplitter(new String[]{input.getText()});
+    public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer,
+            String source) {
+        SentenceSplitter splitter = new SentenceSplitter(new String[] {input.getText()});
 
         Sentence[] sentences = splitter.splitAll();
         List<String> tokens = new ArrayList<>();
@@ -36,8 +37,9 @@ public class TokenizerUtilities {
                 tokens.add(toks.getFirst()[i]);
                 IntPair charOffset = toks.getSecond()[i];
 
-                IntPair translatedCharOffset = new IntPair(
-                        charOffset.getFirst() + s.start, charOffset.getSecond() + s.start);
+                IntPair translatedCharOffset =
+                        new IntPair(charOffset.getFirst() + s.start, charOffset.getSecond()
+                                + s.start);
                 charOffsets.add(translatedCharOffset);
 
             }
@@ -47,15 +49,14 @@ public class TokenizerUtilities {
             start = tokens.size();
         }
 
-        if ( tokens.size() != charOffsets.size() )
-            throw new IllegalArgumentException( "tokens (" + tokens.size() + ") must equal charOffsets (" +
-            charOffsets.size() + "), but does not.");
+        if (tokens.size() != charOffsets.size())
+            throw new IllegalArgumentException("tokens (" + tokens.size()
+                    + ") must equal charOffsets (" + charOffsets.size() + "), but does not.");
 
-        SpanLabelView tokView = new SpanLabelView(ViewNames.TOKENS, source, input, 1.0 );
+        SpanLabelView tokView = new SpanLabelView(ViewNames.TOKENS, source, input, 1.0);
         SpanLabelView view = new SpanLabelView(ViewNames.SENTENCE, source, input, 1.0);
-        for ( int i = 0; i < tokens.size(); ++i )
-        {
-            tokView.addSpanLabel(i, i+1, tokens.get( i ), 1d );
+        for (int i = 0; i < tokens.size(); ++i) {
+            tokView.addSpanLabel(i, i + 1, tokens.get(i), 1d);
         }
         for (IntPair span : sentenceSpans) {
             view.addSpanLabel(span.getFirst(), span.getSecond(), ViewNames.SENTENCE, 1d);

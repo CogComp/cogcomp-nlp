@@ -14,304 +14,314 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Uses the Collins' head percolation table to get a dependency tree using a
- * parse tree
+ * Uses the Collins' head percolation table to get a dependency tree using a parse tree
  *
  * @author Vivek Srikumar
  */
 public class CollinsHeadDependencyParser {
-	CollinsHeadFinder headFinder;
+    CollinsHeadFinder headFinder;
 
-	// This converts prepositions and possessive clitics
-	// to edge labels
-	boolean collapseEdgeLabels;
+    // This converts prepositions and possessive clitics
+    // to edge labels
+    boolean collapseEdgeLabels;
 
-	/**
-	 * Create a CollinsHeadDependencyParser
-	 *
-	 * @param convertPrepositionsToEdgeLabels Should prepositions be merged into the edge labels?
-	 */
+    /**
+     * Create a CollinsHeadDependencyParser
+     *
+     * @param convertPrepositionsToEdgeLabels Should prepositions be merged into the edge labels?
+     */
 
-	public CollinsHeadDependencyParser(boolean convertPrepositionsToEdgeLabels) {
-		this(convertPrepositionsToEdgeLabels, new CollinsHeadFinder());
-	}
+    public CollinsHeadDependencyParser(boolean convertPrepositionsToEdgeLabels) {
+        this(convertPrepositionsToEdgeLabels, new CollinsHeadFinder());
+    }
 
-	public CollinsHeadDependencyParser(boolean convertPrepositionsToEdgeLabels, CollinsHeadFinder headFinder) {
-		collapseEdgeLabels = convertPrepositionsToEdgeLabels;
-		this.headFinder = headFinder;
-	}
+    public CollinsHeadDependencyParser(boolean convertPrepositionsToEdgeLabels,
+            CollinsHeadFinder headFinder) {
+        collapseEdgeLabels = convertPrepositionsToEdgeLabels;
+        this.headFinder = headFinder;
+    }
 
-	public Tree<String> getDependencyTree(Constituent parseTreeRoot) {
-		// for each parse non-terminal, starting from the root, find the head.
-		// Make a dependency arc from the all the other children to the head
-		// child.
+    public Tree<String> getDependencyTree(Constituent parseTreeRoot) {
+        // for each parse non-terminal, starting from the root, find the head.
+        // Make a dependency arc from the all the other children to the head
+        // child.
 
-		if (TreeView.isLeaf(parseTreeRoot)) return new Tree<>(parseTreeRoot.getTokenizedSurfaceForm());
+        if (TreeView.isLeaf(parseTreeRoot))
+            return new Tree<>(parseTreeRoot.getTokenizedSurfaceForm());
 
-		Constituent headWord = headFinder.getHeadWord(parseTreeRoot);
-		Constituent headChild = headFinder.getHeadChild(parseTreeRoot);
+        Constituent headWord = headFinder.getHeadWord(parseTreeRoot);
+        Constituent headChild = headFinder.getHeadChild(parseTreeRoot);
 
-		Tree<String> rootTree = new Tree<>(headWord.getTokenizedSurfaceForm());
-		List<Tree<String>> dependentTrees = new ArrayList<>();
+        Tree<String> rootTree = new Tree<>(headWord.getTokenizedSurfaceForm());
+        List<Tree<String>> dependentTrees = new ArrayList<>();
 
-		for (Relation childEdge : parseTreeRoot.getOutgoingRelations()) {
-			Constituent child = childEdge.getTarget();
+        for (Relation childEdge : parseTreeRoot.getOutgoingRelations()) {
+            Constituent child = childEdge.getTarget();
 
-			if (child.equals(headChild)) {
-				rootTree = getDependencyTree(child);
-			} else {
-				dependentTrees.add(getDependencyTree(child));
-			}
-		}
+            if (child.equals(headChild)) {
+                rootTree = getDependencyTree(child);
+            } else {
+                dependentTrees.add(getDependencyTree(child));
+            }
+        }
 
-		rootTree.addSubtrees(dependentTrees);
+        rootTree.addSubtrees(dependentTrees);
 
-		return rootTree;
-	}
+        return rootTree;
+    }
 
-	public Tree<Pair<String, Integer>> getLabeledDependencyTree(Constituent parseTreeRoot) {
-		Tree<Pair<String, Integer>> tree = makeDepTree(parseTreeRoot);
+    public Tree<Pair<String, Integer>> getLabeledDependencyTree(Constituent parseTreeRoot) {
+        Tree<Pair<String, Integer>> tree = makeDepTree(parseTreeRoot);
 
-		if (this.collapseEdgeLabels) {
-			tree = collapsePrepositionLabels(tree);
+        if (this.collapseEdgeLabels) {
+            tree = collapsePrepositionLabels(tree);
 
-			tree = collapseClitics(tree);
-		}
-		return tree;
-	}
+            tree = collapseClitics(tree);
+        }
+        return tree;
+    }
 
-	protected Tree<Pair<String, Integer>> collapseClitics(Tree<Pair<String, Integer>> tree) {
-		Tree<Pair<String, Integer>> newTree = new Tree<>(tree.getLabel());
+    protected Tree<Pair<String, Integer>> collapseClitics(Tree<Pair<String, Integer>> tree) {
+        Tree<Pair<String, Integer>> newTree = new Tree<>(tree.getLabel());
 
-		for (int i = 0; i < tree.getNumberOfChildren(); i++) {
-			Tree<Pair<String, Integer>> child = tree.getChild(i);
-			String edgeLabel = tree.getEdgeLabel(i).getFirst();
+        for (int i = 0; i < tree.getNumberOfChildren(); i++) {
+            Tree<Pair<String, Integer>> child = tree.getChild(i);
+            String edgeLabel = tree.getEdgeLabel(i).getFirst();
 
-			if (edgeLabel.contains(",")) {
+            if (edgeLabel.contains(",")) {
 
-				String[] tags = edgeLabel.split(", ");
+                String[] tags = edgeLabel.split(", ");
 
-				String childLabel = tags[2].split(": ")[1];
+                String childLabel = tags[2].split(": ")[1];
 
-				if (child.getLabel().getFirst().equals("'s")) {
+                if (child.getLabel().getFirst().equals("'s")) {
 
-					if (child.getNumberOfChildren() > 0) {
-						Tree<Pair<String, Integer>> grandChild = collapseClitics(child.getChild(0));
+                    if (child.getNumberOfChildren() > 0) {
+                        Tree<Pair<String, Integer>> grandChild = collapseClitics(child.getChild(0));
 
-						for (int childId = 1; childId < child.getNumberOfChildren(); childId++) {
-							grandChild
-									.addSubtree(collapseClitics(child.getChild(childId)), child.getEdgeLabel(childId));
-						}
+                        for (int childId = 1; childId < child.getNumberOfChildren(); childId++) {
+                            grandChild.addSubtree(collapseClitics(child.getChild(childId)),
+                                    child.getEdgeLabel(childId));
+                        }
 
-						newTree.addSubtree(grandChild, new Pair<>("'s", -1));
-					} else {
-						newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
-					}
-				} else {
-					newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
-				}
-			} else {
-				newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
-			}
-		}
-
-		return newTree;
-	}
-
-	protected Tree<Pair<String, Integer>> collapsePrepositionLabels(Tree<Pair<String, Integer>> tree) {
+                        newTree.addSubtree(grandChild, new Pair<>("'s", -1));
+                    } else {
+                        newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
+                    }
+                } else {
+                    newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
+                }
+            } else {
+                newTree.addSubtree(collapseClitics(child), tree.getEdgeLabel(i));
+            }
+        }
+
+        return newTree;
+    }
+
+    protected Tree<Pair<String, Integer>> collapsePrepositionLabels(Tree<Pair<String, Integer>> tree) {
+
+        Tree<Pair<String, Integer>> newTree = new Tree<>(tree.getLabel());
+
+        for (int i = 0; i < tree.getNumberOfChildren(); i++) {
+            Tree<Pair<String, Integer>> child = tree.getChild(i);
+            String edgeLabel = tree.getEdgeLabel(i).getFirst();
+
+            String[] tags = edgeLabel.split(", ");
+
+            String childLabel = tags[2].split(": ")[1];
+
+            if (childLabel.equals("PP")) {
+                Pair<Tree<Pair<String, Integer>>, String> processedPP = processPPTree(child);
+                newTree.addSubtree(processedPP.getFirst(), new Pair<>(processedPP.getSecond(), -1));
+            } else {
+                newTree.addSubtree(collapsePrepositionLabels(child), tree.getEdgeLabel(i));
+            }
+        }
+
+        return newTree;
+    }
+
+    protected Pair<Tree<Pair<String, Integer>>, String> processPPTree(
+            Tree<Pair<String, Integer>> tree) {
+        // we are in a prepositional phrase
 
-		Tree<Pair<String, Integer>> newTree = new Tree<>(tree.getLabel());
-
-		for (int i = 0; i < tree.getNumberOfChildren(); i++) {
-			Tree<Pair<String, Integer>> child = tree.getChild(i);
-			String edgeLabel = tree.getEdgeLabel(i).getFirst();
-
-			String[] tags = edgeLabel.split(", ");
-
-			String childLabel = tags[2].split(": ")[1];
-
-			if (childLabel.equals("PP")) {
-				Pair<Tree<Pair<String, Integer>>, String> processedPP = processPPTree(child);
-				newTree.addSubtree(processedPP.getFirst(), new Pair<>(processedPP.getSecond(), -1));
-			} else {
-				newTree.addSubtree(collapsePrepositionLabels(child), tree.getEdgeLabel(i));
-			}
-		}
-
-		return newTree;
-	}
+        List<Pair<String, Integer>> newEdgeLabel = new ArrayList<>();
+        newEdgeLabel.add(tree.getLabel());
 
-	protected Pair<Tree<Pair<String, Integer>>, String> processPPTree(Tree<Pair<String, Integer>> tree) {
-		// we are in a prepositional phrase
+        List<Tree<Pair<String, Integer>>> trees = new ArrayList<>();
+        List<Pair<String, Integer>> internalEdgeLabels = new ArrayList<>();
 
-		List<Pair<String, Integer>> newEdgeLabel = new ArrayList<>();
-		newEdgeLabel.add(tree.getLabel());
+        List<Tree<Pair<String, Integer>>> ppTrees = new ArrayList<>();
+        List<Pair<String, Integer>> ppEdgeLabels = new ArrayList<>();
 
-		List<Tree<Pair<String, Integer>>> trees = new ArrayList<>();
-		List<Pair<String, Integer>> internalEdgeLabels = new ArrayList<>();
+        // find the "rightmost" child of this tree that is not a preposition.
+        // That is the new head.
 
-		List<Tree<Pair<String, Integer>>> ppTrees = new ArrayList<>();
-		List<Pair<String, Integer>> ppEdgeLabels = new ArrayList<>();
+        for (int i = 0; i < tree.getNumberOfChildren(); i++) {
+            Tree<Pair<String, Integer>> child = tree.getChild(i);
+            Pair<String, Integer> edgeLabel = tree.getEdgeLabel(i);
 
-		// find the "rightmost" child of this tree that is not a preposition.
-		// That is the new head.
+            String[] tags = edgeLabel.getFirst().split(", ");
 
-		for (int i = 0; i < tree.getNumberOfChildren(); i++) {
-			Tree<Pair<String, Integer>> child = tree.getChild(i);
-			Pair<String, Integer> edgeLabel = tree.getEdgeLabel(i);
+            String childLabel = tags[2].split(": ")[1];
 
-			String[] tags = edgeLabel.getFirst().split(", ");
+            if (POSUtils.isPOSPreposition(childLabel)) {
+                if (child.isLeaf()) {
+                    newEdgeLabel.add(child.getLabel());
+                } else {
+                    internalEdgeLabels.add(child.getLabel());
+                    trees.add(collapsePrepositionLabels(child));
+                }
+            } else if (childLabel.equals("PP")) {
+                Pair<Tree<Pair<String, Integer>>, String> processedPP = processPPTree(child);
+                ppTrees.add(processedPP.getFirst());
+                ppEdgeLabels.add(new Pair<>(processedPP.getSecond(), -1));
+            } else {
+                trees.add(collapsePrepositionLabels(child));
+                internalEdgeLabels.add(edgeLabel);
+            }
+        }
 
-			String childLabel = tags[2].split(": ")[1];
+        Collections.sort(newEdgeLabel, new Comparator<Pair<String, Integer>>() {
+            public int compare(Pair<String, Integer> arg0, Pair<String, Integer> arg1) {
+                return arg0.getSecond().compareTo(arg1.getSecond());
+            }
+        });
 
-			if (POSUtils.isPOSPreposition(childLabel)) {
-				if (child.isLeaf()) {
-					newEdgeLabel.add(child.getLabel());
-				} else {
-					internalEdgeLabels.add(child.getLabel());
-					trees.add(collapsePrepositionLabels(child));
-				}
-			} else if (childLabel.equals("PP")) {
-				Pair<Tree<Pair<String, Integer>>, String> processedPP = processPPTree(child);
-				ppTrees.add(processedPP.getFirst());
-				ppEdgeLabels.add(new Pair<>(processedPP.getSecond(), -1));
-			} else {
-				trees.add(collapsePrepositionLabels(child));
-				internalEdgeLabels.add(edgeLabel);
-			}
-		}
+        StringBuilder sb = new StringBuilder();
 
-		Collections.sort(newEdgeLabel, new Comparator<Pair<String, Integer>>() {
-			public int compare(Pair<String, Integer> arg0, Pair<String, Integer> arg1) {
-				return arg0.getSecond().compareTo(arg1.getSecond());
-			}
-		});
+        for (Pair<String, Integer> s : newEdgeLabel) {
+            sb.append(s.getFirst()).append(" ");
+        }
+        String label = sb.toString();
 
-		StringBuilder sb = new StringBuilder();
+        int childrenStart = 0;
+        int childrenEnd = trees.size() - 1;
 
-		for (Pair<String, Integer> s : newEdgeLabel) {
-			sb.append(s.getFirst()).append(" ");
-		}
-		String label = sb.toString();
+        int ppChildrenStart = 0;
+        int ppChildrenEnd = ppTrees.size() - 1;
 
-		int childrenStart = 0;
-		int childrenEnd = trees.size() - 1;
+        Tree<Pair<String, Integer>> newTree;
+        if (trees.size() == 0) {
 
-		int ppChildrenStart = 0;
-		int ppChildrenEnd = ppTrees.size() - 1;
+            if (ppTrees.size() > 0) {
+                newTree = ppTrees.get(0);
+                ppChildrenStart = 1;
+            } else {
+                // This shouldn't normally happen. But given that people
+                // write absolute garbage instead of English, and that the
+                // parser is also another fine piece of work, one never knows...
+                //
+                // This means that the current node has no child that is a PP
+                // and neither does it have a child that is not a PP. However,
+                // it is marked as a preposition. What it modifies is a
+                // mystery... Let's just return the preposition.
 
-		Tree<Pair<String, Integer>> newTree;
-		if (trees.size() == 0) {
+                String oldIncomingLabel =
+                        tree.getParent().getEdgeLabel(tree.getPositionAmongParentsChildren())
+                                .getFirst();
 
-			if (ppTrees.size() > 0) {
-				newTree = ppTrees.get(0);
-				ppChildrenStart = 1;
-			} else {
-				// This shouldn't normally happen. But given that people
-				// write absolute garbage instead of English, and that the
-				// parser is also another fine piece of work, one never knows...
-				//
-				// This means that the current node has no child that is a PP
-				// and neither does it have a child that is not a PP. However,
-				// it is marked as a preposition. What it modifies is a
-				// mystery... Let's just return the preposition.
+                return new Pair<>(tree, oldIncomingLabel);
 
-				String oldIncomingLabel =
-						tree.getParent().getEdgeLabel(tree.getPositionAmongParentsChildren()).getFirst();
+            }
+        } else {
 
-				return new Pair<>(tree, oldIncomingLabel);
+            newTree = trees.get(trees.size() - 1);
+            childrenEnd = trees.size() - 1;
 
-			}
-		} else {
+        }
 
-			newTree = trees.get(trees.size() - 1);
-			childrenEnd = trees.size() - 1;
+        for (int i = childrenStart; i < childrenEnd; i++) {
+            newTree.addSubtree(trees.get(i), internalEdgeLabels.get(i));
+        }
 
-		}
+        for (int i = ppChildrenStart; i < ppChildrenEnd; i++) {
+            newTree.addSubtree(ppTrees.get(i), ppEdgeLabels.get(i));
+        }
 
-		for (int i = childrenStart; i < childrenEnd; i++) {
-			newTree.addSubtree(trees.get(i), internalEdgeLabels.get(i));
-		}
+        return new Pair<>(newTree, label);
 
-		for (int i = ppChildrenStart; i < ppChildrenEnd; i++) {
-			newTree.addSubtree(ppTrees.get(i), ppEdgeLabels.get(i));
-		}
+    }
 
-		return new Pair<>(newTree, label);
+    private Tree<Pair<String, Integer>> makeDepTree(Constituent parseTreeRoot) {
 
-	}
+        // for each parse non-terminal, starting from the root, find the head.
+        // Make a dependency arc from the all the other children to the head
+        // child.
 
-	private Tree<Pair<String, Integer>> makeDepTree(Constituent parseTreeRoot) {
+        if (TreeView.isLeaf(parseTreeRoot)) {
+            int position = parseTreeRoot.getStartSpan();
+            return new Tree<>(new Pair<>(parseTreeRoot.getLabel(), position));
+        }
 
-		// for each parse non-terminal, starting from the root, find the head.
-		// Make a dependency arc from the all the other children to the head
-		// child.
+        Constituent headChild = headFinder.getHeadChild(parseTreeRoot);
 
-		if (TreeView.isLeaf(parseTreeRoot)) {
-			int position = parseTreeRoot.getStartSpan();
-			return new Tree<>(new Pair<>(parseTreeRoot.getLabel(), position));
-		}
+        Tree<Pair<String, Integer>> rootTree = null;
 
-		Constituent headChild = headFinder.getHeadChild(parseTreeRoot);
+        List<Tree<Pair<String, Integer>>> dependentTrees = new ArrayList<>();
 
-		Tree<Pair<String, Integer>> rootTree = null;
+        List<Pair<String, Integer>> edgeLabels = new ArrayList<>();
 
-		List<Tree<Pair<String, Integer>>> dependentTrees = new ArrayList<>();
+        int conjunction = -1;
 
-		List<Pair<String, Integer>> edgeLabels = new ArrayList<>();
+        for (Relation childEdge : parseTreeRoot.getOutgoingRelations()) {
 
-		int conjunction = -1;
+            Constituent child = childEdge.getTarget();
 
-		for (Relation childEdge : parseTreeRoot.getOutgoingRelations()) {
+            if (child == headChild) {
+                rootTree = makeDepTree(child);
+            } else {
 
-			Constituent child = childEdge.getTarget();
+                dependentTrees.add(makeDepTree(child));
+                edgeLabels.add(getEdgeLabel(parseTreeRoot, headChild.getLabel(), child));
 
-			if (child == headChild) {
-				rootTree = makeDepTree(child);
-			} else {
+                if (child.getLabel().equals("CC")) {
+                    conjunction = dependentTrees.size() - 1;
+                }
+            }
+        }
 
-				dependentTrees.add(makeDepTree(child));
-				edgeLabels.add(getEdgeLabel(parseTreeRoot, headChild.getLabel(), child));
+        if (conjunction >= 0) {
+            return doConjunctionHack(parseTreeRoot, headChild, rootTree, dependentTrees,
+                    edgeLabels, conjunction);
+        } else {
+            for (int i = 0; i < dependentTrees.size(); i++) {
+                rootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
+            }
+            return rootTree;
+        }
+    }
 
-				if (child.getLabel().equals("CC")) {
-					conjunction = dependentTrees.size() - 1;
-				}
-			}
-		}
+    protected Pair<String, Integer> getEdgeLabel(Constituent parseTreeRoot, String string,
+            Constituent child) {
+        return new Pair<>(("Parent: " + parseTreeRoot.getLabel() + ", Head: " + string
+                + ", Child: " + child.getLabel()).trim(), -1);
+    }
 
-		if (conjunction >= 0) {
-			return doConjunctionHack(parseTreeRoot, headChild, rootTree, dependentTrees, edgeLabels, conjunction);
-		} else {
-			for (int i = 0; i < dependentTrees.size(); i++) {
-				rootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
-			}
-			return rootTree;
-		}
-	}
+    private Tree<Pair<String, Integer>> doConjunctionHack(Constituent parseTreeRoot,
+            Constituent headChild, Tree<Pair<String, Integer>> rootTree,
+            List<Tree<Pair<String, Integer>>> dependentTrees,
+            List<Pair<String, Integer>> edgeLabels, int conjunctionPosition) {
+        Tree<Pair<String, Integer>> newRootTree =
+                new Tree<>(dependentTrees.get(conjunctionPosition).getLabel());
 
-	protected Pair<String, Integer> getEdgeLabel(Constituent parseTreeRoot, String string, Constituent child) {
-		return new Pair<>(
-				("Parent: " + parseTreeRoot.getLabel() + ", Head: " + string + ", Child: " + child.getLabel()).trim(),
-				-1);
-	}
+        int rootToken = rootTree.getLabel().getSecond();
 
-	private Tree<Pair<String, Integer>> doConjunctionHack(Constituent parseTreeRoot, Constituent headChild, Tree<Pair<String, Integer>> rootTree, List<Tree<Pair<String, Integer>>> dependentTrees, List<Pair<String, Integer>> edgeLabels, int conjunctionPosition) {
-		Tree<Pair<String, Integer>> newRootTree = new Tree<>(dependentTrees.get(conjunctionPosition).getLabel());
+        for (int i = 0; i < dependentTrees.size(); i++) {
+            if (i == conjunctionPosition)
+                continue;
 
-		int rootToken = rootTree.getLabel().getSecond();
+            if (dependentTrees.get(i).getLabel().getSecond() < rootToken)
+                rootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
+            else
+                newRootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
+        }
 
-		for (int i = 0; i < dependentTrees.size(); i++) {
-			if (i == conjunctionPosition) continue;
+        Pair<String, Integer> rootEdgeLabel = getEdgeLabel(parseTreeRoot, "CC", headChild);
 
-			if (dependentTrees.get(i).getLabel().getSecond() < rootToken)
-				rootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
-			else newRootTree.addSubtree(dependentTrees.get(i), edgeLabels.get(i));
-		}
+        newRootTree.addSubtree(rootTree, rootEdgeLabel);
 
-		Pair<String, Integer> rootEdgeLabel = getEdgeLabel(parseTreeRoot, "CC", headChild);
-
-		newRootTree.addSubtree(rootTree, rootEdgeLabel);
-
-		return newRootTree;
-	}
+        return newRootTree;
+    }
 }

@@ -8,25 +8,26 @@ import java.util.Set;
 
 public class RegexFeatureExtractor implements FeatureExtractor {
 
-	private final static DiscreteFeature matches = DiscreteFeature.create("Y");
-	private final String regex;
+    private final static DiscreteFeature matches = DiscreteFeature.create("Y");
+    private final String regex;
 
-	public RegexFeatureExtractor(String regex) {
-		this.regex = regex;
-	}
+    public RegexFeatureExtractor(String regex) {
+        this.regex = regex;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		Set<Feature> feature = new LinkedHashSet<>();
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        Set<Feature> feature = new LinkedHashSet<>();
 
-		if (c.getTokenizedSurfaceForm().matches(regex)) feature.add(matches);
+        if (c.getTokenizedSurfaceForm().matches(regex))
+            feature.add(matches);
 
-		return feature;
-	}
+        return feature;
+    }
 
-	@Override
-	public String getName() {
-		return "regex:" + regex;
-	}
+    @Override
+    public String getName() {
+        return "regex:" + regex;
+    }
 
 }

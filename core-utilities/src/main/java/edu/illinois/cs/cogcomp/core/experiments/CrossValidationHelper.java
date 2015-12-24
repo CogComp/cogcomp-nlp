@@ -36,16 +36,16 @@ public class CrossValidationHelper<T> {
     }
 
     /**
-     * @param numFolds   number of folds
+     * @param numFolds number of folds
      * @param experiment one run of the experiment (test + train)
      */
     public CrossValidationHelper(int numFolds, IExperimentFactory<T> experiment) {
-        this(10000, Math.min(Runtime.getRuntime().availableProcessors(),
-                numFolds), numFolds, experiment);
+        this(10000, Math.min(Runtime.getRuntime().availableProcessors(), numFolds), numFolds,
+                experiment);
     }
 
-    public CrossValidationHelper(long timeoutSeconds, int numThreads,
-                                 int numFolds, IExperimentFactory<T> experimentFactory) {
+    public CrossValidationHelper(long timeoutSeconds, int numThreads, int numFolds,
+            IExperimentFactory<T> experimentFactory) {
         this.timeoutSeconds = timeoutSeconds;
         this.numThreads = numThreads;
         this.numFolds = numFolds;
@@ -56,7 +56,8 @@ public class CrossValidationHelper<T> {
     /**
      * NOTE: This does not take care of shuffling or randomizing the data.
      */
-    public double doCrossValidation(Iterable<T> data, int dataSize) throws InterruptedException, ExecutionException {
+    public double doCrossValidation(Iterable<T> data, int dataSize) throws InterruptedException,
+            ExecutionException {
         stats = new OneVariableStats();
 
         log.info("Starting cross validation at " + (new Date()));
@@ -96,8 +97,8 @@ public class CrossValidationHelper<T> {
         return stats.mean();
     }
 
-    private FutureTask<Double> createFoldTask(final List<T> trainingSet,
-                                              final List<T> testSet, final int foldId) {
+    private FutureTask<Double> createFoldTask(final List<T> trainingSet, final List<T> testSet,
+            final int foldId) {
         return new FutureTask<>(new Callable<Double>() {
             public Double call() throws Exception {
                 long start = System.currentTimeMillis();
@@ -109,8 +110,7 @@ public class CrossValidationHelper<T> {
                 long end = System.currentTimeMillis();
 
                 long time = (end - start) / 1000;
-                log.info("End of fold " + foldId + ". Took " + time
-                        + " seconds.");
+                log.info("End of fold " + foldId + ". Took " + time + " seconds.");
 
                 return value;
             }
@@ -124,9 +124,9 @@ public class CrossValidationHelper<T> {
     /**
      * Splits the data into numFolds parts.
      * <p/>
-     * Note: This splits the data into K folds uniformly. If the classes are not
-     * equally distributed, then this is wrong. Instead, override this to do a
-     * stratified split, so that the split proportions are maintained.
+     * Note: This splits the data into K folds uniformly. If the classes are not equally
+     * distributed, then this is wrong. Instead, override this to do a stratified split, so that the
+     * split proportions are maintained.
      */
     protected List<List<T>> splitData(Iterable<T> data, int dataSize) {
         List<List<T>> splits = new ArrayList<>();

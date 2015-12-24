@@ -3,9 +3,9 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 import java.io.Serializable;
 
 /**
- * This utility class represents a pair of objects, the first one of type
- * {@code A} and the second of type {@code B}. This class implements {@code
- * equals} and {@code hashcode} and can be used as keys to maps.
+ * This utility class represents a pair of objects, the first one of type {@code A} and the second
+ * of type {@code B}. This class implements {@code equals} and {@code hashcode} and can be used as
+ * keys to maps.
  *
  * @param <A> The type of the first object in the pair.
  * @param <B> The type of the second object in the pair.

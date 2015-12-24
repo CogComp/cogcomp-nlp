@@ -16,8 +16,10 @@ public class LemmatizerTestPlain {
 
     @Before
     public void setUp() throws Exception {
-        if(!new File("src/test/resources/input.txt").exists()) fail("Input file missing.");
-        if(!new File("src/test/resources/output.txt").exists()) fail("Output file missing.");
+        if (!new File("src/test/resources/input.txt").exists())
+            fail("Input file missing.");
+        if (!new File("src/test/resources/output.txt").exists())
+            fail("Output file missing.");
         input = LineIO.read("src/test/resources/input.txt");
         gold = LineIO.read("src/test/resources/output.txt");
     }
