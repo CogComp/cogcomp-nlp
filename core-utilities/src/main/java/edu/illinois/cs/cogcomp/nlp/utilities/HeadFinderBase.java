@@ -6,11 +6,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import java.util.List;
 
 /**
- * This is mainly an abstract class for the Collins' head finder. It allows for
- * head information to be found in other ways, though.
+ * This is mainly an abstract class for the Collins' head finder. It allows for head information to
+ * be found in other ways, though.
  * <p/>
- * This file is based on the similar file from the Stanford NLP code, rewritten
- * to talk nicely to the other parts of this package.
+ * This file is based on the similar file from the Stanford NLP code, rewritten to talk nicely to
+ * the other parts of this package.
  *
  * @author Vivek Srikumar
  */
@@ -24,7 +24,7 @@ public abstract class HeadFinderBase {
     public enum HeadSearchDirection {
         Left {
             public int getHeadChildId(Constituent tree, String[] info, boolean getDefault) {
-				int headId = 0;
+                int headId = 0;
                 boolean foundHead = false;
                 // traverse from left to right
                 for (String anInfo : info) {
@@ -55,8 +55,7 @@ public abstract class HeadFinderBase {
 
         },
         Right {
-            public int getHeadChildId(Constituent tree, String[] info,
-                                      boolean getDefault) {
+            public int getHeadChildId(Constituent tree, String[] info, boolean getDefault) {
 
                 int headId = 0;
                 boolean foundHead = false;
@@ -89,14 +88,12 @@ public abstract class HeadFinderBase {
 
         },
         LeftDis {
-            public int getHeadChildId(Constituent tree, String[] info,
-                                      boolean getDefault) {
+            public int getHeadChildId(Constituent tree, String[] info, boolean getDefault) {
                 int headId = 0;
                 boolean foundHead = false;
                 // traverse from left to right
 
-                for (int headCandidate = 0; headCandidate < tree
-                        .getOutgoingRelations().size(); headCandidate++) {
+                for (int headCandidate = 0; headCandidate < tree.getOutgoingRelations().size(); headCandidate++) {
                     String candidateLabel = getChildLabel(tree, headCandidate);
                     candidateLabel = ParseUtils.stripFunctionTags(candidateLabel);
 
@@ -124,8 +121,7 @@ public abstract class HeadFinderBase {
 
         },
         RightDis {
-            public int getHeadChildId(Constituent tree, String[] info,
-                                      boolean getDefault) {
+            public int getHeadChildId(Constituent tree, String[] info, boolean getDefault) {
                 int headId = 0;
                 boolean foundHead = false;
                 // traverse from left to right
@@ -159,14 +155,14 @@ public abstract class HeadFinderBase {
         };
 
         abstract int getHeadChildId(Constituent parseNode, String[] info, boolean getDefault);
-	}
+    }
 
-	protected Pair<HeadSearchDirection, String[]> defaultRule = new Pair<>(
-            HeadSearchDirection.Left, new String[]{"S"});
+    protected Pair<HeadSearchDirection, String[]> defaultRule = new Pair<>(
+            HeadSearchDirection.Left, new String[] {"S"});
 
     /**
-     * Get the head node of a constituent belonging to a parse tree. The input
-     * constituent *must* be from a parse tree view.
+     * Get the head node of a constituent belonging to a parse tree. The input constituent *must* be
+     * from a parse tree view.
      *
      * @param parseNode A node from the parse tree view
      * @return The head child of the input node from the parse tree
@@ -232,14 +228,13 @@ public abstract class HeadFinderBase {
     }
 
     /**
-     * This is the meat of the headfinder. Based on the head search direction,
-     * find the head.
+     * This is the meat of the headfinder. Based on the head search direction, find the head.
      */
-    private Constituent findHead(Constituent parseNode,
-                                 Pair<HeadSearchDirection, String[]> rule,
-                                 boolean getDefaultHeadChild) {
+    private Constituent findHead(Constituent parseNode, Pair<HeadSearchDirection, String[]> rule,
+            boolean getDefaultHeadChild) {
 
-        int headChild = rule.getFirst().getHeadChildId(parseNode, rule.getSecond(), getDefaultHeadChild);
+        int headChild =
+                rule.getFirst().getHeadChildId(parseNode, rule.getSecond(), getDefaultHeadChild);
 
         if (headChild == -1)
             return null;
@@ -254,8 +249,7 @@ public abstract class HeadFinderBase {
     }
 
     /**
-     * Return information about how the head is to be computed, given the
-     * non-terminal.
+     * Return information about how the head is to be computed, given the non-terminal.
      * <p/>
      * NOTE: If no rule is specified, return null.
      */

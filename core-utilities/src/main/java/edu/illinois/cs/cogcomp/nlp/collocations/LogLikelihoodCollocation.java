@@ -26,7 +26,8 @@ public abstract class LogLikelihoodCollocation implements CollocationComputer {
         double p2 = (c2 - c12) / (N - c1);
 
 
-        return ll(c12, c1, p) + ll(c2 - c12, N - c1, p) - ll(c12, c1, p1) - ll(c2 - c12, N - c1, p2);
+        return ll(c12, c1, p) + ll(c2 - c12, N - c1, p) - ll(c12, c1, p1)
+                - ll(c2 - c12, N - c1, p2);
 
     }
 

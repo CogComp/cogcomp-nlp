@@ -22,25 +22,22 @@ import java.util.Set;
 /**
  * Given two tokens, this feature extractor extracts the following features:
  * <ul>
- * <li>The path in the dependency tree from the first token of the first
- * constituent to the first token of the second one.</li>
+ * <li>The path in the dependency tree from the first token of the first constituent to the first
+ * token of the second one.</li>
  * <li>The length of the path</li>
  * </ul>
  * <p/>
- * The dependency tree is read from the view name specified in the constructor.
- * If possible, use the static objects for the Easy-first dependency tree (which
- * uses {@link ViewNames#DEPENDENCY}) or the Stanford dependency tree (which
- * uses {@link ViewNames#DEPENDENCY_STANFORD})
+ * The dependency tree is read from the view name specified in the constructor. If possible, use the
+ * static objects for the Easy-first dependency tree (which uses {@link ViewNames#DEPENDENCY}) or
+ * the Stanford dependency tree (which uses {@link ViewNames#DEPENDENCY_STANFORD})
  * <p/>
- * <b>Important note</b>: To be able to specify the two constituents as input,
- * the feature extractor assumes the following convention: The constituent that
- * is specified as a parameter to the getFeatures function has an incoming
- * relation from the first constituent. Furthermore, this incoming relation
- * should be the only such relation.
+ * <b>Important note</b>: To be able to specify the two constituents as input, the feature extractor
+ * assumes the following convention: The constituent that is specified as a parameter to the
+ * getFeatures function has an incoming relation from the first constituent. Furthermore, this
+ * incoming relation should be the only such relation.
  * <p/>
- * This convention does not limit the expressivity in any way because the two
- * constituents could be created on the spot before calling the feature
- * extractor.
+ * This convention does not limit the expressivity in any way because the two constituents could be
+ * created on the spot before calling the feature extractor.
  * <p/>
  *
  * @author Vivek Srikumar
@@ -48,85 +45,95 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class DependencyPathNgrams implements FeatureExtractor {
 
-	private final static ITransformer<String, String> transformer = new ITransformer<String, String>() {
+    private final static ITransformer<String, String> transformer =
+            new ITransformer<String, String>() {
 
-		@Override
-		public String transform(String input) {
-			return input;
-		}
-	};
-	public static DependencyPathNgrams EASY_FIRST_UNIGRAM = new DependencyPathNgrams(ViewNames.DEPENDENCY, 1);
-	public static DependencyPathNgrams STANFORD_UNIGRAM = new DependencyPathNgrams(ViewNames.DEPENDENCY_STANFORD, 1);
-	public static DependencyPathNgrams EASY_FIRST_BIGRAM = new DependencyPathNgrams(ViewNames.DEPENDENCY, 2);
-	public static DependencyPathNgrams STANFORD_BIGRAM = new DependencyPathNgrams(ViewNames.DEPENDENCY_STANFORD, 2);
-	private final String dependencyViewName;
-	private final int ngramSize;
+                @Override
+                public String transform(String input) {
+                    return input;
+                }
+            };
+    public static DependencyPathNgrams EASY_FIRST_UNIGRAM = new DependencyPathNgrams(
+            ViewNames.DEPENDENCY, 1);
+    public static DependencyPathNgrams STANFORD_UNIGRAM = new DependencyPathNgrams(
+            ViewNames.DEPENDENCY_STANFORD, 1);
+    public static DependencyPathNgrams EASY_FIRST_BIGRAM = new DependencyPathNgrams(
+            ViewNames.DEPENDENCY, 2);
+    public static DependencyPathNgrams STANFORD_BIGRAM = new DependencyPathNgrams(
+            ViewNames.DEPENDENCY_STANFORD, 2);
+    private final String dependencyViewName;
+    private final int ngramSize;
 
-	/**
+    /**
 	 *
 	 */
-	public DependencyPathNgrams(String dependencyViewName, int ngramSize) {
-		this.dependencyViewName = dependencyViewName;
-		this.ngramSize = ngramSize;
-	}
+    public DependencyPathNgrams(String dependencyViewName, int ngramSize) {
+        this.dependencyViewName = dependencyViewName;
+        this.ngramSize = ngramSize;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		TextAnnotation ta = c.getTextAnnotation();
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        TextAnnotation ta = c.getTextAnnotation();
 
-		TreeView parse = (TreeView) ta.getView(dependencyViewName);
+        TreeView parse = (TreeView) ta.getView(dependencyViewName);
 
-		Constituent c1 =
-				parse.getConstituentsCoveringToken(c.getIncomingRelations().get(0).getSource().getStartSpan()).get(0);
-		Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
+        Constituent c1 =
+                parse.getConstituentsCoveringToken(
+                        c.getIncomingRelations().get(0).getSource().getStartSpan()).get(0);
+        Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
 
-		Pair<List<Constituent>, List<Constituent>> paths = PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
+        Pair<List<Constituent>, List<Constituent>> paths =
+                PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
 
-		List<String> path = new ArrayList<>();
-		List<String> pos = new ArrayList<>();
+        List<String> path = new ArrayList<>();
+        List<String> pos = new ArrayList<>();
 
-		for (int i = 0; i < paths.getFirst().size() - 1; i++) {
-			Constituent cc = paths.getFirst().get(i);
-			path.add(cc.getIncomingRelations().get(0).getRelationName() + PathFeatureHelper.PATH_UP_STRING);
+        for (int i = 0; i < paths.getFirst().size() - 1; i++) {
+            Constituent cc = paths.getFirst().get(i);
+            path.add(cc.getIncomingRelations().get(0).getRelationName()
+                    + PathFeatureHelper.PATH_UP_STRING);
 
-			pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":" + cc.getIncomingRelations().get(0)
-					.getRelationName() + PathFeatureHelper.PATH_UP_STRING);
+            pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":"
+                    + cc.getIncomingRelations().get(0).getRelationName()
+                    + PathFeatureHelper.PATH_UP_STRING);
 
-		}
+        }
 
-		Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
+        Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
 
-		pos.add(WordHelpers.getPOS(ta, top.getStartSpan()) + ":*");
-		path.add("*");
+        pos.add(WordHelpers.getPOS(ta, top.getStartSpan()) + ":*");
+        path.add("*");
 
-		if (paths.getSecond().size() > 1) {
-			for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
-				Constituent cc = paths.getSecond().get(i);
+        if (paths.getSecond().size() > 1) {
+            for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
+                Constituent cc = paths.getSecond().get(i);
 
-				pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":" + PathFeatureHelper.PATH_DOWN_STRING);
-				path.add(PathFeatureHelper.PATH_DOWN_STRING);
+                pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":"
+                        + PathFeatureHelper.PATH_DOWN_STRING);
+                path.add(PathFeatureHelper.PATH_DOWN_STRING);
 
-			}
-		}
-		Set<Feature> features = new LinkedHashSet<>();
+            }
+        }
+        Set<Feature> features = new LinkedHashSet<>();
 
-		features.addAll(getNgrams(path, ""));
-		features.addAll(getNgrams(pos, "pos"));
+        features.addAll(getNgrams(path, ""));
+        features.addAll(getNgrams(pos, "pos"));
 
-		return features;
+        return features;
 
-	}
+    }
 
-	private Set<Feature> getNgrams(List<String> list, String prefix) {
+    private Set<Feature> getNgrams(List<String> list, String prefix) {
 
-		Set<Feature> feats = FeatureNGramUtility.getNgramsUnordered(list, ngramSize, transformer);
+        Set<Feature> feats = FeatureNGramUtility.getNgramsUnordered(list, ngramSize, transformer);
 
-		return FeatureUtilities.prefix(prefix, feats);
-	}
+        return FeatureUtilities.prefix(prefix, feats);
+    }
 
-	@Override
-	public String getName() {
-		return "#path-n#" + dependencyViewName;
-	}
+    @Override
+    public String getName() {
+        return "#path-n#" + dependencyViewName;
+    }
 
 }

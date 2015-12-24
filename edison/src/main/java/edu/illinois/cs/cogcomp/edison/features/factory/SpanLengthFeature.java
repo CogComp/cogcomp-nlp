@@ -12,16 +12,17 @@ import java.util.Set;
 
 public class SpanLengthFeature implements FeatureExtractor {
 
-	public static SpanLengthFeature instance = new SpanLengthFeature();
+    public static SpanLengthFeature instance = new SpanLengthFeature();
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		return new LinkedHashSet<Feature>(Collections.singletonList(RealFeature.create("l", c.size())));
-	}
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        return new LinkedHashSet<Feature>(Collections.singletonList(RealFeature.create("l",
+                c.size())));
+    }
 
-	@Override
-	public String getName() {
-		return "#ntoks";
-	}
+    @Override
+    public String getName() {
+        return "#ntoks";
+    }
 
 }

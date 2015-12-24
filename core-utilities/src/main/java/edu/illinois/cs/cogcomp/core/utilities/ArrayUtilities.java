@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A utility class to help with the nuisance of converting primitive types
- * arrays to the corresponding boxed lists and vice versa. These functions
- * should really have been in the framework class library!
+ * A utility class to help with the nuisance of converting primitive types arrays to the
+ * corresponding boxed lists and vice versa. These functions should really have been in the
+ * framework class library!
  *
  * @author Vivek Srikumar
  */

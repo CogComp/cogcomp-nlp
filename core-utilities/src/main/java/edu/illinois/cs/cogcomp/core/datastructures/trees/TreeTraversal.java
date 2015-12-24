@@ -5,56 +5,56 @@ import java.util.*;
 public class TreeTraversal {
 
 
-//	/**
-//	 * Walk through the tree in the post order:
-//	 * @param <T> The type of the data content of a node
-//	 * @param tree 
-//	 * @return Sequence of subtrees in post order
-//	 */
-//	public static <T> Iterable<Tree<T>> postorder(Tree<T> tree)
-//	{
-//		ArrayList<Tree<T>> postOrder = new ArrayList<Tree<T>>(); 
-//		
-//		if(tree == null)
-//			return postOrder;
-//		
-//		for(Tree<T> child: tree.childrenIterator())
-//		{
-//			for(Tree<T> p: postorder(child))
-//			{
-//					postOrder.add(p);
-//			}
-//		}
-//		postOrder.add(tree);
-//		return postOrder;
-//	}
-//
-//	
-//	/**
-//	 * Walk through the tree in preorder
-//	 * @param <T> the data type of the content of a node
-//	 * @param tree
-//	 * @return Sequence of subtrees in preorder
-//	 */
-//	
-//	public static <T> Iterable<Tree<T>> preorder(Tree<T> tree)
-//	{
-//		ArrayList<Tree<T>> preOrder = new ArrayList<Tree<T>>(); 
-//		
-//		if(tree == null)
-//			return preOrder;
-//		
-//		preOrder.add(tree);
-//		for(Tree<T> child: tree.childrenIterator())
-//		{
-//			for(Tree<T> p: preorder(child))
-//			{
-//					preOrder.add(p);
-//			}
-//		}
-//		return preOrder;
-//	}
-//
+    // /**
+    // * Walk through the tree in the post order:
+    // * @param <T> The type of the data content of a node
+    // * @param tree
+    // * @return Sequence of subtrees in post order
+    // */
+    // public static <T> Iterable<Tree<T>> postorder(Tree<T> tree)
+    // {
+    // ArrayList<Tree<T>> postOrder = new ArrayList<Tree<T>>();
+    //
+    // if(tree == null)
+    // return postOrder;
+    //
+    // for(Tree<T> child: tree.childrenIterator())
+    // {
+    // for(Tree<T> p: postorder(child))
+    // {
+    // postOrder.add(p);
+    // }
+    // }
+    // postOrder.add(tree);
+    // return postOrder;
+    // }
+    //
+    //
+    // /**
+    // * Walk through the tree in preorder
+    // * @param <T> the data type of the content of a node
+    // * @param tree
+    // * @return Sequence of subtrees in preorder
+    // */
+    //
+    // public static <T> Iterable<Tree<T>> preorder(Tree<T> tree)
+    // {
+    // ArrayList<Tree<T>> preOrder = new ArrayList<Tree<T>>();
+    //
+    // if(tree == null)
+    // return preOrder;
+    //
+    // preOrder.add(tree);
+    // for(Tree<T> child: tree.childrenIterator())
+    // {
+    // for(Tree<T> p: preorder(child))
+    // {
+    // preOrder.add(p);
+    // }
+    // }
+    // return preOrder;
+    // }
+    //
 
 
     /**
