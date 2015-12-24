@@ -48,7 +48,7 @@ public class ParseHeadWordPOS implements FeatureExtractor {
         }
         Set<Feature> features = new LinkedHashSet<>();
 
-        int head = CollinsHeadFinder.instance.getHeadWordPosition(phrase);
+        int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
 
         features.add(DiscreteFeature.create("hw:" + ta.getToken(head).toLowerCase().trim()));
         features.add(DiscreteFeature.create("h-pos:" + WordHelpers.getPOS(ta, head)));

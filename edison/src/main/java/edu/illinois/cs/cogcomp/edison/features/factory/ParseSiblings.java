@@ -75,7 +75,7 @@ public class ParseSiblings implements FeatureExtractor {
                 Constituent sibling = parent.getOutgoingRelations().get(position - 1).getTarget();
 
                 String phraseType = sibling.getLabel();
-                int headWord = CollinsHeadFinder.instance.getHeadWordPosition(sibling);
+                int headWord = CollinsHeadFinder.getInstance().getHeadWordPosition(sibling);
 
                 String token = ta.getToken(headWord).toLowerCase().trim();
                 String pos = WordHelpers.getPOS(ta, headWord);
@@ -90,7 +90,7 @@ public class ParseSiblings implements FeatureExtractor {
                 Constituent sibling = parent.getOutgoingRelations().get(position + 1).getTarget();
 
                 String phraseType = sibling.getLabel();
-                int headWord = CollinsHeadFinder.instance.getHeadWordPosition(sibling);
+                int headWord = CollinsHeadFinder.getInstance().getHeadWordPosition(sibling);
 
                 String token = ta.getToken(headWord).toLowerCase().trim();
                 String pos = WordHelpers.getPOS(ta, headWord);

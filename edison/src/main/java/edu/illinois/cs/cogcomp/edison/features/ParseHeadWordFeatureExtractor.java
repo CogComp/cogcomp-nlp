@@ -40,7 +40,7 @@ public class ParseHeadWordFeatureExtractor implements FeatureExtractor {
         }
         Set<Feature> features = new LinkedHashSet<>();
 
-        int head = CollinsHeadFinder.instance.getHeadWordPosition(phrase);
+        int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
         Constituent c1 = new Constituent("", "", ta, head, head + 1);
 
         features.addAll(fex.getFeatures(c1));

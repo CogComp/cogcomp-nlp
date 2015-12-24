@@ -65,7 +65,7 @@ public class ParsePhraseType implements FeatureExtractor {
                 Constituent parent = phrase.getIncomingRelations().get(0).getSource();
                 parentLabel = parent.getLabel();
 
-                int parentHead = CollinsHeadFinder.instance.getHeadWordPosition(parent);
+                int parentHead = CollinsHeadFinder.getInstance().getHeadWordPosition(parent);
 
                 features.add(DiscreteFeature.create("pt:h:"
                         + ta.getToken(parentHead).toLowerCase().trim()));
