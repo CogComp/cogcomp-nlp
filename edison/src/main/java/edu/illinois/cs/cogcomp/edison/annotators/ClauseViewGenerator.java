@@ -4,7 +4,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
 import java.util.LinkedHashSet;

@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.utilities.CollinsHeadFinder;
+import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.ArrayList;
