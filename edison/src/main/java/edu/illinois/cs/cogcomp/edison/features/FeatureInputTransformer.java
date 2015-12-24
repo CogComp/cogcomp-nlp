@@ -74,7 +74,7 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
             TreeView tree = (TreeView) ta.getView(ViewNames.PARSE_CHARNIAK);
             try {
                 Constituent phrase = tree.getParsePhrase(c);
-                int head = CollinsHeadFinder.instance.getHeadWordPosition(phrase);
+                int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
                 Constituent c1 = new Constituent("", "", ta, head, head + 1);
 
                 return Collections.singletonList(addPointerToSource(c, c1));
@@ -97,7 +97,7 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
             TreeView tree = (TreeView) ta.getView(ViewNames.PARSE_BERKELEY);
             try {
                 Constituent phrase = tree.getParsePhrase(c);
-                int head = CollinsHeadFinder.instance.getHeadWordPosition(phrase);
+                int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
                 Constituent c1 = new Constituent("", "", ta, head, head + 1);
 
                 return Collections.singletonList(addPointerToSource(c, c1));
