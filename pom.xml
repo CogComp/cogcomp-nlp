@@ -117,8 +117,18 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
             <version>5.1.8-christos</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>illinois-nlp-pipeline</artifactId>
+                    <groupId>edu.illinois.cs.cogcomp</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>com.gurobi</groupId>
+            <artifactId>gurobi</artifactId>
+            <version>6.5</version>
+        </dependency>
   </dependencies>
 
   <reporting>
