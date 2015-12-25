@@ -116,7 +116,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
-            <version>5.1.8-christos</version>
+            <version>5.1.8</version>
             <exclusions>
                 <exclusion>
                     <artifactId>illinois-nlp-pipeline</artifactId>
