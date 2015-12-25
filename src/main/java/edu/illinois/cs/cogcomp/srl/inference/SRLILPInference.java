@@ -21,8 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-final public class SRLILPInference extends
-		AbstractILPInference<SRLSentenceStructure> implements ISRLInference {
+final public class SRLILPInference extends AbstractILPInference<SRLSentenceStructure> {
 
 	final static boolean DEBUG = false;
 
@@ -240,7 +239,6 @@ final public class SRLILPInference extends
 		return type + ":sense:" + predicateId + ":" + label;
 	}
 
-	@Override
 	public PredicateArgumentView getOutputView() throws Exception {
 		return runInference().getView(manager, ta);
 	}

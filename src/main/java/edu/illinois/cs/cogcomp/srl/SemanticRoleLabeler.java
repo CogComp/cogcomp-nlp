@@ -169,11 +169,10 @@ public class SemanticRoleLabeler extends Annotator {
 		if (predicates.isEmpty())
 			return null;
 		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
-		ISRLInference inference = new SRLILPInference(s, manager, predicates);
+        SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
 		return inference.getOutputView();
 	}
-
 
 	@Override
 	public void addView(TextAnnotation ta) throws AnnotatorException {
