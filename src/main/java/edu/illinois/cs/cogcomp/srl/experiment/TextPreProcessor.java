@@ -4,11 +4,13 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
 import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
 import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +23,10 @@ public class TextPreProcessor {
 			ViewNames.NER_CONLL,ViewNames.LEMMA, ViewNames.SHALLOW_PARSE,
 			ViewNames.PARSE_STANFORD };
 
-    public TextPreProcessor(String configFile) throws Exception {
-		SRLProperties.initialize(configFile);
-		SRLProperties config = SRLProperties.getInstance();
+	/**
+	* requires SRLProperties to have been instantiated already
+	 */
+    public TextPreProcessor( SRLProperties config ) throws Exception {
         String defaultParser = config.getDefaultParser();
         boolean useCurator = config.useCurator();
 
@@ -41,9 +44,22 @@ public class TextPreProcessor {
 		}
 	}
 
-	public static void initialize(String configFile) {
+    public static void initialize()
+    {
+        SRLProperties props = SRLProperties.getInstance();
+        initialize(props);
+    }
+
+	public static void initialize(ResourceManager rm) {
+        SRLProperties props = SRLProperties.getInstance(rm);
+
+        initialize(props);
+    }
+
+    public static void initialize( SRLProperties props )
+    {
 		try {
-			instance = new TextPreProcessor(configFile);
+			instance = new TextPreProcessor( props );
 		} catch (Exception e) {
 			log.error("Unable to initialize the text pre-processor");
 			e.printStackTrace();
@@ -55,7 +71,7 @@ public class TextPreProcessor {
 		if (instance == null) {
 			// Start a new TextPreProcessor with default values (no Curator, no
 			// tokenization) and default config
-			initialize("srl-config.properties");
+			initialize( new SrlConfigurator().getDefaultConfig() );
 		}
 		return instance;
 	}

@@ -7,19 +7,65 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import junit.framework.TestCase;
 
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
+
 public class SemanticRoleLabelerTest extends TestCase {
-	private SemanticRoleLabeler verbSRL, nomSRL;
+    private static final String CONFIG = "src/test/resources/srl-config.properties";
+
+    private SemanticRoleLabeler verbSRL, nomSRL;
 	private String defaultParser;
 
 	public void setUp() throws Exception {
 		super.setUp();
-		verbSRL = new SemanticRoleLabeler("src/test/resources/srl-config.properties", SRLType.Verb.name());
-		nomSRL = new SemanticRoleLabeler("src/test/resources/srl-config.properties", SRLType.Nom.name());
+
+        /**
+         * the commented code below helps debug problems when gurobi libraries are not found.
+         * the first section dumps the classpath, to check for Gurobi jar.
+         * The second checks LD_LIBRARY_PATH, which is where the JVM looks for the JNI library.
+         */
+//        System.err.println( "## CLASSPATH: " );
+//        ClassLoader cl = ClassLoader.getSystemClassLoader();
+//        URL[] urls = ((URLClassLoader)cl).getURLs();
+//
+//        for(URL url: urls){
+//            System.out.println(url.getFile());
+//        }
+//
+//        String pathToAdd = "/home/mssammon/lib/gurobi650/linux64/lib";
+//        final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
+//        usrPathsField.setAccessible(true);
+//
+//        //get array of paths
+//        final String[] paths = (String[])usrPathsField.get(null);
+//
+//        //check if the path to add is already present
+//        for(String path : paths) {
+//            System.err.println( "## found usr path: " + path );
+//            if(path.equals(pathToAdd)) {
+//                break;
+//            }
+//        }
+//
+//        //add the new path
+//        final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
+//        newPaths[newPaths.length-1] = pathToAdd;
+//        usrPathsField.set(null, newPaths);
+
+        ResourceManager rm = new ResourceManager( CONFIG );
+
+		verbSRL = new SemanticRoleLabeler(rm, "Verb");
+		nomSRL = new SemanticRoleLabeler(rm, "Nom");
 		defaultParser = SRLProperties.getInstance().getDefaultParser();
+
+
 	}
 
 	public void testVerbSRL() throws Exception {

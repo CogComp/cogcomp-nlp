@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
@@ -38,14 +39,15 @@ import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
 import edu.illinois.cs.cogcomp.srl.learn.IdentifierThresholdTuner;
 import edu.illinois.cs.cogcomp.srl.nom.NomSRLManager;
-import edu.illinois.cs.cogcomp.srl.utilities.PredicateArgumentEvaluator;
 import edu.illinois.cs.cogcomp.srl.utilities.WeightVectorUtils;
 import edu.illinois.cs.cogcomp.srl.verb.VerbSRLManager;
 import org.apache.commons.configuration.ConfigurationException;
+import edu.illinois.cs.cogcomp.core.experiments.evaluators.PredicateArgumentEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -187,11 +189,11 @@ public class Main {
 		}
 	}
 
-	private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset) {
+	private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset) throws IOException {
 		Counter<String> addedViews = new Counter<>();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(configFile);
+		TextPreProcessor.initialize( new ResourceManager( configFile ));
 
 		int count = 0;
 		while (dataset.hasNext()) {
@@ -493,6 +495,7 @@ public class Main {
 		manager.getModelInfo(Models.Sense).loadWeightVector();
 		IResetableIterator<TextAnnotation> dataset = SentenceDBHandler.instance.getDataset(testSet);
 		log.info("All models weights loaded now!");
+        PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
 
 		while (dataset.hasNext()) {
 			TextAnnotation ta = dataset.next();
@@ -506,8 +509,9 @@ public class Main {
 			assert inference != null;
 			PredicateArgumentView prediction = inference.getOutputView();
 
-			PredicateArgumentEvaluator.evaluate(gold, prediction, tester);
-			PredicateArgumentEvaluator.evaluateSense(gold, prediction, senseTester);
+            evaluator.setViews(gold, prediction);
+            evaluator.evaluate(tester);
+            evaluator.evaluateSense(senseTester);
 
 			if (outDir != null) {
 				writer.printPredicateArgumentView(gold, goldWriter);

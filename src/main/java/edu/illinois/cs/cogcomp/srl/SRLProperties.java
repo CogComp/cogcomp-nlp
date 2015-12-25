@@ -1,7 +1,9 @@
 package edu.illinois.cs.cogcomp.srl;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;
@@ -12,48 +14,82 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 
 public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
-	private PropertiesConfiguration config;
+	private ResourceManager config;
 
-	private SRLProperties(URL url) throws ConfigurationException {
-		config = new PropertiesConfiguration(url);
 
-		if (config.containsKey("LoadWordNetConfigFromClassPath")
-				&& config.getBoolean("LoadWordNetConfigFromClassPath")) {
-			WordNetManager.loadConfigAsClasspathResource(true);
-		}
+    /**
+     * configFile must have all parameters set, ideally using the SrlConfigurator class.
+     * @param configFile file with configuration parameters
+     */
+
+    private SRLProperties( String configFile ) throws ConfigurationException, IOException {
+        this(new ResourceManager(configFile));
     }
 
+    /**
+     * ResourceManager must have all parameters set, ideally using the SrlConfigurator class.
+     * @param rm
+     */
+    private SRLProperties( ResourceManager rm )
+    {
+        if (rm.containsKey("LoadWordNetConfigFromClassPath")
+				&& rm.getBoolean("LoadWordNetConfigFromClassPath")) {
+			WordNetManager.loadConfigAsClasspathResource(true);
+		}
+        config = rm;
+    }
+
+    /**
+     * If SRLProperties has not yet been instantiated, initialize an instance with default values.
+     * @throws Exception
+     */
+    public static void initialize() throws Exception {
+        initialize( new ResourceManager( new Properties()) );
+    }
+
+    /**
+     *  If SRLProperties has not yet been instantiated, initialize
+     *    new instance with the non-default parameters specified in the configFile named in the argument,
+     *    and default parameters otherwise. If a null string is given as the argument, all default parameters
+     *    are used.
+     * @param configFile  if non-null, names a file in which non-default parameters are specified.
+     * @throws Exception
+     */
 	public static void initialize(String configFile) throws Exception {
-		// first try to load the file from the file system
-		URL url = null;
-		if (IOUtils.exists(configFile)) {
-			url = (new File(configFile)).toURI().toURL();
-		}
-		else {
-			List<URL> list = IOUtils.lsResources(SRLProperties.class, configFile);
-			if (list.size() > 0)
-				url = list.get(0);
-		}
+        initialize(new ResourceManager(configFile));
+    }
 
-		if (url == null) {
-			log.error("Cannot find configuration file at {}.", configFile);
-			throw new Exception("Cannot find configuration file.");
-		}
-
-		theInstance = new SRLProperties(url);
+    public static void initialize( ResourceManager rm )
+    {
+		ResourceManager fullRm = new SrlConfigurator().getConfig(rm);
+		theInstance = new SRLProperties(fullRm);
 	}
+
+
+    public static SRLProperties getInstance( ResourceManager rm )
+    {
+        if ( theInstance == null )
+            try {
+                initialize( rm );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return theInstance;
+    }
 
 	public static SRLProperties getInstance() {
 		if (theInstance == null) {
-			System.out.println("SRL config not initialized. Loading srl-config.properties from the classpath");
+			System.out.println("SRL config not initialized. Instantiating with default parameters.");
 			try {
-				initialize("srl-config.properties");
+				initialize();
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -61,7 +97,7 @@ public class SRLProperties {
 		return theInstance;
 	}
 
-	public PropertiesConfiguration getConfig() {
+	public ResourceManager getConfig() {
 		return config;
 	}
 

@@ -1,11 +1,14 @@
 package edu.illinois.cs.cogcomp.srl;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
+import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -15,10 +18,11 @@ import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SemanticRoleLabeler implements Annotator {
+public class SemanticRoleLabeler extends Annotator {
 	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
 	public final SRLManager manager;
 	private static SRLProperties properties;
@@ -29,7 +33,14 @@ public class SemanticRoleLabeler implements Annotator {
 			System.exit(-1);
 		}
 		String configFile = arguments[0];
-		String srlType;
+        ResourceManager rm = null;
+        try {
+            rm = new SrlConfigurator().getConfig( new ResourceManager( configFile ) );
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit( -1 );
+        }
+        String srlType;
 		// If no second argument is provided it means we need all the SRL types
 		srlType = arguments.length == 1 ? null : arguments[1];
 
@@ -37,12 +48,12 @@ public class SemanticRoleLabeler implements Annotator {
 		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
 		try {
 			if (srlType != null)
-				srlLabelers.add(new SemanticRoleLabeler(configFile, srlType, true));
+				srlLabelers.add(new SemanticRoleLabeler(rm, srlType, true));
 			else {
 				for (SRLType type : SRLType.values()) {
 					srlType = type.name();
 					srlLabelers
-							.add(new SemanticRoleLabeler(configFile, srlType, true));
+							.add(new SemanticRoleLabeler(rm, srlType, true));
 				}
 			}
 		} catch (Exception e) {
@@ -87,27 +98,43 @@ public class SemanticRoleLabeler implements Annotator {
 		} while (!input.equals("_"));
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType) throws Exception {
-
-		this(configFile, srlType, false);
+	public SemanticRoleLabeler(String srlType) throws Exception {
+		this( new SrlConfigurator().getDefaultConfig(), srlType );
 	}
 
-	public SemanticRoleLabeler(String configFile, String srlType, boolean initialize) throws Exception {
+	public SemanticRoleLabeler(ResourceManager rm, String srlType) throws Exception {
+
+		this(rm, srlType, false);
+	}
+
+	public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean initialize) throws Exception {
+		super( getViewNameForType(srlType), TextPreProcessor.requiredViews );
+
 		WordNetManager.loadConfigAsClasspathResource(true);
 
 		log.info("Initializing config");
-		SRLProperties.initialize(configFile);
+		SRLProperties.initialize(rm);
 		properties = SRLProperties.getInstance();
 
 		if(initialize) {
 			log.info("Initializing pre-processor");
-			TextPreProcessor.initialize(configFile);
+			TextPreProcessor.initialize(properties);
 		}
 		log.info("Creating {} manager", srlType);
+
 		manager = Main.getManager(SRLType.valueOf(srlType), false);
 
 		log.info("Loading models");
 		loadModels();
+	}
+
+	private static String getViewNameForType(String srlType) {
+		if ( srlType.equals( SRLType.Verb.name() ) )
+			return ViewNames.SRL_VERB;
+		else if ( srlType.equals( SRLType.Nom.name() ) )
+			return ViewNames.SRL_NOM;
+		else
+			throw new IllegalArgumentException( "ERROR: type '" + srlType + "' not recognized." );
 	}
 
 	public String getSRLCuratorName() {
@@ -142,20 +169,23 @@ public class SemanticRoleLabeler implements Annotator {
 		if (predicates.isEmpty())
 			return null;
 		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
-		ISRLInference inference = new SRLILPInference(s, manager, predicates);
+        SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
 		return inference.getOutputView();
 	}
 
 	@Override
-	public String[] getRequiredViews() {
-		return TextPreProcessor.requiredViews;
-	}
+	public void addView(TextAnnotation ta) throws AnnotatorException {
+		// Check if all required views are present
+		for (String view : getRequiredViews()) {
+			if (!ta.hasView(view)) {
+				throw new AnnotatorException("Missing required view: " + view);
+			}
+		}
 
-	@Override
-	public View getView(TextAnnotation ta) throws AnnotatorException {
 		try {
-			return getSRL(ta);
+            View srlView = getSRL(ta);
+            ta.addView( getViewName(), srlView);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AnnotatorException(e.getMessage());
