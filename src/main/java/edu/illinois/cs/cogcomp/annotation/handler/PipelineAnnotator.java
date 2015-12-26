@@ -1,7 +1,7 @@
 package edu.illinois.cs.cogcomp.annotation.handler;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import org.apache.commons.lang.StringUtils;
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
  *
  * Created by mssammon on 8/24/15.
  */
-abstract public class PipelineAnnotator implements Annotator
+abstract public class PipelineAnnotator extends Annotator
 {
     private static final String NAME = PipelineAnnotator.class.getCanonicalName();
 
@@ -24,8 +24,9 @@ abstract public class PipelineAnnotator implements Annotator
 
     private Logger logger = LoggerFactory.getLogger( PipelineAnnotator.class );
 
-    public PipelineAnnotator(String fullName, String version, String shortName) {
+    public PipelineAnnotator(String fullName, String version, String shortName, String viewName, String[] requiredViews) {
 
+        super( viewName, requiredViews );
         this.fullName = fullName;
         this.version = version;
         this.shortName = shortName;

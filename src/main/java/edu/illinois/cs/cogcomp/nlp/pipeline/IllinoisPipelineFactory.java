@@ -1,18 +1,20 @@
 package edu.illinois.cs.cogcomp.nlp.pipeline;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.handler.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
+import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 
-import javax.swing.text.View;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,16 +56,16 @@ public class IllinoisPipelineFactory
     public static AnnotatorService buildPipeline( ResourceManager nonDefaultRm ) throws IOException, AnnotatorException
     {
         ResourceManager rm = ( new PipelineConfigurator().getConfig( nonDefaultRm ) );
-//        Map< String, Annotator > annotators = buildAnnotators( rm );
-//        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-//        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
-//
+        Map< String, Annotator > annotators = buildAnnotators( rm );
+        IllinoisTokenizer tokenizer = new IllinoisTokenizer();
+        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
+
 //
 //        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
 //        for ( String view : annotators.keySet() )
 //            requestedViews.put( view, false );
 
-        return new SimpleCachingPipeline( rm );
+        return new SimpleCachingPipeline( taBuilder, annotators, rm );
     }
 
     /**
@@ -134,7 +136,7 @@ public class IllinoisPipelineFactory
         if (rm.getBoolean( PipelineConfigurator.USE_SRL_VERB))
         {
             try{
-                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("config/srl-config.properties", "Verb"));
+                viewGenerators.put(ViewNames.SRL_VERB,new SemanticRoleLabeler("Verb"));
             }
             catch (Exception e)
             {
@@ -144,7 +146,7 @@ public class IllinoisPipelineFactory
         if(rm.getBoolean( PipelineConfigurator.USE_SRL_NOM))
         {
             try {
-                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("config/srl-config.properties", "Nom"));
+                viewGenerators.put(ViewNames.SRL_NOM,new SemanticRoleLabeler("Nom"));
             } catch (Exception e) {
                 throw new IOException("SRL norm cannot init .."+e.getMessage());
             }

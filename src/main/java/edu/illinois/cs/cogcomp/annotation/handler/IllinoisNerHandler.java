@@ -30,7 +30,7 @@ public class IllinoisNerHandler extends PipelineAnnotator
      * @throws IOException
      */
     public IllinoisNerHandler(ResourceManager nonDefaultRm, String viewName) throws IOException {
-        super( FULL_NAME_PREFIX + " " + viewName, VERSION, SHORT_NAME_PREFIX + " " + viewName );
+        super( FULL_NAME_PREFIX + " " + viewName, VERSION, SHORT_NAME_PREFIX + " " + viewName, viewName, new String[]{} );
         this.nerAnnotator =  NerAnnotatorManager.buildNerAnnotator( nonDefaultRm, viewName );
         this.viewName = viewName;
     }
@@ -41,10 +41,10 @@ public class IllinoisNerHandler extends PipelineAnnotator
     }
 
     @Override
-    public View getView(TextAnnotation textAnnotation) throws AnnotatorException {
+    public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
         View nerView = nerAnnotator.getView( textAnnotation );
         textAnnotation.addView( nerAnnotator.getViewName(), nerView );
-        return nerView;
+        return;
     }
 
     @Override

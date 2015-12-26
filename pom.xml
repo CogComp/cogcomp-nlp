@@ -1,72 +1,82 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>edu.illinois.cs.cogcomp</groupId>
-  <artifactId>illinois-nlp-pipeline</artifactId>
-  <version>0.1.15</version>
-  <name>Illinois NLP Pipeline</name>
-  <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <cogcomp-nlp-version>3.0.5</cogcomp-nlp-version>
-  </properties>
-	<repositories>
-		<repository>
-			<id>CogcompSoftware</id>
-			<name>CogcompSoftware</name>
-			<url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-		</repository>
-	</repositories>
-	<dependencies>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-core-utilities</artifactId>
-			<version>${cogcomp-nlp-version}</version>
-		</dependency>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <artifactId>illinois-nlp-pipeline</artifactId>
+    <version>0.1.15</version>
+    <name>Illinois NLP Pipeline</name>
+    <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <cogcomp-nlp-version>3.0.14</cogcomp-nlp-version>
+    </properties>
+    <repositories>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-core-utilities</artifactId>
+            <version>${cogcomp-nlp-version}</version>
+        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
             <version>${cogcomp-nlp-version}</version>
         </dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-pos</artifactId>
-			<version>2.0.2</version>
-		</dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-pos</artifactId>
+            <version>2.0.2</version>
+        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
             <version>2.0.2</version>
             <classifier>model</classifier>
         </dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-chunker</artifactId>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-chunker</artifactId>
             <version>2.0.1</version>
-		</dependency>
+        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
             <version>2.0.1</version>
             <classifier>model</classifier>
         </dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-lemmatizer</artifactId>
-			<version>${cogcomp-nlp-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
-		</dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-lemmatizer</artifactId>
+            <version>${cogcomp-nlp-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
+        </dependency>
 
-    <!-- NER and its dependencies -->
-    <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-ner</artifactId>
-      <version>2.8.8</version>
-    </dependency>
+        <!-- NER and its dependencies -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-ner</artifactId>
+            <version>2.8.9-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model-conll</artifactId>
@@ -80,108 +90,118 @@
         </dependency>
 
         <dependency>
-      <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-common-resources</artifactId>
-      <version>1.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
-    </dependency>
-    <!-- Stanford Core NLP, used for its parser (for SRL) -->
-    <dependency>
-      <groupId>edu.stanford.nlp</groupId>
-      <artifactId>stanford-corenlp</artifactId>
-      <version>3.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>edu.stanford.nlp</groupId>
-      <artifactId>stanford-corenlp</artifactId>
-      <version>3.3.1</version>
-      <classifier>models</classifier>
-    </dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-common-resources</artifactId>
+            <version>1.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.4</version>
+        </dependency>
+        <!-- Stanford Core NLP, used for its parser (for SRL) -->
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.1</version>
+            <classifier>models</classifier>
+        </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
-            <version>5.1.6</version>
+            <version>5.1.8</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>illinois-nlp-pipeline</artifactId>
+                    <groupId>edu.illinois.cs.cogcomp</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.gurobi</groupId>
+            <artifactId>gurobi</artifactId>
+            <version>6.5</version>
+        </dependency>
+    </dependencies>
 
-  </dependencies>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+            </plugin>
+        </plugins>
+    </reporting>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assemble/bin.xml</descriptor>
+                    </descriptors>
+                </configuration>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ssh</artifactId>
+                <version>2.4</version>
+            </extension>
+        </extensions>
+    </build>
 
-  <reporting>
-    <excludeDefaults>true</excludeDefaults>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.3</version>
-      </plugin>
-    </plugins>
-  </reporting>
-  <build>
-    <plugins>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-compiler-plugin</artifactId>
-	<version>3.0</version>
-	<configuration>
-	  <source>1.7</source>
-	  <target>1.7</target>
-	</configuration>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-source-plugin</artifactId>
-	<version>2.2.1</version>
-	<executions>
-	  <execution>
-	    <id>attach-sources</id>
-	    <goals>
-	      <goal>jar</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-eclipse-plugin</artifactId>
-	<version>2.9</version>
-	<configuration>
-	  <downloadSources>true</downloadSources>
-	  <downloadJavadocs>true</downloadJavadocs>
-	</configuration>
-      </plugin>
-      <plugin>
-	<artifactId>maven-assembly-plugin</artifactId>
-	<configuration>
-	  <descriptors>
-	    <descriptor>src/assemble/bin.xml</descriptor>
-	  </descriptors>
-	</configuration>
-      </plugin>
-    </plugins>
-    <extensions>
-      <extension>
-	<groupId>org.apache.maven.wagon</groupId>
-	<artifactId>wagon-ssh</artifactId>
-	<version>2.4</version>
-      </extension>
-    </extensions>
-  </build>
-
-  <distributionManagement>
-    <repository>
-      <id>CogcompSoftware</id>
-      <name>CogcompSoftware</name>
-      <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-    </repository>
-    <site>
-      <id>CogcompSoftwareDoc</id>
-      <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
-    </site>
-  </distributionManagement>
+    <distributionManagement>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+        </repository>
+        <site>
+            <id>CogcompSoftwareDoc</id>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
+        </site>
+    </distributionManagement>
 
 </project>

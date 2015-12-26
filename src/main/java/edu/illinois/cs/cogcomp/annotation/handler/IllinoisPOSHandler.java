@@ -28,7 +28,7 @@ public class IllinoisPOSHandler extends PipelineAnnotator
 
 	public IllinoisPOSHandler() 
 	{
-        super("Illinois Part-Of-Speech Tagger", "0.2", "illinoispos");
+        super("Illinois Part-Of-Speech Tagger", "0.2", "illinoispos", ViewNames.POS, new String[]{} );
 
 		logger.info("Loading POS model..");
 		tagger.discreteValue(new Token(new Word("The"), null, ""));
@@ -43,10 +43,9 @@ public class IllinoisPOSHandler extends PipelineAnnotator
      *  annotates TextAnnotation with POS view and returns the new POS view.
      *
      * @param record    TextAnnotation to annotate
-     * @return  newly created POS view
      */
     @Override
-    public View getView(TextAnnotation record) throws AnnotatorException
+    public void addView(TextAnnotation record) throws AnnotatorException
     {
        	if (!record.hasView( tokensfield ) && !record.hasView(sentencesfield))
         {
@@ -71,25 +70,11 @@ public class IllinoisPOSHandler extends PipelineAnnotator
 
         record.addView( ViewNames.POS, posView );
 
-		return posView;
+		return;
 	}
 
 
-    @Override
-    public String getViewName() {
-        return ViewNames.POS;
-    }
 
 
 
-    /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to check for pre-requisites before calling
-     * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
-     *
-     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
-     */
-    @Override
-    public String[] getRequiredViews() {
-        return new String[0];
-    }
 }

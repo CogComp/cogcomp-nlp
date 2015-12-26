@@ -38,7 +38,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator
 
 	public IllinoisChunkerHandler(String configFilename) {
 
-        super("Illinois Chunker", "0.3", "illinoischunker");
+        super("Illinois Chunker", "0.3", "illinoischunker", ViewNames.SHALLOW_PARSE, new String[]{ ViewNames.POS });
 
 		logger.info("Loading Chunker model..");
 		tagger.discreteValue(new Token(new Word("The"), null, ""));
@@ -66,12 +66,7 @@ public class IllinoisChunkerHandler extends PipelineAnnotator
 
 
     @Override
-    public String getViewName() {
-        return ViewNames.SHALLOW_PARSE;
-    }
-
-    @Override
-    public View getView( TextAnnotation record ) throws AnnotatorException {
+    public void addView( TextAnnotation record ) throws AnnotatorException {
 		if (!record.hasView(tokensfield) || !record.hasView(sentencesfield) || !record.hasView( posfield )) {
             String msg = getIdentifier() + ".getView(): Record must be tokenized, sentence split, and POS-tagged first.";
 		    logger.error( msg );
@@ -135,35 +130,9 @@ public class IllinoisChunkerHandler extends PipelineAnnotator
 		}
         record.addView( ViewNames.SHALLOW_PARSE, chunkView );
 
-		return chunkView;
+		return; // chunkView;
 	}
 
-    /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to check for pre-requisites before calling
-     * any single (external) {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator}.
-     *
-     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
-     */
-    @Override
-    public String[] getRequiredViews() {
-        return new String[] { ViewNames.POS };
-    }
 
-//	public String getName() throws TException {
-//		return "Illinois Chunker";
-//	}
-//
-//	public String getVersion() throws TException {
-//		return "0.3";
-//	}
-//
-//	public boolean ping() throws TException {
-//		return true;
-//	}
-//
-//	public String getSourceIdentifier() throws TException {
-//		return "illinoischunker-"+getVersion();
-//	}
-	
 
 }

@@ -36,7 +36,7 @@ public class SimpleCachingPipelineTest
         Properties props = new Properties();
         props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE );
         props.setProperty( PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE );
         props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.TRUE );
 
         props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR.key, "simple-annotation-cache" );
@@ -85,8 +85,8 @@ public class SimpleCachingPipelineTest
             assertTrue(IOUtils.exists(fileName));
         } catch (Exception e) {
             e.printStackTrace();
+            fail( e.getMessage() );
         }
-
 
         assertTrue( new File( fileName ).exists() );
 
@@ -132,7 +132,9 @@ public class SimpleCachingPipelineTest
         assertTrue( ta.hasView( ViewNames.NER_CONLL ) );
 
 		// checks that inactive components are not applied...
-        assertFalse( ta.hasView( ViewNames.PARSE_STANFORD ) );
+        assertTrue( ta.hasView( ViewNames.PARSE_STANFORD ) );
+        assertTrue( ta.hasView( ViewNames.SRL_VERB ) );
+        assertTrue( ta.hasView( ViewNames.SRL_NOM ) );
 
     }
 
