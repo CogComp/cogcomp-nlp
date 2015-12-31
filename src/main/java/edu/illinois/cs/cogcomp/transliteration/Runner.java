@@ -472,9 +472,6 @@ class Runner {
         List<Example> training = Utils.readWikiData(trainfile);
         List<Example> testing = Utils.readWikiData(testfile);
 
-
-
-
         // params
         int emiterations = 5;
         boolean rom = false; // use romanization or not.
@@ -506,8 +503,8 @@ class Runner {
         
             
             SPModel model = new SPModel(subtraining);
-            model.setUseNPLM(true);
-            model.setNPLMfile("lm/newar/nplm-new.txt");
+            //model.setUseNPLM(true);
+            //model.setNPLMfile("lm/newar/nplm-new.txt");
             //List<String> langstrings = Program.getForeignWords(training);
             //model.SetLanguageModel(langstrings);
 
@@ -519,6 +516,8 @@ class Runner {
             logger.info("Testing.");
             String[] pathsplit = trainfile.split("\\.");
             String trainlang = pathsplit[pathsplit.length-1]; // get the last element, filename should be wikidata.Lang
+
+            // This is for testing
             double[] res = TestGenerate(model, subtesting, trainlang);
             double mrr = res[0];
             double acc = res[1];
@@ -527,7 +526,7 @@ class Runner {
             avgacc += acc;
             avgf1 += f1;
             System.out.println(mrr + "," + acc + "," + f1);
-            //model.WriteProbs("probs-" + trainfile.split("\\.")[1] +".txt");
+            model.WriteProbs("probs-" + trainlang +".txt");
         }
 
         System.out.println("=============");
