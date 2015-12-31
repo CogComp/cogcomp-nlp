@@ -137,7 +137,7 @@ class Runner {
         }
 
         List<String> listlines = new ArrayList<>(outlines);
-        listlines.insert(0, "# " + langA + "\t" + langB + "\n");
+        listlines.add(0, "# " + langA + "\t" + langB + "\n");
         LineIO.write("wikidata." + langA + "-" + langB, listlines);
 
     }
