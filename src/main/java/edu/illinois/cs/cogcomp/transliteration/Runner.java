@@ -34,14 +34,14 @@ class Runner {
 
     public static void main(String[] args) throws Exception {
 
-//        String trainfile = dataPath + "he_train_pairs.txt";
-//        String testfile = dataPath + "he_test_pairs.txt";
+        //String trainfile = dataPath + "he_train_pairs.txt";
+        //String testfile = dataPath + "he_test_pairs.txt";
 //
         //String trainfile = "Data/chinese-train.txt";
         //String testfile = "Data/chinese-test.txt";
 
-        String trainlang = "Sanskrit";
-        String testlang = "Newar";
+        String trainlang = "Hindi";
+        String testlang = "Hindi";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
         String trainfile = wikidata + String.format("wikidata.%s", trainlang);
         String testfile = wikidata + String.format("wikidata.%s", testlang);
@@ -59,7 +59,7 @@ class Runner {
         //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
         //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
-        String method = "makeprobs";
+        String method = "wikidata";
 
         if(method == "interactive"){
             interactive();
@@ -85,7 +85,6 @@ class Runner {
         }else{
             logger.error("Should never get here! Try a new method. It was: " + method);
         }
-
 
     }
 
@@ -158,6 +157,7 @@ class Runner {
 
         List<String> listlines = new ArrayList<>(outlines);
         listlines.add(0, "# " + langB + "\t" + langA + "\n");
+
         LineIO.write("wikidata." + langA + "-" + langB, listlines);
 
     }
@@ -492,9 +492,6 @@ class Runner {
         List<Example> training = Utils.readWikiData(trainfile);
         List<Example> testing = Utils.readWikiData(testfile);
 
-
-
-
         // params
         int emiterations = 5;
         boolean rom = false; // use romanization or not.
@@ -506,6 +503,7 @@ class Runner {
         int num = 1;
 
         for (int i = 0; i < num; i++) {
+
 
             java.util.Collections.shuffle(training);
         
@@ -525,8 +523,8 @@ class Runner {
         
             
             SPModel model = new SPModel(subtraining);
-            model.setUseNPLM(true);
-            model.setNPLMfile("lm/newar/nplm-new.txt");
+            //model.setUseNPLM(true);
+            //model.setNPLMfile("lm/newar/nplm-new.txt");
             //List<String> langstrings = Program.getForeignWords(training);
             //model.SetLanguageModel(langstrings);
 
@@ -538,6 +536,9 @@ class Runner {
             logger.info("Testing.");
             String[] pathsplit = trainfile.split("\\.");
             String trainlang = pathsplit[pathsplit.length-1]; // get the last element, filename should be wikidata.Lang
+
+            // This is for testing
+            
             double[] res = TestGenerate(model, subtesting, trainlang);
             double mrr = res[0];
             double acc = res[1];
@@ -546,7 +547,7 @@ class Runner {
             avgacc += acc;
             avgf1 += f1;
             System.out.println(mrr + "," + acc + "," + f1);
-            //model.WriteProbs("probs-" + trainfile.split("\\.")[1] +".txt");
+            model.WriteProbs("probs-" + trainlang +".txt");
         }
 
         System.out.println("=============");

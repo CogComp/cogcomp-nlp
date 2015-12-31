@@ -2681,6 +2681,28 @@ class Program {
         return probs;
     }
 
+
+    /**
+     * Convert each production into a set of productions with different origins
+     * @param probs
+     * @param numOrigins
+     * @return
+     */
+    public static SparseDoubleVector<Production> SplitIntoOrigins(SparseDoubleVector<Production> probs, int numOrigins) {
+
+        SparseDoubleVector<Production> newprobs = new SparseDoubleVector<>();
+
+        for(Production p : probs.keySet()){
+            double prob = probs.get(p);
+            for(int i = 0; i < numOrigins; i++){
+                Production po = new Production(p.segS, p.segT, i);
+                newprobs.put(po, prob / numOrigins);
+            }
+        }
+
+        return newprobs;
+    }
+
 //
 //        private static void EvaluateExamples(HashMap<String,List<String>> testingPairs, List<String> candidates, HashMap<Pair<String, String>, Double> probs, int maxSubstringLength, bool summedPredications, double minProductionProbability)
 //        {

@@ -33,6 +33,11 @@ public class SPModel
         int maxSubstringLength1 = 15;
         int maxSubstringLength2 = 15;
 
+        /**
+         * How many origins do we expect there to be? This should probably be about 50 or less.
+         */
+        public static final int numOrigins = 2;
+
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
 
@@ -194,9 +199,17 @@ public class SPModel
          */
         public void WriteProbs(String fname, double threshold) throws IOException {
             ArrayList<String> outlines = new ArrayList<>();
-            for(Production t : probs.keySet()){
+
+            List<Production> keys = new ArrayList<>(probs.keySet());
+            Collections.sort(keys, new Comparator<Production>() {
+                @Override
+                public int compare(Production o1, Production o2) {
+                    return o1.getFirst().compareTo(o2.getFirst());
+                }
+            });
+            for(Production t : keys){
                 if(probs.get(t) > threshold) {
-                    outlines.add(t.getFirst() + "\t" + t.getSecond() + "\t" + probs.get(t));
+                    outlines.add(t.toString() + "\t" + probs.get(t));
                 }
             }
             LineIO.write(fname, outlines);
@@ -308,9 +321,13 @@ public class SPModel
                 // this just normalizes by the source string.
                 probs = new SparseDoubleVector<>(Program.PSecondGivenFirst(probs));
 
+                // FIXME: uniform origin initialization?
+                probs = Program.SplitIntoOrigins(probs, this.numOrigins);
+
                 if(rom) {
                     probs = Program.InitializeWithRomanization(probs, trainingTriples, testing);
                 }
+
             }
 
             for (int i = 0; i < emIterations; i++)
@@ -339,8 +356,13 @@ public class SPModel
             }
 
             HashMap<Production, Double> memoizationTable = new HashMap<>();
-            return WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability)
-                            / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+            double[] scores = new double[SPModel.numOrigins];
+            for(int orig = 0; orig < SPModel.numOrigins; orig++){
+                scores[orig] = WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability, orig)
+                        / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+            }
+
+            return scores[0];
         }
 
         /**
