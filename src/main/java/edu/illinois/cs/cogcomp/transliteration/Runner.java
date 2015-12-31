@@ -40,7 +40,7 @@ class Runner {
         //String trainfile = "Data/chinese-train.txt";
         //String testfile = "Data/chinese-test.txt";
 
-        String trainlang = "Urdu";
+        String trainlang = "Sanskrit";
         String testlang = "Newar";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
         String trainfile = wikidata + String.format("wikidata.%s", trainlang);
@@ -59,7 +59,7 @@ class Runner {
         //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
         //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
-        String method = "makedata";
+        String method = "makeprobs";
 
         if(method == "interactive"){
             interactive();
@@ -79,6 +79,9 @@ class Runner {
             test();
         }else if(method == "makedata"){
             makedata(trainfile, testfile);
+        }else if(method == "makeprobs"){
+            trainfile = String.format("wikidata.%s-%s", trainlang,testlang);
+            makeprobs(trainfile, trainlang, testlang);
         }else{
             logger.error("Should never get here! Try a new method. It was: " + method);
         }
@@ -86,6 +89,23 @@ class Runner {
 
     }
 
+    /**
+       This trains a model from a file and writes the productions
+       to file. This is intended primarily as a way to measure WAVE.
+       Use this in tandem with makedata().
+    */
+    private static void makeprobs(String trainfile, String trainlang, String testlang) throws IOException{
+
+        List<Example> training = Utils.readWikiData(trainfile);
+        
+        SPModel model = new SPModel(training);
+
+        model.Train(5);
+
+        model.WriteProbs("probs-" + trainlang + "-" + testlang + ".txt");
+                         
+    }
+    
     // Use this method to get data between languages.
     private static void makedata(String trainfile, String testfile) throws IOException {
         List<Example> training = Utils.readWikiData(trainfile);
@@ -137,7 +157,7 @@ class Runner {
         }
 
         List<String> listlines = new ArrayList<>(outlines);
-        listlines.insert(0, "# " + langA + "\t" + langB + "\n");
+        listlines.add(0, "# " + langB + "\t" + langA + "\n");
         LineIO.write("wikidata." + langA + "-" + langB, listlines);
 
     }

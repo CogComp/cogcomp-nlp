@@ -419,10 +419,10 @@ public class Utils {
     public static void main(String[] args) throws FileNotFoundException {
         //romanization();
 
-        String[] names = {"Newar", "Hindi", "Sanskrit", "Nepali"};
+        String[] names = {"Marathi", "Hindi", "Sanskrit", "Nepali"};
 
         for(String name : names){
-            System.out.println(name + " : " + WAVE("probs-"+name+".txt"));
+            System.out.println(name + " : " + WAVE("probs-"+name+"-Newar.txt"));
         }
 
 

@@ -3,3 +3,6 @@
 *.iml
 Sandbox.java
 target
+probs-*
+wikidata.*
+out-*
