@@ -487,24 +487,11 @@ class Runner {
 
         for (int i = 0; i < num; i++) {
 
-<<<<<<< HEAD
-            //java.util.Collections.shuffle(training);
-            //java.util.Collections.shuffle(testing);
 
-            // this allows us to control the size of the training set (optionally smaller)
-            List<Example> training2 = new ArrayList<>();
-            for(Example e : training){
-                if(training2.size() == min){
-                    break;
-                }
-                training2.add(e);
-            }
-=======
             java.util.Collections.shuffle(training);
         
             List<Example> subtraining = training.subList(0,NUMTRAIN);
             List<Example> subtesting;
->>>>>>> 224be0d518b1da70fad3e984cc98da034df794a7
 
             System.out.println("Orig len of testing: " + testing.size());
 
