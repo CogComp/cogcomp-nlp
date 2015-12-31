@@ -34,8 +34,8 @@ class Runner {
 
     public static void main(String[] args) throws Exception {
 
-        String trainfile = dataPath + "he_train_pairs.txt";
-        String testfile = dataPath + "he_test_pairs.txt";
+        //String trainfile = dataPath + "he_train_pairs.txt";
+        //String testfile = dataPath + "he_test_pairs.txt";
 //
         //String trainfile = "Data/chinese-train.txt";
         //String testfile = "Data/chinese-test.txt";
@@ -59,7 +59,7 @@ class Runner {
         //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
         //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
-        String method = "makedata";
+        String method = "wikidata";
 
         if(method == "interactive"){
             interactive();
