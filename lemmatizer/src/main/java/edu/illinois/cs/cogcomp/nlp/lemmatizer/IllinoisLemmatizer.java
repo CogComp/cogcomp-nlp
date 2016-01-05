@@ -35,49 +35,48 @@ public class IllinoisLemmatizer extends Annotator
 	private WordnetLemmaReader wnLemmaReader;
 	private Map<String, String> contractions;
     private Map<String, String> toStanford;
-	
-	private boolean useStanford;
-	
-	private static boolean useStanford_default = false;
-	private static String wnpath_default = "WordNet-3.0/dict";
-	
-	public IllinoisLemmatizer() {
-		this(useStanford_default, wnpath_default);
-	}
-	
-	public IllinoisLemmatizer(ResourceManager rm) {
-        this(rm.getBoolean(USE_STANFORD_LEMMA_CONVENTION,(Boolean.toString(useStanford_default))), rm.getString("wnpath", wnpath_default));
-	}
-	
-	public IllinoisLemmatizer(boolean useStanfordConvention, String wnpath)
-	{
-		super( ViewNames.LEMMA, new String[]{ ViewNames.POS } );
-		this.useStanford = useStanfordConvention;
-		wnLemmaReader = new WordnetLemmaReader(wnpath);
-		loadVerbMap();
-		loadExceptionMap();
-		contractions = new HashMap<>();
-		contractions.put("'d", "have");
-		contractions.put("'ll", "will");
-		contractions.put("'s", "'s");
-		contractions.put("'re", "be");
-		contractions.put("'m", "be");
-		contractions.put("'ve", "have"); 
-		//contractions.put("ca", "can");
-		
-		toStanford = new HashMap<>();
 
-		toStanford.put("her","she");
-		toStanford.put("him","he");
-		toStanford.put("is","be");
-		toStanford.put("their","they");
-		toStanford.put("them","they");
-		toStanford.put("me","i");
-		toStanford.put("an","a");
-	}
+    private boolean useStanford;
 
-	private void loadExceptionMap() {
-		exceptionsMap = new HashMap<>();
+    private static boolean useStanford_default = false;
+
+    public IllinoisLemmatizer() {
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getDefaultConfig() );
+    }
+
+    public IllinoisLemmatizer(ResourceManager rm) {
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getConfig( rm ) );
+    }
+
+    private void initialize( ResourceManager rm ) {
+        this.useStanford = rm.getBoolean( LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key );
+        wnLemmaReader = new WordnetLemmaReader( rm.getString( LemmatizerConfigurator.WN_PATH.key) );
+        loadVerbMap();
+        loadExceptionMap();
+        contractions = new HashMap<>();
+        contractions.put("'d", "have");
+        contractions.put("'ll", "will");
+        contractions.put("'s", "'s");
+        contractions.put("'re", "be");
+        contractions.put("'m", "be");
+        contractions.put("'ve", "have");
+        // contractions.put("ca", "can");
+
+        toStanford = new HashMap<>();
+
+        toStanford.put("her", "she");
+        toStanford.put("him", "he");
+        toStanford.put("is", "be");
+        toStanford.put("their", "they");
+        toStanford.put("them", "they");
+        toStanford.put("me", "i");
+        toStanford.put("an", "a");
+    }
+
+    private void loadExceptionMap() {
+        exceptionsMap = new HashMap<>();
 
         for (String line : readFromClasspath(exceptionsFile)) {
 			String[] parts = line.split("\\s+");
