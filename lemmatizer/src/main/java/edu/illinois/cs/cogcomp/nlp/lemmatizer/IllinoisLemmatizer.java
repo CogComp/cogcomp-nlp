@@ -38,21 +38,20 @@ public class IllinoisLemmatizer extends Annotator {
     private boolean useStanford;
 
     private static boolean useStanford_default = false;
-    private static String wnpath_default = "WordNet-3.0/dict";
 
     public IllinoisLemmatizer() {
-        this(useStanford_default, wnpath_default);
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getDefaultConfig() );
     }
 
     public IllinoisLemmatizer(ResourceManager rm) {
-        this(rm.getBoolean(USE_STANFORD_LEMMA_CONVENTION, (Boolean.toString(useStanford_default))),
-                rm.getString("wnpath", wnpath_default));
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getConfig( rm ) );
     }
 
-    public IllinoisLemmatizer(boolean useStanfordConvention, String wnpath) {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        this.useStanford = useStanfordConvention;
-        wnLemmaReader = new WordnetLemmaReader(wnpath);
+    private void initialize( ResourceManager rm ) {
+        this.useStanford = rm.getBoolean( LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key );
+        wnLemmaReader = new WordnetLemmaReader( rm.getString( LemmatizerConfigurator.WN_PATH.key) );
         loadVerbMap();
         loadExceptionMap();
         contractions = new HashMap<>();
