@@ -40,5 +40,11 @@
             <artifactId>snowball</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>jwnl-prime</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
     </dependencies>
 </project>
