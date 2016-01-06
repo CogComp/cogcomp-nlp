@@ -2,6 +2,7 @@
 import codecs
 from collections import defaultdict
 from Levenshtein import distance
+import os
 
 def readfile(fname):
     """
@@ -88,8 +89,6 @@ def getScores(ans,pred):
                 break
 
         
-
-
     MRR = mrrcorrect / float(len(pred))
     ACC = correct / float(len(pred))
     F1 = totalf1 / float(len(pred))
@@ -114,7 +113,11 @@ def writeAnsFile(ans,ranking):
             
 
 def combine(*fnames):
+    """
+    This combines the different language files into a single version, hopefully better than all the rest.
+    """
 
+    # this will hold all predictions from each file
     predictions = []
 
     ans = None
@@ -125,7 +128,7 @@ def combine(*fnames):
 
     reranked = []
 
-    
+    # ans is identical in each file, so just use last one
     for i,q in enumerate(ans):
         query = q[0]
         gold = q[1]
@@ -143,9 +146,20 @@ def combine(*fnames):
                 
         newranking = []
         for n in dct:
+            # this is a list of scores given for candidates for name n
             votes = dct[n]
+
+            # different strategies are represented here.
+            # get the average score
             avg = sum(votes) / float(len(votes))
-            newranking.append((n,avg))
+
+            # get the total score
+            sumvotes = sum(votes)
+
+            numvotes = len(votes)
+            
+            val = sumvotes
+            newranking.append((n,val))
             
         newranking = sorted(newranking, key=lambda p: p[1], reverse=True)
         

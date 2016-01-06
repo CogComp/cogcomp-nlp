@@ -27,37 +27,22 @@ class Runner {
     static String tl = "/shared/corpora/transliteration/";
     static String irvinedata = tl + "from_anne_irvine/";
 
-    public static final int NUMTRAIN = 500;
-    public static final int NUMTEST = 500;
+    // set these later on
+    public static int NUMTRAIN = 50024;
+    public static int NUMTEST = 4206;
 
     private static Logger logger = LoggerFactory.getLogger(Runner.class);
 
     public static void main(String[] args) throws Exception {
 
-        //String trainfile = dataPath + "he_train_pairs.txt";
-        //String testfile = dataPath + "he_test_pairs.txt";
-//
-        //String trainfile = "Data/chinese-train.txt";
-        //String testfile = "Data/chinese-test.txt";
-
-        String trainlang = "Hindi";
-        String testlang = "Hindi";
+        String trainlang = "Persian";
+        String testlang = "Urdu";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
         String trainfile = wikidata + String.format("wikidata.%s", trainlang);
         String testfile = wikidata + String.format("wikidata.%s", testlang);
 
         ///String trainfile = irvinedata + String.format("irvine-data.%s", trainlang);
         //String testfile = irvinedata + String.format("irvine-data.%s", testlang);
-
-
-        //String trainfile = tl + "chinese/zhExamples.train.500";
-        //String testfile = tl + "chinese/zhExamples.test.500";
-
-        //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHi_11946.xml";
-        //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHi_997.xml";
-
-        //String trainfile = NEWS + "NEWS2015_MSRI/NEWS15_train_EnHe_9501.xml";
-        //String testfile = NEWS + "NEWS2015_MSRI/NEWS15_dev_EnHe_1000.xml";
 
         String method = "wikidata";
 
@@ -79,14 +64,65 @@ class Runner {
             test();
         }else if(method == "makedata"){
             makedata(trainfile, testfile);
-        }else if(method == "makeprobs"){
-            trainfile = String.format("wikidata.%s-%s", trainlang,testlang);
+        }else if(method == "makeprobs") {
+            trainfile = String.format("wikidata.%s-%s", trainlang, testlang);
             makeprobs(trainfile, trainlang, testlang);
+        }else if(method == "experiments"){
+            experiments();
         }else{
             logger.error("Should never get here! Try a new method. It was: " + method);
         }
 
     }
+
+    /**
+     * Run this method to get all results for ranking.
+     * @throws Exception
+     */
+    private static void experiments() throws Exception {
+        String[] arabic_names = {"Arabic", "Egyptian_Arabic", "Mazandarani", "Pashto", "Persian", "Western_Punjabi"};
+        String[] devanagari_names = {"Hindi", "Marathi", "Nepali", "Sanskrit"};
+        String[] cyrillic_names = {"Bashkir", "Bulgarian", "Chechen", "Kirghiz", "Macedonian", "Russian", "Ukrainian"};
+
+        List<String> arabicresults = new ArrayList<>();
+        NUMTRAIN = 485;
+        NUMTEST = 4062;
+        for(String name : arabic_names){
+            logger.debug("Working on " + name);
+            String trainfile = wikidata + String.format("wikidata.%s", name);
+            String testfile = wikidata + String.format("wikidata.%s", "Urdu");
+
+            arabicresults.add(name + TrainAndTest(trainfile, testfile));
+        }
+        LineIO.write("arabicresults.txt", arabicresults);
+
+        List<String> devresults = new ArrayList<>();
+        NUMTRAIN = 896;
+        NUMTEST = 477;
+        for(String name : devanagari_names){
+        logger.debug("Working on " + name);
+            String trainfile = wikidata + String.format("wikidata.%s", name);
+            String testfile = wikidata + String.format("wikidata.%s", "Newar");
+
+            devresults.add(name + TrainAndTest(trainfile, testfile));
+        }
+        LineIO.write("devresults.txt", devresults);
+
+
+        List<String> cyrillicresults = new ArrayList<>();
+        NUMTRAIN = 381;
+        NUMTEST = 482;
+        for(String name : cyrillic_names){
+            logger.debug("Working on " + name);
+            String trainfile = wikidata + String.format("wikidata.%s", name);
+            String testfile = wikidata + String.format("wikidata.%s", "Chuvash");
+
+            cyrillicresults.add(name + TrainAndTest(trainfile, testfile));
+        }
+        LineIO.write("cyrillicresults.txt", cyrillicresults);
+
+    }
+
 
     /**
        This trains a model from a file and writes the productions
@@ -95,17 +131,26 @@ class Runner {
     */
     private static void makeprobs(String trainfile, String trainlang, String testlang) throws IOException{
 
-        List<Example> training = Utils.readWikiData(trainfile);
+        List<Example> training = Utils.readWikiData("gen-data/" + trainfile);
         
         SPModel model = new SPModel(training);
 
         model.Train(5);
 
-        model.WriteProbs("probs-" + trainlang + "-" + testlang + ".txt");
+        model.WriteProbs("models/probs-" + trainlang + "-" + testlang + ".txt");
                          
     }
-    
-    // Use this method to get data between languages.
+
+    /**
+     * Given two language names, this will create a file of pairs between these languages by
+     * finding pairs in each language with common English sources.
+     *
+     * The output of this will be used in makeprobs to get WAVE scores.
+     *
+     * @param trainfile
+     * @param testfile
+     * @throws IOException
+     */
     private static void makedata(String trainfile, String testfile) throws IOException {
         List<Example> training = Utils.readWikiData(trainfile);
         List<Example> testing = Utils.readWikiData(testfile);
@@ -158,7 +203,7 @@ class Runner {
         List<String> listlines = new ArrayList<>(outlines);
         listlines.add(0, "# " + langB + "\t" + langA + "\n");
 
-        LineIO.write("wikidata." + langA + "-" + langB, listlines);
+        LineIO.write("gen-data/wikidata." + langA + "-" + langB, listlines);
 
     }
 
@@ -315,22 +360,11 @@ class Runner {
 
         List<String> outlines = new ArrayList<>();
 
-        //String id = "Any-Arabic; NFD";
-        //Transliterator t = Transliterator.getInstance(id);
-
-        //logger.warn("CREATING A PNJ-URDU MODEL RIGHT HERE.");
-        //boolean fix = false; // don't try to fix the data... edit distance is weird in 2 foreign langs.
-        //List<Example> training = Utils.readWikiData("wikidata.Western_Punjabi-Urdu", fix);
-        //SPModel bashkir2chuvash = new SPModel(training);
-        //bashkir2chuvash.Train(5);
-
-        // FIXME: CAREFUL HERE!!!
-        //logger.warn("SETTING MAXCANDS TO JUST 5");
-        //model.setMaxCandidates(5);
+        model.setMaxCandidates(30);
 
         int i = 0;
         for (MultiExample example : testing) {
-            if(i%50 == 0) {
+            if(i%500 == 0) {
                 logger.debug("on example " + i + " out of " + testing.size());
                 //logger.debug("USING THE CREATED MODEL TO GET INTO URDU.");
             }
@@ -342,18 +376,6 @@ class Runner {
             }
 
             TopList<Double,String> prediction = model.Generate(example.sourceWord);
-
-            // This block is for the second stage in the pipeline.
-            //TopList<Double, String> scriptpreds = new TopList<>(prediction.size());
-            // transform into arabic
-            //for(Pair<Double, String> cand : prediction){
-                //scriptpreds.add(cand.getFirst(), t.transform(cand.getSecond()));
-            //    TopList<Double,String> chuvashcands = bashkir2chuvash.Generate(cand.getSecond());
-            //    if(chuvashcands.size() > 0) {
-            //        scriptpreds.add(cand.getFirst(), chuvashcands.getFirst().getSecond());
-            //    }
-            // }
-            //prediction = scriptpreds;
 
             for(Pair<Double, String> cand : prediction){
                 if(example.getTransliteratedWords().contains(cand.getSecond())){
@@ -368,7 +390,7 @@ class Runner {
 
             double F1 = 0;
             if(prediction.size() == 0){
-                logger.error("No cands for this word: " + example.sourceWord);
+                //logger.error("No cands for this word: " + example.sourceWord);
             }else {
                 F1 = Utils.GetFuzzyF1(prediction.getFirst().getSecond(), example.getTransliteratedWords());
             }
@@ -389,7 +411,7 @@ class Runner {
             }
         }
 
-        LineIO.write("out-gen-"+ lang +".txt", outlines);
+        LineIO.write("output/out-gen-"+ lang +".txt", outlines);
 
         double mrr = correctmrr / (double)testing.size();
         double acc = correctacc / (double)testing.size();
@@ -402,6 +424,116 @@ class Runner {
 
         return res;
     }
+
+    /**
+     * Given a model and set of testing examples, this will get scores using the generation method.
+     * @param model this needs to be a trained model.
+     * @param testing a set of examples.
+     * @return an 3-element double array of scores with elements MRR,ACC,F1
+     * @throws Exception
+     */
+    public static double[] TestGenerateChain(SPModel model, List<? extends MultiExample> testing, String lang) throws Exception {
+        double correctmrr = 0;
+        double correctacc = 0;
+        double totalf1 = 0;
+
+        List<String> outlines = new ArrayList<>();
+
+        //String id = "Any-Arabic; NFD";
+        //Transliterator t = Transliterator.getInstance(id);
+
+        logger.warn("CREATING A SECOND STAGE MODEL RIGHT HERE.");
+        boolean fix = false; // don't try to fix the data... edit distance is weird in 2 foreign langs.
+        List<Example> training = Utils.readWikiData("gen-data/wikidata.Western_Punjabi-Urdu", fix);
+        logger.debug("Size of intermediate model: " + training.size());
+        SPModel stage2model = new SPModel(training);
+        stage2model.setMaxCandidates(5);
+        stage2model.Train(5);
+
+
+        // FIXME: CAREFUL HERE!!!
+        //logger.warn("SETTING MAXCANDS TO JUST 5");
+        model.setMaxCandidates(5);
+
+        int i = 0;
+        for (MultiExample example : testing) {
+            if(i%500 == 0) {
+                logger.debug("on example " + i + " out of " + testing.size());
+                //logger.debug("USING THE CREATED MODEL TO GET INTO URDU.");
+            }
+            i++;
+
+            outlines.add("SourceWord: " + example.sourceWord + "");
+            for(String tw : example.getTransliteratedWords()){
+                outlines.add("TransliteratedWords: " + tw);
+            }
+
+            TopList<Double,String> prediction = model.Generate(example.sourceWord);
+
+            // This block is for the second stage in the pipeline.
+            TopList<Double, String> scriptpreds = new TopList<>(25);
+            // there will be 5 of these
+            for(Pair<Double, String> cand : prediction){
+
+                // there will be 5 of these
+                TopList<Double,String> chuvashcands = stage2model.Generate(cand.getSecond());
+
+                for(Pair<Double, String> chaincand : chuvashcands){
+                    scriptpreds.add(cand.getFirst() * chaincand.getFirst(), chaincand.getSecond());
+                }
+
+             }
+            prediction = scriptpreds;
+
+            for(Pair<Double, String> cand : prediction){
+                if(example.getTransliteratedWords().contains(cand.getSecond())){
+                    outlines.add("**" + cand.getSecond() + ", " + cand.getFirst() + "**");
+                }else{
+                    outlines.add("" + cand.getSecond() + ", " + cand.getFirst() + "");
+                }
+            }
+            outlines.add("\n");
+
+            int bestindex = -1;
+
+            double F1 = 0;
+            if(prediction.size() == 0){
+                //logger.error("No cands for this word: " + example.sourceWord);
+            }else {
+                F1 = Utils.GetFuzzyF1(prediction.getFirst().getSecond(), example.getTransliteratedWords());
+            }
+            totalf1 += F1;
+
+            for(String target : example.getTransliteratedWords()){
+                int index = prediction.indexOf(target);
+                if(bestindex == -1 || index < bestindex){
+                    bestindex = index;
+                }
+            }
+
+            if (bestindex >= 0) {
+                correctmrr += 1.0 / (bestindex + 1);
+                if(bestindex == 0){
+                    correctacc += 1.0;
+                }
+            }
+        }
+
+        LineIO.write("output/out-gen-"+ lang +".txt", outlines);
+
+        double mrr = correctmrr / (double)testing.size();
+        double acc = correctacc / (double)testing.size();
+        double f1 = totalf1 / (double)testing.size();
+
+        double[] res = new double[3];
+        res[0] = mrr;
+        res[1] = acc;
+        res[2] = f1;
+
+        return res;
+    }
+
+
 
     public static Pair<Double,Double> TestDiscovery(SPModel model, List<Example> testing) throws IOException {
         double correctmrr = 0;
@@ -444,7 +576,7 @@ class Runner {
             }
         }
 
-        LineIO.write("out-disc.txt", outlines);
+        LineIO.write("output/out-disc.txt", outlines);
 
         double mrr = correctmrr / (double)testing.size();
         double acc = correctacc / (double)testing.size();
@@ -478,7 +610,7 @@ class Runner {
         avgmrr += mrr;
         avgacc += acc;
         avgf1 += f1;
-        model.WriteProbs("probs-" + testfile.split("\\.")[1] +".txt");
+        model.WriteProbs("models/probs-" + testfile.split("\\.")[1] +".txt");
 
         System.out.println("=============");
         System.out.println("AVGMRR=" + avgmrr);
@@ -487,7 +619,7 @@ class Runner {
     }
 
 
-    public static void TrainAndTest(String trainfile, String testfile) throws Exception {
+    public static String TrainAndTest(String trainfile, String testfile) throws Exception {
 
         List<Example> training = Utils.readWikiData(trainfile);
         List<Example> testing = Utils.readWikiData(testfile);
@@ -547,13 +679,17 @@ class Runner {
             avgacc += acc;
             avgf1 += f1;
             System.out.println(mrr + "," + acc + "," + f1);
-            model.WriteProbs("probs-" + trainlang +".txt");
+            model.WriteProbs("output/probs-" + trainlang +".txt");
         }
 
         System.out.println("=============");
         System.out.println("AVGMRR=" + avgmrr / num);
         System.out.println("AVGACC=" + avgacc / num);
         System.out.println("AVGF1 =" + avgf1 / num);
+
+        System.out.println("& " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\");
+        return " & " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\";
+
     }
 
 

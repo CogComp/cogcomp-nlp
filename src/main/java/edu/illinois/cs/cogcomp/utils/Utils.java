@@ -79,6 +79,11 @@ public class Utils {
         HashMap<String, Double> entropy = new HashMap<>();
 
         for(String line : lines){
+
+            if(line.trim().length() == 0 || line.startsWith("#")){
+                continue;
+            }
+
             String[] sline = line.split("\t");
 
             String src = sline[0];
@@ -155,11 +160,12 @@ public class Utils {
     public static List<Example> readWikiData(String file, boolean fix) throws FileNotFoundException {
         List<Example> examples = new ArrayList<>();
         List<String> lines = LineIO.read(file);
-        System.out.println(file + " = " + lines.size());
 
         String id = "Any-Latin; NFD; [^\\p{Alnum}] Remove";
         //id = "Any-Latin; NFD";
         Transliterator t = Transliterator.getInstance(id);
+
+        HashSet<Example> unique = new HashSet<>();
 
         for(String line : lines)
         {
@@ -173,6 +179,7 @@ public class Utils {
                 continue;
             }
 
+
             // In wikipedia data, the foreign name comes first, English second.
             String foreign = parts[0].toLowerCase();
             String english = parts[1].toLowerCase();
@@ -185,10 +192,6 @@ public class Utils {
             }
 
             int numtoks = ftoks.length;
-
-//            for(int i = 0; i < numtoks; i++){
-//                examples.add(new Example(Example.NormalizeHebrew(etoks[i]), Example.NormalizeHebrew(ftoks[i])));
-//            }
 
             for(int i = 0; i < numtoks; i++){
                 String ftrans = t.transform(ftoks[i]);
@@ -216,21 +219,23 @@ public class Utils {
                 // This version uses transliterated words as the target (cheating)
                 //examples.add(new Example(bestmatch, ftrans));
 
+                Example addme;
                 if(fix) {
                     // This uses the best aligned version (recommended)
-                    examples.add(new Example(bestmatch, ftoks[i]));
+                    addme = new Example(bestmatch, ftoks[i]);
+
                 }else {
                     // This assumes the file ordering is correct
-                    examples.add(new Example(etoks[i], ftoks[i]));
+                    addme = new Example(etoks[i], ftoks[i]);
                 }
-
+                examples.add(addme);
+                unique.add(addme);
             }
 
-
-
-
         }
-        return examples;
+        //System.out.println(file.split("\\.")[1] + " & " + numnames + " & " + examples.size() + " & " + unique.size() + " \\\\");
+        return new ArrayList<>(unique);
+
     }
 
     /**
@@ -414,16 +419,27 @@ public class Utils {
         }
     }
 
+    public static void getSize(String langname) throws FileNotFoundException {
+        String wikidata = "/shared/corpora/transliteration/wikidata/wikidata.";
+        List<Example> e = readWikiData(wikidata + langname);
+
+    }
+
 
 
     public static void main(String[] args) throws FileNotFoundException {
         //romanization();
 
-        String[] names = {"Marathi", "Hindi", "Sanskrit", "Nepali"};
+        String[] arabic_names = {"Urdu", "Arabic", "Egyptian_Arabic", "Mazandarani", "Pashto", "Persian", "Western_Punjabi"};
+        String[] devanagari_names = {"Newar", "Hindi", "Marathi", "Nepali", "Sanskrit"};
+        String[] cyrillic_names = {"Chuvash", "Bashkir", "Bulgarian", "Chechen", "Kirghiz", "Macedonian", "Russian", "Ukrainian"};
 
-        for(String name : names){
-            System.out.println(name + " : " + WAVE("probs-"+name+"-Newar.txt"));
+        for(String name : arabic_names){
+            //System.out.println(name + " : " + WAVE("models/probs-"+name+"-Urdu.txt"));
+            getSize(name);
         }
+
+
 
 
 

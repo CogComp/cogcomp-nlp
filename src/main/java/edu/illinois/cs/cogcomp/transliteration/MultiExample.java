@@ -102,4 +102,28 @@ public class MultiExample {
                 ", weight=" + weight +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MultiExample that = (MultiExample) o;
+
+        if (Double.compare(that.weight, weight) != 0) return false;
+        if (sourceWord != null ? !sourceWord.equals(that.sourceWord) : that.sourceWord != null) return false;
+        return transliteratedWords != null ? transliteratedWords.equals(that.transliteratedWords) : that.transliteratedWords == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = sourceWord != null ? sourceWord.hashCode() : 0;
+        result = 31 * result + (transliteratedWords != null ? transliteratedWords.hashCode() : 0);
+        temp = Double.doubleToLongBits(weight);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
 }

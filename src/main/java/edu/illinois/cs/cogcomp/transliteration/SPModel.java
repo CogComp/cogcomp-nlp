@@ -209,7 +209,8 @@ public class SPModel
             });
             for(Production t : keys){
                 if(probs.get(t) > threshold) {
-                    outlines.add(t.toString() + "\t" + probs.get(t));
+                    String tstr = t.getFirst() + "\t" + t.getSecond();
+                    outlines.add(tstr + "\t" + probs.get(t));
                 }
             }
             LineIO.write(fname, outlines);
