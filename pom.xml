@@ -73,7 +73,27 @@ http://www.w3.org/2001/XMLSchema-instance ">
             <artifactId>nplm-java</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-abstract-server</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>curator-interfaces</artifactId>
+            <version>0.7</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.apache.thrift</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>0.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>curator-utils</artifactId>
+            <version>0.0.4-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
