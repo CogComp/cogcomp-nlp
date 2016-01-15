@@ -1,20 +1,22 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 import java.io.*;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
+import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -36,14 +38,14 @@ public class Quantifier {
 			e.printStackTrace();
 		}
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-        TextAnnotationBuilder taBuilder = new TextAnnotationBuilder( tokenizer );
+        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
         Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
         Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
         for ( String view : extraViewGenerators.keySet() )
             requestedViews.put( view, false );
         try {
-			pipeline =  new AnnotatorService(taBuilder, extraViewGenerators, rm);
-		} catch (AnnotatorException e) {
+			pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

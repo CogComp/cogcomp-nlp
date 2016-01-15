@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
@@ -13,12 +14,14 @@ public class SimpleQuantifier {
 	public static String decimalRegex = "(?:\\d+\\,\\d+,\\d+\\.\\d+|\\d+\\,\\d+,\\d+|"
 			+ "\\d+\\,\\d+\\.\\d+|\\d+\\,\\d+|\\d*\\.\\d+|\\d+)";
 	public static Map<String, Double> numberWords = new HashMap<String, Double>();
+	public static Map<String, Double> units = new HashMap<String, Double>();
+	public static Map<String, Double> tens = new HashMap<String, Double>();
 	 
 	public SimpleQuantifier() {
 		new Normalizer();
 		numberWords.put( "zero",       0.0);
-		numberWords.put( "one", 	   1.0);
-		numberWords.put( "two", 	   2.0);
+		numberWords.put( "one",		1.0);
+		numberWords.put( "two",		2.0);
 		numberWords.put( "three",      3.0);
 		numberWords.put( "four",       4.0);
 		numberWords.put( "five",       5.0);
@@ -27,6 +30,15 @@ public class SimpleQuantifier {
 		numberWords.put( "eight",      8.0);
 		numberWords.put( "nine",       9.0);
 		numberWords.put( "ten",        10.0);
+		units.put( "one", 	   1.0);
+		units.put( "two", 	   2.0);
+		units.put( "three",      3.0);
+		units.put( "four",       4.0);
+		units.put( "five",       5.0);
+		units.put( "six",        6.0);
+		units.put( "seven",      7.0);
+		units.put( "eight",      8.0);
+		units.put( "nine",       9.0);
 	    // the teens
 		numberWords.put( "eleven",     11.0);
 		numberWords.put( "twelve",     12.0);
@@ -47,8 +59,16 @@ public class SimpleQuantifier {
 		numberWords.put( "seventy",    70.0);
 		numberWords.put( "eighty",     80.0);
 		numberWords.put( "ninety",     90.0);
+		tens.put( "twenty",     20.0);
+		tens.put( "thirty",     30.0);
+		tens.put( "forty",      40.0);
+		tens.put( "fourty",     40.0);
+		tens.put( "fifty",      50.0);
+		tens.put( "sixty",      60.0);
+		tens.put( "seventy",    70.0);
+		tens.put( "eighty",     80.0);
+		tens.put( "ninety",     90.0);
 		
-
 		numberWords.put( "twice",      2.0);
 		numberWords.put( "double",     2.0);
 		numberWords.put( "thrice",     3.0);
@@ -57,7 +77,7 @@ public class SimpleQuantifier {
 		
 	}
 	
-	public List<QuantSpan> getSpans(String text) throws Exception {
+	public List<QuantSpan> getSpans(String text) {
 		Matcher matcher = Pattern.compile(decimalRegex).matcher(text);
 		List<QuantSpan> qsList = new ArrayList<QuantSpan>();
 		while(matcher.find()) {
@@ -66,12 +86,30 @@ public class SimpleQuantifier {
 					matcher.start(), matcher.end());
 			qsList.add(qs);
 		}
-		TextAnnotation ta = Quantifier.pipeline.createBasicTextAnnotation("", "", text);
+		TextAnnotation ta = null;
+		try {
+			ta = Quantifier.pipeline.createBasicTextAnnotation("", "", text);
+		} catch (AnnotatorException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(int i=0; i<ta.size(); ++i) {
+			if(i<ta.size()-1 && tens.containsKey(ta.getToken(i).toLowerCase()) && 
+					units.containsKey(ta.getToken(i+1).toLowerCase())) {
+				QuantSpan qs = new QuantSpan(
+						new Quantity("=", 1.0*(tens.get(ta.getToken(i).toLowerCase())+
+								units.get(ta.getToken(i+1).toLowerCase())), ""), 
+						ta.getTokenCharacterOffset(i).getFirst(), 
+						ta.getTokenCharacterOffset(i+1).getSecond());
+				qsList.add(qs);
+				i++;
+				continue;
+			}
 			if(numberWords.containsKey(ta.getToken(i).toLowerCase())) {
 				QuantSpan qs = new QuantSpan(
 						new Quantity("=", 1.0*numberWords.get(ta.getToken(i).toLowerCase()), ""), 
-						ta.getTokenCharacterOffset(i).getFirst(), ta.getTokenCharacterOffset(i).getSecond());
+						ta.getTokenCharacterOffset(i).getFirst(), 
+						ta.getTokenCharacterOffset(i).getSecond());
 				qsList.add(qs);
 			}
 		}
@@ -82,6 +120,13 @@ public class SimpleQuantifier {
 			}
 		});
 		return qsList;
+	}
+	
+	public static void main(String args[]) {
+		SimpleQuantifier sq = new SimpleQuantifier();
+		for(QuantSpan qs : sq.getSpans("I have twenty six eggs and 7 oranges.")) {
+			System.out.println(qs);
+		}
 	}
 	
 }
