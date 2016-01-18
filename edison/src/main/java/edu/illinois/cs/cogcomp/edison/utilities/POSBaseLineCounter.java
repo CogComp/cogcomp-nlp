@@ -4,6 +4,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankPOSReader;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
 import java.util.*;
 
@@ -12,20 +13,20 @@ import com.google.gson.GsonBuilder;
 
 
 /**
- * A baseline counter simply builds a table by counting the number of times that each word
- * appears in training data associated with each possible part of speech tag.
- * Given a word, if it is observed, the counter will return the most frequent tag associated
- * with the word. 
+ * A baseline counter simply builds a table by counting the number of times that each form-POS
+ * association appear in a source corpus.
+ * Given a form, if it is observed, the counter will return the most frequent tag associated
+ * with the form. 
  * 
  * @author Xinbo Wu
 **/
 public class POSBaseLineCounter {
 	/**
-	 * This map associates words with maps that associate POS tags with counts.
+	 * This map associates forms with maps that associate POS tags with counts.
 	 **/
 	protected HashMap<String, TreeMap<String, Integer>> table;
 	/**
-	 * The name of corpus used for training
+	 * The name of corpus used for source
 	 **/
 	protected final String corpusName;
 
@@ -33,17 +34,36 @@ public class POSBaseLineCounter {
 		table = new HashMap<String, TreeMap<String, Integer>>();
 		this.corpusName = corpusName;
 	}
-
+	
 	/**
-	 * A table is built from a given training corpus by simply counting the
-	 * number of times that each word appears in training data associated with
-	 * each possible part of speech tag.
+	 * A table is built from either a given source corpus file or source corpus directory by simply 
+	 * counting the number of times that each form-POS association appear in a source corpus.
 	 * 
-	 * @param fileName
-	 *            fileName of the training corpus
+	 * @param home
+	 *            file name or directory name of the source corpus
 	 * @throws Exception
 	 **/
-	public void buildTable(String fileName) throws Exception {
+	public void buildTable(String home) throws Exception {
+		if (IOUtils.isFile(home))
+			this.buildTableHelper(home);
+		else if(IOUtils.isDirectory(home)){
+			String[] files = IOUtils.lsFiles(home);
+			for (String file : files){
+				//System.out.println(file);
+				this.buildTableHelper(home + "\\" + file);
+			}
+	    }
+	}
+	
+	/**
+	 * A table is built from a given source corpus file by simply 
+	 * counting the number of times that each form-POS association appear in a source corpus.
+	 * 
+	 * @param fileName
+	 *            file name of the source corpus
+	 * @throws Exception
+	 **/
+	private void buildTableHelper(String fileName){
 		PennTreebankPOSReader reader = new PennTreebankPOSReader(this.corpusName);
 		reader.readFile(fileName);
 		List<TextAnnotation> tas = reader.getTextAnnotations();
@@ -53,7 +73,8 @@ public class POSBaseLineCounter {
 			}
 		}
 	}
-
+	
+	/** Increment the counting of a given form-POS association */
 	public void count(String form, String tag) {
 		TreeMap<String, Integer> counts = table.get(form);
 
@@ -73,7 +94,8 @@ public class POSBaseLineCounter {
 	public void forget() {
 		table.clear();
 	}
-
+	
+	/** Give a tag for a given form */
 	public String tag(int tokenId, TextAnnotation ta) {
 		String form = ta.getToken(tokenId);
 		TreeMap<String, Integer> counts = table.get(form);
@@ -102,11 +124,11 @@ public class POSBaseLineCounter {
 	}
 
 	/**
-	 * Determines if the input word looks like a number of some sort.
+	 * Determines if the input form looks like a number of some sort.
 	 *
 	 * @param form
-	 *            The form of the word.
-	 * @return <code>true</code> iff the word contains only characters in ".,-"
+	 *            The form of the form.
+	 * @return <code>true</code> iff the form contains only characters in ".,-"
 	 *         and at least one digit.
 	 **/
 	public boolean looksLikeNumber(String form) {
@@ -123,13 +145,13 @@ public class POSBaseLineCounter {
 	}
 
 	/**
-	 * Indicates whether the input word was observed while training this
+	 * Indicates whether the input form was observed while source this
 	 * learner.
 	 *
 	 * @param form
-	 *            The form of the word.
+	 *            The form of the form.
 	 * @return <code>true</code> if this learner contains statistics for the
-	 *         input word.
+	 *         input form.
 	 **/
 	public boolean observed(String form) {
 		return table.containsKey(form);
@@ -146,11 +168,11 @@ public class POSBaseLineCounter {
 	}
 
 	/**
-	 * Returns the set of tags that the given word has been observed with.
+	 * Returns the set of tags that the given form has been observed with.
 	 *
 	 * @param form
-	 *            The form of the word.
-	 * @return The set of tags observed in association with the given word.
+	 *            The form of the form.
+	 * @return The set of tags observed in association with the given form.
 	 **/
 	public Set<String> allowableTags(String form) {
 		if (!table.containsKey(form)) {
@@ -165,17 +187,19 @@ public class POSBaseLineCounter {
 		return table.get(form).keySet();
 	}
 
-	/** Return the name of the training corpus. */
+	/** Return the name of the source corpus. */
 	public String getCorpusName() {
 		return this.corpusName;
 	}
 	
+	/** Write an instance of POSBaseLineCounter class to JSON format*/
 	public static String write(POSBaseLineCounter counter){
 		Gson gson = new GsonBuilder().create();
 		
 		return gson.toJson(counter);
 	}
 	
+	/** Read the an instance of POSBaseLineCounter class from JSON format*/
 	public static POSBaseLineCounter read(String json){
 		return new Gson().fromJson(json, POSBaseLineCounter.class);
 	}

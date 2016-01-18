@@ -41,15 +41,15 @@ public class POSMikheevFeatureExtractor implements FeatureExtractor {
 	 *            Name of view
 	 * @param corpusName
 	 *            Name of Corpus
-	 * @param fileName
-	 *            fileName of the training corpus
+	 * @param home
+	 *            file name or directory name of the source corpus
 	 * @throws Exception
 	 */
-	public POSMikheevFeatureExtractor(String viewName, String corpusName, String fileName) throws Exception {
+	public POSMikheevFeatureExtractor(String viewName, String corpusName, String home) throws Exception {
 		this.viewName = viewName;
 		this.counter = new POSMikheevCounter(corpusName);
-		counter.buildTable(fileName);
-		counter.doneLearning();
+		counter.buildTable(home);
+		//counter.doneLearning(); //without pruning to maximum the number of form-tag associations
 	}
 
 	/**
