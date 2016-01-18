@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankPOSReader;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,9 +38,37 @@ public class POSMikheevCounter extends POSBaseLineCounter {
 		firstCapitalized = new HashMap<String, TreeMap<String, Integer>>();
 		notFirstCapitalized = new HashMap<String, TreeMap<String, Integer>>();
 	}
-
-	@Override
-	public void buildTable(String fileName) throws Exception {
+	
+	
+	/**
+	 * A table is built from either a given source corpus file or source corpus directory by 
+	 * counting the number of times that each suffix-POS association in a source corpus. 
+	 * 
+	 * @param home
+	 *            file name or directory name of the source corpus
+	 * @throws Exception
+	 **/
+	public void buildTable(String home) throws Exception {
+		if (IOUtils.isFile(home))
+			this.buildTableHelper(home);
+		else if(IOUtils.isDirectory(home)){
+			String[] files = IOUtils.lsFiles(home);
+			for (String file : files){
+				//System.out.println(file);
+				this.buildTableHelper(home +"\\" + file);
+		    }
+		}
+	}
+	
+	/**
+	 * A table is built from a given source corpus file by 
+	 * counting the number of times that each suffix-POS association in a source corpus. 
+	 * 
+	 * @param fileName
+	 *            file name of the source corpus
+	 * @throws Exception
+	 **/
+	private void buildTableHelper(String fileName) throws Exception {
 		PennTreebankPOSReader reader = new PennTreebankPOSReader(this.corpusName);
 		reader.readFile(fileName);
 		List<TextAnnotation> tas = reader.getTextAnnotations();
@@ -145,7 +174,8 @@ public class POSMikheevCounter extends POSBaseLineCounter {
 		firstCapitalized.clear();
 		notFirstCapitalized.clear();
 	}
-
+	
+	/** Give a tag for a given form */
 	public String tag(int tokenId, TextAnnotation ta) {
 		String form = ta.getToken(tokenId);
 
@@ -171,7 +201,8 @@ public class POSMikheevCounter extends POSBaseLineCounter {
 		}
 		return "UNKNOWN";
 	}
-
+	
+	
 	private String tagHelper(String form, HashMap<String, TreeMap<String, Integer>> table) {
 		form = form.toLowerCase();
 		ArrayList<String> forms = new ArrayList<String>();
@@ -266,11 +297,13 @@ public class POSMikheevCounter extends POSBaseLineCounter {
 
 		return result;
 	}
-
+	
+	/** Write an instance of POSMikheevCounter class to JSON format*/
 	public static String write(POSMikheevCounter counter) {
 		return POSBaseLineCounter.write(counter);
 	}
-
+	
+	/** Read the an instance of POSMikheevCounter class from JSON format*/
 	public static POSMikheevCounter read(String json) {
 		return new Gson().fromJson(json, POSMikheevCounter.class);
 	}

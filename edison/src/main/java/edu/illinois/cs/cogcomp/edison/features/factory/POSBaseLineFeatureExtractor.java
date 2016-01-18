@@ -39,14 +39,14 @@ public class POSBaseLineFeatureExtractor implements FeatureExtractor {
 	 *            Name of view
 	 * @param corpusName
 	 *            Name of Corpus
-	 * @param fileName
-	 *            fileName of the training corpus
+	 * @param home
+	 *            file name or directory name of the source corpus
 	 * @throws Exception
 	 */
-	public POSBaseLineFeatureExtractor(String viewName, String corpusName, String fileName) throws Exception {
+	public POSBaseLineFeatureExtractor(String viewName, String corpusName, String home) throws Exception {
 		this.viewName = viewName;
 		this.counter = new POSBaseLineCounter(corpusName);
-		counter.buildTable(fileName);
+		counter.buildTable(home);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class POSBaseLineFeatureExtractor implements FeatureExtractor {
 	 * @param viewName
 	 *            Name of view
 	 * @param json
-	 *            JSON format of trained counter
+	 *            JSON format of POSBaseLineCounter instance
 	 */
 	public POSBaseLineFeatureExtractor(String viewName, String json) {
 		this.viewName = viewName;
