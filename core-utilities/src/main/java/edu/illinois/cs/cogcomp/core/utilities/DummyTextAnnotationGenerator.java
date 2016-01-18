@@ -46,11 +46,11 @@ public class DummyTextAnnotationGenerator {
     }
     static Map<IntPair, String> chunks_noisy = new HashMap<>();
     static {
-        chunks.put(new IntPair(0, 2), "NP");
-        chunks.put(new IntPair(2, 3), "PP");
-        chunks.put(new IntPair(3, 6), "NP");
-        chunks.put(new IntPair(6, 7), "PP");
-        chunks.put(new IntPair(7, 8), "NP");
+        chunks_noisy.put(new IntPair(0, 2), "NP");
+        chunks_noisy.put(new IntPair(2, 3), "PP");
+        chunks_noisy.put(new IntPair(3, 6), "NP");
+        chunks_noisy.put(new IntPair(6, 7), "PP");
+        chunks_noisy.put(new IntPair(7, 8), "NP");
     }
     static IntPair verbSRLPredicate = new IntPair(5, 6);
     static String verbSRLPredicateSense = "01";
