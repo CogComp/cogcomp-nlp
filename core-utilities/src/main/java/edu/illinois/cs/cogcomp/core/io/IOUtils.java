@@ -81,7 +81,7 @@ public abstract class IOUtils {
      * Returns the file name from a full path.
      */
     public static String getFileName(String path) {
-        int slashIndex = path.lastIndexOf('/');
+        int slashIndex = path.lastIndexOf(File.separator);
         path = path.substring(slashIndex + 1);
 
         return path;
@@ -132,7 +132,7 @@ public abstract class IOUtils {
         ArrayList<String> files = new ArrayList<>();
 
         for (String s : tmp) {
-            if (isDirectory(directory + "/" + s))
+            if (isDirectory(directory + File.separator + s))
                 files.add(s);
         }
 
@@ -199,7 +199,7 @@ public abstract class IOUtils {
         // Some JVMs return null for empty dirs
         if (files != null) {
             for (String f : files) {
-                String filename = directory + "/" + f;
+                String filename = directory + File.separator + f;
                 File file = new File(filename);
                 if (file.isDirectory())
                     clean = cleanDir(filename) && file.delete();
