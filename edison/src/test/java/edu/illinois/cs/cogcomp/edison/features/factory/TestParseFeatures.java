@@ -86,7 +86,7 @@ public class TestParseFeatures extends TestCase {
             }
         }
 
-        System.out.println("\n\tTesting parse siblings: Stanford");
+        System.out.println("\n\tTesting verb voice: Stanford");
         for (TextAnnotation ta : tas) {
             if (!ta.hasView(ViewNames.SRL_VERB))
                 continue;
