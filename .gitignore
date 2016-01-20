@@ -9,3 +9,7 @@ local.properties
 ### JetBrains
 *.iml
 .idea/
+
+*.~
+
+*.jar
