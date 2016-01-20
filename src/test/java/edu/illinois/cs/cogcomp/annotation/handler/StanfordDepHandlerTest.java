@@ -50,7 +50,7 @@ public class StanfordDepHandlerTest {
         stanfordProps.put("annotators", "pos, parse");
         stanfordProps.put("parse.originalDependencies", true);
         stanfordProps.put("parse.maxlen",  "100");
-        stanfordProps.put("parse.maxtime", "1000");
+        stanfordProps.put("parse.maxtime", "100");
         POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
         ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
         StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator, 100);
