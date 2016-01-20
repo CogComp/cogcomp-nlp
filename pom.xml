@@ -8,7 +8,7 @@
     <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cogcomp-nlp-version>3.0.14</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.17</cogcomp-nlp-version>
     </properties>
     <repositories>
         <repository>

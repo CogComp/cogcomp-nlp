@@ -5,7 +5,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.IndexedWord;
@@ -14,6 +13,7 @@ import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
+import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,20 +26,31 @@ import java.util.List;
  *
  * Created by James Clarke and Christos Christodoulopoulos.
  */
-public class StanfordDepHandler extends PipelineAnnotator{
+public class StanfordDepHandler extends PipelineAnnotator {
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
+    private int maxParseSentenceLength;
     private Logger logger = LoggerFactory.getLogger( StanfordDepHandler.class );
 
     public StanfordDepHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
+        this(posAnnotator, parseAnnotator, -1);
+    }
+
+    public StanfordDepHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, int maxSentenceLength) {
         super("Stanford Dependency Parser", "3.3.1", "stanforddep", ViewNames.DEPENDENCY_STANFORD, new String[]{});
         this.posAnnotator = posAnnotator;
         this.parseAnnotator = parseAnnotator;
+        this.maxParseSentenceLength = maxSentenceLength;
     }
 
 
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
+        // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
+        if (maxParseSentenceLength > 0 && textAnnotation.size() > maxParseSentenceLength) {
+            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() +
+                    " since it is larger than the maximum sentence length of the parser.");
+        }
         TreeView treeView = new TreeView(ViewNames.DEPENDENCY_STANFORD, "StanfordDepHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = StanfordParseHandler.buildStanfordSentences(textAnnotation);
@@ -47,6 +58,11 @@ public class StanfordDepHandler extends PipelineAnnotator{
         posAnnotator.annotate(document);
         parseAnnotator.annotate(document);
         sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
+        if (sentences.get(0).get(TreeCoreAnnotations.TreeAnnotation.class).nodeString().equals("X")) {
+            // This is most like because we ran out of time
+            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() + ". " +
+                    "This is most likely due to a timeout.");
+        }
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
@@ -56,8 +72,7 @@ public class StanfordDepHandler extends PipelineAnnotator{
             try {
                 root = depGraph.getFirstRoot();
             }
-            catch ( RuntimeException e )
-            {
+            catch ( RuntimeException e ) {
                 String msg = "ERROR in getting root of dep graph for sentence.  Sentence is:\n" +
                         sentence.toString() + "'\nDependency graph is:\n" + depGraph.toCompactString() +
                         "\nText is:\n" + textAnnotation.getText();
@@ -73,8 +88,6 @@ public class StanfordDepHandler extends PipelineAnnotator{
             treeView.setDependencyTree(sentenceId, tree);
         }
         textAnnotation.addView( getViewName(), treeView );
-
-        return;
     }
 
 

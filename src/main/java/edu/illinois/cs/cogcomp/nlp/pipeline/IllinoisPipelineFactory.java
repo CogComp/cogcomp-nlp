@@ -120,15 +120,16 @@ public class IllinoisPipelineFactory
             stanfordProps.put( "parse.maxtime", timePerSentence ); // per sentence? could be per document but no idea from stanford javadoc
             POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
             ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
+            int maxLength = Integer.parseInt(maxParseSentenceLength);
 
             if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_DEP ) )
             {
-                StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator );
+                StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator, maxLength );
                 viewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
             }
             if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_PARSE ) )
             {
-                StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator );
+                StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator, maxLength );
                 viewGenerators.put(ViewNames.PARSE_STANFORD, parser);
             }
         }
