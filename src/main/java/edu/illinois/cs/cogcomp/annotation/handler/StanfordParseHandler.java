@@ -20,7 +20,6 @@ import edu.stanford.nlp.util.CoreMap;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a pipeline
@@ -33,34 +32,26 @@ public class StanfordParseHandler extends PipelineAnnotator {
 
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
-
-    static Properties stanfordProps;
-
-
-    /**
-     * default config options for stanford.  Factory uses its own properties object.
-     */
-    static {
-        stanfordProps = new Properties();
-        stanfordProps.put( "annotators", "pos, parse") ;
-        stanfordProps.put("parse.originalDependencies", true);
-    }
-
-
-    public StanfordParseHandler()
-    {
-        this( new POSTaggerAnnotator("pos", stanfordProps ), new ParserAnnotator( "parse", stanfordProps ) );
-    }
+    private int maxParseSentenceLength;
 
     public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
+        this(posAnnotator, parseAnnotator, -1);
+    }
+
+    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, int maxSentenceLength) {
         super("Stanford Parser", "3.3.1", "stanfordparse", ViewNames.PARSE_STANFORD, new String[]{});
         this.posAnnotator = posAnnotator;
         this.parseAnnotator = parseAnnotator;
+        this.maxParseSentenceLength = maxSentenceLength;
     }
-
 
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
+        // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
+        if (maxParseSentenceLength > 0 && textAnnotation.size() > maxParseSentenceLength) {
+            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() +
+                    " since it is larger than the maximum sentence length of the parser.");
+        }
         TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
@@ -68,11 +59,14 @@ public class StanfordParseHandler extends PipelineAnnotator {
         posAnnotator.annotate(document);
         parseAnnotator.annotate(document);
         sentences = document.get(SentencesAnnotation.class);
+        if (sentences.get(0).get(TreeCoreAnnotations.TreeAnnotation.class).nodeString().equals("X")) {
+            // This is most like because we ran out of time
+            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() + ". " +
+                    "This is most likely due to a timeout.");
+        }
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
-
             CoreMap sentence = sentences.get(sentenceId);
-
 
             edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
             Tree<String> tree = new Tree<>(stanfordTree.value());
@@ -82,7 +76,6 @@ public class StanfordParseHandler extends PipelineAnnotator {
             treeView.setParseTree(sentenceId, tree);
         }
         textAnnotation.addView( getViewName(), treeView );
-        return;
     }
 
 
