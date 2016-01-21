@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * I don't know what CSPTransliteration or CSPModel are for. --Stephen
+ */
 class CSPTransliteration
 {
 

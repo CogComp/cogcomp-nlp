@@ -466,23 +466,6 @@ class WikiTransliteration {
         return result;
     }
 
-//    public static HashMap<Triple<String, String, String>, Double> Normalize(String sourceWord, String targetWord, HashMap<Triple<String, String, String>, Double> counts, InternDictionary<String> internTable, NormalizationMode normalization) {
-//        if (normalization == NormalizationMode.BySourceSubstring)
-//            return NormalizeBySourceSubstring(counts, internTable);
-//        //else if (normalization == NormalizationMode.AllProductions)
-//        //    return NormalizeAllProductions(counts, internTable);
-//        //else if (normalization == NormalizationMode.BySourceSubstringMax)
-//        //    return NormalizeBySourceSubstringMax(counts, internTable);
-//        //else if (normalization == NormalizationMode.BySourceAndTargetSubstring)
-//        //    return NormalizeBySourceAndTargetSubstring(counts, internTable);
-//        //else if (normalization == NormalizationMode.BySourceOverlap)
-//        //    return NormalizeBySourceOverlap(sourceWord, counts, internTable);
-//        //else if (normalization == NormalizationMode.ByTargetSubstring)
-//        //    return NormalizeByTargetSubstring(counts, internTable);
-//        //else
-//        return InternProductions(counts, internTable);
-//    }
-
     public static HashMap<Production, Double> Normalize(String sourceWord, String targetWord, HashMap<Production, Double> counts, InternDictionary<String> internTable, NormalizationMode normalization) {
         if (normalization == NormalizationMode.BySourceSubstring)
             return NormalizeBySourceSubstring(counts, internTable);
