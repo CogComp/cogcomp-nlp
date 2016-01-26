@@ -63,10 +63,6 @@ public class CommaProperties extends ResourceManager {
     public String getNombankDir() {
         return getString("NOMBANK_DIR");
     }
-    
-    public String getConstituentParser() {
-        return getString("CONSTITUENT_PARSER");
-    }
 
     public boolean lexicaliseNER() {
         return getBoolean("LEX_NER");
@@ -78,17 +74,5 @@ public class CommaProperties extends ResourceManager {
 
     public boolean useCurator() {
         return getBoolean("USE_CURATOR");
-    }
-
-    public String getLearnerConfig() {
-        return getString("LEARNER_CONFIG");
-    }
-    
-    public String getSLearnerConfig() {
-        return getString("SLEARNER_CONFIG");
-    }
-    
-    public String getTrainDataConfig() {
-        return getString("SLEARNER_CONFIG");
     }
 }

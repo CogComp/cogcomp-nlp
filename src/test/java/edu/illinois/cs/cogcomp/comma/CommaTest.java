@@ -41,7 +41,7 @@ public class CommaTest extends TestCase {
         tlv.addTokenLabel(12, "''", 1d);
 
 
-        TreeView parse = new TreeView(CommaProperties.getInstance().getConstituentParser(), "Test", ta, 1.0);
+        TreeView parse = new TreeView(ViewNames.PARSE_STANFORD, "Test", ta, 1.0);
         String treeString = "(ROOT" +
 			        		"  (SINV" +
 			        		"    (VP (VBZ Says))" +

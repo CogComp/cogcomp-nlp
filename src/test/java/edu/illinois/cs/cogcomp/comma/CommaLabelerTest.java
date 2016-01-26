@@ -1,21 +1,14 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import java.util.Collections;
-
-import junit.framework.TestCase;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import junit.framework.TestCase;
+
+import java.util.Collections;
 
 public class CommaLabelerTest extends TestCase {
     private TextAnnotation ta;
@@ -42,7 +35,7 @@ public class CommaLabelerTest extends TestCase {
         tlv.addTokenLabel(8, ". ", 1d);
 
 
-        TreeView parse = new TreeView(CommaProperties.getInstance().getConstituentParser(), "Test", ta, 1.0);
+        TreeView parse = new TreeView(ViewNames.PARSE_STANFORD, "Test", ta, 1.0);
         String treeString = "(ROOT (S (NP (NP (NNP Mary)) (, ,) (NP (DT the) (JJ clever) (NN scientist)) (, ,)) " +
                 "(VP (VBD was) (VP (VBG walking)))  (. .)))";
         parse.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(treeString));

@@ -1,13 +1,12 @@
-package edu.illinois.cs.cogcomp.comma.annotators;
+package edu.illinois.cs.cogcomp.comma;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
@@ -18,19 +17,18 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
 
 /**
  * An interface for providing a comma {@link PredicateArgumentView}
  */
 public class CommaLabeler extends Annotator{
     private LocalCommaClassifier classifier;
-    
+
     public static final String viewName = "SRL_COMMA";
-    
+
     public CommaLabeler () {
-    	super(viewName, new String[]{CommaProperties.getInstance().useGold()?ViewNames.PARSE_GOLD :  CommaProperties.getInstance().getConstituentParser() , ViewNames.POS, ViewNames.SHALLOW_PARSE});
+    	super(viewName, new String[]{CommaProperties.getInstance().useGold() ? ViewNames.PARSE_GOLD : ViewNames.PARSE_STANFORD,
+                ViewNames.POS, ViewNames.SHALLOW_PARSE});
     	classifier = new LocalCommaClassifier();
     }
 
@@ -76,7 +74,7 @@ public class CommaLabeler extends Annotator{
     	PreProcessor preProcessor = new PreProcessor();
         BufferedReader reader = new BufferedReader(new FileReader(inFileName));
         PrintWriter writer = new PrintWriter(outFileName, "UTF-8");
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             if(line.length() > 0) {
             	TextAnnotation ta = preProcessor.preProcess(line);

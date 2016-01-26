@@ -1,19 +1,5 @@
 package edu.illinois.cs.cogcomp.comma.readers;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import java_cup.internal_error;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
@@ -24,6 +10,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.NombankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PropbankReader;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.*;
 
 public class PrettyCorpusReader implements IResetableIterator<Sentence>, Serializable {
 
@@ -77,9 +67,8 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
 			if (taMap.containsKey(textId)) {
 				goldTa = taMap.get(textId);
 				try {
-					ta = preProcessor.preProcess(Collections
-							.singletonList(cleanedTokens));
-				} catch (AnnotatorException e) {
+					ta = preProcessor.preProcess(Collections.singletonList(cleanedTokens));
+				} catch (Exception e) {
 					e.printStackTrace();
 					skip = true;
 					failures++;
@@ -92,20 +81,19 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
 
 			if (!skip) {
 				List<List<String>> commaLabels = new ArrayList<>();
-				for (int tokenIdx = 0; tokenIdx < tokens.length; tokenIdx++) {
-					String token = tokens[tokenIdx];
-					if (token.matches(",\\[.*\\]")) {
-						String labels = token.substring(2, token.length() - 1);
-						List<String> commaLabelsForIdx = Arrays.asList(labels.split(","));
-						commaLabels.add(commaLabelsForIdx);
-					} else if (token.equals(",")) {
-						// add null for commas which have not been annotated.
-						// The sentence constructor will optionally discard
-						// these or convert them to Other labels based on
-						// comma.properties.INCLUDE_NULL_LABEL_COMMAS
-						commaLabels.add(null);
-					}
-				}
+                for (String token : tokens) {
+                    if (token.matches(",\\[.*\\]")) {
+                        String labels = token.substring(2, token.length() - 1);
+                        List<String> commaLabelsForIdx = Arrays.asList(labels.split(","));
+                        commaLabels.add(commaLabelsForIdx);
+                    } else if (token.equals(",")) {
+                        // add null for commas which have not been annotated.
+                        // The sentence constructor will optionally discard
+                        // these or convert them to Other labels based on
+                        // comma.properties.INCLUDE_NULL_LABEL_COMMAS
+                        commaLabels.add(null);
+                    }
+                }
 
 				try {
 					Sentence sentence = new Sentence(ta, goldTa, commaLabels);
@@ -159,10 +147,8 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
 
 		try {
 			ptbReader = new PennTreebankReader(treebankHome, sections);
-			propbankReader = new PropbankReader(treebankHome, propbankHome,
-					sections, goldVerbView, true);
-			nombankReader = new NombankReader(treebankHome, nombankHome,
-					sections, goldNomView, true);
+			propbankReader = new PropbankReader(treebankHome, propbankHome, sections, goldVerbView, true);
+			nombankReader = new NombankReader(treebankHome, nombankHome, sections, goldNomView, true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
