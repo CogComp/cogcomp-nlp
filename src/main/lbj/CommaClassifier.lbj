@@ -3,7 +3,7 @@ package edu.illinois.cs.cogcomp.comma.lbj;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
-import edu.illinois.cs.cogcomp.comma.readers.TestReader;
+import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import java.util.List;
@@ -183,10 +183,9 @@ discrete CommaLabel(Comma c) <- {
 /** A learned text classifier; its definition comes from data. */
 discrete LocalCommaClassifier(Comma c) <-
 learn CommaLabel
-	
 	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures, WordFeatures
 	with new SparseNetworkLearner(new SparseAveragedPerceptron(0.003, 0, 3.5))
-	from new CommaParser(TestReader.deserialize().getSentences(), CommaParser.Ordering.ORDERED, true)
+	from new CommaParser(new PrettyCorpusReader(CommaProperties.getInstance().getCommaLabeledDataFile()).getSentences(), CommaParser.Ordering.ORDERED, true)
 end
 
 
@@ -254,7 +253,7 @@ constraint listCommas (Sentence s)
 inference OxfordCommaConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@oxfordComma(s);}
-	with new ILPInference(new GurobiHook())
+	with new ILPInference(new OJalgoHook())
 }
 discrete OxfordCommaConstrainedCommaClassifier (Comma c) <- 
 	OxfordCommaConstrainedInference(LocalCommaClassifier)
@@ -262,7 +261,7 @@ discrete OxfordCommaConstrainedCommaClassifier (Comma c) <-
 inference SubstitutePairConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@substitutePair(s);}
-	with new ILPInference(new GurobiHook())
+	with new ILPInference(new OJalgoHook())
 }
 discrete SubstitutePairConstrainedCommaClassifier (Comma c) <- 
 	SubstitutePairConstrainedInference(LocalCommaClassifier)	
@@ -270,7 +269,7 @@ discrete SubstitutePairConstrainedCommaClassifier (Comma c) <-
 inference LocativePairConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@locativePair(s);}
-	with new ILPInference(new GurobiHook())
+	with new ILPInference(new OJalgoHook())
 }
 discrete LocativePairConstrainedCommaClassifier (Comma c) <- 
 	LocativePairConstrainedInference(LocalCommaClassifier)
@@ -278,7 +277,7 @@ discrete LocativePairConstrainedCommaClassifier (Comma c) <-
 inference ListCommasConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@listCommas(s);}
-	with new ILPInference(new GurobiHook())
+	with new ILPInference(new OJalgoHook())
 }
 discrete ListCommasConstrainedCommaClassifier (Comma c) <- 
 	ListCommasConstrainedInference(LocalCommaClassifier)

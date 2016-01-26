@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.comma.evaluation;
+package edu.illinois.cs.cogcomp.comma;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.lbj.ListCommasConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
@@ -15,7 +16,6 @@ import edu.illinois.cs.cogcomp.comma.lbj.SubstitutePairConstrainedCommaClassifie
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
 import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
-import edu.illinois.cs.cogcomp.comma.readers.TestReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -35,7 +35,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  */
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
-		PrettyCorpusReader pcr = TestReader.deserialize();
+		PrettyCorpusReader pcr = new PrettyCorpusReader(CommaProperties.getInstance().getCommaLabeledDataFile());
 		CommaParser parser = new CommaParser(pcr.getSentences(), Ordering.ORDERED, true);
 		System.out.println("GOLD GOLD");
 		localCVal(true, true, parser, 250, 0.003, 0, 2.0, false);
@@ -61,9 +61,9 @@ public class ClassifierComparison {
 		EvaluateDiscrete bayraktarAuto = getBayraktarBaselinePerformance(parser, false);
 		bayraktarAuto.printPerformance(System.out);
 
-/*		reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(parser, false);
-		
-		printConstrainedClassifierPerformance(parser);*/
+        reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(parser, false);
+
+		printConstrainedClassifierPerformance(parser);
 	}
 	
 	public static void printConstrainedClassifierPerformance(Parser parser){
