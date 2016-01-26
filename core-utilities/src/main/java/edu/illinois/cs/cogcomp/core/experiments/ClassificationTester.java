@@ -72,7 +72,6 @@ public class ClassificationTester {
         record.incrementCorrect(correctCount);
         record.incrementGold(goldCount);
         record.incrementPredicted(predictedCount);
-
     }
 
     public void record(String goldLabel, String predictedLabel) {

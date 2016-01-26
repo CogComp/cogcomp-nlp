@@ -88,7 +88,6 @@ public class SpanLabelView extends View {
         this.addConstituent(c);
 
         return c;
-
     }
 
     public String getLabel(int tokenId) {

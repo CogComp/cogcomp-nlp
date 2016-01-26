@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
+package edu.illinois.cs.cogcomp.core.datastructures.textannotation; 
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -52,8 +52,6 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * A symbol table.
      */
     final SymbolTable symtab;
-
-
 
     public TextAnnotation(String corpusId, String id, String text,
                           IntPair[] characterOffsets, String[] tokens, int[] sentenceEndPositions) {
