@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -6,6 +6,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.factory.*;
+import edu.illinois.cs.cogcomp.edison.features.lrec.LabelTwoAfter;
+import edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSBaseLineFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestPOSWindow extends TestCase {
+public class TestLabelTwoAfter extends TestCase {
 	
 	private static List<TextAnnotation> tas;
 
@@ -32,7 +35,7 @@ public class TestPOSWindow extends TestCase {
 	}
 
 	public final void test() throws Exception {
-		System.out.println("POSWindow Feature Extractor");
+		System.out.println("LabelTwoAfter Feature Extractor");
 		// Using the first TA and a constituent between span of 30-40 as a test
 		TextAnnotation ta = tas.get(2);
 		View TOKENS = ta.getView("TOKENS");
@@ -47,7 +50,13 @@ public class TestPOSWindow extends TestCase {
 
 		System.out.println("Testlist size is " + testlist.size());
 
-		String fileName = Constant.prefix + Constant.POSCorpus;
+		// Constituent test = testlist.get(1);
+
+		// System.out.println("The constituent we are extracting features from
+		// in this test is: " + test.getSurfaceForm());
+
+		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
+		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 		
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
 		posBaseLine.buildTable(fileName);
@@ -55,15 +64,15 @@ public class TestPOSWindow extends TestCase {
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
 		posMikheev.buildTable(fileName);
 		
-		POSWindow posWindowPOS = new POSWindow("posWindowPOS");
-		POSWindow posWindowPOSBaseLine = new POSWindow("posWindowPOSBaseLine", posBaseLine);
-		POSWindow posWindowPOSMikheev = new POSWindow("posWindowPOSMikheev", posMikheev);
+		LabelTwoAfter l2aPOS = new LabelTwoAfter("l2aPOS");
+		LabelTwoAfter l2aPOSBaseLine = new LabelTwoAfter("l2aPOSBaseLine", posBaseLine);
+		LabelTwoAfter l2aPOSMikheev = new LabelTwoAfter("l2aPOSMikheev", posMikheev);
 		
 		//Test when using POS View
-		ArrayList<Set<Feature>> featslist = new ArrayList<Set<Feature>>();
+		ArrayList<Set<Feature>> featslist = new ArrayList<>();
 
 		for (Constituent test : testlist)
-			featslist.add(posWindowPOS.getFeatures(test));
+			featslist.add(l2aPOS.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");
@@ -73,7 +82,6 @@ public class TestPOSWindow extends TestCase {
 		System.out.println("Printing list of Feature set");
 
 		for (Set<Feature> feats : featslist) {
-			System.out.println("\n");
 			for (Feature f : feats)
 				System.out.println(f.getName());
 		}
@@ -82,7 +90,7 @@ public class TestPOSWindow extends TestCase {
 		featslist.clear();
 		
 		for (Constituent test : testlist)
-			featslist.add(posWindowPOSBaseLine.getFeatures(test));
+			featslist.add(l2aPOSBaseLine.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");
@@ -92,7 +100,6 @@ public class TestPOSWindow extends TestCase {
 		System.out.println("Printing list of Feature set");
 
 		for (Set<Feature> feats : featslist) {
-			System.out.println("\n");
 			for (Feature f : feats)
 				System.out.println(f.getName());
 		}
@@ -100,7 +107,7 @@ public class TestPOSWindow extends TestCase {
 		featslist.clear();
 		
 		for (Constituent test : testlist)
-			featslist.add(posWindowPOSMikheev.getFeatures(test));
+			featslist.add(l2aPOSMikheev.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");
@@ -110,7 +117,6 @@ public class TestPOSWindow extends TestCase {
 		System.out.println("Printing list of Feature set");
 
 		for (Set<Feature> feats : featslist) {
-			System.out.println("\n");
 			for (Feature f : feats)
 				System.out.println(f.getName());
 		}

@@ -6,9 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /***
- * Example on serializing classes to xml using XmlModel interface. This will
- * serialize an object with JAXB annotations to xml. Member objects are also
- * serialized if they have jaxb annotations.
+ * Example on serializing classes to xml using XmlModel interface. This will serialize an object
+ * with JAXB annotations to xml. Member objects are also serialized if they have jaxb annotations.
  *
  * @author upadhya3
  */
@@ -26,11 +25,10 @@ public class XMLModelExample {
     public List<EnclosedObject> lists;
 
     /**
-     * Used for JAXB calls only. This is important. JAXB wont work if you do not
-     * have a empty constructor.
+     * Used for JAXB calls only. This is important. JAXB wont work if you do not have a empty
+     * constructor.
      */
-    public XMLModelExample() {
-    }
+    public XMLModelExample() {}
 
     public XMLModelExample(String a, String b, String c) {
         fieldA = a;

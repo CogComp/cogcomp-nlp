@@ -25,11 +25,11 @@ public class ExperimentRunner<T> {
         this(10000);
     }
 
-    public double runExperiment(final IExperiment<T> experiment,
-                                final List<T> trainingSet, final List<T> testSet) throws Exception {
+    public double runExperiment(final IExperiment<T> experiment, final List<T> trainingSet,
+            final List<T> testSet) throws Exception {
 
-        log.info("Running experiment: " + experiment.getDescription()
-                + ". Start time: " + (new Date()));
+        log.info("Running experiment: " + experiment.getDescription() + ". Start time: "
+                + (new Date()));
 
         ExecutionTimer timer = new ExecutionTimer();
         timer.start();
@@ -54,8 +54,8 @@ public class ExperimentRunner<T> {
 
         timer.end();
 
-        log.info("Experiment " + experiment.getDescription()
-                + " complete. End time: " + (new Date()) + ". Took " + timer.getTimeSeconds() + "s.");
+        log.info("Experiment " + experiment.getDescription() + " complete. End time: "
+                + (new Date()) + ". Took " + timer.getTimeSeconds() + "s.");
 
         return value;
     }

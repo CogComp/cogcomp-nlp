@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -53,12 +53,12 @@ public class TestPOSBaseLineFeatureExtractor extends TestCase {
 		//System.out.println(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
 		//System.out.println(System.getProperty("user.dir"));
 		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = Constant.prefix + Constant.POSCorpus;
+		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 		
 		POSBaseLineFeatureExtractor posBaseLine = new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus",
 				fileName);
 
-		ArrayList<Set<Feature>> featslist = new ArrayList<Set<Feature>>();
+		ArrayList<Set<Feature>> featslist = new ArrayList<>();
 
 		for (Constituent test : testlist)
 			featslist.add(posBaseLine.getFeatures(test));

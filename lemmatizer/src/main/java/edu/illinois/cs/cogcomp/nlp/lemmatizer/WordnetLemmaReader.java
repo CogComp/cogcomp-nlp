@@ -22,10 +22,7 @@ public class WordnetLemmaReader {
                 System.err.println("Wordnet path does not point to a directory.");
                 System.exit(-1);
             }
-        } catch (URISyntaxException e) {
-            System.err.println("Error while trying to access Wordnet.");
-            System.exit(-1);
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             System.err.println("Error while trying to access Wordnet.");
             System.exit(-1);
         }
@@ -62,20 +59,28 @@ public class WordnetLemmaReader {
     }
 
     public String getLemma(String word, String pos) {
-        if (pos.startsWith("N")) return nounLemmas.get(word);
-        if (pos.startsWith("J")) return adjectiveLemmas.get(word);
-        if (pos.startsWith("V")) return verbLemmas.get(word);
-        if (pos.startsWith("R")) return adverbLemmas.get(word);
+        if (pos.startsWith("N"))
+            return nounLemmas.get(word);
+        if (pos.startsWith("J"))
+            return adjectiveLemmas.get(word);
+        if (pos.startsWith("V"))
+            return verbLemmas.get(word);
+        if (pos.startsWith("R"))
+            return adverbLemmas.get(word);
 
         return null;
     }
 
     public Set<String> getLemmaAllPOS(String word) {
         Set<String> lemmas = new HashSet<>();
-        if (nounLemmas.containsKey(word)) lemmas.add(nounLemmas.get(word));
-        if (verbLemmas.containsKey(word)) lemmas.add(verbLemmas.get(word));
-        if (adjectiveLemmas.containsKey(word)) lemmas.add(adjectiveLemmas.get(word));
-        if (adverbLemmas.containsKey(word)) lemmas.add(adverbLemmas.get(word));
+        if (nounLemmas.containsKey(word))
+            lemmas.add(nounLemmas.get(word));
+        if (verbLemmas.containsKey(word))
+            lemmas.add(verbLemmas.get(word));
+        if (adjectiveLemmas.containsKey(word))
+            lemmas.add(adjectiveLemmas.get(word));
+        if (adverbLemmas.containsKey(word))
+            lemmas.add(adverbLemmas.get(word));
         return lemmas;
     }
 }

@@ -18,327 +18,320 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 
 public class JsonSerializer extends AbstractSerializer {
 
-  JsonObject writeTextAnnotation(TextAnnotation ta) {
+    JsonObject writeTextAnnotation(TextAnnotation ta) {
 
-    JsonObject json = new JsonObject();
+        JsonObject json = new JsonObject();
 
-    writeString("corpusId", ta.getCorpusId(), json);
-    writeString("id", ta.getId(), json);
-    writeString("text", ta.getText(), json);
-    writeStringArray("tokens", ta.getTokens(), json);
+        writeString("corpusId", ta.getCorpusId(), json);
+        writeString("id", ta.getId(), json);
+        writeString("text", ta.getText(), json);
+        writeStringArray("tokens", ta.getTokens(), json);
 
-    writeSentences(ta, json);
+        writeSentences(ta, json);
 
-    JsonArray views = new JsonArray();
-    for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-      if (viewName.equals(ViewNames.SENTENCE))
-        continue;
+        JsonArray views = new JsonArray();
+        for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
+            if (viewName.equals(ViewNames.SENTENCE))
+                continue;
 
-      JsonObject view = new JsonObject();
+            JsonObject view = new JsonObject();
 
-      writeString("viewName", viewName, view);
-      views.add(view);
+            writeString("viewName", viewName, view);
+            views.add(view);
 
-      JsonArray viewData = new JsonArray();
-      List<View> topKViews = ta.getTopKViews(viewName);
+            JsonArray viewData = new JsonArray();
+            List<View> topKViews = ta.getTopKViews(viewName);
 
-      for (View topKView : topKViews) {
-        JsonObject kView = new JsonObject();
-        writeView(topKView, kView);
+            for (View topKView : topKViews) {
+                JsonObject kView = new JsonObject();
+                writeView(topKView, kView);
 
-        viewData.add(kView);
-      }
+                viewData.add(kView);
+            }
 
-      view.add("viewData", viewData);
+            view.add("viewData", viewData);
+        }
+
+        json.add("views", views);
+
+        return json;
     }
 
-    json.add("views", views);
+    TextAnnotation readTextAnnotation(String string) throws Exception {
+        JsonObject json = (JsonObject) new JsonParser().parse(string);
 
-    return json;
-  }
+        String corpusId = readString("corpusId", json);
+        String id = readString("id", json);
+        String text = readString("text", json);
+        String[] tokens = readStringArray("tokens", json);
 
-  TextAnnotation readTextAnnotation(String string) throws Exception {
-    JsonObject json = (JsonObject) new JsonParser().parse(string);
+        Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
 
-    String corpusId = readString("corpusId", json);
-    String id = readString("id", json);
-    String text = readString("text", json);
-    String[] tokens = readStringArray("tokens", json);
+        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
 
-    Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
+        TextAnnotation ta =
+                new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());
 
-    IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
+        JsonArray views = json.getAsJsonArray("views");
+        for (int i = 0; i < views.size(); i++) {
+            JsonObject view = (JsonObject) views.get(i);
+            String viewName = readString("viewName", view);
 
-    TextAnnotation ta = new TextAnnotation(corpusId, id, text, offsets, tokens, sentences
-        .getSecond());
+            JsonArray viewData = view.getAsJsonArray("viewData");
+            List<View> topKViews = new ArrayList<>();
 
-    JsonArray views = json.getAsJsonArray("views");
-    for (int i = 0; i < views.size(); i++) {
-      JsonObject view = (JsonObject) views.get(i);
-      String viewName = readString("viewName", view);
+            for (int k = 0; k < viewData.size(); k++) {
+                JsonObject kView = (JsonObject) viewData.get(k);
 
-      JsonArray viewData = view.getAsJsonArray("viewData");
-      List<View> topKViews = new ArrayList<>();
+                topKViews.add(readView(kView, ta));
+            }
 
-      for (int k = 0; k < viewData.size(); k++) {
-        JsonObject kView = (JsonObject) viewData.get(k);
+            ta.addTopKView(viewName, topKViews);
+        }
 
-        topKViews.add(readView(kView, ta));
-      }
-
-      ta.addTopKView(viewName, topKViews);
+        return ta;
     }
 
-    return ta;
-  }
+    private static void writeView(View view, JsonObject json) {
+        writeString("viewType", view.getClass().getCanonicalName(), json);
 
-  private static void writeView(View view, JsonObject json) {
-    writeString("viewType", view.getClass().getCanonicalName(), json);
+        writeString("viewName", view.getViewName(), json);
 
-    writeString("viewName", view.getViewName(), json);
+        writeString("generator", view.getViewGenerator(), json);
 
-    writeString("generator", view.getViewGenerator(), json);
+        if (view.getScore() != 0)
+            writeDouble("score", view.getScore(), json);
 
-    if (view.getScore() != 0)
-      writeDouble("score", view.getScore(), json);
+        List<Constituent> constituents = view.getConstituents();
 
-    List<Constituent> constituents = view.getConstituents();
+        if (constituents.size() > 0) {
+            JsonArray cJson = new JsonArray();
+            for (int i = 0; i < view.getNumberOfConstituents(); i++) {
 
-    if (constituents.size() > 0) {
-      JsonArray cJson = new JsonArray();
-      for (int i = 0; i < view.getNumberOfConstituents(); i++) {
+                Constituent constituent = constituents.get(i);
+                JsonObject c = new JsonObject();
+                writeConstituent(constituent, c);
 
-        Constituent constituent = constituents.get(i);
-        JsonObject c = new JsonObject();
-        writeConstituent(constituent, c);
+                cJson.add(c);
+            }
 
-        cJson.add(c);
-      }
+            json.add("constituents", cJson);
+        }
 
-      json.add("constituents", cJson);
+        List<Relation> relations = view.getRelations();
+
+        if (relations.size() > 0) {
+
+            JsonArray rJson = new JsonArray();
+
+            for (Relation r : relations) {
+                Constituent src = r.getSource();
+                Constituent tgt = r.getTarget();
+
+                int srcId = constituents.indexOf(src);
+                int tgtId = constituents.indexOf(tgt);
+
+                JsonObject rJ = new JsonObject();
+
+                writeString("relationName", r.getRelationName(), rJ);
+
+                if (r.getScore() != 0)
+                    writeDouble("score", r.getScore(), rJ);
+                writeInt("srcConstituent", srcId, rJ);
+                writeInt("targetConstituent", tgtId, rJ);
+
+                rJson.add(rJ);
+            }
+
+            json.add("relations", rJson);
+        }
     }
 
-    List<Relation> relations = view.getRelations();
+    private static View readView(JsonObject json, TextAnnotation ta) throws Exception {
 
-    if (relations.size() > 0) {
+        String viewClass = readString("viewType", json);
 
-      JsonArray rJson = new JsonArray();
+        String viewName = readString("viewName", json);
 
-      for (Relation r : relations) {
-        Constituent src = r.getSource();
-        Constituent tgt = r.getTarget();
+        String viewGenerator = readString("generator", json);
 
-        int srcId = constituents.indexOf(src);
-        int tgtId = constituents.indexOf(tgt);
+        double score = 0;
+        if (json.has("score"))
+            score = readDouble("score", json);
 
-        JsonObject rJ = new JsonObject();
+        View view = createEmptyView(ta, viewClass, viewName, viewGenerator, score);
 
-        writeString("relationName", r.getRelationName(), rJ);
+        List<Constituent> constituents = new ArrayList<Constituent>();
 
-        if (r.getScore() != 0)
-          writeDouble("score", r.getScore(), rJ);
-        writeInt("srcConstituent", srcId, rJ);
-        writeInt("targetConstituent", tgtId, rJ);
+        if (json.has("constituents")) {
 
-        rJson.add(rJ);
-      }
+            JsonArray cJson = json.getAsJsonArray("constituents");
 
-      json.add("relations", rJson);
-    }
-  }
+            for (int i = 0; i < cJson.size(); i++) {
+                JsonObject cJ = (JsonObject) cJson.get(i);
+                Constituent c = readConstituent(cJ, ta, viewName);
+                constituents.add(c);
+                view.addConstituent(c);
+            }
+        }
 
-  private static View readView(JsonObject json, TextAnnotation ta)
-      throws Exception {
+        if (json.has("relations")) {
+            JsonArray rJson = json.getAsJsonArray("relations");
+            for (int i = 0; i < rJson.size(); i++) {
+                JsonObject rJ = (JsonObject) rJson.get(i);
 
-    String viewClass = readString("viewType", json);
+                String name = readString("relationName", rJ);
 
-    String viewName = readString("viewName", json);
+                double s = 0;
+                if (rJ.has("score"))
+                    s = readDouble("score", rJ);
 
-    String viewGenerator = readString("generator", json);
+                int src = readInt("srcConstituent", rJ);
+                int tgt = readInt("targetConstituent", rJ);
 
-    double score = 0;
-    if (json.has("score"))
-      score = readDouble("score", json);
+                Relation rel = new Relation(name, constituents.get(src), constituents.get(tgt), s);
 
-    View view = createEmptyView(ta, viewClass, viewName, viewGenerator,
-        score);
-
-    List<Constituent> constituents = new ArrayList<Constituent>();
-
-    if (json.has("constituents")) {
-
-      JsonArray cJson = json.getAsJsonArray("constituents");
-
-      for (int i = 0; i < cJson.size(); i++) {
-        JsonObject cJ = (JsonObject) cJson.get(i);
-        Constituent c = readConstituent(cJ, ta, viewName);
-        constituents.add(c);
-        view.addConstituent(c);
-      }
+                view.addRelation(rel);
+            }
+        }
+        return view;
     }
 
-    if (json.has("relations")) {
-      JsonArray rJson = json.getAsJsonArray("relations");
-      for (int i = 0; i < rJson.size(); i++) {
-        JsonObject rJ = (JsonObject) rJson.get(i);
+    private static void writeConstituent(Constituent c, JsonObject cJ) {
+        writeString("label", c.getLabel(), cJ);
 
-        String name = readString("relationName", rJ);
+        if (c.getConstituentScore() != 0)
+            writeDouble("score", c.getConstituentScore(), cJ);
+        writeInt("start", c.getStartSpan(), cJ);
+        writeInt("end", c.getEndSpan(), cJ);
 
-        double s = 0;
-        if (rJ.has("score"))
-          s = readDouble("score", rJ);
+        if (c.getAttributeKeys().size() > 0) {
+            JsonObject properties = new JsonObject();
 
-        int src = readInt("srcConstituent", rJ);
-        int tgt = readInt("targetConstituent", rJ);
+            for (String key : Sorters.sortSet(c.getAttributeKeys())) {
+                writeString(key, c.getAttribute(key), properties);
+            }
 
-        Relation rel = new Relation(name, constituents.get(src),
-            constituents.get(tgt), s);
-
-        view.addRelation(rel);
-      }
-    }
-    return view;
-  }
-
-  private static void writeConstituent(Constituent c, JsonObject cJ) {
-    writeString("label", c.getLabel(), cJ);
-
-    if (c.getConstituentScore() != 0)
-      writeDouble("score", c.getConstituentScore(), cJ);
-    writeInt("start", c.getStartSpan(), cJ);
-    writeInt("end", c.getEndSpan(), cJ);
-
-    if (c.getAttributeKeys().size() > 0) {
-      JsonObject properties = new JsonObject();
-
-      for (String key : Sorters.sortSet(c.getAttributeKeys())) {
-        writeString(key, c.getAttribute(key), properties);
-      }
-
-      cJ.add("properties", properties);
-    }
-  }
-
-  private static Constituent readConstituent(JsonObject cJ,
-                                             TextAnnotation ta, String viewName) {
-    String label = readString("label", cJ);
-    double score = 0;
-    if (cJ.has("score"))
-      score = readDouble("score", cJ);
-    int start = readInt("start", cJ);
-    int end = readInt("end", cJ);
-    Constituent c = new Constituent(label, score, viewName, ta, start, end);
-
-    if (cJ.has("properties")) {
-      JsonObject properties = cJ.getAsJsonObject("properties");
-
-      for (Entry<String, JsonElement> entry : properties.entrySet()) {
-        c.addAttribute(entry.getKey(), entry.getValue().getAsString());
-      }
-    }
-    return c;
-  }
-
-  private static void writeSentences(TextAnnotation ta, JsonObject json) {
-
-    JsonObject object = new JsonObject();
-
-    SpanLabelView sentenceView = (SpanLabelView) ta
-        .getView(ViewNames.SENTENCE);
-    writeString("generator", sentenceView.getViewGenerator(), object);
-
-    writeDouble("score", sentenceView.getScore(), object);
-    int numSentences = sentenceView.getNumberOfConstituents();
-    int[] sentenceEndPositions = new int[numSentences];
-
-    int id = 0;
-    for (Sentence sentence : ta.sentences()) {
-      sentenceEndPositions[id++] = sentence.getEndSpan();
-    }
-    writeIntArray("sentenceEndPositions", sentenceEndPositions, object);
-
-    json.add("sentences", object);
-  }
-
-  private static Pair<Pair<String, Double>, int[]> readSentences(
-      JsonObject json) {
-    JsonObject object = json.getAsJsonObject("sentences");
-
-    String generator = readString("generator", object);
-    double score = readDouble("score", object);
-    int[] endPositions = readIntArray("sentenceEndPositions", object);
-
-    return new Pair<Pair<String, Double>, int[]>(new Pair<String, Double>(
-        generator, score), endPositions);
-
-  }
-
-  private static void writeIntArray(String name, int[] is, JsonObject object) {
-
-    JsonArray array = new JsonArray();
-
-    for (int i : is) {
-      array.add(new JsonPrimitive(i));
+            cJ.add("properties", properties);
+        }
     }
 
-    object.add(name, array);
-  }
+    private static Constituent readConstituent(JsonObject cJ, TextAnnotation ta, String viewName) {
+        String label = readString("label", cJ);
+        double score = 0;
+        if (cJ.has("score"))
+            score = readDouble("score", cJ);
+        int start = readInt("start", cJ);
+        int end = readInt("end", cJ);
+        Constituent c = new Constituent(label, score, viewName, ta, start, end);
 
-  private static int[] readIntArray(String name, JsonObject object) {
+        if (cJ.has("properties")) {
+            JsonObject properties = cJ.getAsJsonObject("properties");
 
-    JsonArray array = object.get(name).getAsJsonArray();
-    int[] s = new int[array.size()];
-
-    for (int i = 0; i < array.size(); i++)
-      s[i] = array.get(i).getAsInt();
-
-    return s;
-  }
-
-  private static void writeStringArray(String name, String[] strings,
-                                       JsonObject object) {
-
-    JsonArray array = new JsonArray();
-
-    for (String s : strings) {
-      array.add(new JsonPrimitive(s));
+            for (Entry<String, JsonElement> entry : properties.entrySet()) {
+                c.addAttribute(entry.getKey(), entry.getValue().getAsString());
+            }
+        }
+        return c;
     }
 
-    object.add(name, array);
-  }
+    private static void writeSentences(TextAnnotation ta, JsonObject json) {
 
-  private static String[] readStringArray(String name, JsonObject object) {
+        JsonObject object = new JsonObject();
 
-    JsonArray array = object.get(name).getAsJsonArray();
-    String[] s = new String[array.size()];
+        SpanLabelView sentenceView = (SpanLabelView) ta.getView(ViewNames.SENTENCE);
+        writeString("generator", sentenceView.getViewGenerator(), object);
 
-    for (int i = 0; i < array.size(); i++)
-      s[i] = array.get(i).getAsString();
-    return s;
-  }
+        writeDouble("score", sentenceView.getScore(), object);
+        int numSentences = sentenceView.getNumberOfConstituents();
+        int[] sentenceEndPositions = new int[numSentences];
 
-  private static void writeString(String name, String value, JsonObject out) {
-    out.add(name, new JsonPrimitive(value));
-  }
+        int id = 0;
+        for (Sentence sentence : ta.sentences()) {
+            sentenceEndPositions[id++] = sentence.getEndSpan();
+        }
+        writeIntArray("sentenceEndPositions", sentenceEndPositions, object);
 
-  private static String readString(String name, JsonObject obj) {
-    return obj.getAsJsonPrimitive(name).getAsString();
-    // return obj.get(name).getAsString();
-  }
+        json.add("sentences", object);
+    }
 
-  private static void writeInt(String name, int value, JsonObject out) {
-    out.add(name, new JsonPrimitive(value));
-  }
+    private static Pair<Pair<String, Double>, int[]> readSentences(JsonObject json) {
+        JsonObject object = json.getAsJsonObject("sentences");
 
-  private static int readInt(String name, JsonObject obj) {
-    return obj.get(name).getAsInt();
-  }
+        String generator = readString("generator", object);
+        double score = readDouble("score", object);
+        int[] endPositions = readIntArray("sentenceEndPositions", object);
 
-  private static void writeDouble(String name, double value, JsonObject out) {
-    out.add(name, new JsonPrimitive(value));
-  }
+        return new Pair<>(new Pair<>(generator, score),
+                endPositions);
 
-  private static double readDouble(String name, JsonObject obj) {
-    return obj.get(name).getAsDouble();
-  }
+    }
+
+    private static void writeIntArray(String name, int[] is, JsonObject object) {
+
+        JsonArray array = new JsonArray();
+
+        for (int i : is) {
+            array.add(new JsonPrimitive(i));
+        }
+
+        object.add(name, array);
+    }
+
+    private static int[] readIntArray(String name, JsonObject object) {
+
+        JsonArray array = object.get(name).getAsJsonArray();
+        int[] s = new int[array.size()];
+
+        for (int i = 0; i < array.size(); i++)
+            s[i] = array.get(i).getAsInt();
+
+        return s;
+    }
+
+    private static void writeStringArray(String name, String[] strings, JsonObject object) {
+
+        JsonArray array = new JsonArray();
+
+        for (String s : strings) {
+            array.add(new JsonPrimitive(s));
+        }
+
+        object.add(name, array);
+    }
+
+    private static String[] readStringArray(String name, JsonObject object) {
+
+        JsonArray array = object.get(name).getAsJsonArray();
+        String[] s = new String[array.size()];
+
+        for (int i = 0; i < array.size(); i++)
+            s[i] = array.get(i).getAsString();
+        return s;
+    }
+
+    private static void writeString(String name, String value, JsonObject out) {
+        out.add(name, new JsonPrimitive(value));
+    }
+
+    private static String readString(String name, JsonObject obj) {
+        return obj.getAsJsonPrimitive(name).getAsString();
+        // return obj.get(name).getAsString();
+    }
+
+    private static void writeInt(String name, int value, JsonObject out) {
+        out.add(name, new JsonPrimitive(value));
+    }
+
+    private static int readInt(String name, JsonObject obj) {
+        return obj.get(name).getAsInt();
+    }
+
+    private static void writeDouble(String name, double value, JsonObject out) {
+        out.add(name, new JsonPrimitive(value));
+    }
+
+    private static double readDouble(String name, JsonObject obj) {
+        return obj.get(name).getAsDouble();
+    }
 }

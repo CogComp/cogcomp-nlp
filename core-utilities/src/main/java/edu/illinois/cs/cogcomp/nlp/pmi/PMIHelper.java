@@ -39,7 +39,7 @@ public class PMIHelper {
 
     private double getP(String xs) {
 
-        long[] counts = ngrams.getCount(new String[]{xs});
+        long[] counts = ngrams.getCount(new String[] {xs});
 
         long cx = 0;
         for (long c : counts)
@@ -67,10 +67,9 @@ public class PMIHelper {
     /**
      * Use this funtion to include variants into the same bucket.
      * <p/>
-     * For example, say you want to PMI for "hair of girl" and want to include
-     * {"hair", "the hair"} to get counts for the left part, and {"girl",
-     * "the girl", "a girl"} for the right and all combinations for leftRight,
-     * you need to call
+     * For example, say you want to PMI for "hair of girl" and want to include {"hair", "the hair"}
+     * to get counts for the left part, and {"girl", "the girl", "a girl"} for the right and all
+     * combinations for leftRight, you need to call
      * <p/>
      * <code>
      * String[] leftRight = {"hair of girl", "hair of the girl", ..., "the hair of girl",...};
@@ -148,29 +147,26 @@ public class PMIHelper {
     }
 
     public static void main(String[] args) {
-        GoogleNgramsCounts ngrams = new GoogleNgramsCounts("db",
-                "/scratch/vsrikum2/ngrams/data");
+        GoogleNgramsCounts ngrams = new GoogleNgramsCounts("db", "/scratch/vsrikum2/ngrams/data");
 
         PMIHelper pmi = new PMIHelper(ngrams);
 
-        String[] strs = new String[]{"Abraham Lincoln", "Isaac Lincoln",
-                "Steve Jobs", "Steve Wozniak", "great wall", "china",
-                "little wall", "great wall of china", "little wall of china",
-                "girl with hair", "girl with the hair", "the girl with hair",
-                " the girl with the hair", " a girl with hair",
-                " a girl with the hair", "a girl", "girl", "the girl", "hair",
-                "the hair"};
+        String[] strs =
+                new String[] {"Abraham Lincoln", "Isaac Lincoln", "Steve Jobs", "Steve Wozniak",
+                        "great wall", "china", "little wall", "great wall of china",
+                        "little wall of china", "girl with hair", "girl with the hair",
+                        "the girl with hair", " the girl with the hair", " a girl with hair",
+                        " a girl with the hair", "a girl", "girl", "the girl", "hair", "the hair"};
 
         ngrams.getCount(strs);
 
-        for (String xy : new String[]{"Abraham Lincoln", "Isaac Lincoln",
-                "Steve Jobs", "Steve Wozniak"}) {
+        for (String xy : new String[] {"Abraham Lincoln", "Isaac Lincoln", "Steve Jobs",
+                "Steve Wozniak"}) {
             String[] parts = xy.split(" ");
             String x = parts[0];
             String y = parts[1];
 
-            System.out.println(xy + "\t" + pmi.getPMI(xy, x, y) + "\t"
-                    + pmi.getNPMI(xy, x, y));
+            System.out.println(xy + "\t" + pmi.getPMI(xy, x, y) + "\t" + pmi.getNPMI(xy, x, y));
         }
 
         List<Pair<String, String>> items = new ArrayList<>();
@@ -180,19 +176,18 @@ public class PMIHelper {
         for (Pair<String, String> item : items) {
             String xy = item.getFirst() + " of " + item.getSecond();
 
-            System.out.println(xy + "\t"
-                    + pmi.getPMI(xy, item.getFirst(), item.getSecond()) + "\t"
+            System.out.println(xy + "\t" + pmi.getPMI(xy, item.getFirst(), item.getSecond()) + "\t"
                     + pmi.getNPMI(xy, item.getFirst(), item.getSecond()));
         }
 
-        String[] xy = {"girl with hair", "girl with the hair",
-                "the girl with hair", " the girl with the hair",
-                " a girl with hair", " a girl with the hair"};
+        String[] xy =
+                {"girl with hair", "girl with the hair", "the girl with hair",
+                        " the girl with the hair", " a girl with hair", " a girl with the hair"};
         String[] x = {"a girl", "girl", "the girl"};
         String[] y = {"hair", "the hair"};
 
-        System.out.println("girl with hair" + "\t" + pmi.getPMI(xy, x, y)
-                + "\t" + pmi.getNPMI(xy, x, y));
+        System.out.println("girl with hair" + "\t" + pmi.getPMI(xy, x, y) + "\t"
+                + pmi.getNPMI(xy, x, y));
 
     }
 }

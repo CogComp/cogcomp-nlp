@@ -10,7 +10,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  */
 public class LemmatizerConfigurator extends Configurator {
 
-    public final static Property WN_PATH = new Property( "wnPath", "wordnet/dict" );
+    public final static Property WN_PATH = new Property( "wnPath", "wordnet-dict" );
     public final static Property USE_STNFRD_CONVENTIONS = new Property( "useStanfordConventions", FALSE );
 
     /**

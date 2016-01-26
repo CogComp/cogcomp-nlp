@@ -6,9 +6,8 @@ import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import java.util.Comparator;
 
 /**
- * An interface that allows SQL like querying over objects. This is inspired by
- * C#'s linq. Any iterator that implements this interface should allow querying
- * over the elements of the iterator.
+ * An interface that allows SQL like querying over objects. This is inspired by C#'s linq. Any
+ * iterator that implements this interface should allow querying over the elements of the iterator.
  *
  * @param <T> The type of objects in the queryable iterator
  * @author Vivek Srikumar
@@ -16,19 +15,18 @@ import java.util.Comparator;
 public interface IQueryable<T> extends Iterable<T> {
 
     /**
-     * Get a queryable iterator that contains the elements of this iterator
-     * which satisfy the condition.
+     * Get a queryable iterator that contains the elements of this iterator which satisfy the
+     * condition.
      *
-     * @param condition A {@link edu.illinois.cs.cogcomp.core.transformers.Predicate}, which takes an object of type T and
-     *                  returns true/false.
-     * @return A queryable iterator containing only those elements for which the
-     * condition is true.
+     * @param condition A {@link edu.illinois.cs.cogcomp.core.transformers.Predicate}, which takes
+     *        an object of type T and returns true/false.
+     * @return A queryable iterator containing only those elements for which the condition is true.
      */
     IQueryable<T> where(Predicate<T> condition);
 
     /**
-     * Returns a queryable iterator, where the elements of this iterator are
-     * sorted using the comparator.
+     * Returns a queryable iterator, where the elements of this iterator are sorted using the
+     * comparator.
      *
      * @param comparator The comparator for type T
      * @return A sorted queryable iterator
@@ -36,14 +34,12 @@ public interface IQueryable<T> extends Iterable<T> {
     IQueryable<T> orderBy(Comparator<T> comparator);
 
     /**
-     * Given a transformer that converts objects of type T to those of type S,
-     * this function returns a new queryable iterator, containing objects of
-     * type S which are created by applying the transformer to each element of
-     * this iterator.
+     * Given a transformer that converts objects of type T to those of type S, this function returns
+     * a new queryable iterator, containing objects of type S which are created by applying the
+     * transformer to each element of this iterator.
      *
-     * @param <S>         The type of the elements of the returned iterator
-     * @param transformer An {@code ITransformer} that converts objects of type T to
-     *                    those of type S
+     * @param <S> The type of the elements of the returned iterator
+     * @param transformer An {@code ITransformer} that converts objects of type T to those of type S
      * @return A queryable iterator containing objects of type S.
      */
     <S> IQueryable<S> select(ITransformer<T, S> transformer);

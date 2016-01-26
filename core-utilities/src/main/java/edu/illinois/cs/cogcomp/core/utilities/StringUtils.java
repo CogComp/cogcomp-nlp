@@ -33,8 +33,7 @@ public class StringUtils {
     public static final String DATE_FORMAT_NOW = "yyyy-MM-dd_HH-mm-ss";
 
     /**
-     * Get the current date and time in a format so that sorting the string will
-     * sort the date.
+     * Get the current date and time in a format so that sorting the string will sort the date.
      */
     public static String now() {
         Calendar cal = Calendar.getInstance();

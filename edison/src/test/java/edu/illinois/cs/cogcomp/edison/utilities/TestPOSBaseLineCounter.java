@@ -4,19 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.TreeMap;
 
-import org.junit.Test;
-
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.factory.Constant;
-import edu.illinois.cs.cogcomp.edison.features.factory.POSBaseLineFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.TestPOSBaseLineFeatureExtractor;
 import junit.framework.TestCase;
 
 public class TestPOSBaseLineCounter extends TestCase {

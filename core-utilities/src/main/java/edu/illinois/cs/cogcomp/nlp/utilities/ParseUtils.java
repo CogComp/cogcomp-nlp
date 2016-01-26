@@ -23,8 +23,8 @@ import java.util.List;
 public class ParseUtils {
 
     /**
-     * Convert brackets from the Penn treebank format (which uses strings like
-     * -LRB-, -RRB-, etc to denote '(', ')', etc.) to readable tokens.
+     * Convert brackets from the Penn treebank format (which uses strings like -LRB-, -RRB-, etc to
+     * denote '(', ')', etc.) to readable tokens.
      *
      * @param sentence A sentence which is to be converted
      * @return A new sentence.
@@ -42,8 +42,8 @@ public class ParseUtils {
     }
 
     /**
-     * Convert brackets from readable forms to the Penn treebank format (which
-     * uses strings like -LRB-, -RRB-, etc to denote '(', ')', etc.)
+     * Convert brackets from readable forms to the Penn treebank format (which uses strings like
+     * -LRB-, -RRB-, etc to denote '(', ')', etc.)
      *
      * @param sentence A sentence which is to be converted
      * @return A new sentence.
@@ -62,13 +62,13 @@ public class ParseUtils {
     }
 
     /**
-     * Transforms a parse tree into a new tree where each node is labeled by the
-     * span it covers in addition to the label of that node from the original
-     * parse tree.
+     * Transforms a parse tree into a new tree where each node is labeled by the span it covers in
+     * addition to the label of that node from the original parse tree.
      * <p/>
      * For example, consider the following input tree:
      * <p/>
      * <p/>
+     * 
      * <pre>
      *
      * (S1 (S (NP (DT The)
@@ -80,6 +80,7 @@ public class ParseUtils {
      * This is transformed as follows:
      * <p/>
      * <p/>
+     * 
      * <pre>
      * ([S1,[0,4]] ([S,[0,4]] ([NP,[0,2]] ([DT,[0,1]] [The,&lt;0,1]])
      *                                    ([NN,[1,2]] [bird,[1,2]]))
@@ -87,17 +88,15 @@ public class ParseUtils {
      *                        ([.,[3,4]] [.,[3,4]])))
      * </pre>
      * <p/>
-     * Here, the notation [.,.] is used to denote a {@link Pair} object. That
-     * is, the node labeled [NP,[0,2]] indicates that the corresponding node in
-     * the parse tree is labeled NP and that NP spans the tokens ranging from 0
-     * to 2 (exclusive.)
+     * Here, the notation [.,.] is used to denote a {@link Pair} object. That is, the node labeled
+     * [NP,[0,2]] indicates that the corresponding node in the parse tree is labeled NP and that NP
+     * spans the tokens ranging from 0 to 2 (exclusive.)
      *
      * @param parseTree The parse tree to be annotated with the spans
-     * @return A new tree where each node is the {@link Pair} of the original
-     * node's label and the span that the node covers.
+     * @return A new tree where each node is the {@link Pair} of the original node's label and the
+     *         span that the node covers.
      */
-    public static Tree<Pair<String, IntPair>> getSpanLabeledTree(
-            Tree<String> parseTree) {
+    public static Tree<Pair<String, IntPair>> getSpanLabeledTree(Tree<String> parseTree) {
         return getSpanLabeledTree(parseTree, 0).getFirst();
     }
 
@@ -108,33 +107,27 @@ public class ParseUtils {
         // that this code might be slow. So a faster version is also in order.
 
         if (parseTree.isLeaf()) {
-
             IntPair span;
 
-            if (ParseTreeProperties.isNullLabel(parseTree.getParent()
-                    .getLabel())) {
+            if (ParseTreeProperties.isNullLabel(parseTree.getParent().getLabel())) {
                 span = new IntPair(currentLeafId, currentLeafId);
             } else {
                 span = new IntPair(currentLeafId, currentLeafId + 1);
                 currentLeafId++;
             }
 
-            Pair<String, IntPair> label = new Pair<>(
-                    parseTree.getLabel(), span);
-            Tree<Pair<String, IntPair>> tree = new Tree<>(
-                    label);
+            Pair<String, IntPair> label = new Pair<>(parseTree.getLabel(), span);
+            Tree<Pair<String, IntPair>> tree = new Tree<>(label);
 
-            Pair<Tree<Pair<String, IntPair>>, Integer> output = new Pair<>(
-                    tree, currentLeafId);
-            return output;
+            return new Pair<>(tree, currentLeafId);
         }
 
         List<Tree<Pair<String, IntPair>>> children = new ArrayList<>();
 
         int start = currentLeafId;
         for (Tree<String> child : parseTree.getChildren()) {
-            Pair<Tree<Pair<String, IntPair>>, Integer> tmp = getSpanLabeledTree(
-                    child, currentLeafId);
+            Pair<Tree<Pair<String, IntPair>>, Integer> tmp =
+                    getSpanLabeledTree(child, currentLeafId);
             currentLeafId = tmp.getSecond();
             children.add(tmp.getFirst());
         }
@@ -142,10 +135,8 @@ public class ParseUtils {
         int end = currentLeafId;
 
         IntPair span = new IntPair(start, end);
-        Pair<String, IntPair> label = new Pair<>(
-                parseTree.getLabel(), span);
-        Tree<Pair<String, IntPair>> output = new Tree<>(
-                label);
+        Pair<String, IntPair> label = new Pair<>(parseTree.getLabel(), span);
+        Tree<Pair<String, IntPair>> output = new Tree<>(label);
 
         for (Tree<Pair<String, IntPair>> child : children) {
             output.addSubtree(child);
@@ -154,8 +145,7 @@ public class ParseUtils {
         return new Pair<>(output, currentLeafId);
     }
 
-    private static boolean createSnippedTree(Tree<String> original,
-                                             Tree<String> newTree) {
+    private static boolean createSnippedTree(Tree<String> original, Tree<String> newTree) {
         assert original.getLabel().equals(newTree.getLabel());
 
         if (original.isLeaf())
@@ -181,8 +171,7 @@ public class ParseUtils {
     }
 
     /**
-     * Removes subtrees labeled with the null label (-NONE-) and returns a new
-     * tree
+     * Removes subtrees labeled with the null label (-NONE-) and returns a new tree
      *
      * @param tree A parse tree, possibly containing null labels
      * @return A new parse tree where subtrees with the null label are removed
@@ -196,8 +185,8 @@ public class ParseUtils {
     }
 
     /**
-     * Strips function tags from a given node label. This function assumes that
-     * everything that comes before the first hyphen is useful and returns that.
+     * Strips function tags from a given node label. This function assumes that everything that
+     * comes before the first hyphen is useful and returns that.
      *
      * @param label A node label
      * @return The node label without function tags
@@ -230,8 +219,8 @@ public class ParseUtils {
     }
 
     /**
-     * Removes index information in the parse tree to other nodes. That is, for
-     * nodes of the form "X=1", it converts it to just "X".
+     * Removes index information in the parse tree to other nodes. That is, for nodes of the form
+     * "X=1", it converts it to just "X".
      *
      * @param tree A parse tree
      * @return A new tree where the index information is removed.
@@ -253,11 +242,10 @@ public class ParseUtils {
     }
 
     /**
-     * Gets the terminal string from the parse tree. The tokens in the output
-     * are separated by spaces.
+     * Gets the terminal string from the parse tree. The tokens in the output are separated by
+     * spaces.
      *
-     * @param tree The parse tree, where the leaf nodes are the terminals we care
-     *             about
+     * @param tree The parse tree, where the leaf nodes are the terminals we care about
      * @return The terminal string
      */
     public static String getSentenceFromTree(Tree<String> tree) {
@@ -289,19 +277,18 @@ public class ParseUtils {
     public final static String PATH_DOWN_STRING = " *v* ";
 
     /**
-     * Get the labels of all the siblings of the parse tree node that covers the
-     * input constituent. Note that the input constituent could be from any
-     * view. The output includes the phrase label of this constituent too.
+     * Get the labels of all the siblings of the parse tree node that covers the input constituent.
+     * Note that the input constituent could be from any view. The output includes the phrase label
+     * of this constituent too.
      *
      * @param parseViewName The name of the parse view. This might typically be one of
-     *                      ViewNames.PARSE_CHARNIAK or ViewNames.PARSE_STANFORD
-     * @param constituent   The constituent whose sibling phrases are required.
-     * @return An array of strings. If the input constituent is the entire
-     * sentence, then an array of size zero is returned to indicate that
-     * the corresponding parse tree node does not have any siblings.
+     *        ViewNames.PARSE_CHARNIAK or ViewNames.PARSE_STANFORD
+     * @param constituent The constituent whose sibling phrases are required.
+     * @return An array of strings. If the input constituent is the entire sentence, then an array
+     *         of size zero is returned to indicate that the corresponding parse tree node does not
+     *         have any siblings.
      */
-    public static String[] getAllPhraseSiblingLabels(String parseViewName,
-                                                     Constituent constituent) {
+    public static String[] getAllPhraseSiblingLabels(String parseViewName, Constituent constituent) {
         Tree<String> node = getParseTreeCovering(parseViewName, constituent);
         return getAllSiblingLabels(node);
     }
@@ -310,10 +297,9 @@ public class ParseUtils {
      * Get the labels of all siblings of a given tree node.
      *
      * @param node The node whose siblings are required.
-     * @return The labels of the siblings of the input node, as an array of
-     * strings. If the input is the root of the tree, then a string
-     * array of size zero is returned to indicate that the corresponding
-     * parse tree node does not have any siblings.
+     * @return The labels of the siblings of the input node, as an array of strings. If the input is
+     *         the root of the tree, then a string array of size zero is returned to indicate that
+     *         the corresponding parse tree node does not have any siblings.
      */
     public static String[] getAllSiblingLabels(Tree<String> node) {
         List<String> siblings = new ArrayList<>();
@@ -330,20 +316,19 @@ public class ParseUtils {
     }
 
     /**
-     * Finds a common ancestor of two trees which are both contained in a larger
-     * tree. This searches the path from the head of the trees to the root of
-     * the trees till it finds a common node. If none is found, then the
-     * function returns null.
+     * Finds a common ancestor of two trees which are both contained in a larger tree. This searches
+     * the path from the head of the trees to the root of the trees till it finds a common node. If
+     * none is found, then the function returns null.
      *
-     * @param t1   The first tree
-     * @param t2   The second tree
+     * @param t1 The first tree
+     * @param t2 The second tree
      * @param tree The tree that contains {@code t1} and {@code t2}.
-     * @return The tree that is the common ancestor of {@code t1} and {@code t2}
-     * . If none is found, then the function returns null.
+     * @return The tree that is the common ancestor of {@code t1} and {@code t2} . If none is found,
+     *         then the function returns null.
      */
     @Deprecated
-    public static <T> Tree<T> getCommonAncestor(Tree<T> t1, Tree<T> t2,
-                                                Tree<T> tree) throws Exception {
+    public static <T> Tree<T> getCommonAncestor(Tree<T> t1, Tree<T> t2, Tree<T> tree)
+            throws Exception {
         List<Tree<T>> p1 = getPathTreesToRoot(tree, t1, 400);
         List<Tree<T>> p2 = getPathTreesToRoot(tree, t2, 400);
 
@@ -363,35 +348,33 @@ public class ParseUtils {
      * {@code parseViewName} exists in the text annotation.
      *
      * @param parseViewName The name of the parse view
-     * @param s             The sentence
+     * @param s The sentence
      * @return The parse tree of the sentence
      */
     public static Tree<String> getParseTree(String parseViewName, Sentence s) {
-        return getParseTree(parseViewName, s.getSentenceConstituent()
-                .getTextAnnotation(), s.getSentenceId());
+        return getParseTree(parseViewName, s.getSentenceConstituent().getTextAnnotation(),
+                s.getSentenceId());
     }
 
     /**
-     * Get the parse tree of the <code>sentenceId</code>th sentence from the
-     * text annotation. This code assumes that the view called {@code
-     * parseViewName} exists in the text annotation.
+     * Get the parse tree of the <code>sentenceId</code>th sentence from the text annotation. This
+     * code assumes that the view called {@code parseViewName} exists in the text annotation.
      *
      * @param parseViewName The name of the parse view
-     * @param ta            The text annotation object
-     * @param sentenceId    The sentence whose parse tree is required
+     * @param ta The text annotation object
+     * @param sentenceId The sentence whose parse tree is required
      * @return The parse tree of the {@code sentenceId}th sentence
      */
-    public static Tree<String> getParseTree(String parseViewName,
-                                            TextAnnotation ta, int sentenceId) {
+    public static Tree<String> getParseTree(String parseViewName, TextAnnotation ta, int sentenceId) {
         return ((TreeView) (ta.getView(parseViewName))).getTree(sentenceId);
     }
 
     /**
-     * Get the Charniak parse tree of the <code>sentenceId</code>th sentence
-     * from the text annotation. This code assumes that the view called
-     * ViewNames.PARSE_CHARNIAK exists in the text annotation.
+     * Get the Charniak parse tree of the <code>sentenceId</code>th sentence from the text
+     * annotation. This code assumes that the view called ViewNames.PARSE_CHARNIAK exists in the
+     * text annotation.
      *
-     * @param ta         The text annotation object
+     * @param ta The text annotation object
      * @param sentenceId The sentence whose parse tree is required
      * @return The parse tree of the {@code sentenceId}th sentence
      */
@@ -402,16 +385,14 @@ public class ParseUtils {
     }
 
     /**
-     * Get a parse tree from a text annotation that covers the specified
-     * constituent.
+     * Get a parse tree from a text annotation that covers the specified constituent.
      *
      * @param parseViewName The name of the parse view
-     * @param c             The constituent that we care about
-     * @return The portion of the parse tree of the {@link TextAnnotation} to
-     * which the constituent belongs which covers the constituent.
+     * @param c The constituent that we care about
+     * @return The portion of the parse tree of the {@link TextAnnotation} to which the constituent
+     *         belongs which covers the constituent.
      */
-    public static Tree<String> getParseTreeCovering(String parseViewName,
-                                                    Constituent c) {
+    public static Tree<String> getParseTreeCovering(String parseViewName, Constituent c) {
 
         TextAnnotation ta = c.getTextAnnotation();
         int sentenceId = ta.getSentenceId(c);
@@ -426,14 +407,13 @@ public class ParseUtils {
     }
 
     /**
-     * Returns a pair of paths. The first element of the pair is the path up
-     * from the start node to the common ancestor of start and end. The second
-     * element is the path down from the common ancestor to the end node.
+     * Returns a pair of paths. The first element of the pair is the path up from the start node to
+     * the common ancestor of start and end. The second element is the path down from the common
+     * ancestor to the end node.
      */
     @Deprecated
-    public static <T> Pair<List<Tree<T>>, List<Tree<T>>> getPath(Tree<T> start,
-                                                                 Tree<T> end, Tree<T> tree, int maxDepth)
-            throws Exception {
+    public static <T> Pair<List<Tree<T>>, List<Tree<T>>> getPath(Tree<T> start, Tree<T> end,
+            Tree<T> tree, int maxDepth) throws Exception {
         List<Tree<T>> p1 = getPathTreesToRoot(tree, start, maxDepth);
         List<Tree<T>> p2 = getPathTreesToRoot(tree, end, maxDepth);
 
@@ -478,15 +458,14 @@ public class ParseUtils {
     }
 
     /**
-     * Get a string representing the path between trees {@code start} and
-     * {@code end} that belong to the tree {@code tree}
+     * Get a string representing the path between trees {@code start} and {@code end} that belong to
+     * the tree {@code tree}
      */
     @Deprecated
-    public static <T> String getPathString(Tree<T> start, Tree<T> end,
-                                           Tree<T> tree, int maxDepth) throws Exception {
+    public static <T> String getPathString(Tree<T> start, Tree<T> end, Tree<T> tree, int maxDepth)
+            throws Exception {
 
-        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree,
-                maxDepth);
+        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree, maxDepth);
 
         StringBuilder buffer = new StringBuilder();
         for (Tree<T> up : paths.getFirst()) {
@@ -502,11 +481,10 @@ public class ParseUtils {
     }
 
     @Deprecated
-    public static <T> String getPathStringIgnoreLexicalItems(Tree<T> start,
-                                                             Tree<T> end, Tree<T> tree, int maxDepth) throws Exception {
+    public static <T> String getPathStringIgnoreLexicalItems(Tree<T> start, Tree<T> end,
+            Tree<T> tree, int maxDepth) throws Exception {
 
-        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree,
-                maxDepth);
+        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree, maxDepth);
 
         StringBuilder buffer = new StringBuilder();
 
@@ -525,10 +503,9 @@ public class ParseUtils {
     }
 
     @Deprecated
-    public static <T> String getPathStringToCommonAncestor(Tree<T> start,
-                                                           Tree<T> end, Tree<T> tree, int maxDepth) throws Exception {
-        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree,
-                maxDepth);
+    public static <T> String getPathStringToCommonAncestor(Tree<T> start, Tree<T> end,
+            Tree<T> tree, int maxDepth) throws Exception {
+        Pair<List<Tree<T>>, List<Tree<T>>> paths = getPath(start, end, tree, maxDepth);
 
         StringBuilder buffer = new StringBuilder();
 
@@ -540,8 +517,8 @@ public class ParseUtils {
     }
 
     @Deprecated
-    public static <T> List<T> getPathToRoot(Tree<T> tree, Tree<T> leaf,
-                                            int maxDepth) throws Exception {
+    public static <T> List<T> getPathToRoot(Tree<T> tree, Tree<T> leaf, int maxDepth)
+            throws Exception {
         List<T> path = new ArrayList<>();
 
         int depth = 0;
@@ -563,13 +540,12 @@ public class ParseUtils {
     }
 
     /**
-     * This function returns a list of trees from a node in the tree to the
-     * root. If the node is deeper than maxdepth, then the bottom maxDepth nodes
-     * are returned.
+     * This function returns a list of trees from a node in the tree to the root. If the node is
+     * deeper than maxdepth, then the bottom maxDepth nodes are returned.
      */
     @Deprecated
-    public static <T> List<Tree<T>> getPathTreesToRoot(Tree<T> tree,
-                                                       Tree<T> node, int maxDepth) throws Exception {
+    public static <T> List<Tree<T>> getPathTreesToRoot(Tree<T> tree, Tree<T> node, int maxDepth)
+            throws Exception {
         List<Tree<T>> path = new ArrayList<>();
 
         int depth = 0;
@@ -594,9 +570,9 @@ public class ParseUtils {
     }
 
     /**
-     * Assuming that the tree comes with lexical items and POS tags, the subcat
-     * frame for the verb can be found by going to the parent of the POS tag
-     * (which is probably a VP) and listing its children.
+     * Assuming that the tree comes with lexical items and POS tags, the subcat frame for the verb
+     * can be found by going to the parent of the POS tag (which is probably a VP) and listing its
+     * children.
      */
     public static String getSubcatFrame(Tree<String> yieldNode) {
         StringBuilder sb = new StringBuilder();
@@ -672,41 +648,38 @@ public class ParseUtils {
         // we need to shift it back, which is why we have that UGLY as sin
         // mapper at the end.
 
-        Tree<Pair<String, IntPair>> toknTree = getTokenIndexedTreeCovering(
-                tree, start, end);
+        Tree<Pair<String, IntPair>> toknTree = getTokenIndexedTreeCovering(tree, start, end);
 
-        ITransformer<Tree<Pair<String, IntPair>>, Pair<String, IntPair>> transformer = new ITransformer<Tree<Pair<String, IntPair>>, Pair<String, IntPair>>() {
+        ITransformer<Tree<Pair<String, IntPair>>, Pair<String, IntPair>> transformer =
+                new ITransformer<Tree<Pair<String, IntPair>>, Pair<String, IntPair>>() {
 
-            @Override
-            public Pair<String, IntPair> transform(
-                    Tree<Pair<String, IntPair>> input) {
+                    @Override
+                    public Pair<String, IntPair> transform(Tree<Pair<String, IntPair>> input) {
 
-                Pair<String, IntPair> label = input.getLabel();
+                        Pair<String, IntPair> label = input.getLabel();
 
-                IntPair newSpan = new IntPair(label.getSecond().getFirst()
-                        + sentenceStartSpan, label.getSecond().getSecond()
-                        + sentenceStartSpan);
-                return new Pair<>(label.getFirst(), newSpan);
-            }
-        };
+                        IntPair newSpan =
+                                new IntPair(label.getSecond().getFirst() + sentenceStartSpan, label
+                                        .getSecond().getSecond() + sentenceStartSpan);
+                        return new Pair<>(label.getFirst(), newSpan);
+                    }
+                };
         return Mappers.mapTree(toknTree, transformer);
     }
 
     /**
-     * From a parse tree and a span that is specified with the start and end
-     * (exclusive), this function returns a tree that corresponds to the subtree
-     * that covers the span. Each node in the new tree corresponds to a node in
-     * the input tree and is labeled with the label of the original node along
-     * with the span that this node covered in the original tree.
+     * From a parse tree and a span that is specified with the start and end (exclusive), this
+     * function returns a tree that corresponds to the subtree that covers the span. Each node in
+     * the new tree corresponds to a node in the input tree and is labeled with the label of the
+     * original node along with the span that this node covered in the original tree.
      *
-     * @return A new tree that covers the specified span and each node specifies
-     * the label and the span of the original tree that it covers.
+     * @return A new tree that covers the specified span and each node specifies the label and the
+     *         span of the original tree that it covers.
      */
-    public static Tree<Pair<String, IntPair>> getTokenIndexedTreeCovering(
-            Tree<String> parse, int start, int end) {
+    public static Tree<Pair<String, IntPair>> getTokenIndexedTreeCovering(Tree<String> parse,
+            int start, int end) {
 
-        Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils
-                .getSpanLabeledTree(parse);
+        Tree<Pair<String, IntPair>> spanLabeledTree = ParseUtils.getSpanLabeledTree(parse);
 
         Tree<Pair<String, IntPair>> current = spanLabeledTree;
         while (current != null) {
@@ -732,8 +705,7 @@ public class ParseUtils {
         return current;
     }
 
-    public static Tree<String> getTreeCovering(Tree<String> parse, int start,
-                                               int end) {
+    public static Tree<String> getTreeCovering(Tree<String> parse, int start, int end) {
         Tree<String> tree = parse.getYield().get(start);
 
         while (!tree.isRoot()) {
@@ -747,29 +719,29 @@ public class ParseUtils {
     }
 
     /**
-     * Get the head word of a constituent using the {@link HeadFinderBase} that
-     * is passed as an argument. To use this function, first, a head finder
-     * should be created. For example:
+     * Get the head word of a constituent using the {@link HeadFinderBase} that is passed as an
+     * argument. To use this function, first, a head finder should be created. For example:
      * <p/>
+     * 
      * <pre>
      *   TextAnnotation ta = ... // some text annotation
      *   Constituent c = ... // some constituent
-     *
+     * 
      *   CollinsHeadFinder headFinder = new CollinsHeadFinder();
-     *
+     * 
      *   int headId = ParseHelper.getHeadWordPosition(c, headFinder);
-     *
+     * 
      *   // now we can do other things with the headId.
      *   String headWord = WordHelpers.getWord(ta, headId);
      * </pre>
      *
      * @param parseViewName The name of the view which contains the parse trees
-     * @param c             The constituent whose head we wish to find
-     * @param headFinder    The head finder
+     * @param c The constituent whose head we wish to find
+     * @param headFinder The head finder
      * @return The index of the head word..
      */
-    public static int getHeadWordPosition(Constituent c, HeadFinderBase headFinder, String parseViewName)
-            throws Exception {
+    public static int getHeadWordPosition(Constituent c, HeadFinderBase headFinder,
+            String parseViewName) throws Exception {
         TextAnnotation ta = c.getTextAnnotation();
 
         TreeView parse = (TreeView) ta.getView(parseViewName);
@@ -784,41 +756,48 @@ public class ParseUtils {
      * E.g. for the sentence "the man with the telescope", the object of the preposition will be
      * "the telescope" instead of just "telescope".
      *
-     * @param predicate     The predicate of the construction (e.g. "with")
-     * @param argHead       The head-word of the argument of the construction (e.g. "telescope")
+     * @param predicate The predicate of the construction (e.g. "with")
+     * @param argHead The head-word of the argument of the construction (e.g. "telescope")
      * @param parseViewName The name of the parse view used to extract the phrase-structure tree
      * @return The full constituent phrase containing the argument head
      */
-    public static Constituent getPhraseFromHead(Constituent predicate, Constituent argHead, String parseViewName) {
+    public static Constituent getPhraseFromHead(Constituent predicate, Constituent argHead,
+            String parseViewName) {
         // Get the path from the argument to the preposition
         // but only if the predicate node "m-commands" the arg
         TextAnnotation ta = argHead.getTextAnnotation();
         int sentenceOffset = ta.getSentence(ta.getSentenceId(argHead)).getStartSpan();
         int argStart = argHead.getStartSpan() - sentenceOffset;
 
-        Tree<Pair<String, IntPair>> predParentTree = getTokenIndexedTreeCovering(predicate, parseViewName).getParent();
+        Tree<Pair<String, IntPair>> predParentTree =
+                getTokenIndexedTreeCovering(predicate, parseViewName).getParent();
         boolean found = false;
         for (Tree<Pair<String, IntPair>> s : predParentTree.getYield()) {
             if (s.getLabel().getSecond().getFirst() == argStart)
                 found = true;
         }
-        if (!found) return null;
+        if (!found)
+            return null;
 
         // Now follow the path from the argument node to get to the preposition
         Tree<Pair<String, IntPair>> argPhrase = getTokenIndexedTreeCovering(argHead, parseViewName);
         while (!checkForPredicate(argPhrase.getParent(), predicate.getStartSpan() - sentenceOffset)) {
-            if (argPhrase.getParent() == null) break;
+            if (argPhrase.getParent() == null)
+                break;
             argPhrase = argPhrase.getParent();
         }
         // If the phrase covering the constituent is the whole sentence then the annotation is wrong
-        if (argPhrase.getParent() == null) return null;
+        if (argPhrase.getParent() == null)
+            return null;
         int start = predicate.getStartSpan() + 1;
         int end = start + argPhrase.getYield().size();
 
-        return new Constituent(argHead.getLabel(), argHead.getViewName(), argHead.getTextAnnotation(), start, end);
+        return new Constituent(argHead.getLabel(), argHead.getViewName(),
+                argHead.getTextAnnotation(), start, end);
     }
 
-    private static Tree<Pair<String, IntPair>> getTokenIndexedTreeCovering(Constituent predicate, String parseViewName) {
+    private static Tree<Pair<String, IntPair>> getTokenIndexedTreeCovering(Constituent predicate,
+            String parseViewName) {
         TextAnnotation ta = predicate.getTextAnnotation();
         int sentenceId = ta.getSentenceId(predicate);
 
@@ -832,7 +811,8 @@ public class ParseUtils {
     }
 
     private static boolean checkForPredicate(Tree<Pair<String, IntPair>> tree, int predicateIndex) {
-        if (tree == null) return false;
+        if (tree == null)
+            return false;
         // Does the left-most leaf of the tree match the predicate?
         return tree.getYield().get(0).getLabel().getSecond().getFirst() == predicateIndex;
     }

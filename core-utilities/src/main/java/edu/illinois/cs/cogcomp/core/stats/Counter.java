@@ -2,17 +2,17 @@ package edu.illinois.cs.cogcomp.core.stats;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.math.ArgMax;
+import edu.illinois.cs.cogcomp.core.math.ArgMin;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 
 import java.io.Serializable;
 import java.util.*;
 
 /**
- * Create a counter for type T. T must be a type that implements a hash function
- * and equals.
+ * Create a counter for type T. T must be a type that implements a hash function and equals.
  * <p/>
- * A counter keeps track of the count of a family of objects. It also tracks the
- * max, argMax min, argMin.
+ * A counter keeps track of the count of a family of objects. It also tracks the max, argMax min,
+ * argMin.
  * <p/>
  *
  * @author Vivek Srikumar
@@ -26,7 +26,7 @@ public class Counter<T extends Serializable> implements Serializable {
     double total = 0;
 
     transient ArgMax<T, Double> argMax;
-    transient ArgMax<T, Double> argMin;
+    transient ArgMin<T, Double> argMin;
 
     OneVariableStats stats;
 
@@ -38,7 +38,7 @@ public class Counter<T extends Serializable> implements Serializable {
         counts = new TObjectDoubleHashMap<>();
         total = 0;
         argMax = new ArgMax<>(null, Double.MIN_VALUE);
-        argMin = new ArgMax<>(null, Double.MAX_VALUE);
+        argMin = new ArgMin<>(null, Double.MAX_VALUE);
         stats = new OneVariableStats();
     }
 
@@ -50,10 +50,6 @@ public class Counter<T extends Serializable> implements Serializable {
         }
 
         total += increment;
-
-        argMax.update(object, increment);
-
-        argMax.update(object, -increment);
 
         stats.add(increment);
     }
@@ -86,13 +82,17 @@ public class Counter<T extends Serializable> implements Serializable {
     }
 
     public Pair<T, Double> getMax() {
-        return new Pair<>(this.argMax.getArgmax(),
-                this.argMax.getMaxValue());
+        for (Object k : counts.keys()) {
+            argMax.update((T) k, counts.get(k));
+        }
+        return new Pair<>(this.argMax.getArgmax(), this.argMax.getMaxValue());
     }
 
     public Pair<T, Double> getMin() {
-        return new Pair<>(this.argMin.getArgmax(),
-                -this.argMin.getMaxValue());
+        for (Object k : counts.keys()) {
+            argMin.update((T) k, counts.get(k));
+        }
+        return new Pair<>(this.argMin.getArgmin(), this.argMin.getMinValue());
     }
 
     public Set<T> items() {
@@ -162,4 +162,6 @@ public class Counter<T extends Serializable> implements Serializable {
 
         return keys;
     }
+
+
 }

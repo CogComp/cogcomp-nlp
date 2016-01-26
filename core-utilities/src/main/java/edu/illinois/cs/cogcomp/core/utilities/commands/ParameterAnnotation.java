@@ -4,8 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @author vivek
- *         June 12, 2009
+ * @author vivek June 12, 2009
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParameterAnnotation {
