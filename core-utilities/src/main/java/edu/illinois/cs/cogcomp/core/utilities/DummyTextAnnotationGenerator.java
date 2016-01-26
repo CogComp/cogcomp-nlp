@@ -127,8 +127,7 @@ public class DummyTextAnnotationGenerator {
                     if (withNoisyLabels)
                         parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree_noisy));
                     else
-                        parseView.setParseTree(0,
-                                TreeParserFactory.getStringTreeParser().parse(tree));
+                        parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree));
                     ta.addView(viewName, parseView);
                     break;
                 case ViewNames.SRL_VERB:
@@ -145,9 +144,6 @@ public class DummyTextAnnotationGenerator {
                     List<Constituent> args = new ArrayList<>();
                     List<String> tempArgLabels = new ArrayList<>();
                     for (IntPair span : verbSRLArgs.keySet()) {
-                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span
-                                .getSecond()));
-                        tempArgLabels.add(verbSRLArgs.get(span));
                         args.add(new Constituent("argument", viewName, ta, span.getFirst(), span.getSecond()));
                         if (withNoisyLabels)
                             tempArgLabels.add(verbSRLArgs_noisy.get(span));
