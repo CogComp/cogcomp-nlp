@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
-import edu.illinois.cs.cogcomp.comma.utils.SrikumarAnnotationExtractor;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
@@ -39,7 +38,6 @@ public class ErrorAnalysisHelper{
     
     public static void logClassifierErrors(Learner learner, Parser parser){
     	String directoryName = "data/errors/" + learner.name + "/";
-    	SrikumarAnnotationExtractor vivekAnnotationHelper = new SrikumarAnnotationExtractor();
 		EvaluateDiscrete ed = new EvaluateDiscrete();
 		Classifier oracle = learner.getLabeler();
 		parser.reset();
@@ -49,12 +47,11 @@ public class ErrorAnalysisHelper{
 			String gold = oracle.discreteValue(c);
 			ed.reportPrediction(prediction, gold);
 			if (!gold.equals(prediction)) {
-				String textId = c.getTextAnnotation(true).getId();
 				String filename = directoryName + c.getCommaID();
 				FeatureVector fv = learner.getExtractor().classify(c);
-				String instanceInfo = vivekAnnotationHelper.getAnnotation(textId) + c.getAllViews();
+				String instanceInfo = c.getAllViews();
 				ErrorAnalysisHelper.logPredictionError(filename,
-						c.getVivekNaveenAnnotatedText(), prediction, gold,
+						c.getAnnotatedText(), prediction, gold,
 						instanceInfo, fv);
 			}
 		}

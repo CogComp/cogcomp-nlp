@@ -2,8 +2,8 @@ package edu.illinois.cs.cogcomp.comma.lbj;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
+import edu.illinois.cs.cogcomp.comma.readers.TestReader;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import java.util.List;
@@ -186,7 +186,7 @@ learn CommaLabel
 	
 	using  POSFeatures, ParseFeatures, BayraktarLabelFeature, ChunkFeatures, WordFeatures
 	with new SparseNetworkLearner(new SparseAveragedPerceptron(0.003, 0, 3.5))
-	from new CommaParser(new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile()).getSentences(), CommaParser.Ordering.RANDOM, true)
+	from new CommaParser(TestReader.deserialize().getSentences(), CommaParser.Ordering.ORDERED, true)
 end
 
 

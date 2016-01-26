@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
@@ -32,7 +31,7 @@ public class StructuredCommaClassifier extends SLModel{
 		lm = new Lexiconer();
 		infSolver = new CommaSequenceInferenceSolver(lm);
 		para = new SLParameters();
-		para.loadConfigFile(CommaProperties.getInstance().getLearnerConfig());
+		para.loadConfigFile("config/slearner.properties");
 		featureGenerator = new CommaSequenceFeatureGenerator(lm);
 	}
 	

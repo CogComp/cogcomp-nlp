@@ -1,5 +1,11 @@
 package edu.illinois.cs.cogcomp.comma;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import junit.framework.TestCase;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
@@ -9,18 +15,13 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
-import junit.framework.TestCase;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class CommaTest extends TestCase {
 	private Comma[] commas;
 	private CommaProperties properties = CommaProperties.getInstance();
 
-    public void setUp() throws Exception {
+    @Override
+	public void setUp() throws Exception {
         String[] tokens = "Says Gayle Key , a mathematics teacher , `` Hello world . ''".split("\\s+");
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(tokens));
         
@@ -71,13 +72,10 @@ public class CommaTest extends TestCase {
         ta.addView(ner.getViewName(), ner);
         ta.addView(shallowParse.getViewName(), shallowParse);
         
-        List<String> firstCommasLabels = Collections.singletonList("Substitute");
         List<String> firstCommasRefinedLabels = Collections.singletonList("Substitute");
-        List<String> secondCommasLabels = Arrays.asList("Substitute", "Other");
         List<String> secondCommasRefinedLabels = Arrays.asList("Substitute", "Quotation");
         
-        Sentence sentence = new Sentence(ta, null, Arrays.asList(firstCommasLabels, secondCommasLabels), 
-                Arrays.asList(firstCommasRefinedLabels, secondCommasRefinedLabels));
+        Sentence sentence = new Sentence(ta, null, Arrays.asList(firstCommasRefinedLabels, secondCommasRefinedLabels));
         List<Comma> sentenceCommas = sentence.getCommas();
         commas = sentenceCommas.toArray(new Comma[sentenceCommas.size()]);
     }
@@ -86,17 +84,11 @@ public class CommaTest extends TestCase {
 	public void testLabels() {
 		assertEquals("Substitute", commas[0].getLabel());
 		if(properties.allowMultiLabelCommas()){
-			if(properties.useNewLabelSet())
 				assertEquals(Arrays.asList("Substitute", "Quotation"), commas[1].getLabels());
-			else
-				assertEquals(Arrays.asList("Substitute", "Other"), commas[1].getLabels());
 		}
 		else {
 			assertEquals("Substitute", commas[1].getLabel());
-			if(properties.useNewLabelSet())
-				assertEquals("Quotation", commas[2].getLabel());
-			else
-				assertEquals("Other", commas[1].getLabel());
+			assertEquals("Quotation", commas[2].getLabel());
 		}
 	}
 

@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.comma.datastructures;
 
 
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-
 import java.io.IOException;
+
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * A property manager for the CommaSRL.
@@ -44,16 +44,8 @@ public class CommaProperties extends ResourceManager {
     	return getBoolean("IS_COMMA_STRUCTURE_FULL_SENTENCE");
     }
     
-    public boolean useNewLabelSet() {
-        return getBoolean("USE_NEW_LABEL_SET");
-    }
-
-    public String getOtherRelabeledFile() {
-        return getString("COMMASRL_DIR").trim() + "/otherFile.txt";
-    }
-    
-    public String getOriginalSrikumarAnnotationFile(){
-    	return getString("COMMASRL_DIR").trim() + "/Original-data-by-Srikumar-et-al/comma_resolution_data.txt";
+    public String getCommaLabeledDataFile(){
+    	return getString("COMMASRL_DIR").trim() + "/corpus/comma-labeled-data.txt";
     }
     
     public String getBayraktarAnnotationsDir(){
@@ -90,5 +82,13 @@ public class CommaProperties extends ResourceManager {
 
     public String getLearnerConfig() {
         return getString("LEARNER_CONFIG");
+    }
+    
+    public String getSLearnerConfig() {
+        return getString("SLEARNER_CONFIG");
+    }
+    
+    public String getTrainDataConfig() {
+        return getString("SLEARNER_CONFIG");
     }
 }

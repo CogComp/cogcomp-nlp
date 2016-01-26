@@ -1,25 +1,33 @@
 package edu.illinois.cs.cogcomp.comma;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
-import junit.framework.TestCase;
-
 import java.util.Collections;
 
+import junit.framework.TestCase;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
+import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+
 public class CommaLabelerTest extends TestCase {
-    private CommaLabeler classifier;
     private TextAnnotation ta;
+    private String untokenizedText;
+    private CommaLabeler annotator = new CommaLabeler();
 
     @Override
 	public void setUp() throws Exception {
         super.setUp();
-        classifier = new CommaLabeler();
-        String[] sentence = "Mary , the clever scientist , was walking .".split("\\s+");
+        untokenizedText = "Mary, the clever scientist, was walking.";
+        String tokenizedText = "Mary , the clever scientist , was walking .";
+        String[] sentence = tokenizedText.split("\\s+");
         ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(sentence));
 
         TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
@@ -56,9 +64,9 @@ public class CommaLabelerTest extends TestCase {
         ta.addView(shallowParse.getViewName(), shallowParse);
     }
 
-    public void testGetCommaSRL() throws AnnotatorException {
+    public void testGetCommaSRLFromTA() throws AnnotatorException {
         // Create the Comma structure
-        PredicateArgumentView srlView = (PredicateArgumentView) classifier.getView(ta);
+        PredicateArgumentView srlView = (PredicateArgumentView) annotator.getView(ta);
         assertEquals(2, srlView.getPredicates().size());
         Constituent pred1 = srlView.getPredicates().get(0);
         assertEquals("Substitute", srlView.getPredicateSense(pred1));
@@ -68,4 +76,19 @@ public class CommaLabelerTest extends TestCase {
         assertEquals(1, srlView.getArguments(pred2).size());
         assertEquals("LeftOfSubstitute", srlView.getArguments(pred2).get(0).getRelationName());
     }
+    
+    public void testGetCommaSRLFromPlainText() throws Exception {
+    	PreProcessor preProcessor = new PreProcessor();
+    	TextAnnotation ta = preProcessor.preProcess(untokenizedText);
+        PredicateArgumentView srlView = (PredicateArgumentView) annotator.getView(ta);
+        assertEquals(2, srlView.getPredicates().size());
+        Constituent pred1 = srlView.getPredicates().get(0);
+        assertEquals("Substitute", srlView.getPredicateSense(pred1));
+        assertEquals(2, srlView.getArguments(pred1).size());
+        assertEquals("Mary", srlView.getArguments(pred1).get(0).getTarget().getSurfaceForm());
+        Constituent pred2 = srlView.getPredicates().get(1);
+        assertEquals(1, srlView.getArguments(pred2).size());
+        assertEquals("LeftOfSubstitute", srlView.getArguments(pred2).get(0).getRelationName());
+    }
+    
 }

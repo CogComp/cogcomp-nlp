@@ -6,12 +6,16 @@ import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.lbj.*;
+import edu.illinois.cs.cogcomp.comma.lbj.ListCommasConstrainedCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.LocativePairConstrainedCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.OxfordCommaConstrainedCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.SubstitutePairConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
+import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
+import edu.illinois.cs.cogcomp.comma.readers.TestReader;
 import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -31,8 +35,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  */
 public class ClassifierComparison {
 	public static void main(String[] args) throws Exception {
-		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
-		CommaParser parser = new CommaParser(reader.getSentences(), Ordering.RANDOM, true);
+		PrettyCorpusReader pcr = TestReader.deserialize();
+		CommaParser parser = new CommaParser(pcr.getSentences(), Ordering.ORDERED, true);
 		System.out.println("GOLD GOLD");
 		localCVal(true, true, parser, 250, 0.003, 0, 2.0, false);
 		System.out.println("GOLD AUTO");
@@ -57,9 +61,9 @@ public class ClassifierComparison {
 		EvaluateDiscrete bayraktarAuto = getBayraktarBaselinePerformance(parser, false);
 		bayraktarAuto.printPerformance(System.out);
 
-		reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(parser, false);
+/*		reasonForBelievingThatStructuredIsPerformingWorseDueToOverfitting(parser, false);
 		
-		printConstrainedClassifierPerformance(parser);
+		printConstrainedClassifierPerformance(parser);*/
 	}
 	
 	public static void printConstrainedClassifierPerformance(Parser parser){

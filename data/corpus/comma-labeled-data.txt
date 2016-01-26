@@ -23,10 +23,13 @@ wsj/00/wsj_0015.mrg:18
 Last month ,[Introductory] Judge Curry set the interest rate on the refund at 9 % .
 
 wsj/00/wsj_0016.mrg:0
-Japan 's domestic sales of cars ,[List] trucks and buses in October rose 18 % from a year earlier to 500,004 units ,[Substitute] a record for the month ,[Substitute] the Japan Automobile Dealers ' Association said .
+Japan 's domestic sales of cars ,[List] trucks and buses in October rose 18 % from a year earlier to 500,004 units ,[Substitute] a record for the month ,[Substitute,Complementary] the Japan Automobile Dealers ' Association said .
 
 wsj/00/wsj_0016.mrg:3
 October sales ,[Attribute] compared with the previous month ,[Attribute] inched down 0.4 % .
+
+wsj/00/wsj_0016.mrg:4
+Sales of passenger cars grew 22 % from a year earlier to 361,376 units .
 
 wsj/00/wsj_0016.mrg:5
 Sales of medium-sized cars ,[Attribute] which benefited from price reductions arising from introduction of the consumption tax ,[Attribute] more than doubled to 30,841 units from 13,056 in October 1988 .
@@ -217,6 +220,9 @@ Oil production from Australia 's Bass Strait fields will be raised by 11,000 bar
 wsj/00/wsj_0024.mrg:1
 Esso Australia Ltd. ,[Substitute] a unit of New York-based Exxon Corp. ,[Substitute] and Broken Hill Pty. operate the fields in a joint venture .
 
+wsj/00/wsj_0024.mrg:3
+Output will be gradually increased until it reaches about 11,000 barrels a day .
+
 wsj/00/wsj_0024.mrg:6
 The Perch and Dolphin fields are expected to start producing early next year ,[List] and the Seahorse and Tarwhine fields later next year .
 
@@ -242,7 +248,7 @@ wsj/00/wsj_0026.mrg:5
 Timex is a major U.S. producer and seller of watches ,[Attribute] including low-priced battery-operated watches assembled in the Philippines and other developing nations covered by the U.S. tariff preferences .
 
 wsj/00/wsj_0026.mrg:7
-Imports of the types of watches that now will be eligible for duty-free treatment totaled about $ 37.3 million in 1988 ,[Substitute] a relatively small share of the $ 1.5 billion in U.S. watch imports that year ,[Substitute] according to an aide to U.S. Trade Representative Carla Hills .
+Imports of the types of watches that now will be eligible for duty-free treatment totaled about $ 37.3 million in 1988 ,[Substitute] a relatively small share of the $ 1.5 billion in U.S. watch imports that year ,[Substitute,Complementary] according to an aide to U.S. Trade Representative Carla Hills .
 
 wsj/00/wsj_0027.mrg:0
 Magna International Inc. 's chief financial officer ,[Substitute] James McAlpine ,[Substitute] resigned and its chairman ,[Substitute] Frank Stronach ,[Substitute] is stepping in to help turn the automotive-parts manufacturer around ,[Complementary] the company said .
@@ -331,6 +337,9 @@ It 's the latest investment craze sweeping Wall Street : a rash of new closed-en
 wsj/00/wsj_0034.mrg:2
 No fewer than 24 country funds have been launched or registered with regulators this year ,[Complementary] triple the level of all of 1988 ,[Complementary] according to Charles E. Simon & Co. ,[Substitute] a Washington-based research firm .
 
+wsj/00/wsj_0034.mrg:4
+Next week , the Philippine Fund 's launch will be capped by a visit by Philippine President Corazon Aquino -- the first time a head of state has kicked off an issue at the Big Board here .
+
 wsj/00/wsj_0034.mrg:6
 `` Anything 's possible -- how about the New Guinea Fund ? '' quips George Foot ,[Substitute] a managing partner at Newgate Management Associates of Northampton ,[Locative] Mass .
 
@@ -386,7 +395,7 @@ wsj/00/wsj_0035.mrg:5
 But a Soviet bank here would be crippled unless Moscow found a way to settle the $ 188 million debt ,[Attribute] which was lent to the country 's short-lived democratic Kerensky government before the Communists seized power in 1917 .
 
 wsj/00/wsj_0035.mrg:6
-Under a 1934 law ,[Substitute] the Johnson Debt Default Act ,[Substitute] as amended , it 's illegal for Americans to extend credit to countries in default to the U.S. government , unless they are members of the World Bank and International Monetary Fund .
+Under a 1934 law ,[Substitute] the Johnson Debt Default Act ,[Substitute,Complementary] as amended ,[Introductory] it 's illegal for Americans to extend credit to countries in default to the U.S. government ,[Complementary] unless they are members of the World Bank and International Monetary Fund .
 
 wsj/00/wsj_0036.mrg:0
 In another reflection that the growth of the economy is leveling off ,[Introductory] the government said that orders for manufactured goods and spending on construction failed to rise in September .
@@ -398,7 +407,7 @@ wsj/00/wsj_0036.mrg:4
 The purchasing managers ,[Interrupter] however ,[Interrupter] also said that orders turned up in October after four months of decline .
 
 wsj/00/wsj_0036.mrg:5
-Factories booked $ 236.74 billion in orders in September ,[Substitute] nearly the same as the $ 236.79 billion in August ,[Substitute] the Commerce Department said .
+Factories booked $ 236.74 billion in orders in September ,[Substitute] nearly the same as the $ 236.79 billion in August ,[Complementary,Substitute] the Commerce Department said .
 
 wsj/00/wsj_0036.mrg:6
 If not for a 59.6 % surge in orders for capital goods by defense contractors ,[Introductory] factory orders would have fallen 2.1 % .
@@ -413,7 +422,7 @@ wsj/00/wsj_0036.mrg:9
 The figures in both reports were adjusted to remove the effects of usual seasonal patterns ,[List] but were n't adjusted for inflation .
 
 wsj/00/wsj_0036.mrg:10
-Kenneth Mayland ,[Substitute] economist for Society Corp. ,[Substitute] a Cleveland bank ,[Substitute] said demand for exports of factory goods is beginning to taper off .
+Kenneth Mayland ,[Substitute] economist for Society Corp. ,[Substitute] a Cleveland bank ,[Substitute,Substitute] said demand for exports of factory goods is beginning to taper off .
 
 wsj/00/wsj_0036.mrg:11
 At the same time ,[Introductory] the drop in interest rates since the spring has failed to revive the residential construction industry .
@@ -617,7 +626,7 @@ wsj/00/wsj_0041.mrg:11
 `` David Dinkins failed to file his income taxes for four straight years ,[Quotation] '' says a disembodied male voice .
 
 wsj/00/wsj_0041.mrg:12
-And then this television commercial ,[Attribute] paid for by Republican Rudolph Giuliani 's campaign and produced by Roger Ailes ,[Substitute] the master of negative TV ads ,[Attribute] really gets down to business .
+And then this television commercial ,[Attribute] paid for by Republican Rudolph Giuliani 's campaign and produced by Roger Ailes ,[Substitute] the master of negative TV ads ,[Substitute,Attribute] really gets down to business .
 
 wsj/00/wsj_0041.mrg:13
 Mr. Dinkins ,[Interrupter] the ad charges ,[Interrupter] also failed to report his campaign contributions accurately ,[List] hid his links to a failing insurance company and paid a convicted kidnapper `` through a phony organization with no members ,[List] no receipts and no office . ''
@@ -645,6 +654,9 @@ Mr. Dinkins did fail to file his income taxes for four years ,[List] but he insi
 
 wsj/00/wsj_0041.mrg:28
 He was on the board of an insurance company with financial problems ,[List] but he insists he made no secret of it .
+
+wsj/00/wsj_0041.mrg:29
+The city 's Campaign Finance Board has refused to pay Mr. Dinkins $ 95,142 in matching funds because his campaign records are incomplete .
 
 wsj/00/wsj_0041.mrg:31
 And ,[Interrupter] says Mr. Dinkins ,[Interrupter] he did n't know the man his campaign paid for a get-out-the-vote effort had been convicted of kidnapping .
@@ -905,7 +917,7 @@ wsj/00/wsj_0044.mrg:128
 `` We work damn hard at what we do for damn little pay ,[List] and what she did cast unfair aspersions on all of us . ''
 
 wsj/00/wsj_0044.mrg:130
-Says Gayle Key ,[Substitute] a mathematics teacher ,[Substitute] `` The incentive pay thing has opened up a can of worms .
+Says Gayle Key ,[Substitute] a mathematics teacher ,[Substitute,Quotation] `` The incentive pay thing has opened up a can of worms .
 
 wsj/00/wsj_0044.mrg:132
 Mrs. Yeargin says she pleaded guilty because she realized it would no longer be possible to win reinstatement ,[List] and because she was afraid of further charges .
@@ -942,6 +954,9 @@ Sales figures of the test-prep materials are n't known ,[List] but their reach i
 
 wsj/00/wsj_0045.mrg:16
 In Arizona ,[List] California ,[List] Florida ,[List] Louisiana ,[List] Maryland ,[List] New Jersey ,[List] South Carolina and Texas ,[Introductory] educators say they are common classroom tools .
+
+wsj/00/wsj_0045.mrg:18
+About 20,000 sets of Learning Materials teachers ' binders have also been sold in the past four years .
 
 wsj/00/wsj_0045.mrg:23
 When referred to the questions that matched ,[Introductory] he said it was coincidental .
@@ -1010,7 +1025,7 @@ wsj/00/wsj_0047.mrg:22
 Despite the flap over transplants ,[Introductory] federal funding of research involving fetal tissues will continue on a number of fronts .
 
 wsj/00/wsj_0047.mrg:23
-`` Such research may ultimately result in the ability to regenerate damaged tissues or to turn off genes that cause cancer '' or to regulate genes that cause Down 's syndrome ,[Substitute] the leading cause of mental retardation ,[Substitute] according to an NIH summary .
+`` Such research may ultimately result in the ability to regenerate damaged tissues or to turn off genes that cause cancer '' or to regulate genes that cause Down 's syndrome ,[Substitute] the leading cause of mental retardation ,[Substitute,Complementary] according to an NIH summary .
 
 wsj/00/wsj_0048.mrg:0
 Rekindled hope that two New England states will allow broader interstate banking boosted Nasdaq 's bank stocks ,[List] but the over-the-counter market was up only slightly in lackluster trading .
@@ -1019,7 +1034,7 @@ wsj/00/wsj_0048.mrg:2
 In terms of volume ,[Introductory] it was an inauspicious beginning for November .
 
 wsj/00/wsj_0048.mrg:4
-In October ,[Substitute] the busiest month of the year so far ,[Substitute] daily volume averaged roughly 145 million shares .
+In October ,[Substitute] the busiest month of the year so far ,[Substitute,Substitute] daily volume averaged roughly 145 million shares .
 
 wsj/00/wsj_0048.mrg:6
 The index of the 100 largest Nasdaq financial stocks rose modestly as well ,[Complementary] gaining 1.28 to 449.04 .
@@ -1072,8 +1087,14 @@ The Huntsville ,[Locative] Ala. ,[Locative] electronic products maker said it ex
 wsj/00/wsj_0048.mrg:41
 In the year-earlier period ,[Introductory] SCI had net income of $ 4.8 million ,[Substitute] or 23 cents a share ,[Substitute] on revenue of $ 225.6 million .
 
+wsj/00/wsj_0049.mrg:0
+The Internal Revenue Service has threatened criminal sanctions against lawyers who fail to report detailed information about clients who pay them more than $ 10,000 in cash .
+
 wsj/00/wsj_0049.mrg:1
 The warnings ,[Attribute] issued to at least 100 criminal defense attorneys in several major cities in the last week ,[Attribute] have led to an outcry by members of the organized bar ,[Attribute] who claim the information is protected by attorney-client privilege .
+
+wsj/00/wsj_0049.mrg:2
+The IRS warnings stem from a 1984 law that requires anyone who receives more than $ 10,000 in cash from a client or customer in one or more related transactions `` in the course of trade or business '' to report the payment on a document known as Form 8300 .
 
 wsj/00/wsj_0049.mrg:3
 The form asks for such details as the client 's name ,[List] Social Security number ,[List] passport number and details about the services provided for the payment .
@@ -1145,7 +1166,7 @@ wsj/00/wsj_0049.mrg:38
 When you become a federal judge ,[Introductory] all of a sudden you are relegated to a paltry sum . ''
 
 wsj/00/wsj_0049.mrg:39
-At his new job ,[Interrupter] as partner in charge of federal litigation in the Sacramento office of Orrick ,[List] Herrington & Sutcliffe ,[List] he will make out much better .
+At his new job ,[Interrupter] as partner in charge of federal litigation in the Sacramento office of Orrick ,[List] Herrington & Sutcliffe ,[List,Interrupter] he will make out much better .
 
 wsj/00/wsj_0049.mrg:40
 The judge declined to discuss his salary in detail ,[List] but said : `` I 'm going to be a high-priced lawyer . ''
@@ -1196,7 +1217,7 @@ wsj/00/wsj_0049.mrg:68
 In an eight-count indictment ,[Introductory] the government has charged GAF ,[Substitute] a Wayne ,[Locative] N.J. , specialty chemical maker ,[Substitute] and its Vice Chairman James T. Sherwin with attempting to manipulate the common stock of Union Carbide Corp. in advance of GAF 's planned sale of a large block of the stock in November 1986 .
 
 wsj/00/wsj_0049.mrg:73
-Michael R. Bromwich ,[Substitute] a member since January 1987 of the three-lawyer trial team in the prosecution of Oliver North ,[Substitute] became a partner in the Washington ,[Locative] D.C. ,[Locative] office of the 520-lawyer firm .
+Michael R. Bromwich ,[Substitute] a member since January 1987 of the three-lawyer trial team in the prosecution of Oliver North ,[Substitute] became a partner in the Washington ,[Locative] D.C. ,[Locative,Locative] office of the 520-lawyer firm .
 
 wsj/00/wsj_0049.mrg:75
 Mr. Bromwich ,[Attribute] 35 ,[Attribute] also has served as deputy chief and chief of the narcotics unit for the U.S. attorney 's office for the Southern District of New York ,[Attribute] based in Manhattan .
@@ -1262,7 +1283,7 @@ wsj/00/wsj_0051.mrg:30
 Mr. Yamamoto insisted that headquarters had n't approved the bids ,[List] and that he did n't know about most of the cases until Wednesday .
 
 wsj/00/wsj_0051.mrg:32
-`` One yen is not ethical ,[Quotation] '' Michio Sasaki ,[Substitute] an official at Keidanren ,[Substitute] the Japan Federation of Economic Organizations ,[Substitute] said .
+`` One yen is not ethical ,[Quotation] '' Michio Sasaki ,[Substitute] an official at Keidanren ,[Substitute] the Japan Federation of Economic Organizations ,[Substitute,Substitute] said .
 
 wsj/00/wsj_0052.mrg:1
 Backe Group Inc. agreed to acquire Atlantic Publications Inc. ,[Attribute] which has 30 community papers and annual sales of $ 7 million .
@@ -1388,13 +1409,13 @@ wsj/00/wsj_0060.mrg:14
 And executives at stations in such major markets as Washington ; Providence ,[Locative] R.I. ; Cleveland ; Raleigh ,[Locative] N.C. ; Minneapolis ,[List] and Louisville ,[Locative] Ky. ,[Other] say they may very well not renew `` Cosby . ''
 
 wsj/00/wsj_0060.mrg:15
-Dick Lobo ,[Substitute] the general manager of WTVJ ,[Substitute] the NBC-owned station in Miami ,[Substitute] for example , says the show has `` been a major disappointment to us . ''
+Dick Lobo ,[Substitute] the general manager of WTVJ ,[Substitute] the NBC-owned station in Miami ,[Substitute,Substitute] for example ,[Interrupter] says the show has `` been a major disappointment to us . ''
 
 wsj/00/wsj_0060.mrg:16
 `` At the prices we were charged ,[Introductory] there should have been some return for the dollar .
 
 wsj/00/wsj_0060.mrg:18
-Neil Kuvin ,[Substitute] the general manager of WHAS ,[Substitute] the CBS affiliate in Louisville ,[Substitute] says `` Cosby '' gets the station 's highest ratings and he 's `` pleased . ''
+Neil Kuvin ,[Substitute] the general manager of WHAS ,[Substitute] the CBS affiliate in Louisville ,[Substitute,Substitute] says `` Cosby '' gets the station 's highest ratings and he 's `` pleased . ''
 
 wsj/00/wsj_0060.mrg:19
 But he adds ,[Quotation] `` I feel pressured ,[List] disappointed ,[List] uncomfortable and ,[List] frankly ,[Interrupter] quite angry with Viacom .
@@ -1493,7 +1514,7 @@ wsj/00/wsj_0062.mrg:39
 The business had been handled by VanSant Dugdale ,[Locative] Baltimore .
 
 wsj/00/wsj_0062.mrg:41
-American Telephone & Telegraph 's General Business Systems division ,[Locative] New York ,[Locative] awarded the ad account for its Fax product line to Ogilvy & Mather ,[Locative] New York ,[Locative] a WPP Group agency .
+American Telephone & Telegraph 's General Business Systems division ,[Locative] New York ,[Locative] awarded the ad account for its Fax product line to Ogilvy & Mather ,[Locative] New York ,[Locative,Substitute] a WPP Group agency .
 
 wsj/00/wsj_0062.mrg:42
 Billings were n't disclosed for the small account ,[Attribute] which had been serviced at Young & Rubicam ,[Locative] New York .
@@ -1520,13 +1541,13 @@ wsj/00/wsj_0063.mrg:2
 The move is designed to ward off a hostile takeover attempt by two European shipping concerns ,[Substitute] Stena Holding AG and Tiphook PLC .
 
 wsj/00/wsj_0063.mrg:3
-In May ,[Introductory] the two companies ,[Interrupter] through their jointly owned holding company ,[Substitute] Temple ,[Substitute] offered $ 50 a share , or $ 777 million , for Sea Containers .
+In May ,[Introductory] the two companies ,[Interrupter] through their jointly owned holding company ,[Substitute] Temple ,[Interrupter,Substitute] offered $ 50 a share ,[Substitute] or $ 777 million ,[Substitute] for Sea Containers .
 
 wsj/00/wsj_0063.mrg:4
 In August ,[Introductory] Temple sweetened the offer to $ 63 a share ,[Substitute] or $ 963 million .
 
 wsj/00/wsj_0063.mrg:5
-Yesterday ,[Introductory] Sea Containers ' chief executive officer ,[Substitute] James Sherwood ,[Substitute] said in an interview that , under the asset-sale plan , Sea Containers would end up with a cash surplus of approximately $ 620 million .
+Yesterday ,[Introductory] Sea Containers ' chief executive officer ,[Substitute] James Sherwood ,[Substitute,Substitute] said in an interview that ,[Introductory] under the asset-sale plan ,[Introductory] Sea Containers would end up with a cash surplus of approximately $ 620 million .
 
 wsj/00/wsj_0063.mrg:6
 About $ 490 million of that would be allocated to the buy-back ,[Complementary] leaving about $ 130 million ,[Complementary] he said .
@@ -1544,7 +1565,7 @@ wsj/00/wsj_0063.mrg:14
 Temple added that Sea Containers is still mired in legal problems in Bermuda ,[Attribute] where the Supreme Court has temporarily barred Sea Containers from buying back its own stock in a case brought by Stena and Tiphook .
 
 wsj/00/wsj_0063.mrg:16
-Temple also said Sea Containers ' plan raises `` numerous legal ,[List] regulatory ,[List] financial and fairness issues ,[Quotation] '' but did n't elaborate .
+Temple also said Sea Containers ' plan raises `` numerous legal ,[List] regulatory ,[List] financial and fairness issues ,[Complementary] '' but did n't elaborate .
 
 wsj/00/wsj_0063.mrg:18
 In New York Stock Exchange composite trading yesterday ,[Introductory] Sea Containers closed at $ 62.625 ,[Attribute] up 62.5 cents .
@@ -1573,6 +1594,9 @@ wsj/00/wsj_0064.mrg:13
 wsj/00/wsj_0064.mrg:14
 Sen. Danforth and others also want the department to require additional safety equipment in light trucks and minivans ,[Complementary] including air bags or automatic seat belts in front seats and improved side-crash protection .
 
+wsj/00/wsj_0064.mrg:15
+The department 's roof-crush proposal would apply to vehicles weighing 10,000 pounds or less .
+
 wsj/00/wsj_0064.mrg:17
 During the test ,[Introductory] the roof could n't be depressed more than five inches .
 
@@ -1588,6 +1612,9 @@ John Leinonen ,[Substitute] executive engineer of Ford Motor Co. 's auto-safety 
 wsj/00/wsj_0064.mrg:23
 The new Explorer sport-utility vehicle ,[Attribute] set for introduction next spring ,[Attribute] will also have the rear-seat belts .
 
+wsj/00/wsj_0065.mrg:0
+Consolidated Rail Corp. said it would spend more than $ 30 million on 1,000 enclosed railcars for transporting autos .
+
 wsj/00/wsj_0065.mrg:1
 The multilevel railcars ,[Attribute] scheduled for delivery in 1990 ,[Attribute] will be made by Thrall Manufacturing Co. ,[Substitute] a Chicago Heights ,[Locative] Ill. ,[Locative] division of closely held Duchossois Industries Inc. ,[Locative] Elmhurst ,[Locative] Ill .
 
@@ -1598,7 +1625,7 @@ wsj/00/wsj_0066.mrg:0
 Sir Peter Walters ,[Substitute] 58-year-old chairman of British Petroleum Co. until next March ,[Substitute] joins the board of this cement products company on Dec. 1 .
 
 wsj/00/wsj_0066.mrg:1
-Sir Peter will succeed Sir John Milne ,[Attribute] 65 ,[Attribute] who retires as Blue Circle nonexecutive chairman on June 1 .
+Sir Peter will succeed Sir John Milne ,[Attribute] 65 ,[Attribute,Attribute] who retires as Blue Circle nonexecutive chairman on June 1 .
 
 wsj/00/wsj_0067.mrg:0
 Bank of New England Corp. said it has held talks with potential merger partners outside New England ,[Complementary] although it added that nothing is imminent and it has n't received any formal offers .
@@ -1694,7 +1721,7 @@ wsj/00/wsj_0071.mrg:23
 Another small Burgundy estate ,[Substitute] Coche-Dury ,[Substitute] has just offered its 1987 Corton-Charlemagne for $ 155 .
 
 wsj/00/wsj_0071.mrg:24
-From Italy there is Angelo Gaja Barbaresco at $ 125 a bottle ,[List] Piero Antinori 's La Solaia ,[Substitute] a $ 90 Cabernet from Tuscany ,[List] and Biondi-Santi Brunello at $ 98 .
+From Italy there is Angelo Gaja Barbaresco at $ 125 a bottle ,[List] Piero Antinori 's La Solaia ,[Substitute] a $ 90 Cabernet from Tuscany ,[List,Substitute] and Biondi-Santi Brunello at $ 98 .
 
 wsj/00/wsj_0071.mrg:25
 Spain 's Vega Secilia Unico 1979 ( released only in its 10th year ) is $ 70 ,[Complementary] as is Australia 's Grange Hermitage 1982 .
@@ -1715,7 +1742,7 @@ wsj/00/wsj_0071.mrg:35
 The wine was shipped in six-bottle cases instead of the usual 12 ,[List] but even at that it was spread thin ,[Complementary] going to 62 retailers in 28 states .
 
 wsj/00/wsj_0071.mrg:36
-`` We thought it was awfully expensive ,[Interrupter] '' said Sterling Pratt ,[Substitute] wine director at Schaefer 's in Skokie , Ill. ,[Substitute] one of the top stores in suburban Chicago , `` but there are people out there with very different opinions of value .
+`` We thought it was awfully expensive ,[Interrupter] '' said Sterling Pratt ,[Substitute] wine director at Schaefer 's in Skokie , Ill. ,[Substitute,Substitute] one of the top stores in suburban Chicago ,[Substitute] `` but there are people out there with very different opinions of value .
 
 wsj/00/wsj_0071.mrg:39
 Even if there is consumer resistance at first ,[Introductory] a wine that wins high ratings from the critics will eventually move .
@@ -1745,7 +1772,7 @@ wsj/00/wsj_0071.mrg:51
 It 's hardly a question of quality -- the 1982 Salon is a beautiful wine ,[List] but ,[Interrupter] as Mr. Pratt noted ,[Interrupter] people have their own ideas about value .
 
 wsj/00/wsj_0071.mrg:53
-In every major market in the U.S. ,[Interrupter] for instance ,[Interrupter] you can buy '86 La Tache or Richebourg ,[List] virtually all of the first growth Bordeaux ( except Petrus ) ,[List] as well as Opus One and Dominus from California and ,[List] at the moment , the Stag 's Leap 1985 Cask 23 .
+In every major market in the U.S. ,[Interrupter] for instance ,[Interrupter] you can buy '86 La Tache or Richebourg ,[List] virtually all of the first growth Bordeaux ( except Petrus ) ,[List] as well as Opus One and Dominus from California and ,[List,Interrupter] at the moment ,[List,Interrupter] the Stag 's Leap 1985 Cask 23 .
 
 wsj/00/wsj_0071.mrg:54
 With the biggest wine-buying period of the year looming as the holidays approach ,[Introductory] it will be interesting to see how the superpremiums fare .
@@ -1829,7 +1856,7 @@ wsj/00/wsj_0075.mrg:3
 Without congressional action ,[Introductory] the Treasury ca n't sell any new securities -- even savings bonds .
 
 wsj/00/wsj_0075.mrg:4
-But despite partisan bickering over the debt ceiling ,[Attribute] which has become entangled in the fight over cutting capital-gains taxes ,[Attribute] Congress is almost certain to act in time to avoid default .
+But despite partisan bickering over the debt ceiling ,[Attribute] which has become entangled in the fight over cutting capital-gains taxes ,[Attribute,Introductory] Congress is almost certain to act in time to avoid default .
 
 wsj/00/wsj_0075.mrg:5
 `` Each day that Congress fails to act ... will cause additional disruption in our borrowing schedule ,[Complementary] possibly resulting in higher interest costs to the taxpayer ,[Quotation] '' Treasury Secretary Nicholas Brady said in a speech prepared for delivery last night to a group of bankers .
@@ -1928,7 +1955,7 @@ wsj/00/wsj_0080.mrg:25
 In the third quarter ,[Introductory] Georgia Gulf earned $ 46.1 million ,[Substitute] or $ 1.85 a share ,[Substitute] down from $ 53 million ,[Substitute] or $ 1.85 a share on fewer shares outstanding .
 
 wsj/00/wsj_0081.mrg:1
-University Patents Inc. ,[Attribute] based in Westport ,[Locative] Conn. ,[Attribute] said it seeks Johnson & Johnson 's profits from sales of Retin-A ,[Attribute] estimated at $ 50 million ,[Attribute] a similar amount of punitive damages and the right to license Retin-A elsewhere .
+University Patents Inc. ,[Attribute] based in Westport ,[Locative] Conn. ,[Attribute] said it seeks Johnson & Johnson 's profits from sales of Retin-A ,[Attribute] estimated at $ 50 million ,[Attribute,List] a similar amount of punitive damages and the right to license Retin-A elsewhere .
 
 wsj/00/wsj_0081.mrg:2
 In May ,[Introductory] University Patents filed a suit in federal court in Philadelphia against Albert M. Kligman ,[Substitute] a researcher and professor at the University of Pennsylvania School of Medicine who developed Retin-A in the 1960s to combat acne .
@@ -2051,7 +2078,7 @@ wsj/00/wsj_0083.mrg:19
 As the deals also improve Japanese access to American technology and market knowledge ,[Introductory] they feed American anxieties in this area ,[Complementary] too .
 
 wsj/00/wsj_0083.mrg:21
-Free State Glass Industries of Warrenton ,[Locative] Va. ,[Locative] a small fabricator of architectural glass , was foundering under its original management .
+Free State Glass Industries of Warrenton ,[Locative] Va. ,[Locative,Substitute] a small fabricator of architectural glass ,[Substitute] was foundering under its original management .
 
 wsj/00/wsj_0083.mrg:22
 Last year ,[Introductory] Mitsubishi International Corp. ,[Substitute] the New York-based arm of Mitsubishi Corp. ,[Substitute] bought controlling interest in the glass company in a joint venture with Ronald Bodner ,[Substitute] a glass industry executive and Mitsubishi consultant .
@@ -2075,7 +2102,7 @@ wsj/00/wsj_0083.mrg:29
 These vertically integrated combines ,[Attribute] some of which got their start in Japan 's feudal period ,[Attribute] deal globally in commodities ,[List] construction and manufacturing .
 
 wsj/00/wsj_0083.mrg:31
-`` All the `` sogo-shosha '' are looking for new business ,[Quotation] '' says Arthur Klauser ,[Substitute] adviser to the president of Mitsui ,[Locative] U.S.A. ,[Substitute] using the Japanese term for the largest of the global trading houses .
+`` All the `` sogo-shosha '' are looking for new business ,[Quotation] '' says Arthur Klauser ,[Substitute] adviser to the president of Mitsui ,[Locative] U.S.A. ,[Substitute,Substitute] using the Japanese term for the largest of the global trading houses .
 
 wsj/00/wsj_0083.mrg:32
 Adds Takeshi Kondo ,[Substitute] senior vice president of C. Itoh America Inc. : `` We have a great interest in making investments ,[Complementary] particularly in new ventures . ''
@@ -2204,7 +2231,7 @@ wsj/00/wsj_0085.mrg:44
 The additional technology ,[List] personnel training and promotional effort can be expensive .
 
 wsj/00/wsj_0085.mrg:45
-Chemical Bank spent more than $ 50 million to introduce its ChemPlus line ,[Substitute] several packages aimed at different segments ,[Substitute] in 1986 , according to Thomas Jacob , senior vice president of marketing .
+Chemical Bank spent more than $ 50 million to introduce its ChemPlus line ,[Substitute] several packages aimed at different segments ,[Substitute,Substitute] in 1986 ,[Complementary] according to Thomas Jacob ,[Substitute] senior vice president of marketing .
 
 wsj/00/wsj_0085.mrg:46
 `` It 's not easy to roll out something that comprehensive ,[List] and make it pay ,[Quotation] '' Mr. Jacob says .
@@ -2227,6 +2254,9 @@ Soon ,[Introductory] it will split those into 30 .
 wsj/00/wsj_0085.mrg:52
 Says Mr. Sale : `` I think more banks are starting to realize that we have to be more like the department store ,[List] not the boutique . ''
 
+wsj/00/wsj_0086.mrg:0
+SHAREDATA Inc. said it will amend a registration statement filed with the Securities and Exchange Commission to delete a plan to sell 500,000 newly issued common shares .
+
 wsj/00/wsj_0086.mrg:1
 The Chandler ,[Locative] Ariz. ,[Locative] company said it will resubmit the registration to cover only the 2.3 million warrants ,[Attribute] each exercisable for the purchase of one common share .
 
@@ -2235,6 +2265,12 @@ Currently ,[Introductory] ShareData has about 4.1 million common shares outstand
 
 wsj/00/wsj_0086.mrg:3
 ShareData develops and markets low-cost software ,[List] peripheral equipment and accessories for computers .
+
+wsj/00/wsj_0087.mrg:6
+Americans today spend $ 15,000 like pocket change -- they do n't think much about it .
+
+wsj/00/wsj_0087.mrg:8
+Your $ 15,000 will help keep a needy savings and loan solvent -- and out of the federal budget deficit .
 
 wsj/00/wsj_0087.mrg:9
 As a Foster Corporate Parent ,[Introductory] you 'll be helping a neighborhood S&L in areas crucial to its survival .
@@ -2253,6 +2289,9 @@ Every day you delay ,[Introductory] a savings institution 's health -- and the f
 
 wsj/00/wsj_0087.mrg:18
 Think about the good you can do for just $ 15,000 a month ,[Attribute] about the cost of a mid-size Chevrolet or two semesters at a state university .
+
+wsj/00/wsj_0087.mrg:20
+Every $ 15,000 you send will go a long way to boost sagging net worth and employee morale -- and keep your Foster Savings Institution off the federal budget deficit !
 
 wsj/00/wsj_0088.mrg:1
 Separately ,[Introductory] John Phelan told a closed House subcommittee meeting in Washington that he would support Securities and Exchange Commission halts of program trading during market emergencies .
@@ -2365,6 +2404,9 @@ Each variation ,[List] or change ,[List] can occur only once ,[Complementary] th
 wsj/00/wsj_0089.mrg:22
 Ringers memorize patterns of changes ,[Attribute] known as `` methods ,[Attribute] '' which have odd-sounding names like Kent Treble Bob Major or Grandsire Caters .
 
+wsj/00/wsj_0089.mrg:23
+A series of 5,000 or so changes is a `` peal '' and takes about three hours .
+
 wsj/00/wsj_0089.mrg:25
 Ten shirt-sleeved ringers stand in a circle ,[List] one foot ahead of the other in a prize-fighter 's stance ,[List] each pulling a rope that disappears through a small hole in the high ceiling of the ringing chamber .
 
@@ -2432,7 +2474,7 @@ wsj/00/wsj_0089.mrg:49
 The Central Council of Church Bell Ringers ,[Substitute] a sort of parliament of ringing groups ,[Substitute] aims to improve relations with vicars ,[Complementary] says John C. Baldwin ,[Substitute] president .
 
 wsj/00/wsj_0089.mrg:50
-It hopes to speak to students at theological colleges about the joys of bell ringing and will shortly publish a booklet for every vicar in the country entitled ,[Quotation] `` The Bells in Your Care . ''
+It hopes to speak to students at theological colleges about the joys of bell ringing and will shortly publish a booklet for every vicar in the country entitled ,[Other] `` The Bells in Your Care . ''
 
 wsj/00/wsj_0089.mrg:51
 Says Mr. Baldwin ,[Quotation] `` We recognize that we may no longer have as high a priority in church life and experience . ''
@@ -2453,7 +2495,7 @@ wsj/00/wsj_0089.mrg:58
 They are n't accepted everywhere ,[Interrupter] however .
 
 wsj/00/wsj_0089.mrg:59
-The oldest bell-ringing group in the country ,[Substitute] the Ancient Society of College Youths ,[List] founded in 1637 ,[Substitute] remains male-only , a fact that 's particularly galling to women because the group is the sole source of ringers for Britain 's most prestigious churches , St. Paul 's Cathedral and Westminster Abbey .
+The oldest bell-ringing group in the country ,[Substitute] the Ancient Society of College Youths ,[List] founded in 1637 ,[Substitute,List] remains male-only ,[Attribute] a fact that 's particularly galling to women because the group is the sole source of ringers for Britain 's most prestigious churches ,[Substitute] St. Paul 's Cathedral and Westminster Abbey .
 
 wsj/00/wsj_0089.mrg:60
 This being Britain ,[Introductory] no woman has filed an equal-opportunity suit ,[List] but the extent of the problem surfaced this summer in a series of letters to `` The Ringing World ,[Substitute] '' a weekly newspaper for ringers .
@@ -2522,7 +2564,7 @@ wsj/00/wsj_0090.mrg:21
 A drop below that 3 % benchmark `` has always been a strong warning sign that stocks are fully valued ,[Quotation] '' says Mr. Boesel of T. Rowe Price .
 
 wsj/00/wsj_0090.mrg:22
-In fact ,[Quotation] `` the market has always tanked .
+In fact ,[Introductory] `` the market has always tanked .
 
 wsj/00/wsj_0090.mrg:24
 There 's never been an exception ,[Quotation] '' says Gerald W. Perritt ,[Substitute] a Chicago investment adviser and money manager ,[Substitute] based on a review of six decades of stock-market data .
@@ -2585,7 +2627,7 @@ wsj/00/wsj_0091.mrg:2
 Bell 's father-in-law ,[Substitute] Gardner G. Hubbard ,[Attribute] wealthy and well-connected ,[Substitute] obtained financing to start the American Bell Telephone Co. in Boston ,[Attribute] which even had a subsidiary in New York called the Telephone Co. of New York .
 
 wsj/00/wsj_0091.mrg:5
-It acquired Thomas Edison 's microphone patent and then immediately sued the Bell Co. claiming that the microphone invented by my grandfather ,[Substitute] Emile Berliner ,[Substitute] which had been sold to Bell for a princely $ 50,000 , infringed upon Western Union 's Edison patent .
+It acquired Thomas Edison 's microphone patent and then immediately sued the Bell Co. claiming that the microphone invented by my grandfather ,[Substitute] Emile Berliner ,[Substitute,Attribute] which had been sold to Bell for a princely $ 50,000 ,[Attribute] infringed upon Western Union 's Edison patent .
 
 wsj/00/wsj_0091.mrg:6
 When Bell established that the Berliner patent caveat was registered 10 days before Edison 's application ,[Introductory] Western Union dropped the lawsuit and agreed never to enter the telephone business -- the basis for the company 's current plight .
@@ -2651,7 +2693,7 @@ wsj/00/wsj_0093.mrg:16
 Relations between China and the U.S. have been tense since June 7 ,[Attribute] when Chinese dissident Fang Lizhi and his wife ,[Substitute] Li Shuxian ,[Substitute] took refuge in the U.S. Embassy in Beijing .
 
 wsj/00/wsj_0093.mrg:17
-Shortly afterwards ,[Introductory] Mr. Bush imposed a series of anti-China sanctions ,[Attribute] including suspension of most high-level talks ,[Attribute] which could be codified in U.S. congressional legislation in the coming weeks .
+Shortly afterwards ,[Introductory] Mr. Bush imposed a series of anti-China sanctions ,[Attribute] including suspension of most high-level talks ,[Attribute,Attribute] which could be codified in U.S. congressional legislation in the coming weeks .
 
 wsj/00/wsj_0093.mrg:18
 Mr. Nixon is traveling in China as a private citizen ,[List] but he has made clear that he is an unofficial envoy for the Bush administration .
@@ -2780,7 +2822,7 @@ wsj/00/wsj_0096.mrg:12
 Mr. Rosenblum ,[Attribute] who apparently has an unpublished phone number ,[Attribute] also could n't be reached .
 
 wsj/00/wsj_0096.mrg:13
-Triton Securities ,[Attribute] of Danville ,[Locative] Calif. ,[Attribute] and a principal of the firm ,[Substitute] Delwin George Chase ,[Attribute] also of Danville ,[Substitute] were jointly fined $ 10,000 and given 30-day suspensions as part of a settlement .
+Triton Securities ,[Attribute] of Danville ,[Locative] Calif. ,[Attribute] and a principal of the firm ,[Substitute] Delwin George Chase ,[Attribute] also of Danville ,[Attribute,Substitute] were jointly fined $ 10,000 and given 30-day suspensions as part of a settlement .
 
 wsj/00/wsj_0096.mrg:14
 While neither admitting nor denying wrongdoing ,[Introductory] Triton and Mr. Chase consented to findings of violations in connection with limited-partnership sales .
@@ -2792,7 +2834,7 @@ wsj/00/wsj_0096.mrg:18
 Without admitting or denying wrongdoing ,[Introductory] they consented to findings of violations of escrow and record-keeping rules .
 
 wsj/00/wsj_0096.mrg:20
-First Commonwealth Securities Corp. ,[Attribute] of New Orleans ,[Attribute] and its president ,[Substitute] Kenneth J. Canepa ,[Attribute] also of New Orleans ,[Substitute] consented to a $ 10,000 fine .
+First Commonwealth Securities Corp. ,[Attribute] of New Orleans ,[Attribute] and its president ,[Substitute] Kenneth J. Canepa ,[Attribute] also of New Orleans ,[Substitute,Attribute] consented to a $ 10,000 fine .
 
 wsj/00/wsj_0096.mrg:21
 Also ,[Introductory] Mr. Canepa received a two-week suspension `` in a principal capacity . ''
@@ -2801,7 +2843,7 @@ wsj/00/wsj_0096.mrg:22
 Without admitting or denying wrongdoing ,[Introductory] they consented to findings that they had inaccurately represented the firm 's net capital ,[List] maintained inaccurate books and records ,[List] and made other violations .
 
 wsj/00/wsj_0096.mrg:24
-Weatherly Securities Corp. ,[Locative] New York ,[Locative] and three of its principals -- Dell Eugene Keehn and William Northy Prater Jr. ,[Attribute] both of Mercer Island ,[Locative] Wash. ,[Attribute] and Thomas Albert McFall , of Red Bank , N.J . -- consented to a fine of $ 20,000 .
+Weatherly Securities Corp. ,[Locative] New York ,[Locative] and three of its principals -- Dell Eugene Keehn and William Northy Prater Jr. ,[Attribute] both of Mercer Island ,[Locative] Wash. ,[Attribute,List] and Thomas Albert McFall ,[Attribute] of Red Bank ,[Locative] N.J . -- consented to a fine of $ 20,000 .
 
 wsj/00/wsj_0096.mrg:25
 Without admitting or denying wrongdoing ,[Introductory] they consented to findings that they failed to return funds owed to customers in connection with a limited-partnership offering .
@@ -2813,7 +2855,7 @@ wsj/00/wsj_0096.mrg:27
 He described the situation as `` an escrow problem ,[Substitute] a timing issue ,[Attribute] '' which he said was rapidly rectified ,[Complementary] with no losses to customers .
 
 wsj/00/wsj_0096.mrg:28
-W.N. Whelen & Co. ,[Attribute] of Georgetown ,[Locative] Del. ,[Attribute] and its president , William N. Whelen Jr. , also of Georgetown , were barred from transacting principal trades for 90 days and were jointly fined $ 15,000 .
+W.N. Whelen & Co. ,[Attribute] of Georgetown ,[Locative] Del. ,[Attribute,List] and its president ,[Substitute] William N. Whelen Jr. ,[Attribute] also of Georgetown ,[Substitute] were barred from transacting principal trades for 90 days and were jointly fined $ 15,000 .
 
 wsj/00/wsj_0096.mrg:29
 The firm and Mr. Whelen allegedly sold securities to the public at unfair prices ,[Complementary] among other alleged violations .

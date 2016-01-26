@@ -21,7 +21,6 @@ import java.util.*;
  */
 public class Comma implements Serializable {
     private final List<String> labels;
-    private final List<String> refinedLabels;
     public final int commaPosition;
     private Sentence s;
     
@@ -31,7 +30,6 @@ public class Comma implements Serializable {
     private static boolean GOLD = CommaProperties.getInstance().useGold();
     private static final boolean NERlexicalise = CommaProperties.getInstance().lexicaliseNER();
     private static final boolean POSlexicalise = CommaProperties.getInstance().lexicalisePOS();
-    private static final boolean USE_REFINED_LABELS = CommaProperties.getInstance().useNewLabelSet();
     private static final String CONSTITUENT_PARSER = CommaProperties.getInstance().getConstituentParser();//Which automatic parse to use
 
     public static void useGoldFeatures(boolean useGold){
@@ -47,11 +45,10 @@ public class Comma implements Serializable {
      * @param commaPosition The token index of the comma
      * @param s The tokenized string of the sentence
      */
-    protected Comma(int commaPosition, Sentence s, List<String> labels, List<String> refinedLabels) {
+    protected Comma(int commaPosition, Sentence s, List<String> labels) {
     	this.commaPosition = commaPosition;
     	this.s = s;
     	this.labels = labels;
-    	this.refinedLabels = refinedLabels;
     }
     
     
@@ -61,39 +58,21 @@ public class Comma implements Serializable {
      * @param s The tokenized string of the sentence
      */
     protected Comma(int commaPosition, Sentence s){
-    	this(commaPosition, s, null, null);
+    	this(commaPosition, s, null);
     }
     
 
     /**
-     * @return The label as annotated by Vivek. If Vivek's label was Other, and the USE_REFINED_LABELS is true, then the refined label is returned 
+     * @return the label of the comma. If a comma can have multiple labels, only return the first 
      */
     public String getLabel(){
-    	if(USE_REFINED_LABELS)
-    		return refinedLabels.get(0);
-    	else
-    		return labels.get(0);
+    	return labels.get(0);
     }
     
     public List<String> getLabels(){
-    	if(USE_REFINED_LABELS)
-    		return refinedLabels;
-    	else
-    		return labels;
+    	return labels;
     }
     
-    /**
-     * @return The label as annotated by Vivek. If Vivek's label was Other, the USE_REFINED_LABELS is true, and the annotation for the Bayraktar-patterns is available, then the Bayraktar label is returned
-     */
-    public String getBayraktarRefinedLabel() {
-    	if(!USE_REFINED_LABELS || !BayraktarPatternLabeler.isLabelAvailable(getBayraktarPattern()))
-    		return getLabel();
-    	if(getLabel().equals("Other"))
-    		return BayraktarPatternLabeler.getLabel(getBayraktarPattern());
-    	else
-			return getLabel();
-    }
-
     public int getPosition(){
     	return commaPosition;
     }
@@ -154,7 +133,11 @@ public class Comma implements Serializable {
 			posView = (TokenLabelView) s.goldTa.getView(ViewNames.POS);
 		else
 			posView = (TokenLabelView) s.ta.getView(ViewNames.POS);
-		return posView.getLabel(commaPosition - distance);
+		String pos = posView.getLabel(commaPosition - distance);
+		if(pos.equals("DT") && distance == 1 && getWordToRight(distance).equalsIgnoreCase("the"))
+			return "DT-the";
+		else
+			return pos;
 	}
     
     public String getPOSToRight(int distance){
@@ -163,7 +146,11 @@ public class Comma implements Serializable {
 			posView = (TokenLabelView) s.goldTa.getView(ViewNames.POS);
 		else
 			posView = (TokenLabelView) s.ta.getView(ViewNames.POS);
-    	return posView.getLabel(commaPosition + distance);
+    	String pos = posView.getLabel(commaPosition + distance);
+    	if(pos.equals("DT") && distance == 1 && getWordToRight(distance).equalsIgnoreCase("the"))
+			return "DT-the";
+		else
+			return pos;
     }
     
     /*public List<String> getPOSNGrams(int ngramLength, int width){
@@ -408,6 +395,11 @@ public class Comma implements Serializable {
     		return "NULL";
     	String notation = c.getLabel();
     	
+		if (c.getOutgoingRelations().size() > 0
+				&& (c.getViewName().equals(ViewNames.PARSE_GOLD)
+				|| c.getViewName().equals(CONSTITUENT_PARSER)))
+    		notation += c.getOutgoingRelations().get(0).getTarget().getLabel();
+    	
     	if(NERlexicalise)
     		notation += "-" + getNamedEntityTag(c);
     	
@@ -630,21 +622,11 @@ public class Comma implements Serializable {
     	return ngrams.toArray(new String[ngrams.size()]);
     }
     
-    public String getVivekAnnotatedText() {
+    public String getAnnotatedText() {
 		List<String> tokens = Arrays.asList(s.ta.getTokens());
 		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
 				+ "["
-				+ labels
-				+ "] "
-				+ StringUtils.join(" ", 
-						tokens.subList(commaPosition + 1, tokens.size()));
-	}
-	
-	public String getVivekNaveenAnnotatedText() {
-		List<String> tokens = Arrays.asList(s.ta.getTokens());
-		return StringUtils.join(" ", tokens.subList(0, commaPosition+1))
-				+ "["
-				+ getLabel()
+				+ StringUtils.join(",", labels)
 				+ "] "
 				+ StringUtils.join(" ", 
 						tokens.subList(commaPosition + 1, tokens.size()));

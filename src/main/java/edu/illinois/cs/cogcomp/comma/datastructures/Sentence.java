@@ -6,7 +6,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 
 /**
@@ -23,20 +27,15 @@ public class Sentence implements Serializable{
 	/**
 	 * helper for constructing sentences in which all commas have a single label
 	 */
-	public static Sentence makeSentence(TextAnnotation ta, TextAnnotation goldTa, List<String> singleLabels, List<String> singleRefinedLabels) throws Exception{
+	public static Sentence makeSentence(TextAnnotation ta, TextAnnotation goldTa, List<String> singleLabels) throws Exception{
 		List<List<String>> commaLabels = new ArrayList<>();
-		List<List<String>> refinedCommaLabels = new ArrayList<>();
 		for(int i=0; i<singleLabels.size(); i++){
-			if(commaLabels.get(i) == null){
+			if(commaLabels.get(i) == null)
 				commaLabels.add(null);
-				refinedCommaLabels.add(null);
-			}
-			else {
+			else
 				commaLabels.add(Collections.singletonList(singleLabels.get(i)));
-				refinedCommaLabels.add(Collections.singletonList(singleRefinedLabels.get(i)));
-			}
 		}
-		return new Sentence(ta, goldTa, commaLabels, refinedCommaLabels);
+		return new Sentence(ta, goldTa, commaLabels);
 	}
 	
 	/**
@@ -62,7 +61,7 @@ public class Sentence implements Serializable{
 	 * @param refinedLabels list of list of refined labels for each comma
 	 * @throws Exception throws exception if number of comma-label-lists provided is not equal to number of commas in the sentence
 	 */
-	public Sentence(TextAnnotation ta, TextAnnotation goldTa, List<List<String>> labels, List<List<String>> refinedLabels) throws Exception{
+	public Sentence(TextAnnotation ta, TextAnnotation goldTa, List<List<String>> labels) throws Exception{
 		this.ta = ta;
 		this.goldTa = goldTa;
 		commas = new ArrayList<>();
@@ -72,22 +71,19 @@ public class Sentence implements Serializable{
 			if (!tokens[tokenIdx].equals(","))
 				continue;
 			List<String> labelsForCurrIdx = labels.get(numCommas);
-			List<String> refinedLabelsForCurrIdx = refinedLabels.get(numCommas);
 			numCommas++;
 			if(labelsForCurrIdx == null){
 				if(!CommaProperties.getInstance().includeNullLabelCommas())
 					continue;
-				Comma comma = new Comma(tokenIdx, this, Collections.singletonList("Other"),	Collections.singletonList("Other"));
+				Comma comma = new Comma(tokenIdx, this, Collections.singletonList("Other"));
 				commas.add(comma);
 			}
 			else if (CommaProperties.getInstance().allowMultiLabelCommas()) {
-				Comma comma = new Comma(tokenIdx, this, labelsForCurrIdx, refinedLabelsForCurrIdx);
+				Comma comma = new Comma(tokenIdx, this, labelsForCurrIdx);
 				commas.add(comma);
 			} else {
 				for (int labelIdx = 0; labelIdx < labelsForCurrIdx.size(); labelIdx++) {
-					Comma comma = new Comma(tokenIdx, this,
-							Collections.singletonList(labelsForCurrIdx.get(labelIdx)),
-							Collections.singletonList(refinedLabelsForCurrIdx.get(labelIdx)));
+					Comma comma = new Comma(tokenIdx, this, Collections.singletonList(labelsForCurrIdx.get(labelIdx)));
 					commas.add(comma);
 				}
 			}
@@ -95,6 +91,29 @@ public class Sentence implements Serializable{
 
 		if(numCommas!=labels.size())
 			throw new Exception("must provide labels for all commas in sentence");
+	}
+	
+	public Sentence(TextAnnotation ta){
+		this.ta = ta;
+		this.goldTa = ta;
+		commas = new ArrayList<>();
+		PredicateArgumentView commaView = (PredicateArgumentView) ta.getView(CommaLabeler.viewName);
+		List<Constituent> preds = commaView.getPredicates();
+		Collections.sort(preds, TextAnnotationUtilities.constituentStartComparator);
+		for(int predIdx=0; predIdx<preds.size(); predIdx++){
+			List<String> labels = new ArrayList<String>();
+			labels.add(preds.get(predIdx).getLabel());
+			int commaPosition = preds.get(predIdx).getStartSpan();
+			for(int nextPredIdx = predIdx + 1; nextPredIdx<preds.size(); nextPredIdx++){
+				if(preds.get(nextPredIdx).getStartSpan() == commaPosition){
+					labels.add(preds.get(nextPredIdx).getLabel());
+					predIdx++;
+				}
+				else
+					break;
+			}
+			commas.add(new Comma(commaPosition, this, labels));
+		}
 	}
 	
 	/**

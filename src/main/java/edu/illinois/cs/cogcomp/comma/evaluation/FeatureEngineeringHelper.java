@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.comma.utils;
+package edu.illinois.cs.cogcomp.comma.evaluation;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,25 +7,37 @@ import java.util.Comparator;
 import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.evaluation.ClassifierComparison;
-import edu.illinois.cs.cogcomp.comma.lbj.*;
+import edu.illinois.cs.cogcomp.comma.lbj.BayraktarLabelFeature;
+import edu.illinois.cs.cogcomp.comma.lbj.ChunkFeatures;
+import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.lbj.POSFeatures;
+import edu.illinois.cs.cogcomp.comma.lbj.ParseFeatures;
+import edu.illinois.cs.cogcomp.comma.lbj.WordFeatures;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.CommaParser.Ordering;
-import edu.illinois.cs.cogcomp.comma.readers.SrikumarAnnotationReader;
-import edu.illinois.cs.cogcomp.comma.sl.StructuredCommaClassifier;
+import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
+import edu.illinois.cs.cogcomp.comma.readers.TestReader;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
+import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVectorReturner;
+import edu.illinois.cs.cogcomp.lbjava.classify.LabelVectorReturner;
+import edu.illinois.cs.cogcomp.lbjava.learn.Accuracy;
+import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
+import edu.illinois.cs.cogcomp.lbjava.learn.TestingMetric;
+import edu.illinois.cs.cogcomp.lbjava.parse.ArrayParser;
+import edu.illinois.cs.cogcomp.lbjava.parse.FoldParser.SplitPolicy;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
  * Used to get performance of the classifier over different subsets of features 
- * @author navari
  *
  */
 public class FeatureEngineeringHelper {
-	static double learningRate = 0.024;
+	static double learningRate = 0.003;
 	static double threshold = 0;
-	static double thickness = 3.6;
+	static double thickness = 3.5;
 	
 	public static void main(String[] args) throws Exception{
 		featureEngineering();
@@ -33,45 +45,41 @@ public class FeatureEngineeringHelper {
 	
 	public static void featureEngineering() throws Exception{
 		LocalCommaClassifier learner = new LocalCommaClassifier();
-		SrikumarAnnotationReader reader = new SrikumarAnnotationReader(CommaProperties.getInstance().getOriginalSrikumarAnnotationFile());
-		CommaParser commaParser = new CommaParser(reader.getSentences(), Ordering.ORDERED, true);
-		List<Comma> commaList = reader.getCommas();
+		PrettyCorpusReader pcr = TestReader.deserialize();
+		CommaParser parser = new CommaParser(pcr.getSentences(), Ordering.ORDERED, true);
+		List<Comma> commaList = pcr.getCommas();
 		Comma[] commas = commaList.toArray(new Comma[commaList.size()]);
 		
 		ParseFeatures __ParseFeatures = new ParseFeatures();
-		ParseTreeFeature __ParseTreeFeature = new ParseTreeFeature();
+		WordFeatures __WordFeatures = new WordFeatures();
 		POSFeatures __POSFeatures = new POSFeatures();
 		ChunkFeatures __ChunkFeatures = new ChunkFeatures();
-		DependencyFeatures __DependencyFeatures = new DependencyFeatures();
 		BayraktarLabelFeature __BayraktarLabelFeature = new BayraktarLabelFeature();
-		BayraktarPatternFeature __BayraktarPatternFeature = new BayraktarPatternFeature();
 		
 		List<Classifier> features = new ArrayList<>();
 		Classifier labeler = learner.getLabeler();
-		features.add(__ParseFeatures);//Sibling and Parent
-		features.add(__ParseTreeFeature);
+		features.add(__ParseFeatures);
+		features.add(__WordFeatures);
 		features.add(__POSFeatures);
 		features.add(__ChunkFeatures);
-		features.add(__DependencyFeatures);
 		features.add( __BayraktarLabelFeature);
-		features.add( __BayraktarPatternFeature);
-		Collection<List<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 3);
+		Collection<List<Classifier>> ablatedFeatures = getSubsetsOfSizeAtLeastK(features, 4);
 		System.out.println(ablatedFeatures);
 		
 		@SuppressWarnings("unused")
 		Classifier extractor = learner.getExtractor();
 		List<Pair<Double, String>> performanceFeaturePairs = new ArrayList<>();
 		
-		for(List<Classifier> featureSet: ablatedFeatures){
+		/*for(List<Classifier> featureSet: ablatedFeatures){
 			StructuredCommaClassifier structured = new StructuredCommaClassifier(featureSet, labeler);
-			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, commaParser, false, false);
+			EvaluateDiscrete structuredPerformance = ClassifierComparison.structuredCVal(structured, parser, false, false);
 			System.out.println(structuredPerformance.getOverallStats()[2] + "\t" + featureSet + "\n");
 			
 			Pair<Double, String> performanceFeaturePair = new Pair<>(structuredPerformance.getOverallStats()[2], featureSet.toString());
 			performanceFeaturePairs.add(performanceFeaturePair);
-		}
+		}*/
 		
-		/*for(Collection<Classifier> featureSet: ablatedFeatures){
+		for(Collection<Classifier> featureSet: ablatedFeatures){
 			learner.forget();
 			learner.setLTU(new SparseAveragedPerceptron(learningRate, threshold, thickness));
 			learner.setExtractor(new FeatureVectorReturner());
@@ -88,7 +96,7 @@ public class FeatureEngineeringHelper {
 			}
 			Parser featureVectorParser = new ArrayParser(extractedFeatures);
 			BatchTrainer trainer = new BatchTrainer(learner, featureVectorParser);
-			int[] rounds = {90};
+			int[] rounds = {250};
 			int k=5;
 			SplitPolicy splitPolicy = SplitPolicy.sequential;
 			double alpha=0.05;
@@ -101,7 +109,7 @@ public class FeatureEngineeringHelper {
 			performanceFeaturePairs.add(performanceFeaturePair);
 			//System.out.println(featureSet + ";" + perfromance[0][0] + ";" + perfromance[0][1]);
 		}
-		*/
+		
 		Collections.sort(performanceFeaturePairs, new Comparator<Pair<Double, String>>() {
 			@Override
 			public int compare(Pair<Double, String> o1, Pair<Double, String> o2) {
