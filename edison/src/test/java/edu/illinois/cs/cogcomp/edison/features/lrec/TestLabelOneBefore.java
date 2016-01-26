@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -6,6 +6,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.factory.*;
+import edu.illinois.cs.cogcomp.edison.features.lrec.LabelOneBefore;
+import edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSBaseLineFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestLabelOneAfter extends TestCase {
+public class TestLabelOneBefore extends TestCase {
 	
 	private static List<TextAnnotation> tas;
 
@@ -32,7 +35,7 @@ public class TestLabelOneAfter extends TestCase {
 	}
 
 	public final void test() throws Exception {
-		System.out.println("LabelOneAfter Feature Extractor");
+		System.out.println("LabelOneBefore Feature Extractor");
 		// Using the first TA and a constituent between span of 30-40 as a test
 		TextAnnotation ta = tas.get(2);
 		View TOKENS = ta.getView("TOKENS");
@@ -53,7 +56,7 @@ public class TestLabelOneAfter extends TestCase {
 		// in this test is: " + test.getSurfaceForm());
 
 		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = Constant.prefix + Constant.POSCorpus;
+		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 		
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
 		posBaseLine.buildTable(fileName);
@@ -61,15 +64,15 @@ public class TestLabelOneAfter extends TestCase {
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
 		posMikheev.buildTable(fileName);
 		
-		LabelOneAfter l1aPOS = new LabelOneAfter("l1aPOS");
-		LabelOneAfter l1aPOSBaseLine = new LabelOneAfter("l1aPOSBaseLine", posBaseLine);
-		LabelOneAfter l1aPOSMikheev = new LabelOneAfter("l1aPOSMikheev", posMikheev);
+		LabelOneBefore l1bPOS = new LabelOneBefore("l1bPOS");
+		LabelOneBefore l1bPOSBaseLine = new LabelOneBefore("l1bPOSBaseLine", posBaseLine);
+		LabelOneBefore l1bPOSMikheev = new LabelOneBefore("l1bPOSMikheev", posMikheev);
 		
 		//Test when using POS View
-		ArrayList<Set<Feature>> featslist = new ArrayList<Set<Feature>>();
+		ArrayList<Set<Feature>> featslist = new ArrayList<>();
 
 		for (Constituent test : testlist)
-			featslist.add(l1aPOS.getFeatures(test));
+			featslist.add(l1bPOS.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");
@@ -87,7 +90,7 @@ public class TestLabelOneAfter extends TestCase {
 		featslist.clear();
 		
 		for (Constituent test : testlist)
-			featslist.add(l1aPOSBaseLine.getFeatures(test));
+			featslist.add(l1bPOSBaseLine.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");
@@ -104,7 +107,7 @@ public class TestLabelOneAfter extends TestCase {
 		featslist.clear();
 		
 		for (Constituent test : testlist)
-			featslist.add(l1aPOSMikheev.getFeatures(test));
+			featslist.add(l1bPOSMikheev.getFeatures(test));
 
 		if (featslist.isEmpty()) {
 			System.out.println("Feats list is returning NULL.");

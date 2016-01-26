@@ -4,8 +4,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Ignores a public static function. A function that is tagged with this tag
- * will not be exposed to the shell.
+ * Ignores a public static function. A function that is tagged with this tag will not be exposed to
+ * the shell.
  * <p/>
  * Usage:
  * <p/>

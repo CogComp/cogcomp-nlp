@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent; 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -74,7 +74,7 @@ public class POSMikheevFeatureExtractor implements FeatureExtractor {
 		int start = c.getStartSpan();
 		int end = c.getEndSpan();
 
-		Set<Feature> features = new LinkedHashSet<Feature>();
+		Set<Feature> features = new LinkedHashSet<>();
 
 		for (int i = start; i < end; i++) {
 			String form = ta.getToken(i);

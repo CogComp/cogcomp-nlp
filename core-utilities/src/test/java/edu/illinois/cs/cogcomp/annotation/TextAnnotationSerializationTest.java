@@ -11,38 +11,40 @@ import java.util.List;
 
 public class TextAnnotationSerializationTest extends TestCase {
 
-  String sentA = "This is a text that contains pre-tokenized sentences .";
-  String sentB = "For the purposes of this test , tokens are separated by whitespace .";
-  String sentC = "Sentences are separated by newline characters .";
-  String rawText =  sentA + System.lineSeparator() + sentB + System.lineSeparator() + sentC;
+    String sentA = "This is a text that contains pre-tokenized sentences .";
+    String sentB = "For the purposes of this test , tokens are separated by whitespace .";
+    String sentC = "Sentences are separated by newline characters .";
+    String rawText = sentA + System.lineSeparator() + sentB + System.lineSeparator() + sentC;
 
-  private List<String[]> tokenizedSentences;
+    private List<String[]> tokenizedSentences;
 
-  public void setUp() throws Exception {
-    super.setUp();
-    System.out.println(rawText);
-    String[] sentences = rawText.split(System.lineSeparator());
-    tokenizedSentences = new ArrayList<>(sentences.length);
-    for (String sentTokens : sentences) {
-      tokenizedSentences.add(sentTokens.split("\\s"));
+    public void setUp() throws Exception {
+        super.setUp();
+        System.out.println(rawText);
+        String[] sentences = rawText.split(System.lineSeparator());
+        tokenizedSentences = new ArrayList<>(sentences.length);
+        for (String sentTokens : sentences) {
+            tokenizedSentences.add(sentTokens.split("\\s"));
+        }
     }
-  }
 
-  public void testJsonSerializability() throws Exception {
-    TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
+    public void testJsonSerializability() throws Exception {
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
 
-    String json = SerializationHelper.serializeToJson(ta);
+        String json = SerializationHelper.serializeToJson(ta);
 
-    TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
-    assertEquals(ta2.getCorpusId(), ta.getCorpusId());
-    assertEquals(ta2.getId(), ta.getId());
-    assertEquals(ta2.getNumberOfSentences(), ta.getNumberOfSentences());
-    assertEquals(ta2.getSentence(1), ta.getSentence(1));
-    assertEquals(ta2.getSentenceFromToken(2), ta.getSentenceFromToken(2));
-    assertEquals(ta2.getTokenIdFromCharacterOffset(5), ta.getTokenIdFromCharacterOffset(5));
-    assertEquals(ta2.getToken(4), ta.getToken(4));
-    assertEquals(ta2.getAvailableViews(), ta.getAvailableViews());
-    assertEquals(Arrays.toString(ta2.getTokensInSpan(1, 3)), Arrays.toString(ta.getTokensInSpan(1, 3)));
-    assertEquals(ta2.getText(), ta.getText());
-  }
+        TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
+        assertEquals(ta2.getCorpusId(), ta.getCorpusId());
+        assertEquals(ta2.getId(), ta.getId());
+        assertEquals(ta2.getNumberOfSentences(), ta.getNumberOfSentences());
+        assertEquals(ta2.getSentence(1), ta.getSentence(1));
+        assertEquals(ta2.getSentenceFromToken(2), ta.getSentenceFromToken(2));
+        assertEquals(ta2.getTokenIdFromCharacterOffset(5), ta.getTokenIdFromCharacterOffset(5));
+        assertEquals(ta2.getToken(4), ta.getToken(4));
+        assertEquals(ta2.getAvailableViews(), ta.getAvailableViews());
+        assertEquals(Arrays.toString(ta2.getTokensInSpan(1, 3)),
+                Arrays.toString(ta.getTokensInSpan(1, 3)));
+        assertEquals(ta2.getText(), ta.getText());
+    }
 }

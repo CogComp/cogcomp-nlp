@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -16,30 +16,31 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 
 
 /**
- * This feature extractor extracts part of speeches of the words one after each word in a span.
+ * Feature extractor that senses the parts of speech of the four context
+ * words immediately surrounding the target word (two before and two after).
  * 
  * @author Xinbo Wu
  */
-public class LabelOneAfter implements FeatureExtractor{
+public class POSWindow implements FeatureExtractor{
 	private final String viewName;
 	private final boolean isPOSFromCounting;
 	private final boolean isBaseLineCounting;
 	protected POSBaseLineCounter counter;
 	
-	public LabelOneAfter(String viewName){
+	public POSWindow(String viewName){
 		this.isPOSFromCounting = false;
 		this.isBaseLineCounting = false;
 		this.viewName = viewName;
 	}
 	
-	public LabelOneAfter(String viewName, POSBaseLineCounter counter){
+	public POSWindow(String viewName, POSBaseLineCounter counter){
 		this.isPOSFromCounting = true;
 		this.isBaseLineCounting = true;
 		this.viewName = viewName;
 		this.counter = counter;
 	}
 	
-	public LabelOneAfter(String viewName, POSMikheevCounter counter){
+	public POSWindow(String viewName, POSMikheevCounter counter){
 		this.isPOSFromCounting = true;
 		this.isBaseLineCounting = false;
 		this.viewName = viewName;
@@ -49,50 +50,53 @@ public class LabelOneAfter implements FeatureExtractor{
 	@Override
 	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 		String classifier;
-		String prefix = "LabelOneAfter";
+		String prefix = "POSWindow";
 		
 		TextAnnotation ta = c.getTextAnnotation();
 		int lenOfTokens = ta.getTokens().length;
 		
-		int start = c.getStartSpan() + 1;
-		int end = c.getEndSpan() + 1;
+		int start = c.getStartSpan();
+		int end = c.getEndSpan();
 		
-		Set<Feature> features = new LinkedHashSet<Feature>();
+		Set<Feature> features = new LinkedHashSet<>();
 		
 		for (int i = start; i < end; i++) {
+			int curr = i, last = i;
+			
+			//for (; curr >= i-2 && curr > 0; --curr)
+			//for (; last <= i+2 && last < lenOfTokens; ++last)
+			for (int j = 0; j < 2 && curr > 0; j++)
+				curr -= 1;
+			for (int j = 0; j < 2 && last < lenOfTokens - 1; j++)
+				last += 1;
+			
 			if (!isPOSFromCounting){
 				classifier = prefix + "_" + "POS";
 				
-				if (i < lenOfTokens){
+				for (; curr <= last; curr++){
 					TokenLabelView POSView = (TokenLabelView)ta.getView(ViewNames.POS);
 					
-					String form = ta.getToken(i);
-					String tag = POSView.getLabel(i);
+					String form = ta.getToken(curr);
+					String tag = POSView.getLabel(curr);
 					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
+				}
 					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
-				
 			}else if (isBaseLineCounting){
 				classifier = prefix + "_" + "BaselinePOS";
-				if (i < lenOfTokens){
-					String form = ta.getToken(i);
-					String tag = counter.tag(i, ta);
+				for (; curr <= last; curr++){
+					String form = ta.getToken(curr);
+					String tag = counter.tag(curr, ta);
 					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
-					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
+				}
+				
 				
 			}else{
 				classifier = prefix + "_" + "MikheevPOS";
-				if (i < lenOfTokens){
-					String form = ta.getToken(i);
-					String tag = counter.tag(i, ta);
+				for (; curr <= last; curr++){
+					String form = ta.getToken(curr);
+					String tag = counter.tag(curr, ta);
 					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
-					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
-				
+				}
 			}
 		}
 	

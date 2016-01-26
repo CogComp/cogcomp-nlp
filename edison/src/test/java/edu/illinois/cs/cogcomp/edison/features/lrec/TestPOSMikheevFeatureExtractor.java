@@ -1,7 +1,6 @@
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -33,7 +32,7 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
 	}
 
 	public final void test() throws Exception {
-		String fileName = Constant.prefix + Constant.POSCorpus;
+		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 		
 		POSMikheevFeatureExtractor posMikheev = new POSMikheevFeatureExtractor("posMikheev", "test_corpus", fileName);
 		
@@ -42,21 +41,18 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
 		// Using the first TA and a constituent between span of 30-40 as a test
 		int i = 0;
 		for(TextAnnotation ta : tas){
-			ArrayList<String> outFeatures = new ArrayList<String>();
+			ArrayList<String> outFeatures = new ArrayList<>();
 			View TOKENS = ta.getView("TOKENS");
-			
-			Iterator<Constituent> iter = TOKENS.iterator();
-			ArrayList<Set<Feature>> featslist = new ArrayList<Set<Feature>>();
-			
-			while(iter.hasNext()){
-				Set<Feature> feats = posMikheev.getFeatures(iter.next());
+
+			for (Constituent TOKEN : TOKENS) {
+				Set<Feature> feats = posMikheev.getFeatures(TOKEN);
 				if (feats.isEmpty()) {
 					System.out.println("Feats list is returning NULL.");
 				}
-					for (Feature f : feats)
-						if(!f.getName().contains("UNKNOWN")){
+				for (Feature f : feats)
+					if (!f.getName().contains("UNKNOWN")) {
 						outFeatures.add(f.getName());
-						}
+					}
 			}
 			
 			if (!outFeatures.isEmpty()) {

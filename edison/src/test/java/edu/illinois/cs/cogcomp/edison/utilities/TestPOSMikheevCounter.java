@@ -4,22 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
 
-import org.junit.Test;
-
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.factory.Constant;
-import edu.illinois.cs.cogcomp.edison.features.factory.POSBaseLineFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.TestPOSBaseLineFeatureExtractor;
 import junit.framework.TestCase;
 
 public class TestPOSMikheevCounter extends TestCase {
@@ -32,7 +20,7 @@ public class TestPOSMikheevCounter extends TestCase {
 		posMikheev.buildTable(fileName);
 		
 		HashMap<String,HashMap<String, TreeMap<String, Integer>>> tables = 
-				new HashMap<String,HashMap<String, TreeMap<String, Integer>>>();
+				new HashMap<>();
 		tables.put("firstCapitalized", posMikheev.firstCapitalized);
 		tables.put("notFirstCapitalized", posMikheev.notFirstCapitalized);
 		tables.put("table", posMikheev.table);

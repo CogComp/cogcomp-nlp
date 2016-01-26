@@ -7,11 +7,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
 /**
- * StringCleanup maps characters in "broader" encodings to comparable
- * characters in "narrower" encodings -- e.g. from UTF-8 to ascii,
- * or from non-UTF-8 to UTF-8 or smaller.
- * This is useful for some NLP applications that don't handle wide characters
- * or other "non-standard" inputs well (such as the Charniak parser).
+ * StringCleanup maps characters in "broader" encodings to comparable characters in "narrower"
+ * encodings -- e.g. from UTF-8 to ascii, or from non-UTF-8 to UTF-8 or smaller. This is useful for
+ * some NLP applications that don't handle wide characters or other "non-standard" inputs well (such
+ * as the Charniak parser).
  *
  * @author mssammon
  */
@@ -19,9 +18,9 @@ import java.nio.charset.CharsetEncoder;
 
 public class StringCleanup {
     /**
-     * tries to normalize string to specified encoding. The number of characters
-     * returned should be the same, and tokens should remain contiguous in the
-     * output; non-recognized characters will be substituted for *something*.
+     * tries to normalize string to specified encoding. The number of characters returned should be
+     * the same, and tokens should remain contiguous in the output; non-recognized characters will
+     * be substituted for *something*.
      */
 
     static public String normalizeToEncoding(String origString_, Charset encoding_) {
@@ -35,12 +34,13 @@ public class StringCleanup {
 
             int charNum = 0;
 
-            for (int offset = 0; offset < length; ) {
+            for (int offset = 0; offset < length;) {
                 // do something with the codepoint
-                Pair<Character, Integer> replacement = normalizeCodepoint(origString_, encoding_, offset);
+                Pair<Character, Integer> replacement =
+                        normalizeCodepoint(origString_, encoding_, offset);
 
                 Character replacedChar = replacement.getFirst();
-                int codepoint = replacement.getSecond().intValue();
+                int codepoint = replacement.getSecond();
 
                 if (null != replacedChar) {
                     normSeq[charNum] = replacedChar;
@@ -56,29 +56,27 @@ public class StringCleanup {
     }
 
     /**
-     * substitute based on types: for a character encoding not in range,
-     * replace punctuation with generic punctuation
-     * whitespace with whitespace
-     * letter with letter
-     * number with number
-     * currency symbol with currency
+     * substitute based on types: for a character encoding not in range, replace punctuation with
+     * generic punctuation whitespace with whitespace letter with letter number with number currency
+     * symbol with currency
      */
 
-    private static Pair<Character, Integer> normalizeCodepoint(String origString_, Charset encoding_, int offset_) {
+    private static Pair<Character, Integer> normalizeCodepoint(String origString_,
+            Charset encoding_, int offset_) {
         char normalizedChar = '?';
         boolean isOk = false;
         final int codepoint = origString_.codePointAt(offset_);
 
-//        char nextChar = ' ';
-//        char nextNextChar = ' ';
-//        
-//        if ( offset_ + 1 < origString_.length() )
-//        	nextChar = origString_.charAt( offset_ + 1 );
-//        if ( offset_ + 2 < origString_.length() )
-//        	nextNextChar = origString_.charAt( offset_ + 2 );
+        // char nextChar = ' ';
+        // char nextNextChar = ' ';
+        //
+        // if ( offset_ + 1 < origString_.length() )
+        // nextChar = origString_.charAt( offset_ + 1 );
+        // if ( offset_ + 2 < origString_.length() )
+        // nextNextChar = origString_.charAt( offset_ + 2 );
 
-//        CharsetDecoder decoder = encoding_.newDecoder();
-//        System.err.println( "## codepoint is '" + codepoint_ + "'..." );
+        // CharsetDecoder decoder = encoding_.newDecoder();
+        // System.err.println( "## codepoint is '" + codepoint_ + "'..." );
 
         if (encoding_.equals(Charset.forName("US-ASCII"))) {
             if (codepoint < 128)
@@ -124,9 +122,9 @@ public class StringCleanup {
 
         Character newChar = null;
         if (isOk)
-            newChar = Character.valueOf(normalizedChar);
+            newChar = normalizedChar;
 
-        return new Pair<>(newChar, new Integer(codepoint));
+        return new Pair<>(newChar, codepoint);
     }
 
     static public String normalizeToUtf8(String origString_) {
@@ -144,12 +142,16 @@ public class StringCleanup {
         String latin1Str = normalizeToLatin1(origString_);
         return normalizeToEncoding(latin1Str, Charset.forName("ascii"));
     }
-    
-    /*Control Characters such as ^C, ^\, ^M etc. are a part of the C0 ASCII Control Character Set. These break our NER, COREF etc. (Eg. In John Smith Corpus) and are not needed in text documents. 
-     * This function removes the control characters in input string, i.e. almost all of ASCII characters 0 - 31, except the \n, \r and \t characters (which it keeps intact in the text). */
-     static public String removeControlCharacters(String origString_) {
-        String outputStr = origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
-        return outputStr;
+
+    /*
+     * Control Characters such as ^C, ^\, ^M etc. are a part of the C0 ASCII Control Character Set.
+     * These break our NER, COREF etc. (Eg. In John Smith Corpus) and are not needed in text
+     * documents. This function removes the control characters in input string, i.e. almost all of
+     * ASCII characters 0 - 31, except the \n, \r and \t characters (which it keeps intact in the
+     * text).
+     */
+    static public String removeControlCharacters(String origString_) {
+        return origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
     }
 
 }

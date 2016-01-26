@@ -1,6 +1,6 @@
 /target
-# Created by .ignore support plugin (hsz.mobi)
 .idea
 *.log
 */target
 *.iml
+edison/wordnet/

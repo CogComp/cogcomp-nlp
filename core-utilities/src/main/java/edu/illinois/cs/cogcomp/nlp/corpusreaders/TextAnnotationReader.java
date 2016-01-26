@@ -12,7 +12,8 @@ import java.util.Iterator;
  *         <p/>
  *         Sep 4, 2009
  */
-public abstract class TextAnnotationReader implements Iterable<TextAnnotation>, IResetableIterator<TextAnnotation> {
+public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
+        IResetableIterator<TextAnnotation> {
 
     private static Logger log = LoggerFactory.getLogger(TextAnnotationReader.class);
 
@@ -50,7 +51,6 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>, 
 
     protected abstract TextAnnotation makeTextAnnotation() throws Exception;
 
-    public void remove() {
-    }
+    public void remove() {}
 
 }

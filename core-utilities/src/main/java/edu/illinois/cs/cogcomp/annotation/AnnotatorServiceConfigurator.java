@@ -14,13 +14,17 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 public class AnnotatorServiceConfigurator extends Configurator {
 
     public static final Property CACHE_DIR = new Property("cacheDirectory", "annotation-cache");
-    public static final Property THROW_EXCEPTION_IF_NOT_CACHED = new Property("throwExceptionIfNotCached",
-            Configurator.FALSE);
-    public static final Property CACHE_HEAP_SIZE_MB = new Property("cacheHeapSizeInMegabytes", "1000");
-    public static final Property CACHE_DISK_SIZE_MB = new Property("cacheDiskSizeInMegabytes", "2000");
-    public static final Property SET_CACHE_SHUTDOWN_HOOK = new Property("setCacheShutdownHook", Configurator.TRUE);
+    public static final Property THROW_EXCEPTION_IF_NOT_CACHED = new Property(
+            "throwExceptionIfNotCached", Configurator.FALSE);
+    public static final Property CACHE_HEAP_SIZE_MB = new Property("cacheHeapSizeInMegabytes",
+            "1000");
+    public static final Property CACHE_DISK_SIZE_MB = new Property("cacheDiskSizeInMegabytes",
+            "2000");
+    public static final Property SET_CACHE_SHUTDOWN_HOOK = new Property("setCacheShutdownHook",
+            Configurator.TRUE);
     public static final Property DISABLE_CACHE = new Property("disableCache", Configurator.FALSE);
-    public static final Property FORCE_CACHE_UPDATE = new Property("forceCacheUpdate", Configurator.FALSE);
+    public static final Property FORCE_CACHE_UPDATE = new Property("forceCacheUpdate",
+            Configurator.FALSE);
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -29,8 +33,9 @@ public class AnnotatorServiceConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = {CACHE_DIR, THROW_EXCEPTION_IF_NOT_CACHED, CACHE_HEAP_SIZE_MB, CACHE_DISK_SIZE_MB,
-                SET_CACHE_SHUTDOWN_HOOK, DISABLE_CACHE, FORCE_CACHE_UPDATE};
-        return new ResourceManager( generateProperties(props) );
+        Property[] props =
+                {CACHE_DIR, THROW_EXCEPTION_IF_NOT_CACHED, CACHE_HEAP_SIZE_MB, CACHE_DISK_SIZE_MB,
+                        SET_CACHE_SHUTDOWN_HOOK, DISABLE_CACHE, FORCE_CACHE_UPDATE};
+        return new ResourceManager(generateProperties(props));
     }
 }
