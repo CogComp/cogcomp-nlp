@@ -69,7 +69,11 @@
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>edu.princeton</groupId>
+            <artifactId>wordnet-dict</artifactId>
+            <version>3.1</version>
+        </dependency>
         <!-- Database driver for storing TextAnnotations -->
         <dependency>
             <groupId>com.h2database</groupId>

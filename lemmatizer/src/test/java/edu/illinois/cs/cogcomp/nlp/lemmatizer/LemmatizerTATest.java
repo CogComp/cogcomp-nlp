@@ -20,9 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class LemmatizerTestTA {
+public class LemmatizerTATest {
     private static final String TEST_TEXT_ANNOTATION_FILE = "src/test/resources/serializedTA.ser";
-
     private TextAnnotation inputTa;
     private IllinoisLemmatizer lem;
 
