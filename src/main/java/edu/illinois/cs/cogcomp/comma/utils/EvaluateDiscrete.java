@@ -24,7 +24,6 @@ public class EvaluateDiscrete extends TestDiscrete{
 	
 	@Override
 	public void reportPrediction(String p, String l) {
-		// TODO Auto-generated method stub
 		super.reportPrediction(p, l);
 		HashMap<String, Integer> predictionHistogramForL = confusionMatrix.get(l);
 		if(predictionHistogramForL == null){
@@ -73,9 +72,7 @@ public class EvaluateDiscrete extends TestDiscrete{
 		}
 	}
 	
-	public static EvaluateDiscrete evaluateDiscrete(Classifier classifier,
-			Classifier oracle, Parser parser) {
-		return (EvaluateDiscrete) testDiscrete(new EvaluateDiscrete(), classifier, oracle, parser,
-				false, 0);
+	public static EvaluateDiscrete evaluateDiscrete(Classifier classifier, Classifier oracle, Parser parser) {
+		return (EvaluateDiscrete) testDiscrete(new EvaluateDiscrete(), classifier, oracle, parser, false, 0);
 	}
 }

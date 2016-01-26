@@ -1,14 +1,13 @@
 package edu.illinois.cs.cogcomp.comma.bayraktar;
 
-import java.io.File;
+import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 
 /**
  * Use this class to get labels for bayraktar-patterns which have been annotated
@@ -22,10 +21,10 @@ public class BayraktarPatternLabeler {
     	BAYRAKTAR_PATTERN_TO_COMMA_LABEL = new HashMap<>();
     	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir() + "/";
 		for(String label : labels){
-			File file = new File(ANNOTATION_SOURCE_DIR + label);
+			String file = ANNOTATION_SOURCE_DIR + label;
 			List<String> lines;
 			try {
-				lines = FileUtils.readLines(file, null);
+				lines = LineIO.read(file);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -45,22 +44,7 @@ public class BayraktarPatternLabeler {
      */
 	public static String getLabel(Comma comma){
 		String bayraktarPattern = comma.getBayraktarPattern();
-		String label = BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern);
-		return label;
-	}
-	
-	/**
-     * 
-     * @param bayraktarPattern The bayraktar pattern whose label is required
-     * @return the Bayraktar-label as specified in the annotation files
-     */
-	public static String getLabel(String bayraktarPattern){
-		String label = BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern);
-		return label;
-	}
-	
-	public static boolean isLabelAvailable(String bayraktarPattern){
-		return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern)!=null;
+        return BAYRAKTAR_PATTERN_TO_COMMA_LABEL.get(bayraktarPattern);
 	}
 	
 	/**

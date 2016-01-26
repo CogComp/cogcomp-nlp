@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.annotators.CommaLabeler;
+import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -22,8 +22,8 @@ public class Sentence implements Serializable{
 	protected final TextAnnotation ta;//automatic annotations
 	protected final TextAnnotation goldTa;//gold standard annotations
 	private final List<Comma> commas;//commas in sentence ordered by position
-	private static final long serialVersionUID = 2522617554768671154l;
-	
+	private static final long serialVersionUID = 2522617554768671154L;
+
 	/**
 	 * helper for constructing sentences in which all commas have a single label
 	 */
@@ -37,9 +37,9 @@ public class Sentence implements Serializable{
 		}
 		return new Sentence(ta, goldTa, commaLabels);
 	}
-	
+
 	/**
-	 * If labels are not given construct commas and assign the labels according to the bayraktar-syntax-pattern to comma label mappings 
+	 * If labels are not given construct commas and assign the labels according to the bayraktar-syntax-pattern to comma label mappings
 	 */
 	public Sentence(TextAnnotation ta, TextAnnotation goldTa){
 		this.ta = ta;
@@ -52,13 +52,12 @@ public class Sentence implements Serializable{
 			}
 		}
 	}
-	
+
 	/**
-	 * Constructor for sentence which in turn constructs commas in the sentence. Labels for all commas that you are interested in must be provided. Labels-lists for other commas must be set to null and they won't be included. 
-	 * @param ta the automatic 
+	 * Constructor for sentence which in turn constructs commas in the sentence. Labels for all commas that you are interested in must be provided. Labels-lists for other commas must be set to null and they won't be included.
+	 * @param ta the automatic
 	 * @param goldTa
 	 * @param labels List of list of labels for each comma
-	 * @param refinedLabels list of list of refined labels for each comma
 	 * @throws Exception throws exception if number of comma-label-lists provided is not equal to number of commas in the sentence
 	 */
 	public Sentence(TextAnnotation ta, TextAnnotation goldTa, List<List<String>> labels) throws Exception{
@@ -92,7 +91,7 @@ public class Sentence implements Serializable{
 		if(numCommas!=labels.size())
 			throw new Exception("must provide labels for all commas in sentence");
 	}
-	
+
 	public Sentence(TextAnnotation ta){
 		this.ta = ta;
 		this.goldTa = ta;
@@ -101,7 +100,7 @@ public class Sentence implements Serializable{
 		List<Constituent> preds = commaView.getPredicates();
 		Collections.sort(preds, TextAnnotationUtilities.constituentStartComparator);
 		for(int predIdx=0; predIdx<preds.size(); predIdx++){
-			List<String> labels = new ArrayList<String>();
+			List<String> labels = new ArrayList<>();
 			labels.add(preds.get(predIdx).getLabel());
 			int commaPosition = preds.get(predIdx).getStartSpan();
 			for(int nextPredIdx = predIdx + 1; nextPredIdx<preds.size(); nextPredIdx++){
@@ -115,15 +114,15 @@ public class Sentence implements Serializable{
 			commas.add(new Comma(commaPosition, this, labels));
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return commas in the sentence ordered by position
 	 */
 	public List<Comma> getCommas(){
 		return commas;
 	}
-	
+
 	public Collection<Comma> getFirstCommasWhichAreNotLast(){
 		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<>();
 		for (Comma c : commas)
@@ -131,7 +130,7 @@ public class Sentence implements Serializable{
 				firstCommasWhichAreNotLast.add(c);
 		return firstCommasWhichAreNotLast;
 	}
-	
+
 	public Collection<Comma> getMiddleCommas(){
 		Collection<Comma> middleCommas = new ArrayList<>();
 		for (Comma c : commas)
@@ -139,7 +138,7 @@ public class Sentence implements Serializable{
 				middleCommas.add(c);
 		return middleCommas;
 	}
-	
+
 	public Comma getNextComma(Comma curr_c){
 		Comma next_c = null;
 		int curr_diff = Integer.MAX_VALUE;
@@ -151,7 +150,7 @@ public class Sentence implements Serializable{
 		}
 		return next_c;
 	}
-	
+
 	public Comma getPreviousComma(Comma curr_c){
 		Comma prev_c = null;
 		int curr_diff = Integer.MAX_VALUE;
@@ -163,7 +162,7 @@ public class Sentence implements Serializable{
 		}
 		return prev_c;
 	}
-	
+
 	public Collection<Comma> getFirstSiblingCommasWhichAreNotLast(){
 		Collection<Comma> firstCommasWhichAreNotLast = new ArrayList<>();
 		for (Comma c : commas)
@@ -172,7 +171,7 @@ public class Sentence implements Serializable{
 
 		return firstCommasWhichAreNotLast;
 	}
-	
+
 	public Collection<Comma> getMiddleSiblingCommas(){
 		Collection<Comma> middleCommas = new ArrayList<>();
 		for (Comma c : commas)
@@ -180,7 +179,7 @@ public class Sentence implements Serializable{
 				middleCommas.add(c);
 		return middleCommas;
 	}
-	
+
 	public Comma getNextSiblingComma(Comma curr_c){
 		Comma next_c = null;
 		int curr_diff = Integer.MAX_VALUE;
@@ -192,7 +191,7 @@ public class Sentence implements Serializable{
 		}
 		return next_c;
 	}
-	
+
 	public Comma getPreviousSiblingComma(Comma curr_c){
 		Comma prev_c = null;
 		int curr_diff = Integer.MAX_VALUE;
@@ -204,11 +203,11 @@ public class Sentence implements Serializable{
 		}
 		return prev_c;
 	}
-	
-	
+
+
 
 	/**
-	 * 
+	 *
 	 * @return String representation of the sentence with all the commas embedded into the string
 	 */
 	public String getAnnotatedText(){
@@ -227,7 +226,7 @@ public class Sentence implements Serializable{
 		}
 		return annotatedText;
 	}
-	
+
 	public String getId(){
 		return commas.get(0).getTextAnnotation(true).getId();
 	}
