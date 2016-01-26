@@ -16,6 +16,8 @@ There are 2 sources for annotation data:
 2. Comma-Syntax-Pattern annotations:  A mapping from a list of the most frequent syntax patterns, extracted 
    from the context of a comma in the parse of the sentence, to comma labels
 
+Execute './annotate.sh infile outfile' in the project directory to annotate the commas in the infile and recieve output in the outfile. Sentences must be on different lines.
+
 Run `ClassifierComparison` to get the performance of different models as evaluated over 5-fold cval.
 
 Use `CommaLabeler` to obtain a comma `View` for a sentence represented as a `TextAnnotation`
