@@ -44,7 +44,7 @@ MAVEN_VERSIONS_PLUGIN_UPDATE_DEPENDENCIES_GOAL="${MAVEN_VERSIONS_PLUGIN}:use-lat
 MAVEN_HELP_PLUGIN="org.apache.maven.plugins:maven-help-plugin:2.1.1"
 MAVEN_HELP_PLUGIN_EVALUATE_VERSION_GOAL="${MAVEN_HELP_PLUGIN}:evaluate -Dexpression=project.version"
 
-DRY_RUN=false
+COMMIT=false
 
 LAST_COMMIT_HASH=`git log -1 --pretty=format:"%H"`
 
@@ -52,7 +52,7 @@ function printUsage() {
   echo "Usage: ${0} [option(s)]"
   echo
   echo "  -h                Show this help text."
-  echo "  -d                Dry run. Do everything except the commit process."
+  echo "  -d                At the end also commit to the master branch of origin"
   echo "  -v new_version    Override generated version to the specific version."
   echo "                    This should be in the format: major.minor.patch.build. (e.g. 2.8.1.0)"
 }
@@ -60,7 +60,7 @@ function printUsage() {
 while getopts ":v:bhdj" OPT; do
   case ${OPT} in
     d)
-      DRY_RUN=true
+      COMMIT=true
       ;;
     h)
       printUsage
@@ -168,7 +168,7 @@ function commitBuildNumberChanges() {
   git commit -m "${BUILD_NUMBER_CHANGES_COMMIT_MESSAGE}"
 
   echo "Pushing changes to master..."
-  git push master
+  git push origin master
 }
 
 #################################################################################
@@ -201,7 +201,7 @@ updateToLatestDependencies
 #################################################################################
 # Commit/Push updated files up to the repository
 #################################################################################
-if [ ${DRY_RUN} = false ] ; then
+if [ ${COMMIT} = true ] ; then
   commitBuildNumberChanges
 else
   echo "Dry run specified. Skipping commit/push process."
