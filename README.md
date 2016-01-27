@@ -9,14 +9,17 @@ There are 2 models:
 
 There are 2 sources for annotation data:
 
-1. Comma Resolution Data(data/Original-data-by-Srikumar-et-al): 
+1. Comma Resolution Data (`data/corpus`):
    A set of around a 1000 sentences from section 00 of the PTB in which all the commas have been 
    labeled with their roles. The comma that were labeled as **Other** have been refined and the annotations are 
    in `data/otherFile.txt`
-2. Comma-Syntax-Pattern annotations:  A mapping from a list of the most frequent syntax patterns, extracted 
+2. Comma-Syntax-Pattern annotations (`data/Bayraktar-SyntaxToLabel`):  
+   A mapping from a list of the most frequent syntax patterns, extracted 
    from the context of a comma in the parse of the sentence, to comma labels
 
-Execute './annotate.sh infile outfile' in the project directory to annotate the commas in the infile and recieve output in the outfile. Sentences must be on different lines.
+Execute `./scripts/annotate.sh` in the project directory to annotate the commas in the `data/infile.txt` and receive output in the `data/outfile.txt`. 
+You can edit the `infile` to add more sentences. Each sentence must be on a different line.
+**NB:** This script requires [Maven](https://maven.apache.org/download.cgi) to be installed.
 
 Run `ClassifierComparison` to get the performance of different models as evaluated over 5-fold cval.
 
