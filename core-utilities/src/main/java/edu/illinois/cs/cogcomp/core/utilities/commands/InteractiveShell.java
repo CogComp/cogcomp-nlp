@@ -136,33 +136,16 @@ public class InteractiveShell<T> {
         Method[] mList = type.getMethods();
         for (Method m : mList) {
             if (Modifier.isStatic(m.getModifiers())) {
-                if (m.getName().equals(args[0]))
-
-                {
+                if (m.getName().equals(args[0])) {
                     foundMethod = true;
 
                     if (ss.length != m.getParameterTypes().length) {
                         incorrectParams = true;
                     } else {
                         incorrectParams = false;
-                        try {
-                            Object o = m.invoke(null, ss);
-                            if (o != null) {
-                                System.out.println(o.toString());
-                            }
-                        } catch (Exception ex) {
-                            System.out.println("ERROR:");
-                            ex.printStackTrace();
-
-                            if (m.isAnnotationPresent(CommandDescription.class)) {
-                                System.out.println("Documentation");
-                                System.out.println(m.getAnnotation(CommandDescription.class)
-                                        .description());
-                            } else {
-                                System.out.println("No documentation available for " + m.getName());
-                            }
-
-                            System.out.println();
+                        Object o = m.invoke(null, ss);
+                        if (o != null) {
+                            System.out.println(o.toString());
                         }
                     }
                 }
