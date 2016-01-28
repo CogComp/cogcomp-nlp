@@ -14,11 +14,11 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  */
 public class PipelineConfigurator extends Configurator
 {
-    public static final Property NER_CONLL_CONFIG = new Property("nerConllConfig",
-            "ner-conll-config-default.properties");
-    public static final Property NER_ONTONOTES_CONFIG = new Property("nerOntonotesConfig",
-            "ner-ontonotes-config-default.properties");
-    public static final Property LEMMA_CONFIG = new Property("lemmaConfig", "lemmatizer-config-default.properties");
+//    public static final Property NER_CONLL_CONFIG = new Property("nerConllConfig",
+//            "ner-conll-config-default.properties");
+//    public static final Property NER_ONTONOTES_CONFIG = new Property("nerOntonotesConfig",
+//            "ner-ontonotes-config-default.properties");
+//    public static final Property LEMMA_CONFIG = new Property("lemmaConfig", "lemmatizer-config-default.properties");
     // presumably, in ms and per sentence, not document
     public static final Property STFRD_TIME_PER_SENTENCE = new Property("stanfordMaxTimePerSentence", "1000");
     public static final Property STFRD_MAX_SENTENCE_LENGTH = new Property("stanfordParseMaxSentenceLength", "60");
@@ -43,7 +43,7 @@ public class PipelineConfigurator extends Configurator
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] properties = {NER_CONLL_CONFIG, NER_ONTONOTES_CONFIG, LEMMA_CONFIG, STFRD_TIME_PER_SENTENCE,
+        Property[] properties = {STFRD_TIME_PER_SENTENCE,
                 STFRD_MAX_SENTENCE_LENGTH, SIMPLE_CACHE_DIR, USE_POS, USE_LEMMA, USE_SHALLOW_PARSE,
                 USE_NER_CONLL, USE_NER_ONTONOTES, USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(generateProperties(properties))));
