@@ -54,19 +54,19 @@ data structure -- see README_DEVELOPER and the illinois-cogcomp-nlp library
 (https://github.com/IllinoisCogComp/illinois-cogcomp-nlp).
 
 Unless otherwise indicated, the NLP tools listed below are part of the
-illinois-cogcomp-nlp package. The memory is for the component itself *excluding*
-dependencies.
+illinois-cogcomp-nlp package. The memory is expected MAXIMUM memory required 
+for the component itself EXCLUDING dependencies.
 
 1. Lemmatizer: <1G memory, no dependencies.
 2. Part-of-Speech tagger: <1G, no dependencies.
 3. Chunker: <1G, requires Part-of-Speech tagger.
 4. Named Entity Recognizer (CoNLL): 2G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
 5. Named Entity Recognizer (OntoNotes) 4G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
-5. Dependency Parser (Stanford): 1G(?), no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
-6. Constituency Parser (Stanford): 1G(?), no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+6. Constituency Parser (Stanford): 1G, no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+5. Dependency Parser (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
 7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
-8. Noun Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 
 
