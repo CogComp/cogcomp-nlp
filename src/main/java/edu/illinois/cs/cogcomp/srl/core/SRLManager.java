@@ -94,11 +94,6 @@ public abstract class SRLManager {
 
 		modelInfo = new HashMap<>();
 
-		// Load WN properties file from the classpath
-		WordNetManager.loadConfigAsClasspathResource(true);
-		// For nomSRL define the location of NOMLEX
-		NomLexReader.nomLexFile = properties.getNombankHome() + "NOMLEX-plus-clean.1.0";
-
 		initializeModelInfo();
 
 		initializeConstraints();

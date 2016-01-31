@@ -12,8 +12,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.0.15</cogcomp-nlp-version>
-        <cogcomp-nlp-pipeline-version>0.1.15</cogcomp-nlp-pipeline-version>
+        <cogcomp-nlp-version>3.0.17</cogcomp-nlp-version>
+        <cogcomp-nlp-pipeline-version>0.1.16</cogcomp-nlp-pipeline-version>
     </properties>
 
     <repositories>

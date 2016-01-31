@@ -13,7 +13,6 @@ import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
-import edu.illinois.cs.cogcomp.srl.inference.ISRLInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
