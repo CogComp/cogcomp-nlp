@@ -100,7 +100,7 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <!-- Stanford Core NLP, used for its parser (for SRL) -->
+        <!-- Stanford Core NLP, used for its parser (for ) -->
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
@@ -116,7 +116,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
-            <version>5.1.8</version>
+            <version>5.1.9</version>
             <exclusions>
                 <exclusion>
                     <artifactId>illinois-nlp-pipeline</artifactId>

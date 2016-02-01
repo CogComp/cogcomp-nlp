@@ -95,6 +95,8 @@ cp -r test $CPYDIR
 
 cp -r config $CPYDIR
 
+cp pom.xml $CPYDIR
+
 cd $TMPDIR
 
 echo "$0: zipping up the distribution files..."
@@ -105,6 +107,6 @@ cd -
 echo "$0: Done creating release zip.  Moving it to '../$NAME.zip'."
 
 mv $TMPDIR/$NAME.zip ..
-rm -rf $CPYDIR
+rm -rf $TMPDIR
 
 echo "$0: cleaned up. Done."

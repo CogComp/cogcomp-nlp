@@ -121,15 +121,16 @@ public class IllinoisPipelineFactory
             POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator( "pos", stanfordProps );
             ParserAnnotator parseAnnotator = new ParserAnnotator( "parse", stanfordProps );
             int maxLength = Integer.parseInt(maxParseSentenceLength);
+            boolean throwExceptionOnSentenceLengthCheck = rm.getBoolean( PipelineConfigurator.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key );
 
             if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_DEP ) )
             {
-                StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator, maxLength );
-                viewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
+                StanfordDepHandler depParser = new StanfordDepHandler( posAnnotator, parseAnnotator, maxLength, throwExceptionOnSentenceLengthCheck );
+                viewGenerators.put(ViewNames.DEPENDENCY_STANFORD, depParser );
             }
             if ( rm.getBoolean( PipelineConfigurator.USE_STANFORD_PARSE ) )
             {
-                StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator, maxLength );
+                StanfordParseHandler parser = new StanfordParseHandler( posAnnotator, parseAnnotator, maxLength, throwExceptionOnSentenceLengthCheck);
                 viewGenerators.put(ViewNames.PARSE_STANFORD, parser);
             }
         }
