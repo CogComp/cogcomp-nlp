@@ -130,6 +130,14 @@
             <version>6.5</version>
             <optional>true</optional>
         </dependency>
+
+        <!-- needed for intellij unit testing (outside maven) to work properly -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-edison</artifactId>
+            <version>${cogcomp-nlp-version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <reporting>

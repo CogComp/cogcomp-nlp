@@ -201,6 +201,8 @@ public class IllinoisNewPipelineTest
 
         assertFalse( ta.hasView( ViewNames.SRL_VERB ) );
         assertFalse( ta.hasView( ViewNames.NER_ONTONOTES ) );
+        assertTrue( ta.hasView( ViewNames.SHALLOW_PARSE ) );
+        assertTrue( ta.hasView( ViewNames.NER_CONLL));
 
         String[] viewsToAdd =  { ViewNames.SRL_VERB, ViewNames.NER_ONTONOTES };
         Set< String > viewNames = new HashSet<>();
