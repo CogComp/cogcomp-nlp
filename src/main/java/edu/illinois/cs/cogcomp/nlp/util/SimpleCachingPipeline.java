@@ -166,11 +166,23 @@ public class SimpleCachingPipeline implements AnnotatorService {
 
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
 
-        addViewsAndCache(ta, viewsToAnnotate);
+        ta = addViewsAndCache(ta, viewsToAnnotate);
 
         return ta;
     }
 
+    public boolean addAnnotator(Annotator annotator)
+    {
+        boolean isAdded = false;
+
+        if ( !this.viewProviders.containsKey( annotator.getViewName()) )
+        {
+            viewProviders.put( annotator.getViewName(), annotator );
+            isAdded = true;
+        }
+
+        return isAdded;
+    }
 
     /**
      * DOES NOT CACHE THE ADDED VIEW!!!
@@ -211,7 +223,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
         return isUpdated;
     }
 
-    public boolean addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate) throws AnnotatorException {
+    public TextAnnotation addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate) throws AnnotatorException {
         boolean isUpdated = false;
 
         String cacheFile;
@@ -240,7 +252,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
                 throw new AnnotatorException(e.getMessage());
             }
         }
-        return isUpdated;
+        return ta;
     }
 
     /**

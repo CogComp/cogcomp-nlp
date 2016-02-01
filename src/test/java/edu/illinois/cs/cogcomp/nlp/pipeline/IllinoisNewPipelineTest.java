@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
@@ -15,20 +16,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
- *  IMPORTANT NOTE: when runNc87,Isly
- *  by maven during 'install', this test
+ *  IMPORTANT NOTE: when run by maven during 'install', this test
  *     class may generate errors that you will not see if you run the junit tests
  *     directly.  I don't know why this happens: presumably it's some kind of
  *     multithreading problem (as the issue is with multiple instances of CacheManager
  *     existing simultaneously, which simply shouldn't happen).
  *
- * If all tests pass when run directly, it should be save to run maven install from the
+ * If all tests pass when run directly, it should be safe to run maven install from the
  *    command line with the option "-DskipTests=true".
  *
  * Create a pipeline simply from a set of handlers (Annotators) and
@@ -162,6 +162,56 @@ public class IllinoisNewPipelineTest
 
     }
 
+    /**
+     * requires that the source file exists with only some of the annotations.
+     * This test should retrieve the cached file and update it with the missing annotations.
+     *
+     */
+    @Test
+    public void testAugmentCachedTa()
+    {
+        TextAnnotation ta = null;
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES.key, PipelineConfigurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_SRL_VERB.key, PipelineConfigurator.FALSE );
+        props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, PipelineConfigurator.TRUE );
+        ResourceManager rm = new ResourceManager( props );
+        SimpleCachingPipeline pipeline = null;
+        try {
+            pipeline = (SimpleCachingPipeline) IllinoisPipelineFactory.buildPipeline( rm );
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        String newText = "This is some text that the USA hasn't seen from Bill Smith before...";
+        try {
+            ta = pipeline.createAnnotatedTextAnnotation("", "", newText);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+
+        assertFalse( ta.hasView( ViewNames.SRL_VERB ) );
+        assertFalse( ta.hasView( ViewNames.NER_ONTONOTES ) );
+
+        String[] viewsToAdd =  { ViewNames.SRL_VERB, ViewNames.NER_ONTONOTES };
+        Set< String > viewNames = new HashSet<>();
+        Collections.addAll(viewNames, viewsToAdd);
+        try {
+            ta = ((SimpleCachingPipeline ) prep).addViewsAndCache( ta, viewNames );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        assertTrue( ta.hasView( ViewNames.SRL_VERB ) );
+        assertTrue( ta.hasView( ViewNames.NER_ONTONOTES ) );
+    }
 //
 //    /**
 //     * this text has no punctuation, and caused OOM exception when no limit on sentence length was

@@ -11,15 +11,6 @@ CONTENTS
 7 Troubleshooting 
 8 Contact Information 
 
-=================
-
-0. TODO
-
-* write a better ehcache.xml file
-** validate cache behavior
-** make caching optional
-* write a log4j properties file
-* verify lemmatizer behavior (WordNet path?)
 
 ==============================
 
@@ -30,14 +21,13 @@ applications need, with the goal of making them run locally. Some
 components have significant memory requirements, but given a machine
 with sufficient memory, you can instantiate a AnnotatorService
 object that provides plain text tokenization, Part-of-Speech tagging,
-chunking, Named Entity tagging, lemmatization, and dependency and
-constituency parsing.
+chunking, Named Entity tagging, lemmatization, dependency and
+constituency parsing, and (verb) semantic role labeling.
 
 By default, the illinois-nlp-pipeline will cache its outputs in a local
 directory, so that if you process overlapping data sets (or process 
 the same data set multiple times), it will use a cached copy of the
-system outputs and run much faster. 
-
+system outputs and run much faster.
 
 
 1.1 ...A LITTLE MORE SPECIFICALLY
@@ -52,11 +42,32 @@ if you want well-formed output. (IllinoisPreprocesor may generate
 output for such texts, but it is not guaranteed that the different
 tools will succeed in producing mutually consistent output.)
 
-
 One important note: if you wish to use your own tokenization, you should 
 implement a class that follows the Tokenizer interface from 
 illinois-core-utilities, and use it as an argument to a TextAnnotationBuilder
 (also from illinois-core-utilities). 
+
+The pipeline has the following annotators. To understand the annotations,
+please refer to the descriptions of the individual packages at the URLs
+provided. These annotations are stored as Views in a single TextAnnotation
+data structure -- see README_DEVELOPER and the illinois-cogcomp-nlp library
+(https://github.com/IllinoisCogComp/illinois-cogcomp-nlp).
+
+Unless otherwise indicated, the NLP tools listed below are part of the
+illinois-cogcomp-nlp package. The memory is expected MAXIMUM memory required 
+for the component itself EXCLUDING dependencies.
+
+1. Lemmatizer: <1G memory, no dependencies.
+2. Part-of-Speech tagger: <1G, no dependencies.
+3. Chunker: <1G, requires Part-of-Speech tagger.
+4. Named Entity Recognizer (CoNLL): 2G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+5. Named Entity Recognizer (OntoNotes) 4G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+6. Constituency Parser (Stanford): 1G, no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+5. Dependency Parser (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+   Constituency Parser.
+8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+   Constituency Parser.
 
 
 1.2 LICENSE
@@ -68,8 +79,14 @@ download link for this software.
 
 ==============================
 
+2.0 PREREQUISITES
 
-2. SYSTEM REQUIREMENTS
+The Illinois NLP Pipeline provides a suite of state-of-the-art
+Natural Language Processing tools of varying complexity.  Some have
+specific prerequisites that must be present if you want to run them.
+
+
+2.1 GENERAL REQUIREMENTS: SYSTEM
 
 This software was developed on the following platform:
 
@@ -79,13 +96,22 @@ Java 1.7
 The memory required depends on the options you set in the config
 file. 2G should be plenty to run the Tokenizer, POS tagger, and
 lemmatizer, and Shallow Parser (a.k.a. Chunker).  NER will require
-an additional 2G (CoNLL model) or 4G (OntoNotes model). 
+an additional 2G (CoNLL model) or 4G (OntoNotes model). The Stanford
+Syntactic and Dependency Parsers require approximately 2G. The
+Ilinois Verb Semantic Role Labeler requires 4G.
 
-TODO: Stanford component memory requirements
+Note that individual Illinois NLP tools may depend on other tools
+for inputs, and will not work unless those components are also active.
+If you try to run the system with an invalid configuration, it will
+print a warning about the missing components.
 
+2.2 SPECIFIC REQUIREMENTS: SRL
 
-If you want to use the software programmatically, look at 
-doc/README_DEVELOPER.
+To run the Semantic Role Labeler you must have an instance of the
+Gurobi license on your machine, and set the relevant environment
+variables (see
+http://www.gurobi.com/products/licensing-pricing/licensing-overview
+-- note that there is a free academic use license).
 
 ==============================
 
@@ -109,69 +135,14 @@ individual components; scripts to process plain text files from the
 command line; and .jar files for the libraries used by the pipeline and
 its components.
 
-The list of dependencies is as follows:
-
-commons-beanutils-1.7.0.jar
-commons-beanutils-core-1.8.0.jar
-commons-cli-1.2.jar
-commons-codec-1.8.jar
-commons-collections-3.2.1.jar
-commons-configuration-1.6.jar
-commons-digester-1.8.jar
-commons-io-1.3.2.jar
-commons-lang-2.3.jar
-commons-lang3-3.4.jar
-commons-logging-1.1.1.jar
-coreUtilities-0.2.5.jar
-curator-archive-0.0.3-SNAPSHOT.jar
-curator-interfaces-0.7.jar
-curator-utils-0.0.4-SNAPSHOT.jar
-ehcache-2.8.3.jar
-ejml-0.23.jar
-gson-2.3.1.jar
-hamcrest-core-1.3.jar
-httpclient-4.1.2.jar
-httpcore-4.1.3.jar
-illinois-abstract-server-0.1.jar
-illinois-chunker-2.0.1.jar
-illinois-chunker-2.0.1-model.jar
-illinois-common-resources-1.1.jar
-illinois-core-utilities-1.2.14-SNAPSHOT.jar
-illinois-lemmatizer-2.1.2-SNAPSHOT.jar
-illinois-ner-2.6-models-conll.jar
-illinois-ner-2.6-models-ontonotes.jar
-illinois-ner-2.8.5-SNAPSHOT.jar
-illinois-pos-2.0.2.jar
-illinois-pos-2.0.2-model.jar
-illinois-tokenizer-0.0.2-SNAPSHOT.jar
-java-cup-0.11a.jar
-jaxb-api-2.2.7.jar
-joda-time-2.1.jar
-jollyday-0.4.7.jar
-json-simple-1.1.jar
-junit-4.11.jar
-LBJava-1.0.3.jar
-LBJava-NLP-tools-1.0.0.jar
-liblinear-1.94.jar
-libthrift-0.8.0.jar
-logback-classic-0.9.28.jar
-logback-core-0.9.28.jar
-slf4j-api-1.6.1.jar
-stanford-corenlp-3.3.1.jar
-stanford-corenlp-3.3.1-models.jar
-trove4j-3.0.3.jar
-weka-stable-3.6.10.jar
-xalan-2.7.0.jar
-xercesImpl-2.8.0.jar
-xml-apis-1.3.03.jar
-xom-1.2.10.jar
-
-
-You will also need configuration files for the Illinois NER and
-Lemmatizer packages.  You will need an ehcache configuration file.
-The complete Illinois NLP Pipeline package includes these
-configuration files, though you may wish to change them to alter the
-relevant behaviors.
+The complete Illinois NLP Pipeline package includes configuration files
+that specify which components are active and which can be used to control
+individual component behaviors. A set of default values is specified
+programmatically; refer to the documentation of individual packages
+to learn about their specific configuration options. If you specify
+the relevant values in the single configuration file used by the pipeline
+constructor, they will override only those defaults for which you have
+specified values.
 
 ==============================
 
@@ -241,10 +212,13 @@ edu.illinois.cs.cogcomp.nlp.main.
 
 To process text input, use the 'getCachedTextAnnotation()' method: 
 
+        String docId = "APW-20140101.3018"; // arbitrary string identifier
+        String textId = "body"; // arbitrary string identifier
+        String text = ...; // contains plain text to be annotated
 
         ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
         AnnotatorService pipeline = IllinoisPipelineFactory.buildPipeline( rm );
-        TextAnnotation ta = pipeline.getCachedTextAnnotation( text );
+        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 
 This method takes as its argument a String variable containing the
 text you want to process. This String should not be too long --
@@ -255,40 +229,65 @@ The method returns a TextAnnotation data structure (see the
 illinois-core-utilities package for details), which contains 
 a View corresponding to each annotation source. Each View contains
 a set of Constituents and Relations representing the annotator output.
+Access views and constituents via:
 
+        String viewName = ViewNames.POS; // example using ViewNames class constants
+        View view = ta.getView( viewName );
+        List< Constituent > constituents = view.getConstituents();
 
+See the documentation for individual components (links in section 1 above) for
+more information about the annotations and their representation as Constituents and
+Relations.
 
 
 ==============================
 
-NOTE: NOT CURRENTLY RELEVANT, BUT WILL ALMOST CERTAINLY BECOME
-      RELEVANT AGAIN
-
 
 CONFIGURATION OPTIONS
 
-The following options MUST be specified in the config file used to
-construct the ResourceManager and thus the IllinoisPreprocessor:
+The default configuration options are specified in the class edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator.
+Each property has a String as a key and a value.  If you want to change specific behaviors,
+such as activating or deactivating specific components, you can write non-default entries
+in a configuration file and use this to instantiate an instance of the pipeline (any entries
+that duplicate default values will have no effect and are not required).
+The default keys and values are specified below; comments provide more information where the
+values themselves are not self-explanatory.  Note that the key/value pairs each appear
+on a separate line and are themselves separated by a tab key. If you have limited memory or wish
+to save on processing time, you should set the values for unnecessary annotations to 'false'
+-- in particular, SRL components require more time and memory than most other components,
+and the parsers can take a relatively long time on long sentences.
 
-usePos	[true|false]
-useChunker	true
-useLemmatizer	true
-jwnlConfigFile	config/jwnl_properties.xml
-lemmaCacheFile  data/lemmaCache.txt
-updateLemmaCacheFile    false
-maxLemmaCacheEntries    100
-wordnetPath /shared/trollope/curator/dist/data/WordNet
 
-The first three flags indicate which annotations you want.
-IllinoisPreprocessor to provide. The third, fourth, and fifth
-flags specify properties of the lemmatizer cache; it will speed
-up the lemmatizer considerably if you allocate a large number
-(say, 100000) to maxLemmaCacheEntries and set updateLemmaCacheFile
-to 'true'. 'lemmaCacheFile' indicates the plain text file that
-contains the cache.
-'wordnetPath' should point to the root directory of your copy
-of WordNet.
+// in milliseconds
+stanfordMaxTimePerSentence  1000
 
+// in tokens
+stanfordParseMaxSentenceLength  60
+
+// directory in which cached annotations will be written.
+simpleCacheDir simple-annotation-cache
+
+// flags indicating which NLP components will be used
+usePos  true
+useLemma    true
+useShallowParse true
+
+// "standard" NER: see http://cogcomp.cs.illinois.edu/page/demo_view/NER
+useNerConll true
+
+// "extended" NER -- see http://cogcomp.cs.illinois.edu/page/demo_view/NERextended
+useNerOntonotes true
+
+useStanfordParse    true
+useStanfordDep  true
+
+// semantic role labelers
+useSrlVerb  true
+useSrlNom   true
+
+
+Note that individuals have their own configuration options -- see the documentation
+for individual components for details.
 
 ==============================
 

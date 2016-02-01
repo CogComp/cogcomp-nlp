@@ -16,7 +16,7 @@
 
 echoerr() { echo "$@" 1>&2; }
 
-VERSION=0.1.1-SNAPSHOT
+
 
 CONFIG_FILE=
 TEXT_IN_FILE=
@@ -33,8 +33,8 @@ else
     SER_OUT_FILE=$4
 fi
 
-DIST="target"
-LIB="target/dependency"
+DIST="dist"
+LIB="lib"
 CONFIG="config"
 
 MAINJAR="illinois-nlp-pipeline-$VERSION.jar"
@@ -42,7 +42,7 @@ MAIN="edu.illinois.cs.cogcomp.nlp.main.PreprocessorTester"
 FLAGS="-Xmx12g -XX:MaxPermSize=1g -Xverify:all"
 
 
-CP=$DIST/$MAINJAR:$CONFIG
+CP=$DIST/*:$CONFIG
 
 JARS=`ls $LIB`
 
