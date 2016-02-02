@@ -17,7 +17,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 discrete MikheevTable(Token w) <-
 learn POSLabel
   using wordForm
-  from new POSBracketToToken(Constants.trainingAndDevData)
+  //from new POSBracketToToken(Constants.trainingAndDevData)
   with new MikheevLearner()
   preExtract false
 end
@@ -169,7 +169,7 @@ learn POSLabel
   using wordForm, baselineTarget, labelTwoBeforeU, labelOneBeforeU,
         labelOneAfterU, labelTwoAfterU, L2bL1bU, L1bL1aU, L1aL2aU,
         suffixFeatures
-  from new POSLabeledUnknownWordParser(Constants.trainingAndDevData) 50 rounds
+  //from new POSLabeledUnknownWordParser(Constants.trainingAndDevData) 50 rounds
   with SparseNetworkLearner
   {
     SparseAveragedPerceptron.Parameters p =

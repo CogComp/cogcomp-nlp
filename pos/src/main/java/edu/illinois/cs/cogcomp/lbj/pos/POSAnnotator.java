@@ -1,8 +1,11 @@
-package edu.illinois.cs.cogcomp.annotation.handler;
+package edu.illinois.cs.cogcomp.lbj.pos;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
@@ -17,18 +20,18 @@ import java.util.List;
  * @author James Clarke, Mark Sammons
  *
  */
-public class IllinoisPOSHandler extends PipelineAnnotator
+public class POSAnnotator extends Annotator
 {
 	
-//	private static final String NAME = IllinoisPOSHandler.class.getCanonicalName();
-    private final Logger logger = LoggerFactory.getLogger(IllinoisPOSHandler.class);
+	private static final String NAME = "illinoispos";
+    private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
 	private final POSTagger tagger = new POSTagger();
 	private String tokensfield = "tokens";
 	private String sentencesfield = "sentences";
 
-	public IllinoisPOSHandler() 
+	public POSAnnotator() 
 	{
-        super("Illinois Part-Of-Speech Tagger", "0.2", "illinoispos");
+        super(ViewNames.POS, new String[0]);
 
 		logger.info("Loading POS model..");
 		tagger.discreteValue(new Token(new Word("The"), null, ""));
@@ -46,7 +49,7 @@ public class IllinoisPOSHandler extends PipelineAnnotator
      * @return  newly created POS view
      */
     @Override
-    public View getView(TextAnnotation record) throws AnnotatorException
+    public void addView(TextAnnotation record) throws AnnotatorException
     {
        	if (!record.hasView( tokensfield ) && !record.hasView(sentencesfield))
         {
@@ -71,7 +74,6 @@ public class IllinoisPOSHandler extends PipelineAnnotator
 
         record.addView( ViewNames.POS, posView );
 
-		return posView;
 	}
 
 
@@ -91,5 +93,9 @@ public class IllinoisPOSHandler extends PipelineAnnotator
     @Override
     public String[] getRequiredViews() {
         return new String[0];
+    }
+
+    public String getAnnotatorName() {
+        return NAME;
     }
 }

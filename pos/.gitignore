@@ -1,0 +1,45 @@
+### IntelliJ files
+.idea
+illinois-pos.iml
+
+### Eclipse files
+local.properties
+.settings/
+.loadpath
+.project
+.classpath
+
+### LBJava-generated files
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOrBaselineU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/suffixFeatures.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L1bL1aU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOneAfter.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOneAfterU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOneBefore.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerUnknown$$1.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOrBaseline.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L2bL1bU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSLabel.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerKnown$$1.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L1aL2aU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelTwoAfter.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/MikheevTable.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L2bL1b.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelOneBeforeU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/wordForm.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerKnown.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelTwoBeforeU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L1aL2a.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelTwoBefore.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/L1bL1a.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSWindow.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/baselineTarget.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/labelTwoAfterU.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTagger.java
+src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerUnknown.java
+
+### Trained model files
+models
+
+### Others
+*.swp
