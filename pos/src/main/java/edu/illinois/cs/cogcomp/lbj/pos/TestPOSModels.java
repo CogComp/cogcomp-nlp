@@ -86,11 +86,7 @@ public class TestPOSModels {
       System.err.println( "'modelPath' specifies directory from which the learned models will be read." );
       System.exit( -1 );
     }
-    TestPOSModels test = new TestPOSModelsBuilder()
-            .modelPath(args[ 0 ] + "/")
-            .unlabeledTestFile("test/testIn.txt")
-            .labeledTestFile("test/testRefOutput.txt")
-            .buildTestPOSModels();
+    TestPOSModels test = new TestPOSModels(args[0] + "/", "test/testRefOutput.txt", "test/testIn.txt");
 
     test.testAccuracy();
   }
