@@ -1,6 +1,6 @@
 package edu.illinois.cs.cogcomp.lbj.pos.tests;
 
-import edu.illinois.cs.cogcomp.lbj.pos.POSTagger;
+import edu.illinois.cs.cogcomp.lbj.pos.TrainedPOSTagger;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
@@ -43,8 +43,8 @@ public class TestDiff extends TestCase {
     }
 
     public void testDiff() {
-/*
-        POSTagger tagger = new POSTagger();
+
+        TrainedPOSTagger tagger = new TrainedPOSTagger("models/edu/illinois/cs/cogcomp/lbj/pos/");
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String sentence = "";
         int sentenceCounter = 0;
@@ -63,6 +63,5 @@ public class TestDiff extends TestCase {
                 sentenceCounter++;
             }
         }
-*/
     }
 }
