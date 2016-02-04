@@ -10,8 +10,8 @@ import java.util.List;
  * pattern sequence within another sequence. If we want to find sub string match, we can use the
  * Java regular expression library. This provides a similar functionality (not full regular
  * expressions, only sequence matches) for arbitrary lists.
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * It is assumed that the type <code>E</code> implements the <code>hashCode()</code> and
  * <code>equals()</code> functions.
  *

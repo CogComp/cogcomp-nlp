@@ -346,7 +346,7 @@ public class MathUtilities {
 
     /**
      * Add two numbers in log space.
-     * <p/>
+     * <p>
      * Suppose y1 and y2 are two positive reals and let x1 = log(y1) and x2 = log(y2). This function
      * (and the other versions of logAdd) computes log(exp(x1) + exp(x2)) = log(y1 + y2) without
      * underflow or overflow errors. This can be used, for example, to maintain log probabilities
@@ -534,7 +534,7 @@ public class MathUtilities {
     /**
      * Get the incomplete gamma function P(a,x). This implementation is directly taken from
      * numerical recipies 2nd Ed.
-     * <p/>
+     * <p>
      * Wikipedia calls this function the lower incomplete gamma function where the integral is from
      * 0 to x.
      */

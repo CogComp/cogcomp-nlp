@@ -6,14 +6,14 @@ import java.util.*;
 
 /**
  * Identify the longest common substrings between two lists.
- * <p/>
+ * <p>
  * NOTE: This implements a naive dynamic program and can be improved in terms of memory usage by
  * maintaining only the current row of the dynamic programming table and by using a hash table to
  * store only non-zero values of that row.
  *
  * @param <T> It is assumed that this implements <code>equals()</code>.
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jul 7, 2009
  */
 public class LongestCommonSubsequence<T extends Comparable<T>> {

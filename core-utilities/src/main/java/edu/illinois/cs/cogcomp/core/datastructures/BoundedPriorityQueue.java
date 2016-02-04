@@ -9,12 +9,12 @@ import java.util.PriorityQueue;
 /**
  * For some reason, Java does not have an implementation of a bounded
  * {@link java.util.PriorityQueue} out of the box. This class fills that gap.
- * <p/>
+ * <p>
  * Among other places, it is used by the {@link edu.illinois.cs.cogcomp.core.search.BeamSearch}
  * class to maintain the beam.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class BoundedPriorityQueue<E> extends PriorityQueue<E> {

@@ -34,33 +34,37 @@ import java.util.TreeMap;
  *
  * A client for using the Curator to get
  * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}s.
- * <p/>
+ * <p>
  * The general use case involves the following:
  * <ol>
  * <li>
- * Create a new {@link CuratorClient} <code>
+ * Create a new {@link CuratorClient}
  * <pre>
+ *     {@code
  *     // Assuming we're starting from raw text
  *     ResourceManager rm = new CuratorConfigurator().getDefaultConfig();
  *     CuratorClient curator = new CuratorClient(rm);
- *     </pre>
- * </code></li>
+ *     }
+ * </pre>
+ * </li>
  * <li>
  * Create a new {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
- * <code>
  * <pre>
+ *     {@code
  *     TextAnnotation ta = client.getTextAnnotation(text);
- *     </pre>
- * </code></li>
+ *     }
+ * </pre>
+ * </li>
  * <li>
  * Add views to the
  * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} using the
  * required view's name (supported views can be found in
- * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}. <code>
+ * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}.
+ *
  * <pre>
- *     client.addTextAnnotationView(ta, ViewNames.POS);
- *     </pre>
- * </code></li>
+ *     {@code client.addTextAnnotationView(ta, ViewNames.POS);}
+ * </pre>
+ * </li>
  * </ol>
  *
  * @author Christos Christodoulopoulos
@@ -99,7 +103,7 @@ public class CuratorClient {
      * (<b>NB:</b> tabs will be treated as tokens!) Consecutive whitespace characters will not
      * generate empty tokens, but the token offsets and sentence offsets will count all whitespace
      * characters.
-     * <p/>
+     * <p>
      * <b> Note: </b> The {@code Record} returned by this method will not have any views except the
      * {@code Sentence} and {@code Token} view. To get other views from the Curator, call the
      * appropriate {@link CuratorClient} functions (e.g TODO).
@@ -150,7 +154,7 @@ public class CuratorClient {
      * sentence and label views based on newlines and whitespace characters. (<b>NB:</b> tabs will
      * be treated as tokens!) Consecutive whitespace characters will not generate empty tokens, but
      * the token offsets and sentence offsets will count all whitespace characters.
-     * <p/>
+     * <p>
      * <b> Note: </b> The {@code Record} returned by this method will not have any views except the
      * {@code Sentence} and {@code Token} view. To get other views from the Curator, call the
      * appropriate {@link CuratorClient} functions (e.g TODO).
@@ -212,7 +216,7 @@ public class CuratorClient {
             Labeling labeling = record.getLabelViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignLabelingToTokenLabelView(viewName, ta,
-                            labeling);
+                                                                                labeling);
         } else if (viewType == ViewTypes.SPAN_LABEL_VIEW) {
             boolean allowOverlappingSpans = false;
             if (viewName.equals(ViewNames.WIKIFIER))
@@ -220,7 +224,8 @@ public class CuratorClient {
             Labeling labeling = record.getLabelViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignLabelingToSpanLabelView(viewName, ta,
-                            labeling, allowOverlappingSpans);
+                                                                               labeling,
+                                                                               allowOverlappingSpans);
         } else if (viewType == ViewTypes.DEPENDENCY_VIEW) {
             Forest depForest = record.getParseViews().get(convertCuratorViewName(viewName));
             view =
@@ -235,13 +240,13 @@ public class CuratorClient {
             Forest forest = record.getParseViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignForestToPredicateArgumentView(viewName, ta,
-                            forest);
+                                                                                     forest);
         } else if (viewType == ViewTypes.COREF_VIEW) {
             Clustering corefClustering =
                     record.getClusterViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignClusteringToCoreferenceView(viewName, ta,
-                            corefClustering);
+                                                                                   corefClustering);
         } else
             throw new AnnotationFailedException("Unrecognised view type " + viewType);
         return view;
@@ -290,7 +295,7 @@ public class CuratorClient {
 
     /**
      * <b>NB:</b>Temporary fix until Curator gets the new ViewNames.
-     * <p/>
+     * <p>
      * Converts a view name from {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} to
      * one compatible with the current instance of Curator.
      * 

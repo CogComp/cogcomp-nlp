@@ -22,13 +22,13 @@ import java.util.*;
  * input constituent occurs (see note below for explanation).</li>
  * <li>The number of such chunks</li>
  * </ul>
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * <b>Important note</b>: To be able to specify the two constituents as input, the feature extractor
  * assumes the following convention: The constituent that is specified as a parameter to the
  * getFeatures function has an incoming relation from the first constituent. Furthermore, this
  * incoming relation should be the only such relation.
- * <p/>
+ * <p>
  * This convention does not limit the expressivity in any way because the two constituents could be
  * created on the spot before calling the feature extractor.
  *

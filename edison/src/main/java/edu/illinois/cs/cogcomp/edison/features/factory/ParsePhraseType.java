@@ -19,7 +19,7 @@ import java.util.Set;
  * according to the Collins' head percolation rules. The phrase is defined as the smallest node in
  * the parse tree that contains the candidate. If there is more than one such node, the lowest one
  * is chosen.
- * <p/>
+ * <p>
  * If possible, use one of the two static objects in this class, for the Charniak and Stanford
  * parses respectively.
  *

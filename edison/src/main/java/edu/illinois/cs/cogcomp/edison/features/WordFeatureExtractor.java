@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Features of a word.
- * <p/>
+ * <p>
  * If the input constituent is not a word, then the feature extractor can do one of two things: If a
  * flag is set in the constructor, then it will generate features from the last word of the
  * constituent. If the flag is not set, then it will throw a {@link EdisonException}.
@@ -24,7 +24,7 @@ public abstract class WordFeatureExtractor implements FeatureExtractor {
      * is {@code true}, then the feature extractor will generate features from the last word of
      * multi-word constituents. If it is not true, then the feature extractor will throw an
      * exception on seeing a multi-word constituent.
-     * <p/>
+     * <p>
      * It is probably safest to the parameter to {@code true}. This will provide a check to ensure
      * that the WordFeatureExtractor only sees words.
      */

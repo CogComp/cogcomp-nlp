@@ -21,7 +21,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.18</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->

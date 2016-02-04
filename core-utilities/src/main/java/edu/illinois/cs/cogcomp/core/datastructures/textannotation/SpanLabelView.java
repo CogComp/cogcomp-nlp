@@ -11,7 +11,7 @@ import java.util.List;
  * A SpanLabelView is a specialized view which corresponds to contiguous chunks of tokens that have
  * a label. Each chunk corresponds to a single {@code Consituent}. In this view, there will be no
  * {@code Relation}s between the constituents.
- * <p/>
+ * <p>
  * This class is best suited for views like Shallow parse and Named Entities.
  *
  * @author Vivek Srikumar
@@ -61,7 +61,7 @@ public class SpanLabelView extends View {
     /**
      * Adds a new span to this view with a given label and score and returns the newly created
      * constituent.
-     * <p/>
+     * <p>
      * If this {@code SpanLabelView} was defined not to accept overlapping spans (in the
      * constructor), then this function will throw an {@link IllegalArgumentException} when an
      * attempt is made to label an already existing span.

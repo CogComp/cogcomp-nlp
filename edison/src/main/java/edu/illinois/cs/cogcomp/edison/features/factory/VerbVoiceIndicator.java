@@ -23,7 +23,7 @@ import java.util.Vector;
 /**
  * Uses the parse tree to figure out whether a verb is an active or a passive voice. If the word is
  * not a verb or not in a VP, then the word is marked as having "unknown" voice.
- * <p/>
+ * <p>
  * A predicate is either active or passive. We use a simple rule to determine this: if the verb
  * follows a "to-be" verb in the same verb phrase and its POS tag is "VBN", then the predicate is
  * passive. The verb may also be nested in other verb phrases that are themselves nested in the verb

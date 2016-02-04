@@ -10,10 +10,10 @@ import java.util.*;
 
 /**
  * Create a counter for type T. T must be a type that implements a hash function and equals.
- * <p/>
+ * <p>
  * A counter keeps track of the count of a family of objects. It also tracks the max, argMax min,
  * argMin.
- * <p/>
+ * <p>
  *
  * @author Vivek Srikumar
  */
