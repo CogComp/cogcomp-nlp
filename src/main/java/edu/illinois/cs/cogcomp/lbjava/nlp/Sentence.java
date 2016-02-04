@@ -19,6 +19,8 @@ import java.util.regex.Pattern;
  * @author Nick Rizzolo
  **/
 public class Sentence extends LinkedChild {
+	
+	
     /**
      * URL prefixes; used by {@link #partOfURL(int)}.  The values in this array
      * need to be sorted by decreasing order of length to make the regular
@@ -103,7 +105,63 @@ public class Sentence extends LinkedChild {
     private void myAdd(LinkedList<Integer> l, int i) {
         l.add(i);
     }
+    
+    /** no spaces or digits. */
+    final static Pattern pNoSpaceOrDigit = Pattern.compile("[^\\s\\d]");
+    
+    /** digits. */
+    final static Pattern pDigit = Pattern.compile("\\d");
+    
+    /** digit, followed by a comma, then a non digit. */
+    final static Pattern pDigitCommaNoDigit = Pattern.compile("\\d,\\D");
+    
+    /** non digit, followed by a comma, then a digit. */
+    final static Pattern pNoDigitCommaDigit = Pattern.compile("\\D,\\d");
+    
+    /** non space followed by a comma and a single quote. */
+    final static Pattern pApostropheMask = Pattern.compile("[^\\s,']");
 
+    final static Pattern pColonMask = Pattern.compile("[^\\s,':]");
+    final static Pattern pColonSeparator = Pattern.compile("\\d:\\d");
+    final static Pattern pSlashMask = Pattern.compile("[^\\s,':/]");
+    final static Pattern pSlashSeparator = Pattern.compile("\\d/\\d");
+    final static Pattern pDashMask = Pattern.compile("[^\\s,':/-]");
+    final static Pattern pDashSeparator = Pattern.compile("\\w-\\w");
+    final static Pattern pNegative1 = Pattern.compile("-\\.?\\d");
+    final static Pattern pNegative2 = Pattern.compile("\\s-\\.?\\d");
+    final static Pattern pDollarMask = Pattern.compile("[^\\s,':/\\$-]");
+    final static Pattern pMoney1 = Pattern.compile("\\$\\.?\\d");
+    final static Pattern pMoney2 = Pattern.compile("(\\s|-)\\$\\.?\\d");
+    final static Pattern pBeforeElipsis = Pattern.compile("[^\\s,':/\\$\\.-]\\.\\.\\.");
+    final static Pattern pAfterElipsis = Pattern.compile("\\.\\.\\.[^\\s,':/\\$\\.-]");
+    final static Pattern pPunctuation = Pattern.compile("[^\\s\\w,'\\.:/\\$-]");
+    final static Pattern pPunctuation2 = Pattern.compile("[^\\s\\w,'\\.:/\\$-]\\w");
+    final static Pattern pPunctuation3 = Pattern.compile("\\w[^\\s\\w,'\\.:/\\$-]");
+    final static Pattern pSpaces = Pattern.compile("\\s+");
+    
+    /** this complex pattern matches urls hopefully. */
+    static String url_pattern;
+    static {
+        StringBuilder pattern = new StringBuilder();
+        pattern.append("(?i)(");
+        pattern.append(protocols[0]);
+        for (int i = 1; i < protocols.length; ++i) {
+            pattern.append("|");
+            pattern.append(protocols[i]);
+        }
+
+        pattern.append(")://\\S+|[a-zA-Z0-9][a-zA-Z0-9-]*\\.(");
+        pattern.append(topLevelDomains[0]);
+        for (String topLevelDomain : topLevelDomains) {
+            pattern.append("|");
+            pattern.append(topLevelDomain);
+        }
+        pattern.append(")(/\\S+)?");
+        url_pattern = pattern.toString();
+    }
+    
+    /** this pattern will match urls. */
+    final static Pattern pURLs = Pattern.compile(url_pattern);
 
     /**
      * Creates and returns a <code>LinkedVector</code> representation of this
@@ -117,7 +175,7 @@ public class Sentence extends LinkedChild {
         LinkedList<Integer> boundaries = new LinkedList<>();
 
         // Whitespace always signals a word boundary.
-        Matcher m = Pattern.compile("\\s+").matcher(text);
+        Matcher m = pSpaces.matcher(text);
         while (m.find()) {
             myAdd(boundaries, m.start() - 1);
             myAdd(boundaries, m.end());
@@ -132,11 +190,6 @@ public class Sentence extends LinkedChild {
         if (boundaries.size() > 1 && boundaries.getFirst() == -1)
             boundaries.removeFirst();
         else myAdd(boundaries, 0);
-
-        Pattern pNoSpaceOrDigit = Pattern.compile("[^\\s\\d]");
-        Pattern pDigit = Pattern.compile("\\d");
-        Pattern pDigitCommaNoDigit = Pattern.compile("\\d,\\D");
-        Pattern pNoDigitCommaDigit = Pattern.compile("\\D,\\d");
 
         // Commas are separate words unless they're part of a number.
         for (int i = text.indexOf(','); i != -1; i = text.indexOf(',', i + 1)) {
@@ -162,7 +215,6 @@ public class Sentence extends LinkedChild {
             }
         }
 
-        Pattern pApostropheMask = Pattern.compile("[^\\s,']");
         //Pattern pAbbreviation = Pattern.compile("[A-Za-z]'[A-Za-z]");
         //Pattern pPossessive = Pattern.compile("s[^A-Za-z']");
         //Pattern pShortWill = Pattern.compile("ll[^A-Za-z']");
@@ -230,8 +282,6 @@ public class Sentence extends LinkedChild {
             }
         }
 
-        Pattern pColonMask = Pattern.compile("[^\\s,':]");
-        Pattern pColonSeparator = Pattern.compile("\\d:\\d");
         // Colons get separated into their own word unless it looks like they're
         // part of a time (or some other useful structure involving digits) or a
         // URL.
@@ -253,9 +303,6 @@ public class Sentence extends LinkedChild {
                     myAdd(boundaries, i + 1);
                 }
             }
-
-        Pattern pSlashMask = Pattern.compile("[^\\s,':/]");
-        Pattern pSlashSeparator = Pattern.compile("\\d/\\d");
 
         // Slashes get separated into their own word unless it looks like they're
         // part of a date (or some other useful structure involving digits) or a
@@ -282,11 +329,6 @@ public class Sentence extends LinkedChild {
                 }
             }
 
-        Pattern pDashMask = Pattern.compile("[^\\s,':/-]");
-        Pattern pDashSeparator = Pattern.compile("\\w-\\w");
-        Pattern pNegative1 = Pattern.compile("-\\.?\\d");
-        Pattern pNegative2 = Pattern.compile("\\s-\\.?\\d");
-
         // Dashes get separated into their own words unless it looks like they're
         // part of some useful structure like a compound word, a number, or a URL.
         for (int i = text.indexOf('-'); i != -1; i = text.indexOf('-', i + 1))
@@ -311,10 +353,6 @@ public class Sentence extends LinkedChild {
                 }
             }
 
-        Pattern pDollarMask = Pattern.compile("[^\\s,':/\\$-]");
-        Pattern pMoney1 = Pattern.compile("\\$\\.?\\d");
-        Pattern pMoney2 = Pattern.compile("(\\s|-)\\$\\.?\\d");
-
         // Dollar signs get separated into their own words unless it looks like
         // they're in fact delimiting the start of a dollar amount, or are part of
         // a URL.
@@ -335,9 +373,6 @@ public class Sentence extends LinkedChild {
                     myAdd(boundaries, i + 1);
                 }
             }
-
-        Pattern pBeforeElipsis = Pattern.compile("[^\\s,':/\\$\\.-]\\.\\.\\.");
-        Pattern pAfterElipsis = Pattern.compile("\\.\\.\\.[^\\s,':/\\$\\.-]");
 
         // Three or more consecutive periods form their own word.
         for (int i = text.indexOf('.'); i != -1; i = text.indexOf('.', i + 1)) {
@@ -387,9 +422,7 @@ public class Sentence extends LinkedChild {
         // All other punctuation marks constitute their own words, unless they
         // appear immediately after themselves (consecutive identical punctuation
         // marks form a single word) or are part of a URL.
-        Pattern pPunctuation = Pattern.compile("[^\\s\\w,'\\.:/\\$-]");
         m = pPunctuation.matcher(text);
-
         while (m.find())
             if (!partOfURL(m.start())) {
                 if (m.start() + 1 < text.length()
@@ -401,15 +434,14 @@ public class Sentence extends LinkedChild {
                     myAdd(boundaries, m.start() + 1);
                 }
             }
-
-        m = Pattern.compile("[^\\s\\w,'\\.:/\\$-]\\w").matcher(text);
+        m = pPunctuation2.matcher(text);
         while (m.find())
             if (!partOfURL(m.start())) {
                 myAdd(boundaries, m.start());
                 myAdd(boundaries, m.start() + 1);
             }
 
-        m = Pattern.compile("\\w[^\\s\\w,'\\.:/\\$-]").matcher(text);
+        m = pPunctuation3.matcher(text);
         while (m.find())
             if (!partOfURL(m.start())) {
                 myAdd(boundaries, m.start());
@@ -436,7 +468,6 @@ public class Sentence extends LinkedChild {
         return new LinkedVector(w);
     }
 
-
     /**
      * Does a simple check to determine if the symbol at the specified index in
      * the specified string is likely to be part of a URL.  If the specified
@@ -451,29 +482,11 @@ public class Sentence extends LinkedChild {
     private boolean partOfURL(int index) {
         if (inURL != null) return inURL[index];
         inURL = new boolean[text.length()];
-
-        StringBuilder pattern = new StringBuilder();
-        pattern.append("(?i)(");
-        pattern.append(protocols[0]);
-        for (int i = 1; i < protocols.length; ++i) {
-            pattern.append("|");
-            pattern.append(protocols[i]);
-        }
-
-        pattern.append(")://\\S+|[a-zA-Z0-9][a-zA-Z0-9-]*\\.(");
-        pattern.append(topLevelDomains[0]);
-        for (String topLevelDomain : topLevelDomains) {
-            pattern.append("|");
-            pattern.append(topLevelDomain);
-        }
-        pattern.append(")(/\\S+)?");
-
-        Matcher m = Pattern.compile(pattern.toString()).matcher(text);
+        Matcher m = pURLs.matcher(text);
         while (m.find())
             for (int i = m.start(); i < m.end(); ++i) inURL[i] = true;
         return inURL[index];
     }
-
 
     /**
      * The string representation of a <code>Sentence</code> is just its text.
