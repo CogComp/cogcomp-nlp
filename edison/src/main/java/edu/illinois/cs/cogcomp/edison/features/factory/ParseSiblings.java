@@ -19,7 +19,7 @@ import java.util.Set;
  * Extracts the phrase type, head word and head POS of the left and right siblings of the input
  * constituent. Uses the specified parse view and the Collins' head percolation rules to find the
  * heads.
- * <p/>
+ * <p>
  * If possible, use one of the two static objects in this class, for the Charniak and Stanford
  * parses respectively.
  *

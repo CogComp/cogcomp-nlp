@@ -200,7 +200,7 @@ public class TreeView extends View {
 
     /**
      * Set the parse tree of the {@code sentenceId}<sup>th</sup> sentence.
-     * <p/>
+     * <p>
      * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
      * will throw an exception if an attempt is made to set the parse tree in a view that has a
      * dependency tree.
@@ -240,7 +240,7 @@ public class TreeView extends View {
      * Set the dependency tree of hte {@code sentenceId}<sup>th</sup> sentence. Each node in the
      * dependency tree specifies both the token and its position <b>with respect to the start of the
      * sentence</b>, not the entire TextAnnotation.
-     * <p/>
+     * <p>
      * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
      * will throw an exception if an attempt is made to set the dependency tree of a view that has a
      * phrase-structure tree.
@@ -253,7 +253,7 @@ public class TreeView extends View {
      * Set the dependency tree for a specified sentence. Each node in the dependency tree specifies
      * both the token and its position <b>with respect to the start of the sentence</b>, not the
      * entire TextAnnotation.
-     * <p/>
+     * <p>
      * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
      * will throw an exception if an attempt is made to set the dependency tree of a view that has a
      * phrase-structure tree.

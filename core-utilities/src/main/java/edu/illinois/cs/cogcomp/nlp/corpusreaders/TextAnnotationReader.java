@@ -9,7 +9,7 @@ import java.util.Iterator;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Sep 4, 2009
  */
 public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,

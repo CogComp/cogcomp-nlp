@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jan 30, 2009
  */
 public interface IExperiment<T> {

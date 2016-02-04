@@ -18,7 +18,7 @@ import java.util.Set;
  * Extracts only the label of the phrase. The phrase is defined as the smallest node in
  * the parse tree that contains the candidate. If there is more than one such node, the lowest one
  * is chosen.
- * <p/>
+ * <p>
  * If possible, use one of the two static objects in this class, for the Charniak and Stanford
  * parses respectively.
  *

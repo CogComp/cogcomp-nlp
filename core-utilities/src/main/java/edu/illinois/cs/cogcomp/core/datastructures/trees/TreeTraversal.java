@@ -93,7 +93,7 @@ public class TreeTraversal {
 
     /**
      * Do a breadth first traversal over the tree.
-     * <p/>
+     * <p>
      * This does a standard queue based implemenation of the traversal
      *
      * @return An iterable object over the subtrees in breadth first order
@@ -121,7 +121,7 @@ public class TreeTraversal {
 
     /**
      * Get all the nodes of the tree in depth first fashion, limited to a given depth.
-     * <p/>
+     * <p>
      * The depth computation is a little bit ugly, because the tree gives height instead of depths.
      */
     public static <T> List<Tree<T>> depthLimitedTraversal(Tree<T> tree, int depth) {

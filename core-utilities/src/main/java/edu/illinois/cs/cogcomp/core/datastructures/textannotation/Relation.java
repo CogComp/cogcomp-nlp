@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Aug 4, 2009
  */
 public class Relation implements Serializable {

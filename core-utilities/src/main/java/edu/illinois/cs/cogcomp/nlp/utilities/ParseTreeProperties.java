@@ -14,12 +14,12 @@ import java.util.List;
  * This class consists of a set of functions of the form "is a label X?", where the label is a node
  * in the parse tree and X could be different linguistic classes, parts of speech, etc. The
  * functions assume that the parse trees are annotated in the Penn Treebank style.
- * <p/>
+ * <p>
  * Most of the information is from the list <a
  * href="http://bulba.sdsu.edu/jeanette/thesis/PennTags.html">here</a>.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jan 29, 2009
  */
 public class ParseTreeProperties {
