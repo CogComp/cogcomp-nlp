@@ -12,7 +12,7 @@ import java.util.Set;
 
 /**
  * Creates a {@link SpanLabelView} with clause information using the parse tree. This view generator
- * follows the specification in "Tjong Kim Sang, E. F., & D'ejean, H. (2001): Introduction to the
+ * follows the specification in "Tjong Kim Sang, E. F., {@literal &} D'ejean, H. (2001): Introduction to the
  * CoNLL-2001 Shared Task: Clause Identification" and picks out all parse tree nodes that starts
  * with an S to be a clause. In particular, FRAG and RRC are ignored.
  *

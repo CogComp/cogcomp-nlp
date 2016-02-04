@@ -11,15 +11,15 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
- * This class represents a <it>view</it> of the text. According to the multi-view architecture, any
+ * This class represents a <i>view</i> of the text. According to the multi-view architecture, any
  * annotation on text can be thought of as a graph, where each node in the graph may correspond to
  * sets of tokens in the text. Labeled directed edges between the nodes denote relations.
- * <p/>
+ * <p>
  * The nodes are objects of type {@link Constituent} and the edges are objects of type
  * {@link Relation}.
- * <p/>
- * <p/>
- * This class represents a generic <it>view</it> without any restrictions on the structure of the
+ * <p>
+ * <p>
+ * This class represents a generic <i>view</i> without any restrictions on the structure of the
  * graph and can be used for general purpose application specific views. However, for most standard
  * annotations can be represented as one of the sub-classes of this class.
  *
@@ -74,7 +74,7 @@ public class View implements Serializable, IQueryable<Constituent> {
 
     /**
      * A inverted index from token ids to constituents in this view that cover that token.
-     * <p/>
+     * <p>
      * The first element corresponds to the token id, the second corresponds to the constituent .
      */
     @SuppressWarnings("rawtypes")

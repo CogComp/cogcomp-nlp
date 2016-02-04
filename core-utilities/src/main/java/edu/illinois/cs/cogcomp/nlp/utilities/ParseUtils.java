@@ -64,10 +64,10 @@ public class ParseUtils {
     /**
      * Transforms a parse tree into a new tree where each node is labeled by the span it covers in
      * addition to the label of that node from the original parse tree.
-     * <p/>
+     * <p>
      * For example, consider the following input tree:
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * 
      * <pre>
      *
@@ -76,10 +76,10 @@ public class ParseUtils {
      *        (VP (VBD flew)))
      *        (. .))
      * </pre>
-     * <p/>
+     * <p>
      * This is transformed as follows:
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * 
      * <pre>
      * ([S1,[0,4]] ([S,[0,4]] ([NP,[0,2]] ([DT,[0,1]] [The,&lt;0,1]])
@@ -87,7 +87,7 @@ public class ParseUtils {
      *                        ([VP,[2,3]] ([VBD,[2,3]] [flew,[2,3]]))
      *                        ([.,[3,4]] [.,[3,4]])))
      * </pre>
-     * <p/>
+     * <p>
      * Here, the notation [.,.] is used to denote a {@link Pair} object. That is, the node labeled
      * [NP,[0,2]] indicates that the corresponding node in the parse tree is labeled NP and that NP
      * spans the tokens ranging from 0 to 2 (exclusive.)
@@ -721,7 +721,7 @@ public class ParseUtils {
     /**
      * Get the head word of a constituent using the {@link HeadFinderBase} that is passed as an
      * argument. To use this function, first, a head finder should be created. For example:
-     * <p/>
+     * <p>
      * 
      * <pre>
      *   TextAnnotation ta = ... // some text annotation

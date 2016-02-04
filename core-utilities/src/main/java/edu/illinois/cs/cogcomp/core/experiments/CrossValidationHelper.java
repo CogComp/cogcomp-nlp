@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 /**
  * @param <T> The type of the training examples
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jan 30, 2009
  */
 public class CrossValidationHelper<T> {
@@ -123,7 +123,7 @@ public class CrossValidationHelper<T> {
 
     /**
      * Splits the data into numFolds parts.
-     * <p/>
+     * <p>
      * Note: This splits the data into K folds uniformly. If the classes are not equally
      * distributed, then this is wrong. Instead, override this to do a stratified split, so that the
      * split proportions are maintained.

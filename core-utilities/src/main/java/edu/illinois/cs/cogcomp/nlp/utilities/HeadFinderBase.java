@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * This is mainly an abstract class for the Collins' head finder. It allows for head information to
  * be found in other ways, though.
- * <p/>
+ * <p>
  * This file is based on the similar file from the Stanford NLP code, rewritten to talk nicely to
  * the other parts of this package.
  *
@@ -250,7 +250,7 @@ public abstract class HeadFinderBase {
 
     /**
      * Return information about how the head is to be computed, given the non-terminal.
-     * <p/>
+     * <p>
      * NOTE: If no rule is specified, return null.
      */
     public abstract List<Pair<HeadSearchDirection, String[]>> getNonterminalHeadInformation(

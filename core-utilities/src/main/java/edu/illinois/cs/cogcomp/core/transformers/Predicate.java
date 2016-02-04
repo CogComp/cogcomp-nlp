@@ -5,7 +5,7 @@ package edu.illinois.cs.cogcomp.core.transformers;
  * into a {@code boolean}.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jun 25, 2009
  */
 public abstract class Predicate<T> extends ITransformer<T, Boolean> {

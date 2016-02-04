@@ -27,7 +27,7 @@ public class VerbClassDictionary {
     /**
      * Load the verb class dictionary from the file. The file consists of Levin's verb classes and
      * the verbs they contain in the following format:
-     * <p/>
+     * <p>
      * 
      * <pre>
      *  13.4.1

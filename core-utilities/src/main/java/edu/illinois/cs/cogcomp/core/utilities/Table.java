@@ -13,7 +13,7 @@ import java.util.Set;
  * not the most efficient way of doing what it does, though.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Nov 24, 2008
  */
 @SuppressWarnings("serial")

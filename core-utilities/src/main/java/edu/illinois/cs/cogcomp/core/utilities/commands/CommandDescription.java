@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 /**
  * Description for a command.
- * <p/>
+ * <p>
  * Usage:
- * <p/>
+ * <p>
  * <code> @CommandDescription(usage="Foo bar", description = "Does foo to bar") </code>
- * <p/>
+ * <p>
  * <code> public static void Foo(String bar) {...</code>
  *
  * @author Vivek Srikumar

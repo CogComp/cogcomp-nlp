@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * Extracts the head word and POS tag of the constituent. The head is defined using the Collins'
  * head percolation table applied to the phrase in the parse tree.
- * <p/>
+ * <p>
  * If possible, use one of the two static objects in this class, corresponding to the Charniak and
  * Stanford parses respectively.
  *

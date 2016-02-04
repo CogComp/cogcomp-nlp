@@ -31,12 +31,12 @@ import java.util.Set;
  * all annotation views are cached. The constructor provides default values for caching behavior
  * (see the default values), but these can be overridden by providing a ResourceManager (and
  * configuration file) that specifies these values.
- * <p/>
+ * <p>
  * Many Annotators are likely to be singletons to avoid memory overload. AnnotatorService can be
  * subclassed to provide homespun views without creating Annotator classes, though probably the
  * latter is the better way to go. There is at least one use case that motivates this design --
  * backward compatibility with Curator to replace CuratorClient/CachingCuratorClient.
- * <p/>
+ * <p>
  *
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
@@ -198,7 +198,7 @@ public class BasicAnnotatorService implements AnnotatorService {
     /**
      * Create a basic {@link TextAnnotation} with sentence and token views using the
      * {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder} provided to constructor.
-     * <p/>
+     * <p>
      * Also, caches the created {@link TextAnnotation} using the
      * {@link #getTextAnnotationCacheKey(String, String)}
      */

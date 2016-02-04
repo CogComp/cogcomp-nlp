@@ -9,11 +9,11 @@ import java.lang.reflect.Modifier;
 /**
  * This class provides an easy way provide command line interface to the program. It exposes all the
  * static methods of a class (that is the template parameter) to the command line interface.
- * <p/>
+ * <p>
  * Additionally, it also prints documentation if necessary.
- * <p/>
+ * <p>
  * Usage: Create a class called AllCommands
- * <p/>
+ * <p>
  * 
  * <pre>
  * class AllCommands {
@@ -25,7 +25,7 @@ import java.lang.reflect.Modifier;
  *  }
  *  </code>
  * </pre>
- * <p/>
+ * <p>
  * Create the main function somewhere
  * 
  * <pre>
@@ -38,8 +38,8 @@ import java.lang.reflect.Modifier;
  *         tester.runCommand(args);
  * }
  * </pre>
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * Now, command line options can be added to the program by adding static functions to AllCommands.
  *
  * @param <T> The class that contains all the commands.
@@ -112,10 +112,10 @@ public class InteractiveShell<T> {
 
     /**
      * Runs a command.
-     * <p/>
+     * <p>
      * The command is specified by the first element of the argument and its parameters are the rest
      * of the elements.
-     * <p/>
+     * <p>
      * Note: This demands that all the parameters should be strings.
      *
      * @param args An array of strings. The name of the command should be the first element and its
