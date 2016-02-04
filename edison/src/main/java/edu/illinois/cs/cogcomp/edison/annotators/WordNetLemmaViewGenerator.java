@@ -14,7 +14,7 @@ import net.didion.jwnl.data.POS;
 /**
  * If the word is present in WordNet, the lemma from WordNet is used. Otherwise, it defaults to the
  * word itself (with case).
- * <p/>
+ * <p>
  * This lemmatizer lowercases words before finding their lemma. This could lead to errors.
  *
  * @author Vivek Srikumar

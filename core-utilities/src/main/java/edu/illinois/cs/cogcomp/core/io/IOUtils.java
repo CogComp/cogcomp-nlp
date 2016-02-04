@@ -254,7 +254,7 @@ public abstract class IOUtils {
     /**
      * Lists resources that are contained within a path. This works for any resource on the
      * classpath, either in the file system or in a jar file. The function returns a list of URLs,
-     * connections to which can be opened for reading. <br/>
+     * connections to which can be opened for reading. <p>
      * <b>NB</b>: This method works only for full file names. If you need to list the files of a
      * directory contained in the classpath use {@link #lsResourcesDir(Class, String)}
      *
@@ -320,7 +320,7 @@ public abstract class IOUtils {
     /**
      * Lists resources that are contained within a path. This works for any resource on the
      * classpath, either in the file system or in a jar file. The function returns a list of URLs,
-     * connections to which can be opened for reading. <br/>
+     * connections to which can be opened for reading. <p>
      * <b>NB</b>: This method can be used to list the files of a directory contained in the
      * classpath. However, since it explicitly lists the contents of each classpath resource it is
      * very slow. If you need a list of specific files (or for directories that are not inside

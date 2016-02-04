@@ -24,7 +24,7 @@ public class PathFeatureHelper {
     /**
      * Gets the path (that is, a sequence of constituents) from the given node to the root node. If
      * the path is longer than maxDepth, then it is truncated.
-     * <p/>
+     * <p>
      * Assumptions:
      * <ol>
      * <li>This function follow traces the path from the given node along the <i>first</i> incoming
@@ -59,7 +59,7 @@ public class PathFeatureHelper {
     /**
      * Get the paths from two constituents to their common ancestor. Each path is truncated to a
      * length of maxDepth if it is longer than that.
-     * <p/>
+     * <p>
      * <b>Note:</b> This function requires the two constituents to be from the same {@link View}.
      *
      * @throws IllegalArgumentException If no common ancestor is found.
@@ -114,7 +114,7 @@ public class PathFeatureHelper {
 
     /**
      * Returns the common ancestor of the two constituent.
-     * <p/>
+     * <p>
      * It internally uses
      * {@link edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper#getPathsToCommonAncestor(Constituent, Constituent, int)}
      * . So, the restrictions related to that function apply here too.
@@ -132,7 +132,7 @@ public class PathFeatureHelper {
      * (includeConstituentLabel and includeRelationlabel) specify if the node and edge labels should
      * be in the string representation. At least one of them should be true. Othwewise, the function
      * throws an IllegalArgumentException.
-     * <p/>
+     * <p>
      * It internally uses
      * {@link edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper#getPathsToCommonAncestor(Constituent, Constituent, int)}
      * . So, the restrictions related to that function apply here too.

@@ -7,7 +7,7 @@ import java.util.Queue;
  * descendants.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public abstract class GraphSearch<T> {
@@ -20,7 +20,7 @@ public abstract class GraphSearch<T> {
     /**
      * Performs graph search, starting with the <code>initialState</code>. <code>stateManager</code>
      * defines the successor state function and the goal test function.
-     * <p/>
+     * <p>
      *
      * @return The first state that satisfies the goal test function. If no such state is found,
      *         then the function returns <code>null</code>.

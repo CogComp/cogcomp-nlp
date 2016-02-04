@@ -2,16 +2,16 @@ package edu.illinois.cs.cogcomp.core.math;
 
 /**
  * Keeps track of maximum and the object that corresponds to the maximum.
- * <p/>
+ * <p>
  * K: type of value over which the max decision is made. T: type of the objects which generate the
  * values
- * <p/>
+ * <p>
  * In case of ties, the first object is chosen.
- * <p/>
+ * <p>
  * <b>Example:</b>
- * <p/>
+ * <p>
  * Suppose we have a list of strings that can be scored and we wish to track the maximum.
- * <p/>
+ * <p>
  * 
  * <pre>
  * ArgMax&lt;Double, String&gt; argmax = new Argmax&lt;Double, String&gt;(Double.NEGATIVE_INFINITY, &quot;&quot;);

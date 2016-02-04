@@ -4,7 +4,7 @@ package edu.illinois.cs.cogcomp.nlp.collocations;
  * Refer Dunning 1993
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         November 14, 2008
  */
 public abstract class LogLikelihoodCollocation implements CollocationComputer {

@@ -83,7 +83,6 @@ public class SerializationHelper {
      *
      * @param ta The text annotation to be serialized
      * @return A json string
-     * @throws IOException
      */
     public static String serializeToJson(TextAnnotation ta) {
 

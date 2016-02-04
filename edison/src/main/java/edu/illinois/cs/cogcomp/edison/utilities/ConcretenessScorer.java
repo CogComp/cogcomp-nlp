@@ -16,8 +16,8 @@ import java.util.List;
 /**
  * A concreteness scorer based on the ratings of <a
  * href="http://crr.ugent.be/archives/1330">Brysbaert et al. (2014)</a>
- * <p/>
- * <br/>
+ * <p>
+ * <p>
  * Value ranges from <b>1--5</b> where 5 is most concrete
  */
 public class ConcretenessScorer {

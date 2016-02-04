@@ -25,19 +25,19 @@ import java.util.Set;
  * <li>The path, where tokens are represented by their POS tag</li>
  * <li>The length of the path</li>
  * </ul>
- * <p/>
+ * <p>
  * The dependency tree is read from the view name specified in the constructor. If possible, use the
  * static objects for the Easy-first dependency tree (which uses {@link ViewNames#DEPENDENCY}) or
  * the Stanford dependency tree (which uses {@link ViewNames#DEPENDENCY_STANFORD})
- * <p/>
+ * <p>
  * <b>Important note</b>: To be able to specify the two constituents as input, the feature extractor
  * assumes the following convention: The constituent that is specified as a parameter to the
  * getFeatures function has an incoming relation from the first constituent. Furthermore, this
  * incoming relation should be the only such relation.
- * <p/>
+ * <p>
  * This convention does not limit the expressivity in any way because the two constituents could be
  * created on the spot before calling the feature extractor.
- * <p/>
+ * <p>
  *
  * @author Vivek Srikumar
  */

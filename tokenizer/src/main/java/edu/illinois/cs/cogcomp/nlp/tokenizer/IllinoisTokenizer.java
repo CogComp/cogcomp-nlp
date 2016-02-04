@@ -42,7 +42,7 @@ public class IllinoisTokenizer implements Tokenizer {
     }
 
     /**
-     * given a span of text, return a list of Pair< String[], IntPair[] > corresponding to tokenized
+     * given a span of text, return a list of {@literal Pair< String[], IntPair[] >} corresponding to tokenized
      * sentences, where the String[] is the ordered list of sentence tokens and the IntPair[] is the
      * corresponding list of character offsets with respect to <b>the original text</b>.
      *

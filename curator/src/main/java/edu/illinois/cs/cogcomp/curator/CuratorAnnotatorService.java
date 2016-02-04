@@ -12,9 +12,9 @@ import java.util.*;
 
 /**
  * The {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} object with <i>most</i> of the
- * annotators available in CCG Curator. <br/>
+ * annotators available in CCG Curator. <p>
  * Do not call this class directly; instead, use
- * {@link edu.illinois.cs.cogcomp.curator.CuratorFactory} <br/>
+ * {@link edu.illinois.cs.cogcomp.curator.CuratorFactory} <p>
  * TODO Until a caching mechanism is available in illinois-core-utilities, this AnnotatorService
  * will not support caching
  *
@@ -41,7 +41,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}. (to access the rest of the
      * {@code Curator} annotators, you will need to requrest it manually, by altering
      * {@link edu.illinois.cs.cogcomp.curator.CuratorClient#addRecordViewFromCurator}).
-     * <p/>
+     * <p>
      * Each {@code Curator} internal component is wrapped in a
      * {@link edu.illinois.cs.cogcomp.curator.CuratorAnnotator} that automates the retrieval of
      * {@code requiredViews} and {@code viewName}. The current set of components is built using the

@@ -138,7 +138,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
     /**
      * Create a new text annotation using the given text, the tokens and the sentence boundary
      * positions (only the ending positions), specified in terms of the tokens.
-     * <p/>
+     * <p>
      * For example, for the text "Jack went up the hill. So did Jill.", the tokens would be the
      * array {"Jack", "went", "up", "the", "hill", "." ,"So", "did", "Jill", "."} and the array of
      * sentence boundary array would be {6, 11}. If the last element of the sentence boundary array

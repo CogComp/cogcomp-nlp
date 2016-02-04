@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * This class contains all annotation for a single piece of text (which could contain more than one
  * sentence.)
- * <p/>
+ * <p>
  *
  * @author Vivek Srikumar
  */
