@@ -1,9 +1,6 @@
 package edu.illinois.cs.cogcomp.lbj.pos;
 
-import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
-import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
@@ -18,28 +15,20 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * @author James Chen
  */
 public class TestPOSModels {
-  private static final String NAME = POSTrain.class.getCanonicalName();
+  private static final String NAME = TestPOSModels.class.getCanonicalName();
   private String labeledTestFile;
-  private String unlabeledTestFile;
 
-  private POSTaggerKnown taggerKnown;
-  private POSTaggerUnknown taggerUnknown;
+  private TrainedPOSTagger tagger;
 
   /**
    * Constructor for the test class. User specifies models and data.
    *
    * @param modelPath The path to the directory where the models are stored.
    * @param labeledTestData The path to the labeled testing data
-   * @param unlabeledTestData The path to the unlabeled testing data
    */
-  public TestPOSModels(String modelPath, String labeledTestData, String unlabeledTestData) {
+  public TestPOSModels(String modelPath, String labeledTestData) {
     this.labeledTestFile = labeledTestData;
-    this.unlabeledTestFile = unlabeledTestData;
-
-    this.taggerKnown = new POSTaggerKnown(modelPath + Constants.knownName + ".lc",
-            modelPath + Constants.knownName + ".lex");
-    this.taggerUnknown = new POSTaggerUnknown(modelPath + Constants.unknownName + ".lc",
-            modelPath + Constants.unknownName + ".lex");
+    this.tagger = new TrainedPOSTagger(modelPath);
   }
 
   /**
@@ -48,28 +37,22 @@ public class TestPOSModels {
    */
   public void testAccuracy() {
     wordForm __wordForm = new wordForm();
-    Parser unlabeledParser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(unlabeledTestFile)));
     Parser labeledParser = new POSBracketToToken(labeledTestFile);
     int numSeen = 0;
     int numEqual = 0;
 
-    Token unlabeledWord = (Token) unlabeledParser.next();
     Token labeledWord = (Token) labeledParser.next();
-    for (; unlabeledWord != null && labeledWord != null;
-         unlabeledWord = (Token) unlabeledParser.next(),
-                 labeledWord = (Token) labeledParser.next()) {
+    for (; labeledWord != null;
+         labeledWord = (Token) labeledParser.next()) {
+      System.out.println(labeledWord);
+     
+      String labeledTag = labeledWord.label;
+      System.out.println(labeledTag);
+      String testTag = tagger.discreteValue(labeledWord);
+      System.out.println(testTag);
+      System.out.println("");
 
-      String unlabeledTag;
-      String labeledTag;
-
-      if (baselineTarget.getInstance().observed(__wordForm.discreteValue(unlabeledWord))) {
-        unlabeledTag = taggerKnown.discreteValue(unlabeledWord);
-      } else {
-        unlabeledTag = taggerUnknown.discreteValue(unlabeledWord);
-      }
-      labeledTag = labeledWord.label;
-
-      if (labeledTag.equals(unlabeledTag)) {
+      if (labeledTag.equals(testTag)) {
         numEqual++;
       }
       numSeen++;
@@ -86,7 +69,7 @@ public class TestPOSModels {
       System.err.println( "'modelPath' specifies directory from which the learned models will be read." );
       System.exit( -1 );
     }
-    TestPOSModels test = new TestPOSModels(args[0] + "/", "test/testRefOutput.txt", "test/testIn.txt");
+    TestPOSModels test = new TestPOSModels(args[0], Constants.testData);
 
     test.testAccuracy();
   }
