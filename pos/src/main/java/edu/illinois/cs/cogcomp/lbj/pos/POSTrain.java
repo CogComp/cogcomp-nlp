@@ -47,8 +47,8 @@ public class POSTrain {
      * Trains the taggers with the default training data found in Constants.java
      */
     public void trainModels() {
-        System.out.println("Using default training data: " + Constants.trainingData);
-        trainModels(Constants.trainingData);
+        System.out.println("Using default training data: " + Constants.trainingAndDevData);
+        trainModels(Constants.trainingAndDevData);
     }
 
     /**
@@ -109,14 +109,17 @@ public class POSTrain {
     }
 
     public static void main(String[] args) {
-        if ( args.length != 2 ) {
-            System.err.println( "Usage: " + NAME + " trainingDataFile modelPath" );
+        if ( args.length != 2 && args.length != 1) {
+            System.err.println( "Usage: " + NAME + " modelPath [trainingFile]" );
             System.err.println( "'trainingDataFile' must contain training data in specified format (" +
                 "see doc/README); 'modelPath' specifies directory to which the learned models will be written." );
             System.exit( -1 );
         }
-        String trainingFile = args[ 0 ];
-        String modelPath = args[ 1 ];
+        String modelPath = args[ 0 ];
+	String trainingFile = null;
+        if (args.length == 2) {
+          trainingFile = args[ 1 ];
+        }
 
         File writeDir = new File( modelPath );
         if ( !writeDir.exists() ) {
@@ -125,7 +128,11 @@ public class POSTrain {
         }
 
         POSTrain trainer = new POSTrain( modelPath );
-        trainer.trainModels( trainingFile );
+        if (trainingFile == null) {
+          trainer.trainModels();
+        } else {
+          trainer.trainModels( trainingFile );
+        }
 
         trainer.writeModelsToDisk();
     }

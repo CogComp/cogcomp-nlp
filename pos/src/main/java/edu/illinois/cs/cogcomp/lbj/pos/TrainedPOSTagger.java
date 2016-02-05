@@ -11,6 +11,10 @@ public class TrainedPOSTagger {
   private baselineTarget baseline;
   private wordForm wordForm;
 
+  public TrainedPOSTagger() {
+    //TODO: Initialize via default path
+  }
+
   public TrainedPOSTagger(String modelDirectory) {
     String knownModelFile = modelDirectory + "POSTaggerKnown.lc";
     String knownLexFile = modelDirectory + "POSTaggerKnown.lex";
@@ -20,15 +24,19 @@ public class TrainedPOSTagger {
     String mikheevModelFile = modelDirectory + "MikheevTable.lc";
 
     known = new POSTaggerKnown();
+    known.read(knownModelFile, knownLexFile);
     unknown = new POSTaggerUnknown();
+    unknown.read(unknownModelFile, unknownLexFile);
     mikheev = new MikheevTable();
     baseline = new baselineTarget();
     wordForm = new wordForm();
 
-    known.read(knownModelFile, knownLexFile);
-    unknown.read(unknownModelFile, unknownLexFile);
+    //known.unclone();
+    //unknown.unclone();
     baseline.readModel(baselineModelFile);
     mikheev.readModel(mikheevModelFile);
+    mikheev.unclone();
+    baseline.unclone();
   } 
 
   public String discreteValue(Object __example)
@@ -45,8 +53,12 @@ public class TrainedPOSTagger {
 
     if (baseline.observed(wordForm.discreteValue(w)))
     {
+      System.out.println("Observed!");
+System.out.println(baseline.allowableTags(wordForm.discreteValue(w)));
       return known.valueOf(w, baseline.allowableTags(wordForm.discreteValue(w))).getStringValue();
     }
+System.out.println("Unobserved!");
+System.out.println(mikheev.allowableTags(w));
     return unknown.valueOf(w, mikheev.allowableTags(w)).getStringValue();
   }  
 
