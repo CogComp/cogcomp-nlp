@@ -44,13 +44,9 @@ public class TestPOSModels {
     Token labeledWord = (Token) labeledParser.next();
     for (; labeledWord != null;
          labeledWord = (Token) labeledParser.next()) {
-      System.out.println(labeledWord);
      
       String labeledTag = labeledWord.label;
-      System.out.println(labeledTag);
       String testTag = tagger.discreteValue(labeledWord);
-      System.out.println(testTag);
-      System.out.println("");
 
       if (labeledTag.equals(testTag)) {
         numEqual++;

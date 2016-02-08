@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Arrays;
 /**
  * A sanity check, processing a sample text file and comparing the
  * output to a reference file.
@@ -24,7 +24,8 @@ public class TestDiff extends TestCase {
     private static final String testFileName = "testIn.txt";
     private static String testFile;
     private static final String refFileName = "testRefOutput.txt";
-    private static List<String> refSentences;
+    private static List<String> refTags;
+    private static final double thresholdAcc = 0.95;
 
     public void setUp() throws IOException, URISyntaxException {
         URL testFileURL = TestDiff.class.getClassLoader().getResource(testFileName);
@@ -34,11 +35,13 @@ public class TestDiff extends TestCase {
         BufferedReader refReader = new BufferedReader(
                 new InputStreamReader(TestDiff.class.getClassLoader().getResourceAsStream(refFileName)));
 
-        refSentences = new ArrayList<String>();
-
+        refTags = new ArrayList<String>();
         String line;
         while ((line = refReader.readLine()) != null) {
-            refSentences.add(line);
+            String [] entries = line.substring(1, line.length()-1).split("[)] [(]");
+            for (int i = 0; i < entries.length; i++) {
+                refTags.add(entries[i].split(" ")[0]);
+            }
         }
     }
 
@@ -48,20 +51,21 @@ public class TestDiff extends TestCase {
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String sentence = "";
         int sentenceCounter = 0;
-
+        int tokenCounter = 0;
+        int correctCounter = 0;
         for (Token word = (Token) parser.next(); word != null; word = (Token) parser.next()) {
             String tag = tagger.discreteValue(word);
-            sentence += " (" + tag + " " + word.form + ")";
-
-            if (word.next == null) {
-                if (!sentence.substring(1).equals(refSentences.get(sentenceCounter)))
-                    fail("Produced output doesn't match reference: " +
-                            "\nProduced: " + sentence.substring(1) +
-                            "\nExpected: " + refSentences.get(sentenceCounter));
-
-                sentence = "";
-                sentenceCounter++;
+            if (refTags.get(tokenCounter).equals(tag)) {
+                correctCounter++;
             }
+            tokenCounter++;
+            
+        }
+        double result = ((double)correctCounter)/tokenCounter;
+        if (result < thresholdAcc) {
+            fail("Tagger performance is insufficient: "+
+                    "\nProduced: " + result +
+                    "\nExpected: " + thresholdAcc);
         }
     }
 }
