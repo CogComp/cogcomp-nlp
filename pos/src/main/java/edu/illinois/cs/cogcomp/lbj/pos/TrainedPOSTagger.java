@@ -23,20 +23,13 @@ public class TrainedPOSTagger {
     String baselineModelFile = modelDirectory + "baselineTarget.lc";
     String mikheevModelFile = modelDirectory + "MikheevTable.lc";
 
-    known = new POSTaggerKnown();
-    known.read(knownModelFile, knownLexFile);
-    unknown = new POSTaggerUnknown();
-    unknown.read(unknownModelFile, unknownLexFile);
-    mikheev = new MikheevTable();
-    baseline = new baselineTarget();
-    wordForm = new wordForm();
 
-    //known.unclone();
-    //unknown.unclone();
-    baseline.readModel(baselineModelFile);
-    mikheev.readModel(mikheevModelFile);
-    mikheev.unclone();
-    baseline.unclone();
+    baselineTarget.getInstance().readModel(baselineModelFile);
+    MikheevTable.getInstance().readModel(mikheevModelFile);
+
+    known = new POSTaggerKnown(knownModelFile, knownLexFile);
+    unknown = new POSTaggerUnknown(unknownModelFile, unknownLexFile);
+    wordForm = new wordForm();
   } 
 
   public String discreteValue(Object __example)
@@ -50,16 +43,11 @@ public class TrainedPOSTagger {
     }
 
     Token w = (Token) __example;
-
-    if (baseline.observed(wordForm.discreteValue(w)))
+    if (baselineTarget.getInstance().observed(wordForm.discreteValue(w)))
     {
-      System.out.println("Observed!");
-System.out.println(baseline.allowableTags(wordForm.discreteValue(w)));
-      return known.valueOf(w, baseline.allowableTags(wordForm.discreteValue(w))).getStringValue();
+      return known.discreteValue(w);
     }
-System.out.println("Unobserved!");
-System.out.println(mikheev.allowableTags(w));
-    return unknown.valueOf(w, mikheev.allowableTags(w)).getStringValue();
+    return unknown.discreteValue(w);
   }  
 
 }
