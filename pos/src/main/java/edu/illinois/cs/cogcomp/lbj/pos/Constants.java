@@ -24,6 +24,14 @@ public class Constants
   public static final String knownName = "POSTaggerKnown";
   public static final String unknownName = "POSTaggerUnknown";
 
+  public static final String modelPath = "models/edu/illinois/cs/cogcomp/lbj/pos/";
+  public static final String baselineModelPath = modelPath + baselineName + ".lc";
+  public static final String mikheevModelPath = modelPath + mikheevName + ".lc";
+  public static final String knownModelPath = modelPath + knownName + ".lc";
+  public static final String knownLexPath = modelPath + knownName + ".lex";
+  public static final String unknownModelPath = modelPath + unknownName + ".lc";
+  public static final String unknownLexPath = modelPath + unknownName + ".lex";
+
 //	public static final String DATA_DIR = "dataDir";
 //	public static final String TRAIN_DATA = "trainingData";
 //	public static final String DEV_DATA = "devData";

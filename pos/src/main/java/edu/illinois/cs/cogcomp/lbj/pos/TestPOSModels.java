@@ -26,9 +26,9 @@ public class TestPOSModels {
    * @param modelPath The path to the directory where the models are stored.
    * @param labeledTestData The path to the labeled testing data
    */
-  public TestPOSModels(String modelPath, String labeledTestData) {
+  public TestPOSModels(String labeledTestData) {
     this.labeledTestFile = labeledTestData;
-    this.tagger = new TrainedPOSTagger(modelPath);
+    this.tagger = new TrainedPOSTagger();
   }
 
   /**
@@ -59,13 +59,7 @@ public class TestPOSModels {
   }
 
   public static void main(String[] args) {
-    if ( args.length != 1 )
-    {
-      System.err.println( "Usage: " + NAME + " modelPath" );
-      System.err.println( "'modelPath' specifies directory from which the learned models will be read." );
-      System.exit( -1 );
-    }
-    TestPOSModels test = new TestPOSModels(args[0], Constants.testData);
+    TestPOSModels test = new TestPOSModels(Constants.testData);
 
     test.testAccuracy();
   }

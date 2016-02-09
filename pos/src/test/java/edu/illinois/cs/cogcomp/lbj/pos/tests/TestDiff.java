@@ -47,7 +47,7 @@ public class TestDiff extends TestCase {
 
     public void testDiff() {
 
-        TrainedPOSTagger tagger = new TrainedPOSTagger("models/edu/illinois/cs/cogcomp/lbj/pos/");
+        TrainedPOSTagger tagger = new TrainedPOSTagger();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String sentence = "";
         int sentenceCounter = 0;
