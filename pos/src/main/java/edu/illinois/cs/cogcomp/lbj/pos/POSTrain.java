@@ -22,13 +22,13 @@ public class POSTrain {
     private POSBaselineLearner baselineTarget;
 
     public POSTrain(String modelPath) {
-        this.modelPath = modelPath + "/";
+        this.modelPath = modelPath;
         this.iter = 50;
         this.init();
     }
 
     public POSTrain(String modelPath, int iter) {
-        this.modelPath = modelPath + "/";
+        this.modelPath = modelPath;
         this.iter = iter;
         this.init();
     }
@@ -101,10 +101,14 @@ public class POSTrain {
      * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor
      */
     public void writeModelsToDisk() {
-        baselineTarget.write(modelPath + Constants.baselineName + ".lc", modelPath + Constants.baselineName + ".lex");
-        mikheevTable.write(modelPath + Constants.mikheevName + ".lc", modelPath + Constants.mikheevName + ".lex");
-        taggerKnown.write(modelPath + Constants.knownName + ".lc", modelPath + Constants.knownName + ".lex");
-        taggerUnknown.write(modelPath + Constants.unknownName + ".lc", modelPath + Constants.unknownName + ".lex");
+        // Make sure necessary directories exist
+        (new File(modelPath)).mkdirs();
+
+        // There isn't a lexicon for baselineTarget/mikheevTable
+        baselineTarget.writeModel(Constants.baselineModelPath);
+        mikheevTable.writeModel(modelPath + Constants.mikheevName + ".lc");
+        taggerKnown.write(Constants.knownModelPath, Constants.knownLexPath);
+        taggerUnknown.write(Constants.unknownModelPath, Constants.unknownLexPath);
         System.out.println("Done training, models are in " + modelPath);
     }
 
