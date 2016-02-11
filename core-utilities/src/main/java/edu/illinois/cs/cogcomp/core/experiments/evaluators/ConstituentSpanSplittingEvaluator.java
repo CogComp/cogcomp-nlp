@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SpanSplittingEvaluator extends Evaluator {
+public class ConstituentSpanSplittingEvaluator extends Evaluator {
 
     View gold, prediction;
 
