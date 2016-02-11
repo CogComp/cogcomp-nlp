@@ -20,26 +20,19 @@ import java.util.List;
  * @author James Clarke, Mark Sammons
  *
  */
-public class POSAnnotator extends Annotator
-{
+public class POSAnnotator extends Annotator {
 	
-	private static final String NAME = "illinoispos";
-    	private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-	private final TrainedPOSTagger tagger = new TrainedPOSTagger();
-	private String tokensfield = "tokens";
-	private String sentencesfield = "sentences";
+    private static final String NAME = "illinoispos";
+    private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
+    private final TrainedPOSTagger tagger = new TrainedPOSTagger();
+    private String tokensfield = "tokens";
+    private String sentencesfield = "sentences";
 
-	public POSAnnotator() 
-	{
+    public POSAnnotator() {
         super(ViewNames.POS, new String[0]);
-
-		logger.info("Loading POS model..");
-		tagger.discreteValue(new Token(new Word("The"), null, ""));
-		logger.info("POS Tagger ready");
-
         tokensfield = ViewNames.TOKENS;
         sentencesfield = ViewNames.SENTENCE;
-	}
+    }
 	
 
     /**
@@ -49,32 +42,30 @@ public class POSAnnotator extends Annotator
      * @return  newly created POS view
      */
     @Override
-    public void addView(TextAnnotation record) throws AnnotatorException
-    {
-       	if (!record.hasView( tokensfield ) && !record.hasView(sentencesfield))
-        {
-			throw new AnnotatorException("Record must be tokenized and sentence split first");
-		}
-		long startTime = System.currentTimeMillis();
-		List<Token> input = LBJavaUtils.recordToLBJTokens(record);
+    public void addView(TextAnnotation record) throws AnnotatorException {
+       	if (!record.hasView( tokensfield ) && !record.hasView(sentencesfield)) {
+            throw new AnnotatorException("Record must be tokenized and sentence split first");
+        }
+        long startTime = System.currentTimeMillis();
+        List<Token> input = LBJavaUtils.recordToLBJTokens(record);
 
 
         List< Constituent > tokens = record.getView( ViewNames.TOKENS ).getConstituents();
-		TokenLabelView posView = new TokenLabelView( ViewNames.POS, getAnnotatorName(), record, 1.0 );
-		int tcounter = 0;
-		for (Token lbjtoken : input) {
-			tagger.discreteValue(lbjtoken);
-			Constituent token = tokens.get(tcounter);
-			Constituent label = new Constituent(tagger.discreteValue(lbjtoken), ViewNames.POS, record, token.getStartSpan(), token.getEndSpan());
-			posView.addConstituent(label);
-			tcounter++;
-		}
-		long endTime = System.currentTimeMillis();
-		logger.debug("Tagged input in {}ms", endTime-startTime);
+        TokenLabelView posView = new TokenLabelView( ViewNames.POS, getAnnotatorName(), record, 1.0 );
+        int tcounter = 0;
+        for (Token lbjtoken : input) {
+            tagger.discreteValue(lbjtoken);
+            Constituent token = tokens.get(tcounter);
+            Constituent label = new Constituent(tagger.discreteValue(lbjtoken), ViewNames.POS, record, token.getStartSpan(), token.getEndSpan());
+            posView.addConstituent(label);
+            tcounter++;
+        }
+        long endTime = System.currentTimeMillis();
+        logger.debug("Tagged input in {}ms", endTime-startTime);
 
         record.addView( ViewNames.POS, posView );
 
-	}
+    }
 
 
     @Override

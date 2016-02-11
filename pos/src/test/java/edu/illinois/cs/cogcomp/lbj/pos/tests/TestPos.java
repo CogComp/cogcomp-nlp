@@ -20,7 +20,6 @@ public class TestPos
     public void testTagger()
     {
         tagger = new TrainedPOSTagger();
-	
         String str = "My mother always told me I should never eat her father's boiled eggs, and although I tried hard "
         + "to remember I often failed to heed her \"sound\" advice.";
         String[] input = new String[ 1 ];
