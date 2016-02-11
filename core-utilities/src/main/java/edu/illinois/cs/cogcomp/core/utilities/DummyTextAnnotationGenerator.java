@@ -90,8 +90,8 @@ public class DummyTextAnnotationGenerator {
         return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(docs);
     }
 
-    private static String[] allPossibleViews = new String[]{ViewNames.POS, ViewNames.LEMMA, ViewNames.SHALLOW_PARSE,
-            ViewNames.PARSE_GOLD, ViewNames.SRL_VERB};
+    private static String[] allPossibleViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
+            ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB};
 
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels) {
 
@@ -140,9 +140,11 @@ public class DummyTextAnnotationGenerator {
                 case ViewNames.PARSE_CHARNIAK:
                     TreeView parseView = new TreeView(viewName, ta);
                     if (withNoisyLabels)
-                        parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree_noisy));
+                        parseView.setParseTree(0,
+                                TreeParserFactory.getStringTreeParser().parse(tree_noisy));
                     else
-                        parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree));
+                        parseView.setParseTree(0,
+                                TreeParserFactory.getStringTreeParser().parse(tree));
                     ta.addView(viewName, parseView);
                     break;
                 case ViewNames.SRL_VERB:
@@ -153,13 +155,16 @@ public class DummyTextAnnotationGenerator {
                     predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
                             lemmas[verbSRLPredicate.getFirst()]);
                     if (withNoisyLabels)
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, verbSRLPredicateSense_noisy);
+                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                                verbSRLPredicateSense_noisy);
                     else
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, verbSRLPredicateSense);
+                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                                verbSRLPredicateSense);
                     List<Constituent> args = new ArrayList<>();
                     List<String> tempArgLabels = new ArrayList<>();
                     for (IntPair span : verbSRLArgs.keySet()) {
-                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span.getSecond()));
+                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span
+                                .getSecond()));
                         if (withNoisyLabels)
                             tempArgLabels.add(verbSRLArgs_noisy.get(span));
                         else

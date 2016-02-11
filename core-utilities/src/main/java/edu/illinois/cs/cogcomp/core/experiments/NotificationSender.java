@@ -16,7 +16,8 @@ import java.net.URLEncoder;
 
 /**
  * An API to send notifications to android devices via the Notify My Android app. You need to have
- * an account with <a href="https://www.notifymyandroid.com/register.jsp">Notify My Android</a>. <p>
+ * an account with <a href="https://www.notifymyandroid.com/register.jsp">Notify My Android</a>.
+ * <p>
  * Code adapted from from Adriano Maia (adriano@usk.bz)
  *
  * @author Christos Christodoulopoulos
