@@ -16,8 +16,11 @@ public class ParsePhraseTypeOnlyTest {
 
     @Before
     public void setUp() throws Exception {
-        String[] viewsToAdd = {ViewNames.PARSE_STANFORD, ViewNames.PARSE_CHARNIAK, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB};
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        String[] viewsToAdd =
+                {ViewNames.PARSE_STANFORD, ViewNames.PARSE_CHARNIAK, ViewNames.PARSE_GOLD,
+                        ViewNames.SRL_VERB};
+        TextAnnotation ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
         PredicateArgumentView srlView = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         predicate = srlView.getPredicates().get(0);
         arg1 = srlView.getArguments(predicate).get(0).getTarget();

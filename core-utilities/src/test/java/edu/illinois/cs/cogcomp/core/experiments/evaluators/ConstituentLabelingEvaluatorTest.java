@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class SpanLabelingEvaluatorTest {
+public class ConstituentLabelingEvaluatorTest {
     SpanLabelView gold, predicted;
     ClassificationTester splittingTester;
 
@@ -29,7 +29,7 @@ public class SpanLabelingEvaluatorTest {
 
     @Test
     public void testEvaluateIdenticalSpanLabels() throws Exception {
-        SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
+        ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, gold);
         evaluator.evaluate(splittingTester);
         assertEquals(1.0, splittingTester.getAverageF1(), 0);
@@ -38,7 +38,7 @@ public class SpanLabelingEvaluatorTest {
 
     @Test
     public void testEvaluateNoisySpanLabels() throws Exception {
-        SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
+        ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
         assertEquals(splittingTester.getAverageF1(), 0.57, 0.01);

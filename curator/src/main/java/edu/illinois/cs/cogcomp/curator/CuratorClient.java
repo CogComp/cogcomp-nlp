@@ -39,21 +39,27 @@ import java.util.TreeMap;
  * <ol>
  * <li>
  * Create a new {@link CuratorClient}
+ * 
  * <pre>
- *     {@code
+ * {
+ *     &#064;code
  *     // Assuming we're starting from raw text
  *     ResourceManager rm = new CuratorConfigurator().getDefaultConfig();
  *     CuratorClient curator = new CuratorClient(rm);
- *     }
+ * }
  * </pre>
+ * 
  * </li>
  * <li>
  * Create a new {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
+ * 
  * <pre>
- *     {@code
+ * {
+ *     &#064;code
  *     TextAnnotation ta = client.getTextAnnotation(text);
- *     }
+ * }
  * </pre>
+ * 
  * </li>
  * <li>
  * Add views to the
@@ -64,6 +70,7 @@ import java.util.TreeMap;
  * <pre>
  *     {@code client.addTextAnnotationView(ta, ViewNames.POS);}
  * </pre>
+ * 
  * </li>
  * </ol>
  *
@@ -216,7 +223,7 @@ public class CuratorClient {
             Labeling labeling = record.getLabelViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignLabelingToTokenLabelView(viewName, ta,
-                                                                                labeling);
+                            labeling);
         } else if (viewType == ViewTypes.SPAN_LABEL_VIEW) {
             boolean allowOverlappingSpans = false;
             if (viewName.equals(ViewNames.WIKIFIER))
@@ -224,8 +231,7 @@ public class CuratorClient {
             Labeling labeling = record.getLabelViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignLabelingToSpanLabelView(viewName, ta,
-                                                                               labeling,
-                                                                               allowOverlappingSpans);
+                            labeling, allowOverlappingSpans);
         } else if (viewType == ViewTypes.DEPENDENCY_VIEW) {
             Forest depForest = record.getParseViews().get(convertCuratorViewName(viewName));
             view =
@@ -240,13 +246,13 @@ public class CuratorClient {
             Forest forest = record.getParseViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignForestToPredicateArgumentView(viewName, ta,
-                                                                                     forest);
+                            forest);
         } else if (viewType == ViewTypes.COREF_VIEW) {
             Clustering corefClustering =
                     record.getClusterViews().get(convertCuratorViewName(viewName));
             view =
                     CuratorDataStructureInterface.alignClusteringToCoreferenceView(viewName, ta,
-                                                                                   corefClustering);
+                            corefClustering);
         } else
             throw new AnnotationFailedException("Unrecognised view type " + viewType);
         return view;

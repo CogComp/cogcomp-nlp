@@ -36,6 +36,7 @@ public class DummyTextAnnotationGenerator {
             "(S1 (S (NP (NP (DT The) (NNA construction) (IN of)) (PP (NP (DT the) (NN library)))) "
                     + "(VP (VB finished) (PP (IN on) (NP (NN time)))) (. .)))";
     static Map<IntPair, String> chunks = new HashMap<>();
+
     static {
         chunks.put(new IntPair(0, 2), "NP");
         chunks.put(new IntPair(2, 3), "PP");
@@ -44,7 +45,9 @@ public class DummyTextAnnotationGenerator {
         chunks.put(new IntPair(6, 7), "PP");
         chunks.put(new IntPair(7, 8), "NP");
     }
+
     static Map<IntPair, String> chunks_noisy = new HashMap<>();
+
     static {
         chunks_noisy.put(new IntPair(0, 2), "NP");
         chunks_noisy.put(new IntPair(2, 3), "PP");
@@ -52,15 +55,19 @@ public class DummyTextAnnotationGenerator {
         chunks_noisy.put(new IntPair(6, 7), "PP");
         chunks_noisy.put(new IntPair(7, 8), "NP");
     }
+
     static IntPair verbSRLPredicate = new IntPair(5, 6);
     static String verbSRLPredicateSense = "01";
     static String verbSRLPredicateSense_noisy = "02";
     static Map<IntPair, String> verbSRLArgs = new HashMap<>();
+
     static {
         verbSRLArgs.put(new IntPair(0, 5), "A0");
         verbSRLArgs.put(new IntPair(6, 8), "AM-TMP");
     }
+
     static Map<IntPair, String> verbSRLArgs_noisy = new HashMap<>();
+
     static {
         verbSRLArgs_noisy.put(new IntPair(0, 5), "A0");
         verbSRLArgs_noisy.put(new IntPair(6, 8), "A2");
@@ -81,6 +88,13 @@ public class DummyTextAnnotationGenerator {
             i++;
         }
         return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(docs);
+    }
+
+    private static String[] allPossibleViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
+            ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB};
+
+    public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels) {
+        return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels);
     }
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
@@ -125,9 +139,11 @@ public class DummyTextAnnotationGenerator {
                 case ViewNames.PARSE_CHARNIAK:
                     TreeView parseView = new TreeView(viewName, ta);
                     if (withNoisyLabels)
-                        parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree_noisy));
+                        parseView.setParseTree(0,
+                                TreeParserFactory.getStringTreeParser().parse(tree_noisy));
                     else
-                        parseView.setParseTree(0, TreeParserFactory.getStringTreeParser().parse(tree));
+                        parseView.setParseTree(0,
+                                TreeParserFactory.getStringTreeParser().parse(tree));
                     ta.addView(viewName, parseView);
                     break;
                 case ViewNames.SRL_VERB:
@@ -138,13 +154,16 @@ public class DummyTextAnnotationGenerator {
                     predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
                             lemmas[verbSRLPredicate.getFirst()]);
                     if (withNoisyLabels)
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, verbSRLPredicateSense_noisy);
+                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                                verbSRLPredicateSense_noisy);
                     else
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, verbSRLPredicateSense);
+                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                                verbSRLPredicateSense);
                     List<Constituent> args = new ArrayList<>();
                     List<String> tempArgLabels = new ArrayList<>();
                     for (IntPair span : verbSRLArgs.keySet()) {
-                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span.getSecond()));
+                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span
+                                .getSecond()));
                         if (withNoisyLabels)
                             tempArgLabels.add(verbSRLArgs_noisy.get(span));
                         else

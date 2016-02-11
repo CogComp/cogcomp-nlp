@@ -12,9 +12,11 @@ import java.util.*;
 
 /**
  * The {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} object with <i>most</i> of the
- * annotators available in CCG Curator. <p>
+ * annotators available in CCG Curator.
+ * <p>
  * Do not call this class directly; instead, use
- * {@link edu.illinois.cs.cogcomp.curator.CuratorFactory} <p>
+ * {@link edu.illinois.cs.cogcomp.curator.CuratorFactory}
+ * <p>
  * TODO Until a caching mechanism is available in illinois-core-utilities, this AnnotatorService
  * will not support caching
  *
