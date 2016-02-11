@@ -21,8 +21,8 @@ import static java.util.Arrays.asList;
 public class MathUtilities {
 
     /**
-     * Find the argmax and max in a double array. If the array is empty, the
-     * function returns (-1, Double.NEGATIVE_INFINITY)
+     * Find the argmax and max in a double array. If the array is empty, the function returns (-1,
+     * Double.NEGATIVE_INFINITY)
      */
     public static Pair<Integer, Double> max(double[] array) {
         double max = Double.NEGATIVE_INFINITY;
@@ -42,8 +42,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmax and max in an int array. If the array is empty, the
-     * function returns (-1, Integer.MIN_VALUE)
+     * Find the argmax and max in an int array. If the array is empty, the function returns (-1,
+     * Integer.MIN_VALUE)
      */
     public static Pair<Integer, Integer> max(int[] array) {
         int max = Integer.MIN_VALUE;
@@ -63,8 +63,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmax and max in a list of elements that can are ordered. If
-     * the list is empty, the function returns (-1, null).
+     * Find the argmax and max in a list of elements that can are ordered. If the list is empty, the
+     * function returns (-1, null).
      */
     public static <T extends Comparable<T>> Pair<Integer, T> max(Collection<T> list) {
         T max = null;
@@ -87,16 +87,16 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmax and max in a array of elements that can are ordered. If
-     * the list is empty, the function returns (-1, null).
+     * Find the argmax and max in a array of elements that can are ordered. If the list is empty,
+     * the function returns (-1, null).
      */
     public static <T extends Comparable<T>> Pair<Integer, T> max(T[] array) {
         return max(asList(array));
     }
 
     /**
-     * Find the argmax and max in a map from items to values. If the list is
-     * empty, the function returns (null, null).
+     * Find the argmax and max in a map from items to values. If the list is empty, the function
+     * returns (null, null).
      *
      * @param <T> represents items
      * @param <S> represents values, should be {@code Comparable}
@@ -124,8 +124,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmin and min in a double array. If the array is empty, the
-     * function returns (-1, Double.POSITIVE_INFINITY)
+     * Find the argmin and min in a double array. If the array is empty, the function returns (-1,
+     * Double.POSITIVE_INFINITY)
      */
     public static Pair<Integer, Double> min(double[] array) {
         double min = Double.POSITIVE_INFINITY;
@@ -145,8 +145,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmin and min in a int array. If the array is empty, the
-     * function returns (-1, Integer.MAX_VALUE)
+     * Find the argmin and min in a int array. If the array is empty, the function returns (-1,
+     * Integer.MAX_VALUE)
      *
      * @return A pair of integers containing (argMin, min).
      */
@@ -168,8 +168,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmin and min in a list of elements that can are ordered. If
-     * the list is empty, the function returns (-1, null).
+     * Find the argmin and min in a list of elements that can are ordered. If the list is empty, the
+     * function returns (-1, null).
      */
     public static <T extends Comparable<T>> Pair<Integer, T> min(Collection<T> list) {
         T min = null;
@@ -192,8 +192,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmin and min in a map from items to values. If the list is
-     * empty, the function returns (null, null).
+     * Find the argmin and min in a map from items to values. If the list is empty, the function
+     * returns (null, null).
      *
      * @param <T> represents items
      * @param <S> represents values, should be {@code Comparable}
@@ -220,8 +220,8 @@ public class MathUtilities {
     }
 
     /**
-     * Find the argmin and min in a array of elements that can are ordered. If
-     * the list is empty, the function returns (-1, null).
+     * Find the argmin and min in a array of elements that can are ordered. If the list is empty,
+     * the function returns (-1, null).
      */
     public static <T extends Comparable<T>> Pair<Integer, T> min(T[] array) {
         return min(asList(array));
@@ -240,10 +240,9 @@ public class MathUtilities {
     }
 
     /**
-     * Elementwise multiplication of two lists of doubles. Both lists should be
-     * equally long. The output is also a list that has the same length, where
-     * each element is the product of the corresponding elements of the input
-     * lists.
+     * Elementwise multiplication of two lists of doubles. Both lists should be equally long. The
+     * output is also a list that has the same length, where each element is the product of the
+     * corresponding elements of the input lists.
      */
     public static List<Double> multiply(List<Double> d1, List<Double> d2) {
         assert d1.size() == d2.size();
@@ -257,8 +256,8 @@ public class MathUtilities {
     }
 
     /**
-     * Elementwise multiplication of two double arrays. Both arrays should be
-     * equally long. The output is an array of the same length.
+     * Elementwise multiplication of two double arrays. Both arrays should be equally long. The
+     * output is an array of the same length.
      */
     public static double[] multiply(double[] d1, double[] d2) {
         assert d1.length == d2.length;
@@ -284,8 +283,8 @@ public class MathUtilities {
     }
 
     /**
-     * Efficient computation of softmax. This does not create overflow errors
-     * because of exponentiation
+     * Efficient computation of softmax. This does not create overflow errors because of
+     * exponentiation
      */
     public static double[] softmax(double[] input) {
         double min = min(input).getSecond();
@@ -311,8 +310,8 @@ public class MathUtilities {
     }
 
     /**
-     * Efficient computation of softmax. This does not create overflow errors
-     * because of exponentiation
+     * Efficient computation of softmax. This does not create overflow errors because of
+     * exponentiation
      */
     public static List<Double> softmax(List<Double> input) {
         double min = min(input).getSecond();
@@ -333,13 +332,13 @@ public class MathUtilities {
     }
 
     /**
-     * An attempt to fix the value of epsilon used across different
-     * applications.
+     * An attempt to fix the value of epsilon used across different applications.
      */
     public final static double EPSILON = 1e-7;
 
     /**
-     * Check equality of two doubles upto {@link edu.illinois.cs.cogcomp.core.math.MathUtilities#EPSILON}
+     * Check equality of two doubles upto
+     * {@link edu.illinois.cs.cogcomp.core.math.MathUtilities#EPSILON}
      */
     public static boolean epsilonEquals(double d1, double d2) {
         return abs(d1 - d2) < EPSILON;
@@ -347,11 +346,10 @@ public class MathUtilities {
 
     /**
      * Add two numbers in log space.
-     * <p/>
-     * Suppose y1 and y2 are two positive reals and let x1 = log(y1) and x2 =
-     * log(y2). This function (and the other versions of logAdd) computes
-     * log(exp(x1) + exp(x2)) = log(y1 + y2) without underflow or overflow
-     * errors. This can be used, for example, to maintain log probabilities
+     * <p>
+     * Suppose y1 and y2 are two positive reals and let x1 = log(y1) and x2 = log(y2). This function
+     * (and the other versions of logAdd) computes log(exp(x1) + exp(x2)) = log(y1 + y2) without
+     * underflow or overflow errors. This can be used, for example, to maintain log probabilities
      * without worrying about the probabilities getting too small.
      */
     public static double logAdd(double x1, double x2) {
@@ -410,9 +408,8 @@ public class MathUtilities {
             return max;
     }
 
-    private static double[] gammaCof = new double[]{76.18009172947146,
-            -86.50532032941677, 24.01409824083091, -1.231739572450155,
-            0.1208650973866179e-2, -0.5395239384953e-5};
+    private static double[] gammaCof = new double[] {76.18009172947146, -86.50532032941677,
+            24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5};
 
     /**
      * Computes log(gamma(xx)). From numerical recipies. This just works.
@@ -433,13 +430,12 @@ public class MathUtilities {
 
     }
 
-    private static List<Double> factorialsBuffer = asDoubleList(new double[]{
-            0.0, 0.0, 0.6931471805599453, 1.791759469228055, 3.1780538303479458});
+    private static List<Double> factorialsBuffer = asDoubleList(new double[] {0.0, 0.0,
+            0.6931471805599453, 1.791759469228055, 3.1780538303479458});
 
     /**
-     * Get the log of the factorial of a number. Upto 32, the factorial is
-     * exact. After that, the gamma function is used because the numbers can't
-     * be represented anyway.
+     * Get the log of the factorial of a number. Upto 32, the factorial is exact. After that, the
+     * gamma function is used because the numbers can't be represented anyway.
      */
     public static double lnFactorial(int x) {
         if (x < 0)
@@ -473,10 +469,10 @@ public class MathUtilities {
         return exp(lnGamma(x) + lnGamma(w) - lnGamma(x + w));
     }
 
-	/*
-     * Now, a bunch of functions to help compute the incomplete gamma function.
-	 * These are directly lifted from Numerical Recipies, 2nd Ed.
-	 */
+    /*
+     * Now, a bunch of functions to help compute the incomplete gamma function. These are directly
+     * lifted from Numerical Recipies, 2nd Ed.
+     */
 
     private static int MAX_ITERS = 100;
     private static double EPS = 3.0e-7;
@@ -509,7 +505,8 @@ public class MathUtilities {
             }
 
         }
-        throw new IllegalStateException("a = " + a + " is too large, " + MAX_ITERS + " is too small");
+        throw new IllegalStateException("a = " + a + " is too large, " + MAX_ITERS
+                + " is too small");
     }
 
     private static double gser(double x, double a) {
@@ -530,17 +527,16 @@ public class MathUtilities {
                     return sum * exp(-x + a * log(x) - lnGamma(a));
                 }
             }
-            throw new IllegalStateException("a = " + a + " too large, "
-                    + MAX_ITERS + " too small.");
+            throw new IllegalStateException("a = " + a + " too large, " + MAX_ITERS + " too small.");
         }
     }
 
     /**
-     * Get the incomplete gamma function P(a,x). This implementation is directly
-     * taken from numerical recipies 2nd Ed.
-     * <p/>
-     * Wikipedia calls this function the lower incomplete gamma function where
-     * the integral is from 0 to x.
+     * Get the incomplete gamma function P(a,x). This implementation is directly taken from
+     * numerical recipies 2nd Ed.
+     * <p>
+     * Wikipedia calls this function the lower incomplete gamma function where the integral is from
+     * 0 to x.
      */
     public static double incompleteGammaP(double a, double x) {
 

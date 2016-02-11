@@ -1,8 +1,8 @@
 package edu.illinois.cs.cogcomp.core.transformers;
 
 /**
- * This interface is equivalent to a transformer that does not return anything.
- * It is defined explicitly to emphasize the difference.
+ * This interface is equivalent to a transformer that does not return anything. It is defined
+ * explicitly to emphasize the difference.
  *
  * @author Vivek Srikumar Dec 20, 2008
  */

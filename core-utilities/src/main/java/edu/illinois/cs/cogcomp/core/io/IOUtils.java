@@ -16,8 +16,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Some utility functions involving files and directory. Some of these commands
- * are modeled after Unix commands.
+ * Some utility functions involving files and directory. Some of these commands are modeled after
+ * Unix commands.
  *
  * @author Vivek Srikumar
  */
@@ -56,8 +56,7 @@ public abstract class IOUtils {
     }
 
     /**
-     * Get the extension of a file. This function does not check if the file
-     * exists.
+     * Get the extension of a file. This function does not check if the file exists.
      */
     public static String getFileExtension(String name) {
         int pos = name.lastIndexOf('.');
@@ -68,8 +67,7 @@ public abstract class IOUtils {
     }
 
     /**
-     * Remove the extension from the file name. This function does not check if
-     * the file exists.
+     * Remove the extension from the file name. This function does not check if the file exists.
      */
     public static String stripFileExtension(String name) {
         int pos = name.lastIndexOf('.');
@@ -83,7 +81,7 @@ public abstract class IOUtils {
      * Returns the file name from a full path.
      */
     public static String getFileName(String path) {
-        int slashIndex = path.lastIndexOf('/');
+        int slashIndex = path.lastIndexOf(File.separator);
         path = path.substring(slashIndex + 1);
 
         return path;
@@ -104,23 +102,18 @@ public abstract class IOUtils {
      * List the files contained in a directory.
      */
     public static String[] lsFiles(String directory) throws IOException {
-        String[] tmp = ls(directory);
-
-        ArrayList<String> files = new ArrayList<>();
-
-        for (String s : tmp) {
-            if (isFile(directory + "/" + s))
-                files.add(s);
-        }
-
-        return files.toArray(new String[files.size()]);
+        return lsFiles(directory, new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return true;
+            }
+        });
     }
 
     /**
      * Filters the files contained in a directory.
      */
-    public static String[] lsFiles(String directory, FilenameFilter filter)
-            throws IOException {
+    public static String[] lsFiles(String directory, FilenameFilter filter) throws IOException {
         File dir = new File(directory);
         ArrayList<String> files = new ArrayList<>();
         for (File filepath : dir.listFiles(filter)) {
@@ -139,7 +132,7 @@ public abstract class IOUtils {
         ArrayList<String> files = new ArrayList<>();
 
         for (String s : tmp) {
-            if (isDirectory(directory + "/" + s))
+            if (isDirectory(directory + File.separator + s))
                 files.add(s);
         }
 
@@ -154,12 +147,11 @@ public abstract class IOUtils {
     }
 
     /**
-     * Creates a temporary directory and returns its name. If this already
-     * exists, then it is deleted.
+     * Creates a temporary directory and returns its name. If this already exists, then it is
+     * deleted.
      *
-     * @param prefix The prefix of the temporary directory name. This can be used
-     *               to specify the directory where the temporary directory
-     *               resides.
+     * @param prefix The prefix of the temporary directory name. This can be used to specify the
+     *        directory where the temporary directory resides.
      */
     public static String mkTmpDir(String prefix) throws IOException {
         File tmpDir = File.createTempFile(prefix, "");
@@ -207,7 +199,7 @@ public abstract class IOUtils {
         // Some JVMs return null for empty dirs
         if (files != null) {
             for (String f : files) {
-                String filename = directory + "/" + f;
+                String filename = directory + File.separator + f;
                 File file = new File(filename);
                 if (file.isDirectory())
                     clean = cleanDir(filename) && file.delete();
@@ -260,20 +252,19 @@ public abstract class IOUtils {
     }
 
     /**
-     * Lists resources that are contained within a path. This works for any
-     * resource on the classpath, either in the file system or in a jar file.
-     * The function returns a list of URLs, connections to which can be opened
-     * for reading. <br/>
-     * <b>NB</b>: This method works only for full file names. If you need to
-     * list the files of a directory contained in the classpath use
-     * {@link #lsResourcesDir(Class, String)}
+     * Lists resources that are contained within a path. This works for any resource on the
+     * classpath, either in the file system or in a jar file. The function returns a list of URLs,
+     * connections to which can be opened for reading.
+     * <p>
+     * <b>NB</b>: This method works only for full file names. If you need to list the files of a
+     * directory contained in the classpath use {@link #lsResourcesDir(Class, String)}
      *
      * @param clazz The class whose path is scanned
-     * @param path  The name of the resource(s) to be returned
+     * @param path The name of the resource(s) to be returned
      * @return A list of URLs
      */
-    public static List<URL> lsResources(Class clazz, String path)
-            throws URISyntaxException, IOException {
+    public static List<URL> lsResources(Class clazz, String path) throws URISyntaxException,
+            IOException {
         URL dirURL = clazz.getResource(path);
 
         if (dirURL == null) {
@@ -296,8 +287,7 @@ public abstract class IOUtils {
                 urls.add(dirURL);
             } else {
                 for (String l : list) {
-                    URL url = (new File(dirPath + File.separator + l)).toURI()
-                            .toURL();
+                    URL url = (new File(dirPath + File.separator + l)).toURI().toURL();
                     urls.add(url);
                 }
             }
@@ -329,18 +319,17 @@ public abstract class IOUtils {
     }
 
     /**
-     * Lists resources that are contained within a path. This works for any
-     * resource on the classpath, either in the file system or in a jar file.
-     * The function returns a list of URLs, connections to which can be opened
-     * for reading. <br/>
-     * <b>NB</b>: This method can be used to list the files of a directory
-     * contained in the classpath. However, since it explicitly lists the
-     * contents of each classpath resource it is very slow. If you need a list
-     * of specific files (or for directories that are not inside jars), use
-     * {@link #lsResources(Class, String)}
+     * Lists resources that are contained within a path. This works for any resource on the
+     * classpath, either in the file system or in a jar file. The function returns a list of URLs,
+     * connections to which can be opened for reading.
+     * <p>
+     * <b>NB</b>: This method can be used to list the files of a directory contained in the
+     * classpath. However, since it explicitly lists the contents of each classpath resource it is
+     * very slow. If you need a list of specific files (or for directories that are not inside
+     * jars), use {@link #lsResources(Class, String)}
      *
      * @param clazz The class whose path is scanned
-     * @param path  The name of the resource(s) to be returned
+     * @param path The name of the resource(s) to be returned
      * @return A list of URLs
      */
     public static List<URL> lsResourcesDir(Class clazz, String path) throws IOException {
@@ -373,7 +362,8 @@ public abstract class IOUtils {
         return urls;
     }
 
-    private static List<URL> getResourcesFromDirectory(File resource, Pattern pattern) throws IOException {
+    private static List<URL> getResourcesFromDirectory(File resource, Pattern pattern)
+            throws IOException {
         ArrayList<URL> urls = new ArrayList<>();
         final File[] fileList = resource.listFiles();
         if (fileList == null)

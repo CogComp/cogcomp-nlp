@@ -6,14 +6,14 @@ import java.util.*;
 
 /**
  * Identify the longest common substrings between two lists.
- * <p/>
- * NOTE: This implements a naive dynamic program and can be improved in terms of
- * memory usage by maintaining only the current row of the dynamic programming
- * table and by using a hash table to store only non-zero values of that row.
+ * <p>
+ * NOTE: This implements a naive dynamic program and can be improved in terms of memory usage by
+ * maintaining only the current row of the dynamic programming table and by using a hash table to
+ * store only non-zero values of that row.
  *
  * @param <T> It is assumed that this implements <code>equals()</code>.
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jul 7, 2009
  */
 public class LongestCommonSubsequence<T extends Comparable<T>> {
@@ -48,13 +48,13 @@ public class LongestCommonSubsequence<T extends Comparable<T>> {
             return 0;
     }
 
-    private Map<Integer, Integer> getBackTraceMap(double[][] table, List<T> seq1, List<T> seq2, int i, int j) {
+    private Map<Integer, Integer> getBackTraceMap(double[][] table, List<T> seq1, List<T> seq2,
+            int i, int j) {
         if (i == 0 || j == 0) {
             return new HashMap<>();
 
         } else if (compareTokens(seq1.get(i), seq2.get(j)) > 0) {
-            Map<Integer, Integer> bt = getBackTraceMap(table, seq1, seq2,
-                    i - 1, j - 1);
+            Map<Integer, Integer> bt = getBackTraceMap(table, seq1, seq2, i - 1, j - 1);
             bt.put(i, j);
 
             return bt;

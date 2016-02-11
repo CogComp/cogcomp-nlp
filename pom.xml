@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.10</version>
+    <version>3.0.20</version>
 
     <modules>
         <module>core-utilities</module>
@@ -21,6 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	<googleEclipseFormatterStyle>${project.basedir}/../core-utilities/src/main/resources/eclipse-java-google-style.xml</googleEclipseFormatterStyle>
     </properties>
 
     <repositories>
@@ -39,7 +40,7 @@
         </repository>
         <site>
             <id>CogcompSoftwareDoc</id>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
+            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/</url>
         </site>
     </distributionManagement>
 
@@ -65,7 +66,17 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>net.revelc.code</groupId>
+                <artifactId>formatter-maven-plugin</artifactId>
+		<version>0.5.2</version>
+                <configuration>
+			<configFile>${googleEclipseFormatterStyle}</configFile>
+			<excludes>
+				<exclude>**/Morpha.java</exclude>
+			</excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -88,6 +99,31 @@
                         <link>http://download.oracle.com/javase/7/docs/api/</link>
                     </links>
                     <show>public</show>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <printEqualFiles>false</printEqualFiles>
+                    <failBuildInCaseOfDifferentContentConflict>false</failBuildInCaseOfDifferentContentConflict>
+                    <failBuildInCaseOfEqualContentConflict>false</failBuildInCaseOfEqualContentConflict>
+                    <failBuildInCaseOfConflict>false</failBuildInCaseOfConflict>
+                    <checkCompileClasspath>true</checkCompileClasspath>
+                    <checkRuntimeClasspath>true</checkRuntimeClasspath>
+                    <checkTestClasspath>true</checkTestClasspath>
+                    <skip>false</skip>
+                    <quiet>false</quiet>
                 </configuration>
             </plugin>
         </plugins>

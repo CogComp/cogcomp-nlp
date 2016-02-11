@@ -21,15 +21,17 @@ public class TreeViewTest {
 
     @Test
     public void testGetConstituentTree() throws Exception {
-        Tree<Constituent> constituentTree = ((TreeView) ta.getView(ViewNames.PARSE_STANFORD)).getConstituentTree(0);
+        Tree<Constituent> constituentTree =
+                ((TreeView) ta.getView(ViewNames.PARSE_STANFORD)).getConstituentTree(0);
         // Confusingly, the constituent of each node of the tree is called a label
         Constituent root = constituentTree.getLabel();
         assertEquals("S1", root.getLabel());
         assertEquals(new IntPair(0, 9), root.getSpan());
-        Constituent firstNoun = constituentTree.getChild(0).getChild(0).getChild(0).getChild(1).getLabel();
+        Constituent firstNoun =
+                constituentTree.getChild(0).getChild(0).getChild(0).getChild(1).getLabel();
         assertEquals("construction", firstNoun.getSurfaceForm());
         Constituent prepPhrase = constituentTree.getChild(0).getChild(1).getChild(1).getLabel();
-        assertEquals("on time",  prepPhrase.getSurfaceForm());
+        assertEquals("on time", prepPhrase.getSurfaceForm());
         assertEquals("IN", ta.getView(ViewNames.POS).getLabelsCovering(prepPhrase).get(0));
     }
 }

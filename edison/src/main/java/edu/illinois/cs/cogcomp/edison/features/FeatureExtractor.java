@@ -8,9 +8,8 @@ import java.util.Set;
 /**
  * An interface that specifies what a feature extractor should do.
  * <p>
- * In general, a feature extractor looks at a {@code Constituent} of a {@code
- * TextAnnotation} and generates a set of strings as features for that
- * constituent.
+ * In general, a feature extractor looks at a {@code Constituent} of a {@code TextAnnotation} and
+ * generates a set of strings as features for that constituent.
  * 
  * @author Vivek Srikumar
  * 

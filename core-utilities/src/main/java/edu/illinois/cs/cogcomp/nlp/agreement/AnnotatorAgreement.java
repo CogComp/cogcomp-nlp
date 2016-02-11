@@ -2,8 +2,8 @@ package edu.illinois.cs.cogcomp.nlp.agreement;
 
 /**
  * This abstract class and its descendants are based on the survey article
- * "Inter-Coder Agreement for Computational Linguistics" by Ron Artstein and
- * Massimo Poessio in Computational Lingusitics, Volume 34, Number 4.
+ * "Inter-Coder Agreement for Computational Linguistics" by Ron Artstein and Massimo Poessio in
+ * Computational Lingusitics, Volume 34, Number 4.
  *
  * @author Vivek Srikumar
  */
@@ -47,7 +47,8 @@ public abstract class AnnotatorAgreement {
     }
 
     public double getAgreementCoefficient() {
-        return (this.getObservedAgreement() - this.getExpectedAgreement()) / (1 - this.getExpectedAgreement());
+        return (this.getObservedAgreement() - this.getExpectedAgreement())
+                / (1 - this.getExpectedAgreement());
     }
 
 }

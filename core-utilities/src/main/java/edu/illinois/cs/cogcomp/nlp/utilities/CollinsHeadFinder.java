@@ -8,7 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * An instantiation of {@link edu.illinois.cs.cogcomp.nlp.utilities.HeadFinderBase} with Collins's rules (Collins, 1999)
+ * An instantiation of {@link edu.illinois.cs.cogcomp.nlp.utilities.HeadFinderBase} with Collins's
+ * rules (Collins, 1999)
  *
  * @author Vivek Srikumar
  */
@@ -31,71 +32,73 @@ public class CollinsHeadFinder extends HeadFinderBase {
         HeadSearchDirection right = HeadSearchDirection.Right;
         HeadSearchDirection rightDis = HeadSearchDirection.RightDis;
 
-        addHeadInformation("ADJP", left, new String[]{"NNS", "QP", "NN", "$",
-                "ADVP", "JJ", "VBN", "VBG", "ADJP", "JJR", "NP", "JJS", "DT",
-                "FW", "RBR", "RBS", "SBAR", "RB"});
+        addHeadInformation("ADJP", left, new String[] {"NNS", "QP", "NN", "$", "ADVP", "JJ", "VBN",
+                "VBG", "ADJP", "JJR", "NP", "JJS", "DT", "FW", "RBR", "RBS", "SBAR", "RB"});
 
-        addHeadInformation("ADVP", right, new String[]{"RB", "RBR", "RBS", "FW", "ADVP", "TO", "CD",
-                        "JJR", "JJ", "IN", "NP", "JJS", "NN"});
+        addHeadInformation("ADVP", right, new String[] {"RB", "RBR", "RBS", "FW", "ADVP", "TO",
+                "CD", "JJR", "JJ", "IN", "NP", "JJS", "NN"});
 
-        addHeadInformation("CONJP", right, new String[]{"CC", "RB", "IN"});
+        addHeadInformation("CONJP", right, new String[] {"CC", "RB", "IN"});
 
-        addHeadInformation("FRAG", right, new String[]{});
+        addHeadInformation("FRAG", right, new String[] {});
 
-        addHeadInformation("INTJ", left, new String[]{});
+        addHeadInformation("INTJ", left, new String[] {});
 
-        addHeadInformation("LST", right, new String[]{"LS", ":"});
+        addHeadInformation("LST", right, new String[] {"LS", ":"});
 
-        addHeadInformation("NAC", left, new String[]{"NN", "NNS", "NNP",
-                "NNPS", "NP", "NAC", "EX", "$", "CD", "QP", "PRP", "VBG", "JJ",
-                "JJS", "JJR", "ADJP", "FW"});
+        addHeadInformation("NAC", left, new String[] {"NN", "NNS", "NNP", "NNPS", "NP", "NAC",
+                "EX", "$", "CD", "QP", "PRP", "VBG", "JJ", "JJS", "JJR", "ADJP", "FW"});
 
-        addHeadInformation("NX", left, new String[]{});
+        addHeadInformation("NX", left, new String[] {});
 
-        addHeadInformation("PP", right, new String[]{"IN", "TO", "VBG", "VBN", "RP", "FW"});
+        addHeadInformation("PP", right, new String[] {"IN", "TO", "VBG", "VBN", "RP", "FW"});
 
-        addHeadInformation("PRN", left, new String[]{});
+        addHeadInformation("PRN", left, new String[] {});
 
-        addHeadInformation("PRT", right, new String[]{"RP"});
+        addHeadInformation("PRT", right, new String[] {"RP"});
 
-        addHeadInformation("QP", left, new String[]{"IN", "NNS", "NN", "JJ", "RB", "DT", "CD", "NCD", "QP", "JJR", "JJS"});
+        addHeadInformation("QP", left, new String[] {"IN", "NNS", "NN", "JJ", "RB", "DT", "CD",
+                "NCD", "QP", "JJR", "JJS"});
 
-        addHeadInformation("RRC", right, new String[]{"VP", "NP", "ADVP", "ADJP", "PP"});
+        addHeadInformation("RRC", right, new String[] {"VP", "NP", "ADVP", "ADJP", "PP"});
 
-        addHeadInformation("S", left, new String[]{"TO", "IN", "VP", "S", "SBAR", "ADJP", "UCP", "NP"});
+        addHeadInformation("S", left, new String[] {"TO", "IN", "VP", "S", "SBAR", "ADJP", "UCP",
+                "NP"});
 
-        addHeadInformation("SBAR", left, new String[]{"WHNP", "WHPP",
-                "WHADVP", "WHADJP", "IN", "DT", "S", "SQ", "SINV", "SBAR", "FRAG"});
+        addHeadInformation("SBAR", left, new String[] {"WHNP", "WHPP", "WHADVP", "WHADJP", "IN",
+                "DT", "S", "SQ", "SINV", "SBAR", "FRAG"});
 
-        addHeadInformation("SBARQ", left, new String[]{"left", "SQ", "S", "SINV", "SBARQ", "FRAG"});
+        addHeadInformation("SBARQ", left, new String[] {"left", "SQ", "S", "SINV", "SBARQ", "FRAG"});
 
-        addHeadInformation("SINV", left, new String[]{"VBZ", "VBD", "VBP",
-                "VB", "MD", "VP", "S", "SINV", "ADJP", "NP"});
+        addHeadInformation("SINV", left, new String[] {"VBZ", "VBD", "VBP", "VB", "MD", "VP", "S",
+                "SINV", "ADJP", "NP"});
 
-        addHeadInformation("SQ", left, new String[]{"VBZ", "VBD", "VBP", "VB", "MD", "VP", "SQ"});
+        addHeadInformation("SQ", left, new String[] {"VBZ", "VBD", "VBP", "VB", "MD", "VP", "SQ"});
 
-        addHeadInformation("UCP", right, new String[]{});
+        addHeadInformation("UCP", right, new String[] {});
 
-        addHeadInformation("VP", left, new String[]{"TO", "VBD", "VBN", "MD",
-                "VBZ", "VB", "VBG", "VBP", "AUX", "AUXG", "VP", "ADJP", "NN", "NNS", "NP"});
+        addHeadInformation("VP", left, new String[] {"TO", "VBD", "VBN", "MD", "VBZ", "VB", "VBG",
+                "VBP", "AUX", "AUXG", "VP", "ADJP", "NN", "NNS", "NP"});
 
-        addHeadInformation("WHADJP", left, new String[]{"CC", "WRB", "JJ", "ADJP"});
+        addHeadInformation("WHADJP", left, new String[] {"CC", "WRB", "JJ", "ADJP"});
 
-        addHeadInformation("WHADVP", right, new String[]{"CC", "WRB"});
+        addHeadInformation("WHADVP", right, new String[] {"CC", "WRB"});
 
-        addHeadInformation("WHNP", left, new String[]{"WDT", "WP", "WP$", "WHADJP", "WHPP", "WHNP"});
+        addHeadInformation("WHNP", left,
+                new String[] {"WDT", "WP", "WP$", "WHADJP", "WHPP", "WHNP"});
 
-        addHeadInformation("WHPP", right, new String[]{"IN", "TO", "FW"});
+        addHeadInformation("WHPP", right, new String[] {"IN", "TO", "FW"});
 
-        addHeadInformation("X", right, new String[]{});
+        addHeadInformation("X", right, new String[] {});
 
-        addHeadInformation("NP", rightDis, new String[]{"NN", "NNP", "NNPS", "NNS", "NX", "POS", "JJR"});
-        addHeadInformation("NP", left, new String[]{"NP"});
-        addHeadInformation("NP", rightDis, new String[]{"$", "ADJP", "PRN"});
-        addHeadInformation("NP", right, new String[]{"CD"});
-        addHeadInformation("NP", rightDis, new String[]{"JJ", "JJS", "RB", "QP"});
+        addHeadInformation("NP", rightDis, new String[] {"NN", "NNP", "NNPS", "NNS", "NX", "POS",
+                "JJR"});
+        addHeadInformation("NP", left, new String[] {"NP"});
+        addHeadInformation("NP", rightDis, new String[] {"$", "ADJP", "PRN"});
+        addHeadInformation("NP", right, new String[] {"CD"});
+        addHeadInformation("NP", rightDis, new String[] {"JJ", "JJS", "RB", "QP"});
 
-        addHeadInformation("TYPO", left, new String[]{});
+        addHeadInformation("TYPO", left, new String[] {});
     }
 
     private void addHeadInformation(String nonTerminal, HeadSearchDirection direction, String[] tags) {
@@ -108,7 +111,8 @@ public class CollinsHeadFinder extends HeadFinderBase {
     }
 
     @Override
-    public List<Pair<HeadSearchDirection, String[]>> getNonterminalHeadInformation(String nonTerminal) {
+    public List<Pair<HeadSearchDirection, String[]>> getNonterminalHeadInformation(
+            String nonTerminal) {
         if (headFinderInformation.containsKey(nonTerminal))
             return headFinderInformation.get(nonTerminal);
         else
@@ -123,11 +127,9 @@ public class CollinsHeadFinder extends HeadFinderBase {
 
             if (prev.equals("CC")) {
                 int newHeadIndex = headChildId - 2;
-                // Tree<String> child = tree.getChild(newHeadIndex);
                 Constituent child = tree.getOutgoingRelations().get(newHeadIndex).getTarget();
 
-                while (newHeadIndex >= 0
-                        && ParseTreeProperties.isPreTerminal(child)
+                while (newHeadIndex >= 0 && ParseTreeProperties.isPreTerminal(child)
                         && POSUtils.isPOSPunctuation(child.getLabel()))
                     newHeadIndex--;
                 if (newHeadIndex >= 0)

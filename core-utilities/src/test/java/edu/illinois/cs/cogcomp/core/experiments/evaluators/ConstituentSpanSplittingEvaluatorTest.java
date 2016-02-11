@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class SpanSplittingEvaluatorTest {
+public class ConstituentSpanSplittingEvaluatorTest {
     SpanLabelView prediction1, prediction2;
     ClassificationTester splittingTester;
 
@@ -25,7 +25,7 @@ public class SpanSplittingEvaluatorTest {
 
     @Test
     public void testIdenticalSplitting() throws Exception {
-        SpanSplittingEvaluator evaluator = new SpanSplittingEvaluator();
+        ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction1);
         evaluator.evaluate(splittingTester);
         assertEquals(1.0, splittingTester.getAverageF1(), 0);
@@ -34,7 +34,7 @@ public class SpanSplittingEvaluatorTest {
 
     @Test
     public void testShorterPredictionSpans() throws Exception {
-        SpanSplittingEvaluator evaluator = new SpanSplittingEvaluator();
+        ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction2);
         evaluator.evaluate(splittingTester);
         assertEquals(0.4, splittingTester.getAverageF1(), 0);
@@ -43,7 +43,7 @@ public class SpanSplittingEvaluatorTest {
 
     @Test
     public void testLongerPredictionSpans() throws Exception {
-        SpanSplittingEvaluator evaluator = new SpanSplittingEvaluator();
+        ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction2, prediction1);
         evaluator.evaluate(splittingTester);
         assertEquals(0.4, splittingTester.getAverageF1(), 0);
