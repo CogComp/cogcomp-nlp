@@ -11,51 +11,54 @@ import junit.framework.TestCase;
 
 public class ClauseViewGeneratorTest extends TestCase {
 
-	public void setUp() throws Exception {
-		super.setUp();
-	}
+    public void setUp() throws Exception {
+        super.setUp();
+    }
 
-	public final void testClauseViewGenerator() {
-		String text = "Freeport-McMoRan Inc. said it will convert its Freeport-McMoRan Energy Partners Ltd. " +
-				"partnership into a publicly traded company through the exchange of units of the partnership " +
-				"for common shares .";
-		TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(text);
+    public final void testClauseViewGenerator() {
+        String text =
+                "Freeport-McMoRan Inc. said it will convert its Freeport-McMoRan Energy Partners Ltd. "
+                        + "partnership into a publicly traded company through the exchange of units of the partnership "
+                        + "for common shares .";
+        TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(text);
 
-		Tree<String> tree = TreeParserFactory.getStringTreeParser()
-				.parse("(S1 (S (NP-SBJ (NNP Freeport-McMoRan)               (NNP Inc.))       (VP (VBD said)" +
-						"           (SBAR (-NONE- 0)                 (S (NP-SBJ (PRP it))                    " +
-						"(VP (MD will)                        (VP (VB convert)                            " +
-						"(NP (PRP$ its)                                (NNP Freeport-McMoRan) " +
-						"                               (NNP Energy)                                (NNPS Partners)" +
-						"                                (NNP Ltd.)                                (NN partnership)) " +
-						"                           (PP-CLR (IN into)                                    (NP (DT a)" +
-						"                                        (ADJP (RB publicly)" +
-						"                                              (VBN traded))" +
-						"                                        (NN company))) " +
-						"                           (PP-MNR (IN through) " +
-						"                                   (NP (NP (DT the)    " +
-						"                                        (NN exchange))    " +
-						"                                    (PP (IN of)            " +
-						"                                (NP (NP (NNS units))           " +
-						"                                     (PP (IN of)                   " +
-						"                                 (NP (DT the)                           " +
-						"                             (NN partnership)))))                            " +
-						"            (PP (IN for)                                            (NP (JJ common) " +
-						"                                               (NNS shares))))))))))       (. .)))");
+        Tree<String> tree =
+                TreeParserFactory
+                        .getStringTreeParser()
+                        .parse("(S1 (S (NP-SBJ (NNP Freeport-McMoRan)               (NNP Inc.))       (VP (VBD said)"
+                                + "           (SBAR (-NONE- 0)                 (S (NP-SBJ (PRP it))                    "
+                                + "(VP (MD will)                        (VP (VB convert)                            "
+                                + "(NP (PRP$ its)                                (NNP Freeport-McMoRan) "
+                                + "                               (NNP Energy)                                (NNPS Partners)"
+                                + "                                (NNP Ltd.)                                (NN partnership)) "
+                                + "                           (PP-CLR (IN into)                                    (NP (DT a)"
+                                + "                                        (ADJP (RB publicly)"
+                                + "                                              (VBN traded))"
+                                + "                                        (NN company))) "
+                                + "                           (PP-MNR (IN through) "
+                                + "                                   (NP (NP (DT the)    "
+                                + "                                        (NN exchange))    "
+                                + "                                    (PP (IN of)            "
+                                + "                                (NP (NP (NNS units))           "
+                                + "                                     (PP (IN of)                   "
+                                + "                                 (NP (DT the)                           "
+                                + "                             (NN partnership)))))                            "
+                                + "            (PP (IN for)                                            (NP (JJ common) "
+                                + "                                               (NNS shares))))))))))       (. .)))");
 
-		TreeView parse = new TreeView("", ta);
-		parse.setParseTree(0, tree);
+        TreeView parse = new TreeView("", ta);
+        parse.setParseTree(0, tree);
 
-		ta.addView(ViewNames.PARSE_GOLD, parse);
+        ta.addView(ViewNames.PARSE_GOLD, parse);
 
-		ClauseViewGenerator clg = new ClauseViewGenerator(ViewNames.PARSE_GOLD, "clauses");
+        ClauseViewGenerator clg = new ClauseViewGenerator(ViewNames.PARSE_GOLD, "clauses");
 
-		try {
-			ta.addView(clg);
-		} catch (AnnotatorException e) {
-			fail(e.getMessage());
-		}
+        try {
+            ta.addView(clg);
+        } catch (AnnotatorException e) {
+            fail(e.getMessage());
+        }
 
-		System.out.println(ta.getView("clauses"));
-	}
+        System.out.println(ta.getView("clauses"));
+    }
 }

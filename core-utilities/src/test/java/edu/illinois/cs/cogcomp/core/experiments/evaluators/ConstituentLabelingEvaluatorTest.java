@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class SpanLabelingEvaluatorTest {
+public class ConstituentLabelingEvaluatorTest {
     SpanLabelView gold, predicted;
     ClassificationTester splittingTester;
 
@@ -19,15 +19,17 @@ public class SpanLabelingEvaluatorTest {
     public void setUp() throws Exception {
         splittingTester = new ClassificationTester();
         String[] viewsToAdd = {ViewNames.POS};
-        TextAnnotation goldTA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
-        TextAnnotation predictionTA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
+        TextAnnotation goldTA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        TextAnnotation predictionTA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
         gold = (SpanLabelView) goldTA.getView(ViewNames.POS);
         predicted = (SpanLabelView) predictionTA.getView(ViewNames.POS);
     }
 
     @Test
     public void testEvaluateIdenticalSpanLabels() throws Exception {
-        SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
+        ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, gold);
         evaluator.evaluate(splittingTester);
         assertEquals(1.0, splittingTester.getAverageF1(), 0);
@@ -36,10 +38,10 @@ public class SpanLabelingEvaluatorTest {
 
     @Test
     public void testEvaluateNoisySpanLabels() throws Exception {
-        SpanLabelingEvaluator evaluator = new SpanLabelingEvaluator();
+        ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertEquals( splittingTester.getAverageF1(), 0.57, 0.01 );
+        assertEquals(splittingTester.getAverageF1(), 0.57, 0.01);
         assertEquals(0.5, splittingTester.getAverageAccuracy(), 0);
     }
 }

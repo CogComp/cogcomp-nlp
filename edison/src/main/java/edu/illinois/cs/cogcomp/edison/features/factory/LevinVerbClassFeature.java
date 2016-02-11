@@ -15,60 +15,59 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Adds a collection of features that correspond to Levin's verb classes, as
- * defined in
+ * Adds a collection of features that correspond to Levin's verb classes, as defined in
  * "English Verb Classes And Alternations: A Preliminary Investigation"
- * <p/>
- * This class assumes the existence of a file called <i>verbClass.txt</i> in the
- * class path. If the input constituent has an attribute called
- * {@link CoNLLColumnFormatReader#LemmaIdentifier}, it treats the attribute as
- * the lemma of the verb. This lemma is used to index Levin's list and the
- * corresponding verb classes are returned as discrete features. If the lemma is
- * not present in the list, then the feature set contains a single feature:
- * "unknown". If the input constituent doesn't have the required attribute, an
- * empty feature set is returned.
+ * <p>
+ * This class assumes the existence of a file called <i>verbClass.txt</i> in the class path. If the
+ * input constituent has an attribute called {@link CoNLLColumnFormatReader#LemmaIdentifier}, it
+ * treats the attribute as the lemma of the verb. This lemma is used to index Levin's list and the
+ * corresponding verb classes are returned as discrete features. If the lemma is not present in the
+ * list, then the feature set contains a single feature: "unknown". If the input constituent doesn't
+ * have the required attribute, an empty feature set is returned.
  *
  * @author Vivek Srikumar
  */
 public class LevinVerbClassFeature implements FeatureExtractor {
 
-	private static final DiscreteFeature UNKNOWN = DiscreteFeature.create("*");
-	public static LevinVerbClassFeature instance = new LevinVerbClassFeature();
+    private static final DiscreteFeature UNKNOWN = DiscreteFeature.create("*");
+    public static LevinVerbClassFeature instance = new LevinVerbClassFeature();
 
-	VerbClassDictionary dictionary = VerbClassDictionary.getDictionary();
+    VerbClassDictionary dictionary = VerbClassDictionary.getDictionary();
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		Set<Feature> features = new LinkedHashSet<>();
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        Set<Feature> features = new LinkedHashSet<>();
 
-		String verb = getLemma(c);
+        String verb = getLemma(c);
 
-		if (verb != null) {
-			List<String> allVerbClasses = dictionary.getClass(verb);
+        if (verb != null) {
+            List<String> allVerbClasses = dictionary.getClass(verb);
 
-			if (allVerbClasses.size() > 0) {
-				for (String s : allVerbClasses) {
-					features.add(DiscreteFeature.create(s.trim()));
-				}
-			} else {
-				features.add(UNKNOWN);
-			}
-		} else features.add(UNKNOWN);
+            if (allVerbClasses.size() > 0) {
+                for (String s : allVerbClasses) {
+                    features.add(DiscreteFeature.create(s.trim()));
+                }
+            } else {
+                features.add(UNKNOWN);
+            }
+        } else
+            features.add(UNKNOWN);
 
-		return features;
-	}
+        return features;
+    }
 
-	private String getLemma(Constituent c) {
-		if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
-			return c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
-		} else if (c.getTextAnnotation().hasView(ViewNames.LEMMA)) {
-			return WordHelpers.getLemma(c.getTextAnnotation(), c.getEndSpan() - 1);
-		} else return null;
-	}
+    private String getLemma(Constituent c) {
+        if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
+            return c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+        } else if (c.getTextAnnotation().hasView(ViewNames.LEMMA)) {
+            return WordHelpers.getLemma(c.getTextAnnotation(), c.getEndSpan() - 1);
+        } else
+            return null;
+    }
 
-	@Override
-	public String getName() {
-		return "#levin-vb-class#";
-	}
+    @Override
+    public String getName() {
+        return "#levin-vb-class#";
+    }
 
 }

@@ -7,7 +7,8 @@ import java.util.*;
 public class TestLexicon extends TestCase {
 
     private final Random random = new Random();
-    private final String alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !@#$%^&*()";
+    private final String alphabet =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 !@#$%^&*()";
 
     int threshold = 1;
     int maxLen = 4;
@@ -35,8 +36,7 @@ public class TestLexicon extends TestCase {
                 // the count should be more than the threshold in the original
                 // lexicon
 
-                assertEquals(true,
-                        lexicon.featureCounts.get(originalId) > threshold);
+                assertEquals(true, lexicon.featureCounts.get(originalId) > threshold);
 
             }
         }
@@ -48,8 +48,9 @@ public class TestLexicon extends TestCase {
 
         Pair<int[], float[]> feats = lexicon.getFeatureVector(features);
 
-        int[] f1 = lexicon.pruneFeaturesByCount(feats.getFirst(),
-                feats.getSecond(), threshold).getFirst();
+        int[] f1 =
+                lexicon.pruneFeaturesByCount(feats.getFirst(), feats.getSecond(), threshold)
+                        .getFirst();
 
         int[] f2 = prunedLexicon.getFeatureVector(features).getFirst();
 

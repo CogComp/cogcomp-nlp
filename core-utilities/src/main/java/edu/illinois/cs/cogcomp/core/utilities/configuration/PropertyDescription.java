@@ -12,6 +12,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface PropertyDescription {
     String purpose();
+
     String defaultValue();
+
     String[] options() default "";
 }

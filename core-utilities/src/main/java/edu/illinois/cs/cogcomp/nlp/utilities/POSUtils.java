@@ -7,8 +7,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import java.util.*;
 
 /**
- * This class represents a collection of utility functions related to POS tags.
- * Functions from ParseTreeProperties will eventually move here.
+ * This class represents a collection of utility functions related to POS tags. Functions from
+ * ParseTreeProperties will eventually move here.
  *
  * @author Vivek Srikumar
  */
@@ -16,23 +16,20 @@ public class POSUtils {
 
     private static Set<String> posTagSet;
 
-    private final static List<String> punctuationPOS = Arrays.asList("''",
-            "``", ",", ":", ".", "-LRB-", "-RRB-", "-LCB-", "-RCB-", "-LSB-", "-RSB-");
+    private final static List<String> punctuationPOS = Arrays.asList("''", "``", ",", ":", ".",
+            "-LRB-", "-RRB-", "-LCB-", "-RCB-", "-LSB-", "-RSB-");
 
-    public final static Set<String> closedSetPOS = Collections
-            .unmodifiableSet(new HashSet<>(Arrays.asList("CC", "DT",
-                    "IN", "PDT", "POS", "TO", "UH", "SYM", "WDT", "WP", "WP$", "WRB")));
+    public final static Set<String> closedSetPOS = Collections.unmodifiableSet(new HashSet<>(Arrays
+            .asList("CC", "DT", "IN", "PDT", "POS", "TO", "UH", "SYM", "WDT", "WP", "WP$", "WRB")));
 
-    public static final List<String> allPOS = Arrays.asList(
-            "#", "$", "``", "''", ",", "-LRB-", "-RRB-", ".", ":", "CC", "CD", "DT",
-            "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNP", "NNPS",
-            "NNS", "PDT", "POS", "PRP", "PRP$", "RB", "RBR", "RBS", "RP", "SYM",
-            "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "WDT", "WP", "WP$", "WRB"
-    );
+    public static final List<String> allPOS = Arrays.asList("#", "$", "``", "''", ",", "-LRB-",
+            "-RRB-", ".", ":", "CC", "CD", "DT", "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD",
+            "NN", "NNP", "NNPS", "NNS", "PDT", "POS", "PRP", "PRP$", "RB", "RBR", "RBS", "RP",
+            "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "WDT", "WP", "WP$", "WRB");
 
     /**
-     * Very simple way of testing whether something is a part of speech tag.
-     * Just look up a list of allowed POS tags and see if the label is in it.
+     * Very simple way of testing whether something is a part of speech tag. Just look up a list of
+     * allowed POS tags and see if the label is in it.
      */
     public static boolean isPOSTag(String token) {
         if (posTagSet == null) {
@@ -43,8 +40,8 @@ public class POSUtils {
     }
 
     /**
-     * Converts the input part of speech tag into a coarse set, consisting of
-     * the labels Noun, Verb, Adjective, Adverb, Punctuation, Pronoun and Other
+     * Converts the input part of speech tag into a coarse set, consisting of the labels Noun, Verb,
+     * Adjective, Adverb, Punctuation, Pronoun and Other
      */
     public static String getCoarsePOS(String pos) {
         if (isPOSNoun(pos))
@@ -64,7 +61,8 @@ public class POSUtils {
     }
 
     public static boolean isPOSOpenSet(String token) {
-        return isPOSTag(token) && (isPOSNoun(token) || isPOSAdjective(token) || isPOSVerb(token) || isPOSAdverb(token));
+        return isPOSTag(token)
+                && (isPOSNoun(token) || isPOSAdjective(token) || isPOSVerb(token) || isPOSAdverb(token));
     }
 
     public static boolean isPOSClosedSet(String token) {
