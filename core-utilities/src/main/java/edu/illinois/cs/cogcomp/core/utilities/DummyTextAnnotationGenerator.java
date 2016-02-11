@@ -94,7 +94,6 @@ public class DummyTextAnnotationGenerator {
             ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB};
 
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels) {
-
         return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels);
     }
 
