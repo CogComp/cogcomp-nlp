@@ -32,10 +32,5 @@ public class Constants
   public static final String unknownModelPath = modelPath + unknownName + ".lc";
   public static final String unknownLexPath = modelPath + unknownName + ".lex";
 
-//	public static final String DATA_DIR = "dataDir";
-//	public static final String TRAIN_DATA = "trainingData";
-//	public static final String DEV_DATA = "devData";
-//	public static final String TEST_DATA = "testData";
-//	public static final String TRAIN_AND_DEV_DATA = "trainingAndDevData";
 }
 
