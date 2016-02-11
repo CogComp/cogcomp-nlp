@@ -20,7 +20,8 @@ public class TokenizerTextAnnotationBuilderTest {
     @Test
     public void testBuilder() {
 
-        TokenizerTextAnnotationBuilder bldr = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+        TokenizerTextAnnotationBuilder bldr =
+                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
         final String sentA =
                 "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   ";
