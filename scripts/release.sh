@@ -3,7 +3,7 @@
 
 BLD=1
 TMPDIR="tmp9812"
-NAME=
+NAME=""
 FORMAT="zip"
 
 function HELP {
@@ -25,7 +25,8 @@ function HELP {
 
 while getopts bhN:F: opt; do
     case $opt in 
-	h)
+	h) HELP
+	exit -1
 	;;
 	b) BLD=0
 	;;
@@ -36,6 +37,7 @@ while getopts bhN:F: opt; do
 	T) TMPDIR=$OPTARG
 	;;
 	\?) echo "$O: invalid argument '$opt'.\n";
+	exit -1
 	;;
 	:) echo "$0 requires name argument. Run with option 'h' for help info."
 	exit -1
@@ -51,7 +53,7 @@ if [[ $FORMAT != "zip" && $OPTARG != "tgz" ]]; then
     exit -1
 fi
 
-if [ ! -n $NAME ]; then
+if [  -z $NAME ]; then
     echo "$0: you must specify the package name (no spaces or dodgy control characters, please..."
     exit -1;
 fi
