@@ -15,9 +15,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Extracts only the label of the phrase. The phrase is defined as the smallest node in
- * the parse tree that contains the candidate. If there is more than one such node, the lowest one
- * is chosen.
+ * Extracts only the label of the phrase. The phrase is defined as the smallest node in the parse
+ * tree that contains the candidate. If there is more than one such node, the lowest one is chosen.
  * <p>
  * If possible, use one of the two static objects in this class, for the Charniak and Stanford
  * parses respectively.
@@ -56,7 +55,8 @@ public class ParsePhraseTypeOnly implements FeatureExtractor {
 
         Set<Feature> features = new LinkedHashSet<>();
 
-        if (phrase != null) features.add(DiscreteFeature.create(phrase.getLabel()));
+        if (phrase != null)
+            features.add(DiscreteFeature.create(phrase.getLabel()));
 
         return features;
     }

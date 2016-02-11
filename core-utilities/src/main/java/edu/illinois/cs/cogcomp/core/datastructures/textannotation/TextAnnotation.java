@@ -19,7 +19,7 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class TextAnnotation extends AbstractTextAnnotation implements Serializable {
+public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -1308407121595094945L;
 
@@ -289,6 +289,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     public String toString() {
         return "TextAnnotation: " + this.getText();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     public List<IntPair> getSpansMatching(String text) {
