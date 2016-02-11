@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SpanLabelingEvaluator extends Evaluator {
+public class ConstituentLabelingEvaluator extends Evaluator {
 
     View gold, prediction;
 
