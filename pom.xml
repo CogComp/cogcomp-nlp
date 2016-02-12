@@ -8,7 +8,7 @@
     <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cogcomp-nlp-version>3.0.17</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.20</cogcomp-nlp-version>
     </properties>
     <repositories>
         <repository>
@@ -64,11 +64,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.7</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.7</version>
+            <optional>true</optional>
         </dependency>
 
         <!-- NER and its dependencies -->
@@ -116,7 +118,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-srl</artifactId>
-            <version>5.1.8</version>
+            <version>5.1.9</version>
             <exclusions>
                 <exclusion>
                     <artifactId>illinois-nlp-pipeline</artifactId>
@@ -129,6 +131,14 @@
             <artifactId>gurobi</artifactId>
             <version>6.5</version>
             <optional>true</optional>
+        </dependency>
+
+        <!-- needed for intellij unit testing (outside maven) to work properly -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-edison</artifactId>
+            <version>${cogcomp-nlp-version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -174,6 +174,9 @@ public class IllinoisNewPipelineTest
         Properties props = new Properties();
         props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES.key, PipelineConfigurator.FALSE );
         props.setProperty( PipelineConfigurator.USE_SRL_VERB.key, PipelineConfigurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_SRL_NOM.key, PipelineConfigurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_DEP.key, PipelineConfigurator.FALSE );
+        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE.key, PipelineConfigurator.FALSE );
         props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, PipelineConfigurator.TRUE );
         ResourceManager rm = new ResourceManager( props );
         SimpleCachingPipeline pipeline = null;
@@ -198,6 +201,8 @@ public class IllinoisNewPipelineTest
 
         assertFalse( ta.hasView( ViewNames.SRL_VERB ) );
         assertFalse( ta.hasView( ViewNames.NER_ONTONOTES ) );
+        assertTrue( ta.hasView( ViewNames.SHALLOW_PARSE ) );
+        assertTrue( ta.hasView( ViewNames.NER_CONLL));
 
         String[] viewsToAdd =  { ViewNames.SRL_VERB, ViewNames.NER_ONTONOTES };
         Set< String > viewNames = new HashSet<>();

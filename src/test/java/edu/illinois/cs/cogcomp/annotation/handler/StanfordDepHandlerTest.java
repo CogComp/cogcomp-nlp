@@ -34,7 +34,8 @@ public class StanfordDepHandlerTest {
         stanfordProps.put("parse.maxtime", "1000");
         POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
         ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
-        StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator, 60);
+        boolean failOnSentenceLengthCheckFailure = true;
+        StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator, 60, failOnSentenceLengthCheckFailure);
 
         try {
             depParser.addView(ta);
@@ -53,7 +54,8 @@ public class StanfordDepHandlerTest {
         stanfordProps.put("parse.maxtime", "100");
         POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
         ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
-        StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator, 100);
+        boolean failOnSentenceLengthCheckFailure = true;
+        StanfordDepHandler depParser = new StanfordDepHandler(posAnnotator, parseAnnotator, 100, failOnSentenceLengthCheckFailure);
 
         try {
             depParser.addView(ta);

@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.nlp.common.HandlerUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -17,6 +18,8 @@ import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.ArrayCoreMap;
 import edu.stanford.nlp.util.CoreMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,28 +33,46 @@ import java.util.List;
 
 public class StanfordParseHandler extends PipelineAnnotator {
 
+    private final boolean throwExceptionOnSentenceLengthCheck;
+    private Logger logger = LoggerFactory.getLogger( PipelineAnnotator.class );
+
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
     private int maxParseSentenceLength;
 
     public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
-        this(posAnnotator, parseAnnotator, -1);
+        this(posAnnotator, parseAnnotator, -1, false );
     }
 
-    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, int maxSentenceLength) {
+    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, int maxSentenceLength, boolean throwExceptionOnSentenceLengthCheck) {
         super("Stanford Parser", "3.3.1", "stanfordparse", ViewNames.PARSE_STANFORD, new String[]{});
         this.posAnnotator = posAnnotator;
         this.parseAnnotator = parseAnnotator;
         this.maxParseSentenceLength = maxSentenceLength;
+        this.throwExceptionOnSentenceLengthCheck = throwExceptionOnSentenceLengthCheck;
+
     }
 
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
         // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
-        if (maxParseSentenceLength > 0 && textAnnotation.size() > maxParseSentenceLength) {
-            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() +
-                    " since it is larger than the maximum sentence length of the parser.");
+
+        if ( throwExceptionOnSentenceLengthCheck )
+        {
+            Constituent c = HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation, maxParseSentenceLength);
+
+            if ( null != c )
+            {
+                String msg = HandlerUtils.getSentenceLengthError( textAnnotation.getId(), c.getSurfaceForm(), maxParseSentenceLength );
+                logger.error( msg );
+                throw new AnnotatorException( msg );
+            }
         }
+
+//        if (maxParseSentenceLength > 0 && textAnnotation.size() > maxParseSentenceLength) {
+//            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() +
+//                    " since it is larger than the maximum sentence length of the parser.");
+//        }
         TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
@@ -68,12 +89,21 @@ public class StanfordParseHandler extends PipelineAnnotator {
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             CoreMap sentence = sentences.get(sentenceId);
 
-            edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
-            Tree<String> tree = new Tree<>(stanfordTree.value());
-            for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
-                tree.addSubtree(generateNode(pt));
+            if (maxParseSentenceLength > 0 && sentence.size() > maxParseSentenceLength) {
+
+                logger.warn("Unable to parse TextAnnotation " + textAnnotation.getId() +
+                        " since it is larger than the maximum sentence length of the parser (" +
+                        maxParseSentenceLength + ").");
+
+            } else {
+
+                edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+                Tree<String> tree = new Tree<>(stanfordTree.value());
+                for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
+                    tree.addSubtree(generateNode(pt));
+                }
+                treeView.setParseTree(sentenceId, tree);
             }
-            treeView.setParseTree(sentenceId, tree);
         }
         textAnnotation.addView( getViewName(), treeView );
     }
