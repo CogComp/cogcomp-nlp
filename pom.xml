@@ -8,7 +8,7 @@
     <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cogcomp-nlp-version>3.0.17</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.20</cogcomp-nlp-version>
     </properties>
     <repositories>
         <repository>
@@ -64,11 +64,13 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.7</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.7</version>
+            <optional>true</optional>
         </dependency>
 
         <!-- NER and its dependencies -->
@@ -100,7 +102,7 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <!-- Stanford Core NLP, used for its parser (for ) -->
+        <!-- Stanford Core NLP, used for its parser (for SRL) -->
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
