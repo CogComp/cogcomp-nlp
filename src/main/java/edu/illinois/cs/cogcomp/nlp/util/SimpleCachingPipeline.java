@@ -8,7 +8,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class SimpleCachingPipeline implements AnnotatorService {
                                  boolean forceCacheUpdate)
             throws IOException, AnnotatorException {
         this.viewProviders = annotators;
-        this.textAnnotationBuilder = new CcgTextAnnotationBuilder(new IllinoisTokenizer());
+        this.textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
         this.pathToSaveCachedFiles = cacheDir;
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
         this.forceUpdate = forceCacheUpdate;

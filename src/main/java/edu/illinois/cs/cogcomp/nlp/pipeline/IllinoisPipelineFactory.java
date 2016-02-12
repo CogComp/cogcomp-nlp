@@ -11,7 +11,7 @@ import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 
@@ -58,7 +58,7 @@ public class IllinoisPipelineFactory
         ResourceManager rm = ( new PipelineConfigurator().getConfig( nonDefaultRm ) );
         Map< String, Annotator > annotators = buildAnnotators( rm );
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
+        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder( tokenizer );
 
 //
 //        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
