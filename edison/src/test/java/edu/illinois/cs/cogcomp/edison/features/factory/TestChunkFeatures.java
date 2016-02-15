@@ -10,16 +10,16 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 
 import java.util.List;
 
 /**
- * Test class NB: If needed, please re-create the {@code test.ta} and
- * {@code feature.collection.text} files using {@link CreateTestTAResource} and
- * {@link CreateTestFeaturesResource}
+ * Test class
+ * <p/>
+ * <b>NB:</b> If needed, please re-create the {@code feature.collection.text} file using
+ * {@link CreateTestFeaturesResource}.
  *
  * @author Vivek Srikumar
  */

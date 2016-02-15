@@ -30,6 +30,17 @@ public class Counter<T extends Serializable> implements Serializable {
 
     OneVariableStats stats;
 
+    private final Comparator<T> comparator = new Comparator<T>() {
+        public int compare(T arg0, T arg1) {
+            double d0 = counts.get(arg0);
+            double d1 = counts.get(arg1);
+
+            if (d0 < d1) return -1;
+            else if (d0 > d1) return 1;
+            else return 0;
+        }
+    };
+
     public Counter() {
         reset();
     }
@@ -81,6 +92,7 @@ public class Counter<T extends Serializable> implements Serializable {
         return stats.std();
     }
 
+    @SuppressWarnings("unchecked")
     public Pair<T, Double> getMax() {
         for (Object k : counts.keys()) {
             argMax.update((T) k, counts.get(k));
@@ -88,6 +100,7 @@ public class Counter<T extends Serializable> implements Serializable {
         return new Pair<>(this.argMax.getArgmax(), this.argMax.getMaxValue());
     }
 
+    @SuppressWarnings("unchecked")
     public Pair<T, Double> getMin() {
         for (Object k : counts.keys()) {
             argMin.update((T) k, counts.get(k));
@@ -121,47 +134,13 @@ public class Counter<T extends Serializable> implements Serializable {
         for (Object key : this.counts.keys())
             keys.add((T) key);
 
-        Collections.sort(keys, new Comparator<T>() {
-
-            public int compare(T arg0, T arg1) {
-                double d0 = counts.get(arg0);
-                double d1 = counts.get(arg1);
-
-                if (d0 < d1)
-                    return -1;
-                else if (d0 > d1)
-                    return 1;
-                else
-                    return 0;
-            }
-        });
-
+        Collections.sort(keys, comparator);
         return keys;
     }
 
-    @SuppressWarnings("unchecked")
     public List<T> getSortedItemsHighestFirst() {
-        List<T> keys = new ArrayList<>();
-        for (Object key : this.counts.keys())
-            keys.add((T) key);
-
-        Collections.sort(keys, new Comparator<T>() {
-
-            public int compare(T arg0, T arg1) {
-                double d0 = counts.get(arg0);
-                double d1 = counts.get(arg1);
-
-                if (d0 < d1)
-                    return 1;
-                else if (d0 > d1)
-                    return -1;
-                else
-                    return 0;
-            }
-        });
-
-        return keys;
+        List<T> inverseSortedItems = getSortedItems();
+        Collections.sort(inverseSortedItems, comparator.reversed());
+        return inverseSortedItems;
     }
-
-
 }
