@@ -17,18 +17,11 @@
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.20</version>
         </dependency>
-        <!-- Used only in utilities.CreateTestTAResource -->
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-curator</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.10</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
