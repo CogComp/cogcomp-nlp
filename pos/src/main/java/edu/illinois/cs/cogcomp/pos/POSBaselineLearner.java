@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import java.util.*;
 import java.io.*;

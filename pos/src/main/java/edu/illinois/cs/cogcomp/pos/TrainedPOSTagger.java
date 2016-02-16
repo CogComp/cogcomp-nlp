@@ -1,11 +1,13 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import java.util.LinkedList;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.File;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
+import edu.illinois.cs.cogcomp.pos.lbjava.*;
 
 /**
  * This POS Tagger uses a pre-trained model. The model files will be found by checking two locations in order:
@@ -27,6 +29,7 @@ public class TrainedPOSTagger {
      * Initializes a tagger from either a pre-specified directory or the classpath
      */ 
     public TrainedPOSTagger() {
+        ResourceManager rm = new POSConfigurator().getDefaultConfig();
         URL knownModelFile = null;
         URL knownLexFile = null;
         URL unknownModelFile = null;
@@ -34,35 +37,35 @@ public class TrainedPOSTagger {
         URL baselineModelFile = null;
         URL mikheevModelFile = null;
         try {
-          if ((new File(Constants.knownModelPath)).exists()) {
-              knownModelFile = (new File(Constants.knownModelPath)).toURL();
+          if ((new File(rm.getString("knownModelPath"))).exists()) {
+              knownModelFile = (new File(rm.getString("knownModelPath"))).toURL();
           } else {
-              knownModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.knownModelPath); 
+              knownModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("knownModelPath")); 
           }
-          if ((new File(Constants.knownLexPath)).exists()) {
-              knownLexFile = (new File(Constants.knownLexPath)).toURL();
+          if ((new File(rm.getString("knownLexPath"))).exists()) {
+              knownLexFile = (new File(rm.getString("knownLexPath"))).toURL();
           } else {
-              knownLexFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.knownLexPath);
+              knownLexFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("knownLexPath"));
           }
-          if ((new File(Constants.unknownModelPath)).exists()) {
-              unknownModelFile = (new File(Constants.unknownModelPath)).toURL();
+          if ((new File(rm.getString("unknownModelPath"))).exists()) {
+              unknownModelFile = (new File(rm.getString("unknownModelPath"))).toURL();
           } else {
-              unknownModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.unknownModelPath);
+              unknownModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("unknownModelPath"));
           }
-          if ((new File(Constants.unknownLexPath)).exists()) {
-              unknownLexFile = (new File(Constants.unknownLexPath)).toURL();
+          if ((new File(rm.getString("unknownLexPath"))).exists()) {
+              unknownLexFile = (new File(rm.getString("unknownLexPath"))).toURL();
           } else {
-              unknownLexFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.unknownLexPath);
+              unknownLexFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("unknownLexPath"));
           }
-          if ((new File(Constants.baselineModelPath)).exists()) {
-              baselineModelFile = (new File(Constants.baselineModelPath)).toURL();
+          if ((new File(rm.getString("baselineModelPath"))).exists()) {
+              baselineModelFile = (new File(rm.getString("baselineModelPath"))).toURL();
           } else {
-              baselineModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.baselineModelPath);
+              baselineModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("baselineModelPath"));
           }
-          if ((new File(Constants.mikheevModelPath)).exists()) {
-              mikheevModelFile = (new File(Constants.mikheevModelPath)).toURL();
+          if ((new File(rm.getString("mikheevModelPath"))).exists()) {
+              mikheevModelFile = (new File(rm.getString("mikheevModelPath"))).toURL();
           } else {
-              mikheevModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, Constants.mikheevModelPath);
+              mikheevModelFile = IOUtilities.loadFromClasspath(TrainedPOSTagger.class, rm.getString("mikheevModelPath"));
           }
       } catch (MalformedURLException e) {
           System.out.println("ERROR: MALRFORMED URL (THIS SHOULD NEVER HAPPEN)");

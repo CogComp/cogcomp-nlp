@@ -1,7 +1,8 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import java.util.Date;
 import java.io.*;
+import edu.illinois.cs.cogcomp.pos.lbjava.*;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
@@ -11,7 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.*;
 /**
   * This program does a brute force search over 3 parameters of the LBJ POS
   * tagger's training regimen, testing each combination of parameter values on
-  * the test data found in {@link Constants#devData} after training the
+  * the test data found in {@link POSConfigurator#devData} after training the
   * learning classifiers from scratch each time.  All of the performance
   * numbers computed by this program are stored in files in the
   * <code>curves/</code> subdirectory of the working directory, which must
@@ -107,7 +108,7 @@ public class LearningCurve
     Parser unknownTrainParser =
       new FeatureVectorParser("src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerUnknown.ex",
                               "src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSTaggerUnknown.lex");
-    Parser testParser = new POSBracketToToken(Constants.devData);
+    Parser testParser = new POSBracketToToken(new POSConfigurator().getDefaultConfig().getString("devData"));
     double bestF1 = 0;
     int bestRounds = 0;
     double bestKnownThickness = 0;

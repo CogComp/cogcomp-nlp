@@ -1,7 +1,9 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.io.File;
 
@@ -20,6 +22,7 @@ public class POSTrain {
     private POSTaggerUnknown taggerUnknown;
     private MikheevTable mikheevTable;
     private POSBaselineLearner baselineTarget;
+    private ResourceManager rm;
 
     public POSTrain(String modelPath) {
         this.modelPath = modelPath;
@@ -37,6 +40,7 @@ public class POSTrain {
      * Known and unknown taggers to be trained later.
      */
     private void init() {
+        rm = new POSConfigurator().getDefaultConfig();
         taggerKnown = new POSTaggerKnown();
         taggerUnknown = new POSTaggerUnknown();
         mikheevTable = new MikheevTable();
@@ -44,11 +48,11 @@ public class POSTrain {
     }
 
     /**
-     * Trains the taggers with the default training data found in Constants.java
+     * Trains the taggers with the default training data found in POSConfigurator.java
      */
     public void trainModels() {
-        System.out.println("Using default training data: " + Constants.trainingAndDevData);
-        trainModels(Constants.trainingAndDevData);
+        System.out.println("Using default training data: " + rm.getString("trainingAndDevData"));
+        trainModels(rm.getString("trainingAndDevData"));
     }
 
     /**
@@ -61,7 +65,7 @@ public class POSTrain {
         Parser trainingParserUnknown = new POSLabeledUnknownWordParser(trainingData);
 
         MikheevTable.isTraining = true;
-        edu.illinois.cs.cogcomp.lbj.pos.baselineTarget.isTraining = true;
+        edu.illinois.cs.cogcomp.pos.lbjava.baselineTarget.isTraining = true;
 
         Object ex;
         // baseline and mikheev just count, they don't learn -- so one iteration should be enough
@@ -83,11 +87,11 @@ public class POSTrain {
             while ((ex = trainingParser.next()) != null) {
                 taggerKnown.learn(ex);
             }
-            System.out.println("\tFinished training " + Constants.knownName);
+            System.out.println("\tFinished training " + rm.getString("knownName"));
             while ((ex = trainingParserUnknown.next()) != null) {
                 taggerUnknown.learn(ex);
             }
-            System.out.println("\tFinished training " + Constants.unknownName);
+            System.out.println("\tFinished training " + rm.getString("unknownName"));
             trainingParser.reset();
             trainingParserUnknown.reset();
             taggerKnown.doneWithRound();
@@ -105,10 +109,10 @@ public class POSTrain {
         (new File(modelPath)).mkdirs();
 
         // There isn't a lexicon for baselineTarget/mikheevTable
-        baselineTarget.writeModel(Constants.baselineModelPath);
-        mikheevTable.writeModel(modelPath + Constants.mikheevName + ".lc");
-        taggerKnown.write(Constants.knownModelPath, Constants.knownLexPath);
-        taggerUnknown.write(Constants.unknownModelPath, Constants.unknownLexPath);
+        baselineTarget.writeModel(rm.getString("baselineModelPath"));
+        mikheevTable.writeModel(modelPath + rm.getString("mikheevName") + ".lc");
+        taggerKnown.write(rm.getString("knownModelPath"), rm.getString("knownLexPath"));
+        taggerUnknown.write(rm.getString("unknownModelPath"), rm.getString("unknownLexPath"));
         System.out.println("Done training, models are in " + modelPath);
     }
 
