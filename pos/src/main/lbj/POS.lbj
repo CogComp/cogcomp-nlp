@@ -1,5 +1,6 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos.lbjava;
 
+import edu.illinois.cs.cogcomp.pos.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 

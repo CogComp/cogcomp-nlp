@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

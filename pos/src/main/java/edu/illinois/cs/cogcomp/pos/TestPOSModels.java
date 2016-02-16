@@ -1,8 +1,10 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 
 /**
@@ -59,7 +61,8 @@ public class TestPOSModels {
   }
 
   public static void main(String[] args) {
-    TestPOSModels test = new TestPOSModels(Constants.testData);
+    ResourceManager rm = new POSConfigurator().getDefaultConfig();
+    TestPOSModels test = new TestPOSModels(rm.getString("testData"));
 
     test.testAccuracy();
   }

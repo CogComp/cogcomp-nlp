@@ -13,7 +13,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.9</version>
         </dependency>
 	<dependency>
 	    <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -62,17 +62,6 @@
                     <dFlag>${project.basedir}/target/classes</dFlag>
 		    <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
                 </configuration>
-		<!--
-		<executions>
-		    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>clean</goal>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-		-->
             </plugin>
         </plugins>
     </build>

@@ -35,11 +35,12 @@ Here is how you can add maven dependencies into your program:
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.0.20</version>
+            <version>VERSION</version>
         </dependency>
     </dependencies>
 ```
 
+**Note:** Make sure to change the pom.xml parameter `VERSION` to the latest version of the project.
 
 In general, the best way to use the POS Tagger is through the [`POSAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/lbj/pos/POSAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 

@@ -1,7 +1,8 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
+import edu.illinois.cs.cogcomp.pos.lbjava.*;
 
 /**
   * This program tests {@link POSTagger} on labeled data and reports its

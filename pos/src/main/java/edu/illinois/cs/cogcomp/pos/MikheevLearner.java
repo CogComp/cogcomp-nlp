@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.lbj.pos;
+package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
