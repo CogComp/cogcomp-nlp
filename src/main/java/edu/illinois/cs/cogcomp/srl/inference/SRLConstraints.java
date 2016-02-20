@@ -42,36 +42,29 @@ public enum SRLConstraints {
 		}
 	},
 	supportVerbConstraint {
-
 		@Override
 		public SRLILPConstraintGenerator getGenerator(SRLManager manager) {
 			return new SupportVerbConstraint(manager);
 		}
 	},
 	noCrossArgumentExclusiveOverlap {
-
 		@Override
 		public SRLILPConstraintGenerator getGenerator(SRLManager manager) {
 			return new CrossArgumentExclusiveOverlap(manager);
 		}
-
 	},
 	crossArgumentRetainedModifiers {
-
 		@Override
 		public SRLILPConstraintGenerator getGenerator(SRLManager manager) {
 			return new CrossArgumentRetainedModifiers(manager);
 		}
 	},
 	atLeastOneCoreArgument {
-
 		@Override
 		public SRLILPConstraintGenerator getGenerator(SRLManager manager) {
 			return new AtLeastOneCoreArgument(manager);
 		}
-
 	}
-
 	;
 
 	public abstract SRLILPConstraintGenerator getGenerator(SRLManager manager);

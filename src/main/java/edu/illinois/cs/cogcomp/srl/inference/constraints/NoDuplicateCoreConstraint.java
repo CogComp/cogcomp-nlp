@@ -81,7 +81,6 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 		List<ILPConstraint> list = new ArrayList<>();
 
 		for (String coreArgument : coreArgs) {
-
 			int count = 0;
 
 			int argId = manager.getArgumentId(coreArgument);
@@ -89,9 +88,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 			int[] vars = new int[numCandidates];
 			double[] coefs = new double[numCandidates];
 			for (int candidateId = 0; candidateId < numCandidates; candidateId++) {
-
-				vars[candidateId] = getArgumentVariable(variables, type,
-						predicateId, candidateId, coreArgument);
+				vars[candidateId] = getArgumentVariable(variables, type, predicateId, candidateId, coreArgument);
 
 				coefs[candidateId] = 1;
 
@@ -110,8 +107,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 			coefs = cleanedVar.getSecond();
 
 			if (vars.length > 0)
-				list.add(new ILPConstraint(vars, coefs, 1.0,
-						ILPConstraint.LESS_THAN));
+				list.add(new ILPConstraint(vars, coefs, 1.0, ILPConstraint.LESS_THAN));
 
 		}
 
@@ -132,8 +128,7 @@ public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 
 			SRLPredicateStructure yp = y == null ? null : y.ys.get(predicateId);
 
-			list.addAll(addPredicateConstraints(manager, variables, argSet,
-					predicateId, xp, yp));
+			list.addAll(addPredicateConstraints(manager, variables, argSet, predicateId, xp, yp));
 		}
 
 		return list;

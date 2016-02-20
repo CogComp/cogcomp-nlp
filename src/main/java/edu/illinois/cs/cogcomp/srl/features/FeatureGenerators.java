@@ -142,8 +142,7 @@ public class FeatureGenerators {
 						if (relation == null) continue;
 						Constituent target = relation.getTarget();
 						if (ParseTreeProperties.isNominal(target.getLabel())) {
-							int head = CollinsHeadFinder.instance
-									.getHeadWordPosition(phrase);
+							int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
 
 							feats.add(DiscreteFeature.create("np-head:"
 									+ ta.getToken(head).toLowerCase()));
@@ -155,14 +154,11 @@ public class FeatureGenerators {
 					}
 
 					// if the phrase's parent is a PP, then the head of that PP.
-					Constituent parent = phrase.getIncomingRelations().get(0)
-							.getSource();
+					Constituent parent = phrase.getIncomingRelations().get(0).getSource();
 
 					if (parent.getLabel().equals("PP")) {
-						int head = CollinsHeadFinder.instance
-								.getHeadWordPosition(phrase);
-						feats.add(DiscreteFeature.create("p-head:"
-								+ ta.getToken(head).toLowerCase()));
+						int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
+						feats.add(DiscreteFeature.create("p-head:" + ta.getToken(head).toLowerCase()));
 					}
 
 				} catch (EdisonException e) {
@@ -176,8 +172,7 @@ public class FeatureGenerators {
 		};
 	}
 
-	public static FeatureInputTransformer getParseLeftSibling(
-			final String parseViewName) {
+	public static FeatureInputTransformer getParseLeftSibling(final String parseViewName) {
 		return new FeatureInputTransformer() {
 
 			@Override
@@ -224,8 +219,7 @@ public class FeatureGenerators {
 		};
 	}
 
-	public static FeatureInputTransformer getParseRightSibling(
-			final String parseViewName) {
+	public static FeatureInputTransformer getParseRightSibling(final String parseViewName) {
 		return new FeatureInputTransformer() {
 
 			@Override
