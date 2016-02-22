@@ -85,9 +85,11 @@ public class FeatureUtilities {
      */
     public static edu.illinois.cs.cogcomp.lbjava.classify.Feature getLBJFeature(Feature feature) {
         if (feature instanceof DiscreteFeature)
-            return new DiscretePrimitiveFeature("", "", new ByteString(feature.getName()), trueValue);
+            return new DiscretePrimitiveFeature("", "", new ByteString(feature.getName()),
+                    trueValue);
         else
-            return new RealPrimitiveFeature("", "", new ByteString(feature.getName()), feature.getValue());
+            return new RealPrimitiveFeature("", "", new ByteString(feature.getName()),
+                    feature.getValue());
     }
 
     /**
@@ -111,7 +113,8 @@ public class FeatureUtilities {
     /**
      * Create a feature map using the specified feature extractor on the input constituent.
      */
-    public static Map<String, Float> getFeatureMap(final FeatureExtractor fex, Constituent c) throws EdisonException {
+    public static Map<String, Float> getFeatureMap(final FeatureExtractor fex, Constituent c)
+            throws EdisonException {
         Map<String, Float> map = new HashMap<>();
 
         for (Feature f : fex.getFeatures(c)) {
@@ -125,7 +128,8 @@ public class FeatureUtilities {
      * Create a feature set using the specified feature extractor on the input constituent.
      * <b>Note</b>: If there are any real valued features, they will be ignored.
      */
-    public static Set<String> getFeatureSet(final FeatureExtractor fex, Constituent c) throws EdisonException {
+    public static Set<String> getFeatureSet(final FeatureExtractor fex, Constituent c)
+            throws EdisonException {
         Set<String> set = new LinkedHashSet<>();
 
         for (Feature f : fex.getFeatures(c)) {
@@ -332,7 +336,8 @@ public class FeatureUtilities {
      */
     public static Set<Feature> deserializeFeatureSet(byte[] bytes) throws IOException {
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
+        BufferedReader in =
+                new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes)));
 
         Set<Feature> features = new LinkedHashSet<>();
 
