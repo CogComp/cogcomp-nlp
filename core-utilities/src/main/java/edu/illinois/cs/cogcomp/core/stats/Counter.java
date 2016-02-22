@@ -35,9 +35,12 @@ public class Counter<T extends Serializable> implements Serializable {
             double d0 = counts.get(arg0);
             double d1 = counts.get(arg1);
 
-            if (d0 < d1) return -1;
-            else if (d0 > d1) return 1;
-            else return 0;
+            if (d0 < d1)
+                return -1;
+            else if (d0 > d1)
+                return 1;
+            else
+                return 0;
         }
     };
 

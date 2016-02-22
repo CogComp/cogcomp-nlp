@@ -7,7 +7,7 @@ import junit.framework.TestCase;
  */
 public class TestCounter extends TestCase {
     public void testCounter() {
-        Counter<String> cnt = new Counter<String>();
+        Counter<String> cnt = new Counter<>();
         cnt.incrementCount("a");
         cnt.incrementCount("a");
         cnt.incrementCount("z");

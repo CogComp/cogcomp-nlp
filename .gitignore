@@ -1,6 +1,8 @@
-/target
 .idea
 *.log
 */target
 *.iml
 edison/wordnet/
+
+## LBJava-generate files for NER
+/ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures
