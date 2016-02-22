@@ -293,7 +293,9 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        TextAnnotation ta = (TextAnnotation) super.clone();
+        ta.views = new HashMap<>(ta.views);
+        return ta;
     }
 
     public List<IntPair> getSpansMatching(String text) {
