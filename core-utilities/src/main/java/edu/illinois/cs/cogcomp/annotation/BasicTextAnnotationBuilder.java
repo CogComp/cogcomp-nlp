@@ -1,9 +1,7 @@
 package edu.illinois.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,7 +11,7 @@ import java.util.List;
 /**
  * A simple TextAnnotationBuilder that is meant to be used with pre-tokenized text (e.g. for
  * training corpora).
- * <p/>
+ * <p>
  * To create {@link TextAnnotation}s from plain text, you need a
  * {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer}. See {@code illinois-tokenizer} for
  * CogComp's default TextAnnotationBuilder.
@@ -55,7 +53,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
     /**
      * A stub method that <b>should not</b> be call with this Builder. Please use
      * {@link #createTextAnnotationFromTokens(java.util.List)} instead.
-     * <p/>
+     * <p>
      * To create a {@link TextAnnotation} from raw text, please use {@code illinois-tokenizer}
      */
     @Override
@@ -67,7 +65,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
     /**
      * A stub method that <b>should not</b> be call with this Builder. Please use
      * {@link #createTextAnnotationFromTokens(java.util.List)} instead.
-     * <p/>
+     * <p>
      * To create a {@link TextAnnotation} from raw text, please use {@code illinois-tokenizer}
      */
     @Override

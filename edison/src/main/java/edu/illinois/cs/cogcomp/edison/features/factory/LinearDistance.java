@@ -14,12 +14,12 @@ import java.util.Set;
  * Given two constituents, indicates distance between the two. The distance is quantized into one of
  * {0,1,2,3, many} and negatives indicate before. For multi-word constituents, the distance is
  * between the end of the first one and the start of the second.
- * <p/>
+ * <p>
  * <b>Important note</b>: To be able to specify the two constituents as input, the feature extractor
  * assumes the following convention: The constituent that is specified as a parameter to the
  * getFeatures function has an incoming relation from the first constituent. Furthermore, this
  * incoming relation should be the only such relation.
- * <p/>
+ * <p>
  * This convention does not limit the expressivity in any way because the two constituents could be
  * created on the spot before calling the feature extractor.
  *

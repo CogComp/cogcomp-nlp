@@ -29,7 +29,7 @@ import java.util.Scanner;
  * first looks up the lemma dictionary. If found, it returns the lemma. Otherwise, it checks against
  * a known list of contractions. Finally, it goes to WordNet. If the word is present in WordNet, the
  * lemma from WordNet is used. Otherwise, it defaults to the word itself (with case).
- * <p/>
+ * <p>
  * This lemmatizer lowercases words before finding their lemma. This could lead to errors. This
  * requires the file resources/verb-lemDict.txt in the classpath, which can be obtained from
  * cogcomp-common-resources.

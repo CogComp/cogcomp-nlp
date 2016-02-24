@@ -14,8 +14,8 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  *
  * Created by mssammon on 7/27/15.
  */
-public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
-    private static final String NAME = CcgTextAnnotationBuilder.class.getSimpleName();
+public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
+    private static final String NAME = TokenizerTextAnnotationBuilder.class.getSimpleName();
 
     private static final String DEFAULT_TEXT_ID = "dummyTextId";
     private static final String DEFAULT_CORPUS_ID = "dummyCorpusId";
@@ -27,7 +27,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
      * 
      * @param tokenizer The Tokenizer that will split text into sentences and words.
      */
-    public CcgTextAnnotationBuilder(Tokenizer tokenizer) {
+    public TokenizerTextAnnotationBuilder(Tokenizer tokenizer) {
         this.tokenizer = tokenizer;
     }
 
@@ -138,7 +138,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
     /**
      * Create a new text annotation using the given text, the tokens and the sentence boundary
      * positions (only the ending positions), specified in terms of the tokens.
-     * <p/>
+     * <p>
      * For example, for the text "Jack went up the hill. So did Jill.", the tokens would be the
      * array {"Jack", "went", "up", "the", "hill", "." ,"So", "did", "Jill", "."} and the array of
      * sentence boundary array would be {6, 11}. If the last element of the sentence boundary array
@@ -154,7 +154,7 @@ public class CcgTextAnnotationBuilder implements TextAnnotationBuilder {
      */
     public TextAnnotation buildTextAnnotation(String corpusId, String id, String text,
             String[] tokens, int[] sentenceEndPositions) {
-        return CcgTextAnnotationBuilder.buildTextAnnotation(corpusId, id, text, tokens,
+        return TokenizerTextAnnotationBuilder.buildTextAnnotation(corpusId, id, text, tokens,
                 sentenceEndPositions, "UserSpecified", 1.0d);
     }
 

@@ -3,7 +3,7 @@ package edu.illinois.cs.cogcomp.nlp.tokenizer;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -14,13 +14,14 @@ import static org.junit.Assert.assertTrue;
  *
  * Created by mssammon on 9/4/15.
  */
-public class CcgTextAnnotationBuilderTest {
+public class TokenizerTextAnnotationBuilderTest {
 
 
     @Test
     public void testBuilder() {
 
-        CcgTextAnnotationBuilder bldr = new CcgTextAnnotationBuilder(new IllinoisTokenizer());
+        TokenizerTextAnnotationBuilder bldr =
+                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
         final String sentA =
                 "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   ";

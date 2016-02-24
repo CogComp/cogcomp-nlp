@@ -8,7 +8,7 @@ import java.util.List;
  * length of a labeled span is one. In terms of the constituents and relations view, this means that
  * the TokenLabelView has {@code Constituent}s that are one token long and does not have any
  * {@code Relation}s. This class provides methods to add and get labels for a single token.
- * <p/>
+ * <p>
  * This class is best suited for views like Part-of-speech, lemma, etc.
  *
  * @author Vivek Srikumar

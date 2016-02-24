@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Feb 1, 2009
  */
 public class ExperimentRunner<T> {

@@ -12,7 +12,7 @@ import java.net.URL;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jun 24, 2009
  */
 public class XMLUtils {

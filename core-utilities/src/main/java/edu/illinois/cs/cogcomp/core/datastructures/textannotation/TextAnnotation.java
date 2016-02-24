@@ -15,11 +15,11 @@ import java.util.*;
 /**
  * This class contains all annotation for a single piece of text (which could contain more than one
  * sentence.)
- * <p/>
+ * <p>
  *
  * @author Vivek Srikumar
  */
-public class TextAnnotation extends AbstractTextAnnotation implements Serializable {
+public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -1308407121595094945L;
 
@@ -289,6 +289,13 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     public String toString() {
         return "TextAnnotation: " + this.getText();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        TextAnnotation ta = (TextAnnotation) super.clone();
+        ta.views = new HashMap<>(ta.views);
+        return ta;
     }
 
     public List<IntPair> getSpansMatching(String text) {

@@ -7,7 +7,7 @@ import java.util.Queue;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class BeamSearch<T> extends GraphSearch<T> {

@@ -9,9 +9,9 @@ import java.util.List;
 
 /**
  * Search trees for a fixed pattern.
- * <p/>
+ * <p>
  * <b>Usage:</b>
- * <p/>
+ * <p>
  * Suppose <code>tree</code> is some tree and we wish to find all instances of <code>pattern</code>
  * in it.
  * 
@@ -56,16 +56,16 @@ public class TreeGrep<T> {
 
     /**
      * This checks whether any subtrees of <code>tree</code> match the pattern.
-     * <p/>
+     * <p>
      * Note: Each subtree might have multiple matches within it that match the pattern. For example,
      * if the pattern is
-     * <p/>
+     * <p>
      * <code>(VP (NP NN )) </code>
-     * <p/>
+     * <p>
      * and the tree has
-     * <p/>
+     * <p>
      * <code> (VP (NP NN) (NP NN))</code>
-     * <p/>
+     * <p>
      * then, this function will only return the <code>(VP...)</code> subtree, and does not indicate
      * that there are two matches within that subtree, both rooted at the <code>VP</code>.
      */

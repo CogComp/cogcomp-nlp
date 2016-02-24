@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * This class has methods for conversion of non-UTF-8 characters to UTF-8, and from UTF-8 to Ascii.
  * These attempt to preserve character offsets, and to make intuitive replacements (see the
  * StringCleanup class from coreUtilities).
- * <p/>
+ * <p>
  * Other methods try to remove problem character sequences from text to avoid known problems with
  * NLP components for such sequences, but don't preserve character offsets.
  *
@@ -115,7 +115,7 @@ public class TextCleaner {
     /**
      * web documents sometimes use tildes and stars either for page section breaks or as bullets for
      * bullet points; these may cause problems to NLP components
-     * <p/>
+     * <p>
      * this method strips these characters completely
      */
     public static String replaceTildesAndStars(String origText_) {
@@ -129,10 +129,10 @@ public class TextCleaner {
 
     /**
      * replaces duplicate punctuation with single punctuation
-     * <p/>
+     * <p>
      * This sometimes happens due to a typo, or may be due to ad-hoc web formating -- in the latter
      * case, this may not have the ideal effect.
-     * <p/>
+     * <p>
      * In addition, use of double dashes and ellipses may cause problems to NLP components; this
      * should help, though it may introduce extra sentence breaks in the case of ellipses.
      */

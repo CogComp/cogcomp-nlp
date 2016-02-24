@@ -12,12 +12,12 @@ import java.util.Set;
 /**
  * Given two constituents, indicates whether the first is before or after the other or have an
  * overlap.
- * <p/>
+ * <p>
  * <b>Important note</b>: To be able to specify the two constituents as input, the feature extractor
  * assumes the following convention: The constituent that is specified as a parameter to the
  * getFeatures function has an incoming relation from the first constituent. Furthermore, this
  * incoming relation should be the only such relation.
- * <p/>
+ * <p>
  * This convention does not limit the expressivity in any way because the two constituents could be
  * created on the spot before calling the feature extractor.
  *

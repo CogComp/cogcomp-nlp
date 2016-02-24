@@ -14,7 +14,7 @@ import java.util.concurrent.*;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Sep 2, 2010
  */
 public class ParameterTuningHelper<T> {
@@ -56,7 +56,7 @@ public class ParameterTuningHelper<T> {
 
     /**
      * Splits the data into numFolds parts.
-     * <p/>
+     * <p>
      * Note: This splits the data into K folds uniformly. If the classes are not equally
      * distributed, then this is wrong. Instead, override this to do a stratified split, so that the
      * split proportions are maintained.

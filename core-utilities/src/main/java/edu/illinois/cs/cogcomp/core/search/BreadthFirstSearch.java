@@ -5,7 +5,7 @@ import java.util.Queue;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class BreadthFirstSearch<T> extends GraphSearch<T> {

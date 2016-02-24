@@ -21,15 +21,15 @@ import java.util.Set;
  * features. Otherwise, the lemma of the last token is used. If the lemma is not an element of
  * NomLex, then the last token (lower cased) is tested. If NomLex does not contain the last token,
  * then an indicator feature is added that this token is not a member of NomLex.
- * <p/>
+ * <p>
  * When the NomLex entry is found, the following features are added:
  * <ul>
  * <li>Nom class</li>
  * <li>For verbal and adjectival nominalizations, the underlying verb (or adjective).</li>
  * </ul>
- * <p/>
- * <p/>
- * <p/>
+ * <p>
+ * <p>
+ * <p>
  * <b>Note</b>: To use this feature, NomLexReader.nomLexFile must be set.
  *
  * @author Vivek Srikumar

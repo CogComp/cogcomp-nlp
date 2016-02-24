@@ -17,7 +17,7 @@ import java.util.Set;
 /**
  * Adds a collection of features that correspond to Levin's verb classes, as defined in
  * "English Verb Classes And Alternations: A Preliminary Investigation"
- * <p/>
+ * <p>
  * This class assumes the existence of a file called <i>verbClass.txt</i> in the class path. If the
  * input constituent has an attribute called {@link CoNLLColumnFormatReader#LemmaIdentifier}, it
  * treats the attribute as the lemma of the verb. This lemma is used to index Levin's list and the

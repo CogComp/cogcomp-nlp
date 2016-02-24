@@ -6,11 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Ignores a public static function. A function that is tagged with this tag will not be exposed to
  * the shell.
- * <p/>
+ * <p>
  * Usage:
- * <p/>
+ * <p>
  * <code> @CommandIgnore </code>
- * <p/>
+ * <p>
  * <code> public static void Foo(String bar) {...</code>
  *
  * @author vivek

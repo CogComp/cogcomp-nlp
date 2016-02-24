@@ -66,11 +66,11 @@ public class PMIHelper {
 
     /**
      * Use this funtion to include variants into the same bucket.
-     * <p/>
+     * <p>
      * For example, say you want to PMI for "hair of girl" and want to include {"hair", "the hair"}
      * to get counts for the left part, and {"girl", "the girl", "a girl"} for the right and all
      * combinations for leftRight, you need to call
-     * <p/>
+     * <p>
      * <code>
      * String[] leftRight = {"hair of girl", "hair of the girl", ..., "the hair of girl",...};
      * String[] right = {"girl", "the girl", "a girl"};
