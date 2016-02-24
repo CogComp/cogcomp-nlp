@@ -7,7 +7,7 @@ import java.io.Serializable;
  * {@code S transform(T input)}, which takes an object of type T and returns one of type S.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Dec 20, 2008
  */
 public abstract class ITransformer<T, S> implements Serializable {

@@ -19,7 +19,9 @@ import java.util.Set;
 
 /**
  * Prepares the word.features.test and feature.collection.text files used for the Maven Tests NB:
- * File test.ta needs to exist (see {@link CreateTestTAResource}
+ * File test.ta needs to exist
+ *
+ * TODO: 2/15/16 Needs to be switched to use DummyTextAnnotationGenerator
  *
  * @author Christos Christodoulopoulos
  */

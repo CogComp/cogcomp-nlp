@@ -19,9 +19,9 @@ import java.util.Set;
 /**
  * This feature extractor generates the following WordNet based features from a word: synonyms,
  * synsets, hypernyms, hypernym-sets.
- * <p/>
+ * <p>
  * The behavior for multiple word constituents is just like the {@link WordFeatureExtractor}:
- * <p/>
+ * <p>
  * If the input constituent is not a word, then the feature extractor can do one of two things: If a
  * flag is set in the constructor, then it will generate features from the last word of the
  * constituent. If the flag is not set, then it will throw a {@code FeatureException}.
@@ -35,7 +35,7 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
 
     /**
      * Creates a new WordNetFeatureExtractor.
-     * <p/>
+     * <p>
      * It is probably safest to the parameter {@code useLastWord} to true. This will provide a check
      * to ensure that the WordNetFeatureExtractor only sees words.
      */

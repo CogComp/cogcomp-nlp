@@ -10,12 +10,12 @@ import java.util.Set;
 /**
  * A ContextFeatureExtractor generates features from the <b>words</b> in the context of the
  * specified constituent. The constructor specifies the context size.
- * <p/>
+ * <p>
  * To use this class, after creating the object, add other feature extractors using the
  * {@link edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
  * method. Then, for each neighboring word, the feature extractor will generate features using all
  * the extractors that have been added.
- * <p/>
+ * <p>
  * Note: This class only generates features from neighboring words. To go beyond words, new code
  * needs to be written as required.
  *

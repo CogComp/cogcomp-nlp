@@ -5,11 +5,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 /**
  * The interface that will be used by any TextAnnotation creation method that requires tokenization.
  * An implementation using CogComp's default tokenizer can be found in {@code illinois-tokenizer}
- * <p/>
+ * <p>
  * A class that implements this interface must create two views:
  * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} and
  * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#TOKENS}.
- * <p/>
+ * <p>
  * To create a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
  * from pre-tokenized text (e.g. from training corpora) please use
  * {@link BasicTextAnnotationBuilder}.

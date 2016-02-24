@@ -4,7 +4,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.reader.OntoNotesJsonReader;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utility.EvaluationCriteria;
 import edu.illinois.cs.cogcomp.nlp.utility.Utility;
 
@@ -37,8 +37,8 @@ public class Evaluator {
      * Evaluate the IllinoisTokenizer based on criteria.
      */
     public void evaluateIllinoisTokenizer(EvaluationCriteria criteria) {
-        CcgTextAnnotationBuilder illinoisTokenizer =
-                new CcgTextAnnotationBuilder(new IllinoisTokenizer());
+        TokenizerTextAnnotationBuilder illinoisTokenizer =
+                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
         // This is not the best method to pass the raw sentences, since the sentence splitter
         // might make different choices, but for now it works.
         String rawString = "";

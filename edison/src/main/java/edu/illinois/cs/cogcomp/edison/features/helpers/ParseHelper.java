@@ -24,7 +24,7 @@ import java.util.List;
  * parse view.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Sep 30, 2009
  */
 public class ParseHelper {
@@ -483,7 +483,7 @@ public class ParseHelper {
     /**
      * Get the head word of a constituent using the {@link HeadFinderBase} that is passed as an
      * argument. To use this function, first, a head finder should be created. For example:
-     * <p/>
+     * <p>
      * 
      * <pre>
      *   TextAnnotation ta = ... // some text annotation

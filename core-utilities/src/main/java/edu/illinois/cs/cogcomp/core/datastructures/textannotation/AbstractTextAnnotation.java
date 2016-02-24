@@ -11,10 +11,10 @@ import java.util.*;
 /**
  * This is the abstract class that represents annotation for text -- this could represent a
  * paragraph or just a sentence.
- * <p/>
+ * <p>
  * This class stores the raw text, the tokens and the list of views available for the text and
  * provides methods for adding new views.
- * <p/>
+ * <p>
  *
  * @author Vivek Srikumar
  * @see edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
@@ -206,11 +206,11 @@ public abstract class AbstractTextAnnotation implements Serializable {
 
     /**
      * Set the tokens for this text.
-     * <p/>
+     * <p>
      * <b>NOTE</b>: This function should not be called by any method that is not a {@code Tokenizer}
      * and will throw an exception if tokens are set more than once. So do not call this function
      * unless you know what you are doing.
-     * <p/>
+     * <p>
      *
      * @param tokens An array of tokens
      * @param tokenCharacterOffsets An array, whose length is the same as {@code tokens}. Each
@@ -238,22 +238,22 @@ public abstract class AbstractTextAnnotation implements Serializable {
     /**
      * Gets a queryable list of all constituents from the view, represented by {@code viewName}.
      * This function can be used for SQL-like queries on the text.
-     * <p/>
+     * <p>
      * Examples: In all the examples that follow, we assume that {@code text} is a variable of type
      * {@code AbstractTextAnnotation}.
-     * <p/>
+     * <p>
      * <ol>
      * <li>Given a constituent {@code srlConstituent} from the SRL_VERB view, find all constituents
      * in the parse view that cover exactly this constituent.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * 
      * <pre>
      * List&lt;Constituent&gt; parseConstituent = text.select(ViewNames.PARSE).where(
      *         Queries.sameSpanAsConstituent(srlConstituent));
      * </pre>
      * 
-     * <p/>
+     * <p>
      * </ol>
      *
      * @see QueryableList

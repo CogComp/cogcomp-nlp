@@ -10,13 +10,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SpanLabelingEvaluator extends Evaluator {
+public class ConstituentLabelingEvaluator extends Evaluator {
 
-    SpanLabelView gold, prediction;
+    View gold, prediction;
 
     public void setViews(View gold, View prediction) {
-        this.gold = (SpanLabelView) gold;
-        this.prediction = (SpanLabelView) prediction;
+        this.gold = gold;
+        this.prediction = prediction;
     }
 
     public void evaluate(ClassificationTester tester) {

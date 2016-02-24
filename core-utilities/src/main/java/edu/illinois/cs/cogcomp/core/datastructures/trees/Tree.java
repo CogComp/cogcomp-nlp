@@ -28,7 +28,7 @@ public class Tree<T> implements Serializable {
 
     /**
      * Default constructor for a tree.
-     * <p/>
+     * <p>
      * The constructed tree will not have any label, children.
      */
     public Tree() {
