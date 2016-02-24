@@ -143,7 +143,8 @@ public class Counter<T extends Serializable> implements Serializable {
 
     public List<T> getSortedItemsHighestFirst() {
         List<T> inverseSortedItems = getSortedItems();
-        Collections.sort(inverseSortedItems, comparator.reversed());
+        // sort the list in reverse order
+        Collections.sort(inverseSortedItems, Collections.reverseOrder(comparator));
         return inverseSortedItems;
     }
 }
