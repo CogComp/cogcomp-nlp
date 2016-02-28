@@ -1,12 +1,18 @@
 package edu.illinois.cs.cogcomp.core.stats;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * testing Counter.min() and .max() behavior.
- * Created by Shyam on 12/10/15.
+ * Counter test: max, sorted items
+ * @author Shyam Upadhyay
+ * @author Christos Christodoulopoulos
+ * @since 12/10/15.
  */
-public class TestCounter extends TestCase {
+public class TestCounter {
+
+    @Test
     public void testCounter() {
         Counter<String> cnt = new Counter<>();
         cnt.incrementCount("a");
@@ -21,5 +27,8 @@ public class TestCounter extends TestCase {
         cnt.incrementCount("c");
         assertEquals("a", cnt.getMax().getFirst());
         assertEquals("z", cnt.getMin().getFirst());
+
+        assertEquals("z", cnt.getSortedItems().get(0));
+        assertEquals("a", cnt.getSortedItemsHighestFirst().get(0));
     }
 }

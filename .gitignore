@@ -1,6 +1,6 @@
 .idea
 *.log
-*/target
+**/target
 *.iml
 edison/wordnet/
 

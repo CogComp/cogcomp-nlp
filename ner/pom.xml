@@ -11,6 +11,14 @@
 
     <artifactId>illinois-ner</artifactId>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -55,10 +63,19 @@
                 <version>1.2.10</version>
                 <configuration>
                     <lbjavaInputFileList>
-                        <param>src/main/lbj/LbjTagger.lbj</param>
+                        <param>${project.basedir}/src/main/lbj/LbjTagger.lbj</param>
                     </lbjavaInputFileList>
+                    <gspFlag>${project.basedir}/src/main/java</gspFlag>
+                    <dFlag>${project.basedir}/target/classes</dFlag>
                 </configuration>
                 <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
