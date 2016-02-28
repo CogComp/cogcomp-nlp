@@ -20,7 +20,7 @@ public class NerBaseConfigurator extends Configurator {
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
 
-    public final static String CONFIG_NAME = "configFilename";
+    public final static String MODEL_NAME = "modelName";
     public final static String TAG_SCHEME = "taggingEncodingScheme";
     // public final static String TOKENIZATION_SCHEME = "tokenizationScheme";
     public final static String FORCE_NEW_SENTENCE_ON_LINE_BREAKS = "forceNewSentenceOnLineBreaks";
@@ -113,7 +113,7 @@ public class NerBaseConfigurator extends Configurator {
         props.setProperty(VIEW_NAME, ViewNames.NER_CONLL);
         props.setProperty(PHRASE_LENGTH, DEFAULT_PHRASE_LENGTH);
         props.setProperty(PATH_TO_MODEL, DEFAULT_MODEL_PATH);
-        props.setProperty(CONFIG_NAME, DEFAULT_CONFIG_NAME);
+        props.setProperty(MODEL_NAME, DEFAULT_CONFIG_NAME);
         props.setProperty(AFFIXES, DEFAULT_AFFIXES);
         props.setProperty(AGGREGATE_CONTEXT, DEFAULT_AGGREGATE_CONTENT);
         props.setProperty(AGGREGATE_GAZETTEER, DEFAULT_AGGREGATE_GAZETTEER);
