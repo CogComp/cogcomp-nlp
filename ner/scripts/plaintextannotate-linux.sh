@@ -44,7 +44,7 @@ for i in models/*.jar; do
 done
 
 
-CMD="java -classpath $cpath -Xmx4g edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -annotate ${TEST_IN} ${TEST_OUT} ${CONFIG}"
+CMD="java -classpath $cpath -Xmx4g edu.illinois.cs.cogcomp.ner.NerTagger -annotate ${TEST_IN} ${TEST_OUT} ${CONFIG}"
 
 echo "$0: running command '$CMD'..."
 
