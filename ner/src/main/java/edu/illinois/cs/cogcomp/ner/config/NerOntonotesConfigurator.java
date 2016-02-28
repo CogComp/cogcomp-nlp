@@ -26,7 +26,7 @@ public class NerOntonotesConfigurator extends Configurator {
         props.setProperty(NerBaseConfigurator.TREAT_ALL_FILES_AS_ONE, FALSE);
         props.setProperty(NerBaseConfigurator.PATH_TO_MODEL, DEFAULT_ONTONOTES_MODEL_PATH);
         props.setProperty(NerBaseConfigurator.LABEL_TYPES, ONTONOTES_LABEL_TYPES);
-        props.setProperty(NerBaseConfigurator.CONFIG_NAME, ONTONOTES_CONFIG_NAME);
+        props.setProperty(NerBaseConfigurator.MODEL_NAME, ONTONOTES_CONFIG_NAME);
         return (new NerBaseConfigurator()).getConfig(new ResourceManager(props));
     }
 }
