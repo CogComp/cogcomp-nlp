@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.illinois.cs.cogcomp.pos.TrainedPOSTagger;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -39,6 +40,7 @@ public class TestDiff {
     private static List<String[]> refTokens;
     private static final double thresholdAcc = 0.95;
 
+    @Before
     public void setUp() throws IOException, URISyntaxException {
         URL testFileURL = TestDiff.class.getClassLoader().getResource(testFileName);
         assertNotNull("Test file missing", testFileURL);
