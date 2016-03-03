@@ -21,6 +21,7 @@ import java.io.IOException;
 
 /**
  *
+ * Returns conjunctions of previous three POSTags and previous two ChunkLabels
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
