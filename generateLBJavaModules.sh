@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 
-## declare a list of modules which are use lbjava
+## declare a list of modules which are use lbjava (no commas, just space)
 declare -a folders=("pos")
 
 ## now loop through the above array
 for f in "${folders[@]}"
 do
-    cd "$f"
-    mvn lbjava:generate
-    cd ..
+    if [ -d "$f" ]
+    then
+        echo "Generating files for $f . . . "
+        cd "$f"
+        mvn lbjava:generate
+        cd ..
+    else
+        echo "Warning: Directory $f does not exists."
+    fi
 done
 
 
