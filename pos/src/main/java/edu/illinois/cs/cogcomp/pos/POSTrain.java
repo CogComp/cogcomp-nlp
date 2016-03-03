@@ -8,16 +8,16 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import java.io.File;
 
 /**
- * Simple class to build and train models from existing training data, as opposed to
- * using the prepackaged jar.
+ * Simple class to build and train models from existing training data, as opposed to using the
+ * prepackaged jar.
  *
  * @author James Chen
  * @author Christos Christodoulopoulos
  */
 public class POSTrain {
     private static final String NAME = POSTrain.class.getCanonicalName();
-    private String modelPath;   // Path to the directory where the models are stored.
-    private int iter;           // Number of training iterations
+    private String modelPath; // Path to the directory where the models are stored.
+    private int iter; // Number of training iterations
     private POSTaggerKnown taggerKnown;
     private POSTaggerUnknown taggerUnknown;
     private MikheevTable mikheevTable;
@@ -57,6 +57,7 @@ public class POSTrain {
 
     /**
      * Trains the taggers with specified, labeled training data.
+     * 
      * @param trainingData The labeled training data
      */
     public void trainModels(String trainingData) {
@@ -117,29 +118,31 @@ public class POSTrain {
     }
 
     public static void main(String[] args) {
-        if ( args.length != 2 && args.length != 1) {
-            System.err.println( "Usage: " + NAME + " modelPath [trainingFile]" );
-            System.err.println( "'trainingDataFile' must contain training data in specified format (" +
-                "see doc/README); 'modelPath' specifies directory to which the learned models will be written." );
-            System.exit( -1 );
+        if (args.length != 2 && args.length != 1) {
+            System.err.println("Usage: " + NAME + " modelPath [trainingFile]");
+            System.err
+                    .println("'trainingDataFile' must contain training data in specified format ("
+                            + "see doc/README); 'modelPath' specifies directory to which the learned models will be written.");
+            System.exit(-1);
         }
-        String modelPath = args[ 0 ];
-	String trainingFile = null;
+        String modelPath = args[0];
+        String trainingFile = null;
         if (args.length == 2) {
-          trainingFile = args[ 1 ];
+            trainingFile = args[1];
         }
 
-        File writeDir = new File( modelPath );
-        if ( !writeDir.exists() ) {
-            System.err.println( NAME + ".writeModelsToDisk(): creating dir '" + writeDir.getName() + "'..." );
+        File writeDir = new File(modelPath);
+        if (!writeDir.exists()) {
+            System.err.println(NAME + ".writeModelsToDisk(): creating dir '" + writeDir.getName()
+                    + "'...");
             writeDir.mkdir();
         }
 
-        POSTrain trainer = new POSTrain( modelPath );
+        POSTrain trainer = new POSTrain(modelPath);
         if (trainingFile == null) {
-          trainer.trainModels();
+            trainer.trainModels();
         } else {
-          trainer.trainModels( trainingFile );
+            trainer.trainModels(trainingFile);
         }
 
         trainer.writeModelsToDisk();

@@ -11,30 +11,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Convenience classes for mapping between data structures used by Curator and LBJ.
- * Obsolete (?) when using new AnnotatorService pipeline architecture.
+ * Convenience classes for mapping between data structures used by Curator and LBJ. Obsolete (?)
+ * when using new AnnotatorService pipeline architecture.
  *
  * Created by mssammon on 8/24/15.
  */
 @Deprecated
 public class LBJavaUtils {
 
-
-
     /**
-     * Converts a record into LBJ Tokens for use with LBJ classifiers.
-     * If part of speech is present in record, it is added to the LBJ tokens.
+     * Converts a record into LBJ Tokens for use with LBJ classifiers. If part of speech is present
+     * in record, it is added to the LBJ tokens.
      */
     public static List<Token> recordToLBJTokens(TextAnnotation record) {
         List<Token> lbjTokens = new LinkedList<>();
-        List<List<String>> sentences = tokensAsStrings(record.getView(ViewNames.TOKENS).getConstituents(),
-                record.getView( ViewNames.SENTENCE).getConstituents(),
-                record.getText());
+        List<List<String>> sentences =
+                tokensAsStrings(record.getView(ViewNames.TOKENS).getConstituents(),
+                        record.getView(ViewNames.SENTENCE).getConstituents(), record.getText());
 
         List<Constituent> tags = null;
 
-        if ( record.hasView( ViewNames.POS ) )
-            tags = record.getView( ViewNames.POS ).getConstituents();
+        if (record.hasView(ViewNames.POS))
+            tags = record.getView(ViewNames.POS).getConstituents();
 
         int tagIndex = 0;
 
@@ -61,9 +59,8 @@ public class LBJavaUtils {
                 }
 
                 Word wcurrent = new Word(token, wprevious);
-                if ( null != tags )
-                {
-                    Constituent tag = tags.get( tagIndex++ );
+                if (null != tags) {
+                    Constituent tag = tags.get(tagIndex++);
                     wcurrent.partOfSpeech = tag.getLabel();
                 }
 
@@ -80,18 +77,16 @@ public class LBJavaUtils {
     }
 
     /**
-     * Converts sentences and tokens represented as spans into a list of lists
-     * of string.
+     * Converts sentences and tokens represented as spans into a list of lists of string.
      */
     public static List<List<String>> tokensAsStrings(List<Constituent> tokens,
-                                                      List<Constituent> sentences,
-                                                      String rawText) {
+            List<Constituent> sentences, String rawText) {
         List<List<String>> strTokens = new ArrayList<>();
         int sentNum = 0;
         Constituent sentence = sentences.get(sentNum);
         strTokens.add(new ArrayList<String>());
         for (Constituent token : tokens) {
-            if (token.getStartSpan() >= sentence.getEndSpan() ) {
+            if (token.getStartSpan() >= sentence.getEndSpan()) {
                 strTokens.add(new ArrayList<String>());
                 sentNum++;
                 sentence = sentences.get(sentNum);
