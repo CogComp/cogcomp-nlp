@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
+pckage edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -17,6 +17,7 @@ import java.util.*;
 
 /**
  * 
+ * Returns a set of prefixes of length 3 and 4 and suffixes of length 1, 2, 3, and 4.
  * This feature extractor assumes that the TOKEN View have been generated.
  * It generates features related to the prefixes and suffixes of the given
  * constiteunt. This constient may not be a single word.
