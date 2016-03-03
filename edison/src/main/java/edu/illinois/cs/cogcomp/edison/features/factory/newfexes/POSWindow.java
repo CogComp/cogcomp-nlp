@@ -21,6 +21,7 @@ import java.io.IOException;
 
 /**
  *
+ * Generates features for POSTags of window size 2 from given Constituent
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
@@ -107,4 +108,4 @@ public class POSWindow implements FeatureExtractor {
     public String getName() {
 	return "#path#" + viewName;
     }    
-}
+}G
