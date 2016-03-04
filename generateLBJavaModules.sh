@@ -10,12 +10,9 @@ do
     then
         echo "Generating files for $f . . . "
         cd "$f"
-        mvn lbjava:generate
+        mvn lbjava:clean lbjava:generate
         cd ..
     else
         echo "Warning: Directory $f does not exists."
     fi
 done
-
-
-
