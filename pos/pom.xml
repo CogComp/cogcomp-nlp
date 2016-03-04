@@ -57,6 +57,15 @@
                     <dFlag>${project.basedir}/target/classes</dFlag>
                     <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>clean</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
