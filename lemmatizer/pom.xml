@@ -17,7 +17,26 @@
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.21</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-edison</artifactId>
+            <version>3.0.21</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.mit</groupId>
+            <artifactId>jwi</artifactId>
+            <version>2.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.princeton</groupId>
+            <artifactId>wordnet-dict</artifactId>
+            <version>3.1</version>
+        </dependency>
     </dependencies>
-
 
 </project>

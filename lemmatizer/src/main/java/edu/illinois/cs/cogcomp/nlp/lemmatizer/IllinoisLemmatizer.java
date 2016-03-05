@@ -1,135 +1,131 @@
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import org.tartarus.snowball.SnowballStemmer;
+import org.tartarus.snowball.ext.englishStemmer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 public class IllinoisLemmatizer extends Annotator {
-    public static String USE_STANFORD_LEMMA_CONVENTION = "useStanfordConvention";
-
     private static final String NAME = IllinoisLemmatizer.class.getCanonicalName();
-
     private static final String verbLemmaFile = "verb-lemDict.txt";
-    private static final String exceptionsFile = "exceptions.txt";
-    private Map<String, String> verbLemmaMap;
-    private Map<String, String> verbBaseMap;
-    private Map<String, String> exceptionsMap;
+    private static Map<String, String> verbLemmaMap;
+    private static Map<String, String> verbBaseMap;
+    private final static SnowballStemmer stemmer = new englishStemmer();
+    private static Map<String, String> contractions;
+    private static MorphaStemmer morphaStemmer = new MorphaStemmer();
     private WordnetLemmaReader wnLemmaReader;
-    private Map<String, String> contractions;
-    private Map<String, String> toStanford;
-
-    private boolean useStanford;
-
-    private static boolean useStanford_default = false;
-    private static String wnpath_default = "WordNet-3.0/dict";
 
     public IllinoisLemmatizer() {
-        this(useStanford_default, wnpath_default);
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize(new LemmatizerConfigurator().getDefaultConfig());
     }
 
     public IllinoisLemmatizer(ResourceManager rm) {
-        this(rm.getBoolean(USE_STANFORD_LEMMA_CONVENTION, (Boolean.toString(useStanford_default))),
-                rm.getString("wnpath", wnpath_default));
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize(new LemmatizerConfigurator().getConfig(rm));
     }
 
-    public IllinoisLemmatizer(boolean useStanfordConvention, String wnpath) {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        this.useStanford = useStanfordConvention;
-        wnLemmaReader = new WordnetLemmaReader(wnpath);
-        loadVerbMap();
-        loadExceptionMap();
+    public void initialize(ResourceManager rm) {
+        wnLemmaReader = new WordnetLemmaReader(rm.getString(LemmatizerConfigurator.WN_PATH.key));
+        verbLemmaMap = loadMap();
+
         contractions = new HashMap<>();
+        contractions.put("’d", "have");
+        contractions.put("’ll", "will");
+        contractions.put("’s", "’s");
+        contractions.put("’re", "be");
+        contractions.put("’m", "be");
+        contractions.put("’ve", "have");
         contractions.put("'d", "have");
         contractions.put("'ll", "will");
         contractions.put("'s", "'s");
         contractions.put("'re", "be");
         contractions.put("'m", "be");
         contractions.put("'ve", "have");
-        // contractions.put("ca", "can");
-
-        toStanford = new HashMap<>();
-
-        toStanford.put("her", "she");
-        toStanford.put("him", "he");
-        toStanford.put("is", "be");
-        toStanford.put("their", "they");
-        toStanford.put("them", "they");
-        toStanford.put("me", "i");
-        toStanford.put("an", "a");
-    }
-
-    private void loadExceptionMap() {
-        exceptionsMap = new HashMap<>();
-
-        for (String line : readFromClasspath(exceptionsFile)) {
-            String[] parts = line.split("\\s+");
-            exceptionsMap.put(parts[0], parts[1]);
-        }
+        contractions.put("ca", "can");
     }
 
     // load verb resources
-    private void loadVerbMap() {
-        verbLemmaMap = new HashMap<>();
+    private Map<String, String> loadMap() {
+        Map<String, String> mm = new HashMap<>();
         verbBaseMap = new HashMap<>();
+        InputStream in = ClassLoader.getSystemResourceAsStream(verbLemmaFile);
 
-        for (String line : readFromClasspath(verbLemmaFile)) {
+        Scanner scanner = new Scanner(in);
+
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine().trim();
+            if (line.length() == 0)
+                continue;
             String[] parts = line.split("\\s+");
 
             String lemma = parts[0];
-            this.verbBaseMap.put(lemma, lemma);
+            verbBaseMap.put(lemma, lemma);
             for (int i = 1; i < parts.length; i++)
-                verbLemmaMap.put(parts[i], lemma);
+                mm.put(parts[i], lemma);
         }
+        scanner.close();
+
+        return mm;
     }
 
-    public static List<String> readFromClasspath(String filename) {
-        List<String> lines = null;
-        try {
-            InputStream resource =
-                    IOUtils.lsResources(IllinoisLemmatizer.class, filename).get(0).openStream();
-            lines =
-                    LineIO.read(resource, Charset.defaultCharset().name(),
-                            new ITransformer<String, String>() {
-                                public String transform(String line) {
-                                    return line;
-                                }
-                            });
-        } catch (IOException e) {
-            System.err.println("Error while trying to read " + filename + ".");
-            System.exit(-1);
-        } catch (URISyntaxException e) {
-            System.err.println("Error while trying to read " + filename + ".");
-            System.exit(-1);
+    /**
+     * create a Lemma view in the TextAnnotation argument, and return a reference to that View.
+     */
+    public View createLemmaView(TextAnnotation inputTa) throws IOException {
+        String[] toks = inputTa.getTokens();
+        TokenLabelView lemmaView = new TokenLabelView(ViewNames.LEMMA, NAME, inputTa, 1.0);
+
+        for (int i = 0; i < toks.length; ++i) {
+            String lemma = getLemma(inputTa, i);
+            Constituent lemmaConstituent =
+                    new Constituent(lemma, ViewNames.LEMMA, inputTa, i, i + 1);
+            lemmaView.addConstituent(lemmaConstituent);
         }
-        return lines;
+
+        inputTa.addView(ViewNames.LEMMA, lemmaView);
+
+        return lemmaView;
+    }
+
+    @Override
+    public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
+        View v = null;
+
+        try {
+            v = this.createLemmaView(textAnnotation);
+        } catch (IOException e) {
+            e.printStackTrace();
+            String msg =
+                    NAME + ".getView(): caught IOException trying to create view: "
+                            + e.getMessage();
+            throw new AnnotatorException(msg);
+        }
+
+        textAnnotation.addView(getViewName(), v);
     }
 
     /**
      * get a lemma for the token at index tokIndex in TextAnnotation ta.
-     * 
+     *
      * @param ta TextAnnotation to query for lemma; MUST have POS view.
      * @param tokIndex token index for word to lemmatize
      * @return a String representing a lemma with the POS found for the corresponding word
      */
-
-    public String getLemma(TextAnnotation ta, int tokIndex) {
+    public String getLemma(TextAnnotation ta, int tokIndex) throws IOException {
         if (tokIndex >= ta.getTokens().length) {
             String msg =
                     "ERROR: " + NAME + ".getLemma(): index '" + tokIndex
@@ -140,10 +136,9 @@ public class IllinoisLemmatizer extends Annotator {
         }
 
         String word = ta.getToken(tokIndex).toLowerCase().trim();
-        String pos = ta.getView(ViewNames.POS).getLabelsCoveringToken(tokIndex).get(0);
+        String pos = WordHelpers.getPOS(ta, tokIndex);
         return getLemma(word, pos);
     }
-
 
     /**
      * included for backward compatibility: wraps getLemma().
@@ -154,7 +149,7 @@ public class IllinoisLemmatizer extends Annotator {
      */
 
     @Deprecated
-    public String getSingleLemma(TextAnnotation ta, int tokIndex) {
+    public String getSingleLemma(TextAnnotation ta, int tokIndex) throws IOException {
         return getLemma(ta, tokIndex);
     }
 
@@ -166,28 +161,15 @@ public class IllinoisLemmatizer extends Annotator {
      * @param pos Part-of-speech of word
      * @return String representing lemma (root form) of word
      */
-
     public String getLemma(String word, String pos) {
-
-        word = word.toLowerCase();
-
-        // look at file
         boolean posVerb = POSUtils.isPOSVerb(pos) || pos.startsWith("VB");
         boolean knownLemma = verbLemmaMap.containsKey(word);
         boolean contraction = contractions.containsKey(word);
-        boolean exception = exceptionsMap.containsKey(word);
 
-        // first try exceptions
-        if (exception) {
-            return exceptionsMap.get(word);
-        }
-
-        // narrow re case
-        // all res are verbs
         String replaceRE = word.replace("re-", "");
         boolean knownTrimmedLemma = word.startsWith("re-") && verbLemmaMap.containsKey(replaceRE);
 
-        String lemma;
+        String lemma = null;
 
         if (word.indexOf('@') >= 0) {
             return word;
@@ -195,10 +177,6 @@ public class IllinoisLemmatizer extends Annotator {
 
         if (pos.startsWith("V") && (word.equals("'s") || word.equals("’s"))) {
             return "be";
-        }
-
-        if (useStanford && toStanford.containsKey(word)) {
-            return toStanford.get(word);
         }
 
         if (contraction) {
@@ -215,7 +193,7 @@ public class IllinoisLemmatizer extends Annotator {
 
         if (pos.equals("JJR") || pos.equals("JJS") || pos.equals("RBR") || pos.equals("RBS")
                 || pos.equals("RB")) {
-            return word;
+            return word.toLowerCase();
         }
 
         if (posVerb && knownLemma) {
@@ -239,6 +217,7 @@ public class IllinoisLemmatizer extends Annotator {
         if (pos.startsWith("N") || pos.startsWith("J") || pos.startsWith("R")
                 || pos.startsWith("V")) {
             lemma = wnLemmaReader.getLemma(word, pos);
+
             if (lemma != null)
                 return lemma;
             if (word.endsWith("men")) {
@@ -251,33 +230,13 @@ public class IllinoisLemmatizer extends Annotator {
         }
 
         if (word.endsWith("s") || pos.endsWith("S")) {
-            lemma = MorphaStemmer.stem(word);
+            lemma = morphaStemmer.stem(word);
             return lemma;
         }
         return word;
+
     }
 
-    /**
-     * create a Lemma view in the TextAnnotation argument, and return a reference to that View.
-     */
-    public View createLemmaView(TextAnnotation inputTa) throws IOException {
-        String[] toks = inputTa.getTokens();
-        TokenLabelView lemmaView = new TokenLabelView(ViewNames.LEMMA, NAME, inputTa, 1.0);
-
-        for (int i = 0; i < toks.length; ++i) {
-            String lemma = getLemma(inputTa, i);
-            Constituent lemmaConstituent =
-                    new Constituent(lemma, ViewNames.LEMMA, inputTa, i, i + 1);
-            lemmaView.addConstituent(lemmaConstituent);
-        }
-
-        inputTa.addView(ViewNames.LEMMA, lemmaView);
-
-        return lemmaView;
-    }
-
-
-    // main
     public static void main(String[] args) {
         IllinoisLemmatizer lem = new IllinoisLemmatizer();
 
@@ -297,25 +256,8 @@ public class IllinoisLemmatizer extends Annotator {
         lemma = lem.getLemma("putting", "VBG");
         System.out.println(lemma);
 
+        System.out.println("Getting lemmas for 'me': ");
+        lemma = lem.getLemma("me", "PRP");
+        System.out.println(lemma);
     }
-
-
-
-    @Override
-    public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
-        View v = null;
-
-        try {
-            v = this.createLemmaView(textAnnotation);
-        } catch (IOException e) {
-            e.printStackTrace();
-            String msg =
-                    NAME + ".getView(): caught IOException trying to create view: "
-                            + e.getMessage();
-            throw new AnnotatorException(msg);
-        }
-
-        textAnnotation.addView(getViewName(), v);
-    }
-
 }
