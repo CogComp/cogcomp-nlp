@@ -77,8 +77,8 @@ public class MorphaStemmer {
 
         StringBuilder result = new StringBuilder();
         try {
-            for (int i = 0; i < textParts.length; i++) {
-                Morpha morpha = new Morpha(new StringReader(textParts[i]), tags);
+            for (String textPart : textParts) {
+                Morpha morpha = new Morpha(new StringReader(textPart), tags);
 
                 if (result.length() != 0) {
                     result.append(" ");
