@@ -18,14 +18,14 @@ import edu.illinois.cs.cogcomp.lbjava.parse.*;
  * this program. When this program has completed, the {@link POSTagger} class will implement the
  * best peforming classifier arrived at during the search.
  *
- * <h4>Usage</h4> <blockquote><code>
+ * <h1>Usage</h1> <blockquote><code>
  *   java edu.illinois.cs.cogcomp.lbj.pos.LearningCurve \
  *            &lt;knownThicknessLB&gt; &lt;knownThicknessUB&gt; \
  *            &lt;unKnownThicknessLB&gt; &lt;unKnownThicknessUB&gt; \
  *            &lt;rounds&gt;
  * </code></blockquote>
  *
- * <h4>Input</h4> The first four command line parameters are lower bounds (hence, LB) and upper
+ * <h1>Input</h1> The first four command line parameters are lower bounds (hence, LB) and upper
  * bounds (hence, UB) for the first two parameters in the search, which are the thicknesses of the
  * separators in each of the two learning classifiers. These are all real values. All values in
  * increments of 0.5 between and including the lower and upper bounds for each parameter are part of
@@ -33,7 +33,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.*;
  * rounds that each learning classifier will be trained for. The complete tagger is tested after
  * each round.
  *
- * <h4>Output</h4> For each combination of the thickness parameter settings, a file is created in
+ * <h1>Output</h1> For each combination of the thickness parameter settings, a file is created in
  * the <code>curves/</code> directory whose name is of the form <code>curve_<i>k</i>_<i>u</i></code>
  * , where <code><i>k</i></code> is the thickness setting for {@link POSTaggerKnown} and
  * <code><i>u</i></code> is the thickness setting for {@link POSTaggerUnknown}. Each line of text in

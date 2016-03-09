@@ -13,13 +13,13 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
  * time taken to perform various operations are also reported. All output is sent to
  * <code>STDOUT</code>.
  *
- * <h4>Usage</h4> <blockquote><code>
+ * <h1>Usage</h1> <blockquote><code>
  *   java edu.illinois.cs.cogcomp.lbj.pos.POSTag [-q] &lt;testing set&gt;
  * </code></blockquote>
  *
- * <h4>Input</h4> <code>-q</code> mutes the tagged output, leaving only the accuracy report.
+ * <h1>Input</h1> <code>-q</code> mutes the tagged output, leaving only the accuracy report.
  *
- * <h4>Output</h4> One sentence per line, words surrounded by parentheses accompanied by the
+ * <h1>Output</h1> One sentence per line, words surrounded by parentheses accompanied by the
  * predicted POS tag, and, immediately preceding each word, either a dash followed by the true label
  * surrounded in square brackets or a plus sign if the prediction was incorrect or correct
  * respectively.
