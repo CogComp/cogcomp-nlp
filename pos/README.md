@@ -49,7 +49,7 @@ If you would prefer to skip the use of our core data structures, the [`TrainedPO
 ## Models
 When using either `POSAnnotator` or `TrainedPOSTagger`, the models are loaded automatically from one of the following 
 two locations, which are checked in order:
-* First, the directory specified in the constant [`Constants.modelPath`](src/main/java/edu/illinois/cs/cogcomp/pos/Constants.java)
+* First, the directory specified in the `Property` [`POSConfigurator.MODEL_PATH`](src/main/java/edu/illinois/cs/cogcomp/pos/POSConfigurator.java)
 * If the files are not found in this directory, the classpath will be checked (this will result in loading the files 
 from the Maven repository)
 
