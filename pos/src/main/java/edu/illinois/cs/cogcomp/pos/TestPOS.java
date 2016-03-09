@@ -8,11 +8,11 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
  * This program tests {@link POSTagger} on labeled data and reports its performance. All output is
  * sent to <code>STDOUT</code>.
  *
- * <h4>Usage</h4> <blockquote><code>
+ * <h1>Usage</h1> <blockquote><code>
  *   java edu.illinois.cs.cogcomp.lbj.pos.TestPOS &lt;text file&gt;
  * </code></blockquote>
  *
- * <h4>Input</h4> The lone command line parameter is the name of a text file containing annotated
+ * <h1>Input</h1> The lone command line parameter is the name of a text file containing annotated
  * natural language text. This file is expected to have one sentence per line, and the format of
  * each line is as follows: <br>
  * <br>
@@ -23,7 +23,7 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
  * It is also expected that there will be exactly one space between a part of speech and the
  * corresponding spelling and between a closing parenthesis and an opening parenthesis.
  *
- * <h4>Output</h4> An ASCII table is written to <code>STDOUT</code> reporting precision, recall, and
+ * <h1>Output</h1> An ASCII table is written to <code>STDOUT</code> reporting precision, recall, and
  * F<sub>1</sub> scores itemized by the POS tags discovered either in the labeled data or in the
  * predictions. The two rightmost columns are named <code>"LCount"</code> and <code>"PCount"</code>
  * (standing for "labeled count" and "predicted count" respectively), and they report the number of
