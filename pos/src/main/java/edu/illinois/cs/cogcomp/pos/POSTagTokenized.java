@@ -10,15 +10,15 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
  * This program uses {@link POSTagger} to tag pre-tokenized text. All output is sent to
  * <code>STDOUT</code>.
  *
- * <h4>Usage</h4> <blockquote><code>
+ * <h1>Usage</h1> <blockquote><code>
  *   java edu.illinois.cs.cogcomp.lbj.pos.POSTagTokenized &lt;text file&gt;
  * </code></blockquote>
  *
- * <h4>Input</h4> The lone command line parameter is simply the name of a plain text file, written
+ * <h1>Input</h1> The lone command line parameter is simply the name of a plain text file, written
  * in natural language with no annotations except that all words are delimited by whitespace (e.g.,
  * punctuation is separated with whitespace, etc.).
  *
- * <h4>Output</h4> The output will contain exactly one sentence per line, and each word will be
+ * <h1>Output</h1> The output will contain exactly one sentence per line, and each word will be
  * surrounded by parentheses, accompanied by a POS tag.
  *
  * @author Nick Rizzolo
