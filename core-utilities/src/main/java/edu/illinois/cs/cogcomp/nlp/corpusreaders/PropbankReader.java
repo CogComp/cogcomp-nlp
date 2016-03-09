@@ -98,18 +98,18 @@ public class PropbankReader extends AbstractSRLAnnotationReader {
         }
     }
 
-    public PropbankReader(String treebankHome, String propbankHome,
-                          String srlViewName, boolean mergeContiguousCArgs) throws Exception {
+    public PropbankReader(String treebankHome, String propbankHome, String srlViewName,
+            boolean mergeContiguousCArgs) throws Exception {
         super(treebankHome, propbankHome, srlViewName, mergeContiguousCArgs);
     }
 
-    public PropbankReader(String treebankHome, String propbankHome,
-                          String[] sections, String srlViewName, boolean mergeContiguousCArgs) throws Exception {
+    public PropbankReader(String treebankHome, String propbankHome, String[] sections,
+            String srlViewName, boolean mergeContiguousCArgs) throws Exception {
         super(treebankHome, propbankHome, sections, srlViewName, mergeContiguousCArgs);
     }
 
     public PropbankReader(Iterable<TextAnnotation> list, String treebankHome, String propbankHome,
-                          String[] sections, String srlViewName, boolean mergeContiguousCArgs) throws Exception {
+            String[] sections, String srlViewName, boolean mergeContiguousCArgs) throws Exception {
         super(list, treebankHome, propbankHome, sections, srlViewName, mergeContiguousCArgs);
     }
 
@@ -124,6 +124,7 @@ public class PropbankReader extends AbstractSRLAnnotationReader {
     }
 
 }
+
 
 class PropbankFields extends Fields {
 
@@ -160,12 +161,11 @@ class PropbankFields extends Fields {
     }
 
     public Constituent createPredicate(TextAnnotation ta, String viewName,
-                                       List<Tree<Pair<String, IntPair>>> yield) {
+            List<Tree<Pair<String, IntPair>>> yield) {
 
         Tree<Pair<String, IntPair>> l = yield.get(predicateTerminal);
         int start = l.getLabel().getSecond().getFirst();
-        Constituent predicate = new Constituent("Predicate", viewName, ta,
-                start, start + 1);
+        Constituent predicate = new Constituent("Predicate", viewName, ta, start, start + 1);
 
         predicate.addAttribute(PropbankReader.LemmaIdentifier, lemma);
         predicate.addAttribute(PropbankReader.SenseIdentifier, sense);

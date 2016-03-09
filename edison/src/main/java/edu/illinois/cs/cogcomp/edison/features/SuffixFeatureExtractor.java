@@ -12,39 +12,40 @@ import java.util.Set;
  */
 public class SuffixFeatureExtractor extends WordFeatureExtractor {
 
-	private final Feature featureName;
-	protected List<String> suffixes;
+    private final Feature featureName;
+    protected List<String> suffixes;
 
-	public SuffixFeatureExtractor(List<String> deAdjSuffixes, String featureName, boolean useLastWordOfMultiwordConstituents) {
-		super(useLastWordOfMultiwordConstituents);
-		this.suffixes = deAdjSuffixes;
-		this.featureName = DiscreteFeature.create(featureName);
-	}
+    public SuffixFeatureExtractor(List<String> deAdjSuffixes, String featureName,
+            boolean useLastWordOfMultiwordConstituents) {
+        super(useLastWordOfMultiwordConstituents);
+        this.suffixes = deAdjSuffixes;
+        this.featureName = DiscreteFeature.create(featureName);
+    }
 
-	@Override
-	public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
+    @Override
+    public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
 
-		String word = ta.getToken(wordPosition).toLowerCase();
+        String word = ta.getToken(wordPosition).toLowerCase();
 
-		Set<Feature> feats = new LinkedHashSet<>();
+        Set<Feature> feats = new LinkedHashSet<>();
 
-		boolean found = false;
-		for (String s : suffixes) {
-			if (word.endsWith(s)) {
-				feats.add(DiscreteFeature.create(featureName.getName() + ":" + s));
-				found = true;
-			}
-		}
+        boolean found = false;
+        for (String s : suffixes) {
+            if (word.endsWith(s)) {
+                feats.add(DiscreteFeature.create(featureName.getName() + ":" + s));
+                found = true;
+            }
+        }
 
-		if (found) {
-			feats.add(featureName);
-		}
+        if (found) {
+            feats.add(featureName);
+        }
 
-		return feats;
-	}
+        return feats;
+    }
 
-	@Override
-	public String getName() {
-		return "#suffix#" + featureName;
-	}
+    @Override
+    public String getName() {
+        return "#suffix#" + featureName;
+    }
 }

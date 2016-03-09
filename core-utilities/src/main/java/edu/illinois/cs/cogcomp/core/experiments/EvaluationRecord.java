@@ -80,12 +80,14 @@ public class EvaluationRecord {
     }
 
     public String getSummary() {
-        String s = "  - Predicted = " + this.predictedCount + ", Gold = "
-                + this.goldCount + " Correct = " + this.correctCount;
+        String s =
+                "  - Predicted = " + this.predictedCount + ", Gold = " + this.goldCount
+                        + " Correct = " + this.correctCount;
 
         s += "\n";
-        s += "  - Precision = " + getPrecision() + ", Recall = " + getRecall()
-                + ", F1 = " + getF1();
+        s +=
+                "  - Precision = " + getPrecision() + ", Recall = " + getRecall() + ", F1 = "
+                        + getF1();
 
         return s;
     }
@@ -102,8 +104,7 @@ public class EvaluationRecord {
         table.addColumn("Recall");
         table.addColumn("F1");
 
-        table.addRow(new String[]{
-                StringUtils.getFormattedString(getPrecision(), 3),
+        table.addRow(new String[] {StringUtils.getFormattedString(getPrecision(), 3),
                 StringUtils.getFormattedString(getRecall(), 3),
                 StringUtils.getFormattedString(getF1(), 3)});
 

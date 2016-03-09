@@ -9,27 +9,27 @@ import java.util.List;
 
 /**
  * Search trees for a fixed pattern.
- * <p/>
+ * <p>
  * <b>Usage:</b>
- * <p/>
- * Suppose <code>tree</code> is some tree and we wish to find all instances of
- * <code>pattern</code> in it.
+ * <p>
+ * Suppose <code>tree</code> is some tree and we wish to find all instances of <code>pattern</code>
+ * in it.
+ * 
  * <pre>
  * TreeGrep&lt;String&gt; grepper = new TreeGrep&lt;String&gt;(pattern);
  * if (grepper.matches(tree)) {
- * 	List&lt;TreeGrepMatch&lt;String&gt;&gt; matches = grepper.getMatches();
- * 	for (TreeGrepMatch&lt;String&gt; match : matches) {
- * 		// do something with the match
- *    }
+ *     List&lt;TreeGrepMatch&lt;String&gt;&gt; matches = grepper.getMatches();
+ *     for (TreeGrepMatch&lt;String&gt; match : matches) {
+ *         // do something with the match
+ *     }
  * }
  *
  * </pre>
- * Refer the documentation of {@link TreeGrepMatch} for details about how to
- * use it the match object.
- * This class does not yet support regular expression searches for trees like
- * tregex or tgrep. Moreover, the current implementation can be improved by
- * using something like the Boyer-Moore algorithm for both vertical and
- * horizontal search.
+ * 
+ * Refer the documentation of {@link TreeGrepMatch} for details about how to use it the match
+ * object. This class does not yet support regular expression searches for trees like tregex or
+ * tgrep. Moreover, the current implementation can be improved by using something like the
+ * Boyer-Moore algorithm for both vertical and horizontal search.
  *
  * @author Vivek Srikumar
  * @see TreeGrepMatch
@@ -56,19 +56,18 @@ public class TreeGrep<T> {
 
     /**
      * This checks whether any subtrees of <code>tree</code> match the pattern.
-     * <p/>
-     * Note: Each subtree might have multiple matches within it that match the
-     * pattern. For example, if the pattern is
-     * <p/>
+     * <p>
+     * Note: Each subtree might have multiple matches within it that match the pattern. For example,
+     * if the pattern is
+     * <p>
      * <code>(VP (NP NN )) </code>
-     * <p/>
+     * <p>
      * and the tree has
-     * <p/>
+     * <p>
      * <code> (VP (NP NN) (NP NN))</code>
-     * <p/>
-     * then, this function will only return the <code>(VP...)</code> subtree,
-     * and does not indicate that there are two matches within that subtree,
-     * both rooted at the <code>VP</code>.
+     * <p>
+     * then, this function will only return the <code>(VP...)</code> subtree, and does not indicate
+     * that there are two matches within that subtree, both rooted at the <code>VP</code>.
      */
     public boolean matches(Tree<T> tree) {
         boolean found = false;
@@ -81,8 +80,7 @@ public class TreeGrep<T> {
             }
 
             nodeTreeMatches = new ArrayList<>();
-            nodeTreeMatches = doesNodeMatchPattern(node, getPattern(),
-                    nodeTreeMatches);
+            nodeTreeMatches = doesNodeMatchPattern(node, getPattern(), nodeTreeMatches);
             if (nodeTreeMatches.size() > 0) {
 
                 if (verbose) {
@@ -98,9 +96,8 @@ public class TreeGrep<T> {
     }
 
     /**
-     * Checks if the tree that is passed as a parameter matches the pattern.
-     * This is different from {@link #matches(Tree)} because it does not
-     * recursively check interior nodes for matches.
+     * Checks if the tree that is passed as a parameter matches the pattern. This is different from
+     * {@link #matches(Tree)} because it does not recursively check interior nodes for matches.
      */
     public boolean doesThisTreeMatch(Tree<T> tree) {
         boolean found = false;
@@ -121,11 +118,10 @@ public class TreeGrep<T> {
     }
 
     /**
-     * Gets a list of matches for the pattern in the most recently searched
-     * tree.
+     * Gets a list of matches for the pattern in the most recently searched tree.
      *
-     * @return A list of {@link TreeGrepMatch} objects. See the general
-     * documentation of this class for a sample usage.
+     * @return A list of {@link TreeGrepMatch} objects. See the general documentation of this class
+     *         for a sample usage.
      */
     public List<TreeGrepMatch<T>> getMatches() {
         return matchesList;
@@ -136,8 +132,8 @@ public class TreeGrep<T> {
     }
 
 
-    protected List<TreeGrepMatch<T>> doesNodeMatchPattern(Tree<T> tree,
-                                                          Tree<T> currentPattern, List<TreeGrepMatch<T>> nodeMatches) {
+    protected List<TreeGrepMatch<T>> doesNodeMatchPattern(Tree<T> tree, Tree<T> currentPattern,
+            List<TreeGrepMatch<T>> nodeMatches) {
 
         if (verbose) {
             System.out.println("Tree:" + tree);
@@ -152,8 +148,7 @@ public class TreeGrep<T> {
         // return new ArrayList<TreeGrepMatch<T>>();
         // }
 
-        if (!doesLabelMatchPatternLabel(tree.getLabel(),
-                currentPattern.getLabel())) {
+        if (!doesLabelMatchPatternLabel(tree.getLabel(), currentPattern.getLabel())) {
             if (verbose)
                 System.out.println("Labels don't match");
             return new ArrayList<>();
@@ -169,8 +164,7 @@ public class TreeGrep<T> {
                 TreeGrepMatch<T> match = new TreeGrepMatch<>(currentPattern);
                 if (verbose)
                     System.out.println("Adding match between "
-                            + match.getCurrentPatternNode().getLabel()
-                            + " and " + tree.getLabel());
+                            + match.getCurrentPatternNode().getLabel() + " and " + tree.getLabel());
 
                 match.addMatch(tree);
                 nodeMatches.add(match);
@@ -179,16 +173,15 @@ public class TreeGrep<T> {
                 for (TreeGrepMatch<T> match : nodeMatches) {
                     if (verbose)
                         System.out.println("Adding match between "
-                                + match.getCurrentPatternNode().getLabel()
-                                + " and " + tree.getLabel());
+                                + match.getCurrentPatternNode().getLabel() + " and "
+                                + tree.getLabel());
 
                     match.addMatch(tree);
                 }
             }
 
             if (verbose) {
-                System.out
-                        .println("Current node match list after adding new match");
+                System.out.println("Current node match list after adding new match");
 
                 System.out.println(nodeMatches);
             }
@@ -198,8 +191,7 @@ public class TreeGrep<T> {
 
         if (tree.isLeaf()) {
             if (verbose)
-                System.out
-                        .println("Tree is leaf, but pattern is not. Cannot match.");
+                System.out.println("Tree is leaf, but pattern is not. Cannot match.");
             return new ArrayList<>();
         }
 
@@ -211,29 +203,24 @@ public class TreeGrep<T> {
         List<List<TreeGrepMatch<T>>> currentNodeMatchList = new ArrayList<>();
 
         if (verbose)
-            System.out.println("Matching children of "
-                    + currentPattern.getLabel());
+            System.out.println("Matching children of " + currentPattern.getLabel());
 
         // first check the "endOfChildrenString" case
-        T lastChild = currentPattern.getChild(
-                currentPattern.getNumberOfChildren() - 1).getLabel();
+        T lastChild = currentPattern.getChild(currentPattern.getNumberOfChildren() - 1).getLabel();
         T firstChild = currentPattern.getChild(0).getLabel();
         if (lastChild.toString().equals(endOfChildrenString)) {
-            int treeChildId = tree.getNumberOfChildren()
-                    - currentPattern.getNumberOfChildren() + 1;
+            int treeChildId = tree.getNumberOfChildren() - currentPattern.getNumberOfChildren() + 1;
 
             if (treeChildId < 0)
                 return new ArrayList<>();
 
             matchPatternChildren(tree, currentPattern, treeChildMatchPositions,
-                    currentNodeMatchList, treeChildId, 0,
-                    currentPattern.getNumberOfChildren() - 1);
+                    currentNodeMatchList, treeChildId, 0, currentPattern.getNumberOfChildren() - 1);
         } else if (firstChild.toString().equals(startOfChildrenString)) {
             int treeChildId = 0;
 
             matchPatternChildren(tree, currentPattern, treeChildMatchPositions,
-                    currentNodeMatchList, treeChildId, 1,
-                    currentPattern.getNumberOfChildren());
+                    currentNodeMatchList, treeChildId, 1, currentPattern.getNumberOfChildren());
         } else {
 
             for (int treeChildId = 0; treeChildId < tree.getNumberOfChildren()
@@ -241,9 +228,8 @@ public class TreeGrep<T> {
                 int start = 0;
                 int end = currentPattern.getNumberOfChildren();
 
-                matchPatternChildren(tree, currentPattern,
-                        treeChildMatchPositions, currentNodeMatchList,
-                        treeChildId, start, end);
+                matchPatternChildren(tree, currentPattern, treeChildMatchPositions,
+                        currentNodeMatchList, treeChildId, start, end);
 
             }// end for each tree child
         }
@@ -256,17 +242,15 @@ public class TreeGrep<T> {
                 System.out.println(" with ");
                 System.out.println(nodeMatches);
             }
-            newNodeMatches.addAll(mergeMatches(nodeMatches,
-                    currentNodeChildrenMatches));
+            newNodeMatches.addAll(mergeMatches(nodeMatches, currentNodeChildrenMatches));
         }
 
         return newNodeMatches;
     }
 
     private void matchPatternChildren(Tree<T> tree, Tree<T> currentPattern,
-                                      List<Integer> treeChildMatchPositions,
-                                      List<List<TreeGrepMatch<T>>> currentNodeMatchList, int treeChildId,
-                                      int start, int end) {
+            List<Integer> treeChildMatchPositions,
+            List<List<TreeGrepMatch<T>>> currentNodeMatchList, int treeChildId, int start, int end) {
 
         boolean foundMatch = true;
         List<List<TreeGrepMatch<T>>> childrenMatches = new ArrayList<>();
@@ -278,8 +262,7 @@ public class TreeGrep<T> {
 
             List<TreeGrepMatch<T>> childMatches = new ArrayList<>();
 
-            childMatches = doesNodeMatchPattern(treeChildNode,
-                    patternChildNode, childMatches);
+            childMatches = doesNodeMatchPattern(treeChildNode, patternChildNode, childMatches);
             if (childMatches.size() == 0) {
                 foundMatch = false;
                 break;
@@ -287,8 +270,7 @@ public class TreeGrep<T> {
             childrenMatches.add(childMatches);
 
             if (verbose) {
-                System.out.println(treeChildNode + " matches "
-                        + patternChildNode);
+                System.out.println(treeChildNode + " matches " + patternChildNode);
                 System.out.println(childMatches);
             }
 
@@ -296,23 +278,20 @@ public class TreeGrep<T> {
 
         if (foundMatch) {
             if (verbose) {
-                System.out.println("Found match for children of "
-                        + currentPattern);
+                System.out.println("Found match for children of " + currentPattern);
                 System.out.println(childrenMatches);
 
             }
             // Add this new match to the existing one.
 
             // first make a new match for this root node
-            TreeGrepMatch<T> currentNodeMatch = new TreeGrepMatch<>(
-                    currentPattern);
+            TreeGrepMatch<T> currentNodeMatch = new TreeGrepMatch<>(currentPattern);
             currentNodeMatch.addMatch(tree);
             List<TreeGrepMatch<T>> currentNodeMatches = new ArrayList<>();
             currentNodeMatches.add(currentNodeMatch);
 
             // add all the children
-            currentNodeMatches = mergeChildrenMatches(childrenMatches,
-                    currentNodeMatches);
+            currentNodeMatches = mergeChildrenMatches(childrenMatches, currentNodeMatches);
 
             if (verbose) {
                 System.out.println("Matches for subtree at " + tree.getLabel());
@@ -327,12 +306,10 @@ public class TreeGrep<T> {
     }
 
     protected List<TreeGrepMatch<T>> mergeChildrenMatches(
-            List<List<TreeGrepMatch<T>>> childrenMatches,
-            List<TreeGrepMatch<T>> currentNodeMatches) {
+            List<List<TreeGrepMatch<T>>> childrenMatches, List<TreeGrepMatch<T>> currentNodeMatches) {
         List<TreeGrepMatch<T>> newMatches = new ArrayList<>();
 
-        for (List<TreeGrepMatch<T>> children : Permutations
-                .crossProduct(childrenMatches)) {
+        for (List<TreeGrepMatch<T>> children : Permutations.crossProduct(childrenMatches)) {
 
             for (TreeGrepMatch<T> match : currentNodeMatches) {
                 TreeGrepMatch<T> newMatch = new TreeGrepMatch<>(match);
@@ -348,16 +325,14 @@ public class TreeGrep<T> {
 
     }
 
-    private List<TreeGrepMatch<T>> mergeMatches(
-            List<TreeGrepMatch<T>> nodeOutsideMatches,
+    private List<TreeGrepMatch<T>> mergeMatches(List<TreeGrepMatch<T>> nodeOutsideMatches,
             List<TreeGrepMatch<T>> currentNodeChildrenMatches) {
         if (nodeOutsideMatches.size() == 0)
             return currentNodeChildrenMatches;
         List<TreeGrepMatch<T>> nodeMatches = new ArrayList<>();
         for (TreeGrepMatch<T> nodeOutsideMatch : nodeOutsideMatches) {
             for (TreeGrepMatch<T> nodeChildrenMatch : currentNodeChildrenMatches) {
-                TreeGrepMatch<T> newMatch = new TreeGrepMatch<>(
-                        nodeOutsideMatch);
+                TreeGrepMatch<T> newMatch = new TreeGrepMatch<>(nodeOutsideMatch);
 
                 newMatch.mergeMatches(nodeChildrenMatch);
 

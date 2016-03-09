@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 
 /**
- * This class forces each view name in {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} to declare its type so that
- * it can be dynamically added to a {@link TextAnnotation}.
+ * This class forces each view name in {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}
+ * to declare its type so that it can be dynamically added to a {@link TextAnnotation}.
  *
  * TODO Eventually, this should replace ViewNames
  *
