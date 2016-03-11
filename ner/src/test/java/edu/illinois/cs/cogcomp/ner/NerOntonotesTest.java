@@ -33,6 +33,6 @@ public class NerOntonotesTest {
         nerOntonotes.addView(taOnto);
         View v = taOnto.getView(nerOntonotes.getViewName());
 
-        assertEquals(v.getConstituents().size(), 3);
+        assertEquals(v.getConstituents().size(), 4);
     }
 }

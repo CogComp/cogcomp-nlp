@@ -46,7 +46,7 @@ public class Parameters {
      *        {@link #readAndLoadConfig readAndLoadConfig}
      */
     public static void readConfigAndLoadExternalData(ResourceManager rm) {
-        readAndLoadConfig(rm, false);
+        ParametersForLbjCode.currentParameters =readAndLoadConfig(rm, false);
     }
 
 
@@ -116,7 +116,7 @@ public class Parameters {
             }
 
             param.debug = rm.getDebug();
-            ParametersForLbjCode.currentParameters.debug = param.debug;
+//            ParametersForLbjCode.currentParameters.debug = param.debug;
 
             double randomNoiseLevel = rm.getDouble(NerBaseConfigurator.RANDOM_NOISE_LEVEL);
             double omissionRate = rm.getDouble(NerBaseConfigurator.OMISSION_RATE);

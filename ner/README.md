@@ -102,6 +102,12 @@ as you must train the models separately from the install process, and the
 junit tests will fail without models already being present.  
 
 
+## Compiling the Source
+Assuming you have models, you will still need source data to run some tests.
+The appropriate values are set in ```src/test/resources/ner-test.properties```
+(note that this is distinct from the config file for the ner itself). 
+
+
 
 ## How to train the tagger on new data
 
