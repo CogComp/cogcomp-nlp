@@ -70,21 +70,15 @@ public class LemmatizerTATest {
             fail(e.getMessage());
         }
 
-
-        // System.err.println(
-        // "Determining that TextAnnotation constituents use one-past-the-end indexing..." );
         Constituent posC = inputTa.getView(ViewNames.POS).getConstituents().get(0);
 
         assertEquals(0, posC.getStartSpan());
         assertEquals(1, posC.getEndSpan());
 
         boolean isTested = false;
-        // System.err.println( "Raw text: " + inputTa.getText() );
 
         if (null != lemmaView) {
             List<Constituent> spans = inputTa.getView(ViewNames.LEMMA).getConstituents();
-
-            // printConstituents( System.out, spans );
 
             String the = spans.get(0).getLabel(); // orig 'The'
             String CIA = spans.get(1).getLabel(); // orig 'men'
@@ -97,7 +91,6 @@ public class LemmatizerTATest {
             assertEquals(thought, "think");
             assertEquals(had, "have");
             assertEquals(were, "be");
-
             isTested = true;
         }
 
@@ -107,7 +100,6 @@ public class LemmatizerTATest {
     private void printConstituents(PrintStream out, List<Constituent> spans) {
         for (Constituent c : spans)
             out.print(c.getLabel() + ", ");
-
         out.println();
     }
 
