@@ -1,6 +1,8 @@
 package edu.illinois.cs.cogcomp.ner;
 
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
@@ -16,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Properties;
 
 import static org.junit.Assert.fail;
 
@@ -45,6 +48,9 @@ public class TestGazetteers {
                     + "Campus Bridging team on an on-site XCBC installation, these folks can get their science up and running again. Jack Smith can "
                     + "attest to that. As cyberinfrastructure coordinator in the Division of Science and Research of the West Virginia Higher "
                     + "Education Policy Commission, Smith worked closely with Fischer and colleague Eric Coulter when they came to Marshall.";
+    private static final String NER_DATA_PATH = "nerConllData";
+    private static final String COL_TEST_CONFIG = "src/test/resources/ner-test.properties";
+    private String dataDir;
 
     /** the text used for this test. */
 
@@ -62,6 +68,10 @@ public class TestGazetteers {
             e.printStackTrace();
             fail();
         }
+
+        ResourceManager rm = new ResourceManager( COL_TEST_CONFIG );
+        dataDir =rm.getString( NER_DATA_PATH );
+
     }
 
     private String construct(NEWord w, LinkedVector sentence) {
@@ -86,11 +96,10 @@ public class TestGazetteers {
         System.out.println("Starting ");
 
         try {
-            final String dir =
-                    "/Users/redman/Projects/IllinoisNER/GoldData/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev";
-            String[] files = new File(dir).list();
+//                    "/Users/redman/Projects/IllinoisNER/GoldData/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev";
+            String[] files = new File(dataDir).list();
             for (String file1 : files) {
-                String file = dir + File.separator + file1;
+                String file = dataDir + File.separator + file1;
                 String message = "Processing " + file;
                 Data data1 = new Data(file, file, "-c", new String[] {}, new String[] {});
                 ExpressiveFeaturesAnnotator.annotate(data1);
@@ -236,11 +245,10 @@ public class TestGazetteers {
         System.out.println("Starting ");
 
         try {
-            final String dir =
-                    "/Users/redman/Projects/IllinoisNER/GoldData/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev";
-            String[] files = new File(dir).list();
+
+            String[] files = new File(dataDir).list();
             for (String file1 : files) {
-                String file = dir + File.separator + file1;
+                String file = dataDir + File.separator + file1;
                 String message = "Processing " + file;
                 Data data1 = new Data(file, file, "-c", new String[] {}, new String[] {});
                 ExpressiveFeaturesAnnotator.annotate(data1);

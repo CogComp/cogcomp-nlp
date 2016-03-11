@@ -12,23 +12,25 @@
 #    from the CoNLL corpus as a way to allow you to run a 
 #    sanity check, but this is not a full evaluation. 
 
-mvn lbj:clean
-mvn lbj:compile
-mvn compile
-mvn dependency:copy-dependencies
+#mvn lbj:clean
+#mvn lbj:compile
+#mvn compile
+#mvn dependency:copy-dependencies
 
-#test="test/Test/"
-#test="data/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev/"
-#test="data/Reuters/ColumnFormatDocumentsSplit/Test/"
-#test="data/MUC7Columns/MUC7.NE.formalrun.sentences.columns.gold"
-test="data/Ontonotes/ColumnFormat/Test"
+#test="/shared/corpora/corporaWeb/written/eng/NER/Data/GoldData/Ontonotes/ColumnFormat/Test"
+test="/shared/corpora/corporaWeb/written/eng/NER/Data/GoldData/Reuters/ColumnFormatDocumentsSplit/Test"
 #test="/Users/redman/Projects/IllinoisNER/shelley/data/GoldData/Ontonotes/ColumnFormat/Test"
 
-#configFile="config/conll.config"
 
-configFile="config/ontonotes.config"
+#configFile="config/ner-ontonotes.properties"
+configFile="config/ner.properties"
 
 # Classpath
 cpath="target/classes:target/dependency/*"
 
-java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -test ${test} -c ${configFile}
+CMD="java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test ${test} -c ${configFile}"
+
+echo "$0: running command '$CMD'..."
+
+
+$CMD
