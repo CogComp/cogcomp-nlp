@@ -20,7 +20,7 @@ public class NerBaseConfigurator extends Configurator {
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
 
-    public final static String CONFIG_NAME = "configFilename";
+    public final static String MODEL_NAME = "modelName";
     public final static String TAG_SCHEME = "taggingEncodingScheme";
     // public final static String TOKENIZATION_SCHEME = "tokenizationScheme";
     public final static String FORCE_NEW_SENTENCE_ON_LINE_BREAKS = "forceNewSentenceOnLineBreaks";
@@ -72,7 +72,7 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_PATHS_TO_GAZETTEERS = "gazetteers";
     private final static String DEFAULT_WORD_EMBEDDINGS = "0";
 
-    private final static String DEFAULT_MODEL_PATH = "data/Models/CoNLL";
+    private final static String DEFAULT_MODEL_PATH = "ner/models";
     private final static String DEFAULT_FORMS = "1";
     private final static String DEFAULT_PHRASE_LENGTH = "5";
     private final static String DEFAULT_CAPITALIZATION = "1";
@@ -100,7 +100,7 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_THRESHOLD_PREDICTION = FALSE;
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
-    private final static String DEFAULT_CONFIG_NAME = "CoNLL";
+    private final static String DEFAULT_MODEL_NAME = "CoNLL";
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";
     private static final String DEFAULT_OMISSION_RATE = "0.2";
@@ -113,7 +113,7 @@ public class NerBaseConfigurator extends Configurator {
         props.setProperty(VIEW_NAME, ViewNames.NER_CONLL);
         props.setProperty(PHRASE_LENGTH, DEFAULT_PHRASE_LENGTH);
         props.setProperty(PATH_TO_MODEL, DEFAULT_MODEL_PATH);
-        props.setProperty(CONFIG_NAME, DEFAULT_CONFIG_NAME);
+        props.setProperty(MODEL_NAME, DEFAULT_MODEL_NAME);
         props.setProperty(AFFIXES, DEFAULT_AFFIXES);
         props.setProperty(AGGREGATE_CONTEXT, DEFAULT_AGGREGATE_CONTENT);
         props.setProperty(AGGREGATE_GAZETTEER, DEFAULT_AGGREGATE_GAZETTEER);

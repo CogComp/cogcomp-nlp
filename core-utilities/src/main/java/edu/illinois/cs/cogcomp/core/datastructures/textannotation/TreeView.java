@@ -106,11 +106,7 @@ public class TreeView extends View {
     protected void setDependencyTreeSwitch(Constituent root) {
         List<Relation> rootRelations = root.getOutgoingRelations();
 
-        if (rootRelations.size() == 0) {
-            isDependencyTree = false;
-        } else {
-            isDependencyTree = !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
-        }
+        isDependencyTree = rootRelations.size() != 0 && !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
     }
 
     private void findRoots() {
@@ -611,9 +607,7 @@ public class TreeView extends View {
             for (Constituent cc : spans) {
                 boolean found = false;
                 for (Relation r : cc.getOutgoingRelations()) {
-                    if (spans.contains(r.getTarget()))
-                        break;
-                    else {
+                    if (!spans.contains(r.getTarget())) {
                         found = true;
                         break;
                     }
@@ -670,14 +664,13 @@ public class TreeView extends View {
 
         IntPair span = null;
         for (Constituent candidate : candidates) {
-            boolean add;
+            boolean add = false;
             if (span == null) {
                 span = candidate.getSpan();
                 add = true;
             } else if (span.equals(candidate.getSpan())) {
                 add = true;
-            } else
-                break;
+            }
 
             if (add) {
                 // Don't add POS tags and words

@@ -31,14 +31,16 @@ class ParameterizedFeatureExtractors {
                         Tree<String> tree, FeatureExtractor fex) throws EdisonException {
                     String parse = attributes.get(PARSE_VIEW);
 
-                    if (parse.equals(ViewNames.PARSE_CHARNIAK))
-                        return ClauseFeatureExtractor.CHARNIAK;
-                    else if (parse.equals(ViewNames.PARSE_BERKELEY))
-                        return ClauseFeatureExtractor.BERKELEY;
-                    else if (parse.equals(ViewNames.PARSE_STANFORD))
-                        return ClauseFeatureExtractor.STANFORD;
-                    else
-                        throw new EdisonException("Cannot generate clause view for using " + parse);
+                    switch (parse) {
+                        case ViewNames.PARSE_CHARNIAK:
+                            return ClauseFeatureExtractor.CHARNIAK;
+                        case ViewNames.PARSE_BERKELEY:
+                            return ClauseFeatureExtractor.BERKELEY;
+                        case ViewNames.PARSE_STANFORD:
+                            return ClauseFeatureExtractor.STANFORD;
+                        default:
+                            throw new EdisonException("Cannot generate clause view for using " + parse);
+                    }
 
                 }
             };
@@ -114,16 +116,22 @@ class ParameterizedFeatureExtractors {
                         return new ParseHeadWordFeatureExtractor(parseView, fex);
 
                     FeatureInputTransformer transformer;
-                    if (parseView.equals(ViewNames.PARSE_CHARNIAK))
-                        transformer = FeatureInputTransformer.charniakHead;
-                    else if (parseView.equals(ViewNames.DEPENDENCY_STANFORD))
-                        transformer = FeatureInputTransformer.stanfordDependencyHead;
-                    else if (parseView.equals(ViewNames.DEPENDENCY))
-                        transformer = FeatureInputTransformer.easyFirstDependencyHead;
-                    else if (parseView.equals(ViewNames.PARSE_BERKELEY))
-                        transformer = FeatureInputTransformer.berkeleyHead;
-                    else
-                        throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                    switch (parseView) {
+                        case ViewNames.PARSE_CHARNIAK:
+                            transformer = FeatureInputTransformer.charniakHead;
+                            break;
+                        case ViewNames.DEPENDENCY_STANFORD:
+                            transformer = FeatureInputTransformer.stanfordDependencyHead;
+                            break;
+                        case ViewNames.DEPENDENCY:
+                            transformer = FeatureInputTransformer.easyFirstDependencyHead;
+                            break;
+                        case ViewNames.PARSE_BERKELEY:
+                            transformer = FeatureInputTransformer.berkeleyHead;
+                            break;
+                        default:
+                            throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                    }
 
                     return new FeatureCollection("", transformer, fex);
 
@@ -143,18 +151,25 @@ class ParameterizedFeatureExtractors {
                     String parseView = attributes.get(PARSE_VIEW);
 
                     FeatureInputTransformer transformer;
-                    if (parseView.equals(ViewNames.PARSE_CHARNIAK))
-                        transformer = FeatureInputTransformer.charniakGovernor;
-                    else if (parseView.equals(ViewNames.PARSE_STANFORD))
-                        transformer = FeatureInputTransformer.stanfordGovernor;
-                    else if (parseView.equals(ViewNames.PARSE_BERKELEY))
-                        transformer = FeatureInputTransformer.berkeleyGovernor;
-                    else if (parseView.equals(ViewNames.DEPENDENCY_STANFORD))
-                        transformer = FeatureInputTransformer.stanfordDependencyGovernor;
-                    else if (parseView.equals(ViewNames.DEPENDENCY))
-                        transformer = FeatureInputTransformer.easyFirstDependencyGovernor;
-                    else
-                        throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                    switch (parseView) {
+                        case ViewNames.PARSE_CHARNIAK:
+                            transformer = FeatureInputTransformer.charniakGovernor;
+                            break;
+                        case ViewNames.PARSE_STANFORD:
+                            transformer = FeatureInputTransformer.stanfordGovernor;
+                            break;
+                        case ViewNames.PARSE_BERKELEY:
+                            transformer = FeatureInputTransformer.berkeleyGovernor;
+                            break;
+                        case ViewNames.DEPENDENCY_STANFORD:
+                            transformer = FeatureInputTransformer.stanfordDependencyGovernor;
+                            break;
+                        case ViewNames.DEPENDENCY:
+                            transformer = FeatureInputTransformer.easyFirstDependencyGovernor;
+                            break;
+                        default:
+                            throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                    }
 
                     return new FeatureCollection("", transformer, fex);
 
