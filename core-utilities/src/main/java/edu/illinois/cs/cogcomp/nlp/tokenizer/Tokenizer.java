@@ -51,7 +51,7 @@ public interface Tokenizer {
             int lastSentEnd = 0;
 
             for (int i = 0; i < this.tokens.length; ++i) {
-                if (sentenceEndIndexes.contains(new Integer(i))) {
+                if (sentenceEndIndexes.contains(i)) {
                     if (null == sentTokens)
                         throw new IllegalArgumentException("Found null token or offset array. "
                                 + "Sentence end indexes must be incorrect.");

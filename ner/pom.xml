@@ -47,6 +47,20 @@
             <version>1.0.0</version>
         </dependency>
 
+<!-- models: you need to use/specify a new path to avoid using these -->
+
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-ner-model</artifactId>
+            <version>3.2</version>
+            <classifier>CoNLL</classifier>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-ner-model</artifactId>
+            <version>3.2</version>
+            <classifier>OntoNotes</classifier>
+        </dependency>
         <!-- Non-Illinois packages -->
         <dependency>
             <groupId>org.apache.commons</groupId>

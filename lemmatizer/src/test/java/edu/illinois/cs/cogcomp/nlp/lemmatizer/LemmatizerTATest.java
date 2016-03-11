@@ -7,20 +7,21 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Properties;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class LemmatizerTestTA {
+public class LemmatizerTATest {
     private static final String TEST_TEXT_ANNOTATION_FILE = "src/test/resources/serializedTA.ser";
-
     private TextAnnotation inputTa;
     private IllinoisLemmatizer lem;
 
@@ -38,7 +39,10 @@ public class LemmatizerTestTA {
 
     @Test
     public void stanfordTest() {
-        IllinoisLemmatizer lem = new IllinoisLemmatizer(true, "WordNet-3.0/dict");
+        Properties props = new Properties();
+        //set non-default lemmatizer constructor params
+        props.setProperty( LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key, LemmatizerConfigurator.TRUE );
+        IllinoisLemmatizer lem = new IllinoisLemmatizer( new ResourceManager( props ));
 
         String lemma = lem.getLemma("me", "PRP");
         assertTrue(lemma.equals("i"));

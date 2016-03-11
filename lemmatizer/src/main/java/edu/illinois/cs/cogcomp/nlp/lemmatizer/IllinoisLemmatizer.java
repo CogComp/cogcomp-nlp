@@ -22,37 +22,35 @@ import java.util.List;
 import java.util.Map;
 
 public class IllinoisLemmatizer extends Annotator {
-    public static String USE_STANFORD_LEMMA_CONVENTION = "useStanfordConvention";
 
-    private static final String NAME = IllinoisLemmatizer.class.getCanonicalName();
+	private static final String NAME = IllinoisLemmatizer.class.getCanonicalName();
 
-    private static final String verbLemmaFile = "verb-lemDict.txt";
-    private static final String exceptionsFile = "exceptions.txt";
-    private Map<String, String> verbLemmaMap;
-    private Map<String, String> verbBaseMap;
-    private Map<String, String> exceptionsMap;
-    private WordnetLemmaReader wnLemmaReader;
-    private Map<String, String> contractions;
+	private static final String verbLemmaFile = "verb-lemDict.txt";
+	private static final String exceptionsFile = "exceptions.txt";
+	private Map<String, String> verbLemmaMap;
+	private Map<String, String> verbBaseMap;
+	private Map<String, String> exceptionsMap;
+	private WordnetLemmaReader wnLemmaReader;
+	private Map<String, String> contractions;
     private Map<String, String> toStanford;
 
     private boolean useStanford;
 
     private static boolean useStanford_default = false;
-    private static String wnpath_default = "WordNet-3.0/dict";
 
     public IllinoisLemmatizer() {
-        this(useStanford_default, wnpath_default);
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getDefaultConfig() );
     }
 
     public IllinoisLemmatizer(ResourceManager rm) {
-        this(rm.getBoolean(USE_STANFORD_LEMMA_CONVENTION, (Boolean.toString(useStanford_default))),
-                rm.getString("wnpath", wnpath_default));
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        initialize( new LemmatizerConfigurator().getConfig( rm ) );
     }
 
-    public IllinoisLemmatizer(boolean useStanfordConvention, String wnpath) {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        this.useStanford = useStanfordConvention;
-        wnLemmaReader = new WordnetLemmaReader(wnpath);
+    private void initialize( ResourceManager rm ) {
+        this.useStanford = rm.getBoolean( LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key );
+        wnLemmaReader = new WordnetLemmaReader( rm.getString( LemmatizerConfigurator.WN_PATH.key) );
         loadVerbMap();
         loadExceptionMap();
         contractions = new HashMap<>();
@@ -89,15 +87,15 @@ public class IllinoisLemmatizer extends Annotator {
         verbLemmaMap = new HashMap<>();
         verbBaseMap = new HashMap<>();
 
-        for (String line : readFromClasspath(verbLemmaFile)) {
-            String[] parts = line.split("\\s+");
+		for (String line : readFromClasspath(verbLemmaFile)) {
+			String[] parts = line.split("\\s+");
 
-            String lemma = parts[0];
-            this.verbBaseMap.put(lemma, lemma);
-            for (int i = 1; i < parts.length; i++)
-                verbLemmaMap.put(parts[i], lemma);
-        }
-    }
+			String lemma = parts[0];
+			this.verbBaseMap.put(lemma, lemma);
+			for (int i = 1; i < parts.length; i++)
+				verbLemmaMap.put(parts[i], lemma);
+		}
+	}
 
     public static List<String> readFromClasspath(String filename) {
         List<String> lines = null;
@@ -111,10 +109,7 @@ public class IllinoisLemmatizer extends Annotator {
                                     return line;
                                 }
                             });
-        } catch (IOException e) {
-            System.err.println("Error while trying to read " + filename + ".");
-            System.exit(-1);
-        } catch (URISyntaxException e) {
+        } catch (IOException | URISyntaxException e) {
             System.err.println("Error while trying to read " + filename + ".");
             System.exit(-1);
         }
@@ -123,7 +118,7 @@ public class IllinoisLemmatizer extends Annotator {
 
     /**
      * get a lemma for the token at index tokIndex in TextAnnotation ta.
-     * 
+     *
      * @param ta TextAnnotation to query for lemma; MUST have POS view.
      * @param tokIndex token index for word to lemmatize
      * @return a String representing a lemma with the POS found for the corresponding word

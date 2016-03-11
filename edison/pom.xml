@@ -23,11 +23,11 @@
             <artifactId>LBJava</artifactId>
             <version>1.2.10</version>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>jwnl-prime</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+            <!--<artifactId>jwnl-prime</artifactId>-->
+            <!--<version>1.0.1</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.tartarus</groupId>
             <artifactId>snowball</artifactId>

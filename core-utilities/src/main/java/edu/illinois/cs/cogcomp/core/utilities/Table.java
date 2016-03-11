@@ -22,14 +22,14 @@ public class Table extends DefaultTableModel {
     Set<Integer> separators = new HashSet<>();
 
     public String toOrgTable() {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
 
         int numCols = this.getColumnCount();
         int numRows = this.getRowCount();
 
         buffer.append("|");
         for (int i = 0; i < numCols; i++) {
-            buffer.append(this.getColumnName(i) + " | ");
+            buffer.append(this.getColumnName(i)).append(" | ");
         }
         buffer.append("\n|-----\n");
 
@@ -40,7 +40,7 @@ public class Table extends DefaultTableModel {
             }
             buffer.append("| ");
             for (int i = 0; i < numCols; i++) {
-                buffer.append(this.getValueAt(row, i) + " | ");
+                buffer.append(this.getValueAt(row, i)).append(" | ");
             }
             buffer.append("\n");
         }
@@ -59,8 +59,7 @@ public class Table extends DefaultTableModel {
         buffer.append("<tr>");
 
         for (int i = 0; i < numCols; i++) {
-            buffer.append("<th style=\"border-width:1px; border-style:inset; border-color:#000000;\">"
-                    + this.getColumnName(i) + "</th>");
+            buffer.append("<th style=\"border-width:1px; border-style:inset; border-color:#000000;\">").append(this.getColumnName(i)).append("</th>");
         }
         buffer.append("</tr>\n");
 
@@ -78,9 +77,7 @@ public class Table extends DefaultTableModel {
 
             buffer.append("<tr>");
             for (int i = 0; i < numCols; i++) {
-                buffer.append("<" + trh
-                        + " style=\"border-width:1px; border-style:inset; border-color:#000000; "
-                        + color + " \">" + this.getValueAt(row, i) + " </" + trh + ">");
+                buffer.append("<").append(trh).append(" style=\"border-width:1px; border-style:inset; border-color:#000000; ").append(color).append(" \">").append(this.getValueAt(row, i)).append(" </").append(trh).append(">");
             }
             buffer.append("</tr>\n");
         }

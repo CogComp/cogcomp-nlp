@@ -59,9 +59,9 @@ public class TreeRuleTest extends TestCase {
         List<List<String>> results = rule.applyRule(tree);
         for (List<String> result : results) {
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (String r : result)
-                sb.append(r + " ");
+                sb.append(r).append(" ");
 
             assertTrue(afterRule.contains(sb.toString().trim()));
 

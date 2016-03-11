@@ -22,10 +22,7 @@ public class WordnetLemmaReader {
                 System.err.println("Wordnet path does not point to a directory.");
                 System.exit(-1);
             }
-        } catch (URISyntaxException e) {
-            System.err.println("Error while trying to access Wordnet.");
-            System.exit(-1);
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             System.err.println("Error while trying to access Wordnet.");
             System.exit(-1);
         }
