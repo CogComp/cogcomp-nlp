@@ -60,14 +60,20 @@ public class TextChunkRepresentationManager {
                             nextType = next.getPrediction(labelType);
                             nextLabel = next.getPrediction(labelType);
                         }
-                        if (nextType.contains("-")) nextType = nextType.substring(2);
-                        if (prev != null) prevType = prev.getPrediction(labelType);
-                        if (prevType.contains("-")) prevType = prevType.substring(2);
-                        if ((!nextType.equalsIgnoreCase(label)) && (!prevType.equalsIgnoreCase(label)))
+                        if (nextType.contains("-"))
+                            nextType = nextType.substring(2);
+                        if (prev != null)
+                            prevType = prev.getPrediction(labelType);
+                        if (prevType.contains("-"))
+                            prevType = prevType.substring(2);
+                        if ((!nextType.equalsIgnoreCase(label))
+                                && (!prevType.equalsIgnoreCase(label)))
                             w.setPrediction("U-" + label, labelType);
-                        else if (((!nextType.equalsIgnoreCase(label)) || nextLabel.startsWith("B-")) && (w
-                                .getPrediction(labelType).startsWith("B-"))) w.setPrediction("U-" + label, labelType);
-                        else if ((!nextType.equalsIgnoreCase(label)) && (prevType.equalsIgnoreCase(label)))
+                        else if (((!nextType.equalsIgnoreCase(label)) || nextLabel.startsWith("B-"))
+                                && (w.getPrediction(labelType).startsWith("B-")))
+                            w.setPrediction("U-" + label, labelType);
+                        else if ((!nextType.equalsIgnoreCase(label))
+                                && (prevType.equalsIgnoreCase(label)))
                             w.setPrediction("L-" + label, labelType);
                     }
                 }
@@ -106,9 +112,12 @@ public class TextChunkRepresentationManager {
                         label = label.substring(2);
                         NEWord prev = (NEWord) w.previous;
                         String prevLabel = "O";
-                        if (prev != null) prevLabel = prev.getPrediction(labelType);
-                        if (prevLabel.contains("-")) prevLabel = prevLabel.substring(2);
-                        if ((!prevLabel.equals(label)) && w.getPrediction(labelType).startsWith("B-"))
+                        if (prev != null)
+                            prevLabel = prev.getPrediction(labelType);
+                        if (prevLabel.contains("-"))
+                            prevLabel = prevLabel.substring(2);
+                        if ((!prevLabel.equals(label))
+                                && w.getPrediction(labelType).startsWith("B-"))
                             w.setPrediction("I-" + label, labelType);
                     }
                 }
@@ -127,9 +136,12 @@ public class TextChunkRepresentationManager {
                         label = label.substring(2);
                         NEWord prev = (NEWord) w.previous;
                         String prevLabel = "O";
-                        if (prev != null) prevLabel = prev.getPrediction(labelType);
-                        if (prevLabel.contains("-")) prevLabel = prevLabel.substring(2);
-                        if (!prevLabel.equalsIgnoreCase(label)) w.setPrediction("B-" + label, labelType);
+                        if (prev != null)
+                            prevLabel = prev.getPrediction(labelType);
+                        if (prevLabel.contains("-"))
+                            prevLabel = prevLabel.substring(2);
+                        if (!prevLabel.equalsIgnoreCase(label))
+                            w.setPrediction("B-" + label, labelType);
                     }
                 }
             }
@@ -156,10 +168,12 @@ public class TextChunkRepresentationManager {
                             nextLabel = next.getPrediction(labelType);
                             nextLabelSuffix = nextLabel;
                         }
-                        if (nextLabel.contains("-")) nextLabelSuffix = nextLabel.substring(2);
+                        if (nextLabel.contains("-"))
+                            nextLabelSuffix = nextLabel.substring(2);
                         if ((nextLabelSuffix.equals(labelSuffix)) && nextLabel.startsWith("B-"))
                             w.setPrediction("E-" + labelSuffix, labelType);
-                        else if (label.startsWith("B-")) w.setPrediction("I-" + labelSuffix, labelType);
+                        else if (label.startsWith("B-"))
+                            w.setPrediction("I-" + labelSuffix, labelType);
 
                     }
                 }
@@ -214,7 +228,8 @@ public class TextChunkRepresentationManager {
                             nextLabel = next.getPrediction(labelType);
                             nextLabelSuffix = nextLabel;
                         }
-                        if (nextLabel.contains("-")) nextLabelSuffix = nextLabel.substring(2);
+                        if (nextLabel.contains("-"))
+                            nextLabelSuffix = nextLabel.substring(2);
 
                         if ((!nextLabelSuffix.equals(labelSuffix)) || nextLabel.startsWith("B-"))
                             w.setPrediction("E-" + labelSuffix, labelType);

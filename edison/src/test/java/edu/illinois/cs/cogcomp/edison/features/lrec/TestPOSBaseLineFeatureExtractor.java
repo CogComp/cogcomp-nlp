@@ -14,86 +14,89 @@ import java.util.List;
 import java.util.Set;
 
 public class TestPOSBaseLineFeatureExtractor extends TestCase {
-	
-	private static List<TextAnnotation> tas;
 
-	static {
-		try {
-			tas = IOUtils.readObjectAsResource(TestPOSBaseLineFeatureExtractor.class, "test.ta");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private static List<TextAnnotation> tas;
 
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    static {
+        try {
+            tas = IOUtils.readObjectAsResource(TestPOSBaseLineFeatureExtractor.class, "test.ta");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public final void test() throws Exception {
-		System.out.println("POSBaseLine Feature Extractor");
-		// Using the first TA and a constituent between span of 30-40 as a test
-		TextAnnotation ta = tas.get(2);
-		View TOKENS = ta.getView("TOKENS");
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
 
-		System.out.println("GOT TOKENS FROM TEXTAnn");
+    public final void test() throws Exception {
+        System.out.println("POSBaseLine Feature Extractor");
+        // Using the first TA and a constituent between span of 30-40 as a test
+        TextAnnotation ta = tas.get(2);
+        View TOKENS = ta.getView("TOKENS");
 
-		List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
+        System.out.println("GOT TOKENS FROM TEXTAnn");
 
-		for (Constituent c : testlist) {
-			System.out.println(c.getSurfaceForm());
-		}
+        List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
-		System.out.println("Testlist size is " + testlist.size());
+        for (Constituent c : testlist) {
+            System.out.println(c.getSurfaceForm());
+        }
 
-		// Constituent test = testlist.get(1);
+        System.out.println("Testlist size is " + testlist.size());
 
-		// System.out.println("The constituent we are extracting features from
-		// in this test is: " + test.getSurfaceForm());
-		
-		//System.out.println(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
-		//System.out.println(System.getProperty("user.dir"));
-		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
-		POSBaseLineFeatureExtractor posBaseLine = new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus",
-				fileName);
+        // Constituent test = testlist.get(1);
 
-		ArrayList<Set<Feature>> featslist = new ArrayList<>();
+        // System.out.println("The constituent we are extracting features from
+        // in this test is: " + test.getSurfaceForm());
 
-		for (Constituent test : testlist)
-			featslist.add(posBaseLine.getFeatures(test));
+        // System.out.println(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
+        // System.out.println(System.getProperty("user.dir"));
+        // String fileName =
+        // "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
+        String fileName =
+                edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix
+                        + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 
-		if (featslist.isEmpty()) {
-			System.out.println("Feats list is returning NULL.");
-		}
+        POSBaseLineFeatureExtractor posBaseLine =
+                new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus", fileName);
 
-		System.out.println("Printing list of Feature set");
+        ArrayList<Set<Feature>> featslist = new ArrayList<>();
 
-		for (Set<Feature> feats : featslist) {
-			for (Feature f : feats)
-				System.out.println(f.getName());
-		}
+        for (Constituent test : testlist)
+            featslist.add(posBaseLine.getFeatures(test));
 
-		/*
-		 * Set<Feature> feats = posBaseLine.getFeatures(test);
-		 * 
-		 * if (feats == null) { System.out.println("Feats are returning NULL.");
-		 * }
-		 * 
-		 * System.out.println("Printing Set of Features");
-		 * 
-		 * for (Feature f : feats) { System.out.println(f.getName()); }
-		 */
+        if (featslist.isEmpty()) {
+            System.out.println("Feats list is returning NULL.");
+        }
 
-		System.out.println("GOT FEATURES YES!");
-	}
+        System.out.println("Printing list of Feature set");
 
-	private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
+        for (Set<Feature> feats : featslist) {
+            for (Feature f : feats)
+                System.out.println(f.getName());
+        }
 
-		for (TextAnnotation ta : tas) {
-			for (String viewName : viewNames)
-				if (ta.hasView(viewName))
-					System.out.println(ta.getView(viewName));
-		}
-	}
+        /*
+         * Set<Feature> feats = posBaseLine.getFeatures(test);
+         * 
+         * if (feats == null) { System.out.println("Feats are returning NULL."); }
+         * 
+         * System.out.println("Printing Set of Features");
+         * 
+         * for (Feature f : feats) { System.out.println(f.getName()); }
+         */
+
+        System.out.println("GOT FEATURES YES!");
+    }
+
+    private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
+            throws EdisonException {
+
+        for (TextAnnotation ta : tas) {
+            for (String viewName : viewNames)
+                if (ta.hasView(viewName))
+                    System.out.println(ta.getView(viewName));
+        }
+    }
 }

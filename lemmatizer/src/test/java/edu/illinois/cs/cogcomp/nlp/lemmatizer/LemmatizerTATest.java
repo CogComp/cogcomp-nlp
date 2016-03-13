@@ -40,9 +40,10 @@ public class LemmatizerTATest {
     @Test
     public void stanfordTest() {
         Properties props = new Properties();
-        //set non-default lemmatizer constructor params
-        props.setProperty( LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key, LemmatizerConfigurator.TRUE );
-        IllinoisLemmatizer lem = new IllinoisLemmatizer( new ResourceManager( props ));
+        // set non-default lemmatizer constructor params
+        props.setProperty(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key,
+                LemmatizerConfigurator.TRUE);
+        IllinoisLemmatizer lem = new IllinoisLemmatizer(new ResourceManager(props));
 
         String lemma = lem.getLemma("me", "PRP");
         assertTrue(lemma.equals("i"));

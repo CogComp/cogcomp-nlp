@@ -63,10 +63,10 @@ public class PlainTextReader {
             sentences1.add(text);
 
         ArrayList<String> sentences2 = new ArrayList<>();// we add Lbj sentence splitting on
-                                                               // top.
+                                                         // top.
         if (!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) {
             for (String aSentences1 : sentences1) {
-                SentenceSplitter parser = new SentenceSplitter(new String[]{aSentences1});
+                SentenceSplitter parser = new SentenceSplitter(new String[] {aSentences1});
                 Sentence s = (Sentence) parser.next();
                 while (s != null) {
                     sentences2.add(s.text);
@@ -82,17 +82,19 @@ public class PlainTextReader {
             if (sentenceText.length() > 0) {
                 // adding the space before the final period in the sentence,
                 // this is just a formatting issue with LBJ sentence splitter that can happen
-                if (sentenceText.charAt(sentenceText
-                        .length() - 1) == '.' && !ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                if (sentenceText.charAt(sentenceText.length() - 1) == '.'
+                        && !ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
                     sentenceText = sentenceText.substring(0, sentenceText.length() - 1) + " . ";
                 // now tokenizing for real...
 
                 String[] sentence = sentenceText.split("[ \\n\\t]");
                 if (sentence.length > 0) {
                     // fixing a bug in LBJ sentence splitter if needed
-                    if ((!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting) && sentence.length == 1 && res
-                            .size() > 0 && (sentence[0].equals("\"") || sentence[0].equals("''") || sentence[0]
-                            .equals("'"))) {
+                    if ((!ParametersForLbjCode.currentParameters.keepOriginalFileTokenizationAndSentenceSplitting)
+                            && sentence.length == 1
+                            && res.size() > 0
+                            && (sentence[0].equals("\"") || sentence[0].equals("''") || sentence[0]
+                                    .equals("'"))) {
 
                         int where = res.size() - 1;
                         String[] tmp = res.remove(where);
@@ -104,7 +106,8 @@ public class PlainTextReader {
                         System.arraycopy(tmp, 0, newtmp, 0, len);
                         newtmp[len] = sentence[0];
                         res.add(newtmp);
-                    } else res.add(sentence);
+                    } else
+                        res.add(sentence);
                 }
             }
         }

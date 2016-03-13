@@ -19,117 +19,121 @@ import java.util.List;
 import java.util.Set;
 
 public class TestLabelTwoAfter extends TestCase {
-	
-	private static List<TextAnnotation> tas;
 
-	static {
-		try {
-			tas = IOUtils.readObjectAsResource(TestPOSBaseLineFeatureExtractor.class, "test.ta");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private static List<TextAnnotation> tas;
 
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    static {
+        try {
+            tas = IOUtils.readObjectAsResource(TestPOSBaseLineFeatureExtractor.class, "test.ta");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public final void test() throws Exception {
-		System.out.println("LabelTwoAfter Feature Extractor");
-		// Using the first TA and a constituent between span of 30-40 as a test
-		TextAnnotation ta = tas.get(2);
-		View TOKENS = ta.getView("TOKENS");
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
 
-		System.out.println("GOT TOKENS FROM TEXTAnn");
+    public final void test() throws Exception {
+        System.out.println("LabelTwoAfter Feature Extractor");
+        // Using the first TA and a constituent between span of 30-40 as a test
+        TextAnnotation ta = tas.get(2);
+        View TOKENS = ta.getView("TOKENS");
 
-		List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
+        System.out.println("GOT TOKENS FROM TEXTAnn");
 
-		for (Constituent c : testlist) {
-			System.out.println(c.getSurfaceForm());
-		}
+        List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
-		System.out.println("Testlist size is " + testlist.size());
+        for (Constituent c : testlist) {
+            System.out.println(c.getSurfaceForm());
+        }
 
-		// Constituent test = testlist.get(1);
+        System.out.println("Testlist size is " + testlist.size());
 
-		// System.out.println("The constituent we are extracting features from
-		// in this test is: " + test.getSurfaceForm());
+        // Constituent test = testlist.get(1);
 
-		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
-		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
-		posBaseLine.buildTable(fileName);
-		
-		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-		posMikheev.buildTable(fileName);
-		
-		LabelTwoAfter l2aPOS = new LabelTwoAfter("l2aPOS");
-		LabelTwoAfter l2aPOSBaseLine = new LabelTwoAfter("l2aPOSBaseLine", posBaseLine);
-		LabelTwoAfter l2aPOSMikheev = new LabelTwoAfter("l2aPOSMikheev", posMikheev);
-		
-		//Test when using POS View
-		ArrayList<Set<Feature>> featslist = new ArrayList<>();
+        // System.out.println("The constituent we are extracting features from
+        // in this test is: " + test.getSurfaceForm());
 
-		for (Constituent test : testlist)
-			featslist.add(l2aPOS.getFeatures(test));
+        // String fileName =
+        // "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
+        String fileName =
+                edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix
+                        + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
 
-		if (featslist.isEmpty()) {
-			System.out.println("Feats list is returning NULL.");
-		}
-		
-		System.out.println("\n" + "Test when using POS View");
-		System.out.println("Printing list of Feature set");
+        POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
+        posBaseLine.buildTable(fileName);
 
-		for (Set<Feature> feats : featslist) {
-			for (Feature f : feats)
-				System.out.println(f.getName());
-		}
-		
-		//Test when using POS baseline Counting
-		featslist.clear();
-		
-		for (Constituent test : testlist)
-			featslist.add(l2aPOSBaseLine.getFeatures(test));
+        POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
+        posMikheev.buildTable(fileName);
 
-		if (featslist.isEmpty()) {
-			System.out.println("Feats list is returning NULL.");
-		}
+        LabelTwoAfter l2aPOS = new LabelTwoAfter("l2aPOS");
+        LabelTwoAfter l2aPOSBaseLine = new LabelTwoAfter("l2aPOSBaseLine", posBaseLine);
+        LabelTwoAfter l2aPOSMikheev = new LabelTwoAfter("l2aPOSMikheev", posMikheev);
 
-		System.out.println("\n" + "Test when using POS baseline Counting");
-		System.out.println("Printing list of Feature set");
+        // Test when using POS View
+        ArrayList<Set<Feature>> featslist = new ArrayList<>();
 
-		for (Set<Feature> feats : featslist) {
-			for (Feature f : feats)
-				System.out.println(f.getName());
-		}
-		//Test when using POS Mikheev Counting
-		featslist.clear();
-		
-		for (Constituent test : testlist)
-			featslist.add(l2aPOSMikheev.getFeatures(test));
+        for (Constituent test : testlist)
+            featslist.add(l2aPOS.getFeatures(test));
 
-		if (featslist.isEmpty()) {
-			System.out.println("Feats list is returning NULL.");
-		}
+        if (featslist.isEmpty()) {
+            System.out.println("Feats list is returning NULL.");
+        }
 
-		System.out.println("\n" + "Test when using POS Mikheev Counting");
-		System.out.println("Printing list of Feature set");
+        System.out.println("\n" + "Test when using POS View");
+        System.out.println("Printing list of Feature set");
 
-		for (Set<Feature> feats : featslist) {
-			for (Feature f : feats)
-				System.out.println(f.getName());
-		}
+        for (Set<Feature> feats : featslist) {
+            for (Feature f : feats)
+                System.out.println(f.getName());
+        }
 
-		System.out.println("GOT FEATURES YES!");
-	}
+        // Test when using POS baseline Counting
+        featslist.clear();
 
-	private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
+        for (Constituent test : testlist)
+            featslist.add(l2aPOSBaseLine.getFeatures(test));
 
-		for (TextAnnotation ta : tas) {
-			for (String viewName : viewNames)
-				if (ta.hasView(viewName))
-					System.out.println(ta.getView(viewName));
-		}
-	}
+        if (featslist.isEmpty()) {
+            System.out.println("Feats list is returning NULL.");
+        }
+
+        System.out.println("\n" + "Test when using POS baseline Counting");
+        System.out.println("Printing list of Feature set");
+
+        for (Set<Feature> feats : featslist) {
+            for (Feature f : feats)
+                System.out.println(f.getName());
+        }
+        // Test when using POS Mikheev Counting
+        featslist.clear();
+
+        for (Constituent test : testlist)
+            featslist.add(l2aPOSMikheev.getFeatures(test));
+
+        if (featslist.isEmpty()) {
+            System.out.println("Feats list is returning NULL.");
+        }
+
+        System.out.println("\n" + "Test when using POS Mikheev Counting");
+        System.out.println("Printing list of Feature set");
+
+        for (Set<Feature> feats : featslist) {
+            for (Feature f : feats)
+                System.out.println(f.getName());
+        }
+
+        System.out.println("GOT FEATURES YES!");
+    }
+
+    private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
+            throws EdisonException {
+
+        for (TextAnnotation ta : tas) {
+            for (String viewName : viewNames)
+                if (ta.hasView(viewName))
+                    System.out.println(ta.getView(viewName));
+        }
+    }
 }

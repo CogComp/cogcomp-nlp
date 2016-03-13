@@ -260,25 +260,33 @@ public class NETesterMultiDataset {
                     NEWord originalW = (NEWord) originalSentence.get(j);
                     NEWord w = new NEWord(new Word(originalW.form), null, null);
                     w.neLabel = originalW.neLabel;
-                    if (w.neLabel.indexOf('-') > -1 && dataSet.labelsToIgnoreForEvaluation
-                            .contains(w.neLabel.substring(2))) w.neLabel = "O";
+                    if (w.neLabel.indexOf('-') > -1
+                            && dataSet.labelsToIgnoreForEvaluation.contains(w.neLabel.substring(2)))
+                        w.neLabel = "O";
                     w.neTypeLevel1 = originalW.neTypeLevel1;
-                    if (w.neLabel.indexOf('-') > -1 && dataSet.labelsToAnonymizeForEvaluation
-                            .contains(w.neLabel.substring(2))) {
+                    if (w.neLabel.indexOf('-') > -1
+                            && dataSet.labelsToAnonymizeForEvaluation.contains(w.neLabel
+                                    .substring(2))) {
                         w.neLabel = w.neLabel.substring(0, 2) + "ENTITY";
                         // System.out.println("replace!!!");
                     }
                     w.neTypeLevel1 = originalW.neTypeLevel1;
-                    if (w.neTypeLevel1.indexOf('-') > -1 && dataSet.labelsToIgnoreForEvaluation
-                            .contains(w.neTypeLevel1.substring(2))) w.neTypeLevel1 = "O";
-                    if (w.neTypeLevel1.indexOf('-') > -1 && dataSet.labelsToAnonymizeForEvaluation
-                            .contains(w.neTypeLevel1.substring(2)))
+                    if (w.neTypeLevel1.indexOf('-') > -1
+                            && dataSet.labelsToIgnoreForEvaluation.contains(w.neTypeLevel1
+                                    .substring(2)))
+                        w.neTypeLevel1 = "O";
+                    if (w.neTypeLevel1.indexOf('-') > -1
+                            && dataSet.labelsToAnonymizeForEvaluation.contains(w.neTypeLevel1
+                                    .substring(2)))
                         w.neTypeLevel1 = w.neTypeLevel1.substring(0, 2) + "ENTITY";
                     w.neTypeLevel2 = originalW.neTypeLevel2;
-                    if (w.neTypeLevel2.indexOf('-') > -1 && dataSet.labelsToIgnoreForEvaluation
-                            .contains(w.neTypeLevel2.substring(2))) w.neTypeLevel2 = "O";
-                    if (w.neTypeLevel2.indexOf('-') > -1 && dataSet.labelsToAnonymizeForEvaluation
-                            .contains(w.neTypeLevel2.substring(2)))
+                    if (w.neTypeLevel2.indexOf('-') > -1
+                            && dataSet.labelsToIgnoreForEvaluation.contains(w.neTypeLevel2
+                                    .substring(2)))
+                        w.neTypeLevel2 = "O";
+                    if (w.neTypeLevel2.indexOf('-') > -1
+                            && dataSet.labelsToAnonymizeForEvaluation.contains(w.neTypeLevel2
+                                    .substring(2)))
                         w.neTypeLevel2 = w.neTypeLevel2.substring(0, 2) + "ENTITY";
                     sentence.add(w);
                 }
@@ -293,7 +301,8 @@ public class NETesterMultiDataset {
                     dataCloneWithanonymizedLabels.documents.get(docid).sentences;
             for (LinkedVector vector : sentences) {
                 int N = vector.size();
-                String[] predictionsLevel1 = new String[N], predictionsLevel2 = new String[N], labels = new String[N];
+                String[] predictionsLevel1 = new String[N], predictionsLevel2 = new String[N], labels =
+                        new String[N];
 
                 for (int i = 0; i < N; ++i) {
                     predictionsLevel1[i] = ((NEWord) vector.get(i)).neTypeLevel1;
@@ -301,10 +310,13 @@ public class NETesterMultiDataset {
                     labels[i] = labeler.discreteValue(vector.get(i));
                     String pLevel1 = predictionsLevel1[i];
                     String pLevel2 = predictionsLevel2[i];
-                    if (pLevel1.indexOf('-') > -1) pLevel1 = pLevel1.substring(2);
-                    if (pLevel2.indexOf('-') > -1) pLevel2 = pLevel2.substring(2);
+                    if (pLevel1.indexOf('-') > -1)
+                        pLevel1 = pLevel1.substring(2);
+                    if (pLevel2.indexOf('-') > -1)
+                        pLevel2 = pLevel2.substring(2);
                     String l = labels[i];
-                    if (l.indexOf('-') > -1) l = l.substring(2);
+                    if (l.indexOf('-') > -1)
+                        l = l.substring(2);
                     resultsTokenLevel1.reportPrediction(pLevel1, l);
                     resultsTokenLevel2.reportPrediction(pLevel2, l);
                 }
@@ -315,25 +327,31 @@ public class NETesterMultiDataset {
                     String p = "O", l = "O";
                     int pEnd = -1, lEnd = -1;
 
-                    if (predictionsLevel1[i].startsWith("B-") || predictionsLevel1[i]
-                            .startsWith("I-") && (i == 0 || !predictionsLevel1[i - 1]
-                            .endsWith(predictionsLevel1[i].substring(2)))) {
+                    if (predictionsLevel1[i].startsWith("B-")
+                            || predictionsLevel1[i].startsWith("I-")
+                            && (i == 0 || !predictionsLevel1[i - 1].endsWith(predictionsLevel1[i]
+                                    .substring(2)))) {
                         p = predictionsLevel1[i].substring(2);
                         pEnd = i;
-                        while (pEnd + 1 < N && predictionsLevel1[pEnd + 1].equals("I-" + p)) ++pEnd;
+                        while (pEnd + 1 < N && predictionsLevel1[pEnd + 1].equals("I-" + p))
+                            ++pEnd;
                     }
 
                     if (labels[i].startsWith("B-")) {
                         l = labels[i].substring(2);
                         lEnd = i;
-                        while (lEnd + 1 < N && labels[lEnd + 1].equals("I-" + l)) ++lEnd;
+                        while (lEnd + 1 < N && labels[lEnd + 1].equals("I-" + l))
+                            ++lEnd;
                     }
 
                     if (!p.equals("O") || !l.equals("O")) {
-                        if (pEnd == lEnd) resultsPhraseLevel1.reportPrediction(p, l);
+                        if (pEnd == lEnd)
+                            resultsPhraseLevel1.reportPrediction(p, l);
                         else {
-                            if (!p.equals("O")) resultsPhraseLevel1.reportPrediction(p, "O");
-                            if (!l.equals("O")) resultsPhraseLevel1.reportPrediction("O", l);
+                            if (!p.equals("O"))
+                                resultsPhraseLevel1.reportPrediction(p, "O");
+                            if (!l.equals("O"))
+                                resultsPhraseLevel1.reportPrediction("O", l);
                         }
                     }
                 }
@@ -343,25 +361,31 @@ public class NETesterMultiDataset {
                     String p = "O", l = "O";
                     int pEnd = -1, lEnd = -1;
 
-                    if (predictionsLevel2[i].startsWith("B-") || predictionsLevel2[i]
-                            .startsWith("I-") && (i == 0 || !predictionsLevel2[i - 1]
-                            .endsWith(predictionsLevel2[i].substring(2)))) {
+                    if (predictionsLevel2[i].startsWith("B-")
+                            || predictionsLevel2[i].startsWith("I-")
+                            && (i == 0 || !predictionsLevel2[i - 1].endsWith(predictionsLevel2[i]
+                                    .substring(2)))) {
                         p = predictionsLevel2[i].substring(2);
                         pEnd = i;
-                        while (pEnd + 1 < N && predictionsLevel2[pEnd + 1].equals("I-" + p)) ++pEnd;
+                        while (pEnd + 1 < N && predictionsLevel2[pEnd + 1].equals("I-" + p))
+                            ++pEnd;
                     }
 
                     if (labels[i].startsWith("B-")) {
                         l = labels[i].substring(2);
                         lEnd = i;
-                        while (lEnd + 1 < N && labels[lEnd + 1].equals("I-" + l)) ++lEnd;
+                        while (lEnd + 1 < N && labels[lEnd + 1].equals("I-" + l))
+                            ++lEnd;
                     }
 
                     if (!p.equals("O") || !l.equals("O")) {
-                        if (pEnd == lEnd) resultsPhraseLevel2.reportPrediction(p, l);
+                        if (pEnd == lEnd)
+                            resultsPhraseLevel2.reportPrediction(p, l);
                         else {
-                            if (!p.equals("O")) resultsPhraseLevel2.reportPrediction(p, "O");
-                            if (!l.equals("O")) resultsPhraseLevel2.reportPrediction("O", l);
+                            if (!p.equals("O"))
+                                resultsPhraseLevel2.reportPrediction(p, "O");
+                            if (!l.equals("O"))
+                                resultsPhraseLevel2.reportPrediction("O", l);
                         }
                     }
                 }
@@ -386,7 +410,8 @@ public class NETesterMultiDataset {
                     if (bracketTypePrediction.indexOf('-') > 0)
                         bracketTypePrediction = bracketTypePrediction.substring(0, 1);
                     String bracketTypeLabel = w.neLabel;
-                    if (bracketTypeLabel.indexOf('-') > 0) bracketTypeLabel = bracketTypeLabel.substring(0, 1);
+                    if (bracketTypeLabel.indexOf('-') > 0)
+                        bracketTypeLabel = bracketTypeLabel.substring(0, 1);
                     resultsByBILOU.reportPrediction(w.neTypeLevel2, w.neLabel);
                     resultsSegmentation.reportPrediction(bracketTypePrediction, bracketTypeLabel);
                 }
