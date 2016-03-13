@@ -46,7 +46,7 @@ public class Parameters {
      *        {@link #readAndLoadConfig readAndLoadConfig}
      */
     public static void readConfigAndLoadExternalData(ResourceManager rm) {
-        ParametersForLbjCode.currentParameters =readAndLoadConfig(rm, false);
+        ParametersForLbjCode.currentParameters = readAndLoadConfig(rm, false);
     }
 
 
@@ -116,7 +116,7 @@ public class Parameters {
             }
 
             param.debug = rm.getDebug();
-//            ParametersForLbjCode.currentParameters.debug = param.debug;
+            // ParametersForLbjCode.currentParameters.debug = param.debug;
 
             double randomNoiseLevel = rm.getDouble(NerBaseConfigurator.RANDOM_NOISE_LEVEL);
             double omissionRate = rm.getDouble(NerBaseConfigurator.OMISSION_RATE);
@@ -125,7 +125,8 @@ public class Parameters {
             String cFilename = rm.getString(NerBaseConfigurator.MODEL_NAME);
             if (cFilename == null) {
                 throw new IllegalArgumentException(
-                        "Config File Error: Expected value for non-optional '" + NerBaseConfigurator.MODEL_NAME + "'");
+                        "Config File Error: Expected value for non-optional '"
+                                + NerBaseConfigurator.MODEL_NAME + "'");
             }
             param.configFilename = cFilename;
 

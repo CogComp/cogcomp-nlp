@@ -79,8 +79,7 @@ public class POSAnnotator extends Annotator {
 
     /**
      * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to
-     * check for pre-requisites before calling any single (external)
-     * {@link Annotator}.
+     * check for pre-requisites before calling any single (external) {@link Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by
      *         this ViewGenerator

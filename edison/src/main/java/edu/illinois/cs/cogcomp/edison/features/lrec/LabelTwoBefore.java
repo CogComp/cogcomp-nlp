@@ -20,86 +20,86 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
  * 
  * @author Xinbo Wu
  */
-public class LabelTwoBefore implements FeatureExtractor{
-	private final String viewName;
-	private final boolean isPOSFromCounting;
-	private final boolean isBaseLineCounting;
-	protected POSBaseLineCounter counter;
-	
-	public LabelTwoBefore(String viewName){
-		this.isPOSFromCounting = false;
-		this.isBaseLineCounting = false;
-		this.viewName = viewName;
-	}
-	
-	public LabelTwoBefore(String viewName, POSBaseLineCounter counter){
-		this.isPOSFromCounting = true;
-		this.isBaseLineCounting = true;
-		this.viewName = viewName;
-		this.counter = counter;
-	}
-	
-	public LabelTwoBefore(String viewName, POSMikheevCounter counter){
-		this.isPOSFromCounting = true;
-		this.isBaseLineCounting = false;
-		this.viewName = viewName;
-		this.counter = counter;
-	}
-	
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		String classifier;
-		String prefix = "LabelTwoBefore";
-		
-		TextAnnotation ta = c.getTextAnnotation();
-		
-		int start = c.getStartSpan() - 2;
-		int end = c.getEndSpan() - 2;
-		
-		Set<Feature> features = new LinkedHashSet<>();
-		
-		for (int i = start; i < end; i++) {
-			if (!isPOSFromCounting){
-				classifier = prefix + "_" + "POS";
-				
-				if (i >= 0 ){
-					TokenLabelView POSView = (TokenLabelView)ta.getView(ViewNames.POS);
-					
-					String form = ta.getToken(i);
-					String tag = POSView.getLabel(i);
-					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
-					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
-				
-			}else if (isBaseLineCounting){
-				classifier = prefix + "_" + "BaselinePOS";
-				if (i >= 0 ){
-					String form = ta.getToken(i);
-					String tag = counter.tag(i, ta);
-					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
-					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
-				
-			}else{
-				classifier = prefix + "_" + "MikheevPOS";
-				if (i >= 0 ){
-					String form = ta.getToken(i);
-					String tag = counter.tag(i, ta);
-					features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
-					
-				}else
-					features.add(new DiscreteFeature(classifier + ":" + ""));
-				
-			}
-		}
-	
-		return features;
-	}
-	
-	@Override
-	public String getName() {
-		return "#path#" + this.viewName;
-	}
+public class LabelTwoBefore implements FeatureExtractor {
+    private final String viewName;
+    private final boolean isPOSFromCounting;
+    private final boolean isBaseLineCounting;
+    protected POSBaseLineCounter counter;
+
+    public LabelTwoBefore(String viewName) {
+        this.isPOSFromCounting = false;
+        this.isBaseLineCounting = false;
+        this.viewName = viewName;
+    }
+
+    public LabelTwoBefore(String viewName, POSBaseLineCounter counter) {
+        this.isPOSFromCounting = true;
+        this.isBaseLineCounting = true;
+        this.viewName = viewName;
+        this.counter = counter;
+    }
+
+    public LabelTwoBefore(String viewName, POSMikheevCounter counter) {
+        this.isPOSFromCounting = true;
+        this.isBaseLineCounting = false;
+        this.viewName = viewName;
+        this.counter = counter;
+    }
+
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        String classifier;
+        String prefix = "LabelTwoBefore";
+
+        TextAnnotation ta = c.getTextAnnotation();
+
+        int start = c.getStartSpan() - 2;
+        int end = c.getEndSpan() - 2;
+
+        Set<Feature> features = new LinkedHashSet<>();
+
+        for (int i = start; i < end; i++) {
+            if (!isPOSFromCounting) {
+                classifier = prefix + "_" + "POS";
+
+                if (i >= 0) {
+                    TokenLabelView POSView = (TokenLabelView) ta.getView(ViewNames.POS);
+
+                    String form = ta.getToken(i);
+                    String tag = POSView.getLabel(i);
+                    features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
+
+                } else
+                    features.add(new DiscreteFeature(classifier + ":" + ""));
+
+            } else if (isBaseLineCounting) {
+                classifier = prefix + "_" + "BaselinePOS";
+                if (i >= 0) {
+                    String form = ta.getToken(i);
+                    String tag = counter.tag(i, ta);
+                    features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
+
+                } else
+                    features.add(new DiscreteFeature(classifier + ":" + ""));
+
+            } else {
+                classifier = prefix + "_" + "MikheevPOS";
+                if (i >= 0) {
+                    String form = ta.getToken(i);
+                    String tag = counter.tag(i, ta);
+                    features.add(new DiscreteFeature(classifier + ":" + tag + "_" + form));
+
+                } else
+                    features.add(new DiscreteFeature(classifier + ":" + ""));
+
+            }
+        }
+
+        return features;
+    }
+
+    @Override
+    public String getName() {
+        return "#path#" + this.viewName;
+    }
 }

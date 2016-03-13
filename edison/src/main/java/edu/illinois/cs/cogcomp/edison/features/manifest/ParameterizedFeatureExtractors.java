@@ -39,7 +39,8 @@ class ParameterizedFeatureExtractors {
                         case ViewNames.PARSE_STANFORD:
                             return ClauseFeatureExtractor.STANFORD;
                         default:
-                            throw new EdisonException("Cannot generate clause view for using " + parse);
+                            throw new EdisonException("Cannot generate clause view for using "
+                                    + parse);
                     }
 
                 }
@@ -130,7 +131,8 @@ class ParameterizedFeatureExtractors {
                             transformer = FeatureInputTransformer.berkeleyHead;
                             break;
                         default:
-                            throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                            throw new EdisonException("Invalid parse view: " + parseView + "\n"
+                                    + tree);
                     }
 
                     return new FeatureCollection("", transformer, fex);
@@ -168,7 +170,8 @@ class ParameterizedFeatureExtractors {
                             transformer = FeatureInputTransformer.easyFirstDependencyGovernor;
                             break;
                         default:
-                            throw new EdisonException("Invalid parse view: " + parseView + "\n" + tree);
+                            throw new EdisonException("Invalid parse view: " + parseView + "\n"
+                                    + tree);
                     }
 
                     return new FeatureCollection("", transformer, fex);

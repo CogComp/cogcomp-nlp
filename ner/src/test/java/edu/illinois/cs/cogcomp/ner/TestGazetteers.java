@@ -69,8 +69,8 @@ public class TestGazetteers {
             fail();
         }
 
-        ResourceManager rm = new ResourceManager( COL_TEST_CONFIG );
-        dataDir =rm.getString( NER_DATA_PATH );
+        ResourceManager rm = new ResourceManager(COL_TEST_CONFIG);
+        dataDir = rm.getString(NER_DATA_PATH);
 
     }
 
@@ -96,7 +96,7 @@ public class TestGazetteers {
         System.out.println("Starting ");
 
         try {
-//                    "/Users/redman/Projects/IllinoisNER/GoldData/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev";
+            // "/Users/redman/Projects/IllinoisNER/GoldData/Reuters/ColumnFormatDocumentsSplit/TrainPlusDev";
             String[] files = new File(dataDir).list();
             for (String file1 : files) {
                 String file = dataDir + File.separator + file1;

@@ -27,7 +27,8 @@ public class ExpressiveFeaturesAnnotator {
                     for (LinkedVector sentence : sentences) {
                         for (int j = 0; j < sentence.size(); j++) {
                             NEWord ww = (NEWord) sentence.get(j);
-                            if (ww.gazetteers == null) ww.gazetteers = new ArrayList<>();
+                            if (ww.gazetteers == null)
+                                ww.gazetteers = new ArrayList<>();
                         }
                     }
                 }
@@ -78,7 +79,8 @@ public class ExpressiveFeaturesAnnotator {
                     for (LinkedVector sentence : sentences) {
                         for (int j = 0; j < sentence.size(); j++) {
                             NEWord ww = (NEWord) sentence.get(j);
-                            if (ww.gazetteers == null) ww.gazetteers = new ArrayList<>();
+                            if (ww.gazetteers == null)
+                                ww.gazetteers = new ArrayList<>();
                         }
                     }
                 }

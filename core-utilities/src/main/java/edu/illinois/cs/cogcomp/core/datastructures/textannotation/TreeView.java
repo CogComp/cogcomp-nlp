@@ -106,7 +106,9 @@ public class TreeView extends View {
     protected void setDependencyTreeSwitch(Constituent root) {
         List<Relation> rootRelations = root.getOutgoingRelations();
 
-        isDependencyTree = rootRelations.size() != 0 && !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
+        isDependencyTree =
+                rootRelations.size() != 0
+                        && !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
     }
 
     private void findRoots() {

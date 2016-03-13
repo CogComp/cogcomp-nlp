@@ -16,12 +16,12 @@ public abstract class Annotator {
 
 
     /**
-     * set the name of the View this Annotator creates, and the list of prerequisite Views that this Annotator
-     *    requires as input
+     * set the name of the View this Annotator creates, and the list of prerequisite Views that this
+     * Annotator requires as input
      *
      * @param viewName The name of the View this annotator will populate. This will be used to
-     *                 access the created view from the TextAnnotation holding it.
-     * @param requiredViews  The views that must be populated for this new view to be created.
+     *        access the created view from the TextAnnotation holding it.
+     * @param requiredViews The views that must be populated for this new view to be created.
      */
     public Annotator(String viewName, String[] requiredViews) {
         this.viewName = viewName;
@@ -32,7 +32,7 @@ public abstract class Annotator {
     /**
      * create and add the view named by getViewName() to the TextAnnotation argument.
      *
-     * @param ta  the TextAnnotation to modify.
+     * @param ta the TextAnnotation to modify.
      */
     public abstract void addView(TextAnnotation ta) throws AnnotatorException;
 

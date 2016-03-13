@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Counter test: max, sorted items
+ * 
  * @author Shyam Upadhyay
  * @author Christos Christodoulopoulos
  * @since 12/10/15.

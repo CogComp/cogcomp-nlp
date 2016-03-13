@@ -144,7 +144,8 @@ public class BrownClusters {
                     if (!wordToPath.containsKey(form)) {
                         oovCaseSensitiveHash.put(form, true);
                     }
-                    if ((!wordToPath.containsKey(form)) && (!wordToPath.containsKey(form.toLowerCase()))) {
+                    if ((!wordToPath.containsKey(form))
+                            && (!wordToPath.containsKey(form.toLowerCase()))) {
                         oovAfterLowercasingHash.put(form.toLowerCase(), true);
                     }
                 }

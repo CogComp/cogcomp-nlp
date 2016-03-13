@@ -59,7 +59,9 @@ public class Table extends DefaultTableModel {
         buffer.append("<tr>");
 
         for (int i = 0; i < numCols; i++) {
-            buffer.append("<th style=\"border-width:1px; border-style:inset; border-color:#000000;\">").append(this.getColumnName(i)).append("</th>");
+            buffer.append(
+                    "<th style=\"border-width:1px; border-style:inset; border-color:#000000;\">")
+                    .append(this.getColumnName(i)).append("</th>");
         }
         buffer.append("</tr>\n");
 
@@ -77,7 +79,11 @@ public class Table extends DefaultTableModel {
 
             buffer.append("<tr>");
             for (int i = 0; i < numCols; i++) {
-                buffer.append("<").append(trh).append(" style=\"border-width:1px; border-style:inset; border-color:#000000; ").append(color).append(" \">").append(this.getValueAt(row, i)).append(" </").append(trh).append(">");
+                buffer.append("<")
+                        .append(trh)
+                        .append(" style=\"border-width:1px; border-style:inset; border-color:#000000; ")
+                        .append(color).append(" \">").append(this.getValueAt(row, i)).append(" </")
+                        .append(trh).append(">");
             }
             buffer.append("</tr>\n");
         }

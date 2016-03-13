@@ -26,7 +26,8 @@ public class ParametersForLbjCode {
     // Labels to evaluate only for having found an NE regardless of the label found.
     public Vector<String> labelsToAnonymizeInEvaluation = null;
 
-    // if we use this set of parameters as auxiliary feature- this tells us what is the name of the feature to generate.
+    // if we use this set of parameters as auxiliary feature- this tells us what is the name of the
+    // feature to generate.
     public String nameAsAuxFeature = null;
 
     public SparseNetworkLearner taggerLevel1;
@@ -51,7 +52,8 @@ public class ParametersForLbjCode {
     // this will selectively lowercase the text in the first sentence if it's all-capitalized
     public boolean normalizeTitleText = false;
 
-    // can be: ".data/ner-ext/BrownHierarchicalWordClusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
+    // can be:
+    // ".data/ner-ext/BrownHierarchicalWordClusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
     public String pathToTokenNormalizationData = null;
 
     // this will not normalize the text in any way
@@ -73,7 +75,8 @@ public class ParametersForLbjCode {
     // should be BIO / BILOU/ IOB1/ IOE1/ IOE2
     public String configFilename = null;
     // so that we can automatically save the models at the right place
-    // this name must be unique for each config file, and it will be appended to the model file names,
+    // this name must be unique for each config file, and it will be appended to the model file
+    // names,
     public TokenizationScheme tokenizationScheme = TokenizationScheme.DualTokenizationScheme;
 
 }
