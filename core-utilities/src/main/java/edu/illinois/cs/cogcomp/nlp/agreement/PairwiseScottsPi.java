@@ -1,8 +1,7 @@
 package edu.illinois.cs.cogcomp.nlp.agreement;
 
 /**
- * This assumes that all annotators have the expected distribution for random
- * assignment of labels.
+ * This assumes that all annotators have the expected distribution for random assignment of labels.
  *
  * @author Vivek Srikumar
  */

@@ -17,7 +17,8 @@ public class DoubleArrayIO {
     private final static Logger log = LoggerFactory.getLogger(DoubleArrayIO.class);
 
     public static void save(double[] w, String fileName) throws FileNotFoundException, IOException {
-        BufferedOutputStream stream = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)));
+        BufferedOutputStream stream =
+                new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)));
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
 

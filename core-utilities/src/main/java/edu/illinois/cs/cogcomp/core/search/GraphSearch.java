@@ -3,11 +3,11 @@ package edu.illinois.cs.cogcomp.core.search;
 import java.util.Queue;
 
 /**
- * This is the abstract class that does graph search, based on a queuing
- * function. Use one of its descendants.
+ * This is the abstract class that does graph search, based on a queuing function. Use one of its
+ * descendants.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public abstract class GraphSearch<T> {
@@ -18,13 +18,12 @@ public abstract class GraphSearch<T> {
     }
 
     /**
-     * Performs graph search, starting with the <code>initialState</code>.
-     * <code>stateManager</code> defines the successor state function and the
-     * goal test function.
-     * <p/>
+     * Performs graph search, starting with the <code>initialState</code>. <code>stateManager</code>
+     * defines the successor state function and the goal test function.
+     * <p>
      *
-     * @return The first state that satisfies the goal test function. If no such
-     * state is found, then the function returns <code>null</code>.
+     * @return The first state that satisfies the goal test function. If no such state is found,
+     *         then the function returns <code>null</code>.
      */
     public T search(T initialState, IStateManager<T> stateManager) {
         queue.clear();

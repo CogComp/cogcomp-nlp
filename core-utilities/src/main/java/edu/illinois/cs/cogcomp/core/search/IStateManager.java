@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public interface IStateManager<T> {

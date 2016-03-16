@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.*;
 
 /**
- * A Constituent represents a unit of text (not necessarily contiguous) that
- * participates in a view. In terms of the nodes and edges representation of
- * views, Constituents are the nodes and {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation}s are edges. Each
+ * A Constituent represents a unit of text (not necessarily contiguous) that participates in a view.
+ * In terms of the nodes and edges representation of views, Constituents are the nodes and
+ * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation}s are edges. Each
  * Constituent corresponds to a set of tokens in a {@link TextAnnotation}.
  *
  * @author Vivek Srikumar
@@ -36,47 +36,49 @@ public class Constituent implements Serializable {
     protected final int label;
 
     /**
-     * This indicates whether the element {@code Constituent#constituentTokens}
-     * is a two element list consisting of a start and an end tokenId,
-     * specifying a span, instead of explicitly listing the each element. This
-     * would use less memory.
+     * This indicates whether the element {@code Constituent#constituentTokens} is a two element
+     * list consisting of a start and an end tokenId, specifying a span, instead of explicitly
+     * listing the each element. This would use less memory.
      */
     // protected boolean useConstituentTokensAsSpan;
 
     protected final String viewName;
 
     /**
-     * start, end offsets are token indexes, and use one-past-the-end indexing
-     *    -- so a one-token constituent right at the beginning of a text has start/end (0,1)
-     * offsets are relative to the entire text span (i.e. NOT sentence-relative)
-     * This constructor assigns default score to constituent
+     * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
+     * constituent right at the beginning of a text has start/end (0,1) offsets are relative to the
+     * entire text span (i.e. NOT sentence-relative) This constructor assigns default score to
+     * constituent
      *
      * @param label label of this Constituent
-     * @param viewName  name of {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this Constituent belongs to
-     * @param text  TextAnnotation this Constituent belongs to
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
      * @param start start token offset
-     * @param end   end token offset (one-past-the-end)
+     * @param end end token offset (one-past-the-end)
      */
-    public Constituent(String label, String viewName, TextAnnotation text,
-                       int start, int end) {
+    public Constituent(String label, String viewName, TextAnnotation text, int start, int end) {
         this(label, 1.0, viewName, text, start, end);
     }
 
 
     /**
-     * start, end offsets are token indexes, and use one-past-the-end indexing
-     *    -- so a one-token constituent right at the beginning of a text has start/end (0,1)
-     * offsets are relative to the entire text span (i.e. NOT sentence-relative)
+     * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
+     * constituent right at the beginning of a text has start/end (0,1) offsets are relative to the
+     * entire text span (i.e. NOT sentence-relative)
      *
      * @param label label of this Constituent
      * @param score confidence in label
-     * @param viewName  name of {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this Constituent belongs to
-     * @param text  TextAnnotation this Constituent belongs to
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
      * @param start start token offset
-     * @param end   end token offset (one-past-the-end)
+     * @param end end token offset (one-past-the-end)
      */
-    public Constituent(String label, double score, String viewName,
-                       TextAnnotation text, int start, int end) {
+    public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
+            int end) {
 
         if (label == null)
             label = "";
@@ -106,18 +108,20 @@ public class Constituent implements Serializable {
 
 
         if (startSpan >= 0) {
-            startCharOffset = text.getTokenCharacterOffset(startSpan)
-                    .getFirst();
+            startCharOffset = text.getTokenCharacterOffset(startSpan).getFirst();
         } else
             startCharOffset = -1;
 
         if (endSpan > 0 && endSpan <= text.size()) {
-// TODO: verify correct token offset behavior. If a Constituent must always use one-past-the-end indexing wrt token
-            // indexes, this should be a requirement on instantiation.  The check below was throwing an exception
+            // TODO: verify correct token offset behavior. If a Constituent must always use
+            // one-past-the-end indexing wrt token
+            // indexes, this should be a requirement on instantiation. The check below was throwing
+            // an exception
             // when start and end span were the same.
             if (endSpan > startSpan)
                 endCharOffset = text.getTokenCharacterOffset(endSpan - 1).getSecond();
-            else // FIXED -- MS 4/17/2015
+            else
+                // FIXED -- MS 4/17/2015
                 endCharOffset = text.getTokenCharacterOffset(endSpan).getSecond();
         } else
             endCharOffset = 0;
@@ -128,7 +132,9 @@ public class Constituent implements Serializable {
                 + start
                 + ", "
                 + end
-                + "), -> (" + startCharOffset + ", " + endCharOffset + ")";
+                + "), -> ("
+                + startCharOffset
+                + ", " + endCharOffset + ")";
     }
 
     public int getStartCharOffset() {
@@ -194,15 +200,12 @@ public class Constituent implements Serializable {
             if (!this.attributes.equals(that.attributes))
                 return false;
 
-        if (this.getIncomingRelations().size() != that.getIncomingRelations()
-                .size())
+        if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
             return false;
 
-        for (int relationId = 0; relationId < this.getIncomingRelations()
-                .size(); relationId++) {
+        for (int relationId = 0; relationId < this.getIncomingRelations().size(); relationId++) {
             Relation myRelation = this.getIncomingRelations().get(relationId);
-            Relation otherRelation = that.getIncomingRelations()
-                    .get(relationId);
+            Relation otherRelation = that.getIncomingRelations().get(relationId);
 
             int myRelationName = myRelation.relationName;
 
@@ -210,21 +213,17 @@ public class Constituent implements Serializable {
             if (myRelationName != otherRelationName)
                 return false;
 
-            if (!myRelation.getSource().getSpan()
-                    .equals(otherRelation.getSource().getSpan()))
+            if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
                 return false;
 
         }
 
-        if (this.getOutgoingRelations().size() != that.getOutgoingRelations()
-                .size())
+        if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
             return false;
 
-        for (int relationId = 0; relationId < this.getOutgoingRelations()
-                .size(); relationId++) {
+        for (int relationId = 0; relationId < this.getOutgoingRelations().size(); relationId++) {
             Relation myRelation = this.getOutgoingRelations().get(relationId);
-            Relation otherRelation = that.getOutgoingRelations()
-                    .get(relationId);
+            Relation otherRelation = that.getOutgoingRelations().get(relationId);
 
             int myRelationName = myRelation.relationName;
 
@@ -233,13 +232,11 @@ public class Constituent implements Serializable {
             if (myRelationName != otherRelationName)
                 return false;
 
-            if (!myRelation.getTarget().getSpan()
-                    .equals(otherRelation.getTarget().getSpan()))
+            if (!myRelation.getTarget().getSpan().equals(otherRelation.getTarget().getSpan()))
                 return false;
         }
 
-        return this.textAnnotation.getText().equals(
-                that.textAnnotation.getText())
+        return this.textAnnotation.getText().equals(that.textAnnotation.getText())
                 && this.getStartSpan() == that.getStartSpan()
                 && this.getEndSpan() == that.getEndSpan()
                 && this.getLabel().equals(that.getLabel())
@@ -299,10 +296,12 @@ public class Constituent implements Serializable {
     }
 
     /**
-     * This method returns a <i>tokenized</i> representation of the surface form of the constituent. This is <b>not</b>
-     * the original surface form of the constituent. To retrieve that, please use {@link #getSurfaceForm}
+     * This method returns a <i>tokenized</i> representation of the surface form of the constituent.
+     * This is <b>not</b> the original surface form of the constituent. To retrieve that, please use
+     * {@link #getSurfaceForm}
      *
-     * @return A constructed form based on the tokens covered by the constituent and a single whitespace separating them.
+     * @return A constructed form based on the tokens covered by the constituent and a single
+     *         whitespace separating them.
      */
     public String getTokenizedSurfaceForm() {
         StringBuilder sb = new StringBuilder();
@@ -318,8 +317,8 @@ public class Constituent implements Serializable {
     }
 
     /**
-     * This method returns the <i>original</i> surface form of the constituent. To retrieve a <i>tokenized</i> form
-     * please use {@link #getTokenizedSurfaceForm()}
+     * This method returns the <i>original</i> surface form of the constituent. To retrieve a
+     * <i>tokenized</i> form please use {@link #getTokenizedSurfaceForm()}
      *
      * @return The original (char-offset-based) form of the constituent.
      */
@@ -358,8 +357,7 @@ public class Constituent implements Serializable {
         hashCode += this.getEndSpan() * 43;
 
         hashCode += this.getLabel().hashCode() * 91;
-        hashCode += (this.attributes == null ? 0
-                : this.attributes.hashCode() * 7);
+        hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 7);
         hashCode += (new Double(this.constituentScore)).hashCode() * 67;
         hashCode += this.getViewName().hashCode();
 
@@ -426,8 +424,8 @@ public class Constituent implements Serializable {
         return toSExpression(0, true, "", includeEdgeLabels);
     }
 
-    protected String toSExpression(int spaces, boolean firstChild,
-                                   String prefix, boolean includeEdgeLabels) {
+    protected String toSExpression(int spaces, boolean firstChild, String prefix,
+            boolean includeEdgeLabels) {
         StringBuilder sb = new StringBuilder();
 
         if (!firstChild) {
@@ -447,12 +445,11 @@ public class Constituent implements Serializable {
 
         // for (Relation relation : this.sourceOfRelations())
         for (int i = 0; i < this.getOutgoingRelations().size(); i++) {
-            String childPrefix = this.getOutgoingRelations().get(i)
-                    .getRelationName();
+            String childPrefix = this.getOutgoingRelations().get(i).getRelationName();
 
             Constituent child = this.getOutgoingRelations().get(i).getTarget();
-            sb.append(child.toSExpression(spaces + len, isFirstChild,
-                    childPrefix, includeEdgeLabels));
+            sb.append(child.toSExpression(spaces + len, isFirstChild, childPrefix,
+                    includeEdgeLabels));
             isFirstChild = false;
 
             if (i < this.getOutgoingRelations().size() - 1)
@@ -471,9 +468,8 @@ public class Constituent implements Serializable {
     }
 
     /**
-     * Return the identifier of the sentence that contains this constituent. No
-     * sentence contains this constituent (that is, if this constituent is an
-     * implicit one), then return -1.
+     * Return the identifier of the sentence that contains this constituent. No sentence contains
+     * this constituent (that is, if this constituent is an implicit one), then return -1.
      */
     public int getSentenceId() {
         try {
@@ -500,9 +496,9 @@ public class Constituent implements Serializable {
     }
 
     public Constituent cloneForNewView(String newViewName) {
-        Constituent cloneC = new Constituent(this.getLabel(), newViewName,
-                this.getTextAnnotation(), this.getStartSpan(),
-                this.getEndSpan());
+        Constituent cloneC =
+                new Constituent(this.getLabel(), newViewName, this.getTextAnnotation(),
+                        this.getStartSpan(), this.getEndSpan());
 
         for (String k : this.getAttributeKeys()) {
             cloneC.addAttribute(k, this.getAttribute(k));
@@ -511,4 +507,13 @@ public class Constituent implements Serializable {
         return cloneC;
     }
 
+    public Constituent cloneForNewViewWithDestinationLabel(String newViewName, String Dlabel) {
+        Constituent cloneC =
+                new Constituent(Dlabel, newViewName, this.getTextAnnotation(), this.getStartSpan(),
+                        this.getEndSpan());
+        for (String k : this.getAttributeKeys()) {
+            cloneC.addAttribute(k, this.getAttribute(k));
+        }
+        return cloneC;
+    }
 }

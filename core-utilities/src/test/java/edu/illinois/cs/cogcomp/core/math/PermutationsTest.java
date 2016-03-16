@@ -9,10 +9,9 @@ import java.util.List;
 public class PermutationsTest extends TestCase {
 
     public void testGetAllBinaryCombinations() {
-        for (int numElements : new int[]{3, 4}) {
+        for (int numElements : new int[] {3, 4}) {
 
-            List<int[]> combs = Permutations
-                    .getAllBinaryCombinations(numElements);
+            List<int[]> combs = Permutations.getAllBinaryCombinations(numElements);
             assertEquals((int) (Math.pow(2, numElements)), combs.size());
 
             // There must be 1 array with all zeros, numElements with one 1, ...
@@ -28,8 +27,8 @@ public class PermutationsTest extends TestCase {
             }
 
             for (int i = 0; i < numElements; i++) {
-                assertEquals((double) MathUtilities.binomialCoeffs(numElements,
-                        i), numOnes.getCount(i));
+                assertEquals((double) MathUtilities.binomialCoeffs(numElements, i),
+                        numOnes.getCount(i));
             }
         }
 
