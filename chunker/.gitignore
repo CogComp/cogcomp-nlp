@@ -1,8 +1,0 @@
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/PreviousTags.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/SOPrevious.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/ChunkLabel.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Mixed.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/POSWindowpp.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Formpp.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Chunker$$1.java
-src/main/java/edu/illinois/cs/cogcomp/lbj/chunk/Chunker.java
