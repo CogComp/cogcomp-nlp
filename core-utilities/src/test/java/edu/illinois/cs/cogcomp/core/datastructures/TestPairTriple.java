@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class TestPairTriple extends TestCase {
 
-    public void testPair(){
+    public void testPair() {
         Pair<String, String> p1 = new Pair<>("Hi", "Hello");
         Pair<String, String> p2 = new Pair<>("Hi", "Hello");
         Pair<String, String> p3 = new Pair<>("Hi", "Howdy");
@@ -21,7 +21,7 @@ public class TestPairTriple extends TestCase {
     }
 
 
-    public void testTriple(){
+    public void testTriple() {
         Triple<String, String, Integer> t1 = new Triple<>("Fearlessness", "Rub", 45);
         Triple<String, String, Integer> t2 = new Triple<>("Fearlessness", "Rub", 45);
         Triple<String, String, Integer> t3 = new Triple<>("Fearlessness", "blah blah", 41);

@@ -16,8 +16,8 @@ public class TestListMatch extends TestCase {
 
         List<String> textSplit = new LinkedList<>();
 
-        for ( int i = 0; i < textString.length(); ++i )
-            textSplit.add( textString.substring( i, i+1 ) );
+        for (int i = 0; i < textString.length(); ++i)
+            textSplit.add(textString.substring(i, i + 1));
 
 
         ListMatch<String> matcher = new RegexBasedMatch<>(pattern);
@@ -30,18 +30,16 @@ public class TestListMatch extends TestCase {
 
     public void testRegexMatchesSeuss() {
 
-        List<String> pattern = Arrays
-                .asList("do", "not", "like");
+        List<String> pattern = Arrays.asList("do", "not", "like");
 
-        List<String> text = new ArrayList<>(Arrays.asList("I", "do",
-                "not", "like", "them", "in", "a", "box", ".", "I", "do", "not",
-                "like", "them", "with", "a", "fox", ".", "I", "do", "not",
-                "like", "them", "in", "a", "house", ".", "I", "do", "not",
-                "like", "them", "with", "a", "mouse", ".", "I", "do", "not",
-                "lik", "them", "here", "or", "there", ".", "I", "do", "not",
-                "like", "them", "anywhere", ".", "I", "do", "not", "like",
-                "green", "eggs", "and", "ham", ".", "I", "do", "not", "like",
-                "them,", "Sam-I-am", "."));
+        List<String> text =
+                new ArrayList<>(Arrays.asList("I", "do", "not", "like", "them", "in", "a", "box",
+                        ".", "I", "do", "not", "like", "them", "with", "a", "fox", ".", "I", "do",
+                        "not", "like", "them", "in", "a", "house", ".", "I", "do", "not", "like",
+                        "them", "with", "a", "mouse", ".", "I", "do", "not", "lik", "them", "here",
+                        "or", "there", ".", "I", "do", "not", "like", "them", "anywhere", ".", "I",
+                        "do", "not", "like", "green", "eggs", "and", "ham", ".", "I", "do", "not",
+                        "like", "them,", "Sam-I-am", "."));
 
         ListMatch<String> matcher = new RegexBasedMatch<>(pattern);
 
@@ -56,18 +54,16 @@ public class TestListMatch extends TestCase {
 
     public void testRegexMatchesSeussSpecial() {
 
-        List<String> pattern = Arrays.asList("****", "*not",
-                "li+e");
+        List<String> pattern = Arrays.asList("****", "*not", "li+e");
 
-        List<String> text = new ArrayList<>(Arrays.asList("I", "****",
-                "*not", "li+e", "them", "in", "a", "box", ".", "I", "****",
-                "*not", "li+e", "them", "with", "a", "fox", ".", "I", "****",
-                "*not", "li+e", "them", "in", "a", "house", ".", "I", "****",
-                "*not", "li+e", "them", "with", "a", "mouse", ".", "I", "****",
-                "*not", "lik", "them", "here", "or", "there", ".", "I", "****",
-                "*not", "li+e", "them", "anywhere", ".", "I", "****", "*not",
-                "li+e", "green", "eggs", "and", "ham", ".", "I", "****",
-                "*not", "li+e", "them,", "Sam-I-am", "."));
+        List<String> text =
+                new ArrayList<>(Arrays.asList("I", "****", "*not", "li+e", "them", "in", "a",
+                        "box", ".", "I", "****", "*not", "li+e", "them", "with", "a", "fox", ".",
+                        "I", "****", "*not", "li+e", "them", "in", "a", "house", ".", "I", "****",
+                        "*not", "li+e", "them", "with", "a", "mouse", ".", "I", "****", "*not",
+                        "lik", "them", "here", "or", "there", ".", "I", "****", "*not", "li+e",
+                        "them", "anywhere", ".", "I", "****", "*not", "li+e", "green", "eggs",
+                        "and", "ham", ".", "I", "****", "*not", "li+e", "them,", "Sam-I-am", "."));
 
         ListMatch<String> matcher = new RegexBasedMatch<>(pattern);
 
@@ -96,18 +92,16 @@ public class TestListMatch extends TestCase {
 
     public void testBMatchesSeuss() {
 
-        List<String> pattern = Arrays
-                .asList("do", "not", "like");
+        List<String> pattern = Arrays.asList("do", "not", "like");
 
-        List<String> text = new ArrayList<>(Arrays.asList("I", "do",
-                "not", "like", "them", "in", "a", "box", ".", "I", "do", "not",
-                "like", "them", "with", "a", "fox", ".", "I", "do", "not",
-                "like", "them", "in", "a", "house", ".", "I", "do", "not",
-                "like", "them", "with", "a", "mouse", ".", "I", "do", "not",
-                "lik", "them", "here", "or", "there", ".", "I", "do", "not",
-                "like", "them", "anywhere", ".", "I", "do", "not", "like",
-                "green", "eggs", "and", "ham", ".", "I", "do", "not", "like",
-                "them,", "Sam-I-am", "."));
+        List<String> text =
+                new ArrayList<>(Arrays.asList("I", "do", "not", "like", "them", "in", "a", "box",
+                        ".", "I", "do", "not", "like", "them", "with", "a", "fox", ".", "I", "do",
+                        "not", "like", "them", "in", "a", "house", ".", "I", "do", "not", "like",
+                        "them", "with", "a", "mouse", ".", "I", "do", "not", "lik", "them", "here",
+                        "or", "there", ".", "I", "do", "not", "like", "them", "anywhere", ".", "I",
+                        "do", "not", "like", "green", "eggs", "and", "ham", ".", "I", "do", "not",
+                        "like", "them,", "Sam-I-am", "."));
 
         ListMatch<String> matcher = new BoyerMooreHorspoolMatch<>(pattern);
 
@@ -122,18 +116,16 @@ public class TestListMatch extends TestCase {
 
     public void testBMatchesSeussSpecial() {
 
-        List<String> pattern = Arrays.asList("****", "*not",
-                "li+e");
+        List<String> pattern = Arrays.asList("****", "*not", "li+e");
 
-        List<String> text = new ArrayList<>(Arrays.asList("I", "****",
-                "*not", "li+e", "them", "in", "a", "box", ".", "I", "****",
-                "*not", "li+e", "them", "with", "a", "fox", ".", "I", "****",
-                "*not", "li+e", "them", "in", "a", "house", ".", "I", "****",
-                "*not", "li+e", "them", "with", "a", "mouse", ".", "I", "****",
-                "*not", "lik", "them", "here", "or", "there", ".", "I", "****",
-                "*not", "li+e", "them", "anywhere", ".", "I", "****", "*not",
-                "li+e", "green", "eggs", "and", "ham", ".", "I", "****",
-                "*not", "li+e", "them,", "Sam-I-am", "."));
+        List<String> text =
+                new ArrayList<>(Arrays.asList("I", "****", "*not", "li+e", "them", "in", "a",
+                        "box", ".", "I", "****", "*not", "li+e", "them", "with", "a", "fox", ".",
+                        "I", "****", "*not", "li+e", "them", "in", "a", "house", ".", "I", "****",
+                        "*not", "li+e", "them", "with", "a", "mouse", ".", "I", "****", "*not",
+                        "lik", "them", "here", "or", "there", ".", "I", "****", "*not", "li+e",
+                        "them", "anywhere", ".", "I", "****", "*not", "li+e", "green", "eggs",
+                        "and", "ham", ".", "I", "****", "*not", "li+e", "them,", "Sam-I-am", "."));
 
         ListMatch<String> matcher = new BoyerMooreHorspoolMatch<>(pattern);
 

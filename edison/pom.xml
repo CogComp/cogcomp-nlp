@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.9</version>
+        <version>3.0.22</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,13 +15,13 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.9</version>
+            <version>3.0.22</version>
         </dependency>
         <!-- Used only in utilities.CreateTestTAResource -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.9</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>jwnl-prime</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.3</version>
         </dependency>
         <dependency>
             <groupId>org.tartarus</groupId>

@@ -8,25 +8,28 @@ import java.util.Set;
 
 public class ConditionalFeatureExtractor implements FeatureExtractor {
 
-	private Predicate<Constituent> condition;
-	private FeatureExtractor ifTrue;
-	private FeatureExtractor ifFalse;
+    private Predicate<Constituent> condition;
+    private FeatureExtractor ifTrue;
+    private FeatureExtractor ifFalse;
 
-	public ConditionalFeatureExtractor(Predicate<Constituent> condition, FeatureExtractor ifTrue, FeatureExtractor ifFalse) {
-		this.condition = condition;
-		this.ifTrue = ifTrue;
-		this.ifFalse = ifFalse;
-	}
+    public ConditionalFeatureExtractor(Predicate<Constituent> condition, FeatureExtractor ifTrue,
+            FeatureExtractor ifFalse) {
+        this.condition = condition;
+        this.ifTrue = ifTrue;
+        this.ifFalse = ifFalse;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		if (condition.transform(c)) return ifTrue.getFeatures(c);
-		else return ifFalse.getFeatures(c);
-	}
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        if (condition.transform(c))
+            return ifTrue.getFeatures(c);
+        else
+            return ifFalse.getFeatures(c);
+    }
 
-	@Override
-	public String getName() {
-		return "";
-	}
+    @Override
+    public String getName() {
+        return "";
+    }
 
 }

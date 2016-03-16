@@ -7,23 +7,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * There is no point in storing structures with string labels. Instead, we can
- * look them up in the symtab.
+ * There is no point in storing structures with string labels. Instead, we can look them up in the
+ * symtab.
  *
  * @author Vivek Srikumar
  */
 class SymbolTable implements Serializable {
 
     /*
-     * Experimented with using TIntIntHashMap to store the symbol table as a
-     * map from string hashcodes to int. The problem is that string hashCode is
-     * not unique and this hurts even in very simple cases. For example,
-     * "n't".hashCode() == "let".hashCode().
-     *
-     * Have decided to switch to a map from string to Integer and pay the boxing
-     * and unboxing costs instead of losing strings. It turns out that boxing is
-     * the more expensive operation, which is done only in the add function.
-     * However, new strings are added infrequently.
+     * Experimented with using TIntIntHashMap to store the symbol table as a map from string
+     * hashcodes to int. The problem is that string hashCode is not unique and this hurts even in
+     * very simple cases. For example, "n't".hashCode() == "let".hashCode().
+     * 
+     * Have decided to switch to a map from string to Integer and pay the boxing and unboxing costs
+     * instead of losing strings. It turns out that boxing is the more expensive operation, which is
+     * done only in the add function. However, new strings are added infrequently.
      */
     private final Map<String, Integer> symtab;
 
@@ -39,8 +37,8 @@ class SymbolTable implements Serializable {
             int id = symtab.get(label);
 
             if (!strings.get(id).equals(label)) {
-                System.out.println("Error with label " + label
-                        + ", confused with " + strings.get(id));
+                System.out.println("Error with label " + label + ", confused with "
+                        + strings.get(id));
                 throw new RuntimeException();
             }
 

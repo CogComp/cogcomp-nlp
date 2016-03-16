@@ -23,8 +23,9 @@ public class StanfordTokenizer {
             OntoNotesDataModel eachModel = new OntoNotesDataModel();
             eachModel.setPlainSentence(eachRawText);
             StringReader reader = new StringReader(eachRawText);
-            PTBTokenizer<CoreLabel> ptbTokenizer = new PTBTokenizer<>(reader, new CoreLabelTokenFactory(), "");
-            for (CoreLabel label; ptbTokenizer.hasNext(); ) {
+            PTBTokenizer<CoreLabel> ptbTokenizer =
+                    new PTBTokenizer<>(reader, new CoreLabelTokenFactory(), "");
+            for (CoreLabel label; ptbTokenizer.hasNext();) {
                 label = ptbTokenizer.next();
                 eachModel.addAToken(label.word());
             }
@@ -33,7 +34,7 @@ public class StanfordTokenizer {
         Utility.computeCharacterOffsets(sentences);
     }
 
-	public ArrayList<OntoNotesDataModel> getSentences() {
-		return sentences;
-	}
+    public ArrayList<OntoNotesDataModel> getSentences() {
+        return sentences;
+    }
 }

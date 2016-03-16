@@ -9,12 +9,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This is a utility class that exists exclusively for generating Org-Mode
- * tables. It is probably not the most efficient way of doing what it does,
- * though.
+ * This is a utility class that exists exclusively for generating Org-Mode tables. It is probably
+ * not the most efficient way of doing what it does, though.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Nov 24, 2008
  */
 @SuppressWarnings("serial")
@@ -79,11 +78,9 @@ public class Table extends DefaultTableModel {
 
             buffer.append("<tr>");
             for (int i = 0; i < numCols; i++) {
-                buffer.append("<"
-                        + trh
+                buffer.append("<" + trh
                         + " style=\"border-width:1px; border-style:inset; border-color:#000000; "
-                        + color + " \">" + this.getValueAt(row, i) + " </"
-                        + trh + ">");
+                        + color + " \">" + this.getValueAt(row, i) + " </" + trh + ">");
             }
             buffer.append("</tr>\n");
         }

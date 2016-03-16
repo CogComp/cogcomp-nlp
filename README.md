@@ -15,3 +15,4 @@ CogComp's main NLP libraries
 - [illinois-edison](edison/README.md)
 - [illinois-lemmatizer](lemmatizer/README.md)
 - [illinois-tokenizer](tokenizer/README.md)
+- [illinois-pos](pos/README.md)
