@@ -56,7 +56,7 @@ public class OntoNotesDataModel {
         this.sentenceStartOffset = sentenceStartOffset;
     }
 
-    public int getSentenceEndOffset(){
+    public int getSentenceEndOffset() {
         return sentenceEndOffset;
     }
 

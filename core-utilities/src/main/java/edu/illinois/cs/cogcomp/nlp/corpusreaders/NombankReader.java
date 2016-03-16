@@ -16,12 +16,10 @@ import java.util.Set;
  * @author Vivek Srikumar
  */
 public class NombankReader extends AbstractSRLAnnotationReader {
-    public NombankReader(String treebankHome, String nombankHome,
-                         String[] sections, String srlViewName, boolean mergeContiguousCArgs)
-            throws Exception {
+    public NombankReader(String treebankHome, String nombankHome, String[] sections,
+            String srlViewName, boolean mergeContiguousCArgs) throws Exception {
 
-        super(treebankHome, nombankHome, sections, srlViewName,
-                mergeContiguousCArgs);
+        super(treebankHome, nombankHome, sections, srlViewName, mergeContiguousCArgs);
     }
 
     @Override
@@ -35,6 +33,7 @@ public class NombankReader extends AbstractSRLAnnotationReader {
     }
 
 }
+
 
 class NombankFields extends Fields {
 
@@ -73,7 +72,8 @@ class NombankFields extends Fields {
     }
 
     @Override
-    public Constituent createPredicate(TextAnnotation ta, String viewName, List<Tree<Pair<String, IntPair>>> yield) {
+    public Constituent createPredicate(TextAnnotation ta, String viewName,
+            List<Tree<Pair<String, IntPair>>> yield) {
         Tree<Pair<String, IntPair>> l = yield.get(predicateTerminal);
         int start = l.getLabel().getSecond().getFirst();
         Constituent predicate = new Constituent("Predicate", viewName, ta, start, start + 1);

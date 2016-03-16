@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.core.transformers;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jan 6, 2009
  */
 public class StringTransformer<T> extends ITransformer<T, String> {

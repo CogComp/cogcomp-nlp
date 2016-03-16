@@ -1,0 +1,180 @@
+package edu.illinois.cs.cogcomp.pos.lbjava;
+
+import edu.illinois.cs.cogcomp.pos.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+
+
+/**
+  * Returns the <i>form</i> of the word, i.e, the raw text that represents it.
+  * The only exceptions are the brackets <code>'('</code>, <code>'['</code>,
+  * and <code>'{'</code> which are translated to <code>'-LRB-'</code> and
+  * <code>')'</code>, <code>']'</code>, <code>'}'</code> which are translated
+  * to <code>'-RRB-'</code>.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete wordForm(Token w) <-
+{
+  if (w.form.length() == 1)
+  {
+    if ("([{".indexOf(w.form.charAt(0)) != -1) return "-LRB-";
+    if (")]}".indexOf(w.form.charAt(0)) != -1) return "-RRB-";
+  }
+
+  return w.form;
+}
+
+/**
+  * Simply returns the value of {@link Token#label}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete POSLabel(Token w) <- { return w.label; }
+
+/**
+  * Learned with {@link POSBaselineLearner}, this classifier returns the tag
+  * most often associated with the given word.  Only {@link wordForm} is used
+  * as a feature.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete baselineTarget(Token w) <-
+learn POSLabel
+  using wordForm
+  //from new POSBracketToToken(Constants.trainingAndDevData)
+  with new POSBaselineLearner()
+  preExtract false
+end
+
+/**
+  * During the training of {@link POSTaggerKnown}, return the value of
+  * {@link POSLabel}; otherwise, return the value of {@link baselineTarget}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOrBaseline(Token w) cached <-
+{
+  if (POSTaggerKnown.isTraining) return POSLabel(w);
+  return baselineTarget(w);
+}
+
+/**
+  * Produces the POS tag label of the word two before the target word.  During
+  * the training of {@link POSTaggerKnown}, these labels are present in the
+  * data, so the value of {@link POSLabel} is simply returned.  Otherwise, the
+  * prediction made by {@link POSTaggerKnown} is returned.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelTwoBefore(Token w) cached <-
+{
+  if (w.previous != null && w.previous.previous != null)
+  {
+    if (POSTaggerKnown.isTraining) return POSLabel(w.previous.previous);
+    return POSTaggerKnown(w.previous.previous);
+  }
+
+  return "";
+}
+
+/**
+  * Produces the POS tag label of the word one before the target word.  During
+  * the training of {@link POSTaggerKnown}, these labels are present in the
+  * data, so the value of {@link POSLabel} is simply returned.  Otherwise, the
+  * prediction made by {@link POSTaggerKnown} is returned.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOneBefore(Token w) cached <-
+{
+  if (w.previous != null)
+  {
+    if (POSTaggerKnown.isTraining) return POSLabel(w.previous);
+    return POSTaggerKnown(w.previous);
+  }
+
+  return "";
+}
+
+/**
+  * Returns the value of {@link labelOrBaseline} on the next word.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelOneAfter(Token w) cached <-
+{
+  if (w.next != null) return labelOrBaseline(w.next);
+  return "";
+}
+
+/**
+  * Returns the value of {@link labelOrBaseline} on the word after the next
+  * word.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete labelTwoAfter(Token w) cached <-
+{
+  if (w.next != null && w.next.next != null)
+    return labelOrBaseline(w.next.next);
+  return "";
+}
+
+/**
+  * The classifier conjunction of {@link labelTwoBefore} and
+  * {@link labelOneBefore}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L2bL1b(Token w) <- labelTwoBefore && labelOneBefore
+
+/**
+  * The classifier conjunction of {@link labelOneBefore} and
+  * {@link labelOneAfter}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L1bL1a(Token w) <- labelOneBefore && labelOneAfter
+
+/**
+  * The classifier conjunction of {@link labelOneAfter} and
+  * {@link labelTwoAfter}.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete L1aL2a(Token w) <- labelOneAfter && labelTwoAfter
+
+/**
+  * Predicting the part of speech of the given word, this classifier is
+  * intended to be applied only on words whose forms were observed during
+  * training.  {@link wordForm}, {@link baselineTarget},
+  * {@link labelTwoBefore}, {@link labelOneBefore}, {@link labelOneAfter},
+  * {@link labelTwoAfter}, {@link L2bL1b}, {@link L1bL1a}, and {@link L1aL2a}
+  * are all used as features.  At test-time, the learning algorithm is
+  * restricted to return a prediction from the set of tags the given word was
+  * observed with at training-time.  The prediction is cached in the
+  * <code>Word.partOfSpeech</code> field, and the value of that field will
+  * simply be returned whenever it is non-<code>null</code>.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete POSTaggerKnown(Token w) cachedin w.partOfSpeech <-
+learn POSLabel
+  using wordForm, baselineTarget, labelTwoBefore, labelOneBefore,
+        labelOneAfter, labelTwoAfter, L2bL1b, L1bL1a, L1aL2a
+  //from new POSBracketToToken(Constants.trainingAndDevData) 50 rounds
+  with SparseNetworkLearner
+  {
+    SparseAveragedPerceptron.Parameters p =
+      new SparseAveragedPerceptron.Parameters();
+    p.learningRate = .1;
+    p.thickness = 2;
+    baseLTU = new SparseAveragedPerceptron(p);
+  }
+
+  evaluate valueOf(w, baselineTarget.allowableTags(wordForm(w)))
+  progressOutput 2000000
+end
+

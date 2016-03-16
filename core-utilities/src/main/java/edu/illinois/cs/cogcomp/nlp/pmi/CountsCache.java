@@ -7,8 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 
 public class CountsCache {
-    private static final Logger log = LoggerFactory
-            .getLogger(CountsCache.class);
+    private static final Logger log = LoggerFactory.getLogger(CountsCache.class);
 
     public static final String sqlDriver = "org.h2.Driver";
 
@@ -25,8 +24,8 @@ public class CountsCache {
         }
     }
 
-    private static void createTable(String dbFile, String tableName,
-                                    String tableDefinition) throws SQLException {
+    private static void createTable(String dbFile, String tableName, String tableDefinition)
+            throws SQLException {
 
         checkConnection(dbFile);
 

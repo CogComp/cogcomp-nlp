@@ -22,8 +22,8 @@ public class Sorters {
         return keys;
     }
 
-    public static <T, S extends Comparable<S>> List<T> sortMapByValue(
-            final Map<T, S> input, final Comparator<S> valueComparator) {
+    public static <T, S extends Comparable<S>> List<T> sortMapByValue(final Map<T, S> input,
+            final Comparator<S> valueComparator) {
         List<T> keys = new ArrayList<>();
         for (T val : input.keySet()) {
             keys.add(val);
@@ -39,15 +39,13 @@ public class Sorters {
         return keys;
     }
 
-    public static <T extends Comparable<T>> List<T> sortSet(
-            final Collection<T> set) {
+    public static <T extends Comparable<T>> List<T> sortSet(final Collection<T> set) {
         List<T> values = new ArrayList<>(set);
         Collections.sort(values);
         return values;
     }
 
-    public static <T> List<T> sortSet(final Collection<T> set,
-                                      Comparator<T> comparator) {
+    public static <T> List<T> sortSet(final Collection<T> set, Comparator<T> comparator) {
         List<T> values = new ArrayList<>(set);
         Collections.sort(values, comparator);
         return values;

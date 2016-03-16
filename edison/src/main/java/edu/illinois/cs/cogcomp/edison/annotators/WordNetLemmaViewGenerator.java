@@ -12,46 +12,46 @@ import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.POS;
 
 /**
- * If the word is present in WordNet, the lemma from WordNet is used. Otherwise,
- * it defaults to the word itself (with case).
- * <p/>
- * This lemmatizer lowercases words before finding their lemma. This could lead
- * to errors.
+ * If the word is present in WordNet, the lemma from WordNet is used. Otherwise, it defaults to the
+ * word itself (with case).
+ * <p>
+ * This lemmatizer lowercases words before finding their lemma. This could lead to errors.
  *
  * @author Vivek Srikumar
  * @deprecated Use {@code illinois-lemmatizer} instead
  */
 public class WordNetLemmaViewGenerator extends Annotator {
 
-	private WordNetManager wn;
+    private WordNetManager wn;
 
-	public WordNetLemmaViewGenerator(WordNetManager wn) {
-		super( ViewNames.LEMMA, new String[]{ ViewNames.POS} );
-		this.wn = wn;
-	}
+    public WordNetLemmaViewGenerator(WordNetManager wn) {
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
+        this.wn = wn;
+    }
 
-	@Override
-	public void addView(TextAnnotation ta) {
-		TokenLabelView view = new TokenLabelView(getViewName(), "WordNet", ta, 1.0);
-		for (int i = 0; i < ta.size(); i++) {
-			String word = ta.getToken(i).toLowerCase().trim();
+    @Override
+    public void addView(TextAnnotation ta) {
+        TokenLabelView view = new TokenLabelView(getViewName(), "WordNet", ta, 1.0);
+        for (int i = 0; i < ta.size(); i++) {
+            String word = ta.getToken(i).toLowerCase().trim();
 
-			POS wnPOS = WordNetHelper.getWNPOS(WordHelpers.getPOS(ta, i));
+            POS wnPOS = WordNetHelper.getWNPOS(WordHelpers.getPOS(ta, i));
 
-			String lemma;
-			if (wnPOS == null) lemma = ta.getToken(i);
-			else {
+            String lemma;
+            if (wnPOS == null)
+                lemma = ta.getToken(i);
+            else {
 
-				try {
-					lemma = wn.getLemma(word, wnPOS);
-				} catch (JWNLException e) {
-					lemma = ta.getToken(i);
-				}
-			}
-			view.addTokenLabel(i, lemma, 1.0);
-		}
+                try {
+                    lemma = wn.getLemma(word, wnPOS);
+                } catch (JWNLException e) {
+                    lemma = ta.getToken(i);
+                }
+            }
+            view.addTokenLabel(i, lemma, 1.0);
+        }
 
-		ta.addView( getViewName(), view );
-	}
+        ta.addView(getViewName(), view);
+    }
 
 }

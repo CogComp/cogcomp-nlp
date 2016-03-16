@@ -35,7 +35,8 @@ public class ResourceManager {
 
     /**
      * construct a ResourceManager with a Properties object
-     * @param props_    a Properties object with the properties set
+     * 
+     * @param props_ a Properties object with the properties set
      */
     public ResourceManager(Properties props_) {
         properties = props_;
@@ -45,21 +46,23 @@ public class ResourceManager {
     /**
      * return the Properties object built by this ResourceManager
      */
-    public Properties getProperties()
-    {
+    public Properties getProperties() {
         return properties;
     }
 
     /**
      * read a set of values from a file, expecting one value per line
+     * 
      * @param resourceName file (may be on classpath)
      * @param myset set to populate
      * @param lowercase if 'true', lowercase the set elements on read
      * @param padSpace if 'true', add whitespace on each side of element read
      */
-    public static void readSet(String resourceName, Set<String> myset, boolean lowercase, boolean padSpace) {
+    public static void readSet(String resourceName, Set<String> myset, boolean lowercase,
+            boolean padSpace) {
         try {
-            InputStream is = ResourceManager.class.getClassLoader().getResourceAsStream(resourceName);
+            InputStream is =
+                    ResourceManager.class.getClassLoader().getResourceAsStream(resourceName);
 
             // perhaps it is a path, even though just the file name is fine.
             if (is == null) {
@@ -136,9 +139,8 @@ public class ResourceManager {
         String value = properties.getProperty(propertyName_);
 
         if (null == value) {
-            throw new IllegalArgumentException(
-                    "ERROR: ResourceLoader.getString(): "
-                            + "no entry for key '" + propertyName_ + "'.");
+            throw new IllegalArgumentException("ERROR: ResourceLoader.getString(): "
+                    + "no entry for key '" + propertyName_ + "'.");
         }
 
         return value;
@@ -152,9 +154,8 @@ public class ResourceManager {
         String valueList = properties.getProperty(propertyName_);
 
         if (null == valueList) {
-            throw new IllegalArgumentException(
-                    "ERROR: ResourceLoader.getCommaSeparatedValues(): "
-                            + "no entry for key '" + propertyName_ + "'.");
+            throw new IllegalArgumentException("ERROR: ResourceLoader.getCommaSeparatedValues(): "
+                    + "no entry for key '" + propertyName_ + "'.");
         }
         String[] values = new String[1];
         values[0] = valueList;
