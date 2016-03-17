@@ -20,13 +20,13 @@ import java.util.*;
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
-public class ChunkWindow3Before implements FeatureExtractor {
+public class ChunkWindowThreeBefore implements FeatureExtractor {
 
     public static View SHALLOW_PARSE, TOKENS;
 
     private final String viewName;
     
-    public PreviousTags(String viewName) {
+    public ChunkWindowThreeBefore(String viewName) {
 	this.viewName = viewName;
     }
     
@@ -74,7 +74,7 @@ public class ChunkWindow3Before implements FeatureExtractor {
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-	String classifier = "ChunkWindow3Before";
+	String classifier = "ChunkWindowThreeBefore";
 	
 	TextAnnotation ta = c.getTextAnnotation();
 	

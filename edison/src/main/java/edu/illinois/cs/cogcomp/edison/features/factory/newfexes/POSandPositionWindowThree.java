@@ -21,13 +21,13 @@ import java.util.*;
  * Generates a 3-shingle of POSTags in a window of size 3
  *
  */
-public class POSandPositionWin3 implements FeatureExtractor {
+public class POSandPositionWindowThree implements FeatureExtractor {
 
     public static View POS, TOKENS;
 
     private final String viewName;
     
-    public POSWindowpp(String viewName) {
+    public POSandPositionWindowThree(String viewName) {
 	this.viewName = viewName;
     }
     
@@ -76,7 +76,7 @@ public class POSandPositionWin3 implements FeatureExtractor {
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-	String classifier = "POSandPositionWin3";
+	String classifier = "POSandPositionWindowThree";
 	
 	TextAnnotation ta = c.getTextAnnotation();
 	

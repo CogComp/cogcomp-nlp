@@ -21,14 +21,14 @@ import java.util.*;
  * Generates a conjunction of 3-shingles from a window of 2 tokens.
  *
  */
-public class WordConj123GramWin2 implements FeatureExtractor {
+public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor {
 
     //Views required for feature extractor
     public static View TOKENS;
 
     private final String viewName;
     
-    public Formpp(String viewName) {
+    public WordConjunctionOneTwoThreeGramWindowTwo(String viewName) {
 	this.viewName = viewName;
     }
    
@@ -85,7 +85,7 @@ public class WordConj123GramWin2 implements FeatureExtractor {
 	String[] forms = getWindowKFrom(TOKENS, startspan, endspan, 2);
 	
 	String __id, __value;
-	String classifier = "WordConj123GramWin2";
+	String classifier = "WordConjunctionOneTwoThreeGramWindowTwo";
 	Set<Feature> __result = new LinkedHashSet<Feature>();
 	
 	for (int j = 0; j < k; j++){

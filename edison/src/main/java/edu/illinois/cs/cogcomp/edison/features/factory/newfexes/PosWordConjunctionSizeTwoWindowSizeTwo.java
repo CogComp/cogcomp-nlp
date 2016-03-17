@@ -25,11 +25,11 @@ import java.io.IOException;
  * Extracts the POS Tags as well as the form (text) of tokens 2 before and 2 after from the given token and generates a discrete feature from it.
  *
  */
-public class Mixed implements FeatureExtractor {
+public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor {
 
     private final String viewName;
     
-    public Mixed(String viewName) {
+    public PosWordConjunctionSizeTwoWindowSizeTwo(String viewName) {
 	this.viewName = viewName;
     }
 
@@ -107,7 +107,7 @@ public class Mixed implements FeatureExtractor {
 	String[] forms = getwindowkfrom(TOKENS, startspan, endspan, k);
 	String[] tags = getwindowtagskfrom(TOKENS, POS, startspan, endspan, k);
 		
-	String classifier = "Mixed";
+	String classifier = "PosWordConjunctionSizeTwoWindowSizeTwo";
 	String __id, __value;
 	Set<Feature> __result = new LinkedHashSet<Feature>();
 

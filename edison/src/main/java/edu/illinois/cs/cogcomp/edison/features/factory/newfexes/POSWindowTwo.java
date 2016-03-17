@@ -25,11 +25,11 @@ import java.io.IOException;
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
-public class POSWin2 implements FeatureExtractor {
+public class POSWindowTwo implements FeatureExtractor {
 
     private final String viewName;
     
-    public POSWindow(String viewName) {
+    public POSWindowTwo(String viewName) {
 	this.viewName = viewName;
     }
 
@@ -84,7 +84,7 @@ public class POSWin2 implements FeatureExtractor {
 	
 	String[] tags = getwindowtagskfrom(TOKENS, POS, startspan, endspan, k);
 		
-	String classifier = "POSWin2";
+	String classifier = "POSWindowTwo";
 	String __id, __value;
 	Set<Feature> __result = new LinkedHashSet<Feature>();
 
