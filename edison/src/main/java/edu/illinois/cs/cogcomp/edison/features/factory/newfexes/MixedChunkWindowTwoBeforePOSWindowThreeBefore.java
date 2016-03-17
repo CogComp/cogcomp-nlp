@@ -25,13 +25,13 @@ import java.io.IOException;
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
-public class SOPrevious implements FeatureExtractor {
+public class MixedChunkWindowTwoBeforePOSWindowThreeBefore implements FeatureExtractor {
 
     public static View SHALLOW_PARSE, POS, TOKENS;
 
     private final String viewName;
     
-    public SOPrevious(String viewName) {
+    public MixedChunkWindowTwoBeforePOSWindowThreeBefore(String viewName) {
 	this.viewName = viewName;
     }
 
@@ -124,7 +124,7 @@ public class SOPrevious implements FeatureExtractor {
 	
 	Set<Feature> __result = new LinkedHashSet<Feature>();
 	
-	String classifier = "SOPrevious";
+	String classifier = "MixedChunkWindowTwoBeforePOSWindowThreeBefore";
 	String __id = classifier+":"+"ll";
 	String __value = "(" + (labels[0] + "_" + labels[1])+")";	
         /*BufferedWriter output = null;

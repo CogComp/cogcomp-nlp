@@ -23,17 +23,17 @@ import java.io.Writer;
 
 
 /**
- * Test class for SHALLOW PARSER Formpp Feature Extractor
+ * Test class for SHALLOW PARSER PreviousTags Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestPOSWindowpp extends TestCase {
+public class TestChunkWindowThreeBefore extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestChunkWindowThreeBefore.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,34 +43,30 @@ public class TestPOSWindowpp extends TestCase {
 	super.setUp();
     }
     
-    public final void testPOSWindowpp() throws EdisonException {
+    public final void testUsage() throws EdisonException {
 	
-	System.out.println("POSWindowpp Feature Extractor");
+	System.out.println("PreviousTags Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
-	TextAnnotation ta = tas.get(2);
+	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
-	
-	System.out.println("GOT TOKENS FROM TEXTAnn");
-	
+		
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	
 	for(Constituent c: testlist){
 	    System.out.println(c.getSurfaceForm());
 	}
-	
+
 	System.out.println("Testlist size is "+testlist.size());
-	
-	Constituent test = testlist.get(1);
+
+	Constituent test = testlist.get(4);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
-	
-       	POSWindowpp POSWpp = new POSWindowpp("POSWindowpp");
-	
-	//Formpp.initViews(test);
+
+		ChunkWindowThreeBefore prevtags = new ChunkWindowThreeBefore("ChunkWindowThreeBefore");
 	
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
-	
-	Set<Feature> feats = POSWpp.getFeatures(test);
+     
+	Set<Feature> feats = prevtags.getFeatures(test);
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");
@@ -80,10 +76,7 @@ public class TestPOSWindowpp extends TestCase {
 	for(Feature f: feats){
 	    System.out.println(f.getName());
 	}
-	
-	System.out.println("GOT FEATURES YES!");
-	
-	//System.exit(0);
+	 
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {

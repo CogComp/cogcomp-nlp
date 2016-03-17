@@ -27,13 +27,13 @@ import java.io.Writer;
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestFormpp extends TestCase {
+public class TestPosWordConjunctionSizeTwoWindowSizeTwo extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestPosWordConjunctionSizeTwoWindowSizeTwo.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,9 +43,9 @@ public class TestFormpp extends TestCase {
 	super.setUp();
     }
     
-    public final void testFormpp() throws EdisonException {
+    public final void testUsage() throws EdisonException {
 	
-	System.out.println("Formpp");
+	System.out.println("PosWordConjunctionSizeTwoWindowSizeTwo Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
 	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
@@ -60,15 +60,26 @@ public class TestFormpp extends TestCase {
 
 	System.out.println("Testlist size is "+testlist.size());
 
-	Constituent test = testlist.get(2);
+	Constituent test = testlist.get(1);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+
+		PosWordConjunctionSizeTwoWindowSizeTwo M = new PosWordConjunctionSizeTwoWindowSizeTwo("PosWordConjunctionSizeTwoWindowSizeTwo");
 	
-       	Formpp Formpp = new Formpp("Formpp");
+	System.out.println("Init Views");
+	
+	//Formpp.initViews(test);
 	
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
-	Set<Feature> feats = Formpp.getFeatures(test);
+	//List<Constituent> words2b4 = SOP.getstuff(test);
+	System.out.println("About to print out words from text");
+	//for(Constituent word: words2b4){
+	    
+	//   System.out.println(word.getSurfaceForm());
+	//}
+	
+	Set<Feature> feats = M.getFeatures(test);
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");

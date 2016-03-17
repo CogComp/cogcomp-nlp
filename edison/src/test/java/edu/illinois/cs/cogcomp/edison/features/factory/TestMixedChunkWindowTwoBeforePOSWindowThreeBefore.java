@@ -27,13 +27,13 @@ import java.io.Writer;
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestSOPrevious extends TestCase {
+public class TestMixedChunkWindowTwoBeforePOSWindowThreeBefore extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestMixedChunkWindowTwoBeforePOSWindowThreeBefore.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,7 +43,7 @@ public class TestSOPrevious extends TestCase {
 	super.setUp();
     }
     
-    public final void testSOPrevious() throws EdisonException {
+    public final void testUsage() throws EdisonException {
 	
 	System.out.println("SOPREVIOUS");
 	//Using the first TA and a constituent between span of 0-20 as a test
@@ -63,8 +63,8 @@ public class TestSOPrevious extends TestCase {
 	Constituent test = testlist.get(5);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
- 
-       	SOPrevious SOP = new SOPrevious("SOPreviousView");
+
+		MixedChunkWindowTwoBeforePOSWindowThreeBefore SOP = new MixedChunkWindowTwoBeforePOSWindowThreeBefore("MixedChunkWindowTwoBeforePOSWindowThreeBefore");
 	
 	Set<Feature> feats = SOP.getFeatures(test);
 	

@@ -139,7 +139,7 @@ public class SOPrevious_old implements FeatureExtractor {
 	
 	Set<Feature> __result = new LinkedHashSet<Feature>();
 	
-	String classifier = "SOPrevious";
+	String classifier = "MixedChunkWindowTwoBeforePOSWindowThreeBefore";
 	String __id = classifier+":"+"ll";
 	String __value = "(" + (labels[0] + "_" + labels[1])+")";	
         /*BufferedWriter output = null;

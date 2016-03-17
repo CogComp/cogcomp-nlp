@@ -27,13 +27,13 @@ import java.io.Writer;
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestPOSWindow extends TestCase {
+public class TestPOSWindowTwo extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestPOSWindowTwo.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,7 +43,7 @@ public class TestPOSWindow extends TestCase {
 	super.setUp();
     }
     
-    public final void testPOSWindow() throws EdisonException {
+    public final void testUsage() throws EdisonException {
 	
 	System.out.println("POSWindow Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
@@ -63,8 +63,8 @@ public class TestPOSWindow extends TestCase {
 	Constituent test = testlist.get(1);
 
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
-		
-       	POSWindow POSW = new POSWindow("POSWindow");
+
+		POSWindowTwo POSW = new POSWindowTwo("POSWindowTwo");
       
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	

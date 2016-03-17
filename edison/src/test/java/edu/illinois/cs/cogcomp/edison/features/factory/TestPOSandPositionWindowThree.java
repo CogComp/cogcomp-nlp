@@ -23,17 +23,17 @@ import java.io.Writer;
 
 
 /**
- * Test class for SHALLOW PARSER PreviousTags Feature Extractor
+ * Test class for SHALLOW PARSER Formpp Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestPreviousTags extends TestCase {
+public class TestPOSandPositionWindowThree extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestPOSandPositionWindowThree.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,30 +43,34 @@ public class TestPreviousTags extends TestCase {
 	super.setUp();
     }
     
-    public final void testPreviousTags() throws EdisonException {
+    public final void testUsage() throws EdisonException {
 	
-	System.out.println("PreviousTags Feature Extractor");
+	System.out.println("POSWindowpp Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
-	TextAnnotation ta = tas.get(1);
+	TextAnnotation ta = tas.get(2);
 	View TOKENS = ta.getView("TOKENS");
-		
+	
+	System.out.println("GOT TOKENS FROM TEXTAnn");
+	
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	
 	for(Constituent c: testlist){
 	    System.out.println(c.getSurfaceForm());
 	}
-
+	
 	System.out.println("Testlist size is "+testlist.size());
-
-	Constituent test = testlist.get(4);
+	
+	Constituent test = testlist.get(1);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+
+		POSandPositionWindowThree POSWpp = new POSandPositionWindowThree("POSandPositionWindowThree");
 	
-        PreviousTags prevtags = new PreviousTags("PreviousTags");
+	//Formpp.initViews(test);
 	
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
-     
-	Set<Feature> feats = prevtags.getFeatures(test);
+	
+	Set<Feature> feats = POSWpp.getFeatures(test);
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");
@@ -76,7 +80,10 @@ public class TestPreviousTags extends TestCase {
 	for(Feature f: feats){
 	    System.out.println(f.getName());
 	}
-	 
+	
+	System.out.println("GOT FEATURES YES!");
+	
+	//System.exit(0);
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {

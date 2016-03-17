@@ -27,13 +27,13 @@ import java.io.Writer;
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestMixed extends TestCase {
+public class TestWordConjunctionOneTwoThreeGramWindowTwo extends TestCase {
 
     private static List<TextAnnotation> tas;
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestWordConjunctionOneTwoThreeGramWindowTwo.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -43,9 +43,9 @@ public class TestMixed extends TestCase {
 	super.setUp();
     }
     
-    public final void testMixed() throws EdisonException {
+    public final void testFormpp() throws EdisonException {
 	
-	System.out.println("Mixed Feature Extractor");
+	System.out.println("Formpp");
 	//Using the first TA and a constituent between span of 30-40 as a test
 	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
@@ -60,26 +60,15 @@ public class TestMixed extends TestCase {
 
 	System.out.println("Testlist size is "+testlist.size());
 
-	Constituent test = testlist.get(1);
+	Constituent test = testlist.get(2);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
-	
-       	Mixed M = new Mixed("Mixed");
-	
-	System.out.println("Init Views");
-	
-	//Formpp.initViews(test);
+
+		WordConjunctionOneTwoThreeGramWindowTwo WordConjunctionOneTwoThreeGramWindowTwo = new Formpp("WordConjunctionOneTwoThreeGramWindowTwo");
 	
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
-	//List<Constituent> words2b4 = SOP.getstuff(test);
-	System.out.println("About to print out words from text");
-	//for(Constituent word: words2b4){
-	    
-	//   System.out.println(word.getSurfaceForm());
-	//}
-	
-	Set<Feature> feats = M.getFeatures(test);
+	Set<Feature> feats = Formpp.getFeatures(test);
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");
