@@ -108,4 +108,4 @@ public class POSWindowTwo implements FeatureExtractor {
     public String getName() {
 	return "#path#" + viewName;
     }    
-}G
+}
