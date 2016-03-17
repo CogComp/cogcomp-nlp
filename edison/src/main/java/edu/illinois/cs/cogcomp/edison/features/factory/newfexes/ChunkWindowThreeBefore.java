@@ -91,7 +91,7 @@ public class ChunkWindowThreeBefore implements FeatureExtractor {
 	
 	String[] labels = new String[2];
 	
-	Set<Feature> __result = new LinkedHashSet<Feature>();
+	Set<Feature> result = new LinkedHashSet<Feature>();
 	
 	int i = 0;
 
@@ -111,10 +111,10 @@ public class ChunkWindowThreeBefore implements FeatureExtractor {
 	    labels[i] = Chunk_label.get(0);
 	    String __value = "(" + labels[i] + ")";	    
 	    String __id = classifier +":"+ (i++);
-	    __result.add(new DiscreteFeature(__id+__value));
+	    result.add(new DiscreteFeature(__id+__value));
 	}
 	
-	return __result;
+	return result;
     }
     
     @Override

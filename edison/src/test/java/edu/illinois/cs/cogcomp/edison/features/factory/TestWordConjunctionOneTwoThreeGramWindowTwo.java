@@ -63,12 +63,12 @@ public class TestWordConjunctionOneTwoThreeGramWindowTwo extends TestCase {
 	Constituent test = testlist.get(2);
 	
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
-
-		WordConjunctionOneTwoThreeGramWindowTwo WordConjunctionOneTwoThreeGramWindowTwo = new Formpp("WordConjunctionOneTwoThreeGramWindowTwo");
 	
+	WordConjunctionOneTwoThreeGramWindowTwo WordConjunctionOneTwoThreeGramWindowTwo = new WordConjunctionOneTwoThreeGramWindowTwo("WordConjunctionOneTwoThreeGramWindowTwo");
+		
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
-	Set<Feature> feats = Formpp.getFeatures(test);
+	Set<Feature> feats = WordConjunctionOneTwoThreeGramWindowTwo.getFeatures(test);
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");

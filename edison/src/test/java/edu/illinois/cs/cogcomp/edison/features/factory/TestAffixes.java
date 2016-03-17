@@ -33,7 +33,7 @@ public class TestAffixes extends TestCase {
     
     static {
 	try {
-	    tas = IOUtils.readObjectAsResource(TestSOPrevious.class, "test.ta");
+	    tas = IOUtils.readObjectAsResource(TestAffixes.class, "test.ta");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
