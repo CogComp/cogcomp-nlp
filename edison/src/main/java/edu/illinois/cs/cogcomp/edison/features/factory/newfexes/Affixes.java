@@ -1,4 +1,4 @@
-pckage edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
+package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
