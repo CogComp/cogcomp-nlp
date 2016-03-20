@@ -7,17 +7,15 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.Constant;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
 
 public class TestPOSMikheevCounter extends TestCase {
 	
 	public final void test()throws Exception{
-		String prefix = Constant.prefix;
-		String fileName = prefix + Constant.POSCorpus + Constant.POSCorpus01;
-		
+
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-		posMikheev.buildTable(fileName);
+		posMikheev.buildTable(TestPosHelper.corpus);
 		
 		HashMap<String,HashMap<String, TreeMap<String, Integer>>> tables = 
 				new HashMap<>();
@@ -45,7 +43,7 @@ public class TestPOSMikheevCounter extends TestCase {
 		System.out.println(str);
 		
 		try {
-			File file = new File(prefix + Constant.testResources + "\\outputFiles\\TestMikheevCounterOutput");
+			File file = new File("src\\test\\resources\\outputFiles\\TestMikheevCounterOutput");
 
 			if (!file.exists()) {
 				file.createNewFile();

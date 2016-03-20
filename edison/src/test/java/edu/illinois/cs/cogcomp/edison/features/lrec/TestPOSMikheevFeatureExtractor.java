@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import junit.framework.TestCase;
@@ -32,9 +33,8 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
 	}
 
 	public final void test() throws Exception {
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
-		POSMikheevFeatureExtractor posMikheev = new POSMikheevFeatureExtractor("posMikheev", "test_corpus", fileName);
+
+		POSMikheevFeatureExtractor posMikheev = new POSMikheevFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
 		
 		System.out.println("POSMikheev Feature Extractor");
 		System.out.println("Only print the features with known tags");

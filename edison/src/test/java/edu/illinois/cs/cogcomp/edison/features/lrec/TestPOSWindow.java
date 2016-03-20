@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
@@ -47,13 +48,12 @@ public class TestPOSWindow extends TestCase {
 
 		System.out.println("Testlist size is " + testlist.size());
 
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
+
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
-		posBaseLine.buildTable(fileName);
+		posBaseLine.buildTable(TestPosHelper.corpus);
 		
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-		posMikheev.buildTable(fileName);
+		posMikheev.buildTable(TestPosHelper.corpus);
 		
 		POSWindow posWindowPOS = new POSWindow("posWindowPOS");
 		POSWindow posWindowPOSBaseLine = new POSWindow("posWindowPOSBaseLine", posBaseLine);

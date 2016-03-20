@@ -6,17 +6,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.TreeMap;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.Constant;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
 
 public class TestPOSBaseLineCounter extends TestCase {
 	
 	public final void test()throws Exception{
-		String prefix = Constant.prefix;
-		String fileName = prefix + Constant.POSCorpus + Constant.POSCorpus01;
-		
+
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
-		posBaseLine.buildTable(fileName);
+		posBaseLine.buildTable(TestPosHelper.corpus);
 		
 		
 		String str = "Test Corpus: section0.br\n";
@@ -33,7 +31,7 @@ public class TestPOSBaseLineCounter extends TestCase {
 		System.out.println(str);
 		
 		try {
-			File file = new File(prefix + Constant.testResources + "\\outputFiles\\TestBaseLineCounterOutput");
+			File file = new File("src\\test\resources\\outputFiles\\TestBaseLineCounterOutput");
 
 			if (!file.exists()) {
 				file.createNewFile();
