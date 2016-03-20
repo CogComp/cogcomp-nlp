@@ -7,59 +7,56 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.Constant;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
 
 public class TestPOSMikheevCounter extends TestCase {
+	
+	public final void test()throws Exception{
 
-    public final void test() throws Exception {
-        String prefix = Constant.prefix;
-        String fileName = prefix + Constant.POSCorpus + Constant.POSCorpus01;
+		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
+		posMikheev.buildTable(TestPosHelper.corpus);
+		
+		HashMap<String,HashMap<String, TreeMap<String, Integer>>> tables = 
+				new HashMap<>();
+		tables.put("firstCapitalized", posMikheev.firstCapitalized);
+		tables.put("notFirstCapitalized", posMikheev.notFirstCapitalized);
+		tables.put("table", posMikheev.table);
+		
+		String str = "Test Corpus: section0.br\n" + "\n";
+		for (String tableName : tables.keySet()){
+			str += tableName + "\n";
+			HashMap<String, TreeMap<String, Integer>> table = tables.get(tableName);
+			
+			for (String form : table.keySet()){
+				str += "		" + form + ": \n";
+				TreeMap<String, Integer> posSet = table.get(form);
 
-        POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-        posMikheev.buildTable(fileName);
+				for (String pos : posSet.keySet()){
+					str += "			" + pos + ": " + posSet.get(pos) + "\n";
+				}
+			}
+			str += "\n";
+			
+		}
+		
+		System.out.println(str);
+		
+		try {
+			File file = new File("src\\test\\resources\\outputFiles\\TestMikheevCounterOutput");
 
-        HashMap<String, HashMap<String, TreeMap<String, Integer>>> tables = new HashMap<>();
-        tables.put("firstCapitalized", posMikheev.firstCapitalized);
-        tables.put("notFirstCapitalized", posMikheev.notFirstCapitalized);
-        tables.put("table", posMikheev.table);
+			if (!file.exists()) {
+				file.createNewFile();
+			}
 
-        String str = "Test Corpus: section0.br\n" + "\n";
-        for (String tableName : tables.keySet()) {
-            str += tableName + "\n";
-            HashMap<String, TreeMap<String, Integer>> table = tables.get(tableName);
-
-            for (String form : table.keySet()) {
-                str += "		" + form + ": \n";
-                TreeMap<String, Integer> posSet = table.get(form);
-
-                for (String pos : posSet.keySet()) {
-                    str += "			" + pos + ": " + posSet.get(pos) + "\n";
-                }
-            }
-            str += "\n";
-
-        }
-
-        System.out.println(str);
-
-        try {
-            File file =
-                    new File(prefix + Constant.testResources
-                            + "\\outputFiles\\TestMikheevCounterOutput");
-
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(str);
-            bw.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+			FileWriter fw = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			bw.write(str);
+			bw.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	
+	}
 }
