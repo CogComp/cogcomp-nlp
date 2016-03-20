@@ -1,8 +1,10 @@
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**

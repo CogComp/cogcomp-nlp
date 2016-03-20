@@ -20,7 +20,7 @@ public class TestPosHelper {
             rm = new ResourceManager(CONFIG);
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit( -1 );
+            System.exit(-1);
         }
         corpus = rm.getString(POS_CORPUS);
     }
