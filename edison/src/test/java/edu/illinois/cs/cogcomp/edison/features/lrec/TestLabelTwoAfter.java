@@ -6,7 +6,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.*;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.features.lrec.LabelTwoAfter;
 import edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSBaseLineFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -55,14 +55,12 @@ public class TestLabelTwoAfter extends TestCase {
 		// System.out.println("The constituent we are extracting features from
 		// in this test is: " + test.getSurfaceForm());
 
-		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
+
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
-		posBaseLine.buildTable(fileName);
+		posBaseLine.buildTable(TestPosHelper.corpus);
 		
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-		posMikheev.buildTable(fileName);
+		posMikheev.buildTable(TestPosHelper.corpus);
 		
 		LabelTwoAfter l2aPOS = new LabelTwoAfter("l2aPOS");
 		LabelTwoAfter l2aPOSBaseLine = new LabelTwoAfter("l2aPOSBaseLine", posBaseLine);

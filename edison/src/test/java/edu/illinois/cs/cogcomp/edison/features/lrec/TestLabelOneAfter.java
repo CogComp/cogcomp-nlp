@@ -4,9 +4,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.*;
+import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.features.lrec.LabelOneAfter;
 import edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSBaseLineFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -18,9 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * NOTE: you must set the path in src/test/resources/lrec-config.txt to point to the relevant POS corpus.
+ */
+
 public class TestLabelOneAfter extends TestCase {
-	
-	private static List<TextAnnotation> tas;
+
+
+    private static List<TextAnnotation> tas;
 
 	static {
 		try {
@@ -30,7 +36,8 @@ public class TestLabelOneAfter extends TestCase {
 		}
 	}
 
-	protected void setUp() throws Exception {
+
+    protected void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -56,13 +63,12 @@ public class TestLabelOneAfter extends TestCase {
 		// in this test is: " + test.getSurfaceForm());
 
 		//String fileName = "C:\\Users\\Jason\\Desktop\\UIUC 2015 Fall\\Cogcomp\\pos-translation\\pos";
-		String fileName = edu.illinois.cs.cogcomp.edison.features.factory.Constant.prefix + edu.illinois.cs.cogcomp.edison.features.factory.Constant.POSCorpus;
-		
+
 		POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
-		posBaseLine.buildTable(fileName);
+		posBaseLine.buildTable(TestPosHelper.corpus);
 		
 		POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
-		posMikheev.buildTable(fileName);
+		posMikheev.buildTable(TestPosHelper.corpus);
 		
 		LabelOneAfter l1aPOS = new LabelOneAfter("l1aPOS");
 		LabelOneAfter l1aPOSBaseLine = new LabelOneAfter("l1aPOSBaseLine", posBaseLine);
