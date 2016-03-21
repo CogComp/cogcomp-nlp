@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-nlp-pipeline</artifactId>
-    <version>0.1.17</version>
+    <version>0.1.18</version>
     <name>Illinois NLP Pipeline</name>
     <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cogcomp-nlp-version>3.0.20</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.22</cogcomp-nlp-version>
     </properties>
     <repositories>
         <repository>
@@ -139,6 +139,17 @@
             <artifactId>illinois-edison</artifactId>
             <version>${cogcomp-nlp-version}</version>
             <scope>test</scope>
+        </dependency>
+<!--        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>Illinois-Combined-Coref</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+    -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>wikifier</artifactId>
+            <version>3.1.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

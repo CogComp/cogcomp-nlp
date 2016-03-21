@@ -16,7 +16,9 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 
 import static org.junit.Assert.*;
@@ -28,7 +30,7 @@ import static org.junit.Assert.*;
 public class SimpleCachingPipelineTest
 {
 
-    private static AnnotatorService processor;
+    private static SimpleCachingPipeline processor;
     private static HashSet<String> activeViews;
 
     @BeforeClass
@@ -47,6 +49,39 @@ public class SimpleCachingPipelineTest
         activeViews.add( ViewNames.NER_CONLL );
         processor = new SimpleCachingPipeline( new ResourceManager( props ) );
     }
+
+
+    @Test
+    public void testTokenizedInputToPipeline()
+    {
+        String[] firstSent = "What does the fox say ?".split( " " );
+        String[] secondSent = "Fabio Aiolli says that in Italy the fox says \" Woof \" .".split( " " );
+
+        List< String[] > input = new ArrayList<>( 2 );
+        input.add( firstSent );
+        input.add( secondSent );
+
+        TextAnnotation ta = null;
+
+        try {
+            ta = processor.createBasicTextAnnotation("test", "test", input );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        try {
+            processor.addViewsAndCache( ta, activeViews );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        assert( ta.hasView( ViewNames.NER_CONLL ) );
+        assert( ta.getView( ViewNames.NER_CONLL ).getConstituents().size() == 3 );
+
+    }
+
 
 
     @Test

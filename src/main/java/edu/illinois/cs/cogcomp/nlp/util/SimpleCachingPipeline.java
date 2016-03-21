@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,6 +54,8 @@ public class SimpleCachingPipeline implements AnnotatorService {
                 rm.getBoolean(AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED),
                 rm.getBoolean(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE));
     }
+
+
 
     public SimpleCachingPipeline(TextAnnotationBuilder taBuilder,
                                  Map<String, Annotator> annotators,
@@ -115,6 +119,50 @@ public class SimpleCachingPipeline implements AnnotatorService {
 
         return textAnnotationBuilder.createTextAnnotation(corpusId, docId, text);
     }
+
+
+    public TextAnnotation createBasicTextAnnotation( String corpusId, String docId,
+                                                     List<String[]> tokenizedSentences) throws AnnotatorException {
+        String text = joinTokenizedSentences( tokenizedSentences );
+
+        String savePath;
+        try {
+            savePath = getSavePath(this.pathToSaveCachedFiles, text);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AnnotatorException(e.getMessage());
+        }
+
+        TextAnnotation ta;
+
+        if (new File(savePath).exists() && !forceUpdate) {
+            try {
+                ta = SerializationHelper.deserializeTextAnnotationFromFile(savePath);
+                return ta;
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new AnnotatorException(e.getMessage());
+            }
+        } else if (throwExceptionIfNotCached)
+            throwNotCachedException(corpusId, docId, text);
+
+        return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(corpusId, docId, tokenizedSentences);
+    }
+
+    private String joinTokenizedSentences(List<String[]> tokenizedSentences) {
+
+        StringBuilder bldr = new StringBuilder();
+
+        for ( String[] toks : tokenizedSentences )
+        {
+            bldr.append( StringUtils.join( " ", toks ) );
+        }
+
+        return bldr.toString();
+
+
+    }
+
 
     private void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
         throw new AnnotatorException("text with corpusid '" + corpusId + "', docId '" + docId +

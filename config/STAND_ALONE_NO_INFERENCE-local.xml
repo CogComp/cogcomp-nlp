@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- This is an auto-generated configuration file. Manually set options will override
+the parameter presets. To set a parameter to null, simply delete the corresponding XML element.
+Pre-populating the configuration with preset can reduce the cluttering in this file but
+please make sure you understand what each preset does.-->
+<wikifierConfigurations>
+    <paths>
+        <wikiAccessDir>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/MapDBIndex/</wikiAccessDir>
+        <wikiRelationIndexDir>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/WikiData/Index/WikiRelation/</wikiRelationIndexDir>
+        <models>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/Models/TitleMatchPlusLexicalPlusCoherence/</models>
+        <titleStringIndex>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/WikiData/Index/TitleAndRedirects/</titleStringIndex>
+        <wordnetConfig>config/jwnl_properties.xml</wordnetConfig>
+        <stopwords>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/OtherData/stopwords_big</stopwords>
+        <wordNetDictionaryPath>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/WordNet/</wordNetDictionaryPath>
+        <nerConfig>config/NER.config</nerConfig>
+        <wikiSummary>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/MapDBIndex/WikiSummary.proto.save</wikiSummary>
+        <neSimPath>config/nesimConfig.txt</neSimPath>
+        <pageCategories>/shared/bronte/mssammon/wikifier-svn/WikifierVer3data/MapDBIndex/TitleSummaryData.txt</pageCategories>
+    </paths>
+    <parameters>
+        <minLinkability>0.05</minLinkability>
+        <minSurfaceLen>3.0</minSurfaceLen>
+        <maxCandidatesToGenerateInitially>20</maxCandidatesToGenerateInitially>
+        <EXCLUDE_DISAMBIGUATION_PAGE>true</EXCLUDE_DISAMBIGUATION_PAGE>
+        <GENERATE_CONTEXTUAL_CANDIDATES>true</GENERATE_CONTEXTUAL_CANDIDATES>
+        <GENERATE_LONG_ENTITIES>true</GENERATE_LONG_ENTITIES>
+        <UNINDEXED_AS_NULL>true</UNINDEXED_AS_NULL>
+        <USE_LEXICAL_SEARCH_HEURSTICS>true</USE_LEXICAL_SEARCH_HEURSTICS>
+        <USE_SPELL_CHECK>true</USE_SPELL_CHECK>
+        <USE_FUZZY_SEARCH>true</USE_FUZZY_SEARCH>
+        <USE_COREF>false</USE_COREF>
+        <DISABLE_LOC_COREF>true</DISABLE_LOC_COREF>
+        <USE_RELATIONAL_INFERENCE>false</USE_RELATIONAL_INFERENCE>
+        <RESOLVE_NOMINAL_COREF>false</RESOLVE_NOMINAL_COREF>
+        <useLexicalFeaturesNaive>false</useLexicalFeaturesNaive>
+        <unambiguousThreshold>0.99</unambiguousThreshold>
+        <disallowEntityOverlap>false</disallowEntityOverlap>
+        <useNestedNER>true</useNestedNER>
+        <useOnlyConditionalTitleProbabilitiesInTitleMatchFeatures>false</useOnlyConditionalTitleProbabilitiesInTitleMatchFeatures>
+        <useLexicalFeaturesReweighted>true</useLexicalFeaturesReweighted>
+        <useUnambiguousInDisambiguationContext>false</useUnambiguousInDisambiguationContext>
+        <useNamedEntitiesInDisambiguationContext>false</useNamedEntitiesInDisambiguationContext>
+        <useAllSurfaceFormsInDisambiguationContext>true</useAllSurfaceFormsInDisambiguationContext>
+        <useOnlyLinkedSurfaceFormsForDisambiguationContext>true</useOnlyLinkedSurfaceFormsForDisambiguationContext>
+        <useCoherenceFeatures>true</useCoherenceFeatures>
+        <useGoldSolutionsForCoherence>false</useGoldSolutionsForCoherence>
+        <generateFeaturesConjunctions>false</generateFeaturesConjunctions>
+        <numCandidatesAtCoherenceLevel>3</numCandidatesAtCoherenceLevel>
+        <preset>STAND_ALONE_NO_INFERENCE</preset>
+    </parameters>
+    <settings>
+        <annotateNER>true</annotateNER>
+        <annotateCOREF>false</annotateCOREF>
+        <annotateSHALLOW_PARSE>true</annotateSHALLOW_PARSE>
+        <featureExtractionThreadCount>AUTO</featureExtractionThreadCount>
+        <wikiAccessProvider>MapDB</wikiAccessProvider>
+        <bypassCurator>true</bypassCurator>
+    </settings>
+</wikifierConfigurations>

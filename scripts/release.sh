@@ -54,7 +54,7 @@ if [[ $FORMAT != "zip" && $OPTARG != "tgz" ]]; then
 fi
 
 if [  -z $NAME ]; then
-    echo "$0: you must specify the package name (no spaces or dodgy control characters, please..."
+    echo "$0: you must specify the package name with flag '-N' (no spaces or dodgy control characters, please...)"
     exit -1;
 fi
 
