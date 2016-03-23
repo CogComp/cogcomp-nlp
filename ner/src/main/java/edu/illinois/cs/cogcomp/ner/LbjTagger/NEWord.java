@@ -197,6 +197,10 @@ public class NEWord extends Word {
         Parser parser = new WordSplitter(new SentenceSplitter(sentence));
         LinkedVector words = (LinkedVector) parser.next();
         Vector<NEWord> res = new Vector<>();
+        if (words == null) {
+            res.add(word);
+            return res;
+        }
         String label = word.neLabel;
         for (int i = 0; i < words.size(); i++) {
             if (label.contains("B-") && i > 0)
