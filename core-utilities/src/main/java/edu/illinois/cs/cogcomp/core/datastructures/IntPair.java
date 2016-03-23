@@ -67,9 +67,7 @@ public class IntPair implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         IntPair other = (IntPair) obj;
-        if (first != other.first)
-            return false;
-        return second == other.second;
+        return first == other.first && second == other.second;
     }
 
     @Override

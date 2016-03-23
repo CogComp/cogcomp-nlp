@@ -14,3 +14,4 @@ CogComp's main NLP libraries
 - [illinois-lemmatizer](lemmatizer/README.md)
 - [illinois-tokenizer](tokenizer/README.md)
 - [illinois-pos](pos/README.md)
+- [illinois-ner](ner/README.md)

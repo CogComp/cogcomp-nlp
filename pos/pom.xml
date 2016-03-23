@@ -19,7 +19,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.2.10</version>
+            <version>1.2.13</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -46,7 +46,7 @@
             <plugin>
                 <groupId>edu.illinois.cs.cogcomp</groupId>
                 <artifactId>lbjava-maven-plugin</artifactId>
-                <version>2.1</version>
+                <version>1.2.13</version>
                 <configuration>
                     <lbjavaInputFileList>
                         <param>${project.basedir}/src/main/lbj/POSKnown.lbj</param>
