@@ -154,7 +154,7 @@ public class NERAnnotatorTest {
      * Make sure it runs in reasonable time. We will test the performance of the machine we run on
      * to get a better measure.
      */
-    @Test
+    //@Test
     public void testPerformance() {
         // now do performance.
         final int SIZE = 100;
@@ -235,7 +235,7 @@ public class NERAnnotatorTest {
     /**
      * on every core we should get performance below 300 ticks and the results should still be good.
      */
-    @Test
+    //@Test
     public void testMultiThreaded() {
         final int SIZE = 1000;
 
