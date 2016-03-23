@@ -347,7 +347,12 @@ public abstract class IOUtils {
             else {
                 String jarPath = "file:" + resource.getPath() + "!";
                 ZipFile zf;
-                zf = new ZipFile(resource);
+                try {
+                    zf = new ZipFile(resource);
+                }
+                catch (IOException e) {
+                    continue;
+                }
                 final Enumeration e = zf.entries();
                 while (e.hasMoreElements()) {
                     final ZipEntry ze = (ZipEntry) e.nextElement();
