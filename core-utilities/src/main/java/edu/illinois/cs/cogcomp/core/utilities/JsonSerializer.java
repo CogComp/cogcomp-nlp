@@ -161,7 +161,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         View view = createEmptyView(ta, viewClass, viewName, viewGenerator, score);
 
-        List<Constituent> constituents = new ArrayList<Constituent>();
+        List<Constituent> constituents = new ArrayList<>();
 
         if (json.has("constituents")) {
 
@@ -262,8 +262,7 @@ public class JsonSerializer extends AbstractSerializer {
         double score = readDouble("score", object);
         int[] endPositions = readIntArray("sentenceEndPositions", object);
 
-        return new Pair<Pair<String, Double>, int[]>(new Pair<String, Double>(generator, score),
-                endPositions);
+        return new Pair<>(new Pair<>(generator, score), endPositions);
 
     }
 

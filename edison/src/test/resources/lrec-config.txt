@@ -1,0 +1,2 @@
+## path to Part-of-Speech corpus in parenthesis format.
+posCorpus   /shared/corpora/corporaWeb/written/eng/POS/00-18.br

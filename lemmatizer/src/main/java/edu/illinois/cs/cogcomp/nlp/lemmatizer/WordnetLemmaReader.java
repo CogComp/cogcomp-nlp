@@ -1,8 +1,10 @@
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -16,6 +18,16 @@ public class WordnetLemmaReader {
     private static Map<String, String> nounLemmas, verbLemmas, adjectiveLemmas, adverbLemmas;
 
     public WordnetLemmaReader(String wordnetPath) {
+        try {
+            if (IOUtils.lsResources(WordnetLemmaReader.class, wordnetPath).size() == 0) {
+                System.err.println("Wordnet path does not point to a directory.");
+                System.exit(-1);
+            }
+        } catch (URISyntaxException | IOException e) {
+            System.err.println("Error while trying to access Wordnet.");
+            System.exit(-1);
+        }
+
         nounLemmas = new HashMap<>();
         verbLemmas = new HashMap<>();
         adjectiveLemmas = new HashMap<>();

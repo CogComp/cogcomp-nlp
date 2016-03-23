@@ -6,15 +6,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import junit.framework.TestCase;
 
 import java.util.List;
 
 /**
- * Test class NB: If needed, please re-create the {@code test.ta} and
- * {@code feature.collection.text} files using {@link CreateTestTAResource} and
- * {@link CreateTestFeaturesResource}
+ * Test class
+ * <p/>
+ * <b>NB:</b> If needed, please re-create the {@code feature.collection.text} file using
+ * {@link CreateTestFeaturesResource}.
  *
  * @author Vivek Srikumar
  */

@@ -36,7 +36,7 @@ public class OntoNotesJsonReader {
                         "sentence_end_offset").toString()));
                 JSONArray eachSentenceArray = (JSONArray) sentenceArray.get("tokens");
                 for (JSONObject eachTokenObject : (Iterable<JSONObject>) eachSentenceArray) {
-                    ;
+
                     currentDataModel.addAToken((String) eachTokenObject.get("token_text"));
                     currentDataModel.addAStartOffset(Integer.parseInt(eachTokenObject.get(
                             "token_start_offset").toString()));

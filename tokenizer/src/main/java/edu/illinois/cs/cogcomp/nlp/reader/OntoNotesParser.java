@@ -35,17 +35,21 @@ public class OntoNotesParser {
             bufferedReader = new BufferedReader(new FileReader("./data/" + fileName));
 
             while ((currentLine = bufferedReader.readLine()) != null) {
-                if (currentLine.equals("Plain sentence:")) {
-                    plainSentenceFlag = true;
-                    eachPlainSentence = "";
-                } else if (currentLine.equals("Treebanked sentence:")) {
-                    plainSentenceFlag = false;
-                    plainSentenceCount = 0;
-                    currentDataModel.setPlainSentence(eachPlainSentence);
-                    sentences.add(currentDataModel);
-                    // System.out.println(eachPlainSentence+"\n");
-                } else if (currentLine.equals("Leaves:")) {
-                    leavesFlag = true;
+                switch (currentLine) {
+                    case "Plain sentence:":
+                        plainSentenceFlag = true;
+                        eachPlainSentence = "";
+                        break;
+                    case "Treebanked sentence:":
+                        plainSentenceFlag = false;
+                        plainSentenceCount = 0;
+                        currentDataModel.setPlainSentence(eachPlainSentence);
+                        sentences.add(currentDataModel);
+                        // System.out.println(eachPlainSentence+"\n");
+                        break;
+                    case "Leaves:":
+                        leavesFlag = true;
+                        break;
                 }
                 if (plainSentenceFlag) {
                     plainSentenceCount++;

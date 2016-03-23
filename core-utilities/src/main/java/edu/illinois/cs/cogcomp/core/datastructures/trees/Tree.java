@@ -279,10 +279,7 @@ public class Tree<T> implements Serializable {
         if (this.parent == null) {
             return this.parent.childrenEdgeLabels != null;
         } else {
-            if (this.isLeaf())
-                return false;
-            else
-                return this.childrenEdgeLabels != null;
+            return !this.isLeaf() && this.childrenEdgeLabels != null;
         }
     }
 
