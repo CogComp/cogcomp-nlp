@@ -146,11 +146,6 @@
             <version>1.0.3</version>
         </dependency>
     -->
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>wikifier</artifactId>
-            <version>3.1.2-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <reporting>
