@@ -16,12 +16,13 @@
         <module>edison</module>
         <module>curator</module>
         <module>pos</module>
+        <module>chunker</module>
     </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	<googleEclipseFormatterStyle>${project.basedir}/../core-utilities/src/main/resources/eclipse-java-google-style.xml</googleEclipseFormatterStyle>
+        <googleEclipseFormatterStyle>${project.basedir}/../core-utilities/src/main/resources/eclipse-java-google-style.xml</googleEclipseFormatterStyle>
     </properties>
 
     <repositories>
@@ -71,10 +72,10 @@
                 <artifactId>formatter-maven-plugin</artifactId>
                 <version>0.5.2</version>
                 <configuration>
-			<configFile>${googleEclipseFormatterStyle}</configFile>
-			<excludes>
-				<exclude>**/Morpha.java</exclude>
-			</excludes>
+            <configFile>${googleEclipseFormatterStyle}</configFile>
+            <excludes>
+                <exclude>**/Morpha.java</exclude>
+            </excludes>
                 </configuration>
             </plugin>
             <plugin>
