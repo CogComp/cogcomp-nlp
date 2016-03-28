@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.srl.data;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
 import org.slf4j.Logger;
@@ -32,7 +33,6 @@ public class FramesManager {
 	private static FramesManager PROP_INSTANCE = null, NOM_INSTANCE = null;
 
 	public static FramesManager getPropbankInstance() {
-
 		if (PROP_INSTANCE == null) {
 			synchronized (log) {
 				if (PROP_INSTANCE == null) {
@@ -40,7 +40,6 @@ public class FramesManager {
 				}
 			}
 		}
-
 		return PROP_INSTANCE;
 	}
 
@@ -53,7 +52,6 @@ public class FramesManager {
 				}
 			}
 		}
-
 		return NOM_INSTANCE;
 	}
 
@@ -79,7 +77,6 @@ public class FramesManager {
 	}
 
 	private void readFrameData(String dir) throws Exception {
-
 		frameData = new HashMap<>();
 
 		File framesetFile = new File(dir + File.separator + "frameset.dtd");
@@ -132,8 +129,7 @@ public class FramesManager {
 		}
 	}
 
-	private void addRoleSets(String file, String lemma, FrameData fData,
-							 NodeList roleSets) {
+	private void addRoleSets(String file, String lemma, FrameData fData, NodeList roleSets) {
 		for (int i = 0; i < roleSets.getLength(); i++) {
 			Element roleSet = (Element) roleSets.item(i);
 
@@ -248,4 +244,30 @@ public class FramesManager {
 		return frameData.get(lemma);
 	}
 
+    /**
+     * Use this to create the compact files used during inference.
+     * NB: You need to have access to the Propbank and Nombank frame files
+     */
+    public static void main(String[] args) throws IOException {
+        List<String> outLines = new ArrayList<>();
+//        FramesManager manager = new FramesManager(propFramesDir);
+        FramesManager manager = new FramesManager(nomFramesDir);
+        for (String predicate : manager.getPredicates()) {
+            FrameData frame = manager.getFrame(predicate);
+            Set<String> senses = frame.getSenses();
+            String senseStr = "";
+            for (String sense : senses) {
+                Set<String> argsForSense = frame.getArgsForSense(sense);
+                if (argsForSense.isEmpty()) continue;
+                senseStr += sense + "#";
+                for (String arg : argsForSense)
+                    senseStr += arg + ",";
+                senseStr = senseStr.substring(0, senseStr.length()-1) + " ";
+            }
+            outLines.add(predicate + "\t" + senseStr.trim());
+        }
+        Collections.sort(outLines);
+//        LineIO.write("src/main/resources/Verb.legal.arguments", outLines);
+        LineIO.write("src/main/resources/Nom.legal.arguments", outLines);
+    }
 }

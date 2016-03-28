@@ -7,14 +7,10 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
-import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.Constants;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
-import edu.illinois.cs.cogcomp.srl.data.FrameData;
-import edu.illinois.cs.cogcomp.srl.data.FramesManager;
 import edu.illinois.cs.cogcomp.srl.data.LegalArguments;
 import edu.illinois.cs.cogcomp.srl.features.FeatureGenerators;
 import edu.illinois.cs.cogcomp.srl.features.ProjectedPath;
@@ -27,7 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -63,9 +58,8 @@ public abstract class SRLManager {
 	private final Set<String> allArgumentsSet;
 
 	private final LegalArguments knownLegalArguments;
-	private final Map<String, Set<String>> legalArgumentsCache;
 
-	private final SRLProperties properties = SRLProperties.getInstance();
+    private final SRLProperties properties = SRLProperties.getInstance();
 
 	private ArgumentIdentifier identifier;
 
@@ -87,9 +81,7 @@ public abstract class SRLManager {
 		argToId = getLabelIdMap(getArgumentLabels());
 		this.knownLegalArguments = new LegalArguments(getSRLType() + ".legal.arguments");
 
-		this.legalArgumentsCache = new ConcurrentHashMap<>();
-
-		log.info("{} Arguments: " + Sorters.sortSet(argToId.keySet()), argToId.size());
+        log.info("{} Arguments: " + Sorters.sortSet(argToId.keySet()), argToId.size());
 		log.info("{} senses: " + Sorters.sortSet(senseToId.keySet()), senseToId.size());
 
 		modelInfo = new HashMap<>();
@@ -247,9 +239,7 @@ public abstract class SRLManager {
 
 	public abstract ArgumentCandidateGenerator getArgumentCandidateGenerator();
 
-	public abstract FramesManager getFrameManager();
-
-	public abstract AbstractPredicateDetector getHeuristicPredicateDetector();
+    public abstract AbstractPredicateDetector getHeuristicPredicateDetector();
 
 	public abstract AbstractPredicateDetector getLearnedPredicateDetector();
 
@@ -412,57 +402,16 @@ public abstract class SRLManager {
 	 * unknown predicates, all arguments are legal.
 	 */
 	public Set<String> getLegalArguments(String lemma) {
-		FramesManager frameMan = getFrameManager();
-
 		if (knownLegalArguments.hasLegalArguments(lemma)) {
-
 			Set<String> set = new HashSet<>();
 
 			set.addAll(Arrays.asList("AM-ADV", "AM-DIS", "AM-LOC", "AM-MNR", "AM-MOD", "AM-NEG", "AM-TMP"));
 
 			set.addAll(knownLegalArguments.getLegalArguments(lemma));
 
-			if (lemma.equals("%"))
-				lemma = "perc-sign";
-
-			if (lemma.equals("namedrop"))
-				lemma = "name-drop";
-
-			if (frameMan.frameData.containsKey(lemma))
-				set.addAll(frameMan.getFrame(lemma).getLegalArguments());
-			else
-				log.warn("Unseen lemma {}", lemma);
-
 			return set;
 		}
-		else {
-
-			Set<String> knownPredicates = frameMan.getPredicates();
-			if (knownPredicates.contains(lemma)) {
-
-				if (legalArgumentsCache.containsKey(lemma))
-					return legalArgumentsCache.get(lemma);
-				else {
-
-					HashSet<String> set = new HashSet<>(frameMan
-                            .getFrame(lemma).getLegalArguments());
-
-					set.addAll(this.getModifierArguments());
-
-					for (String s : new ArrayList<>(set)) {
-						set.add("C-" + s);
-						set.add("R-" + s);
-					}
-
-					set.add(NULL_LABEL);
-
-					legalArgumentsCache.put(lemma, set);
-
-					return set;
-				}
-			} else
-				return getAllArguments();
-		}
+        else return getAllArguments();
 	}
 
 	/**
@@ -470,10 +419,8 @@ public abstract class SRLManager {
 	 * For unknown predicates, only the sense 01 is allowed.
 	 */
 	public Set<String> getLegalSenses(String predicate) {
-		FramesManager frameMan = getFrameManager();
-
-		if (frameMan.getPredicates().contains(predicate)) {
-			Set<String> senses = frameMan.getFrame(predicate).getSenses();
+		if (knownLegalArguments.hasLegalSenses(predicate)) {
+			Set<String> senses = knownLegalArguments.getLegalSenses(predicate);
 
 			// keep only senses that the model knows about
 			senses.retainAll(this.senseToId.keySet());
@@ -485,7 +432,6 @@ public abstract class SRLManager {
 			}
 		}
 		return new HashSet<>(Collections.singletonList("01"));
-
 	}
 
 	/**
@@ -493,14 +439,11 @@ public abstract class SRLManager {
 	 * For unknown predicates, only the sense 01 is allowed with all arguments
 	 */
 	public Map<String, Set<String>> getLegalLabelsForSense(String lemma) {
-		FramesManager frameMan = getFrameManager();
-
 		Map<String, Set<String>> map = new HashMap<>();
 
-		if (frameMan.getPredicates().contains(lemma)) {
-			FrameData frame = frameMan.getFrame(lemma);
-			for (String sense : frame.getSenses()) {
-				Set<String> argsForSense = new HashSet<>(frame.getArgsForSense(sense));
+		if (knownLegalArguments.hasLegalSenses(lemma) && knownLegalArguments.hasLegalArguments(lemma)) {
+			for (String sense : knownLegalArguments.getLegalSenses(lemma)) {
+				Set<String> argsForSense = new HashSet<>(knownLegalArguments.getLegalArgsForSense(lemma, sense));
 				argsForSense.add(NULL_LABEL);
 
 				map.put(sense, argsForSense);

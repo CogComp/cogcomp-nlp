@@ -14,9 +14,9 @@ public class SemanticRoleLabelerTest extends TestCase {
     private static String[] requiredViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
             ViewNames.SHALLOW_PARSE, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
 
-    private SemanticRoleLabeler verbSRL, nomSRL;
+    private ResourceManager rm;
 
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
 		super.setUp();
 
         /**
@@ -52,19 +52,18 @@ public class SemanticRoleLabelerTest extends TestCase {
 //        newPaths[newPaths.length-1] = pathToAdd;
 //        usrPathsField.set(null, newPaths);
 
-        ResourceManager rm = new ResourceManager( CONFIG );
-
-		verbSRL = new SemanticRoleLabeler(rm, "Verb");
-		nomSRL = new SemanticRoleLabeler(rm, "Nom");
+        rm = new ResourceManager( CONFIG );
 	}
 
 	public void testVerbSRL() throws Exception {
+        SemanticRoleLabeler verbSRL = new SemanticRoleLabeler(rm, "Verb");
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
 		PredicateArgumentView srl = verbSRL.getSRL(ta);
 		assertEquals("finish:02\n    A1: The construction of the library\n    AM-TMP: on time\n", srl.toString());
 	}
 
 	public void testNomSRL() throws Exception {
+        SemanticRoleLabeler nomSRL = new SemanticRoleLabeler(rm, "Nom");
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
 		PredicateArgumentView srl = nomSRL.getSRL(ta);
 		assertEquals("construction:01\n    A1: of the library\n", srl.toString());

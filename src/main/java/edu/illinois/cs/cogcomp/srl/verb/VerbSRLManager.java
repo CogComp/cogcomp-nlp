@@ -2,7 +2,6 @@ package edu.illinois.cs.cogcomp.srl.verb;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.srl.core.*;
-import edu.illinois.cs.cogcomp.srl.data.FramesManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,12 +113,7 @@ public class VerbSRLManager extends SRLManager {
 		return this.candidateGenerator;
 	}
 
-	@Override
-	public FramesManager getFrameManager() {
-		return FramesManager.getPropbankInstance();
-	}
-
-	@Override
+    @Override
 	public String getPredictedViewName() {
 		return ViewNames.SRL_VERB;
 	}
