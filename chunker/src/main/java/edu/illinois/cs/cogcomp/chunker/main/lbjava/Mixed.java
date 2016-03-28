@@ -5,8 +5,6 @@ package edu.illinois.cs.cogcomp.chunker.main.lbjava;
 
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.chunker.utils.Constants;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
@@ -14,6 +12,8 @@ import edu.illinois.cs.cogcomp.lbjava.learn.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 
 
 public class Mixed extends Classifier
