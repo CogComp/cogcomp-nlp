@@ -86,5 +86,13 @@ TODO
 TODO 
 
 
+## Testing/Installing Source
+Some of the feature extractor unit tests rely on access to licensed corpora. Specifically, you will need access to the 
+Part-of-Speech tagger's source corpus in the parenthesis format (one sentence per line, each POS/word pair in 
+parentheses, e.g.
+(DT The)(NN dog)(VBD bit)(PRP me)(. .)
+
+To install the source with Maven you will need to either skip the tests or to set the relevant property in the config
+file src/test/resources/lrec-config.txt. 
 
 

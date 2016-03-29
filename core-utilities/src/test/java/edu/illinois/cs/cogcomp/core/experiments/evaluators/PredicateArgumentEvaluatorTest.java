@@ -23,8 +23,10 @@ public class PredicateArgumentEvaluatorTest {
         argLabelTester = new ClassificationTester();
 
         String[] viewsToAdd = {ViewNames.SRL_VERB};
-        TextAnnotation taGold = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
-        TextAnnotation taPred = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        TextAnnotation taGold =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        TextAnnotation taPred =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
         gold = (PredicateArgumentView) taGold.getView(ViewNames.SRL_VERB);
         predicted = (PredicateArgumentView) taPred.getView(ViewNames.SRL_VERB);
     }
@@ -53,7 +55,8 @@ public class PredicateArgumentEvaluatorTest {
 
         // Add a wrong prediction
         Constituent predicate = predicted.getPredicates().get(0);
-        Constituent argument = new Constituent("test", ViewNames.SRL_VERB, predicate.getTextAnnotation(), 0, 1);
+        Constituent argument =
+                new Constituent("test", ViewNames.SRL_VERB, predicate.getTextAnnotation(), 0, 1);
         predicted.addRelation(new Relation("test", predicate, argument, 0));
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);

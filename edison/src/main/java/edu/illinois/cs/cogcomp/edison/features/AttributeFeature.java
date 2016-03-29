@@ -11,26 +11,26 @@ import java.util.Set;
  */
 public class AttributeFeature implements FeatureExtractor {
 
-	private String attributeName;
+    private String attributeName;
 
-	public AttributeFeature(String attributeName) {
-		this.attributeName = attributeName;
+    public AttributeFeature(String attributeName) {
+        this.attributeName = attributeName;
 
-	}
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-		Set<Feature> set = new LinkedHashSet<>();
-		if (c.hasAttribute(attributeName)) {
-			set.add(DiscreteFeature.create(c.getAttribute(attributeName)));
-		}
-		return set;
-	}
+        Set<Feature> set = new LinkedHashSet<>();
+        if (c.hasAttribute(attributeName)) {
+            set.add(DiscreteFeature.create(c.getAttribute(attributeName)));
+        }
+        return set;
+    }
 
-	@Override
-	public String getName() {
-		return "#" + attributeName;
-	}
+    @Override
+    public String getName() {
+        return "#" + attributeName;
+    }
 
 }

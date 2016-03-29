@@ -10,16 +10,17 @@ import java.util.List;
  * @author Vivek Srikumar
  */
 public class SpanLabelsHelper {
-	public static List<Constituent> getConstituentsInBetween(SpanLabelView view, int start, int end) {
+    public static List<Constituent> getConstituentsInBetween(SpanLabelView view, int start, int end) {
 
-		List<Constituent> output = view.getConstituentsCoveringSpan(start, end);
-		List<Constituent> restrictedOutput = new ArrayList<>();
+        List<Constituent> output = view.getConstituentsCoveringSpan(start, end);
+        List<Constituent> restrictedOutput = new ArrayList<>();
 
-		for (Constituent c : output) {
-			if ((c.getStartSpan() >= start) && (c.getEndSpan() <= end)) restrictedOutput.add(c);
-		}
+        for (Constituent c : output) {
+            if ((c.getStartSpan() >= start) && (c.getEndSpan() <= end))
+                restrictedOutput.add(c);
+        }
 
-		return restrictedOutput;
-	}
+        return restrictedOutput;
+    }
 
 }

@@ -13,11 +13,12 @@ import java.util.regex.Pattern;
 
 
 /**
- * This class has methods for conversion of non-UTF-8 characters to UTF-8, and from UTF-8 to Ascii. These attempt
- * to preserve character offsets, and to make intuitive replacements (see the StringCleanup class from coreUtilities).
- * <p/>
- * Other methods try to remove problem character sequences from text to avoid known problems with NLP components
- * for such sequences, but don't preserve character offsets.
+ * This class has methods for conversion of non-UTF-8 characters to UTF-8, and from UTF-8 to Ascii.
+ * These attempt to preserve character offsets, and to make intuitive replacements (see the
+ * StringCleanup class from coreUtilities).
+ * <p>
+ * Other methods try to remove problem character sequences from text to avoid known problems with
+ * NLP components for such sequences, but don't preserve character offsets.
  *
  * @author mssammon
  */
@@ -28,7 +29,8 @@ public class TextCleaner {
 
     private static final int REGEX_TEXT_LIMIT = 10000;
 
-    private static Pattern repeatPunctuationPattern = Pattern.compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
+    private static Pattern repeatPunctuationPattern = Pattern
+            .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
     private boolean removeRepeatPunctuation;
     private boolean replaceUnderscores;
     private boolean replaceControlSequence;
@@ -46,8 +48,8 @@ public class TextCleaner {
 
 
     /**
-     * attempts to remove/replace characters likely to cause problems to NLP tools
-     * -- output should be ascii only
+     * attempts to remove/replace characters likely to cause problems to NLP tools -- output should
+     * be ascii only
      */
 
     public String cleanText(String text_) {
@@ -57,7 +59,7 @@ public class TextCleaner {
         StringBuilder finalCleanText = new StringBuilder();
 
         // regexp can die due to heap exhaustion (recursion problem) for long inputs,
-        //     so the text is chunked
+        // so the text is chunked
 
         while (end < textLen) {
             end = Math.min(start + REGEX_TEXT_LIMIT, textLen);
@@ -86,14 +88,15 @@ public class TextCleaner {
         }
 
 
-        logger.debug(NAME + ".cleanText(): original text: \n'" + text_ + "';\n new text: \n'" + finalCleanText + "'.");
+        logger.debug(NAME + ".cleanText(): original text: \n'" + text_ + "';\n new text: \n'"
+                + finalCleanText + "'.");
         return (finalCleanText.toString()).trim();
     }
 
 
     /**
-     * attempts to replace incorrect apostrophe symbol (after other substitutions for
-     * non-standard quotation marks)
+     * attempts to replace incorrect apostrophe symbol (after other substitutions for non-standard
+     * quotation marks)
      */
     public static String replaceMisusedApostropheSymbol(String origText_) {
         return origText_.replaceAll("\"s(\\s+)", "'s$1");
@@ -101,8 +104,8 @@ public class TextCleaner {
 
 
     /**
-     * replaces underscores with dashes (many crawled news articles seem to have substituted em- or en-dashes
-     * with underscores)
+     * replaces underscores with dashes (many crawled news articles seem to have substituted em- or
+     * en-dashes with underscores)
      */
     public static String replaceUnderscores(String origText_) {
         return origText_.replaceAll("_", "-");
@@ -112,7 +115,7 @@ public class TextCleaner {
     /**
      * web documents sometimes use tildes and stars either for page section breaks or as bullets for
      * bullet points; these may cause problems to NLP components
-     * <p/>
+     * <p>
      * this method strips these characters completely
      */
     public static String replaceTildesAndStars(String origText_) {
@@ -126,10 +129,10 @@ public class TextCleaner {
 
     /**
      * replaces duplicate punctuation with single punctuation
-     * <p/>
-     * This sometimes happens due to a typo, or may be due to ad-hoc web formating
-     * -- in the latter case, this may not have the ideal effect.
-     * <p/>
+     * <p>
+     * This sometimes happens due to a typo, or may be due to ad-hoc web formating -- in the latter
+     * case, this may not have the ideal effect.
+     * <p>
      * In addition, use of double dashes and ellipses may cause problems to NLP components; this
      * should help, though it may introduce extra sentence breaks in the case of ellipses.
      */
@@ -153,8 +156,8 @@ public class TextCleaner {
     }
 
     /**
-     * noisy character sequences seen in some crawled text look like rendered control sequences; this method
-     * strips them all.
+     * noisy character sequences seen in some crawled text look like rendered control sequences;
+     * this method strips them all.
      */
     public static String replaceControlSequence(String origText_) {
         String cleanText = origText_.replaceAll("@\\^", "");

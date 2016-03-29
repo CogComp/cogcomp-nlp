@@ -15,41 +15,41 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 @SuppressWarnings("serial")
 public class ChunkPropertyFeatureFactory {
 
-	private static Predicate<Constituent> isNegatedPredicate = new Predicate<Constituent>() {
+    private static Predicate<Constituent> isNegatedPredicate = new Predicate<Constituent>() {
 
-		@Override
-		public Boolean transform(Constituent input) {
+        @Override
+        public Boolean transform(Constituent input) {
 
-			TextAnnotation ta = input.getTextAnnotation();
-			boolean found = false;
-			for (int i = input.getStartSpan(); i < input.getEndSpan(); i++) {
-				if (ta.getTokens()[i].equals("not") || (ta.getTokens()[i].equals("n't"))) {
-					found = true;
-					break;
-				}
-			}
-			return found;
+            TextAnnotation ta = input.getTextAnnotation();
+            boolean found = false;
+            for (int i = input.getStartSpan(); i < input.getEndSpan(); i++) {
+                if (ta.getTokens()[i].equals("not") || (ta.getTokens()[i].equals("n't"))) {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
 
-		}
-	};
-	public static ChunkPropertyIndicator isNegated =
-			new ChunkPropertyIndicator(ViewNames.SHALLOW_PARSE, "neg?", isNegatedPredicate);
-	private static Predicate<Constituent> hasModalVerbPredicate = new Predicate<Constituent>() {
+        }
+    };
+    public static ChunkPropertyIndicator isNegated = new ChunkPropertyIndicator(
+            ViewNames.SHALLOW_PARSE, "neg?", isNegatedPredicate);
+    private static Predicate<Constituent> hasModalVerbPredicate = new Predicate<Constituent>() {
 
-		@Override
-		public Boolean transform(Constituent input) {
-			TextAnnotation ta = input.getTextAnnotation();
+        @Override
+        public Boolean transform(Constituent input) {
+            TextAnnotation ta = input.getTextAnnotation();
 
-			boolean found = false;
-			for (int i = input.getStartSpan(); i < input.getEndSpan(); i++) {
-				if (WordHelpers.getPOS(ta, i).equals("MD")) {
-					found = true;
-					break;
-				}
-			}
-			return found;
-		}
-	};
-	public static ChunkPropertyIndicator hasModalVerb =
-			new ChunkPropertyIndicator(ViewNames.SHALLOW_PARSE, "modal?", hasModalVerbPredicate);
+            boolean found = false;
+            for (int i = input.getStartSpan(); i < input.getEndSpan(); i++) {
+                if (WordHelpers.getPOS(ta, i).equals("MD")) {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+        }
+    };
+    public static ChunkPropertyIndicator hasModalVerb = new ChunkPropertyIndicator(
+            ViewNames.SHALLOW_PARSE, "modal?", hasModalVerbPredicate);
 }

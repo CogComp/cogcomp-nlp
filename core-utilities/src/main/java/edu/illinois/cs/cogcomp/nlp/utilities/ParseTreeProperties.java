@@ -11,26 +11,25 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class consists of a set of functions of the form "is a label X?", where
- * the label is a node in the parse tree and X could be different linguistic
- * classes, parts of speech, etc. The functions assume that the parse trees are
- * annotated in the Penn Treebank style.
- * <p/>
+ * This class consists of a set of functions of the form "is a label X?", where the label is a node
+ * in the parse tree and X could be different linguistic classes, parts of speech, etc. The
+ * functions assume that the parse trees are annotated in the Penn Treebank style.
+ * <p>
  * Most of the information is from the list <a
  * href="http://bulba.sdsu.edu/jeanette/thesis/PennTags.html">here</a>.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jan 29, 2009
  */
 public class ParseTreeProperties {
 
-    private static List<String> punctuations = Arrays.asList("''", "``", "\"",
-            "'", ",", ":", ".", "(", ")", "[", "]", "{", "}");
+    private static List<String> punctuations = Arrays.asList("''", "``", "\"", "'", ",", ":", ".",
+            "(", ")", "[", "]", "{", "}");
 
     /**
-     * Is a given tree a pre-terminal. This could be used to check for POS tag
-     * too, if the convention is that pre-terminals are POS tags.
+     * Is a given tree a pre-terminal. This could be used to check for POS tag too, if the
+     * convention is that pre-terminals are POS tags.
      */
     public static boolean isPreTerminal(Tree<String> tree) {
         if (tree.isLeaf())
@@ -50,8 +49,7 @@ public class ParseTreeProperties {
     public static boolean isNonTerminalNoun(String nonTerminalToken) {
         nonTerminalToken = ParseUtils.stripFunctionTags(nonTerminalToken);
 
-        return nonTerminalToken.startsWith("NP")
-                || nonTerminalToken.startsWith("NX");
+        return nonTerminalToken.startsWith("NP") || nonTerminalToken.startsWith("NX");
     }
 
     public static boolean isNonTerminalVerb(String nonTerminalToken) {
