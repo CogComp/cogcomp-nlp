@@ -42,20 +42,6 @@ your Maven project by adding the following dependencies to your pom.xml file:
     <artifactId>illinois-ner</artifactId>
     <version>VERSION</version>
 </dependency>
-<dependency>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
-    <artifactId>illinois-ner</artifactId>
-    <version>VERSION</version>
-    <classifier>models-conll</classifier>
-    <scope>runtime</scope>
-</dependency>
-<dependency>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
-    <artifactId>illinois-ner</artifactId>
-    <version>VERSION</version>
-    <classifier>models-ontonotes</classifier>
-    <scope>runtime</scope>
-</dependency>
 ```
 
 ## How to compile the software
