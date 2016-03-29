@@ -56,17 +56,9 @@ your Maven project by adding the following dependencies to your pom.xml file:
     <classifier>models-ontonotes</classifier>
     <scope>runtime</scope>
 </dependency>
-<dependency>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
-    <artifactId>LBJava</artifactId>
-    <version>1.2.10</version>
-</dependency>
 ```
 
-
-
 ## How to compile the software
-
 
 ### PREREQUISITES
 
