@@ -16,49 +16,50 @@ import java.util.Set;
  */
 public class DependencyModifierFeatureExtractor implements FeatureExtractor {
 
-	private final FeatureExtractor baseFex;
-	private final FeatureInputTransformer dependencyHeadIdentifier;
+    private final FeatureExtractor baseFex;
+    private final FeatureInputTransformer dependencyHeadIdentifier;
 
-	public DependencyModifierFeatureExtractor(String dependencyViewName, FeatureExtractor baseFex) throws
-			EdisonException {
-		switch (dependencyViewName) {
-			case ViewNames.DEPENDENCY:
-				this.dependencyHeadIdentifier = FeatureInputTransformer.easyFirstDependencyHead;
-				break;
-			case ViewNames.DEPENDENCY_STANFORD:
-				this.dependencyHeadIdentifier = FeatureInputTransformer.stanfordDependencyHead;
-				break;
-			default:
-				this.dependencyHeadIdentifier = null;
-				break;
-		}
-		this.baseFex = baseFex;
-	}
+    public DependencyModifierFeatureExtractor(String dependencyViewName, FeatureExtractor baseFex)
+            throws EdisonException {
+        switch (dependencyViewName) {
+            case ViewNames.DEPENDENCY:
+                this.dependencyHeadIdentifier = FeatureInputTransformer.easyFirstDependencyHead;
+                break;
+            case ViewNames.DEPENDENCY_STANFORD:
+                this.dependencyHeadIdentifier = FeatureInputTransformer.stanfordDependencyHead;
+                break;
+            default:
+                this.dependencyHeadIdentifier = null;
+                break;
+        }
+        this.baseFex = baseFex;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-		List<Constituent> parents = dependencyHeadIdentifier.transform(c);
-		Set<Feature> features = new LinkedHashSet<>();
-		if (parents.size() == 0) {
+        List<Constituent> parents = dependencyHeadIdentifier.transform(c);
+        Set<Feature> features = new LinkedHashSet<>();
+        if (parents.size() == 0) {
 
-			Constituent parent = parents.get(0);
-			for (Relation out : parent.getOutgoingRelations()) {
-				String label = out.getRelationName();
+            Constituent parent = parents.get(0);
+            for (Relation out : parent.getOutgoingRelations()) {
+                String label = out.getRelationName();
 
-				if (label.contains("det") || label.contains("mod") || label.contains("number")) {
+                if (label.contains("det") || label.contains("mod") || label.contains("number")) {
 
-					features.addAll(FeatureUtilities.prefix(label, baseFex.getFeatures(out.getTarget())));
+                    features.addAll(FeatureUtilities.prefix(label,
+                            baseFex.getFeatures(out.getTarget())));
 
-				}
-			}
-		}
-		return features;
-	}
+                }
+            }
+        }
+        return features;
+    }
 
-	@Override
-	public String getName() {
-		return "#dep-mod";
-	}
+    @Override
+    public String getName() {
+        return "#dep-mod";
+    }
 
 }

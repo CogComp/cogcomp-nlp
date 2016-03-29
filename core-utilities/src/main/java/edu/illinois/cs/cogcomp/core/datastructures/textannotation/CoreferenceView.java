@@ -39,7 +39,7 @@ public class CoreferenceView extends View {
      * Create a new CoreferenceView with default {@link #viewGenerator} and {@link #score}.
      */
     public CoreferenceView(String viewName, TextAnnotation text) {
-        this(viewName, viewName+"-annotator", text, 1.0);
+        this(viewName, viewName + "-annotator", text, 1.0);
     }
 
     public CoreferenceView(String viewName, String viewGenerator, TextAnnotation text, double score) {
@@ -60,7 +60,8 @@ public class CoreferenceView extends View {
         super.addRelation(relation);
     }
 
-    public void addCorefEdges(Constituent canonicalMention, List<Constituent> coreferentMentions, double[] scores) {
+    public void addCorefEdges(Constituent canonicalMention, List<Constituent> coreferentMentions,
+            double[] scores) {
         this.addConstituent(canonicalMention);
 
         int canonicalMentionId = this.constituents.indexOf(canonicalMention);
@@ -136,7 +137,8 @@ public class CoreferenceView extends View {
     }
 
     public List<Constituent> getCoreferentMentions(Constituent mention) {
-        List<Constituent> myMentions = (List<Constituent>) this.where(Queries.sameSpanAsConstituent(mention));
+        List<Constituent> myMentions =
+                (List<Constituent>) this.where(Queries.sameSpanAsConstituent(mention));
 
         if (myMentions.size() == 0)
             return Collections.singletonList(mention);
@@ -156,12 +158,13 @@ public class CoreferenceView extends View {
 
         for (Constituent canonical : Sorters.sortSet(entities,
                 TextAnnotationUtilities.constituentStartComparator)) {
-            sb.append(canonical.toString()).append(" (").append(canonical.getStartSpan()).append(", ")
-                    .append(canonical.getEndSpan()).append(")\n");
+            sb.append(canonical.toString()).append(" (").append(canonical.getStartSpan())
+                    .append(", ").append(canonical.getEndSpan()).append(")\n");
 
             for (Relation referant : canonical.getOutgoingRelations()) {
-                sb.append("\t").append(referant.getTarget().toString()).append(" (").append(referant.getTarget()
-                        .getStartSpan()).append(", ").append(referant.getTarget().getEndSpan()).append(") \n");
+                sb.append("\t").append(referant.getTarget().toString()).append(" (")
+                        .append(referant.getTarget().getStartSpan()).append(", ")
+                        .append(referant.getTarget().getEndSpan()).append(") \n");
             }
             sb.append("\n");
         }

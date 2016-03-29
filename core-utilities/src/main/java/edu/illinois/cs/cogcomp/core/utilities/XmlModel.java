@@ -14,9 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Accepts JAXB compatible model classes and performs the IO/parsing.
- * All operations are thread-safe. You can choose either use the static method
- * to load or extend this class to utilize the protected parsing methods.
+ * Accepts JAXB compatible model classes and performs the IO/parsing. All operations are
+ * thread-safe. You can choose either use the static method to load or extend this class to utilize
+ * the protected parsing methods.
  *
  * @author cheng88
  */
@@ -82,7 +82,8 @@ public abstract class XmlModel {
     @SuppressWarnings("unchecked")
     public static <T> T load(Class<T> clazz, String filename) {
         try {
-            return (T) getUnmarshaller(clazz).unmarshal(new InputStreamReader(new FileInputStream(filename), "UTF-8"));
+            return (T) getUnmarshaller(clazz).unmarshal(
+                    new InputStreamReader(new FileInputStream(filename), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +93,8 @@ public abstract class XmlModel {
     @SuppressWarnings("unchecked")
     public static <T> T load(Class<T> clazz, File file) {
         try {
-            return (T) getUnmarshaller(clazz).unmarshal(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            return (T) getUnmarshaller(clazz).unmarshal(
+                    new InputStreamReader(new FileInputStream(file), "UTF-8"));
         } catch (Exception e) {
             e.printStackTrace();
         }

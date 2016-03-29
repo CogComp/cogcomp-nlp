@@ -1,0 +1,146 @@
+
+Thu Jun  7 15:34:04 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.0.0 released.
+
+Mon Jun 11 10:39:05 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.0.1 released.
+  * The labelOrBaseline classifier now checks POSTagger's static isTraining
+    field instead of Train.TRAINING to determine how to compute the feature.
+  * Added the 'test' rule to the Makefile, which requires that a test data set
+    exists.
+
+Wed Jun 13 00:22:00 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.0 released.
+  * The tagger now uses SparseAveragedPerceptron and achieves better
+    performance with less training.
+
+Thu Aug 16 11:09:17 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.1 released.
+  * This software is now released under the Illinois Open Source License.  For
+    more information, see the file LICENSE.
+  * Retrained the tagger using the new implementation of
+    SparseAveragedPerceptron.
+
+Wed Sep  5 15:54:51 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.2 released.
+  * Retrained the tagger with the appropriate, official Penn Treebank II WSJ
+    data.
+  * POSTagPlain now utilizes the new ChildrenFromVector and WordSplitter
+    classes from the LBJ2.nlp package.
+  * POSTagPlain now converts bracket tokens to "-LRB-" and "-RRB-" as
+    appropriate.
+
+Thu Oct 11 11:52:14 CDT 2007 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.3 released.
+  * Retrained the tagger to work with the latest version of LBJ.
+
+Sat May 10 00:51:19 CDT 2008 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.4 released.
+  * The wordForm classifier is introduced as a feature extracting classifier,
+    and it takes care of converting brackets to the form in which they are
+    observed during training.
+
+Wed Sep 10 15:43:12 CDT 2008 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.1.5 released.
+  * Retrained the tagger to work with the latest version of LBJ.
+
+Fri Mar  6 17:43:44 CST 2009 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.2.0 released.
+  * The tagger now uses two learned models when making its decision.  One
+    model is applied to words that were observed during training, and the
+    other is applied to words that weren't.  Mikheev rules are used to create
+    confusion sets for the previously unseen words.
+
+Tue Feb  2 11:35:29 CST 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.3.0 released.
+  * All classes are now contained in edu.illinois.cs.cogcomp.lbj.pos.
+  * Added the edu.illinois.cs.cogcomp.lbj.pos.TestPOS program that simply runs
+    TestDiscrete on labeled testing data.
+  * The edu.illinois.cs.cogcomp.lbj.pos.POSTagPlain program no longer prints
+    the three field bracketed form in which the first field was always null.
+    Now it's the usual two field form.
+  * Retrained the tagger with LBJ 2.2.0.
+
+Wed Apr 14 16:57:14 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.4.0 released.
+  * Retrained the tagger with LBJ 2.3.0.
+
+Sat Jun 19 10:56:33 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.5.0 released.
+  * Retrained the tagger with LBJ 2.4.2.
+
+Thu Jun 24 00:18:46 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.0 released.
+  * The learners have been updated with Java 5 syntax and methods for reading
+    and writing their internal representations, which are necessary for LBJ
+    2.5.0.
+  * Retrained the tagger with LBJ 2.5.0.
+
+Mon Jul 12 14:05:37 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.1 released.
+  * Small changes to make the code work with the latest version of LBJ in
+    which feature pre-extraction happens by default.
+
+Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.2 released.
+  * Small changes to make the code work with the latest version of LBJ.
+
+Mon Sep 27 22:36:56 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.3 released.
+  * Small changes to make the code work with the latest version of LBJ.
+
+Mon Nov  1 09:47:25 CDT 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.4 released.
+  * Small changes and retraining to make the code work with the latest version
+    of LBJ.
+
+Sun Nov 21 10:50:17 CST 2010 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.6.5 released.
+  * Bug fix: Parentheses were not being recognized appropriately.
+
+Tue Mar  1 11:40:10 CST 2011 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.7.0 released.
+  * LBJ used to give all classifiers a single example cache.  Now, only those
+    features declared with the "cached" keyword get it.  In this project, that
+    keyword is given only to those classifiers involved in a conjunction.
+
+Tue Mar 15 11:26:40 CDT 2011 Nick Rizzolo <rizzolo@gmail.com>
+
+  * LBJPOS 1.7.1 released.
+  * Retrained with LBJ 2.8.1.
+  * Fixed a bug in MikheevLearner.
+
+Mon Jan 13 11:45:00 CDT 2014 Mark Sammons <mssammon@illinois.edu>
+Tue Sep  2 18:23:24 CDT 2014 Christos Christodoulopoulos <christod@illinois.edu>
+
+  * LBJPOS 2.0.0 released
+  * mavenized project
+  * changed directory structure to be maven-compatible
+  * updated documentation
+
+Wed Dec 17 1:31:00 CDT 2014 James Chen <jchen121@illinois.edu>
+
+  * Added API for training models in Java
+
+Thu Feb 11 13:30:00 CDT 2016 Colin Graber <cgraber2@illinois.edu>
+  * Added interface to core data structures
+  * Added class to simplify loading of pre-trained models

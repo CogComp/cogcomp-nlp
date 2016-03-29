@@ -24,8 +24,7 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
 
         int sentence, predicateTerminal;
 
-        Fields(String line) {
-        }
+        Fields(String line) {}
 
         String getSection() {
             return section;
@@ -55,8 +54,8 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
             return predicateTerminal;
         }
 
-        public abstract Constituent createPredicate(TextAnnotation ta,
-                                                    String viewName, List<Tree<Pair<String, IntPair>>> yield);
+        public abstract Constituent createPredicate(TextAnnotation ta, String viewName,
+                List<Tree<Pair<String, IntPair>>> yield);
 
         public abstract List<? extends GoldLabel> getGoldLabels();
 
@@ -77,14 +76,13 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
         throw new Exception("Invalid constructor.");
     }
 
-    public AbstractSRLAnnotationReader(String treebankHome, String nombankHome,
-                                       String srlViewName, boolean mergeContiguousCArgs) throws Exception {
+    public AbstractSRLAnnotationReader(String treebankHome, String nombankHome, String srlViewName,
+            boolean mergeContiguousCArgs) throws Exception {
         this(treebankHome, nombankHome, null, srlViewName, mergeContiguousCArgs);
     }
 
-    public AbstractSRLAnnotationReader(String treebankHome, String nombankHome,
-                                       String[] sections, String srlViewName, boolean mergeContiguousCArgs)
-            throws Exception {
+    public AbstractSRLAnnotationReader(String treebankHome, String nombankHome, String[] sections,
+            String srlViewName, boolean mergeContiguousCArgs) throws Exception {
         super(treebankHome, sections);
         this.dataHome = nombankHome;
         this.srlViewName = srlViewName;
@@ -101,9 +99,9 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
         wsjIterator = null;
     }
 
-    public AbstractSRLAnnotationReader(Iterable<TextAnnotation> list,
-                                       String treebankHome, String nombankHome, String[] sections,
-                                       String srlViewName, boolean mergeContiguousCArgs) throws Exception {
+    public AbstractSRLAnnotationReader(Iterable<TextAnnotation> list, String treebankHome,
+            String nombankHome, String[] sections, String srlViewName, boolean mergeContiguousCArgs)
+            throws Exception {
         super(treebankHome);
         this.srlViewName = srlViewName;
         this.mergeContiguousCArgs = mergeContiguousCArgs;
@@ -129,8 +127,7 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
 
             if (this.sections.contains(n.getSection())) {
                 if (!this.goldFields.containsKey(n.getIdentifier())) {
-                    this.goldFields.put(n.getIdentifier(),
-                            new ArrayList<Fields>());
+                    this.goldFields.put(n.getIdentifier(), new ArrayList<Fields>());
                 }
 
                 this.goldFields.get(n.getIdentifier()).add(n);
@@ -167,14 +164,13 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
 
         List<Tree<Pair<String, IntPair>>> yield = spanLabeledTree.getYield();
 
-        PredicateArgumentView pav = new PredicateArgumentView(srlViewName,
-                "AnnotatedTreebank", ta, 1.0);
+        PredicateArgumentView pav =
+                new PredicateArgumentView(srlViewName, "AnnotatedTreebank", ta, 1.0);
 
         Set<Integer> predicates = new HashSet<>();
 
         for (Fields fields : goldFields.get(ta.getId())) {
-            Constituent predicate = fields.createPredicate(ta, srlViewName,
-                    yield);
+            Constituent predicate = fields.createPredicate(ta, srlViewName, yield);
 
             if (predicates.contains(predicate.getStartSpan()))
                 continue;
@@ -191,8 +187,8 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
 
             for (GoldLabel arg : fields.getGoldLabels()) {
 
-                List<Constituent> aa = arg.getArgument(ta, srlViewName, yield,
-                        mergeContiguousCArgs);
+                List<Constituent> aa =
+                        arg.getArgument(ta, srlViewName, yield, mergeContiguousCArgs);
 
                 List<Constituent> filtered = new ArrayList<>();
                 for (Constituent possibleArg : aa) {
@@ -206,8 +202,7 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
                 addArguments(ta, predicate, args, labels, scores, arg, filtered);
             }// for each arg
 
-            pav.addPredicateArguments(predicate, args,
-                    labels.toArray(new String[labels.size()]),
+            pav.addPredicateArguments(predicate, args, labels.toArray(new String[labels.size()]),
                     ArrayUtilities.asDoubleArray(scores));
 
         }
@@ -216,18 +211,19 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
             ta.addView(srlViewName, pav);
     }
 
-    private void addArguments(TextAnnotation ta, Constituent predicate,
-                              List<Constituent> args, List<String> labels, List<Double> scores,
-                              GoldLabel arg, List<Constituent> aa) {
+    private void addArguments(TextAnnotation ta, Constituent predicate, List<Constituent> args,
+            List<String> labels, List<Double> scores, GoldLabel arg, List<Constituent> aa) {
         String label = arg.label;
 
         label = convertToCoNLL(label);
 
         if (label.equals("rel")) {
             for (Constituent c : aa) {
-                if (c.getStartSpan() == predicate.getStartSpan() && c.getEndSpan() == predicate.getEndSpan())
+                if (c.getStartSpan() == predicate.getStartSpan()
+                        && c.getEndSpan() == predicate.getEndSpan())
                     continue;
-                else if (c.getStartSpan() <= predicate.getStartSpan() && c.getEndSpan() <= predicate.getEndSpan()) {
+                else if (c.getStartSpan() <= predicate.getStartSpan()
+                        && c.getEndSpan() <= predicate.getEndSpan()) {
                     int c1Start = c.getStartSpan();
                     int c1End = predicate.getStartSpan();
 
@@ -245,14 +241,16 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
                         labels.add("C-V");
                         scores.add(1.0);
                     }
-                } else if (c.getStartSpan() == predicate.getStartSpan() && c.getEndSpan() > predicate.getEndSpan()) {
+                } else if (c.getStartSpan() == predicate.getStartSpan()
+                        && c.getEndSpan() > predicate.getEndSpan()) {
                     int start = predicate.getEndSpan();
                     int end = c.getEndSpan();
                     args.add(new Constituent("C-V", srlViewName, ta, start, end));
                     labels.add("C-V");
                     scores.add(1.0);
                 } else {
-                    args.add(new Constituent("C-V", srlViewName, ta, c.getStartSpan(), c.getEndSpan()));
+                    args.add(new Constituent("C-V", srlViewName, ta, c.getStartSpan(), c
+                            .getEndSpan()));
                     labels.add("C-V");
                     scores.add(1.0);
                 }
@@ -279,6 +277,7 @@ public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
 
 }
 
+
 class GoldLabel {
     final String propSpanInfo;
     final String label;
@@ -292,8 +291,8 @@ class GoldLabel {
         int firstDash = field.indexOf('-');
 
         propSpanInfo = field.substring(0, firstDash);
-        String l = field.substring(firstDash + 1).replaceAll("ARG", "A")
-                .replaceAll("Support", "SUP");
+        String l =
+                field.substring(firstDash + 1).replaceAll("ARG", "A").replaceAll("Support", "SUP");
 
         int hIndex = l.indexOf("-H");
         if (hIndex > 0) {
@@ -322,8 +321,7 @@ class GoldLabel {
     }
 
     List<Constituent> getArgument(TextAnnotation ta, String viewName,
-                                  List<Tree<Pair<String, IntPair>>> yield,
-                                  boolean mergeContiguousCArgs) {
+            List<Tree<Pair<String, IntPair>>> yield, boolean mergeContiguousCArgs) {
 
         String[] parts = propSpanInfo.split("\\*");
 
@@ -361,8 +359,7 @@ class GoldLabel {
         Collections.sort(spans, new Comparator<Pair<IntPair, Boolean>>() {
 
             @Override
-            public int compare(Pair<IntPair, Boolean> arg0,
-                               Pair<IntPair, Boolean> arg1) {
+            public int compare(Pair<IntPair, Boolean> arg0, Pair<IntPair, Boolean> arg1) {
                 if (arg0.getFirst().getFirst() < arg1.getFirst().getFirst())
                     return -1;
                 else if (arg0.getFirst().getFirst() == arg1.getFirst().getFirst())
@@ -391,8 +388,9 @@ class GoldLabel {
                 }
             }
 
-            Constituent constituent = new Constituent(label, viewName, ta, item
-                    .getFirst().getFirst(), item.getFirst().getSecond());
+            Constituent constituent =
+                    new Constituent(label, viewName, ta, item.getFirst().getFirst(), item
+                            .getFirst().getSecond());
 
             if (h != null) {
                 constituent.addAttribute(AbstractSRLAnnotationReader.HyphenTagInfo, h);

@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
- * This class contains the canonical strings used for naming standard views.
- * They are used both in Curator's views as well as {@link TextAnnotation} views
+ * This class contains the canonical strings used for naming standard views. They are used both in
+ * Curator's views as well as {@link TextAnnotation} views
  *
  * @author Vivek Srikumar
  * @author Christos Christodoulopoulos
@@ -61,13 +61,15 @@ public class ViewNames {
     public static final String WIKIFIER = "WIKIFIER";
 
     /**
-     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY}, {@link #CLAUSES_STANFORD}
+     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY},
+     *             {@link #CLAUSES_STANFORD}
      */
     @Deprecated
     public static final String CLAUSES = "CLAUSES";
 
     /**
-     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY}, {@link #PSEUDO_PARSE_STANFORD}
+     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY},
+     *             {@link #PSEUDO_PARSE_STANFORD}
      */
     @Deprecated
     public static final String PSEUDO_PARSE = "PSEUDO_PARSE";

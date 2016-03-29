@@ -5,13 +5,18 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.10</version>
+        <version>3.0.22</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>illinois-core-utilities</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>jwnl-prime</artifactId>
+            <version>1.0.3</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -64,7 +69,11 @@
             <artifactId>gson</artifactId>
             <version>2.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>edu.princeton</groupId>
+            <artifactId>wordnet-dict</artifactId>
+            <version>3.1</version>
+        </dependency>
         <!-- Database driver for storing TextAnnotations -->
         <dependency>
             <groupId>com.h2database</groupId>

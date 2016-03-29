@@ -175,8 +175,7 @@ public class TreeRule<T> {
         }
     }
 
-    private void addIntroductions(List<List<T>> output,
-                                  List<Tree<T>> dfsPatternMatches) {
+    private void addIntroductions(List<List<T>> output, List<Tree<T>> dfsPatternMatches) {
         for (List<Pair<Integer, T>> introduction : introductions) {
             List<T> relation = new ArrayList<>();
             for (Pair<Integer, T> item : introduction) {

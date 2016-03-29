@@ -19,8 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Based on {@code edu.illinois.cs.cogcomp.lbj.coref.io.loaders.DocCoNLLLoader} from the Coref package.
- * This reader just processes {@link TextAnnotation}s; Coreference mentions and gold labels are ignored.
+ * Based on {@code edu.illinois.cs.cogcomp.lbj.coref.io.loaders.DocCoNLLLoader} from the Coref
+ * package. This reader just processes {@link TextAnnotation}s; Coreference mentions and gold labels
+ * are ignored.
  */
 public class OntonotesReader extends TextAnnotationReader {
     private String ontonotesDirectory;
@@ -46,9 +47,8 @@ public class OntonotesReader extends TextAnnotationReader {
         String[] files = new String[0];
         // In case the input argument is a single file
         if (!IOUtils.isDirectory(ontonotesDirectory)) {
-            files = new String[]{ontonotesDirectory};
-        }
-        else {
+            files = new String[] {ontonotesDirectory};
+        } else {
             try {
                 files = IOUtils.ls(ontonotesDirectory);
             } catch (IOException e) {
@@ -70,7 +70,8 @@ public class OntonotesReader extends TextAnnotationReader {
 
     @Override
     protected TextAnnotation makeTextAnnotation() throws Exception {
-        if (!hasNext()) return null;
+        if (!hasNext())
+            return null;
         return textAnnotations.get(taCounter++);
     }
 
@@ -104,7 +105,8 @@ public class OntonotesReader extends TextAnnotationReader {
         if (part != -1) {
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
-                if (line.startsWith("#begin document") && Integer.parseInt(line.split("\\s+")[4].trim()) == part) {
+                if (line.startsWith("#begin document")
+                        && Integer.parseInt(line.split("\\s+")[4].trim()) == part) {
                     documentStart = i + 1;
                     m_docID = line.replace("#begin document ", "");
                 }
@@ -112,8 +114,7 @@ public class OntonotesReader extends TextAnnotationReader {
             if (documentStart == 0) {
                 logger.error("Cannot find the document " + filename + "_part" + part);
             }
-        }
-        else {
+        } else {
             m_docID = filename;
         }
 
@@ -165,13 +166,17 @@ public class OntonotesReader extends TextAnnotationReader {
                 String chunkLabel = null;
                 if (parts[columnId].startsWith("(")) {
                     argumentStart.get(predicateNumOffset + columnId - 11).add(wordNum);
-                    chunkLabel = parts[columnId].replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("\\*", "");
+                    chunkLabel =
+                            parts[columnId].replaceAll("\\(", "").replaceAll("\\)", "")
+                                    .replaceAll("\\*", "");
                     argumentLabels.get(predicateNumOffset + columnId - 11).add(chunkLabel);
                 }
                 if (parts[columnId].endsWith(")"))
-                    for (int k = 0; k < (parts[columnId].length() - parts[columnId].replaceAll("\\)", "").length()); k++)
+                    for (int k = 0; k < (parts[columnId].length() - parts[columnId].replaceAll(
+                            "\\)", "").length()); k++)
                         argumentEnd.get(predicateNumOffset + columnId - 11).add(wordNum + 1);
-                if (chunkLabel != null && chunkLabel.equals("V") && !(parts[7].equals("-") && parts[6].equals("-"))) {
+                if (chunkLabel != null && chunkLabel.equals("V")
+                        && !(parts[7].equals("-") && parts[6].equals("-"))) {
                     verbSenses.add(parts[7]);
                     baseForms.add(parts[6]);
                     predicatePositions.add(wordNum);
@@ -183,7 +188,8 @@ public class OntonotesReader extends TextAnnotationReader {
             // name entity
             if (parts[10].startsWith("(")) {
                 neStart.add(wordNum);
-                neLabel = parts[10].replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("\\*", "");
+                neLabel =
+                        parts[10].replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("\\*", "");
                 if (neLabel.equals("PERSON"))
                     neLabel = "PER";
                 neLabels.add(neLabel);
@@ -193,26 +199,31 @@ public class OntonotesReader extends TextAnnotationReader {
             }
 
             // parse tree
-            parse.append(parts[5].replaceAll("\\*",
-                    " \\(" + parts[4].replaceAll("\\$", "\\\\\\$") + " \\("
-                            + word.replaceAll("\\$", "\\\\\\$")
-                            + "\\)\\)"));
+            parse.append(parts[5].replaceAll("\\*", " \\(" + parts[4].replaceAll("\\$", "\\\\\\$")
+                    + " \\(" + word.replaceAll("\\$", "\\\\\\$") + "\\)\\)"));
             wordNum++;
         }
 
         // setup TextAnnotation
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(m_docID, m_docID, sentences);
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(m_docID, m_docID,
+                        sentences);
         addPOSView(pos, ta);
         addParseView(parses, ta);
         addNERView(neLabels, neStart, neEnd, ta);
-        addSRLView(verbSenses, baseForms, argumentLabels, argumentStart, argumentEnd, predicatePositions, numPredicates, ta);
+        addSRLView(verbSenses, baseForms, argumentLabels, argumentStart, argumentEnd,
+                predicatePositions, numPredicates, ta);
 
         return ta;
     }
 
-    private void addSRLView(List<String> verbSenses, List<String> baseForms, List<List<String>> argumentLabels, List<List<Integer>> argumentStart, List<List<Integer>> argumentEnd, List<Integer> predicatePositions, int numPredicates, TextAnnotation ta) {
-        //SRL view
-        PredicateArgumentView pav = new PredicateArgumentView(ViewNames.SRL_VERB, "GoldStandard", ta, 1.0);
+    private void addSRLView(List<String> verbSenses, List<String> baseForms,
+            List<List<String>> argumentLabels, List<List<Integer>> argumentStart,
+            List<List<Integer>> argumentEnd, List<Integer> predicatePositions, int numPredicates,
+            TextAnnotation ta) {
+        // SRL view
+        PredicateArgumentView pav =
+                new PredicateArgumentView(ViewNames.SRL_VERB, "GoldStandard", ta, 1.0);
 
         for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
             List<Constituent> args = new ArrayList<>();
@@ -224,7 +235,8 @@ public class OntonotesReader extends TextAnnotationReader {
                     int start = argumentStart.get(predicateId).get(argId);
                     int end = argumentEnd.get(predicateId).get(argId);
 
-                    Constituent arg = new Constituent(label, 1.0, ViewNames.SRL_VERB, ta, start, end);
+                    Constituent arg =
+                            new Constituent(label, 1.0, ViewNames.SRL_VERB, ta, start, end);
 
                     args.add(arg);
                     relations.add(label);
@@ -232,22 +244,28 @@ public class OntonotesReader extends TextAnnotationReader {
             }
 
             int predicatePos = predicatePositions.get(predicateId);
-            Constituent predicate = new Constituent("Predicate", 1.0, ViewNames.SRL_VERB, ta, predicatePos, predicatePos + 1);
+            Constituent predicate =
+                    new Constituent("Predicate", 1.0, ViewNames.SRL_VERB, ta, predicatePos,
+                            predicatePos + 1);
 
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, verbSenses.get(predicateId));
-            predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, baseForms.get(predicateId));
+            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                    verbSenses.get(predicateId));
+            predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+                    baseForms.get(predicateId));
 
             double[] scoresDoubleArray = new double[relations.size()];
             for (int relationId = 0; relationId < relations.size(); relationId++) {
                 scoresDoubleArray[relationId] = 1.0;
             }
-            pav.addPredicateArguments(predicate, args, relations.toArray(new String[relations.size()]), scoresDoubleArray);
+            pav.addPredicateArguments(predicate, args,
+                    relations.toArray(new String[relations.size()]), scoresDoubleArray);
         }
 
         ta.addView(ViewNames.SRL_VERB, pav);
     }
 
-    private void addNERView(List<String> neLabels, List<Integer> neStart, List<Integer> neEnd, TextAnnotation ta) {
+    private void addNERView(List<String> neLabels, List<Integer> neStart, List<Integer> neEnd,
+            TextAnnotation ta) {
         // NER View
         SpanLabelView nerView = new SpanLabelView(ViewNames.NER_ONTONOTES, "GoldStandard", ta, 1.0);
         for (int j = 0; j < neEnd.size(); j++) {
@@ -257,27 +275,29 @@ public class OntonotesReader extends TextAnnotationReader {
 
             // Fix the Chinese name with Hyphen
             // TODO This needs Gazetteers, is there no better way?
-            //if (endWord < wordNum - 2 && getPOS(ta, endWord + 1).equals("HYPH") &&
-            //        Gazetteers.getChineseLastName().contains(firstWord.toLowerCase())) {
-            //    endWord += 2;
-            //    nelabel = "PER";
-            //}
+            // if (endWord < wordNum - 2 && getPOS(ta, endWord + 1).equals("HYPH") &&
+            // Gazetteers.getChineseLastName().contains(firstWord.toLowerCase())) {
+            // endWord += 2;
+            // nelabel = "PER";
+            // }
 
             // Fix Incorrect Boundary
-            while (startWord <= endWord && (getPOS(ta, startWord).equals("UH")
-                    || getPOS(ta, startWord).equals(",")
-                    || getWord(ta, startWord).startsWith("%")
+            while (startWord <= endWord
+                    && (getPOS(ta, startWord).equals("UH") || getPOS(ta, startWord).equals(",") || getWord(
+                            ta, startWord).startsWith("%")
                     // TODO This needs Gazetteers, is there no better way?
-                    //|| Gazetteers.getSayWords().contains(getWord(ta, startWord).toLowerCase())
-            )) {
+                    // || Gazetteers.getSayWords().contains(getWord(ta, startWord).toLowerCase())
+                    )) {
                 startWord++;
             }
-            while (startWord <= endWord && (getPOS(ta, endWord).equals(".") || getPOS(ta, endWord).equals(","))) {
+            while (startWord <= endWord
+                    && (getPOS(ta, endWord).equals(".") || getPOS(ta, endWord).equals(","))) {
                 endWord--;
             }
             if (startWord == endWord && getWord(ta, startWord).toLowerCase().equals("one"))
                 continue;
-            if (startWord <= endWord && nerView.getConstituentsCoveringSpan(startWord, endWord + 1).isEmpty())
+            if (startWord <= endWord
+                    && nerView.getConstituentsCoveringSpan(startWord, endWord + 1).isEmpty())
                 nerView.addSpanLabel(startWord, endWord + 1, nelabel, 1.0);
         }
         ta.addView(ViewNames.NER_ONTONOTES, nerView);
@@ -302,9 +322,10 @@ public class OntonotesReader extends TextAnnotationReader {
     }
 
     private String getWord(TextAnnotation ta, int token) {
-        return ta.getView(ViewNames.TOKENS).getConstituentsCoveringToken(token).get(0).getTokenizedSurfaceForm();
+        return ta.getView(ViewNames.TOKENS).getConstituentsCoveringToken(token).get(0)
+                .getTokenizedSurfaceForm();
     }
-    
+
     private String getPOS(TextAnnotation ta, int token) {
         return ((TokenLabelView) ta.getView(ViewNames.POS)).getLabel(token);
     }
@@ -318,10 +339,10 @@ public class OntonotesReader extends TextAnnotationReader {
         stringReplaceMap.put("-LCB-", "{");
         stringReplaceMap.put("-RCB-", "}");
 
-        //modify /? -> ?, otherwise Curator cannot parse this sentence
-        if(s.contains("/") && s.length() == 2)
+        // modify /? -> ?, otherwise Curator cannot parse this sentence
+        if (s.contains("/") && s.length() == 2)
             s = String.valueOf(s.charAt(1));
-        if(stringReplaceMap.containsKey(s))
+        if (stringReplaceMap.containsKey(s))
             return stringReplaceMap.get(s);
         else
             return s;

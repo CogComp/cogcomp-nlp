@@ -6,7 +6,7 @@ import java.util.Queue;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class UniformCostSearch<T> extends GraphSearch<T> {

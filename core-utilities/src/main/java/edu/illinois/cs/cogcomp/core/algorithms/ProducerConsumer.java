@@ -60,7 +60,8 @@ public abstract class ProducerConsumer<T> {
 
                     try {
                         Thread.sleep(20000);
-                    } catch (InterruptedException ignored) { }
+                    } catch (InterruptedException ignored) {
+                    }
                 }
             }
         }, "Status");
@@ -104,7 +105,8 @@ public abstract class ProducerConsumer<T> {
                     totalCount++;
 
                     if (totalCount % 10000 == 0)
-                        log.info("Total number of instances added to q {},  total including skipped ones = {}",
+                        log.info(
+                                "Total number of instances added to q {},  total including skipped ones = {}",
                                 addedToQueue, totalCount);
 
                     if (!prerequisiteCheck(input))
@@ -120,15 +122,15 @@ public abstract class ProducerConsumer<T> {
             } // end while
 
             done.set(true);
-            log.info("Read all data. Found {} instances ({} instances overall including skipped ones)",
+            log.info(
+                    "Read all data. Found {} instances ({} instances overall including skipped ones)",
                     count.get(), totalCount);
 
             int count = 0;
             while (activeConsumers.get() > 0) {
 
-                log.info(
-                        "Waiting for consumers to shut down, {} active, queue size = {}, done = "
-                                + done.get(), activeConsumers.get(), q.size());
+                log.info("Waiting for consumers to shut down, {} active, queue size = {}, done = "
+                        + done.get(), activeConsumers.get(), q.size());
 
                 if (this.q.size() == 0) {
                     count++;
@@ -191,7 +193,8 @@ public abstract class ProducerConsumer<T> {
 
                 activeConsumers.decrementAndGet();
 
-                log.debug("Consumer thread complete! {} instances processed by this thread", myCount);
+                log.debug("Consumer thread complete! {} instances processed by this thread",
+                        myCount);
 
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
