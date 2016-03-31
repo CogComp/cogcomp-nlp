@@ -8,9 +8,11 @@ import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import gnu.trove.TCollections;
 import gnu.trove.map.TIntObjectMap;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * This class contains all annotation for a single piece of text (which could contain more than one
@@ -22,6 +24,8 @@ import java.util.*;
 public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable {
 
     private static final long serialVersionUID = -1308407121595094945L;
+
+    private org.slf4j.Logger logger = LoggerFactory.getLogger( TextAnnotation.class );
 
     /**
      * An identifier for the corpus
@@ -219,11 +223,19 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         return sentences;
     }
 
+
+
     /**
      * Get the position of token that corresponds to the character offset that is passed as a
      * parameter. This function could be useful when dealing with corpora that specify annotation in
      * terms of character offsets. In particular, the CuratorClient uses this function to convert
      * views from the Curator representation.
+     * NOTE: one-past-the-end indexing can make this problematic. Currently, constituents are processed so that
+     *   only characters <i>within</i> tokens are mapped to token ids (avoiding ambiguity at the cost of introducing
+     *   complexity for users thinking of one-past-the-end indexing).
+     *
+     * UPDATED to allow non-zero first token character offset (i.e. in case where source text has markup preamble
+     *    that you want to ignore. Current implementation maps char offsets not representing tokens to the index '-1'.
      */
     public int getTokenIdFromCharacterOffset(int characterOffset) {
         if (characterOffsetsToTokens == null) {
@@ -234,21 +246,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             }
 
             int characterId = 0;
+            int tokenId = 0;
+            View tokenView = this.getView( ViewNames.TOKENS );
+            for (Constituent tok : tokenView.getConstituents() ) {
 
-            for (int tokenId = 0; tokenId < this.size(); tokenId++) {
-
-                // whitespace first. eat up all the whitespace
-                // characters. Assumption: Any
-                // whitespace characters that come before the a token belong
-                // to the token.
-                while (characterId < this.getText().length()
-                        && Character.isWhitespace(this.getText().charAt(characterId))) {
-                    characterOffsetsToTokens[characterId] = tokenId;
-                    characterId++;
-                }
-
-                int start = characterId;
-                for (; characterId < start + this.getToken(tokenId).length(); characterId++) {
+                //TODO: decide how to map whitespace, or how to handle failure to find token otherwise
+                int start = tok.getStartCharOffset();
+                int end = tok.getEndCharOffset();
+                for (characterId = start; characterId < end; characterId++) {
                     characterOffsetsToTokens[characterId] = tokenId;
                 }
 
@@ -261,19 +266,22 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                     }
                     break;
                 }
+                tokenId++;
             }
 
             // all the whitespace characters that come after this token also
-            // point to the end.
-            while (characterId < this.getText().length()
-                    && Character.isWhitespace(this.getText().charAt(characterId))) {
-                characterOffsetsToTokens[characterId] = this.size();
-                characterId++;
-            }
+//            // point to the end.
+//            while (characterId < this.getText().length()
+//                    && Character.isWhitespace(this.getText().charAt(characterId))) {
+//                characterOffsetsToTokens[characterId] = this.size();
+//                characterId++;
+//            }
         }
 
         if (characterOffset < 0 || characterOffset > characterOffsetsToTokens.length) {
-            throw new IllegalArgumentException("Invalid character offset. The character position "
+//            throw new IllegalArgumentException("Invalid character offset. The character position "
+//                    + characterOffset + " does not correspond to any token.");
+            logger.debug("Invalid character offset. The character position "
                     + characterOffset + " does not correspond to any token.");
         }
 
