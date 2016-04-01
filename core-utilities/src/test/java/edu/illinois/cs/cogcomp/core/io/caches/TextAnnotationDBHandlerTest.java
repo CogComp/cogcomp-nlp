@@ -51,8 +51,7 @@ public class TextAnnotationDBHandlerTest {
     @After
     public void tearDown() throws Exception {
         IOUtils.rm(dbFile + ".h2.db");
-        IOUtils.cleanDir(dbFile + ".lobs.db");
-        IOUtils.rmDir(dbFile + ".lobs.db");
+        IOUtils.rm(dbFile + ".mv.db");
     }
 
     @Test
