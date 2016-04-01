@@ -23,8 +23,8 @@ TEST_OUT="test/SampleOutputs/NERTest.conll.tagged.txt"
 TEST_FILTERED="test/SampleOutputs/NERTest.conll.tagged.filtered.txt"
 
 # Config file
-CONFIG="config/conll.config"
-#configfile="config/ontonotes.config"
+CONFIG="config/ner.properties"
+#configfile="config/ner-ontonotes.properties"
 
 DIFF_FILE="$TEST_FILTERED.diff"
 
