@@ -59,10 +59,18 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>compiling</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>clean</goal>
                             <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>cleaning</id>
+                        <phase>pre-clean</phase>
+                        <goals>
+                            <goal>clean</goal>
                         </goals>
                     </execution>
                 </executions>
