@@ -7,6 +7,10 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.io.InputStream;
 import java.util.Scanner;
 
+/**
+ * This class is unused, use {@link ManifestParser} instead.
+ */
+@Deprecated
 public class FeatureManifestParser {
     private String contents;
 

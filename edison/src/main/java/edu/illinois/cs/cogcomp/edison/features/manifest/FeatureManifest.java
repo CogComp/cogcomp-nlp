@@ -16,15 +16,28 @@ import org.slf4j.LoggerFactory;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * FeatureManifest represents a parsed manifest file (.fex format).
+ */
 public class FeatureManifest {
     private final static Logger log = LoggerFactory.getLogger(FeatureManifest.class);
     private ManifestParser parser;
     private boolean compressedName;
 
+    /**
+     * Load the file.
+     * @param path path to .fex file
+     * @throws Exception
+     */
     public FeatureManifest(String path) throws Exception {
         this(IOUtils.lsResources(FeatureManifest.class, path).get(0).openStream());
     }
 
+    /**
+     * Alternate constructor for {@link InputStream}
+     * @param file
+     * @throws Exception
+     */
     public FeatureManifest(InputStream file) throws Exception {
 
         parser = new ManifestParser(file);
@@ -58,6 +71,13 @@ public class FeatureManifest {
         parser.setVariable(key, value);
     }
 
+    /**
+     * This parses the body of a define statement: (define name body).
+     * @param tree
+     * @param cf used for memoization, can be empty when passed in
+     * @return
+     * @throws EdisonException
+     */
     private FeatureExtractor createFex(Tree<String> tree, Map<String, FeatureExtractor> cf)
             throws EdisonException {
         String label = tree.getLabel();
@@ -91,6 +111,34 @@ public class FeatureManifest {
         else
             throw new EdisonException("Invalid feature description: " + tree);
     }
+
+    /**
+     * Alternate version, calls {@link FeatureManifest#populateFex(FeatureCollection)}
+     * @return
+     * @throws EdisonException
+     */
+    public FeatureExtractor createFex() throws EdisonException {
+        String name = parser.getName();
+        if (this.compressedName) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while (i >= 0 && i < name.length()) {
+                sb.append(name.charAt(i));
+
+                i = name.indexOf("-", i);
+                if (i >= 0)
+                    i++;
+            }
+            name = sb.toString();
+        }
+
+        return populateFex(new FeatureCollection(name));
+    }
+
+    public FeatureExtractor createFex(FeatureInputTransformer transformer) throws EdisonException {
+        return populateFex(new FeatureCollection(parser.getName(), transformer));
+    }
+
 
     public FeatureExtractor processQuery(Tree<String> tree, Map<String, FeatureExtractor> cf)
             throws EdisonException {
@@ -384,6 +432,13 @@ public class FeatureManifest {
         return fc;
     }
 
+    /**
+     * Given a leaf name, find the corresponding FeatureExtractor, as defined in {@link KnownFexes#fexes}
+     * @param label string, needs to be in {@link KnownFexes#fexes}
+     * @param cf used for memoization, maps label to FeatureExtractor
+     * @return the corresponding FeatureExtractor
+     * @throws EdisonException
+     */
     private FeatureExtractor getLeafFeature(String label, Map<String, FeatureExtractor> cf)
             throws EdisonException {
 
@@ -396,9 +451,6 @@ public class FeatureManifest {
                     + "', expecting one of " + KnownFexes.fexes.keySet());
         FeatureExtractor featureExtractor = KnownFexes.fexes.get(label);
 
-        // CachedFeatureCollection f = new CachedFeatureCollection("",
-        // featureExtractor);
-
         cf.put(uniqueLabel, featureExtractor);
         return featureExtractor;
 
@@ -408,6 +460,11 @@ public class FeatureManifest {
         return getUniqueList(label).toString().replaceAll("\\s+", "");
     }
 
+    /**
+     * This just removes all whitespace.
+     * @param label any string
+     * @return label without whitespace
+     */
     private String uniquify(String label) {
         return label.replaceAll("\\s+", "");
     }
@@ -462,8 +519,16 @@ public class FeatureManifest {
         return "__DEF__" + label;
     }
 
+    /**
+     * This adds a FeatureExtractor to the input FeatureCollection. Typically the FeatureCollection
+     * is empty, having only a name.
+     * @param fex
+     * @return
+     * @throws EdisonException
+     */
     private FeatureExtractor populateFex(FeatureCollection fex) throws EdisonException {
 
+        // cached features.
         Map<String, FeatureExtractor> cf = new HashMap<>();
 
         // first manage all define statements
@@ -475,7 +540,7 @@ public class FeatureManifest {
 
             String name = defn.getChild(0).getLabel();
 
-            FeatureExtractor body = createFex(defn.getChild(1), cf);
+            FeatureExtractor body = this.createFex(defn.getChild(1), cf);
 
             cf.put(definition(name), new CachedFeatureCollection("", body));
         }
@@ -489,26 +554,5 @@ public class FeatureManifest {
         this.compressedName = true;
     }
 
-    public FeatureExtractor createFex() throws EdisonException {
-        String name = parser.getName();
-        if (this.compressedName) {
-            StringBuilder sb = new StringBuilder();
-            int i = 0;
-            while (i >= 0 && i < name.length()) {
-                sb.append(name.charAt(i));
-
-                i = name.indexOf("-", i);
-                if (i >= 0)
-                    i++;
-            }
-            name = sb.toString();
-        }
-
-        return populateFex(new FeatureCollection(name));
-    }
-
-    public FeatureExtractor createFex(FeatureInputTransformer transformer) throws EdisonException {
-        return populateFex(new FeatureCollection(parser.getName(), transformer));
-    }
 
 }
