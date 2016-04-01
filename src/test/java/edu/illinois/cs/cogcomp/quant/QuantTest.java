@@ -18,8 +18,8 @@ public class QuantTest extends TestCase {
 	@Test
 	public void testQuantifierView() throws Exception {
 		Quantifier quantifier = new Quantifier();
-		TextAnnotation ta = Quantifier.pipeline.createBasicTextAnnotation("", "", "It was May 2008.");
-		quantifier.addQuantifierView(ta);
+		TextAnnotation ta = Quantifier.taBuilder.createTextAnnotation("It was May 2008.");
+		quantifier.addView(ta);
 		assertTrue(ta.hasView(ViewNames.QUANTITIES));
 		assertTrue(isEqual("[= Date(05/XX/2008)]", ta.getView(ViewNames.QUANTITIES).getConstituents()
 				.get(0).getLabel()));

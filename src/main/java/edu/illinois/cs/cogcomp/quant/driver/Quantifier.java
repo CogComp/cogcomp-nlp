@@ -1,57 +1,42 @@
 package edu.illinois.cs.cogcomp.quant.driver;
-import java.io.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
+import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
+import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import edu.illinois.cs.cogcomp.nlp.util.SimpleCachingPipeline;
-import edu.illinois.cs.cogcomp.nlp.utility.CcgTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.File;
 
-public class Quantifier {
+public class Quantifier extends Annotator {
 	
 	public Normalizer normalizer;
 	public static Pattern wordSplitPat[];
-	public static AnnotatorService pipeline;
+	public static TextAnnotationBuilder taBuilder;
+	private String dataDir = "data";
+    private String modelsDir = "models";
+    private String modelName = modelsDir + File.separator + new QuantitiesClassifier();
 	
 	static {
-		ResourceManager rm = null;
-		try {
-			rm = new ResourceManager("pipeline.config");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
-        TextAnnotationBuilder taBuilder = new CcgTextAnnotationBuilder( tokenizer );
-        Map< String, Annotator> extraViewGenerators = new HashMap<String, Annotator>();
-        Map< String, Boolean > requestedViews = new HashMap<String, Boolean>();
-        for ( String view : extraViewGenerators.keySet() )
-            requestedViews.put( view, false );
-        try {
-			pipeline =  new SimpleCachingPipeline(taBuilder, extraViewGenerators, rm);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        taBuilder = new TokenizerTextAnnotationBuilder( tokenizer );
 	}
 	
 	public Quantifier() {
+        super(ViewNames.QUANTITIES, new String[0]);
 		normalizer = new Normalizer();
 		wordSplitPat = new Pattern[25];
 		// Dashes
@@ -103,16 +88,15 @@ public class Quantifier {
 	}
 	
 	public List<QuantSpan> getSpans(String text, boolean standardized) throws AnnotatorException {
-		TextAnnotation taCurator = pipeline.createBasicTextAnnotation("", "", text);
-		TextAnnotation taQuant = pipeline.createBasicTextAnnotation("", "", wordsplitSentence(text).trim());
+		TextAnnotation taCurator = taBuilder.createTextAnnotation(text);
+		TextAnnotation taQuant = taBuilder.createTextAnnotation(wordsplitSentence(text).trim());
 		List<QuantSpan> quantSpans = new ArrayList<QuantSpan>();
 		String sentences[] = new String[taQuant.getNumberOfSentences()];
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
 			sentences[i] = taQuant.getSentence(i).getText();
 		}
-		Chunker chunker = new Chunker();
-	    Parser parser = new PlainToTokenParser(new WordSplitter(
-	    		new SentenceSplitter(sentences)));
+		QuantitiesClassifier chunker = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
+	    Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(sentences)));
 	    String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;
@@ -164,7 +148,7 @@ public class Quantifier {
 	
 	public String getAnnotatedString(String text, boolean standardized) throws Exception {
 		String ans = "";
-		TextAnnotation ta = pipeline.createBasicTextAnnotation("", "", text);
+		TextAnnotation ta = taBuilder.createTextAnnotation(text);
 		List<QuantSpan> quantSpans = getSpans(text, standardized);
 		int quantIndex = 0;
 		for(int i=0; i<ta.size(); ++i) {
@@ -181,8 +165,15 @@ public class Quantifier {
 		}
 	    return ans;
 	}
+	
+	public static void main(String args[]) throws Throwable {
+		Quantifier quantifier = new Quantifier();
+		quantifier.trainOnAll();
+		quantifier.test();
+	}
 
-	public void addQuantifierView(TextAnnotation ta) throws Exception {
+	@Override
+	public void addView(TextAnnotation ta) throws AnnotatorException {
 		assert (ta.hasView(ViewNames.SENTENCE));
 		SpanLabelView quantifierView = new SpanLabelView(
 				ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);
@@ -194,32 +185,28 @@ public class Quantifier {
 		}
 		ta.addView(ViewNames.QUANTITIES, quantifierView);
 	}
+
+	public void trainOnAll() {
+        QuantitiesClassifier classifier = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
+        QuantitiesDataReader trainReader = new QuantitiesDataReader(dataDir + "/allData.txt", "train");
+        BatchTrainer trainer = new BatchTrainer(classifier, trainReader);
+        trainer.train(45);
+        classifier.save();
+    }
 	
-	public static void main(String args[])throws Throwable {
-		String inputFile;
-		String standardized;
-		Quantifier quantifier = new Quantifier();
-		if (args.length < 2){
-			System.err.println(
-					"usage: java driver.Quantifier <input file> <standardized(Y/N)>");
-			System.exit(1);
-		}
-		
-		inputFile = args[0];
-		standardized = args[1];
-		
-		BufferedReader br = new BufferedReader(new FileReader(new File(inputFile)));
-		String txt = "", str;
-		while( (str = br.readLine())!=null ) {
-			txt+=str+" ";
-		}
-		br.close();
-		
-		if( standardized.equals("Y") || standardized.equals("y") ) {
-			System.out.println(quantifier.getAnnotatedString(txt,true));
-		} else {
-			System.out.println(quantifier.getAnnotatedString(txt,false));
-		}
-	}
-	
+    public void train() {
+        QuantitiesClassifier classifier = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
+        QuantitiesDataReader trainReader = new QuantitiesDataReader(dataDir + "/train.txt", "train");
+        BatchTrainer trainer = new BatchTrainer(classifier, trainReader);
+        trainer.train(45);
+        classifier.save();
+    }
+
+    public void test() {
+    		QuantitiesClassifier classifier = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
+        QuantitiesDataReader testReader = new QuantitiesDataReader(dataDir + "/test.txt", "test");
+        TestDiscrete tester = new TestDiscrete();
+        tester.addNull("O");
+        TestDiscrete.testDiscrete(tester, classifier, new QuantitiesLabel(), testReader, true, 1000);
+    }
 }

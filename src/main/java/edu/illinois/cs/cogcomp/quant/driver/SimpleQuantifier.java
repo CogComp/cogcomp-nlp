@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
@@ -86,13 +85,7 @@ public class SimpleQuantifier {
 					matcher.start(), matcher.end());
 			qsList.add(qs);
 		}
-		TextAnnotation ta = null;
-		try {
-			ta = Quantifier.pipeline.createBasicTextAnnotation("", "", text);
-		} catch (AnnotatorException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		TextAnnotation ta = Quantifier.taBuilder.createTextAnnotation(text);
 		for(int i=0; i<ta.size(); ++i) {
 			if(i<ta.size()-1 && tens.containsKey(ta.getToken(i).toLowerCase()) && 
 					units.containsKey(ta.getToken(i+1).toLowerCase())) {

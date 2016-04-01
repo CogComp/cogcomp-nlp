@@ -11,3 +11,4 @@ log/
 src/main/java/edu/illinois/cs/cogcomp/quant/lbj/
 *~
 *cache*
+models/*
