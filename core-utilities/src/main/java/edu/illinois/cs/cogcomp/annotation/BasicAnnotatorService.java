@@ -5,6 +5,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utilities.PrintUtils;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -40,6 +41,7 @@ import java.util.Set;
  *
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
+ * @author Narender Gupta
  *
  *         Created by mssammon on 4/13/15.
  */
@@ -205,27 +207,35 @@ public class BasicAnnotatorService implements AnnotatorService {
     @Override
     public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text)
             throws AnnotatorException {
-
-        String key = getTextAnnotationCacheKey(text, textAnnotationBuilder.getName());
-        if (!disableCache && annotationCache.isKeyInCache(key)) {
-            Element taElem = annotationCache.get(key);
-            return SerializationHelper.deserializeTextAnnotationFromBytes((byte[]) taElem
-                    .getObjectValue());
-        }
-        return createTextAnnotationAndCache(corpusId, docId, text);
+        TextAnnotation ta = getTextAnnotationFromCache(text);
+        if (ta == null)
+            ta = createTextAnnotationAndCache(corpusId, docId, text);
+        return ta;
     }
 
     private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text)
             throws AnnotatorException {
         TextAnnotation ta = textAnnotationBuilder.createTextAnnotation(corpusId, docId, text);
         if (!disableCache) {
-            String key = getTextAnnotationCacheKey(text, textAnnotationBuilder.getName());
-            removeKeyFromCache(key);
-            try {
-                putInCache(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
-            } catch (IOException e) {
-                throw new AnnotatorException(e.getMessage());
-            }
+            putTextAnnotationInCache(text, ta);
+        }
+        return ta;
+    }
+
+    @Override
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer
+            .Tokenization tokenization) throws AnnotatorException {
+        TextAnnotation ta = getTextAnnotationFromCache(text);
+        if (ta == null)
+            ta = createTextAnnotationAndCache(corpusId, docId, text, tokenization);
+        return ta;
+    }
+
+    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text, Tokenizer
+            .Tokenization tokenization) throws AnnotatorException {
+        TextAnnotation ta = textAnnotationBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
+        if (!disableCache) {
+            putTextAnnotationInCache(text, ta);
         }
         return ta;
     }
@@ -237,11 +247,18 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
     @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
+            .Tokenization tokenization) throws AnnotatorException {
+        return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization, viewProviders.keySet());
+    }
+
+
+    @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Set<String> viewNames) throws AnnotatorException {
         long startTime = System.currentTimeMillis();
         logger.debug("starting createAnnotatedTextAnnotation()...");
-        TextAnnotation ta = createBasicTextAnnotation(corpusId, text, text);
+        TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
         for (String view : viewNames)
             addView(ta, view);
         long endTime = System.currentTimeMillis();
@@ -249,6 +266,15 @@ public class BasicAnnotatorService implements AnnotatorService {
         logger.debug("Finished createAnnotatedTextAnnotation(), took: " + duration
                 + " milliseconds");
 
+        return ta;
+    }
+
+    @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
+            .Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+        TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+        for (String view : viewNames)
+            addView(ta, view);
         return ta;
     }
 
@@ -397,6 +423,26 @@ public class BasicAnnotatorService implements AnnotatorService {
         else {
             annotationCache.flush();
             cacheManager.shutdown();
+        }
+    }
+
+    private TextAnnotation getTextAnnotationFromCache(String text) {
+        String key = getTextAnnotationCacheKey(text, textAnnotationBuilder.getName());
+        if (!disableCache && annotationCache.isKeyInCache(key)) {
+            Element taElem = annotationCache.get(key);
+            return SerializationHelper.deserializeTextAnnotationFromBytes((byte[]) taElem
+                    .getObjectValue());
+        }
+        return null;
+    }
+
+    private void putTextAnnotationInCache(String text, TextAnnotation ta) throws AnnotatorException {
+        String key = getTextAnnotationCacheKey(text, textAnnotationBuilder.getName());
+        removeKeyFromCache(key);
+        try {
+            putInCache(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
+        } catch (IOException e) {
+            throw new AnnotatorException(e.getMessage());
         }
     }
 }

@@ -12,7 +12,8 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  * A set of convenience methods for constructing TextAnnotations. Replaces a morass of specialized
  * constructors in Edison to support use of illinois-core-utilities.
  *
- * Created by mssammon on 7/27/15.
+ * @author Mark Sammons
+ * @author Narender Gupta
  */
 public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
     private static final String NAME = TokenizerTextAnnotationBuilder.class.getSimpleName();
@@ -75,6 +76,13 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
         Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan(text);
         return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
+    }
+
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
+            tokenization) throws IllegalArgumentException {
+        throw new IllegalArgumentException(
+                "Cannot create annotation from tokenized text using TokenizerTextAnnotationBuilder");
     }
 
     /**
