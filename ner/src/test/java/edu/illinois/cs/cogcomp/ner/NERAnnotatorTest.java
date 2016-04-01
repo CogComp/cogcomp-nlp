@@ -155,7 +155,7 @@ public class NERAnnotatorTest {
      * to get a better measure.
      */
     //@Test
-    public void testPerformance() {
+    public void evaluatePerformance() {
         // now do performance.
         final int SIZE = 100;
 
@@ -236,7 +236,7 @@ public class NERAnnotatorTest {
      * on every core we should get performance below 300 ticks and the results should still be good.
      */
     //@Test
-    public void testMultiThreaded() {
+    public void evaluateMultiThreaded() {
         final int SIZE = 1000;
 
         // create one thread per core, launch them.
