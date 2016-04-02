@@ -28,7 +28,7 @@ abstract public class DataReader implements Parser {
     protected final String viewName;
     protected final String file;
 
-    private static Preprocessor preprocessor;
+    public static Preprocessor preprocessor;
 
     public DataReader(String file, String corpusName, String viewName) {
         this.file = getCorrectPath(file);

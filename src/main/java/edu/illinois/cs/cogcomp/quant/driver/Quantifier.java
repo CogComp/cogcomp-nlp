@@ -4,15 +4,13 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
-import edu.illinois.cs.cogcomp.lbjava.nlp.*;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
@@ -96,15 +94,16 @@ public class Quantifier extends Annotator {
 			sentences[i] = taQuant.getSentence(i).getText();
 		}
 		QuantitiesClassifier chunker = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
-	    Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(sentences)));
-	    String previous = "";
+		DataReader.preprocessor = new Preprocessor(PreprocessorConfigurator.defaults());
+		DataReader.preprocessor.annotate(taQuant);
+		String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;
 	    String prediction="";
 	    int startPos=0, endPos=0, tokenPos=0;
-	    
-	    for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-		    	prediction = chunker.discreteValue(w);
+	    List<Constituent> tokens = taQuant.getView(ViewNames.TOKENS).getConstituents();
+	    for (int i=0; i<tokens.size(); ++i) {
+		    	prediction = chunker.discreteValue(tokens.get(i));
 		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 		    							&& !previous.endsWith(prediction.substring(2))){
 		    		if( !inChunk && tokenPos < taCurator.size()){
@@ -113,14 +112,14 @@ public class Quantifier extends Annotator {
 		    		}	
 		    	}
 		    	if( inChunk ){
-		    		chunk += w.form+" ";
+		    		chunk += tokens.get(i).getSurfaceForm()+" ";
 		    	}
 	    		if (!prediction.equals("O")
 	    					&& tokenPos < taCurator.size()
-	    					&& (w.next == null
-	    					|| chunker.discreteValue(w.next).equals("O")
-	    					|| chunker.discreteValue(w.next).startsWith("B-")
-	    					|| !chunker.discreteValue(w.next).endsWith(
+	    					&& (i == (tokens.size()-1)
+	    					|| chunker.discreteValue(tokens.get(i+1)).equals("O")
+	    					|| chunker.discreteValue(tokens.get(i+1)).startsWith("B-")
+	    					|| !chunker.discreteValue(tokens.get(i+1)).endsWith(
 	    							prediction.substring(2)))){
 	    			
 	    			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
@@ -128,7 +127,7 @@ public class Quantifier extends Annotator {
 	    			try { 
 		    			if(standardized) {
 		    				span.object = normalizer.parse(chunk, 
-		    						chunker.discreteValue(w).substring(2));
+		    						chunker.discreteValue(tokens.get(i)).substring(2));
 		    			}
 	    			} catch (Exception e) {
 	    				e.printStackTrace();
@@ -139,7 +138,7 @@ public class Quantifier extends Annotator {
 	    		}
 	    		previous = prediction;
 	    		if(tokenPos < taCurator.size() && taCurator.getToken(tokenPos).trim().
-	    				endsWith(w.form.trim())){
+	    				endsWith(tokens.get(i).getSurfaceForm().trim())){
 	    			tokenPos++;
 	    		}
 	    }
