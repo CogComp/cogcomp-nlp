@@ -78,6 +78,11 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
+    /**
+     * A stub method that <b>should not</b> be called with this Builder. Please use
+     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder} if you need to create
+     * {@link TextAnnotation} from pre-tokenized text.
+     */
     @Override
     public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
             tokenization) throws IllegalArgumentException {

@@ -19,11 +19,30 @@ public interface TextAnnotationBuilder {
 
     String getName();
 
+    /**
+     * A method for creating {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} by
+     * tokenizing the given text string.
+     * @param text Raw text string
+     */
     TextAnnotation createTextAnnotation(String text) throws IllegalArgumentException;
 
+    /**
+     * An overloaded version of {@link #createTextAnnotation(String)} which takes in a corpus Id and text Id. These
+     * strings can be used for bookkeeping.
+     * @param corpusId
+     * @param textId
+     * @param text Raw text string.
+     */
     TextAnnotation createTextAnnotation(String corpusId, String textId, String text)
             throws IllegalArgumentException;
 
+    /**
+     * A method for creating {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} by
+     * respecting the pre-tokenization of text passed as an instance of
+     * {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization}.
+     * @param text Raw text string
+     * @param tokenization An instance containing tokens, character offsets, and sentence boundaries.
+     */
     TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
             tokenization) throws IllegalArgumentException;
 
