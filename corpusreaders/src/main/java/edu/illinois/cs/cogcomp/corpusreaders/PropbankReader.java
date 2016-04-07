@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package edu.illinois.cs.cogcomp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -9,7 +9,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.illinois.cs.cogcomp.nlp.corpusreaders.AbstractSRLAnnotationReader.Fields;
+import static edu.illinois.cs.cogcomp.corpusreaders.AbstractSRLAnnotationReader.Fields;
 
 /**
  * @author Vivek Srikumar
