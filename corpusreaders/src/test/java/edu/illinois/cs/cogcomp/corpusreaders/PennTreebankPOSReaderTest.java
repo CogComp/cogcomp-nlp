@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package edu.illinois.cs.cogcomp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;

@@ -17,6 +17,7 @@
         <module>curator</module>
         <module>pos</module>
         <module>ner</module>
+        <module>corpusreaders</module>
     </modules>
 
     <properties>

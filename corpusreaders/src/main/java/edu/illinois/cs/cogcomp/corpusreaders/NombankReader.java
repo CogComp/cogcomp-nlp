@@ -1,11 +1,11 @@
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package edu.illinois.cs.cogcomp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.AbstractSRLAnnotationReader.Fields;
+import edu.illinois.cs.cogcomp.corpusreaders.AbstractSRLAnnotationReader.Fields;
 
 import java.util.ArrayList;
 import java.util.HashSet;

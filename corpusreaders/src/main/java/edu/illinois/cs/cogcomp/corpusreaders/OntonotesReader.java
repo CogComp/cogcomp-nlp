@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package edu.illinois.cs.cogcomp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -7,6 +7,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
