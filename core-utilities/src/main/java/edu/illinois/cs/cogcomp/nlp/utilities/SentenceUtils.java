@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.nlp.utilities;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jun 30, 2009
  */
 public class SentenceUtils {

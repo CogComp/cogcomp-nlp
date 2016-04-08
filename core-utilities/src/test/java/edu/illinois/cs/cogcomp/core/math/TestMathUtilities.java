@@ -24,7 +24,7 @@ public class TestMathUtilities extends TestCase {
         doubleList1 = new ArrayList<>();
         intList1 = new ArrayList<>();
 
-        a1 = new double[]{3, 1, 3, 5, 1, -1, 51, 4};
+        a1 = new double[] {3, 1, 3, 5, 1, -1, 51, 4};
 
         for (double d : a1) {
             doubleList1.add(d);
@@ -76,8 +76,7 @@ public class TestMathUtilities extends TestCase {
         for (double d : softmax(l))
             assertEquals(d, 0.25);
 
-        for (double d : softmax(new double[]{10, 100}, new double[]{100,
-                10}))
+        for (double d : softmax(new double[] {10, 100}, new double[] {100, 10}))
             assertEquals(d, 0.5);
 
     }
@@ -86,7 +85,7 @@ public class TestMathUtilities extends TestCase {
         assertEquals(logAdd(Double.NEGATIVE_INFINITY, 1), 1.0);
         assertEquals(logAdd(10, Double.NEGATIVE_INFINITY), 10.0);
 
-        double[] d = new double[]{-15, -1, 0, 1, 3};
+        double[] d = new double[] {-15, -1, 0, 1, 3};
         for (double x : d) {
             for (double y : d) {
                 double l1 = logAdd(x, y);
@@ -98,21 +97,19 @@ public class TestMathUtilities extends TestCase {
     }
 
     public void testLogAddCollection() {
-        assertEquals(logAdd(new double[]{Double.NEGATIVE_INFINITY, 1}), 1.0);
-        assertEquals(logAdd(new double[]{10, Double.NEGATIVE_INFINITY}),
-                10.0);
+        assertEquals(logAdd(new double[] {Double.NEGATIVE_INFINITY, 1}), 1.0);
+        assertEquals(logAdd(new double[] {10, Double.NEGATIVE_INFINITY}), 10.0);
 
-        double[] d = new double[]{-15, -1, 0, 1, 3};
+        double[] d = new double[] {-15, -1, 0, 1, 3};
         for (double x : d) {
             for (double y : d) {
                 for (double z : d) {
-                    double[] array = new double[]{x, y, z};
+                    double[] array = new double[] {x, y, z};
                     double l1 = logAdd(array);
 
                     double l2 = logAdd(asDoubleList(array));
 
-                    double l3 = Math.log(Math.exp(x) + Math.exp(y)
-                            + Math.exp(z));
+                    double l3 = Math.log(Math.exp(x) + Math.exp(y) + Math.exp(z));
 
                     assertEquals(true, epsilonEquals(l1, l2));
                     assertEquals(true, epsilonEquals(l1, l3));
@@ -129,7 +126,7 @@ public class TestMathUtilities extends TestCase {
         assertTrue(epsilonEquals(lnGamma(0.5), Math.log(Math.sqrt(Math.PI))));
 
         // gamma(z+1) = z gamma(z)
-        for (double d : new double[]{0.1, 0.3, 1.0, 2.0, 5.0, 10, 100}) {
+        for (double d : new double[] {0.1, 0.3, 1.0, 2.0, 5.0, 10, 100}) {
             assertTrue(epsilonEquals(lnGamma(1 + d), Math.log(d) + lnGamma(d)));
 
         }
@@ -149,7 +146,7 @@ public class TestMathUtilities extends TestCase {
     }
 
     public void testBinomialCoeffs() {
-        int[] c = new int[]{1, 5, 10, 10, 5, 1};
+        int[] c = new int[] {1, 5, 10, 10, 5, 1};
         for (int i = 0; i <= 5; i++) {
             assertEquals(binomialCoeffs(5, i), c[i]);
         }
@@ -163,8 +160,7 @@ public class TestMathUtilities extends TestCase {
 
         // some values from wolfram alpha
         myAssertEpsilonEquals(beta(1, 2), 0.5);
-        myAssertEpsilonEquals(beta(3, Math.PI),
-                2 / (Math.PI * (Math.PI + 1) * (Math.PI + 2)));
+        myAssertEpsilonEquals(beta(3, Math.PI), 2 / (Math.PI * (Math.PI + 1) * (Math.PI + 2)));
     }
 
     public void testIncompleteGamma() {
@@ -208,7 +204,7 @@ public class TestMathUtilities extends TestCase {
 
         // erf(-x) = -erf(x)
         // erfc(-x) = 2 - erfc(x)
-        for (double x : new double[]{0.001, 0.01, 0.1, 1, 10}) {
+        for (double x : new double[] {0.001, 0.01, 0.1, 1, 10}) {
             myAssertEpsilonEquals(erf(-x), -erf(x));
             myAssertEpsilonEquals(erfc(-x), 2 - erfc(x));
         }

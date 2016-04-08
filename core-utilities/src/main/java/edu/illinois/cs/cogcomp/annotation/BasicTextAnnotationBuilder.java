@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
@@ -11,13 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple TextAnnotationBuilder that is meant to be used with pre-tokenized text (e.g. for training corpora).
- * <p/>
- * To create {@link TextAnnotation}s from plain text, you need a {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer}. See {@code illinois-tokenizer}
- * for CogComp's default TextAnnotationBuilder.
+ * A simple TextAnnotationBuilder that is meant to be used with pre-tokenized text (e.g. for
+ * training corpora).
+ * <p>
+ * To create {@link TextAnnotation}s from plain text, you need a
+ * {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer}. See {@code illinois-tokenizer} for
+ * CogComp's default TextAnnotationBuilder.
  *
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
+ * @author Narender Gupta
  */
 public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
@@ -25,6 +27,7 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
     /**
      * The default way to create a {@link TextAnnotation} from pre-tokenized text.
+     * 
      * @param tokenizedSentences A list of sentences, each one being an array of tokens
      * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
      */
@@ -34,45 +37,51 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
     /**
      * The default way to create a {@link TextAnnotation} from pre-tokenized text.
+     * 
      * @param tokenizedSentences A list of sentences, each one being a list of tokens
      * @return A {@link TextAnnotation} containing the SENTENCE and TOKENS views.
      */
-    public static TextAnnotation createTextAnnotationFromTokens(String corpusId,
-                                                                String textId, List<String[]> tokenizedSentences) {
+    public static TextAnnotation createTextAnnotationFromTokens(String corpusId, String textId,
+            List<String[]> tokenizedSentences) {
         Tokenization tokenization = tokenizeTextSpan(tokenizedSentences);
         String text = "";
         for (String[] sentenceTokens : tokenizedSentences)
             text += StringUtils.join(sentenceTokens, ' ') + System.lineSeparator();
 
-        return new TextAnnotation( corpusId,
-                textId,
-                text,
-                tokenization.getCharacterOffsets(),
-                tokenization.getTokens(),
-                tokenization.getSentenceEndTokenIndexes()
-        );
+        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
     /**
-     * A stub method that <b>should not</b> be call with this Builder.
-     * Please use {@link #createTextAnnotationFromTokens(java.util.List)} instead.
-     * <p/>
+     * A stub method that <b>should not</b> be call with this Builder. Please use
+     * {@link #createTextAnnotationFromTokens(java.util.List)} instead.
+     * <p>
      * To create a {@link TextAnnotation} from raw text, please use {@code illinois-tokenizer}
      */
     @Override
     public TextAnnotation createTextAnnotation(String text) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Cannot create annotation from raw text using BasicTextAnnotationBuilder");
+        throw new IllegalArgumentException(
+                "Cannot create annotation from raw text using BasicTextAnnotationBuilder");
     }
 
     /**
-     * A stub method that <b>should not</b> be call with this Builder.
-     * Please use {@link #createTextAnnotationFromTokens(java.util.List)} instead.
-     * <p/>
+     * A stub method that <b>should not</b> be call with this Builder. Please use
+     * {@link #createTextAnnotationFromTokens(java.util.List)} instead.
+     * <p>
      * To create a {@link TextAnnotation} from raw text, please use {@code illinois-tokenizer}
      */
     @Override
-    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text) throws IllegalArgumentException {
-        throw new IllegalArgumentException("Cannot create annotation from raw text using BasicTextAnnotationBuilder");
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text)
+            throws IllegalArgumentException {
+        throw new IllegalArgumentException(
+                "Cannot create annotation from raw text using BasicTextAnnotationBuilder");
+    }
+
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenization
+            tokenization) throws IllegalArgumentException {
+        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
     private static Tokenization tokenizeTextSpan(List<String[]> tokenizedSentences) {
@@ -100,7 +109,8 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
                 // The next token should start after a single space
                 tokenStartOffset += sentenceToken.length() + 1;
-                nextSentStartCharOffset = tokenCharEnd + 1; // by end of loop, this should match start of next sentence
+                nextSentStartCharOffset = tokenCharEnd + 1; // by end of loop, this should match
+                                                            // start of next sentence
             }
 
             sentStartTokOffset += sentenceTokens.length;
@@ -110,10 +120,12 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
         assert tokensList.size() == charOffsetsList.size();
 
         String[] tokens = new String[tokensList.size()];
-        for (int i = 0; i < tokensList.size(); i++) tokens[i] = tokensList.get(i);
+        for (int i = 0; i < tokensList.size(); i++)
+            tokens[i] = tokensList.get(i);
 
         IntPair[] charOffsets = new IntPair[charOffsetsList.size()];
-        for (int i = 0; i < charOffsetsList.size(); i++) charOffsets[i] = charOffsetsList.get(i);
+        for (int i = 0; i < charOffsetsList.size(); i++)
+            charOffsets[i] = charOffsetsList.get(i);
 
         return new Tokenization(tokens, charOffsets, sentenceEndIndexes);
     }
