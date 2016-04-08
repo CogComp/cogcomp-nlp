@@ -211,7 +211,8 @@ public class ReadACEAnnotation {
 			System.out.println("  Relation mention extent:\t" + relationMention.extent + "\t" + relationMention.extentStart + "\t" + relationMention.extentEnd);
 		}
 
-		NodeList nlMention = ((Element)node).getElementsByTagName("relation_mention_argument");
+		String relationMentionArgumentTag = is2004mode ? "rel_mention_arg" : "relation_mention_argument";
+		NodeList nlMention = ((Element)node).getElementsByTagName(relationMentionArgumentTag);
 		
 		for (int i = 0; i < nlMention.getLength(); ++i) {
 			ACERelationArgumentMention relationArgumentMention = readRelationArgumentMention (nlMention.item(i));
@@ -229,9 +230,16 @@ public class ReadACEAnnotation {
 		
 		NamedNodeMap nnMap = node.getAttributes();
 		
-		eventArgumentMention.id = nnMap.getNamedItem("REFID").getNodeValue();
-		eventArgumentMention.role = nnMap.getNamedItem("ROLE").getNodeValue();
-		
+        if (is2004mode) {
+            // Trying to be consistent with the notation for ACE2005
+            String argNum = nnMap.getNamedItem("ARGNUM").getNodeValue();
+            eventArgumentMention.role = "Arg-" + argNum;
+            eventArgumentMention.id = nnMap.getNamedItem("ENTITYMENTIONID").getNodeValue();
+        } else {
+            eventArgumentMention.id = nnMap.getNamedItem("REFID").getNodeValue();
+            eventArgumentMention.role = nnMap.getNamedItem("ROLE").getNodeValue();
+        }
+
 		if (isDebug) {
 			System.out.println("    Relation argument mention:\t" + eventArgumentMention.id + "\t" + eventArgumentMention.role );
 		}
