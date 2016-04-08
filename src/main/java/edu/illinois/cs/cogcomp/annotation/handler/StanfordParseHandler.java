@@ -34,7 +34,7 @@ import java.util.List;
 public class StanfordParseHandler extends PipelineAnnotator {
 
     private final boolean throwExceptionOnSentenceLengthCheck;
-    private Logger logger = LoggerFactory.getLogger( PipelineAnnotator.class );
+    private final static Logger logger = LoggerFactory.getLogger( PipelineAnnotator.class );
 
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
@@ -56,23 +56,8 @@ public class StanfordParseHandler extends PipelineAnnotator {
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
         // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
+        checkLength(textAnnotation, throwExceptionOnSentenceLengthCheck, maxParseSentenceLength);
 
-        if ( throwExceptionOnSentenceLengthCheck )
-        {
-            Constituent c = HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation, maxParseSentenceLength);
-
-            if ( null != c )
-            {
-                String msg = HandlerUtils.getSentenceLengthError( textAnnotation.getId(), c.getSurfaceForm(), maxParseSentenceLength );
-                logger.error( msg );
-                throw new AnnotatorException( msg );
-            }
-        }
-
-//        if (maxParseSentenceLength > 0 && textAnnotation.size() > maxParseSentenceLength) {
-//            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() +
-//                    " since it is larger than the maximum sentence length of the parser.");
-//        }
         TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
@@ -108,8 +93,20 @@ public class StanfordParseHandler extends PipelineAnnotator {
         textAnnotation.addView( getViewName(), treeView );
     }
 
+    static void checkLength(TextAnnotation textAnnotation, boolean throwExceptionOnSentenceLengthCheck, int maxParseSentenceLength) throws AnnotatorException {
+        if (throwExceptionOnSentenceLengthCheck) {
+            Constituent c = HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation, maxParseSentenceLength);
 
-    protected static List<CoreMap> buildStanfordSentences(TextAnnotation ta) {
+            if ( null != c ) {
+                String msg = HandlerUtils.getSentenceLengthError( textAnnotation.getId(), c.getSurfaceForm(), maxParseSentenceLength);
+                logger.error( msg );
+                throw new AnnotatorException( msg );
+            }
+        }
+    }
+
+
+    static List<CoreMap> buildStanfordSentences(TextAnnotation ta) {
         View tokens = ta.getView(ViewNames.TOKENS);
         View sentences = ta.getView(ViewNames.SENTENCE);
         String rawText = ta.getText();
