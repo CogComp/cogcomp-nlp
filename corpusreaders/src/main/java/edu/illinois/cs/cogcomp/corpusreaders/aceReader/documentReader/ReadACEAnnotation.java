@@ -14,18 +14,6 @@ public class ReadACEAnnotation {
      */
     public static boolean is2004mode = false;
 
-    public static void main (String[] args) {
-		
-		String testFile1 = "/shared/shelley/yqsong/eventData/ace2005Modify/data/English/nw/adj/AFP_ENG_20030304.0250.apf.xml";
-		String testFile2 = "/shared/shelley/yqsong/eventData/ace2005Modify/data/English/nw/adj/AFP_ENG_20030311.0491.apf.xml";
-		ReadACEAnnotation readDoc = new ReadACEAnnotation();
-        try {
-            readDoc.readDocument(testFile2);
-        } catch (XMLException e) {
-            e.printStackTrace();
-        }
-    }
-	
 	public static ACEDocumentAnnotation readDocument (String FileStr) throws XMLException {
 		ACEDocumentAnnotation docAnnotation = new ACEDocumentAnnotation();
 
