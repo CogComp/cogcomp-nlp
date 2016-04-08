@@ -102,7 +102,6 @@ public class SimpleXMLParser {
 
     private static DocumentBuilder getDocumentBuilder() throws XMLException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating(true);
 
         try {
             return factory.newDocumentBuilder();
