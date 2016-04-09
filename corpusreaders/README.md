@@ -7,7 +7,7 @@ provided by the `illinois-core-utilities` package.
 
 ## List of Corpus Readers
   - PennTreebank Reader
-  - Probbank Reader
+  - Propbank Reader
   - Treebank Chunk Reader
   - Ontonotes Reader
   - PennTreebank POS Reader
