@@ -101,6 +101,13 @@ public class ACEReader extends TextAnnotationReader {
         this(aceCorpusHome, null, is2004mode);
     }
 
+    /**
+     * @return Boolean representing if the reader is in 2004 mode.
+     */
+    public boolean Is2004Mode() {
+        return this.is2004mode;
+    }
+
     @Override
     protected void initializeReader() {
         // This is called even before our class's constructor initializations.
@@ -136,9 +143,11 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
+                // Adding AbsolutePath as textId for annotation as TA currently
+                // does not support attributes.
                 TextAnnotation ta = taBuilder.createTextAnnotation(
                         this.corpusId,
-                        section + "-" + file.getName(),
+                        file.getAbsolutePath(),
                         doc.contentRemovingTags);
 
                 this.addEntityViews(ta, doc.aceAnnotation, file);
