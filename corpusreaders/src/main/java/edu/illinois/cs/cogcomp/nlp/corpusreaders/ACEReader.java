@@ -31,7 +31,7 @@ public class ACEReader extends TextAnnotationReader {
     private List<TextAnnotation> documents;
 
     // Entity Constants
-    public final String EntityView = "EntityView";
+    public final String EntityView = "ENTITYVIEW";
 
     public final String EntityIDAttribute = "EntityID";
     public final String EntityTypeAttribute = "EntityType";
@@ -46,7 +46,7 @@ public class ACEReader extends TextAnnotationReader {
     public final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
 
     // Relation Constants
-    public final String RelationView = "RelationView";
+    public final String RelationView = "RELATIONVIEW";
 
     public final String RelationIDAttribute = "RelationID";
     public final String RelationTypeAttribute = "RelationType";
