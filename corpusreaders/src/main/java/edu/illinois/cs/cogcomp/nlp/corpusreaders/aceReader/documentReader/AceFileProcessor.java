@@ -7,14 +7,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.EventConstants;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.IOManager;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,7 +59,7 @@ public class AceFileProcessor
      * @return null if file cannot be parsed, ACEDocument otherwise
      */
     public ACEDocument processAceEntry( File subFolderEntry, String annotationFile )
-    {
+            throws FileNotFoundException {
 
         ACEDocumentAnnotation annotationACE = null;
         try {
@@ -84,12 +85,13 @@ public class AceFileProcessor
      * @return
      */
 
-    public ACEDocument processAceEntry(File subFolderEntry, ACEDocumentAnnotation annotationACE, String annotationFile) {
+    public ACEDocument processAceEntry(File subFolderEntry, ACEDocumentAnnotation annotationACE, String annotationFile)
+            throws FileNotFoundException {
         boolean is2004mode = ReadACEAnnotation.is2004mode;
         ACEDocument aceDoc = new ACEDocument();
 
         String docFile = annotationFile.replace(".apf.xml", ".sgm");
-        List<String> lines = IOManager.readLinesWithoutTrimming(docFile);
+        List<String> lines = LineIO.read(docFile);
         String content = "";
         for (int i = 0; i < lines.size(); ++i) {
             content += lines.get(i) + "\n";

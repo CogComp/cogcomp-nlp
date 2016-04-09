@@ -9,7 +9,6 @@ import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
@@ -31,34 +30,34 @@ public class ACEReader extends TextAnnotationReader {
     private List<TextAnnotation> documents;
 
     // Entity Constants
-    public final String EntityView = "ENTITYVIEW";
+    public static final String ENTITYVIEW = "ENTITYVIEW";
 
-    public final String EntityIDAttribute = "EntityID";
-    public final String EntityTypeAttribute = "EntityType";
-    public final String EntitySubtypeAttribute = "EntitySubtype";
-    public final String EntityClassAttribute = "EntityClass";
+    public static final String EntityIDAttribute = "EntityID";
+    public static final String EntityTypeAttribute = "EntityType";
+    public static final String EntitySubtypeAttribute = "EntitySubtype";
+    public static final String EntityClassAttribute = "EntityClass";
 
-    public final String EntityMentionIDAttribute = "EntityMentionID";
-    public final String EntityMentionTypeAttribute = "EntityMentionType";
-    public final String EntityMentionLDCTypeAttribute = "EntityMentionLDCType";
+    public static final String EntityMentionIDAttribute = "EntityMentionID";
+    public static final String EntityMentionTypeAttribute = "EntityMentionType";
+    public static final String EntityMentionLDCTypeAttribute = "EntityMentionLDCType";
 
-    public final String EntityHeadStartCharOffset = "EntityHeadStartCharOffset";
-    public final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
+    public static final String EntityHeadStartCharOffset = "EntityHeadStartCharOffset";
+    public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
 
     // Relation Constants
-    public final String RelationView = "RELATIONVIEW";
+    public static final String RELATIONVIEW = "RELATIONVIEW";
 
-    public final String RelationIDAttribute = "RelationID";
-    public final String RelationTypeAttribute = "RelationType";
-    public final String RelationSubtypeAttribute = "RelationSubtype";
-    public final String RelationModalityAttribute = "RelationModality";
-    public final String RelationTenseAttribute = "RelationTense";
+    public static final String RelationIDAttribute = "RelationID";
+    public static final String RelationTypeAttribute = "RelationType";
+    public static final String RelationSubtypeAttribute = "RelationSubtype";
+    public static final String RelationModalityAttribute = "RelationModality";
+    public static final String RelationTenseAttribute = "RelationTense";
 
-    public final String RelationMentionIDAttribute = "RelationMentionID";
-    public final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
+    public static final String RelationMentionIDAttribute = "RelationMentionID";
+    public static final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
 
-    public final String RelationMentionArgumentIDAttribute = "RelationMentionArgumentID";
-    public final String RelationMentionArgumentRoleAttribute = "RelationMentionArgumentRole";
+    public static final String RelationMentionArgumentIDAttribute = "RelationMentionArgumentID";
+    public static final String RelationMentionArgumentRoleAttribute = "RelationMentionArgumentRole";
 
     private final String RelationFirstArgumentTag = "Arg-1";
     private final String RelationSecondArgumentTag = "Arg-2";
@@ -138,7 +137,7 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityView = new SpanLabelView(EntityView, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityView = new SpanLabelView(ENTITYVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefView = new CoreferenceView(ViewNames.COREF, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         for (ACEEntity entity : docAnnotation.entityList) {
@@ -153,7 +152,7 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
-                Constituent extentConstituent = new Constituent(entity.type, EntityView, ta, extentStartTokenId, extentEndTokenId + 1);
+                Constituent extentConstituent = new Constituent(entity.type, ENTITYVIEW, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
                 extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
@@ -188,7 +187,7 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(EntityView, entityView);
+        ta.addView(ENTITYVIEW, entityView);
         ta.addView(ViewNames.COREF, corefView);
     }
 
@@ -202,7 +201,7 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        PredicateArgumentView relationView = new PredicateArgumentView(RelationView, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationView = new PredicateArgumentView(RELATIONVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF);
         Set<Constituent> corefEntitiesInDoc = entityCorefView.getCanonicalEntities();
@@ -273,8 +272,8 @@ public class ACEReader extends TextAnnotationReader {
                     }
                 }
 
-                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RelationView, firstArgumentMention.role);
-                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RelationView, secondArgumentMention.role);
+                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, firstArgumentMention.role);
+                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, secondArgumentMention.role);
 
                 // Add attributes to each of the constituents.
                 for (Constituent arg : Arrays.asList(firstArgument, secondArgument)) {
@@ -302,7 +301,7 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(RelationView, relationView);
+        ta.addView(RELATIONVIEW, relationView);
     }
 
     @Override

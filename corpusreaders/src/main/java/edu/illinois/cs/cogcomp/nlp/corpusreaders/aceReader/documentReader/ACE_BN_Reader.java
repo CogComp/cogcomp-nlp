@@ -1,9 +1,10 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.IOManager;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -13,9 +14,9 @@ public class ACE_BN_Reader {
 	
 	static boolean isDebug = false;
 
-	public static void main (String[] args) {
+	public static void main (String[] args) throws FileNotFoundException {
 		String file = "/shared/shelley/yqsong/eventData/ace2005Modify/data/English/bn/adj/CNN_ENG_20030304_173120.16.sgm";
-		List<String> lines = IOManager.readLinesWithoutTrimming(file);
+		List<String> lines = LineIO.read(file);
 		String content = "";
 		for (int i = 0; i < lines.size(); ++i) {
 			content += lines.get(i) + " ";
