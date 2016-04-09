@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFil
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -28,6 +30,11 @@ public class ACEReader extends TextAnnotationReader {
     private String[] sections;
     private String corpusId;
     private List<TextAnnotation> documents;
+
+    private static final String RelationFirstArgumentTag = "Arg-1";
+    private static final String RelationSecondArgumentTag = "Arg-2";
+
+    private static final Logger logger  = LoggerFactory.getLogger(ACEReader.class);
 
     // Entity Constants
     public static final String ENTITYVIEW = "ENTITYVIEW";
@@ -59,9 +66,14 @@ public class ACEReader extends TextAnnotationReader {
     public static final String RelationMentionArgumentIDAttribute = "RelationMentionArgumentID";
     public static final String RelationMentionArgumentRoleAttribute = "RelationMentionArgumentRole";
 
-    private final String RelationFirstArgumentTag = "Arg-1";
-    private final String RelationSecondArgumentTag = "Arg-2";
-
+    /**
+     * Constructor for the ACE Data-set Reader
+     * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
+     * @param sections List of sections to parse. eg. `new String[] { "nw", "bn" }`
+     *                 Pass `null` to parse all available sections.
+     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
+     * @throws Exception Exception thrown in-case of major failure.
+     */
     public ACEReader(String aceCorpusHome, String[] sections, boolean is2004mode) throws Exception {
         super(aceCorpusHome);
 
@@ -79,6 +91,12 @@ public class ACEReader extends TextAnnotationReader {
         this.updateCurrentFiles();
     }
 
+    /**
+     * Constructor for the ACE Data-set Reader
+     * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
+     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
+     * @throws Exception Exception thrown in-case of major failure.
+     */
     public ACEReader(String aceCorpusHome, boolean is2004mode) throws Exception {
         this(aceCorpusHome, null, is2004mode);
     }
@@ -102,7 +120,6 @@ public class ACEReader extends TextAnnotationReader {
 
         ReadACEAnnotation.is2004mode = this.is2004mode;
         AceFileProcessor fileProcessor = new AceFileProcessor(new TokenizerTextAnnotationBuilder(new IllinoisTokenizer()));
-
         TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
         for (String section : this.sections) {
@@ -110,15 +127,20 @@ public class ACEReader extends TextAnnotationReader {
 
             for (File file : sectionDir.listFiles(apfFileFilter)) {
                 ACEDocument doc;
+
                 try {
                     doc = fileProcessor.processAceEntry(sectionDir, file.getAbsolutePath());
                     doc.taList.get(0); // Only pick documents that have at-least one TA.
                 } catch (Exception ex) {
-                    ex.printStackTrace();
+                    logger.warn("Error while reading document - " + file.getName(), ex);
                     continue;
                 }
 
-                TextAnnotation ta = taBuilder.createTextAnnotation(this.corpusId, file.getName(), doc.contentRemovingTags);
+                TextAnnotation ta = taBuilder.createTextAnnotation(
+                        this.corpusId,
+                        section + "-" + file.getName(),
+                        doc.contentRemovingTags);
+
                 this.addEntityViews(ta, doc.aceAnnotation, file);
                 this.addRelationView(ta, doc.aceAnnotation, file);
 
@@ -137,6 +159,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
+        logger.info("Parsing entites for " +  file.getName());
+
         SpanLabelView entityView = new SpanLabelView(ENTITYVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefView = new CoreferenceView(ViewNames.COREF, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
@@ -148,7 +172,7 @@ public class ACEReader extends TextAnnotationReader {
                 int extentEndTokenId = ta.getTokenIdFromCharacterOffset(entityMention.extentEnd);
 
                 if (extentStartTokenId < 0 || extentEndTokenId < 0 || extentStartTokenId > extentEndTokenId + 1) {
-                    // Logging for this
+                    logger.error("Incorrect Extent Token Span for mention - " + entity.id + " " + entityMention.id);
                     continue;
                 }
 
@@ -184,6 +208,8 @@ public class ACEReader extends TextAnnotationReader {
 
             if (corefMentions.size() > 0) {
                 corefView.addCorefEdges(canonicalMention, corefMentions, scores);
+            } else {
+                logger.error("No Entity Mentions found for a given entity - " + entity.id);
             }
         }
 
@@ -201,6 +227,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
+        logger.info("Parsing relations for " +  file.getName());
+
         PredicateArgumentView relationView = new PredicateArgumentView(RELATIONVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF);
@@ -208,6 +236,7 @@ public class ACEReader extends TextAnnotationReader {
         Set<Constituent> allCanonicalEntities = new HashSet<>();
 
         // Investigate this issue further.
+        // getCanonicalEntities should not return mentions with incoming edges.
         for (Constituent c : corefEntitiesInDoc) {
             if (c.getIncomingRelations().size() == 0) {
                 allCanonicalEntities.add(c);
@@ -215,6 +244,8 @@ public class ACEReader extends TextAnnotationReader {
         }
 
         for (ACERelation relation : docAnnotation.relationList) {
+
+            // Check if the relation has "Arg-1" and "Arg-2"
             String firstArgumentEntityId = null;
             String secondArgumentEntityId = null;
 
@@ -226,6 +257,12 @@ public class ACEReader extends TextAnnotationReader {
                 }
             }
 
+            if (firstArgumentEntityId == null || secondArgumentEntityId == null) {
+                logger.error("ACE Relation Arguments not found for relation id - " + relation.id);
+                continue;
+            }
+
+            // Find the canonical mentions for the participating entities.
             Constituent firstArgumentCanonicalMention = null;
             Constituent secondArgumentCanonicalMention = null;
             for (Constituent cons : allCanonicalEntities) {
@@ -238,7 +275,14 @@ public class ACEReader extends TextAnnotationReader {
                 }
             }
 
+            if (firstArgumentCanonicalMention == null || secondArgumentCanonicalMention == null) {
+                logger.error("Cannot find participating mention for relation id - " + relation.id);
+                continue;
+            }
+
+            // Parse each relation mention individually
             for (ACERelationMention relationMention : relation.relationMentionList) {
+                // Find both mentions in the relation
                 ACERelationArgumentMention firstArgumentMention = null;
                 ACERelationArgumentMention secondArgumentMention = null;
 
@@ -250,6 +294,13 @@ public class ACEReader extends TextAnnotationReader {
                     }
                 }
 
+                if (firstArgumentMention == null || secondArgumentMention == null) {
+                    logger.error("Cannot find participating mention for relation id - " + relation.id + " " + relationMention.id);
+                    continue;
+                }
+
+                // Use the coreference view edges to find the actual mention that is used in the current relation mention.
+                // Check with the canonical mention first and then follow the edge to get other coreferent mentions.
                 Constituent firstArgument = null;
                 if (firstArgumentCanonicalMention.getAttribute(EntityMentionIDAttribute).equals(firstArgumentMention.id)) {
                     firstArgument = firstArgumentCanonicalMention;
@@ -272,6 +323,12 @@ public class ACEReader extends TextAnnotationReader {
                     }
                 }
 
+                if (firstArgument == null || secondArgument == null) {
+                    logger.error("Failed to find mentions for relation id - " + relation.id + " " + relationMention.id);
+                    continue;
+                }
+
+                // Clone mentions for the relation view.
                 firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, firstArgumentMention.role);
                 secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, secondArgumentMention.role);
 
@@ -293,6 +350,7 @@ public class ACEReader extends TextAnnotationReader {
                 secondArgument.addAttribute(RelationMentionArgumentIDAttribute, secondArgumentMention.id);
                 secondArgument.addAttribute(RelationMentionArgumentRoleAttribute, secondArgumentMention.role);
 
+                // Add relation to the view.
                 relationView.addPredicateArguments(
                         firstArgument,
                         Collections.singletonList(secondArgument),
@@ -301,6 +359,7 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
+        // Add the relation view to the TextAnnotation
         ta.addView(RELATIONVIEW, relationView);
     }
 
