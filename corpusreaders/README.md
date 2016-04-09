@@ -1,0 +1,15 @@
+# illinois-corpusreaders
+
+## Overview
+
+This module includes NLP Corpus readers that reads into datastructures
+provided by the `illinois-core-utilities` package.
+
+## List of Corpus Readers
+  - PennTreebank Reader
+  - Probbank Reader
+  - Treebank Chunk Reader
+  - Ontonotes Reader
+  - PennTreebank POS Reader
+  - Nombank Reader
+  - [ACE Reader](doc/ACEReader.md) 
