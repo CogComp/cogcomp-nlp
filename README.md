@@ -9,6 +9,7 @@ Dev project:
 CogComp's main NLP libraries
 
 - [illinois-core-utilities](core-utilities/README.md)
+- [illinois-corpusreaders](corpusreaders/README.md)
 - [illinois-curator](curator/README.md)
 - [illinois-edison](edison/README.md)
 - [illinois-lemmatizer](lemmatizer/README.md)
