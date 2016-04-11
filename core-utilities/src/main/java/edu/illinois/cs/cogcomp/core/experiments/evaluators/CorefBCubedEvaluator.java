@@ -53,64 +53,35 @@ public class CorefBCubedEvaluator extends Evaluator {
     public void evaluate() {
         List<Constituent> allGoldConstituents = gold.getConstituents();
         double precision = 0;
+        double recall = 0;
         for(Constituent cons : allGoldConstituents) {
             HashSet<Constituent> overlappingGoldCanonicalCons = gold.getOverlappingChainsCanonicalMentions(cons);
             HashSet<Constituent> overlappingPredCanonicalCons = prediction.getOverlappingChainsCanonicalMentions(cons);
 
-            int numerator = 0;
-            int denominator = 0;
+            int overlapCount = 0;
+            int predCount = 0;
+            int goldCount = 0;
             for(Constituent predCanonicalCons : overlappingPredCanonicalCons ) {
                 HashSet consInPredCluster =  new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
                 for(Constituent goldCanonicalCons : overlappingGoldCanonicalCons) {
                     HashSet consInGoldCluster = new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
                     Set<String> intersection = new HashSet(consInGoldCluster);
                     intersection.retainAll(consInPredCluster);
-                    if(!intersection.isEmpty())
-                        numerator -= 1; //intersection.size();
+                    overlapCount += intersection.size();
+                    predCount += consInPredCluster.size();
+                    goldCount += consInGoldCluster.size();
                 }
-                numerator += consInPredCluster.size();
-                denominator += consInPredCluster.size();
-                System.out.println(numerator);
-                System.out.println(denominator);
-                if(numerator == 0) {
-                    System.out.println("stop here ... ");
-                }
-                System.out.println("=======");
             }
 
-            precision += 1.0 * numerator / denominator;
+            precision += 1.0 * overlapCount / predCount;
+            recall += 1.0 * overlapCount / goldCount;
             System.out.println("--- precision " + precision);
+            System.out.println("--- recall " + recall);
         }
-        System.out.println("*** precision ");
-        System.out.println(precision);
         // normalize with the number of mentions
         precision /= allGoldConstituents.size();
-
-        List<Constituent> allPredConstituents = prediction.getConstituents();
-        double recall = 0;
-        for(Constituent cons : allPredConstituents) {
-            HashSet<Constituent> overlappingGoldCanonicalCons = gold.getOverlappingChainsCanonicalMentions(cons);
-            HashSet<Constituent> overlappingPredCanonicalCons = prediction.getOverlappingChainsCanonicalMentions(cons);
-
-            int numerator = 0;
-            int denominator = 0;
-            for(Constituent goldCanonicalCons : overlappingGoldCanonicalCons ) {
-                HashSet consInGoldCluster =  new HashSet(gold.getCoreferentMentions(goldCanonicalCons));
-                for(Constituent predCanonicalCons : overlappingPredCanonicalCons) {
-                    HashSet consInPredCluster = new HashSet(prediction.getCoreferentMentions(predCanonicalCons));
-                    Set<String> intersection = new HashSet(consInPredCluster);
-                    intersection.retainAll(consInGoldCluster);
-//                    numerator -= intersection.size();
-                    if(!intersection.isEmpty())
-                        numerator -= 1; //intersection.size();
-                }
-                numerator += consInGoldCluster.size();
-                denominator += consInGoldCluster.size();
-            }
-            recall += 1.0 * numerator / denominator;
-        }
-        // normalize with the number of mentions
         recall /= allGoldConstituents.size();
+
         System.out.println("precision = ");
         System.out.println(precision);
         System.out.println("recall = ");
