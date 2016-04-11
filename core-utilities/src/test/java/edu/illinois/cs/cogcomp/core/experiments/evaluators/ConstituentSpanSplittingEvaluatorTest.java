@@ -28,8 +28,8 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction1);
         evaluator.evaluate(splittingTester);
-        assertEquals(1.0, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(1.0, splittingTester.getMacroF1(), 0);
+        assertEquals(1.0, splittingTester.getMacroPrecision(), 0);
     }
 
     @Test
@@ -37,8 +37,8 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction2);
         evaluator.evaluate(splittingTester);
-        assertEquals(0.4, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(0.4, splittingTester.getMacroF1(), 0);
+        assertEquals(1.0, splittingTester.getMacroPrecision(), 0);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction2, prediction1);
         evaluator.evaluate(splittingTester);
-        assertEquals(0.4, splittingTester.getAverageF1(), 0);
-        assertEquals(0.25, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(0.4, splittingTester.getMacroF1(), 0);
+        assertEquals(0.25, splittingTester.getMacroPrecision(), 0);
     }
 }

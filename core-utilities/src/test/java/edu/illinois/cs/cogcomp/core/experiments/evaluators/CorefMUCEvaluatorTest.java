@@ -43,14 +43,12 @@ public class CorefMUCEvaluatorTest {
         predicted.addCorefEdges(allCons.get(5), allCons.subList(6, 7));
         dummyTextAnnotation.addView("predicted", predicted);
         System.out.println(predicted);
-        System.out.println(predicted.canonicalEntitiesMap);
         System.out.println(predicted.getCanonicalEntitiesViaRelations());
-        System.out.println(predicted.canonicalEntitiesMap);
     }
 
     @Test
     public void testScores() throws Exception {
-
+        ClassificationTester mucTester = new ClassificationTester();
         for(Constituent c : predicted.getConstituents()) {
             System.out.println(predicted.getCoreferentMentionsViaRelations(c));
         }
@@ -58,8 +56,13 @@ public class CorefMUCEvaluatorTest {
         mucEvaluator.setViews(gold, predicted);
         mucEvaluator.evaluate();
 
+        ClassificationTester bcubedTester = new ClassificationTester();
         CorefBCubedEvaluator bcubedEvaluator = new CorefBCubedEvaluator();
         bcubedEvaluator.setViews(gold, predicted);
-        bcubedEvaluator.evaluate();
+        bcubedEvaluator.evaluate(bcubedTester);
+
+        assertEquals(bcubedTester.getAvgMicroF1(), 0.83, 0.1);
+        assertEquals(bcubedTester.getAvgMicroPrecision(), 0.76, 0.1);
+        assertEquals(bcubedTester.getAvgMicroRecall(), 1.0, 0.1);
     }
 }

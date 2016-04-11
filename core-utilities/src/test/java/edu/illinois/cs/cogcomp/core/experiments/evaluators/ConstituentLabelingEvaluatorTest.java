@@ -32,8 +32,8 @@ public class ConstituentLabelingEvaluatorTest {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, gold);
         evaluator.evaluate(splittingTester);
-        assertEquals(1.0, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(1.0, splittingTester.getMacroF1(), 0);
+        assertEquals(1.0, splittingTester.getMacroPrecision(), 0);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ConstituentLabelingEvaluatorTest {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertEquals(splittingTester.getAverageF1(), 0.57, 0.01);
-        assertEquals(0.5, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(splittingTester.getMacroF1(), 0.57, 0.01);
+        assertEquals(0.5, splittingTester.getMacroPrecision(), 0);
     }
 }

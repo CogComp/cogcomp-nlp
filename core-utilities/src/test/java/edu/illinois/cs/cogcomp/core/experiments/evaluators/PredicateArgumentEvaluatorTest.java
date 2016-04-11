@@ -36,14 +36,14 @@ public class PredicateArgumentEvaluatorTest {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluateSense(senseTester);
-        assertEquals(1.0, senseTester.getAverageF1(), 0);
+        assertEquals(1.0, senseTester.getMacroF1(), 0);
 
         // Override the sense
         predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluateSense(senseTester);
-        assertEquals(0.5, senseTester.getAverageF1(), 0);
+        assertEquals(0.5, senseTester.getMacroF1(), 0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class PredicateArgumentEvaluatorTest {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(argLabelTester);
-        assertEquals(1.0, argLabelTester.getAverageF1(), 0);
+        assertEquals(1.0, argLabelTester.getMacroF1(), 0);
 
         // Add a wrong prediction
         Constituent predicate = predicted.getPredicates().get(0);
@@ -61,6 +61,6 @@ public class PredicateArgumentEvaluatorTest {
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(argLabelTester);
-        assertEquals(0.92, argLabelTester.getAverageF1(), 0.1);
+        assertEquals(0.92, argLabelTester.getMacroF1(), 0.1);
     }
 }
