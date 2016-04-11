@@ -322,12 +322,13 @@ public class TreeView extends View {
 
         TextAnnotation ta = this.getTextAnnotation();
         if (start < ta.size()) {
-            if (!ta.getToken(start).equals(tokenInTree)) {
+            // Add a check in case the token is at the same position in multiple sentences
+            // (see unit test for such a case)
+            if (start < sentenceStart || !ta.getToken(start).equals(tokenInTree)) {
                 start += sentenceStart;
                 end += sentenceStart;
             }
         }
-
         return createNewConstituent(start, end, constituentLabel, treeScore);
     }
 
