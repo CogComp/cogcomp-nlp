@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.CoreferenceView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
