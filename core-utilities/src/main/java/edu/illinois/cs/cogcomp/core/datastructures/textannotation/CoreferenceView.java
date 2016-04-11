@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
@@ -20,7 +17,8 @@ public class CoreferenceView extends View {
 
     private static final long serialVersionUID = -5490913231260663181L;
 
-    public TIntIntHashMap canonicalEntitiesMap;
+    // TODO: remove this
+    protected TIntIntHashMap canonicalEntitiesMap;
 
     private static ITransformer<Relation, Constituent> relationsToConstituents;
 
@@ -99,6 +97,7 @@ public class CoreferenceView extends View {
     /**
      * Finds the representative elements for each cluster
      */
+    @Deprecated
     private void findCanonicalEntries() {
 
         if (this.canonicalEntitiesMap.size() > 0 || !this.modified)
@@ -120,6 +119,7 @@ public class CoreferenceView extends View {
         modified = false;
     }
 
+    @Deprecated
     public Set<Constituent> getCanonicalEntities() {
 
         findCanonicalEntries();
@@ -150,6 +150,7 @@ public class CoreferenceView extends View {
     /**
      * Given a constituent, it returns the canonical constituent which represents the cluster.
      */
+    @Deprecated
     public Constituent getCanonicalEntity(Constituent c) {
         findCanonicalEntries();
 
@@ -202,6 +203,7 @@ public class CoreferenceView extends View {
      * @param mention canonical mention
      * @return the connected constituents
      */
+    @Deprecated
     public List<Constituent> getCoreferentMentions(Constituent mention) {
         List<Constituent> myMentions =
                 (List<Constituent>) this.where(Queries.sameSpanAsConstituent(mention));

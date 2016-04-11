@@ -46,14 +46,12 @@ public class CorefBCubedEvaluator extends Evaluator {
         this.prediction = (CoreferenceView) prediction;
     }
 
+    /**
+     * The result will be populated in a ClassificationTester. Note that you can either use "micro" or "macro" statistics.
+     * It is more common to use "micro" statistics for BCubed metric.
+     */
     public void evaluate(ClassificationTester tester) {
-        // TODO
-    }
-
-    public void evaluate() {
         List<Constituent> allGoldConstituents = gold.getConstituents();
-        double precision = 0;
-        double recall = 0;
         for(Constituent cons : allGoldConstituents) {
             HashSet<Constituent> overlappingGoldCanonicalCons = gold.getOverlappingChainsCanonicalMentions(cons);
             HashSet<Constituent> overlappingPredCanonicalCons = prediction.getOverlappingChainsCanonicalMentions(cons);
@@ -72,19 +70,7 @@ public class CorefBCubedEvaluator extends Evaluator {
                     goldCount += consInGoldCluster.size();
                 }
             }
-
-            precision += 1.0 * overlapCount / predCount;
-            recall += 1.0 * overlapCount / goldCount;
-            System.out.println("--- precision " + precision);
-            System.out.println("--- recall " + recall);
+            tester.recordCount(cons.toString(), goldCount, predCount, overlapCount);
         }
-        // normalize with the number of mentions
-        precision /= allGoldConstituents.size();
-        recall /= allGoldConstituents.size();
-
-        System.out.println("precision = ");
-        System.out.println(precision);
-        System.out.println("recall = ");
-        System.out.println(recall);
     }
 }
