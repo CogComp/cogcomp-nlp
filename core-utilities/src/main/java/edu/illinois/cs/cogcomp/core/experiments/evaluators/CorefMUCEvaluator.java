@@ -26,54 +26,48 @@ public class CorefMUCEvaluator extends Evaluator {
     }
 
     public void evaluate(ClassificationTester tester) {
-        // TODO
-    }
-
-     public void evaluate() {
         // Recall = \sum_i [ |si| - |pOfsi| ] / \sum_i [ |si| - 1 ]
         // where si is a true cluster, pOfsi is the set of predicted
         // clusters that contain elements of si (i.e. number of predicted clusters having some overlap with
         // this gold cluster)
-        int numerator = 0;
-        int denominator = 0;
+        int numerator1 = 0;
+        int denominator1 = 0;
          for(Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations() ) {
-            HashSet consInGoldCluster =  new HashSet(gold.getCoreferentMentions(goldCanonicalCons));
+            HashSet consInGoldCluster =  new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
             for(Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
-                HashSet consInPredCluster = new HashSet(prediction.getCoreferentMentions(predCanonicalCons));
+                HashSet consInPredCluster = new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
                 Set<String> intersection = new HashSet(consInGoldCluster);
                 intersection.retainAll(consInPredCluster);
                 if(!intersection.isEmpty())
-                    numerator -= 1;
+                    numerator1 -= 1;
             }
-            numerator += consInGoldCluster.size();
-            denominator += consInGoldCluster.size() - 1;
+            numerator1 += consInGoldCluster.size();
+            denominator1 += consInGoldCluster.size() - 1;
         }
-         System.out.println(numerator);
-         System.out.println(denominator);
-        double recall = 1.0 * numerator / denominator;
+
+        double recall = 1.0 * numerator1 / denominator1;
 
         // Precision is defined dually by reversing the roles of gold and prediction
         // Precision = \sum_i [ |siprime| - |pOfsiprime| ] / \sum_i [ |siprime| - 1 ]
         // where siprime is a predicted cluster, pOfsiprime is the set of
         // true clusters that contain elements of siprime.
-        numerator = 0;
-        denominator = 0;
+        int numerator2 = 0;
+        int denominator2 = 0;
         for(Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations() ) {
-            HashSet consInPredCluster =  new HashSet(prediction.getCoreferentMentions(predCanonicalCons));
+            HashSet consInPredCluster =  new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
             for(Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
-                HashSet consInGoldCluster = new HashSet(gold.getCoreferentMentions(goldCanonicalCons));
+                HashSet consInGoldCluster = new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
                 Set<String> intersection = new HashSet(consInPredCluster);
                 intersection.retainAll(consInGoldCluster);
                 if(!intersection.isEmpty())
-                    numerator -= 1;
+                    numerator2 -= 1;
             }
-            numerator += consInPredCluster.size();
-            denominator += consInPredCluster.size() - 1;
+            numerator2 += consInPredCluster.size();
+            denominator2 += consInPredCluster.size() - 1;
         }
-        double precision = 1.0 * numerator / denominator;
-         System.out.println("precision = ");
-         System.out.println(precision);
-         System.out.println("recall = ");
-         System.out.println(recall);
+        double precision = 1.0 * numerator2 / denominator2;
+
+        assert (numerator1 == numerator2);
+        tester.recordCount("coref", denominator1, denominator2, numerator1);
      }
 }

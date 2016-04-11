@@ -159,6 +159,9 @@ public class CoreferenceView extends View {
         return this.constituents.get(cId);
     }
 
+    /**
+     * Given a constituent, it returns the canonical constituent which represents the cluster.
+     */
     public Constituent getCanonicalEntityViaRelation(Constituent c) {
         List<Relation> incomingRelations = getFilteredIncomingRelations(c);
 
@@ -172,6 +175,9 @@ public class CoreferenceView extends View {
         return incomingRelations.get(0).source;
     }
 
+    /**
+     * Given a constituent, it returns the canonical constituents which represents the cluster.
+     */
     public Set<Constituent> getCanonicalEntitySetViaRelation(Constituent c) {
         List<Relation> incomingRelations = getFilteredIncomingRelations(c);
 
@@ -219,14 +225,18 @@ public class CoreferenceView extends View {
         return Mappers.map(getFilteredOutgoingRelations(canonicalEntity), relationsToConstituents);
     }
 
+    /**
+     * Returns ALL the constituents in a single chain characterized by its canonical constituent
+     */
     public Set<Constituent> getCoreferentMentionsViaRelations(Constituent mention) {
         Set<Constituent> canonicalMentionSet = getCanonicalEntitySetViaRelation(mention);
         Set<Constituent> coreferentMentions = new HashSet<>();
         for(Constituent c : canonicalMentionSet) {
-            for(Relation r: c.getOutgoingRelations()) {
+            for(Relation r: getFilteredOutgoingRelations(c)) {
                 coreferentMentions.add(r.target);
             }
         }
+        coreferentMentions.addAll(canonicalMentionSet);
         return coreferentMentions;
     }
 

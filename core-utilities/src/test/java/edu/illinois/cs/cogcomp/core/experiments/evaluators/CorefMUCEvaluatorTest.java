@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,7 +32,6 @@ public class CorefMUCEvaluatorTest {
         tokens.add(toks);
         TextAnnotation dummyTextAnnotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokens);
         List<Constituent> allCons = dummyTextAnnotation.getView(ViewNames.TOKENS).getConstituents();
-        //System.out.println();
         gold = new CoreferenceView("gold", dummyTextAnnotation);
         gold.addCorefEdges(allCons.get(0), allCons.subList(1, 5));
         gold.addCorefEdges(allCons.get(5), allCons.subList(6, 7));
@@ -42,27 +42,24 @@ public class CorefMUCEvaluatorTest {
         predicted.addCorefEdges(allCons.get(0), allCons.subList(7, 12));
         predicted.addCorefEdges(allCons.get(5), allCons.subList(6, 7));
         dummyTextAnnotation.addView("predicted", predicted);
-        System.out.println(predicted);
-        System.out.println(predicted.getCanonicalEntitiesViaRelations());
     }
 
     @Test
     public void testScores() throws Exception {
         ClassificationTester mucTester = new ClassificationTester();
-        for(Constituent c : predicted.getConstituents()) {
-            System.out.println(predicted.getCoreferentMentionsViaRelations(c));
-        }
         CorefMUCEvaluator mucEvaluator = new CorefMUCEvaluator();
         mucEvaluator.setViews(gold, predicted);
-        mucEvaluator.evaluate();
+        mucEvaluator.evaluate(mucTester);
+        assertEquals(mucTester.getAvgMicroF1(), 0.94, 0.01);
+        assertEquals(mucTester.getAvgMicroPrecision(), 0.9, 0.01);
+        assertEquals(mucTester.getAvgMicroRecall(), 1.0, 0.01);
 
         ClassificationTester bcubedTester = new ClassificationTester();
         CorefBCubedEvaluator bcubedEvaluator = new CorefBCubedEvaluator();
         bcubedEvaluator.setViews(gold, predicted);
         bcubedEvaluator.evaluate(bcubedTester);
-
-        assertEquals(bcubedTester.getAvgMicroF1(), 0.83, 0.1);
-        assertEquals(bcubedTester.getAvgMicroPrecision(), 0.76, 0.1);
-        assertEquals(bcubedTester.getAvgMicroRecall(), 1.0, 0.1);
+        assertEquals(bcubedTester.getAvgMicroF1(), 0.73, 0.01);
+        assertEquals(bcubedTester.getAvgMicroPrecision(), 0.58, 0.01);
+        assertEquals(bcubedTester.getAvgMicroRecall(), 1.0, 0.01);
     }
 }
