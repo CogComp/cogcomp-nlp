@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.io.File;
@@ -120,6 +121,11 @@ public class SimpleCachingPipeline implements AnnotatorService {
         return textAnnotationBuilder.createTextAnnotation(corpusId, docId, text);
     }
 
+    @Override
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        return null;
+    }
+
 
     public TextAnnotation createBasicTextAnnotation( String corpusId, String docId,
                                                      List<String[]> tokenizedSentences) throws AnnotatorException {
@@ -210,6 +216,11 @@ public class SimpleCachingPipeline implements AnnotatorService {
     }
 
     @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        return null;
+    }
+
+    @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Set<String> viewsToAnnotate) throws AnnotatorException {
 
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
@@ -217,6 +228,11 @@ public class SimpleCachingPipeline implements AnnotatorService {
         ta = addViewsAndCache(ta, viewsToAnnotate);
 
         return ta;
+    }
+
+    @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+        return null;
     }
 
     public boolean addAnnotator(Annotator annotator)
