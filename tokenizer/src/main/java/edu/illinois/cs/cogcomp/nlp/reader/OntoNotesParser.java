@@ -30,46 +30,46 @@ public class OntoNotesParser {
             String currentLine, eachPlainSentence = "";
 
             OntoNotesDataModel currentDataModel = new OntoNotesDataModel();
-            sentences = new ArrayList<OntoNotesDataModel>();
+            sentences = new ArrayList<>();
 
-            bufferedReader = new BufferedReader(new FileReader("./data/"+fileName));
+            bufferedReader = new BufferedReader(new FileReader("./data/" + fileName));
 
             while ((currentLine = bufferedReader.readLine()) != null) {
-                if (currentLine.equals("Plain sentence:")) {
-                    plainSentenceFlag = true;
-                    eachPlainSentence = "";
-                }
-                else if (currentLine.equals("Treebanked sentence:")) {
-                    plainSentenceFlag = false;
-                    plainSentenceCount = 0;
-                    currentDataModel.setPlainSentence(eachPlainSentence);
-                    sentences.add(currentDataModel);
-                    //System.out.println(eachPlainSentence+"\n");
-                }
-                else if (currentLine.equals("Leaves:")) {
-                    leavesFlag = true;
+                switch (currentLine) {
+                    case "Plain sentence:":
+                        plainSentenceFlag = true;
+                        eachPlainSentence = "";
+                        break;
+                    case "Treebanked sentence:":
+                        plainSentenceFlag = false;
+                        plainSentenceCount = 0;
+                        currentDataModel.setPlainSentence(eachPlainSentence);
+                        sentences.add(currentDataModel);
+                        // System.out.println(eachPlainSentence+"\n");
+                        break;
+                    case "Leaves:":
+                        leavesFlag = true;
+                        break;
                 }
                 if (plainSentenceFlag) {
-                    plainSentenceCount ++;
-                    if (plainSentenceCount == 3 && ! currentLine.equals("")) {
+                    plainSentenceCount++;
+                    if (plainSentenceCount == 3 && !currentLine.equals("")) {
                         eachPlainSentence += currentLine.substring(4);
-                    }
-                    else if (plainSentenceCount > 3 && ! currentLine.equals("")) {
+                    } else if (plainSentenceCount > 3 && !currentLine.equals("")) {
                         eachPlainSentence += currentLine.substring(3);
                     }
                 }
                 if (leavesFlag) {
-                    leavesCount ++;
+                    leavesCount++;
                     if (leavesCount > 2) {
-                        if (! currentLine.equals("")) {
-                            if (!currentLine.substring(0,9).equals("         ")) {
+                        if (!currentLine.equals("")) {
+                            if (!currentLine.substring(0, 9).equals("         ")) {
                                 if (currentLine.charAt(8) != '*') {
                                     currentDataModel.addAToken(currentLine.substring(8));
-                                    //System.out.println("[" + currentLine.substring(8) + "]");
+                                    // System.out.println("[" + currentLine.substring(8) + "]");
                                 }
                             }
-                        }
-                        else {
+                        } else {
                             leavesFlag = false;
                             leavesCount = 0;
                             currentDataModel = new OntoNotesDataModel();
@@ -91,11 +91,12 @@ public class OntoNotesParser {
         Utility.computeCharacterOffsets(sentences);
 
         for (OntoNotesDataModel eachEntry : sentences) {
-            System.out.println(eachEntry.getPlainSentence()+"\n");
-            System.out.println(eachEntry.getTokens().toString()+"\n");
-            System.out.println(eachEntry.getStartOffsets().toString()+"\n");
-            System.out.println(eachEntry.getEndOffsets().toString()+"\n");
-            System.out.println("start: "+eachEntry.getSentenceStartOffset()+", end: "+eachEntry.getSentenceEndOffset()+"\n\n");
+            System.out.println(eachEntry.getPlainSentence() + "\n");
+            System.out.println(eachEntry.getTokens().toString() + "\n");
+            System.out.println(eachEntry.getStartOffsets().toString() + "\n");
+            System.out.println(eachEntry.getEndOffsets().toString() + "\n");
+            System.out.println("start: " + eachEntry.getSentenceStartOffset() + ", end: "
+                    + eachEntry.getSentenceEndOffset() + "\n\n");
         }
     }
 
@@ -125,7 +126,7 @@ public class OntoNotesParser {
         jsonObject.put("sentences", sentencesArray);
 
         try {
-            FileWriter file = new FileWriter("./data/"+fileName);
+            FileWriter file = new FileWriter("./data/" + fileName);
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             JsonParser jp = new JsonParser();
             JsonElement je = jp.parse(JSONValue.toJSONString(jsonObject));

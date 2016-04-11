@@ -38,9 +38,9 @@ public class GoogleNgramsCounts extends CachedNgramCounter {
 
                 LineIO.write(tmpFile, item);
 
-                String command = ngramProgram + " -f " + tmpFile + " -n "
-                        + numTokens + " -g " + outputFile + " -z "
-                        + googleNgramsDataDir + "/" + numTokens + "gms";
+                String command =
+                        ngramProgram + " -f " + tmpFile + " -n " + numTokens + " -g " + outputFile
+                                + " -z " + googleNgramsDataDir + "/" + numTokens + "gms";
                 ShellInterface.executeCommandWithOutput(command);
 
                 ArrayList<String> read = LineIO.read(outputFile);

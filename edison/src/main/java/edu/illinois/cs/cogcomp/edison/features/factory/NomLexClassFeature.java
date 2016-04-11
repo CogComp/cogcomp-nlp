@@ -16,68 +16,67 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Adds NomLex based features. If the input constituent contiains an attribute
- * called {@link CoNLLColumnFormatReader#LemmaIdentifier}, the corresponding
- * value is used to identify the features. Otherwise, the lemma of the last
- * token is used. If the lemma is not an element of NomLex, then the last token
- * (lower cased) is tested. If NomLex does not contain the last token, then an
- * indicator feature is added that this token is not a member of NomLex.
- * <p/>
+ * Adds NomLex based features. If the input constituent contiains an attribute called
+ * {@link CoNLLColumnFormatReader#LemmaIdentifier}, the corresponding value is used to identify the
+ * features. Otherwise, the lemma of the last token is used. If the lemma is not an element of
+ * NomLex, then the last token (lower cased) is tested. If NomLex does not contain the last token,
+ * then an indicator feature is added that this token is not a member of NomLex.
+ * <p>
  * When the NomLex entry is found, the following features are added:
  * <ul>
  * <li>Nom class</li>
- * <li>For verbal and adjectival nominalizations, the underlying verb (or
- * adjective).</li>
+ * <li>For verbal and adjectival nominalizations, the underlying verb (or adjective).</li>
  * </ul>
- * <p/>
- * <p/>
- * <p/>
+ * <p>
+ * <p>
+ * <p>
  * <b>Note</b>: To use this feature, NomLexReader.nomLexFile must be set.
  *
  * @author Vivek Srikumar
  */
 public class NomLexClassFeature implements FeatureExtractor {
 
-	private static final DiscreteFeature DE_ADJECTIVAL = DiscreteFeature.create("nom-adj");
-	private static final DiscreteFeature DE_VERBAL = DiscreteFeature.create("nom-vb");
-	public static NomLexClassFeature instance = new NomLexClassFeature();
+    private static final DiscreteFeature DE_ADJECTIVAL = DiscreteFeature.create("nom-adj");
+    private static final DiscreteFeature DE_VERBAL = DiscreteFeature.create("nom-vb");
+    public static NomLexClassFeature instance = new NomLexClassFeature();
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-		int tokenId = c.getEndSpan() - 1;
-		TextAnnotation ta = c.getTextAnnotation();
-		String predicateWord = ta.getToken(tokenId).toLowerCase().trim();
-		String predicateLemma;
-		if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier))
-			predicateLemma = c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
-		else predicateLemma = WordHelpers.getLemma(ta, tokenId);
+        int tokenId = c.getEndSpan() - 1;
+        TextAnnotation ta = c.getTextAnnotation();
+        String predicateWord = ta.getToken(tokenId).toLowerCase().trim();
+        String predicateLemma;
+        if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier))
+            predicateLemma = c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+        else
+            predicateLemma = WordHelpers.getLemma(ta, tokenId);
 
-		NomLexReader nomLex = NomLexReader.getInstance();
+        NomLexReader nomLex = NomLexReader.getInstance();
 
-		List<NomLexEntry> nomLexEntries = nomLex.getNomLexEntries(predicateWord, predicateLemma);
+        List<NomLexEntry> nomLexEntries = nomLex.getNomLexEntries(predicateWord, predicateLemma);
 
-		Set<Feature> features = new LinkedHashSet<>();
-		if (nomLexEntries.size() > 0) {
-			for (NomLexEntry e : nomLexEntries) {
-				features.add(DiscreteFeature.create("nom-cls:" + e.nomClass));
+        Set<Feature> features = new LinkedHashSet<>();
+        if (nomLexEntries.size() > 0) {
+            for (NomLexEntry e : nomLexEntries) {
+                features.add(DiscreteFeature.create("nom-cls:" + e.nomClass));
 
-				if (NomLexEntry.VERBAL.contains(e.nomClass)) {
-					features.add(DE_VERBAL);
-					features.add(DiscreteFeature.create("nom-vb:" + e.verb));
-				} else if (NomLexEntry.ADJECTIVAL.contains(e.nomClass)) {
-					features.add(DE_ADJECTIVAL);
-					features.add(DiscreteFeature.create("nom-adj:" + e.adj));
-				}
-			}
-		}
+                if (NomLexEntry.VERBAL.contains(e.nomClass)) {
+                    features.add(DE_VERBAL);
+                    features.add(DiscreteFeature.create("nom-vb:" + e.verb));
+                } else if (NomLexEntry.ADJECTIVAL.contains(e.nomClass)) {
+                    features.add(DE_ADJECTIVAL);
+                    features.add(DiscreteFeature.create("nom-adj:" + e.adj));
+                }
+            }
+        }
 
-		return features;
-	}
+        return features;
+    }
 
-	@Override
-	public String getName() {
-		return "#nomlex#";
-	}
+    @Override
+    public String getName() {
+        return "#nomlex#";
+    }
 
 }

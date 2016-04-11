@@ -2,7 +2,7 @@ package edu.illinois.cs.cogcomp.core.experiments;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Aug 4, 2010
  */
 public interface IExperimentFactory<T> {

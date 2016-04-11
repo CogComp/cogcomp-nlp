@@ -10,13 +10,14 @@ public class CoreConfigNames {
     public static final String CURATOR_FORCE_UPDATE = "curatorForceUpdate";
 
     // CuratorClient flags
-    /** If set to {@code true}, the output will be a Curator {@link Record} instead of a {@link TextAnnotation}. */
-    public static final String USE_RECORDS = "useRecords";
     /** If set to {@code true}, the input text will be assumed to be pre-tokenized */
     public static final String RESPECT_TOKENIZATION = "respectTokenization";
     /** A comma-separated list of views to add (see {@link ViewNames} for a complete list of views. */
     public static final String VIEWS_TO_ADD = "viewsToAdd";
-    /** Use this option to output the annotated {@link Record}/{@link TextAnnotation} as plain text (instead of serialzed) */
+    /**
+     * Use this option to output the annotated {@link TextAnnotation} as plain text (instead of
+     * serialzed)
+     */
     public static final String OUTPUT_TO_TEXT = "outputToText";
     /** Force the Curator client to overwrite the generated output files */
     public static final String IS_FORCE_OVERWRITE = "forceUpdateOutputFile";

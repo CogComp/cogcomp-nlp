@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
- * This class contains the canonical strings used for naming standard views.
- * They are used both in Curator's views as well as {@link TextAnnotation} views
+ * This class contains the canonical strings used for naming standard views. They are used both in
+ * Curator's views as well as {@link TextAnnotation} views
  *
  * @author Vivek Srikumar
  * @author Christos Christodoulopoulos
@@ -61,13 +61,15 @@ public class ViewNames {
     public static final String WIKIFIER = "WIKIFIER";
 
     /**
-     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY}, {@link #CLAUSES_STANFORD}
+     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY},
+     *             {@link #CLAUSES_STANFORD}
      */
     @Deprecated
     public static final String CLAUSES = "CLAUSES";
 
     /**
-     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY}, {@link #PSEUDO_PARSE_STANFORD}
+     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY},
+     *             {@link #PSEUDO_PARSE_STANFORD}
      */
     @Deprecated
     public static final String PSEUDO_PARSE = "PSEUDO_PARSE";
@@ -88,6 +90,9 @@ public class ViewNames {
     public static final String PSEUDO_PARSE_CHARNIAK = "PSEUDO_PARSE_CHARNIAK";
     public static final String PSEUDO_PARSE_BERKELEY = "PSEUDO_PARSE_BERKELEY";
     public static final String PSEUDO_PARSE_STANFORD = "PSEUDO_PARSE_STANFORD";
+    public static final String GAZETTEER = "GAZETTEER";
+    public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
+    public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -105,9 +110,12 @@ public class ViewNames {
             case CLAUSES_CHARNIAK:
             case CLAUSES_STANFORD:
             case CLAUSES_BERKELEY:
+            case BROWN_CLUSTERS:
+            case GAZETTEER:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
+            case DEPENDENCY_HEADFINDER:
                 return ViewTypes.DEPENDENCY_VIEW;
             case PARSE_GOLD:
             case PARSE_CHARNIAK:

@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implements a naive list searcher, only for debugging purposes. For any
- * application, use {@link BoyerMooreHorspoolMatch}. If you are using this, then
- * you are doing something wrong.
+ * Implements a naive list searcher, only for debugging purposes. For any application, use
+ * {@link BoyerMooreHorspoolMatch}. If you are using this, then you are doing something wrong.
  *
  * @author Vivek Srikumar
  */
@@ -27,8 +26,7 @@ public class NaiveListMatcher<T> extends ListMatch<T> {
 
             boolean found = true;
             for (int patternId = 0; patternId < pattern.size(); patternId++) {
-                if (!text.get(textId + patternId)
-                        .equals(pattern.get(patternId))) {
+                if (!text.get(textId + patternId).equals(pattern.get(patternId))) {
                     System.out.println("...Not found");
                     found = false;
                     break;

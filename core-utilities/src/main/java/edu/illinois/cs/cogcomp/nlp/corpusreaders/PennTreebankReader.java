@@ -8,7 +8,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSFromParse;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
@@ -53,7 +53,7 @@ public class PennTreebankReader extends TextAnnotationReader {
     /**
      * Reads all the sections of the combined annotation from penn treebank
      *
-     * @param treebankHome  The directory that points to the merged (mrg) files of the WSJ portion
+     * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      * @param parseViewName The name of the parse view which is to be added
      */
     public PennTreebankReader(String treebankHome, String parseViewName) throws Exception {
@@ -74,7 +74,8 @@ public class PennTreebankReader extends TextAnnotationReader {
      *
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
-    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName) throws Exception {
+    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
+            throws Exception {
         super(PENN_TREEBANK_WSJ);
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
@@ -116,10 +117,8 @@ public class PennTreebankReader extends TextAnnotationReader {
         if (currentSectionId < sections.length)
             return true;
 
-        if (currentFileId < currentSectionFiles.length)
-            return true;
+        return currentFileId < currentSectionFiles.length;
 
-        return false;
     }
 
     protected TextAnnotation makeTextAnnotation() throws AnnotatorException {
@@ -142,9 +141,9 @@ public class PennTreebankReader extends TextAnnotationReader {
             }
 
             try {
-                lines = LineIO.read(combinedWSJHome + "/"
-                        + sections[currentSectionId - 1] + "/"
-                        + currentSectionFiles[currentFileId++]);
+                lines =
+                        LineIO.read(combinedWSJHome + "/" + sections[currentSectionId - 1] + "/"
+                                + currentSectionFiles[currentFileId++]);
                 treeInFile = 0;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -172,8 +171,9 @@ public class PennTreebankReader extends TextAnnotationReader {
             if (first) {
                 first = false;
 
-                line = line.substring(0, line.indexOf("(") + 1) + TOP_LABEL
-                        + line.substring(line.indexOf("(") + 1);
+                line =
+                        line.substring(0, line.indexOf("(") + 1) + TOP_LABEL
+                                + line.substring(line.indexOf("(") + 1);
             }
 
             int numOpenParen = line.replaceAll("[^\\(]", "").length();
@@ -187,18 +187,21 @@ public class PennTreebankReader extends TextAnnotationReader {
                 break;
         }
 
-        Tree<String> tree = TreeParserFactory.getStringTreeParser().parse(
-                sb.toString().replaceAll("\\\\/", "/"));
+        Tree<String> tree =
+                TreeParserFactory.getStringTreeParser().parse(
+                        sb.toString().replaceAll("\\\\/", "/"));
 
         String[] text = ParseUtils.getTerminalStringSentence(tree);
 
-        String id = "wsj/" + sections[currentSectionId - 1] + "/"
-                + currentSectionFiles[currentFileId - 1] + ":" + treeInFile;
+        String id =
+                "wsj/" + sections[currentSectionId - 1] + "/"
+                        + currentSectionFiles[currentFileId - 1] + ":" + treeInFile;
 
         treeInFile++;
 
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(PENN_TREEBANK_WSJ, id,
-                Collections.singletonList(text));
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(PENN_TREEBANK_WSJ, id,
+                        Collections.singletonList(text));
 
         TreeView parse = new TreeView(parseViewName, "PTB-GOLD", ta, 1.0);
         parse.setParseTree(0, tree);
@@ -206,11 +209,10 @@ public class PennTreebankReader extends TextAnnotationReader {
         ta.addView(parseViewName, parse);
 
         POSFromParse pos = new POSFromParse(parseViewName);
-        ta.addView( pos );
+        ta.addView(pos);
 
         return ta;
     }
 
-    public void remove() {
-    }
+    public void remove() {}
 }

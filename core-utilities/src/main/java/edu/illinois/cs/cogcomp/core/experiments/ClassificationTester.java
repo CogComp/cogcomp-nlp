@@ -9,8 +9,8 @@ import edu.illinois.cs.cogcomp.core.utilities.Table;
 import java.util.*;
 
 /**
- * A class for recording results of experiments. This can be used to generate a
- * result table with one row per label and a confusion table.
+ * A class for recording results of experiments. This can be used to generate a result table with
+ * one row per label and a confusion table.
  *
  * @author Vivek Srikumar
  */
@@ -72,7 +72,6 @@ public class ClassificationTester {
         record.incrementCorrect(correctCount);
         record.incrementGold(goldCount);
         record.incrementPredicted(predictedCount);
-
     }
 
     public void record(String goldLabel, String predictedLabel) {
@@ -160,13 +159,12 @@ public class ClassificationTester {
     }
 
     public Table getPerformanceTable(boolean printCounts) {
-        return getPerformanceTable(printCounts, labelWiseRecords, evalRecord,
-                significance);
+        return getPerformanceTable(printCounts, labelWiseRecords, evalRecord, significance);
     }
 
     private Table getPerformanceTable(boolean printCounts,
-                                      Map<String, EvaluationRecord> labelWiseRecords,
-                                      EvaluationRecord evalRecord, Map<String, ShufflingBasedStatisticalSignificance> significance) {
+            Map<String, EvaluationRecord> labelWiseRecords, EvaluationRecord evalRecord,
+            Map<String, ShufflingBasedStatisticalSignificance> significance) {
         Table table = new Table();
         table.addColumn("Label");
 
@@ -202,8 +200,8 @@ public class ClassificationTester {
         return table;
     }
 
-    private String[] getRow(String label, EvaluationRecord record,
-                            boolean printCounts, Map<String, ShufflingBasedStatisticalSignificance> significance) {
+    private String[] getRow(String label, EvaluationRecord record, boolean printCounts,
+            Map<String, ShufflingBasedStatisticalSignificance> significance) {
 
         String c2;
         String c3;
@@ -225,24 +223,24 @@ public class ClassificationTester {
 
             assert sig != null;
 
-            prec = attachSignificance(record.getPrecision(),
-                    sig.precisionSignificance(), sig.precisionSign());
+            prec =
+                    attachSignificance(record.getPrecision(), sig.precisionSignificance(),
+                            sig.precisionSign());
 
-            rec = attachSignificance(record.getRecall(),
-                    sig.recallSignificance(), sig.recallSign());
+            rec =
+                    attachSignificance(record.getRecall(), sig.recallSignificance(),
+                            sig.recallSign());
 
-            f1 = attachSignificance(record.getF1(), sig.f1Significance(),
-                    sig.f1Sign());
+            f1 = attachSignificance(record.getF1(), sig.f1Significance(), sig.f1Sign());
 
         } else {
-            prec = StringUtils.getFormattedString(record.getPrecision() * 100,
-                    2);
+            prec = StringUtils.getFormattedString(record.getPrecision() * 100, 2);
             rec = StringUtils.getFormattedString(record.getRecall() * 100, 2);
             f1 = StringUtils.getFormattedString(record.getF1() * 100, 2);
 
         }
 
-        return new String[]{label, c2, c3, c4, prec, rec, f1};
+        return new String[] {label, c2, c3, c4, prec, rec, f1};
     }
 
     private String attachSignificance(double e, double d, double sign) {
@@ -269,8 +267,8 @@ public class ClassificationTester {
     }
 
     /**
-     * Statistical significance information. Takes map from label to p-values
-     * for {P, R, F} for that label.
+     * Statistical significance information. Takes map from label to p-values for {P, R, F} for that
+     * label.
      */
     public void setSignificanceInfo(Map<String, ShufflingBasedStatisticalSignificance> significance) {
         this.significance = significance;

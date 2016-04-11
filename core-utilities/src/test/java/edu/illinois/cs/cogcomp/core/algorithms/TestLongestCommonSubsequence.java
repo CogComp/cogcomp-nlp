@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Vivek Srikumar
- *         <p/>
- *         Jul 7, 2009
+ * @author Vivek Srikumar Jul 7, 2009
  */
 public class TestLongestCommonSubsequence extends TestCase {
 
@@ -31,8 +29,7 @@ public class TestLongestCommonSubsequence extends TestCase {
 
         for (IntPair obj : match) {
 
-            assertEquals(s1.charAt(obj.getFirst() - 1),
-                    s2.charAt(obj.getSecond() - 1));
+            assertEquals(s1.charAt(obj.getFirst() - 1), s2.charAt(obj.getSecond() - 1));
         }
     }
 
@@ -40,8 +37,7 @@ public class TestLongestCommonSubsequence extends TestCase {
         String s1 = "Mr. John Smith-Murray died at Denver, CO.";
         String s2 = "Mr. John Smith - Murray died at Denver , CO .";
 
-        Map<Integer, Integer> match = LongestCommonSubsequence
-                .getCharacterLCSMap(s1, s2);
+        Map<Integer, Integer> match = LongestCommonSubsequence.getCharacterLCSMap(s1, s2);
 
         for (int i = 0; i < s1.length(); i++) {
             assertEquals(s1.charAt(i), s2.charAt(match.get(i + 1) - 1));
@@ -53,14 +49,14 @@ public class TestLongestCommonSubsequence extends TestCase {
         String strA = "ABABAB";
         String strB = "BABA";
 
-        List<String> sequence1 = splitStringToChars( strA );
-        List<String> sequence2 = splitStringToChars( strB );
+        List<String> sequence1 = splitStringToChars(strA);
+        List<String> sequence2 = splitStringToChars(strB);
 
         String[] results;
 
 
 
-        results = new String[]{"B", "A", "B", "A"};
+        results = new String[] {"B", "A", "B", "A"};
 
         LongestCommonSubsequence<String> lcsMatcher = new LongestCommonSubsequence<>();
 
@@ -70,10 +66,10 @@ public class TestLongestCommonSubsequence extends TestCase {
     }
 
     private static List<String> splitStringToChars(String str) {
-        List< String > split = new ArrayList<>( str.length() );
+        List<String> split = new ArrayList<>(str.length());
 
-        for ( int i = 0; i < str.length(); ++i )
-            split.add( str.substring( i, i+1 ) );
+        for (int i = 0; i < str.length(); ++i)
+            split.add(str.substring(i, i + 1));
         return split;
     }
 

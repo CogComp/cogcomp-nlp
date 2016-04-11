@@ -10,7 +10,7 @@ import java.util.Stack;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class DepthFirstSearch<T> extends GraphSearch<T> {
@@ -19,7 +19,6 @@ public class DepthFirstSearch<T> extends GraphSearch<T> {
         super(new Queue<T>() {
 
             Stack<T> stack = new Stack<>();
-            ;
 
             public T element() {
                 return stack.peek();

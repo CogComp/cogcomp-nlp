@@ -9,9 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Vivek Srikumar
- *         <p/>
- *         Jun 23, 2009
+ * @author Vivek Srikumar Jun 23, 2009
  */
 public class TreeGrepTest extends TestCase {
 
@@ -23,14 +21,15 @@ public class TreeGrepTest extends TestCase {
 
         TreeParser<String> parser = TreeParserFactory.getStringTreeParser();
 
-        String treeString = "(A (A (B E)       C)   (B (E (D F)	 A)      F)   (C (A (B F G)	 C	 E	 (D H)))   (D H)   (B F G))";
+        String treeString =
+                "(A (A (B E)       C)   (B (E (D F)	 A)      F)   (C (A (B F G)	 C	 E	 (D H)))   (D H)   (B F G))";
         // String treeString = "(D F)";
         tree = parser.parse(treeString);
 
-        String[] foundPatternStrings = new String[]{"(D F)", "A", "(A B)",
-                "(B E)", "(B F)", "(A B C)", "(D H)", "(A B C D)",
-                "(A (B F) C)", "(A (B E) C D)", "(B F G)", "(A (B E) C)",
-                "(A (B E))"};
+        String[] foundPatternStrings =
+                new String[] {"(D F)", "A", "(A B)", "(B E)", "(B F)", "(A B C)", "(D H)",
+                        "(A B C D)", "(A (B F) C)", "(A (B E) C D)", "(B F G)", "(A (B E) C)",
+                        "(A (B E))"};
 
         // String[] foundPatternStrings = new String[] { "(A B)" };
 
@@ -39,8 +38,7 @@ public class TreeGrepTest extends TestCase {
             foundPatterns.add(parser.parse(p));
         }
 
-        String[] notFoundPatternStrings = new String[]{"(A B D)", "(X)",
-                "(A (C E))"};
+        String[] notFoundPatternStrings = new String[] {"(A B D)", "(X)", "(A (C E))"};
         notFoundPatterns = new ArrayList<>();
         for (String p : notFoundPatternStrings) {
             notFoundPatterns.add(parser.parse(p));
@@ -76,8 +74,8 @@ public class TreeGrepTest extends TestCase {
         String[] endPatternStrings = {"(B F $$$)", "(A B C $$$)"};
 
         for (String endPatternString : endPatternStrings) {
-            Tree<String> endPattern = TreeParserFactory.getStringTreeParser()
-                    .parse(endPatternString);
+            Tree<String> endPattern =
+                    TreeParserFactory.getStringTreeParser().parse(endPatternString);
 
             TreeGrep<String> matcher = new TreeGrep<>(endPattern);
             boolean result = matcher.matches(tree);
@@ -94,8 +92,8 @@ public class TreeGrepTest extends TestCase {
         String[] startPatternStrings = {"(B ^^^ F)", "(A ^^^ B C)"};
 
         for (String startPatternString : startPatternStrings) {
-            Tree<String> startPattern = TreeParserFactory.getStringTreeParser()
-                    .parse(startPatternString);
+            Tree<String> startPattern =
+                    TreeParserFactory.getStringTreeParser().parse(startPatternString);
 
             TreeGrep<String> matcher = new TreeGrep<>(startPattern);
             boolean result = matcher.matches(tree);
