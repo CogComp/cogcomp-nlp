@@ -1,13 +1,10 @@
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ConstituentLabelingEvaluator extends Evaluator {
