@@ -18,7 +18,7 @@ O            0.000  0.000  0.000   1273   1239
 Overall     93.377 93.510 93.443  23852  23886
 Accuracy    88.772   -      -      -     25125
 
-Model 3.0.25, test with no POS: (conll format, test.noPOStxt)
+Model 3.0.25, test with no POS (illinois-pos-models:3.0.12) : (conll format, test.noPOStxt)
 
  Label   Precision Recall   F1   LCount PCount
 ----------------------------------------------
