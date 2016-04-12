@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 // MUC: P:	0.9  -  R:	1.0  - F:   0.947
 // b3Element:  P:	0.583 -  R:  1.0 - F:  0.737
 // b3Cluster:  P:   0.75  -  R:  1.0 - F:  0.857
-public class CorefMUCEvaluatorTest {
+public class CorefEvaluatorTest {
     CoreferenceView gold, predicted;
     ClassificationTester senseTester, argLabelTester;
 

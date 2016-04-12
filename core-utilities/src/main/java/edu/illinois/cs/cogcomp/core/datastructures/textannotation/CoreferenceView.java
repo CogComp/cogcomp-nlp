@@ -34,8 +34,6 @@ public class CoreferenceView extends View {
         };
     }
 
-    private List<Constituent> canonicalMentions;
-
     /**
      * Create a new CoreferenceView with default {@link #viewGenerator} and {@link #score}.
      */
@@ -45,7 +43,7 @@ public class CoreferenceView extends View {
 
     public CoreferenceView(String viewName, String viewGenerator, TextAnnotation text, double score) {
         super(viewName, viewGenerator, text, score);
-        canonicalMentions = new ArrayList<>();
+
         canonicalEntitiesMap = new TIntIntHashMap();
     }
 
@@ -78,7 +76,6 @@ public class CoreferenceView extends View {
         int canonicalMentionId = this.constituents.indexOf(canonicalMention);
 
         canonicalEntitiesMap.put(canonicalMentionId, canonicalMentionId);
-        canonicalMentions.add(canonicalMention);
 
         int i = 0;
         for (Constituent c : coreferentMentions) {
@@ -138,8 +135,15 @@ public class CoreferenceView extends View {
         return cc;
     }
 
-    public List<Constituent> getCanonicalEntitiesViaRelations() {
-        return canonicalMentions;
+    public Set<Constituent> getCanonicalEntitiesViaRelations() {
+        HashSet<Constituent> canonicalConstituents = new HashSet<>();
+        for (Constituent cc : this.getConstituents()) {
+            List<Relation> incomingRelations = getFilteredIncomingRelations(cc);
+            for(Relation r : incomingRelations) {
+                canonicalConstituents.add(r.source);
+            }
+        }
+        return canonicalConstituents;
     }
 
     /**
@@ -283,7 +287,6 @@ public class CoreferenceView extends View {
     @Override
     public void removeAllConsituents() {
         constituents.clear();
-        canonicalMentions.clear();
         removeAllRelations();
     }
 }
