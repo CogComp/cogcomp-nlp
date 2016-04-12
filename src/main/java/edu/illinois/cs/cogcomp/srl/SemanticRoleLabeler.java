@@ -9,7 +9,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
-import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -53,8 +52,7 @@ public class SemanticRoleLabeler extends Annotator {
 			else {
 				for (SRLType type : SRLType.values()) {
 					srlType = type.name();
-					srlLabelers
-							.add(new SemanticRoleLabeler(rm, srlType, true));
+					srlLabelers.add(new SemanticRoleLabeler(rm, srlType, true));
 				}
 			}
 		} catch (Exception e) {
@@ -81,7 +79,8 @@ public class SemanticRoleLabeler extends Annotator {
 				}
 
 				for (SemanticRoleLabeler srl : srlLabelers) {
-					System.out.println(srl.getSRLCuratorName());
+					if (srlLabelers.size() > 1)
+						System.out.println(srl.getViewName());
 
 					PredicateArgumentView p;
 					try {
@@ -104,7 +103,6 @@ public class SemanticRoleLabeler extends Annotator {
 	}
 
 	public SemanticRoleLabeler(ResourceManager rm, String srlType) throws Exception {
-
 		this(rm, srlType, false);
 	}
 
@@ -167,13 +165,7 @@ public class SemanticRoleLabeler extends Annotator {
 
 		if (predicates.isEmpty())
 			return null;
-		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
-		try {
-			s.getSolver();
-		}
-		catch (UnsatisfiedLinkError e) {
-			s = new ILPSolverFactory(SolverType.OJAlgo);
-		}
+		ILPSolverFactory s = new ILPSolverFactory(properties.getILPSolverType(false));
         SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
 		return inference.getOutputView();
@@ -187,7 +179,6 @@ public class SemanticRoleLabeler extends Annotator {
 				throw new AnnotatorException("Missing required view: " + view);
 			}
 		}
-
 		try {
             View srlView = getSRL(ta);
             ta.addView( getViewName(), srlView);

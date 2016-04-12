@@ -1,6 +1,7 @@
 package edu.illinois.cs.cogcomp.srl;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -16,7 +17,6 @@ public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
 	private static SRLProperties theInstance;
 	private ResourceManager config;
-
 
     /**
      * configFile must have all parameters set, ideally using the SrlConfigurator class.
@@ -175,4 +175,19 @@ public class SRLProperties {
 	public String getPipelineConfig() {
         return this.config.getString("PipelineConfig");
     }
+
+	public ILPSolverFactory.SolverType getILPSolverType(boolean isEvaluating) {
+		String solver = config.getString("ILPSolver");
+		switch (solver) {
+			case "Gurobi":
+				if (isEvaluating)
+					return ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi;
+				else return ILPSolverFactory.SolverType.Gurobi;
+			case "OJAlgo":
+				return ILPSolverFactory.SolverType.OJAlgo;
+			default:
+				log.info("Using default ILP Solver: OJAlgo");
+				return ILPSolverFactory.SolverType.OJAlgo;
+		}
+	}
 }

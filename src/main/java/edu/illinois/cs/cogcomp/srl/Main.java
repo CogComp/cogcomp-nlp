@@ -459,7 +459,7 @@ public class Main {
 
 		Dataset testSet = Dataset.PTBTest;
 
-		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
+		ILPSolverFactory solver = new ILPSolverFactory(properties.getILPSolverType(true));
 
 		String outDir = properties.getOutputDir();
 		PrintWriter goldWriter = null, predWriter = null;
