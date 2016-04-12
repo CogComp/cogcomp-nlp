@@ -5,7 +5,8 @@ by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.
 
 To include one of the modules in your Maven project, add the following snippet with the
 `#modulename#` and `#version` entries replaced with the relevant module name and the 
-version listed in this project's pom.xml file:
+version listed in this project's pom.xml file. Note that you also add to need the
+`<repository` element for the CogComp maven repository in the `<repositories>` element.
  
  ```
      <dependencies>
@@ -15,6 +16,17 @@ version listed in this project's pom.xml file:
              <artifactId>#modulename#</artifactId>
              <version>#version#</version>
          </dependency>
+         ...
+     </dependencies>
+     ...
+     <repositories>
+         <repository>
+             <id>CogcompSoftware</id>
+             <name>CogcompSoftware</name>
+             <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+         </repository>
+     </repositories>
+
 ```
 
 
