@@ -1,3 +1,6 @@
+Version 5.1.12
+Added Windows support (including access to non-Gurobi solver)
+
 Version 5.1.4
 Switched entirely to illinois-sl for structured prediction (removed JLIS traces)
 Using the latest AnnotatorService from illinois-core-utilities for both Curator & pipeline annotation
