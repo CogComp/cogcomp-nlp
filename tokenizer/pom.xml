@@ -24,12 +24,5 @@
             <version>1.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.5.1</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>
