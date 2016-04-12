@@ -283,7 +283,7 @@ public class CoreferenceView extends View {
     @Override
     public void removeAllConsituents() {
         constituents.clear();
-        this.canonicalMentions.clear();
+        canonicalMentions.clear();
         removeAllRelations();
     }
 }

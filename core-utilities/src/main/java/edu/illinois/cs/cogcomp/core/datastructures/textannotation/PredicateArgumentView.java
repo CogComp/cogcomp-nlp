@@ -136,7 +136,7 @@ public class PredicateArgumentView extends View {
     @Override
     public void removeAllConsituents() {
         constituents.clear();
-        this.predicates.clear();
+        predicates.clear();
         removeAllRelations();
     }
 }
