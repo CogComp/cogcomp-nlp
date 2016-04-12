@@ -243,6 +243,7 @@ public class View implements Serializable, IQueryable<Constituent> {
 
     public void removeAllConsituents() {
         constituents.clear();
+        removeAllRelations();
     }
 
     /**
