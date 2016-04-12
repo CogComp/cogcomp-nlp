@@ -137,5 +137,6 @@ public class PredicateArgumentView extends View {
     public void removeAllConsituents() {
         constituents.clear();
         this.predicates.clear();
+        removeAllRelations();
     }
 }
