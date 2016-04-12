@@ -279,4 +279,10 @@ public class CoreferenceView extends View {
         }
         return filteredIncomingRelations;
     }
+
+    @Override
+    public void removeAllConsituents() {
+        constituents.clear();
+        this.canonicalMentions.clear();
+    }
 }
