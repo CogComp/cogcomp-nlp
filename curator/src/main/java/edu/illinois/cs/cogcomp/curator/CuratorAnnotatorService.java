@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 import java.util.*;
 
@@ -21,6 +22,7 @@ import java.util.*;
  * will not support caching
  *
  * @author Christos Christodouloupoulos
+ * @author Narender Gupta
  */
 public class CuratorAnnotatorService implements AnnotatorService {
 
@@ -123,6 +125,12 @@ public class CuratorAnnotatorService implements AnnotatorService {
     }
 
     @Override
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer
+            .Tokenization tokenization) throws AnnotatorException {
+        return taBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
+    }
+
+    @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
@@ -132,9 +140,27 @@ public class CuratorAnnotatorService implements AnnotatorService {
     }
 
     @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
+            .Tokenization tokenization) throws AnnotatorException {
+        TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+        for (String viewName : viewProviders.keySet())
+            addView(ta, viewName);
+        return ta;
+    }
+
+    @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Set<String> viewNames) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+        for (String viewName : viewNames)
+            addView(ta, viewName);
+        return ta;
+    }
+
+    @Override
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
+            .Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+        TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
         for (String viewName : viewNames)
             addView(ta, viewName);
         return ta;

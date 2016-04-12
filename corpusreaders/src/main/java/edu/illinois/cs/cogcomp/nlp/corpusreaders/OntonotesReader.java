@@ -7,6 +7,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
