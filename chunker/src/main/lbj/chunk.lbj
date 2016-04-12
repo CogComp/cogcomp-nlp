@@ -113,7 +113,7 @@ discrete% POSWindowpp(Token word) <-
   String[] tags = new String[before+after+1];
   i = 0;
   for (; w != last; w = (Token) w.next) tags[i++] = POSTagger(w);
-  
+
   for (int j = 0; j < k; j++) {
       for (i = 0; i < tags.length; i++) {
           StringBuffer f = new StringBuffer();
@@ -169,9 +169,7 @@ discrete Chunker(Token word) cachedin word.type <-
 learn ChunkLabel
   using Forms, Capitalization, WordTypeInformation, Affixes, PreviousTags,
         POSWindow, Mixed, POSWindowpp, Formpp, SOPrevious
-  from
-    new ChildrenFromVectors(new CoNLL2000Parser(Constants.trainingData))
-    50 rounds
+  //from new ChildrenFromVectors(new CoNLL2000Parser(Constants.trainingData)) 50 rounds
   with SparseNetworkLearner {
     SparseAveragedPerceptron.Parameters p =
       new SparseAveragedPerceptron.Parameters();
