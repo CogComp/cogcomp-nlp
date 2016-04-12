@@ -24,8 +24,7 @@ public abstract class ILPConstraintGenerator {
     this.delayedConstraint = delayedConstraint;
   }
 
-  public abstract List<ILPConstraint> getILPConstraints(IInstance x,
-                                                        InferenceVariableLexManager variables);
+  public abstract List<ILPConstraint> getILPConstraints(IInstance x, InferenceVariableLexManager variables);
 
   /**
    * The subset of constraints that are violated.
@@ -34,8 +33,7 @@ public abstract class ILPConstraintGenerator {
    * @param y
    * @return
    */
-  public abstract List<ILPConstraint> getViolatedILPConstraints(IInstance x,
-                                                                IStructure y,
+  public abstract List<ILPConstraint> getViolatedILPConstraints(IInstance x, IStructure y,
                                                                 InferenceVariableLexManager variables);
 
   /**

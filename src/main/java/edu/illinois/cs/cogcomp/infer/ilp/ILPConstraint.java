@@ -1,6 +1,3 @@
-/**
- *
- */
 package edu.illinois.cs.cogcomp.infer.ilp;
 
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;

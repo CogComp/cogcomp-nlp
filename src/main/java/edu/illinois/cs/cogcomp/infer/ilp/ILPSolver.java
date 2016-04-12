@@ -5,10 +5,10 @@ public interface ILPSolver {
 	void setMaximize(boolean arg0);
 
 	int addBooleanVariable(double arg0);
-	
+
 	int addRealVariable(double arg0);
 
-        int addIntegerVariable(double arg0);
+	int addIntegerVariable(double arg0);
 
 	int[] addDiscreteVariable(double[] arg0);
 
@@ -24,8 +24,8 @@ public interface ILPSolver {
 
 	boolean getBooleanValue(int arg0);
 
-        int getIntegerValue(int arg0);
-	
+	int getIntegerValue(int arg0);
+
 	double getRealValue(int arg0);
 
 	double objectiveValue();

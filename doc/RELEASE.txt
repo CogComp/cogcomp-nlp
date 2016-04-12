@@ -11,3 +11,7 @@ Miscellaneous bugfixes.
 
 Version 0.4.1
 Made Gurobi an optional dependency
+
+Version 0.5.0
+Added the oj! Algorithm (ojAlgo) solver
+Updated dependencies

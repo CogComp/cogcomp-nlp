@@ -5,24 +5,17 @@ public class ILPSolverFactory {
 	private int beamSize = -1;
 	public final SolverType type;
 
-	public static enum SolverType {
-		XpressMP,
-
+	public enum SolverType {
 		Beam,
-
 		Gurobi,
-
-		CuttingPlaneGurobi,
-
-		CuttingPlaneXpressMP,
-
+		OJAlgo,
 		JLISCuttingPlaneGurobi
 	}
 
 	/**
 	 * Create ILP solvers that using one of XpresssMP, Gurobi, or Cutting plane
 	 * solvers
-	 * 
+	 *
 	 * @param type
 	 */
 	public ILPSolverFactory(SolverType type) {
@@ -34,7 +27,7 @@ public class ILPSolverFactory {
 
 	/**
 	 * Create ILP solvers that perform beam search with a specified beam size
-	 * 
+	 *
 	 * @param size
 	 */
 	public ILPSolverFactory(int size) {
@@ -44,14 +37,14 @@ public class ILPSolverFactory {
 
 	public ILPSolver getSolver() {
 		switch (type) {
-		case Beam:
-			return new BeamSearch(beamSize);
-		case Gurobi:
-			return new GurobiHook();
-		case CuttingPlaneGurobi:
-			return new CuttingPlaneILPHook(new GurobiHook());
-		case JLISCuttingPlaneGurobi:
-			return new JLISCuttingPlaneILPSolverGurobi(new GurobiHook());
+			case Beam:
+				return new BeamSearch(beamSize);
+			case Gurobi:
+				return new GurobiHook();
+			case OJAlgo:
+				return new OJalgoHook();
+			case JLISCuttingPlaneGurobi:
+				return new JLISCuttingPlaneILPSolverGurobi(new GurobiHook());
 		}
 
 		throw new RuntimeException();

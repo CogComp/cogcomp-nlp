@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractILPInference<T> implements Inference<T> {
 
-  private static final Logger log = LoggerFactory
-          .getLogger(AbstractILPInference.class);
+  private static final Logger log = LoggerFactory.getLogger(AbstractILPInference.class);
 
   public boolean debug;
   protected ILPSolver xmp;
@@ -23,7 +22,6 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
   }
 
   public T runInference() throws Exception {
-
     xmp = solverFactory.getSolver();
 
     reset();
@@ -54,21 +52,16 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
     }
 
     if (!solved) {
-
       boolean timedOut = false;
       if (xmp instanceof GurobiHook)
         timedOut = ((GurobiHook) xmp).isTimedOut();
-      else if (xmp instanceof CuttingPlaneILPHook)
-        timedOut = ((CuttingPlaneILPHook) xmp).isTimedOut();
       else if (xmp instanceof JLISCuttingPlaneILPSolverGurobi)
         timedOut = ((JLISCuttingPlaneILPSolverGurobi) xmp).isTimedOut();
 
       if (!timedOut) {
         if (debug)
           printDebugInfo(xmp, variableManager);
-        if (xmp instanceof CuttingPlaneILPHook) {
-          ((CuttingPlaneILPHook) xmp).printModelStatus();
-        } else if (xmp instanceof JLISCuttingPlaneILPSolverGurobi)
+        if (xmp instanceof JLISCuttingPlaneILPSolverGurobi)
           ((JLISCuttingPlaneILPSolverGurobi) xmp).printModelStatus();
 
         throw new Exception("Unsat");
@@ -89,43 +82,20 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
     // xmp.reset();
   }
 
-  /**
-   * @param xmp
-   * @param variableManager
-   * @throws Exception
-   */
-  protected abstract T getOutput(ILPSolver xmp,
-                                 InferenceVariableLexManager variableManager) throws Exception;
 
-  /**
-   * @param variableManager
-   * @param xmp
-   */
-  protected void printDebugInfo(ILPSolver xmp,
-                                InferenceVariableLexManager variableManager) {
+  protected abstract T getOutput(ILPSolver xmp, InferenceVariableLexManager variableManager) throws Exception;
+
+  protected void printDebugInfo(ILPSolver xmp, InferenceVariableLexManager variableManager) {
     StringBuffer sb = new StringBuffer();
     xmp.write(sb);
     System.out.println(sb);
-
-    // System.out.println("Optimal Score = " + xmp.getOptimalValue());
   }
 
-  /**
-   * @param xmp
-   * @param variableManager
-   */
-  protected abstract void addConstraints(ILPSolver xmp,
-                                         InferenceVariableLexManager variableManager);
+  protected abstract void addConstraints(ILPSolver xmp, InferenceVariableLexManager variableManager);
 
-  /**
-   * @param xmp
-   * @param variableManager
-   */
-  protected abstract void addVariables(ILPSolver xmp,
-                                       InferenceVariableLexManager variableManager);
+  protected abstract void addVariables(ILPSolver xmp, InferenceVariableLexManager variableManager);
 
   protected void addConstraint(ILPSolver xmp, ILPConstraint c) {
-
     if (c.sense == ILPConstraint.EQUAL)
       addEqualityConstraint(xmp, c.vars, c.coeffs, c.rhs);
     else if (c.sense == ILPConstraint.GREATER_THAN)
@@ -134,8 +104,7 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
       addLessThanConstraint(xmp, c.vars, c.coeffs, c.rhs);
   }
 
-  protected void addEqualityConstraint(ILPSolver xmp, int[] vars,
-                                       double[] coefs, double rhs) {
+  protected void addEqualityConstraint(ILPSolver xmp, int[] vars, double[] coefs, double rhs) {
     if (debug) {
       for (int i = 0; i < vars.length; i++) {
         System.out.print(coefs[i] + " x_" + vars[i] + " + ");
@@ -145,8 +114,7 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
     xmp.addEqualityConstraint(vars, coefs, rhs);
   }
 
-  protected void addGreaterThanConstraint(ILPSolver xmp, int[] vars,
-                                          double[] coefs, double rhs) {
+  protected void addGreaterThanConstraint(ILPSolver xmp, int[] vars, double[] coefs, double rhs) {
     if (debug) {
       for (int i = 0; i < vars.length; i++) {
         System.out.print(coefs[i] + " x_" + vars[i] + " + ");
@@ -157,8 +125,7 @@ public abstract class AbstractILPInference<T> implements Inference<T> {
     xmp.addGreaterThanConstraint(vars, coefs, rhs);
   }
 
-  protected void addLessThanConstraint(ILPSolver xmp, int[] vars,
-                                       double[] coefs, double rhs) {
+  protected void addLessThanConstraint(ILPSolver xmp, int[] vars, double[] coefs, double rhs) {
     if (debug) {
       for (int i = 0; i < vars.length; i++) {
         System.out.print(coefs[i] + " x_" + vars[i] + " + ");

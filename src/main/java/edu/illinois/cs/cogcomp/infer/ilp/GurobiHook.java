@@ -24,8 +24,7 @@ public class GurobiHook implements ILPSolver {
     }
                                                  
     
-	private static final Logger logger = LoggerFactory
-			.getLogger(GurobiHook.class);
+	private static final Logger logger = LoggerFactory.getLogger(GurobiHook.class);
 
 	private static GRBEnv ENV;
 	static {
@@ -455,56 +454,7 @@ public class GurobiHook implements ILPSolver {
 		throw new RuntimeException("ILP not solved! Cannot get objective yet.");
 	}
 
-	public static void main(String[] args) {
-		try {
-			GRBEnv env = new GRBEnv();
-			GRBModel model = new GRBModel(env);
-
-			// Create variables
-
-			GRBVar x = model.addVar(0.0, 1.0, -1.0, GRB.BINARY, "x");
-			GRBVar y = model.addVar(0.0, 1.0, -1.0, GRB.BINARY, "y");
-			GRBVar z = model.addVar(0.0, 1.0, -2.0, GRB.BINARY, "z");
-
-			// Integrate new variables
-
-			model.update();
-
-			// Add constraint: x + 2 y + 3 z <= 4
-
-			GRBLinExpr expr = new GRBLinExpr();
-			expr.addTerm(1.0, x);
-			expr.addTerm(2.0, y);
-			expr.addTerm(3, z);
-			model.addConstr(expr, GRB.LESS_EQUAL, 4.0, "c0");
-
-			// Add constraint: x + y >= 1
-
-			expr = new GRBLinExpr();
-			expr.addTerm(1.0, x);
-			expr.addTerm(1.0, y);
-			model.addConstr(expr, GRB.GREATER_EQUAL, 1.0, "c1");
-
-			// Optimize model
-
-			model.optimize();
-
-			System.out.println(x.get(GRB.StringAttr.VarName) + " "
-					+ x.get(GRB.DoubleAttr.X));
-			System.out.println(y.get(GRB.StringAttr.VarName) + " "
-					+ y.get(GRB.DoubleAttr.X));
-			System.out.println(z.get(GRB.StringAttr.VarName) + " "
-					+ z.get(GRB.DoubleAttr.X));
-
-			System.out.println("Obj: " + model.get(GRB.DoubleAttr.ObjVal));
-		} catch (GRBException e) {
-			System.out.println("Error code: " + e.getErrorCode() + ". "
-					+ e.getMessage());
-		}
-	}
-
 	public boolean unsat() {
 		return this.unsat;
 	}
-
 }

@@ -15,8 +15,7 @@ import java.util.List;
  */
 public class JLISCuttingPlaneILPSolverGurobi implements ILPSolver {
 
-  private final static Logger log = LoggerFactory
-          .getLogger(JLISCuttingPlaneILPSolverGurobi.class);
+  private final static Logger log = LoggerFactory.getLogger(JLISCuttingPlaneILPSolverGurobi.class);
 
   private static final int MAX_ITER = 100;
   private final ILPSolver baseSolver;

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package edu.illinois.cs.cogcomp.infer.ilp;
 
 import java.util.ArrayList;
@@ -283,10 +280,6 @@ public class BeamSearch implements ILPSolver {
 		isSolved = true;
 	}
 
-	/**
-	 * @param initState
-	 * @return
-	 */
 	private List<PartialAssignment> expandState(PartialAssignment state) {
 
 		if (DEBUG) {
@@ -440,10 +433,6 @@ public class BeamSearch implements ILPSolver {
 	public void write(StringBuffer arg0) {
 	}
 
-	/**
-	 * @param pq
-	 * @return
-	 */
 	private List<PartialAssignment> sortAndResize(List<PartialAssignment> pq) {
 
 		sortBeam(pq);
@@ -511,41 +500,4 @@ public class BeamSearch implements ILPSolver {
 			return sb.toString();
 		}
 	}
-
-	public static void main(String[] args) throws Exception {
-		ILPSolver solver = new BeamSearch(2);
-		//
-		// max x + y + 2z,
-		//
-		// subject to
-		// x + 2 y + 3 z <= 4
-		// x + y >= 1
-		// x, y, z binary.
-
-		int x = solver.addBooleanVariable(1);
-
-                int y = solver.addBooleanVariable(1);
-		int z = solver.addBooleanVariable(2);
-
-		solver.addLessThanConstraint(new int[] { x, y, z }, new double[] { 1,
-				2, 3 }, 4d);
-
-		solver.addGreaterThanConstraint(new int[] { x, y },
-				new double[] { 1, 1 }, 1);
-
-		solver.setMaximize(true);
-
-		solver.solve();
-
-		if (solver.isSolved()) {
-			System.out.println("x = " + solver.getBooleanValue(x));
-			System.out.println("y = " + solver.getBooleanValue(y));
-			System.out.println("z = " + solver.getBooleanValue(z));
-
-		} else {
-			System.out.println("Error");
-		}
-
-	}
-
 }
