@@ -5,14 +5,21 @@
 ### Running
 You can use the **illinois-srl** system in either  *interactive* or *annotator* mode.
 #### Interactive mode
-In *interactive mode* the user can input a single piece of text and get back the feedback from either 
+In *interactive mode* the user can input a single piece of text and get back the feedback from both 
 the **Nom**inal or **Verb**al SRL systems in plain text. 
  
 To run the system in *interactive mode* see the class `edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler`
-or simply run the script: 
+or simply execute the  `run-interactive` script: 
 
+For linux:
 ```
-scripts/run-interactive.sh <config> <Verb|Nom>
+scripts/run-interactive.sh
+```
+
+For windows:
+```
+cd scripts
+run-interactive-win.bat
 ```
 
 #### As an `Annotator` component
