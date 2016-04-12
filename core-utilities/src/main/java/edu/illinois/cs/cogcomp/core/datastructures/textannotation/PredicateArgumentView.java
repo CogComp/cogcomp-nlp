@@ -132,4 +132,10 @@ public class PredicateArgumentView extends View {
         }
         return sb.toString();
     }
+
+    @Override
+    public void removeAllConsituents() {
+        constituents.clear();
+        this.predicates.clear();
+    }
 }
