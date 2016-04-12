@@ -16,7 +16,10 @@ import java.util.*;
  */
 public class ClassificationTester {
 
+    // average statistics
     EvaluationRecord evalRecord;
+
+    // per-label statistics
     Map<String, EvaluationRecord> labelWiseRecords;
     Counter<String> counter;
 
@@ -150,8 +153,42 @@ public class ClassificationTester {
         return new Pair<>(table, sortSet);
     }
 
-    public double getAverageF1() {
+    // Micro statistics, returns the F1, P and R for all instances of any labels
+    public double getMicroF1() {
         return evalRecord.getF1();
+    }
+
+    public double getMicroPrecision() {
+        return evalRecord.getPrecision();
+    }
+
+    public double getMicroRecall() {
+        return evalRecord.getRecall();
+    }
+
+    // Average of macro statistics, returns average of the F1, P and R across different labels
+    public double getMacroF1() {
+        double sumF1 = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumF1 += e.getF1();
+        }
+        return sumF1 / labelWiseRecords.size();
+    }
+
+    public double getMacroPrecision() {
+        double sumPrecision = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumPrecision += e.getPrecision();
+        }
+        return sumPrecision / labelWiseRecords.size();
+    }
+
+    public double getMacroRecall() {
+        double sumRecall = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumRecall += e.getRecall();
+        }
+        return sumRecall / labelWiseRecords.size();
     }
 
     public Table getPerformanceTable() {
@@ -260,10 +297,6 @@ public class ClassificationTester {
             out = "+" + out + "+";
 
         return out + sig;
-    }
-
-    public double getAverageAccuracy() {
-        return evalRecord.getPrecision();
     }
 
     /**
