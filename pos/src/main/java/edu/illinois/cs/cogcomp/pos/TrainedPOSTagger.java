@@ -1,13 +1,29 @@
 package edu.illinois.cs.cogcomp.pos;
 
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.io.File;
+import java.util.List;
+
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
+import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
+import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
+import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
+import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import org.junit.Before;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * This POS Tagger uses a pre-trained model. The model files will be found by checking two locations
@@ -109,6 +125,60 @@ public class TrainedPOSTagger {
             return known.discreteValue(w);
         }
         return unknown.discreteValue(w);
+    }
+
+    public static void main(String[] args) throws IOException{
+        String testFileName = "testIn.txt";
+        String testFile;
+        String refFileName = "testRefOutput.txt";
+        List<String> refTags;
+        List<String[]> refTokens;
+        double thresholdAcc = 0.95;
+
+
+
+        URL testFileURL = TrainedPOSTagger.class.getClassLoader().getResource(testFileName);
+        assertNotNull("Test file missing", testFileURL);
+        testFile = testFileURL.getFile();
+        assertNotNull("Reference file missing",
+                TrainedPOSTagger.class.getClassLoader().getResource(refFileName));
+        BufferedReader refReader =
+                new BufferedReader(new InputStreamReader(TrainedPOSTagger.class.getClassLoader()
+                        .getResourceAsStream(refFileName)));
+
+        refTags = new ArrayList<>();
+        refTokens = new ArrayList<>();
+        String line;
+        while ((line = refReader.readLine()) != null) {
+            String[] entries = line.substring(1, line.length() - 1).split("[)] [(]");
+
+            for (int i = 0; i < entries.length; i++) {
+                refTags.add(entries[i].split(" ")[0]);
+                entries[i] = entries[i].split(" ")[1];
+            }
+            refTokens.add(entries);
+        }
+
+
+        POSTagger tagger = new POSTagger();
+        Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
+        String sentence = "";
+        int sentenceCounter = 0;
+        int tokenCounter = 0;
+        int correctCounter = 0;
+        for (Token word = (Token) parser.next(); word != null; word = (Token) parser.next()) {
+            String tag = tagger.discreteValue(word);
+            if (refTags.get(tokenCounter).equals(tag)) {
+                correctCounter++;
+            }
+            tokenCounter++;
+        }
+        double result = ((double) correctCounter) / tokenCounter;
+        System.out.println(result);
+        if (result < thresholdAcc) {
+            fail("Tagger performance is insufficient: " + "\nProduced: " + result + "\nExpected: "
+                    + thresholdAcc);
+        }
     }
 
 }

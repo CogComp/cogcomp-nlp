@@ -9,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

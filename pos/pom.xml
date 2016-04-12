@@ -29,7 +29,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos-models</artifactId>
-            <version>3.0.10</version>
+            <version>3.0.12</version>
         </dependency>
     </dependencies>
 
@@ -57,15 +57,24 @@
                     <dFlag>${project.basedir}/target/classes</dFlag>
                     <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
                 </configuration>
-                <executions>
+<!--                <executions>
                     <execution>
+                        <id>compiling</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>clean</goal>
                             <goal>compile</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>cleaning</id>
+                        <phase>pre-clean</phase>
+                        <goals>
+                        <goal>clean</goal>
+                        </goals>
+                    </execution>
                 </executions>
+-->
             </plugin>
         </plugins>
     </build>

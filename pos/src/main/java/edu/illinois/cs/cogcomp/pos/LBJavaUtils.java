@@ -16,7 +16,7 @@ import java.util.List;
  *
  * Created by mssammon on 8/24/15.
  */
-@Deprecated
+
 public class LBJavaUtils {
 
     /**
