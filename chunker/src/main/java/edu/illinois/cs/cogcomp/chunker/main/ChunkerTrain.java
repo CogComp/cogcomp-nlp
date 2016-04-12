@@ -25,6 +25,12 @@ public class ChunkerTrain {
 
     private Chunker chunker;
 
+    public ChunkerTrain(int iter) {
+        this.init();
+        this.modelDirPath = rm.getString("modelDirPath");
+        this.iter = iter;
+
+    }
 
     public ChunkerTrain(String modelDirPath, int iter) {
         if(!modelDirPath.endsWith("/")) {
@@ -46,7 +52,7 @@ public class ChunkerTrain {
     }
 
     private void init(){
-        rm = new POSConfigurator().getDefaultConfig();
+        rm = new ChunkerConfigurator().getDefaultConfig();
         this.chunker = new Chunker();
     }
 
@@ -94,25 +100,28 @@ public class ChunkerTrain {
      */
     public void writeModelsToDisk() {
         // Make sure necessary directories exist
+        System.out.println("Writing models to disk");
         (new File(modelDirPath)).mkdirs();
         chunker.write(modelDirPath + rm.getString("modelName") + ".lc", modelDirPath + rm.getString("modelName") + ".lex");
         System.out.println("Done training, models are in " + modelDirPath);
     }
 
     public static void main(String[] args) {
-        if ( args.length != 1 && args.length != 2)
-        {
-            System.err.println( "Usage: " + NAME + "modelDirPath [trainingData]" );
-            System.exit( -1 );
-        }
-        String modelDir = args[0];
+        String modelDir = null;
         String trainingFile = null;
+
+        if(args.length >= 1)
+            modelDir = args[0];
+
         if (args.length == 2) {
             trainingFile = args[1];
         }
 
         ChunkerTrain trainer = null;
-        trainer = new ChunkerTrain(modelDir, 50);
+        if(modelDir!=null)
+            trainer = new ChunkerTrain(modelDir, 50);
+        else
+            trainer = new ChunkerTrain(50); //Using default model output path from configurator
 
 
         System.out.println("Starting training ...");
@@ -124,6 +133,6 @@ public class ChunkerTrain {
         else{
             trainer.trainModels(trainingFile);
         }
-        trainer.writeModelsToDisk(); //"illinois-chunker"
+        trainer.writeModelsToDisk(); //"Chunker"
     }
 }

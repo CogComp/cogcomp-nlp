@@ -1,8 +1,7 @@
 package edu.illinois.cs.cogcomp.chunker.main;
 
-import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
@@ -16,7 +15,7 @@ public class TestChunkerModels {
     private String modelPath;
     private String labeledData;
 
-    private Chunker chunker;
+    private TrainedChunker tagger;
 
     /**
      * Constructor for the test class. User specifies models and data.
@@ -27,10 +26,7 @@ public class TestChunkerModels {
      */
     public TestChunkerModels(String modelPath, String labeledData, String chunkerName) {
         this.labeledData = labeledData;
-        if (null == modelPath || null == chunkerName )
-            this.chunker = new Chunker();
-        else
-            this.chunker = new Chunker(modelPath + chunkerName + ".lc", modelPath + chunkerName + ".lex");
+        tagger = new TrainedChunker();
     }
 
     public void testAccuracy() {
@@ -39,8 +35,8 @@ public class TestChunkerModels {
         int numSeen = 0;
         int numEqual = 0;
 
-        for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-            String prediction = chunker.discreteValue(w);
+        for (Token w = (Token) parser.next(); w != null; w = (Token) parser.next()) {
+            String prediction = tagger.discreteValue(w);
             String raw = w.toString();
             String actualChunk = raw.substring(raw.indexOf('(') + 1, raw.indexOf(' '));
             if (prediction.equals(actualChunk)) {

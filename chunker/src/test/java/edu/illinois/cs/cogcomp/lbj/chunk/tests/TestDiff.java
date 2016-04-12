@@ -1,10 +1,12 @@
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
+import edu.illinois.cs.cogcomp.chunker.main.TrainedChunker;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import junit.framework.TestCase;
 
@@ -44,14 +46,14 @@ public class TestDiff extends TestCase {
     }
 
     public void testDiff() {
-        Chunker chunker = new Chunker();
+        TrainedChunker tagger = new TrainedChunker();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String previous = "";
         String sentence = "";
         int sentenceCounter = 0;
 
-        for (Word w = (Word) parser.next(); w != null; w = (Word) parser.next()) {
-            String prediction = chunker.discreteValue(w);
+        for (Token w = (Token) parser.next(); w != null; w = (Token) parser.next()) {
+            String prediction = tagger.discreteValue(w);
             if (prediction.startsWith("B-") || prediction.startsWith("I-")
                     && !previous.endsWith(prediction.substring(2)))
                 sentence += ("[" + prediction.substring(2) + " ");
@@ -60,9 +62,9 @@ public class TestDiff extends TestCase {
 
             if (!prediction.equals("O")
                     && (w.next == null
-                    || chunker.discreteValue(w.next).equals("O")
-                    || chunker.discreteValue(w.next).startsWith("B-")
-                    || !chunker.discreteValue(w.next)
+                    || tagger.discreteValue((Token)w.next).equals("O")
+                    || tagger.discreteValue((Token)w.next).startsWith("B-")
+                    || !tagger.discreteValue((Token)w.next)
                     .endsWith(prediction.substring(2))))
                 sentence += ("] ");
 

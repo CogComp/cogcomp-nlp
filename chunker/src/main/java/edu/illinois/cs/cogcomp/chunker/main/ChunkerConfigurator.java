@@ -12,9 +12,9 @@ public class ChunkerConfigurator extends Configurator {
     public static final Property TRAINING_DATA = new Property("trainingData",
             "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/train.txt");
 
-    public static final Property MODEL_NAME = new Property("modelName", "illinois-chunker");
+    public static final Property MODEL_NAME = new Property("modelName", "Chunker");
 
-    public static final Property MODEL_DIR_PATH = new Property("modelDirPath", "models/edu/illinois/cs/cogcomp/chunker/main/lbjava/");
+    public static final Property MODEL_DIR_PATH = new Property("modelDirPath", "edu/illinois/cs/cogcomp/chunker/main/lbjava/");
 
     public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value + MODEL_NAME.value + ".lc");
 

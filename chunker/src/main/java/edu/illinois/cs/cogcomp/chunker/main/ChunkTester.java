@@ -7,6 +7,10 @@ import edu.illinois.cs.cogcomp.lbjava.parse.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
 
+import java.net.URL;
+
+import static org.junit.Assert.assertNotNull;
+
 
 /**
  * This class may be used to produce a detailed report of the <i>phrase by
@@ -43,24 +47,21 @@ public class ChunkTester {
      * @param args The command line parameters.
      **/
     public static void main(String[] args) {
-        String testFile = null;
+        String testFileName = "test.txt";
+        String testNoPOSFileName = "test.noPOS.txt";
+        //String testNoPOSFileName = "testIn.txt";
+
         String parserName = null;
+        URL testFileURL = ChunkTester.class.getClassLoader().getResource(testFileName);
+        assertNotNull("Test file missing", testFileURL);
+        String testFile = testFileURL.getFile();
 
-        try {
-            testFile = args[0];
-
-            if (args.length > 1)
-            {
-                parserName = args[1];
-                if (args.length > 2) throw new Exception();
-            }
-        }
-        catch (Exception e) {
-            System.err.println("usage: java edu.illinois.cs.cogcomp.chunker.main.ChunkTester <test data> \\\n [<parser>]");
-            System.exit(1);
-        }
-
+        URL testNoPOSFileURL = ChunkTester.class.getClassLoader().getResource(testNoPOSFileName);
+        assertNotNull("Test file missing", testNoPOSFileURL);
+        String testNoPOSFile = testNoPOSFileURL.getFile();
         Parser parser;
+
+        System.out.println("\nWith Gold POS");
 
         if (parserName == null) parser = new CoNLL2000Parser(testFile);
         else
@@ -68,6 +69,19 @@ public class ChunkTester {
 
         BIOTester tester = new BIOTester(new Chunker(), new ChunkLabel(), new ChildrenFromVectors(parser));
         tester.test().printPerformance(System.out);
+
+        System.out.println("\nWith NO POS");
+
+        if (parserName == null) parser = new CoNLL2000Parser(testNoPOSFile);
+        else
+            parser = ClassUtils.getParser(parserName, new Class[]{ String.class }, new String[]{testNoPOSFileName});
+
+        tester = new BIOTester(new Chunker(), new ChunkLabel(), new ChildrenFromVectors(parser));
+        tester.test().printPerformance(System.out);
+
+
+
+
     }
 }
 
