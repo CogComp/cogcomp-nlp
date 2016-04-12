@@ -1,5 +1,7 @@
 # illinois-srl: Semantic Role Labeler
 
+![build status](https://gitlab-beta.engr.illinois.edu/cogcomp/illinois-srl/badges/branch/build.svg)
+
 ### Running
 You can use the **illinois-srl** system in either  *interactive* or *annotator* mode.
 #### Interactive mode
