@@ -8,7 +8,7 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPConstraintGenerator;
-import edu.illinois.cs.cogcomp.srl.jlis.*;
+import edu.illinois.cs.cogcomp.srl.learn.*;
 
 import java.util.*;
 
@@ -27,8 +27,8 @@ public class NoOverlapConstraint extends SRLILPConstraintGenerator {
 	}
 
 	private List<ILPConstraint> getNoOverlapConstraint(SRLManager manager,
-			InferenceVariableLexManager variables, int predicateId,
-			SRLPredicateInstance x, SRLPredicateStructure y) {
+													   InferenceVariableLexManager variables, int predicateId,
+													   SRLPredicateInstance x, SRLPredicateStructure y) {
 
 		String type = manager.getPredictedViewName();
 

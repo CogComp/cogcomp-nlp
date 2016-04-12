@@ -34,9 +34,9 @@ import edu.illinois.cs.cogcomp.srl.experiment.PruningPreExtractor;
 import edu.illinois.cs.cogcomp.srl.experiment.TextPreProcessor;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
 import edu.illinois.cs.cogcomp.srl.inference.SRLMulticlassInference;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLFeatureExtractor;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import edu.illinois.cs.cogcomp.srl.learn.SRLFeatureExtractor;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassLabel;
 import edu.illinois.cs.cogcomp.srl.learn.IdentifierThresholdTuner;
 import edu.illinois.cs.cogcomp.srl.nom.NomSRLManager;
 import edu.illinois.cs.cogcomp.srl.utilities.WeightVectorUtils;
@@ -459,7 +459,7 @@ public class Main {
 
 		Dataset testSet = Dataset.PTBTest;
 
-		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.CuttingPlaneGurobi);
+		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
 
 		String outDir = properties.getOutputDir();
 		PrintWriter goldWriter = null, predWriter = null;

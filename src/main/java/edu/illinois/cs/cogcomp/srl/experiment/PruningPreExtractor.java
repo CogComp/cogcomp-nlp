@@ -8,8 +8,8 @@ import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.ModelInfo;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassLabel;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;

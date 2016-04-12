@@ -3,9 +3,11 @@ package edu.illinois.cs.cogcomp.srl;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
@@ -109,8 +111,6 @@ public class SemanticRoleLabeler extends Annotator {
 	public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean initialize) throws Exception {
 		super( getViewNameForType(srlType), TextPreProcessor.requiredViews );
 
-		WordNetManager.loadConfigAsClasspathResource(true);
-
 		log.info("Initializing config");
 		SRLProperties.initialize(rm);
 		properties = SRLProperties.getInstance();
@@ -168,6 +168,12 @@ public class SemanticRoleLabeler extends Annotator {
 		if (predicates.isEmpty())
 			return null;
 		ILPSolverFactory s = new ILPSolverFactory(SolverType.Gurobi);
+		try {
+			s.getSolver();
+		}
+		catch (UnsatisfiedLinkError e) {
+			s = new ILPSolverFactory(SolverType.OJAlgo);
+		}
         SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
 		return inference.getOutputView();

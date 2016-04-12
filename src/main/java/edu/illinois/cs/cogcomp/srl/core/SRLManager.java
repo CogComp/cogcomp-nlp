@@ -16,7 +16,7 @@ import edu.illinois.cs.cogcomp.srl.features.FeatureGenerators;
 import edu.illinois.cs.cogcomp.srl.features.ProjectedPath;
 import edu.illinois.cs.cogcomp.srl.inference.SRLConstraints;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

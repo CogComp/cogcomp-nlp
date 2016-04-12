@@ -5,15 +5,15 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-srl</artifactId>
     <packaging>jar</packaging>
-    <version>5.1.11</version>
+    <version>5.1.12</version>
 
     <url>http://cogcomp.cs.illinois.edu</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.0.22</cogcomp-nlp-version>
-        <cogcomp-nlp-pipeline-version>0.1.17</cogcomp-nlp-pipeline-version>
+        <cogcomp-nlp-version>3.0.27</cogcomp-nlp-version>
+        <cogcomp-nlp-pipeline-version>0.1.19</cogcomp-nlp-pipeline-version>
     </properties>
 
     <repositories>
@@ -107,7 +107,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>inference</artifactId>
-            <version>0.4.2</version>
+            <version>0.5.0</version>
         </dependency>
 
         <dependency>

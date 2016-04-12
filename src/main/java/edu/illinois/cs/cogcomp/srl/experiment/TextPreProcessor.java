@@ -40,7 +40,7 @@ public class TextPreProcessor {
 						+ "Please change the 'DefaultParser' parameter in the configuration file.");
 				System.exit(-1);
 			}
-			annotator = IllinoisPipelineFactory.buildPipeline();
+			annotator = IllinoisPipelineFactory.buildPipeline(new ResourceManager(config.getPipelineConfig()));
 		}
 	}
 

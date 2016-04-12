@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.srl.jlis.*;
+import edu.illinois.cs.cogcomp.srl.learn.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
