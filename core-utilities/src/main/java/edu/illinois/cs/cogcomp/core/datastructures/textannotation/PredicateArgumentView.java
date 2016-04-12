@@ -132,48 +132,4 @@ public class PredicateArgumentView extends View {
         }
         return sb.toString();
     }
-
-    public Set<Constituent> getPredicateArgumentConstituents() {
-        Set<Constituent> allCons = new HashSet<>(this.predicates);
-        for(Constituent c : allCons) {
-            for(Relation r : c.getOutgoingRelations() ) {
-                allCons.add(r.getTarget());
-            }
-        }
-        return allCons;
-    }
-
-    public Set<Relation> getPredicateArgumentRelations() {
-        Set<Relation> relations = new HashSet<>();
-        for(Constituent c: getPredicateArgumentConstituents()) {
-            for(Relation r: c.getIncomingRelations())
-                relations.add(r);
-            for(Relation r: c.getOutgoingRelations())
-                relations.add(r);
-        }
-        return relations;
-    }
-
-    public void removeAllConstituentsAndRelations() {
-        Set<Relation> allRelations = getPredicateArgumentRelations();
-        for(Constituent c : getPredicateArgumentConstituents()) {
-            this.removeConstituent(c);
-        }
-        for(Relation r : allRelations) {
-            this.removeRelation(r);
-        }
-    }
-
-    public void removeAllRelations() {
-        for(Constituent c: getPredicateArgumentConstituents()) {
-            // remove relations from the View class
-            for(Relation r: c.getIncomingRelations())
-                this.removeRelation(r);
-            for(Relation r: c.getOutgoingRelations())
-                this.removeRelation(r);
-            // remove relations from the constituents
-            c.removeAllIncomingRelatons();
-            c.removeAllOutgoingRelaton();
-        }
-    }
 }

@@ -279,46 +279,4 @@ public class CoreferenceView extends View {
         }
         return filteredIncomingRelations;
     }
-
-    public Set<Relation> getAllRelations() {
-        Set<Relation> relations = new HashSet<>();
-        for(Constituent c: this.getAllCorefConstitunets()) {
-            for (Relation r : c.getIncomingRelations())
-                relations.add(r);
-            for (Relation r : c.getOutgoingRelations())
-                relations.add(r);
-        }
-        return relations;
-    }
-
-    public Set<Constituent> getAllCorefConstitunets() {
-        List<Constituent> can = this.getCanonicalEntitiesViaRelations();
-        Set<Constituent> allCorefCons = new HashSet<>();
-        for(Constituent c: can) {
-            allCorefCons.addAll(this.getCoreferentMentionsViaRelations(c));
-        }
-        return allCorefCons;
-    }
-
-    public void removeRelations() {
-        Set<Constituent> allCorefCons = getAllCorefConstitunets();
-        for(Constituent c: allCorefCons) {
-            for(Relation r: c.getIncomingRelations())
-                this.removeRelation(r);
-            for(Relation r: c.getOutgoingRelations())
-                this.removeRelation(r);
-            c.removeAllIncomingRelatons();
-            c.removeAllOutgoingRelaton();
-        }
-    }
-
-    public void removeConsituents() {
-        Set<Relation> relations = this.getAllRelations();
-        for(Constituent c : this.getAllCorefConstitunets()) {
-            this.removeConstituent(c);
-        }
-        for(Relation r : relations) {
-            this.removeRelation(r);
-        }
-    }
 }
