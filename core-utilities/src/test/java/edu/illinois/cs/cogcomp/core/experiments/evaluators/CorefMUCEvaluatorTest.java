@@ -1,7 +1,6 @@
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
@@ -10,7 +9,6 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
@@ -50,16 +48,16 @@ public class CorefMUCEvaluatorTest {
         CorefMUCEvaluator mucEvaluator = new CorefMUCEvaluator();
         mucEvaluator.setViews(gold, predicted);
         mucEvaluator.evaluate(mucTester);
-        assertEquals(mucTester.getAvgMicroF1(), 0.94, 0.01);
-        assertEquals(mucTester.getAvgMicroPrecision(), 0.9, 0.01);
-        assertEquals(mucTester.getAvgMicroRecall(), 1.0, 0.01);
+        assertEquals(mucTester.getMacroF1(), 0.94, 0.01);
+        assertEquals(mucTester.getMacroPrecision(), 0.9, 0.01);
+        assertEquals(mucTester.getMacroRecall(), 1.0, 0.01);
 
         ClassificationTester bcubedTester = new ClassificationTester();
         CorefBCubedEvaluator bcubedEvaluator = new CorefBCubedEvaluator();
         bcubedEvaluator.setViews(gold, predicted);
         bcubedEvaluator.evaluate(bcubedTester);
-        assertEquals(bcubedTester.getAvgMicroF1(), 0.73, 0.01);
-        assertEquals(bcubedTester.getAvgMicroPrecision(), 0.58, 0.01);
-        assertEquals(bcubedTester.getAvgMicroRecall(), 1.0, 0.01);
+        assertEquals(bcubedTester.getMacroF1(), 0.73, 0.01);
+        assertEquals(bcubedTester.getMacroPrecision(), 0.58, 0.01);
+        assertEquals(bcubedTester.getMacroRecall(), 1.0, 0.01);
     }
 }

@@ -48,7 +48,7 @@ public class CorefBCubedEvaluator extends Evaluator {
 
     /**
      * The result will be populated in a ClassificationTester. Note that you can either use "micro" or "macro" statistics.
-     * It is more common to use "micro" statistics for BCubed metric.
+     * It is more common to use "macro" statistics for BCubed metric.
      */
     public void evaluate(ClassificationTester tester) {
         List<Constituent> allGoldConstituents = gold.getConstituents();

@@ -153,21 +153,21 @@ public class ClassificationTester {
         return new Pair<>(table, sortSet);
     }
 
-    // Macro statistics, returns the F1, P and R for all instances of any labels
-    public double getMacroF1() {
+    // Micro statistics, returns the F1, P and R for all instances of any labels
+    public double getMicroF1() {
         return evalRecord.getF1();
     }
 
-    public double getMacroPrecision() {
+    public double getMicroPrecision() {
         return evalRecord.getPrecision();
     }
 
-    public double getMacroRecall() {
+    public double getMicroRecall() {
         return evalRecord.getRecall();
     }
 
-    // Average of micro statistics, returns average of the F1, P and R across different labels
-    public double getAvgMicroF1() {
+    // Average of macro statistics, returns average of the F1, P and R across different labels
+    public double getMacroF1() {
         double sumF1 = 0;
         for(EvaluationRecord e : labelWiseRecords.values()) {
             sumF1 += e.getF1();
@@ -175,7 +175,7 @@ public class ClassificationTester {
         return sumF1 / labelWiseRecords.size();
     }
 
-    public double getAvgMicroPrecision() {
+    public double getMacroPrecision() {
         double sumPrecision = 0;
         for(EvaluationRecord e : labelWiseRecords.values()) {
             sumPrecision += e.getPrecision();
@@ -183,7 +183,7 @@ public class ClassificationTester {
         return sumPrecision / labelWiseRecords.size();
     }
 
-    public double getAvgMicroRecall() {
+    public double getMacroRecall() {
         double sumRecall = 0;
         for(EvaluationRecord e : labelWiseRecords.values()) {
             sumRecall += e.getRecall();
