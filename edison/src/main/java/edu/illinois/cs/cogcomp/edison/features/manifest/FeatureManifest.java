@@ -140,6 +140,13 @@ public class FeatureManifest {
     }
 
 
+    /**
+     * This deals with if statements.
+     * @param tree
+     * @param cf
+     * @return
+     * @throws EdisonException
+     */
     public FeatureExtractor processQuery(Tree<String> tree, Map<String, FeatureExtractor> cf)
             throws EdisonException {
 

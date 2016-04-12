@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * This calls an external parser to parse the Tree structure, and stores features, definitions, and variables.
+ */
 class ManifestParser {
 
     private String featureSetName;
