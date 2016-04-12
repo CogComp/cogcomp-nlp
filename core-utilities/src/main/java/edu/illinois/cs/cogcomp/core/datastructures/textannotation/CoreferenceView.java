@@ -22,7 +22,6 @@ public class CoreferenceView extends View {
 
     private static ITransformer<Relation, Constituent> relationsToConstituents;
 
-
     boolean modified = false;
 
     static {
@@ -35,6 +34,8 @@ public class CoreferenceView extends View {
         };
     }
 
+    private List<Constituent> canonicalMentions;
+
     /**
      * Create a new CoreferenceView with default {@link #viewGenerator} and {@link #score}.
      */
@@ -44,7 +45,7 @@ public class CoreferenceView extends View {
 
     public CoreferenceView(String viewName, String viewGenerator, TextAnnotation text, double score) {
         super(viewName, viewGenerator, text, score);
-
+        canonicalMentions = new ArrayList<>();
         canonicalEntitiesMap = new TIntIntHashMap();
     }
 
@@ -77,6 +78,7 @@ public class CoreferenceView extends View {
         int canonicalMentionId = this.constituents.indexOf(canonicalMention);
 
         canonicalEntitiesMap.put(canonicalMentionId, canonicalMentionId);
+        canonicalMentions.add(canonicalMention);
 
         int i = 0;
         for (Constituent c : coreferentMentions) {
@@ -136,15 +138,8 @@ public class CoreferenceView extends View {
         return cc;
     }
 
-    public Set<Constituent> getCanonicalEntitiesViaRelations() {
-        HashSet<Constituent> canonicalConstituents = new HashSet<>();
-        for (Constituent cc : this.getConstituents()) {
-            List<Relation> incomingRelations = getFilteredIncomingRelations(cc);
-            for(Relation r : incomingRelations) {
-                canonicalConstituents.add(r.source);
-            }
-        }
-        return canonicalConstituents;
+    public List<Constituent> getCanonicalEntitiesViaRelations() {
+        return canonicalMentions;
     }
 
     /**
@@ -189,7 +184,6 @@ public class CoreferenceView extends View {
             canonical.add(r.source);
         return canonical;
     }
-
 
     /**
      * Given a mention, it returns the list of canonical mentions of the coref chains which
@@ -284,5 +278,47 @@ public class CoreferenceView extends View {
             filteredIncomingRelations.add(r);
         }
         return filteredIncomingRelations;
+    }
+
+    public Set<Relation> getAllRelations() {
+        Set<Relation> relations = new HashSet<>();
+        for(Constituent c: this.getAllCorefConstitunets()) {
+            for (Relation r : c.getIncomingRelations())
+                relations.add(r);
+            for (Relation r : c.getOutgoingRelations())
+                relations.add(r);
+        }
+        return relations;
+    }
+
+    public Set<Constituent> getAllCorefConstitunets() {
+        List<Constituent> can = this.getCanonicalEntitiesViaRelations();
+        Set<Constituent> allCorefCons = new HashSet<>();
+        for(Constituent c: can) {
+            allCorefCons.addAll(this.getCoreferentMentionsViaRelations(c));
+        }
+        return allCorefCons;
+    }
+
+    public void removeRelations() {
+        Set<Constituent> allCorefCons = getAllCorefConstitunets();
+        for(Constituent c: allCorefCons) {
+            for(Relation r: c.getIncomingRelations())
+                this.removeRelation(r);
+            for(Relation r: c.getOutgoingRelations())
+                this.removeRelation(r);
+            c.removeAllIncomingRelatons();
+            c.removeAllOutgoingRelaton();
+        }
+    }
+
+    public void removeConsituents() {
+        Set<Relation> relations = this.getAllRelations();
+        for(Constituent c : this.getAllCorefConstitunets()) {
+            this.removeConstituent(c);
+        }
+        for(Relation r : relations) {
+            this.removeRelation(r);
+        }
     }
 }
