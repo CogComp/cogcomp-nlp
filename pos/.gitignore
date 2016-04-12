@@ -10,7 +10,7 @@ local.properties
 .classpath
 
 ### LBJava-generated files
-src/main/java/edu/illinois/cs/cogcomp/pos/lbjava/
+#src/main/java/edu/illinois/cs/cogcomp/pos/lbjava/
 ### Trained model files
 models
 
