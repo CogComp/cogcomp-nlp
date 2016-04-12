@@ -3,10 +3,7 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Vivek Srikumar
@@ -134,5 +131,12 @@ public class PredicateArgumentView extends View {
             }
         }
         return sb.toString();
+    }
+
+    @Override
+    public void removeAllConsituents() {
+        constituents.clear();
+        predicates.clear();
+        removeAllRelations();
     }
 }

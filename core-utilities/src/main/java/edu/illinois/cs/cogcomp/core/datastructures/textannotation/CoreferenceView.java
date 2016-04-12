@@ -22,7 +22,6 @@ public class CoreferenceView extends View {
 
     private static ITransformer<Relation, Constituent> relationsToConstituents;
 
-
     boolean modified = false;
 
     static {
@@ -190,7 +189,6 @@ public class CoreferenceView extends View {
         return canonical;
     }
 
-
     /**
      * Given a mention, it returns the list of canonical mentions of the coref chains which
      * overlap with the input constituent
@@ -284,5 +282,11 @@ public class CoreferenceView extends View {
             filteredIncomingRelations.add(r);
         }
         return filteredIncomingRelations;
+    }
+
+    @Override
+    public void removeAllConsituents() {
+        constituents.clear();
+        removeAllRelations();
     }
 }

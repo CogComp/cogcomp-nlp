@@ -516,4 +516,20 @@ public class Constituent implements Serializable {
         }
         return cloneC;
     }
+
+    public void removeIncomingRelaton(Relation r) {
+        this.incomingRelations.remove(r);
+    }
+
+    public void removeAllIncomingRelatons() {
+        this.incomingRelations.clear();
+    }
+
+    public void removeOutgoingRelaton(Relation r) {
+        this.outgoingRelations.remove(r);
+    }
+
+    public void removeAllOutgoingRelaton() {
+        this.outgoingRelations.clear();
+    }
 }
