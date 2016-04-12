@@ -26,7 +26,7 @@ public class POSAnnotator extends Annotator {
 
     private static final String NAME = "illinoispos";
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-    private final TrainedPOSTagger tagger = new TrainedPOSTagger();
+    private final POSTagger tagger = new POSTagger();
     private String tokensfield = "tokens";
     private String sentencesfield = "sentences";
 
