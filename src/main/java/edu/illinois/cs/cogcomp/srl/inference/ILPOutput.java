@@ -5,7 +5,7 @@ import edu.illinois.cs.cogcomp.infer.ilp.ILPSolver;
 import edu.illinois.cs.cogcomp.infer.ilp.InferenceVariableLexManager;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
-import edu.illinois.cs.cogcomp.srl.jlis.*;
+import edu.illinois.cs.cogcomp.srl.learn.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class ILPOutput implements ILPOutputGenerator {
 	}
 
 	public SRLSentenceStructure getOutput(ILPSolver xmp,
-			InferenceVariableLexManager variableManager, IInstance ins) {
+										  InferenceVariableLexManager variableManager, IInstance ins) {
 
 		SRLSentenceInstance instance = (SRLSentenceInstance) ins;
 

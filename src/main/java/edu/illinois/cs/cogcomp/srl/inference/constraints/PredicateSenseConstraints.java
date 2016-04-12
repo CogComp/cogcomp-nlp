@@ -9,10 +9,10 @@ import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPConstraintGenerator;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPInference;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateStructure;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceStructure;
+import edu.illinois.cs.cogcomp.srl.learn.SRLPredicateInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLPredicateStructure;
+import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceStructure;
 
 import java.util.*;
 

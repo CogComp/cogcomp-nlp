@@ -9,7 +9,7 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPConstraintGenerator;
-import edu.illinois.cs.cogcomp.srl.jlis.*;
+import edu.illinois.cs.cogcomp.srl.learn.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

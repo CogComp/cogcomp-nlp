@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
 import edu.illinois.cs.cogcomp.srl.core.*;
-import edu.illinois.cs.cogcomp.srl.jlis.*;
+import edu.illinois.cs.cogcomp.srl.learn.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;

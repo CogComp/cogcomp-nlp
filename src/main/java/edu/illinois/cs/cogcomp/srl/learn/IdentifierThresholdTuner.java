@@ -7,8 +7,6 @@ import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.srl.core.ArgumentIdentifier;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -16,7 +14,7 @@ import java.util.concurrent.*;
 
 public class IdentifierThresholdTuner {
 
-	protected final double n_F;
+	private final double n_F;
 	private final int nThreads;
 	private final SRLManager manager;
 	private final SLProblem problem;
@@ -31,7 +29,7 @@ public class IdentifierThresholdTuner {
 
 	}
 
-	protected double fN(double precision, double recall, double n) {
+	private double fN(double precision, double recall, double n) {
 		double denom = n * n * precision + recall;
 		double num = (n * n + 1) * precision * recall;
 
@@ -140,8 +138,8 @@ public class IdentifierThresholdTuner {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<Pair<Double, Double>, IntPair> getPerformance(List<Double> A,
-			List<Double> B, final List<Pair<Double, Boolean>> scores)
+	private Map<Pair<Double, Double>, IntPair> getPerformance(List<Double> A,
+															  List<Double> B, final List<Pair<Double, Boolean>> scores)
 			throws InterruptedException, ExecutionException {
 
 		ExecutorService executor = Executors.newFixedThreadPool(nThreads);

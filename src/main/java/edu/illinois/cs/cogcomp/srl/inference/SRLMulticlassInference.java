@@ -6,8 +6,8 @@ import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassLabel;
 
 @SuppressWarnings("serial")
 public class SRLMulticlassInference extends AbstractInferenceSolver {

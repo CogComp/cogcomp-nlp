@@ -8,10 +8,10 @@ import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceStructure;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLPredicateInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceStructure;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,8 +25,7 @@ final public class SRLILPInference extends AbstractILPInference<SRLSentenceStruc
 
 	final static boolean DEBUG = false;
 
-	private final static Logger log = LoggerFactory
-			.getLogger(SRLILPInference.class);
+	private final static Logger log = LoggerFactory.getLogger(SRLILPInference.class);
 
 	public final SRLSentenceInstance instance;
 
@@ -71,8 +70,7 @@ final public class SRLILPInference extends AbstractILPInference<SRLSentenceStruc
 	}
 
 	@Override
-	protected void initializeSolver(ILPSolver xmp,
-									InferenceVariableLexManager variableManager) {
+	protected void initializeSolver(ILPSolver xmp, InferenceVariableLexManager variableManager) {
 		if (this.solverFactory.type == SolverType.JLISCuttingPlaneGurobi) {
 			JLISCuttingPlaneILPSolverGurobi s = (JLISCuttingPlaneILPSolverGurobi) xmp;
 			s.setInput(instance);
@@ -87,8 +85,7 @@ final public class SRLILPInference extends AbstractILPInference<SRLSentenceStruc
 		return outputGenerator.getOutput(xmp, variableManager, this.instance);
 	}
 
-	protected void addConstraints(ILPSolver xmp,
-								  List<ILPConstraint> constraints, String debugMessage) {
+	protected void addConstraints(ILPSolver xmp, List<ILPConstraint> constraints, String debugMessage) {
 		log.debug(debugMessage);
 
 		for (ILPConstraint c : constraints) {
@@ -114,12 +111,7 @@ final public class SRLILPInference extends AbstractILPInference<SRLSentenceStruc
 				((JLISCuttingPlaneILPSolverGurobi) xmp).addCuttingPlaneConstraintGenerator(c);
 			} else {
 				List<ILPConstraint> cs = c.getILPConstraints(instance, variableManager);
-
-				if (c.isDelayedConstraint() && xmp instanceof CuttingPlaneILPHook) {
-					((CuttingPlaneILPHook) xmp).addCuttingPlaneConstraintCollection(cs);
-				} else {
-					addConstraints(xmp, cs, c.name);
-				}
+				addConstraints(xmp, cs, c.name);
 			}
 		}
 	}

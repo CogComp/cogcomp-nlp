@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.srl.jlis;
+package edu.illinois.cs.cogcomp.srl.learn;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;

@@ -9,8 +9,8 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.inference.SRLILPConstraintGenerator;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLPredicateInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLSentenceInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLPredicateInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceInstance;
 
 import java.util.ArrayList;
 import java.util.HashSet;

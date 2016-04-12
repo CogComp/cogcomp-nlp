@@ -2,8 +2,8 @@ package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassInstance;
-import edu.illinois.cs.cogcomp.srl.jlis.SRLMulticlassLabel;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
+import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassLabel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

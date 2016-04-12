@@ -56,7 +56,7 @@ public class ModelInfo {
 
 	public void loadWeightVector() {
 		if (w != null) {
-			log.info("Weight vector already loaded!");
+			log.debug("Weight vector already loaded!");
 			return;
 		}
 
