@@ -106,6 +106,10 @@ public abstract class AbstractTextAnnotation implements Serializable {
         views.remove(viewName);
     }
 
+    public void removeAllViews() {
+        views.clear();
+    }
+
     /**
      * Gets the set of views that are available
      *
