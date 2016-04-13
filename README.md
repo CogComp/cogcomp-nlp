@@ -40,7 +40,7 @@ To include one of the modules in your Maven project, add the following snippet w
    version listed in this project's pom.xml file. Note that you also add to need the
    `<repository` element for the CogComp maven repository in the `<repositories>` element.
     
-    ```xml 
+```xml 
     <dependencies>
          ...
         <dependency>
@@ -58,4 +58,4 @@ To include one of the modules in your Maven project, add the following snippet w
             <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
         </repository>
     </repositories>
-   ```
+```
