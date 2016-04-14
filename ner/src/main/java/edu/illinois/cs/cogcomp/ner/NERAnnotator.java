@@ -51,6 +51,7 @@ public class NERAnnotator extends Annotator {
 
     }
 
+
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
         super(viewName, REQUIRED_VIEWS);
         ResourceManager nerRm;
