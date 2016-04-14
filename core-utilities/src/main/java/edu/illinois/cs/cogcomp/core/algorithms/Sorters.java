@@ -22,6 +22,22 @@ public class Sorters {
         return keys;
     }
 
+    public static <T, S extends Comparable<S>> List<T> reverseSortMapByValue(final Map<T, S> input) {
+        List<T> keys = new ArrayList<>();
+        for (T val : input.keySet()) {
+            keys.add(val);
+        }
+
+        Collections.sort(keys, new Comparator<T>() {
+
+            public int compare(T arg0, T arg1) {
+                return input.get(arg0).compareTo(input.get(arg1)) * -1;
+            }
+        });
+
+        return keys;
+    }
+
     public static <T, S extends Comparable<S>> List<T> sortMapByValue(final Map<T, S> input,
             final Comparator<S> valueComparator) {
         List<T> keys = new ArrayList<>();
