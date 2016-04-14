@@ -26,11 +26,11 @@
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>1.0.1</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
-            <!--<artifactId>illinois-pos-models</artifactId>-->
-            <!--<version>3.0.10</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-pos-models</artifactId>
+            <version>3.0.13</version>
+        </dependency>
     </dependencies>
 
     <repositories>
