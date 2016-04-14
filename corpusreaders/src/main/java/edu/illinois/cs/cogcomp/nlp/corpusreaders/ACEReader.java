@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFil
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,19 +35,19 @@ public class ACEReader extends TextAnnotationReader {
     private static final String RelationFirstArgumentTag = "Arg-1";
     private static final String RelationSecondArgumentTag = "Arg-2";
 
-    private static final Logger logger  = LoggerFactory.getLogger(ACEReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
 
     // Entity Constants
     public static final String ENTITYVIEW = "ENTITYVIEW";
 
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
-    public static final String EntitySubtypeAttribute = "EntitySubtype";
+    public static final String EntitySubtypeAttribute = "EntitySubtype"; /* Optional */
     public static final String EntityClassAttribute = "EntityClass";
 
     public static final String EntityMentionIDAttribute = "EntityMentionID";
     public static final String EntityMentionTypeAttribute = "EntityMentionType";
-    public static final String EntityMentionLDCTypeAttribute = "EntityMentionLDCType";
+    public static final String EntityMentionLDCTypeAttribute = "EntityMentionLDCType"; /* Optional */
 
     public static final String EntityHeadStartCharOffset = "EntityHeadStartCharOffset";
     public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
@@ -56,9 +57,9 @@ public class ACEReader extends TextAnnotationReader {
 
     public static final String RelationIDAttribute = "RelationID";
     public static final String RelationTypeAttribute = "RelationType";
-    public static final String RelationSubtypeAttribute = "RelationSubtype";
-    public static final String RelationModalityAttribute = "RelationModality";
-    public static final String RelationTenseAttribute = "RelationTense";
+    public static final String RelationSubtypeAttribute = "RelationSubtype"; /* Optional */
+    public static final String RelationModalityAttribute = "RelationModality"; /* Optional */
+    public static final String RelationTenseAttribute = "RelationTense"; /* Optional */
 
     public static final String RelationMentionIDAttribute = "RelationMentionID";
     public static final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
@@ -68,10 +69,11 @@ public class ACEReader extends TextAnnotationReader {
 
     /**
      * Constructor for the ACE Data-set Reader
+     *
      * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
-     * @param sections List of sections to parse. eg. `new String[] { "nw", "bn" }`
-     *                 Pass `null` to parse all available sections.
-     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
+     * @param sections      List of sections to parse. eg. `new String[] { "nw", "bn" }`
+     *                      Pass `null` to parse all available sections.
+     * @param is2004mode    Boolean representing if the data-set is the ACE-2004.
      * @throws Exception Exception thrown in-case of major failure.
      */
     public ACEReader(String aceCorpusHome, String[] sections, boolean is2004mode) throws Exception {
@@ -83,7 +85,7 @@ public class ACEReader extends TextAnnotationReader {
         this.is2004mode = is2004mode;
         this.sections = sections;
 
-        if (this.sections == null) {
+        if (this.sections == null || this.sections.length == 0) {
             this.sections = IOUtils.lsDirectories(this.aceCorpusHome);
         }
 
@@ -93,8 +95,9 @@ public class ACEReader extends TextAnnotationReader {
 
     /**
      * Constructor for the ACE Data-set Reader
+     *
      * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
-     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
+     * @param is2004mode    Boolean representing if the data-set is the ACE-2004.
      * @throws Exception Exception thrown in-case of major failure.
      */
     public ACEReader(String aceCorpusHome, boolean is2004mode) throws Exception {
@@ -134,20 +137,23 @@ public class ACEReader extends TextAnnotationReader {
 
             for (File file : sectionDir.listFiles(apfFileFilter)) {
                 ACEDocument doc;
+                String fileName = file.getAbsolutePath();
 
                 try {
-                    doc = fileProcessor.processAceEntry(sectionDir, file.getAbsolutePath());
+                    doc = fileProcessor.processAceEntry(sectionDir, fileName);
                     doc.taList.get(0); // Only pick documents that have at-least one TA.
                 } catch (Exception ex) {
                     logger.warn("Error while reading document - " + file.getName(), ex);
                     continue;
                 }
 
-                // Adding AbsolutePath as textId for annotation as TA currently
-                // does not support attributes.
+                logger.info("Parsing file - " + file.getName());
+
+                // Adding `section/fileName` as textId for annotation.
+                String textId = fileName.substring(fileName.indexOf(section + File.separator));
                 TextAnnotation ta = taBuilder.createTextAnnotation(
                         this.corpusId,
-                        file.getAbsolutePath(),
+                        textId,
                         doc.contentRemovingTags);
 
                 this.addEntityViews(ta, doc.aceAnnotation, file);
@@ -168,8 +174,6 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        logger.info("Parsing entites for " +  file.getName());
-
         SpanLabelView entityView = new SpanLabelView(ENTITYVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefView = new CoreferenceView(ViewNames.COREF, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
@@ -187,12 +191,13 @@ public class ACEReader extends TextAnnotationReader {
 
                 Constituent extentConstituent = new Constituent(entity.type, ENTITYVIEW, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
-                extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
-                extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
                 extentConstituent.addAttribute(EntityMentionTypeAttribute, entityMention.type);
-                extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
+                extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
+
+                if (entity.subtype != null) extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
+                if (entityMention.ldcType != null) extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
 
                 extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
                 extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
@@ -231,13 +236,12 @@ public class ACEReader extends TextAnnotationReader {
      * Adds a PredicateArgumentView for ACE Relations between Entities.
      * The Predicate constituent of the View presents the first Argument in the ACE Relation.
      * The Argument constituent of the View presents the second Argument in the ACE Relation.
+     *
      * @param ta            TextAnnotation instance to add the Relation View to.
      * @param docAnnotation Annotation for the current document.
      * @param file          Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        logger.info("Parsing relations for " +  file.getName());
-
         PredicateArgumentView relationView = new PredicateArgumentView(RELATIONVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF);
@@ -345,9 +349,10 @@ public class ACEReader extends TextAnnotationReader {
                 for (Constituent arg : Arrays.asList(firstArgument, secondArgument)) {
                     arg.addAttribute(RelationIDAttribute, relation.id);
                     arg.addAttribute(RelationTypeAttribute, relation.type);
-                    arg.addAttribute(RelationSubtypeAttribute, relation.subtype);
-                    arg.addAttribute(RelationTenseAttribute, relation.tense);
-                    arg.addAttribute(RelationModalityAttribute, relation.modality);
+
+                    if (relation.subtype != null) arg.addAttribute(RelationSubtypeAttribute, relation.subtype);
+                    if (relation.tense != null) arg.addAttribute(RelationTenseAttribute, relation.tense);
+                    if (relation.modality != null) arg.addAttribute(RelationModalityAttribute, relation.modality);
 
                     arg.addAttribute(RelationMentionIDAttribute, relationMention.id);
                     arg.addAttribute(RelationMentionLexicalConditionAttribute, relationMention.lexicalCondition);
@@ -363,8 +368,8 @@ public class ACEReader extends TextAnnotationReader {
                 relationView.addPredicateArguments(
                         firstArgument,
                         Collections.singletonList(secondArgument),
-                        new String[]{relation.subtype},
-                        new double[]{1.0f});
+                        new String[]{ relation.subtype },
+                        new double[]{ 1.0f });
             }
         }
 
@@ -409,12 +414,11 @@ public class ACEReader extends TextAnnotationReader {
      * leading to the entity id factor being totally ignored.
      *
      * @param corefView Input CoreferenceView to find coreferent mentions from.
-     * @param mention Mention to find coreferent mentions to.
+     * @param mention   Mention to find coreferent mentions to.
      * @return List of Mentions represented as Constituents in the Coreference View.
      */
     private static List<Constituent> getCorefMentionsForSameEntityId(CoreferenceView corefView, Constituent mention) {
         Constituent canonicalEntity = corefView.getCanonicalEntity(mention);
         return Mappers.map(canonicalEntity.getOutgoingRelations(), relationsToConstituents);
     }
-
 }
