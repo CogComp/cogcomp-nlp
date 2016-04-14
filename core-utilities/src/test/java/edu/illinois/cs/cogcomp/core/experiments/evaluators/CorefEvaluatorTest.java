@@ -59,5 +59,13 @@ public class CorefEvaluatorTest {
         assertEquals(bcubedTester.getMacroF1(), 0.73, 0.01);
         assertEquals(bcubedTester.getMacroPrecision(), 0.58, 0.01);
         assertEquals(bcubedTester.getMacroRecall(), 1.0, 0.01);
+
+        ClassificationTester accuracyTester = new ClassificationTester();
+        CorefAccuracyEvaluator accuracyEvaluator = new CorefAccuracyEvaluator();
+        accuracyEvaluator.setViews(gold, predicted);
+        accuracyEvaluator.evaluate(accuracyTester);
+        assertEquals(accuracyTester.getMacroF1(), 0.68, 0.01);
+        assertEquals(accuracyTester.getMacroPrecision(), 0.51, 0.01);
+        assertEquals(accuracyTester.getMacroRecall(), 1.0, 0.01);
     }
 }
