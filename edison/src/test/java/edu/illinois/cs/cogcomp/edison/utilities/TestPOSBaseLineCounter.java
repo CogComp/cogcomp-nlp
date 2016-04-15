@@ -31,7 +31,7 @@ public class TestPOSBaseLineCounter extends TestCase {
         System.out.println(str);
 
         try {
-            File file = new File("src\\test\resources\\outputFiles\\TestBaseLineCounterOutput");
+            File file = new File("src/test/resources/outputFiles/TestBaseLineCounterOutput");
 
             if (!file.exists()) {
                 file.createNewFile();

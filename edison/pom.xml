@@ -46,4 +46,28 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
+
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <tags>
+                        <!-- Tag to allow the definition of keywords describing FeatureExtractors.
+                          If the extractor is a reference (i.e. was used in a CogComp project)
+                          then one of the keywords must be the name of the project -->
+                        <tag>
+                            <name>keywords</name>
+                            <!-- Tag is allowed to appear in types (classes, interfaces) and fields -->
+                            <placement>tf</placement>
+                            <head>Keywords:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

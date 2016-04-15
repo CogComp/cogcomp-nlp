@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Test class
- * <p/>
+ * <p>
  * <b>NB:</b> If needed, please re-create the {@code feature.collection.text} file using
  * {@link CreateTestFeaturesResource}.
  *

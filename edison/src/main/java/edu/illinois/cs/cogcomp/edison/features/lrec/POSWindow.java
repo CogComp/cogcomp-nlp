@@ -18,7 +18,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 /**
  * Feature extractor that senses the parts of speech of the four context words immediately
  * surrounding the target word (two before and two after).
- * 
+ *
+ * @keywords pos-tagger, window
  * @author Xinbo Wu
  */
 public class POSWindow implements FeatureExtractor {
