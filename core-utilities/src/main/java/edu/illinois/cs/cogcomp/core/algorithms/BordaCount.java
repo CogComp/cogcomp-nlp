@@ -1,9 +1,6 @@
 package edu.illinois.cs.cogcomp.core.algorithms;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This is an implementation of Borda Count algorithm for aggregating multiple rankings into a single ranking.
@@ -37,7 +34,8 @@ public class BordaCount {
                     scores.put(item, scores.get(item) + i);
                 }
             }
-            result = Sorters.reverseSortMapByValue(scores);
+            result = Sorters.sortMapByValue(scores);
+            Collections.reverse(result);
         }
         return result;
     }
