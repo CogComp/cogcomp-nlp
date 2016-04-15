@@ -24,7 +24,7 @@ import java.util.*;
  * This class might more accurately be called 'ParameterLoader'. This is the class that has
  * functionality for populating {@link ParametersForLbjCode}, which actually contains the parameters
  * used throughout the program.
- * <p/>
+ * <p>
  * Rewritten by Stephen Mayhew, Jan 2013
  */
 public class Parameters {

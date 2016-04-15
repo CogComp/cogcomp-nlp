@@ -10,7 +10,7 @@ import java.util.Properties;
  * Configuration for NER using CoNLL model with "standard" parameters (i.e., those we found to
  * perform best on the labeled data we have). Note that this includes a default ViewName that
  * conforms to expected CCG software behavior.
- * <p/>
+ * <p>
  * This class avoids the need for a configuration file. Non-default config values can be set
  * individually, and the client will use the inherited {#getConfig( ResourceManager rm )} method to
  * override only those values that conflict with defaults. Created by mssammon on 10/14/15.
