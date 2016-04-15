@@ -11,13 +11,13 @@
 
     <artifactId>illinois-ner</artifactId>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>CogcompSoftware</id>-->
+            <!--<name>CogcompSoftware</name>-->
+            <!--<url>http://cogcomp.cs.illinois.edu/m2repo/</url>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 
     <dependencies>
         <dependency>
@@ -35,6 +35,7 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-common-resources</artifactId>
             <version>1.1</version>
+<!--            <classifier>ner</classifier> -->
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -71,28 +72,28 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>edu.illinois.cs.cogcomp</groupId>
-                <artifactId>lbjava-maven-plugin</artifactId>
-                <version>1.2.13</version>
-                <configuration>
-                    <lbjavaInputFileList>
-                        <param>${project.basedir}/src/main/lbj/LbjTagger.lbj</param>
-                    </lbjavaInputFileList>
-                    <gspFlag>${project.basedir}/src/main/java</gspFlag>
-                    <dFlag>${project.basedir}/target/classes</dFlag>
-                    <sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>clean</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+                <!--<artifactId>lbjava-maven-plugin</artifactId>-->
+                <!--<version>1.2.13</version>-->
+                <!--<configuration>-->
+                    <!--<lbjavaInputFileList>-->
+                        <!--<param>${project.basedir}/src/main/lbj/LbjTagger.lbj</param>-->
+                    <!--</lbjavaInputFileList>-->
+                    <!--<gspFlag>${project.basedir}/src/main/java</gspFlag>-->
+                    <!--<dFlag>${project.basedir}/target/classes</dFlag>-->
+                    <!--<sourcepathFlag>${project.basedir}/src/main/java</sourcepathFlag>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>generate-sources</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>clean</goal>-->
+                            <!--<goal>compile</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>

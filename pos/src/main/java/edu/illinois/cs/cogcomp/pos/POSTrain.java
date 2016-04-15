@@ -16,22 +16,18 @@ import java.io.File;
  */
 public class POSTrain {
     private static final String NAME = POSTrain.class.getCanonicalName();
-    private String modelPath; // Path to the directory where the models are stored.
     private int iter; // Number of training iterations
     private POSTaggerKnown taggerKnown;
     private POSTaggerUnknown taggerUnknown;
     private MikheevTable mikheevTable;
-    private POSBaselineLearner baselineTarget;
+    private BaselineTarget baselineTarget;
     private ResourceManager rm;
 
-    public POSTrain(String modelPath) {
-        this.modelPath = modelPath;
-        this.iter = 50;
-        this.init();
+    public POSTrain() {
+        this(50);
     }
 
-    public POSTrain(String modelPath, int iter) {
-        this.modelPath = modelPath;
+    public POSTrain(int iter) {
         this.iter = iter;
         this.init();
     }
@@ -41,10 +37,18 @@ public class POSTrain {
      */
     private void init() {
         rm = new POSConfigurator().getDefaultConfig();
-        taggerKnown = new POSTaggerKnown();
-        taggerUnknown = new POSTaggerUnknown();
-        mikheevTable = new MikheevTable();
-        baselineTarget = new baselineTarget();
+        String knownModelFile = rm.getString("knownModelPath");
+        String knownLexFile = rm.getString("knownLexPath");
+        String unknownModelFile = rm.getString("unknownModelPath");
+        String unknownLexFile = rm.getString("unknownLexPath");
+        String baselineModelFile = rm.getString("baselineModelPath");
+        String baselineLexFile = rm.getString("baselineLexPath");
+        String mikheevModelFile = rm.getString("mikheevModelPath");
+        String mikheevLexFile = rm.getString("mikheevLexPath");
+        baselineTarget = new BaselineTarget(baselineModelFile, baselineLexFile);
+        mikheevTable = new MikheevTable(mikheevModelFile, mikheevLexFile);
+        taggerKnown = new POSTaggerKnown(knownModelFile, knownLexFile, baselineTarget);
+        taggerUnknown = new POSTaggerUnknown(unknownModelFile, unknownLexFile, mikheevTable);
     }
 
     /**
@@ -66,7 +70,7 @@ public class POSTrain {
         Parser trainingParserUnknown = new POSLabeledUnknownWordParser(trainingData);
 
         MikheevTable.isTraining = true;
-        edu.illinois.cs.cogcomp.pos.lbjava.baselineTarget.isTraining = true;
+        BaselineTarget.isTraining = true;
 
         Object ex;
         // baseline and mikheev just count, they don't learn -- so one iteration should be enough
@@ -105,45 +109,40 @@ public class POSTrain {
     /**
      * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor
      */
-    public void writeModelsToDisk() {
-        // Make sure necessary directories exist
-        (new File(modelPath)).mkdirs();
-
-        // There isn't a lexicon for baselineTarget/mikheevTable
-        baselineTarget.writeModel(rm.getString("baselineModelPath"));
-        mikheevTable.writeModel(modelPath + rm.getString("mikheevName") + ".lc");
-        taggerKnown.write(rm.getString("knownModelPath"), rm.getString("knownLexPath"));
-        taggerUnknown.write(rm.getString("unknownModelPath"), rm.getString("unknownLexPath"));
-        System.out.println("Done training, models are in " + modelPath);
+    private void writeModelsToDisk() {
+        baselineTarget.save();
+        mikheevTable.save();
+        taggerKnown.save();
+        taggerUnknown.save();
+        System.out.println("Done training");
     }
 
     public static void main(String[] args) {
-        if (args.length != 2 && args.length != 1) {
-            System.err.println("Usage: " + NAME + " modelPath [trainingFile]");
-            System.err
-                    .println("'trainingDataFile' must contain training data in specified format ("
-                            + "see doc/README); 'modelPath' specifies directory to which the learned models will be written.");
-            System.exit(-1);
-        }
-        String modelPath = args[0];
-        String trainingFile = null;
-        if (args.length == 2) {
-            trainingFile = args[1];
-        }
+//        if (args.length != 2 && args.length != 1) {
+//            System.err.println("Usage: " + NAME + " modelPath [trainingFile]");
+//            System.err
+//                    .println("'trainingDataFile' must contain training data in specified format ("
+//                            + "see doc/README); 'modelPath' specifies directory to which the learned models will be written.");
+//            System.exit(-1);
+//        }
+//        String configFile;
+//        if (args.length == 1) {
+//            configFile = args[0];
+//        }
 
-        File writeDir = new File(modelPath);
-        if (!writeDir.exists()) {
-            System.err.println(NAME + ".writeModelsToDisk(): creating dir '" + writeDir.getName()
-                    + "'...");
-            writeDir.mkdir();
-        }
+//        File writeDir = new File(modelPath);
+//        if (!writeDir.exists()) {
+//            System.err.println(NAME + ".writeModelsToDisk(): creating dir '" + writeDir.getName()
+//                    + "'...");
+//            writeDir.mkdir();
+//        }
 
-        POSTrain trainer = new POSTrain(modelPath);
-        if (trainingFile == null) {
+        POSTrain trainer = new POSTrain();
+//        if (trainingFile == null) {
             trainer.trainModels();
-        } else {
-            trainer.trainModels(trainingFile);
-        }
+//        } else {
+//            trainer.trainModels(trainingFile);
+//        }
 
         trainer.writeModelsToDisk();
     }
