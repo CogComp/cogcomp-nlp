@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 /**
- * A cache that removes the least recently used elements when it is full. This
- * implementation is <b>NOT</b> threadsafe.
+ * A cache that removes the least recently used elements when it is full. This implementation is
+ * <b>NOT</b> threadsafe.
  *
  * @author Vivek Srikumar
  */
@@ -24,10 +24,7 @@ public class LRUCache<K, V> {
         cache = new LinkedHashMap<K, V>(initialCapacity) {
             @Override
             protected boolean removeEldestEntry(java.util.Map.Entry<K, V> eldest) {
-                if (this.size() > LRUCache.this.sizeLimit)
-                    return true;
-                else
-                    return false;
+                return this.size() > LRUCache.this.sizeLimit;
             }
         };
     }

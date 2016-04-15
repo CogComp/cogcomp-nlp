@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>${cogcompversion}</version>
+        <version>3.0.30</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,30 +15,14 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>${cogcompversion}</version>
+            <version>3.0.30</version>
         </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
-
-
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>curator-interfaces</artifactId>
-            <version>0.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.5.1</version>
-            <optional>true</optional>
-            <scope>test</scope>
-        </dependency>
-
 
     </dependencies>
 </project>

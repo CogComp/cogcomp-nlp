@@ -15,7 +15,8 @@ import java.util.Random;
  */
 public class ShufflingBasedStatisticalSignificance {
 
-    private final static Logger log = LoggerFactory.getLogger(ShufflingBasedStatisticalSignificance.class);
+    private final static Logger log = LoggerFactory
+            .getLogger(ShufflingBasedStatisticalSignificance.class);
     List<EvaluationRecord> output1, output2;
     private int numIterations;
     private Random random;
@@ -46,7 +47,8 @@ public class ShufflingBasedStatisticalSignificance {
     }
 
     public static void main(String[] args) {
-        ShufflingBasedStatisticalSignificance sig = new ShufflingBasedStatisticalSignificance(10000, new Random());
+        ShufflingBasedStatisticalSignificance sig =
+                new ShufflingBasedStatisticalSignificance(10000, new Random());
 
         EvaluationRecord e1 = new EvaluationRecord();
         EvaluationRecord e2 = new EvaluationRecord();
@@ -76,11 +78,9 @@ public class ShufflingBasedStatisticalSignificance {
     }
 
     public void runSignificanceTest() {
-        log.debug("Doing random shuffle test for " + numIterations
-                + " iterations");
+        log.debug("Doing random shuffle test for " + numIterations + " iterations");
 
-        perf = evaluate(new Pair<>(
-                output1, output2));
+        perf = evaluate(new Pair<>(output1, output2));
 
         log.debug("System 1 performance: " + perf.getFirst().getSummary());
         log.debug("System 2 performance: " + perf.getSecond().getSummary());
@@ -197,8 +197,7 @@ public class ShufflingBasedStatisticalSignificance {
             mergeInto(system2Perf, output2.get(i));
         }
 
-        return new Pair<>(system1Perf,
-                system2Perf);
+        return new Pair<>(system1Perf, system2Perf);
 
     }
 
@@ -233,9 +232,8 @@ public class ShufflingBasedStatisticalSignificance {
 
     @Override
     public String toString() {
-        return " P: " + this.precisionSignificance() + " ("
-                + this.precisionSign() + "), R: " + this.recallSignificance()
-                + "(" + this.recallSign() + "), F: " + this.f1Significance()
-                + "(" + this.f1Sign() + ")";
+        return " P: " + this.precisionSignificance() + " (" + this.precisionSign() + "), R: "
+                + this.recallSignificance() + "(" + this.recallSign() + "), F: "
+                + this.f1Significance() + "(" + this.f1Sign() + ")";
     }
 }

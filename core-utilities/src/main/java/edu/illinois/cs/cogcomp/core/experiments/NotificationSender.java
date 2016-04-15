@@ -15,9 +15,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 /**
- * An API to send notifications to android devices via the Notify My Android app.
- * You need to have an account with <a href="https://www.notifymyandroid.com/register.jsp">Notify My Android</a>.
- * <br/>
+ * An API to send notifications to android devices via the Notify My Android app. You need to have
+ * an account with <a href="https://www.notifymyandroid.com/register.jsp">Notify My Android</a>.
+ * <p>
  * Code adapted from from Adriano Maia (adriano@usk.bz)
  *
  * @author Christos Christodoulopoulos
@@ -25,20 +25,21 @@ import java.net.URLEncoder;
  */
 public class NotificationSender {
     private static String API_KEY;
-    private static final String DEFAULT_URL = "https://nma.usk.bz";
+    private static final String DEFAULT_URL = "https://www.notifymyandroid.com";
     private static String APP_NAME = "CogComp project";
     private static String EVENT_NAME = "Experiment Complete";
 
     /**
      * Basic constructor. You only need the file that contains the API key.
      *
-     * @param apiKeyFile The file containing the 48-bit API key from
-     *                   <a href="https://www.notifymyandroid.com/account.jsp">Notify My Android</a>
+     * @param apiKeyFile The file containing the 48-bit API key from <a
+     *        href="https://www.notifymyandroid.com/account.jsp">Notify My Android</a>
      */
     public NotificationSender(String apiKeyFile) {
         try {
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(new File(apiKeyFile))));
+            BufferedReader in =
+                    new BufferedReader(new InputStreamReader(new FileInputStream(new File(
+                            apiKeyFile))));
             API_KEY = in.readLine();
         } catch (IOException e) {
             System.err.println("Cannot read API key file");
@@ -47,13 +48,13 @@ public class NotificationSender {
     }
 
     /**
-     * A extended constructor that allows the definition of the name of the program (the title of the notification)
-     * and the event name (the subtitle of the notification).
+     * A extended constructor that allows the definition of the name of the program (the title of
+     * the notification) and the event name (the subtitle of the notification).
      *
-     * @param apiKeyFile The file containing the 48-bit API key from
-     *                   <a href="https://www.notifymyandroid.com/account.jsp">Notify My Android</a>
-     * @param appName    The name of the program sending the notification
-     * @param eventName  The event name (e.g. Experiment Complete!)
+     * @param apiKeyFile The file containing the 48-bit API key from <a
+     *        href="https://www.notifymyandroid.com/account.jsp">Notify My Android</a>
+     * @param appName The name of the program sending the notification
+     * @param eventName The event name (e.g. Experiment Complete!)
      */
     public NotificationSender(String apiKeyFile, String appName, String eventName) {
         this(apiKeyFile);
@@ -140,20 +141,21 @@ public class NotificationSender {
 
             return (msgSent) ? "Message sent successfully" : "Message failed to send";
         } else {
-            return "There was a problem contacting NMA Servers. " +
-                    "HTTP Response code different than 200(OK). " +
-                    "Try again or contact support@nma.bz if it persists.";
+            return "There was a problem contacting NMA Servers. "
+                    + "HTTP Response code different than 200(OK). "
+                    + "Try again or contact support@notifymyandroid.com if it persists.";
         }
     }
 
     /**
      * Dynamically adds a url-form-encoded key/value to a StringBuilder
      *
-     * @param sb    StringBuilder buffer used to build the final url-form-encoded data
-     * @param name  Key name
+     * @param sb StringBuilder buffer used to build the final url-form-encoded data
+     * @param name Key name
      * @param value Value
      */
-    private static void addEncodedParameter(StringBuilder sb, String name, String value) throws IOException {
+    private static void addEncodedParameter(StringBuilder sb, String name, String value)
+            throws IOException {
         if (sb.length() > 0) {
             sb.append("&");
         }
