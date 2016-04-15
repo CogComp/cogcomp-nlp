@@ -1,10 +1,12 @@
 package edu.illinois.cs.cogcomp.pos;
 
-import java.util.*;
-import java.io.*;
-import edu.illinois.cs.cogcomp.lbjava.nlp.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.POSBracketToVector;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 
 /**

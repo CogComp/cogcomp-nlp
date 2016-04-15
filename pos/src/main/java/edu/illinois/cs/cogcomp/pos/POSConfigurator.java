@@ -26,7 +26,7 @@ public class POSConfigurator extends Configurator {
     public static final Property TRAINING_AND_DEV_DATA = new Property("trainingAndDevData",
             CORPUS_PREFIX.value + "00-21.br");
 
-    public static final Property BASELINE_NAME = new Property("baselineName", "baselineTarget");
+    public static final Property BASELINE_NAME = new Property("baselineName", "BaselineTarget");
     public static final Property MIKHEEV_NAME = new Property("mikheevName", "MikheevTable");
     public static final Property KNOWN_NAME = new Property("knownName", "POSTaggerKnown");
     public static final Property UNKNOWN_NAME = new Property("unknownName", "POSTaggerUnknown");
@@ -35,8 +35,12 @@ public class POSConfigurator extends Configurator {
             "models/edu/illinois/cs/cogcomp/pos/lbjava/");
     public static final Property BASELINE_MODEL_PATH = new Property("baselineModelPath",
             MODEL_PATH.value + BASELINE_NAME.value + ".lc");
+    public static final Property BASELINE_LEX_PATH = new Property("baselineLexPath",
+            MODEL_PATH.value + BASELINE_NAME.value + ".lex");
     public static final Property MIKHEEV_MODEL_PATH = new Property("mikheevModelPath",
             MODEL_PATH.value + MIKHEEV_NAME.value + ".lc");
+    public static final Property MIKHEEV_LEX_PATH = new Property("mikheevLexPath",
+            MODEL_PATH.value + MIKHEEV_NAME.value + ".lex");
     public static final Property KNOWN_MODEL_PATH = new Property("knownModelPath", MODEL_PATH.value
             + KNOWN_NAME.value + ".lc");
     public static final Property KNOWN_LEX_PATH = new Property("knownLexPath", MODEL_PATH.value
@@ -52,7 +56,7 @@ public class POSConfigurator extends Configurator {
                 {CORPUS_PREFIX, TRAINING_DATA, DEV_DATA, TEST_DATA, TRAINING_AND_DEV_DATA,
                         BASELINE_NAME, MIKHEEV_NAME, KNOWN_NAME, UNKNOWN_NAME, MODEL_PATH,
                         BASELINE_MODEL_PATH, MIKHEEV_MODEL_PATH, KNOWN_MODEL_PATH, KNOWN_LEX_PATH,
-                        UNKNOWN_MODEL_PATH, UNKNOWN_LEX_PATH};
+                        UNKNOWN_MODEL_PATH, UNKNOWN_LEX_PATH, BASELINE_LEX_PATH, MIKHEEV_LEX_PATH};
         return new ResourceManager(generateProperties(props));
     }
 }
