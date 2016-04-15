@@ -34,8 +34,8 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-common-resources</artifactId>
-            <version>1.5</version>
-            <classifier>ner</classifier>
+            <version>1.1</version>
+<!--            <classifier>ner</classifier> -->
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>

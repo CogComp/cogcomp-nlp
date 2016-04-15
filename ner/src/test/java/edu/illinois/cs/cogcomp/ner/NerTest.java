@@ -20,7 +20,7 @@ public class NerTest {
     private static final String TEST_INPUT =
             "JFK has one dog and Newark has a handful, Farbstein said.";
     private static final String TEST_OUTPUT =
-            "[LOC JFK] has one dog and [LOC Newark] has a handful , [PER Farbstein] said . ";
+            "JFK has one dog and [LOC Newark] has a handful , [PER Farbstein] said . ";
 
     private static NETaggerLevel1 t1;
     private static NETaggerLevel2 t2 = null;
