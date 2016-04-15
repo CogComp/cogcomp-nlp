@@ -1,0 +1,27 @@
+(define features
+  
+  (define word-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     word))
+
+  (define pos-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     pos))
+
+  (define predicate-features
+    (list word-context
+	  pos-context
+	  word
+	  lemma
+	  pos
+	  capitalization
+	  (attribute :name predicate)
+	  (subcat-frame :parse-view *default-parser*)
+	  numbers
+	  chunk-embedding
+	  ne-embedding))
+predicate-features)

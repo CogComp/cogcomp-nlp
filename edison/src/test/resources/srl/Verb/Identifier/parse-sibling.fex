@@ -1,0 +1,4 @@
+(define parse-sibling-features
+    (list label
+	  (head-features :parse-view *default-parser*
+			 word-pos)))
