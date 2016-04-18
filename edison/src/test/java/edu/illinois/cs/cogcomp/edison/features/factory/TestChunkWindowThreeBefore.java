@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
 
+import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
@@ -45,7 +46,7 @@ public class TestChunkWindowThreeBefore extends TestCase {
     
     public final void testUsage() throws EdisonException {
 	
-	System.out.println("PreviousTags Feature Extractor");
+	// System.out.println("PreviousTags Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
 	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
@@ -53,28 +54,33 @@ public class TestChunkWindowThreeBefore extends TestCase {
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	
 	for(Constituent c: testlist){
-	    System.out.println(c.getSurfaceForm());
+	    // System.out.println(c.getSurfaceForm());
 	}
 
-	System.out.println("Testlist size is "+testlist.size());
+	// System.out.println("Testlist size is "+testlist.size());
 
 	Constituent test = testlist.get(4);
 	
-	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+	// System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
 
 		ChunkWindowThreeBefore prevtags = new ChunkWindowThreeBefore("ChunkWindowThreeBefore");
 	
-	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
+	System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
      
 	Set<Feature> feats = prevtags.getFeatures(test);
-	
+	String[] expected_outputs = {
+		"ChunkWindowThreeBefore:0(NP)",
+		"ChunkWindowThreeBefore:1(NP)"
+	};
+
 	if(feats == null){
-	    System.out.println("Feats are returning NULL.");
+	    // System.out.println("Feats are returning NULL.");
 	}
 	
-	System.out.println("Printing Set of Features");
+	// System.out.println("Printing Set of Features");
 	for(Feature f: feats){
 	    System.out.println(f.getName());
+		assert(ArrayUtils.contains( expected_outputs, f.getName()));
 	}
 	 
     }
@@ -83,7 +89,7 @@ public class TestChunkWindowThreeBefore extends TestCase {
 	
 	for (TextAnnotation ta : tas) {
 	    for (String viewName : viewNames)
-		if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
+		// if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
 	}
     }
 }
