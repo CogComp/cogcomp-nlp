@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.apache.commons.lang.ArrayUtils;
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -45,12 +46,10 @@ public class TestPOSWindowTwo extends TestCase {
     
     public final void testUsage() throws EdisonException {
 	
-	System.out.println("POSWindow Feature Extractor");
+	System.out.println("POSWindowTwo Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
 	TextAnnotation ta = tas.get(2);
 	View TOKENS = ta.getView("TOKENS");
-	
-	System.out.println("GOT TOKENS FROM TEXTAnn");
 	
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	
@@ -58,17 +57,22 @@ public class TestPOSWindowTwo extends TestCase {
 	    System.out.println(c.getSurfaceForm());
 	}
 	
-	System.out.println("Testlist size is "+testlist.size());
-	
 	Constituent test = testlist.get(1);
 
 	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
 
-		POSWindowTwo POSW = new POSWindowTwo("POSWindowTwo");
+	POSWindowTwo POSW = new POSWindowTwo("POSWindowTwo");
       
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
 	Set<Feature> feats = POSW.getFeatures(test);
+	
+	String[] expected_outputs = {
+	    "POSWindowTwo:0(DT)",
+	    "POSWindowTwo:1(VBZ)",
+	    "POSWindowTwo:2(DT)",
+	    "POSWindowTwo:3(NN)"
+	};
 	
 	if(feats == null){
 	    System.out.println("Feats are returning NULL.");
@@ -76,7 +80,7 @@ public class TestPOSWindowTwo extends TestCase {
 	
 	System.out.println("Printing Set of Features");
 	for(Feature f: feats){
-	    System.out.println(f.getName());
+	    assert(ArrayUtils.contains(expected_outputs, f.getName()));
 	}
 		
 	//System.exit(0);
