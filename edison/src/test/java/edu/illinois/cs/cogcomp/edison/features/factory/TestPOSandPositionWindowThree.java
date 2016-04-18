@@ -104,7 +104,7 @@ public class TestPOSandPositionWindowThree extends TestCase {
 	System.out.println("Printing Set of Features");
 	for(Feature f: feats){
 	    // System.out.println(f.getName());
-		assert(ArrayUtils.contains( expected_outputs, f.getName()))
+		assert(ArrayUtils.contains( expected_outputs, f.getName()));
 	}
 	
 	System.out.println("GOT FEATURES YES!");
