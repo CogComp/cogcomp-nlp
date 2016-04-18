@@ -45,10 +45,10 @@ public class TestPOSWindowTwo extends TestCase {
     
     public final void testUsage() throws EdisonException {
 
-	POSWindowTwo:0(DT)
+	String expected_outputs[] = POSWindowTwo:0(DT)
 	POSWindowTwo:1(VBZ)
-	    POSWindowTwo:2(DT)
-	    POSWindowTwo:3(NN)
+	POSWindowTwo:2(DT)
+	POSWindowTwo:3(NN)
 	
 	System.out.println("POSWindow Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
