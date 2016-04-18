@@ -72,7 +72,7 @@ public class TestPOSandPositionWindowThree extends TestCase {
 	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
 	Set<Feature> feats = POSWpp.getFeatures(test);
-	String[] expected_outputs = [
+	String[] expected_outputs = {
 		"POSandPositionWindowThree:0_0(DT)",
 		"POSandPositionWindowThree:1_0(VBZ)",
 		"POSandPositionWindowThree:2_0(DT)",
@@ -94,7 +94,7 @@ public class TestPOSandPositionWindowThree extends TestCase {
 		"POSandPositionWindowThree:4_2(._null_null)",
 		"POSandPositionWindowThree:5_2(null_null)",
 		"POSandPositionWindowThree:6_2(null)"
-	];
+	};
 
 
 	if(feats == null){
