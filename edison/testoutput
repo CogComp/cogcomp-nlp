@@ -1,7 +1,7 @@
 [INFO] Scanning for projects...
 [INFO]                                                                         
 [INFO] ------------------------------------------------------------------------
-[INFO] Building illinois-edison 3.0.12
+[INFO] Building illinois-edison 3.0.24-pv
 [INFO] ------------------------------------------------------------------------
 [INFO] 
 [INFO] --- maven-resources-plugin:2.5:resources (default-resources) @ illinois-edison ---
@@ -15,7 +15,7 @@
 [INFO] --- maven-resources-plugin:2.5:testResources (default-testResources) @ illinois-edison ---
 [debug] execute contextualize
 [INFO] Using 'UTF-8' encoding to copy filtered resources.
-[INFO] Copying 8 resources
+[INFO] Copying 14 resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:2.0.2:testCompile (default-testCompile) @ illinois-edison ---
 [INFO] Compiling 8 source files to /home/pvijaya2/research/edison/latest/illinois-cogcomp-nlp/edison/target/test-classes
@@ -58,7 +58,7 @@ Printing Set of Features
 MixedChunkWindowTwoBeforePOSWindowThreeBefore:ll(NP_VP)
 MixedChunkWindowTwoBeforePOSWindowThreeBefore:lt1(NP_RB)
 MixedChunkWindowTwoBeforePOSWindowThreeBefore:lt2VP_VBN
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.459 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.391 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestWordTypeInformation
 WordTypeInformation
 GOT TOKENS FROM TEXTAnn
@@ -83,7 +83,7 @@ WordTypeInformation:d3(false)
 WordTypeInformation:c4(false)
 WordTypeInformation:d4(false)
 WordTypeInformation:c4(true)
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.144 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.12 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestChunkWindowThreeBefore
 PreviousTags Feature Extractor
 I
@@ -97,7 +97,24 @@ The constituent we are extracting features from in this test is: today
 Printing Set of Features
 ChunkWindowThreeBefore:0(NP)
 ChunkWindowThreeBefore:1(NP)
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.074 sec
+Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestAffixes
+Affixes Feature Extractor
+GOT TOKENS FROM TEXTAnn
+I
+give
+John
+$900
+today
+.
+Testlist size is 6
+The constituent we are extracting features from in this test is: give
+Printing Set of Features
+Affixes:p|(giv)
+Affixes:s|(e)
+Affixes:s|(ve)
+Affixes:s|(ive)
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.099 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestWordConjunctionOneTwoThreeGramWindowTwo
 Formpp
 GOT TOKENS FROM TEXTAnn
@@ -121,24 +138,7 @@ WordConjunctionOneTwoThreeGramWindowTwo:2_1(John_$900)
 WordConjunctionOneTwoThreeGramWindowTwo:3_1($900_today)
 WordConjunctionOneTwoThreeGramWindowTwo:4_1(today)
 GOT FEATURES YES!
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 sec
-Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestAffixes
-Affixes Feature Extractor
-GOT TOKENS FROM TEXTAnn
-I
-give
-John
-$900
-today
-.
-Testlist size is 6
-The constituent we are extracting features from in this test is: give
-Printing Set of Features
-Affixes:p|(giv)
-Affixes:s|(e)
-Affixes:s|(ve)
-Affixes:s|(ive)
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.108 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.077 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestPosWordConjunctionSizeTwoWindowSizeTwo
 PosWordConjunctionSizeTwoWindowSizeTwo Feature Extractor
 GOT TOKENS FROM TEXTAnn
@@ -163,7 +163,7 @@ PosWordConjunctionSizeTwoWindowSizeTwo:1_1(give_John)
 PosWordConjunctionSizeTwoWindowSizeTwo:2_1(John_$900)
 PosWordConjunctionSizeTwoWindowSizeTwo:3_1($900_null)
 GOT FEATURES YES!
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.258 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.264 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestPOSWindowTwo
 POSWindow Feature Extractor
 GOT TOKENS FROM TEXTAnn
@@ -193,7 +193,7 @@ POSWindowTwo:0(DT)
 POSWindowTwo:1(VBZ)
 POSWindowTwo:2(DT)
 POSWindowTwo:3(NN)
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.071 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.newfexes.TestPOSandPositionWindowThree
 POSWindowpp Feature Extractor
 GOT TOKENS FROM TEXTAnn
@@ -237,7 +237,7 @@ POSandPositionWindowThree:4_2(._null_null)
 POSandPositionWindowThree:5_2(null_null)
 POSandPositionWindowThree:6_2(null)
 GOT FEATURES YES!
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.107 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.TestChunkFeatures
 
 	Testing NER embedding
@@ -3357,7 +3357,7 @@ planted----> the first human footprint on thelunar crust(1.0)	[A]
 planted----> he(1.0)	[B]
 planted----> one giant leap formankind(1.0)	[A]
 's----> About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "(1.0)	[C]
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.434 sec
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.4 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.TestParseFeatures
 
 	Testing parse head-word+POS: Charniak
@@ -18429,7 +18429,7 @@ declared	[A]
 planted	[A]
 's	[A]
 
-	Testing parse siblings: Stanford
+	Testing verb voice: Stanford
 TextAnnotation: My mother-in-law, the Queen of Egypt, left me some pearls in October.
 left	[A]
 TextAnnotation: I give John $900 today.
@@ -18629,641 +18629,9 @@ stepped	[A]
 declared	[A]
 planted	[A]
 's	[A]
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.417 sec
-Running edu.illinois.cs.cogcomp.edison.features.factory.TestVerbClassFeatures
-TextAnnotation: My mother-in-law, the Queen of Egypt, left me some pearls in October.
-23:51:24 INFO  VerbClassDictionary:70 - Reading verb class dictionary. Looking for levin-verbClass.txt in the classpath
-23:51:24 INFO  VerbClassDictionary:83 - Loaded verb class dictionary. Test: classes for 'give' are [13.1]
-left	[*]
-TextAnnotation: I give John $900 today.
-give	[13.1]
-TextAnnotation: This is a test. This is another one. My mother-in-law has arrived. 
-is	[*]
-is	[*]
-arrived	[51.1]
-TextAnnotation: It is a technique widely used in natural language processing. It is similar to the concept of lexical analysis for computer languages.
-is	[*]
-used	[29.2, 54.3]
-is	[*]
-TextAnnotation: Models of this kind have recently attracted much attention within the NLP community.
-have	[*]
-attracted	[*]
-TextAnnotation:   We have three kinds of pastries. One of them has chocolate and the other 2 don't. 
-have	[*]
-has	[*]
-do	[*]
-TextAnnotation: Most customers think that our pastries are the best in the world. Some come here from hundreds of miles away.
-think	[29.4]
-are	[*]
-come	[48.1.1, 51.1]
-TextAnnotation: Three people want more.
-want	[29.1, 32.1]
-TextAnnotation: This	sentence has a tab. This does not.
-has	[*]
-does	[*]
-TextAnnotation: By winning the National Football League (NFL) playoff game, the 49ers will host the winner of Sunday's Dallas-Green Bay game on January 15 to decide a berth in the January 29 championship game at Miami.
-winning	[13.5.1]
-host	[29.8]
-decide	[*]
-TextAnnotation: The construction of the library took time.
-took	[10.5, 11.3, 29.2]
-TextAnnotation: John said that he will quit next week.
-said	[37.7]
-quit	[*]
-TextAnnotation: It wasn't a long walk to Lisa Cochran's car in the Costco parking lot from the store. But by the time she got there, her infant was near death. Cochran blames the Infantino baby sling -- now recalled -- for her baby's death.
-was	[*]
-walk	[51.3.2]
-got	[*]
-was	[*]
-blames	[*]
-sling	[*]
-recalled	[10.2, 29.2]
-TextAnnotation: They won seven straight on their way to Super Bowl titles in 1997 and '98, then didn't make the playoffs last year. 
-won	[13.5.1]
-make	[26.1]
-TextAnnotation: By the time the second half started, I was pretty much O.K.''
-started	[55.1]
-was	[*]
-TextAnnotation: New England rallied to maintain  first place; the Giants and Falcons got wake-up calls and Buffalo  toppled the Chiefs as the second half of the National Football  League season was in full swing on Sunday. 
-rallied	[*]
-maintain	[29.5]
-got	[*]
-toppled	[*]
-was	[*]
-TextAnnotation: but - (( but I 'd love to have his hair)) something just came off the ~ TV about the Scott trial. 
-love	[31.2]
-have	[*]
-came	[48.1.1, 51.1]
-TextAnnotation: Joseph Conrad Parkhurst , who founded the motorcycle magazine Cycle 	World in 1962 , has died.
-founded	[*]
-died	[48.2]
-TextAnnotation: Mr. Dahl, a registered representative in the insurance business, said he "screwed up" because he didn't realize he was breaking securities laws. 
-registered	[54.1]
-said	[37.7]
-screwed	[*]
-realize	[*]
-breaking	[23.2, 40.8.3, 45.1, 48.1.1]
-TextAnnotation: mike von fremd , abc news , jacksonville .
-TextAnnotation: jackie judd , abc news .
-TextAnnotation: For the appeals court ruling in Duncan v. Northwest Airlines : http://www.uscourts.gov/links.html and click on 9th Circuit .
-TextAnnotation: natalie pawelski , cnn .
-TextAnnotation: `` The first thing overseas traders want to know when they come in in the morning is , ` What did the Nasdaq and the Dow do ? ' '' said Howard Klein , an institutional broker specializing in emerging markets at SG Cowen Securities in New York .
-want	[29.1, 32.1]
-know	[29.5]
-come	[48.1.1, 51.1]
-is	[*]
-did	[*]
-do	[*]
-said	[37.7]
-specializing	[*]
-emerging	[48.1.1]
-TextAnnotation: Sheryl Corley , NPR news , Chicago .
-TextAnnotation: The car costs $900.
-TextAnnotation: Steelers Quarterback Jim Brady sneaked a backward pass to running back Joe Corduroy for a last-second denial of Florida that will surely echo down the ages. His first completion of the 2011 season, this pass represents the pinnacle of Jim's terrible season to date, and it may mean redemption of his $13M contract with Pittsburgh, according to Joe's mother.
-sneaked	[10.5, 51.3.2]
-pass	[11.1, 13.1]
-running	[51.3.2]
-echo	[47.4]
-represents	[29.2]
-mean	[29.5]
-TextAnnotation: The investigation focused on the hangman's cell, where 141 French prisoners-of-war were said to have been executed, as well at the 18th-century Master Ropemaker's House.
-focused	[*]
-said	[37.7]
-executed	[42.1]
-TextAnnotation: The South Side store, part of a redevelopment of an abandoned steel plant, fell by a 25-21 vote. Passage required a majority of 26 votes in the 50-member council.
-abandoned	[51.2]
-fell	[*]
-required	[*]
-TextAnnotation: The newspaper added that regardless of the Israeli challenges, Lahoud would still be able to deliver on his duties, supported by Syria and a united Lebanon.
-added	[22.1]
-be	[*]
-deliver	[11.1]
-supported	[31.2]
-united	[22.2]
-TextAnnotation: Seven Egyptian human rights organizations issued a plea today, Monday, to Egyptian President Hosni Mubarak to hold accountable those responsible for the acts of torture that targeted residents of a village in Egypt's countryside while investigating two capital murders last August.
-issued	[13.3, 13.4.1, 48.1.1]
-hold	[15.1, 29.5]
-torture	[*]
-targeted	[*]
-investigating	[30.2, 35.4]
-TextAnnotation: GUS on Friday disposed of its remaining home shopping business and last non-UK retail operation with the 390m (265m) sale of the Dutch home shopping company, Wehkamp, to Industri Kapital, a private equity firm.
-disposed	[*]
-remaining	[47.1]
-TextAnnotation: Tintin, the Smurfs, Boule et Bill, Asterix, Natacha, Spirou and other legendary characters were created by talented artists like Herge, Morris, Franquin and Walthery.
-created	[26.4, 27]
-TextAnnotation: Spirou was created by Rob-Vel.
-created	[26.4, 27]
-TextAnnotation: In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts ) , the role of Celimene , played by Kim Cattrall , was mistakenly attributed to Christina Haag . 
-Revitalized	[31.1]
-Take	[10.5, 11.3, 29.2]
-played	[26.7]
-was	[*]
-attributed	[*]
-TextAnnotation: A three-man German delegation, accompanied by a Somali expert, arrived in north Mogadishu on Friday to start a new peace initiative to reconcile warring Somali clan factions. The delegation, headed by Hans Sterken, has since arrival held talks with Somali Salvation Alliance (SSA) factions supporting north Mogadishu warlord, self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally, Osman Hassan Ali "Atto". Atto, a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid, heads a faction opposed to Aidid in the United Somali Congress/Somali National Alliance (USC/SNA) which controls the southern half of the war-torn Somali capital. Addressing newsmen here on Saturday, Sterken said that his delegation intended to meet all faction leaders who are agreeable to dialogue, as "there is no way one can obtain peace, except through dialogue." "We also intend to extend our invitation for dialogue to all representatives of the majority, as we believe that the majority should rule, that is democracy. That's the concrete message we have for Somalis," Sterken said. Asked whether they would invite General Aidid for talks on the peace initiative, Sterken said they had already held talks with Aidid's representative in the Egyptian capital Cairo and at Nairobi in neighbouring Kenya. The official was Abdurahman Ahmed Ali "Tuur", the deputy president in Aidid's yet to be recognised government, who welcomed the new German peace efforts. The German delegation was sent by Germany's Asocication for the Promotion of International Understanding, an organisation that consists of the country's leading former parliamentarians.
-accompanied	[*]
-arrived	[51.1]
-start	[55.1]
-reconcile	[*]
-warring	[36.1]
-headed	[*]
-has	[*]
-held	[15.1, 29.5]
-supporting	[31.2]
-heads	[*]
-opposed	[22.2, 29.2]
-controls	[*]
-Addressing	[25.3, 29.2]
-said	[37.7]
-intended	[29.2]
-meet	[36.3]
-are	[*]
-is	[*]
-obtain	[13.5.2]
-intend	[29.2]
-extend	[13.2, 13.3]
-believe	[29.4]
-rule	[29.3]
-is	[*]
-'s	[*]
-have	[*]
-said	[37.7]
-Asked	[37.1]
-invite	[*]
-said	[37.7]
-had	[*]
-held	[15.1, 29.5]
-neighbouring	[*]
-was	[*]
-recognised	[29.5, 30.2]
-welcomed	[*]
-sent	[11.1]
-consists	[*]
-leading	[51.7]
-TextAnnotation: Houston,Monday, July 21 -- Men have landed and walked on the moon.  Two Americans, astronauts of Apollo 11, steered their fragile four-legged lunar module safely and smoothly to the historic landing yesterday at 4:17:40 P.M., Eastern daylight time.  Neil A. Armstrong, the 38-year-old civilian commander, radioed to earth and the mission control room here: "Houston, Tranquility Base here; the Eagle has landed."
-
-The first men to reach the moon -- Mr. Armstrong and his co-pilot, Col. Edwin E. Aldrin, Jr. of the Air Force -- brought their ship to rest on a level, rock-strewn plain near the southwestern shore of the arid Sea of Tranquility.  About six and a half hours later, Mr. Armstrong opened the landing craft's hatch, stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust: "That's one small step for man, one giant leap for mankind."
-landed	[9.10]
-walked	[51.3.2]
-steered	[26.7]
-module	[*]
-radioed	[37.4]
-landed	[9.10]
-reach	[13.5.1]
-brought	[11.3]
-rest	[47.6, 9.2]
-opened	[40.3.2, 45.4, 47.6, 48.1.1]
-stepped	[*]
-declared	[29.4, 37.7, 48.1.2]
-planted	[9.7]
-'s	[*]
-TextAnnotation: Houston,Monday, July 21 -- Men have landed and walked on the moon.  TwoAmericans, astronauts of Apollo 11, steered their fragile four-leggedlunar module safely and smoothly to the historic landing yesterday at4:17:40 P.M., Eastern daylight time.  Neil A. Armstrong, the38-year-old civilian commander, radioed to earth and the missioncontrol room here: "Houston, Tranquility Base here; the Eagle haslanded."
-
- The first men to reach the moon -- Mr. Armstrong and hisco-pilot, Col. Edwin E. Aldrin, Jr. of the Air Force -- brought theirship to rest on a level, rock-strewn plain near the southwestern shoreof the arid Sea of Tranquility.  About six and a half hours later, Mr.Armstrong opened the landing craft's hatch, stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust: "That's one small step for man, one giant leap formankind."
-landed	[9.10]
-walked	[51.3.2]
-steered	[26.7]
-radioed	[37.4]
-haslanded	[*]
-reach	[13.5.1]
-brought	[11.3]
-rest	[47.6, 9.2]
-opened	[40.3.2, 45.4, 47.6, 48.1.1]
-stepped	[*]
-declared	[29.4, 37.7, 48.1.2]
-planted	[9.7]
-'s	[*]
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 sec
-Running edu.illinois.cs.cogcomp.edison.features.factory.TestWordFeatureFactory
-	Testing conflated POS
-	Testing capitalization
-	Testing de-adjectival abstract noun suffixes
-	Testing de-nominal noun producing suffixes
-	Testing de-verbal suffixes
-	Testing gerund marker
-	Testing known prefixes
-	Testing lemma
-	Testing nominalization marker
-	Testing POS
-	Testing prefix, suffixes
-	Testing word
-	Testing Brown cluster features
-23:51:27 INFO  BrownClusterViewGenerator:118 - Finished loading 1000 brown clusters from brownBllipClusters
-	Testing wordNet
-msg = NOUN_KEY
-msg = VERB_KEY
-msg = ADJECTIVE_KEY
-msg = ADVERB_KEY
-msg = ANTONYM_KEY
-msg = HYPERNYM_KEY
-msg = HYPONYM_KEY
-msg = ATTRIBUTE_KEY
-msg = ALSO_SEE_KEY
-msg = ENTAILMENT_KEY
-msg = ENTAILED_BY_KEY
-msg = CAUSE_KEY
-msg = VERB_GROUP_KEY
-msg = MEMBER_MERONYM_KEY
-msg = SUBSTANCE_MERONYM_KEY
-msg = PART_MERONYM_KEY
-msg = MEMBER_HOLONYM_KEY
-msg = SUBSTANCE_HOLONYM_KEY
-msg = PART_HOLONYM_KEY
-msg = SIMILAR_KEY
-msg = PARTICIPLE_OF_KEY
-msg = DERIVED_KEY
-msg = NOMINALIZATION_KEY
-msg = CATEGORY_DOMAIN_KEY
-msg = REGION_DOMAIN_KEY
-msg = USAGE_DOMAIN_KEY
-msg = CATEGORY_MEMBER_KEY
-msg = REGION_MEMBER_KEY
-msg = USAGE_MEMBER_KEY
-msg = INSTANCE_HYPERNYM_KEY
-msg = INSTANCES_HYPONYM_KEY
-msg = NONE_KEY
-msg = AP_PREDICATIVE_KEY
-msg = AP_ATTRIBUTIVE_KEY
-msg = AP_IMMEDIATE_POSTNOMIAL_KEY
-msg = NUMBER_OF_VERB_FRAMES
-msg = NOUN
-msg = VERB
-msg = ADJECTIVE
-msg = ADVERB
-msg = INDEX_KEY
-msg = DATA_KEY
-msg = EXCEPTION_KEY
-23:51:35 INFO  Dictionary:62 - Installing dictionary net.didion.jwnl.dictionary.FileBackedDictionary@1563da5
-	Testing feature collection
-	Testing gazetteer features
-23:51:37 INFO  GazetteerViewGenerator:262 - Loading all gazetteers from gazetteers
-23:51:37 INFO  GazetteerViewGenerator:320 - Finished loading  0 gazetteers from gazetteers
-Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.983 sec
-Running edu.illinois.cs.cogcomp.edison.features.factory.TestSyntacticFrame
-My mother-in-law , the Queen of Egypt ,	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-left-np-np-]
-in October	[np-v-np-np-, general:np-v-np-np-, lemma:np-left-np-np-]
-me	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-left-CUR-np-]
-today	[np-v-np-NP-, general:np-v-np-CUR-, lemma:np-give-np-CUR-]
-I	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-give-np-np-]
-John $900	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-give-CUR-np-]
-This	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-a test	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-another one	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-This	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-My mother-in-law	[NP-v-, general:CUR-v-, lemma:CUR-arrive-]
-a technique widely used in natural language processing	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-It	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-widely	[np-v-, general:np-v-, lemma:np-use-]
-a technique	[NP-v-, general:CUR-v-, lemma:CUR-use-]
-in natural language processing	[np-v-, general:np-v-, lemma:np-use-]
-similar to the concept of lexical analysis for computer languages	[np-v-, general:np-v-, lemma:np-be-]
-It	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-recently	[np-v-, general:np-v-, lemma:np-have-]
-Models of this kind	[NP-v-, general:CUR-v-, lemma:CUR-have-]
-much attention	[v-NP-, general:v-CUR-, lemma:attract-CUR-]
-Models of this kind	[v-np-, general:v-np-, lemma:attract-np-]
-within the NLP community	[v-np-, general:v-np-, lemma:attract-np-]
-recently	[v-np-, general:v-np-, lemma:attract-np-]
-We	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
-three kinds of pastries	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
-One of them	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
-chocolate	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
-n't	[np-v-, general:np-v-, lemma:np-do-]
-the other 2	[NP-v-, general:CUR-v-, lemma:CUR-do-]
-Most customers	[NP-v-, general:CUR-v-, lemma:CUR-think-]
-that our pastries are the best in the world	[np-v-, general:np-v-, lemma:np-think-]
-the best in the world	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-our pastries	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-that	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
-from hundreds of miles away	[np-v-, general:np-v-, lemma:np-come-]
-here	[np-v-, general:np-v-, lemma:np-come-]
-Some	[NP-v-, general:CUR-v-, lemma:CUR-come-]
-Three people	[NP-v-np-, general:CUR-v-np-, lemma:CUR-want-np-]
-more	[np-v-NP-, general:np-v-CUR-, lemma:np-want-CUR-]
-This sentence	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
-a tab	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
-This	[NP-v-, general:CUR-v-, lemma:CUR-do-]
-not	[np-v-, general:np-v-, lemma:np-do-]
-the National Football League	[v-NP-np-, general:v-CUR-np-, lemma:win-CUR-np-]
-the 49ers	[v-np-, general:v-np-, lemma:host-np-]
-By winning the National Football League ( NFL ) playoff game	[v-np-, general:v-np-, lemma:host-np-]
-will	[v-np-, general:v-np-, lemma:host-np-]
-the winner of Sunday 's Dallas-Green Bay game	[v-NP-, general:v-CUR-, lemma:host-CUR-]
-on January 15	[v-np-, general:v-np-, lemma:host-np-]
-a berth in the January 29 championship game	[v-NP-, general:v-CUR-, lemma:decide-CUR-]
-January 15	[v-np-, general:v-np-, lemma:decide-np-]
-at Miami	[v-np-, general:v-np-, lemma:decide-np-]
-The construction of the library	[NP-v-np-, general:CUR-v-np-, lemma:CUR-take-np-]
-time	[np-v-NP-, general:np-v-CUR-, lemma:np-take-CUR-]
-that he will quit next week	[np-v-, general:np-v-, lemma:np-say-]
-John	[NP-v-, general:CUR-v-, lemma:CUR-say-]
-next week	[v-NP-, general:v-CUR-, lemma:quit-CUR-]
-will	[v-np-, general:v-np-, lemma:quit-np-]
-he	[v-np-, general:v-np-, lemma:quit-np-]
-It	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-n't	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
-a long walk to Lisa Cochran 's car	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-in the Costco parking lot from the store	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
-to Lisa Cochran 's car	[v-, general:v-, lemma:walk-]
-her infant	[np-v-, general:np-v-, lemma:np-get-]
-she	[NP-v-, general:CUR-v-, lemma:CUR-get-]
-the time	[np-v-, general:np-v-, lemma:np-get-]
-near death	[np-v-, general:np-v-, lemma:np-be-]
-her infant	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-Cochran	[NP-v-np-, general:CUR-v-np-, lemma:CUR-blame-np-]
-the Infantino baby sling	[np-v-NP-, general:np-v-CUR-, lemma:np-blame-CUR-]
-for her baby 's death	[nnp-nn-v-, general:nnp-nn-v-, lemma:nnp-nn-sling-]
-baby	[nnp-NN-v-, general:nnp-CUR-v-, lemma:nnp-CUR-sling-]
-now	[np-v-, general:np-v-, lemma:np-recall-]
-They	[v-np-, general:v-np-, lemma:win-np-]
-seven straight on their way to Super Bowl titles	[v-NP-, general:v-CUR-, lemma:win-CUR-]
-then	[v-, general:v-, lemma:make-]
-n't	[v-, general:v-, lemma:make-]
-the playoffs last year	[v-, general:v-, lemma:make-]
-the time	[np-v-, general:np-v-, lemma:np-start-]
-the second half	[NP-v-, general:CUR-v-, lemma:CUR-start-]
-By the time the second half started	[np-v-, general:np-v-, lemma:np-be-]
-pretty much O.K	[np-v-, general:np-v-, lemma:np-be-]
-I	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-to maintain first place	[np-v-, general:np-v-, lemma:np-rally-]
-New England	[NP-v-, general:CUR-v-, lemma:CUR-rally-]
-first place	[v-NP-, general:v-CUR-, lemma:maintain-CUR-]
-New England	[v-np-, general:v-np-, lemma:maintain-np-]
-wake-up calls	[np-v-NP-, general:np-v-CUR-, lemma:np-get-CUR-]
-the Giants and Falcons	[NP-v-np-, general:CUR-v-np-, lemma:CUR-get-np-]
-the Chiefs as the second half of the National Football League season was in full swing on Sunday	[np-v-, general:np-v-, lemma:np-topple-]
-Buffalo	[NP-v-, general:CUR-v-, lemma:CUR-topple-]
-the Chiefs as the second half of the National Football League season	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-'d	[v-, general:v-, lemma:love-]
-but	[v-, general:v-, lemma:love-]
-I	[v-, general:v-, lemma:love-]
-to have his hair )) something just came off the ~ TV about the Scott trial	[v-, general:v-, lemma:love-]
-but	[v-np-, general:v-np-, lemma:have-np-]
-'d	[v-np-, general:v-np-, lemma:have-np-]
-I	[v-np-, general:v-np-, lemma:have-np-]
-his hair )) something just came off the ~ TV	[v-NP-, general:v-CUR-, lemma:have-CUR-]
-his hair ))	[np-v-np-, general:np-v-np-, lemma:np-come-np-]
-off	[np-v-np-, general:np-v-np-, lemma:np-come-np-]
-in 1962	[v-np-, general:v-np-, lemma:found-np-]
-Joseph Conrad Parkhurst	[v-np-, general:v-np-, lemma:found-np-]
-the motorcycle magazine Cycle World	[v-NP-, general:v-CUR-, lemma:found-CUR-]
-who	[v-np-, general:v-np-, lemma:found-np-]
-Joseph Conrad Parkhurst , who founded the motorcycle magazine Cycle World in 1962 ,	[NP-v-, general:CUR-v-, lemma:CUR-die-]
-Mr. Dahl	[v-nn-, general:v-nn-, lemma:register-nn-]
-representative	[v-NN-, general:v-CUR-, lemma:register-CUR-]
-Mr. Dahl , a registered representative in the insurance business ,	[NP-v-, general:CUR-v-, lemma:CUR-say-]
-he " screwed up " because he did n't realize he was breaking securities laws	[np-v-, general:np-v-, lemma:np-say-]
-up	[np-v-, general:np-v-, lemma:np-screw-]
-he	[NP-v-, general:CUR-v-, lemma:CUR-screw-]
-because he did n't realize he was breaking securities laws	[np-v-, general:np-v-, lemma:np-screw-]
-he	[v-, general:v-, lemma:realize-]
-he was breaking securities laws	[v-, general:v-, lemma:realize-]
-n't	[v-, general:v-, lemma:realize-]
-he	[v-np-, general:v-np-, lemma:break-np-]
-securities laws	[v-NP-, general:v-CUR-, lemma:break-CUR-]
-The first thing	[np-v-, general:np-v-, lemma:np-want-]
-overseas traders	[NP-v-, general:CUR-v-, lemma:CUR-want-]
-when they come in in the morning	[v-, general:v-, lemma:know-]
-overseas traders	[v-, general:v-, lemma:know-]
-The first thing	[v-, general:v-, lemma:know-]
-in the morning	[np-v-, general:np-v-, lemma:np-come-]
-when	[np-v-, general:np-v-, lemma:np-come-]
-they	[NP-v-, general:CUR-v-, lemma:CUR-come-]
-The first thing overseas traders want to know when they come in in the morning	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-the Nasdaq and the Dow	[v-NP-, general:v-CUR-, lemma:do-CUR-]
-What	[v-np-, general:v-np-, lemma:do-np-]
-the Nasdaq and the Dow	[NP-v-, general:CUR-v-, lemma:CUR-do-]
-Howard Klein , an institutional broker specializing in emerging markets at SG Cowen Securities in New York	[v-NP-, general:v-CUR-, lemma:say-CUR-]
-Howard Klein	[np-v-, general:np-v-, lemma:np-specialize-]
-an institutional broker specializing in emerging markets at SG Cowen Securities in New York	[np-v-, general:np-v-, lemma:np-specialize-]
-emerging markets	[v-nns-, general:v-nns-, lemma:emerge-nns-]
-at SG Cowen Securities in New York	[v-nns-, general:v-nns-, lemma:emerge-nns-]
-an institutional broker	[v-nns-, general:v-nns-, lemma:emerge-nns-]
-Steelers Quarterback Jim Brady	[NP-v-np-, general:CUR-v-np-, lemma:CUR-sneak-np-]
-a backward pass	[np-v-NP-, general:np-v-CUR-, lemma:np-sneak-CUR-]
-a	[v-, general:v-, lemma:pass-]
-back	[v-np-, general:v-np-, lemma:run-np-]
-Joe Corduroy	[v-NP-, general:v-CUR-, lemma:run-CUR-]
-for a last-second denial of Florida that will surely echo down the ages	[v-np-, general:v-np-, lemma:run-np-]
-the ages	[v-NP-, general:v-CUR-, lemma:echo-CUR-]
-a last-second denial	[v-np-, general:v-np-, lemma:echo-np-]
-will	[v-np-, general:v-np-, lemma:echo-np-]
-surely	[v-np-, general:v-np-, lemma:echo-np-]
-this pass	[NP-v-np-, general:CUR-v-np-, lemma:CUR-represent-np-]
-the pinnacle of Jim 's terrible season	[np-v-NP-, general:np-v-CUR-, lemma:np-represent-CUR-]
-His first completion of the 2011 season	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
-it may mean redemption of his $13M contract with Pittsburgh , according to Joe 's mother	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
-to date	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
-may	[v-np-, general:v-np-, lemma:mean-np-]
-redemption of his $13M contract with Pittsburgh	[v-NP-, general:v-CUR-, lemma:mean-CUR-]
-it	[v-np-, general:v-np-, lemma:mean-np-]
-on the hangman 's cell , where 141 French prisoners-of-war were said to have been executed	[np-v-, general:np-v-, lemma:np-focus-]
-The investigation	[NP-v-, general:CUR-v-, lemma:CUR-focus-]
-to have been executed	[v-, general:v-, lemma:say-]
-where	[v-, general:v-, lemma:say-]
-the 18th-century Master Ropemaker 's House	[v-, general:v-, lemma:say-]
-141 French prisoners-of-war	[v-, general:v-, lemma:say-]
-the hangman 's cell	[v-, general:v-, lemma:execute-]
-141 French prisoners-of-war	[v-, general:v-, lemma:execute-]
-steel	[v-NN-nn-, general:v-CUR-nn-, lemma:abandon-CUR-nn-]
-by a 25-21 vote	[np-v-, general:np-v-, lemma:np-fell-]
-The South Side store , part of a redevelopment of an abandoned steel plant ,	[NP-v-, general:CUR-v-, lemma:CUR-fell-]
-a majority of 26 votes in the 50-member council	[np-v-NP-, general:np-v-CUR-, lemma:np-require-CUR-]
-The newspaper	[NP-v-, general:CUR-v-, lemma:CUR-add-]
-that regardless of the Israeli challenges , Lahoud would still be able to deliver on his duties , supported by Syria and a united Lebanon	[np-v-, general:np-v-, lemma:np-add-]
-still	[v-, general:v-, lemma:be-]
-Lahoud	[v-, general:v-, lemma:be-]
-able to deliver on his duties , supported by Syria and a united Lebanon	[v-, general:v-, lemma:be-]
-would	[v-, general:v-, lemma:be-]
-regardless of the Israeli challenges	[v-, general:v-, lemma:be-]
-Lahoud	[v-, general:v-, lemma:deliver-]
-on his duties , supported by Syria and a united Lebanon	[v-, general:v-, lemma:deliver-]
-his duties	[NP-v-, general:CUR-v-, lemma:CUR-support-]
-by Syria and a united Lebanon	[np-v-, general:np-v-, lemma:np-support-]
-Lebanon	[np-v-NNP-, general:np-v-CUR-, lemma:np-unite-CUR-]
-Syria	[NP-v-nnp-, general:CUR-v-nnp-, lemma:CUR-unite-nnp-]
-Seven Egyptian human rights organizations	[NP-v-np-, general:CUR-v-np-, lemma:CUR-issue-np-]
-to hold accountable those responsible for the acts of torture that targeted residents of a village in Egypt 's countryside while investigating two capital murders last August	[np-v-np-, general:np-v-np-, lemma:np-issue-np-]
-accountable	[v-, general:v-, lemma:hold-]
-a plea today , Monday , to Egyptian President Hosni Mubarak	[v-, general:v-, lemma:hold-]
-the acts	[v-, general:v-, lemma:torture-]
-while investigating two capital murders last August	[v-np-, general:v-np-, lemma:target-np-]
-residents of a village in Egypt 's countryside	[v-NP-, general:v-CUR-, lemma:target-CUR-]
-last August	[v-np-NP-, general:v-np-CUR-, lemma:investigate-np-CUR-]
-two capital murders	[v-NP-np-, general:v-CUR-np-, lemma:investigate-CUR-np-]
-GUS on Friday	[NP-v-, general:CUR-v-, lemma:CUR-dispose-]
-of its remaining home shopping business and last non-UK retail operation	[np-v-, general:np-v-, lemma:np-dispose-]
-with the 390m ( 265m ) sale of the Dutch home shopping company , Wehkamp , to Industri Kapital , a private equity firm	[np-v-, general:np-v-, lemma:np-dispose-]
-last non-UK retail operation	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
-its	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
-with the 390m ( 265m ) sale of the Dutch home shopping company , Wehkamp , to Industri Kapital , a private equity firm	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
-Tintin , the Smurfs , Boule et Bill , Asterix , Natacha , Spirou and other legendary characters	[v-, general:v-, lemma:create-]
-by talented artists like Herge , Morris , Franquin and Walthery	[v-, general:v-, lemma:create-]
-Spirou	[v-, general:v-, lemma:create-]
-by Rob-Vel	[v-, general:v-, lemma:create-]
-Classics	[v-NNS-, general:v-CUR-, lemma:revitalize-CUR-]
-in Windy City	[np-v-np-, general:np-v-np-, lemma:np-take-np-]
-the Stage	[np-v-NP-, general:np-v-CUR-, lemma:np-take-CUR-]
-Revitalized Classics	[NP-v-np-, general:CUR-v-np-, lemma:CUR-take-np-]
-Celimene	[NP-v-, general:CUR-v-, lemma:CUR-play-]
-by Kim Cattrall	[np-v-, general:np-v-, lemma:np-play-]
-In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts )	[np-v-, general:np-v-, lemma:np-play-]
-In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts )	[np-v-, general:np-v-, lemma:np-be-]
-the role of Celimene , played by Kim Cattrall ,	[NP-v-, general:CUR-v-, lemma:CUR-be-]
-to Christina Haag	[v-, general:v-, lemma:attribute-]
-mistakenly	[v-, general:v-, lemma:attribute-]
-A three-man German delegation	[NP-v-, general:CUR-v-, lemma:CUR-accompanied-]
-by a Somali expert	[np-v-, general:np-v-, lemma:np-accompanied-]
-on Friday	[np-v-, general:np-v-, lemma:np-arrive-]
-to start a new peace initiative to reconcile warring Somali clan factions	[np-v-, general:np-v-, lemma:np-arrive-]
-in north Mogadishu	[np-v-, general:np-v-, lemma:np-arrive-]
-A three-man German delegation , accompanied by a Somali expert ,	[NP-v-, general:CUR-v-, lemma:CUR-arrive-]
-a new peace initiative to reconcile warring Somali clan factions	[v-NP-, general:v-CUR-, lemma:start-CUR-]
-warring Somali clan factions	[v-NP-, general:v-CUR-, lemma:reconcile-CUR-]
-a new peace initiative	[v-np-, general:v-np-, lemma:reconcile-np-]
-a new peace initiative	[v-nn-nns-, general:v-nn-nns-, lemma:war-nn-nns-]
-The delegation	[NP-v-, general:CUR-v-, lemma:CUR-head-]
-by Hans Sterken	[np-v-, general:np-v-, lemma:np-head-]
-The delegation , headed by Hans Sterken ,	[NP-v-, general:CUR-v-, lemma:CUR-have-]
-held talks with Somali Salvation Alliance ( SSA ) factions supporting north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali " Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-, general:np-v-, lemma:np-have-]
-since arrival	[np-v-, general:np-v-, lemma:np-have-]
-since arrival	[v-np-, general:v-np-, lemma:hold-np-]
-talks with Somali Salvation Alliance ( SSA ) factions	[v-NP-, general:v-CUR-, lemma:hold-CUR-]
-north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali	[v-NP-, general:v-CUR-, lemma:support-CUR-]
-Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[v-np-, general:v-np-, lemma:support-np-]
-Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid ,	[NP-v-np-, general:CUR-v-np-, lemma:CUR-head-np-]
-a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-NP-, general:np-v-CUR-, lemma:np-head-CUR-]
-supporting north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali " Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-, general:np-v-, lemma:np-oppose-]
-Aidid	[v-np-, general:v-np-, lemma:control-np-]
-the United Somali Congress / Somali National Alliance	[v-np-, general:v-np-, lemma:control-np-]
-which	[v-np-, general:v-np-, lemma:control-np-]
-the southern half of the war-torn Somali capital	[v-NP-, general:v-CUR-, lemma:control-CUR-]
-Sterken	[v-np-, general:v-np-, lemma:address-np-]
-on Saturday	[v-np-, general:v-np-, lemma:address-np-]
-newsmen here	[v-NP-, general:v-CUR-, lemma:address-CUR-]
-that his delegation intended to meet all faction leaders who are agreeable to dialogue , as " there is no way one can obtain peace , except through dialogue	[np-v-, general:np-v-, lemma:np-say-]
-Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
-his delegation	[NP-v-, general:CUR-v-, lemma:CUR-intend-]
-all faction leaders who are agreeable to dialogue , as " there is no way one can obtain peace , except through dialogue	[v-NP-, general:v-CUR-, lemma:meet-CUR-]
-his delegation	[v-np-, general:v-np-, lemma:meet-np-]
-as " there is no way one can obtain peace , except through dialogue	[v-, general:v-, lemma:be-]
-all faction leaders	[v-, general:v-, lemma:be-]
-agreeable to dialogue	[v-, general:v-, lemma:be-]
-who	[v-, general:v-, lemma:be-]
-no way one can obtain peace , except through dialogue	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-one	[v-np-, general:v-np-, lemma:obtain-np-]
-peace	[v-NP-, general:v-CUR-, lemma:obtain-CUR-]
-can	[v-np-, general:v-np-, lemma:obtain-np-]
-also	[np-v-, general:np-v-, lemma:np-intend-]
-We	[NP-v-, general:CUR-v-, lemma:CUR-intend-]
-also	[v-np-, general:v-np-, lemma:extend-np-]
-as we believe that the majority should rule , that is democracy	[v-np-, general:v-np-, lemma:extend-np-]
-We	[v-np-, general:v-np-, lemma:extend-np-]
-to all representatives of the majority	[v-np-, general:v-np-, lemma:extend-np-]
-our invitation for dialogue	[v-NP-, general:v-CUR-, lemma:extend-CUR-]
-that the majority should rule , that is democracy	[np-v-, general:np-v-, lemma:np-believe-]
-we	[NP-v-, general:CUR-v-, lemma:CUR-believe-]
-rule , that is democracy	[v-, general:v-, lemma:rule-]
-should	[v-, general:v-, lemma:rule-]
-the majority	[v-, general:v-, lemma:rule-]
-that	[v-np-, general:v-np-, lemma:be-np-]
-democracy	[v-NP-, general:v-CUR-, lemma:be-CUR-]
-the concrete message we have for Somalis , " Sterken said	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
-That	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-for Somalis , " Sterken said	[np-v-, general:np-v-, lemma:np-have-]
-we	[NP-v-, general:CUR-v-, lemma:CUR-have-]
-the concrete message	[np-v-, general:np-v-, lemma:np-have-]
-Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
-for Somalis	[np-v-, general:np-v-, lemma:np-say-]
-whether they would invite General Aidid for talks on the peace initiative	[v-, general:v-, lemma:ask-]
-for talks on the peace initiative	[v-np-, general:v-np-, lemma:invite-np-]
-would	[v-np-, general:v-np-, lemma:invite-np-]
-General Aidid	[v-NP-, general:v-CUR-, lemma:invite-CUR-]
-they	[v-np-, general:v-np-, lemma:invite-np-]
-they had already held talks with Aidid 's representative in the Egyptian capital Cairo and at Nairobi in neighbouring Kenya	[np-v-, general:np-v-, lemma:np-say-]
-Asked whether they would invite General Aidid for talks on the peace initiative	[np-v-, general:np-v-, lemma:np-say-]
-Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
-they	[NP-v-, general:CUR-v-, lemma:CUR-have-]
-talks with Aidid 's representative	[v-NP-, general:v-CUR-, lemma:hold-CUR-]
-in the Egyptian capital Cairo	[v-np-, general:v-np-, lemma:hold-np-]
-at Nairobi	[v-np-, general:v-np-, lemma:hold-np-]
-in neighbouring Kenya	[v-np-, general:v-np-, lemma:hold-np-]
-they	[v-np-, general:v-np-, lemma:hold-np-]
-already	[v-np-, general:v-np-, lemma:hold-np-]
-Kenya	[v-NP-, general:v-CUR-, lemma:neighbor-CUR-]
-The official	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
-the deputy president in Aidid 's yet to be recognised government	[v-nn-, general:v-nn-, lemma:recognize-nn-]
-the new German peace efforts	[v-NP-, general:v-CUR-, lemma:welcome-CUR-]
-the deputy president in Aidid 's yet to be recognised government	[v-np-, general:v-np-, lemma:welcome-np-]
-who	[v-np-, general:v-np-, lemma:welcome-np-]
-by Germany 's Asocication for the Promotion of International Understanding , an organisation that consists of the country 's leading former parliamentarians	[v-, general:v-, lemma:send-]
-The German delegation	[v-, general:v-, lemma:send-]
-of the country 's leading former parliamentarians	[v-, general:v-, lemma:consist-]
-that	[v-, general:v-, lemma:consist-]
-the Promotion	[v-, general:v-, lemma:consist-]
-by Germany 's Asocication for the Promotion of International Understanding , an organisation that consists of the country 's leading former parliamentarians	[np-v-nns-, general:np-v-nns-, lemma:np-lead-nns-]
-Houston , Monday , July 21	[v-, general:v-, lemma:land-]
-Men	[v-, general:v-, lemma:land-]
-on the moon	[v-, general:v-, lemma:walk-]
-Men	[v-, general:v-, lemma:walk-]
-Houston , Monday , July 21	[v-, general:v-, lemma:walk-]
-Two Americans , astronauts of Apollo 11 ,	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-steer-np-np-]
-their fragile four-legged lunar module	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-steer-CUR-np-]
-yesterday	[np-v-np-NP-, general:np-v-np-CUR-, lemma:np-steer-np-CUR-]
-to the historic landing	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
-at 4:17:40 P.M. , Eastern daylight time	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
-safely and smoothly	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
-four-legged	[v-, general:v-, lemma:module-]
-lunar	[v-, general:v-, lemma:module-]
-to the historic landing	[v-, general:v-, lemma:module-]
-yesterday	[v-, general:v-, lemma:module-]
-safely and smoothly	[v-, general:v-, lemma:module-]
-room here	[np-v-NP-, general:np-v-CUR-, lemma:np-radio-CUR-]
-Neil A. Armstrong , the 38-year-old civilian commander ,	[NP-v-np-, general:CUR-v-np-, lemma:CUR-radio-np-]
-to earth and the mission control	[np-v-np-, general:np-v-np-, lemma:np-radio-np-]
-the Eagle	[NP-v-, general:CUR-v-, lemma:CUR-land-]
-The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:reach-np-]
-The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[NP-v-np-, general:CUR-v-np-, lemma:CUR-bring-np-]
-their ship to rest on a level , rock-strewn plain near the southwestern shore of the arid Sea of Tranquility	[np-v-NP-, general:np-v-CUR-, lemma:np-bring-CUR-]
-their ship to rest on a level , rock-strewn plain near the southwestern shore of the arid Sea of Tranquility	[v-, general:v-, lemma:rest-]
-The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-, general:v-, lemma:rest-]
-Mr. Armstrong	[NP-v-np-, general:CUR-v-np-, lemma:CUR-open-np-]
-About six and a half hours later	[np-v-np-, general:np-v-np-, lemma:np-open-np-]
-the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-NP-, general:np-v-CUR-, lemma:np-open-CUR-]
-the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[v-, general:v-, lemma:step-]
-the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[v-, general:v-, lemma:declare-]
-the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-np-, general:np-v-np-, lemma:np-plant-np-]
-the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
-Men	[v-, general:v-, lemma:land-]
-Houston , Monday , July 21	[v-, general:v-, lemma:land-]
-Houston , Monday , July 21	[v-, general:v-, lemma:walk-]
-Men	[v-, general:v-, lemma:walk-]
-on the moon	[v-, general:v-, lemma:walk-]
-their fragile four-leggedlunar module	[v-NP-, general:v-CUR-, lemma:steer-CUR-]
-Eastern daylight time	[v-np-, general:v-np-, lemma:steer-np-]
-to the historic landing yesterday at4:17:40 P.M.	[v-np-, general:v-np-, lemma:steer-np-]
-TwoAmericans , astronauts of Apollo 11 ,	[v-np-, general:v-np-, lemma:steer-np-]
-Neil A. Armstrong , the38-year-old civilian commander ,	[NP-v-, general:CUR-v-, lemma:CUR-radio-]
-to earth and the missioncontrol room here	[np-v-, general:np-v-, lemma:np-radio-]
-the Eagle	[NP-v-, general:CUR-v-, lemma:CUR-haslanded-]
-The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:reach-np-]
-to rest on a level , rock-strewn plain near the southwestern shoreof the arid Sea of Tranquility	[np-v-np-, general:np-v-np-, lemma:np-bring-np-]
-theirship	[np-v-NP-, general:np-v-CUR-, lemma:np-bring-CUR-]
-The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[NP-v-np-, general:CUR-v-np-, lemma:CUR-bring-np-]
-The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:rest-np-]
-on a level , rock-strewn plain near the southwestern shoreof	[v-np-, general:v-np-, lemma:rest-np-]
-rest	[v-np-, general:v-np-, lemma:rest-np-]
-theirship	[v-np-, general:v-np-, lemma:rest-np-]
-About six and a half hours later	[v-np-, general:v-np-, lemma:open-np-]
-stepped slowly down theladder	[v-np-, general:v-np-, lemma:open-np-]
-the landing craft 's hatch	[v-NP-, general:v-CUR-, lemma:open-CUR-]
-Mr.Armstrong	[v-np-, general:v-np-, lemma:open-np-]
-About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[v-, general:v-, lemma:step-]
-About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[v-, general:v-, lemma:declare-]
-the first human footprint on thelunar crust	[np-v-NP-, general:np-v-CUR-, lemma:np-plant-CUR-]
-he	[NP-v-np-, general:CUR-v-np-, lemma:CUR-plant-np-]
-one giant leap formankind	[np-v-np-, general:np-v-np-, lemma:np-plant-np-]
-About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.122 sec
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.343 sec
+Running edu.illinois.cs.cogcomp.edison.features.factory.ParsePhraseTypeOnlyTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.05 sec
 Running edu.illinois.cs.cogcomp.edison.features.factory.TestClauseFeatureExtractor
 (S (NP (PRP$ My)
     (NN mother-in-law))
@@ -20327,17 +19695,1290 @@ the first human footprint on thelunar crust	[coverage=0.14583333, rel-pos:O]
 he	[coverage=0.020833334, rel-pos:O]
 one giant leap formankind	[coverage=0.083333336, rel-pos:O]
 About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[coverage=1.0, rel-pos:O]
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.192 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.174 sec
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestVerbClassFeatures
+TextAnnotation: My mother-in-law, the Queen of Egypt, left me some pearls in October.
+00:03:00 INFO  VerbClassDictionary:72 - Reading verb class dictionary. Looking for levin-verbClass.txt in the classpath
+00:03:00 INFO  VerbClassDictionary:88 - Loaded verb class dictionary. Test: classes for 'give' are [13.1]
+left	[*]
+TextAnnotation: I give John $900 today.
+give	[13.1]
+TextAnnotation: This is a test. This is another one. My mother-in-law has arrived. 
+is	[*]
+is	[*]
+arrived	[51.1]
+TextAnnotation: It is a technique widely used in natural language processing. It is similar to the concept of lexical analysis for computer languages.
+is	[*]
+used	[29.2, 54.3]
+is	[*]
+TextAnnotation: Models of this kind have recently attracted much attention within the NLP community.
+have	[*]
+attracted	[*]
+TextAnnotation:   We have three kinds of pastries. One of them has chocolate and the other 2 don't. 
+have	[*]
+has	[*]
+do	[*]
+TextAnnotation: Most customers think that our pastries are the best in the world. Some come here from hundreds of miles away.
+think	[29.4]
+are	[*]
+come	[48.1.1, 51.1]
+TextAnnotation: Three people want more.
+want	[29.1, 32.1]
+TextAnnotation: This	sentence has a tab. This does not.
+has	[*]
+does	[*]
+TextAnnotation: By winning the National Football League (NFL) playoff game, the 49ers will host the winner of Sunday's Dallas-Green Bay game on January 15 to decide a berth in the January 29 championship game at Miami.
+winning	[13.5.1]
+host	[29.8]
+decide	[*]
+TextAnnotation: The construction of the library took time.
+took	[10.5, 11.3, 29.2]
+TextAnnotation: John said that he will quit next week.
+said	[37.7]
+quit	[*]
+TextAnnotation: It wasn't a long walk to Lisa Cochran's car in the Costco parking lot from the store. But by the time she got there, her infant was near death. Cochran blames the Infantino baby sling -- now recalled -- for her baby's death.
+was	[*]
+walk	[51.3.2]
+got	[*]
+was	[*]
+blames	[*]
+sling	[*]
+recalled	[10.2, 29.2]
+TextAnnotation: They won seven straight on their way to Super Bowl titles in 1997 and '98, then didn't make the playoffs last year. 
+won	[13.5.1]
+make	[26.1]
+TextAnnotation: By the time the second half started, I was pretty much O.K.''
+started	[55.1]
+was	[*]
+TextAnnotation: New England rallied to maintain  first place; the Giants and Falcons got wake-up calls and Buffalo  toppled the Chiefs as the second half of the National Football  League season was in full swing on Sunday. 
+rallied	[*]
+maintain	[29.5]
+got	[*]
+toppled	[*]
+was	[*]
+TextAnnotation: but - (( but I 'd love to have his hair)) something just came off the ~ TV about the Scott trial. 
+love	[31.2]
+have	[*]
+came	[48.1.1, 51.1]
+TextAnnotation: Joseph Conrad Parkhurst , who founded the motorcycle magazine Cycle 	World in 1962 , has died.
+founded	[*]
+died	[48.2]
+TextAnnotation: Mr. Dahl, a registered representative in the insurance business, said he "screwed up" because he didn't realize he was breaking securities laws. 
+registered	[54.1]
+said	[37.7]
+screwed	[*]
+realize	[*]
+breaking	[23.2, 40.8.3, 45.1, 48.1.1]
+TextAnnotation: mike von fremd , abc news , jacksonville .
+TextAnnotation: jackie judd , abc news .
+TextAnnotation: For the appeals court ruling in Duncan v. Northwest Airlines : http://www.uscourts.gov/links.html and click on 9th Circuit .
+TextAnnotation: natalie pawelski , cnn .
+TextAnnotation: `` The first thing overseas traders want to know when they come in in the morning is , ` What did the Nasdaq and the Dow do ? ' '' said Howard Klein , an institutional broker specializing in emerging markets at SG Cowen Securities in New York .
+want	[29.1, 32.1]
+know	[29.5]
+come	[48.1.1, 51.1]
+is	[*]
+did	[*]
+do	[*]
+said	[37.7]
+specializing	[*]
+emerging	[48.1.1]
+TextAnnotation: Sheryl Corley , NPR news , Chicago .
+TextAnnotation: The car costs $900.
+TextAnnotation: Steelers Quarterback Jim Brady sneaked a backward pass to running back Joe Corduroy for a last-second denial of Florida that will surely echo down the ages. His first completion of the 2011 season, this pass represents the pinnacle of Jim's terrible season to date, and it may mean redemption of his $13M contract with Pittsburgh, according to Joe's mother.
+sneaked	[10.5, 51.3.2]
+pass	[11.1, 13.1]
+running	[51.3.2]
+echo	[47.4]
+represents	[29.2]
+mean	[29.5]
+TextAnnotation: The investigation focused on the hangman's cell, where 141 French prisoners-of-war were said to have been executed, as well at the 18th-century Master Ropemaker's House.
+focused	[*]
+said	[37.7]
+executed	[42.1]
+TextAnnotation: The South Side store, part of a redevelopment of an abandoned steel plant, fell by a 25-21 vote. Passage required a majority of 26 votes in the 50-member council.
+abandoned	[51.2]
+fell	[*]
+required	[*]
+TextAnnotation: The newspaper added that regardless of the Israeli challenges, Lahoud would still be able to deliver on his duties, supported by Syria and a united Lebanon.
+added	[22.1]
+be	[*]
+deliver	[11.1]
+supported	[31.2]
+united	[22.2]
+TextAnnotation: Seven Egyptian human rights organizations issued a plea today, Monday, to Egyptian President Hosni Mubarak to hold accountable those responsible for the acts of torture that targeted residents of a village in Egypt's countryside while investigating two capital murders last August.
+issued	[13.3, 13.4.1, 48.1.1]
+hold	[15.1, 29.5]
+torture	[*]
+targeted	[*]
+investigating	[30.2, 35.4]
+TextAnnotation: GUS on Friday disposed of its remaining home shopping business and last non-UK retail operation with the 390m (265m) sale of the Dutch home shopping company, Wehkamp, to Industri Kapital, a private equity firm.
+disposed	[*]
+remaining	[47.1]
+TextAnnotation: Tintin, the Smurfs, Boule et Bill, Asterix, Natacha, Spirou and other legendary characters were created by talented artists like Herge, Morris, Franquin and Walthery.
+created	[26.4, 27]
+TextAnnotation: Spirou was created by Rob-Vel.
+created	[26.4, 27]
+TextAnnotation: In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts ) , the role of Celimene , played by Kim Cattrall , was mistakenly attributed to Christina Haag . 
+Revitalized	[31.1]
+Take	[10.5, 11.3, 29.2]
+played	[26.7]
+was	[*]
+attributed	[*]
+TextAnnotation: A three-man German delegation, accompanied by a Somali expert, arrived in north Mogadishu on Friday to start a new peace initiative to reconcile warring Somali clan factions. The delegation, headed by Hans Sterken, has since arrival held talks with Somali Salvation Alliance (SSA) factions supporting north Mogadishu warlord, self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally, Osman Hassan Ali "Atto". Atto, a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid, heads a faction opposed to Aidid in the United Somali Congress/Somali National Alliance (USC/SNA) which controls the southern half of the war-torn Somali capital. Addressing newsmen here on Saturday, Sterken said that his delegation intended to meet all faction leaders who are agreeable to dialogue, as "there is no way one can obtain peace, except through dialogue." "We also intend to extend our invitation for dialogue to all representatives of the majority, as we believe that the majority should rule, that is democracy. That's the concrete message we have for Somalis," Sterken said. Asked whether they would invite General Aidid for talks on the peace initiative, Sterken said they had already held talks with Aidid's representative in the Egyptian capital Cairo and at Nairobi in neighbouring Kenya. The official was Abdurahman Ahmed Ali "Tuur", the deputy president in Aidid's yet to be recognised government, who welcomed the new German peace efforts. The German delegation was sent by Germany's Asocication for the Promotion of International Understanding, an organisation that consists of the country's leading former parliamentarians.
+accompanied	[*]
+arrived	[51.1]
+start	[55.1]
+reconcile	[*]
+warring	[36.1]
+headed	[*]
+has	[*]
+held	[15.1, 29.5]
+supporting	[31.2]
+heads	[*]
+opposed	[22.2, 29.2]
+controls	[*]
+Addressing	[25.3, 29.2]
+said	[37.7]
+intended	[29.2]
+meet	[36.3]
+are	[*]
+is	[*]
+obtain	[13.5.2]
+intend	[29.2]
+extend	[13.2, 13.3]
+believe	[29.4]
+rule	[29.3]
+is	[*]
+'s	[*]
+have	[*]
+said	[37.7]
+Asked	[37.1]
+invite	[*]
+said	[37.7]
+had	[*]
+held	[15.1, 29.5]
+neighbouring	[*]
+was	[*]
+recognised	[29.5, 30.2]
+welcomed	[*]
+sent	[11.1]
+consists	[*]
+leading	[51.7]
+TextAnnotation: Houston,Monday, July 21 -- Men have landed and walked on the moon.  Two Americans, astronauts of Apollo 11, steered their fragile four-legged lunar module safely and smoothly to the historic landing yesterday at 4:17:40 P.M., Eastern daylight time.  Neil A. Armstrong, the 38-year-old civilian commander, radioed to earth and the mission control room here: "Houston, Tranquility Base here; the Eagle has landed."
+
+The first men to reach the moon -- Mr. Armstrong and his co-pilot, Col. Edwin E. Aldrin, Jr. of the Air Force -- brought their ship to rest on a level, rock-strewn plain near the southwestern shore of the arid Sea of Tranquility.  About six and a half hours later, Mr. Armstrong opened the landing craft's hatch, stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust: "That's one small step for man, one giant leap for mankind."
+landed	[9.10]
+walked	[51.3.2]
+steered	[26.7]
+module	[*]
+radioed	[37.4]
+landed	[9.10]
+reach	[13.5.1]
+brought	[11.3]
+rest	[47.6, 9.2]
+opened	[40.3.2, 45.4, 47.6, 48.1.1]
+stepped	[*]
+declared	[29.4, 37.7, 48.1.2]
+planted	[9.7]
+'s	[*]
+TextAnnotation: Houston,Monday, July 21 -- Men have landed and walked on the moon.  TwoAmericans, astronauts of Apollo 11, steered their fragile four-leggedlunar module safely and smoothly to the historic landing yesterday at4:17:40 P.M., Eastern daylight time.  Neil A. Armstrong, the38-year-old civilian commander, radioed to earth and the missioncontrol room here: "Houston, Tranquility Base here; the Eagle haslanded."
+
+ The first men to reach the moon -- Mr. Armstrong and hisco-pilot, Col. Edwin E. Aldrin, Jr. of the Air Force -- brought theirship to rest on a level, rock-strewn plain near the southwestern shoreof the arid Sea of Tranquility.  About six and a half hours later, Mr.Armstrong opened the landing craft's hatch, stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust: "That's one small step for man, one giant leap formankind."
+landed	[9.10]
+walked	[51.3.2]
+steered	[26.7]
+radioed	[37.4]
+haslanded	[*]
+reach	[13.5.1]
+brought	[11.3]
+rest	[47.6, 9.2]
+opened	[40.3.2, 45.4, 47.6, 48.1.1]
+stepped	[*]
+declared	[29.4, 37.7, 48.1.2]
+planted	[9.7]
+'s	[*]
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.084 sec
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestWordFeatureFactory
+	Testing lemma
+	Testing gerund marker
+	Testing conflated POS
+	Testing capitalization
+	Testing de-adjectival abstract noun suffixes
+	Testing de-nominal noun producing suffixes
+	Testing de-verbal suffixes
+	Testing known prefixes
+	Testing nominalization marker
+	Testing POS
+	Testing prefix, suffixes
+	Testing word
+	Testing Brown cluster features
+00:03:03 INFO  BrownClusterViewGenerator:125 - Finished loading 1000 brown clusters from brownBllipClusters
+	Testing wordNet
+00:03:09 INFO  MapBackedDictionary:62 - Loading MapBackedDictionary
+00:03:09 INFO  MapBackedDictionary:62 - Loading [POS: noun] [DictionaryFile: index]
+00:03:10 INFO  MapBackedDictionary:62 - Loading [POS: verb] [DictionaryFile: index]
+00:03:10 INFO  MapBackedDictionary:62 - Loading [POS: adjective] [DictionaryFile: index]
+00:03:10 INFO  MapBackedDictionary:62 - Loading [POS: adverb] [DictionaryFile: index]
+00:03:10 INFO  MapBackedDictionary:62 - Loading [POS: noun] [DictionaryFile: data]
+00:03:14 INFO  MapBackedDictionary:62 - Loading [POS: verb] [DictionaryFile: data]
+00:03:15 INFO  MapBackedDictionary:62 - Loading [POS: adjective] [DictionaryFile: data]
+00:03:16 INFO  MapBackedDictionary:62 - Loading [POS: adverb] [DictionaryFile: data]
+00:03:16 INFO  MapBackedDictionary:62 - Loading [POS: noun] [DictionaryFile: exception]
+00:03:16 INFO  MapBackedDictionary:62 - Loading [POS: verb] [DictionaryFile: exception]
+00:03:16 INFO  MapBackedDictionary:62 - Loading [POS: adjective] [DictionaryFile: exception]
+00:03:16 INFO  MapBackedDictionary:62 - Loading [POS: adverb] [DictionaryFile: exception]
+00:03:16 INFO  Dictionary:62 - Installing dictionary net.didion.jwnl.dictionary.MapBackedDictionary@4671e53b
+	Testing feature collection
+	Testing gazetteer features
+00:03:17 INFO  GazetteerViewGenerator:283 - Loading all gazetteers from gazetteers
+00:03:17 INFO  GazetteerViewGenerator:345 - Finished loading  0 gazetteers from gazetteers
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.767 sec
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestSyntacticFrame
+My mother-in-law , the Queen of Egypt ,	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-left-np-np-]
+in October	[np-v-np-np-, general:np-v-np-np-, lemma:np-left-np-np-]
+me	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-left-CUR-np-]
+today	[np-v-np-NP-, general:np-v-np-CUR-, lemma:np-give-np-CUR-]
+I	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-give-np-np-]
+John $900	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-give-CUR-np-]
+This	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+a test	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+another one	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+This	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+My mother-in-law	[NP-v-, general:CUR-v-, lemma:CUR-arrive-]
+a technique widely used in natural language processing	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+It	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+widely	[np-v-, general:np-v-, lemma:np-use-]
+a technique	[NP-v-, general:CUR-v-, lemma:CUR-use-]
+in natural language processing	[np-v-, general:np-v-, lemma:np-use-]
+similar to the concept of lexical analysis for computer languages	[np-v-, general:np-v-, lemma:np-be-]
+It	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+recently	[np-v-, general:np-v-, lemma:np-have-]
+Models of this kind	[NP-v-, general:CUR-v-, lemma:CUR-have-]
+much attention	[v-NP-, general:v-CUR-, lemma:attract-CUR-]
+Models of this kind	[v-np-, general:v-np-, lemma:attract-np-]
+within the NLP community	[v-np-, general:v-np-, lemma:attract-np-]
+recently	[v-np-, general:v-np-, lemma:attract-np-]
+We	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
+three kinds of pastries	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
+One of them	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
+chocolate	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
+n't	[np-v-, general:np-v-, lemma:np-do-]
+the other 2	[NP-v-, general:CUR-v-, lemma:CUR-do-]
+Most customers	[NP-v-, general:CUR-v-, lemma:CUR-think-]
+that our pastries are the best in the world	[np-v-, general:np-v-, lemma:np-think-]
+the best in the world	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+our pastries	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+that	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
+from hundreds of miles away	[np-v-, general:np-v-, lemma:np-come-]
+here	[np-v-, general:np-v-, lemma:np-come-]
+Some	[NP-v-, general:CUR-v-, lemma:CUR-come-]
+Three people	[NP-v-np-, general:CUR-v-np-, lemma:CUR-want-np-]
+more	[np-v-NP-, general:np-v-CUR-, lemma:np-want-CUR-]
+This sentence	[NP-v-np-, general:CUR-v-np-, lemma:CUR-have-np-]
+a tab	[np-v-NP-, general:np-v-CUR-, lemma:np-have-CUR-]
+This	[NP-v-, general:CUR-v-, lemma:CUR-do-]
+not	[np-v-, general:np-v-, lemma:np-do-]
+the National Football League	[v-NP-np-, general:v-CUR-np-, lemma:win-CUR-np-]
+the 49ers	[v-np-, general:v-np-, lemma:host-np-]
+By winning the National Football League ( NFL ) playoff game	[v-np-, general:v-np-, lemma:host-np-]
+will	[v-np-, general:v-np-, lemma:host-np-]
+the winner of Sunday 's Dallas-Green Bay game	[v-NP-, general:v-CUR-, lemma:host-CUR-]
+on January 15	[v-np-, general:v-np-, lemma:host-np-]
+a berth in the January 29 championship game	[v-NP-, general:v-CUR-, lemma:decide-CUR-]
+January 15	[v-np-, general:v-np-, lemma:decide-np-]
+at Miami	[v-np-, general:v-np-, lemma:decide-np-]
+The construction of the library	[NP-v-np-, general:CUR-v-np-, lemma:CUR-take-np-]
+time	[np-v-NP-, general:np-v-CUR-, lemma:np-take-CUR-]
+that he will quit next week	[np-v-, general:np-v-, lemma:np-say-]
+John	[NP-v-, general:CUR-v-, lemma:CUR-say-]
+next week	[v-NP-, general:v-CUR-, lemma:quit-CUR-]
+will	[v-np-, general:v-np-, lemma:quit-np-]
+he	[v-np-, general:v-np-, lemma:quit-np-]
+It	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+n't	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
+a long walk to Lisa Cochran 's car	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+in the Costco parking lot from the store	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
+to Lisa Cochran 's car	[v-, general:v-, lemma:walk-]
+her infant	[np-v-, general:np-v-, lemma:np-get-]
+she	[NP-v-, general:CUR-v-, lemma:CUR-get-]
+the time	[np-v-, general:np-v-, lemma:np-get-]
+near death	[np-v-, general:np-v-, lemma:np-be-]
+her infant	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+Cochran	[NP-v-np-, general:CUR-v-np-, lemma:CUR-blame-np-]
+the Infantino baby sling	[np-v-NP-, general:np-v-CUR-, lemma:np-blame-CUR-]
+for her baby 's death	[nnp-nn-v-, general:nnp-nn-v-, lemma:nnp-nn-sling-]
+baby	[nnp-NN-v-, general:nnp-CUR-v-, lemma:nnp-CUR-sling-]
+now	[np-v-, general:np-v-, lemma:np-recall-]
+They	[v-np-, general:v-np-, lemma:win-np-]
+seven straight on their way to Super Bowl titles	[v-NP-, general:v-CUR-, lemma:win-CUR-]
+then	[v-, general:v-, lemma:make-]
+n't	[v-, general:v-, lemma:make-]
+the playoffs last year	[v-, general:v-, lemma:make-]
+the time	[np-v-, general:np-v-, lemma:np-start-]
+the second half	[NP-v-, general:CUR-v-, lemma:CUR-start-]
+By the time the second half started	[np-v-, general:np-v-, lemma:np-be-]
+pretty much O.K	[np-v-, general:np-v-, lemma:np-be-]
+I	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+to maintain first place	[np-v-, general:np-v-, lemma:np-rally-]
+New England	[NP-v-, general:CUR-v-, lemma:CUR-rally-]
+first place	[v-NP-, general:v-CUR-, lemma:maintain-CUR-]
+New England	[v-np-, general:v-np-, lemma:maintain-np-]
+wake-up calls	[np-v-NP-, general:np-v-CUR-, lemma:np-get-CUR-]
+the Giants and Falcons	[NP-v-np-, general:CUR-v-np-, lemma:CUR-get-np-]
+the Chiefs as the second half of the National Football League season was in full swing on Sunday	[np-v-, general:np-v-, lemma:np-topple-]
+Buffalo	[NP-v-, general:CUR-v-, lemma:CUR-topple-]
+the Chiefs as the second half of the National Football League season	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+'d	[v-, general:v-, lemma:love-]
+but	[v-, general:v-, lemma:love-]
+I	[v-, general:v-, lemma:love-]
+to have his hair )) something just came off the ~ TV about the Scott trial	[v-, general:v-, lemma:love-]
+but	[v-np-, general:v-np-, lemma:have-np-]
+'d	[v-np-, general:v-np-, lemma:have-np-]
+I	[v-np-, general:v-np-, lemma:have-np-]
+his hair )) something just came off the ~ TV	[v-NP-, general:v-CUR-, lemma:have-CUR-]
+his hair ))	[np-v-np-, general:np-v-np-, lemma:np-come-np-]
+off	[np-v-np-, general:np-v-np-, lemma:np-come-np-]
+in 1962	[v-np-, general:v-np-, lemma:found-np-]
+Joseph Conrad Parkhurst	[v-np-, general:v-np-, lemma:found-np-]
+the motorcycle magazine Cycle World	[v-NP-, general:v-CUR-, lemma:found-CUR-]
+who	[v-np-, general:v-np-, lemma:found-np-]
+Joseph Conrad Parkhurst , who founded the motorcycle magazine Cycle World in 1962 ,	[NP-v-, general:CUR-v-, lemma:CUR-die-]
+Mr. Dahl	[v-nn-, general:v-nn-, lemma:register-nn-]
+representative	[v-NN-, general:v-CUR-, lemma:register-CUR-]
+Mr. Dahl , a registered representative in the insurance business ,	[NP-v-, general:CUR-v-, lemma:CUR-say-]
+he " screwed up " because he did n't realize he was breaking securities laws	[np-v-, general:np-v-, lemma:np-say-]
+up	[np-v-, general:np-v-, lemma:np-screw-]
+he	[NP-v-, general:CUR-v-, lemma:CUR-screw-]
+because he did n't realize he was breaking securities laws	[np-v-, general:np-v-, lemma:np-screw-]
+he	[v-, general:v-, lemma:realize-]
+he was breaking securities laws	[v-, general:v-, lemma:realize-]
+n't	[v-, general:v-, lemma:realize-]
+he	[v-np-, general:v-np-, lemma:break-np-]
+securities laws	[v-NP-, general:v-CUR-, lemma:break-CUR-]
+The first thing	[np-v-, general:np-v-, lemma:np-want-]
+overseas traders	[NP-v-, general:CUR-v-, lemma:CUR-want-]
+when they come in in the morning	[v-, general:v-, lemma:know-]
+overseas traders	[v-, general:v-, lemma:know-]
+The first thing	[v-, general:v-, lemma:know-]
+in the morning	[np-v-, general:np-v-, lemma:np-come-]
+when	[np-v-, general:np-v-, lemma:np-come-]
+they	[NP-v-, general:CUR-v-, lemma:CUR-come-]
+The first thing overseas traders want to know when they come in in the morning	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+the Nasdaq and the Dow	[v-NP-, general:v-CUR-, lemma:do-CUR-]
+What	[v-np-, general:v-np-, lemma:do-np-]
+the Nasdaq and the Dow	[NP-v-, general:CUR-v-, lemma:CUR-do-]
+Howard Klein , an institutional broker specializing in emerging markets at SG Cowen Securities in New York	[v-NP-, general:v-CUR-, lemma:say-CUR-]
+Howard Klein	[np-v-, general:np-v-, lemma:np-specialize-]
+an institutional broker specializing in emerging markets at SG Cowen Securities in New York	[np-v-, general:np-v-, lemma:np-specialize-]
+emerging markets	[v-nns-, general:v-nns-, lemma:emerge-nns-]
+at SG Cowen Securities in New York	[v-nns-, general:v-nns-, lemma:emerge-nns-]
+an institutional broker	[v-nns-, general:v-nns-, lemma:emerge-nns-]
+Steelers Quarterback Jim Brady	[NP-v-np-, general:CUR-v-np-, lemma:CUR-sneak-np-]
+a backward pass	[np-v-NP-, general:np-v-CUR-, lemma:np-sneak-CUR-]
+a	[v-, general:v-, lemma:pass-]
+back	[v-np-, general:v-np-, lemma:run-np-]
+Joe Corduroy	[v-NP-, general:v-CUR-, lemma:run-CUR-]
+for a last-second denial of Florida that will surely echo down the ages	[v-np-, general:v-np-, lemma:run-np-]
+the ages	[v-NP-, general:v-CUR-, lemma:echo-CUR-]
+a last-second denial	[v-np-, general:v-np-, lemma:echo-np-]
+will	[v-np-, general:v-np-, lemma:echo-np-]
+surely	[v-np-, general:v-np-, lemma:echo-np-]
+this pass	[NP-v-np-, general:CUR-v-np-, lemma:CUR-represent-np-]
+the pinnacle of Jim 's terrible season	[np-v-NP-, general:np-v-CUR-, lemma:np-represent-CUR-]
+His first completion of the 2011 season	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
+it may mean redemption of his $13M contract with Pittsburgh , according to Joe 's mother	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
+to date	[np-v-np-, general:np-v-np-, lemma:np-represent-np-]
+may	[v-np-, general:v-np-, lemma:mean-np-]
+redemption of his $13M contract with Pittsburgh	[v-NP-, general:v-CUR-, lemma:mean-CUR-]
+it	[v-np-, general:v-np-, lemma:mean-np-]
+on the hangman 's cell , where 141 French prisoners-of-war were said to have been executed	[np-v-, general:np-v-, lemma:np-focus-]
+The investigation	[NP-v-, general:CUR-v-, lemma:CUR-focus-]
+to have been executed	[v-, general:v-, lemma:say-]
+where	[v-, general:v-, lemma:say-]
+the 18th-century Master Ropemaker 's House	[v-, general:v-, lemma:say-]
+141 French prisoners-of-war	[v-, general:v-, lemma:say-]
+the hangman 's cell	[v-, general:v-, lemma:execute-]
+141 French prisoners-of-war	[v-, general:v-, lemma:execute-]
+steel	[v-NN-nn-, general:v-CUR-nn-, lemma:abandon-CUR-nn-]
+by a 25-21 vote	[np-v-, general:np-v-, lemma:np-fell-]
+The South Side store , part of a redevelopment of an abandoned steel plant ,	[NP-v-, general:CUR-v-, lemma:CUR-fell-]
+a majority of 26 votes in the 50-member council	[np-v-NP-, general:np-v-CUR-, lemma:np-require-CUR-]
+The newspaper	[NP-v-, general:CUR-v-, lemma:CUR-add-]
+that regardless of the Israeli challenges , Lahoud would still be able to deliver on his duties , supported by Syria and a united Lebanon	[np-v-, general:np-v-, lemma:np-add-]
+still	[v-, general:v-, lemma:be-]
+Lahoud	[v-, general:v-, lemma:be-]
+able to deliver on his duties , supported by Syria and a united Lebanon	[v-, general:v-, lemma:be-]
+would	[v-, general:v-, lemma:be-]
+regardless of the Israeli challenges	[v-, general:v-, lemma:be-]
+Lahoud	[v-, general:v-, lemma:deliver-]
+on his duties , supported by Syria and a united Lebanon	[v-, general:v-, lemma:deliver-]
+his duties	[NP-v-, general:CUR-v-, lemma:CUR-support-]
+by Syria and a united Lebanon	[np-v-, general:np-v-, lemma:np-support-]
+Lebanon	[np-v-NNP-, general:np-v-CUR-, lemma:np-unite-CUR-]
+Syria	[NP-v-nnp-, general:CUR-v-nnp-, lemma:CUR-unite-nnp-]
+Seven Egyptian human rights organizations	[NP-v-np-, general:CUR-v-np-, lemma:CUR-issue-np-]
+to hold accountable those responsible for the acts of torture that targeted residents of a village in Egypt 's countryside while investigating two capital murders last August	[np-v-np-, general:np-v-np-, lemma:np-issue-np-]
+accountable	[v-, general:v-, lemma:hold-]
+a plea today , Monday , to Egyptian President Hosni Mubarak	[v-, general:v-, lemma:hold-]
+the acts	[v-, general:v-, lemma:torture-]
+while investigating two capital murders last August	[v-np-, general:v-np-, lemma:target-np-]
+residents of a village in Egypt 's countryside	[v-NP-, general:v-CUR-, lemma:target-CUR-]
+last August	[v-np-NP-, general:v-np-CUR-, lemma:investigate-np-CUR-]
+two capital murders	[v-NP-np-, general:v-CUR-np-, lemma:investigate-CUR-np-]
+GUS on Friday	[NP-v-, general:CUR-v-, lemma:CUR-dispose-]
+of its remaining home shopping business and last non-UK retail operation	[np-v-, general:np-v-, lemma:np-dispose-]
+with the 390m ( 265m ) sale of the Dutch home shopping company , Wehkamp , to Industri Kapital , a private equity firm	[np-v-, general:np-v-, lemma:np-dispose-]
+last non-UK retail operation	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
+its	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
+with the 390m ( 265m ) sale of the Dutch home shopping company , Wehkamp , to Industri Kapital , a private equity firm	[v-nn-nn-nn-, general:v-nn-nn-nn-, lemma:remain-nn-nn-nn-]
+Tintin , the Smurfs , Boule et Bill , Asterix , Natacha , Spirou and other legendary characters	[v-, general:v-, lemma:create-]
+by talented artists like Herge , Morris , Franquin and Walthery	[v-, general:v-, lemma:create-]
+Spirou	[v-, general:v-, lemma:create-]
+by Rob-Vel	[v-, general:v-, lemma:create-]
+Classics	[v-NNS-, general:v-CUR-, lemma:revitalize-CUR-]
+in Windy City	[np-v-np-, general:np-v-np-, lemma:np-take-np-]
+the Stage	[np-v-NP-, general:np-v-CUR-, lemma:np-take-CUR-]
+Revitalized Classics	[NP-v-np-, general:CUR-v-np-, lemma:CUR-take-np-]
+Celimene	[NP-v-, general:CUR-v-, lemma:CUR-play-]
+by Kim Cattrall	[np-v-, general:np-v-, lemma:np-play-]
+In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts )	[np-v-, general:np-v-, lemma:np-play-]
+In an Oct. 19 review of `` The Misanthrope '' at Chicago 's Goodman Theatre ( `` Revitalized Classics Take the Stage in Windy City , '' Leisure & Arts )	[np-v-, general:np-v-, lemma:np-be-]
+the role of Celimene , played by Kim Cattrall ,	[NP-v-, general:CUR-v-, lemma:CUR-be-]
+to Christina Haag	[v-, general:v-, lemma:attribute-]
+mistakenly	[v-, general:v-, lemma:attribute-]
+A three-man German delegation	[NP-v-, general:CUR-v-, lemma:CUR-accompanied-]
+by a Somali expert	[np-v-, general:np-v-, lemma:np-accompanied-]
+on Friday	[np-v-, general:np-v-, lemma:np-arrive-]
+to start a new peace initiative to reconcile warring Somali clan factions	[np-v-, general:np-v-, lemma:np-arrive-]
+in north Mogadishu	[np-v-, general:np-v-, lemma:np-arrive-]
+A three-man German delegation , accompanied by a Somali expert ,	[NP-v-, general:CUR-v-, lemma:CUR-arrive-]
+a new peace initiative to reconcile warring Somali clan factions	[v-NP-, general:v-CUR-, lemma:start-CUR-]
+warring Somali clan factions	[v-NP-, general:v-CUR-, lemma:reconcile-CUR-]
+a new peace initiative	[v-np-, general:v-np-, lemma:reconcile-np-]
+a new peace initiative	[v-nn-nns-, general:v-nn-nns-, lemma:war-nn-nns-]
+The delegation	[NP-v-, general:CUR-v-, lemma:CUR-head-]
+by Hans Sterken	[np-v-, general:np-v-, lemma:np-head-]
+The delegation , headed by Hans Sterken ,	[NP-v-, general:CUR-v-, lemma:CUR-have-]
+held talks with Somali Salvation Alliance ( SSA ) factions supporting north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali " Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-, general:np-v-, lemma:np-have-]
+since arrival	[np-v-, general:np-v-, lemma:np-have-]
+since arrival	[v-np-, general:v-np-, lemma:hold-np-]
+talks with Somali Salvation Alliance ( SSA ) factions	[v-NP-, general:v-CUR-, lemma:hold-CUR-]
+north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali	[v-NP-, general:v-CUR-, lemma:support-CUR-]
+Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[v-np-, general:v-np-, lemma:support-np-]
+Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid ,	[NP-v-np-, general:CUR-v-np-, lemma:CUR-head-np-]
+a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-NP-, general:np-v-CUR-, lemma:np-head-CUR-]
+supporting north Mogadishu warlord , self-styled interim Somali president Ali Mahdi Mohamed and those of his south Mogadishu ally , Osman Hassan Ali " Atto ". Atto , a former financier-turned political enemy of south Mogadishu warlord General Mohamed Farah Aidid , heads a faction opposed to Aidid in the United Somali Congress / Somali National Alliance ( USC / SNA ) which controls the southern half of the war-torn Somali capital	[np-v-, general:np-v-, lemma:np-oppose-]
+Aidid	[v-np-, general:v-np-, lemma:control-np-]
+the United Somali Congress / Somali National Alliance	[v-np-, general:v-np-, lemma:control-np-]
+which	[v-np-, general:v-np-, lemma:control-np-]
+the southern half of the war-torn Somali capital	[v-NP-, general:v-CUR-, lemma:control-CUR-]
+Sterken	[v-np-, general:v-np-, lemma:address-np-]
+on Saturday	[v-np-, general:v-np-, lemma:address-np-]
+newsmen here	[v-NP-, general:v-CUR-, lemma:address-CUR-]
+that his delegation intended to meet all faction leaders who are agreeable to dialogue , as " there is no way one can obtain peace , except through dialogue	[np-v-, general:np-v-, lemma:np-say-]
+Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
+his delegation	[NP-v-, general:CUR-v-, lemma:CUR-intend-]
+all faction leaders who are agreeable to dialogue , as " there is no way one can obtain peace , except through dialogue	[v-NP-, general:v-CUR-, lemma:meet-CUR-]
+his delegation	[v-np-, general:v-np-, lemma:meet-np-]
+as " there is no way one can obtain peace , except through dialogue	[v-, general:v-, lemma:be-]
+all faction leaders	[v-, general:v-, lemma:be-]
+agreeable to dialogue	[v-, general:v-, lemma:be-]
+who	[v-, general:v-, lemma:be-]
+no way one can obtain peace , except through dialogue	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+one	[v-np-, general:v-np-, lemma:obtain-np-]
+peace	[v-NP-, general:v-CUR-, lemma:obtain-CUR-]
+can	[v-np-, general:v-np-, lemma:obtain-np-]
+also	[np-v-, general:np-v-, lemma:np-intend-]
+We	[NP-v-, general:CUR-v-, lemma:CUR-intend-]
+also	[v-np-, general:v-np-, lemma:extend-np-]
+as we believe that the majority should rule , that is democracy	[v-np-, general:v-np-, lemma:extend-np-]
+We	[v-np-, general:v-np-, lemma:extend-np-]
+to all representatives of the majority	[v-np-, general:v-np-, lemma:extend-np-]
+our invitation for dialogue	[v-NP-, general:v-CUR-, lemma:extend-CUR-]
+that the majority should rule , that is democracy	[np-v-, general:np-v-, lemma:np-believe-]
+we	[NP-v-, general:CUR-v-, lemma:CUR-believe-]
+rule , that is democracy	[v-, general:v-, lemma:rule-]
+should	[v-, general:v-, lemma:rule-]
+the majority	[v-, general:v-, lemma:rule-]
+that	[v-np-, general:v-np-, lemma:be-np-]
+democracy	[v-NP-, general:v-CUR-, lemma:be-CUR-]
+the concrete message we have for Somalis , " Sterken said	[np-v-NP-, general:np-v-CUR-, lemma:np-be-CUR-]
+That	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+for Somalis , " Sterken said	[np-v-, general:np-v-, lemma:np-have-]
+we	[NP-v-, general:CUR-v-, lemma:CUR-have-]
+the concrete message	[np-v-, general:np-v-, lemma:np-have-]
+Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
+for Somalis	[np-v-, general:np-v-, lemma:np-say-]
+whether they would invite General Aidid for talks on the peace initiative	[v-, general:v-, lemma:ask-]
+for talks on the peace initiative	[v-np-, general:v-np-, lemma:invite-np-]
+would	[v-np-, general:v-np-, lemma:invite-np-]
+General Aidid	[v-NP-, general:v-CUR-, lemma:invite-CUR-]
+they	[v-np-, general:v-np-, lemma:invite-np-]
+they had already held talks with Aidid 's representative in the Egyptian capital Cairo and at Nairobi in neighbouring Kenya	[np-v-, general:np-v-, lemma:np-say-]
+Asked whether they would invite General Aidid for talks on the peace initiative	[np-v-, general:np-v-, lemma:np-say-]
+Sterken	[NP-v-, general:CUR-v-, lemma:CUR-say-]
+they	[NP-v-, general:CUR-v-, lemma:CUR-have-]
+talks with Aidid 's representative	[v-NP-, general:v-CUR-, lemma:hold-CUR-]
+in the Egyptian capital Cairo	[v-np-, general:v-np-, lemma:hold-np-]
+at Nairobi	[v-np-, general:v-np-, lemma:hold-np-]
+in neighbouring Kenya	[v-np-, general:v-np-, lemma:hold-np-]
+they	[v-np-, general:v-np-, lemma:hold-np-]
+already	[v-np-, general:v-np-, lemma:hold-np-]
+Kenya	[v-NP-, general:v-CUR-, lemma:neighbor-CUR-]
+The official	[NP-v-np-, general:CUR-v-np-, lemma:CUR-be-np-]
+the deputy president in Aidid 's yet to be recognised government	[v-nn-, general:v-nn-, lemma:recognize-nn-]
+the new German peace efforts	[v-NP-, general:v-CUR-, lemma:welcome-CUR-]
+the deputy president in Aidid 's yet to be recognised government	[v-np-, general:v-np-, lemma:welcome-np-]
+who	[v-np-, general:v-np-, lemma:welcome-np-]
+by Germany 's Asocication for the Promotion of International Understanding , an organisation that consists of the country 's leading former parliamentarians	[v-, general:v-, lemma:send-]
+The German delegation	[v-, general:v-, lemma:send-]
+of the country 's leading former parliamentarians	[v-, general:v-, lemma:consist-]
+that	[v-, general:v-, lemma:consist-]
+the Promotion	[v-, general:v-, lemma:consist-]
+by Germany 's Asocication for the Promotion of International Understanding , an organisation that consists of the country 's leading former parliamentarians	[np-v-nns-, general:np-v-nns-, lemma:np-lead-nns-]
+Houston , Monday , July 21	[v-, general:v-, lemma:land-]
+Men	[v-, general:v-, lemma:land-]
+on the moon	[v-, general:v-, lemma:walk-]
+Men	[v-, general:v-, lemma:walk-]
+Houston , Monday , July 21	[v-, general:v-, lemma:walk-]
+Two Americans , astronauts of Apollo 11 ,	[NP-v-np-np-, general:CUR-v-np-np-, lemma:CUR-steer-np-np-]
+their fragile four-legged lunar module	[np-v-NP-np-, general:np-v-CUR-np-, lemma:np-steer-CUR-np-]
+yesterday	[np-v-np-NP-, general:np-v-np-CUR-, lemma:np-steer-np-CUR-]
+to the historic landing	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
+at 4:17:40 P.M. , Eastern daylight time	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
+safely and smoothly	[np-v-np-np-, general:np-v-np-np-, lemma:np-steer-np-np-]
+four-legged	[v-, general:v-, lemma:module-]
+lunar	[v-, general:v-, lemma:module-]
+to the historic landing	[v-, general:v-, lemma:module-]
+yesterday	[v-, general:v-, lemma:module-]
+safely and smoothly	[v-, general:v-, lemma:module-]
+room here	[np-v-NP-, general:np-v-CUR-, lemma:np-radio-CUR-]
+Neil A. Armstrong , the 38-year-old civilian commander ,	[NP-v-np-, general:CUR-v-np-, lemma:CUR-radio-np-]
+to earth and the mission control	[np-v-np-, general:np-v-np-, lemma:np-radio-np-]
+the Eagle	[NP-v-, general:CUR-v-, lemma:CUR-land-]
+The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:reach-np-]
+The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[NP-v-np-, general:CUR-v-np-, lemma:CUR-bring-np-]
+their ship to rest on a level , rock-strewn plain near the southwestern shore of the arid Sea of Tranquility	[np-v-NP-, general:np-v-CUR-, lemma:np-bring-CUR-]
+their ship to rest on a level , rock-strewn plain near the southwestern shore of the arid Sea of Tranquility	[v-, general:v-, lemma:rest-]
+The first men to reach the moon -- Mr. Armstrong and his co-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-, general:v-, lemma:rest-]
+Mr. Armstrong	[NP-v-np-, general:CUR-v-np-, lemma:CUR-open-np-]
+About six and a half hours later	[np-v-np-, general:np-v-np-, lemma:np-open-np-]
+the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-NP-, general:np-v-CUR-, lemma:np-open-CUR-]
+the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[v-, general:v-, lemma:step-]
+the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[v-, general:v-, lemma:declare-]
+the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-np-, general:np-v-np-, lemma:np-plant-np-]
+the landing craft 's hatch , stepped slowly down the ladder and declared as he planted the first human footprint on the lunar crust : " That 's one small step for man , one giant leap for mankind	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
+Men	[v-, general:v-, lemma:land-]
+Houston , Monday , July 21	[v-, general:v-, lemma:land-]
+Houston , Monday , July 21	[v-, general:v-, lemma:walk-]
+Men	[v-, general:v-, lemma:walk-]
+on the moon	[v-, general:v-, lemma:walk-]
+their fragile four-leggedlunar module	[v-NP-, general:v-CUR-, lemma:steer-CUR-]
+Eastern daylight time	[v-np-, general:v-np-, lemma:steer-np-]
+to the historic landing yesterday at4:17:40 P.M.	[v-np-, general:v-np-, lemma:steer-np-]
+TwoAmericans , astronauts of Apollo 11 ,	[v-np-, general:v-np-, lemma:steer-np-]
+Neil A. Armstrong , the38-year-old civilian commander ,	[NP-v-, general:CUR-v-, lemma:CUR-radio-]
+to earth and the missioncontrol room here	[np-v-, general:np-v-, lemma:np-radio-]
+the Eagle	[NP-v-, general:CUR-v-, lemma:CUR-haslanded-]
+The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:reach-np-]
+to rest on a level , rock-strewn plain near the southwestern shoreof the arid Sea of Tranquility	[np-v-np-, general:np-v-np-, lemma:np-bring-np-]
+theirship	[np-v-NP-, general:np-v-CUR-, lemma:np-bring-CUR-]
+The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[NP-v-np-, general:CUR-v-np-, lemma:CUR-bring-np-]
+The first men to reach the moon -- Mr. Armstrong and hisco-pilot , Col. Edwin E. Aldrin , Jr. of the Air Force --	[v-np-, general:v-np-, lemma:rest-np-]
+on a level , rock-strewn plain near the southwestern shoreof	[v-np-, general:v-np-, lemma:rest-np-]
+rest	[v-np-, general:v-np-, lemma:rest-np-]
+theirship	[v-np-, general:v-np-, lemma:rest-np-]
+About six and a half hours later	[v-np-, general:v-np-, lemma:open-np-]
+stepped slowly down theladder	[v-np-, general:v-np-, lemma:open-np-]
+the landing craft 's hatch	[v-NP-, general:v-CUR-, lemma:open-CUR-]
+Mr.Armstrong	[v-np-, general:v-np-, lemma:open-np-]
+About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[v-, general:v-, lemma:step-]
+About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[v-, general:v-, lemma:declare-]
+the first human footprint on thelunar crust	[np-v-NP-, general:np-v-CUR-, lemma:np-plant-CUR-]
+he	[NP-v-np-, general:CUR-v-np-, lemma:CUR-plant-np-]
+one giant leap formankind	[np-v-np-, general:np-v-np-, lemma:np-plant-np-]
+About six and a half hours later , Mr.Armstrong opened the landing craft 's hatch , stepped slowly down theladder and declared as he planted the first human footprint on thelunar crust : " That 's one small step for man , one giant leap formankind . "	[np-v-np-, general:np-v-np-, lemma:np-be-np-]
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.072 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestLabelTwoAfter
+LabelTwoAfter Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+
+Test when using POS View
+Printing list of Feature set
+LabelTwoAfter_POS:DT_a
+LabelTwoAfter_POS:NN_test
+LabelTwoAfter_POS:._.
+LabelTwoAfter_POS:DT_This
+LabelTwoAfter_POS:VBZ_is
+LabelTwoAfter_POS:DT_another
+LabelTwoAfter_POS:CD_one
+LabelTwoAfter_POS:._.
+LabelTwoAfter_POS:PRP$_My
+LabelTwoAfter_POS:NN_mother-in-law
+LabelTwoAfter_POS:VBZ_has
+LabelTwoAfter_POS:VBN_arrived
+LabelTwoAfter_POS:._.
+LabelTwoAfter_POS:
+LabelTwoAfter_POS:
+
+Test when using POS baseline Counting
+Printing list of Feature set
+LabelTwoAfter_BaselinePOS:UNKNOWN_a
+LabelTwoAfter_BaselinePOS:UNKNOWN_test
+LabelTwoAfter_BaselinePOS:UNKNOWN_.
+LabelTwoAfter_BaselinePOS:UNKNOWN_This
+LabelTwoAfter_BaselinePOS:UNKNOWN_is
+LabelTwoAfter_BaselinePOS:UNKNOWN_another
+LabelTwoAfter_BaselinePOS:UNKNOWN_one
+LabelTwoAfter_BaselinePOS:UNKNOWN_.
+LabelTwoAfter_BaselinePOS:UNKNOWN_My
+LabelTwoAfter_BaselinePOS:UNKNOWN_mother-in-law
+LabelTwoAfter_BaselinePOS:UNKNOWN_has
+LabelTwoAfter_BaselinePOS:UNKNOWN_arrived
+LabelTwoAfter_BaselinePOS:UNKNOWN_.
+LabelTwoAfter_BaselinePOS:
+LabelTwoAfter_BaselinePOS:
+
+Test when using POS Mikheev Counting
+Printing list of Feature set
+LabelTwoAfter_MikheevPOS:UNKNOWN_a
+LabelTwoAfter_MikheevPOS:UNKNOWN_test
+LabelTwoAfter_MikheevPOS:UNKNOWN_.
+LabelTwoAfter_MikheevPOS:UNKNOWN_This
+LabelTwoAfter_MikheevPOS:UNKNOWN_is
+LabelTwoAfter_MikheevPOS:UNKNOWN_another
+LabelTwoAfter_MikheevPOS:UNKNOWN_one
+LabelTwoAfter_MikheevPOS:UNKNOWN_.
+LabelTwoAfter_MikheevPOS:UNKNOWN_My
+LabelTwoAfter_MikheevPOS:UNKNOWN_mother-in-law
+LabelTwoAfter_MikheevPOS:UNKNOWN_has
+LabelTwoAfter_MikheevPOS:UNKNOWN_arrived
+LabelTwoAfter_MikheevPOS:UNKNOWN_.
+LabelTwoAfter_MikheevPOS:
+LabelTwoAfter_MikheevPOS:
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.087 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSBaseLineFeatureExtractor
+POSBaseLine Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+Printing list of Feature set
+BaseLinePOS:UNKNOWN_This
+BaseLinePOS:UNKNOWN_is
+BaseLinePOS:UNKNOWN_a
+BaseLinePOS:UNKNOWN_test
+BaseLinePOS:UNKNOWN_.
+BaseLinePOS:UNKNOWN_This
+BaseLinePOS:UNKNOWN_is
+BaseLinePOS:UNKNOWN_another
+BaseLinePOS:UNKNOWN_one
+BaseLinePOS:UNKNOWN_.
+BaseLinePOS:UNKNOWN_My
+BaseLinePOS:UNKNOWN_mother-in-law
+BaseLinePOS:UNKNOWN_has
+BaseLinePOS:UNKNOWN_arrived
+BaseLinePOS:UNKNOWN_.
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.081 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestLabelTwoBefore
+LabelTwoBefore Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+
+Test when using POS View
+Printing list of Feature set
+LabelTwoBefore_POS:
+LabelTwoBefore_POS:
+LabelTwoBefore_POS:DT_This
+LabelTwoBefore_POS:VBZ_is
+LabelTwoBefore_POS:DT_a
+LabelTwoBefore_POS:NN_test
+LabelTwoBefore_POS:._.
+LabelTwoBefore_POS:DT_This
+LabelTwoBefore_POS:VBZ_is
+LabelTwoBefore_POS:DT_another
+LabelTwoBefore_POS:CD_one
+LabelTwoBefore_POS:._.
+LabelTwoBefore_POS:PRP$_My
+LabelTwoBefore_POS:NN_mother-in-law
+LabelTwoBefore_POS:VBZ_has
+
+Test when using POS baseline Counting
+Printing list of Feature set
+LabelTwoBefore_BaselinePOS:
+LabelTwoBefore_BaselinePOS:
+LabelTwoBefore_BaselinePOS:UNKNOWN_This
+LabelTwoBefore_BaselinePOS:UNKNOWN_is
+LabelTwoBefore_BaselinePOS:UNKNOWN_a
+LabelTwoBefore_BaselinePOS:UNKNOWN_test
+LabelTwoBefore_BaselinePOS:UNKNOWN_.
+LabelTwoBefore_BaselinePOS:UNKNOWN_This
+LabelTwoBefore_BaselinePOS:UNKNOWN_is
+LabelTwoBefore_BaselinePOS:UNKNOWN_another
+LabelTwoBefore_BaselinePOS:UNKNOWN_one
+LabelTwoBefore_BaselinePOS:UNKNOWN_.
+LabelTwoBefore_BaselinePOS:UNKNOWN_My
+LabelTwoBefore_BaselinePOS:UNKNOWN_mother-in-law
+LabelTwoBefore_BaselinePOS:UNKNOWN_has
+
+Test when using POS Mikheev Counting
+Printing list of Feature set
+LabelTwoBefore_MikheevPOS:
+LabelTwoBefore_MikheevPOS:
+LabelTwoBefore_MikheevPOS:UNKNOWN_This
+LabelTwoBefore_MikheevPOS:UNKNOWN_is
+LabelTwoBefore_MikheevPOS:UNKNOWN_a
+LabelTwoBefore_MikheevPOS:UNKNOWN_test
+LabelTwoBefore_MikheevPOS:UNKNOWN_.
+LabelTwoBefore_MikheevPOS:UNKNOWN_This
+LabelTwoBefore_MikheevPOS:UNKNOWN_is
+LabelTwoBefore_MikheevPOS:UNKNOWN_another
+LabelTwoBefore_MikheevPOS:UNKNOWN_one
+LabelTwoBefore_MikheevPOS:UNKNOWN_.
+LabelTwoBefore_MikheevPOS:UNKNOWN_My
+LabelTwoBefore_MikheevPOS:UNKNOWN_mother-in-law
+LabelTwoBefore_MikheevPOS:UNKNOWN_has
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.054 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestLabelOneBefore
+LabelOneBefore Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+
+Test when using POS View
+Printing list of Feature set
+LabelOneBefore_POS:
+LabelOneBefore_POS:DT_This
+LabelOneBefore_POS:VBZ_is
+LabelOneBefore_POS:DT_a
+LabelOneBefore_POS:NN_test
+LabelOneBefore_POS:._.
+LabelOneBefore_POS:DT_This
+LabelOneBefore_POS:VBZ_is
+LabelOneBefore_POS:DT_another
+LabelOneBefore_POS:CD_one
+LabelOneBefore_POS:._.
+LabelOneBefore_POS:PRP$_My
+LabelOneBefore_POS:NN_mother-in-law
+LabelOneBefore_POS:VBZ_has
+LabelOneBefore_POS:VBN_arrived
+
+Test when using POS baseline Counting
+Printing list of Feature set
+LabelOneBefore_BaselinePOS:
+LabelOneBefore_BaselinePOS:UNKNOWN_This
+LabelOneBefore_BaselinePOS:UNKNOWN_is
+LabelOneBefore_BaselinePOS:UNKNOWN_a
+LabelOneBefore_BaselinePOS:UNKNOWN_test
+LabelOneBefore_BaselinePOS:UNKNOWN_.
+LabelOneBefore_BaselinePOS:UNKNOWN_This
+LabelOneBefore_BaselinePOS:UNKNOWN_is
+LabelOneBefore_BaselinePOS:UNKNOWN_another
+LabelOneBefore_BaselinePOS:UNKNOWN_one
+LabelOneBefore_BaselinePOS:UNKNOWN_.
+LabelOneBefore_BaselinePOS:UNKNOWN_My
+LabelOneBefore_BaselinePOS:UNKNOWN_mother-in-law
+LabelOneBefore_BaselinePOS:UNKNOWN_has
+LabelOneBefore_BaselinePOS:UNKNOWN_arrived
+
+Test when using POS Mikheev Counting
+Printing list of Feature set
+LabelOneBefore_MikheevPOS:
+LabelOneBefore_MikheevPOS:UNKNOWN_This
+LabelOneBefore_MikheevPOS:UNKNOWN_is
+LabelOneBefore_MikheevPOS:UNKNOWN_a
+LabelOneBefore_MikheevPOS:UNKNOWN_test
+LabelOneBefore_MikheevPOS:UNKNOWN_.
+LabelOneBefore_MikheevPOS:UNKNOWN_This
+LabelOneBefore_MikheevPOS:UNKNOWN_is
+LabelOneBefore_MikheevPOS:UNKNOWN_another
+LabelOneBefore_MikheevPOS:UNKNOWN_one
+LabelOneBefore_MikheevPOS:UNKNOWN_.
+LabelOneBefore_MikheevPOS:UNKNOWN_My
+LabelOneBefore_MikheevPOS:UNKNOWN_mother-in-law
+LabelOneBefore_MikheevPOS:UNKNOWN_has
+LabelOneBefore_MikheevPOS:UNKNOWN_arrived
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.113 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSWindow
+POSWindow Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+
+Test when using POS View
+Printing list of Feature set
+
+
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_a
+
+
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_a
+POSWindow_POS:NN_test
+
+
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_a
+POSWindow_POS:NN_test
+POSWindow_POS:._.
+
+
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_a
+POSWindow_POS:NN_test
+POSWindow_POS:._.
+POSWindow_POS:DT_This
+
+
+POSWindow_POS:DT_a
+POSWindow_POS:NN_test
+POSWindow_POS:._.
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+
+
+POSWindow_POS:NN_test
+POSWindow_POS:._.
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_another
+
+
+POSWindow_POS:._.
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_another
+POSWindow_POS:CD_one
+
+
+POSWindow_POS:DT_This
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_another
+POSWindow_POS:CD_one
+POSWindow_POS:._.
+
+
+POSWindow_POS:VBZ_is
+POSWindow_POS:DT_another
+POSWindow_POS:CD_one
+POSWindow_POS:._.
+POSWindow_POS:PRP$_My
+
+
+POSWindow_POS:DT_another
+POSWindow_POS:CD_one
+POSWindow_POS:._.
+POSWindow_POS:PRP$_My
+POSWindow_POS:NN_mother-in-law
+
+
+POSWindow_POS:CD_one
+POSWindow_POS:._.
+POSWindow_POS:PRP$_My
+POSWindow_POS:NN_mother-in-law
+POSWindow_POS:VBZ_has
+
+
+POSWindow_POS:._.
+POSWindow_POS:PRP$_My
+POSWindow_POS:NN_mother-in-law
+POSWindow_POS:VBZ_has
+POSWindow_POS:VBN_arrived
+
+
+POSWindow_POS:PRP$_My
+POSWindow_POS:NN_mother-in-law
+POSWindow_POS:VBZ_has
+POSWindow_POS:VBN_arrived
+POSWindow_POS:._.
+
+
+POSWindow_POS:NN_mother-in-law
+POSWindow_POS:VBZ_has
+POSWindow_POS:VBN_arrived
+POSWindow_POS:._.
+
+
+POSWindow_POS:VBZ_has
+POSWindow_POS:VBN_arrived
+POSWindow_POS:._.
+
+Test when using POS baseline Counting
+Printing list of Feature set
+
+
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_a
+
+
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_a
+POSWindow_BaselinePOS:UNKNOWN_test
+
+
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_a
+POSWindow_BaselinePOS:UNKNOWN_test
+POSWindow_BaselinePOS:UNKNOWN_.
+
+
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_a
+POSWindow_BaselinePOS:UNKNOWN_test
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_This
+
+
+POSWindow_BaselinePOS:UNKNOWN_a
+POSWindow_BaselinePOS:UNKNOWN_test
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+
+
+POSWindow_BaselinePOS:UNKNOWN_test
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_another
+
+
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_another
+POSWindow_BaselinePOS:UNKNOWN_one
+
+
+POSWindow_BaselinePOS:UNKNOWN_This
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_another
+POSWindow_BaselinePOS:UNKNOWN_one
+POSWindow_BaselinePOS:UNKNOWN_.
+
+
+POSWindow_BaselinePOS:UNKNOWN_is
+POSWindow_BaselinePOS:UNKNOWN_another
+POSWindow_BaselinePOS:UNKNOWN_one
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_My
+
+
+POSWindow_BaselinePOS:UNKNOWN_another
+POSWindow_BaselinePOS:UNKNOWN_one
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_My
+POSWindow_BaselinePOS:UNKNOWN_mother-in-law
+
+
+POSWindow_BaselinePOS:UNKNOWN_one
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_My
+POSWindow_BaselinePOS:UNKNOWN_mother-in-law
+POSWindow_BaselinePOS:UNKNOWN_has
+
+
+POSWindow_BaselinePOS:UNKNOWN_.
+POSWindow_BaselinePOS:UNKNOWN_My
+POSWindow_BaselinePOS:UNKNOWN_mother-in-law
+POSWindow_BaselinePOS:UNKNOWN_has
+POSWindow_BaselinePOS:UNKNOWN_arrived
+
+
+POSWindow_BaselinePOS:UNKNOWN_My
+POSWindow_BaselinePOS:UNKNOWN_mother-in-law
+POSWindow_BaselinePOS:UNKNOWN_has
+POSWindow_BaselinePOS:UNKNOWN_arrived
+POSWindow_BaselinePOS:UNKNOWN_.
+
+
+POSWindow_BaselinePOS:UNKNOWN_mother-in-law
+POSWindow_BaselinePOS:UNKNOWN_has
+POSWindow_BaselinePOS:UNKNOWN_arrived
+POSWindow_BaselinePOS:UNKNOWN_.
+
+
+POSWindow_BaselinePOS:UNKNOWN_has
+POSWindow_BaselinePOS:UNKNOWN_arrived
+POSWindow_BaselinePOS:UNKNOWN_.
+
+Test when using POS Mikheev Counting
+Printing list of Feature set
+
+
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_a
+
+
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_a
+POSWindow_MikheevPOS:UNKNOWN_test
+
+
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_a
+POSWindow_MikheevPOS:UNKNOWN_test
+POSWindow_MikheevPOS:UNKNOWN_.
+
+
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_a
+POSWindow_MikheevPOS:UNKNOWN_test
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_This
+
+
+POSWindow_MikheevPOS:UNKNOWN_a
+POSWindow_MikheevPOS:UNKNOWN_test
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+
+
+POSWindow_MikheevPOS:UNKNOWN_test
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_another
+
+
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_another
+POSWindow_MikheevPOS:UNKNOWN_one
+
+
+POSWindow_MikheevPOS:UNKNOWN_This
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_another
+POSWindow_MikheevPOS:UNKNOWN_one
+POSWindow_MikheevPOS:UNKNOWN_.
+
+
+POSWindow_MikheevPOS:UNKNOWN_is
+POSWindow_MikheevPOS:UNKNOWN_another
+POSWindow_MikheevPOS:UNKNOWN_one
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_My
+
+
+POSWindow_MikheevPOS:UNKNOWN_another
+POSWindow_MikheevPOS:UNKNOWN_one
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_My
+POSWindow_MikheevPOS:UNKNOWN_mother-in-law
+
+
+POSWindow_MikheevPOS:UNKNOWN_one
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_My
+POSWindow_MikheevPOS:UNKNOWN_mother-in-law
+POSWindow_MikheevPOS:UNKNOWN_has
+
+
+POSWindow_MikheevPOS:UNKNOWN_.
+POSWindow_MikheevPOS:UNKNOWN_My
+POSWindow_MikheevPOS:UNKNOWN_mother-in-law
+POSWindow_MikheevPOS:UNKNOWN_has
+POSWindow_MikheevPOS:UNKNOWN_arrived
+
+
+POSWindow_MikheevPOS:UNKNOWN_My
+POSWindow_MikheevPOS:UNKNOWN_mother-in-law
+POSWindow_MikheevPOS:UNKNOWN_has
+POSWindow_MikheevPOS:UNKNOWN_arrived
+POSWindow_MikheevPOS:UNKNOWN_.
+
+
+POSWindow_MikheevPOS:UNKNOWN_mother-in-law
+POSWindow_MikheevPOS:UNKNOWN_has
+POSWindow_MikheevPOS:UNKNOWN_arrived
+POSWindow_MikheevPOS:UNKNOWN_.
+
+
+POSWindow_MikheevPOS:UNKNOWN_has
+POSWindow_MikheevPOS:UNKNOWN_arrived
+POSWindow_MikheevPOS:UNKNOWN_.
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestPOSMikheevFeatureExtractor
+POSMikheev Feature Extractor
+Only print the features with known tags
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.06 sec
+Running edu.illinois.cs.cogcomp.edison.features.lrec.TestLabelOneAfter
+LabelOneAfter Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+
+Test when using POS View
+Printing list of Feature set
+LabelOneAfter_POS:VBZ_is
+LabelOneAfter_POS:DT_a
+LabelOneAfter_POS:NN_test
+LabelOneAfter_POS:._.
+LabelOneAfter_POS:DT_This
+LabelOneAfter_POS:VBZ_is
+LabelOneAfter_POS:DT_another
+LabelOneAfter_POS:CD_one
+LabelOneAfter_POS:._.
+LabelOneAfter_POS:PRP$_My
+LabelOneAfter_POS:NN_mother-in-law
+LabelOneAfter_POS:VBZ_has
+LabelOneAfter_POS:VBN_arrived
+LabelOneAfter_POS:._.
+LabelOneAfter_POS:
+
+Test when using POS baseline Counting
+Printing list of Feature set
+LabelOneAfter_BaselinePOS:UNKNOWN_is
+LabelOneAfter_BaselinePOS:UNKNOWN_a
+LabelOneAfter_BaselinePOS:UNKNOWN_test
+LabelOneAfter_BaselinePOS:UNKNOWN_.
+LabelOneAfter_BaselinePOS:UNKNOWN_This
+LabelOneAfter_BaselinePOS:UNKNOWN_is
+LabelOneAfter_BaselinePOS:UNKNOWN_another
+LabelOneAfter_BaselinePOS:UNKNOWN_one
+LabelOneAfter_BaselinePOS:UNKNOWN_.
+LabelOneAfter_BaselinePOS:UNKNOWN_My
+LabelOneAfter_BaselinePOS:UNKNOWN_mother-in-law
+LabelOneAfter_BaselinePOS:UNKNOWN_has
+LabelOneAfter_BaselinePOS:UNKNOWN_arrived
+LabelOneAfter_BaselinePOS:UNKNOWN_.
+LabelOneAfter_BaselinePOS:
+
+Test when using POS Mikheev Counting
+Printing list of Feature set
+LabelOneAfter_MikheevPOS:UNKNOWN_is
+LabelOneAfter_MikheevPOS:UNKNOWN_a
+LabelOneAfter_MikheevPOS:UNKNOWN_test
+LabelOneAfter_MikheevPOS:UNKNOWN_.
+LabelOneAfter_MikheevPOS:UNKNOWN_This
+LabelOneAfter_MikheevPOS:UNKNOWN_is
+LabelOneAfter_MikheevPOS:UNKNOWN_another
+LabelOneAfter_MikheevPOS:UNKNOWN_one
+LabelOneAfter_MikheevPOS:UNKNOWN_.
+LabelOneAfter_MikheevPOS:UNKNOWN_My
+LabelOneAfter_MikheevPOS:UNKNOWN_mother-in-law
+LabelOneAfter_MikheevPOS:UNKNOWN_has
+LabelOneAfter_MikheevPOS:UNKNOWN_arrived
+LabelOneAfter_MikheevPOS:UNKNOWN_.
+LabelOneAfter_MikheevPOS:
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.052 sec
 Running edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifestTest
-23:51:37 INFO  NomLexReader:65 - Loading NOMLEX. Looking for file NOMLEX-plus-clean.1.0
-23:51:37 INFO  NomLexReader:36 - Loading NOMLEX-plus-clean.1.0 from classpath
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.423 sec
+00:03:18 INFO  NomLexReader:65 - Loading NOMLEX. Looking for file NOMLEX-plus-clean.1.0
+00:03:18 INFO  NomLexReader:36 - Loading NOMLEX-plus-clean.1.0 from classpath
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.658 sec
 Running edu.illinois.cs.cogcomp.edison.features.TestNGramFeatures
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 sec
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.085 sec
 Running edu.illinois.cs.cogcomp.edison.features.helpers.TestParseHelper
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 sec
 Running edu.illinois.cs.cogcomp.edison.features.TestContextFeatureExtractor
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 sec
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running edu.illinois.cs.cogcomp.edison.annotators.TestParseViewGenerator
 (S1 (S (NP (DT This))
    (VP (AUX is)
@@ -20354,10 +20995,10 @@ Running edu.illinois.cs.cogcomp.edison.annotators.TestParseViewGenerator
 (is (:LABEL:Parent: VP, Head: AUX, Child: NP test :LABEL:Parent: NP, Head: NN, Child: DT a)
     :LABEL:Parent: S, Head: VP, Child: NP This
     :LABEL:Parent: S, Head: VP, Child: . .)
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
 Running edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGeneratorTest
 [S Freeport-McMoRan Inc. said it will convert its Freeport-McMoRan Energy Partners Ltd. partnership into a publicly traded company through the exchange of units of the partnership for common shares . ] [S it will convert its Freeport-McMoRan Energy Partners Ltd. partnership into a publicly traded company through the exchange of units of the partnership for common shares ] 
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 sec
 Running edu.illinois.cs.cogcomp.edison.annotators.TestHeadFinderDependencyHelper
 (S1 (S (S (NP (EX There))
    (VP (AUX is)
@@ -20385,6 +21026,17 @@ Running edu.illinois.cs.cogcomp.edison.annotators.TestHeadFinderDependencyHelper
                                             :LABEL:Parent: S, Head: VP, Child: NP it)
     :LABEL:Parent: S, Head: S, Child: . .)
 
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 sec
+Running edu.illinois.cs.cogcomp.edison.utilities.TestPOSMikheevCounter
+Test Corpus: section0.br
+
+firstCapitalized
+
+notFirstCapitalized
+
+table
+
+
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running edu.illinois.cs.cogcomp.edison.utilities.TestWordNetManager
 [experiment, experimentation, mental_measurement, communication, communicating, attempt, effort, endeavor, endeavour, try, attempt, effort, endeavor, endeavour, try, covering, natural_covering, cover, evaluate, pass_judgment, judge, check, examine, be, score, determine, check, find_out, see, ascertain, watch, learn, take, submit]
@@ -20395,16 +21047,10 @@ Running edu.illinois.cs.cogcomp.edison.utilities.TestWordNetManager
 [noun.cognition, verb.social]
 [noun.cognition, noun.act, noun.communication, noun.act, noun.act, noun.animal]
 [noun.cognition]
-msg = HYPERNYM
-msg = NOMINALIZATION
-msg = HYPONYM
-msg = VERB_GROUP
 [hypernym, nominalization, hyponym, verb group]
 [hypernym, nominalization, hyponym]
 [hypernym, nominalization, hyponym]
 [hypernym, nominalization, hyponym]
-msg = VERB_FRAME_001
-msg = VERB_FRAME_002
 [Something ----s, Somebody ----s]
 [Something ----s]
 [sandwich]
@@ -20419,20 +21065,22 @@ msg = VERB_FRAME_002
 [tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]
 [tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]
 [tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.029 sec
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 sec
+Running edu.illinois.cs.cogcomp.edison.utilities.TestPOSBaseLineCounter
+Test Corpus: section0.br
+
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 sec
 Running edu.illinois.cs.cogcomp.edison.utilities.ConcretenessScorerTest
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.24 sec
-Running edu.illinois.cs.cogcomp.edison.utilities.TestCollinsHeadFinder
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 sec
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.221 sec
 
 Results :
 
-Tests run: 60, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 70, Failures: 0, Errors: 0, Skipped: 0
 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 22.399s
-[INFO] Finished at: Wed Mar 16 23:51:42 CDT 2016
-[INFO] Final Memory: 20M/164M
+[INFO] Total time: 25.253s
+[INFO] Finished at: Thu Apr 14 00:03:22 CDT 2016
+[INFO] Final Memory: 18M/164M
 [INFO] ------------------------------------------------------------------------
