@@ -89,11 +89,4 @@ public class TestAffixes extends TestCase {
 	 
     }
 
-    private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
-	
-	for (TextAnnotation ta : tas) {
-	    for (String viewName : viewNames)
-		// if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
-	}
-    }
 }
