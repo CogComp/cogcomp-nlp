@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
 
+import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
@@ -46,12 +47,12 @@ public class TestWordTypeInformation extends TestCase {
     
     public final void testFormpp() throws EdisonException {
 	
-	System.out.println("WordTypeInformation");
+	// System.out.println("WordTypeInformation");
 	//Using the first TA and a constituent between span of 0 - 20 as a test
 	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
 	
-	System.out.println("GOT TOKENS FROM TEXTAnn");
+	// System.out.println("GOT TOKENS FROM TEXTAnn");
 	
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	String[] teststrings = new String[5];
@@ -59,37 +60,54 @@ public class TestWordTypeInformation extends TestCase {
 	int i = 0, start = 1, end = 6;
 	
 	for(Constituent c: testlist){
-	    System.out.println(c.getSurfaceForm());
+	    // System.out.println(c.getSurfaceForm());
 	    if(i >= start && i < end){		
 		teststrings[i - start] = c.getSurfaceForm();
 	    }
 	    i++;
 	}
 	
-	System.out.println("Testlist size is "+testlist.size());
+	// System.out.println("Testlist size is "+testlist.size());
 
 	Constituent test = testlist.get(3);
 	
-	System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+	// System.out.println("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
 	
        	WordTypeInformation wti = new WordTypeInformation("WordTypeInformation");
 	
-	//System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
+	System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
 	Set<Feature> feats = wti.getFeatures(test);
+	String[] expected_outputs = {
+		"WordTypeInformation:c0(false)",
+		"WordTypeInformation:d0(false)",
+		"WordTypeInformation:c1(false)",
+		"WordTypeInformation:d1(false)",
+		"WordTypeInformation:c2(false)",
+		"WordTypeInformation:d2(false)",
+		"WordTypeInformation:c2(true)",
+		"WordTypeInformation:c3(false)",
+		"WordTypeInformation:d3(false)",
+		"WordTypeInformation:c4(false)",
+		"WordTypeInformation:d4(false)",
+		"WordTypeInformation:c4(true)"
+	};
+
+
 	Set<String> __result = new LinkedHashSet<String>();
 	String __id;
 	String __value;
 	String classifier = "WordTypeInformation";
 	
 	if(feats == null){
-	    System.out.println("Feats are returning NULL.");
+	    // System.out.println("Feats are returning NULL.");
 	    assertFalse(true);
 	}
 	
-	System.out.println("Printing Set of Features");
+	// System.out.println("Printing Set of Features");
 	for(Feature f: feats){
 	    System.out.println(f.getName());
+		assert(ArrayUtils.contains( expected_outputs, f.getName()));
 	}
 	
 	for(;(start < end && teststrings[start-1]!=null); start++){
@@ -127,7 +145,7 @@ public class TestWordTypeInformation extends TestCase {
 	
 	for (TextAnnotation ta : tas) {
 	    for (String viewName : viewNames)
-		if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
+		// if (ta.hasView(viewName)) System.out.println(ta.getView(viewName));
 	}
     }
 }
