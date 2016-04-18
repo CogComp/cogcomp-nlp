@@ -73,6 +73,13 @@ public class TestPosWordConjunctionSizeTwoWindowSizeTwo extends TestCase {
 	
 	System.out.println("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
 	
+	//List<Constituent> words2b4 = SOP.getstuff(test);
+	// System.out.println("About to print out words from text");
+	//for(Constituent word: words2b4){
+	    
+	  System.out.println(word.getSurfaceForm());
+	//}
+	
 	Set<Feature> feats = M.getFeatures(test);
 	String[] expected_outputs = {
 		"PosWordConjunctionSizeTwoWindowSizeTwo:0_1(PRP_give)",
