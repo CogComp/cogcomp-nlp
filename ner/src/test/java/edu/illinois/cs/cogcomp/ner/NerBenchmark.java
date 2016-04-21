@@ -8,11 +8,12 @@ import java.io.File;
 
 /**
  * This runs a standard benchmark test across several datasets for the NER package. Training can be
- * enabled by passing in the "-train" flag. The test configurations and data are expected in the
+ * enabled by passing in the "-training" flag. The configurations and data are expected in the
  * "benchmark" directory. Within, there will be a directory for each dataset you want to run
- * against. Within the dataset directories, there will be a "config" directory containing one or
+ * against. Within those individual dataset directories, there will be a "config" directory containing one or
  * more configuration files, a "test" directory (which can be a link to the directory with the test
- * data, and a "train" directory where the training data files are found. Each configuration file
+ * data), and a "train" directory where the training data files are found. If only a "train" directory is
+ * located in the directory, that will be used for both test and train directories. Each configuration file
  * will result in a run to evaluate the results, and potentially one run to train up the model. The
  * results are presented on standard out.
  * <p>
@@ -23,8 +24,8 @@ import java.io.File;
  *   - <dataset name> there can be as many of these directories as you like, Reuters, Ontonotes, MUC7
  *    and Web are examples of datasets one might run.
  *     - "config" - this must contain one or more configuration files, there will be at least one run per config file.
- *     - "test" : the text directory.
- *     - "train" : the directory with the training data.
+ *     - "test" : the test directory. If training, and not test directory, the "train" directory will be used for both.
+ *     - "train" : the directory with the training data, only needed if "-training" passed.
  * 
  * Command Line Options:
  * -verbose : provide detailed report on all scoring methods with separate evaluation for phrase level tokenization, 
@@ -119,6 +120,8 @@ public class NerBenchmark {
             String trainDirName = dir + "/train/";
             File trainDir = new File(trainDirName);
             String testDirName = dir + "/test/";
+            if (!new File(testDirName).exists())
+                testDirName = dir + "/train/";
             if (configsDir.exists() && configsDir.isDirectory()) {
                 String[] configfiles = configsDir.list();
                 for (String confFile : configfiles) {
