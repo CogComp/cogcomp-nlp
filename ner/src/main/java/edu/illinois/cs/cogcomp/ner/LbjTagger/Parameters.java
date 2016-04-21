@@ -269,7 +269,6 @@ public class Parameters {
                     int maxPhraseLength = 5;
                     if (rm.containsKey(NerBaseConfigurator.PHRASE_LENGTH))
                         maxPhraseLength = rm.getInt(NerBaseConfigurator.PHRASE_LENGTH);
-                    logger.info("Loading TreeGazetteers at length " + maxPhraseLength);
                     GazetteersFactory.init(maxPhraseLength, pathToGazetteersLists, false);
                 }
             }
