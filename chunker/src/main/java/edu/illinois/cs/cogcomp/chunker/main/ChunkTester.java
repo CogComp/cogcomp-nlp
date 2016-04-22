@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 
 import java.net.URL;
 
