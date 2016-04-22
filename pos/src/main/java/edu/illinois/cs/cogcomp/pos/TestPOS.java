@@ -52,7 +52,6 @@ public class TestPOS {
 
         String testingFile = rm.getString("testData");
 
-
         TestDiscrete.testDiscrete(new TestDiscrete(), new POSTagger(), new POSLabel(),
                 new POSBracketToToken(testingFile), true, 0);
     }
