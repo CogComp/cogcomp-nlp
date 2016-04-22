@@ -23,7 +23,7 @@ public class LearningCurveMultiDataset {
 
     /**
      * train a model with the specified inputs, evaluate with the specified test data
-     * <p/>
+     * <p>
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
@@ -45,7 +45,7 @@ public class LearningCurveMultiDataset {
 
     /**
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
-     * <p/>
+     * <p>
      * NB: assuming column format
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,

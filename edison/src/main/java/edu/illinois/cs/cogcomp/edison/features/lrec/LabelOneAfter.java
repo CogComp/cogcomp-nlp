@@ -17,7 +17,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 
 /**
  * This feature extractor extracts part of speeches of the words one after each word in a span.
- * 
+ *
+ * @keywords pos-tagger, after
  * @author Xinbo Wu
  */
 public class LabelOneAfter implements FeatureExtractor {
