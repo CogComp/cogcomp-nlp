@@ -42,7 +42,7 @@ public class TestPOSMikheevCounter extends TestCase {
         System.out.println(str);
 
         try {
-            File file = new File("src\\test\\resources\\outputFiles\\TestMikheevCounterOutput");
+            File file = new File("src/test/resources/outputFiles/TestMikheevCounterOutput");
 
             if (!file.exists()) {
                 file.createNewFile();
