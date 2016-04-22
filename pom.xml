@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.24</version>
+    <version>3.0.33</version>
 
     <modules>
         <module>core-utilities</module>
@@ -17,6 +17,7 @@
         <module>curator</module>
         <module>pos</module>
         <module>ner</module>
+        <module>corpusreaders</module>
     </modules>
 
     <properties>

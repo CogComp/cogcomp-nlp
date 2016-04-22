@@ -37,7 +37,7 @@ public class TestPOSModels {
      * track of and reporting total accuracy at the end.
      */
     public void testAccuracy() {
-        wordForm __wordForm = new wordForm();
+        WordForm __wordForm = new WordForm();
         Parser labeledParser = new POSBracketToToken(labeledTestFile);
         int numSeen = 0;
         int numEqual = 0;

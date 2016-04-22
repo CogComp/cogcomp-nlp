@@ -229,6 +229,23 @@ public class View implements Serializable, IQueryable<Constituent> {
         relations.remove(relation);
     }
 
+    public void removeAllRelations() {
+        List<Constituent> allCorefCons = this.getConstituents();
+        for(Constituent c: allCorefCons) {
+            for(Relation r: c.getIncomingRelations())
+                this.removeRelation(r);
+            for(Relation r: c.getOutgoingRelations())
+                this.removeRelation(r);
+            c.removeAllIncomingRelatons();
+            c.removeAllOutgoingRelaton();
+        }
+    }
+
+    public void removeAllConsituents() {
+        constituents.clear();
+        removeAllRelations();
+    }
+
     /**
      * Checks if this view contains a constituent
      *
