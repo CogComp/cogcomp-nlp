@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
 // F1B88000000000000000B49CC2E4E2A4D294558C94C4A4DC1FFCB457C4B294D22D809CFCE4DC35827D4584E4C4EC84D4150B1D558A658CC4350D827DBCB4DA8215054B558CB2DC9C1D40A8205779615E145F719352617A6E466E5A2451A6A5B24D2C458292109300114E60AC07000000
 
