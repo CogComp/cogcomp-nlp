@@ -48,7 +48,9 @@ public class ACEReader extends TextAnnotationReader {
     private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
 
     // Entity Constants
-    public static final String ENTITYVIEW = "ENTITYVIEW";
+    public static final String ENTITYVIEW_COARSE = "ENTITYVIEW_COARSE";
+    public static final String ENTITYVIEW_FINE = "ENTITYVIEW_FINE";
+    public static final String ENTITYVIEW = ENTITYVIEW_COARSE;
 
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
@@ -63,7 +65,9 @@ public class ACEReader extends TextAnnotationReader {
     public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
 
     // Relation Constants
-    public static final String RELATIONVIEW = "RELATIONVIEW";
+    public static final String RELATIONVIEW_COARSE = "RELATIONVIEW_COARSE";
+    public static final String RELATIONVIEW_FINE = "RELATIONVIEW_FINE";
+    public static final String RELATIONVIEW = RELATIONVIEW_COARSE;
 
     public static final String RelationIDAttribute = "RelationID";
     public static final String RelationTypeAttribute = "RelationType";
@@ -184,7 +188,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityView = new SpanLabelView(ENTITYVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityCoarseView = new SpanLabelView(ENTITYVIEW_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityFineView = new SpanLabelView(ENTITYVIEW_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefView = new CoreferenceView(ViewNames.COREF, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         for (ACEEntity entity : docAnnotation.entityList) {
@@ -199,7 +204,7 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
-                Constituent extentConstituent = new Constituent(entity.type, ENTITYVIEW, ta, extentStartTokenId, extentEndTokenId + 1);
+                Constituent extentConstituent = new Constituent(entity.type, ENTITYVIEW_COARSE, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
@@ -212,7 +217,11 @@ public class ACEReader extends TextAnnotationReader {
                 extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
                 extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
 
-                entityView.addConstituent(extentConstituent);
+                entityCoarseView.addConstituent(extentConstituent);
+
+                // Clone constituent for the ENTITYVIEW_FINE SpanLabelView
+                String subTypeLabel = (entity.subtype != null) ? entity.subtype : entity.type;
+                entityFineView.addConstituent(extentConstituent.cloneForNewViewWithDestinationLabel(ENTITYVIEW_FINE, subTypeLabel));
 
                 corefMentions.add(extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.COREF, entity.id));
             }
@@ -237,7 +246,8 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(ENTITYVIEW, entityView);
+        ta.addView(ENTITYVIEW_COARSE, entityCoarseView);
+        ta.addView(ENTITYVIEW_FINE, entityFineView);
         ta.addView(ViewNames.COREF, corefView);
     }
 
@@ -252,7 +262,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        PredicateArgumentView relationView = new PredicateArgumentView(RELATIONVIEW, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationCoarseView = new PredicateArgumentView(RELATIONVIEW_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationFineView = new PredicateArgumentView(RELATIONVIEW_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF);
         Set<Constituent> corefEntitiesInDoc = entityCorefView.getCanonicalEntities();
@@ -352,8 +363,8 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 // Clone mentions for the relation view.
-                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, firstArgumentMention.role);
-                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW, secondArgumentMention.role);
+                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW_COARSE, firstArgumentMention.role);
+                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW_COARSE, secondArgumentMention.role);
 
                 // Add attributes to each of the constituents.
                 for (Constituent arg : Arrays.asList(firstArgument, secondArgument)) {
@@ -374,17 +385,29 @@ public class ACEReader extends TextAnnotationReader {
                 secondArgument.addAttribute(RelationMentionArgumentIDAttribute, secondArgumentMention.id);
                 secondArgument.addAttribute(RelationMentionArgumentRoleAttribute, secondArgumentMention.role);
 
-                // Add relation to the view.
-                relationView.addPredicateArguments(
+                // Add relation to the coarse view.
+                relationCoarseView.addPredicateArguments(
                         firstArgument,
                         Collections.singletonList(secondArgument),
-                        new String[]{ relation.subtype },
+                        new String[]{ relation.type },
+                        new double[]{ 1.0f });
+
+                // Adding relation to the fine view.
+                Constituent fineFirstArg = firstArgument.cloneForNewView(RELATIONVIEW_FINE);
+                Constituent fineSecondArg = secondArgument.cloneForNewView(RELATIONVIEW_FINE);
+
+                String subTypeLabel = (relation.subtype != null) ? relation.subtype : relation.type;
+                relationFineView.addPredicateArguments(
+                        fineFirstArg,
+                        Collections.singletonList(fineSecondArg),
+                        new String[]{ subTypeLabel },
                         new double[]{ 1.0f });
             }
         }
 
         // Add the relation view to the TextAnnotation
-        ta.addView(RELATIONVIEW, relationView);
+        ta.addView(RELATIONVIEW_COARSE, relationCoarseView);
+        ta.addView(RELATIONVIEW_FINE, relationFineView);
     }
 
     @Override
