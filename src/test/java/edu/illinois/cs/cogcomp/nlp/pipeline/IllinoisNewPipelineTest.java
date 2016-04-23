@@ -49,6 +49,8 @@ public class IllinoisNewPipelineTest
     @BeforeClass
     public static void setUpOnce() throws Exception
     {
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH.key, "80" );
         ResourceManager pipelineRm = new PipelineConfigurator().getDefaultConfig();
         ResourceManager annotatorServiceRm = new AnnotatorServiceConfigurator().getConfig( pipelineRm );
 
