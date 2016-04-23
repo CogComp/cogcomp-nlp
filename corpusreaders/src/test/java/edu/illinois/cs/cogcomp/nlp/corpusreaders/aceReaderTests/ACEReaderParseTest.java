@@ -24,6 +24,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadAC
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -36,19 +37,20 @@ public class ACEReaderParseTest {
     @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2004Dataset() throws Exception {
-        ACEReader reader = new ACEReader("src/test/resources/ACE/ace2004/data/English", true);
-        testReaderParse(reader, 2);
-
+        String corpusHomeDir = "src/test/resources/ACE/ace2004/data/English";
+        ACEReader reader = new ACEReader(corpusHomeDir, true);
+        testReaderParse(reader, corpusHomeDir, 2);
     }
 
     @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2005Dataset() throws Exception {
-        ACEReader reader = new ACEReader("src/test/resources/ACE/ace2005/data/English", false);
-        testReaderParse(reader, 6);
+        String corpusHomeDir = "src/test/resources/ACE/ace2005/data/English";
+        ACEReader reader = new ACEReader(corpusHomeDir, false);
+        testReaderParse(reader, corpusHomeDir, 6);
     }
 
-    private void testReaderParse(ACEReader reader, int numberOfDocs) throws XMLException {
+    private void testReaderParse(ACEReader reader, String corpusHomeDir, int numberOfDocs) throws XMLException {
         int numDocs = 0;
         ReadACEAnnotation.is2004mode = reader.Is2004Mode();
         String corpusIdGold = reader.Is2004Mode() ? "ACE2004" : "ACE2005";
@@ -56,7 +58,7 @@ public class ACEReaderParseTest {
         assertTrue(reader.hasNext());
         while (reader.hasNext()) {
             TextAnnotation doc = reader.next();
-            ACEDocumentAnnotation annotation = ReadACEAnnotation.readDocument(doc.getId());
+            ACEDocumentAnnotation annotation = ReadACEAnnotation.readDocument(corpusHomeDir + File.separatorChar + doc.getId());
 
             assertNotNull(doc);
             assertNotNull(annotation);
@@ -65,14 +67,21 @@ public class ACEReaderParseTest {
             Set<String> documentViews = doc.getAvailableViews();
             assertTrue(documentViews.contains(ViewNames.TOKENS));
             assertTrue(documentViews.contains(ACEReader.ENTITYVIEW));
+            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW_COARSE));
+            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW_FINE));
             assertTrue(documentViews.contains(ACEReader.RELATIONVIEW));
+            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW_COARSE));
+            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW_FINE));
             assertTrue(documentViews.contains(ViewNames.COREF));
 
             int entityMentions = 0;
             for (ACEEntity entity : annotation.entityList) entityMentions += entity.entityMentionList.size();
 
-            SpanLabelView entityView = (SpanLabelView) doc.getView(ACEReader.ENTITYVIEW);
+            SpanLabelView entityView = (SpanLabelView) doc.getView(ACEReader.ENTITYVIEW_COARSE);
             assertEquals(entityView.getNumberOfConstituents(), entityMentions);
+
+            SpanLabelView entityFineView = (SpanLabelView) doc.getView(ACEReader.ENTITYVIEW_FINE);
+            assertEquals(entityFineView.getNumberOfConstituents(), entityMentions);
 
             CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF);
             assertEquals(coreferenceView.getNumberOfConstituents(), entityMentions);
@@ -80,8 +89,11 @@ public class ACEReaderParseTest {
             int relationMentions = 0;
             for (ACERelation relation : annotation.relationList) relationMentions += relation.relationMentionList.size();
 
-            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ACEReader.RELATIONVIEW);
+            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ACEReader.RELATIONVIEW_COARSE);
             assertEquals(relationView.getPredicates().size(), relationMentions);
+
+            PredicateArgumentView relationFineView = (PredicateArgumentView) doc.getView(ACEReader.RELATIONVIEW_FINE);
+            assertEquals(relationFineView.getPredicates().size(), relationMentions);
 
             numDocs++;
         }
