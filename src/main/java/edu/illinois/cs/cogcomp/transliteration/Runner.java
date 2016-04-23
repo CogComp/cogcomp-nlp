@@ -28,18 +28,21 @@ class Runner {
     static String irvinedata = tl + "from_anne_irvine/";
 
     // set these later on
-    public static int NUMTRAIN = 50024;
-    public static int NUMTEST = 4206;
+    public static int NUMTRAIN = 1000;
+    public static int NUMTEST = 1000;
 
     private static Logger logger = LoggerFactory.getLogger(Runner.class);
 
     public static void main(String[] args) throws Exception {
 
-        String trainlang = "Persian";
-        String testlang = "Urdu";
+        String trainlang = "Arabic";
+        String testlang = "Arabic";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
-        String trainfile = wikidata + String.format("wikidata.%s", trainlang);
-        String testfile = wikidata + String.format("wikidata.%s", testlang);
+        //String trainfile = wikidata + String.format("wikidata.%s", trainlang);
+        //String testfile = wikidata + String.format("wikidata.%s", testlang);
+
+        String trainfile = String.format("Data/wikidata.%s", trainlang);
+        String testfile = String.format("Data/wikidata.%s", testlang);
 
         ///String trainfile = irvinedata + String.format("irvine-data.%s", trainlang);
         //String testfile = irvinedata + String.format("irvine-data.%s", testlang);
