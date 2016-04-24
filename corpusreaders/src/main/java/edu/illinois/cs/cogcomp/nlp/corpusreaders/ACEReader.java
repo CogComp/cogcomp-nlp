@@ -48,9 +48,7 @@ public class ACEReader extends TextAnnotationReader {
     private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
 
     // Entity Constants
-    public static final String ENTITYVIEW_COARSE = "ENTITYVIEW_COARSE";
-    public static final String ENTITYVIEW_FINE = "ENTITYVIEW_FINE";
-    public static final String ENTITYVIEW = ENTITYVIEW_COARSE;
+    public static final String ENTITYVIEW = ViewNames.NER_ACE_COARSE;
 
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
@@ -65,9 +63,7 @@ public class ACEReader extends TextAnnotationReader {
     public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
 
     // Relation Constants
-    public static final String RELATIONVIEW_COARSE = "RELATIONVIEW_COARSE";
-    public static final String RELATIONVIEW_FINE = "RELATIONVIEW_FINE";
-    public static final String RELATIONVIEW = RELATIONVIEW_COARSE;
+    public static final String RELATIONVIEW = ViewNames.RELATION_ACE_COARSE;
 
     public static final String RelationIDAttribute = "RelationID";
     public static final String RelationTypeAttribute = "RelationType";
@@ -188,8 +184,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityCoarseView = new SpanLabelView(ENTITYVIEW_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityFineView = new SpanLabelView(ENTITYVIEW_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityCoarseView = new SpanLabelView(ViewNames.NER_ACE_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityFineView = new SpanLabelView(ViewNames.NER_ACE_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefView = new CoreferenceView(ViewNames.COREF, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         for (ACEEntity entity : docAnnotation.entityList) {
@@ -204,7 +200,7 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
-                Constituent extentConstituent = new Constituent(entity.type, ENTITYVIEW_COARSE, ta, extentStartTokenId, extentEndTokenId + 1);
+                Constituent extentConstituent = new Constituent(entity.type, ViewNames.NER_ACE_COARSE, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
@@ -212,7 +208,8 @@ public class ACEReader extends TextAnnotationReader {
                 extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
 
                 if (entity.subtype != null) extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
-                if (entityMention.ldcType != null) extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
+                if (entityMention.ldcType != null)
+                    extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
 
                 extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
                 extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
@@ -221,7 +218,7 @@ public class ACEReader extends TextAnnotationReader {
 
                 // Clone constituent for the ENTITYVIEW_FINE SpanLabelView
                 String subTypeLabel = (entity.subtype != null) ? entity.subtype : entity.type;
-                entityFineView.addConstituent(extentConstituent.cloneForNewViewWithDestinationLabel(ENTITYVIEW_FINE, subTypeLabel));
+                entityFineView.addConstituent(extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.NER_ACE_FINE, subTypeLabel));
 
                 corefMentions.add(extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.COREF, entity.id));
             }
@@ -246,8 +243,8 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(ENTITYVIEW_COARSE, entityCoarseView);
-        ta.addView(ENTITYVIEW_FINE, entityFineView);
+        ta.addView(ViewNames.NER_ACE_COARSE, entityCoarseView);
+        ta.addView(ViewNames.NER_ACE_FINE, entityFineView);
         ta.addView(ViewNames.COREF, corefView);
     }
 
@@ -262,20 +259,11 @@ public class ACEReader extends TextAnnotationReader {
      * @param file          Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        PredicateArgumentView relationCoarseView = new PredicateArgumentView(RELATIONVIEW_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f);
-        PredicateArgumentView relationFineView = new PredicateArgumentView(RELATIONVIEW_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationCoarseView = new PredicateArgumentView(ViewNames.RELATION_ACE_COARSE, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationFineView = new PredicateArgumentView(ViewNames.RELATION_ACE_FINE, ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF);
-        Set<Constituent> corefEntitiesInDoc = entityCorefView.getCanonicalEntities();
-        Set<Constituent> allCanonicalEntities = new HashSet<>();
-
-        // Investigate this issue further.
-        // getCanonicalEntities should not return mentions with incoming edges.
-        for (Constituent c : corefEntitiesInDoc) {
-            if (c.getIncomingRelations().size() == 0) {
-                allCanonicalEntities.add(c);
-            }
-        }
+        Set<Constituent> allCanonicalEntities = entityCorefView.getCanonicalEntitiesViaRelations();
 
         for (ACERelation relation : docAnnotation.relationList) {
 
@@ -333,27 +321,20 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
-                // Use the coreference view edges to find the actual mention that is used in the current relation mention.
-                // Check with the canonical mention first and then follow the edge to get other coreferent mentions.
+                // Use the coreference view edges to find the coreferent mentions that is used in the current relation mention.
                 Constituent firstArgument = null;
-                if (firstArgumentCanonicalMention.getAttribute(EntityMentionIDAttribute).equals(firstArgumentMention.id)) {
-                    firstArgument = firstArgumentCanonicalMention;
-                } else {
-                    for (Constituent args : getCorefMentionsForSameEntityId(entityCorefView, firstArgumentCanonicalMention)) {
-                        if (args.getAttribute(EntityMentionIDAttribute).equals(firstArgumentMention.id)) {
-                            firstArgument = args;
-                        }
+                for (Constituent args : entityCorefView.getCoreferentMentionsViaRelations(firstArgumentCanonicalMention)) {
+                    if (args.getAttribute(EntityMentionIDAttribute).equals(firstArgumentMention.id)) {
+                        firstArgument = args;
+                        break;
                     }
                 }
 
                 Constituent secondArgument = null;
-                if (secondArgumentCanonicalMention.getAttribute(EntityMentionIDAttribute).equals(secondArgumentMention.id)) {
-                    secondArgument = secondArgumentCanonicalMention;
-                } else {
-                    for (Constituent args : getCorefMentionsForSameEntityId(entityCorefView, secondArgumentCanonicalMention)) {
-                        if (args.getAttribute(EntityMentionIDAttribute).equals(secondArgumentMention.id)) {
-                            secondArgument = args;
-                        }
+                for (Constituent args : entityCorefView.getCoreferentMentionsViaRelations(secondArgumentCanonicalMention)) {
+                    if (args.getAttribute(EntityMentionIDAttribute).equals(secondArgumentMention.id)) {
+                        secondArgument = args;
+                        break;
                     }
                 }
 
@@ -363,8 +344,8 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 // Clone mentions for the relation view.
-                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW_COARSE, firstArgumentMention.role);
-                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(RELATIONVIEW_COARSE, secondArgumentMention.role);
+                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(ViewNames.RELATION_ACE_COARSE, firstArgumentMention.role);
+                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(ViewNames.RELATION_ACE_COARSE, secondArgumentMention.role);
 
                 // Add attributes to each of the constituents.
                 for (Constituent arg : Arrays.asList(firstArgument, secondArgument)) {
@@ -389,25 +370,25 @@ public class ACEReader extends TextAnnotationReader {
                 relationCoarseView.addPredicateArguments(
                         firstArgument,
                         Collections.singletonList(secondArgument),
-                        new String[]{ relation.type },
-                        new double[]{ 1.0f });
+                        new String[]{relation.type},
+                        new double[]{1.0f});
 
                 // Adding relation to the fine view.
-                Constituent fineFirstArg = firstArgument.cloneForNewView(RELATIONVIEW_FINE);
-                Constituent fineSecondArg = secondArgument.cloneForNewView(RELATIONVIEW_FINE);
+                Constituent fineFirstArg = firstArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE);
+                Constituent fineSecondArg = secondArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE);
 
                 String subTypeLabel = (relation.subtype != null) ? relation.subtype : relation.type;
                 relationFineView.addPredicateArguments(
                         fineFirstArg,
                         Collections.singletonList(fineSecondArg),
-                        new String[]{ subTypeLabel },
-                        new double[]{ 1.0f });
+                        new String[]{subTypeLabel},
+                        new double[]{1.0f});
             }
         }
 
         // Add the relation view to the TextAnnotation
-        ta.addView(RELATIONVIEW_COARSE, relationCoarseView);
-        ta.addView(RELATIONVIEW_FINE, relationFineView);
+        ta.addView(ViewNames.RELATION_ACE_COARSE, relationCoarseView);
+        ta.addView(ViewNames.RELATION_ACE_FINE, relationFineView);
     }
 
     @Override
@@ -425,33 +406,5 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     public boolean hasNext() {
         return this.documents.size() > this.currentAnnotationId;
-    }
-
-    /* Helper for finding correct Coreferent Mentions chain. */
-
-    private static ITransformer<Relation, Constituent> relationsToConstituents;
-
-    static {
-        relationsToConstituents = new ITransformer<Relation, Constituent>() {
-
-            @Override
-            public Constituent transform(Relation arg0) {
-                return arg0.getTarget();
-            }
-        };
-    }
-
-    /**
-     * Find Coref Mentions for a given input mention. The method in the CoreferenceView class does not
-     * work for this case due to multiple redundant mentions (same span);
-     * leading to the entity id factor being totally ignored.
-     *
-     * @param corefView Input CoreferenceView to find coreferent mentions from.
-     * @param mention   Mention to find coreferent mentions to.
-     * @return List of Mentions represented as Constituents in the Coreference View.
-     */
-    private static List<Constituent> getCorefMentionsForSameEntityId(CoreferenceView corefView, Constituent mention) {
-        Constituent canonicalEntity = corefView.getCanonicalEntity(mention);
-        return Mappers.map(canonicalEntity.getOutgoingRelations(), relationsToConstituents);
     }
 }

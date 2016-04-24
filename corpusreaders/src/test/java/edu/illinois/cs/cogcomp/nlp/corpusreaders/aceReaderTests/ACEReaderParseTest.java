@@ -67,20 +67,20 @@ public class ACEReaderParseTest {
             Set<String> documentViews = doc.getAvailableViews();
             assertTrue(documentViews.contains(ViewNames.TOKENS));
             assertTrue(documentViews.contains(ACEReader.ENTITYVIEW));
-            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW_COARSE));
-            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW_FINE));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_COARSE));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_FINE));
             assertTrue(documentViews.contains(ACEReader.RELATIONVIEW));
-            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW_COARSE));
-            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW_FINE));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_COARSE));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_FINE));
             assertTrue(documentViews.contains(ViewNames.COREF));
 
             int entityMentions = 0;
             for (ACEEntity entity : annotation.entityList) entityMentions += entity.entityMentionList.size();
 
-            SpanLabelView entityView = (SpanLabelView) doc.getView(ACEReader.ENTITYVIEW_COARSE);
+            SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_COARSE);
             assertEquals(entityView.getNumberOfConstituents(), entityMentions);
 
-            SpanLabelView entityFineView = (SpanLabelView) doc.getView(ACEReader.ENTITYVIEW_FINE);
+            SpanLabelView entityFineView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_FINE);
             assertEquals(entityFineView.getNumberOfConstituents(), entityMentions);
 
             CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF);
@@ -89,10 +89,10 @@ public class ACEReaderParseTest {
             int relationMentions = 0;
             for (ACERelation relation : annotation.relationList) relationMentions += relation.relationMentionList.size();
 
-            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ACEReader.RELATIONVIEW_COARSE);
+            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_COARSE);
             assertEquals(relationView.getPredicates().size(), relationMentions);
 
-            PredicateArgumentView relationFineView = (PredicateArgumentView) doc.getView(ACEReader.RELATIONVIEW_FINE);
+            PredicateArgumentView relationFineView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_FINE);
             assertEquals(relationFineView.getPredicates().size(), relationMentions);
 
             numDocs++;
