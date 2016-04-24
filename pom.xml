@@ -16,6 +16,7 @@
         <module>edison</module>
         <module>curator</module>
         <module>pos</module>
+        <module>chunker</module>
         <module>ner</module>
         <module>corpusreaders</module>
     </modules>

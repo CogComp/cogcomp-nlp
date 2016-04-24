@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
-import edu.illinois.cs.cogcomp.chunker.main.TrainedChunker;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
@@ -46,7 +45,7 @@ public class TestDiff extends TestCase {
     }
 
     public void testDiff() {
-        TrainedChunker tagger = new TrainedChunker();
+        Chunker tagger = new Chunker();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String previous = "";
         String sentence = "";

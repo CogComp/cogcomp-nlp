@@ -19,41 +19,24 @@ import java.io.File;
  */
 public class ChunkerTrain {
     private static final String NAME = ChunkerTrain.class.getCanonicalName();
-    private String modelDirPath;   // Path to where the trainer will save the trained models
     private int iter;           // Number of iterations to be used when training the chunker
+    Chunker chunker;
     private ResourceManager rm;
 
-    private Chunker chunker;
+    public ChunkerTrain(){
+        this(50);
+    }
 
     public ChunkerTrain(int iter) {
-        this.init();
-        this.modelDirPath = rm.getString("modelDirPath");
-        this.iter = iter;
-
-    }
-
-    public ChunkerTrain(String modelDirPath, int iter) {
-        if(!modelDirPath.endsWith("/")) {
-            modelDirPath += "/";
-        }
-        this.modelDirPath = modelDirPath;
         this.iter = iter;
         this.init();
     }
 
-
-    public ChunkerTrain(String modelDirPath) {
-        if(!modelDirPath.endsWith("/")) {
-            modelDirPath += "/";
-        }
-        this.modelDirPath = modelDirPath;
-        this.iter = 50;
-        this.init();
-    }
-
-    private void init(){
+    public void init(){
         rm = new ChunkerConfigurator().getDefaultConfig();
-        this.chunker = new Chunker();
+        String modelFile = rm.getString("modelPath");
+        String modelLexFile = rm.getString("modelLexPath");
+        chunker = new Chunker(modelFile, modelLexFile);
     }
 
     /**
@@ -72,15 +55,16 @@ public class ChunkerTrain {
      */
     public void trainModels(String trainingData) {
         Parser parser = new CoNLL2000Parser(trainingData);
-        trainModelsWithParser( trainingData, parser );
+        trainModelsWithParser(parser );
     }
 
     /**
      * Trains the chunker models with the specified training data
-     * @param trainingData The labeled training data
+     * @param parser Parser for the training data. Initialized in trainModels(String trainingData)
      */
-    public void trainModelsWithParser(String trainingData, Parser parser )
-    {
+    public void trainModelsWithParser(Parser parser ) {
+        chunker.isTraining = true;
+
         // Run the learner
         for (int i = 1; i <= iter; i++) {
             LinkedVector ex;
@@ -90,8 +74,10 @@ public class ChunkerTrain {
                 }
             }
             parser.reset();
+            chunker.doneWithRound();
             System.out.println("Iteration number : " + i);
         }
+        chunker.doneLearning();
     }
 
     /**
@@ -99,40 +85,40 @@ public class ChunkerTrain {
      * The modelName ("illinois-chunker") is fixed
      */
     public void writeModelsToDisk() {
-        // Make sure necessary directories exist
-        System.out.println("Writing models to disk");
-        (new File(modelDirPath)).mkdirs();
-        chunker.write(modelDirPath + rm.getString("modelName") + ".lc", modelDirPath + rm.getString("modelName") + ".lex");
-        System.out.println("Done training, models are in " + modelDirPath);
+        chunker.save();
+        System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
     }
 
     public static void main(String[] args) {
-        String modelDir = null;
-        String trainingFile = null;
+//        String modelDir = null;
+//        String trainingFile = null;
+//
+//        if(args.length >= 1)
+//            modelDir = args[0];
+//
+//        if (args.length == 2) {
+//            trainingFile = args[1];
+//        }
 
-        if(args.length >= 1)
-            modelDir = args[0];
+        ChunkerTrain trainer = new ChunkerTrain();
+        trainer.trainModels();
+        trainer.writeModelsToDisk();
 
-        if (args.length == 2) {
-            trainingFile = args[1];
-        }
-
-        ChunkerTrain trainer = null;
-        if(modelDir!=null)
-            trainer = new ChunkerTrain(modelDir, 50);
-        else
-            trainer = new ChunkerTrain(50); //Using default model output path from configurator
-
-
-        System.out.println("Starting training ...");
-
-//        trainer.trainModels(Constants.trainingData);
-        if(trainingFile == null){
-            trainer.trainModels();
-        }
-        else{
-            trainer.trainModels(trainingFile);
-        }
-        trainer.writeModelsToDisk(); //"Chunker"
+//        if(modelDir!=null)
+//            trainer = new ChunkerTrain(modelDir, 50);
+//        else
+//            trainer = new ChunkerTrain(50); //Using default model output path from configurator
+//
+//
+//        System.out.println("Starting training ...");
+//
+////        trainer.trainModels(Constants.trainingData);
+//        if(trainingFile == null){
+//            trainer.trainModels();
+//        }
+//        else{
+//            trainer.trainModels(trainingFile);
+//        }
+//        trainer.writeModelsToDisk(); //"Chunker"
     }
 }

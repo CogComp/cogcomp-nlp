@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.chunker.main;
 
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
@@ -15,7 +16,7 @@ public class TestChunkerModels {
     private String modelPath;
     private String labeledData;
 
-    private TrainedChunker tagger;
+    private Chunker tagger;
 
     /**
      * Constructor for the test class. User specifies models and data.
@@ -26,7 +27,7 @@ public class TestChunkerModels {
      */
     public TestChunkerModels(String modelPath, String labeledData, String chunkerName) {
         this.labeledData = labeledData;
-        tagger = new TrainedChunker();
+        tagger = new Chunker();
     }
 
     public void testAccuracy() {
