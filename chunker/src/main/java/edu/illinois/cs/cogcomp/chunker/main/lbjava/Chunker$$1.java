@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
 // F1B88000000000000000B49CC2E4E2A4D294555507EC82DCBCE4D22515134D809CFCE4DC3582FCF2A41D450B1D5507BCF2ACD26D1507E4C28CC294CC9CCAA4C29CCCFC3D158070AC7845614AA76E5A10510450D13D2D23B22518AA30A825BC233FB4B834213D14C3FF0E0FCCCB49CF27D150F50AC7A029841418E08D6001D1CEF03D6A3A00008959E02FA9000000
 
@@ -12,7 +22,6 @@ import edu.illinois.cs.cogcomp.lbjava.learn.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 
 
