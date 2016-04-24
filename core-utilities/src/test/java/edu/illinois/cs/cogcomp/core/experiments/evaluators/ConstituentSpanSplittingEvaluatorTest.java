@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -28,8 +38,8 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction1);
         evaluator.evaluate(splittingTester);
-        assertEquals(1.0, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(1.0, splittingTester.getMicroF1(), 0);
+        assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
 
     @Test
@@ -37,8 +47,8 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction1, prediction2);
         evaluator.evaluate(splittingTester);
-        assertEquals(0.4, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(0.4, splittingTester.getMicroF1(), 0);
+        assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
 
     @Test
@@ -46,7 +56,7 @@ public class ConstituentSpanSplittingEvaluatorTest {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.setViews(prediction2, prediction1);
         evaluator.evaluate(splittingTester);
-        assertEquals(0.4, splittingTester.getAverageF1(), 0);
-        assertEquals(0.25, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(0.4, splittingTester.getMicroF1(), 0);
+        assertEquals(0.25, splittingTester.getMicroPrecision(), 0);
     }
 }

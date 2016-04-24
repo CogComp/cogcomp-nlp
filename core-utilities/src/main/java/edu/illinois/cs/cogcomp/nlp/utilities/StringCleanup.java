@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -40,7 +50,7 @@ public class StringCleanup {
                         normalizeCodepoint(origString_, encoding_, offset);
 
                 Character replacedChar = replacement.getFirst();
-                int codepoint = replacement.getSecond().intValue();
+                int codepoint = replacement.getSecond();
 
                 if (null != replacedChar) {
                     normSeq[charNum] = replacedChar;
@@ -122,9 +132,9 @@ public class StringCleanup {
 
         Character newChar = null;
         if (isOk)
-            newChar = Character.valueOf(normalizedChar);
+            newChar = normalizedChar;
 
-        return new Pair<>(newChar, new Integer(codepoint));
+        return new Pair<>(newChar, codepoint);
     }
 
     static public String normalizeToUtf8(String origString_) {
@@ -151,8 +161,7 @@ public class StringCleanup {
      * text).
      */
     static public String removeControlCharacters(String origString_) {
-        String outputStr = origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
-        return outputStr;
+        return origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
     }
 
 }
