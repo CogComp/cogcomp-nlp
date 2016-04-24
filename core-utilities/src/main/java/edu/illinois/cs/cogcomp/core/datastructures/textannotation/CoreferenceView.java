@@ -148,10 +148,7 @@ public class CoreferenceView extends View {
     public Set<Constituent> getCanonicalEntitiesViaRelations() {
         HashSet<Constituent> canonicalConstituents = new HashSet<>();
         for (Constituent cc : this.getConstituents()) {
-            List<Relation> incomingRelations = getFilteredIncomingRelations(cc);
-            for(Relation r : incomingRelations) {
-                canonicalConstituents.add(r.source);
-            }
+            canonicalConstituents.add(getCanonicalEntityViaRelation(cc));
         }
         return canonicalConstituents;
     }

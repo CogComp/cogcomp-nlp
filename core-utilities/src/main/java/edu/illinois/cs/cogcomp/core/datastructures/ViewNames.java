@@ -34,8 +34,11 @@ public class ViewNames {
     @Deprecated
     public static final String NER = "NER";
 
+    public static final String NER_ACE_COARSE = "NER_ACE_COARSE";
+    public static final String NER_ACE_FINE = "NER_ACE_FINE";
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
+
 
     public static final String SHALLOW_PARSE = "SHALLOW_PARSE";
 
@@ -44,6 +47,9 @@ public class ViewNames {
      */
     @Deprecated
     public static final String CHUNK = "CHUNK";
+
+    public static final String RELATION_ACE_COARSE = "RELATION_ACE_COARSE";
+    public static final String RELATION_ACE_FINE = "RELATION_ACE_FINE";
 
     /**
      * @deprecated Replaced by {@link #SRL_VERB}
@@ -112,6 +118,8 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
+            case NER_ACE_COARSE:
+            case NER_ACE_FINE:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
@@ -140,6 +148,8 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
+            case RELATION_ACE_COARSE:
+            case RELATION_ACE_FINE:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
                 return ViewTypes.COREF_VIEW;
