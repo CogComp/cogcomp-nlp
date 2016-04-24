@@ -42,7 +42,7 @@ public class POSConfigurator extends Configurator {
     public static final Property UNKNOWN_NAME = new Property("unknownName", "POSTaggerUnknown");
 
     public static final Property MODEL_PATH = new Property("modelPath",
-            "edu/illinois/cs/cogcomp/pos/lbjava/");
+            "models/edu/illinois/cs/cogcomp/pos/lbjava/");
     public static final Property BASELINE_MODEL_PATH = new Property("baselineModelPath",
             MODEL_PATH.value + BASELINE_NAME.value + ".lc");
     public static final Property BASELINE_LEX_PATH = new Property("baselineLexPath",

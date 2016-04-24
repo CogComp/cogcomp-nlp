@@ -8,6 +8,7 @@ package edu.illinois.cs.cogcomp.chunker.main;
 import java.util.List;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
@@ -25,7 +26,7 @@ public class ChunkerAnnotator extends Annotator
 {
     private static final String NAME = ChunkerAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(ChunkerAnnotator.class);
-    private TrainedChunker tagger = new TrainedChunker();
+    private Chunker tagger = new Chunker();
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
     private String sentencesfield = ViewNames.SENTENCE;

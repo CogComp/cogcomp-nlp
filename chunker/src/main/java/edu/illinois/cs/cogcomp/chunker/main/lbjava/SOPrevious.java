@@ -3,8 +3,10 @@
 
 package edu.illinois.cs.cogcomp.chunker.main.lbjava;
 
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.chunker.utils.Constants;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
@@ -18,7 +20,10 @@ import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 
 public class SOPrevious extends Classifier
 {
-  private static final Chunker __Chunker = new Chunker();
+  private static ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
+  private static String modelFile = rm.getString("modelPath");
+  private static String modelLexFile = rm.getString("modelLexPath");
+  private static final Chunker __Chunker = new Chunker(modelFile, modelLexFile);
   private static final POSTagger __POSTagger = new POSTagger();
 
   public SOPrevious()

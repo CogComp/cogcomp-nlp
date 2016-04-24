@@ -3,8 +3,10 @@
 
 package edu.illinois.cs.cogcomp.chunker.main.lbjava;
 
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.chunker.utils.Constants;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
@@ -12,6 +14,7 @@ import edu.illinois.cs.cogcomp.lbjava.learn.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
+import edu.illinois.cs.cogcomp.pos.POSConfigurator;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
 
@@ -26,7 +29,10 @@ import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
  **/
 public class PreviousTags extends Classifier
 {
-  private static final Chunker __Chunker = new Chunker();
+  private static ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
+  private static String modelFile = rm.getString("modelPath");
+  private static String modelLexFile = rm.getString("modelLexPath");
+  private static final Chunker __Chunker = new Chunker(modelFile, modelLexFile);
 
   public PreviousTags()
   {
