@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.22</version>
+    <version>3.0.33</version>
 
     <modules>
         <module>core-utilities</module>
@@ -16,7 +16,8 @@
         <module>edison</module>
         <module>curator</module>
         <module>pos</module>
-        <module>chunker</module>
+        <module>ner</module>
+        <module>corpusreaders</module>
     </modules>
 
     <properties>
@@ -126,6 +127,33 @@
                     <skip>false</skip>
                     <quiet>false</quiet>
                 </configuration>
+            </plugin>
+            <!-- for License Maven Plugin -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.11</version>
+                <configuration>
+                    <header>core-utilities/src/main/resources/license-header.txt</header>
+                    <excludes>
+                        <exclude>**/*.txt</exclude>
+                        <exclude>**/*.groovy</exclude>
+                        <exclude>**/*.sh</exclude>
+                        <exclude>**/*.lbj</exclude>
+                        <exclude>**/*.xml</exclude>
+                        <exclude>**/*.properties</exclude>
+                        <exclude>**/*.md</exclude>
+                        <exclude>src/test/resources/**</exclude>
+                        <exclude>src/main/resources/**</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <extensions>

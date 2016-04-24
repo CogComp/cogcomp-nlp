@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -80,8 +90,7 @@ public class POSAnnotator extends Annotator {
 
     /**
      * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to
-     * check for pre-requisites before calling any single (external)
-     * {@link Annotator}.
+     * check for pre-requisites before calling any single (external) {@link Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by
      *         this ViewGenerator

@@ -1,13 +1,31 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.stats;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Shyam on 12/10/15.
+ * Counter test: max, sorted items
+ * 
+ * @author Shyam Upadhyay
+ * @author Christos Christodoulopoulos
+ * @since 12/10/15.
  */
-public class TestCounter extends TestCase {
+public class TestCounter {
+
+    @Test
     public void testCounter() {
-        Counter<String> cnt = new Counter<String>();
+        Counter<String> cnt = new Counter<>();
         cnt.incrementCount("a");
         cnt.incrementCount("a");
         cnt.incrementCount("z");
@@ -20,5 +38,8 @@ public class TestCounter extends TestCase {
         cnt.incrementCount("c");
         assertEquals("a", cnt.getMax().getFirst());
         assertEquals("z", cnt.getMin().getFirst());
+
+        assertEquals("z", cnt.getSortedItems().get(0));
+        assertEquals("a", cnt.getSortedItemsHighestFirst().get(0));
     }
 }

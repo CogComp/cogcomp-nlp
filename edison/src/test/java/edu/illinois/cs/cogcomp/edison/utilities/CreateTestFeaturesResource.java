@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -19,7 +29,9 @@ import java.util.Set;
 
 /**
  * Prepares the word.features.test and feature.collection.text files used for the Maven Tests NB:
- * File test.ta needs to exist (see {@link CreateTestTAResource}
+ * File test.ta needs to exist
+ *
+ * TODO: 2/15/16 Needs to be switched to use DummyTextAnnotationGenerator
  *
  * @author Christos Christodoulopoulos
  */

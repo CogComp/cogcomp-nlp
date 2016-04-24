@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -515,5 +525,21 @@ public class Constituent implements Serializable {
             cloneC.addAttribute(k, this.getAttribute(k));
         }
         return cloneC;
+    }
+
+    public void removeIncomingRelaton(Relation r) {
+        this.incomingRelations.remove(r);
+    }
+
+    public void removeAllIncomingRelatons() {
+        this.incomingRelations.clear();
+    }
+
+    public void removeOutgoingRelaton(Relation r) {
+        this.outgoingRelations.remove(r);
+    }
+
+    public void removeAllOutgoingRelaton() {
+        this.outgoingRelations.clear();
     }
 }

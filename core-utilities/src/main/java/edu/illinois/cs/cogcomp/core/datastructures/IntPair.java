@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import java.io.Serializable;
@@ -67,9 +77,7 @@ public class IntPair implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         IntPair other = (IntPair) obj;
-        if (first != other.first)
-            return false;
-        return second == other.second;
+        return first == other.first && second == other.second;
     }
 
     @Override
