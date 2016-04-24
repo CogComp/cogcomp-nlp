@@ -22,6 +22,12 @@ public class ChunkerConfigurator extends Configurator {
     public static final Property TRAINING_DATA = new Property("trainingData",
             "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/train.txt");
 
+    public static final Property TEST_GOLDPOS_DATA = new Property("testGoldPOSData",
+            "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.txt");
+
+    public static final Property TEST_NOPOS_DATA = new Property("testNoPOSData",
+            "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt");
+
     public static final Property MODEL_NAME = new Property("modelName", "Chunker");
 
     public static final Property MODEL_DIR_PATH = new Property("modelDirPath", "edu/illinois/cs/cogcomp/chunker/main/lbjava/");
@@ -34,7 +40,7 @@ public class ChunkerConfigurator extends Configurator {
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] props =
-                {TRAINING_DATA, MODEL_NAME, MODEL_DIR_PATH, MODEL_PATH, MODEL_LEX_PATH};
+                {TRAINING_DATA, TEST_GOLDPOS_DATA , TEST_NOPOS_DATA, MODEL_NAME, MODEL_DIR_PATH, MODEL_PATH, MODEL_LEX_PATH};
         return new ResourceManager(generateProperties(props));
     }
 

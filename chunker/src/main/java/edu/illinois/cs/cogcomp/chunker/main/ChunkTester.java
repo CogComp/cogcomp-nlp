@@ -13,6 +13,7 @@ package edu.illinois.cs.cogcomp.chunker.main;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
@@ -58,9 +59,9 @@ public class ChunkTester {
      * @param args The command line parameters.
      **/
     public static void main(String[] args) {
-        String testFileName = "test.txt";
-        String testNoPOSFileName = "test.noPOS.txt";
-        //String testNoPOSFileName = "testIn.txt";
+        ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
+        String testFileName = rm.getString("testGoldPOSData");
+        String testNoPOSFileName = rm.getString("testNoPOSData");
 
         String parserName = null;
         URL testFileURL = ChunkTester.class.getClassLoader().getResource(testFileName);
