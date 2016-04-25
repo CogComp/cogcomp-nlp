@@ -21,7 +21,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
-import edu.illinois.cs.cogcomp.pos.TrainedPOSTagger;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -77,7 +77,7 @@ public class TestDiff {
 
     @Test
     public void testDiff() {
-        TrainedPOSTagger tagger = new TrainedPOSTagger();
+        POSTagger tagger = new POSTagger();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
         String sentence = "";
         int sentenceCounter = 0;
