@@ -28,12 +28,12 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 /**
  * Wraps the Illinois Chunker (Shallow Parser) in an illinois-core-utilities Annotator
+ * 
  * @author James Clarke, Mark Sammons, Nitish Gupta
  *
  */
 
-public class ChunkerAnnotator extends Annotator
-{
+public class ChunkerAnnotator extends Annotator {
     private static final String NAME = ChunkerAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(ChunkerAnnotator.class);
     private Chunker tagger = new Chunker();
@@ -43,23 +43,24 @@ public class ChunkerAnnotator extends Annotator
 
 
     public ChunkerAnnotator() {
-        super(ViewNames.SHALLOW_PARSE, new String[] { ViewNames.POS });
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS});
     }
 
     @Override
-    public void addView( TextAnnotation record ) throws AnnotatorException {
-        if (!record.hasView(tokensfield) || !record.hasView(sentencesfield) || !record.hasView( posfield )) {
+    public void addView(TextAnnotation record) throws AnnotatorException {
+        if (!record.hasView(tokensfield) || !record.hasView(sentencesfield)
+                || !record.hasView(posfield)) {
             String msg = "Record must be tokenized, sentence split, and POS-tagged first.";
-            logger.error( msg );
-            throw new AnnotatorException( msg);
+            logger.error(msg);
+            throw new AnnotatorException(msg);
         }
 
         List<Constituent> tags = record.getView(posfield).getConstituents();
-//		String rawText = record.getText();
+        // String rawText = record.getText();
 
         List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens(record);
 
-        View chunkView = new SpanLabelView( ViewNames.SHALLOW_PARSE, this.NAME, record, 1.0 );
+        View chunkView = new SpanLabelView(ViewNames.SHALLOW_PARSE, this.NAME, record, 1.0);
 
         int currentChunkStart = 0;
         int currentChunkEnd = 0;
@@ -70,27 +71,32 @@ public class ChunkerAnnotator extends Annotator
         for (Token lbjtoken : lbjTokens) {
             Constituent current = tags.get(tcounter);
             tagger.discreteValue(lbjtoken);
-            logger.debug("{} {}", lbjtoken.toString(), ( null == lbjtoken.type ) ? "NULL" : lbjtoken.type ) ;
+            logger.debug("{} {}", lbjtoken.toString(), (null == lbjtoken.type) ? "NULL"
+                    : lbjtoken.type);
 
             // what happens if we see an Inside tag -- even if it doesn't follow a Before tag
             if (null != lbjtoken.type && lbjtoken.type.charAt(0) == 'I') {
-                if ( lbjtoken.type.length() < 3 )
-                    throw new IllegalArgumentException("Chunker word label '" + lbjtoken.type + "' is too short!" );
-                if ( null == clabel ) // we must have just seen an Outside tag and possibly completed a chunk
+                if (lbjtoken.type.length() < 3)
+                    throw new IllegalArgumentException("Chunker word label '" + lbjtoken.type
+                            + "' is too short!");
+                if (null == clabel) // we must have just seen an Outside tag and possibly completed
+                                    // a chunk
                 {
                     // modify lbjToken.type for later ifs
                     lbjtoken.type = "B" + lbjtoken.type.substring(1);
-                }
-                else if ( clabel.length() >= 3 && !clabel.equals(lbjtoken.type.substring(2) ) ) {
+                } else if (clabel.length() >= 3 && !clabel.equals(lbjtoken.type.substring(2))) {
                     // trying to avoid mysterious null pointer exception...
                     lbjtoken.type = "B" + lbjtoken.type.substring(1);
                 }
             }
-            if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O') && clabel != null) {
+            if ((lbjtoken.type.charAt(0) == 'B' || lbjtoken.type.charAt(0) == 'O')
+                    && clabel != null) {
 
                 if (previous != null) {
                     currentChunkEnd = previous.getEndSpan();
-                    Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
+                    Constituent label =
+                            new Constituent(clabel, ViewNames.SHALLOW_PARSE, record,
+                                    currentChunkStart, currentChunkEnd);
                     chunkView.addConstituent(label);
                     clabel = null;
                 } // else no chunk in progress (we are at the start of the doc)
@@ -103,14 +109,16 @@ public class ChunkerAnnotator extends Annotator
             previous = current;
             tcounter++;
         }
-        if (clabel != null && null != previous ) {
+        if (clabel != null && null != previous) {
             currentChunkEnd = previous.getEndSpan();
-            Constituent label = new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart, currentChunkEnd );
+            Constituent label =
+                    new Constituent(clabel, ViewNames.SHALLOW_PARSE, record, currentChunkStart,
+                            currentChunkEnd);
             chunkView.addConstituent(label);
         }
-        record.addView( ViewNames.SHALLOW_PARSE, chunkView );
+        record.addView(ViewNames.SHALLOW_PARSE, chunkView);
 
-        return; //chunkView;
+        return; // chunkView;
     }
 
     @Override
@@ -119,14 +127,16 @@ public class ChunkerAnnotator extends Annotator
     }
 
     /**
-     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to check for pre-requisites before calling
-     * any single (external) {@link edu.illinois.cs.cogcomp.annotation.Annotator}.
+     * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to
+     * check for pre-requisites before calling any single (external)
+     * {@link edu.illinois.cs.cogcomp.annotation.Annotator}.
      *
-     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by this ViewGenerator
+     * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by
+     *         this ViewGenerator
      */
     @Override
     public String[] getRequiredViews() {
-        return new String[] { ViewNames.POS };
+        return new String[] {ViewNames.POS};
     }
 
 
