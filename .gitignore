@@ -2,5 +2,7 @@
 *.log
 **/target
 *.iml
+*.DS_Store
+*.settings
 edison/wordnet/
 

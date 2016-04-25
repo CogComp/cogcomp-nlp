@@ -30,7 +30,7 @@ public class TestPOSModels {
     private static final String NAME = TestPOSModels.class.getCanonicalName();
     private String labeledTestFile;
 
-    private TrainedPOSTagger tagger;
+    private POSTagger tagger;
 
     /**
      * Constructor for the test class. User specifies models and data.
@@ -39,7 +39,7 @@ public class TestPOSModels {
      */
     public TestPOSModels(String labeledTestData) {
         this.labeledTestFile = labeledTestData;
-        this.tagger = new TrainedPOSTagger();
+        this.tagger = new POSTagger();
     }
 
     /**

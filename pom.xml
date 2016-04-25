@@ -16,6 +16,7 @@
         <module>edison</module>
         <module>curator</module>
         <module>pos</module>
+        <module>chunker</module>
         <module>ner</module>
         <module>corpusreaders</module>
     </modules>
@@ -73,10 +74,10 @@
                 <artifactId>formatter-maven-plugin</artifactId>
                 <version>0.5.2</version>
                 <configuration>
-			<configFile>${googleEclipseFormatterStyle}</configFile>
-			<excludes>
-				<exclude>**/Morpha.java</exclude>
-			</excludes>
+            <configFile>${googleEclipseFormatterStyle}</configFile>
+            <excludes>
+                <exclude>**/Morpha.java</exclude>
+            </excludes>
                 </configuration>
             </plugin>
             <plugin>
