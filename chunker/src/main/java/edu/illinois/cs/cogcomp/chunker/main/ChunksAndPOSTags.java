@@ -23,15 +23,15 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * with chunk and part of speech tags. Both the Illinois POS tagger and the Illinois Chunker must be
  * on the <code>CLASSPATH</code> for this command to execute.
  *
- * <h4>Usage</h4> <blockquote><code>
+ * <h3>Usage</h3> <blockquote><code>
  *   java edu.illinois.cs.cogcomp.chunker.main.ChunksAndPOSTags
  *          &lt;input file&gt;
  * </code></blockquote>
  *
- * <h4>Input</h4> The only command line parameter specifies the relative path to a file containing
+ * <h3>Input</h3> The only command line parameter specifies the relative path to a file containing
  * the plain text to be annotated.
  *
- * <h4>Output</h4> The input text with predicted chunk and POS annotations is produced on
+ * <h3>Output</h3> The input text with predicted chunk and POS annotations is produced on
  * <code>STDOUT</code>. Annotated segments will be surrounded by square brackets. The type of the
  * segment (as indicated by the <code>"B-"</code> and <code>"I-"</code> labels after removing those
  * prefixes) appears attached to the opening square bracket.
