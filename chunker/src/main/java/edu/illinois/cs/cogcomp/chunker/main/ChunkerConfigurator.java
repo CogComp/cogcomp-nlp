@@ -25,22 +25,27 @@ public class ChunkerConfigurator extends Configurator {
     public static final Property TEST_GOLDPOS_DATA = new Property("testGoldPOSData",
             "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.txt");
 
-    public static final Property TEST_NOPOS_DATA = new Property("testNoPOSData",
-            "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt");
+    public static final Property TEST_NOPOS_DATA =
+            new Property("testNoPOSData",
+                    "/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt");
 
     public static final Property MODEL_NAME = new Property("modelName", "Chunker");
 
-    public static final Property MODEL_DIR_PATH = new Property("modelDirPath", "edu/illinois/cs/cogcomp/chunker/main/lbjava/");
+    public static final Property MODEL_DIR_PATH = new Property("modelDirPath",
+            "edu/illinois/cs/cogcomp/chunker/main/lbjava/");
 
-    public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value + MODEL_NAME.value + ".lc");
+    public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value
+            + MODEL_NAME.value + ".lc");
 
-    public static final Property MODEL_LEX_PATH = new Property("modelLexPath", MODEL_DIR_PATH.value + MODEL_NAME.value + ".lex");
+    public static final Property MODEL_LEX_PATH = new Property("modelLexPath", MODEL_DIR_PATH.value
+            + MODEL_NAME.value + ".lex");
 
 
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] props =
-                {TRAINING_DATA, TEST_GOLDPOS_DATA , TEST_NOPOS_DATA, MODEL_NAME, MODEL_DIR_PATH, MODEL_PATH, MODEL_LEX_PATH};
+                {TRAINING_DATA, TEST_GOLDPOS_DATA, TEST_NOPOS_DATA, MODEL_NAME, MODEL_DIR_PATH,
+                        MODEL_PATH, MODEL_LEX_PATH};
         return new ResourceManager(generateProperties(props));
     }
 

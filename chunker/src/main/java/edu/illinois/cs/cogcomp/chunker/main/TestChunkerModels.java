@@ -17,8 +17,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
- * Test class for evaluating the accuracy of the chunker
- * Expects data to be in COLUMN FORMAT
+ * Test class for evaluating the accuracy of the chunker Expects data to be in COLUMN FORMAT
+ * 
  * @author James Chen
  */
 public class TestChunkerModels {
@@ -29,8 +29,9 @@ public class TestChunkerModels {
     private Chunker tagger;
 
     /**
-     * Constructor for the test class. User specifies models and data.
-     * If no args provided, instantiate default chunker.
+     * Constructor for the test class. User specifies models and data. If no args provided,
+     * instantiate default chunker.
+     * 
      * @param modelPath Path to the directory where the models are stored
      * @param labeledData The path to the labeled testing data
      * @param chunkerName The file name of the chunker .lc and .lex models
@@ -56,8 +57,8 @@ public class TestChunkerModels {
             numSeen++;
         }
 
-        System.out.println("Total accuracy over " + numSeen + " items: " +
-                String.format("%.2f", 100.0 * (double) numEqual / (double) numSeen) + "%");
+        System.out.println("Total accuracy over " + numSeen + " items: "
+                + String.format("%.2f", 100.0 * (double) numEqual / (double) numSeen) + "%");
 
     }
 
@@ -65,17 +66,16 @@ public class TestChunkerModels {
 
         TestChunkerModels test = null;
 
-        if ( args.length != 3 ) {
+        if (args.length != 3) {
             if (args.length == 1)
                 test = new TestChunkerModels(null, args[0], null);
             else {
                 System.err.println("Usage: " + NAME + " testData modelDir modelName");
-                System.err.println( "OR " + NAME + " testData" );
+                System.err.println("OR " + NAME + " testData");
                 System.exit(-1);
             }
-        }
-        else
-             test = new TestChunkerModels(args[ 1 ], args[ 0 ], args[ 2 ]);
+        } else
+            test = new TestChunkerModels(args[1], args[0], args[2]);
 
         test.testAccuracy();
     }

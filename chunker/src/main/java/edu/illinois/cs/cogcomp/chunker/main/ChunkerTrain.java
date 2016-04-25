@@ -13,27 +13,22 @@ package edu.illinois.cs.cogcomp.chunker.main;
 
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.chunker.utils.Constants;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import edu.illinois.cs.cogcomp.pos.POSConfigurator;
-
-import java.io.File;
+import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
- * Trains chunker models with user specified labeled data in the CoNLL2000 format.
- * Similar to POSTrain.java.
+ * Trains chunker models with user specified labeled data in the CoNLL2000 format. Similar to
+ * POSTrain.java.
  *
  * @author James Chen
  */
 public class ChunkerTrain {
-    private static final String NAME = ChunkerTrain.class.getCanonicalName();
-    private int iter;           // Number of iterations to be used when training the chunker
-    Chunker chunker;
+    private int iter; // Number of iterations to be used when training the chunker
+    private Chunker chunker;
     private ResourceManager rm;
 
-    public ChunkerTrain(){
+    public ChunkerTrain() {
         this(50);
     }
 
@@ -42,7 +37,7 @@ public class ChunkerTrain {
         this.init();
     }
 
-    public void init(){
+    public void init() {
         rm = new ChunkerConfigurator().getDefaultConfig();
         String modelFile = rm.getString("modelPath");
         String modelLexFile = rm.getString("modelLexPath");
@@ -58,27 +53,27 @@ public class ChunkerTrain {
     }
 
     /**
-     * Trains the chunker models with the specified training data
-     *   which must be in CoNLL2000 format
+     * Trains the chunker models with the specified training data which must be in CoNLL2000 format
      *
      * @param trainingData The labeled training data
      */
     public void trainModels(String trainingData) {
         Parser parser = new CoNLL2000Parser(trainingData);
-        trainModelsWithParser(parser );
+        trainModelsWithParser(parser);
     }
 
     /**
      * Trains the chunker models with the specified training data
+     * 
      * @param parser Parser for the training data. Initialized in trainModels(String trainingData)
      */
-    public void trainModelsWithParser(Parser parser ) {
-        chunker.isTraining = true;
+    public void trainModelsWithParser(Parser parser) {
+        Chunker.isTraining = true;
 
         // Run the learner
         for (int i = 1; i <= iter; i++) {
             LinkedVector ex;
-            while ((ex = (LinkedVector)parser.next()) != null) {
+            while ((ex = (LinkedVector) parser.next()) != null) {
                 for (int j = 0; j < ex.size(); j++) {
                     chunker.learn(ex.get(j));
                 }
@@ -91,8 +86,8 @@ public class ChunkerTrain {
     }
 
     /**
-     * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor
-     * The modelName ("illinois-chunker") is fixed
+     * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor The
+     * modelName ("illinois-chunker") is fixed
      */
     public void writeModelsToDisk() {
         chunker.save();
@@ -100,35 +95,8 @@ public class ChunkerTrain {
     }
 
     public static void main(String[] args) {
-//        String modelDir = null;
-//        String trainingFile = null;
-//
-//        if(args.length >= 1)
-//            modelDir = args[0];
-//
-//        if (args.length == 2) {
-//            trainingFile = args[1];
-//        }
-
         ChunkerTrain trainer = new ChunkerTrain();
         trainer.trainModels();
         trainer.writeModelsToDisk();
-
-//        if(modelDir!=null)
-//            trainer = new ChunkerTrain(modelDir, 50);
-//        else
-//            trainer = new ChunkerTrain(50); //Using default model output path from configurator
-//
-//
-//        System.out.println("Starting training ...");
-//
-////        trainer.trainModels(Constants.trainingData);
-//        if(trainingFile == null){
-//            trainer.trainModels();
-//        }
-//        else{
-//            trainer.trainModels(trainingFile);
-//        }
-//        trainer.writeModelsToDisk(); //"Chunker"
     }
 }

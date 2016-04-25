@@ -43,8 +43,8 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
+    <!--<build>-->
+        <!--<plugins>-->
             <!--<plugin>-->
                 <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
                 <!--<artifactId>lbjava-maven-plugin</artifactId>-->
@@ -75,20 +75,20 @@
                     <!--</execution>-->
                 <!--</executions>-->
             <!--</plugin>-->
-        </plugins>
-    </build>
+        <!--</plugins>-->
+    <!--</build>-->
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    <!--<pluginRepositories>-->
+        <!--<pluginRepository>-->
+            <!--<id>CogcompSoftware</id>-->
+            <!--<name>CogcompSoftware</name>-->
+            <!--<url>http://cogcomp.cs.illinois.edu/m2repo/</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</pluginRepository>-->
+    <!--</pluginRepositories>-->
 </project>
