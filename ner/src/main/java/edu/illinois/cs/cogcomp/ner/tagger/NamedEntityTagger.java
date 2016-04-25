@@ -39,7 +39,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * to standard out.
  * <p>
  * 
- * <pre>
+ * {@code
  * Command Line Options:
  * -f <file name>: the input file to tokenize
  * -d <directory name> : the name of a directory containing input files.
@@ -48,7 +48,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * -c <file name> : the name of the configuration file.
  * -t <number of threads> : Allows users to specify the number of threads to use, by default there will be one
  *    thread for every core on the machine.
- * </pre>
+ * }
  */
 public class NamedEntityTagger {
 

@@ -84,7 +84,6 @@ public class TokenizerStateMachine {
     
     /**
      * Init the state machine decision matrix and the text annotation.
-     * @param text text to process
      */
     public TokenizerStateMachine() {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token types (TokenType enum)

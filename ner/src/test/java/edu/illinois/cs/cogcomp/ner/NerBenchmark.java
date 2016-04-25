@@ -14,8 +14,6 @@ import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 
 import java.io.File;
 
-// import edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NEDisplayPredictions;
-
 /**
  * This runs a standard benchmark test across several datasets for the NER package. Training can be
  * enabled by passing in the "-training" flag. The configurations and data are expected in the
@@ -28,7 +26,7 @@ import java.io.File;
  * results are presented on standard out.
  * <p>
  *
- * <pre>
+ * {@code
  * Directory format:
  * - "benchmark"
  *   - <dataset name> there can be as many of these directories as you like, Reuters, Ontonotes, MUC7
@@ -42,7 +40,7 @@ import java.io.File;
  * word level tokenization and so on. Alternatively, only the overall F1 scores are reported.
  * -training : this option will cause a training run, if training, evaluation will not be performed, that requires another run.
  * -features : for debugging, reports the feature vector for each token in the dataset. Output produced in a "features.out" file.
- * </pre>
+ * }
  */
 public class NerBenchmark {
 

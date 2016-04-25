@@ -94,7 +94,7 @@ public class Main extends AbstractMain {
     }
 
     /**
-     * The only argument is -config <config_file_name>. This method will capture the config 
+     * The only argument is {@code -config <config_file_name>}. This method will capture the config 
      * file name, and initialize the system when it does.
      * @throws IOException 
      * @see edu.illinois.cs.cogcomp.ner.AbstractMain#processArgument(java.lang.String[], int)
