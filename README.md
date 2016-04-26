@@ -1,10 +1,6 @@
 # illinois-cogcomp-nlp
 
-Main project: 
-[![Build Status](https://semaphoreci.com/api/v1/projects/5303a5fc-469c-42a8-84c9-fbef6382179a/579314/badge.svg)](https://semaphoreci.com/danyaljj/illinois-cogcomp-nlp)
-
-Dev project: 
-[![Build Status](https://semaphoreci.com/api/v1/projects/80f49761-69dc-4a02-8ea9-a6895338a115/580384/badge.svg)](https://semaphoreci.com/cogcomp-dev/illinois-cogcomp-nlp)
+[![Build Status](https://semaphoreci.com/api/v1/projects/7db00c92-df2a-457e-8067-e1012deaca74/785552/badge.svg)](https://semaphoreci.com/cogcomp-dev/illinois-cogcomp-nlp-2)
 
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
 by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.illinois.edu).  
