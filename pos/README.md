@@ -55,7 +55,7 @@ When using`POSAnnotator`, the models are loaded automatically from the directory
 Thus, to use your own models, simply place them in this directory and they will be loaded; otherwise, the model version 
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
-Note : To use your own models, exclude the `illinois-pos-models` artifact from `illinois-pos`.
+Note : To use your own models, exclude the `illinois-pos-models` artifact from the `illinois-pos` dependency in your `pom.xml`.
 
 ## Training
 The class [`POSTrain`](src/main/java/edu/illinois/cs/cogcomp/pos/POSTrain.java) contains a main method that can be used to 
