@@ -1,11 +1,21 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.transformers;
 
 /**
- * A {@code Predicate} is a special {@link ITransformer} that converts an object
- * of type {@code T} into a {@code boolean}.
+ * A {@code Predicate} is a special {@link ITransformer} that converts an object of type {@code T}
+ * into a {@code boolean}.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Jun 25, 2009
  */
 public abstract class Predicate<T> extends ITransformer<T, Boolean> {

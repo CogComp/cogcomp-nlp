@@ -1,5 +1,16 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -10,9 +21,9 @@ import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.nlp.utilities.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -33,442 +44,468 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
-public class GazetteerViewGenerator implements Annotator {
-	public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
-	public static final String GazetterView = "GazetteerView";
-	private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
-	private static final String PEOPLE_FAMOUS = "People.Famous";
-	private static final String STATES = "Locations.States";
-	private static final String MAN_MADE_OBJECT = "ManMadeObjects";
-	private static final String ART_WORK = "ArtWork";
-	private static final String FILMS = "Films";
-	private static final String CLOTHES = "Clothes";
-	private static final Set<String> PEOPLE;
+public class GazetteerViewGenerator extends Annotator {
+    public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
+    private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
+    private static final String PEOPLE_FAMOUS = "People.Famous";
+    private static final String STATES = "Locations.States";
+    private static final String MAN_MADE_OBJECT = "ManMadeObjects";
+    private static final String ART_WORK = "ArtWork";
+    private static final String FILMS = "Films";
+    private static final String CLOTHES = "Clothes";
+    private static final Set<String> PEOPLE;
+
+    static {
+        try {
+            PEOPLE =
+                    getSet("People", "People.Famous", "People.FirstNames", "People.Gender.Female",
+                            "People.Gender.Male", "People.Politicians", "People.Politicians.US",
+                            "People.Politicians.US.Presidents",
+                            "People.Politicians.US.VicePresidents");
+
+            gazetteersInstance =
+                    new GazetteerViewGenerator("resources/gazetteers/gazetteers",
+                            ViewNames.GAZETTEER + "Gazetteers");
+
+            GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
+
+            cbcInstance =
+                    new GazetteerViewGenerator("resources/cbcData/lists", ViewNames.GAZETTEER
+                            + "CBC");
 
-	static {
-		try {
-			PEOPLE = getSet("People", "People.Famous", "People.FirstNames", "People.Gender.Female",
-					"People.Gender.Male", "People.Politicians", "People.Politicians.US",
-					"People.Politicians.US.Presidents", "People.Politicians.US.VicePresidents");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-			gazetteersInstance = new GazetteerViewGenerator("resources/gazetteers/gazetteers",
-							GazetteerViewGenerator.GazetterView + "Gazetteers");
+    private final List<int[]> lengths;
+    private final List<Predicate<Pair<Constituent, SpanLabelView>>> gazetteerFilters;
+    private final String viewName;
+    private List<String> names;
+    private List<int[]> patterns;
+    private int maxLength;
+    private String directory;
 
-			GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
+    private boolean gzip;
 
-			cbcInstance = new GazetteerViewGenerator("resources/cbcData/lists",
-					GazetteerViewGenerator.GazetterView + "CBC");
+    private boolean loaded;
 
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    private Set<String> ignore;
 
-	private final List<int[]> lengths;
-	private final List<Predicate<Pair<Constituent, SpanLabelView>>> gazetteerFilters;
-	private final String viewName;
-	private List<String> names;
-	private List<int[]> patterns;
-	private int maxLength;
-	private String directory;
+    public GazetteerViewGenerator(String directory, String viewName) throws Exception {
+        this(directory, true, viewName);
+    }
 
-	private boolean gzip;
+    public GazetteerViewGenerator(String directory, boolean gzip, String viewName) throws Exception {
+        super(viewName, new String[] {});
+        this.directory = directory;
+        this.gzip = gzip;
+        this.viewName = viewName;
+
+        // this.gazetteers = new HashMap<String, List<String>>();
+        this.names = new ArrayList<>();
+        this.patterns = new ArrayList<>();
+        this.lengths = new ArrayList<>();
 
-	private boolean loaded;
+        this.gazetteerFilters = new ArrayList<>();
 
-	private Set<String> ignore;
+        this.loaded = false;
 
-	public GazetteerViewGenerator(String directory, String viewName) throws Exception {
-		this(directory, true, viewName);
-	}
+        this.ignore = new LinkedHashSet<>();
 
-	public GazetteerViewGenerator(String directory, boolean gzip, String viewName) throws Exception {
+    }
 
-		this.directory = directory;
-		this.gzip = gzip;
-		this.viewName = viewName;
+    @SuppressWarnings("serial")
+    private static Predicate<Pair<Constituent, SpanLabelView>> getPOSFilter(
+            final Set<String> types, final Set<String> p) {
+        return new Predicate<Pair<Constituent, SpanLabelView>>() {
+
+            @Override
+            public Boolean transform(Pair<Constituent, SpanLabelView> input) {
+                Constituent c = input.getFirst();
+                TextAnnotation ta = c.getTextAnnotation();
+                if (!ta.hasView(ViewNames.POS))
+                    return true;
+
+                if (types != null && !types.contains(c.getLabel()))
+                    return true;
+
+                if (c.size() == 1) {
+
+                    int startSpan = c.getStartSpan();
+                    String pos = WordHelpers.getPOS(ta, startSpan);
+
+                    if (p.contains(pos))
+                        return false;
+                }
+
+                return true;
+            }
+        };
+    }
+
+    @SuppressWarnings("serial")
+    public static void addGazetteerFilters(GazetteerViewGenerator gazetteers) {
+        // the last word of clothes should be an noun
+
+        gazetteers.addFilter(new Predicate<Pair<Constituent, SpanLabelView>>() {
+            @Override
+            public Boolean transform(Pair<Constituent, SpanLabelView> input) {
+
+                if (!input.getFirst().getLabel().equals(CLOTHES))
+                    return true;
+
+                TextAnnotation ta = input.getFirst().getTextAnnotation();
+                int last = input.getFirst().getEndSpan() - 1;
+
+                return !ta.hasView(ViewNames.POS)
+                        || POSUtils.isPOSNoun(WordHelpers.getPOS(ta, last));
+            }
+        });
 
-		// this.gazetteers = new HashMap<String, List<String>>();
-		this.names = new ArrayList<>();
-		this.patterns = new ArrayList<>();
-		this.lengths = new ArrayList<>();
+        // film names, art work names, and famous people should be an NP in the
+        // parse tree.
+        gazetteers.addFilter(getNPFilter(getSet(FILMS, ART_WORK, PEOPLE_FAMOUS)));
 
-		this.gazetteerFilters = new ArrayList<>();
+        Predicate<Pair<Constituent, SpanLabelView>> prepFilter =
+                getPOSFilter(getSet(FILMS, ART_WORK), getSet("IN", "TO", "PRP", "PRP$"));
 
-		this.loaded = false;
+        gazetteers.addFilter(prepFilter);
 
-		this.ignore = new LinkedHashSet<>();
+        // gazetteers.addFilter(getPOSFilter(getSet(LOCATIONS), getSet("IN")));
 
-	}
+        gazetteers.addFilter(getPOSFilter(getSet(STATES), getSet("IN", "CC")));
 
-	@SuppressWarnings("serial")
-	private static Predicate<Pair<Constituent, SpanLabelView>> getPOSFilter(final Set<String> types, final Set<String> p) {
-		return new Predicate<Pair<Constituent, SpanLabelView>>() {
+        // the following should be filtered:
+        // 1. Temporal labels that are contained in people
+        // 2. any People label that are contained in art work
+        // 3. any People that are contained in man-made-objects
+        // 4. Any man made objects that are contained in people
 
-			@Override
-			public Boolean transform(Pair<Constituent, SpanLabelView> input) {
-				Constituent c = input.getFirst();
-				TextAnnotation ta = c.getTextAnnotation();
-				if (!ta.hasView(ViewNames.POS)) return true;
+        gazetteers.addFilter(containedInSetFilter(getSet("Temporal", MAN_MADE_OBJECT), PEOPLE));
 
-				if (types != null && !types.contains(c.getLabel())) return true;
+        gazetteers.addFilter(containedInSetFilter(
+                PEOPLE,
+                getSet(ART_WORK, MAN_MADE_OBJECT, "Organizations", "Organizations.Terrorist",
+                        "Temporal")));
 
-				if (c.size() == 1) {
+        // Nothing can be a verb
+        gazetteers.addFilter(getPOSFilter(null, getSet("VBD", "VBG", "VB", "VBP")));
+    }
 
-					int startSpan = c.getStartSpan();
-					String pos = WordHelpers.getPOS(ta, startSpan);
+    private static Set<String> getSet(String... strings) {
+        return new LinkedHashSet<>(Arrays.asList(strings));
+    }
 
-					if (p.contains(pos)) return false;
-				}
+    private static Predicate<Pair<Constituent, SpanLabelView>> getNPFilter(final Set<String> types) {
+        @SuppressWarnings("serial")
+        Predicate<Pair<Constituent, SpanLabelView>> npFilter =
+                new Predicate<Pair<Constituent, SpanLabelView>>() {
 
-				return true;
-			}
-		};
-	}
+                    @Override
+                    public Boolean transform(Pair<Constituent, SpanLabelView> input) {
 
-	@SuppressWarnings("serial")
-	public static void addGazetteerFilters(GazetteerViewGenerator gazetteers) {
-		// the last word of clothes should be an noun
+                        if (!types.contains(input.getFirst().getLabel()))
+                            return true;
 
-		gazetteers.addFilter(new Predicate<Pair<Constituent, SpanLabelView>>() {
-			@Override
-			public Boolean transform(Pair<Constituent, SpanLabelView> input) {
+                        Constituent c = input.getFirst();
+                        TextAnnotation ta = c.getTextAnnotation();
 
-				if (!input.getFirst().getLabel().equals(CLOTHES)) return true;
+                        TreeView parse;
+                        if (ta.hasView(ViewNames.PARSE_CHARNIAK))
+                            parse = (TreeView) ta.getView(ViewNames.PARSE_CHARNIAK);
+                        else if (ta.hasView(ViewNames.PARSE_BERKELEY))
+                            parse = (TreeView) ta.getView(ViewNames.PARSE_BERKELEY);
+                        else if (ta.hasView(ViewNames.PARSE_STANFORD))
+                            parse = (TreeView) ta.getView(ViewNames.PARSE_STANFORD);
+                        else
+                            return true;
 
-				TextAnnotation ta = input.getFirst().getTextAnnotation();
-				int last = input.getFirst().getEndSpan() - 1;
+                        boolean foundNP = false;
+                        for (Constituent parseConstituent : parse.where(Queries
+                                .sameSpanAsConstituent(c))) {
+                            if (ParseTreeProperties.isNonTerminalNoun(parseConstituent.getLabel())) {
+                                foundNP = true;
+                                break;
+                            }
+                        }
 
-				return !ta.hasView(ViewNames.POS) || POSUtils.isPOSNoun(WordHelpers.getPOS(ta, last));
-			}
-		});
+                        // do not include
+                        return foundNP;
+                    }
+                };
+        return npFilter;
+    }
 
-		// film names, art work names, and famous people should be an NP in the
-		// parse tree.
-		gazetteers.addFilter(getNPFilter(getSet(FILMS, ART_WORK, PEOPLE_FAMOUS)));
+    @SuppressWarnings("serial")
+    private static Predicate<Pair<Constituent, SpanLabelView>> containedInSetFilter(
+            final Set<String> typesToFilter, final Set<String> otherSet) {
 
-		Predicate<Pair<Constituent, SpanLabelView>> prepFilter =
-				getPOSFilter(getSet(FILMS, ART_WORK), getSet("IN", "TO", "PRP", "PRP$"));
+        assert typesToFilter != null;
+        assert otherSet != null;
 
-		gazetteers.addFilter(prepFilter);
+        return new Predicate<Pair<Constituent, SpanLabelView>>() {
 
-		// gazetteers.addFilter(getPOSFilter(getSet(LOCATIONS), getSet("IN")));
+            @Override
+            public Boolean transform(Pair<Constituent, SpanLabelView> input) {
+                Constituent candidate = input.getFirst();
+                SpanLabelView view = input.getSecond();
 
-		gazetteers.addFilter(getPOSFilter(getSet(STATES), getSet("IN", "CC")));
+                assert candidate != null;
 
-		// the following should be filtered:
-		// 1. Temporal labels that are contained in people
-		// 2. any People label that are contained in art work
-		// 3. any People that are contained in man-made-objects
-		// 4. Any man made objects that are contained in people
+                if (!typesToFilter.contains(candidate.getLabel()))
+                    return true;
 
-		gazetteers.addFilter(containedInSetFilter(getSet("Temporal", MAN_MADE_OBJECT), PEOPLE));
+                for (Constituent c : view.where(Queries.containsConstituent(candidate))) {
 
-		gazetteers
-				.addFilter(containedInSetFilter(PEOPLE, getSet(ART_WORK, MAN_MADE_OBJECT, "Organizations", "Organizations.Terrorist", "Temporal")));
+                    if (c == candidate)
+                        continue;
 
-		// Nothing can be a verb
-		gazetteers.addFilter(getPOSFilter(null, getSet("VBD", "VBG", "VB", "VBP")));
-	}
+                    if (otherSet.contains(c.getLabel())) {
 
-	private static Set<String> getSet(String... strings) {
-		return new LinkedHashSet<>(Arrays.asList(strings));
-	}
+                        return false;
+                    }
+                }
 
-	private static Predicate<Pair<Constituent, SpanLabelView>> getNPFilter(final Set<String> types) {
-		@SuppressWarnings("serial") Predicate<Pair<Constituent, SpanLabelView>> npFilter =
-				new Predicate<Pair<Constituent, SpanLabelView>>() {
+                return true;
+            }
+        };
+    }
 
-					@Override
-					public Boolean transform(Pair<Constituent, SpanLabelView> input) {
+    public static void main(String[] args) throws EdisonException, AnnotatorException {
+        gazetteersInstance.ignoreGazetteer("Weapons.gz");
+        gazetteersInstance.ignoreGazetteer("Weapons.Missile.gz");
 
-						if (!types.contains(input.getFirst().getLabel())) return true;
+        List<String[]> sentences =
+                Arrays.asList("I live in Chicago , Illinois .".split("\\s+"),
+                        "I met George Bush .".split("\\s+"));
+        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(sentences);
 
-						Constituent c = input.getFirst();
-						TextAnnotation ta = c.getTextAnnotation();
+        ta.addView(gazetteersInstance);
 
-						TreeView parse;
-						if (ta.hasView(ViewNames.PARSE_CHARNIAK))
-							parse = (TreeView) ta.getView(ViewNames.PARSE_CHARNIAK);
-						else if (ta.hasView(ViewNames.PARSE_BERKELEY))
-							parse = (TreeView) ta.getView(ViewNames.PARSE_BERKELEY);
-						else if (ta.hasView(ViewNames.PARSE_STANFORD))
-							parse = (TreeView) ta.getView(ViewNames.PARSE_STANFORD);
-						else return true;
+        System.out.println(ta);
 
-						boolean foundNP = false;
-						for (Constituent parseConstituent : parse.where(Queries.sameSpanAsConstituent(c))) {
-							if (ParseTreeProperties.isNonTerminalNoun(parseConstituent.getLabel())) {
-								foundNP = true;
-								break;
-							}
-						}
+        System.out.println(ta.getView(gazetteersInstance.getViewName()));
+    }
 
-						// do not include
-						return foundNP;
-					}
-				};
-		return npFilter;
-	}
+    private void lazyLoadGazetteers(String directory, boolean gzip) throws URISyntaxException,
+            IOException {
+        log.info("Loading all gazetteers from {}", directory);
 
-	@SuppressWarnings("serial")
-	private static Predicate<Pair<Constituent, SpanLabelView>> containedInSetFilter(final Set<String> typesToFilter, final Set<String> otherSet) {
+        for (URL url : IOUtils.lsResources(GazetteerViewGenerator.class, directory)) {
+            String file = IOUtils.getFileName(url.getPath());
 
-		assert typesToFilter != null;
-		assert otherSet != null;
+            // ignore any dot files
+            if (file.startsWith("."))
+                continue;
 
-		return new Predicate<Pair<Constituent, SpanLabelView>>() {
+            if (ignore.contains(file))
+                continue;
 
-			@Override
-			public Boolean transform(Pair<Constituent, SpanLabelView> input) {
-				Constituent candidate = input.getFirst();
-				SpanLabelView view = input.getSecond();
+            int max = -1;
 
-				assert candidate != null;
+            TIntArrayList list = new TIntArrayList();
+            TIntArrayList lenList = new TIntArrayList();
 
-				if (!typesToFilter.contains(candidate.getLabel())) return true;
+            this.names.add(file);
 
-				for (Constituent c : view.where(Queries.containsConstituent(candidate))) {
+            log.debug("Loading {} from {}", file, url.getPath());
 
-					if (c == candidate) continue;
+            InputStream stream = url.openStream();
+            if (gzip)
+                stream = new GZIPInputStream(stream);
 
-					if (otherSet.contains(c.getLabel())) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-						return false;
-					}
-				}
+            String line;
+            while ((line = reader.readLine()) != null) {
 
-				return true;
-			}
-		};
-	}
+                line = StringUtils.normalizeUnicodeDiacritics(line);
 
-	public static void main(String[] args) throws EdisonException, AnnotatorException {
-		gazetteersInstance.ignoreGazetteer("Weapons.gz");
-		gazetteersInstance.ignoreGazetteer("Weapons.Missile.gz");
+                line = line.replaceAll("&amp;", "&");
 
-		List<String[]> sentences =
-				Arrays.asList("I live in Chicago , Illinois .".split("\\s+"), "I met George Bush .".split("\\s+"));
-		TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(sentences);
+                line = line.replaceAll("'", " '");
+                line = line.replaceAll(",", " ,");
+                line = line.replaceAll(";", " ;");
+                line = line.replaceAll("\\s+", " ");
 
-		ta.addView(gazetteersInstance);
+                line = line.trim();
 
-		System.out.println(ta);
+                list.add(line.hashCode());
 
-		System.out.println(ta.getView(gazetteersInstance.getViewName()));
-	}
+                int len = line.split("\\s+").length;
 
-	private void lazyLoadGazetteers(String directory, boolean gzip) throws URISyntaxException, IOException {
-		log.info("Loading all gazetteers from {}", directory);
+                lenList.add(len);
 
-		for (URL url : IOUtils.lsResources(GazetteerViewGenerator.class, directory)) {
-			String file = IOUtils.getFileName(url.getPath());
+                if (len > max)
+                    max = len;
+            }
 
-			// ignore any dot files
-			if (file.startsWith(".")) continue;
+            this.patterns.add(list.toArray());
+            this.lengths.add(lenList.toArray());
 
-			if (ignore.contains(file)) continue;
+            this.maxLength = Math.max(max, this.maxLength);
 
-			int max = -1;
+            reader.close();
 
-			TIntArrayList list = new TIntArrayList();
-			TIntArrayList lenList = new TIntArrayList();
+            log.debug("Found {} elements of type {}", list.size(), file);
+        }
 
-			this.names.add(file);
+        this.loaded = true;
+        log.info("Finished loading  {} gazetteers from {}", names.size(), directory);
+    }
 
-			log.debug("Loading {} from {}", file, url.getPath());
+    /**
+     * Add a filter for the labels. Only constituents that pass *ALL* filters will be added to the
+     * view.
+     */
+    public void addFilter(Predicate<Pair<Constituent, SpanLabelView>> filter) {
+        this.gazetteerFilters.add(filter);
+    }
 
-			InputStream stream = url.openStream();
-			if (gzip) stream = new GZIPInputStream(stream);
+    /**
+     * Adds a label to the set of gazetteers to be ignored. Use this to speed up the process of
+     * adding the view.
+     */
+    public void ignoreGazetteer(String label) {
+        this.ignore.add(label);
+    }
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+    /**
+     * Returns the names of all the gazetteers known to this view generator.
+     */
+    public List<String> getGazetteerNames() {
+        return Collections.unmodifiableList(names);
 
-			String line;
-			while ((line = reader.readLine()) != null) {
+    }
 
-				line = StringUtils.normalizeUnicodeDiacritics(line);
+    @Override
+    public void addView(TextAnnotation ta) {
 
-				line = line.replaceAll("&amp;", "&");
+        if (!this.loaded) {
+            synchronized (this) {
+                if (!this.loaded) {
+                    try {
+                        lazyLoadGazetteers(directory, gzip);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
 
-				line = line.replaceAll("'", " '");
-				line = line.replaceAll(",", " ,");
-				line = line.replaceAll(";", " ;");
-				line = line.replaceAll("\\s+", " ");
+        SpanLabelView view = new SpanLabelView(ViewNames.GAZETTEER, "Gazetteers", ta, 1.0, true);
 
-				line = line.trim();
+        TIntObjectHashMap<ArrayList<IntPair>> allSpans = hashAllSpans(ta);
 
-				list.add(line.hashCode());
+        for (int i = 0; i < names.size(); i++) {
+            String label = names.get(i);
+            if (!this.ignore.contains(label)) {
+                addView(label, i, view, allSpans);
+            }
+        }
 
-				int len = line.split("\\s+").length;
+        SpanLabelView newView = new SpanLabelView(ViewNames.GAZETTEER, "Gazetteers", ta, 1.0, true);
 
-				lenList.add(len);
+        for (Constituent c : view) {
+            Pair<Constituent, SpanLabelView> input = new Pair<>(c, view);
 
-				if (len > max) max = len;
-			}
+            boolean allow = true;
+            for (Predicate<Pair<Constituent, SpanLabelView>> filter : this.gazetteerFilters) {
+                if (!filter.transform(input)) {
+                    allow = false;
+                    log.debug("Not labeling constituent {} as {} because it failed a filter", c,
+                            c.getLabel());
+                    break;
+                }
+            }
 
-			this.patterns.add(list.toArray());
-			this.lengths.add(lenList.toArray());
+            if (allow)
+                newView.addSpanLabel(c.getStartSpan(), c.getEndSpan(), c.getLabel(),
+                        c.getConstituentScore());
+        }
 
-			this.maxLength = Math.max(max, this.maxLength);
+        ta.addView(getViewName(), newView);
+    }
 
-			reader.close();
+    @Override
+    public String[] getRequiredViews() {
+        return new String[0];
+    }
 
-			log.debug("Found {} elements of type {}", list.size(), file);
-		}
+    private TIntObjectHashMap<ArrayList<IntPair>> hashAllSpans(TextAnnotation ta) {
+        TIntObjectHashMap<ArrayList<IntPair>> allSpans = new TIntObjectHashMap<>();
 
-		this.loaded = true;
-		log.info("Finished loading  {} gazetteers from {}", names.size(), directory);
-	}
+        for (int start = 0; start < ta.size() - 1; start++) {
 
-	/**
-	 * Add a filter for the labels. Only constituents that pass *ALL* filters
-	 * will be added to the view.
-	 */
-	public void addFilter(Predicate<Pair<Constituent, SpanLabelView>> filter) {
-		this.gazetteerFilters.add(filter);
-	}
+            int last = Math.min(ta.size(), start + maxLength);
 
-	/**
-	 * Adds a label to the set of gazetteers to be ignored. Use this to speed up
-	 * the process of adding the view.
-	 */
-	public void ignoreGazetteer(String label) {
-		this.ignore.add(label);
-	}
+            StringBuilder sb = new StringBuilder();
 
-	/**
-	 * Returns the names of all the gazetteers known to this view generator.
-	 */
-	public List<String> getGazetteerNames() {
-		return Collections.unmodifiableList(names);
+            for (int end = start; end < last; end++) {
 
-	}
+                String token = ta.getToken(end);
 
-	@Override
-	public String getViewName() {
-		return this.viewName;
-	}
+                token = token.replaceAll("``", "\"").replaceAll("''", "\"");
+                token = SentenceUtils.convertFromPTBBrackets(token);
 
-	@Override
-	public View getView(TextAnnotation ta) {
+                sb.append(token).append(" ");
 
-		if (!this.loaded) {
-			synchronized (this) {
-				if (!this.loaded) {
-					try {
-						lazyLoadGazetteers(directory, gzip);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					}
-				}
-			}
-		}
+                int hash = sb.toString().trim().hashCode();
 
-		SpanLabelView view = new SpanLabelView(GazetterView, "Gazetteers", ta, 1.0, true);
+                if (!allSpans.containsKey(hash))
+                    allSpans.put(hash, new ArrayList<IntPair>());
+                List<IntPair> object = allSpans.get(hash);
+                object.add(new IntPair(start, end + 1));
+            }
+        }
 
-		TIntObjectHashMap<ArrayList<IntPair>> allSpans = hashAllSpans(ta);
+        return allSpans;
+    }
 
-		for (int i = 0; i < names.size(); i++) {
-			String label = names.get(i);
-			if (!this.ignore.contains(label)) {
-				addView(label, i, view, allSpans);
-			}
-		}
+    private void addView(String label, int labelId, SpanLabelView view,
+            TIntObjectHashMap<ArrayList<IntPair>> allSpans) {
+        log.debug("Adding gazetteer {}", label);
 
-		SpanLabelView newView = new SpanLabelView(GazetterView, "Gazetteers", ta, 1.0, true);
+        List<IntPair> matches = new ArrayList<>();
 
-		for (Constituent c : view) {
-			Pair<Constituent, SpanLabelView> input = new Pair<>(c, view);
+        int[] pattern = this.patterns.get(labelId);
+        int[] len = this.lengths.get(labelId);
 
-			boolean allow = true;
-			for (Predicate<Pair<Constituent, SpanLabelView>> filter : this.gazetteerFilters) {
-				if (!filter.transform(input)) {
-					allow = false;
-					log.debug("Not labeling constituent {} as {} because it failed a filter", c, c.getLabel());
-					break;
-				}
-			}
+        for (int i = 0; i < pattern.length; i++) {
+            int hashCode = pattern[i];
+            int length = len[i];
 
-			if (allow) newView.addSpanLabel(c.getStartSpan(), c.getEndSpan(), c.getLabel(), c.getConstituentScore());
-		}
+            if (allSpans.containsKey(hashCode)) {
+                List<IntPair> list = allSpans.get(hashCode);
 
-		return newView;
-	}
+                for (IntPair pair : list) {
+                    if (pair.getSecond() - pair.getFirst() == length)
+                        matches.add(pair);
+                }
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[0];
-	}
+            }
+        }
+        Set<IntPair> added = new LinkedHashSet<>();
+        for (IntPair p : matches) {
 
-	private TIntObjectHashMap<ArrayList<IntPair>> hashAllSpans(TextAnnotation ta) {
-		TIntObjectHashMap<ArrayList<IntPair>> allSpans = new TIntObjectHashMap<>();
+            // don't add nested constituents of the same type
+            boolean foundContainer = false;
+            for (IntPair p1 : added) {
+                if (p1 == p)
+                    continue;
 
-		for (int start = 0; start < ta.size() - 1; start++) {
+                if (p1.getFirst() <= p.getFirst() && p1.getSecond() >= p.getSecond()) {
+                    foundContainer = true;
+                    break;
+                }
+            }
 
-			int last = Math.min(ta.size(), start + maxLength);
+            if (!foundContainer) {
+                view.addSpanLabel(p.getFirst(), p.getSecond(), label, 1.0);
+                added.add(p);
+            }
+        }
 
-			StringBuilder sb = new StringBuilder();
-
-			for (int end = start; end < last; end++) {
-
-				String token = ta.getToken(end);
-
-				token = token.replaceAll("``", "\"").replaceAll("''", "\"");
-				token = SentenceUtils.convertFromPTBBrackets(token);
-
-				sb.append(token).append(" ");
-
-				int hash = sb.toString().trim().hashCode();
-
-				if (!allSpans.containsKey(hash)) allSpans.put(hash, new ArrayList<IntPair>());
-				List<IntPair> object = allSpans.get(hash);
-				object.add(new IntPair(start, end + 1));
-			}
-		}
-
-		return allSpans;
-	}
-
-	private void addView(String label, int labelId, SpanLabelView view, TIntObjectHashMap<ArrayList<IntPair>> allSpans) {
-		log.debug("Adding gazetteer {}", label);
-
-		List<IntPair> matches = new ArrayList<>();
-
-		int[] pattern = this.patterns.get(labelId);
-		int[] len = this.lengths.get(labelId);
-
-		for (int i = 0; i < pattern.length; i++) {
-			int hashCode = pattern[i];
-			int length = len[i];
-
-			if (allSpans.containsKey(hashCode)) {
-				List<IntPair> list = allSpans.get(hashCode);
-
-				for (IntPair pair : list) {
-					if (pair.getSecond() - pair.getFirst() == length) matches.add(pair);
-				}
-
-			}
-		}
-		Set<IntPair> added = new LinkedHashSet<>();
-		for (IntPair p : matches) {
-
-			// don't add nested constituents of the same type
-			boolean foundContainer = false;
-			for (IntPair p1 : added) {
-				if (p1 == p) continue;
-
-				if (p1.getFirst() <= p.getFirst() && p1.getSecond() >= p.getSecond()) {
-					foundContainer = true;
-					break;
-				}
-			}
-
-			if (!foundContainer) {
-				view.addSpanLabel(p.getFirst(), p.getSecond(), label, 1.0);
-				added.add(p);
-			}
-		}
-
-	}
+    }
 }

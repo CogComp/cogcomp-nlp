@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import java.io.Serializable;
@@ -28,7 +38,7 @@ public class Tree<T> implements Serializable {
 
     /**
      * Default constructor for a tree.
-     * <p/>
+     * <p>
      * The constructed tree will not have any label, children.
      */
     public Tree() {
@@ -131,12 +141,10 @@ public class Tree<T> implements Serializable {
         })).parse(treeString);
     }
 
-	/*
-     * --------------------------------------------------------------------------
-	 * -------- GETTERS
-	 * ----------------------------------------------------------
-	 * ------------------------
-	 */
+    /*
+     * -------------------------------------------------------------------------- -------- GETTERS
+     * ---------------------------------------------------------- ------------------------
+     */
 
     public Tree<T> getChild(int position) {
         return children.get(position);
@@ -230,12 +238,11 @@ public class Tree<T> implements Serializable {
         return cloneTree;
     }
 
-	/*
-	 * --------------------------------------------------------------------------
-	 * -------- EQUALITY, HASH AND THE LIKE
-	 * --------------------------------------
-	 * --------------------------------------------
-	 */
+    /*
+     * -------------------------------------------------------------------------- -------- EQUALITY,
+     * HASH AND THE LIKE --------------------------------------
+     * --------------------------------------------
+     */
 
     @SuppressWarnings("unchecked")
     @Override
@@ -249,8 +256,7 @@ public class Tree<T> implements Serializable {
                 return false;
 
             for (int childId = 0; childId < children.size(); childId++) {
-                if (!(children.get(childId).equals(otherTree.children
-                        .get(childId))))
+                if (!(children.get(childId).equals(otherTree.children.get(childId))))
                     return false;
             }
             return true;
@@ -263,12 +269,10 @@ public class Tree<T> implements Serializable {
         return this.toString().hashCode();
     }
 
-	/*
-	 * --------------------------------------------------------------------------
-	 * -------- TREE MODIFIERS
-	 * --------------------------------------------------
-	 * --------------------------------
-	 */
+    /*
+     * -------------------------------------------------------------------------- -------- TREE
+     * MODIFIERS -------------------------------------------------- --------------------------------
+     */
 
     void makeParentNull() {
         this.parent = null;
@@ -285,19 +289,15 @@ public class Tree<T> implements Serializable {
         if (this.parent == null) {
             return this.parent.childrenEdgeLabels != null;
         } else {
-            if (this.isLeaf())
-                return false;
-            else
-                return this.childrenEdgeLabels != null;
+            return !this.isLeaf() && this.childrenEdgeLabels != null;
         }
     }
 
-	/*
-	 * --------------------------------------------------------------------------
-	 * -------- MISCELLANEOUS HELPER FUNCTIONS
-	 * ----------------------------------
-	 * ------------------------------------------------
-	 */
+    /*
+     * -------------------------------------------------------------------------- --------
+     * MISCELLANEOUS HELPER FUNCTIONS ----------------------------------
+     * ------------------------------------------------
+     */
 
     private String toString(boolean firstChild, int spaces) {
         String treeString = "";
@@ -314,8 +314,7 @@ public class Tree<T> implements Serializable {
 
         if (this.parent != null && this.parent.childrenEdgeLabels != null
                 && this.parent.childrenEdgeLabels.get(position) != null) {
-            treeString += (":LABEL:"
-                    + this.parent.childrenEdgeLabels.get(position) + " ");
+            treeString += (":LABEL:" + this.parent.childrenEdgeLabels.get(position) + " ");
         }
 
         treeString += label.toString();
@@ -327,8 +326,7 @@ public class Tree<T> implements Serializable {
 
         boolean first = true;
         int index = 0;
-        for (Iterator<Tree<T>> iterator = children.iterator(); iterator
-                .hasNext(); ) {
+        for (Iterator<Tree<T>> iterator = children.iterator(); iterator.hasNext();) {
             Tree<T> child = iterator.next();
 
             treeString += child.toString(first, len);

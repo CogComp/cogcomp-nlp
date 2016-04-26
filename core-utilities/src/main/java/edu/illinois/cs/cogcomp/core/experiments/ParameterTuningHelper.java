@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -14,13 +24,12 @@ import java.util.concurrent.*;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Sep 2, 2010
  */
 public class ParameterTuningHelper<T> {
 
-    private static Logger log = LoggerFactory
-            .getLogger(ParameterTuningHelper.class);
+    private static Logger log = LoggerFactory.getLogger(ParameterTuningHelper.class);
 
     private final int numFolds;
 
@@ -36,14 +45,13 @@ public class ParameterTuningHelper<T> {
 
     private Random randomSeed;
 
-    public ParameterTuningHelper(IExperimentFactory<T> experimentFactory,
-                                 int numFolds, List<List<Double>> parameters, int timeoutSeconds,
-                                 int numThreads) {
+    public ParameterTuningHelper(IExperimentFactory<T> experimentFactory, int numFolds,
+            List<List<Double>> parameters, int timeoutSeconds, int numThreads) {
         super();
         this.experimentFactory = experimentFactory;
         this.numFolds = numFolds;
-        this.parameterCrossProduct = Collections.synchronizedList(Permutations
-                .crossProduct(parameters));
+        this.parameterCrossProduct =
+                Collections.synchronizedList(Permutations.crossProduct(parameters));
         this.timeoutSeconds = timeoutSeconds;
         this.numThreads = numThreads;
 
@@ -58,10 +66,10 @@ public class ParameterTuningHelper<T> {
 
     /**
      * Splits the data into numFolds parts.
-     * <p/>
-     * Note: This splits the data into K folds uniformly. If the classes are not
-     * equally distributed, then this is wrong. Instead, override this to do a
-     * stratified split, so that the split proportions are maintained.
+     * <p>
+     * Note: This splits the data into K folds uniformly. If the classes are not equally
+     * distributed, then this is wrong. Instead, override this to do a stratified split, so that the
+     * split proportions are maintained.
      */
     protected List<List<T>> splitData(Iterable<T> data, int dataSize) {
         List<List<T>> splits = new ArrayList<>();
@@ -93,8 +101,8 @@ public class ParameterTuningHelper<T> {
         return splits;
     }
 
-    public List<Double> tune(Iterable<T> data, int dataSize)
-            throws InterruptedException, ExecutionException {
+    public List<Double> tune(Iterable<T> data, int dataSize) throws InterruptedException,
+            ExecutionException {
         List<List<T>> splits = splitData(data, dataSize);
 
         ExecutorService executor = Executors.newFixedThreadPool(numThreads);
@@ -112,8 +120,8 @@ public class ParameterTuningHelper<T> {
             final List<T> testSet = splits.get(splitId);
 
             for (int paramId = 0; paramId < parameterCrossProduct.size(); paramId++) {
-                FutureTask<Pair<Integer, Double>> task = makeExperiment(
-                        trainingSet, testSet, splitId, paramId);
+                FutureTask<Pair<Integer, Double>> task =
+                        makeExperiment(trainingSet, testSet, splitId, paramId);
                 executor.execute(task);
                 tasks.add(task);
 
@@ -144,9 +152,8 @@ public class ParameterTuningHelper<T> {
 
     }
 
-    private FutureTask<Pair<Integer, Double>> makeExperiment(
-            final List<T> trainingSet, final List<T> testSet, final int foldId,
-            final int paramId) {
+    private FutureTask<Pair<Integer, Double>> makeExperiment(final List<T> trainingSet,
+            final List<T> testSet, final int foldId, final int paramId) {
 
         final List<Double> params = parameterCrossProduct.get(paramId);
 
@@ -155,8 +162,7 @@ public class ParameterTuningHelper<T> {
             public Pair<Integer, Double> call() throws Exception {
 
                 long start = System.currentTimeMillis();
-                log.info("Starting fold " + foldId + " for parameterId: "
-                        + paramId + ": " + params);
+                log.info("Starting fold " + foldId + " for parameterId: " + paramId + ": " + params);
 
                 IExperiment<T> experiment = experimentFactory.makeExperiment();
 
@@ -167,8 +173,8 @@ public class ParameterTuningHelper<T> {
                 long end = System.currentTimeMillis();
 
                 long time = (end - start) / 1000;
-                log.info("End of fold " + foldId + " for parameterId: "
-                        + paramId + ". Took " + time + " seconds.");
+                log.info("End of fold " + foldId + " for parameterId: " + paramId + ". Took "
+                        + time + " seconds.");
 
                 return new Pair<>(paramId, value);
             }

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -18,64 +28,69 @@ import java.util.Set;
  */
 public class ClauseFeatureExtractor implements FeatureExtractor {
 
-	public static ClauseFeatureExtractor CHARNIAK =
-			new ClauseFeatureExtractor(ViewNames.PSEUDO_PARSE_CHARNIAK, ViewNames.CLAUSES_CHARNIAK);
-	public static ClauseFeatureExtractor STANFORD =
-			new ClauseFeatureExtractor(ViewNames.PSEUDO_PARSE_STANFORD, ViewNames.CLAUSES_STANFORD);
-	public static ClauseFeatureExtractor BERKELEY =
-			new ClauseFeatureExtractor(ViewNames.PSEUDO_PARSE_BERKELEY, ViewNames.CLAUSES_BERKELEY);
-	private final String parseViewName;
-	private final String clauseViewName;
+    public static ClauseFeatureExtractor CHARNIAK = new ClauseFeatureExtractor(
+            ViewNames.PSEUDO_PARSE_CHARNIAK, ViewNames.CLAUSES_CHARNIAK);
+    public static ClauseFeatureExtractor STANFORD = new ClauseFeatureExtractor(
+            ViewNames.PSEUDO_PARSE_STANFORD, ViewNames.CLAUSES_STANFORD);
+    public static ClauseFeatureExtractor BERKELEY = new ClauseFeatureExtractor(
+            ViewNames.PSEUDO_PARSE_BERKELEY, ViewNames.CLAUSES_BERKELEY);
+    private final String parseViewName;
+    private final String clauseViewName;
 
-	public ClauseFeatureExtractor(String pseudoParseViewName, String clauseViewName) {
-		this.parseViewName = pseudoParseViewName;
-		this.clauseViewName = clauseViewName;
-	}
+    public ClauseFeatureExtractor(String pseudoParseViewName, String clauseViewName) {
+        this.parseViewName = pseudoParseViewName;
+        this.clauseViewName = clauseViewName;
+    }
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-		TextAnnotation ta = c.getTextAnnotation();
-		TreeView pseudoParseView = (TreeView) ta.getView(parseViewName);
+        TextAnnotation ta = c.getTextAnnotation();
+        TreeView pseudoParseView = (TreeView) ta.getView(parseViewName);
 
-		Constituent p = c.getIncomingRelations().get(0).getSource();
+        Constituent p = c.getIncomingRelations().get(0).getSource();
 
-		String clauseRelativePosition;
-		try {
-			Constituent arg = pseudoParseView.getParsePhrase(c);
-			Constituent pred = pseudoParseView.getParsePhrase(p);
+        String clauseRelativePosition;
+        try {
+            Constituent arg = pseudoParseView.getParsePhrase(c);
+            Constituent pred = pseudoParseView.getParsePhrase(p);
 
-			Constituent ca = PathFeatureHelper.getCommonAncestor(arg, pred, 400);
-			Constituent argParent = TreeView.getParent(arg);
-			Constituent predParent = TreeView.getParent(pred);
-			if (argParent == ca && predParent == ca) clauseRelativePosition = "S";
-			else if (argParent == ca || arg == ca) clauseRelativePosition = "A";
-			else if (predParent == ca || pred == ca) clauseRelativePosition = "B";
-			else clauseRelativePosition = "O";
-		} catch (Exception ex) {
-			clauseRelativePosition = "O";
-		}
+            Constituent ca = PathFeatureHelper.getCommonAncestor(arg, pred, 400);
+            Constituent argParent = TreeView.getParent(arg);
+            Constituent predParent = TreeView.getParent(pred);
+            if (argParent == ca && predParent == ca)
+                clauseRelativePosition = "S";
+            else if (argParent == ca || arg == ca)
+                clauseRelativePosition = "A";
+            else if (predParent == ca || pred == ca)
+                clauseRelativePosition = "B";
+            else
+                clauseRelativePosition = "O";
+        } catch (Exception ex) {
+            clauseRelativePosition = "O";
+        }
 
-		SpanLabelView clause = (SpanLabelView) ta.getView(clauseViewName);
-		List<Constituent> clauses = clause.getConstituentsCovering(p);
-		float ratio = 0;
-		if (clauses.size() > 0) {
-			Constituent local = clauses.get(0);
-			if (Queries.hasOverlap(local).transform(c)) ratio = c.size() * 1.0f / local.size();
-		}
+        SpanLabelView clause = (SpanLabelView) ta.getView(clauseViewName);
+        List<Constituent> clauses = clause.getConstituentsCovering(p);
+        float ratio = 0;
+        if (clauses.size() > 0) {
+            Constituent local = clauses.get(0);
+            if (Queries.hasOverlap(local).transform(c))
+                ratio = c.size() * 1.0f / local.size();
+        }
 
-		Set<Feature> features = new LinkedHashSet<>();
+        Set<Feature> features = new LinkedHashSet<>();
 
-		features.add(RealFeature.create("coverage", ratio));
+        features.add(RealFeature.create("coverage", ratio));
 
-		features.add(DiscreteFeature.create("rel-pos:" + clauseRelativePosition));
+        features.add(DiscreteFeature.create("rel-pos:" + clauseRelativePosition));
 
-		return features;
-	}
+        return features;
+    }
 
-	@Override
-	public String getName() {
-		return "#clause#" + clauseViewName;
-	}
+    @Override
+    public String getName() {
+        return "#clause#" + clauseViewName;
+    }
 
 }

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.curator;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -12,7 +22,8 @@ public class RecordUtils {
 
 
     public static List<String> getSentenceList(Record record) {
-        if (record.getLabelViews() == null || !record.getLabelViews().containsKey(ViewNames.SENTENCE))
+        if (record.getLabelViews() == null
+                || !record.getLabelViews().containsKey(ViewNames.SENTENCE))
             return null;
         List<String> sentenceList = new LinkedList<>();
         String rawText = record.getRawText();

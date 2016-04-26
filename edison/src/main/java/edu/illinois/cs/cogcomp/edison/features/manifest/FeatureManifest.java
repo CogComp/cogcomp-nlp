@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.manifest;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
@@ -17,467 +27,498 @@ import java.io.InputStream;
 import java.util.*;
 
 public class FeatureManifest {
-	private final static Logger log = LoggerFactory.getLogger(FeatureManifest.class);
-
-	private static String jwnlConfig = null;
-	private ManifestParser parser;
-	private boolean compressedName;
-
-	public FeatureManifest(String path) throws Exception {
-		this(IOUtils.lsResources(FeatureManifest.class, path).get(0).openStream());
-	}
-
-	public FeatureManifest(InputStream file) throws Exception {
-
-		parser = new ManifestParser(file);
-		compressedName = false;
-
-		log.debug("Features: \n{}", getIncludedFeatures());
-	}
-
-	public static void setJWNLConfigFile(String file) {
-		jwnlConfig = file;
-	}
-
-	public static void setFeatureExtractor(String name, FeatureExtractor fex) {
-		KnownFexes.fexes.put(name, fex);
-	}
-
-	public static void setTransformer(String name, FeatureInputTransformer t) {
-		KnownTransformers.transformers.put(name, t);
-	}
-
-	public static Set<String> getKnownFeatureExtractors() {
-
-		Set<String> f = new LinkedHashSet<>();
-		f.addAll(KnownFexes.getKnownFeatureExtractors());
-		f.addAll(WordNetClasses.getKnownFeatureExtractors());
-		f.addAll(ParameterizedFeatureExtractors.getKnownFeatureExtractors());
-
-		f.add("bigram");
-		f.add("trigram");
-
-		return f;
-	}
-
-	public void setVariable(String key, String value) {
-		parser.setVariable(key, value);
-	}
-
-	private FeatureExtractor createFex(Tree<String> tree, Map<String, FeatureExtractor> cf) throws EdisonException {
-		String label = tree.getLabel();
-
-		if (tree.isLeaf()) {
-			if (label.startsWith("wn")) return getWordNetFeatureExtractor(Arrays.asList(label), cf);
-			else if (cf.containsKey(definition(label))) return cf.get(definition(label));
-			else return getLeafFeature(label, cf);
-		} else if (label.equals("list")) return processList(tree, cf);
-		else if (label.equals("conjoin")) return processConjunction(tree, cf);
-		else if (ParameterizedFeatureExtractors.fexes.containsKey(label)) return getParameterizedFex(tree, cf);
-		else if (label.equals("conjoin-and-include")) return processIncludeWithPrefix(tree, cf);
-		else if (label.equals("bigram")) return bigrams(tree, cf);
-		else if (label.equals("trigram")) return trigrams(tree, cf);
-		else if (label.equals("define")) throw new EdisonException(
-				"'define' can only be a top level statement " + "or at the beginning of a feature descriptor\n" + tree);
-		else if (label.equals("transform-input")) return processTransform(tree, cf);
-		else if (label.equals("if")) return processQuery(tree, cf);
-		else throw new EdisonException("Invalid feature description: " + tree);
-	}
-
-	public FeatureExtractor processQuery(Tree<String> tree, Map<String, FeatureExtractor> cf) throws EdisonException {
-
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
-
-		if (tree.getNumberOfChildren() != 3) {
-			throw new EdisonException("Invalid query. Expecting (if <query> <if-true> <if-false>).\n" + tree);
-		}
+    private final static Logger log = LoggerFactory.getLogger(FeatureManifest.class);
+    private ManifestParser parser;
+    private boolean compressedName;
+
+    public FeatureManifest(String path) throws Exception {
+        this(IOUtils.lsResources(FeatureManifest.class, path).get(0).openStream());
+    }
+
+    public FeatureManifest(InputStream file) throws Exception {
+
+        parser = new ManifestParser(file);
+        compressedName = false;
+
+        log.debug("Features: \n{}", getIncludedFeatures());
+    }
+
+    public static void setFeatureExtractor(String name, FeatureExtractor fex) {
+        KnownFexes.fexes.put(name, fex);
+    }
+
+    public static void setTransformer(String name, FeatureInputTransformer t) {
+        KnownTransformers.transformers.put(name, t);
+    }
+
+    public static Set<String> getKnownFeatureExtractors() {
+
+        Set<String> f = new LinkedHashSet<>();
+        f.addAll(KnownFexes.getKnownFeatureExtractors());
+        f.addAll(WordNetClasses.getKnownFeatureExtractors());
+        f.addAll(ParameterizedFeatureExtractors.getKnownFeatureExtractors());
+
+        f.add("bigram");
+        f.add("trigram");
+
+        return f;
+    }
+
+    public void setVariable(String key, String value) {
+        parser.setVariable(key, value);
+    }
+
+    private FeatureExtractor createFex(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
+        String label = tree.getLabel();
+
+        if (tree.isLeaf()) {
+            if (label.startsWith("wn"))
+                return getWordNetFeatureExtractor(Collections.singletonList(label), cf);
+            else if (cf.containsKey(definition(label)))
+                return cf.get(definition(label));
+            else
+                return getLeafFeature(label, cf);
+        } else if (label.equals("list"))
+            return processList(tree, cf);
+        else if (label.equals("conjoin"))
+            return processConjunction(tree, cf);
+        else if (ParameterizedFeatureExtractors.fexes.containsKey(label))
+            return getParameterizedFex(tree, cf);
+        else if (label.equals("conjoin-and-include"))
+            return processIncludeWithPrefix(tree, cf);
+        else if (label.equals("bigram"))
+            return bigrams(tree, cf);
+        else if (label.equals("trigram"))
+            return trigrams(tree, cf);
+        else if (label.equals("define"))
+            throw new EdisonException("'define' can only be a top level statement "
+                    + "or at the beginning of a feature descriptor\n" + tree);
+        else if (label.equals("transform-input"))
+            return processTransform(tree, cf);
+        else if (label.equals("if"))
+            return processQuery(tree, cf);
+        else
+            throw new EdisonException("Invalid feature description: " + tree);
+    }
+
+    public FeatureExtractor processQuery(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
+
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
+
+        if (tree.getNumberOfChildren() != 3) {
+            throw new EdisonException(
+                    "Invalid query. Expecting (if <query> <if-true> <if-false>).\n" + tree);
+        }
+
+        Tree<String> condition = tree.getChild(0);
+
+        Predicate<Constituent> predicate;
+        if (condition.getLabel().equals("exists")) {
+            predicate = processExists(condition);
+        } else {
+            throw new EdisonException("Unknown query '" + condition.getLabel() + "'");
+        }
+
+        FeatureExtractor ifTrue = createFex(tree.getChild(1), cf);
+        FeatureExtractor ifFalse = createFex(tree.getChild(2), cf);
+
+        ConditionalFeatureExtractor fex =
+                new ConditionalFeatureExtractor(predicate, ifTrue, ifFalse);
+
+        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        cf.put(uniqueLabel, cfx);
+        return cfx;
+    }
+
+    @SuppressWarnings("serial")
+    private Predicate<Constituent> processExists(Tree<String> condition) throws EdisonException {
+        if (condition.getNumberOfChildren() != 4) {
+            throw new EdisonException("Invalid syntax for exists. Expecting "
+                    + "(exists :view <view-name> :such-that <predicate>).\n" + condition);
+        }
+
+        final HashMap<String, String> variables = parser.getVariables();
+
+        String viewName = null;
+        Tree<String> query = null;
+
+        int id = 0;
+        while (id != 4) {
+            Tree<String> child = condition.getChild(id++);
+            if (child.getLabel().equals(":view")) {
+                child = condition.getChild(id++);
+                viewName = child.getLabel();
+                if (variables.containsKey(viewName))
+                    viewName = variables.get(viewName);
+            } else if (child.getLabel().equals(":such-that")) {
+                query = condition.getChild(id++);
+
+                // parse the query for now, just so that we catch syntax errors
+                QueryGenerator.generateQuery(query, null, variables);
+
+            }
+        }
+
+        final Tree<String> tree = Mappers.mapTree(query, new ITransformer<Tree<String>, String>() {
+
+            @Override
+            public String transform(Tree<String> input) {
+                return input.getLabel();
+            }
+        });
+        final String name = viewName;
+
+        return new Predicate<Constituent>() {
+            @Override
+            public Boolean transform(Constituent c) {
+                Predicate<Constituent> q;
+                try {
+                    q = QueryGenerator.generateQuery(tree, c, variables);
+
+                    return c.getTextAnnotation().getView(name).where(q).iterator().hasNext();
+                } catch (EdisonException e) {
+                    // this should never happen because we have already checked
+                    // for errors before hand. This can happen only at runtime,
+                    // given the data.
+                    throw new RuntimeException(e);
+                }
+
+            }
+        };
+    }
+
+    private FeatureExtractor processTransform(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
+
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
+
+        if (tree.getNumberOfChildren() != 2)
+            throw new EdisonException("transform-input requires two arguments.\n" + tree);
+
+        String transformer = tree.getChild(0).getLabel();
+
+        if (!KnownTransformers.transformers.containsKey(transformer))
+            throw new EdisonException("Unknown input transformer '" + transformer
+                    + "'. Expecting one of " + KnownTransformers.transformers.keySet());
+
+        FeatureInputTransformer fit = KnownTransformers.transformers.get(transformer);
+
+        CachedFeatureCollection cfx =
+                new CachedFeatureCollection("", fit, createFex(tree.getChild(1), cf));
+        cf.put(uniqueLabel, cfx);
+
+        return cfx;
+
+    }
+
+    private FeatureExtractor getNonAttributeFeatureExtractors(Tree<String> tree,
+            Map<String, FeatureExtractor> cf) throws EdisonException {
 
-		Tree<String> condition = tree.getChild(0);
-
-		Predicate<Constituent> predicate;
-		if (condition.getLabel().equals("exists")) {
-			predicate = processExists(condition);
-		} else {
-			throw new EdisonException("Unknown query '" + condition.getLabel() + "'");
-		}
+        FeatureCollection f = new FeatureCollection("");
+        int childId = 0;
 
-		FeatureExtractor ifTrue = createFex(tree.getChild(1), cf);
-		FeatureExtractor ifFalse = createFex(tree.getChild(2), cf);
-
-		ConditionalFeatureExtractor fex = new ConditionalFeatureExtractor(predicate, ifTrue, ifFalse);
-
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
-		cf.put(uniqueLabel, cfx);
-		return cfx;
-	}
-
-	@SuppressWarnings("serial")
-	private Predicate<Constituent> processExists(Tree<String> condition) throws EdisonException {
-		if (condition.getNumberOfChildren() != 4) {
-			throw new EdisonException(
-					"Invalid syntax for exists. Expecting " + "(exists :view <view-name> :such-that <predicate>).\n" + condition);
-		}
-
-		final HashMap<String, String> variables = parser.getVariables();
+        boolean found = false;
+        while (childId < tree.getNumberOfChildren()) {
+            Tree<String> child = tree.getChild(childId++);
+            if (child.getLabel().startsWith(":")) {
+                childId++;
+            } else {
+                f.addFeatureExtractor(createFex(child, cf));
+                found = true;
+            }
+        }
 
-		String viewName = null;
-		Tree<String> query = null;
-
-		int id = 0;
-		while (id != 4) {
-			Tree<String> child = condition.getChild(id++);
-			if (child.getLabel().equals(":view")) {
-				child = condition.getChild(id++);
-				viewName = child.getLabel();
-				if (variables.containsKey(viewName)) viewName = variables.get(viewName);
-			} else if (child.getLabel().equals(":such-that")) {
-				query = condition.getChild(id++);
+        if (found)
+            return f;
+        else
+            return null;
 
-				// parse the query for now, just so that we catch syntax errors
-				QueryGenerator.generateQuery(query, null, variables);
+    }
 
-			}
-		}
-
-		final Tree<String> tree = Mappers.mapTree(query, new ITransformer<Tree<String>, String>() {
+    private FeatureExtractor getParameterizedFex(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-					@Override
-					public String transform(Tree<String> input) {
-						return input.getLabel();
-					}
-				});
-		final String name = viewName;
+        FeatureExtractor fex =
+                ParameterizedFeatureExtractors.getParameterizedFeatureExtractor(tree,
+                        getNonAttributeFeatureExtractors(tree, cf), parser.getVariables());
 
-		return new Predicate<Constituent>() {
-			@Override
-			public Boolean transform(Constituent c) {
-				Predicate<Constituent> q;
-				try {
-					q = QueryGenerator.generateQuery(tree, c, variables);
+        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        cf.put(uniquify(tree), cfx);
 
-					return c.getTextAnnotation().getView(name).where(q).iterator().hasNext();
-				} catch (EdisonException e) {
-					// this should never happen because we have already checked
-					// for errors before hand. This can happen only at runtime,
-					// given the data.
-					throw new RuntimeException(e);
-				}
+        return cfx;
+    }
 
-			}
-		};
-	}
+    private WordFeatureExtractor getWordFex(final FeatureExtractor fex) {
+        return new WordFeatureExtractor() {
 
-	private FeatureExtractor processTransform(Tree<String> tree, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
+            @Override
+            public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
+                    throws EdisonException {
+                return fex.getFeatures(new Constituent("", "", ta, wordPosition, wordPosition + 1));
+            }
+        };
+    }
 
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+    private FeatureExtractor bigrams(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
 
-		if (tree.getNumberOfChildren() != 2)
-			throw new EdisonException("transform-input requires two arguments.\n" + tree);
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-		String transformer = tree.getChild(0).getLabel();
+        if (tree.getNumberOfChildren() != 1) {
+            throw new EdisonException("bigrams takes exactly one argument\n" + tree);
+        }
 
-		if (!KnownTransformers.transformers.containsKey(transformer)) throw new EdisonException(
-				"Unknown input transformer '" + transformer + "'. Expecting one of " + KnownTransformers.transformers
-						.keySet());
+        FeatureExtractor fex =
+                NgramFeatureExtractor.bigrams(getWordFex(createFex(tree.getChild(0), cf)));
 
-		FeatureInputTransformer fit = KnownTransformers.transformers.get(transformer);
+        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        cf.put(uniquify(tree), cfx);
 
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fit, createFex(tree.getChild(1), cf));
-		cf.put(uniqueLabel, cfx);
+        return cfx;
+    }
 
-		return cfx;
+    private FeatureExtractor trigrams(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
 
-	}
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-	private FeatureExtractor getNonAttributeFeatureExtractors(Tree<String> tree, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
+        if (tree.getNumberOfChildren() != 1) {
+            throw new EdisonException("trigrams takes exactly one argument\n" + tree);
+        }
 
-		FeatureCollection f = new FeatureCollection("");
-		int childId = 0;
+        FeatureExtractor fex =
+                NgramFeatureExtractor.trigrams(getWordFex(createFex(tree.getChild(0), cf)));
 
-		boolean found = false;
-		while (childId < tree.getNumberOfChildren()) {
-			Tree<String> child = tree.getChild(childId++);
-			if (child.getLabel().startsWith(":")) {
-				childId++;
-				continue;
-			} else {
-				f.addFeatureExtractor(createFex(child, cf));
-				found = true;
-			}
-		}
+        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        cf.put(uniquify(tree), cfx);
 
-		if (found) return f;
-		else return null;
+        return cfx;
+    }
 
-	}
+    private FeatureExtractor processIncludeWithPrefix(Tree<String> tree,
+            Map<String, FeatureExtractor> cf) throws EdisonException {
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-	private FeatureExtractor getParameterizedFex(Tree<String> tree, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+        FeatureCollection fex = new FeatureCollection("");
 
-		FeatureExtractor fex = ParameterizedFeatureExtractors
-				.getParameterizedFeatureExtractor(tree, getNonAttributeFeatureExtractors(tree, cf),
-						parser.getVariables());
+        if (tree.getNumberOfChildren() == 0)
+            throw new EdisonException("Invalid declaration for conjoin-and-include\n" + tree);
 
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
-		cf.put(uniquify(tree), cfx);
+        FeatureExtractor firstChild = createFex(tree.getChild(0), cf);
+        fex.addFeatureExtractor(firstChild);
 
-		return cfx;
-	}
+        if (tree.getNumberOfChildren() > 1) {
 
-	private WordFeatureExtractor getWordFex(final FeatureExtractor fex) {
-		return new WordFeatureExtractor() {
+            FeatureExtractor conjoin = new FeatureCollection("", firstChild);
 
-			@Override
-			public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
-				return fex.getFeatures(new Constituent("", "", ta, wordPosition, wordPosition + 1));
-			}
-		};
-	}
+            for (int childId = 1; childId < tree.getNumberOfChildren(); childId++) {
+                FeatureExtractor ff = createFex(tree.getChild(childId), cf);
 
-	private FeatureExtractor bigrams(Tree<String> tree, Map<String, FeatureExtractor> cf) throws EdisonException {
+                conjoin = FeatureUtilities.conjoin(conjoin, ff);
+                fex.addFeatureExtractor(ff);
+            }
 
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+            fex.addFeatureExtractor(conjoin);
+        }
 
-		if (tree.getNumberOfChildren() != 1) {
-			throw new EdisonException("bigrams takes exactly one argument\n" + tree);
-		}
+        CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
+        cf.put(uniquify(tree), cfx);
 
-		FeatureExtractor fex = NgramFeatureExtractor.bigrams(getWordFex(createFex(tree.getChild(0), cf)));
+        return cfx;
 
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
-		cf.put(uniquify(tree), cfx);
+    }
 
-		return cfx;
-	}
+    private FeatureExtractor processConjunction(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-	private FeatureExtractor trigrams(Tree<String> tree, Map<String, FeatureExtractor> cf) throws EdisonException {
+        if (tree.getNumberOfChildren() == 0) {
+            throw new EdisonException("Invalid conjunction " + tree);
+        }
 
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+        FeatureExtractor fex = createFex(tree.getChild(0), cf);
 
-		if (tree.getNumberOfChildren() != 1) {
-			throw new EdisonException("trigrams takes exactly one argument\n" + tree);
-		}
+        for (int i = 1; i < tree.getNumberOfChildren(); i++) {
+            fex = FeatureUtilities.conjoin(fex, createFex(tree.getChild(i), cf));
+        }
 
-		FeatureExtractor fex = NgramFeatureExtractor.trigrams(getWordFex(createFex(tree.getChild(0), cf)));
+        CachedFeatureCollection f = new CachedFeatureCollection("", fex);
 
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
-		cf.put(uniquify(tree), cfx);
+        cf.put(uniqueLabel, f);
 
-		return cfx;
-	}
+        return f;
+    }
 
-	private FeatureExtractor processIncludeWithPrefix(Tree<String> tree, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+    private FeatureExtractor processList(Tree<String> tree, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
 
-		FeatureCollection fex = new FeatureCollection("");
+        String uniqueLabel = uniquify(tree);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-		if (tree.getNumberOfChildren() == 0)
-			throw new EdisonException("Invalid declaration for conjoin-and-include\n" + tree);
+        CachedFeatureCollection fc = new CachedFeatureCollection("");
 
-		FeatureExtractor firstChild = createFex(tree.getChild(0), cf);
-		fex.addFeatureExtractor(firstChild);
+        List<String> wnLabels = new ArrayList<>();
 
-		if (tree.getNumberOfChildren() > 1) {
+        for (Tree<String> child : tree.getChildren()) {
+            if (child.isLeaf() && child.getLabel().startsWith("wn")) {
+                wnLabels.add(child.getLabel());
+            } else {
+                fc.addFeatureExtractor(createFex(child, cf));
+            }
 
-			FeatureExtractor conjoin = new FeatureCollection("", firstChild);
+        }
 
-			for (int childId = 1; childId < tree.getNumberOfChildren(); childId++) {
-				FeatureExtractor ff = createFex(tree.getChild(childId), cf);
+        if (wnLabels.size() > 0)
+            fc.addFeatureExtractor(getWordNetFeatureExtractor(wnLabels, cf));
 
-				conjoin = FeatureUtilities.conjoin(conjoin, ff);
-				fex.addFeatureExtractor(ff);
-			}
+        cf.put(uniquify(tree), fc);
 
-			fex.addFeatureExtractor(conjoin);
-		}
+        return fc;
+    }
 
-		CachedFeatureCollection cfx = new CachedFeatureCollection("", fex);
-		cf.put(uniquify(tree), cfx);
+    private FeatureExtractor getLeafFeature(String label, Map<String, FeatureExtractor> cf)
+            throws EdisonException {
 
-		return cfx;
+        String uniqueLabel = uniquify(label);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-	}
+        if (!KnownFexes.fexes.containsKey(label))
+            throw new EdisonException("Unknown feature extractor '" + label
+                    + "', expecting one of " + KnownFexes.fexes.keySet());
+        FeatureExtractor featureExtractor = KnownFexes.fexes.get(label);
 
-	private FeatureExtractor processConjunction(Tree<String> tree, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+        // CachedFeatureCollection f = new CachedFeatureCollection("",
+        // featureExtractor);
 
-		if (tree.getNumberOfChildren() == 0) {
-			throw new EdisonException("Invalid conjunction " + tree);
-		}
+        cf.put(uniqueLabel, featureExtractor);
+        return featureExtractor;
 
-		FeatureExtractor fex = createFex(tree.getChild(0), cf);
+    }
 
-		for (int i = 1; i < tree.getNumberOfChildren(); i++) {
-			fex = FeatureUtilities.conjoin(fex, createFex(tree.getChild(i), cf));
-		}
+    private String uniquify(Tree<String> label) {
+        return getUniqueList(label).toString().replaceAll("\\s+", "");
+    }
 
-		CachedFeatureCollection f = new CachedFeatureCollection("", fex);
+    private String uniquify(String label) {
+        return label.replaceAll("\\s+", "");
+    }
 
-		cf.put(uniqueLabel, f);
+    private String uniquify(List<String> labels) {
+        return new TreeSet<>(labels).toString().replaceAll("\\s+", "");
+    }
 
-		return f;
-	}
+    private FeatureExtractor getWordNetFeatureExtractor(List<String> wnLabels,
+            Map<String, FeatureExtractor> cf) throws EdisonException {
 
-	private FeatureExtractor processList(Tree<String> tree, Map<String, FeatureExtractor> cf) throws EdisonException {
+        String uniqueLabel = uniquify(wnLabels);
+        if (cf.containsKey(uniqueLabel))
+            return cf.get(uniqueLabel);
 
-		String uniqueLabel = uniquify(tree);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+        try {
+            WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
 
-		CachedFeatureCollection fc = new CachedFeatureCollection("");
+            for (String label : wnLabels) {
+                if (!WordNetClasses.wnClasses.containsKey(label))
+                    throw new EdisonException("Unknown wordnet feature extractor '" + label
+                            + "', expecting one of " + WordNetClasses.wnClasses.keySet());
+                wn.addFeatureType(WordNetClasses.wnClasses.get(label));
+            }
 
-		List<String> wnLabels = new ArrayList<>();
+            CachedFeatureCollection f = new CachedFeatureCollection("", wn);
 
-		for (Tree<String> child : tree.getChildren()) {
-			if (child.isLeaf() && child.getLabel().startsWith("wn")) {
-				wnLabels.add(child.getLabel());
-			} else {
-				fc.addFeatureExtractor(createFex(child, cf));
-			}
+            cf.put(uniqueLabel, f);
+            return f;
+        } catch (Exception e) {
+            throw new EdisonException(e);
+        }
 
-		}
+    }
 
-		if (wnLabels.size() > 0) fc.addFeatureExtractor(getWordNetFeatureExtractor(wnLabels, cf));
+    public String getIncludedFeatures() {
+        return parser.getIncludedFeatures();
+    }
 
-		cf.put(uniquify(tree), fc);
+    private List<String> getUniqueList(Tree<String> tree) {
+        List<String> f = new ArrayList<>();
+        for (Tree<String> child : tree.getChildren()) {
+            f.add(child.toString().replaceAll("\\s+", " "));
+        }
 
-		return fc;
-	}
+        Collections.sort(f);
 
-	private FeatureExtractor getLeafFeature(String label, Map<String, FeatureExtractor> cf) throws EdisonException {
+        return f;
+    }
 
-		String uniqueLabel = uniquify(label);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+    private String definition(String label) {
+        return "__DEF__" + label;
+    }
 
-		if (!KnownFexes.fexes.containsKey(label)) throw new EdisonException(
-				"Unknown feature extractor '" + label + "', expecting one of " + KnownFexes.fexes.keySet());
-		FeatureExtractor featureExtractor = KnownFexes.fexes.get(label);
+    private FeatureExtractor populateFex(FeatureCollection fex) throws EdisonException {
 
-		// CachedFeatureCollection f = new CachedFeatureCollection("",
-		// featureExtractor);
+        Map<String, FeatureExtractor> cf = new HashMap<>();
 
-		cf.put(uniqueLabel, featureExtractor);
-		return featureExtractor;
+        // first manage all define statements
+        for (Tree<String> defn : parser.getDefinitions()) {
+            if (defn.getNumberOfChildren() != 2) {
+                throw new EdisonException("Invalid definition. Expecting (define name body)\n"
+                        + defn);
+            }
 
-	}
+            String name = defn.getChild(0).getLabel();
 
-	private String uniquify(Tree<String> label) {
-		return getUniqueList(label).toString().replaceAll("\\s+", "");
-	}
+            FeatureExtractor body = createFex(defn.getChild(1), cf);
 
-	private String uniquify(String label) {
-		return label.replaceAll("\\s+", "");
-	}
+            cf.put(definition(name), new CachedFeatureCollection("", body));
+        }
 
-	private String uniquify(List<String> labels) {
-		return new TreeSet<>(labels).toString().replaceAll("\\s+", "");
-	}
+        fex.addFeatureExtractor(this.createFex(parser.getFeatureDescriptor(), cf));
 
-	private FeatureExtractor getWordNetFeatureExtractor(List<String> wnLabels, Map<String, FeatureExtractor> cf) throws
-			EdisonException {
+        return fex;
+    }
 
-		String uniqueLabel = uniquify(wnLabels);
-		if (cf.containsKey(uniqueLabel)) return cf.get(uniqueLabel);
+    public void useCompressedName() {
+        this.compressedName = true;
+    }
 
-		if (jwnlConfig == null) {
-			throw new EdisonException(
-					"Requesting wordnet feature, but JWNL config file missing. " + "Please use FeatureManifest.setJWNLConfigFile(file)");
-		}
-		try {
-			WordNetFeatureExtractor wn = new WordNetFeatureExtractor(jwnlConfig);
+    public FeatureExtractor createFex() throws EdisonException {
+        String name = parser.getName();
+        if (this.compressedName) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            while (i >= 0 && i < name.length()) {
+                sb.append(name.charAt(i));
 
-			for (String label : wnLabels) {
-				if (!WordNetClasses.wnClasses.containsKey(label)) throw new EdisonException(
-						"Unknown wordnet feature extractor '" + label + "', expecting one of " + WordNetClasses.wnClasses
-								.keySet());
-				wn.addFeatureType(WordNetClasses.wnClasses.get(label));
-			}
+                i = name.indexOf("-", i);
+                if (i >= 0)
+                    i++;
+            }
+            name = sb.toString();
+        }
 
-			CachedFeatureCollection f = new CachedFeatureCollection("", wn);
+        return populateFex(new FeatureCollection(name));
+    }
 
-			cf.put(uniqueLabel, f);
-			return f;
-		} catch (Exception e) {
-			throw new EdisonException(e);
-		}
-
-	}
-
-	public String getIncludedFeatures() {
-		return parser.getIncludedFeatures();
-	}
-
-	private List<String> getUniqueList(Tree<String> tree) {
-		List<String> f = new ArrayList<>();
-		for (Tree<String> child : tree.getChildren()) {
-			f.add(child.toString().replaceAll("\\s+", " "));
-		}
-
-		Collections.sort(f);
-
-		return f;
-	}
-
-	private String definition(String label) {
-		return "__DEF__" + label;
-	}
-
-	private FeatureExtractor populateFex(FeatureCollection fex) throws EdisonException {
-
-		Map<String, FeatureExtractor> cf = new HashMap<>();
-
-		// first manage all define statements
-		for (Tree<String> defn : parser.getDefinitions()) {
-			if (defn.getNumberOfChildren() != 2) {
-				throw new EdisonException("Invalid definition. Expecting (define name body)\n" + defn);
-			}
-
-			String name = defn.getChild(0).getLabel();
-
-			FeatureExtractor body = createFex(defn.getChild(1), cf);
-
-			cf.put(definition(name), new CachedFeatureCollection("", body));
-		}
-
-		fex.addFeatureExtractor(this.createFex(parser.getFeatureDescriptor(), cf));
-
-		return fex;
-	}
-
-	public void useCompressedName() {
-		this.compressedName = true;
-	}
-
-	public FeatureExtractor createFex() throws EdisonException {
-		String name = parser.getName();
-		if (this.compressedName) {
-			StringBuilder sb = new StringBuilder();
-			int i = 0;
-			while (i >= 0 && i < name.length()) {
-				sb.append(name.charAt(i));
-
-				i = name.indexOf("-", i);
-				if (i >= 0) i++;
-			}
-			name = sb.toString();
-		}
-
-		return populateFex(new FeatureCollection(name));
-	}
-
-	public FeatureExtractor createFex(FeatureInputTransformer transformer) throws EdisonException {
-		return populateFex(new FeatureCollection(parser.getName(), transformer));
-	}
+    public FeatureExtractor createFex(FeatureInputTransformer transformer) throws EdisonException {
+        return populateFex(new FeatureCollection(parser.getName(), transformer));
+    }
 
 }

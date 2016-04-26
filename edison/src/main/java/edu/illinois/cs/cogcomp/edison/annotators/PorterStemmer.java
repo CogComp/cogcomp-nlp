@@ -1,7 +1,17 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.annotators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -14,36 +24,37 @@ import org.tartarus.snowball.ext.englishStemmer;
  * @author Vivek Srikumar
  * @deprecated Use {@code illinois-lemmatizer} instead
  */
-public class PorterStemmer implements Annotator {
+public class PorterStemmer extends Annotator {
 
-	public static final PorterStemmer instance = new PorterStemmer();
+    private static PorterStemmer instance = null; // = new PorterStemmer();
 
-	private final static SnowballStemmer stemmer = new englishStemmer();
+    private final static SnowballStemmer stemmer = new englishStemmer();
 
-	@Override
-	public String getViewName() {
-		return ViewNames.LEMMA;
-	}
+    public static PorterStemmer getInstance() {
+        if (null == instance)
+            instance = new PorterStemmer(ViewNames.LEMMA, new String[] {});
+        return instance;
+    }
 
-	@Override
-	public View getView(TextAnnotation input) {
-		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "PorterStemmer", input, 1.0);
+    private PorterStemmer(String viewName, String[] prerequisiteViews) {
+        super(viewName, prerequisiteViews);
+    }
 
-		synchronized (instance) {
-			for (int i = 0; i < input.size(); i++) {
-				stemmer.setCurrent(input.getToken(i));
+    @Override
+    public void addView(TextAnnotation input) {
+        TokenLabelView view = new TokenLabelView(getViewName(), "PorterStemmer", input, 1.0);
 
-				stemmer.stem();
+        synchronized (instance) {
+            for (int i = 0; i < input.size(); i++) {
+                stemmer.setCurrent(input.getToken(i));
 
-				view.addTokenLabel(i, stemmer.getCurrent(), 1.0);
-			}
-		}
-		return view;
-	}
+                stemmer.stem();
 
-	@Override
-	public String[] getRequiredViews() {
-		return new String[0];
-	}
+                view.addTokenLabel(i, stemmer.getCurrent(), 1.0);
+            }
+        }
+        input.addView(getViewName(), view);
+    }
+
 
 }

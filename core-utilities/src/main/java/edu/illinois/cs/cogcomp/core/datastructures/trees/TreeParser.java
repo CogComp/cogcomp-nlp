@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import java.util.ArrayList;
@@ -47,8 +57,7 @@ public class TreeParser<S> {
 
                 return tree;
             } else {
-                throw new IllegalArgumentException(
-                        "Missing close parenthesis near " + currentToken);
+                throw new IllegalArgumentException("Missing close parenthesis near " + currentToken);
             }
 
         } else {
@@ -84,8 +93,8 @@ public class TreeParser<S> {
     // http://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
     private final static String WITH_DELIMITER = "((?<=%1$s)|(?=%1$s))";
 
-    private final static Pattern regex = Pattern.compile(String.format(
-            WITH_DELIMITER, "[\\s\\(\\)]"));
+    private final static Pattern regex = Pattern.compile(String.format(WITH_DELIMITER,
+            "[\\s\\(\\)]"));
 
     private List<String> tokenize(String treeString) {
 

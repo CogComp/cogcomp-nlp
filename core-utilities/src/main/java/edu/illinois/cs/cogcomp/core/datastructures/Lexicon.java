@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import gnu.trove.map.hash.TIntFloatHashMap;
@@ -40,9 +50,9 @@ public class Lexicon {
     /**
      * Create a new lexicon object
      *
-     * @param hasBias      Include a default entry in the lexicon for GLOBAL_BIAS?
-     * @param storeStrings Store strings in the lexicon? Useful for debugging at the
-     *                     expense of much more memory consumption
+     * @param hasBias Include a default entry in the lexicon for GLOBAL_BIAS?
+     * @param storeStrings Store strings in the lexicon? Useful for debugging at the expense of much
+     *        more memory consumption
      */
     public Lexicon(boolean hasBias, boolean storeStrings) {
         feature2Id = new TIntIntHashMap();
@@ -61,8 +71,8 @@ public class Lexicon {
     }
 
     /**
-     * Load a lexicon from the inputstream. This does not load the strings into
-     * the lexicon, even if they are present.
+     * Load a lexicon from the inputstream. This does not load the strings into the lexicon, even if
+     * they are present.
      */
     public Lexicon(InputStream in) throws IOException {
         this(in, false);
@@ -130,9 +140,9 @@ public class Lexicon {
     }
 
     /**
-     * Get the feature corresponding to the name. Note: This function will throw
-     * a NullPointerException if the lexicon is not explicitly asked to keep the
-     * feature strings in memory. The default is not to keep strings in memory.
+     * Get the feature corresponding to the name. Note: This function will throw a
+     * NullPointerException if the lexicon is not explicitly asked to keep the feature strings in
+     * memory. The default is not to keep strings in memory.
      */
     public String lookupName(int id) {
         return featureNames.get(id);
@@ -158,8 +168,8 @@ public class Lexicon {
 
         // If there is a hash collision, print a warning
         if (feature2Id.containsKey(featureHash)) {
-            log.warn("Possible hash collision in lexicon "
-                    + "for feature name = {}, hash = {}", f, featureHash);
+            log.warn("Possible hash collision in lexicon " + "for feature name = {}, hash = {}", f,
+                    featureHash);
         } else {
 
             feature2Id.put(featureHash, nextFeatureId++);
@@ -182,20 +192,18 @@ public class Lexicon {
     }
 
     /**
-     * A hash function from feature names to integers. The lexicon will lose
-     * features whenever there is a hash collision because it does not keep
-     * track of any of the strings.
+     * A hash function from feature names to integers. The lexicon will lose features whenever there
+     * is a hash collision because it does not keep track of any of the strings.
      */
     protected int getFeatureHash(String featureName) {
         /*
-		 * Some instrumentation suggests that using java's hashcode directly
-		 * gives collisions for 1% of randomly generated strings, while taking
-		 * the hashcode of their MD5 representation gives a collision of only
-		 * 0.05%. So MD5 it is.
-		 * 
-		 * Using MD5, however, requires us to pay a time penalty. However, this
-		 * doesn't seem to be too much.
-		 */
+         * Some instrumentation suggests that using java's hashcode directly gives collisions for 1%
+         * of randomly generated strings, while taking the hashcode of their MD5 representation
+         * gives a collision of only 0.05%. So MD5 it is.
+         * 
+         * Using MD5, however, requires us to pay a time penalty. However, this doesn't seem to be
+         * too much.
+         */
         return DigestUtils.md5Hex(featureName).hashCode();
         // return featureName.hashCode();
     }
@@ -255,15 +263,13 @@ public class Lexicon {
     }
 
     /**
-     * Saves the feature to id mapping. Note: This does not store the feature
-     * names.
+     * Saves the feature to id mapping. Note: This does not store the feature names.
      */
     public void save(String file) throws IOException {
-        BufferedOutputStream stream = new BufferedOutputStream(
-                new GZIPOutputStream(new FileOutputStream(file)));
+        BufferedOutputStream stream =
+                new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
-        final BufferedWriter writer = new BufferedWriter(
-                new OutputStreamWriter(stream));
+        final BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
 
         writer.write(lexManagerVersion);
         writer.newLine();
@@ -307,8 +313,7 @@ public class Lexicon {
         log.info("Done.");
     }
 
-    private void writeInt(BufferedWriter writer, int integer)
-            throws IOException {
+    private void writeInt(BufferedWriter writer, int integer) throws IOException {
         writer.write(integer + "");
         writer.newLine();
     }

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.math;
 
 import java.util.ArrayList;
@@ -14,8 +24,8 @@ public class Permutations {
     public static List<int[]> getAllBinaryCombinations(int numElements) {
         List<int[]> output = new ArrayList<>();
 
-        output.add(new int[]{0});
-        output.add(new int[]{1});
+        output.add(new int[] {0});
+        output.add(new int[] {1});
 
         for (int elementId = 1; elementId < numElements; elementId++) {
 
@@ -82,8 +92,7 @@ public class Permutations {
 
             return result;
         } else {
-            List<List<T>> allButLast = crossProduct(input.subList(0,
-                    input.size() - 1));
+            List<List<T>> allButLast = crossProduct(input.subList(0, input.size() - 1));
 
             List<List<T>> result = new ArrayList<>();
             for (List<T> allButLastElem : allButLast) {

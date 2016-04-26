@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import edu.illinois.cs.cogcomp.core.search.BeamSearch;
@@ -9,12 +19,12 @@ import java.util.PriorityQueue;
 /**
  * For some reason, Java does not have an implementation of a bounded
  * {@link java.util.PriorityQueue} out of the box. This class fills that gap.
- * <p/>
- * Among other places, it is used by the {@link edu.illinois.cs.cogcomp.core.search.BeamSearch} class to maintain
- * the beam.
+ * <p>
+ * Among other places, it is used by the {@link edu.illinois.cs.cogcomp.core.search.BeamSearch}
+ * class to maintain the beam.
  *
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         May 1, 2009
  */
 public class BoundedPriorityQueue<E> extends PriorityQueue<E> {
@@ -23,13 +33,11 @@ public class BoundedPriorityQueue<E> extends PriorityQueue<E> {
 
     protected final int maxQueueSize;
 
-    public BoundedPriorityQueue(int maxQueueSize,
-                                Comparator<? super E> comparator) {
+    public BoundedPriorityQueue(int maxQueueSize, Comparator<? super E> comparator) {
         super(11, comparator);
         this.maxQueueSize = maxQueueSize;
         if (this.maxQueueSize <= 0) {
-            throw new IllegalArgumentException(
-                    "Maximum queue size should be non negative");
+            throw new IllegalArgumentException("Maximum queue size should be non negative");
         }
     }
 

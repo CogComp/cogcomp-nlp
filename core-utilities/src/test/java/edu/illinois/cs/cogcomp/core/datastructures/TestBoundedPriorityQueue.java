@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
@@ -7,8 +17,8 @@ import java.util.Comparator;
 public class TestBoundedPriorityQueue extends TestCase {
 
     public final void testBoundedPriorityQueue() {
-        BoundedPriorityQueue<Integer> queue = new BoundedPriorityQueue<>(2,
-                new Comparator<Integer>() {
+        BoundedPriorityQueue<Integer> queue =
+                new BoundedPriorityQueue<>(2, new Comparator<Integer>() {
                     @Override
                     public int compare(Integer o1, Integer o2) {
                         return (int) Math.signum(o1 - o2);

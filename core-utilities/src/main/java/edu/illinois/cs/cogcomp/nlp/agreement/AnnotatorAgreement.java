@@ -1,9 +1,19 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.agreement;
 
 /**
  * This abstract class and its descendants are based on the survey article
- * "Inter-Coder Agreement for Computational Linguistics" by Ron Artstein and
- * Massimo Poessio in Computational Lingusitics, Volume 34, Number 4.
+ * "Inter-Coder Agreement for Computational Linguistics" by Ron Artstein and Massimo Poessio in
+ * Computational Lingusitics, Volume 34, Number 4.
  *
  * @author Vivek Srikumar
  */
@@ -47,7 +57,8 @@ public abstract class AnnotatorAgreement {
     }
 
     public double getAgreementCoefficient() {
-        return (this.getObservedAgreement() - this.getExpectedAgreement()) / (1 - this.getExpectedAgreement());
+        return (this.getObservedAgreement() - this.getExpectedAgreement())
+                / (1 - this.getExpectedAgreement());
     }
 
 }

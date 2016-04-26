@@ -1,10 +1,20 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.TextAnnotationUtilities;
 import junit.framework.TestCase;
 
 import java.util.Arrays;
@@ -16,175 +26,184 @@ import java.util.Set;
  */
 public class TestContextFeatureExtractor extends TestCase {
 
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
 
-	public void testGetFeaturesIndexWithoutConstituent() throws EdisonException {
-		ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, true);
+    public void testGetFeaturesIndexWithoutConstituent() throws EdisonException {
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, true);
 
-		fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordFeatureExtractor() {
 
-			@Override
-			public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
-				String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
+            @Override
+            public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
+                    throws EdisonException {
+                String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
 
-				Set<Feature> ss = new HashSet<>();
-				ss.add(DiscreteFeature.create(s));
-				return ss;
-			}
-		});
+                Set<Feature> ss = new HashSet<>();
+                ss.add(DiscreteFeature.create(s));
+                return ss;
+            }
+        });
 
-		TextAnnotation ta =
-				TextAnnotationUtilities.createFromTokenizedString("This is a test for the feature extractor .");
+        TextAnnotation ta =
+                TextAnnotationUtilities
+                        .createFromTokenizedString("This is a test for the feature extractor .");
 
-		Constituent c1 = new Constituent("", "", ta, 2, 3);
+        Constituent c1 = new Constituent("", "", ta, 2, 3);
 
-		Set<String> c1fs = new HashSet<>();
-		c1fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is", "context1:#word#:test",
-				"context2:#word#:for"));
+        Set<String> c1fs = new HashSet<>();
+        c1fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is",
+                "context1:#word#:test", "context2:#word#:for"));
 
-		Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
-		Set<Feature> features = fex.getFeatures(c1);
+        Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
+        Set<Feature> features = fex.getFeatures(c1);
 
-		c1f.removeAll(features);
-		assertEquals(0, c1f.size());
+        c1f.removeAll(features);
+        assertEquals(0, c1f.size());
 
-		Constituent c2 = new Constituent("", "", ta, 2, 4);
+        Constituent c2 = new Constituent("", "", ta, 2, 4);
 
-		Set<String> c2fs = new HashSet<>();
-		c2fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is", "context1:#word#:for",
-				"context2:#word#:the"));
+        Set<String> c2fs = new HashSet<>();
+        c2fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is",
+                "context1:#word#:for", "context2:#word#:the"));
 
-		Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
-		c2f.removeAll(fex.getFeatures(c2));
-		assertEquals(0, c2f.size());
+        Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
+        c2f.removeAll(fex.getFeatures(c2));
+        assertEquals(0, c2f.size());
 
-	}
+    }
 
-	public void testGetFeaturesIndexWithConstituent() throws EdisonException {
-		ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, false);
+    public void testGetFeaturesIndexWithConstituent() throws EdisonException {
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, false);
 
-		fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordFeatureExtractor() {
 
-			@Override
-			public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
-				String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
+            @Override
+            public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
+                    throws EdisonException {
+                String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
 
-				Set<Feature> ss = new HashSet<>();
-				ss.add(DiscreteFeature.create(s));
-				return ss;
-			}
-		});
+                Set<Feature> ss = new HashSet<>();
+                ss.add(DiscreteFeature.create(s));
+                return ss;
+            }
+        });
 
-		TextAnnotation ta =
-				TextAnnotationUtilities.createFromTokenizedString("This is a test for the feature extractor .");
+        TextAnnotation ta =
+                TextAnnotationUtilities
+                        .createFromTokenizedString("This is a test for the feature extractor .");
 
-		Constituent c1 = new Constituent("", "", ta, 2, 3);
+        Constituent c1 = new Constituent("", "", ta, 2, 3);
 
-		Set<String> c1fs = new HashSet<>();
-		c1fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is", "context*:#word#:a",
-				"context1:#word#:test", "context2:#word#:for"));
-		Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
+        Set<String> c1fs = new HashSet<>();
+        c1fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is",
+                "context*:#word#:a", "context1:#word#:test", "context2:#word#:for"));
+        Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
 
-		Set<Feature> features = fex.getFeatures(c1);
+        Set<Feature> features = fex.getFeatures(c1);
 
-		c1f.removeAll(features);
-		assertEquals(0, c1f.size());
+        c1f.removeAll(features);
+        assertEquals(0, c1f.size());
 
-		Constituent c2 = new Constituent("", "", ta, 2, 4);
+        Constituent c2 = new Constituent("", "", ta, 2, 4);
 
-		Set<String> c2fs = new HashSet<>();
-		c2fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is", "context*:#word#:a",
-				"context*:#word#:test", "context1:#word#:for", "context2:#word#:the"));
+        Set<String> c2fs = new HashSet<>();
+        c2fs.addAll(Arrays.asList("context-2:#word#:this", "context-1:#word#:is",
+                "context*:#word#:a", "context*:#word#:test", "context1:#word#:for",
+                "context2:#word#:the"));
 
-		Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
+        Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
 
-		c2f.removeAll(fex.getFeatures(c2));
-		assertEquals(0, c2f.size());
+        c2f.removeAll(fex.getFeatures(c2));
+        assertEquals(0, c2f.size());
 
-	}
+    }
 
-	public void testGetFeaturesNoIndexWithoutConstituent() throws EdisonException {
-		ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, true);
+    public void testGetFeaturesNoIndexWithoutConstituent() throws EdisonException {
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, true);
 
-		fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordFeatureExtractor() {
 
-			@Override
-			public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
-				String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
+            @Override
+            public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
+                    throws EdisonException {
+                String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
 
-				Set<String> ss = new HashSet<>();
-				ss.add(s);
-				return FeatureUtilities.getFeatures(ss);
-			}
-		});
+                Set<String> ss = new HashSet<>();
+                ss.add(s);
+                return FeatureUtilities.getFeatures(ss);
+            }
+        });
 
-		TextAnnotation ta =
-				TextAnnotationUtilities.createFromTokenizedString("This is a test for the feature extractor .");
+        TextAnnotation ta =
+                TextAnnotationUtilities
+                        .createFromTokenizedString("This is a test for the feature extractor .");
 
-		Constituent c1 = new Constituent("", "", ta, 2, 3);
+        Constituent c1 = new Constituent("", "", ta, 2, 3);
 
-		Set<String> c1fs = new HashSet<>();
-		c1fs.addAll(
-				Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:test", "context:#word#:for"));
+        Set<String> c1fs = new HashSet<>();
+        c1fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is",
+                "context:#word#:test", "context:#word#:for"));
 
-		Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
-		c1f.removeAll(fex.getFeatures(c1));
-		assertEquals(0, c1f.size());
+        Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
+        c1f.removeAll(fex.getFeatures(c1));
+        assertEquals(0, c1f.size());
 
-		Constituent c2 = new Constituent("", "", ta, 2, 4);
+        Constituent c2 = new Constituent("", "", ta, 2, 4);
 
-		Set<String> c2fs = new HashSet<>();
-		c2fs.addAll(
-				Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:for", "context:#word#:the"));
+        Set<String> c2fs = new HashSet<>();
+        c2fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:for",
+                "context:#word#:the"));
 
-		Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
+        Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
 
-		c2f.removeAll(fex.getFeatures(c2));
-		assertEquals(0, c2f.size());
+        c2f.removeAll(fex.getFeatures(c2));
+        assertEquals(0, c2f.size());
 
-	}
+    }
 
-	public void testGetFeaturesNoIndexWithConstituent() throws EdisonException {
-		ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, false);
+    public void testGetFeaturesNoIndexWithConstituent() throws EdisonException {
+        ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, false);
 
-		fex.addFeatureExtractor(new WordFeatureExtractor() {
+        fex.addFeatureExtractor(new WordFeatureExtractor() {
 
-			@Override
-			public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition) throws EdisonException {
-				String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
+            @Override
+            public Set<Feature> getWordFeatures(TextAnnotation ta, int wordPosition)
+                    throws EdisonException {
+                String s = WordHelpers.getWord(ta, wordPosition).toLowerCase();
 
-				Set<String> ss = new HashSet<>();
-				ss.add(s);
-				return FeatureUtilities.getFeatures(ss);
-			}
-		});
+                Set<String> ss = new HashSet<>();
+                ss.add(s);
+                return FeatureUtilities.getFeatures(ss);
+            }
+        });
 
-		TextAnnotation ta =
-				TextAnnotationUtilities.createFromTokenizedString("This is a test for the feature extractor .");
+        TextAnnotation ta =
+                TextAnnotationUtilities
+                        .createFromTokenizedString("This is a test for the feature extractor .");
 
-		Constituent c1 = new Constituent("", "", ta, 2, 3);
+        Constituent c1 = new Constituent("", "", ta, 2, 3);
 
-		Set<String> c1fs = new HashSet<>();
-		c1fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:a", "context:#word#:test",
-				"context:#word#:for"));
+        Set<String> c1fs = new HashSet<>();
+        c1fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:a",
+                "context:#word#:test", "context:#word#:for"));
 
-		Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
+        Set<Feature> c1f = FeatureUtilities.getFeatures(c1fs);
 
-		c1f.removeAll(fex.getFeatures(c1));
-		assertEquals(0, c1f.size());
+        c1f.removeAll(fex.getFeatures(c1));
+        assertEquals(0, c1f.size());
 
-		Constituent c2 = new Constituent("", "", ta, 2, 4);
+        Constituent c2 = new Constituent("", "", ta, 2, 4);
 
-		Set<String> c2fs = new HashSet<>();
-		c2fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:a", "context:#word#:test",
-				"context:#word#:for", "context:#word#:the"));
+        Set<String> c2fs = new HashSet<>();
+        c2fs.addAll(Arrays.asList("context:#word#:this", "context:#word#:is", "context:#word#:a",
+                "context:#word#:test", "context:#word#:for", "context:#word#:the"));
 
-		Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
+        Set<Feature> c2f = FeatureUtilities.getFeatures(c2fs);
 
-		c2f.removeAll(fex.getFeatures(c2));
-		assertEquals(0, c2f.size());
+        c2f.removeAll(fex.getFeatures(c2));
+        assertEquals(0, c2f.size());
 
-	}
+    }
 }

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.algorithms;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -6,15 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This is an implementation of the Boyer-Moore-Horspool algorithm for finding
- * the matches of a pattern sequence within another sequence. If we want to find
- * sub string match, we can use the Java regular expression library. This
- * provides a similar functionality (not full regular expressions, only sequence
- * matches) for arbitrary lists.
- * <p/>
- * <p/>
- * It is assumed that the type <code>E</code> implements the
- * <code>hashCode()</code> and <code>equals()</code> functions.
+ * This is an implementation of the Boyer-Moore-Horspool algorithm for finding the matches of a
+ * pattern sequence within another sequence. If we want to find sub string match, we can use the
+ * Java regular expression library. This provides a similar functionality (not full regular
+ * expressions, only sequence matches) for arbitrary lists.
+ * <p>
+ * <p>
+ * It is assumed that the type <code>E</code> implements the <code>hashCode()</code> and
+ * <code>equals()</code> functions.
  *
  * @author Vivek Srikumar
  */
@@ -53,8 +62,7 @@ public class BoyerMooreHorspoolMatch<E> extends ListMatch<E> {
     }
 
     /**
-     * Get a list of positions pointing into the input where the pattern
-     * matches.
+     * Get a list of positions pointing into the input where the pattern matches.
      */
     public List<Integer> matches(List<E> text) {
         List<Integer> matchPositions = new ArrayList<>();

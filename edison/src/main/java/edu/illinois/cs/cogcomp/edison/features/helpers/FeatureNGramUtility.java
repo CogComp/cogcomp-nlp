@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.helpers;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -16,60 +26,63 @@ import java.util.Set;
  */
 public class FeatureNGramUtility {
 
-	private static final ITransformer<Constituent, String> labelTransformer = new ITransformer<Constituent, String>() {
+    private static final ITransformer<Constituent, String> labelTransformer =
+            new ITransformer<Constituent, String>() {
 
-		@Override
-		public String transform(Constituent input) {
-			return input.getLabel();
-		}
-	};
+                @Override
+                public String transform(Constituent input) {
+                    return input.getLabel();
+                }
+            };
 
-	public static Set<Feature> getLabelNgramsOrdered(List<Constituent> list, int ngramLength) {
-		return getNgramsOrdered(list, ngramLength, labelTransformer);
-	}
+    public static Set<Feature> getLabelNgramsOrdered(List<Constituent> list, int ngramLength) {
+        return getNgramsOrdered(list, ngramLength, labelTransformer);
+    }
 
-	public static <T> Set<Feature> getNgramsOrdered(List<T> list, int ngramLength, ITransformer<T, String> f) {
-		Set<Feature> features = new LinkedHashSet<>();
+    public static <T> Set<Feature> getNgramsOrdered(List<T> list, int ngramLength,
+            ITransformer<T, String> f) {
+        Set<Feature> features = new LinkedHashSet<>();
 
-		for (int i = 0; i < list.size() - ngramLength + 1; i++) {
+        for (int i = 0; i < list.size() - ngramLength + 1; i++) {
 
-			List<String> strings = new ArrayList<>();
+            List<String> strings = new ArrayList<>();
 
-			for (int j = 0; j < ngramLength; j++) {
+            for (int j = 0; j < ngramLength; j++) {
 
-				if (i + j < list.size()) {
-					T cc = list.get(i + j);
-					strings.add(f.transform(cc));
-				}
+                if (i + j < list.size()) {
+                    T cc = list.get(i + j);
+                    strings.add(f.transform(cc));
+                }
 
-			}
-			features.add(DiscreteFeature.create(i + ":" + StringUtils.join("-", strings)));
-		}
-		return features;
-	}
+            }
+            features.add(DiscreteFeature.create(i + ":" + StringUtils.join("-", strings)));
+        }
+        return features;
+    }
 
-	public static Set<Feature> getLabelNgramsUnordered(List<Constituent> list, int ngramLength) {
-		return getNgramsUnordered(list, ngramLength, labelTransformer);
-	}
+    public static Set<Feature> getLabelNgramsUnordered(List<Constituent> list, int ngramLength) {
+        return getNgramsUnordered(list, ngramLength, labelTransformer);
+    }
 
-	public static <T> Set<Feature> getNgramsUnordered(List<T> list, int ngramLength, ITransformer<T, String> f) {
-		Set<Feature> features = new LinkedHashSet<>();
+    public static <T> Set<Feature> getNgramsUnordered(List<T> list, int ngramLength,
+            ITransformer<T, String> f) {
+        Set<Feature> features = new LinkedHashSet<>();
 
-		for (int i = 0; i < list.size() - ngramLength + 1; i++) {
+        for (int i = 0; i < list.size() - ngramLength + 1; i++) {
 
-			List<String> strings = new ArrayList<>();
+            List<String> strings = new ArrayList<>();
 
-			for (int j = 0; j < ngramLength; j++) {
+            for (int j = 0; j < ngramLength; j++) {
 
-				if (i + j < list.size()) {
-					T cc = list.get(i + j);
-					strings.add(f.transform(cc));
-				}
+                if (i + j < list.size()) {
+                    T cc = list.get(i + j);
+                    strings.add(f.transform(cc));
+                }
 
-			}
-			features.add(DiscreteFeature.create(StringUtils.join("-", strings)));
-		}
-		return features;
-	}
+            }
+            features.add(DiscreteFeature.create(StringUtils.join("-", strings)));
+        }
+        return features;
+    }
 
 }

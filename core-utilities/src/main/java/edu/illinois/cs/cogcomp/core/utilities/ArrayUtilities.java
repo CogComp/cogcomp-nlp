@@ -1,12 +1,22 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A utility class to help with the nuisance of converting primitive types
- * arrays to the corresponding boxed lists and vice versa. These functions
- * should really have been in the framework class library!
+ * A utility class to help with the nuisance of converting primitive types arrays to the
+ * corresponding boxed lists and vice versa. These functions should really have been in the
+ * framework class library!
  *
  * @author Vivek Srikumar
  */
