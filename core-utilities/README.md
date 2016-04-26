@@ -120,7 +120,8 @@ of annotations over some text.
                  ["I", "am", "a", "HAL-9000", "computer", "."],
                  ["I", "was", "born", "in", "Urbana"]);
                  
-    TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(corpus, textId2, tokenizedSentences);
+    TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
+    											corpus, textId2, tokenizedSentences);
     ```
       
 ### Views 
