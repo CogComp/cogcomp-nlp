@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import java.lang.management.ManagementFactory;
@@ -11,8 +21,7 @@ public class MemoryMonitor {
     public static final long memLimit = Runtime.getRuntime().maxMemory();
 
     /**
-     * @return whether used memory is more than 75% of max available
-     * to JVM
+     * @return whether used memory is more than 75% of max available to JVM
      */
     public static boolean almostFull() {
         return memLimit * 3 / 4 < usedMemory();
@@ -22,7 +31,7 @@ public class MemoryMonitor {
      * Returns current memory usage in MB
      */
     public static void printMemoryUsage(String announcement) {
-//		runGC(r,10);
+        // runGC(r,10);
         System.out.printf(announcement + "memory usage: %sMB\n", memoryUsageInMB());
     }
 

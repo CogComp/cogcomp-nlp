@@ -1,10 +1,20 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import java.io.Serializable;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Aug 4, 2009
  */
 public class Relation implements Serializable {
@@ -17,8 +27,7 @@ public class Relation implements Serializable {
     protected double score;
     protected final int relationName;
 
-    public Relation(String relationName, Constituent source,
-                    Constituent target, double score) {
+    public Relation(String relationName, Constituent source, Constituent target, double score) {
 
         TextAnnotation ta = source.getTextAnnotation();
         assert ta == target.getTextAnnotation();
@@ -49,8 +58,7 @@ public class Relation implements Serializable {
         Relation r = (Relation) obj;
 
         return r.getRelationName().equals(this.relationName)
-                && r.getSource().equals(this.getSource())
-                && r.getTarget().equals(this.getTarget())
+                && r.getSource().equals(this.getSource()) && r.getTarget().equals(this.getTarget())
                 && r.getScore() == this.getScore();
 
     }
@@ -82,14 +90,12 @@ public class Relation implements Serializable {
 
     @Override
     public int hashCode() {
-        return this.getRelationName().hashCode() * 79
-                + this.getSource().hashCode() * 7 + this.getTarget().hashCode()
-                * 13 + (new Double(this.getScore())).hashCode() * 17;
+        return this.getRelationName().hashCode() * 79 + this.getSource().hashCode() * 7
+                + this.getTarget().hashCode() * 13 + (new Double(this.getScore())).hashCode() * 17;
     }
 
     @Override
     public String toString() {
-        return source + "--" + getRelationName() + "--> " + target + "("
-                + getScore() + ")";
+        return source + "--" + getRelationName() + "--> " + target + "(" + getScore() + ")";
     }
 }

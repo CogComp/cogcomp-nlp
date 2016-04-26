@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -8,9 +18,8 @@ import java.util.Set;
 /**
  * An interface that specifies what a feature extractor should do.
  * <p>
- * In general, a feature extractor looks at a {@code Constituent} of a {@code
- * TextAnnotation} and generates a set of strings as features for that
- * constituent.
+ * In general, a feature extractor looks at a {@code Constituent} of a {@code TextAnnotation} and
+ * generates a set of strings as features for that constituent.
  * 
  * @author Vivek Srikumar
  * 

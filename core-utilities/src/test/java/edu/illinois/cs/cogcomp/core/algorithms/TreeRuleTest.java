@@ -1,4 +1,14 @@
 /**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
+/**
  *
  */
 package edu.illinois.cs.cogcomp.core.algorithms;
@@ -14,9 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Vivek Srikumar
- *         <p/>
- *         Jun 24, 2009
+ * @author Vivek Srikumar Jun 24, 2009
  */
 public class TreeRuleTest extends TestCase {
     TreeRule<String> rule;
@@ -46,10 +54,10 @@ public class TreeRuleTest extends TestCase {
 
         // String sentence = "Bob , the builder , stepped forward .";
 
-        tree = TreeParserFactory
-                .getStringTreeParser()
-                .parse(
-                        "(S1 (S (NP (NP (NNP Bob))           (, ,)           (NP (DT the)               (NN builder))           (, ,))       (VP (VBD stepped)           (ADVP (RB forward)))       (. .)))");
+        tree =
+                TreeParserFactory
+                        .getStringTreeParser()
+                        .parse("(S1 (S (NP (NP (NNP Bob))           (, ,)           (NP (DT the)               (NN builder))           (, ,))       (VP (VBD stepped)           (ADVP (RB forward)))       (. .)))");
 
         afterRule = new HashSet<>();
         afterRule.add("Bob stepped forward .");
@@ -61,9 +69,9 @@ public class TreeRuleTest extends TestCase {
         List<List<String>> results = rule.applyRule(tree);
         for (List<String> result : results) {
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (String r : result)
-                sb.append(r + " ");
+                sb.append(r).append(" ");
 
             assertTrue(afterRule.contains(sb.toString().trim()));
 

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -13,20 +23,17 @@ import static org.junit.Assert.assertEquals;
 public class IllinoisTokenizerTest {
 
     @Before
-    public void setUp() throws Exception {
-    }
+    public void setUp() throws Exception {}
 
     /**
-     * Test method for
-     * {@link IllinoisTokenizer}
-     * .
+     * Test method for {@link IllinoisTokenizer} .
      */
     @Test
     public void testIllinoisTokenizer() {
         Tokenizer tokenizer = new IllinoisTokenizer();
 
         String sentence = "This is a   test.";
-        String[] tokens = { "This", "is", "a", "test", "." };
+        String[] tokens = {"This", "is", "a", "test", "."};
         IntPair[] offsets = new IntPair[tokens.length];
         offsets[0] = new IntPair(0, 4);
         offsets[1] = new IntPair(5, 7);
@@ -37,8 +44,7 @@ public class IllinoisTokenizerTest {
         doTokenizerTest(tokenizer, sentence, tokens, offsets);
 
         sentence = "Hello, world! I am at UIUC.";
-        tokens = new String[] { "Hello", ",", "world", "!", "I", "am", "at",
-                "UIUC", "." };
+        tokens = new String[] {"Hello", ",", "world", "!", "I", "am", "at", "UIUC", "."};
         offsets = new IntPair[tokens.length];
         offsets[0] = new IntPair(0, 5);
         offsets[1] = new IntPair(5, 6);
@@ -54,43 +60,42 @@ public class IllinoisTokenizerTest {
     }
 
     @Test
-    public void testIllinoisTokenizerMultiline()
-    {
+    public void testIllinoisTokenizerMultiline() {
         Tokenizer tkr = new IllinoisTokenizer();
-        String text = "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   " +
-                System.lineSeparator() + "He is intolerant of intolerance!";
+        String text =
+                "Mr. Dawkins -- a liberal professor -- doesn't like fundamentalists.   "
+                        + System.lineSeparator() + "He is intolerant of intolerance!";
 
-        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan( text );
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         int[] sentEndOffsets = tknzn.getSentenceEndTokenIndexes();
 
-        assertEquals( 2, sentEndOffsets.length );
+        assertEquals(2, sentEndOffsets.length);
 
-        assertEquals( 12, sentEndOffsets[ 0 ] );
-        assertEquals( 18, sentEndOffsets[ 1 ] );
+        assertEquals(12, sentEndOffsets[0]);
+        assertEquals(18, sentEndOffsets[1]);
 
         String[] tokens = tknzn.getTokens();
 
-        assertEquals( "--", tokens[ 6 ] );
-        assertEquals( "of", tokens[ 15 ] );
+        assertEquals("--", tokens[6]);
+        assertEquals("of", tokens[15]);
 
         IntPair[] tokenOffsets = tknzn.getCharacterOffsets();
         int notIndex = 8;
-        IntPair notOffsets = new IntPair( 42, 45 );
+        IntPair notOffsets = new IntPair(42, 45);
 
-        assertEquals( notOffsets, tokenOffsets[ notIndex ] );
+        assertEquals(notOffsets, tokenOffsets[notIndex]);
 
         int intolerantIndex = 14;
 
-        IntPair intolerantOffsets = new IntPair( 77, 87 );
+        IntPair intolerantOffsets = new IntPair(77, 87);
 
-        assertEquals( intolerantOffsets, tokenOffsets[ intolerantIndex ] );
+        assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
 
 
     }
 
-    private void doTokenizerTest(Tokenizer tokenizer, String sentence,
-                                 String[] tokens, IntPair[] offsets) {
-
+    private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens,
+            IntPair[] offsets) {
         System.out.println(sentence);
         Pair<String[], IntPair[]> tokenize = tokenizer.tokenizeSentence(sentence);
 
@@ -106,4 +111,3 @@ public class IllinoisTokenizerTest {
 
 
 }
-

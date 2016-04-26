@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import junit.framework.TestCase;
@@ -23,18 +33,17 @@ public class TreeTest extends TestCase {
 
     private Tree<String> t1, t2, tree;
     String treeString = "(Root (Leaf)\n" + "      (Child1 (Child1Leaf))\n"
-            + "      (Child2 (Child2Leaf1)\n"
-            + "              (Child2Leaf2))\n" + "      (Leaf))";
+            + "      (Child2 (Child2Leaf1)\n" + "              (Child2Leaf2))\n" + "      (Leaf))";
 
     String treeString2 = "(Root (Leaf)\n" + "      (Child1 (Child1Leaf))\n"
-            + "      (Child2 (Child2Leaf1 (GrandChild1))\n"
-            + "              (Child2Leaf2))\n" + "      (Leaf))";
+            + "      (Child2 (Child2Leaf1 (GrandChild1))\n" + "              (Child2Leaf2))\n"
+            + "      (Leaf))";
 
-	/*
+    /*
      * (non-Javadoc)
-	 * 
-	 * @see junit.framework.TestCase#setUp()
-	 */
+     * 
+     * @see junit.framework.TestCase#setUp()
+     */
 
     public void setUp() throws Exception {
         tree = new Tree<>("Root");
@@ -58,9 +67,9 @@ public class TreeTest extends TestCase {
     public final void testCreateTree() {
         // (A (B ( C )))
 
-        Node a = new Node(0, "A", new int[]{1});
-        Node b = new Node(1, "B", new int[]{2});
-        Node c = new Node(2, "C", new int[]{});
+        Node a = new Node(0, "A", new int[] {1});
+        Node b = new Node(1, "B", new int[] {2});
+        Node c = new Node(2, "C", new int[] {});
 
         List<Node> nodes = new ArrayList<>();
         nodes.add(a);
@@ -83,8 +92,7 @@ public class TreeTest extends TestCase {
 
             if (currentNode.children.length > 0) {
                 for (int childId : currentNode.children) {
-                    Tree<String> childNode = new Tree<>(
-                            nodes.get(childId).label);
+                    Tree<String> childNode = new Tree<>(nodes.get(childId).label);
                     parent.addSubtree(childNode);
                     nodeMap.put(childId, childNode);
                     nodeIndices.add(childId);
@@ -99,8 +107,8 @@ public class TreeTest extends TestCase {
 
         }
 
-        Tree<String> expectedTree = TreeParserFactory.getStringTreeParser()
-                .parse("(A (B (C word)))");
+        Tree<String> expectedTree =
+                TreeParserFactory.getStringTreeParser().parse("(A (B (C word)))");
 
         String treeString = tree.toString();
         assertEquals(expectedTree.toString(), treeString);
@@ -139,10 +147,8 @@ public class TreeTest extends TestCase {
     }
 
     public final void testAddSubtreeAt() {
-        assertEquals("(Root Leaf\n" + "      (Child1 Child1Leaf)\n"
-                        + "      (Child2 Child2Leaf1\n"
-                        + "              Child2Leaf2)\n" + "      Leaf)",
-                tree.toString());
+        assertEquals("(Root Leaf\n" + "      (Child1 Child1Leaf)\n" + "      (Child2 Child2Leaf1\n"
+                + "              Child2Leaf2)\n" + "      Leaf)", tree.toString());
 
     }
 
@@ -174,8 +180,7 @@ public class TreeTest extends TestCase {
     }
 
     public final void testGetYield() {
-        String[] leaves = new String[]{"Leaf", "Child1Leaf", "Child2Leaf1",
-                "Child2Leaf2", "Leaf"};
+        String[] leaves = new String[] {"Leaf", "Child1Leaf", "Child2Leaf1", "Child2Leaf2", "Leaf"};
 
         int i = 0;
         for (Tree<String> s : tree.getYield()) {
@@ -185,8 +190,7 @@ public class TreeTest extends TestCase {
 
         tree.getChild(2).getChild(1).addLeaf("GrandChild");
 
-        leaves = new String[]{"Leaf", "Child1Leaf", "Child2Leaf1",
-                "GrandChild", "Leaf"};
+        leaves = new String[] {"Leaf", "Child1Leaf", "Child2Leaf1", "GrandChild", "Leaf"};
         i = 0;
         for (Tree<String> s : tree.getYield()) {
             assertEquals(leaves[i++], s.getLabel());

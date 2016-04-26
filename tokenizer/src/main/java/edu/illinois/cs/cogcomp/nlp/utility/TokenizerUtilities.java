@@ -1,15 +1,22 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.utility;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 import java.util.ArrayList;
@@ -20,132 +27,9 @@ import java.util.List;
  */
 public class TokenizerUtilities {
 
-    public static final Tokenizer lbjTokenizer = new IllinoisTokenizer();
-//    public static final Tokenizer whiteSpaceTokenizer = new WhitespaceTokenizer();
-
-    /**
-     * The elements of this enumeration generate views called {@code SENTENCE}.
-     * Most of the time, you will not have to use this view generator.
-     * <p/>
-     * Each element of {@code SentenceViewGenerators} implements the
-     * {@code getViewGenerator()} function, which creates a view from a
-     * {@code TextAnnotation}.
-     * <p/>
-     * Elements of this enumeration, in addition to generating the view, <i>also
-     * tokenize</i> the sentence. Since a {@code TextAnnotation} can be
-     * tokenized only once, only elements of this enumeration should be used to
-     * tokenize sentences unless you want a custom tokenizer.
-     */
-    public enum SentenceViewGenerators implements Annotator {
-
-        /**
-         * This sentence view generator tokenizes text with the {@link edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer }
-         * and uses the LBJ sentence splitter to split sentences.
-         */
-        LBJSentenceViewGenerator {
-            @Override
-            public String getViewName() {
-                return ViewNames.SENTENCE;
-            }
-
-            @Override
-            public View getView(TextAnnotation ta) {
-                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(ta,
-                        lbjTokenizer, "LBJ");
-            }
-
-            @Override
-            public String[] getRequiredViews() {
-                return new String[0];
-            }
-        }
-    }
-//        /**
-//         * This sentence view generator sentence splits on newlines and tokenizes on white space, using
-//         *     the {@link edu.illinois.cs.cogcomp.nlp.tokenizer.WhitespaceTokenizer}
-//         *
-//         */
-//        WhiteSpaceSentenceViewGenerator {
-//            @Override
-//            public String getViewName() {
-//                return ViewNames.SENTENCE;
-//            }
-//
-//            @Override
-//            public View getView(TextAnnotation input) {
-//                return edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.addTokenView(input,
-//                        edu.illinois.cs.cogcomp.nlp.utility.TokenizerUtilities.whiteSpaceTokenizer, "WhiteSpace");
-//            }
-//
-//            @Override
-//            public String[] getRequiredViews() {
-//                return new String[0];
-//            }
-//       };
-
-
-//        private static final String[] TOKENIZER_VIEWS = {ViewNames.SENTENCE, ViewNames.TOKENS};
-//
-//        /**
-//         * Returns the name of the sentence view ({@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE}.)
-//         */
-//        public String[] getViewNames() {
-//            return TOKENIZER_VIEWS;
-//        }
-//
-//    }
-
-    public static IntPair[] getTokenOffsets(String sentence, String[] tokens) {
-        List<IntPair> offsets = new ArrayList<>();
-
-        int tokenId = 0;
-        int characterId = 0;
-
-        int tokenCharacterStart = 0;
-        int tokenLength = 0;
-
-        while (characterId < sentence.length() && Character.isWhitespace(sentence.charAt(characterId)))
-            characterId++;
-
-        while (characterId < sentence.length()) {
-            if (tokenLength == tokens[tokenId].length()) {
-                offsets.add(new IntPair(tokenCharacterStart, characterId));
-
-                while (characterId < sentence.length()
-                        && Character.isWhitespace(sentence.charAt(characterId)))
-                    characterId++;
-
-                tokenCharacterStart = characterId;
-                tokenLength = 0;
-                tokenId++;
-
-            } else {
-                assert sentence.charAt(characterId) == tokens[tokenId]
-                        .charAt(tokenLength) : sentence.charAt(characterId)
-                        + " expected, found "
-                        + tokens[tokenId].charAt(tokenLength)
-                        + " instead in sentence: " + sentence;
-
-                tokenLength++;
-                characterId++;
-
-            }
-        }
-
-        if (characterId == sentence.length()
-                && offsets.size() == tokens.length - 1) {
-            offsets.add(new IntPair(tokenCharacterStart, sentence.length()));
-        }
-
-        assert offsets.size() == tokens.length : offsets;
-
-        return offsets.toArray(new IntPair[offsets.size()]);
-    }
-
-
-
-    public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer, String source) {
-        SentenceSplitter splitter = new SentenceSplitter(new String[]{input.getText()});
+    public static SpanLabelView addTokenView(TextAnnotation input, Tokenizer tokenizer,
+            String source) {
+        SentenceSplitter splitter = new SentenceSplitter(new String[] {input.getText()});
 
         Sentence[] sentences = splitter.splitAll();
         List<String> tokens = new ArrayList<>();
@@ -163,8 +47,9 @@ public class TokenizerUtilities {
                 tokens.add(toks.getFirst()[i]);
                 IntPair charOffset = toks.getSecond()[i];
 
-                IntPair translatedCharOffset = new IntPair(
-                        charOffset.getFirst() + s.start, charOffset.getSecond() + s.start);
+                IntPair translatedCharOffset =
+                        new IntPair(charOffset.getFirst() + s.start, charOffset.getSecond()
+                                + s.start);
                 charOffsets.add(translatedCharOffset);
 
             }
@@ -174,18 +59,14 @@ public class TokenizerUtilities {
             start = tokens.size();
         }
 
-        if ( tokens.size() != charOffsets.size() )
-            throw new IllegalArgumentException( "tokens (" + tokens.size() + ") must equal charOffsets (" +
-            charOffsets.size() + "), but does not.");
+        if (tokens.size() != charOffsets.size())
+            throw new IllegalArgumentException("tokens (" + tokens.size()
+                    + ") must equal charOffsets (" + charOffsets.size() + "), but does not.");
 
-//        input.setTokens(tokens.toArray(new String[tokens.size()]),
-//                charOffsets.toArray(new IntPair[charOffsets.size()]));
-
-        SpanLabelView tokView = new SpanLabelView(ViewNames.TOKENS, source, input, 1.0 );
+        SpanLabelView tokView = new SpanLabelView(ViewNames.TOKENS, source, input, 1.0);
         SpanLabelView view = new SpanLabelView(ViewNames.SENTENCE, source, input, 1.0);
-        for ( int i = 0; i < tokens.size(); ++i )
-        {
-            tokView.addSpanLabel(i, i+1, tokens.get( i ), 1d );
+        for (int i = 0; i < tokens.size(); ++i) {
+            tokView.addSpanLabel(i, i + 1, tokens.get(i), 1d);
         }
         for (IntPair span : sentenceSpans) {
             view.addSpanLabel(span.getFirst(), span.getSecond(), ViewNames.SENTENCE, 1d);

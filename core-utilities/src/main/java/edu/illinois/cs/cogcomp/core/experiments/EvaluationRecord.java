@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments;
 
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
@@ -80,12 +90,14 @@ public class EvaluationRecord {
     }
 
     public String getSummary() {
-        String s = "  - Predicted = " + this.predictedCount + ", Gold = "
-                + this.goldCount + " Correct = " + this.correctCount;
+        String s =
+                "  - Predicted = " + this.predictedCount + ", Gold = " + this.goldCount
+                        + " Correct = " + this.correctCount;
 
         s += "\n";
-        s += "  - Precision = " + getPrecision() + ", Recall = " + getRecall()
-                + ", F1 = " + getF1();
+        s +=
+                "  - Precision = " + getPrecision() + ", Recall = " + getRecall() + ", F1 = "
+                        + getF1();
 
         return s;
     }
@@ -102,8 +114,7 @@ public class EvaluationRecord {
         table.addColumn("Recall");
         table.addColumn("F1");
 
-        table.addRow(new String[]{
-                StringUtils.getFormattedString(getPrecision(), 3),
+        table.addRow(new String[] {StringUtils.getFormattedString(getPrecision(), 3),
                 StringUtils.getFormattedString(getRecall(), 3),
                 StringUtils.getFormattedString(getF1(), 3)});
 

@@ -1,5 +1,16 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -15,17 +26,21 @@ public class CollinsHeadFinderTest extends TestCase {
     private TextAnnotation ta;
 
     public void setUp() {
-        String[] sentence = "Central Asia , North east Europe and Africa are continents .".split(" ");
-        String treeString = "(S1 (S (NP (NP (NNP Central)             "
-                + "  (NNP Asia))           (, ,)        "
-                + "   (NP (NNP North)               (NNP east)  "
-                + "             (NNP Europe))           (CC and)           "
-                + "(NP (NNP Africa)))       (VP (AUX are)       "
-                + "    (NP (NNS continents)))       (. .)))";
+        String[] sentence =
+                "Central Asia , North east Europe and Africa are continents .".split(" ");
+        String treeString =
+                "(S1 (S (NP (NP (NNP Central)             "
+                        + "  (NNP Asia))           (, ,)        "
+                        + "   (NP (NNP North)               (NNP east)  "
+                        + "             (NNP Europe))           (CC and)           "
+                        + "(NP (NNP Africa)))       (VP (AUX are)       "
+                        + "    (NP (NNS continents)))       (. .)))";
 
         Tree<String> tree = TreeParserFactory.getStringTreeParser().parse(treeString);
 
-        ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections.singletonList(sentence));
+        ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections
+                        .singletonList(sentence));
 
         TreeView view = new TreeView(ViewNames.PARSE_GOLD, "", ta, 1.0);
         view.setParseTree(0, tree);

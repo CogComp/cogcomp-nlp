@@ -1,10 +1,20 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
- * This class contains the canonical strings used for naming standard views.
- * They are used both in Curator's views as well as {@link TextAnnotation} views
+ * This class contains the canonical strings used for naming standard views. They are used both in
+ * Curator's views as well as {@link TextAnnotation} views
  *
  * @author Vivek Srikumar
  * @author Christos Christodoulopoulos
@@ -24,8 +34,11 @@ public class ViewNames {
     @Deprecated
     public static final String NER = "NER";
 
+    public static final String NER_ACE_COARSE = "NER_ACE_COARSE";
+    public static final String NER_ACE_FINE = "NER_ACE_FINE";
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
+
 
     public static final String SHALLOW_PARSE = "SHALLOW_PARSE";
 
@@ -34,6 +47,9 @@ public class ViewNames {
      */
     @Deprecated
     public static final String CHUNK = "CHUNK";
+
+    public static final String RELATION_ACE_COARSE = "RELATION_ACE_COARSE";
+    public static final String RELATION_ACE_FINE = "RELATION_ACE_FINE";
 
     /**
      * @deprecated Replaced by {@link #SRL_VERB}
@@ -61,13 +77,15 @@ public class ViewNames {
     public static final String WIKIFIER = "WIKIFIER";
 
     /**
-     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY}, {@link #CLAUSES_STANFORD}
+     * @deprecated Replaced by {@link #CLAUSES_CHARNIAK}, {@link #CLAUSES_BERKELEY},
+     *             {@link #CLAUSES_STANFORD}
      */
     @Deprecated
     public static final String CLAUSES = "CLAUSES";
 
     /**
-     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY}, {@link #PSEUDO_PARSE_STANFORD}
+     * @deprecated Replaced by {@link #PSEUDO_PARSE_CHARNIAK}, {@link #PSEUDO_PARSE_BERKELEY},
+     *             {@link #PSEUDO_PARSE_STANFORD}
      */
     @Deprecated
     public static final String PSEUDO_PARSE = "PSEUDO_PARSE";
@@ -88,6 +106,9 @@ public class ViewNames {
     public static final String PSEUDO_PARSE_CHARNIAK = "PSEUDO_PARSE_CHARNIAK";
     public static final String PSEUDO_PARSE_BERKELEY = "PSEUDO_PARSE_BERKELEY";
     public static final String PSEUDO_PARSE_STANFORD = "PSEUDO_PARSE_STANFORD";
+    public static final String GAZETTEER = "GAZETTEER";
+    public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
+    public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -97,6 +118,8 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
+            case NER_ACE_COARSE:
+            case NER_ACE_FINE:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
@@ -105,9 +128,12 @@ public class ViewNames {
             case CLAUSES_CHARNIAK:
             case CLAUSES_STANFORD:
             case CLAUSES_BERKELEY:
+            case BROWN_CLUSTERS:
+            case GAZETTEER:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
+            case DEPENDENCY_HEADFINDER:
                 return ViewTypes.DEPENDENCY_VIEW;
             case PARSE_GOLD:
             case PARSE_CHARNIAK:
@@ -122,6 +148,8 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
+            case RELATION_ACE_COARSE:
+            case RELATION_ACE_FINE:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
                 return ViewTypes.COREF_VIEW;

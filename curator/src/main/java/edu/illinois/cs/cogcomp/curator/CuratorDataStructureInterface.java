@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.curator;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -18,8 +28,7 @@ public class CuratorDataStructureInterface {
     private final static Logger log = LoggerFactory.getLogger(CuratorDataStructureInterface.class);
 
     public static TextAnnotation getTextAnnotationFromRecord(String corpusId, String textId,
-                                                             Record record, Labeling tokensLabeling,
-                                                             Labeling sentenceLabeling) {
+            Record record, Labeling tokensLabeling, Labeling sentenceLabeling) {
 
         final String rawText = record.getRawText();
         final List<Span> sentenceLabels = sentenceLabeling.getLabels();
@@ -61,7 +70,8 @@ public class CuratorDataStructureInterface {
                     // we have no more sentences. This means that there should
                     // be no more tokens. As a sanity check, let's assert this.
                     if (tokenId != labels.size() - 1)
-                        log.error("Found tokens that don't belong to any sentence for input: " + rawText);
+                        log.error("Found tokens that don't belong to any sentence for input: "
+                                + rawText);
                 }
 
             }
@@ -76,12 +86,15 @@ public class CuratorDataStructureInterface {
         }
 
         IntPair[] characterOffsets = new IntPair[charOffsetsList.size()];
-        for (int i = 0; i < charOffsetsList.size(); i++) characterOffsets[i] = charOffsetsList.get(i);
+        for (int i = 0; i < charOffsetsList.size(); i++)
+            characterOffsets[i] = charOffsetsList.get(i);
 
-        return new TextAnnotation(corpusId, textId, rawText, characterOffsets, tokensArray, sentenceEndPositions);
+        return new TextAnnotation(corpusId, textId, rawText, characterOffsets, tokensArray,
+                sentenceEndPositions);
     }
 
-    public static TreeView alignForestToParseTreeView(String viewName, TextAnnotation ta, Forest parseForest) {
+    public static TreeView alignForestToParseTreeView(String viewName, TextAnnotation ta,
+            Forest parseForest) {
 
         final List<edu.illinois.cs.cogcomp.thrift.base.Tree> trees = parseForest.getTrees();
         final String parseSource = parseForest.getSource();
@@ -94,14 +107,14 @@ public class CuratorDataStructureInterface {
 
             if (tree.isSetScore()) {
 
-                final Pair<Tree<String>, Tree<Double>> treeInfo = getParseTreeScores(parseForest.getRawText(), tree);
+                final Pair<Tree<String>, Tree<Double>> treeInfo =
+                        getParseTreeScores(parseForest.getRawText(), tree);
 
                 parseTree = treeInfo.getFirst();
                 final Tree<Double> score = treeInfo.getSecond();
                 parseView.setScoredParseTree(sentenceId, parseTree, score);
 
-            }
-            else {
+            } else {
                 parseTree = getParseTree(ta.getText(), tree);
                 parseView.setParseTree(sentenceId, parseTree);
             }
@@ -111,7 +124,7 @@ public class CuratorDataStructureInterface {
     }
 
     protected static Pair<Tree<String>, Tree<Double>> getParseTreeScores(String sentenceRawString,
-                                                                         edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
+            edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
 
         int top = tree.getTop();
         final List<Node> nodes = tree.getNodes();
@@ -142,8 +155,7 @@ public class CuratorDataStructureInterface {
             // get its children, and sort them
             Node currentNode = nodes.get(current);
 
-            if (currentNode.isSetChildren()
-                    && currentNode.getChildren().size() > 0) {
+            if (currentNode.isSetChildren() && currentNode.getChildren().size() > 0) {
                 List<Integer> childrenSetList = new ArrayList<>();
 
                 childrenSetList.addAll(currentNode.children.keySet());
@@ -175,11 +187,11 @@ public class CuratorDataStructureInterface {
                     scoreNodeMap.put(childId, childScoreNode);
                     nodeIndices.add(childId);
                 }
-            }
-            else {
+            } else {
                 // this is a leaf.
                 Span span = currentNode.span;
-                String leafLabel = sentenceRawString.substring(span.getStart(), span.getEnding()).trim();
+                String leafLabel =
+                        sentenceRawString.substring(span.getStart(), span.getEnding()).trim();
 
                 leafLabel = ParseUtils.convertBracketsToPTBFormat(leafLabel);
 
@@ -192,7 +204,7 @@ public class CuratorDataStructureInterface {
     }
 
     protected static Tree<String> getParseTree(String sentenceRawString,
-                                               edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
+            edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
 
         assert sentenceRawString != null;
 
@@ -216,8 +228,7 @@ public class CuratorDataStructureInterface {
 
             // get its children, and sort them
             Node currentNode = nodes.get(current);
-            if (currentNode.isSetChildren()
-                    && currentNode.getChildren().size() > 0) {
+            if (currentNode.isSetChildren() && currentNode.getChildren().size() > 0) {
                 List<Integer> childrenSet = new ArrayList<>();
 
                 childrenSet.addAll(currentNode.children.keySet());
@@ -248,7 +259,8 @@ public class CuratorDataStructureInterface {
             } else {
                 // this is a leaf.
                 Span span = nodes.get(current).span;
-                String leafLabel = sentenceRawString.substring(span.getStart(), span.getEnding()).trim();
+                String leafLabel =
+                        sentenceRawString.substring(span.getStart(), span.getEnding()).trim();
 
                 leafLabel = ParseUtils.convertBracketsToPTBFormat(leafLabel);
 
@@ -258,8 +270,8 @@ public class CuratorDataStructureInterface {
         return parse;
     }
 
-    public static PredicateArgumentView alignForestToPredicateArgumentView(String viewName, TextAnnotation ta,
-                                                                           Forest forest) {
+    public static PredicateArgumentView alignForestToPredicateArgumentView(String viewName,
+            TextAnnotation ta, Forest forest) {
         if (forest == null)
             return new PredicateArgumentView(viewName, "", ta, 1.0);
 
@@ -295,11 +307,13 @@ public class CuratorDataStructureInterface {
                 Map<String, String> attr = rootSpan.getAttributes();
 
                 if (attr.containsKey("sense")) {
-                    predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, attr.get("sense"));
+                    predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                            attr.get("sense"));
                 }
 
                 if (attr.containsKey("predicate")) {
-                    predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, attr.get("predicate"));
+                    predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+                            attr.get("predicate"));
                 }
             }
 
@@ -315,8 +329,9 @@ public class CuratorDataStructureInterface {
 
                 String childLabel = rootNode.getChildren().get(childNodeId);
 
-                Constituent spanConstituent = getNewConstituentForSpan(
-                        childNode.getLabel(), viewName, ta, childNode.getSpan());
+                Constituent spanConstituent =
+                        getNewConstituentForSpan(childNode.getLabel(), viewName, ta,
+                                childNode.getSpan());
 
                 arguments.add(spanConstituent);
                 relations[index] = childLabel;
@@ -331,14 +346,16 @@ public class CuratorDataStructureInterface {
     }
 
     /**
-     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Clustering} to a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to produce a
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.CoreferenceView}. Note: This function assumes that the longest
-     * mention (in terms of the number of characters) is the canonical mention.
+     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Clustering} to a
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to produce
+     * a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.CoreferenceView}. Note:
+     * This function assumes that the longest mention (in terms of the number of characters) is the
+     * canonical mention.
      *
      * @return A coreference view
      */
-    public static CoreferenceView alignClusteringToCoreferenceView(String viewName, TextAnnotation ta,
-                                                                   Clustering clustering) {
+    public static CoreferenceView alignClusteringToCoreferenceView(String viewName,
+            TextAnnotation ta, Clustering clustering) {
 
         String generator = clustering.getSource();
         double score = clustering.getScore();
@@ -356,11 +373,13 @@ public class CuratorDataStructureInterface {
             for (Span span : labeling.getLabels()) {
 
                 // first make a constituent, for the span, copy all attributes
-                Constituent constituent = getNewConstituentForSpan(span.getLabel(), viewName, ta, span);
+                Constituent constituent =
+                        getNewConstituentForSpan(span.getLabel(), viewName, ta, span);
 
                 coreferentMentions.add(constituent);
-                if (canonicalMention == null ||
-                        canonicalMention.getSurfaceForm().length() < constituent.getSurfaceForm().length())
+                if (canonicalMention == null
+                        || canonicalMention.getSurfaceForm().length() < constituent
+                                .getSurfaceForm().length())
                     canonicalMention = constituent;
 
                 scores[spanId] = span.getScore();
@@ -374,18 +393,19 @@ public class CuratorDataStructureInterface {
     }
 
     /**
-     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView}.
+     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView}.
      *
      * @return A SpanLabelView
      */
-    public static SpanLabelView alignLabelingToSpanLabelView(String viewName,
-                                                             TextAnnotation ta, Labeling spanLabeling,
-                                                             boolean allowOverlappingSpans) {
+    public static SpanLabelView alignLabelingToSpanLabelView(String viewName, TextAnnotation ta,
+            Labeling spanLabeling, boolean allowOverlappingSpans) {
         List<Span> labels = spanLabeling.getLabels();
         double score = spanLabeling.getScore();
         String generator = spanLabeling.getSource();
 
-        SpanLabelView view = new SpanLabelView(viewName, generator, ta, score, allowOverlappingSpans);
+        SpanLabelView view =
+                new SpanLabelView(viewName, generator, ta, score, allowOverlappingSpans);
 
         for (Span span : labels) {
             int tokenId = ta.getTokenIdFromCharacterOffset(span.getStart());
@@ -420,8 +440,8 @@ public class CuratorDataStructureInterface {
                 existsSpan = view.getConstituentsCoveringSpan(tokenId, endTokenId + 1).size() > 0;
 
             if (allowOverlappingSpans || !existsSpan) {
-                Constituent newConstituent = view.addSpanLabel(tokenId,
-                        endTokenId + 1, span.getLabel(), span.getScore());
+                Constituent newConstituent =
+                        view.addSpanLabel(tokenId, endTokenId + 1, span.getLabel(), span.getScore());
 
                 if (span.isSetAttributes() && span.getAttributes().size() > 0) {
                     copyAttributesToConstituent(span, newConstituent);
@@ -432,11 +452,13 @@ public class CuratorDataStructureInterface {
     }
 
     /**
-     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
+     * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
      *
      * @return A TokenLabelView
      */
-    public static TokenLabelView alignLabelingToTokenLabelView(String viewName, TextAnnotation ta, Labeling labeling) {
+    public static TokenLabelView alignLabelingToTokenLabelView(String viewName, TextAnnotation ta,
+            Labeling labeling) {
         List<Span> labels = labeling.getLabels();
         double score = labeling.getScore();
         String generator = labeling.getSource();
@@ -466,7 +488,8 @@ public class CuratorDataStructureInterface {
         return view;
     }
 
-    public static TreeView alignForestToDependencyView(String viewName, TextAnnotation ta, Forest dep) {
+    public static TreeView alignForestToDependencyView(String viewName, TextAnnotation ta,
+            Forest dep) {
         TreeView view = new TreeView(viewName, dep.getSource(), ta, 0.0d);
 
         for (edu.illinois.cs.cogcomp.thrift.base.Tree tree : dep.getTrees()) {
@@ -486,13 +509,12 @@ public class CuratorDataStructureInterface {
     }
 
     /**
-     * Converts a curator tree into a dependency tree that can be added to a
-     * TreeView.
+     * Converts a curator tree into a dependency tree that can be added to a TreeView.
      *
      * @return A dependency tree for the curator Tree
      */
-    protected static Tree<Pair<String, Integer>> makeDependencyTree(
-            TextAnnotation ta, edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
+    protected static Tree<Pair<String, Integer>> makeDependencyTree(TextAnnotation ta,
+            edu.illinois.cs.cogcomp.thrift.base.Tree tree) {
 
         Map<Node, Tree<Pair<String, Integer>>> nodeToTreeMap = new HashMap<>();
 
@@ -506,7 +528,8 @@ public class CuratorDataStructureInterface {
 
         int sentenceStart = ta.getSentence(ta.getSentenceId(topTokenId)).getStartSpan();
 
-        Tree<Pair<String, Integer>> topTree = new Tree<>(new Pair<>(ta.getToken(topTokenId), topTokenId - sentenceStart));
+        Tree<Pair<String, Integer>> topTree =
+                new Tree<>(new Pair<>(ta.getToken(topTokenId), topTokenId - sentenceStart));
 
         nodeToTreeMap.put(topNode, topTree);
 
@@ -535,7 +558,8 @@ public class CuratorDataStructureInterface {
 
                 String childToken = ta.getToken(childTokenId);
 
-                Tree<Pair<String, Integer>> childTree = new Tree<>(new Pair<>(childToken, childTokenId - sentenceStart));
+                Tree<Pair<String, Integer>> childTree =
+                        new Tree<>(new Pair<>(childToken, childTokenId - sentenceStart));
 
                 treeNode.addSubtree(childTree, new Pair<>(edgeLabel, 1));
 
@@ -546,7 +570,8 @@ public class CuratorDataStructureInterface {
         return nodeToTreeMap.get(topNode);
     }
 
-    protected static Constituent getNewConstituentForSpan(String label, String viewName, TextAnnotation ta, Span span) {
+    protected static Constituent getNewConstituentForSpan(String label, String viewName,
+            TextAnnotation ta, Span span) {
         int start = ta.getTokenIdFromCharacterOffset(span.getStart());
         int end = ta.getTokenIdFromCharacterOffset(span.getEnding() - 1) + 1;
 

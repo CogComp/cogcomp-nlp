@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.algorithms;
 
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
@@ -27,9 +37,10 @@ public abstract class LevensteinDistance {
                 if (!s1.get(i - 1).equals(s2.get(j - 1)))
                     cost = 1;
 
-                dist[i][j] = MathUtilities.min(
-                        new int[]{dist[i][j - 1] + 1, dist[i - 1][j] + 1,
-                                dist[i - 1][j - 1] + cost}).getSecond();
+                dist[i][j] =
+                        MathUtilities.min(
+                                new int[] {dist[i][j - 1] + 1, dist[i - 1][j] + 1,
+                                        dist[i - 1][j - 1] + cost}).getSecond();
             }
         }
 
@@ -58,9 +69,10 @@ public abstract class LevensteinDistance {
                 if (s1.charAt(i - 1) != s2.charAt(j - 1))
                     cost = 1;
 
-                dist[i][j] = MathUtilities.min(
-                        new int[]{dist[i][j - 1] + 1, dist[i - 1][j] + 1,
-                                dist[i - 1][j - 1] + cost}).getSecond();
+                dist[i][j] =
+                        MathUtilities.min(
+                                new int[] {dist[i][j - 1] + 1, dist[i - 1][j] + 1,
+                                        dist[i - 1][j - 1] + cost}).getSecond();
             }
         }
 
@@ -84,8 +96,8 @@ public abstract class LevensteinDistance {
     }
 
     /**
-     * Given the input string s, get the string in the input array that is
-     * closest to s in terms of Levenstein distance.
+     * Given the input string s, get the string in the input array that is closest to s in terms of
+     * Levenstein distance.
      */
     public static String getNearestMatch(String s, String[] array) {
         String closest = array[0];

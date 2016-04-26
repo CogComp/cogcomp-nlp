@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments;
 
 import edu.illinois.cs.cogcomp.core.utilities.ExecutionTimer;
@@ -10,7 +20,7 @@ import java.util.concurrent.*;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Feb 1, 2009
  */
 public class ExperimentRunner<T> {
@@ -25,11 +35,11 @@ public class ExperimentRunner<T> {
         this(10000);
     }
 
-    public double runExperiment(final IExperiment<T> experiment,
-                                final List<T> trainingSet, final List<T> testSet) throws Exception {
+    public double runExperiment(final IExperiment<T> experiment, final List<T> trainingSet,
+            final List<T> testSet) throws Exception {
 
-        log.info("Running experiment: " + experiment.getDescription()
-                + ". Start time: " + (new Date()));
+        log.info("Running experiment: " + experiment.getDescription() + ". Start time: "
+                + (new Date()));
 
         ExecutionTimer timer = new ExecutionTimer();
         timer.start();
@@ -54,8 +64,8 @@ public class ExperimentRunner<T> {
 
         timer.end();
 
-        log.info("Experiment " + experiment.getDescription()
-                + " complete. End time: " + (new Date()) + ". Took " + timer.getTimeSeconds() + "s.");
+        log.info("Experiment " + experiment.getDescription() + " complete. End time: "
+                + (new Date()) + ". Took " + timer.getTimeSeconds() + "s.");
 
         return value;
     }

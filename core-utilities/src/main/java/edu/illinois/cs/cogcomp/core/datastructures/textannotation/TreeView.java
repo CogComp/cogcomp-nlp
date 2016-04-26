@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
@@ -12,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This view represents a tree structure. Use this for parse trees and
- * dependency trees. It extends {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} by providing functions to get and
- * set {@link edu.illinois.cs.cogcomp.core.datastructures.trees.Tree} objects.
+ * This view represents a tree structure. Use this for parse trees and dependency trees. It extends
+ * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} by providing functions to
+ * get and set {@link edu.illinois.cs.cogcomp.core.datastructures.trees.Tree} objects.
  *
  * @author Vivek Srikumar
  */
@@ -36,7 +46,7 @@ public class TreeView extends View {
      * Create a new TreeView with default {@link #viewGenerator} and {@link #score}.
      */
     public TreeView(String viewName, TextAnnotation text) {
-        this(viewName, viewName+"-annotator", text, 1.0);
+        this(viewName, viewName + "-annotator", text, 1.0);
     }
 
     public TreeView(String viewName, String viewGenerator, TextAnnotation text, double score) {
@@ -85,7 +95,8 @@ public class TreeView extends View {
     }
 
     /**
-     * Get the {@link edu.illinois.cs.cogcomp.core.datastructures.trees.Tree} representation of the tree for the given sentence.
+     * Get the {@link edu.illinois.cs.cogcomp.core.datastructures.trees.Tree} representation of the
+     * tree for the given sentence.
      */
     public Tree<String> getTree(int sentenceId) {
         if (this.trees == null) {
@@ -105,14 +116,9 @@ public class TreeView extends View {
     protected void setDependencyTreeSwitch(Constituent root) {
         List<Relation> rootRelations = root.getOutgoingRelations();
 
-        if (rootRelations.size() == 0) {
-            isDependencyTree = false;
-        } else {
-            if (rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING))
-                isDependencyTree = false;
-            else
-                isDependencyTree = true;
-        }
+        isDependencyTree =
+                rootRelations.size() != 0
+                        && !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
     }
 
     private void findRoots() {
@@ -157,7 +163,8 @@ public class TreeView extends View {
     public Constituent getTreeRoot(Sentence s) {
         Constituent root = null;
         Constituent sentenceConstituent = s.getSentenceConstituent();
-        IQueryable<Constituent> queryable = this.where(Queries.containedInConstituent(sentenceConstituent));
+        IQueryable<Constituent> queryable =
+                this.where(Queries.containedInConstituent(sentenceConstituent));
         for (Constituent c : queryable) {
             if (c.getIncomingRelations().size() == 0) {
                 root = c;
@@ -168,9 +175,8 @@ public class TreeView extends View {
     }
 
     /**
-     * Ugly hack to initialize the trees arraylist with the correct number
-     * elements. There should be as many trees as there are sentences. Later
-     * on, we can say trees.set(sentenceId, tree);
+     * Ugly hack to initialize the trees arraylist with the correct number elements. There should be
+     * as many trees as there are sentences. Later on, we can say trees.set(sentenceId, tree);
      */
     private void safeInitializeTrees() {
         if (this.trees == null) {
@@ -202,10 +208,10 @@ public class TreeView extends View {
 
     /**
      * Set the parse tree of the {@code sentenceId}<sup>th</sup> sentence.
-     * <p/>
-     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the
-     * dependency tree and will throw an exception if an attempt is made to set
-     * the parse tree in a view that has a dependency tree.
+     * <p>
+     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
+     * will throw an exception if an attempt is made to set the parse tree in a view that has a
+     * dependency tree.
      */
     public void setParseTree(int sentenceId, Tree<String> tree) {
         safeInitializeTrees();
@@ -239,29 +245,29 @@ public class TreeView extends View {
     }
 
     /**
-     * Set the dependency tree of hte {@code sentenceId}<sup>th</sup> sentence.
-     * Each node in the dependency tree specifies both the token and its
-     * position <b>with respect to the start of the sentence</b>, not the entire
-     * TextAnnotation.
-     * <p/>
-     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the
-     * dependency tree and will throw an exception if an attempt is made to set
-     * the dependency tree of a view that has a phrase-structure tree.
+     * Set the dependency tree of hte {@code sentenceId}<sup>th</sup> sentence. Each node in the
+     * dependency tree specifies both the token and its position <b>with respect to the start of the
+     * sentence</b>, not the entire TextAnnotation.
+     * <p>
+     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
+     * will throw an exception if an attempt is made to set the dependency tree of a view that has a
+     * phrase-structure tree.
      */
     public void setDependencyTree(int sentenceId, Tree<Pair<String, Integer>> depTree) {
         this.setDependencyTree(sentenceId, depTree, 0.0d);
     }
 
     /**
-     * Set the dependency tree for a specified sentence. Each node in the
-     * dependency tree specifies both the token and its position <b>with respect
-     * to the start of the sentence</b>, not the entire TextAnnotation.
-     * <p/>
-     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the
-     * dependency tree and will throw an exception if an attempt is made to set
-     * the dependency tree of a view that has a phrase-structure tree.
+     * Set the dependency tree for a specified sentence. Each node in the dependency tree specifies
+     * both the token and its position <b>with respect to the start of the sentence</b>, not the
+     * entire TextAnnotation.
+     * <p>
+     * <b>Note</b>: The same TreeView cannot contain both the parse tree and the dependency tree and
+     * will throw an exception if an attempt is made to set the dependency tree of a view that has a
+     * phrase-structure tree.
      */
-    public void setDependencyTree(int sentenceId, Tree<Pair<String, Integer>> depTree, double treeScore) {
+    public void setDependencyTree(int sentenceId, Tree<Pair<String, Integer>> depTree,
+            double treeScore) {
         // safeInitializeTrees();
 
         if (firstTree) {
@@ -270,12 +276,14 @@ public class TreeView extends View {
         }
 
         if (!this.isDependencyTree) {
-            throw new IllegalArgumentException("Not expecting a dependency tree, but found " + depTree);
+            throw new IllegalArgumentException("Not expecting a dependency tree, but found "
+                    + depTree);
         }
 
         int sentenceStart = getSentenceStart(sentenceId);
 
-        Constituent root = getConstituentRelativeToSentenceStart(depTree, treeScore, sentenceStart, "ROOT");
+        Constituent root =
+                getConstituentRelativeToSentenceStart(depTree, treeScore, sentenceStart, "ROOT");
 
         this.addConstituent(root);
 
@@ -291,19 +299,18 @@ public class TreeView extends View {
      * assumes that the integer in the dependency tree label is ALWAYS token offset in the TEXT,
      * i.e. is NOT sentence-relative.
      */
-    private Constituent createTreeConstituent(Tree<Pair<String, Integer>> depTree, double treeScore,
-            String constituentLabel) {
+    private Constituent createTreeConstituent(Tree<Pair<String, Integer>> depTree,
+            double treeScore, String constituentLabel) {
         Pair<String, Integer> label = depTree.getLabel();
         int start = label.getSecond();
-        int end = label.getSecond() + 1; //TODO: verify stanford at-the-end indexing!
+        int end = label.getSecond() + 1; // TODO: verify stanford at-the-end indexing!
 
         return createNewConstituent(start, end, constituentLabel, treeScore);
     }
 
 
-    private Constituent getConstituentRelativeToSentenceStart(
-            Tree<Pair<String, Integer>> depTree, double treeScore,
-            int sentenceStart, String constituentLabel) {
+    private Constituent getConstituentRelativeToSentenceStart(Tree<Pair<String, Integer>> depTree,
+            double treeScore, int sentenceStart, String constituentLabel) {
         // HACK AHEAD: Sometimes, the integer in the dependency tree label is
         // the token offset in the text. Sometimes, it is the token offset in
         // the sentence. A cheap way to test for this is to verify that the
@@ -318,21 +325,25 @@ public class TreeView extends View {
         String tokenInTree = label.getFirst();
         // HACKING THE HACK: If the tokenInTree is a -LRB- or a -RRB- replace it
         // with the standard '(' and ')' to match the sentence tokens
-        if (tokenInTree.equals("-LRB-")) tokenInTree = "(";
-        else if (tokenInTree.equals("-RRB-")) tokenInTree = ")";
+        if (tokenInTree.equals("-LRB-"))
+            tokenInTree = "(";
+        else if (tokenInTree.equals("-RRB-"))
+            tokenInTree = ")";
 
         TextAnnotation ta = this.getTextAnnotation();
         if (start < ta.size()) {
-            if (!ta.getToken(start).equals(tokenInTree)) {
+            // Add a check in case the token is at the same position in multiple sentences
+            // (see unit test for such a case)
+            if (start < sentenceStart || !ta.getToken(start).equals(tokenInTree)) {
                 start += sentenceStart;
                 end += sentenceStart;
             }
         }
-
         return createNewConstituent(start, end, constituentLabel, treeScore);
     }
 
-    protected void addDependencyTree(Tree<Pair<String, Integer>> depTree, int sentStart, Constituent parent) {
+    protected void addDependencyTree(Tree<Pair<String, Integer>> depTree, int sentStart,
+            Constituent parent) {
         String word = depTree.getLabel().getFirst();
 
         String token = this.getTextAnnotation().getToken(parent.getStartSpan());
@@ -347,8 +358,8 @@ public class TreeView extends View {
             System.err.println(parent.getTextAnnotation().toString());
             System.err.println(depTree);
 
-            throw new IllegalStateException("Expecting " + token + ", found "
-                    + word + " instead while constructing the dependency tree");
+            throw new IllegalStateException("Expecting " + token + ", found " + word
+                    + " instead while constructing the dependency tree");
         }
 
         for (int i = 0; i < depTree.getNumberOfChildren(); i++) {
@@ -356,7 +367,8 @@ public class TreeView extends View {
 
             Tree<Pair<String, Integer>> child = depTree.getChild(i);
 
-            Constituent childConstituent = getConstituentRelativeToSentenceStart(child, 1.0, sentStart, relationLabel);
+            Constituent childConstituent =
+                    getConstituentRelativeToSentenceStart(child, 1.0, sentStart, relationLabel);
 
             this.addConstituent(childConstituent);
             this.addRelation(new Relation(relationLabel, parent, childConstituent, 1.0));
@@ -366,7 +378,7 @@ public class TreeView extends View {
     }
 
     protected void addDependencyTreeWithHack(Tree<Pair<String, Integer>> depTree,
-                                             Constituent parent, int sentenceStart) {
+            Constituent parent, int sentenceStart) {
         String word = depTree.getLabel().getFirst();
 
         String token = this.getTextAnnotation().getToken(parent.getStartSpan());
@@ -381,8 +393,8 @@ public class TreeView extends View {
             System.out.println(parent.getTextAnnotation().toString());
             System.out.println(depTree);
 
-            throw new IllegalStateException("Expecting " + token + ", found "
-                    + word + " instead while constructing the dependency tree");
+            throw new IllegalStateException("Expecting " + token + ", found " + word
+                    + " instead while constructing the dependency tree");
         }
 
         for (int i = 0; i < depTree.getNumberOfChildren(); i++) {
@@ -390,8 +402,8 @@ public class TreeView extends View {
 
             Tree<Pair<String, Integer>> child = depTree.getChild(i);
 
-            Constituent childConstituent = getConstituentRelativeToSentenceStart(
-                    child, 1.0, sentenceStart, relationLabel);
+            Constituent childConstituent =
+                    getConstituentRelativeToSentenceStart(child, 1.0, sentenceStart, relationLabel);
 
             this.addConstituent(childConstituent);
             this.addRelation(new Relation(relationLabel, parent, childConstituent, 1.0));
@@ -408,8 +420,7 @@ public class TreeView extends View {
 
         if (!this.getViewName().startsWith("PARSE")) {
             throw new IllegalStateException("Cannot set a Tree<String> object "
-                    + "as the dependency tree."
-                    + " Need a Tree<String, Integer> "
+                    + "as the dependency tree." + " Need a Tree<String, Integer> "
                     + "to recover dependency token information. ");
         }
 
@@ -426,20 +437,20 @@ public class TreeView extends View {
         int rootStart = rootSpan.getFirst() + sentenceStart;
         int rootEnd = rootSpan.getSecond() + sentenceStart;
 
-        Constituent root = createNewConstituent(rootStart, rootEnd, rootLabel.getFirst(), scores.getLabel());
+        Constituent root =
+                createNewConstituent(rootStart, rootEnd, rootLabel.getFirst(), scores.getLabel());
 
         this.addConstituent(root);
 
-        addScoredParseTree(spanLabeledTree, scores, root, this
-                .getTextAnnotation().getSentence(sentenceId).getStartSpan());
+        addScoredParseTree(spanLabeledTree, scores, root,
+                this.getTextAnnotation().getSentence(sentenceId).getStartSpan());
     }
 
     /**
      * Transforms a scored input tree into the constituent-relation graph
      */
-    protected void addScoredParseTree(
-            Tree<Pair<String, IntPair>> spanLabeledTree, Tree<Double> scores,
-            Constituent root, int sentenceStartPosition) {
+    protected void addScoredParseTree(Tree<Pair<String, IntPair>> spanLabeledTree,
+            Tree<Double> scores, Constituent root, int sentenceStartPosition) {
 
         for (int childId = 0; childId < spanLabeledTree.getNumberOfChildren(); childId++) {
             Tree<Pair<String, IntPair>> child = spanLabeledTree.getChild(childId);
@@ -458,10 +469,12 @@ public class TreeView extends View {
 
             Constituent childConstituent;
             if (start == end) {
-                childConstituent = new Constituent(constituentLabel, constituentScore, this.getViewName(),
-                        this.getTextAnnotation(), -1, 0);
+                childConstituent =
+                        new Constituent(constituentLabel, constituentScore, this.getViewName(),
+                                this.getTextAnnotation(), -1, 0);
             } else {
-                childConstituent = createNewConstituent(start, end, constituentLabel, constituentScore);
+                childConstituent =
+                        createNewConstituent(start, end, constituentLabel, constituentScore);
             }
 
             this.addConstituent(childConstituent);
@@ -476,8 +489,8 @@ public class TreeView extends View {
     /**
      * Transforms an unscored input tree into the constituent-relation graph
      */
-    protected void addParseTree(Tree<Pair<String, IntPair>> spanLabeledTree,
-                                Constituent root, int sentenceStartPosition) {
+    protected void addParseTree(Tree<Pair<String, IntPair>> spanLabeledTree, Constituent root,
+            int sentenceStartPosition) {
 
         for (int childId = 0; childId < spanLabeledTree.getNumberOfChildren(); childId++) {
             Tree<Pair<String, IntPair>> child = spanLabeledTree.getChild(childId);
@@ -494,8 +507,9 @@ public class TreeView extends View {
             String constituentLabel = childLabel.getFirst();
             Constituent childConstituent;
             if (start == end) {
-                childConstituent = new Constituent(constituentLabel, 1.0,
-                        this.getViewName(), this.getTextAnnotation(), -1, 0);
+                childConstituent =
+                        new Constituent(constituentLabel, 1.0, this.getViewName(),
+                                this.getTextAnnotation(), -1, 0);
             } else {
                 childConstituent = createNewConstituent(start, end, constituentLabel, 1.0);
 
@@ -519,8 +533,8 @@ public class TreeView extends View {
     }
 
     /**
-     * This function exists to deal with annoying data conventions in the
-     * treebank column format data.
+     * This function exists to deal with annoying data conventions in the treebank column format
+     * data.
      */
     private String treebankTokenHacks(String s) {
         String token = s.replaceAll("\\\\/", "/").replaceAll("\\\\\\*", "*");
@@ -529,28 +543,48 @@ public class TreeView extends View {
     }
 
     /**
-     * Makes a new constituent spanning {@code start} to {@code end} with the
-     * label {@code constituentLabel} and score {@code constituentScore}.
+     * Makes a new constituent spanning {@code start} to {@code end} with the label
+     * {@code constituentLabel} and score {@code constituentScore}.
      */
-    private Constituent createNewConstituent(int start, int end,
-                                             String constituentLabel, double constituentScore) {
-        return new Constituent(constituentLabel, constituentScore,
-                this.getViewName(), this.getTextAnnotation(), start, end);
+    private Constituent createNewConstituent(int start, int end, String constituentLabel,
+            double constituentScore) {
+        return new Constituent(constituentLabel, constituentScore, this.getViewName(),
+                this.getTextAnnotation(), start, end);
+    }
+
+    public Tree<Constituent> getConstituentTree(int sentenceId) {
+        return getConstituentSubTree(ParseUtils.getSpanLabeledTree(getTree(sentenceId)));
+    }
+
+    private Tree<Constituent> getConstituentSubTree(Tree<Pair<String, IntPair>> parseTree) {
+        Pair<String, IntPair> rootLabel = parseTree.getLabel();
+        Constituent root = createConstituent(rootLabel);
+        Tree<Constituent> constituentTree = new Tree<>(root);
+        for (Tree<Pair<String, IntPair>> child : parseTree.getChildren()) {
+            if (child.isLeaf())
+                continue;
+            constituentTree.addSubtree(getConstituentSubTree(child));
+        }
+        return constituentTree;
+    }
+
+    private Constituent createConstituent(Pair<String, IntPair> rootLabel) {
+        IntPair span = rootLabel.getSecond();
+        return createNewConstituent(span.getFirst(), span.getSecond(), rootLabel.getFirst(), 1.0);
     }
 
     /**
-     * Finds the highest node in the parse tree that contains the input
-     * constituent. This function is a useful mechanism to get a node from the
-     * parse tree. Note that several parse helper functions (such as path
-     * helpers) require nodes from the parse view and this function could be
+     * Finds the highest node in the parse tree that contains the input constituent. This function
+     * is a useful mechanism to get a node from the parse tree. Note that several parse helper
+     * functions (such as path helpers) require nodes from the parse view and this function could be
      * used to get them.
      *
      * @param c The input constituent. This could be from any view.
      */
     @SuppressWarnings({"unchecked", "serial"})
     public Constituent getParsePhrase(Constituent c) throws Exception {
-        Predicate<Constituent> predicate = Queries.containsConstituent(c).and(
-                new Predicate<Constituent>() {
+        Predicate<Constituent> predicate =
+                Queries.containsConstituent(c).and(new Predicate<Constituent>() {
 
                     @Override
                     public Boolean transform(Constituent input) {
@@ -559,8 +593,8 @@ public class TreeView extends View {
                     }
                 });
 
-        List<Constituent> candidates = (List<Constituent>) this
-                .where(predicate).orderBy(
+        List<Constituent> candidates =
+                (List<Constituent>) this.where(predicate).orderBy(
                         TextAnnotationUtilities.constituentLengthComparator);
 
         // Find the set of all spans that have the same size as the smallest
@@ -569,26 +603,24 @@ public class TreeView extends View {
 
         // There *must* be such span
         if (spans.size() == 0)
-            throw new Exception("Cannot find any span in parse tree for `" + c + "`!\n" + this + "\n");
+            throw new Exception("Cannot find any span in parse tree for `" + c + "`!\n" + this
+                    + "\n");
 
         Constituent phrase = null;
         if (spans.size() == 1) {
             phrase = spans.iterator().next();
         } else {
 
-			/*
-             * Now, try to find the constituent among the spans that is the
-			 * highest. What is the highest span? If it has a child that is
-			 * contained in spans, then it can't be the highest. Otherwise, it
-			 * must be the highest one. This is a pain and somewhat slow. On the
-			 * bright side, this is not frequent.
-			 */
+            /*
+             * Now, try to find the constituent among the spans that is the highest. What is the
+             * highest span? If it has a child that is contained in spans, then it can't be the
+             * highest. Otherwise, it must be the highest one. This is a pain and somewhat slow. On
+             * the bright side, this is not frequent.
+             */
             for (Constituent cc : spans) {
                 boolean found = false;
                 for (Relation r : cc.getOutgoingRelations()) {
-                    if (spans.contains(r.getTarget()))
-                        break;
-                    else {
+                    if (!spans.contains(r.getTarget())) {
                         found = true;
                         break;
                     }
@@ -624,8 +656,8 @@ public class TreeView extends View {
             // a hack that deals with cases when a single word constituent is
             // not found in the parse tree because it is not a phrase.
             if (c.getStartSpan() == c.getEndSpan() - 1) {
-                candidates = (List<Constituent>) this.where(Queries
-                        .sameSpanAsConstituent(c).and(
+                candidates =
+                        (List<Constituent>) this.where(Queries.sameSpanAsConstituent(c).and(
                                 new Predicate<Constituent>() {
 
                                     @Override
@@ -645,18 +677,18 @@ public class TreeView extends View {
 
         IntPair span = null;
         for (Constituent candidate : candidates) {
-            boolean add;
+            boolean add = false;
             if (span == null) {
                 span = candidate.getSpan();
                 add = true;
             } else if (span.equals(candidate.getSpan())) {
                 add = true;
-            } else
-                break;
+            }
 
             if (add) {
                 // Don't add POS tags and words
-                if (candidate.getOutgoingRelations().size() > 0 && !ParseTreeProperties.isPreTerminal(candidate))
+                if (candidate.getOutgoingRelations().size() > 0
+                        && !ParseTreeProperties.isPreTerminal(candidate))
                     spans.add(candidate);
 
             }
@@ -665,24 +697,24 @@ public class TreeView extends View {
     }
 
     /**
-     * Checks if a constituent is a root node of a tree. It is assumed that the
-     * input constituent is a member of a TreeView.
+     * Checks if a constituent is a root node of a tree. It is assumed that the input constituent is
+     * a member of a TreeView.
      */
     public static boolean isRoot(Constituent c) {
         return c.getIncomingRelations().size() == 0;
     }
 
     /**
-     * Checks if a constituent is a leaf of a tree. It is assumed that the input
-     * constituent is a member of a TreeView.
+     * Checks if a constituent is a leaf of a tree. It is assumed that the input constituent is a
+     * member of a TreeView.
      */
     public static boolean isLeaf(Constituent c) {
         return c.getOutgoingRelations().size() == 0;
     }
 
     /**
-     * Gets the parent of a constituent. It is assumed that the input
-     * constiutent is a member of a TreeView.
+     * Gets the parent of a constituent. It is assumed that the input constiutent is a member of a
+     * TreeView.
      */
     public static Constituent getParent(Constituent constituent) {
         return constituent.getIncomingRelations().get(0).getSource();

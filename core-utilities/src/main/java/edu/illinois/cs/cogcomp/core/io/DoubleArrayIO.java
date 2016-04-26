@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.io;
 
 import org.slf4j.Logger;
@@ -17,7 +27,8 @@ public class DoubleArrayIO {
     private final static Logger log = LoggerFactory.getLogger(DoubleArrayIO.class);
 
     public static void save(double[] w, String fileName) throws FileNotFoundException, IOException {
-        BufferedOutputStream stream = new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)));
+        BufferedOutputStream stream =
+                new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(fileName)));
 
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
 

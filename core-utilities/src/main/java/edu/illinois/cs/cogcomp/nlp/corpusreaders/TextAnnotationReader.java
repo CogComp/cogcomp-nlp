@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
@@ -9,10 +19,11 @@ import java.util.Iterator;
 
 /**
  * @author Vivek Srikumar
- *         <p/>
+ *         <p>
  *         Sep 4, 2009
  */
-public abstract class TextAnnotationReader implements Iterable<TextAnnotation>, IResetableIterator<TextAnnotation> {
+public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
+        IResetableIterator<TextAnnotation> {
 
     private static Logger log = LoggerFactory.getLogger(TextAnnotationReader.class);
 
@@ -50,7 +61,6 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>, 
 
     protected abstract TextAnnotation makeTextAnnotation() throws Exception;
 
-    public void remove() {
-    }
+    public void remove() {}
 
 }

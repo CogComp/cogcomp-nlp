@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
@@ -9,14 +19,17 @@ import edu.illinois.cs.cogcomp.core.utilities.Table;
 import java.util.*;
 
 /**
- * A class for recording results of experiments. This can be used to generate a
- * result table with one row per label and a confusion table.
+ * A class for recording results of experiments. This can be used to generate a result table with
+ * one row per label and a confusion table.
  *
  * @author Vivek Srikumar
  */
 public class ClassificationTester {
 
+    // average statistics
     EvaluationRecord evalRecord;
+
+    // per-label statistics
     Map<String, EvaluationRecord> labelWiseRecords;
     Counter<String> counter;
 
@@ -72,7 +85,6 @@ public class ClassificationTester {
         record.incrementCorrect(correctCount);
         record.incrementGold(goldCount);
         record.incrementPredicted(predictedCount);
-
     }
 
     public void record(String goldLabel, String predictedLabel) {
@@ -151,8 +163,42 @@ public class ClassificationTester {
         return new Pair<>(table, sortSet);
     }
 
-    public double getAverageF1() {
+    // Micro statistics, returns the F1, P and R for all instances of any labels
+    public double getMicroF1() {
         return evalRecord.getF1();
+    }
+
+    public double getMicroPrecision() {
+        return evalRecord.getPrecision();
+    }
+
+    public double getMicroRecall() {
+        return evalRecord.getRecall();
+    }
+
+    // Average of macro statistics, returns average of the F1, P and R across different labels
+    public double getMacroF1() {
+        double sumF1 = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumF1 += e.getF1();
+        }
+        return sumF1 / labelWiseRecords.size();
+    }
+
+    public double getMacroPrecision() {
+        double sumPrecision = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumPrecision += e.getPrecision();
+        }
+        return sumPrecision / labelWiseRecords.size();
+    }
+
+    public double getMacroRecall() {
+        double sumRecall = 0;
+        for(EvaluationRecord e : labelWiseRecords.values()) {
+            sumRecall += e.getRecall();
+        }
+        return sumRecall / labelWiseRecords.size();
     }
 
     public Table getPerformanceTable() {
@@ -160,13 +206,12 @@ public class ClassificationTester {
     }
 
     public Table getPerformanceTable(boolean printCounts) {
-        return getPerformanceTable(printCounts, labelWiseRecords, evalRecord,
-                significance);
+        return getPerformanceTable(printCounts, labelWiseRecords, evalRecord, significance);
     }
 
     private Table getPerformanceTable(boolean printCounts,
-                                      Map<String, EvaluationRecord> labelWiseRecords,
-                                      EvaluationRecord evalRecord, Map<String, ShufflingBasedStatisticalSignificance> significance) {
+            Map<String, EvaluationRecord> labelWiseRecords, EvaluationRecord evalRecord,
+            Map<String, ShufflingBasedStatisticalSignificance> significance) {
         Table table = new Table();
         table.addColumn("Label");
 
@@ -202,8 +247,8 @@ public class ClassificationTester {
         return table;
     }
 
-    private String[] getRow(String label, EvaluationRecord record,
-                            boolean printCounts, Map<String, ShufflingBasedStatisticalSignificance> significance) {
+    private String[] getRow(String label, EvaluationRecord record, boolean printCounts,
+            Map<String, ShufflingBasedStatisticalSignificance> significance) {
 
         String c2;
         String c3;
@@ -225,24 +270,24 @@ public class ClassificationTester {
 
             assert sig != null;
 
-            prec = attachSignificance(record.getPrecision(),
-                    sig.precisionSignificance(), sig.precisionSign());
+            prec =
+                    attachSignificance(record.getPrecision(), sig.precisionSignificance(),
+                            sig.precisionSign());
 
-            rec = attachSignificance(record.getRecall(),
-                    sig.recallSignificance(), sig.recallSign());
+            rec =
+                    attachSignificance(record.getRecall(), sig.recallSignificance(),
+                            sig.recallSign());
 
-            f1 = attachSignificance(record.getF1(), sig.f1Significance(),
-                    sig.f1Sign());
+            f1 = attachSignificance(record.getF1(), sig.f1Significance(), sig.f1Sign());
 
         } else {
-            prec = StringUtils.getFormattedString(record.getPrecision() * 100,
-                    2);
+            prec = StringUtils.getFormattedString(record.getPrecision() * 100, 2);
             rec = StringUtils.getFormattedString(record.getRecall() * 100, 2);
             f1 = StringUtils.getFormattedString(record.getF1() * 100, 2);
 
         }
 
-        return new String[]{label, c2, c3, c4, prec, rec, f1};
+        return new String[] {label, c2, c3, c4, prec, rec, f1};
     }
 
     private String attachSignificance(double e, double d, double sign) {
@@ -264,13 +309,9 @@ public class ClassificationTester {
         return out + sig;
     }
 
-    public double getAverageAccuracy() {
-        return evalRecord.getPrecision();
-    }
-
     /**
-     * Statistical significance information. Takes map from label to p-values
-     * for {P, R, F} for that label.
+     * Statistical significance information. Takes map from label to p-values for {P, R, F} for that
+     * label.
      */
     public void setSignificanceInfo(Map<String, ShufflingBasedStatisticalSignificance> significance) {
         this.significance = significance;

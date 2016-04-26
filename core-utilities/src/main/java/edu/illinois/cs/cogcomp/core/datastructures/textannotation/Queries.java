@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
@@ -6,8 +16,8 @@ import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import java.util.*;
 
 /**
- * This contains a collection of queries that can be passed to the where and
- * select clauses of an {@link IQueryable} over {@link Constituent}s like the
+ * This contains a collection of queries that can be passed to the where and select clauses of an
+ * {@link IQueryable} over {@link Constituent}s like the
  * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} class.
  *
  * @author Vivek Srikumar
@@ -16,12 +26,11 @@ import java.util.*;
 public abstract class Queries {
 
     /**
-     * Returns a {@link edu.illinois.cs.cogcomp.core.transformers.Predicate} that will check if the argument to the
-     * predicate contains the argument to this function.
+     * Returns a {@link edu.illinois.cs.cogcomp.core.transformers.Predicate} that will check if the
+     * argument to the predicate contains the argument to this function.
      *
-     * @param c The {@link Constituent} that should be contained in the
-     *          argument to the Predicate for the predicate to return
-     *          <code>true</code>
+     * @param c The {@link Constituent} that should be contained in the argument to the Predicate
+     *        for the predicate to return <code>true</code>
      * @return A Predicate
      */
     public static Predicate<Constituent> containsConstituent(final Constituent c) {
@@ -33,8 +42,7 @@ public abstract class Queries {
         };
     }
 
-    public static Predicate<Constituent> sameSpanAsConstituent(
-            final Constituent c) {
+    public static Predicate<Constituent> sameSpanAsConstituent(final Constituent c) {
         return new Predicate<Constituent>() {
             public Boolean transform(final Constituent input) {
                 return input.getStartSpan() == c.getStartSpan()
@@ -63,8 +71,7 @@ public abstract class Queries {
         };
     }
 
-    public static Predicate<Constituent> containedInConstituent(
-            final Constituent c) {
+    public static Predicate<Constituent> containedInConstituent(final Constituent c) {
         return new Predicate<Constituent>() {
             public Boolean transform(final Constituent input) {
                 return c.getStartSpan() <= input.getStartSpan()
@@ -73,26 +80,24 @@ public abstract class Queries {
         };
     }
 
-    public static Predicate<Constituent> containedInConstituentExclusive(
-            final Constituent c) {
+    public static Predicate<Constituent> containedInConstituentExclusive(final Constituent c) {
         return new Predicate<Constituent>() {
             public Boolean transform(final Constituent input) {
-                return (c.getStartSpan() <= input.getStartSpan() && c
-                        .getEndSpan() >= input.getEndSpan())
-                        && (c.getStartSpan() != input.getStartSpan() || c
-                        .getEndSpan() != input.getEndSpan());
+                return (c.getStartSpan() <= input.getStartSpan() && c.getEndSpan() >= input
+                        .getEndSpan())
+                        && (c.getStartSpan() != input.getStartSpan() || c.getEndSpan() != input
+                                .getEndSpan());
             }
         };
     }
 
-    public static Predicate<Constituent> containsConstituentExclusive(
-            final Constituent c) {
+    public static Predicate<Constituent> containsConstituentExclusive(final Constituent c) {
         return new Predicate<Constituent>() {
             public Boolean transform(final Constituent input) {
-                return (input.getStartSpan() <= c.getStartSpan() && input
-                        .getEndSpan() >= c.getEndSpan())
-                        && (c.getStartSpan() != input.getStartSpan() || c
-                        .getEndSpan() != input.getEndSpan());
+                return (input.getStartSpan() <= c.getStartSpan() && input.getEndSpan() >= c
+                        .getEndSpan())
+                        && (c.getStartSpan() != input.getStartSpan() || c.getEndSpan() != input
+                                .getEndSpan());
             }
         };
     }
@@ -134,10 +139,8 @@ public abstract class Queries {
         return hasOverlap(c).negate();
     }
 
-    public static Predicate<Constituent> exclusivelyOverlaps(
-            Constituent argument) {
-        return Queries.hasOverlap(argument)
-                .and(Queries.containedInConstituent(argument).negate())
+    public static Predicate<Constituent> exclusivelyOverlaps(Constituent argument) {
+        return Queries.hasOverlap(argument).and(Queries.containedInConstituent(argument).negate())
                 .and(Queries.containsConstituent(argument).negate())
                 .and(Queries.sameSpanAsConstituent(argument).negate());
     }
@@ -172,8 +175,7 @@ public abstract class Queries {
         };
     }
 
-    public static Predicate<Constituent> nThChildOf(final Constituent parent,
-                                                    final int n) {
+    public static Predicate<Constituent> nThChildOf(final Constituent parent, final int n) {
         return new Predicate<Constituent>() {
 
             @Override

@@ -5,39 +5,41 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>${cogcompversion}</version>
+        <version>3.0.34</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>edison</artifactId>
+    <artifactId>illinois-edison</artifactId>
 
     <dependencies>
-
-        <dependency>
-            <groupId>net.didion</groupId>
-            <artifactId>jwnl</artifactId>
-            <version>1.4_rc3</version>
-        </dependency>
-
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>${cogcompversion}</version>
+            <version>3.0.34</version>
         </dependency>
-
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-caching-curator</artifactId>
-            <version>2.1.1</version>
+            <artifactId>illinois-corpusreaders</artifactId>
+            <version>3.0.34</version>
+        </dependency>
+        <!-- Used only in utilities.CreateTestTAResource -->
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-curator</artifactId>
+            <version>3.0.34</version>
             <scope>test</scope>
         </dependency>
-
+        <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.12</version>
         </dependency>
-
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+            <!--<artifactId>jwnl-prime</artifactId>-->
+            <!--<version>1.0.1</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.tartarus</groupId>
             <artifactId>snowball</artifactId>
@@ -45,4 +47,27 @@
         </dependency>
     </dependencies>
 
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <configuration>
+                    <tags>
+                        <!-- Tag to allow the definition of keywords describing FeatureExtractors.
+                          If the extractor is a reference (i.e. was used in a CogComp project)
+                          then one of the keywords must be the name of the project -->
+                        <tag>
+                            <name>keywords</name>
+                            <!-- Tag is allowed to appear in types (classes, interfaces) and fields -->
+                            <placement>tf</placement>
+                            <head>Keywords:</head>
+                        </tag>
+                    </tags>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
