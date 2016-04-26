@@ -115,11 +115,10 @@ of annotations over some text.
     String corpus = "2001_ODYSSEY"
     String textId2 = "002";
     
-    List<String[]> tokenizedSentences = Arrays.asList(
-                 ["Good",  "afternoon", ",", "gentlemen", "."], 
-                 ["I", "am", "a", "HAL-9000", "computer", "."],
-                 ["I", "was", "born", "in", "Urbana"]);
-                 
+	String[] sentence1 = {"Good",  "afternoon", ",", "gentlemen", "."};
+    String[] sentence2 = {"I", "am", "a", "HAL-9000", "computer", "."};
+    
+	List<String[]> tokenizedSentences = Arrays.asList(sentence1, sentence2);
     TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
     											corpus, textId2, tokenizedSentences);
     ```
@@ -319,6 +318,7 @@ and then create a `TextAnnotation` component and add the `View`s you need:
 ```java 
 TextAnnotation ta = annotator.createBasicTextAnnotation(corpusID, taID, "Some text that I want to process.");
 ```
+
 
 Of course the real fun begins now! Using `AnnotatorService` you can add different annotation 
 Views using their canonical name:
