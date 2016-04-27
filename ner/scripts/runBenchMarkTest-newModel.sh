@@ -35,4 +35,4 @@ configFile="config/ontonotes.config"
 # Classpath
 cpath="target/classes:target/dependency/*"
 
-java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -test ${test} -c ${configFile}
+java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test ${test} -c ${configFile}

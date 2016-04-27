@@ -18,4 +18,4 @@ configFile="config/conll.config"
 # Classpath
 cpath="target/classes:target/dependency/*"
 
-java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -test ${test} -r ${configFile}
+java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test ${test} -r ${configFile}
