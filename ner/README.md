@@ -36,8 +36,7 @@ using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner
 To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONNLL`/`ViewNames.NER_ONTONOTES`
 
 ```
-NERAnnotator annotator = new NERAnnotator(new ResourceManager(new Properties()),
-											ViewNames.NER_CONLL);											
+NERAnnotator annotator = new NERAnnotator(new ResourceManager(new Properties()), ViewNames.NER_CONLL);											
 ```
 
 You can easily incorporate the Illinois Named Entity Recognizer into
