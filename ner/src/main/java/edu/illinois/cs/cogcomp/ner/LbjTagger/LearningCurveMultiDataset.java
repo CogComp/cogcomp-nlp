@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -23,7 +33,7 @@ public class LearningCurveMultiDataset {
 
     /**
      * train a model with the specified inputs, evaluate with the specified test data
-     * <p/>
+     * <p>
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
      */
     public static void getLearningCurve(int fixedNumIterations, String trainDataPath,
@@ -45,7 +55,7 @@ public class LearningCurveMultiDataset {
 
     /**
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
-     * <p/>
+     * <p>
      * NB: assuming column format
      */
     public static void getLearningCurve(Vector<Data> trainDataSet, Vector<Data> testDataSet,

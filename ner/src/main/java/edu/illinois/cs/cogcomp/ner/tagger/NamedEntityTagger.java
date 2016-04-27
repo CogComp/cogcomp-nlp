@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.ner.tagger;
 
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
@@ -29,7 +39,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * to standard out.
  * <p>
  * 
- * <pre>
+ * {@code
  * Command Line Options:
  * -f <file name>: the input file to tokenize
  * -d <directory name> : the name of a directory containing input files.
@@ -38,7 +48,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * -c <file name> : the name of the configuration file.
  * -t <number of threads> : Allows users to specify the number of threads to use, by default there will be one
  *    thread for every core on the machine.
- * </pre>
+ * }
  */
 public class NamedEntityTagger {
 

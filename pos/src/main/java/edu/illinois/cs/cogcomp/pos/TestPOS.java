@@ -1,5 +1,16 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pos;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
 import edu.illinois.cs.cogcomp.pos.lbjava.*;
@@ -41,12 +52,17 @@ public class TestPOS {
      **/
     public static void main(String[] args) {
         // Parse the command line
-        if (args.length != 1) {
-            System.err.println("usage: java edu.illinois.cs.cogcomp.lbj.pos.TestPOS <text file>");
-            System.exit(1);
-        }
+//        if (args.length != 1) {
+//            System.err.println("usage: java edu.illinois.cs.cogcomp.lbj.pos.TestPOS <text file>");
+//            System.exit(1);
+//        }
 
-        String testingFile = args[0];
+        //String testingFile = args[0];
+        ResourceManager rm = new POSConfigurator().getDefaultConfig();
+
+        String testingFile = rm.getString("testData");
+
+
 
         TestDiscrete.testDiscrete(new TestDiscrete(), new POSTagger(), new POSLabel(),
                 new POSBracketToToken(testingFile), true, 0);

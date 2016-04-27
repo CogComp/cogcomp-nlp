@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import java.util.LinkedHashSet;
@@ -18,7 +28,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 /**
  * Feature extractor that senses the parts of speech of the four context words immediately
  * surrounding the target word (two before and two after).
- * 
+ *
+ * @keywords pos-tagger, window
  * @author Xinbo Wu
  */
 public class POSWindow implements FeatureExtractor {

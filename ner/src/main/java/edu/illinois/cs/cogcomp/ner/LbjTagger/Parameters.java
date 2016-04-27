@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -24,7 +34,7 @@ import java.util.*;
  * This class might more accurately be called 'ParameterLoader'. This is the class that has
  * functionality for populating {@link ParametersForLbjCode}, which actually contains the parameters
  * used throughout the program.
- * <p/>
+ * <p>
  * Rewritten by Stephen Mayhew, Jan 2013
  */
 public class Parameters {
@@ -269,7 +279,6 @@ public class Parameters {
                     int maxPhraseLength = 5;
                     if (rm.containsKey(NerBaseConfigurator.PHRASE_LENGTH))
                         maxPhraseLength = rm.getInt(NerBaseConfigurator.PHRASE_LENGTH);
-                    logger.info("Loading TreeGazetteers at length " + maxPhraseLength);
                     GazetteersFactory.init(maxPhraseLength, pathToGazetteersLists, false);
                 }
             }

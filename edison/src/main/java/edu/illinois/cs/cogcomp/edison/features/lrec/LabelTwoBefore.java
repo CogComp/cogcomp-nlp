@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import java.util.LinkedHashSet;
@@ -17,7 +27,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 
 /**
  * This feature extractor extracts part of speeches of the words two before each word in a span.
- * 
+ *
+ * @keywords pos-tagger, before
  * @author Xinbo Wu
  */
 public class LabelTwoBefore implements FeatureExtractor {

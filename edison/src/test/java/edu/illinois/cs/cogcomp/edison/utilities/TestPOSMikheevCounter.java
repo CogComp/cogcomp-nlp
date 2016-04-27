@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
 import java.io.BufferedWriter;
@@ -42,7 +52,7 @@ public class TestPOSMikheevCounter extends TestCase {
         System.out.println(str);
 
         try {
-            File file = new File("src\\test\\resources\\outputFiles\\TestMikheevCounterOutput");
+            File file = new File("src/test/resources/outputFiles/TestMikheevCounterOutput");
 
             if (!file.exists()) {
                 file.createNewFile();
