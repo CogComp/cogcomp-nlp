@@ -310,7 +310,7 @@ Below is an example of how to use `IllinoisPipelineFactory` to create new annota
 ```java 
 AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
 // Or alternatively to use the curator: 
-// AnnotatorService annotator = CuratorPipeline.buildCurator();
+// AnnotatorService annotator = CuratorFactory.buildCuratorClient();
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:
