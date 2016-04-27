@@ -19,14 +19,19 @@ Assuming you have plain text files you want to process in directory `input/`, yo
 in a new directory (suppose you create `output/`) by navigating to the root directory and running the command:
 
 ```bash
-java -Xmx4g -classpath "dist/*:lib/*:models/*" -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -annotate input output config/ner.properties"
+java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate input output config/ner.properties"
 ```
 
-This will annotate with 4 NER categories: PER, LOC, ORG, and MISC.  If you change the `modelName` parameter
+This will annotate with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you change the `modelName` parameter
 of `config/ner.properties` to **NER_ONTONOTES**, your input text will be annotated with 18 labels. In both cases, 
 each input file will be annotated in bracket format and the result written to a file with the same name 
 under the directory `output/`.
 
+Alternatively, you can run the `runNER.sh` script, which allows you to tag input files, or to tag text typed into the console.
+
+```bash
+$ ./scripts/runNER.sh
+```
 
 ### PROGRAMMATIC USE
 
@@ -57,11 +62,11 @@ your Maven project by adding the following dependencies to your pom.xml file:
 ### PREREQUISITES
 
 - To run the Named entity tagger, you will need Java installed on your
-system (see [https://www.java.com/en/download/help/download_options.xml](https://www.java.com/en/download/help/download_options.xml)).
+system (see [here](https://www.java.com/en/download/help/download_options.xml)).
 - If you are running it on Windows, you may need to set path variables 
-(see [http://docs.oracle.com/javase/tutorial/essential/environment/paths.html](http://docs.oracle.com/javase/tutorial/essential/environment/paths.html)).
+(see [here](http://docs.oracle.com/javase/tutorial/essential/environment/paths.html)).
 - To compile the code you will need the Maven project management tool. 
-(see [http://maven.apache.org/download.cgi](http://maven.apache.org/download.cgi))
+(see [here](http://maven.apache.org/download.cgi))
 
 ### COMPILATION
 
@@ -107,7 +112,7 @@ Scripts are provided by way of example: [train.sh](scripts/train.sh). There is n
 The script [train.sh](scripts/train.sh) runs a model like this below:
 
 ```bash
-java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -train <training-file> -test  <development-set-file> <files-format> <force-sentence-splitting-on-newlines> <config-file>  
+java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train <training-file> -test  <development-set-file> <files-format> <force-sentence-splitting-on-newlines> <config-file>
 ```
 
 Where the parameters are:
@@ -125,7 +130,7 @@ Where the parameters are:
 
 Sample training command:
 ```bash
-java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -train Data/GoldData/Reuters/train.brackets.gold -test  Data/GoldData/Reuters/test.brackets.gold -r true Config/allLayer1.config 
+java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train Data/GoldData/Reuters/train.brackets.gold -test  Data/GoldData/Reuters/test.brackets.gold -r true Config/allLayer1.config
 ```
 Where do you get the data from? Unfortunately, the data that was used to train 
 the system is copyrighted. So you need to obtain your own data.
@@ -147,7 +152,7 @@ you have an appropriate license. This data is annotated with 18 different labels
 
 A note on the training procedure:
 The config file specifies where to put the models. (To understand the structure 
-of the config files, take a look at the code in [LbjTagger.Parameters.java](src/main/java/edu/illinois/cs/cogcomp/LbjNer/LbjTagger/Parameters.java), or 
+of the config files, take a look at the code in [LbjTagger.Parameters.java](src/main/java/edu/illinois/cs/cogcomp/ner/LbjTagger/Parameters.java), or
 look at [README-CONFIG](config/README-CONFIG)). Here are sample lines from a config file that 
 specify the paths for the models:
 
