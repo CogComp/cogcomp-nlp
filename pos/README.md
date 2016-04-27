@@ -44,7 +44,7 @@ Here is how you can add maven dependencies into your program:
 
 In general, the best way to use the POS Tagger is through the [`POSAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/pos/POSAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
-```
+```java
 	POSAnnotator posannotator = new POSAnnotator();
 	posannotator.addView(ta);
 ```
