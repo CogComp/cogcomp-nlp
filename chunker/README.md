@@ -46,22 +46,22 @@ Here is how you can add maven dependencies into your program:
 
 In general, the best way to use the Chunker is through the [`ChunkerAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
-If you would prefer to skip the use of our core data structures, the [`TrainedChunker class`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/TrainedChunker.java) can be used, allowing for sentences to be tagged.
+```
+	ChunkerAnnotator chunker  = new ChunkerAnnotator();
+	chunker.addView(ta);
+```
 
 ## Models
-When using either `ChunkerAnnotator` or `TrainedChunker`, the models are loaded automatically from one of the following 
-two locations, which are checked in order:
-* First, the directory specified in the `Property` [`ChunkerConfigurator.MODEL_PATH`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerConfigurator.java)
-* If the files are not found in this directory, the classpath will be checked (this will result in loading the files 
-from the Maven repository)
+When using`ChunkerAnnotator`, the models are loaded automatically from the directory specified in the `Property` [`ChunkerConfigurator.MODEL_DIR_PATH`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerConfigurator.java)
 
 Thus, to use your own models, simply place them in this directory and they will be loaded; otherwise, the model version 
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
+Note : To use your own models, exclude the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml`.
+
 ## Training
 The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to 
 train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level 
-of the Chunker sub-project using the following command, where `[MODEL PATH]` is the directory where the model will be written and 
-optional `[TRAINING DATA PATH]` is the file containing the training data. If the `[TRAINING DATA PATH]` is skipped, the class tries to load the training data from a pre-specified path.
+of the Chunker sub-project using the following command.
 
-    mvn exec:java -Dexec.mainClass="edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain" -Dexec.args="[MODEL PATH] [TRAINING DATA PATH]"
+    mvn exec:java -Dexec.mainClass="edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain"
