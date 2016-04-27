@@ -35,7 +35,7 @@ using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner
 
 To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONLL`/`ViewNames.NER_ONTONOTES`. (CoNLL Format NER used in example below)
 
-```
+```java
 NERAnnotator CoNLLannotator = new NERAnnotator(new ResourceManager(new Properties()), ViewNames.NER_CONLL);
 
 CoNLLannotator.addView(ta);											
