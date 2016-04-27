@@ -33,10 +33,12 @@ under the directory `output/`.
 If you want to use the NER tagger programmatically, we recommend
 using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner/NERAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
-To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONNLL`/`ViewNames.NER_ONTONOTES`
+To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONLL`/`ViewNames.NER_ONTONOTES`. (CoNLL Format NER used in example below)
 
 ```
-NERAnnotator annotator = new NERAnnotator(new ResourceManager(new Properties()), ViewNames.NER_CONLL);											
+NERAnnotator CoNLLannotator = new NERAnnotator(new ResourceManager(new Properties()), ViewNames.NER_CONLL);
+
+CoNLLannotator.addView(ta);											
 ```
 
 You can easily incorporate the Illinois Named Entity Recognizer into
