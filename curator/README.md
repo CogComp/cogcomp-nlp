@@ -8,10 +8,9 @@ application. This package contains code for interacting with Curator, using the 
 To use, first create a `CuratorAnnotatorService` to use the pipeline: 
 
 ```java 
-ResourceManager rm = new ResourceManager("config/project.properties")
-AnnotatorService annotator = CuratorPipeline.buildCurator(rm);
+AnnotatorService annotator = CuratorFactory.buildCuratorClient();
 // Or alternatively to use the pipeline:
-// AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline(rm);
+// AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:
