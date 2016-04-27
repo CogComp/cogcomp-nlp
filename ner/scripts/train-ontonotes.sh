@@ -13,7 +13,7 @@ configFile="config/ontonotes.config"
 # Classpath
 cpath="target/classes:target/dependency/*:data/NewModels/ontonotes/*:config"
 
-CMD="java -classpath  ${cpath} -Xmx20g edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -train $train -test $test -c $configFile"
+CMD="java -classpath  ${cpath} -Xmx20g edu.illinois.cs.cogcomp.ner.NerTagger -train $train -test $test -c $configFile"
 
 echo "$0: running command '$CMD'..."
 

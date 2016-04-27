@@ -12,4 +12,4 @@ outputfile="test/SampleOutputs/NERTest.conll.tagged.txt"
 configfile="config/conll.config"
 #configfile="config/ontonotes.config"
 
-mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.LbjNer.LbjTagger.NerTagger -Dexec.args="-annotate ${inputfile} ${outputfile} ${configfile}"
+mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.ner.NerTagger -Dexec.args="-annotate ${inputfile} ${outputfile} ${configfile}"
