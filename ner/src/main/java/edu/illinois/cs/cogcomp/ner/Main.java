@@ -83,7 +83,7 @@ public class Main extends AbstractMain {
     private ResultProcessor rp = null;
     
     /** the resource manager contains all the properties. */
-    private ResourceManager resourceManager = null;
+    private ResourceManager resourceManager;
     
     /**
      * The only argument we take is the config file.
@@ -94,7 +94,7 @@ public class Main extends AbstractMain {
     }
 
     /**
-     * The only argument is {@code -config <config_file_name>}. This method will capture the config 
+     * The only argument is {@code <config_file_name>}. This method will capture the config
      * file name, and initialize the system when it does.
      * @throws IOException 
      * @see edu.illinois.cs.cogcomp.ner.AbstractMain#processArgument(java.lang.String[], int)
@@ -117,8 +117,8 @@ public class Main extends AbstractMain {
     @Override
     protected String getCommandSyntax() {
         return 
-            "java -Xms2g edu.illinois.cs.cogcomp.ner.Main -config <config_file_name>\n" +
-            "    -config <config_file_name> : specify the location of a configuration file.";
+            "java -Xms2g edu.illinois.cs.cogcomp.ner.Main <config_file_name>\n" +
+            "    <config_file_name> : specify the location of a configuration file.";
     }
     
     /**
@@ -280,7 +280,7 @@ public class Main extends AbstractMain {
                                 + "3 - annotate "+indesc+", "+outdesc+".\n"
                                 + "4 - show and modify configuration parameters.\n"
                                 + "q - exit the application.\n"
-                                + "Choose from above options:");
+                                + "Choose from above options: ");
                 break;
             case ENTER_IN:
                 System.out.print("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
@@ -291,7 +291,7 @@ public class Main extends AbstractMain {
                 break;
 
             case ENTER_STRING:
-                System.out.print(":");
+                System.out.print(": ");
                 break;
                 
             case SHOW_CONFIG:
