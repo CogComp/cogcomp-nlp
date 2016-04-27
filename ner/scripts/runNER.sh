@@ -6,21 +6,26 @@
 # to set input and output directories or files, or to enable input and output
 # to standard input and standard output. You can also change or set any
 # property.
-DATADIR=benchmarkData
+#
+# Usage:
+#  $ ./scripts/runNER.sh <optional config file>
+#
+# If no config file is specified, default parameters are used.
+# One config file can be found in config/ner.properties
+
 DIST=target
 LIB=target/dependency
-
+mvn compile
 # ensure the binary is built.
-if [ ! -e $DIST ]; then 
-    mvn install -DskipTests=true
+if [ `ls $DIST/*jar | wc -l` -eq 0 ]; then
+    mvn -DskipTests=true package
 fi
+
 if [ ! -e $LIB ]; then
     mvn dependency:copy-dependencies
 fi
 
-# Classpath
-cpath=".:target/test-classes"
-
+# Build classpath
 for JAR in `ls $DIST/*jar`; do
     cpath="$cpath:$JAR"
 done
