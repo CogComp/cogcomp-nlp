@@ -46,7 +46,7 @@ Here is how you can add maven dependencies into your program:
 
 In general, the best way to use the Chunker is through the [`ChunkerAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
-```
+```java
 	ChunkerAnnotator chunker  = new ChunkerAnnotator();
 	chunker.addView(ta);
 ```
