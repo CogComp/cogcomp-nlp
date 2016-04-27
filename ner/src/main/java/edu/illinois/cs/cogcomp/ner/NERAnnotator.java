@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * Generate NER annotations using the Annotator API.
@@ -61,6 +62,9 @@ public class NERAnnotator extends Annotator {
 
     }
 
+    public NERAnnotator(String viewName) throws IOException {
+        this(new ResourceManager(new Properties()), viewName);
+    }
 
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
         super(viewName, REQUIRED_VIEWS);
