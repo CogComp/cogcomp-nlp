@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
@@ -19,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Properties;
 
 /**
  * Generate NER annotations using the Annotator API.
@@ -49,6 +60,10 @@ public class NERAnnotator extends Annotator {
     public NERAnnotator(String nonDefaultConfigValues, String viewName) throws IOException {
         this(new ResourceManager(nonDefaultConfigValues), viewName);
 
+    }
+
+    public NERAnnotator(String viewName) throws IOException {
+        this(new ResourceManager(new Properties()), viewName);
     }
 
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {

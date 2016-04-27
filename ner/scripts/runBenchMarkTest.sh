@@ -1,34 +1,49 @@
 #!/bin/sh
-# This is the script that will take as input a testfile / a directory
-# with many test files that have gold standard annotations for NER,
-# predict NER annotations for the test files using the prelearned model
-# in the package and then evaluate the result with respect to the gold
-# annotations. On CoNLL test set, using this script will give you F1
-# score close to 90.5
 
-# !!! IMPORTANT !!! 
-# -- you need to set the variable 'test' below to point to some 
-#    gold-standard data in column format. We include a single file
-#    from the CoNLL corpus as a way to allow you to run a 
-#    sanity check, but this is not a full evaluation. 
+###
+# run a benchmark test class that evaluates the current NER models on a 
+#   range of corpora.
 
-#mvn lbj:clean
-#mvn lbj:compile
-#mvn compile
-#mvn dependency:copy-dependencies
-
-#test="/shared/corpora/corporaWeb/written/eng/NER/Data/GoldData/Ontonotes/ColumnFormat/Test"
-test="/shared/corpora/corporaWeb/written/eng/NER/Data/GoldData/Reuters/ColumnFormatDocumentsSplit/Test"
-#test="/Users/redman/Projects/IllinoisNER/shelley/data/GoldData/Ontonotes/ColumnFormat/Test"
+# you need to create this directory, which must contain the benchmark 
+# configuration and data:
+#  <your-benchmark-dir>
+#       |_<data-set-1>
+#             |
+#             |_config/
+#             |_train/
+#             |_test/
+# 
+# config can contain multiple configurations
+# for each, a benchmark test will be conducted by training on the data in
+#     train/, and evaluating on the data in test/.
 
 
-#configFile="config/ner-ontonotes.properties"
-configFile="config/ner.properties"
+DATADIR=benchmarkData
+DIST=target
+LIB=target/dependency
+
+if [ ! -e $DIST ]; then 
+    mvn install -DskipTests=true
+fi
+
+if [ ! -e $LIB ]; then
+    mvn dependency:copy-dependencies
+fi
+
+
 
 # Classpath
-cpath="target/classes:target/dependency/*"
+cpath=".:target/test-classes"
 
-CMD="java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerTagger -test ${test} -c ${configFile}"
+for JAR in `ls $DIST/*jar`; do
+    cpath="$cpath:$JAR"
+done
+
+for JAR in `ls $LIB/*jar`; do
+    cpath="$cpath:$JAR"
+done
+
+CMD="java -classpath  ${cpath} -Xmx8g edu.illinois.cs.cogcomp.ner.NerBenchmark -training $DATADIR"
 
 echo "$0: running command '$CMD'..."
 

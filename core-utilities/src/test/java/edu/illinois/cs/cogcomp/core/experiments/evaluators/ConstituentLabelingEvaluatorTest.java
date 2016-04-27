@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -32,8 +42,8 @@ public class ConstituentLabelingEvaluatorTest {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, gold);
         evaluator.evaluate(splittingTester);
-        assertEquals(1.0, splittingTester.getAverageF1(), 0);
-        assertEquals(1.0, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(1.0, splittingTester.getMicroF1(), 0);
+        assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
 
     @Test
@@ -41,7 +51,7 @@ public class ConstituentLabelingEvaluatorTest {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertEquals(splittingTester.getAverageF1(), 0.57, 0.01);
-        assertEquals(0.5, splittingTester.getAverageAccuracy(), 0);
+        assertEquals(splittingTester.getMicroF1(), 0.57, 0.01);
+        assertEquals(0.5, splittingTester.getMicroPrecision(), 0);
     }
 }

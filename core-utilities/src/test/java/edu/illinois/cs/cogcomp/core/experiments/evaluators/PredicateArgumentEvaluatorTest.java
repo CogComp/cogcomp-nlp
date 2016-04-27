@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -36,14 +46,14 @@ public class PredicateArgumentEvaluatorTest {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluateSense(senseTester);
-        assertEquals(1.0, senseTester.getAverageF1(), 0);
+        assertEquals(1.0, senseTester.getMicroF1(), 0);
 
         // Override the sense
         predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluateSense(senseTester);
-        assertEquals(0.5, senseTester.getAverageF1(), 0);
+        assertEquals(0.5, senseTester.getMicroF1(), 0);
     }
 
     @Test
@@ -51,7 +61,7 @@ public class PredicateArgumentEvaluatorTest {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(argLabelTester);
-        assertEquals(1.0, argLabelTester.getAverageF1(), 0);
+        assertEquals(1.0, argLabelTester.getMicroF1(), 0);
 
         // Add a wrong prediction
         Constituent predicate = predicted.getPredicates().get(0);
@@ -61,6 +71,6 @@ public class PredicateArgumentEvaluatorTest {
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(argLabelTester);
-        assertEquals(0.92, argLabelTester.getAverageF1(), 0.1);
+        assertEquals(0.92, argLabelTester.getMicroF1(), 0.1);
     }
 }

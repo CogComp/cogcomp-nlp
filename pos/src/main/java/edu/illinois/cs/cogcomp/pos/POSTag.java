@@ -1,10 +1,22 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pos;
 
-import java.util.*;
-import java.io.*;
-import edu.illinois.cs.cogcomp.lbjava.nlp.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.POSBracketToVector;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 
 /**
