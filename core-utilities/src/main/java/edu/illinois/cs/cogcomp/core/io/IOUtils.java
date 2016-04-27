@@ -318,6 +318,7 @@ public abstract class IOUtils {
 
                 String name = element.getName();
 
+                // FIXME: this is a very bad way to deal with file paths.
                 if (name.startsWith(path) && !name.equals(path + "/")) {
                     URL url = new URL("jar:" + jarRoot + "/" + name);
                     urls.add(url);
