@@ -128,32 +128,8 @@ public class POSTrain {
     }
 
     public static void main(String[] args) {
-//        if (args.length != 2 && args.length != 1) {
-//            System.err.println("Usage: " + NAME + " modelPath [trainingFile]");
-//            System.err
-//                    .println("'trainingDataFile' must contain training data in specified format ("
-//                            + "see doc/README); 'modelPath' specifies directory to which the learned models will be written.");
-//            System.exit(-1);
-//        }
-//        String configFile;
-//        if (args.length == 1) {
-//            configFile = args[0];
-//        }
-
-//        File writeDir = new File(modelPath);
-//        if (!writeDir.exists()) {
-//            System.err.println(NAME + ".writeModelsToDisk(): creating dir '" + writeDir.getName()
-//                    + "'...");
-//            writeDir.mkdir();
-//        }
-
         POSTrain trainer = new POSTrain();
-//        if (trainingFile == null) {
-            trainer.trainModels();
-//        } else {
-//            trainer.trainModels(trainingFile);
-//        }
-
+        trainer.trainModels();
         trainer.writeModelsToDisk();
     }
 }
