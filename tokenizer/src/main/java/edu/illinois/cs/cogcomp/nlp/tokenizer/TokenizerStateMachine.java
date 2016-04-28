@@ -470,20 +470,17 @@ public class TokenizerStateMachine {
      * <li>tokens - This array of Strings (String[]) contains text tokens.</li>
      * <li>sentenceEndPositions - this array of integers(int[]) indicates the end of the sentence objects.</li>
      * </ul>
-     * @param text the text to parse.
+     * @param intext the text to parse.
      */
-    protected void parseText(String text) {
-        this.textstring = text;
-        this.text = text.toCharArray();
-        int len = text.length();
-        char[] characters = new char[len];
-        text.getChars(0, text.length(), characters, 0);
+    protected void parseText(String intext) {
+        this.textstring = intext.trim();
+        this.text = this.textstring.toCharArray();
         current = 0;
         stack = new ArrayList<State>();
         completed = new ArrayList<State>();
         this.push(new State(TokenizerState.IN_SENTENCE), current);
-        for (current = 0; current < characters.length; current++) {
-            char character = characters[current];
+        for (current = 0; current < this.text.length; current++) {
+            char character = this.text[current];
             int tokentype = classify(character);
             statemachine[state][tokentype].process(character);
         }
