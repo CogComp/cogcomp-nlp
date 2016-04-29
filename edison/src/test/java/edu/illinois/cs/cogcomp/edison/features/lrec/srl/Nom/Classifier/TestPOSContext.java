@@ -5,7 +5,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edision.srl.Nom_Predicate.POSContext;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;

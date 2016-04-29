@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
-import edu.illinois.cs.cogcomp.edison.features.GetParseLeftSibling;
+import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
 import edu.illinois.cs.cogcomp.edison.features.ParseHeadWordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
@@ -79,7 +79,7 @@ public class ArgumentFeatures implements FeatureExtractor{
 		base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
 		base.addFeatureExtractor(ChunkPathPattern.SHALLOW_PARSE);
 		base.addFeatureExtractor(ClauseFeatureExtractor.STANFORD);
-		
+		System.out.println("here");
 		base.addFeatureExtractor(SyntacticFrame.STANFORD);
 		
 		base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, new WordPos()));

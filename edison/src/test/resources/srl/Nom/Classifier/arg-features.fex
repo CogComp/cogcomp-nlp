@@ -39,14 +39,12 @@
 			       days-of-week
 			       
 			       months
-			       date
-			       wn:synsets-first-sense
-			       wn:hypernyms-first-sense))
+			       date ))
 	  currency
 	  linear-position
 
 	  hyphen-argument-feature
-	  
+
 	  (parse-phrase-features :parse-view *default-parser*)
 
 	  (parse-path :parse-view *default-parser*)

@@ -2,7 +2,7 @@
 
   (define predicate-features
     (list (attribute :name predicate)
-	  pos 
+	  pos
 	  (voice :parse-view *default-parser*)
 	  (subcat-frame :parse-view *default-parser*)
 	  has-modal-verb

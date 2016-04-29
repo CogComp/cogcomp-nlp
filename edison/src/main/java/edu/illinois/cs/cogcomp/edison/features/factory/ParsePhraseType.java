@@ -75,7 +75,6 @@ public class ParsePhraseType implements FeatureExtractor {
             }
 
             features.add(DiscreteFeature.create("pt:" + parentLabel));
-
         }
 
         return features;
