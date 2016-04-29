@@ -3,7 +3,6 @@ package edu.illinois.cs.cogcomp.annotation.handler;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
@@ -19,10 +18,8 @@ import edu.stanford.nlp.trees.TreeCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Text;
 
 import java.util.List;
-import java.util.logging.Handler;
 
 /**
  * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a pipeline
@@ -55,18 +52,7 @@ public class StanfordDepHandler extends PipelineAnnotator {
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
         // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
-
-        if ( throwExceptionOnSentenceLengthCheck )
-        {
-            Constituent c = HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation, maxParseSentenceLength);
-
-            if ( null != c )
-            {
-                String msg = HandlerUtils.getSentenceLengthError( textAnnotation.getId(), c.getSurfaceForm(), maxParseSentenceLength );
-                logger.error( msg );
-                throw new AnnotatorException( msg );
-            }
-        }
+        StanfordParseHandler.checkLength(textAnnotation, throwExceptionOnSentenceLengthCheck, maxParseSentenceLength);
 
         TreeView treeView = new TreeView(ViewNames.DEPENDENCY_STANFORD, "StanfordDepHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
