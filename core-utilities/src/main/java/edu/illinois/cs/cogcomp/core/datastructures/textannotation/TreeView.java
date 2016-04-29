@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
@@ -106,11 +116,9 @@ public class TreeView extends View {
     protected void setDependencyTreeSwitch(Constituent root) {
         List<Relation> rootRelations = root.getOutgoingRelations();
 
-        if (rootRelations.size() == 0) {
-            isDependencyTree = false;
-        } else {
-            isDependencyTree = !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
-        }
+        isDependencyTree =
+                rootRelations.size() != 0
+                        && !rootRelations.get(0).getRelationName().equals(PARENT_OF_STRING);
     }
 
     private void findRoots() {
@@ -324,12 +332,13 @@ public class TreeView extends View {
 
         TextAnnotation ta = this.getTextAnnotation();
         if (start < ta.size()) {
-            if (!ta.getToken(start).equals(tokenInTree)) {
+            // Add a check in case the token is at the same position in multiple sentences
+            // (see unit test for such a case)
+            if (start < sentenceStart || !ta.getToken(start).equals(tokenInTree)) {
                 start += sentenceStart;
                 end += sentenceStart;
             }
         }
-
         return createNewConstituent(start, end, constituentLabel, treeScore);
     }
 
@@ -611,9 +620,7 @@ public class TreeView extends View {
             for (Constituent cc : spans) {
                 boolean found = false;
                 for (Relation r : cc.getOutgoingRelations()) {
-                    if (spans.contains(r.getTarget()))
-                        break;
-                    else {
+                    if (!spans.contains(r.getTarget())) {
                         found = true;
                         break;
                     }
@@ -670,14 +677,13 @@ public class TreeView extends View {
 
         IntPair span = null;
         for (Constituent candidate : candidates) {
-            boolean add;
+            boolean add = false;
             if (span == null) {
                 span = candidate.getSpan();
                 add = true;
             } else if (span.equals(candidate.getSpan())) {
                 add = true;
-            } else
-                break;
+            }
 
             if (add) {
                 // Don't add POS tags and words

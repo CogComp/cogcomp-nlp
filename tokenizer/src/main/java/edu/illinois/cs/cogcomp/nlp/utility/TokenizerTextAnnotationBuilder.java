@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.utility;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
@@ -12,7 +22,8 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  * A set of convenience methods for constructing TextAnnotations. Replaces a morass of specialized
  * constructors in Edison to support use of illinois-core-utilities.
  *
- * Created by mssammon on 7/27/15.
+ * @author Mark Sammons
+ * @author Narender Gupta
  */
 public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
     private static final String NAME = TokenizerTextAnnotationBuilder.class.getSimpleName();
@@ -75,6 +86,18 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
         Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan(text);
         return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
+    }
+
+    /**
+     * A stub method that <b>should not</b> be called with this Builder. Please use
+     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder} if you need to create
+     * {@link TextAnnotation} from pre-tokenized text.
+     */
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
+            tokenization) throws IllegalArgumentException {
+        throw new IllegalArgumentException(
+                "Cannot create annotation from tokenized text using TokenizerTextAnnotationBuilder");
     }
 
     /**

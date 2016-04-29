@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import java.util.ArrayList;
@@ -161,7 +171,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         View view = createEmptyView(ta, viewClass, viewName, viewGenerator, score);
 
-        List<Constituent> constituents = new ArrayList<Constituent>();
+        List<Constituent> constituents = new ArrayList<>();
 
         if (json.has("constituents")) {
 
@@ -262,8 +272,7 @@ public class JsonSerializer extends AbstractSerializer {
         double score = readDouble("score", object);
         int[] endPositions = readIntArray("sentenceEndPositions", object);
 
-        return new Pair<Pair<String, Double>, int[]>(new Pair<String, Double>(generator, score),
-                endPositions);
+        return new Pair<>(new Pair<>(generator, score), endPositions);
 
     }
 

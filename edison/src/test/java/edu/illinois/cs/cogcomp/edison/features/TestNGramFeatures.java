@@ -1,10 +1,19 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 
@@ -12,9 +21,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Test class NB: If needed, please re-create the {@code test.ta} and
- * {@code feature.collection.text} files using {@link CreateTestTAResource} and
- * {@link CreateTestFeaturesResource}
+ * Test class
+ * <p>
+ * <b>NB:</b> If needed, please re-create the {@code feature.collection.text} file using
+ * {@link CreateTestFeaturesResource}.
  *
  * @author Vivek Srikumar
  */

@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
@@ -227,6 +237,23 @@ public class View implements Serializable, IQueryable<Constituent> {
      */
     public void removeRelation(Relation relation) {
         relations.remove(relation);
+    }
+
+    public void removeAllRelations() {
+        List<Constituent> allCorefCons = this.getConstituents();
+        for(Constituent c: allCorefCons) {
+            for(Relation r: c.getIncomingRelations())
+                this.removeRelation(r);
+            for(Relation r: c.getOutgoingRelations())
+                this.removeRelation(r);
+            c.removeAllIncomingRelatons();
+            c.removeAllOutgoingRelaton();
+        }
+    }
+
+    public void removeAllConsituents() {
+        constituents.clear();
+        removeAllRelations();
     }
 
     /**

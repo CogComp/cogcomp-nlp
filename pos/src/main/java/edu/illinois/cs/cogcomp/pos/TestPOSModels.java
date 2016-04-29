@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
@@ -20,7 +30,7 @@ public class TestPOSModels {
     private static final String NAME = TestPOSModels.class.getCanonicalName();
     private String labeledTestFile;
 
-    private TrainedPOSTagger tagger;
+    private POSTagger tagger;
 
     /**
      * Constructor for the test class. User specifies models and data.
@@ -29,7 +39,7 @@ public class TestPOSModels {
      */
     public TestPOSModels(String labeledTestData) {
         this.labeledTestFile = labeledTestData;
-        this.tagger = new TrainedPOSTagger();
+        this.tagger = new POSTagger();
     }
 
     /**
@@ -37,7 +47,7 @@ public class TestPOSModels {
      * track of and reporting total accuracy at the end.
      */
     public void testAccuracy() {
-        wordForm __wordForm = new wordForm();
+        WordForm __wordForm = new WordForm();
         Parser labeledParser = new POSBracketToToken(labeledTestFile);
         int numSeen = 0;
         int numEqual = 0;

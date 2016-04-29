@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pos;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -9,6 +19,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +36,7 @@ public class POSAnnotator extends Annotator {
 
     private static final String NAME = "illinoispos";
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-    private final TrainedPOSTagger tagger = new TrainedPOSTagger();
+    private final POSTagger tagger = new POSTagger();
     private String tokensfield = "tokens";
     private String sentencesfield = "sentences";
 
@@ -79,8 +90,7 @@ public class POSAnnotator extends Annotator {
 
     /**
      * Can be used internally by {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} to
-     * check for pre-requisites before calling any single (external)
-     * {@link Annotator}.
+     * check for pre-requisites before calling any single (external) {@link Annotator}.
      *
      * @return The list of {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} required by
      *         this ViewGenerator

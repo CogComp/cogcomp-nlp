@@ -94,9 +94,11 @@ of annotations over some text.
     String corpus = "2001_ODYSSEY";
     String textId = "001";
     
-    // Create a TextAnnotation using the LBJ sentence 
-    // splitter and tokenizers.
-    TextAnnotation ta1 = new TextAnnotation(corpus, textId, text1); 
+    // Create a TextAnnotation using the LBJ sentence splitter 
+    // and tokenizers. 
+    TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+    
+    TextAnnotation ta1 = tab.createTextAnnotation(corpus, textId, text1); 
     ```
 
   2. Using pre-tokenized text
@@ -110,13 +112,15 @@ of annotations over some text.
     are white-space tokenized.
     
     ```java 
+    String corpus = "2001_ODYSSEY"
     String textId2 = "002";
     
-    List<String> tokenizedSentences = Arrays.asList(
-                 "Good afternoon , gentlemen .", 
-                     "I am a HAL-9000 computer .",
-                 "I was born in Urbana , Il. in 1992 .");
-    TextAnnotation ta2 = new TextAnnotation(corpus, textId2, tokenizedSentences);
+	String[] sentence1 = {"Good",  "afternoon", ",", "gentlemen", "."};
+    String[] sentence2 = {"I", "am", "a", "HAL-9000", "computer", "."};
+    
+	List<String[]> tokenizedSentences = Arrays.asList(sentence1, sentence2);
+    TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
+    											corpus, textId2, tokenizedSentences);
     ```
       
 ### Views 
@@ -304,10 +308,9 @@ The image below describes the different ways of creating
 Below is an example of how to use `IllinoisPipelineFactory` to create new annotations. 
 
 ```java 
-ResourceManager rm = new ResourceManager("config/project.properties")
-AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline(rm);
+AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
 // Or alternatively to use the curator: 
-// AnnotatorService annotator = CuratorPipeline.buildCurator(rm);
+// AnnotatorService annotator = CuratorFactory.buildCuratorClient();
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:
@@ -315,6 +318,7 @@ and then create a `TextAnnotation` component and add the `View`s you need:
 ```java 
 TextAnnotation ta = annotator.createBasicTextAnnotation(corpusID, taID, "Some text that I want to process.");
 ```
+
 
 Of course the real fun begins now! Using `AnnotatorService` you can add different annotation 
 Views using their canonical name:

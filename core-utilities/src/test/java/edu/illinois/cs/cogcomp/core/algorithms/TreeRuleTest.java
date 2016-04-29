@@ -1,4 +1,14 @@
 /**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
+/**
  *
  */
 package edu.illinois.cs.cogcomp.core.algorithms;
@@ -59,9 +69,9 @@ public class TreeRuleTest extends TestCase {
         List<List<String>> results = rule.applyRule(tree);
         for (List<String> result : results) {
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (String r : result)
-                sb.append(r + " ");
+                sb.append(r).append(" ");
 
             assertTrue(afterRule.contains(sb.toString().trim()));
 

@@ -1,7 +1,18 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import org.apache.commons.lang.StringUtils;
 
@@ -18,6 +29,7 @@ import java.util.List;
  *
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
+ * @author Narender Gupta
  */
 public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
 
@@ -73,6 +85,13 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
             throws IllegalArgumentException {
         throw new IllegalArgumentException(
                 "Cannot create annotation from raw text using BasicTextAnnotationBuilder");
+    }
+
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenization
+            tokenization) throws IllegalArgumentException {
+        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }
 
     private static Tokenization tokenizeTextSpan(List<String[]> tokenizedSentences) {
