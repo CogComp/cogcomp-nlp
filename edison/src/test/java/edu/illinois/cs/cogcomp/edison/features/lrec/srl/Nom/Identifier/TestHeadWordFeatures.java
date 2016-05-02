@@ -81,7 +81,7 @@ public class TestHeadWordFeatures extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Nom\\Identifier\\head-word-features.fex";
+		String fileName = Constant.prefix + "/Nom/Identifier/head-word-features.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

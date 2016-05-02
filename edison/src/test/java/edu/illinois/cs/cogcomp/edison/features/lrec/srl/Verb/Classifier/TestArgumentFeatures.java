@@ -80,7 +80,7 @@ public class TestArgumentFeatures extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Verb\\Classifier\\arg-features.fex";
+		String fileName = Constant.prefix + "/Verb/Classifier/arg-features.fex";
 
 
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

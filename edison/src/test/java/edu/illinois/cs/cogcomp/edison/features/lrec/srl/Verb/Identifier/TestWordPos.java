@@ -63,7 +63,7 @@ public class TestWordPos extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Verb\\Identifier\\word-pos.fex";
+		String fileName = Constant.prefix + "/Verb/Identifier/word-pos.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

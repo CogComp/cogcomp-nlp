@@ -77,7 +77,7 @@ public class TestParseSibling extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Verb\\Classifier\\parse-sibling.fex";
+		String fileName = Constant.prefix + "/Verb/Classifier/parse-sibling.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

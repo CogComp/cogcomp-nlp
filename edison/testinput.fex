@@ -1,1 +1,5 @@
-(define word-context (context :size 2 :include-index true :ignore-center true word))
+(define word-context
+	(context :size 2
+	:include-index true
+	:ignore-center true
+word))
