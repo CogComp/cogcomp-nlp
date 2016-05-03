@@ -11,12 +11,16 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -42,18 +46,28 @@ public class LinearPosition implements FeatureExtractor {
     private static final DiscreteFeature BEFORE = DiscreteFeature.create("B");
 
     public static LinearPosition instance = new LinearPosition();
+    private Logger logger = LoggerFactory.getLogger( LinearPosition.class );
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-        Constituent predicate = c.getIncomingRelations().get(0).getSource();
 
+        List<Relation> rels =  c.getIncomingRelations();
         Set<Feature> features = new LinkedHashSet<>();
-        if (predicate.getStartSpan() >= c.getEndSpan())
-            features.add(BEFORE);
-        else if (c.getStartSpan() >= predicate.getEndSpan())
-            features.add(AFTER);
-        else
-            features.add(CONTAINS);
+
+        if ( rels.isEmpty() )
+            logger.warn( "LinearPosition requires constituent with incoming edges. Constituent with label '{}' has none.",
+                        c.getLabel() );
+        else {
+
+            Constituent predicate = rels.get(0).getSource();
+
+            if (predicate.getStartSpan() >= c.getEndSpan())
+                features.add(BEFORE);
+            else if (c.getStartSpan() >= predicate.getEndSpan())
+                features.add(AFTER);
+            else
+                features.add(CONTAINS);
+        }
         return features;
     }
 

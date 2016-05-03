@@ -44,7 +44,7 @@ public class TestArgumentFeatures extends TestCase {
 	}
 
 	public final void test() throws Exception {
-		System.out.println("ArgumentFeatures Feature Extractor");
+		System.out.println("Verb ArgumentFeatures Feature Extractor");
 		// Using the first TA and a constituent between span of 30-40 as a test
 //		TextAnnotation ta = tas.get(2);
 //		View TOKENS = ta.getView("TOKENS");
@@ -75,7 +75,7 @@ public class TestArgumentFeatures extends TestCase {
 
 		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(0, 5);
 		
-		System.out.println("SRL output");
+		System.out.println("SRL output from fex script: ");
 		int SRLFexCount = 0;
 	
 		FeatureManifest featureManifest;
@@ -127,11 +127,11 @@ public class TestArgumentFeatures extends TestCase {
 			System.out.println();
 		}
 
-		System.out.println("GOT FEATURES YES!");
+		System.out.println("Finished extracting features from SRL Fex.");
 		
 		System.out.println("--------------------------------------------------------------------");
 		
-		System.out.println("Edison output");
+		System.out.println("Edison reference feature extractor output:");
 		int EdisonFexCount = 0;
 		ArgumentFeatures af = new ArgumentFeatures(); 
 	

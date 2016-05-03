@@ -62,7 +62,7 @@ public class TestArgumentFeatures extends TestCase {
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
 		int i = 0;
 
-		System.out.println("This textannoation annotates the text: " + ta.getText());
+		System.out.println("This textannotation annotates the text: " + ta.getText());
 
 		View SRL_VERB = ta.getView("SRL_VERB");
 

@@ -59,7 +59,7 @@ public class SubcategorizationFrame implements FeatureExtractor {
 
         List<Relation> incomingRelations = phrase.getIncomingRelations();
 
-        if (incomingRelations == null) {
+        if (incomingRelations == null || incomingRelations.isEmpty()) {
             features.add(DiscreteFeature.create("root"));
         } else {
             Constituent parent = incomingRelations.get(0).getSource();

@@ -28,7 +28,7 @@ import java.util.*;
  * Extracts the following features from two constituents
  * <ul>
  * <li>The concatenation of shallow parse chunks between the last token of the constituent to the
- * left and the first token of the other one. This feature also indicates where in the sequence the
+ * left and the first token of the argument. This feature also indicates where in the sequence the
  * input constituent occurs (see note below for explanation).</li>
  * <li>The number of such chunks</li>
  * </ul>
@@ -41,7 +41,10 @@ import java.util.*;
  * <p>
  * This convention does not limit the expressivity in any way because the two constituents could be
  * created on the spot before calling the feature extractor.
- *
+ *<p>
+ * <b>Another Important Note</b>: this FeatureExtractor MUST be called on a Constituent that is expected to have
+ *   incoming relations.
+ *   <p>
  * @author Vivek Srikumar
  */
 public class ChunkPathPattern implements FeatureExtractor {

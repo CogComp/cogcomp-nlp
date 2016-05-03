@@ -41,7 +41,7 @@ public class ParsePhraseTypeOnlyTest {
     public void testParsePhraseCharniak() throws Exception {
         ParsePhraseTypeOnly charniak = ParsePhraseTypeOnly.CHARNIAK;
         assertEquals("[VBD]", charniak.getFeatures(predicate).toString());
-        assertEquals("[PP]", charniak.getFeatures(arg1).toString());
+        assertEquals("[NP]", charniak.getFeatures(arg1).toString());
         assertEquals("[NP]", charniak.getFeatures(arg2).toString());
     }
 
@@ -49,7 +49,7 @@ public class ParsePhraseTypeOnlyTest {
     public void testParsePhraseStanford() throws Exception {
         ParsePhraseTypeOnly stanford = ParsePhraseTypeOnly.STANFORD;
         assertEquals("[VBD]", stanford.getFeatures(predicate).toString());
-        assertEquals("[PP]", stanford.getFeatures(arg1).toString());
+        assertEquals("[NP]", stanford.getFeatures(arg1).toString());
         assertEquals("[NP]", stanford.getFeatures(arg2).toString());
     }
 
@@ -57,7 +57,7 @@ public class ParsePhraseTypeOnlyTest {
     public void testParsePhraseGold() throws Exception {
         ParsePhraseTypeOnly gold = new ParsePhraseTypeOnly(ViewNames.PARSE_GOLD);
         assertEquals("[VBD]", gold.getFeatures(predicate).toString());
-        assertEquals("[PP]", gold.getFeatures(arg1).toString());
-        assertEquals("[NP]", gold.getFeatures(arg2).toString());
+        assertEquals("[NP]", gold.getFeatures(arg1).toString());
+        assertEquals("[PP]", gold.getFeatures(arg2).toString());
     }
 }

@@ -46,7 +46,7 @@ public class TestNomClassifier extends TestCase {
 		System.out.println("Nom Classifier Feature Extractor");
 		// Using the first TA and a constituent between span of 30-40 as a test
 		TextAnnotation ta = tas.get(2);
-		View TOKENS = ta.getView("TOKENS");
+		View TOKENS = ta.getView(ViewNames.PARSE_STANFORD);
 
 		System.out.println("GOT TOKENS FROM TEXTAnn");
 
@@ -57,37 +57,37 @@ public class TestNomClassifier extends TestCase {
 		} 
 		System.out.println("Testlist size is " + testlist.size());
 		
-		Writer writer = null;
-		FileOutputStream fexfile = new FileOutputStream("testinput.fex");
-		String fexcontent = "(define word-context\n"
-				+ "\t(context :size 2\n" + "\t:include-index true\n"
-				+ "\t:ignore-center true\n"
-				+ "word))";
-		
-		try {
-			writer = new BufferedWriter(new OutputStreamWriter(fexfile, "utf-8"));
-			writer.write(fexcontent);
-		}catch(IOException ex){
-		}finally{
-			
-			try{
-				writer.close();
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-		}
+//		Writer writer = null;
+//		FileOutputStream fexfile = new FileOutputStream("testinput.fex");
+//		String fexcontent = "(define word-context\n"
+//				+ "\t(context :size 2\n" + "\t:include-index true\n"
+//				+ "\t:ignore-center true\n"
+//				+ "word))";
+//
+//		try {
+//			writer = new BufferedWriter(new OutputStreamWriter(fexfile, "utf-8"));
+//			writer.write(fexcontent);
+//		}catch(IOException ex){
+//		}finally{
+//
+//			try{
+//				writer.close();
+//			}catch(Exception e){
+//				e.printStackTrace();
+//			}
+//		}
 					
 		/*
 		 * 
 		Nom_Classifier NC = new Nom_Classifier();
 		*/
-		String fileName = Constant.prefix +  "/srl/Nom/Classifier/Nom.Classifier.fex";
+		String fileName = Constant.prefix +  "/Nom/Classifier/Nom.Classifier.fex";
 //		System.out.println(fileName);
 //		System.out.println(System.getProperty("user.dir"));
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
 		
-		featureManifest = new FeatureManifest(new FileInputStream("Nom.Classifier.fex"));
+		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
 		FeatureManifest.setTransformer("parse-left-sibling", FeatureGenerators.getParseLeftSibling(ViewNames.PARSE_STANFORD));
 		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseLeftSibling(ViewNames.PARSE_STANFORD));
