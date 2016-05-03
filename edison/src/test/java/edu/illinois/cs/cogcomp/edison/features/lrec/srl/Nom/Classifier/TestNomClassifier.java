@@ -8,6 +8,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -80,7 +81,7 @@ public class TestNomClassifier extends TestCase {
 		 * 
 		Nom_Classifier NC = new Nom_Classifier();
 		*/
-//		String fileName = Constant.prefix + Constant.testResources + "\\srl\\Nom\\Nom.Classifier.fex";
+		String fileName = Constant.prefix +  "/srl/Nom/Classifier/Nom.Classifier.fex";
 //		System.out.println(fileName);
 //		System.out.println(System.getProperty("user.dir"));
 		FeatureManifest featureManifest;
