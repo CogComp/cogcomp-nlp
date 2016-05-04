@@ -34,11 +34,15 @@ public class ViewNames {
     @Deprecated
     public static final String NER = "NER";
 
-    public static final String NER_ACE_COARSE = "NER_ACE_COARSE";
-    public static final String NER_ACE_FINE = "NER_ACE_FINE";
+    // Constituents in this view contains heads of mentions only
+    public static final String NER_ACE_COARSE_HEAD = "NER_ACE_COARSE_HEAD";
+    public static final String NER_ACE_FINE_HEAD = "NER_ACE_FINE_HEAD";
+    // Constituents in this view contains extents of mentions.
+    public static final String NER_ACE_COARSE_EXTENT = "NER_ACE_COARSE_EXTENT";
+    public static final String NER_ACE_FINE_EXTENT = "NER_ACE_FINE_EXTENT";
+
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
-
 
     public static final String SHALLOW_PARSE = "SHALLOW_PARSE";
 
@@ -48,8 +52,12 @@ public class ViewNames {
     @Deprecated
     public static final String CHUNK = "CHUNK";
 
-    public static final String RELATION_ACE_COARSE = "RELATION_ACE_COARSE";
-    public static final String RELATION_ACE_FINE = "RELATION_ACE_FINE";
+    // Constituents in this view contains heads of mentions only
+    public static final String RELATION_ACE_COARSE_HEAD = "RELATION_ACE_COARSE_HEAD";
+    public static final String RELATION_ACE_FINE_HEAD = "RELATION_ACE_FINE_HEAD";
+    // Constituents in this view contains extents of mentions only
+    public static final String RELATION_ACE_COARSE_EXTENT = "RELATION_ACE_COARSE_EXTENT";
+    public static final String RELATION_ACE_FINE_EXTENT = "RELATION_ACE_FINE_EXTENT";
 
     /**
      * @deprecated Replaced by {@link #SRL_VERB}
@@ -68,6 +76,10 @@ public class ViewNames {
     public static final String SRL_PREP = "SRL_PREP";
 
     public static final String COREF = "COREF";
+    // Constituents in this view contains heads of mentions only
+    public static final String COREF_HEAD = "COREF_HEAD";
+    // Constituents in this view contains extents of mentions only
+    public static final String COREF_EXTENT = "COREF_EXTENT";
 
     public static final String DEPENDENCY_STANFORD = "DEPENDENCY_STANFORD";
     public static final String DEPENDENCY = "DEPENDENCY";
@@ -118,8 +130,10 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
-            case NER_ACE_COARSE:
-            case NER_ACE_FINE:
+            case NER_ACE_COARSE_HEAD:
+            case NER_ACE_FINE_HEAD:
+            case NER_ACE_COARSE_EXTENT:
+            case NER_ACE_FINE_EXTENT:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
@@ -148,10 +162,14 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
-            case RELATION_ACE_COARSE:
-            case RELATION_ACE_FINE:
+            case RELATION_ACE_COARSE_HEAD:
+            case RELATION_ACE_FINE_HEAD:
+            case RELATION_ACE_COARSE_EXTENT:
+            case RELATION_ACE_FINE_EXTENT:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
+            case COREF_HEAD:
+            case COREF_EXTENT:
                 return ViewTypes.COREF_VIEW;
         }
         return null;
