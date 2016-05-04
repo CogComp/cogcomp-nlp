@@ -164,7 +164,7 @@ public abstract class SRLManager {
 
 		// These three are from Surdeanu etal.
 		FeatureManifest.setTransformer("parse-left-sibling", FeatureGenerators.getParseLeftSibling(defaultParser));
-		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseLeftSibling(defaultParser));
+		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseRightSibling(defaultParser));
 		FeatureManifest.setFeatureExtractor("pp-features", FeatureGenerators.ppFeatures(defaultParser));
 
 		// Introduced in Toutanova etal.
