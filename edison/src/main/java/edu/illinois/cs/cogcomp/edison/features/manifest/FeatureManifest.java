@@ -523,6 +523,7 @@ public class FeatureManifest {
 
     private List<String> getUniqueList(Tree<String> tree) {
         List<String> f = new ArrayList<>();
+        f.add(tree.getLabel());
         for (Tree<String> child : tree.getChildren()) {
             f.add(child.toString().replaceAll("\\s+", " "));
         }
