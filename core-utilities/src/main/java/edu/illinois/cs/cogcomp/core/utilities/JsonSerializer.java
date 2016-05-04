@@ -214,6 +214,9 @@ public class JsonSerializer extends AbstractSerializer {
             writeDouble("score", c.getConstituentScore(), cJ);
         writeInt("start", c.getStartSpan(), cJ);
         writeInt("end", c.getEndSpan(), cJ);
+        writeBoolean("hasHead", c.hasHeadInformation(), cJ);
+        writeInt("headStart", c.getHeadStartSpan(), cJ);
+        writeInt("headEnd", c.getHeadEndSpan(), cJ);
 
         if (c.getAttributeKeys().size() > 0) {
             JsonObject properties = new JsonObject();
@@ -233,7 +236,18 @@ public class JsonSerializer extends AbstractSerializer {
             score = readDouble("score", cJ);
         int start = readInt("start", cJ);
         int end = readInt("end", cJ);
-        Constituent c = new Constituent(label, score, viewName, ta, start, end);
+        boolean hasHead = readBoolean("hasHead", cJ);
+        int headStart = readInt("headStart", cJ);
+        int headEnd = readInt("headEnd", cJ);
+
+        Constituent c;
+
+        if (!hasHead) {
+            c = new Constituent(label, score, viewName, ta, start, end);
+        } else {
+            // Use the alternate constructor for storing head information.
+            c = new Constituent(label, score, viewName, ta, start, end, headStart, headEnd);
+        }
 
         if (cJ.has("properties")) {
             JsonObject properties = cJ.getAsJsonObject("properties");
@@ -342,5 +356,13 @@ public class JsonSerializer extends AbstractSerializer {
 
     private static double readDouble(String name, JsonObject obj) {
         return obj.get(name).getAsDouble();
+    }
+
+    private static void writeBoolean(String name, Boolean value, JsonObject out) {
+        out.add(name, new JsonPrimitive(value));
+    }
+
+    private static Boolean readBoolean(String name, JsonObject obj) {
+        return obj.getAsJsonPrimitive(name).getAsBoolean();
     }
 }
