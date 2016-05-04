@@ -30,12 +30,10 @@ import java.util.Set;
 public class CorefMUCEvaluator extends Evaluator {
     CoreferenceView gold, prediction;
 
-    public void setViews(View gold, View prediction) {
-        this.gold = (CoreferenceView) gold;
-        this.prediction = (CoreferenceView) prediction;
-    }
-
-    public void evaluate(ClassificationTester tester) {
+    public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
+        super.cleanAttributes(goldView, predictionView);
+        this.gold = (CoreferenceView) goldView;
+        this.prediction = (CoreferenceView) predictionView;
         // Recall = \sum_i [ |si| - |pOfsi| ] / \sum_i [ |si| - 1 ]
         // where si is a true cluster, pOfsi is the set of predicted
         // clusters that contain elements of si (i.e. number of predicted clusters having some overlap with

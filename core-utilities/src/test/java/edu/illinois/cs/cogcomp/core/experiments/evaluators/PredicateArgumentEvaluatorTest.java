@@ -44,23 +44,20 @@ public class PredicateArgumentEvaluatorTest {
     @Test
     public void testEvaluateSense() throws Exception {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
-        evaluator.setViews(gold, predicted);
-        evaluator.evaluateSense(senseTester);
+        evaluator.evaluateSense(senseTester, gold, predicted);
         assertEquals(1.0, senseTester.getMicroF1(), 0);
 
         // Override the sense
         predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
-        evaluator.setViews(gold, predicted);
-        evaluator.evaluateSense(senseTester);
+        evaluator.evaluateSense(senseTester, gold, predicted);
         assertEquals(0.5, senseTester.getMicroF1(), 0);
     }
 
     @Test
     public void testEvaluate() throws Exception {
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
-        evaluator.setViews(gold, predicted);
-        evaluator.evaluate(argLabelTester);
+        evaluator.evaluate(argLabelTester, gold, predicted);
         assertEquals(1.0, argLabelTester.getMicroF1(), 0);
 
         // Add a wrong prediction
@@ -69,8 +66,7 @@ public class PredicateArgumentEvaluatorTest {
                 new Constituent("test", ViewNames.SRL_VERB, predicate.getTextAnnotation(), 0, 1);
         predicted.addRelation(new Relation("test", predicate, argument, 0));
         evaluator = new PredicateArgumentEvaluator();
-        evaluator.setViews(gold, predicted);
-        evaluator.evaluate(argLabelTester);
+        evaluator.evaluate(argLabelTester, gold, predicted);
         assertEquals(0.92, argLabelTester.getMicroF1(), 0.1);
     }
 }

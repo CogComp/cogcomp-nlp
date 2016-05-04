@@ -23,17 +23,13 @@ import java.util.List;
  * in the same cluster both in the gold clustering and prediction clustering
  */
 public class CorefAccuracyEvaluator extends Evaluator {
-    CoreferenceView gold, prediction;
-
-    public void setViews(View gold, View prediction) {
-        this.gold = (CoreferenceView) gold;
-        this.prediction = (CoreferenceView) prediction;
-    }
-
-    public void evaluate(ClassificationTester tester) {
+    public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
+        super.cleanAttributes(goldView, predictionView);
         int overlapCount = 0;
         int predCount = 0;
         int goldCount = 0;
+        CoreferenceView gold = (CoreferenceView)goldView;
+        CoreferenceView prediction = (CoreferenceView)predictionView;
         List<Constituent> allGoldConstituents = gold.getConstituents();
         for(Constituent cons1 : allGoldConstituents) {
             HashSet<Constituent> conferents1gold = gold.getOverlappingChainsCanonicalMentions(cons1);
