@@ -257,6 +257,14 @@ public class View implements Serializable, IQueryable<Constituent> {
     }
 
     /**
+     * Removes all the attributes from the constituents of this of this view
+     */
+    public void removeAttributes() {
+        for(Constituent cons : constituents)
+        cons.removeAllAttributes();
+    }
+
+    /**
      * Checks if this view contains a constituent
      *
      * @param c The constituent, whose containership needs to be checked.
