@@ -31,7 +31,6 @@ import static org.junit.Assert.assertEquals;
 // b3Cluster:  P:   0.75  -  R:  1.0 - F:  0.857
 public class CorefEvaluatorTest {
     CoreferenceView gold, predicted;
-    ClassificationTester senseTester, argLabelTester;
 
     @Before
     public void setUp() throws Exception {
@@ -56,24 +55,21 @@ public class CorefEvaluatorTest {
     public void testScores() throws Exception {
         ClassificationTester mucTester = new ClassificationTester();
         CorefMUCEvaluator mucEvaluator = new CorefMUCEvaluator();
-        mucEvaluator.setViews(gold, predicted);
-        mucEvaluator.evaluate(mucTester);
+        mucEvaluator.evaluate(mucTester, gold, predicted);
         assertEquals(mucTester.getMacroF1(), 0.94, 0.01);
         assertEquals(mucTester.getMacroPrecision(), 0.9, 0.01);
         assertEquals(mucTester.getMacroRecall(), 1.0, 0.01);
 
         ClassificationTester bcubedTester = new ClassificationTester();
         CorefBCubedEvaluator bcubedEvaluator = new CorefBCubedEvaluator();
-        bcubedEvaluator.setViews(gold, predicted);
-        bcubedEvaluator.evaluate(bcubedTester);
+        bcubedEvaluator.evaluate(bcubedTester, gold, predicted);
         assertEquals(bcubedTester.getMacroF1(), 0.73, 0.01);
         assertEquals(bcubedTester.getMacroPrecision(), 0.58, 0.01);
         assertEquals(bcubedTester.getMacroRecall(), 1.0, 0.01);
 
         ClassificationTester accuracyTester = new ClassificationTester();
         CorefAccuracyEvaluator accuracyEvaluator = new CorefAccuracyEvaluator();
-        accuracyEvaluator.setViews(gold, predicted);
-        accuracyEvaluator.evaluate(accuracyTester);
+        accuracyEvaluator.evaluate(accuracyTester, gold, predicted);
         assertEquals(accuracyTester.getMacroF1(), 0.68, 0.01);
         assertEquals(accuracyTester.getMacroPrecision(), 0.51, 0.01);
         assertEquals(accuracyTester.getMacroRecall(), 1.0, 0.01);

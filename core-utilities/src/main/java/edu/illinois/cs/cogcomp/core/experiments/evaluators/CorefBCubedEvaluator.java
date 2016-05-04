@@ -51,16 +51,14 @@ import java.util.Set;
 public class CorefBCubedEvaluator extends Evaluator {
     CoreferenceView gold, prediction;
 
-    public void setViews(View gold, View prediction) {
-        this.gold = (CoreferenceView) gold;
-        this.prediction = (CoreferenceView) prediction;
-    }
-
     /**
      * The result will be populated in a ClassificationTester. Note that you can either use "micro" or "macro" statistics.
      * It is more common to use "macro" statistics for BCubed metric.
      */
-    public void evaluate(ClassificationTester tester) {
+    public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
+        super.cleanAttributes(goldView, predictionView);
+        this.gold = (CoreferenceView) goldView;
+        this.prediction = (CoreferenceView) predictionView;
         List<Constituent> allGoldConstituents = gold.getConstituents();
         for(Constituent cons : allGoldConstituents) {
             HashSet<Constituent> overlappingGoldCanonicalCons = gold.getOverlappingChainsCanonicalMentions(cons);

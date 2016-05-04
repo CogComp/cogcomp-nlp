@@ -19,15 +19,8 @@ import java.util.Set;
 
 public class ConstituentLabelingEvaluator extends Evaluator {
 
-    View gold, prediction;
-
-    public void setViews(View gold, View prediction) {
-        this.gold = gold;
-        this.prediction = prediction;
-    }
-
-    public void evaluate(ClassificationTester tester) {
-
+    public void evaluate(ClassificationTester tester, View gold, View prediction) {
+        super.cleanAttributes(gold, prediction);
         Set<Constituent> goldCons = new HashSet<>(gold.getConstituents());
         Set<Constituent> predictionCons = new HashSet<>(prediction.getConstituents());
 
