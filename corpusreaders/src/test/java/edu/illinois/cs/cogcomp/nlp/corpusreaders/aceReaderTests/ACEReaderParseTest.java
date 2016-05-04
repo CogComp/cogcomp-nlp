@@ -66,10 +66,8 @@ public class ACEReaderParseTest {
 
             Set<String> documentViews = doc.getAvailableViews();
             assertTrue(documentViews.contains(ViewNames.TOKENS));
-            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW));
             assertTrue(documentViews.contains(ViewNames.NER_ACE_COARSE));
             assertTrue(documentViews.contains(ViewNames.NER_ACE_FINE));
-            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW));
             assertTrue(documentViews.contains(ViewNames.RELATION_ACE_COARSE));
             assertTrue(documentViews.contains(ViewNames.RELATION_ACE_FINE));
             assertTrue(documentViews.contains(ViewNames.COREF));

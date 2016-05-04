@@ -35,10 +35,15 @@ public class Constituent implements Serializable {
 
     protected final IntPair span; // span start/end token offsets
 
+    protected final IntPair headSpan;
+
     // Curator-style offsets -- end char offset numbers position AFTER
     // constituent
     protected final int startCharOffset;
     protected final int endCharOffset;
+
+    protected final int headStartCharOffset;
+    protected final int headEndCharOffset;
 
     protected final List<Relation> outgoingRelations;
     protected final List<Relation> incomingRelations;
@@ -51,6 +56,8 @@ public class Constituent implements Serializable {
      * listing the each element. This would use less memory.
      */
     // protected boolean useConstituentTokensAsSpan;
+
+    protected final boolean hasHeadInformation;
 
     protected final String viewName;
 
@@ -72,7 +79,6 @@ public class Constituent implements Serializable {
         this(label, 1.0, viewName, text, start, end);
     }
 
-
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
      * constituent right at the beginning of a text has start/end (0,1) offsets are relative to the
@@ -88,8 +94,22 @@ public class Constituent implements Serializable {
      * @param end end token offset (one-past-the-end)
      */
     public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
-            int end) {
+                       int end) {
+        this(label, score, viewName, text, start, end, start, end, false);
+    }
 
+    public Constituent(String label, String viewName, TextAnnotation text, int start,
+                       int end, int headStart, int headEnd) {
+        this(label, 1.0, viewName, text, start, end, headStart, headEnd, true);
+    }
+
+    public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
+                       int end, int headStart, int headEnd) {
+        this(label, score, viewName, text, start, end, headStart, headEnd, true);
+    }
+
+    private Constituent(String label, double score, String viewName, TextAnnotation text, int start,
+                       int end, int headStart, int headEnd, boolean hasHeadInformation) {
         if (label == null)
             label = "";
         int labelId = text.symtab.getId(label);
@@ -108,14 +128,12 @@ public class Constituent implements Serializable {
         int endSpan = this.getEndSpan();
 
         if (start >= 0) {
-
             assert startSpan >= 0;
             assert endSpan >= 0;
         }
 
         this.outgoingRelations = new ArrayList<>();
         this.incomingRelations = new ArrayList<>();
-
 
         if (startSpan >= 0) {
             startCharOffset = text.getTokenCharacterOffset(startSpan).getFirst();
@@ -145,6 +163,49 @@ public class Constituent implements Serializable {
                 + "), -> ("
                 + startCharOffset
                 + ", " + endCharOffset + ")";
+
+        this.hasHeadInformation = hasHeadInformation;
+
+        IntPair headSpan = new IntPair(headStart, headEnd);
+        this.headSpan = headSpan;
+        int headStartSpan = headSpan.getFirst();
+        int headEndSpan = headSpan.getSecond();
+
+        if (headStart >= 0) {
+            assert headStartSpan >= 0;
+            assert headEndSpan >= 0;
+        }
+
+        if (headStartSpan >= 0) {
+            this.headStartCharOffset = text.getTokenCharacterOffset(headStartSpan).getFirst();
+        } else {
+            this.headStartCharOffset = -1;
+        }
+
+        if (headEndSpan > 0 && headEndSpan <= text.size()) {
+            // TODO: verify correct token offset behavior. If a Constituent must always use
+            // one-past-the-end indexing wrt token
+            // indexes, this should be a requirement on instantiation. The check below was throwing
+            // an exception
+            // when start and end span were the same.
+            if (headEndSpan > headStartSpan)
+                this.headEndCharOffset = text.getTokenCharacterOffset(headEndSpan - 1).getSecond();
+            else
+                // FIXED -- MS 4/17/2015
+                this.headEndCharOffset = text.getTokenCharacterOffset(headEndSpan).getSecond();
+        } else {
+            this.headEndCharOffset = 0;
+        }
+
+        assert this.headEndCharOffset >= this.headStartCharOffset : "End character offset of head constituent less than start!\n"
+                + text.getTokenizedText()
+                + "("
+                + headStart
+                + ", "
+                + headEnd
+                + "), -> ("
+                + this.headStartCharOffset
+                + ", " + this.headEndCharOffset + ")";
     }
 
     public int getStartCharOffset() {
@@ -246,6 +307,12 @@ public class Constituent implements Serializable {
                 return false;
         }
 
+        if (this.hasHeadInformation) {
+            if (this.getHeadStartSpan() != that.getHeadStartSpan() || this.getHeadEndSpan() != that.getHeadEndSpan()) {
+                return false;
+            }
+        }
+
         return this.textAnnotation.getText().equals(that.textAnnotation.getText())
                 && this.getStartSpan() == that.getStartSpan()
                 && this.getEndSpan() == that.getEndSpan()
@@ -305,6 +372,7 @@ public class Constituent implements Serializable {
         return span;
     }
 
+
     /**
      * This method returns a <i>tokenized</i> representation of the surface form of the constituent.
      * This is <b>not</b> the original surface form of the constituent. To retrieve that, please use
@@ -334,6 +402,39 @@ public class Constituent implements Serializable {
      */
     public String getSurfaceForm() {
         return this.textAnnotation.text.substring(startCharOffset, endCharOffset);
+    }
+
+    public int getHeadStartSpan() {
+        return this.headSpan.getFirst();
+    }
+
+    public int getHeadEndSpan() {
+        return this.headSpan.getSecond();
+    }
+
+    public boolean hasHeadInformation() {
+        return this.hasHeadInformation;
+    }
+
+    public IntPair getHeadSpan() {
+        return this.headSpan;
+    }
+
+    public String getTokenizedSurfaceFormForHead() {
+        StringBuilder sb = new StringBuilder();
+
+        if (this.getHeadStartSpan() < 0) {
+            sb.append(this.getLabel());
+        } else {
+            for (int i = this.getHeadStartSpan(); i < this.getHeadEndSpan(); i++) {
+                sb.append(this.textAnnotation.getToken(i)).append(" ");
+            }
+        }
+        return sb.toString().trim();
+    }
+
+    public String getSurfaceFormForHead() {
+        return this.textAnnotation.text.substring(this.headStartCharOffset, this.headEndCharOffset);
     }
 
     /**
@@ -385,6 +486,11 @@ public class Constituent implements Serializable {
             hashCode += relation.getTarget().getStartSpan() * 13;
             hashCode += relation.getTarget().getEndSpan() * 19;
 
+        }
+
+        if (this.hasHeadInformation) {
+            hashCode += this.getHeadStartSpan() * 53;
+            hashCode += this.getHeadEndSpan() * 99;
         }
 
         return hashCode;
@@ -507,8 +613,8 @@ public class Constituent implements Serializable {
 
     public Constituent cloneForNewView(String newViewName) {
         Constituent cloneC =
-                new Constituent(this.getLabel(), newViewName, this.getTextAnnotation(),
-                        this.getStartSpan(), this.getEndSpan());
+                new Constituent(this.getLabel(), 1.0, newViewName, this.getTextAnnotation(),
+                        this.getStartSpan(), this.getEndSpan(), this.getHeadStartSpan(), this.getHeadEndSpan(), this.hasHeadInformation());
 
         for (String k : this.getAttributeKeys()) {
             cloneC.addAttribute(k, this.getAttribute(k));
@@ -519,8 +625,9 @@ public class Constituent implements Serializable {
 
     public Constituent cloneForNewViewWithDestinationLabel(String newViewName, String Dlabel) {
         Constituent cloneC =
-                new Constituent(Dlabel, newViewName, this.getTextAnnotation(), this.getStartSpan(),
-                        this.getEndSpan());
+                new Constituent(Dlabel, 1.0, newViewName, this.getTextAnnotation(), this.getStartSpan(),
+                        this.getEndSpan(), this.getHeadStartSpan(), this.getHeadEndSpan(), this.hasHeadInformation());
+
         for (String k : this.getAttributeKeys()) {
             cloneC.addAttribute(k, this.getAttribute(k));
         }
@@ -541,5 +648,12 @@ public class Constituent implements Serializable {
 
     public void removeAllOutgoingRelaton() {
         this.outgoingRelations.clear();
+    }
+
+    /**
+     * Removes all attributes from a Constituent.
+     */
+    public void removeAttributes() {
+        this.attributes = null;
     }
 }

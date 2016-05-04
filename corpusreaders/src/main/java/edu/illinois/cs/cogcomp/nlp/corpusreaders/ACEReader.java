@@ -12,6 +12,7 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
@@ -48,8 +49,6 @@ public class ACEReader extends TextAnnotationReader {
     private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
 
     // Entity Constants
-    public static final String ENTITYVIEW = ViewNames.NER_ACE_COARSE;
-
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
     public static final String EntitySubtypeAttribute = "EntitySubtype"; /* Optional */
@@ -63,8 +62,6 @@ public class ACEReader extends TextAnnotationReader {
     public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
 
     // Relation Constants
-    public static final String RELATIONVIEW = ViewNames.RELATION_ACE_COARSE;
-
     public static final String RelationIDAttribute = "RelationID";
     public static final String RelationTypeAttribute = "RelationType";
     public static final String RelationSubtypeAttribute = "RelationSubtype"; /* Optional */
@@ -200,7 +197,17 @@ public class ACEReader extends TextAnnotationReader {
                     continue;
                 }
 
-                Constituent extentConstituent = new Constituent(entity.type, ViewNames.NER_ACE_COARSE, ta, extentStartTokenId, extentEndTokenId + 1);
+                IntPair headSpan = getHeadSpanForExtent(ta, entityMention.headStart, entityMention.headEnd);
+
+                Constituent extentConstituent;
+                if (headSpan == null) {
+                    headSpan = new IntPair(extentStartTokenId, extentEndTokenId + 1);
+                }
+
+                // Create a constituent with head information.
+                extentConstituent = new Constituent(entity.type, ViewNames.NER_ACE_COARSE, ta,
+                        extentStartTokenId, extentEndTokenId + 1, headSpan.getFirst(), headSpan.getSecond());
+
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
@@ -216,7 +223,7 @@ public class ACEReader extends TextAnnotationReader {
 
                 entityCoarseView.addConstituent(extentConstituent);
 
-                // Clone constituent for the ENTITYVIEW_FINE SpanLabelView
+                // Clone constituent for the NER_ACE_FINE SpanLabelView
                 String subTypeLabel = (entity.subtype != null) ? entity.subtype : entity.type;
                 entityFineView.addConstituent(extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.NER_ACE_FINE, subTypeLabel));
 
@@ -247,7 +254,6 @@ public class ACEReader extends TextAnnotationReader {
         ta.addView(ViewNames.NER_ACE_FINE, entityFineView);
         ta.addView(ViewNames.COREF, corefView);
     }
-
 
     /**
      * Adds a PredicateArgumentView for ACE Relations between Entities.
@@ -406,5 +412,17 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     public boolean hasNext() {
         return this.documents.size() > this.currentAnnotationId;
+    }
+
+    private static IntPair getHeadSpanForExtent(TextAnnotation textAnnotation, int headStartCharOffset, int headEndCharOffset) {
+        int start_token = textAnnotation.getTokenIdFromCharacterOffset(headStartCharOffset);
+        int end_token = textAnnotation.getTokenIdFromCharacterOffset(headEndCharOffset);
+
+        if (start_token >= 0 && end_token >= 0 && !(end_token - start_token < 0)) {
+            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token number exclusive
+            return new IntPair(start_token, end_token + 1);
+        }
+
+        return null;
     }
 }
