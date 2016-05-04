@@ -29,7 +29,6 @@ public class PredicateArgumentEvaluator extends Evaluator {
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
     public void evaluateSense(ClassificationTester senseTester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
         gold = (PredicateArgumentView)goldView;
         prediction = (PredicateArgumentView)predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
