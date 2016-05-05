@@ -62,7 +62,7 @@ public class TestArgumentFeatures extends TestCase {
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
 		int i = 0;
 
-		System.out.println("This textannoation annotates the text: " + ta.getText());
+		System.out.println("This textannotation annotates the text: " + ta.getText());
 
 		View SRL_VERB = ta.getView("SRL_VERB");
 
@@ -79,7 +79,7 @@ public class TestArgumentFeatures extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Nom\\Classifier\\arg-features.fex";
+		String fileName = Constant.prefix + "/Nom/Classifier/arg-features.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

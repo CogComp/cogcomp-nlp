@@ -81,7 +81,7 @@ public class TestPredicate extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Nom\\Identifier\\predicate-features.fex";
+		String fileName = Constant.prefix + "/Nom/Identifier/predicate-features.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);

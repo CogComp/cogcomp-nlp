@@ -75,7 +75,7 @@ public class TestMyFeatures extends TestCase {
 	
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "\\Verb\\Sense\\my-features.fex";
+		String fileName = Constant.prefix + "/Verb/Sense/my-features.fex";
 		
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
