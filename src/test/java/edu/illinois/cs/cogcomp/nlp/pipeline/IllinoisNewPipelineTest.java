@@ -93,7 +93,6 @@ public class IllinoisNewPipelineTest
         // Annotate input texts, put stuff in the cache
         start = System.currentTimeMillis();
         try {
-
             prep.createAnnotatedTextAnnotation("", "", text);
         } catch (AnnotatorException e) {
             e.printStackTrace();
