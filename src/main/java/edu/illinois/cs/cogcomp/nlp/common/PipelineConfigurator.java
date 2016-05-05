@@ -20,7 +20,7 @@ public class PipelineConfigurator extends Configurator
 //            "ner-ontonotes-config-default.properties");
 //    public static final Property LEMMA_CONFIG = new Property("lemmaConfig", "lemmatizer-config-default.properties");
     // presumably, in ms and per sentence, not document
-    public static final Property STFRD_TIME_PER_SENTENCE = new Property("stanfordMaxTimePerSentence", "1000");
+    public static final Property STFRD_TIME_PER_SENTENCE = new Property("stanfordMaxTimePerSentence", "10000");
     public static final Property STFRD_MAX_SENTENCE_LENGTH = new Property("stanfordParseMaxSentenceLength", "80");
 //    public static final Property ACTIVE_VIEWS = "activeViews";
     public static final Property SIMPLE_CACHE_DIR = new Property("simpleCacheDir", "simple-annotation-cache");
