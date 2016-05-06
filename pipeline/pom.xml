@@ -1,15 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
+
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.0.38</version>
+    </parent>
+
     <artifactId>illinois-nlp-pipeline</artifactId>
-    <version>0.1.21</version>
     <name>Illinois NLP Pipeline</name>
     <description>Provides preprocessing steps for Illinois NLP components, using Curator data structures</description>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <cogcomp-nlp-version>3.0.33</cogcomp-nlp-version>
     </properties>
+
     <repositories>
         <repository>
             <id>CogcompSoftware</id>
@@ -17,6 +24,7 @@
             <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
         </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -160,6 +168,7 @@
             </plugin>
         </plugins>
     </reporting>
+
     <build>
         <plugins>
             <plugin>
