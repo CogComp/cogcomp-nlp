@@ -39,7 +39,9 @@
 			       days-of-week
 			       
 			       months
-			       date ))
+			       date
+			       wn:synsets-first-sense
+                   wn:hypernyms-first-sense))
 	  currency
 	  linear-position
 

@@ -1,45 +1,16 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.factory.*;
 import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
-import edu.illinois.cs.cogcomp.edison.features.ParseHeadWordFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkPathPattern;
-import edu.illinois.cs.cogcomp.edison.features.factory.ClauseFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.LinearPosition;
-import edu.illinois.cs.cogcomp.edison.features.factory.ListFeatureFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassFeature;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParsePath;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParsePhraseType;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParseSiblings;
-import edu.illinois.cs.cogcomp.edison.features.factory.SpanLengthFeature;
-import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
-import edu.illinois.cs.cogcomp.edison.features.factory.SyntacticFrame;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseRightSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.PPFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
-import edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
-import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
-import edu.illinois.cs.cogcomp.edison.features.CachedFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+
+import java.util.Set;
 
 
 /**

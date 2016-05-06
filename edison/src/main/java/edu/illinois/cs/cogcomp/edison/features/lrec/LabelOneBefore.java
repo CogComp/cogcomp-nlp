@@ -10,9 +10,6 @@
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -23,6 +20,9 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 /**

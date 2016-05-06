@@ -1,39 +1,15 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
-import edu.illinois.cs.cogcomp.edison.features.ParseHeadWordFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkPathPattern;
-import edu.illinois.cs.cogcomp.edison.features.factory.LinearPosition;
-import edu.illinois.cs.cogcomp.edison.features.factory.ListFeatureFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.NomLexClassFeature;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParsePath;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParsePhraseType;
-import edu.illinois.cs.cogcomp.edison.features.factory.ParseSiblings;
-import edu.illinois.cs.cogcomp.edison.features.factory.SubcategorizationFrame;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.*;
+import edu.illinois.cs.cogcomp.edison.features.factory.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
-import edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
-import edu.illinois.cs.cogcomp.edison.features.AttributeFeature;
-import edu.illinois.cs.cogcomp.edison.features.CachedFeatureCollection;
+import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 
 /**
@@ -43,7 +19,7 @@ import edu.illinois.cs.cogcomp.edison.features.CachedFeatureCollection;
 public class ArgumentFeatures implements FeatureExtractor{
 	private final FeatureCollection base = new FeatureCollection(this.getName());
 	
-	public ArgumentFeatures(){
+	public ArgumentFeatures() throws EdisonException{
 		ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
 		
 		tmp.add(new FeatureCollection("", FeatureInputTransformer.constituentParent,
@@ -58,8 +34,16 @@ public class ArgumentFeatures implements FeatureExtractor{
 		tmp.get(1).addFeatureExtractor(ListFeatureFactory.daysOfTheWeek);
 		tmp.get(1).addFeatureExtractor(ListFeatureFactory.months);
 		tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.dateMarker);
-		//tmp.get(1).addFeatureExtractor(WordNetFeatureClass.synsetsFirstSense);
-		//tmp.get(1).addFeatureExtractor(WordNetFeatureClass.hypernymsFirstSense);
+
+		try {
+			WordNetFeatureExtractor wn = new WordNetFeatureExtractor();
+				wn.addFeatureType(WordNetFeatureClass.synsetsFirstSense);
+				wn.addFeatureType(WordNetFeatureClass.hypernymsFirstSense);
+
+				tmp.get(1).addFeatureExtractor(wn);
+			} catch (Exception e) {
+			throw new EdisonException(e);
+		}
 
 		this.base.addFeatureExtractor(tmp.get(0));
 		this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, tmp.get(1)));
