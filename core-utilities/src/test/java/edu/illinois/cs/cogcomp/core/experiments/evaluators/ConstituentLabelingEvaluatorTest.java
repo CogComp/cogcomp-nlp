@@ -51,7 +51,7 @@ public class ConstituentLabelingEvaluatorTest {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluate(splittingTester);
-        assertEquals(splittingTester.getMicroF1(), 0.57, 0.01);
-        assertEquals(0.5, splittingTester.getMicroPrecision(), 0);
+        assertEquals(splittingTester.getMicroF1(), 0.64, 0.01);
+        assertEquals(0.57, splittingTester.getMicroPrecision(), 0.01);
     }
 }
