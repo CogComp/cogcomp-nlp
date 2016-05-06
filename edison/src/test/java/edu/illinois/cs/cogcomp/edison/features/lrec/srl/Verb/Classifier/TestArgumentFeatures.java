@@ -91,10 +91,10 @@ public class TestArgumentFeatures extends TestCase {
 		FeatureManifest.setFeatureExtractor("projected-path", new ProjectedPath(ViewNames.PARSE_STANFORD));
 
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
-		
+
 		featureManifest.useCompressedName();
 		featureManifest.setVariable("*default-parser*", ViewNames.PARSE_STANFORD);
-		
+
 		fex = featureManifest.createFex();
 		
 		

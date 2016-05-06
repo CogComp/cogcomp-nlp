@@ -32,19 +32,49 @@ public class DummyTextAnnotationGenerator {
 
     static String basicString = "To annotate or not ; that is the question .";
 
-    static String annotatedString = "The construction of the John Smith library finished on time .";
-    static String[] pos = {"DT", "NN", "IN", "DT", "NNP", "NNP", "NN", "VBD", "IN", "NN", "."};
-    static String[] pos_noisy = {"DT", "NNA", "DT", "DT", "NNP", "NN", "NN", "VB", "IN", "NN", "."};
-    static String[] lemmas = {"the", "construction", "of", "the", "John", "Smith", "library", "finish", "on",
-            "time", "."};
-    static String[] lemmas_noisy = {"the", "construct", "of", "the", "John", "Smith", "library", "fin", "on",
-            "time", "."};
+    static String annotatedString1 = "The construction of the John Smith library finished on time .";
+    static String annotatedString2 = "The $10M building was designed in 2016 .";
+    static String annotatedString3 = "The paving commenced Monday and will finish in June .";
+
+    static List<String[]> annotatedTokenizedStringArray;
+    static{
+        annotatedTokenizedStringArray = new ArrayList<>();
+        annotatedTokenizedStringArray.add(annotatedString1.split(" "));
+        annotatedTokenizedStringArray.add(annotatedString2.split(" "));
+        annotatedTokenizedStringArray.add(annotatedString3.split(" "));
+    };
+
+    static String[] pos = {"DT", "NN", "IN", "DT", "NNP", "NNP", "NN", "VBD", "IN", "NN", ".",
+                            "DT", "NN", "NN", "VBD", "VBN", "IN", "CD", ".",
+                            "DT", "VBG", "VBD", "NNP", "CC", "MD", "VB", "IN", "NNP", "." };
+    static String[] pos_noisy = {"DT", "NNA", "DT", "DT", "NNP", "NN", "NN", "VB", "IN", "NN", ".",
+                                "DT", "NNS", "NN", "VB", "VBN", "IN", "NN", ".",
+                                "DT", "VBG", "VBD", "NNP", "CC", "MD", "VB", "IN", "NN", "." };
+    static String[] lemmas =
+            {"the", "construction", "of", "the", "John", "Smith", "library", "finish", "on", "time", ".",
+                    "The", "$10M", "building", "be", "design", "in", "2016", "." +
+                            "The", "paving", "commence", "Monday", "and", "will", "finish", "in", "June", "."
+            };
+    static String[] lemmas_noisy =
+            {"the", "construct", "of", "the", "John", "Smith", "library", "fin", "on", "time", ".",
+            "The", "$10M", "build", "be", "design", "in", "2016", "." +
+            "The", "pave", "commence", "Monday", "and", "will", "finish", "in", "June", "." };
+
     static String tree =
             "(S1 (S (NP (NP (DT The) (NN construction)) (PP (IN of) (NP (DT the) (NNP John) (NNP Smith) (NN library)))) "
                     + "(VP (VBD finished) (PP (IN on) (NP (NN time)))) (. .)))";
+    static String tree2 = "(S1 (S (NP (DT The) (JJ $10M) (NN building)) (VP (AUX was) (VP (VBN designed) (PP (IN in) " +
+            "(NP (CD 2016)))))(. .)))";
+    static String tree3 = "(S1 (S (NP (DT The)(NN paving))(VP (VP (VBD commenced)(NP (NNP Monday)))(CC and)(VP (MD will)(VP (VB finish)(PP (IN in)(NP (NNP June))))))(. .)))";
+
     static String tree_noisy =
             "(S1 (S (NP (NP (DT The) (NNA construction) (IN of)) (PP (NP (DT the) (NNP John) (NN Smith) (NN library)))) "
                     + "(VP (VB finished) (PP (IN on) (NP (NN time)))) (. .)))";
+    static String tree_noisy2 = "(S1 (S (NP (DT The) (NN $10M) (NN building)) (VP (AUX was) (VP (VBN designed) (PP (IN in) " +
+            "(NP (CD 2016)))))(. .)))";
+    static String tree_noisy3 = "(S1 (S (NP (DT The) (JJ paving)) (VP (VP (VBD commenced) (NP (NNP Monday))) (CC and)" +
+            "(VP (MD will) (VP (VB finish) (PP (IN in) (NP (NNP June)))))) (. .)))";
+
     static Map<IntPair, String> chunks = new HashMap<>();
     static Map<IntPair, String> ner = new HashMap<>();
 
@@ -55,6 +85,19 @@ public class DummyTextAnnotationGenerator {
         chunks.put(new IntPair(7, 8), "VP");
         chunks.put(new IntPair(8, 9), "PP");
         chunks.put(new IntPair(9, 10), "NP");
+
+        chunks.put(new IntPair(11, 14), "NP");
+        chunks.put(new IntPair(14, 16), "VP");
+        chunks.put(new IntPair(16, 17), "PP");
+        chunks.put(new IntPair(17, 18), "NP");
+
+        chunks.put(new IntPair(19, 21), "NP");
+        chunks.put(new IntPair(21, 22), "VP");
+        chunks.put(new IntPair(22, 23), "NP");
+        chunks.put(new IntPair(24, 26), "VP");
+        chunks.put(new IntPair(26, 27), "PP");
+        chunks.put(new IntPair(27, 28), "NP");
+
         ner.put(new IntPair(4, 6), "PER" );
     }
 
@@ -67,24 +110,70 @@ public class DummyTextAnnotationGenerator {
         chunks_noisy.put(new IntPair(3, 8), "NP");
         chunks_noisy.put(new IntPair(8, 9), "PP");
         chunks_noisy.put(new IntPair(9, 10), "NP");
+
+        chunks_noisy.put(new IntPair(11, 14), "NP");
+        chunks_noisy.put(new IntPair(14, 16), "VP");
+        chunks_noisy.put(new IntPair(16, 17), "PP");
+        chunks_noisy.put(new IntPair(17, 18), "ADJP");
+
+        chunks_noisy.put(new IntPair(19, 21), "NP");
+        chunks_noisy.put(new IntPair(21, 22), "VP");
+        chunks_noisy.put(new IntPair(22, 23), "ADJP");
+        chunks_noisy.put(new IntPair(24, 26), "VP");
+        chunks_noisy.put(new IntPair(26, 28), "NP" );
+
+
         ner_noisy.put( new IntPair(4, 6), "ORG" );
+        ner_noisy.put( new IntPair(27, 28), "PER" );
     }
 
     static IntPair verbSRLPredicate = new IntPair(7, 8);
     static String verbSRLPredicateSense = "01";
     static String verbSRLPredicateSense_noisy = "02";
     static Map<IntPair, String> verbSRLArgs = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs2 = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs3 = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs4 = new HashMap<>();
+
+
+    static IntPair verbSRLPredicate2 = new IntPair(15, 16);
+    static IntPair verbSRLPredicate3 = new IntPair(21, 22);
+    static IntPair verbSRLPredicate4 = new IntPair(25, 26);
 
     static {
         verbSRLArgs.put(new IntPair(0, 7), "A0");
         verbSRLArgs.put(new IntPair(8, 10), "AM-TMP");
+
+        verbSRLArgs2.put(new IntPair(11, 14), "A1");
+        verbSRLArgs2.put(new IntPair(16, 18), "AM-TMP");
+
+        verbSRLArgs3.put(new IntPair(19, 21), "A0");
+        verbSRLArgs3.put(new IntPair(22, 23), "AM-TMP");
+
+        verbSRLArgs4.put(new IntPair(19, 21), "A0");
+        verbSRLArgs4.put(new IntPair(24, 25), "AM-MOD");
+        verbSRLArgs4.put(new IntPair(26, 28), "AM-TMP");
+
     }
 
     static Map<IntPair, String> verbSRLArgs_noisy = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs_noisy2 = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs_noisy3 = new HashMap<>();
+    static Map<IntPair, String> verbSRLArgs_noisy4 = new HashMap<>();
 
     static {
         verbSRLArgs_noisy.put(new IntPair(0, 7), "A0");
         verbSRLArgs_noisy.put(new IntPair(8, 10), "A2");
+
+        verbSRLArgs_noisy2.put(new IntPair(11, 14), "A1");
+        verbSRLArgs_noisy2.put(new IntPair(16, 18), "AM-TMP");
+
+        verbSRLArgs_noisy3.put(new IntPair(19, 21), "A0");
+        verbSRLArgs_noisy3.put(new IntPair(22, 23), "AM-TMP");
+
+        verbSRLArgs_noisy4.put(new IntPair(24, 25), "AM-MOD");
+        verbSRLArgs_noisy4.put(new IntPair(26, 28), "AM-MNR");
+
     }
 
     /**
@@ -105,7 +194,8 @@ public class DummyTextAnnotationGenerator {
     }
 
     private static String[] allPossibleViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
-            ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB, ViewNames.NER_CONLL};
+            ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB, ViewNames.NER_CONLL,
+            ViewNames.PSEUDO_PARSE_STANFORD };
 
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels) {
         return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels);
@@ -113,7 +203,7 @@ public class DummyTextAnnotationGenerator {
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
             boolean withNoisyLabels) {
-        TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(annotatedString);
+        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(annotatedTokenizedStringArray);
 
         for (String viewName : viewsToAdd) {
             switch (viewName) {
@@ -157,43 +247,64 @@ public class DummyTextAnnotationGenerator {
                 case ViewNames.PARSE_GOLD:
                 case ViewNames.PARSE_STANFORD:
                 case ViewNames.PARSE_BERKELEY:
+                case ViewNames.PSEUDO_PARSE_STANFORD:
                 case ViewNames.PARSE_CHARNIAK:
                     TreeView parseView = new TreeView(viewName, ta);
-                    if (withNoisyLabels)
+                    if (withNoisyLabels) {
                         parseView.setParseTree(0,
                                 TreeParserFactory.getStringTreeParser().parse(tree_noisy));
-                    else
+                        parseView.setParseTree(1,
+                                TreeParserFactory.getStringTreeParser().parse(tree_noisy2));
+                        parseView.setParseTree(2,
+                                TreeParserFactory.getStringTreeParser().parse(tree_noisy3));
+                    }
+                    else {
                         parseView.setParseTree(0,
                                 TreeParserFactory.getStringTreeParser().parse(tree));
+                        parseView.setParseTree(1,
+                                TreeParserFactory.getStringTreeParser().parse(tree2));
+                        parseView.setParseTree(2,
+                                TreeParserFactory.getStringTreeParser().parse(tree3));
+                    }
                     ta.addView(viewName, parseView);
                     break;
                 case ViewNames.SRL_VERB:
                     PredicateArgumentView verbSRLView = new PredicateArgumentView(viewName, ta);
-                    Constituent predicate =
-                            new Constituent("predicate", viewName, ta, verbSRLPredicate.getFirst(),
-                                    verbSRLPredicate.getSecond());
-                    predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
-                            lemmas[verbSRLPredicate.getFirst()]);
-                    if (withNoisyLabels)
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
-                                verbSRLPredicateSense_noisy);
-                    else
-                        predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
-                                verbSRLPredicateSense);
-                    List<Constituent> args = new ArrayList<>();
-                    List<String> tempArgLabels = new ArrayList<>();
-                    for (IntPair span : verbSRLArgs.keySet()) {
-                        args.add(new Constituent("argument", viewName, ta, span.getFirst(), span
-                                .getSecond()));
-                        if (withNoisyLabels)
-                            tempArgLabels.add(verbSRLArgs_noisy.get(span));
-                        else
-                            tempArgLabels.add(verbSRLArgs.get(span));
-                    }
-                    String[] argLabels = tempArgLabels.toArray(new String[args.size()]);
-                    double[] scores = new double[args.size()];
-                    verbSRLView.addPredicateArguments(predicate, args, argLabels, scores);
+
+                    addSrlFrame( verbSRLView,
+                            viewName,
+                            ta,
+                            verbSRLPredicate,
+                            ( withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                            ( withNoisyLabels ? verbSRLArgs_noisy : verbSRLArgs)
+                        );
+
+                    addSrlFrame( verbSRLView,
+                            viewName,
+                            ta,
+                            verbSRLPredicate2,
+                            ( withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                            ( withNoisyLabels ? verbSRLArgs_noisy2 : verbSRLArgs)
+                    );
+
+                    addSrlFrame( verbSRLView,
+                            viewName,
+                            ta,
+                            verbSRLPredicate3,
+                            ( withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                            ( withNoisyLabels ? verbSRLArgs_noisy3 : verbSRLArgs)
+                    );
+
+                    addSrlFrame( verbSRLView,
+                            viewName,
+                            ta,
+                            verbSRLPredicate4,
+                            ( withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                            ( withNoisyLabels ? verbSRLArgs_noisy4 : verbSRLArgs)
+                    );
+
                     ta.addView(viewName, verbSRLView);
+
                     break;
                 case ViewNames.NER_ONTONOTES:
                     // For now the NER views are going to be empty
@@ -204,6 +315,32 @@ public class DummyTextAnnotationGenerator {
         }
 
         return ta;
+    }
+
+    private static void addSrlFrame(PredicateArgumentView srlView,
+                                    String viewName,
+                                    TextAnnotation ta,
+                                    IntPair verbSRLPredicate,
+                                    String sense,
+                                    Map<IntPair, String> srlArgs) {
+        Constituent predicate =
+                new Constituent("predicate", viewName, ta, verbSRLPredicate.getFirst(),
+                        verbSRLPredicate.getSecond());
+        predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+                lemmas[verbSRLPredicate.getFirst()]);
+            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                    sense);
+        List<Constituent> args = new ArrayList<>();
+        List<String> tempArgLabels = new ArrayList<>();
+        for (IntPair span : srlArgs.keySet()) {
+            args.add(new Constituent("argument", viewName, ta, span.getFirst(), span
+                    .getSecond()));
+                tempArgLabels.add(srlArgs.get(span));
+        }
+        String[] argLabels = tempArgLabels.toArray(new String[args.size()]);
+        double[] scores = new double[args.size()];
+        srlView.addPredicateArguments(predicate, args, argLabels, scores);
+
     }
 
 }

@@ -74,7 +74,7 @@ public class TreeViewTest {
         // Confusingly, the constituent of each node of the tree is called a label
         Constituent root = constituentTree.getLabel();
         assertEquals("S1", root.getLabel());
-        assertEquals(new IntPair(0, 9), root.getSpan());
+        assertEquals(new IntPair(0, 11), root.getSpan());
         Constituent firstNoun =
                 constituentTree.getChild(0).getChild(0).getChild(0).getChild(1).getLabel();
         assertEquals("construction", firstNoun.getSurfaceForm());

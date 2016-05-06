@@ -58,7 +58,7 @@ public class TestArgumentFeatures extends TestCase {
 //		System.out.println("Testlist size is " + testlist.size());
 
 		String[] viewsToAdd = {ViewNames.POS, ViewNames.LEMMA,ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
-				ViewNames.SRL_VERB,ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
+				ViewNames.SRL_VERB,ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL, ViewNames.PSEUDO_PARSE_STANFORD};
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
 		int i = 0;
 
