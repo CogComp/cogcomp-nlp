@@ -35,6 +35,10 @@ public class PredicateArgumentEvaluatorTest {
         String[] viewsToAdd = {ViewNames.SRL_VERB};
         TextAnnotation taGold =
                 DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+/**
+ * this next assignment looks like a bug (shouldn't it use 'noisy' labels by setting second arg 'true'?)
+ * -- BUT in fact the tests directly overwrite portions of taPred as needed.
+ */
         TextAnnotation taPred =
                 DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
         gold = (PredicateArgumentView) taGold.getView(ViewNames.SRL_VERB);
@@ -53,7 +57,7 @@ public class PredicateArgumentEvaluatorTest {
         evaluator = new PredicateArgumentEvaluator();
         evaluator.setViews(gold, predicted);
         evaluator.evaluateSense(senseTester);
-        assertEquals(0.5, senseTester.getMicroF1(), 0);
+        assertEquals(0.875, senseTester.getMicroF1(), 0);
     }
 
     @Test

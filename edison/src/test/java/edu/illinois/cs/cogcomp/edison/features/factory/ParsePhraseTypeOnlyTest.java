@@ -42,7 +42,7 @@ public class ParsePhraseTypeOnlyTest {
         ParsePhraseTypeOnly charniak = ParsePhraseTypeOnly.CHARNIAK;
         assertEquals("[VBD]", charniak.getFeatures(predicate).toString());
         assertEquals("[NP]", charniak.getFeatures(arg1).toString());
-        assertEquals("[NP]", charniak.getFeatures(arg2).toString());
+        assertEquals("[PP]", charniak.getFeatures(arg2).toString());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ParsePhraseTypeOnlyTest {
         ParsePhraseTypeOnly stanford = ParsePhraseTypeOnly.STANFORD;
         assertEquals("[VBD]", stanford.getFeatures(predicate).toString());
         assertEquals("[NP]", stanford.getFeatures(arg1).toString());
-        assertEquals("[NP]", stanford.getFeatures(arg2).toString());
+        assertEquals("[PP]", stanford.getFeatures(arg2).toString());
     }
 
     @Test
