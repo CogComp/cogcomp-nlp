@@ -77,13 +77,13 @@ members of the class `WordFeatureExtractorFactory`.
 In addition to the programmatic generation using feature extractors, we allow specification of
 feature extractors through a special file that defines feature extractors. This file is the .fex file.
 
-## What happens
+### What happens
 `FeatureManifest` loads the file and sends it to `ManifestParser`. Contains logic for converting
     definitions, variables, names into `FeatureExtractor`s.
 `ManifestParser` actually parses the file, and stores definitions, variables, names, etc.
 
 
-## Structure of the .fex file
+### Structure of the .fex file
 
 The file has a lisp-like syntax. As in lisp, a semicolon (;) is the comment symbol. This may come anywhere
 in the line.
