@@ -64,7 +64,7 @@ public abstract class Annotator {
      * @return the newly created View.
      * @throws AnnotatorException
      */
-    public View getView(TextAnnotation ta) throws AnnotatorException {
+    public final View getView(TextAnnotation ta) throws AnnotatorException {
         addView(ta);
         return ta.getView(viewName);
     }
