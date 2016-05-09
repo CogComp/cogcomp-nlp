@@ -455,6 +455,8 @@ public class CuratorDataStructureInterface {
      * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
      *
+     * <b>NOTE:</b> must correct for one-past-the-end labeling when calling
+     * {@link TextAnnotation.getTokenIdFromCharacterOffset() }.
      * @return A TokenLabelView
      */
     public static TokenLabelView alignLabelingToTokenLabelView(String viewName, TextAnnotation ta,
@@ -469,7 +471,7 @@ public class CuratorDataStructureInterface {
 
             int tokenId = ta.getTokenIdFromCharacterOffset(span.getStart());
 
-            int endTokenId = ta.getTokenIdFromCharacterOffset(span.getEnding());
+            int endTokenId = ta.getTokenIdFromCharacterOffset(span.getEnding()-1);
 
             if (tokenId == endTokenId)
                 endTokenId++;
