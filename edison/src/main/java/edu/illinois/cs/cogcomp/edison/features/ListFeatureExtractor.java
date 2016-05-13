@@ -72,7 +72,19 @@ public class ListFeatureExtractor implements FeatureExtractor {
         if (!caseSensitive)
             surface = surface.toLowerCase();
         Set<Feature> features = new LinkedHashSet<>();
-        if (list.contains(surface))
+
+        boolean isContained = false;
+        for (String pattern : list){
+            if (!caseSensitive)
+                isContained = surface.equalsIgnoreCase(pattern);
+            else
+                isContained = surface.equals(pattern);
+
+            if (isContained)
+                break;
+        }
+
+        if (isContained)
             features.add(listName);
         return features;
     }

@@ -6,22 +6,18 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.PseudoParse;
+import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +44,8 @@ public class TestArgumentFeatures extends TestCase {
 				ViewNames.SRL_VERB,ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
 		int i = 0;
+		ta.addView(ClauseViewGenerator.STANFORD);
+		ta.addView(PseudoParse.STANFORD);
 
 		System.out.println("This textannotation annotates the text: " + ta.getText());
 
@@ -55,11 +53,17 @@ public class TestArgumentFeatures extends TestCase {
 
 		System.out.println("GOT SRL_VERB FROM TEXTAnn");
 
-		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(0, 5);
+		List<Constituent> testlist_0 = SRL_VERB.getConstituentsCoveringSpan(10,13);
+		List<Constituent> testlist_1 = SRL_VERB.getConstituentsCoveringSpan(26,27);
+		//List<Constituent> testlist_1 = SRL_VERB.getConstituentsCoveringSpan(18,29);
 
-		for (Constituent c : testlist) {
+		for (Constituent c : testlist_1) {
 			System.out.println(c.getSurfaceForm());
 		}
+//
+//		for (Constituent c : testlist_1) {
+//			System.out.println(c.getSurfaceForm());
+//		}
 
 		System.out.println("SRL output");
 		int SRLFexCount = 0;
@@ -81,7 +85,17 @@ public class TestArgumentFeatures extends TestCase {
 		
 		fex = featureManifest.createFex();
 
-		for (Constituent test : testlist){
+		for (Constituent test : testlist_0){
+			System.out.println("The constituent for testing is " + test.toString());
+			Set<Feature> feats = fex.getFeatures(test);
+			for (Feature f : feats){
+				System.out.println(f.getName());
+				SRLFexCount += f.getName().split("/n").length;
+			}
+			System.out.println();
+		}
+
+		for (Constituent test : testlist_1){
 			System.out.println("The constituent for testing is " + test.toString());
 			Set<Feature> feats = fex.getFeatures(test);
 			for (Feature f : feats){
@@ -100,12 +114,22 @@ public class TestArgumentFeatures extends TestCase {
 		int EdisonFexCount = 0;
 		ArgumentFeatures af = new ArgumentFeatures();
 
-		for (Constituent test : testlist){
+		for (Constituent test : testlist_0){
 			System.out.println("The constituent for testing is " + test.toString());
 			Set<Feature> feats = af.getFeatures(test);
 			for (Feature f : feats){
 				System.out.println(f.getName());
 				EdisonFexCount += f.getName().split("/n").length;
+			}
+			System.out.println();
+		}
+
+		for (Constituent test : testlist_1){
+			System.out.println("The constituent for testing is " + test.toString());
+			Set<Feature> feats = af.getFeatures(test);
+			for (Feature f : feats){
+				System.out.println(f.getName());
+				EdisonFexCount  += f.getName().split("/n").length;
 			}
 			System.out.println();
 		}

@@ -66,7 +66,7 @@ public class TestMyFeatures extends TestCase {
 
 		System.out.println("GOT SRL_VERB FROM TEXTAnn");
 
-		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(0, 5);
+		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(10, 13);
 
 		System.out.println("Testlist size is " + testlist.size());
 		
