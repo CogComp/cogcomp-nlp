@@ -28,20 +28,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TestPredicate extends TestCase {
-	
-	private static List<TextAnnotation> tas;
-
-	static {
-		try {
-			tas = IOUtils.readObjectAsResource(PredicateFeatures.class, "test.ta");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 
 	public final void test() throws Exception {
 		System.out.println("PredicateFeatures Feature Extractor");
@@ -167,14 +153,6 @@ public class TestPredicate extends TestCase {
 		assertEquals(EdisonFexCount,EdisonFexCount);
 	}
 
-	private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
-
-		for (TextAnnotation ta : tas) {
-			for (String viewName : viewNames)
-				if (ta.hasView(viewName))
-					System.out.println(ta.getView(viewName));
-		}
-	}
 }
 
 

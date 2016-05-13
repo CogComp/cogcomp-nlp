@@ -22,20 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TestArgumentFeatures extends TestCase {
-	
-	private static List<TextAnnotation> tas;
-
-	static {
-		try {
-			tas = IOUtils.readObjectAsResource(ArgumentFeatures.class, "test.ta");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 
 	public final void test() throws Exception {
 		System.out.println("ArgumentFeatures Feature Extractor");
@@ -55,7 +41,6 @@ public class TestArgumentFeatures extends TestCase {
 
 		List<Constituent> testlist_0 = SRL_VERB.getConstituentsCoveringSpan(10,13);
 		List<Constituent> testlist_1 = SRL_VERB.getConstituentsCoveringSpan(26,27);
-		//List<Constituent> testlist_1 = SRL_VERB.getConstituentsCoveringSpan(18,29);
 
 		for (Constituent c : testlist_1) {
 			System.out.println(c.getSurfaceForm());
@@ -138,14 +123,6 @@ public class TestArgumentFeatures extends TestCase {
 		assertEquals(SRLFexCount,EdisonFexCount);
 	}
 
-	private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
-
-		for (TextAnnotation ta : tas) {
-			for (String viewName : viewNames)
-				if (ta.hasView(viewName))
-					System.out.println(ta.getView(viewName));
-		}
-	}
 }
 
 

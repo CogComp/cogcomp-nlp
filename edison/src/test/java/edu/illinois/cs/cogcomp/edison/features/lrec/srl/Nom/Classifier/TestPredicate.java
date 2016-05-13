@@ -28,30 +28,9 @@ import java.util.List;
 import java.util.Set;
 
 public class TestPredicate extends TestCase {
-	
-	private static List<TextAnnotation> tas;
-
-	static {
-		try {
-			tas = IOUtils.readObjectAsResource(PredicateFeatures.class, "test.ta");
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 
 	public final void test() throws Exception {
 		System.out.println("PredicateFeatures Feature Extractor");
-		// Using the first TA and a constituent between span of 30-40 as a test
-//		TextAnnotation ta = tas.get(2);
-//		View TOKENS = ta.getView("TOKENS");
-//
-//		System.out.println("GOT TOKENS FROM TEXTAnn");
-//
-//		List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
 		String[] viewsToAdd = {ViewNames.POS, ViewNames.LEMMA,ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
 				ViewNames.SRL_VERB,ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
@@ -126,14 +105,6 @@ public class TestPredicate extends TestCase {
 		assertEquals(SRLFexCount,EdisonFexCount);
 	}
 
-	private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames) throws EdisonException {
-
-		for (TextAnnotation ta : tas) {
-			for (String viewName : viewNames)
-				if (ta.hasView(viewName))
-					System.out.println(ta.getView(viewName));
-		}
-	}
 }
 
 

@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 public class TestWordPos extends TestCase {
-	
+
 	private static List<TextAnnotation> tas;
 
 	static {
