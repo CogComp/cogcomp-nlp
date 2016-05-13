@@ -242,7 +242,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * views from the Curator representation.
      * NOTE: one-past-the-end indexing can make this problematic. Currently, constituents are processed so that
      *   only characters <i>within</i> tokens are mapped to token ids (avoiding ambiguity at the cost of introducing
-     *   complexity for users thinking of one-past-the-end indexing).
+     *   complexity for users thinking of one-past-the-end indexing). <b>I.E. you MUST modify the end offset in
+     *   the call if you are using one-past-the-end offsets.</b> (example: curator data structures use one-past-the-
+     *   end, as do TextAnnotation Views/Constituents. This behavior was chosen to handle the case where there is
+     *   arbitrary whitespace, and to avoid confusion when two tokens are contiguous (the first character of the
+     *   second token would conflict with the last (one-past-the-end) character of the first.
      *
      * UPDATED to allow non-zero first token character offset (i.e. in case where source text has markup preamble
      *    that you want to ignore. Current implementation maps char offsets not representing tokens to the index '-1'.
