@@ -473,11 +473,23 @@ public class TokenizerStateMachine {
      * @param intext the text to parse.
      */
     protected void parseText(String intext) {
+    	// find index of last non whitespace
+    	int i = intext.length()-1;
+    	for (; i >=0 ; i--) {
+    		if (!Character.isWhitespace(intext.charAt(i)))
+    			break; // found the first non-whitepsace.
+    	}
+    	i++; // length is one beyond the last whitespace char.
+        stack = new ArrayList<State>();
+        completed = new ArrayList<State>();
+    	if (i == 0)
+    		return;
+    	this.text = new char[i];
+    	intext.getChars(0, i, this.text, 0);
+    	
         this.textstring = intext.trim();
         this.text = this.textstring.toCharArray();
         current = 0;
-        stack = new ArrayList<State>();
-        completed = new ArrayList<State>();
         this.push(new State(TokenizerState.IN_SENTENCE), current);
         for (current = 0; current < this.text.length; current++) {
             char character = this.text[current];

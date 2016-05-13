@@ -118,21 +118,22 @@ public class StatefulTokenizer implements Tokenizer {
     			                        " a plant manager making between $90,000 and $120,000 may expect to get a 10 percent raise or more.        \n";
         String issue2 = "John is 'a good boy' and he is 'not a dog' or a dogs' or a dog's eye.";
         String issue3 = "At 1:30 a.m. Sunday, the troops moved out: 40 U.S. soldiers in a convoy of Humvees mounted with heavy machine guns, and 60 Afghan National Army troops in pickup trucks.";
-        String issue4 = "And John said \"There are those who would.\" So ended his reign.";
+        String issue4 = " There is one.     ";
         String issue5 = "\"I said, 'what're you? Crazy?'\" said Sandowsky. \"I can't afford to do that.";
         String [] ss = {issue1, issue2, issue3, issue4, issue5};
         for (String issue : ss) {
-            final TextAnnotationBuilder stab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
-            TextAnnotation ta = stab.createTextAnnotation(issue);
-            System.out.println(ta);
-            for (int i = 0; i < ta.getNumberOfSentences(); i++)
-                System.out.println(ta.getSentence(i));
-    
+        	TextAnnotation ta;
             final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
             ta = tab.createTextAnnotation(issue);
             for (int i = 0; i < ta.getNumberOfSentences(); i++)
                 System.out.println(ta.getSentence(i));
             System.out.println("\n");
+            final TextAnnotationBuilder stab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+            ta = stab.createTextAnnotation(issue);
+            System.out.println(ta);
+            for (int i = 0; i < ta.getNumberOfSentences(); i++)
+                System.out.println(ta.getSentence(i));
+    
         }
     }
 }
