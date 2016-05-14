@@ -121,6 +121,7 @@ public class ViewNames {
     public static final String GAZETTEER = "GAZETTEER";
     public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
     public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
+    public static final String GAZETTEER_NE = "GAZETTEER_NE";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -144,6 +145,7 @@ public class ViewNames {
             case CLAUSES_BERKELEY:
             case BROWN_CLUSTERS:
             case GAZETTEER:
+            case GAZETTEER_NE:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:

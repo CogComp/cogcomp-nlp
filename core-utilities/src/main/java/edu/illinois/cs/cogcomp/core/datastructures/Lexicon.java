@@ -28,6 +28,9 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * A lexicon manager that manages features.
+ * Stores a hash value for string features and maps to an integer id.
+ * Optionally stores the string values too.
+ * Method previewFeature( String ) gets the
  *
  * @author Vivek Srikumar
  */
@@ -160,6 +163,20 @@ public class Lexicon {
         }
     }
 
+
+    /**
+     * a more intuitive method for adding a feature.  If already added, return id that was assigned; if not,
+     *    add it with a unique id and return that id.
+     *
+     * @param feature  Feature value to put in lexicon
+     * @return integer id for feature
+     */
+    public synchronized int getFeatureId( String feature )
+    {
+        previewFeature( feature );
+        return this.lookupId( feature );
+    }
+
     /**
      * Add a new feature to this lexicon
      */
@@ -208,6 +225,12 @@ public class Lexicon {
         // return featureName.hashCode();
     }
 
+    /**
+     * generate a feature id representation from a feature vector with associated weights
+     *
+     * @param featureMap
+     * @return
+     */
     public Pair<int[], float[]> getFeatureVector(Map<String, Float> featureMap) {
         TIntFloatHashMap feats = new TIntFloatHashMap();
         for (Entry<String, Float> f : featureMap.entrySet()) {
