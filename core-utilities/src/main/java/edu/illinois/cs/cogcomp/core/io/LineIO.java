@@ -212,7 +212,7 @@ public class LineIO {
      * @param fileName The name of the file to be read
      * @return an open input stream.
      */
-    private static InputStream getInputStream(String fileName) throws FileNotFoundException {
+    public static InputStream getInputStream(String fileName) throws FileNotFoundException {
         InputStream is = LineIO.class.getClassLoader().getResourceAsStream(fileName);
 
         if (is == null) {
