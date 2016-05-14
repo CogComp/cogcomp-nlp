@@ -29,6 +29,8 @@ import java.util.zip.GZIPInputStream;
 
 /**
  * Use this class to create a brown cluster view for your text.
+ * Modified May 2016 to support multiple simulatenous brown cluster views,
+ *    distinguished by the name passed by the client (suffix to ViewNames.BROWN_CLUSTERS)
  *
  * @author Vivek Srikumar
  */
@@ -42,6 +44,11 @@ public class BrownClusterViewGenerator extends Annotator {
     public final static String file3200 =
             "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
     private final Logger log = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
+
+    // NER:
+    // "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt"
+    // "brown-clusters/brownBllipClusters"
+    // file1000 "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
 
     // private final Map<String, List<ListMatch<String>>> matchers;
     // private final Map<String, List<Integer>> lengths;
@@ -60,7 +67,7 @@ public class BrownClusterViewGenerator extends Annotator {
     }
 
     public BrownClusterViewGenerator(String name, String file, boolean gzip) throws Exception {
-        super(ViewNames.BROWN_CLUSTERS, new String[] {});
+        super(ViewNames.BROWN_CLUSTERS + "_" + name, new String[] {});
         this.name = name;
         this.file = file;
         this.gzip = gzip;
@@ -140,7 +147,7 @@ public class BrownClusterViewGenerator extends Annotator {
         lazyLoadClusters();
 
         SpanLabelView view =
-                new SpanLabelView(ViewNames.BROWN_CLUSTERS, "BrownClusters", ta, 1.0, true);
+                new SpanLabelView(getViewName(), "BrownClusters", ta, 1.0, true);
 
         Map<String, List<IntPair>> m = getMatchingSpans(ta);
 

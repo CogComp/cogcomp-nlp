@@ -329,6 +329,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                             TCollections
                                     .synchronizedMap(new TIntObjectHashMap<ArrayList<IntPair>>());
 
+                    /**
+                     * creates a hash for each contiguous substring, and creates an entry for it in allSpans
+                     * NOTE: spans previously used "at-the-end" indexing but then the offsets won't agree with actual
+                     *    constituents, so CHANGED IT 2016/05/11. MS
+                     */
                     for (int start = 0; start < this.size() - 1; start++) {
                         StringBuilder sb = new StringBuilder();
 
@@ -346,7 +351,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                                 allSpans.put(hash, new ArrayList<IntPair>());
 
                             List<IntPair> list = allSpans.get(hash);
-                            list.add(new IntPair(start, end));
+                            list.add(new IntPair(start, end+1));
                         }
                     }
                 }
@@ -363,12 +368,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // This is a hack to deal with the fact that sometimes, two strings in
         // Java could have the same hashCode even if they aren't identical. This
         // won't weed out all such cases, but will remove most.v
-        List<IntPair> newList = new ArrayList<>();
-        for (IntPair item : list) {
-            if (item.getSecond() - item.getFirst() == length)
-                newList.add(item);
-        }
+        // MS: don't see that this does anything except filter out spans of length 1.  How is that helpful?
+//        List<IntPair> newList = new ArrayList<>();
+//        for (IntPair item : list) {
+//            if (item.getSecond() - item.getFirst() == length)
+//                newList.add(item);
+//        }
+//        return newList;
 
-        return newList;
+        return list;
     }
 }
