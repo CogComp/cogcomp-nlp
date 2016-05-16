@@ -56,16 +56,16 @@ public class additionalFeaturesDiscreteNonConjunctive extends Classifier
     String __id;
     String __value;
 
-    for (int fid = 0; fid < word.getGeneratedDiscreteFeaturesNonConjunctive().size(); fid++)
-    {
-      NEWord.DiscreteFeature feature = word.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
-      if (!feature.useWithinTokenWindow)
-      {
-        __id = "" + (feature.featureGroupName);
-        __value = "" + (feature.featureValue);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-      }
-    }
+//    for (int fid = 0; fid < word.getGeneratedDiscreteFeaturesNonConjunctive().size(); fid++)
+//    {
+//      NEWord.DiscreteFeature feature = word.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
+//      if (!feature.useWithinTokenWindow)
+//      {
+//        __id = "" + (feature.featureGroupName);
+//        __value = "" + (feature.featureValue);
+//        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+//      }
+//    }
     int i;
     NEWord w = word, last = word;
     for (i = 0; i <= 2 && last != null; ++i)
@@ -76,20 +76,20 @@ public class additionalFeaturesDiscreteNonConjunctive extends Classifier
     {
       w = (NEWord) w.previous;
     }
-    for (; w != last; w = (NEWord) w.next)
-    {
-      for (int fid = 0; fid < w.getGeneratedDiscreteFeaturesNonConjunctive().size(); fid++)
-      {
-        NEWord.DiscreteFeature feature = w.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
-        if (feature.useWithinTokenWindow)
-        {
-          __id = "" + ("pos" + i + "group" + feature.featureGroupName);
-          __value = "" + (feature.featureValue);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-        }
-      }
-      i++;
-    }
+//    for (; w != last; w = (NEWord) w.next)
+//    {
+//      for (int fid = 0; fid < w.getGeneratedDiscreteFeaturesNonConjunctive().size(); fid++)
+//      {
+//        NEWord.DiscreteFeature feature = w.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
+//        if (feature.useWithinTokenWindow)
+//        {
+//          __id = "" + ("pos" + i + "group" + feature.featureGroupName);
+//          __value = "" + (feature.featureValue);
+//          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+//        }
+//      }
+//      i++;
+//    }
     return __result;
   }
 
