@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -48,12 +48,12 @@ public class TestAffixes extends TestCase {
     
     public final void testAffixes() throws EdisonException {
 	
-	log.debug("Affixes Feature Extractor")
+	log.debug("Affixes Feature Extractor");
 	//Using the first TA and a constituent between span of 30-40 as a test
 	TextAnnotation ta = tas.get(1);
 	View TOKENS = ta.getView("TOKENS");
 	
-	log.debug("GOT TOKENS FROM TEXTAnn")
+	log.debug("Got tokens FROM TextAnnotation");
 	
 	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
 	
@@ -61,7 +61,7 @@ public class TestAffixes extends TestCase {
 	    log.debug(c.getSurfaceForm());
 	}
 
-	log.debug("Testlist size is "+testlist.size());
+	log.debug("Test Input size is "+testlist.size());
 
 	Constituent test = testlist.get(1);
 	
