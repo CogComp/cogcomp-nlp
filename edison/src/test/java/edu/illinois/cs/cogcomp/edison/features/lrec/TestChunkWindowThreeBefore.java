@@ -33,58 +33,57 @@ public class TestChunkWindowThreeBefore extends TestCase {
     static Logger log = Logger.getLogger(TestChunkWindowThreeBefore.class.getName());
 
     private static List<TextAnnotation> tas;
-    
+
     static {
-	try {
-	    tas = IOUtils.readObjectAsResource(TestChunkWindowThreeBefore.class, "test.ta");
-	} catch (Exception e) {
-	    throw new RuntimeException(e);
-	}
+        try {
+            tas = IOUtils.readObjectAsResource(TestChunkWindowThreeBefore.class, "test.ta");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    
+
     protected void setUp() throws Exception {
-	super.setUp();
+        super.setUp();
     }
-    
+
     public final void testUsage() throws EdisonException {
-	
-	log.debug("PreviousTags Feature Extractor");
-	//Using the first TA and a constituent between span of 30-40 as a test
-	TextAnnotation ta = tas.get(1);
-	View TOKENS = ta.getView("TOKENS");
-		
-	List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0,20);
-	
-	for(Constituent c: testlist){
-	    log.debug(c.getSurfaceForm());
-	}
 
-	log.debug("Testlist size is "+testlist.size());
+        log.debug("PreviousTags Feature Extractor");
+        // Using the first TA and a constituent between span of 30-40 as a test
+        TextAnnotation ta = tas.get(1);
+        View TOKENS = ta.getView("TOKENS");
 
-	Constituent test = testlist.get(4);
-	
-	log.debug("The constituent we are extracting features from in this test is: "+test.getSurfaceForm());
+        List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
-		ChunkWindowThreeBefore prevtags = new ChunkWindowThreeBefore("ChunkWindowThreeBefore");
-	
-	log.debug("Startspan is "+test.getStartSpan()+" and Endspan is "+test.getEndSpan());
-     
-	Set<Feature> feats = prevtags.getFeatures(test);
-	String[] expected_outputs = {
-		"ChunkWindowThreeBefore:0(NP)",
-		"ChunkWindowThreeBefore:1(NP)"
-	};
+        for (Constituent c : testlist) {
+            log.debug(c.getSurfaceForm());
+        }
 
-	if(feats == null){
-	    log.debug("Feats are returning NULL.");
-	}
-	
-	log.debug("Printing Set of Features");
-	for(Feature f: feats){
-	    log.debug(f.getName());
-		assert(ArrayUtils.contains( expected_outputs, f.getName()));
-	}
-	 
+        log.debug("Testlist size is " + testlist.size());
+
+        Constituent test = testlist.get(4);
+
+        log.debug("The constituent we are extracting features from in this test is: "
+                + test.getSurfaceForm());
+
+        ChunkWindowThreeBefore prevtags = new ChunkWindowThreeBefore("ChunkWindowThreeBefore");
+
+        log.debug("Startspan is " + test.getStartSpan() + " and Endspan is " + test.getEndSpan());
+
+        Set<Feature> feats = prevtags.getFeatures(test);
+        String[] expected_outputs =
+                {"ChunkWindowThreeBefore:0(NP)", "ChunkWindowThreeBefore:1(NP)"};
+
+        if (feats == null) {
+            log.debug("Feats are returning NULL.");
+        }
+
+        log.debug("Printing Set of Features");
+        for (Feature f : feats) {
+            log.debug(f.getName());
+            assert (ArrayUtils.contains(expected_outputs, f.getName()));
+        }
+
     }
 
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -35,11 +32,13 @@ import java.util.Set;
  * If the input constituent is not a word, then the feature extractor can do one of two things: If a
  * flag is set in the constructor, then it will generate features from the last word of the
  * constituent. If the flag is not set, then it will throw a {@code FeatureException}.
- *<p>
- *     Note: you must call {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)} in order
- *     to specify which types of WordNet features you would like. If you do not add any feature types, no
- *     features will be returned. See {@link WordNetFeatureClass} to learn about WordNet feature types.
- *</p>
+ * <p>
+ * Note: you must call {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)} in order
+ * to specify which types of WordNet features you would like. If you do not add any feature types,
+ * no features will be returned. See {@link WordNetFeatureClass} to learn about WordNet feature
+ * types.
+ * </p>
+ * 
  * @author Vivek Srikumar
  */
 public class WordNetFeatureExtractor extends WordFeatureExtractor {
@@ -76,8 +75,9 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
     }
 
     /**
-     * Specify which types of features you would like this feature extractor to extract. This
-     * must be called at least once or the feature extractor will return nothing.
+     * Specify which types of features you would like this feature extractor to extract. This must
+     * be called at least once or the feature extractor will return nothing.
+     * 
      * @param name feature type
      */
     public void addFeatureType(WordNetFeatureClass name) {
@@ -296,11 +296,11 @@ public class WordNetFeatureExtractor extends WordFeatureExtractor {
     }
 
     /**
-     * Feature types as used in {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)}. These
-     * specify different types of features available from WordNet.
+     * Feature types as used in {@link WordNetFeatureExtractor#addFeatureType(WordNetFeatureClass)}.
+     * These specify different types of features available from WordNet.
      *
-     * All features classes containing 'firstSense' in the name apply only on the first sense in the synset. Names with
-     * 'allSenses' apply to all senses in the synset.
+     * All features classes containing 'firstSense' in the name apply only on the first sense in the
+     * synset. Names with 'allSenses' apply to all senses in the synset.
      *
      * TODO: document this more fully.
      */
