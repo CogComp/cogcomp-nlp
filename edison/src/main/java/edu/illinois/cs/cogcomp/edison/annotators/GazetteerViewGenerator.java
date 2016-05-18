@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -42,8 +39,9 @@ import java.util.zip.GZIPInputStream;
 /**
  * Use this class to create a gazetteer view for your text.
  *
- * Use this in combination with cogcomp-common-resources, and pass in 'resources/gazetteers/gazetteers' as the
- * directory (note the lack of a trailing slash -- this is important!)
+ * Use this in combination with cogcomp-common-resources, and pass in
+ * 'resources/gazetteers/gazetteers' as the directory (note the lack of a trailing slash -- this is
+ * important!)
  *
  *
  * @author Vivek Srikumar

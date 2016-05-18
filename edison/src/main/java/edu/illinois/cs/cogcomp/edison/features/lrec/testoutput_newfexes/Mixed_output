@@ -1,0 +1,25 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestMixed
+Mixed Feature Extractor
+GOT TOKENS FROM TEXTAnn
+I
+give
+John
+$900
+today
+.
+Testlist size is 6
+The constituent we are extracting features from in this test is: give
+Init Views
+About to print out words from text
+Printing Set of Features
+Mixed:0_1(PRP_give)
+Mixed:1_1(VBP_John)
+Mixed:2_1(NNP_$900)
+Mixed:3_1(NN_null)
+Mixed:4_1(null)
+Mixed:0_1(I_give)
+Mixed:1_1(give_John)
+Mixed:2_1(John_$900)
+Mixed:3_1($900_null)
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 sec

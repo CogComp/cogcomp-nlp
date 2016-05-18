@@ -1,0 +1,11 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestPreviousTags
+PreviousTags Feature Extractor
+I
+give
+John
+$900
+today
+.
+Testlist size is 6
+The constituent we are extracting features from in this test is: today
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.061 sec <<< FAILURE!
