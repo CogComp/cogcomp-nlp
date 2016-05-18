@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.manifest;
@@ -21,7 +18,8 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * This calls an external parser to parse the Tree structure, and stores features, definitions, and variables.
+ * This calls an external parser to parse the Tree structure, and stores features, definitions, and
+ * variables.
  */
 class ManifestParser {
 
@@ -33,7 +31,9 @@ class ManifestParser {
     private HashMap<String, String> variables;
 
     /**
-     * This takes an InputStream of a manifest file, and calls {@link ManifestParser#initialize(String)} on it.
+     * This takes an InputStream of a manifest file, and calls
+     * {@link ManifestParser#initialize(String)} on it.
+     * 
      * @param file {@link InputStream of a manifest file}
      * @throws EdisonException
      */
@@ -60,8 +60,9 @@ class ManifestParser {
     }
 
     /**
-     * Constructor that takes the string contents of a manifest file (no comments allowed in the file).
-     * This calls {@link ManifestParser#initialize(String)} on the string.
+     * Constructor that takes the string contents of a manifest file (no comments allowed in the
+     * file). This calls {@link ManifestParser#initialize(String)} on the string.
+     * 
      * @param contents
      * @throws EdisonException
      */
@@ -71,8 +72,9 @@ class ManifestParser {
     }
 
     /**
-     * Given the string content of a manifest file (no comments allowed), parse it.
-     * If the file has comments, pass it through the constructor instead.
+     * Given the string content of a manifest file (no comments allowed), parse it. If the file has
+     * comments, pass it through the constructor instead.
+     * 
      * @param contents contents of the manifest file, without comments.
      * @throws EdisonException
      */
