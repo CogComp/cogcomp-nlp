@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.manifest;
@@ -36,6 +33,7 @@ public class FeatureManifest {
 
     /**
      * Load the file.
+     * 
      * @param path path to .fex file
      * @throws Exception
      */
@@ -45,6 +43,7 @@ public class FeatureManifest {
 
     /**
      * Alternate constructor for {@link InputStream}
+     * 
      * @param file
      * @throws Exception
      */
@@ -83,6 +82,7 @@ public class FeatureManifest {
 
     /**
      * This parses the body of a define statement: (define name body).
+     * 
      * @param tree
      * @param cf used for memoization, can be empty when passed in
      * @return
@@ -124,6 +124,7 @@ public class FeatureManifest {
 
     /**
      * Alternate version, calls {@link FeatureManifest#populateFex(FeatureCollection)}
+     * 
      * @return
      * @throws EdisonException
      */
@@ -152,6 +153,7 @@ public class FeatureManifest {
 
     /**
      * This deals with if statements.
+     * 
      * @param tree
      * @param cf
      * @return
@@ -450,7 +452,9 @@ public class FeatureManifest {
     }
 
     /**
-     * Given a leaf name, find the corresponding FeatureExtractor, as defined in {@link KnownFexes#fexes}
+     * Given a leaf name, find the corresponding FeatureExtractor, as defined in
+     * {@link KnownFexes#fexes}
+     * 
      * @param label string, needs to be in {@link KnownFexes#fexes}
      * @param cf used for memoization, maps label to FeatureExtractor
      * @return the corresponding FeatureExtractor
@@ -479,6 +483,7 @@ public class FeatureManifest {
 
     /**
      * This just removes all whitespace.
+     * 
      * @param label any string
      * @return label without whitespace
      */
@@ -540,6 +545,7 @@ public class FeatureManifest {
     /**
      * This adds a FeatureExtractor to the input FeatureCollection. Typically the FeatureCollection
      * is empty, having only a name.
+     * 
      * @param fex
      * @return
      * @throws EdisonException

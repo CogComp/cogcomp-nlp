@@ -17,8 +17,7 @@ import java.util.*;
 
 /**
  *
- * @author Paul Vijayakumar, Mazin Bokhari
- * Generates a 3-shingle of POSTags in a window of size 3
+ * @author Paul Vijayakumar, Mazin Bokhari Generates a 3-shingle of POSTags in a window of size 3
  *
  */
 public class POSandPositionWindowThree implements FeatureExtractor {
@@ -26,48 +25,48 @@ public class POSandPositionWindowThree implements FeatureExtractor {
     public static View POS, TOKENS;
 
     private final String viewName;
-    
+
     public POSandPositionWindowThree(String viewName) {
-	this.viewName = viewName;
+        this.viewName = viewName;
     }
-    
-    public List<Constituent> getwordskfrom(View TOKENS, int startspan, int endspan, int k){
-	
-	//This assumes that span is only representing a token
-	if(k == 0){
 
-	    
-	    return TOKENS.getConstituentsCoveringSpan(startspan, endspan);
-	    
-	}else if(k < 0){
-	    
-	    int kprevindex = startspan+k;
-	    
-	    //Checking the token index specified by kprevindex is
-	    //valid (i.e. non-negative) 
+    public List<Constituent> getwordskfrom(View TOKENS, int startspan, int endspan, int k) {
 
-	    if(kprevindex < 0){
-		kprevindex = 0;
-	    }
-	    
-	    return TOKENS.getConstituentsCoveringSpan(kprevindex,startspan);
-	    
-	}else{
-	    
-	    int knextindex = endspan+k;
-	    
-	    //Checking the token index specified by kprevindex is
-	    //valid (i.e. non-negative) 
+        // This assumes that span is only representing a token
+        if (k == 0) {
 
-	    if(knextindex > TOKENS.getEndSpan()){
-		knextindex = TOKENS.getEndSpan();
-	    }
-	    
-	    return TOKENS.getConstituentsCoveringSpan(endspan, knextindex);
-	    
-	}   
+
+            return TOKENS.getConstituentsCoveringSpan(startspan, endspan);
+
+        } else if (k < 0) {
+
+            int kprevindex = startspan + k;
+
+            // Checking the token index specified by kprevindex is
+            // valid (i.e. non-negative)
+
+            if (kprevindex < 0) {
+                kprevindex = 0;
+            }
+
+            return TOKENS.getConstituentsCoveringSpan(kprevindex, startspan);
+
+        } else {
+
+            int knextindex = endspan + k;
+
+            // Checking the token index specified by kprevindex is
+            // valid (i.e. non-negative)
+
+            if (knextindex > TOKENS.getEndSpan()) {
+                knextindex = TOKENS.getEndSpan();
+            }
+
+            return TOKENS.getConstituentsCoveringSpan(endspan, knextindex);
+
+        }
     }
-    
+
     @Override
     /**
      * This feature extractor assumes that the TOKEN View and POS View have been
@@ -76,88 +75,87 @@ public class POSandPositionWindowThree implements FeatureExtractor {
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-	String classifier = "POSandPositionWindowThree";
-	
-	TextAnnotation ta = c.getTextAnnotation();
-	
-	TOKENS = ta.getView(ViewNames.TOKENS);
-	POS = ta.getView(ViewNames.POS);
+        String classifier = "POSandPositionWindowThree";
 
-	//We can assume that the constituent in this case is a Word(Token) described by the LBJ chunk definition
-	int startspan = c.getStartSpan();
-	int endspan = c.getEndSpan();
-	
-	int before = 3;
-	int after = 3;
+        TextAnnotation ta = c.getTextAnnotation();
 
-	//All our constituents are words(tokens)
-	String[] tags = new String[before + after + 1];
+        TOKENS = ta.getView(ViewNames.TOKENS);
+        POS = ta.getView(ViewNames.POS);
 
-	int k = -3; // three words before
-	List<Constituent> wordsthreebefore = getwordskfrom(TOKENS,startspan,endspan,k);
-	
-	int i = 0;
-	for(Constituent token : wordsthreebefore){
-	        
-	    //Should only be one POS tag for each token
-	    List<String> POS_tag = POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
-	        
-	    if(POS_tag.size() != 1){
-		System.out.println("Error token has more than one POS tag.");
-	    }
-	        
-	    tags[i] = POS_tag.get(0);
-	    i++;
-	}
+        // We can assume that the constituent in this case is a Word(Token) described by the LBJ
+        // chunk definition
+        int startspan = c.getStartSpan();
+        int endspan = c.getEndSpan();
 
-	tags[i] = POS.getLabelsCoveringSpan(c.getStartSpan(), c.getEndSpan()).get(0);
-	i++;
-	
-	k = 3; // three words after
-	List<Constituent> wordsthreeafter = getwordskfrom(TOKENS,startspan,endspan,k);
+        int before = 3;
+        int after = 3;
 
-	for(Constituent token : wordsthreeafter){
-	    
-	    //Should only be one POS tag for each token
-	    List<String> POS_tag = POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
-	    
-	    if(POS_tag.size() != 1){
-		System.out.println("Error token has more than one POS tag.");
-	    }
-	        
-	    tags[i] = POS_tag.get(0);
-	    i++;
-	}
+        // All our constituents are words(tokens)
+        String[] tags = new String[before + after + 1];
 
-	Set<Feature> __result = new LinkedHashSet<Feature>();
+        int k = -3; // three words before
+        List<Constituent> wordsthreebefore = getwordskfrom(TOKENS, startspan, endspan, k);
 
-	String __id;
-	String __value;
-	int contextmax = 3;
-	for (int j = 0; j < contextmax; j++)
-	    {
-		for (i = 0; i < tags.length; i++)
-		    {
-			StringBuffer f = new StringBuffer();
-			for (int context = 0; context <= j && i + context < tags.length; context++)
-			    {
-				if (context != 0)
-				    {
-					f.append("_");
-				    }
-				f.append(tags[i + context]);
-			    }
-			__id = "" + (i + "_" + j);
-			__value = "" + (f.toString());
-			__result.add(new DiscreteFeature(classifier+":"+__id+"("+__value+")"));
-		    }
-	    }
-	
-	return __result;
+        int i = 0;
+        for (Constituent token : wordsthreebefore) {
+
+            // Should only be one POS tag for each token
+            List<String> POS_tag =
+                    POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
+
+            if (POS_tag.size() != 1) {
+                System.out.println("Error token has more than one POS tag.");
+            }
+
+            tags[i] = POS_tag.get(0);
+            i++;
+        }
+
+        tags[i] = POS.getLabelsCoveringSpan(c.getStartSpan(), c.getEndSpan()).get(0);
+        i++;
+
+        k = 3; // three words after
+        List<Constituent> wordsthreeafter = getwordskfrom(TOKENS, startspan, endspan, k);
+
+        for (Constituent token : wordsthreeafter) {
+
+            // Should only be one POS tag for each token
+            List<String> POS_tag =
+                    POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
+
+            if (POS_tag.size() != 1) {
+                System.out.println("Error token has more than one POS tag.");
+            }
+
+            tags[i] = POS_tag.get(0);
+            i++;
+        }
+
+        Set<Feature> __result = new LinkedHashSet<Feature>();
+
+        String __id;
+        String __value;
+        int contextmax = 3;
+        for (int j = 0; j < contextmax; j++) {
+            for (i = 0; i < tags.length; i++) {
+                StringBuffer f = new StringBuffer();
+                for (int context = 0; context <= j && i + context < tags.length; context++) {
+                    if (context != 0) {
+                        f.append("_");
+                    }
+                    f.append(tags[i + context]);
+                }
+                __id = "" + (i + "_" + j);
+                __value = "" + (f.toString());
+                __result.add(new DiscreteFeature(classifier + ":" + __id + "(" + __value + ")"));
+            }
+        }
+
+        return __result;
     }
-    
+
     @Override
     public String getName() {
-	return "#path#" + viewName;
-    }    
+        return "#path#" + viewName;
+    }
 }
