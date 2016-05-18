@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.edison.features.factory.newfexes;
+package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
