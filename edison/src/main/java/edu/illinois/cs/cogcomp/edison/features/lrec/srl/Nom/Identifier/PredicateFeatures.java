@@ -16,10 +16,17 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class PredicateFeatures implements FeatureExtractor{
+	private final String name;
+	private final FeatureCollection base;
 
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
 	public PredicateFeatures(){
+		this("#predicateFeatures#");
+	}
+
+	public PredicateFeatures(String name){
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		ArrayList<CachedFeatureCollection> tmp = new ArrayList<CachedFeatureCollection>();
 		
 		tmp.add(new CachedFeatureCollection(""));
@@ -47,6 +54,6 @@ public class PredicateFeatures implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#predicateFeatures#";
+		return this.name;
 	}
 }

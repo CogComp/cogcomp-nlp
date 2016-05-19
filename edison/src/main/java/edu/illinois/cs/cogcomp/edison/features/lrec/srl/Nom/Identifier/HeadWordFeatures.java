@@ -19,9 +19,17 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class HeadWordFeatures implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final String name;
+	private final FeatureCollection base;
+
 	public HeadWordFeatures(){
+		this("#HeadWordFeatures#");
+	}
+
+	public HeadWordFeatures(String name){
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
 		
 		tmp.add(new FeatureCollection(""));
@@ -44,6 +52,6 @@ public class HeadWordFeatures implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#HeadWordFeatures#";
+		return this.name;
 	}
 }

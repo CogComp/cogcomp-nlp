@@ -14,9 +14,18 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class PredicateFeatures implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final String name;
+	private final FeatureCollection base;
+
 	public PredicateFeatures(){
+		this("#predicateFeatures#");
+	}
+
+	public PredicateFeatures(String name){
+		this.name = name;
+
+		this.base = new FeatureCollection(this.getName());
+
 		this.base.addFeatureExtractor(new AttributeFeature("predicate"));
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
 		this.base.addFeatureExtractor(VerbVoiceIndicator.STANFORD);
@@ -44,6 +53,6 @@ public class PredicateFeatures implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#predicateFeatures#";
+		return this.name;
 	}
 }

@@ -15,9 +15,17 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class WordPos implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final String name;
+	private final FeatureCollection base;
+
 	public WordPos(){
+		this("#wordPos#");
+	}
+
+	public WordPos(String name){
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
 	}
@@ -30,6 +38,6 @@ public class WordPos implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#wordPos#";
+		return this.name;
 	}
 }

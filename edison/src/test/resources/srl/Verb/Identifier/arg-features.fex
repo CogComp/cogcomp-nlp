@@ -26,44 +26,52 @@
 	  (head-features :parse-view *default-parser*
 			 word-pos)))
 
-  (define arg-features
-    (list (transform-input constituent-parent
-			   predicate-features)
-	  (parse-phrase-features :parse-view *default-parser*)
-	  linear-position
-	  (parse-path :parse-view *default-parser*)
-	  (context :size 2
-		   :include-index true
-		   :ignore-center true
-		   word-pos)
+   (define arg-features
+      (list (transform-input constituent-parent
+  			   predicate-features)
+  	  (parse-phrase-features :parse-view *default-parser*)
+  	  linear-position
+  	  (parse-path :parse-view *default-parser*)
+  	  (context :size 2
+  		   :include-index true
+  		   :ignore-center true
+  		   word-pos)
 
-	  (transform-input first-word
-			   word-pos)
-	  
-	  (transform-input last-word
-			   word-pos)
+  	  (transform-input first-word
+  			   word-pos)
 
-	  ;; The next three are from Surdeanu et al.
-	  (transform-input parse-left-sibling
-			   parse-sibling-features)
+  	  (transform-input last-word
+  			   word-pos)
 
-	  (transform-input parse-right-sibling
-			   parse-sibling-features)
+  	  ;; The next three are from Surdeanu et al.
+  	  (transform-input parse-left-sibling
+  			   parse-sibling-features)
 
-	  pp-features
+  	  (transform-input parse-right-sibling
+  			   parse-sibling-features)
 
-	  projected-path ;; from Toutanova etal
+  	  pp-features
+
+  	  projected-path ;; from Toutanova etal
 
 
-	  ne-embedding
-	  
-	  length
-	  chunk-embedding
-	  chunk-path
-	  (clauses :parse-view *default-parser*)
+  	  ne-embedding
 
-	  (syntactic-frame :parse-view *default-parser*)
+  	  ;; Only specific conjunctions here
+  	  (conjoin predicate-features
+  		   (list (parse-path :parse-view *default-parser*)
+  			 (parse-phrase-features :parse-view *default-parser*)
+  			 linear-position
+  			 pp-features))
 
-	  (head-features :parse-view *default-parser*
-			 word-pos)))
+
+  	  length
+  	  chunk-embedding
+  	  chunk-path
+  	  (clauses :parse-view *default-parser*)
+
+  	  (syntactic-frame :parse-view *default-parser*)
+
+  	  (head-features :parse-view *default-parser*
+  			 word-pos)))
 arg-features)

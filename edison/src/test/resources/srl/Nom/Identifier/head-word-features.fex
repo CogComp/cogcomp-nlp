@@ -1,12 +1,14 @@
-(define head-word-features
-    (head-features :parse-view *default-parser*
-		   (list word
-			 pos
-			 numbers
-			 gerunds
-			 
-			 nom
-			 days-of-week
-			 
-			 months
-			 date)))
+(define features
+    (define head-word-features
+        (head-features :parse-view *default-parser*
+    		   (list word
+    			 pos
+    			 numbers
+    			 gerunds
+
+    			 nom
+    			 days-of-week
+
+    			 months
+    			 date)))
+head-word-features)

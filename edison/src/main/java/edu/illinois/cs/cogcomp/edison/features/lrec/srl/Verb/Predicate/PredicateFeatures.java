@@ -18,11 +18,19 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class PredicateFeatures implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final String name;
+	private final FeatureCollection base;
+
 	public PredicateFeatures(){
-		this.base.addFeatureExtractor(new WordContext());
-		this.base.addFeatureExtractor(new POSContext());
+		this("#predicateFeatures#");
+	}
+
+	public PredicateFeatures(String name){
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
+		this.base.addFeatureExtractor(new WordContext(""));
+		this.base.addFeatureExtractor(new POSContext(""));
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.lemma);
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
@@ -42,6 +50,6 @@ public class PredicateFeatures implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#predicateFeatures#";
+		return this.name;
 	}
 }

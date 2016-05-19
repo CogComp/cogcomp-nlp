@@ -23,7 +23,7 @@ public class ArgumentFeatures implements FeatureExtractor{
 		ArrayList<FeatureCollection> tmp = new ArrayList<FeatureCollection>();
 		
 		tmp.add(new FeatureCollection("", FeatureInputTransformer.constituentParent,
-				new PredicateFeatures()));
+				new PredicateFeatures("")));
 		
 		tmp.add(new FeatureCollection(""));
 		tmp.get(1).addFeatureExtractor(WordFeatureExtractorFactory.word);
@@ -61,8 +61,8 @@ public class ArgumentFeatures implements FeatureExtractor{
 		this.base.addFeatureExtractor(ChunkEmbedding.NER);
 		
 		this.base.addFeatureExtractor(new ParseSiblings(ViewNames.PARSE_STANFORD));
-		this.base.addFeatureExtractor(new WordContext());
-		this.base.addFeatureExtractor(new POSContext());
+		this.base.addFeatureExtractor(new WordContext(""));
+		this.base.addFeatureExtractor(new POSContext(""));
 	}
 	
 	

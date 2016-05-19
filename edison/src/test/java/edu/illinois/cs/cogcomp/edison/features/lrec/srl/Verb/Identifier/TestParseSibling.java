@@ -4,27 +4,25 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.PseudoParse;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier.ParseSibling;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 
 import java.io.FileInputStream;
 import java.util.List;
-import java.util.Set;
 
+/**
+ *
+ * @author Xinbo Wu
+ */
 public class TestParseSibling extends TestCase {
-
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
 
 	public final void test() throws Exception {
 		System.out.println("ParseSibling Feature Extractor");
@@ -33,28 +31,25 @@ public class TestParseSibling extends TestCase {
 				ViewNames.SRL_VERB,ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
 		int i = 0;
+		ta.addView(ClauseViewGenerator.STANFORD);
+		ta.addView(PseudoParse.STANFORD);
 
-		System.out.println("This textannoation annotates the text: " + ta.getText());
+		System.out.println("This textannotation annotates the text: \n" + ta.getText());
 
-		View SRL_VERB = ta.getView("SRL_VERB");
+		View TOKENS = ta.getView("TOKENS");
 
-		System.out.println("GOT SRL_VERB FROM TEXTAnn");
-
-		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(0, 5);
-
-		System.out.println("SRL output");
-		int SRLFexCount = 0;
+		List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(10,13);
+		testlist.addAll(TOKENS.getConstituentsCoveringSpan(26,27));
 
 		FeatureManifest featureManifest;
 		FeatureExtractor fex;
-		String fileName = Constant.prefix + "/Verb/Classifier/parse-sibling.fex";
+		String fileName = Constant.prefix + "/Verb/Identifier/parse-sibling.fex";
 
 		featureManifest = new FeatureManifest(new FileInputStream(fileName));
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
 		FeatureManifest.setTransformer("parse-left-sibling", FeatureGenerators.getParseLeftSibling(ViewNames.PARSE_STANFORD));
 		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseRightSibling(ViewNames.PARSE_STANFORD));
 		FeatureManifest.setFeatureExtractor("pp-features", FeatureGenerators.ppFeatures(ViewNames.PARSE_STANFORD));
-
 		FeatureManifest.setFeatureExtractor("projected-path", new ProjectedPath(ViewNames.PARSE_STANFORD));
 
 		featureManifest.useCompressedName();
@@ -62,36 +57,13 @@ public class TestParseSibling extends TestCase {
 
 		fex = featureManifest.createFex();
 
-		for (Constituent test : testlist){
-			System.out.println("The constituent for testing is " + test.toString());
-			Set<Feature> feats = fex.getFeatures(test);
-			for (Feature f : feats){
-				System.out.println(f.getName());
-				SRLFexCount += f.getName().split("/n").length;
-			}
-			System.out.println();
-		}
 
-		System.out.println("GOT FEATURES YES!");
+		ParseSibling ps = new ParseSibling();
 
-		System.out.println("--------------------------------------------------------------------");
-
-		System.out.println("Edison output");
-		int EdisonFexCount = 0;
-		edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier.ParseSibling pf = new ParseSibling();
 
 		for (Constituent test : testlist){
-			System.out.println("The constituent for testing is " + test.toString());
-			Set<Feature> feats = pf.getFeatures(test);
-			for (Feature f : feats){
-				System.out.println(f.getName());
-				EdisonFexCount += f.getName().split("/n").length;
-			}
-			System.out.println();
+			assertTrue(SRLFeaturesComparator.isEqual(test, fex, ps));
 		}
-
-		System.out.println("GOT FEATURES YES!");
-		assertEquals(SRLFexCount,EdisonFexCount);
 	}
 
 }

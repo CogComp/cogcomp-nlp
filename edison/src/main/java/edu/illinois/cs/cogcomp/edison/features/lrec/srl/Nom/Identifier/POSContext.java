@@ -12,26 +12,34 @@ import java.util.Set;
 
 
 /**
- * 
+ *
  * @author Xinbo Wu
  */
 public class POSContext implements FeatureExtractor{
+	private final FeatureCollection base;
+	private final String name;
 
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
 	public POSContext(){
+		this("#posContext#");
+	}
+
+	public POSContext(String name){
+		//ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
 		context.addFeatureExtractor(WordFeatureExtractorFactory.pos);
 		base.addFeatureExtractor(context);
 	}
-	
+
 	@Override
 	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 		return base.getFeatures(c);
 	}
-	
+
 	@Override
 	public String getName() {
-		return "#posContext#";
+		return this.name;
 	}
 }

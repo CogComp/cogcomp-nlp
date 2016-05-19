@@ -17,7 +17,7 @@ public class Verb_Predicate implements FeatureExtractor{
 	private final FeatureCollection base = new FeatureCollection(this.getName());
 	
 	public Verb_Predicate(){
-		this.base.addFeatureExtractor(new PredicateFeatures());
+		this.base.addFeatureExtractor(new PredicateFeatures(""));
 	}
 	
 	@Override

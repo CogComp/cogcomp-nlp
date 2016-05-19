@@ -16,9 +16,18 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class WordContext implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final FeatureCollection base;
+	private final String name;
+
 	public WordContext(){
+		this("#wordContext#");
+	}
+
+	public WordContext(String name){
+		//ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
 		context.addFeatureExtractor(WordFeatureExtractorFactory.word);
 		base.addFeatureExtractor(context);
@@ -31,6 +40,6 @@ public class WordContext implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#wordContext#";
+		return this.name;
 	}
 }

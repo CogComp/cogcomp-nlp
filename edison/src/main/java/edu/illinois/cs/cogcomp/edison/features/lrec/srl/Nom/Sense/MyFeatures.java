@@ -38,8 +38,8 @@ public class MyFeatures implements FeatureExtractor{
 		this.base.addFeatureExtractor(tmp.get(1));
 
 
-		this.base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.stanfordGovernor, new WordFeatures()));
-		this.base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.stanfordObject, new WordFeatures()));
+		this.base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.stanfordGovernor, new WordFeatures("")));
+		this.base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.stanfordObject, new WordFeatures("")));
 	}
 	
 	

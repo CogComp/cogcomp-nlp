@@ -19,9 +19,17 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class WordFeatures implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
-	public WordFeatures() throws Exception{
+	private final String name;
+	private final FeatureCollection base;
+
+	public WordFeatures()throws Exception{
+		this("#WordFeatures#");
+	}
+
+	public WordFeatures(String name) throws Exception{
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.word);
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.pos);
 		this.base.addFeatureExtractor(WordFeatureExtractorFactory.lemma);
@@ -61,6 +69,6 @@ public class WordFeatures implements FeatureExtractor{
 	
 	@Override
 	public String getName() {
-		return "#wordFeatures#";
+		return this.name;
 	}
 }

@@ -19,7 +19,7 @@ public class Nom_Predicate implements FeatureExtractor{
 	private final FeatureCollection base = new FeatureCollection(this.getName());
 	
 	public Nom_Predicate(){
-		this.base.addFeatureExtractor(FeatureUtilities.conjoin(NomLexClassFeature.instance,new PredicateFeatures()));
+		this.base.addFeatureExtractor(FeatureUtilities.conjoin(NomLexClassFeature.instance,new PredicateFeatures("")));
 	}
 	
 	@Override

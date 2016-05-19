@@ -23,24 +23,24 @@ public class ArgumentFeatures implements FeatureExtractor{
 	
 	public ArgumentFeatures(){
 		base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.constituentParent,
-				new PredicateFeatures()));
+				new PredicateFeatures("")));
 		base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 		base.addFeatureExtractor(LinearPosition.instance);
 		base.addFeatureExtractor(ParsePath.STANFORD);
 		ContextFeatureExtractor context = new ContextFeatureExtractor(2, true, true);
-		context.addFeatureExtractor(new WordPos());
+		context.addFeatureExtractor(new WordPos(""));
 		base.addFeatureExtractor(context);
 		
 		base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.firstWord,
-				new WordPos()));
+				new WordPos("")));
 		
 		base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.lastWord,
-				new WordPos()));
+				new WordPos("")));
 		
 		base.addFeatureExtractor(new FeatureCollection("", new GetParseLeftSibling(ViewNames.PARSE_STANFORD),
-				new ParseSibling()));
+				new ParseSibling("")));
 		base.addFeatureExtractor(new FeatureCollection("", new GetParseRightSibling(ViewNames.PARSE_STANFORD),
-				new ParseSibling()));
+				new ParseSibling("")));
 		base.addFeatureExtractor(new PPFeatures(ViewNames.PARSE_STANFORD));
 		
 		base.addFeatureExtractor(new ProjectedPath(ViewNames.PARSE_STANFORD));
@@ -51,8 +51,9 @@ public class ArgumentFeatures implements FeatureExtractor{
 		tmp.addFeatureExtractor(ParsePath.STANFORD);
 		tmp.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 		tmp.addFeatureExtractor(LinearPosition.instance);
-		//tmp.addFeatureExtractor(ppFeature);
-		base.addFeatureExtractor(FeatureUtilities.conjoin(new PredicateFeatures(),tmp));
+		tmp.addFeatureExtractor(new PPFeatures(ViewNames.PARSE_STANFORD));
+
+		base.addFeatureExtractor(FeatureUtilities.conjoin(new PredicateFeatures(""),tmp));
 		
 		base.addFeatureExtractor(SpanLengthFeature.instance);
 		base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);
@@ -61,7 +62,7 @@ public class ArgumentFeatures implements FeatureExtractor{
 		
 		base.addFeatureExtractor(SyntacticFrame.STANFORD);
 		
-		base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, new WordPos()));
+		base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, new WordPos("")));
 	}
 	
 	

@@ -15,9 +15,17 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class ParseSibling implements FeatureExtractor{
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
+	private final String name;
+	private final FeatureCollection base;
+
 	public ParseSibling(){
+		this("#parseSibling#");
+	}
+
+	public ParseSibling(String name){
+		this.name = name;
+		this.base = new FeatureCollection(this.getName());
+
 		this.base.addFeatureExtractor(new FeatureExtractor() {
 
 			@Override
@@ -31,7 +39,7 @@ public class ParseSibling implements FeatureExtractor{
 			}
 		});
 		
-		this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, new WordPos()));
+		this.base.addFeatureExtractor(new ParseHeadWordFeatureExtractor(ViewNames.PARSE_STANFORD, new WordPos("")));
 	}
 	
 	
