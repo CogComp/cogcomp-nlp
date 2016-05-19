@@ -132,7 +132,7 @@ public class SRLFeaturesComparator {
             }
 
         }
-        return true&&!hold;
+        return !hold;
     }
 
     /**
