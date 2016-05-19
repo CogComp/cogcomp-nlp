@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import java.util.*;
 
 /**
- * * This class is used to compare features extracted by the new SRL in Edison and extracted by illinois.srl.
+ *  This class is used to compare features extracted by the new SRL in Edison and extracted by illinois.srl.
  * This class also have methods for comparing feature extractors in new SRL in Edison and illinois.srl.
  * Because the illinois.srl caches extracted features, but the new SRL does not, this class contains
  * two kinds of methods for checking equality: a regular kind methods used when cache does not matter
@@ -17,6 +17,7 @@ import java.util.*;
  * @author Xinbo Wu
  */
 public class SRLFeaturesComparator {
+
     /**
      * Check if two sets of SRL feature are equal, when cache does not matter
      * for feature extraction.
@@ -25,7 +26,6 @@ public class SRLFeaturesComparator {
      * @param feats_2 another set SRL of features
      * @return if the two set of SRL features are equal
      */
-
     public static boolean isEqual(Set<Feature> feats_1, Set<Feature> feats_2) {
 
         boolean isEqual = true;
@@ -56,76 +56,6 @@ public class SRLFeaturesComparator {
             }
 
         }
-
-//        for (Feature feat:feats_1)
-//            System.out.println(feat.getName());
-//
-//        System.out.println();
-//
-//        for (Feature feat:feats_2)
-//            System.out.println(feat.getName());
-//
-//
-//        ArrayList<String> splited_1 = new ArrayList();
-//        ArrayList<String> splited_2 = new ArrayList();
-//        boolean hold = false;
-//
-//        while (iter_1.hasNext()){
-//            if (!hold) {
-//                splited_1 = new ArrayList(Arrays.asList(iter_1.next().getName().split(":")));
-//                splited_2 = new ArrayList(Arrays.asList(iter_2.next().getName().split(":")));
-//            } else {
-//                System.out.println(splited_1);
-//                System.out.println(splited_2);
-//                System.out.println("");
-//                splited_2 = new ArrayList(Arrays.asList(iter_2.next().getName().split(":")));
-//            }
-//
-//            splited_1.removeAll(Collections.singleton(""));
-//            splited_2.removeAll(Collections.singleton(""));
-//
-//            for (int i = 1; i < splited_1.size(); i++) {
-//                if (splited_1.get(i).equals(splited_2.get(i))) {
-//                    hold = false;
-//                    continue;
-//                }else if (splited_1.get(i).equals("#word#") && splited_2.get(i).equals("#wd"))
-//                    continue;
-//                else
-//                    hold = true;
-//                    break;
-//                    //return false;
-//            }
-//
-//        }
-//        for (int i = 0; i < feats_1.size(); i++){
-//
-//
-//
-//        }
-//
-//
-//
-//
-//
-//
-//
-//        ArrayList<String[]> splited_feats_1 = new ArrayList<String[]>();
-//        for (Feature feat : feats_1)
-//            splited_feats_1.add(feat.getName().split(":#"));
-//
-//        ArrayList<String[]> splited_feats_2 = new ArrayList<String[]>();
-//        for (Feature feat : feats_2)
-//            splited_feats_2.add(feat.getName().split(":#"));
-//
-//        for (int i = 0; i < splited_feats_1.size(); i++) {
-//            String[] curr_1 = splited_feats_1.get(i);
-//            String[] curr_2 = splited_feats_2.get(i);
-//
-//            if (curr_1[curr_1.length - 1].equals(curr_2[curr_2.length - 1]))
-//                isEqual = true;
-//            else
-//                return false;
-//        }
 
         return isEqual;
     }
@@ -202,7 +132,7 @@ public class SRLFeaturesComparator {
             }
 
         }
-        return true;
+        return true&&!hold;
     }
 
     /**
