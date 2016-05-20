@@ -18,10 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -283,6 +280,28 @@ public class Lexicon {
         System.arraycopy(vals, 0, valF, 0, count);
 
         return new Pair<>(idxF, valF);
+    }
+
+
+    public void writeIntegerToFeatureStringFormat( PrintStream out ) throws IOException {
+        if ( null == this.featureNames )
+            throw new IllegalStateException( "Error: Lexicon has not been configured to store feature names." );
+
+        TreeMap< Integer, String > idToFeat = new TreeMap();
+
+        for ( String feat : this.featureNames )
+        {
+            int id = lookupId( feat );
+            idToFeat.put( id, feat );
+        }
+
+        for ( Integer id : idToFeat.keySet() )
+        {
+            out.print( id );
+            out.print( "\t" );
+            out.print( idToFeat.get( id ) );
+        }
+        out.flush();
     }
 
     /**

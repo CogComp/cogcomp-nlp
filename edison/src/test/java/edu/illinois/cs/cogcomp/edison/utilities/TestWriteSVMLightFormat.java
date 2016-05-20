@@ -132,4 +132,11 @@ public class TestWriteSVMLightFormat
         assertEquals( EXPECTED_MULTI_SECOND, posOutput );
     }
 
+
+    @Test
+    public void testWriteLexicon()
+    {
+        WriteSVMLightFormat writeSVMLightFormat = new WriteSVMLightFormat( false, false, false );
+
+    }
 }
