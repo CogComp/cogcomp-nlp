@@ -11,7 +11,10 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
@@ -24,7 +27,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by mssammon on 5/10/16.
+ * For a given Constituent, sweeps a window of specified size, optionally ignoring sentence boundaries,
+ *    and for each relative window position, creates a feature recording that relative position and
+ *    any word embedding value corresponding to the token at that position.
+ *
+ *  @keywords embedding, window, token
+ *  @author mssammon
  */
 public class WordEmbeddingWindow implements FeatureExtractor {
 
@@ -51,10 +59,14 @@ public class WordEmbeddingWindow implements FeatureExtractor {
 
         IntPair relativeWindow = FeatureCreatorUtil.getWindowSpan( c, windowStart, windowEnd, ignoreSentenceBoundaries );
 
+        int absStart = c.getStartSpan() - relativeWindow.getFirst();
+
+        View tokens = c.getTextAnnotation().getView( ViewNames.TOKENS );
 
         for ( int i = relativeWindow.getFirst(); i <= relativeWindow.getSecond(); ++i )
         {
-            double[] embedding = WordEmbeddings.getEmbedding(c);
+            Constituent word = tokens.getConstituentsCoveringToken( absStart + i ).get( 0 );
+            double[] embedding = WordEmbeddings.getEmbedding( word );
             if (embedding != null)
             {
                 for (int dim = 0; dim < embedding.length; dim++)
