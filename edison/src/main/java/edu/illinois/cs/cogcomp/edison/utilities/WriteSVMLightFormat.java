@@ -13,6 +13,10 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -59,8 +63,44 @@ public class WriteSVMLightFormat
 
 
     /**
+     * return a String representation of the lexicon (tab-separated key/value pairs, where the key is an
+     *     integer and the value is a feature's text representation
+     *
+     * @return
+     */
+    public String getLexiconContentsAsString() throws IOException {
+        StringBuilder bldr = new StringBuilder();
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        writeLexiconToOutputStream( baos );
+
+        return bldr.toString();
+    }
+
+
+    /**
+     * write the lexicon out to an outputstream. Note that for non-binary tasks, there may be duplicate entries
+     *     for integer ids: labels may have the same id as features.
+     *
+     * @param out where the lexicon will be written
+     * @throws IOException
+     */
+    public void writeLexiconToOutputStream( OutputStream out ) throws IOException {
+        if ( !isBinaryTask )
+            writeLexicon( labelLex, out );
+        writeLexicon( featureLex, out );
+    }
+
+    private void writeLexicon(Lexicon lex, OutputStream out) throws IOException {
+        lex.writeIntegerToFeatureStringFormat( new PrintStream( out ) );
+    }
+
+    /**
      * Generate a String value corresponding to a SVMLight format example from Edison feature representation (String
-     *     label and Collection of Feature).
+     *     label and Collection of Feature).  Stores a mapping between features and integer ids so that when a new
+     *     example is passed in, if a feature is the same as an example that has already been processed, that feature
+     *     will get the same integer id as it did previously.
      * From SVMLight documentation, binary classification labels must be {-1,1} for binary problem, but otherwise
      *     labels are just integers --
      *     one integer per class for multi-class problem
@@ -95,6 +135,9 @@ public class WriteSVMLightFormat
 
         return bldr.toString();
     }
+
+
+
 
     private int getLabel(String label) {
 
