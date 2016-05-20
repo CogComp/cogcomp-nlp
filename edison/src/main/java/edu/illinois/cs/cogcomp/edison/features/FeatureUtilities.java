@@ -301,7 +301,13 @@ public class FeatureUtilities {
         for (Feature a : feats1) {
             for (Feature b : feats2) {
 
-                if (a == b)
+                /**
+                 * this next equality is correct: checking for literally the same Feature object, in which case only
+                 *    return the single object. Regular equality filters out instances where two identical feature
+                 *    strings occur next to each other -- e.g. the words "buffalo buffalo" -- in which case you
+                 *    want the conjoined feature "buffalo&buffalo" and not just "buffalo".
+                 */
+                if (a == b )
                     features.add(a);
                 else
                     features.add(a.conjoinWith(b));
