@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import org.apache.commons.lang.ArrayUtils;
@@ -46,7 +56,7 @@ public class TestChunkWindowThreeBefore extends TestCase {
         super.setUp();
     }
 
-    public final void testUsage() throws EdisonException {
+    public final void test() throws EdisonException {
 
         log.debug("PreviousTags Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test
