@@ -136,6 +136,9 @@ public class WriteSVMLightFormat
         return bldr.toString();
     }
 
+
+
+
     private int getLabel(String label) {
 
         int lab = -1;
