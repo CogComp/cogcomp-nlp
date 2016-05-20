@@ -24,12 +24,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
-* needs reimplementation of Gazetteer classes to work with Constituents.
- * Probably makes sense to work with a Gazetteer view that stores equivalent information to
- *    the corresponding field, NEWord.gazetteers
- * Not yet sure how gazetteers populate NEWord fields: the fex looks like it sweeps a window
- *    of +/- 2 and adds feat for size of window (could be <5 if at end of sentence) plus name
- *    of gazetteers matched at that position
+ * WIP: Works with a Gazetteer view containing named entities matched with static lists.
+ * Sweeps a window of +/- 2 tokens and adds a feature for location within window plus name
+ *    of each overlapping entity's source gazetteers matched at that position.
+ * TODO: verify that the original NER behavior stored ONLY the gazetteers matching a given
+ *    word as features in NEWord objects
+ *
+ *  @keywords gazetteer, ner
+ *  @author mssammon
  */
 public class GazetteerWindowTwo implements FeatureExtractor {
     @Override

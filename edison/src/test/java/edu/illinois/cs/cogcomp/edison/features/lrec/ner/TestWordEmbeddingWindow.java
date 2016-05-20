@@ -32,40 +32,40 @@ import static org.junit.Assert.fail;
  *
  * @author mssammon
  */
-public class TestWordEmbeddingsWindow
+public class TestWordEmbeddingWindow
 {
-    public final void test()
-    {
-        boolean withNoise = false;
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation( withNoise );
-
-        int targetIndex = 6;
-
-        Constituent c = ta.getView(ViewNames.TOKENS).getConstituents().get( targetIndex );
-
-        boolean ignoreSentenceBoundaries = false;
-        WordEmbeddingWindow wew = null;
-        try {
-            wew = new WordEmbeddingWindow( 2, ignoreSentenceBoundaries );
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
-
-        String expectedFeatures = "blahblahblah";
-
-        String actualFeatStr = "";
-
-        try {
-            Set<Feature> actualFeatures = wew.getFeatures( c );
-
-            actualFeatStr = StringUtils.join( actualFeatures, "," );
-        } catch (EdisonException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
-
-        assertEquals( expectedFeatures, actualFeatStr );
-    }
+//    public final void test()
+//    {
+//        boolean withNoise = false;
+//        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation( withNoise );
+//
+//        int targetIndex = 6;
+//
+//        Constituent c = ta.getView(ViewNames.TOKENS).getConstituents().get( targetIndex );
+//
+//        boolean ignoreSentenceBoundaries = false;
+//        WordEmbeddingWindow wew = null;
+//        try {
+//            wew = new WordEmbeddingWindow( 2, ignoreSentenceBoundaries );
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//
+//        String expectedFeatures = "";
+//
+//        String actualFeatStr = "";
+//
+//        try {
+//            Set<Feature> actualFeatures = wew.getFeatures( c );
+//
+//            actualFeatStr = StringUtils.join( actualFeatures, "," );
+//        } catch (EdisonException e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//
+//        assertEquals( expectedFeatures, actualFeatStr );
+//    }
 
 }
