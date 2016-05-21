@@ -49,7 +49,7 @@ public class ConstituentLabelingEvaluatorTest {
     public void testEvaluateNoisySpanLabels() throws Exception {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.evaluate(splittingTester, gold, predicted);
-        assertEquals(splittingTester.getMicroF1(), 0.57, 0.01);
-        assertEquals(0.5, splittingTester.getMicroPrecision(), 0);
+        assertEquals( 0.636, splittingTester.getMicroF1(), 0.01);
+        assertEquals(0.568, splittingTester.getMicroPrecision(), 0.01);
     }
 }
