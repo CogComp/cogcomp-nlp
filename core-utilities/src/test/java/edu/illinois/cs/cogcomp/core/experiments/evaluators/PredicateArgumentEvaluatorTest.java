@@ -51,7 +51,7 @@ public class PredicateArgumentEvaluatorTest {
         predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
         evaluator.evaluateSense(senseTester, gold, predicted);
-        assertEquals(0.5, senseTester.getMicroF1(), 0);
+        assertEquals(0.875, senseTester.getMicroF1(), 0.01);
     }
 
     @Test
