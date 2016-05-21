@@ -1,3 +1,13 @@
+/**
+ * This software is released under the University of Illinois/Research and
+ *  Academic Use License. See the LICENSE file in the root folder for details.
+ * Copyright (c) 2016
+ *
+ * Developed by:
+ * The Cognitive Computation Group
+ * University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -19,8 +29,9 @@ import java.util.*;
  * 
  * Returns a set of prefixes of length 3 and 4 and suffixes of length 1, 2, 3, and 4. This feature
  * extractor assumes that the TOKEN View have been generated. It generates features related to the
- * prefixes and suffixes of the given constiteunt. This constient may not be a single word.
+ * prefixes and suffixes of the given constituent. This constituent may not be a single word.
  *
+ * @keywords affix, prefix, suffix, token
  * @author Paul Vijayakumar, Mazin Bokhari
  *
  */
