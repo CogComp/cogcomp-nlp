@@ -1,0 +1,3 @@
+ (define word-pos
+    (list word pos))
+word-pos)
