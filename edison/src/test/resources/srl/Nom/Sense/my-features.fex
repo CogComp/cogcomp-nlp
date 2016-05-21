@@ -1,0 +1,45 @@
+(define features
+
+  (define word-features
+    (list word
+	  pos
+	  lemma
+	  capitalization
+	  conflated-pos
+	  gerunds
+	  nom
+	  ne-embedding
+	  brown-clusters-1000
+	  de-verbal-suffixes
+	  de-nom-nouns
+	  de-adj-nouns
+	  known-prefixes
+	  wn:exists-entry
+	  wn:synsets-first-sense
+	  wn:synsets-all
+	  wn:hypernyms-all
+	  wn:hypernyms-first-sense
+	  wn:part-holonyms-first-sense
+	  wn:member-holonyms-first-sense
+	  wn:substance-holonyms-first-sense
+	  ;; gazetteers
+	  ))
+  (define my-features
+    (list (context :size 3
+		   :include-index true
+		   :ignore-center true
+		   word
+		   pos
+		   lemma
+		   has-modal-verb
+		   is-negated)
+	  (context :size 1
+		   :include-index true
+		   :ignore-center true
+		   (bigram word)
+		   (trigram word))
+	  (governor-features :parse-view *default-parser*
+			     word-features)
+	  (object-features :parse-view *default-parser*
+			   word-features)))
+my-features)

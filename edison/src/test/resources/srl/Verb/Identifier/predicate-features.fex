@@ -1,0 +1,20 @@
+(define features
+
+  (define predicate-features
+    (list (attribute :name predicate)
+	  pos 
+	  (voice :parse-view *default-parser*)
+	  (subcat-frame :parse-view *default-parser*)
+	  has-modal-verb
+	  is-negated
+	  (parse-phrase-features :parse-view *default-parser*)
+
+	  (context :size 1
+		   :include-index true
+		   :ignore-center false
+		   (list word
+			 pos
+			 (conjoin word pos)))
+	  
+	  levin-verb-class))
+predicate-features)
