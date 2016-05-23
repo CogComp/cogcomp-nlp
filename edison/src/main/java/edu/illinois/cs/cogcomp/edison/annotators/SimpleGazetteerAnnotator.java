@@ -10,6 +10,17 @@
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
@@ -17,32 +28,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 
 /**
  * This class contains all the gazetteer data and the tree used to search for 
@@ -52,9 +37,6 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
  * @author redman
  */
 public class SimpleGazetteerAnnotator extends Annotator {
-
-    /** the logger. */
-    static private Logger logger = LoggerFactory.getLogger(SimpleGazetteerAnnotator.class);
 
     /** this hash tree contains the terms as exactly as they are. */
     ArrayList<GazetteerTree> dictionaries = new ArrayList<>();
@@ -85,44 +67,24 @@ public class SimpleGazetteerAnnotator extends Annotator {
     }
 
     /**
-     * If the path points to something in a jar file in the classpath, this method will return
-     * a list of all the resources in that directory for further processing.
-     * @param pathToDirectories the directory to find.
-     * @return a list of files in the directory.
+     * Lists the contents of a directory that exists either in the local path or in the classpath
+     * 
+     * @param directory The name of the directory containing the gazetteers
+     * @return An array of URL objects to be read
      * @throws IOException
-     * @throws URISyntaxException 
+     * @throws  
      */
-    private String[] listFilesInJar (String pathToDirectories) throws IOException, URISyntaxException {
-    	URI uri = SimpleGazetteerAnnotator.class.getResource(pathToDirectories).toURI();
-        Path myPath = null;
-        if (uri.getScheme().equals("jar")) {
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
-            myPath = fileSystem.getPath(pathToDirectories);
-        } else {
-            myPath = Paths.get(uri);
-        }
-
-        final ArrayList<String> paths = new ArrayList<String>();
-        Files.walkFileTree(myPath, new FileVisitor<Path>() {
-			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-				return FileVisitResult.CONTINUE;
+    public URL[] listGazetteers(String resourceDir)
+            throws IOException {
+        List<URL> files = new ArrayList<>();
+        try {
+			for (URL url : IOUtils.lsResources(SimpleGazetteerAnnotator.class, resourceDir)) {
+			    files.add(url);
 			}
-			@Override
-			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				paths.add(file.toString());
-				return FileVisitResult.CONTINUE;
-			}
-			@Override
-			public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-				return FileVisitResult.CONTINUE;
-			}
-			@Override
-			public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-				return FileVisitResult.TERMINATE;
-			}
-        });
-        logger.debug("Identified "+paths.size()+" gazetteer files to load.");
-        return paths.toArray(new String[paths.size()]);
+		} catch (URISyntaxException e) {
+			throw new IOException("URI syntax error.",e);
+		}
+        return files.toArray(new URL[files.size()]);
     }
     
     /**
@@ -134,27 +96,19 @@ public class SimpleGazetteerAnnotator extends Annotator {
      * @throws URISyntaxException 
      */
     private void init(int phrase_length, String pathToDictionaries) throws IOException {
-        ArrayList<String> filenames = new ArrayList<>();
+        ArrayList<URL> filenames = new ArrayList<>();
 
         // List the Gazetteers directory (either local or in the classpath)
-        String[] allfiles = null;
-        File gazdir = new File(pathToDictionaries);
-        if (gazdir.exists())
-        	allfiles = gazdir.list();
-        else {
-        	try {
-				allfiles = listFilesInJar(pathToDictionaries);
-			} catch (URISyntaxException e) {
-				throw new IOException("Could not find the gazetteers in classpath or file system!");
+        URL[] allfiles = listGazetteers(pathToDictionaries);
+        for (URL file : allfiles) {
+        	filenames.add(file);
+        }
+        Arrays.sort(allfiles, new Comparator<URL>() {
+			@Override
+			public int compare(URL o1, URL o2) {
+				return o1.toString().compareTo(o2.toString());
 			}
-        }
-        
-        for (String file : allfiles) {
-            if (!IOUtils.isDirectory(file)) {
-                filenames.add(file);
-            }
-        }
-        Arrays.sort(allfiles);
+        });
 
         // init the dictionaries.
         dictionaries = new ArrayList<>(filenames.size());
@@ -178,9 +132,19 @@ public class SimpleGazetteerAnnotator extends Annotator {
         });
 
         // for each dictionary, compile each of the gaz trees for each phrase permutation.
-        for (String file : filenames) {
-            gaz.readDictionary(this.getFeatureName(file), "", this.loadResource(file));
-            gazIC.readDictionary(this.getFeatureName(file), "(IC)", this.loadResource(file));
+        for (URL file : filenames) {
+        	InputStream is = file.openStream();
+        	try {
+        		gaz.readDictionary(IOUtils.getFileName(file.getPath()), "", is);
+        	} finally {
+        		is.close();
+        	}
+        	is = file.openStream();
+        	try {
+        		gazIC.readDictionary(IOUtils.getFileName(file.getPath()), "(IC)", is);
+        	} finally {
+        		is.close();
+        	}
         }
         gaz.trimToSize();
         gazIC.trimToSize();
@@ -188,47 +152,6 @@ public class SimpleGazetteerAnnotator extends Annotator {
         dictionariesIgnoreCase.add(gazIC);
     }
     
-    /**
-     * Mangle the file name, strip off the path and the file extension, returning what
-     * we will define here to be the feature name.
-     * @param file the name of the resource.
-     * @return and input stream to the resource.
-     * @throws FileNotFoundException 
-     */
-    private String getFeatureName(String file) throws FileNotFoundException {
-    	File asfile = new File (file);
-    	String filename = null;
-    	if (asfile.exists())
-    		filename = asfile.getName();
-    	else {
-    		String url = this.getClass().getResource(file).toString();
-    		filename = url.substring(url.lastIndexOf('/')+1, url.length());
-    	}
-    	
-    	// strip the file extension.
-		int lasti = filename.lastIndexOf(".");
-		if (lasti != -1)
-			return filename.substring(0, lasti);
-		else
-			return filename;
-	}
-
-
-    /**
-     * Create a stream first looking in the classpath, then in a directory.
-     * @param file the name of the resource.
-     * @return and input stream to the resource.
-     * @throws FileNotFoundException 
-     */
-    private InputStream loadResource(String file) throws FileNotFoundException {
-    	File asfile = new File (file);
-    	if (asfile.exists())
-    		return new FileInputStream(asfile);
-    	else {
-    		return this.getClass().getResourceAsStream(file);
-    	}
-	}
-
     /**
      * The view will consist of potentially overlapping constituents representing those tokens that 
      * matched entries in the gazetteers. Some tokens will match against several gazetteers.

@@ -3,7 +3,8 @@
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -68,14 +69,14 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testMultiThreading() throws IOException, URISyntaxException, AnnotatorException {
-		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "gazetteers");
-		final TextAnnotation ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
+		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
 		class TestThread extends Thread {
 			Throwable throwable;
 			public void run() {
 				
 				long start = System.currentTimeMillis();
 				while (true) {
+					final TextAnnotation ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
 					try {
 						sga.addView(ta);
 					} catch (AnnotatorException e) {
@@ -101,13 +102,14 @@ public class SimpleGazetteerAnnotatorTest {
 						assertEquals(c3.getLabel(),"places(IC)");
 						assertEquals(c4.getLabel(),"places(IC)");
 						assertEquals(c5.getLabel(),"places(IC)");
-						if ((System.currentTimeMillis() - start) > 60000l) {
+						if ((System.currentTimeMillis() - start) > 10000l) {
 							// run for one minute.
 							throwable = null;
 							return;
 						}
 					} catch (AssertionError ae) {
 						throwable = ae;
+						ae.printStackTrace();
 						return;
 					}
 				}
@@ -141,7 +143,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testAddView() throws IOException, URISyntaxException, AnnotatorException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "gazetteers");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		TextAnnotation ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -165,7 +167,7 @@ public class SimpleGazetteerAnnotatorTest {
 		assertEquals(c4.getLabel(),"places(IC)");
 		assertEquals(c5.getLabel(),"places(IC)");
 		
-		sga = new SimpleGazetteerAnnotator(4, "gazetteers");
+		sga = new SimpleGazetteerAnnotator(4, "/testgazetteers");
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -205,7 +207,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testSimpleGazetteerAnnotatorString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator("gazetteers");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator("/testgazetteers/");
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 	}
@@ -217,9 +219,8 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testSimpleGazetteerAnnotatorIntString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "gazetteers");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 	}
-
 }
