@@ -133,6 +133,7 @@ public class ViewNames {
             case CLAUSES_BERKELEY:
             case BROWN_CLUSTERS:
             case GAZETTEER:
+            case TREE_GAZETTEER:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
