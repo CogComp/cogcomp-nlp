@@ -16,14 +16,14 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Sense.SrlNomSenseFeatures;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.SrlSenseFeatures;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 
 
 /**
- * Extracts conjunction of lemma and {@link SrlNomSenseFeatures}.
+ * Extracts conjunction of lemma and {@link SrlSenseFeatures}.
  *
  *
  * @author Xinbo Wu
@@ -32,7 +32,7 @@ public class LemmaAndSrlSense implements FeatureExtractor {
 	private final FeatureCollection base = new FeatureCollection(this.getName());
 	
 	public LemmaAndSrlSense() throws Exception{
-		this.base.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.lemma,new SrlNomSenseFeatures()));
+		this.base.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.lemma,new SrlSenseFeatures()));
 	}
 	
 	@Override

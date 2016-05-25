@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseRightSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.PPFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.SrlVerbPredicateFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordAndPos;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
@@ -35,7 +36,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor {
 	
 	public SrlVerbIdentifierArgumentFeatures(){
 		base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.constituentParent,
-				new PredicateFeatures("")));
+				new SrlVerbPredicateFeatures("")));
 		base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 		base.addFeatureExtractor(LinearPosition.instance);
 		base.addFeatureExtractor(ParsePath.STANFORD);
@@ -65,7 +66,7 @@ public class SrlVerbIdentifierArgumentFeatures implements FeatureExtractor {
 		tmp.addFeatureExtractor(LinearPosition.instance);
 		tmp.addFeatureExtractor(new PPFeatures(ViewNames.PARSE_STANFORD));
 
-		base.addFeatureExtractor(FeatureUtilities.conjoin(new PredicateFeatures(""),tmp));
+		base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlVerbPredicateFeatures(""),tmp));
 		
 		base.addFeatureExtractor(SpanLengthFeature.instance);
 		base.addFeatureExtractor(ChunkEmbedding.SHALLOW_PARSE);

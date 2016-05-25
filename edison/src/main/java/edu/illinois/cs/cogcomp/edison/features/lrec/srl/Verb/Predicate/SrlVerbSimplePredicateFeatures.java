@@ -26,8 +26,11 @@ import java.util.Set;
 
 
 /**
+ * Extracts features for SRL Verb predicates. Combines {@link WordContextWindowTwo}; {@link POSContextWindowTwo};
+ *     {@link WordFeatureExtractorFactory} word, lemma, pos, capitalization, and numberNormalizer;
+ *     {@link SubcategorizationFrame}; and {@link ChunkEmbedding} for NER and Shallow Parse.
  *
- * @keywords  semantic role labeling, srl, verbal, verb, predicate
+ *
  * @author Xinbo Wu
  */
 public class SrlVerbSimplePredicateFeatures implements FeatureExtractor {

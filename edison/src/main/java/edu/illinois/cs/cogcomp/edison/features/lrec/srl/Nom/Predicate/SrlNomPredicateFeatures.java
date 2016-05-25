@@ -26,8 +26,12 @@ import java.util.Set;
 
 
 /**
+ * Extracts features for identifying Nominal SRL predicates.
+ * Combines {@link WordContextWindowTwo}; {@link POSContextWindowTwo}; {@link AttributeFeature};
+ *     {@link WordFeatureExtractorFactory} word, lemma, pos, capitalization, and numberNormalizer;
+ *     {@link SubcategorizationFrame}, {@link ChunkEmbedding} Shallow Parse and NER.
  *
- * @keywords  semantic role labeling, srl, nominal, nom, predicate
+ * @keywords SRL, Nominalization, predicate, nominal, nom
  * @author Xinbo Wu
  */
 public class SrlNomPredicateFeatures implements FeatureExtractor {
