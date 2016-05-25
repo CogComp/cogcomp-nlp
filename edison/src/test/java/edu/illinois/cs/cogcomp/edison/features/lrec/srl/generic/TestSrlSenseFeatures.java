@@ -30,7 +30,7 @@ import java.io.FileInputStream;
 import java.util.List;
 
 /**
- *
+ * Standard feature extraction test for {@link SrlSenseFeatures}.
  * @author Xinbo Wu
  */
 public class TestSrlSenseFeatures extends TestCase {

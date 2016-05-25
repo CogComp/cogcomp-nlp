@@ -30,7 +30,7 @@ import java.io.FileInputStream;
 import java.util.List;
 
 /**
- *
+ * Standard feature extractor test for {@link WordAndPos}.
  * @author Xinbo Wu
  */
 public class TestWordAndPos extends TestCase {

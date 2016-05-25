@@ -21,7 +21,6 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Generic.POSContext;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import junit.framework.TestCase;
@@ -30,7 +29,7 @@ import java.io.FileInputStream;
 import java.util.List;
 
 /**
- *
+ * Standard feature extraction test for {@link POSContextWindowTwo}
  * @author Xinbo Wu
  */
 public class TestPOSContext extends TestCase {
@@ -68,7 +67,7 @@ public class TestPOSContext extends TestCase {
 		fex = featureManifest.createFex();
 
 
-		POSContext pc = new POSContext();
+		POSContextWindowTwo pc = new POSContextWindowTwo();
 
 
 		for (Constituent test : testlist){

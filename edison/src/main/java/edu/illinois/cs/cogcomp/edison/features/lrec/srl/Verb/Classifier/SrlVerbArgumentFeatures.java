@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseRightSibling;
 import edu.illinois.cs.cogcomp.edison.features.lrec.PPFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
+import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.SrlVerbPredicateFeatures;
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordAndPos;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
@@ -25,7 +27,14 @@ import java.util.Set;
 
 
 /**
- * 
+ * Extracts features to classify SRL Verb arguments.
+ * Combines {@link SrlVerbPredicateFeatures} tranformed using {@link FeatureInputTransformer} constituentParent;
+ *     {@link ParsePhraseType}; {@link LinearPosition}; {@link ParsePath}; {@link WordAndPos } in a context window of
+ *     size 2; parse siblings; {@link PPFeatures}; {@link ProjectedPath}; {@link ChunkPathPattern} for shallow parse;
+ *     {@link ChunkEmbedding} for NER and shallow parse; {@link ClauseFeatureExtractor};
+ *     {@link SpanLengthFeature}; {@link SyntacticFrame}; and {@link ParseHeadWordFeatureExtractor}.
+ *
+ * @keywords SRL, verb, arguments, mixed
  * @author Xinbo Wu
  */
 public class SrlVerbArgumentFeatures implements FeatureExtractor {
@@ -33,7 +42,7 @@ public class SrlVerbArgumentFeatures implements FeatureExtractor {
 	
 	public SrlVerbArgumentFeatures(){
 		base.addFeatureExtractor(new FeatureCollection("", FeatureInputTransformer.constituentParent,
-				new PredicateFeatures("")));
+				new SrlVerbPredicateFeatures("")));
 		base.addFeatureExtractor(new ParsePhraseType(ViewNames.PARSE_STANFORD));
 		base.addFeatureExtractor(LinearPosition.instance);
 		base.addFeatureExtractor(ParsePath.STANFORD);
