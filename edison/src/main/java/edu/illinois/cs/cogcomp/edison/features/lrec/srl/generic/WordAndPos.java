@@ -21,8 +21,9 @@ import java.util.Set;
 
 
 /**
+ * Extracts a conjunction of Word and Part of Speech.
  *
- * @keywords  semantic role labeling, srl, verbal, verb, identifier, word, pos
+ * @keywords word, pos, part of speech, conjunction
  * @author Xinbo Wu
  */
 public class WordAndPos implements FeatureExtractor {
