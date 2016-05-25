@@ -25,7 +25,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, verbal, verb, sense, word
  * @author Xinbo Wu
  */
 public class WordFeatures implements FeatureExtractor {

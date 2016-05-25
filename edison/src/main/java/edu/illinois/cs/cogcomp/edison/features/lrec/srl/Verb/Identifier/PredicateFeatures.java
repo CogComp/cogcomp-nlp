@@ -20,7 +20,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, verbal, verb, identifier, predicate
  * @author Xinbo Wu
  */
 public class PredicateFeatures implements FeatureExtractor {

@@ -25,7 +25,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, verbal, verb, identifier, argument
  * @author Xinbo Wu
  */
 public class ArgumentFeatures implements FeatureExtractor {
