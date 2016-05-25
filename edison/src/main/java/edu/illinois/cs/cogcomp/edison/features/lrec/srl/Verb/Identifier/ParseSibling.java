@@ -21,7 +21,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, verbal, verb, identifier, parse sibling
  * @author Xinbo Wu
  */
 public class ParseSibling implements FeatureExtractor {
