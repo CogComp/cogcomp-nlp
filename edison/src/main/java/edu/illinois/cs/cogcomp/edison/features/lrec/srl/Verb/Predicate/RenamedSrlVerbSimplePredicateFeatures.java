@@ -20,8 +20,8 @@ import java.util.Set;
 
 
 /**
+ * Adds the name '#VerbPredicate#' to the features extracted by {@link SrlVerbSimplePredicateFeatures}.
  *
- * @keywords  semantic role labeling, srl, verbal, verb, predicate
  * @author Xinbo Wu
  */
 public class RenamedSrlVerbSimplePredicateFeatures implements FeatureExtractor {

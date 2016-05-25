@@ -25,8 +25,12 @@ import java.util.Set;
 
 
 /**
+ * Extracts lexical and parse structure features for identifying Nom SRL arguments.
+ * Combines {@link WordFeatureExtractorFactory} word, pos, numberNormalizer, gerundMarker,
+ *     nominalizationMarker, and dateMarker; {@link ListFeatureFactory} daysOfTheWeek and months;
+ *     and {@link ParseHeadWordFeatureExtractor}.
  *
- * @keywords  semantic role labeling, srl, nominal, nom, identifier, head
+ * @keywords SRL, Nom, nominalization, nominal, identifier, argument
  * @author Xinbo Wu
  */
 public class SrlNomHeadWordFeatures implements FeatureExtractor {

@@ -22,8 +22,9 @@ import java.util.Set;
 
 
 /**
+ * Applies {@link ParseHeadWordFeatureExtractor} parameterized with {@link WordAndPos}.
  *
- * @keywords  semantic role labeling, srl, verbal, verb, classifier, parse sibling
+ * @keywords SRL, parse, head
  * @author Xinbo Wu
  */
 public class ParseSibling implements FeatureExtractor {

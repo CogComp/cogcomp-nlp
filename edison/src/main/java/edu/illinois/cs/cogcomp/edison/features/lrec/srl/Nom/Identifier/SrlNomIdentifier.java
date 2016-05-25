@@ -24,8 +24,13 @@ import java.util.Set;
 
 
 /**
+ * Extracts features for Nom SRL argument identification.
+ * Combines {@link SrlNomHeadWordFeatures}, {@link ParsePath}, {@link LinearPosition}, {@link ParsePhraseType},
+ *     {@link SrlNomHeadWordFeatures}, {@link HyphenTagFeature}, {@link ChunkEmbedding} NER and Shallow Parse views,
+ *     {@link ChunkPathPattern}, {@link CurrencyIndicator}, {@link ParseSiblings}, {@link WordContextWindowTwo},
+ *     and {@link POSContextWindowTwo}
  *
- * @keywords  semantic role labeling, srl, nominal, nom, identifier
+ * @keywords SRL, Nominalization, Nom, Nominal, argument, identification
  * @author Xinbo Wu
  */
 public class SrlNomIdentifier implements FeatureExtractor {
