@@ -32,11 +32,7 @@ public class LemmaAndSrlSense implements FeatureExtractor {
 	private final FeatureCollection base = new FeatureCollection(this.getName());
 	
 	public LemmaAndSrlSense() throws Exception{
-<<<<<<< HEAD:edison/src/main/java/edu/illinois/cs/cogcomp/edison/features/lrec/srl/Verb/Sense/LemmaAndSrlSense.java
 		this.base.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.lemma,new SrlSenseFeatures()));
-=======
-		this.base.addFeatureExtractor(FeatureUtilities.conjoin(WordFeatureExtractorFactory.lemma,new SrlNomSenseFeatures()));
->>>>>>> major overhaul of edison lrec feature extractors and tests.:edison/src/main/java/edu/illinois/cs/cogcomp/edison/features/lrec/srl/Verb/Sense/LemmaAndSrlSense.java
 	}
 	
 	@Override
