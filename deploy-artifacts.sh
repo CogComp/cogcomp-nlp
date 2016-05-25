@@ -20,6 +20,6 @@ function setPermissions() {
 
 mvn deploy
 
-setPermissions
+#setPermissions
 
 mvn site-deploy

@@ -22,7 +22,9 @@ import java.util.Set;
 
 
 /**
- * 
+ * Applies {@link ParseHeadWordFeatureExtractor} parameterized with {@link WordAndPos}.
+ *
+ * @keywords SRL, parse, head
  * @author Xinbo Wu
  */
 public class ParseSibling implements FeatureExtractor {

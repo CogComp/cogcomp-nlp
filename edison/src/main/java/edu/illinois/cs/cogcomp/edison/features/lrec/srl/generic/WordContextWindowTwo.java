@@ -22,7 +22,9 @@ import java.util.Set;
 
 
 /**
- * 
+ * Extracts words in a context window of size 2 using {@link WordFeatureExtractorFactory}.word
+ *
+ * @keywords SRL, generic, word, context
  * @author Xinbo Wu
  */
 public class WordContextWindowTwo implements FeatureExtractor {
