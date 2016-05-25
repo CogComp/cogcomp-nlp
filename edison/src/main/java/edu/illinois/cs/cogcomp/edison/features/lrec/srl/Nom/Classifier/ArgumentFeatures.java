@@ -23,7 +23,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, nominal, nom, classifier, argument
  * @author Xinbo Wu
  */
 public class ArgumentFeatures implements FeatureExtractor {

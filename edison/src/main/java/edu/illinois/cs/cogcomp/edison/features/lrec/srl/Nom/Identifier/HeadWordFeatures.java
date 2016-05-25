@@ -25,7 +25,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, nominal, nom, identifier, head
  * @author Xinbo Wu
  */
 public class HeadWordFeatures implements FeatureExtractor {

@@ -22,7 +22,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, nominal, nom, sense
  * @author Xinbo Wu
  */
 public class Nom_Sense implements FeatureExtractor {
