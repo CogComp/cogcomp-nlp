@@ -20,7 +20,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, verbal, verb, identifier
  * @author Xinbo Wu
  */
 public class Verb_Identifier implements FeatureExtractor {

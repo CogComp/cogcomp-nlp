@@ -23,6 +23,7 @@ import java.util.Set;
 
 /**
  *
+ * @keywords  Ssemantic role labeling, srl, nominal, nom, classifier, pos, context
  * @author Xinbo Wu
  */
 public class POSContext implements FeatureExtractor {

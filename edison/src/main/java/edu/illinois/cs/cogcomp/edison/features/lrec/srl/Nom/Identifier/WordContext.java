@@ -22,7 +22,8 @@ import java.util.Set;
 
 
 /**
- * 
+ *
+ * @keywords  semantic role labeling, srl, nominal, nom, identifier, word, context
  * @author Xinbo Wu
  */
 public class WordContext implements FeatureExtractor {
