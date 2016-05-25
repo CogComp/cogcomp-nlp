@@ -14,8 +14,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
