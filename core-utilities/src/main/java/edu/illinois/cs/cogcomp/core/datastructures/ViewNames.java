@@ -28,6 +28,9 @@ public class ViewNames {
     public static final String LEMMA = "LEMMA";
     public static final String POS = "POS";
 
+    /** the tree gazetteer produced by the SimpleGazetteerAnnotator. */
+    public static final String TREE_GAZETTEER = "TREE_GAZETTEER";
+
     /**
      * @deprecated Replaced by ViewNames#NER_CONLL, ViewNames#NER_ONTONOTES
      */
@@ -145,6 +148,7 @@ public class ViewNames {
             case CLAUSES_BERKELEY:
             case BROWN_CLUSTERS:
             case GAZETTEER:
+            case TREE_GAZETTEER:
             case GAZETTEER_NE:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
