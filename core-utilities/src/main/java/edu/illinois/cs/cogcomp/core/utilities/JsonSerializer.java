@@ -11,8 +11,10 @@
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -33,6 +35,15 @@ public class JsonSerializer extends AbstractSerializer {
     private final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     JsonObject writeTextAnnotation(TextAnnotation ta) {
+
+        // get rid of the views that are empty
+        Set<String> viewNames = new HashSet<>(ta.getAvailableViews());
+        for(String vu : viewNames) {
+            if (ta.getView(vu) == null) {
+                logger.warn("View " + vu + " is null");
+                ta.removeView(vu);
+            }
+        }
 
         JsonObject json = new JsonObject();
 
@@ -58,12 +69,8 @@ public class JsonSerializer extends AbstractSerializer {
 
             for (View topKView : topKViews) {
                 JsonObject kView = new JsonObject();
-                if (topKView != null) {
-                    writeView(topKView, kView);
-                    viewData.add(kView);
-                }
-                else
-                    logger.warn("View " + viewName + " is null");
+                writeView(topKView, kView);
+                viewData.add(kView);
             }
 
             view.add("viewData", viewData);
