@@ -30,7 +30,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
     <dependency>
         <groupId>edu.illinois.cs.cogcomp</groupId>
         <artifactId>illinois-edison</artifactId>
-        <version>3.0.42</version>
+        <version>3.0.44</version>
     </dependency>
 </dependencies>
 ```
@@ -39,7 +39,7 @@ or if you are using SBT:
 ```
 resolvers += "CogcompSoftware" at "http://cogcomp.cs.illinois.edu/m2repo/"
 
-libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "3.0.42"
+libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "3.0.44"
 ```
 
 ## The `FeatureExtractor` interface
