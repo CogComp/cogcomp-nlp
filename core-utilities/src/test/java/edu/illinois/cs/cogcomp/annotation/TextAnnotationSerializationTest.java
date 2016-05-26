@@ -42,6 +42,9 @@ public class TextAnnotationSerializationTest extends TestCase {
         TextAnnotation ta =
                 BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);
 
+        // making sure serialization does not fail, when some views (possibly by mistake) are null
+        ta.addView("nullView", null);
+
         String json = SerializationHelper.serializeToJson(ta);
 
         TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
