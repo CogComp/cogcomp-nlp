@@ -40,8 +40,7 @@ public class ConstituentLabelingEvaluatorTest {
     @Test
     public void testEvaluateIdenticalSpanLabels() throws Exception {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
-        evaluator.setViews(gold, gold);
-        evaluator.evaluate(splittingTester);
+        evaluator.evaluate(splittingTester, gold, gold);
         assertEquals(1.0, splittingTester.getMicroF1(), 0);
         assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
@@ -49,9 +48,8 @@ public class ConstituentLabelingEvaluatorTest {
     @Test
     public void testEvaluateNoisySpanLabels() throws Exception {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
-        evaluator.setViews(gold, predicted);
-        evaluator.evaluate(splittingTester);
-        assertEquals(splittingTester.getMicroF1(), 0.57, 0.01);
-        assertEquals(0.5, splittingTester.getMicroPrecision(), 0);
+        evaluator.evaluate(splittingTester, gold, predicted);
+        assertEquals( 0.636, splittingTester.getMicroF1(), 0.01);
+        assertEquals(0.568, splittingTester.getMicroPrecision(), 0.01);
     }
 }

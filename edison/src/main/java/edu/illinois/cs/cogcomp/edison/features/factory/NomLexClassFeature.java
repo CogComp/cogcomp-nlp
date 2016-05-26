@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Adds NomLex based features. If the input constituent contiains an attribute called
+ * Adds NomLex based features. If the input constituent contains an attribute called
  * {@link CoNLLColumnFormatReader#LemmaIdentifier}, the corresponding value is used to identify the
  * features. Otherwise, the lemma of the last token is used. If the lemma is not an element of
  * NomLex, then the last token (lower cased) is tested. If NomLex does not contain the last token,
@@ -37,11 +37,9 @@ import java.util.Set;
  * <li>Nom class</li>
  * <li>For verbal and adjectival nominalizations, the underlying verb (or adjective).</li>
  * </ul>
- * <p>
- * <p>
- * <p>
  * <b>Note</b>: To use this feature, NomLexReader.nomLexFile must be set.
  *
+ * @keywords SRL, Nom, Nominal, Nominalization, NomLex
  * @author Vivek Srikumar
  */
 public class NomLexClassFeature implements FeatureExtractor {

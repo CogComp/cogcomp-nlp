@@ -46,7 +46,7 @@ public class CreateTestTAResource {
             // since the sentence below are not properly tokenized
             Map<String, String> nonDefaultValues = new HashMap<>();
             nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key,
-                    CuratorConfigurator.TRUE);
+                    CuratorConfigurator.FALSE);
             ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
             annotator = CuratorFactory.buildCuratorClient(curatorConfig);
             // Populate the annotation list

@@ -66,34 +66,52 @@ public class ACEReaderParseTest {
 
             Set<String> documentViews = doc.getAvailableViews();
             assertTrue(documentViews.contains(ViewNames.TOKENS));
-            assertTrue(documentViews.contains(ACEReader.ENTITYVIEW));
-            assertTrue(documentViews.contains(ViewNames.NER_ACE_COARSE));
-            assertTrue(documentViews.contains(ViewNames.NER_ACE_FINE));
-            assertTrue(documentViews.contains(ACEReader.RELATIONVIEW));
-            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_COARSE));
-            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_FINE));
-            assertTrue(documentViews.contains(ViewNames.COREF));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_COARSE_EXTENT));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_FINE_EXTENT));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_COARSE_HEAD));
+            assertTrue(documentViews.contains(ViewNames.NER_ACE_FINE_HEAD));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_COARSE_EXTENT));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_FINE_EXTENT));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_COARSE_HEAD));
+            assertTrue(documentViews.contains(ViewNames.RELATION_ACE_FINE_HEAD));
+            assertTrue(documentViews.contains(ViewNames.COREF_HEAD));
+            assertTrue(documentViews.contains(ViewNames.COREF_EXTENT));
 
             int entityMentions = 0;
             for (ACEEntity entity : annotation.entityList) entityMentions += entity.entityMentionList.size();
 
-            SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_COARSE);
+            SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_COARSE_EXTENT);
             assertEquals(entityView.getNumberOfConstituents(), entityMentions);
 
-            SpanLabelView entityFineView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_FINE);
+            SpanLabelView entityFineView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_FINE_EXTENT);
             assertEquals(entityFineView.getNumberOfConstituents(), entityMentions);
 
-            CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF);
+            SpanLabelView entityHeadView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_COARSE_HEAD);
+            assertEquals(entityHeadView.getNumberOfConstituents(), entityMentions);
+
+            SpanLabelView entityFineHeadView = (SpanLabelView) doc.getView(ViewNames.NER_ACE_FINE_HEAD);
+            assertEquals(entityFineHeadView.getNumberOfConstituents(), entityMentions);
+
+            CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF_HEAD);
             assertEquals(coreferenceView.getNumberOfConstituents(), entityMentions);
+
+            CoreferenceView coreferenceExtentView = (CoreferenceView) doc.getView(ViewNames.COREF_EXTENT);
+            assertEquals(coreferenceExtentView.getNumberOfConstituents(), entityMentions);
 
             int relationMentions = 0;
             for (ACERelation relation : annotation.relationList) relationMentions += relation.relationMentionList.size();
 
-            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_COARSE);
+            PredicateArgumentView relationView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_COARSE_EXTENT);
             assertEquals(relationView.getPredicates().size(), relationMentions);
 
-            PredicateArgumentView relationFineView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_FINE);
+            PredicateArgumentView relationFineView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_FINE_EXTENT);
             assertEquals(relationFineView.getPredicates().size(), relationMentions);
+
+            PredicateArgumentView relationHeadView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_COARSE_HEAD);
+            assertEquals(relationHeadView.getPredicates().size(), relationMentions);
+
+            PredicateArgumentView relationFineHeadView = (PredicateArgumentView) doc.getView(ViewNames.RELATION_ACE_FINE_HEAD);
+            assertEquals(relationFineHeadView.getPredicates().size(), relationMentions);
 
             numDocs++;
         }

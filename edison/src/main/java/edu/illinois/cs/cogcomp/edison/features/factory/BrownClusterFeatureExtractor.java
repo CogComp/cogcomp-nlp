@@ -26,7 +26,9 @@ import java.util.Set;
 
 /**
  * A {@code WordFeatureExtractor} that generates prefixes of brown cluster Ids for each word.
+ * Using BrownClusterViewGenerator, which now supports multiple Brown cluster sources to be used simultaneously.
  *
+ * @keywords named entity recognizer, ner, brown, embeddings
  * @author Vivek Srikumar
  * @see WordFeatureExtractor
  */

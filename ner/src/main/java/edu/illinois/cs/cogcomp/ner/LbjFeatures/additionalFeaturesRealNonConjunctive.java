@@ -56,16 +56,16 @@ public class additionalFeaturesRealNonConjunctive extends Classifier
     String __id;
     double __value;
 
-    for (int fid = 0; fid < word.getGeneratedRealFeaturesNonConjunctive().size(); fid++)
-    {
-      NEWord.RealFeature feature = word.getGeneratedRealFeaturesNonConjunctive().get(fid);
-      if (!feature.useWithinTokenWindow)
-      {
-        __id = "" + (feature.featureGroupName);
-        __value = feature.featureValue;
-        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-      }
-    }
+//    for (int fid = 0; fid < word.getGeneratedRealFeaturesNonConjunctive().size(); fid++)
+//    {
+//      NEWord.RealFeature feature = word.getGeneratedRealFeaturesNonConjunctive().get(fid);
+//      if (!feature.useWithinTokenWindow)
+//      {
+//        __id = "" + (feature.featureGroupName);
+//        __value = feature.featureValue;
+//        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+//      }
+//    }
     int i;
     NEWord w = word, last = word;
     for (i = 0; i <= 2 && last != null; ++i)
@@ -76,20 +76,20 @@ public class additionalFeaturesRealNonConjunctive extends Classifier
     {
       w = (NEWord) w.previous;
     }
-    for (; w != last; w = (NEWord) w.next)
-    {
-      for (int fid = 0; fid < w.getGeneratedRealFeaturesNonConjunctive().size(); fid++)
-      {
-        NEWord.RealFeature feature = w.getGeneratedRealFeaturesNonConjunctive().get(fid);
-        if (feature.useWithinTokenWindow)
-        {
-          __id = "" + ("pos" + i + "group" + feature.featureGroupName);
-          __value = feature.featureValue;
-          __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-        }
-      }
-      i++;
-    }
+//    for (; w != last; w = (NEWord) w.next)
+//    {
+//      for (int fid = 0; fid < w.getGeneratedRealFeaturesNonConjunctive().size(); fid++)
+//      {
+//        NEWord.RealFeature feature = w.getGeneratedRealFeaturesNonConjunctive().get(fid);
+//        if (feature.useWithinTokenWindow)
+//        {
+//          __id = "" + ("pos" + i + "group" + feature.featureGroupName);
+//          __value = feature.featureValue;
+//          __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+//        }
+//      }
+//      i++;
+//    }
     return __result;
   }
 

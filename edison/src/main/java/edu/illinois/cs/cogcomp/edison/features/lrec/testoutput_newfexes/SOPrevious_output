@@ -1,0 +1,33 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestSOPrevious
+SOPREVIOUS
+GOT TOKENS FROM TEXTAnn
+It
+is
+a
+technique
+widely
+used
+in
+natural
+language
+processing
+.
+It
+is
+similar
+to
+the
+concept
+of
+lexical
+analysis
+Testlist size is 20
+The constituent we are extracting features from in this test is: used
+SOPrevious:ll(NP_VP)
+SOPrevious:lt1(NP_RB)
+SOPrevious:lt2(VP_VBN)
+Printing Set of Features
+SOPrevious:ll(NP_VP)
+SOPrevious:lt1(NP_RB)
+SOPrevious:lt2(VP_VBN)
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 sec

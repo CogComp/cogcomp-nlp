@@ -470,20 +470,29 @@ public class TokenizerStateMachine {
      * <li>tokens - This array of Strings (String[]) contains text tokens.</li>
      * <li>sentenceEndPositions - this array of integers(int[]) indicates the end of the sentence objects.</li>
      * </ul>
-     * @param text the text to parse.
+     * @param intext the text to parse.
      */
-    protected void parseText(String text) {
-        this.textstring = text;
-        this.text = text.toCharArray();
-        int len = text.length();
-        char[] characters = new char[len];
-        text.getChars(0, text.length(), characters, 0);
-        current = 0;
+    protected void parseText(String intext) {
+    	// find index of last non whitespace
+    	int i = intext.length()-1;
+    	for (; i >=0 ; i--) {
+    		if (!Character.isWhitespace(intext.charAt(i)))
+    			break; // found the first non-whitepsace.
+    	}
+    	i++; // length is one beyond the last whitespace char.
         stack = new ArrayList<State>();
         completed = new ArrayList<State>();
+    	if (i == 0)
+    		return;
+    	this.text = new char[i];
+    	intext.getChars(0, i, this.text, 0);
+    	
+        this.textstring = intext.trim();
+        this.text = this.textstring.toCharArray();
+        current = 0;
         this.push(new State(TokenizerState.IN_SENTENCE), current);
-        for (current = 0; current < characters.length; current++) {
-            char character = characters[current];
+        for (current = 0; current < this.text.length; current++) {
+            char character = this.text[current];
             int tokentype = classify(character);
             statemachine[state][tokentype].process(character);
         }

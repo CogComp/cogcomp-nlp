@@ -34,7 +34,7 @@ An application that identifies named entities in plain text according to two dif
 To include one of the modules in your Maven project, add the following snippet with the
    `#modulename#` and `#version` entries replaced with the relevant module name and the 
    version listed in this project's pom.xml file. Note that you also add to need the
-   `<repository` element for the CogComp maven repository in the `<repositories>` element.
+   `<repository>` element for the CogComp maven repository in the `<repositories>` element.
     
 ```xml 
     <dependencies>

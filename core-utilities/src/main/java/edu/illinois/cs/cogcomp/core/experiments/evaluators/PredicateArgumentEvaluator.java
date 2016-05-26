@@ -28,13 +28,10 @@ public class PredicateArgumentEvaluator extends Evaluator {
     PredicateArgumentView gold, prediction;
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
-    public void setViews(View gold, View prediction) {
-        this.gold = (PredicateArgumentView) gold;
-        this.prediction = (PredicateArgumentView) prediction;
+    public void evaluateSense(ClassificationTester senseTester, View goldView, View predictionView) {
+        gold = (PredicateArgumentView)goldView;
+        prediction = (PredicateArgumentView)predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
-    }
-
-    public void evaluateSense(ClassificationTester senseTester) {
         for (Constituent gp : gold.getPredicates()) {
             if (goldToPredictionPredicateMapping.containsKey(gp)) {
                 Constituent pp = goldToPredictionPredicateMapping.get(gp);
@@ -58,7 +55,11 @@ public class PredicateArgumentEvaluator extends Evaluator {
      *
      * @param tester The multi-class {@link ClassificationTester} for the argument labels
      */
-    public void evaluate(ClassificationTester tester) {
+    public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
+        super.cleanAttributes(goldView, predictionView);
+        gold = (PredicateArgumentView)goldView;
+        prediction = (PredicateArgumentView)predictionView;
+        goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (!goldToPredictionPredicateMapping.containsKey(gp)) {
                 // if there is no matching prediction, then, we have a recall

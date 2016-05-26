@@ -535,11 +535,20 @@ public class Constituent implements Serializable {
         this.incomingRelations.clear();
     }
 
-    public void removeOutgoingRelaton(Relation r) {
+    public void removeOutgoingRelation(Relation r) {
         this.outgoingRelations.remove(r);
     }
 
     public void removeAllOutgoingRelaton() {
         this.outgoingRelations.clear();
     }
+
+    /**
+      * Removes all attributes from a Constituent.
+      */
+    public void removeAllAttributes() {
+        this.attributes = null;
+    }
 }
+
+
