@@ -25,8 +25,12 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JsonSerializer extends AbstractSerializer {
+
+    private final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     JsonObject writeTextAnnotation(TextAnnotation ta) {
 
@@ -54,9 +58,12 @@ public class JsonSerializer extends AbstractSerializer {
 
             for (View topKView : topKViews) {
                 JsonObject kView = new JsonObject();
-                writeView(topKView, kView);
-
-                viewData.add(kView);
+                if (topKView != null) {
+                    writeView(topKView, kView);
+                    viewData.add(kView);
+                }
+                else
+                    logger.warn("View " + viewName + " is null");
             }
 
             view.add("viewData", viewData);
