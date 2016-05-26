@@ -22,9 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.util.Properties;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
@@ -40,6 +44,10 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class Main extends AbstractMain {
+
+    /** set to true to produce bracketed output, otherwise CoNLL output. */
+    boolean bracketedOutput = true;
+
     /**
      * enumerates the various input processing states.
      */
@@ -91,6 +99,10 @@ public class Main extends AbstractMain {
      */
     public Main(String[] args) {
         super(args);
+        
+        // the subclass must call the method to process arguments, or the initialization
+        // of field variables is done after the initialization fo the superclass.
+        processArguments(args);
     }
 
     /**
@@ -101,8 +113,8 @@ public class Main extends AbstractMain {
      */
     @Override
     protected int processArgument(String[] args, int current) throws Exception {
-        if (current > 0)
-            throw new RuntimeException("This program takes only one argument.");
+    	if (args[current].equals("-c"))
+    		bracketedOutput = false;
         else {
             if (new File(args[current]).exists()) {
                 System.out.println("Loading properties from "+args[current]);
@@ -117,8 +129,9 @@ public class Main extends AbstractMain {
     @Override
     protected String getCommandSyntax() {
         return 
-            "java -Xms2g edu.illinois.cs.cogcomp.ner.Main <config_file_name>\n" +
-            "    <config_file_name> : specify the location of a configuration file.";
+            "java -Xms2g edu.illinois.cs.cogcomp.ner.Main -b <config_file_name> [-c]\n" +
+            "    <config_file_name> : specify the location of a configuration file.\n" +
+            "    -c                 : produce output in CoNLL 2002 format, by default, output in bracketed format.";
     }
     
     /**
@@ -349,14 +362,95 @@ public class Main extends AbstractMain {
             System.out.println("Completed");
         }
     }
-    
+
     /**
      * Render a string representing the original data with embedded labels in the text.
      * @param nerView the NER label view.
      * @param ta the text annotation.
      * @return the original text marked up with the annotations.
      */
-    private String renderString(View nerView, TextAnnotation ta) {
+    private String produceCoNLL2002Annotations(View nerView, TextAnnotation ta) {
+        StringBuilder sb = new StringBuilder();
+        
+        // get the tokens.
+        List<Constituent> tokens = new ArrayList<>(ta.getView(ViewNames.TOKENS).getConstituents());
+        Collections.sort(tokens, TextAnnotationUtilities.constituentStartEndComparator);
+
+        // get the sentences.
+        List<Constituent> sentences = new ArrayList<>(ta.getView(ViewNames.SENTENCE).getConstituents());
+        Collections.sort(sentences, TextAnnotationUtilities.constituentStartEndComparator);
+        
+        // get the entities
+        List<Constituent> entities = new ArrayList<>(nerView.getConstituents());
+        Collections.sort(entities, TextAnnotationUtilities.constituentStartEndComparator);
+        int entityindx = 0;
+        int sentenceindex = 0;
+        int sentenceEndIndex = sentences.get(sentenceindex).getEndCharOffset();
+        for (Constituent token : tokens) {
+        	
+        	// make sure we have the next entity.
+            for ( ; entityindx < entities.size(); entityindx++) {
+                Constituent entity = entities.get(entityindx);
+            	if (token.getStartCharOffset() <= entity.getStartCharOffset())
+            		break;
+            	else if (token.getEndCharOffset() <= entity.getEndCharOffset())
+            		break; // we are inside of the entity.
+            }
+            sb.append(token.getSurfaceForm());
+            sb.append(' ');
+            if (entityindx < entities.size()) {
+                Constituent entity = entities.get(entityindx);
+                if (token.getStartCharOffset() == entity.getStartCharOffset()) {
+                	if (token.getEndCharOffset() == entity.getEndCharOffset()) {
+                		sb.append("U-"+entity.getLabel());
+                	} else if (token.getEndCharOffset() > entity.getEndCharOffset()) {
+                		sb.append("U-"+entity.getLabel());
+                		System.err.println("Odd. There is an entity enclosed within a single token!");
+                	} else {
+                		sb.append("B-"+entity.getLabel());
+                	}
+                } else if (token.getStartCharOffset() > entity.getStartCharOffset()) {
+                	if (token.getEndCharOffset() <= entity.getEndCharOffset()) {
+	                	sb.append("I-"+entity.getLabel());
+	                } else {
+	                	sb.append('O');
+	                }
+                } else {
+                	sb.append('O');
+                }
+            } else {
+            	sb.append('O');
+            }
+            sb.append('\n');
+            if (token.getEndCharOffset() >= sentenceEndIndex) {
+            	sb.append('\n');
+            	if (sentenceindex < (sentences.size()-1))
+            		sentenceindex++;
+            	sentenceEndIndex = sentences.get(sentenceindex).getEndCharOffset();
+            }
+        }
+        return sb.toString();
+    }
+    
+    /**
+     * Produce output in the selected oiutput format.
+     * @param nerView the view to present.
+     * @param ta the text annotation.
+     * @return the string with the data.
+     */
+    private String produceOutput(View nerView, TextAnnotation ta) {
+    	if (bracketedOutput)
+    		return this.produceBracketedAnnotations(nerView, ta);
+    	else
+    		return this.produceCoNLL2002Annotations(nerView, ta);
+    }
+    /**
+     * Render a string representing the original data with embedded labels in the text.
+     * @param nerView the NER label view.
+     * @param ta the text annotation.
+     * @return the original text marked up with the annotations.
+     */
+    private String produceBracketedAnnotations(View nerView, TextAnnotation ta) {
         StringBuilder sb = new StringBuilder();
         List<Constituent> constituents = new ArrayList<>(nerView.getConstituents());
         Collections.sort(constituents, TextAnnotationUtilities.constituentStartComparator);
@@ -389,8 +483,9 @@ public class Main extends AbstractMain {
      * @throws Exception if anything goes wrong.
      */
     private void processInputString(String data) throws Exception {
+        data = StringEscapeUtils.unescapeHtml4(data);
         TextAnnotation ta = tab.createTextAnnotation(data);
-        data = this.renderString(this.nerAnnotator.getView(ta), ta);
+        data = this.produceOutput(this.nerAnnotator.getView(ta), ta);
         this.getResultProcessor().publish(data, Long.toString(System.currentTimeMillis())+".txt");
     }
     
@@ -403,8 +498,9 @@ public class Main extends AbstractMain {
      */
     private void processInputFile(File infile) throws Exception {
         String s = InFile.readFileText(infile.toString());
+        s = StringEscapeUtils.unescapeHtml4(s);
         TextAnnotation ta = tab.createTextAnnotation(s);
-        s = this.renderString(this.nerAnnotator.getView(ta), ta);
+        s = this.produceOutput(this.nerAnnotator.getView(ta), ta);
         this.getResultProcessor().publish(s, infile.getName());
     }
     

@@ -20,6 +20,31 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 public class TextAnnotationUtilities {
+	
+	/**
+	 * This comparator will sort entities on start location, but where start is equal on
+	 * end as well so the shorter entities come first.
+	 */
+    public final static Comparator<Constituent> constituentStartEndComparator =
+            new Comparator<Constituent>() {
+                public int compare(Constituent arg0, Constituent arg1) {
+                    int start0 = arg0.getStartSpan();
+                    int start1 = arg1.getStartSpan();
+                    if (start0 < start1)
+                        return -1;
+                    else if (start0 == start1) {
+                        int end0 = arg0.getEndSpan();
+                        int end1 = arg1.getEndSpan();
+                        if (end0 < end1)
+                            return -1;
+                        else if (end0 == end1) {
+                            return 0;
+                        } else
+                            return 1;
+                    } else
+                        return 1;
+                }
+            };
     public final static Comparator<Constituent> constituentStartComparator =
             new Comparator<Constituent>() {
                 public int compare(Constituent arg0, Constituent arg1) {
