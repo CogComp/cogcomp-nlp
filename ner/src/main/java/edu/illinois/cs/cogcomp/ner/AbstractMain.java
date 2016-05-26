@@ -44,7 +44,6 @@ abstract public class AbstractMain extends Thread {
      * @param args the arguments.
      */
     protected AbstractMain(String[] args) {
-        processArguments(args);
     }
     
     /**
