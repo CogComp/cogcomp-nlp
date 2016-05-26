@@ -19,15 +19,8 @@ import java.util.Set;
 
 public class ConstituentSpanSplittingEvaluator extends Evaluator {
 
-    View gold, prediction;
-
-    public void setViews(View gold, View prediction) {
-        this.gold = gold;
-        this.prediction = prediction;
-    }
-
-    public void evaluate(ClassificationTester tester) {
-
+    public void evaluate(ClassificationTester tester, View gold, View prediction) {
+        super.cleanAttributes(gold, prediction);
         Set<IntPair> goldSpans = new HashSet<>();
         for (Constituent cons : gold.getConstituents()) {
             goldSpans.add(cons.getSpan());

@@ -242,7 +242,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * views from the Curator representation.
      * NOTE: one-past-the-end indexing can make this problematic. Currently, constituents are processed so that
      *   only characters <i>within</i> tokens are mapped to token ids (avoiding ambiguity at the cost of introducing
-     *   complexity for users thinking of one-past-the-end indexing).
+     *   complexity for users thinking of one-past-the-end indexing). <b>I.E. you MUST modify the end offset in
+     *   the call if you are using one-past-the-end offsets.</b> (example: curator data structures use one-past-the-
+     *   end, as do TextAnnotation Views/Constituents. This behavior was chosen to handle the case where there is
+     *   arbitrary whitespace, and to avoid confusion when two tokens are contiguous (the first character of the
+     *   second token would conflict with the last (one-past-the-end) character of the first.
      *
      * UPDATED to allow non-zero first token character offset (i.e. in case where source text has markup preamble
      *    that you want to ignore. Current implementation maps char offsets not representing tokens to the index '-1'.
@@ -325,6 +329,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                             TCollections
                                     .synchronizedMap(new TIntObjectHashMap<ArrayList<IntPair>>());
 
+                    /**
+                     * creates a hash for each contiguous substring, and creates an entry for it in allSpans
+                     * NOTE: spans previously used "at-the-end" indexing but then the offsets won't agree with actual
+                     *    constituents, so CHANGED IT 2016/05/11. MS
+                     */
                     for (int start = 0; start < this.size() - 1; start++) {
                         StringBuilder sb = new StringBuilder();
 
@@ -342,7 +351,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                                 allSpans.put(hash, new ArrayList<IntPair>());
 
                             List<IntPair> list = allSpans.get(hash);
-                            list.add(new IntPair(start, end));
+                            list.add(new IntPair(start, end+1));
                         }
                     }
                 }
@@ -359,12 +368,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // This is a hack to deal with the fact that sometimes, two strings in
         // Java could have the same hashCode even if they aren't identical. This
         // won't weed out all such cases, but will remove most.v
-        List<IntPair> newList = new ArrayList<>();
-        for (IntPair item : list) {
-            if (item.getSecond() - item.getFirst() == length)
-                newList.add(item);
-        }
+        // MS: don't see that this does anything except filter out spans of length 1.  How is that helpful?
+//        List<IntPair> newList = new ArrayList<>();
+//        for (IntPair item : list) {
+//            if (item.getSecond() - item.getFirst() == length)
+//                newList.add(item);
+//        }
+//        return newList;
 
-        return newList;
+        return list;
     }
 }

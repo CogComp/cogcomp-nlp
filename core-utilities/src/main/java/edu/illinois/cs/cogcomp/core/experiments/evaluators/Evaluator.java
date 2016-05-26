@@ -14,7 +14,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 
 public abstract class Evaluator {
-    public abstract void setViews(View goldView, View predictedView);
-
-    public abstract void evaluate(ClassificationTester senseTester);
+    protected void cleanAttributes(View gold, View prediction) {
+        // get rid of attributes
+        gold.removeAttributes();
+        prediction.removeAttributes();
+    }
+    public abstract void evaluate(ClassificationTester senseTester, View goldView, View predictedView);
 }

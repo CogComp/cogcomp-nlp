@@ -42,8 +42,9 @@ import java.util.zip.GZIPInputStream;
 /**
  * Use this class to create a gazetteer view for your text.
  *
- * Use this in combination with cogcomp-common-resources, and pass in 'resources/gazetteers/gazetteers' as the
- * directory (note the lack of a trailing slash -- this is important!)
+ * Use this in combination with cogcomp-common-resources, and pass in
+ * 'resources/gazetteers/gazetteers' as the directory (note the lack of a trailing slash -- this is
+ * important!)
  *
  *
  * @author Vivek Srikumar

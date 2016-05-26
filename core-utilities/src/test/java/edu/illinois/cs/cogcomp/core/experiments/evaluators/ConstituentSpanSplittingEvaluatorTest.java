@@ -36,8 +36,7 @@ public class ConstituentSpanSplittingEvaluatorTest {
     @Test
     public void testIdenticalSplitting() throws Exception {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
-        evaluator.setViews(prediction1, prediction1);
-        evaluator.evaluate(splittingTester);
+        evaluator.evaluate(splittingTester, prediction1, prediction1);
         assertEquals(1.0, splittingTester.getMicroF1(), 0);
         assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
@@ -45,8 +44,7 @@ public class ConstituentSpanSplittingEvaluatorTest {
     @Test
     public void testShorterPredictionSpans() throws Exception {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
-        evaluator.setViews(prediction1, prediction2);
-        evaluator.evaluate(splittingTester);
+        evaluator.evaluate(splittingTester, prediction1, prediction2);
         assertEquals(0.4, splittingTester.getMicroF1(), 0);
         assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
     }
@@ -54,8 +52,7 @@ public class ConstituentSpanSplittingEvaluatorTest {
     @Test
     public void testLongerPredictionSpans() throws Exception {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
-        evaluator.setViews(prediction2, prediction1);
-        evaluator.evaluate(splittingTester);
+        evaluator.evaluate(splittingTester, prediction2, prediction1);
         assertEquals(0.4, splittingTester.getMicroF1(), 0);
         assertEquals(0.25, splittingTester.getMicroPrecision(), 0);
     }
