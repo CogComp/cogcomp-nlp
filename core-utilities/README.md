@@ -83,7 +83,7 @@ of annotations over some text.
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
-    use the sentence slitter defined in the [Learning based Java](http://cogcomp.cs.illinois.edu/page/software_view/11) (LBJava)
+    use the sentence slitter defined in the [Learning Based Java](https://github.com/IllinoisCogComp/lbjava) (LBJava)
     library to split the text into sentences and further apply the
     LBJ tokenizer to tokenize the sentence.
     
