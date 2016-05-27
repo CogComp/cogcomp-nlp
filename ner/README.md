@@ -13,6 +13,8 @@ and press 'Download'. The next screen displays the license.
 
 ## Quickstart
 
+This assumes you have downloaded the package from the [Cogcomp download page.](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
+
 ### FROM THE COMMAND LINE
 
 Assuming you have plain text files you want to process in directory `input/`, you can generate the annotated versions
@@ -70,7 +72,9 @@ system (see [here](https://www.java.com/en/download/help/download_options.xml)).
 
 ### COMPILATION
 
-However, if you so desire, it is easy to recompile. cd to the main directory
+If you have downloaded the package from the Cogcomp website, then the compiled jars can be found in the `dist/` folder.
+
+Otherwise, it is not hard to compile. cd to the main directory
 and run: 
 ```bash
 $ mvn lbjava:clean lbjava:compile compile 
