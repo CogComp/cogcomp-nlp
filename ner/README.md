@@ -13,7 +13,7 @@ and press 'Download'. The next screen displays the license.
 
 ## Quickstart
 
-This assumes you have downloaded the package from the [Cogcomp download page.](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
+This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
 
 ### FROM THE COMMAND LINE
 
