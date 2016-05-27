@@ -7,7 +7,7 @@ The newest version tags entities with either the "classic" 4-label type set
 derived from unlabeled text, and expressive non-local features.
 
 ## Licensing
-To see the full license for this software, see [LICENSE](LICENSE) or visit the download page for this software
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
 and press 'Download'. The next screen displays the license. 
 
 
@@ -69,9 +69,6 @@ system (see [here](https://www.java.com/en/download/help/download_options.xml)).
 (see [here](http://maven.apache.org/download.cgi))
 
 ### COMPILATION
-
-The code comes pre-compiled, so there is no need for compilation. The jar
-can be found in [./dist](./dist).
 
 However, if you so desire, it is easy to recompile. cd to the main directory
 and run: 
@@ -152,8 +149,7 @@ you have an appropriate license. This data is annotated with 18 different labels
 
 A note on the training procedure:
 The config file specifies where to put the models. (To understand the structure 
-of the config files, take a look at the code in [LbjTagger.Parameters.java](src/main/java/edu/illinois/cs/cogcomp/ner/LbjTagger/Parameters.java), or
-look at [README-CONFIG](config/README-CONFIG)). Here are sample lines from a config file that 
+of the config files, take a look at the code in [LbjTagger.Parameters.java](src/main/java/edu/illinois/cs/cogcomp/ner/LbjTagger/Parameters.java)). Here are sample lines from a config file that 
 specify the paths for the models:
 
 ```bash
@@ -173,8 +169,8 @@ make sure that you specify the new path for saving the models, otherwise, the
 old good models will be overwritten.
 
 Sample bracket format (the spaces before the close brackets (]) are not important):
-Now the [ORG National Weather Service  ] is calling for above-normal temperatures in more than 
-half of the [LOC U.S.  ] 
+
+    Now the [ORG National Weather Service  ] is calling for above-normal temperatures in more than half of the [LOC U.S.  ] 
 
 The column format used here is a little different from CoNLL03
 annotation format. Note that there is shallow parse and POS info there, 
