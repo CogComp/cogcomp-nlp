@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.transliteration.Example;
 import edu.illinois.cs.cogcomp.transliteration.MultiExample;
+import edu.illinois.cs.cogcomp.transliteration.SPModel;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -426,22 +427,64 @@ public class Utils {
     }
 
 
-
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         //romanization();
 
         String[] arabic_names = {"Urdu", "Arabic", "Egyptian_Arabic", "Mazandarani", "Pashto", "Persian", "Western_Punjabi"};
         String[] devanagari_names = {"Newar", "Hindi", "Marathi", "Nepali", "Sanskrit"};
         String[] cyrillic_names = {"Chuvash", "Bashkir", "Bulgarian", "Chechen", "Kirghiz", "Macedonian", "Russian", "Ukrainian"};
 
-        for(String name : arabic_names){
+        //for(String name : arabic_names){
             //System.out.println(name + " : " + WAVE("models/probs-"+name+"-Urdu.txt"));
-            getSize(name);
+            //getSize(name);
+        //}
+
+        String lang= "Arabic";
+        String wikidata = "Data/wikidata." + lang;
+
+        List<String> allnames = LineIO.read("/Users/stephen/Dropbox/papers/NAACL2016/data/all-names2.txt");
+
+        List<Example> training = readWikiData(wikidata);
+
+        training = training.subList(0, 2000);
+
+        SPModel m = new SPModel(training);
+        m.Train(5);
+
+        TopList<Double, String> res = m.Generate("stephen");
+        System.out.println(res);
+
+        List<String> outlines = new ArrayList<>();
+
+        int i = 0;
+        for(String nameAndLabel : allnames){
+            if(i%100 == 0){
+                System.out.println(i);
+            }
+            i++;
+
+            String[] s = nameAndLabel.split("\t");
+            String name = s[0];
+            String label = s[1];
+
+            String[] sname = name.split(" ");
+
+            String line = "";
+            for(String tok : sname){
+                res = m.Generate(tok.toLowerCase());
+                if(res.size() > 0) {
+                    String topcand = res.getFirst().getSecond();
+                    line += topcand + " ";
+                }else{
+                }
+            }
+
+            if(line.trim().length() > 0) {
+                outlines.add(line.trim() + "\t" + label);
+            }
         }
 
-
-
-
+        LineIO.write("/Users/stephen/Dropbox/papers/NAACL2016/data/all-names-"+ lang +"2.txt", outlines);
 
 
 //        Transliterator t = Transliterator.getInstance("Any-am_FONIPA");

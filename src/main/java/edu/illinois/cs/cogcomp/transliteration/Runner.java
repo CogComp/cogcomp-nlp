@@ -43,7 +43,7 @@ class Runner {
 
         String trainfile = args[0];
         String testfile = args[1];
-
+        
         String trainlang = "Hindi";
         String testlang = "Hindi";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
