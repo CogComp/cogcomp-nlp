@@ -43,7 +43,10 @@ class Runner {
 
         String trainfile = args[0];
         String testfile = args[1];
-        
+
+        //String trainfile = "/tmp/wikidata.heb";
+        //String testfile = "/tmp/wikidata.heb";
+
         String trainlang = "Hindi";
         String testlang = "Hindi";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
@@ -632,8 +635,42 @@ class Runner {
 
     public static String TrainAndTest(String trainfile, String testfile) throws Exception {
 
+        List<Example> subtraining;
+        List<Example> subtesting;
+
         List<Example> training = Utils.readWikiData(trainfile);
-        List<Example> testing = Utils.readWikiData(testfile);
+        logger.info(String.format("Loaded %s training examples.", training.size()));
+
+        if(trainfile.equals(testfile)){
+            logger.info("Train and test are the same... using just train.");
+            // then don't need to load testing.
+            int trainnum = (int)Math.round(TRAINRATIO*training.size());
+            subtraining = training.subList(0,trainnum);
+            subtesting = training.subList(trainnum,training.size()-1);
+        }else{
+            logger.debug("Train and test are different.");
+            // OK, load testing.
+            List<Example> testing = Utils.readWikiData(testfile);
+            logger.info(String.format("Loaded %s testing examples", testing.size()));
+
+            // now make sure there is no overlap between test and train.
+            // only keep those training examples that are not also in test.
+            subtraining = new ArrayList<>();
+            for(Example e : training){
+                if(!testing.contains(e)){
+                    subtraining.add(e);
+                }
+            }
+
+            logger.info("After filtering, num training is: " + subtraining.size());
+
+
+            subtesting = testing;
+        }
+
+        logger.info("Actual Training: " + subtraining.size());
+        logger.info("Actual Testing: " + subtesting.size());
+
 
         // params
         int emiterations = 5;
@@ -646,23 +683,7 @@ class Runner {
 
         for (int i = 0; i < num; i++) {
 
-            java.util.Collections.shuffle(training);
-
-            int trainnum = (int)Math.round(TRAINRATIO*training.size());
-
-            List<Example> subtraining = training.subList(0,trainnum);
-            List<Example> subtesting;
-
-            logger.info("Orig len of testing: " + testing.size());
-
-            if(trainfile.equals(testfile)){
-                subtesting = testing.subList(trainnum,training.size()-1);
-            }else{
-                subtesting = testing; //testing.subList(0,NUMTEST);
-            }
-
-            logger.info("Actual Training: " + subtraining.size());
-            logger.info("Actual Testing: " + subtesting.size());
+            java.util.Collections.shuffle(subtraining);
         
             
             SPModel model = new SPModel(subtraining);
