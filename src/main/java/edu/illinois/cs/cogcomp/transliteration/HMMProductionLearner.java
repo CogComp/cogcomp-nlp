@@ -37,7 +37,7 @@ public class HMMProductionLearner {
         }
 
         // load LM for target language
-        NeuralLM lm = NeuralLM.from_file("/home/mayhew2/IdeaProjects/illinois-transliteration/lm/nplm-ru.txt");
+        NeuralLM lm = NeuralLM.from_file("/home/mayhew2/IdeaProjects/illinois-transliteration/lm/russian/nplm-ru.txt");
 
         // initialize B: matrix of target->source productions.
         // keep as a hashmap, and update as necessary, no initialization needed.
@@ -49,6 +49,24 @@ public class HMMProductionLearner {
         String tgtalphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
         String srcalphabet = "abcdefghijklmnopqrstuvwxyz";
+
+        // Let's precalculate a, and make sure it is normalized. +2 because of start and end symbols
+        double[][] transition = new double[tgtalphabet.length()][tgtalphabet.length()];
+
+        for(int i = 0; i < tgtalphabet.length(); i++){
+            double total = 0;
+            for(int j = 0; j < tgtalphabet.length(); j++){
+                char[] ngram = {tgtalphabet.charAt(i), tgtalphabet.charAt(j)};
+                transition[i][j] = Math.exp(lm.ngram_prob(ngram));
+                total += transition[i][j];
+            }
+            System.out.println(total);
+        }
+
+        for(double[] row : transition){
+            System.out.println(Arrays.toString(row));
+        }
+
 
         Random r = new Random();
         int numexamples = 20;

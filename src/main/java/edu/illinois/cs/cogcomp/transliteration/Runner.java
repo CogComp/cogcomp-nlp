@@ -1,6 +1,5 @@
 package edu.illinois.cs.cogcomp.transliteration;
 
-import com.ibm.icu.text.Transliterator;
 import edu.illinois.cs.cogcomp.core.algorithms.LevensteinDistance;
 import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -14,32 +13,42 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+
+import static com.ibm.icu.impl.duration.impl.DataRecord.EGender.N;
 
 class Runner {
 
     static String dataPath = "Data/hebrewEnglishAlignment/";
     static String wikidata = "/shared/corpora/transliteration/wikidata/";
+    static String wikidataurom = "/shared/corpora/transliteration/wikidata.urom/";
     static String wikidataextra = "/shared/corpora/transliteration/wikidata-extra/";
     static String NEWS = "/shared/corpora/transliteration/NEWS2015/";
     static String tl = "/shared/corpora/transliteration/";
     static String irvinedata = tl + "from_anne_irvine/";
 
     // set these later on
-    public static int NUMTRAIN = 50024;
-    public static int NUMTEST = 4206;
+    public static int NUMTRAIN = -1;
+    public static int NUMTEST = -1;
+
+    public static double TRAINRATIO = 0.75;
+
 
     private static Logger logger = LoggerFactory.getLogger(Runner.class);
 
     public static void main(String[] args) throws Exception {
 
-        String trainlang = "Persian";
-        String testlang = "Urdu";
+        String trainfile = args[0];
+        String testfile = args[1];
+
+        String trainlang = "Hindi";
+        String testlang = "Hindi";
         String probFile = "nonsenseword"; //String.format("probs-%s.txt", trainlang);
-        String trainfile = wikidata + String.format("wikidata.%s", trainlang);
-        String testfile = wikidata + String.format("wikidata.%s", testlang);
+//        String trainfile = wikidataurom + String.format("wikidata.%s", trainlang);
+//        String testfile = wikidataurom + String.format("wikidata.%s", testlang);
 
         ///String trainfile = irvinedata + String.format("irvine-data.%s", trainlang);
         //String testfile = irvinedata + String.format("irvine-data.%s", testlang);
@@ -54,7 +63,9 @@ class Runner {
         }else if(method == "wikidata-pretrain"){
             LoadAndTest(probFile, testfile);
         }else if(method == "NEWS"){
-            TrainAndTestNEWS(trainfile, testfile);
+            String langpair = "EnBa";
+
+            TrainAndTestNEWS(langpair);
         }else if(method == "CCB") {
             List<Example> data = Utils.readCCBData("en", "ja");
             System.out.println(data.size());
@@ -84,29 +95,29 @@ class Runner {
         String[] devanagari_names = {"Hindi", "Marathi", "Nepali", "Sanskrit"};
         String[] cyrillic_names = {"Bashkir", "Bulgarian", "Chechen", "Kirghiz", "Macedonian", "Russian", "Ukrainian"};
 
-        List<String> arabicresults = new ArrayList<>();
-        NUMTRAIN = 485;
-        NUMTEST = 4062;
-        for(String name : arabic_names){
-            logger.debug("Working on " + name);
-            String trainfile = wikidata + String.format("wikidata.%s", name);
-            String testfile = wikidata + String.format("wikidata.%s", "Urdu");
+        // List<String> arabicresults = new ArrayList<>();
+        // NUMTRAIN = 485;
+        // NUMTEST = 4062;
+        // for(String name : arabic_names){
+        //     logger.debug("Working on " + name);
+        //     String trainfile = wikidata + String.format("wikidata.%s", name);
+        //     String testfile = wikidata + String.format("wikidata.%s", "Urdu");
 
-            arabicresults.add(name + TrainAndTest(trainfile, testfile));
-        }
-        LineIO.write("arabicresults.txt", arabicresults);
+        //     arabicresults.add(name + TrainAndTest(trainfile, testfile));
+        // }
+        // LineIO.write("arabicresults.txt", arabicresults);
 
-        List<String> devresults = new ArrayList<>();
-        NUMTRAIN = 896;
-        NUMTEST = 477;
-        for(String name : devanagari_names){
-        logger.debug("Working on " + name);
-            String trainfile = wikidata + String.format("wikidata.%s", name);
-            String testfile = wikidata + String.format("wikidata.%s", "Newar");
+        // List<String> devresults = new ArrayList<>();
+        // NUMTRAIN = 896;
+        // NUMTEST = 477;
+        // for(String name : devanagari_names){
+        // logger.debug("Working on " + name);
+        //     String trainfile = wikidata + String.format("wikidata.%s", name);
+        //     String testfile = wikidata + String.format("wikidata.%s", "Newar");
 
-            devresults.add(name + TrainAndTest(trainfile, testfile));
-        }
-        LineIO.write("devresults.txt", devresults);
+        //     devresults.add(name + TrainAndTest(trainfile, testfile));
+        // }
+        // LineIO.write("devresults.txt", devresults);
 
 
         List<String> cyrillicresults = new ArrayList<>();
@@ -360,7 +371,7 @@ class Runner {
 
         List<String> outlines = new ArrayList<>();
 
-        model.setMaxCandidates(30);
+        //model.setMaxCandidates(30);
 
         int i = 0;
         for (MultiExample example : testing) {
@@ -612,10 +623,10 @@ class Runner {
         avgf1 += f1;
         model.WriteProbs("models/probs-" + testfile.split("\\.")[1] +".txt");
 
-        System.out.println("=============");
-        System.out.println("AVGMRR=" + avgmrr);
-        System.out.println("AVGACC=" + avgacc);
-        System.out.println("AVGF1 =" + avgf1);
+        //System.out.println("=============");
+        //System.out.println("AVGMRR=" + avgmrr);
+        //System.out.println("AVGACC=" + avgacc);
+        //System.out.println("AVGF1 =" + avgf1);
     }
 
 
@@ -628,7 +639,6 @@ class Runner {
         int emiterations = 5;
         boolean rom = false; // use romanization or not.
 
-
         double avgmrr= 0;
         double avgacc = 0;
         double avgf1 = 0;
@@ -636,22 +646,23 @@ class Runner {
 
         for (int i = 0; i < num; i++) {
 
-
             java.util.Collections.shuffle(training);
-        
-            List<Example> subtraining = training.subList(0,NUMTRAIN);
+
+            int trainnum = (int)Math.round(TRAINRATIO*training.size());
+
+            List<Example> subtraining = training.subList(0,trainnum);
             List<Example> subtesting;
 
-            System.out.println("Orig len of testing: " + testing.size());
+            logger.info("Orig len of testing: " + testing.size());
 
             if(trainfile.equals(testfile)){
-                subtesting = testing.subList(NUMTRAIN,NUMTRAIN+NUMTEST);
+                subtesting = testing.subList(trainnum,training.size()-1);
             }else{
-                subtesting = testing.subList(0,NUMTEST);
+                subtesting = testing; //testing.subList(0,NUMTEST);
             }
 
-            System.out.println("Actual Training: " + subtraining.size());
-            System.out.println("Actual Training: " + subtesting.size());
+            logger.info("Actual Training: " + subtraining.size());
+            logger.info("Actual Testing: " + subtesting.size());
         
             
             SPModel model = new SPModel(subtraining);
@@ -678,27 +689,60 @@ class Runner {
             avgmrr += mrr;
             avgacc += acc;
             avgf1 += f1;
-            System.out.println(mrr + "," + acc + "," + f1);
-            model.WriteProbs("output/probs-" + trainlang +".txt");
+            System.out.println(subtraining.size() + "," + subtesting.size() + "," + mrr + "," + acc + "," + f1);
+            //model.WriteProbs("output/probs-" + trainlang +".txt");
         }
 
-        System.out.println("=============");
-        System.out.println("AVGMRR=" + avgmrr / num);
-        System.out.println("AVGACC=" + avgacc / num);
-        System.out.println("AVGF1 =" + avgf1 / num);
+        //System.out.println("=============");
+        //System.out.println("AVGMRR=" + avgmrr / num);
+        //System.out.println("AVGACC=" + avgacc / num);
+        //System.out.println("AVGF1 =" + avgf1 / num);
 
-        System.out.println("& " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\");
+        //System.out.println("& " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\");
         return " & " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\";
 
     }
 
 
-    public static void TrainAndTestNEWS(String trainfile, String testfile) throws Exception {
+    /**
+     * This is for training and testing of NEWS data.
+
+     * @throws Exception
+     */
+    public static void TrainAndTestNEWS(String langpair) throws Exception {
+
+        // given a language pair (such as EnHi), we find the files that match it. Train is
+        // always for training, dev always for testing.
+
+        String[] folders = {"NEWS2015_I2R","NEWS2015_MSRI","NEWS2015_NECTEC","NEWS2015_RMIT"};
+
+        String trainfile = "";
+        String testfile = "";
+
+        for(String folder : folders){
+            File filefolder = new File(NEWS + folder);
+            File[] files = filefolder.listFiles();
+            for(File f : files){
+                System.out.println(f.getName());
+                String name = f.getName();
+                if(name.contains("NEWS15_dev_" + langpair)){
+                    testfile = f.getAbsolutePath();
+                }else if(name.contains("NEWS15_train_" + langpair)){
+                    trainfile = f.getAbsolutePath();
+                }
+            }
+        }
+
+        logger.debug("Using train: {}", trainfile);
+        logger.debug("Using test: {}", testfile);
 
         List<MultiExample> trainingMulti = Utils.readNEWSData(trainfile);
 
         // convert the MultiExamples into single examples.
         List<Example> training = Utils.convertMulti(trainingMulti);
+
+        //logger.debug("USING A SHORTENED NUMBER OF TRAINING EXAMPLES!");
+        //training = training.subList(0,700);
 
         List<MultiExample> testing = Utils.readNEWSData(testfile);
 
@@ -712,8 +756,8 @@ class Runner {
 
         for (int i = 0; i < num; i++) {
 
-            java.util.Collections.shuffle(training);
-            java.util.Collections.shuffle(testing);
+            //java.util.Collections.shuffle(training);
+            //java.util.Collections.shuffle(testing);
 
             SPModel model = new SPModel(training);
             //List<String> langstrings = Program.getForeignWords(wikidata + "wikidata.Hebrew");
@@ -721,19 +765,19 @@ class Runner {
             //List<String> langstrings = LineIO.read("Data/heWords.txt");
             //model.SetLanguageModel(langstrings);
             //model.SetLanguageModel(Utils.readSRILM("lm/lm-he.txt"));
-            model.setUseNPLM(true);
+            //model.setUseNPLM(false);
 
             // This is set by the shared task.
             model.setMaxCandidates(50);
             model.setNgramSize(3);
 
-            int emiterations = 3;
+            int emiterations = 5;
 
             logger.info("Training with " + emiterations + " iterations.");
             model.Train(emiterations);
 
             logger.info("Testing.");
-            double[] res = TestGenerate(model, testing, "unknown");
+            double[] res = TestGenerate(model, testing, langpair);
             double mrr = res[0];
             double acc = res[1];
             double f1 = res[2];

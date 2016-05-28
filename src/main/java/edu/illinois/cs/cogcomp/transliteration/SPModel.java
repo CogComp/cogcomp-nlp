@@ -36,7 +36,7 @@ public class SPModel
         /**
          * How many origins do we expect there to be? This should probably be about 50 or less.
          */
-        public static final int numOrigins = 2;
+        public static final int numOrigins = 1;
 
         private HashMap<String, Double> languageModel = null;
         //private Dictionary<String, double> languageModelDual=null;
@@ -209,7 +209,7 @@ public class SPModel
             });
             for(Production t : keys){
                 if(probs.get(t) > threshold) {
-                    String tstr = t.getFirst() + "\t" + t.getSecond();
+                    String tstr = t.getFirst() + "\t" + t.getSecond() + "\t" + t.getOrigin();
                     outlines.add(tstr + "\t" + probs.get(t));
                 }
             }
