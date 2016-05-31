@@ -88,13 +88,13 @@ public class DependencyPathNgrams implements FeatureExtractor {
         TextAnnotation ta = c.getTextAnnotation();
         Set<Feature> features = new LinkedHashSet<>();
         TreeView parse = (TreeView) ta.getView(dependencyViewName);
-        List<Relation> incomingRelations = c.getIncomingRelations();
-
+        // get equivalent of c in the parse view
+        Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
+        List<Relation> incomingRelations = c2.getIncomingRelations();
         if(incomingRelations.size() > 0) {
             Constituent c1 =
                     parse.getConstituentsCoveringToken(
                             incomingRelations.get(0).getSource().getStartSpan()).get(0);
-            Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
 
             Pair<List<Constituent>, List<Constituent>> paths =
                     PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
