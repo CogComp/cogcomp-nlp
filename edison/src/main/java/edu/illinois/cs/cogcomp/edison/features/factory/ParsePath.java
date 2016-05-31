@@ -13,6 +13,7 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
@@ -61,50 +62,51 @@ public class ParsePath implements FeatureExtractor {
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
-
-        TreeView parse = (TreeView) ta.getView(parseViewName);
-        Constituent c1, c2;
-        try {
-            c1 = parse.getParsePhrase(c.getIncomingRelations().get(0).getSource());
-            c2 = parse.getParsePhrase(c);
-        } catch (Exception e) {
-            throw new EdisonException(e);
-        }
-
-        Pair<List<Constituent>, List<Constituent>> paths =
-                PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
-        List<Constituent> list = new ArrayList<>();
-
-        for (int i = 0; i < paths.getFirst().size() - 1; i++) {
-            list.add(paths.getFirst().get(i));
-        }
-
-        Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
-        list.add(top);
-
-        for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
-            list.add(paths.getSecond().get(i));
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < paths.getFirst().size() - 1; i++) {
-
-            Constituent cc = paths.getFirst().get(i);
-            sb.append(cc.getLabel());
-
-            sb.append(PathFeatureHelper.PATH_UP_STRING);
-        }
-        String pathToAncestor = sb.toString();
-
-        String pathString = PathFeatureHelper.getPathString(paths, true, false);
-
         Set<Feature> features = new LinkedHashSet<>();
+        List<Relation> incomingRelations = c.getIncomingRelations();
 
-        features.add(DiscreteFeature.create(pathString));
-        features.add(DiscreteFeature.create(pathToAncestor));
-        features.add(RealFeature.create("l", list.size()));
+        if(incomingRelations.size() > 0) {
+            TreeView parse = (TreeView) ta.getView(parseViewName);
+            Constituent c1, c2;
+            try {
+                c1 = parse.getParsePhrase(incomingRelations.get(0).getSource());
+                c2 = parse.getParsePhrase(c);
+            } catch (Exception e) {
+                throw new EdisonException(e);
+            }
 
+            Pair<List<Constituent>, List<Constituent>> paths =
+                    PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
+            List<Constituent> list = new ArrayList<>();
+
+            for (int i = 0; i < paths.getFirst().size() - 1; i++) {
+                list.add(paths.getFirst().get(i));
+            }
+
+            Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
+            list.add(top);
+
+            for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
+                list.add(paths.getSecond().get(i));
+            }
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < paths.getFirst().size() - 1; i++) {
+
+                Constituent cc = paths.getFirst().get(i);
+                sb.append(cc.getLabel());
+
+                sb.append(PathFeatureHelper.PATH_UP_STRING);
+            }
+            String pathToAncestor = sb.toString();
+
+            String pathString = PathFeatureHelper.getPathString(paths, true, false);
+
+            features.add(DiscreteFeature.create(pathString));
+            features.add(DiscreteFeature.create(pathToAncestor));
+            features.add(RealFeature.create("l", list.size()));
+        }
         return features;
 
     }
