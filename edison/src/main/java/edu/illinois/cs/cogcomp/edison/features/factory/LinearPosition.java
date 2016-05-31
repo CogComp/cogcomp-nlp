@@ -11,12 +11,14 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,15 +47,17 @@ public class LinearPosition implements FeatureExtractor {
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-        Constituent predicate = c.getIncomingRelations().get(0).getSource();
-
+        List<Relation> incomingRelation = c.getIncomingRelations();
         Set<Feature> features = new LinkedHashSet<>();
-        if (predicate.getStartSpan() >= c.getEndSpan())
-            features.add(BEFORE);
-        else if (c.getStartSpan() >= predicate.getEndSpan())
-            features.add(AFTER);
-        else
-            features.add(CONTAINS);
+        if(incomingRelation.size() > 0) {
+            Constituent predicate = incomingRelation.get(0).getSource();
+            if (predicate.getStartSpan() >= c.getEndSpan())
+                features.add(BEFORE);
+            else if (c.getStartSpan() >= predicate.getEndSpan())
+                features.add(AFTER);
+            else
+                features.add(CONTAINS);
+        }
         return features;
     }
 
