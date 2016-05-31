@@ -62,15 +62,17 @@ public class ParsePath implements FeatureExtractor {
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
+        TreeView parse = (TreeView) ta.getView(parseViewName);
+        Constituent cEquivalentInParseView = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
         Set<Feature> features = new LinkedHashSet<>();
-        List<Relation> incomingRelations = c.getIncomingRelations();
+        List<Relation> incomingRelations = cEquivalentInParseView.getIncomingRelations();
+
 
         if(incomingRelations.size() > 0) {
-            TreeView parse = (TreeView) ta.getView(parseViewName);
             Constituent c1, c2;
             try {
                 c1 = parse.getParsePhrase(incomingRelations.get(0).getSource());
-                c2 = parse.getParsePhrase(c);
+                c2 = parse.getParsePhrase(cEquivalentInParseView);
             } catch (Exception e) {
                 throw new EdisonException(e);
             }
