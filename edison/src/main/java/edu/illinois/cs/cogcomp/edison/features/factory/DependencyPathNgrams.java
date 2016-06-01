@@ -13,6 +13,7 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
@@ -75,7 +76,7 @@ public class DependencyPathNgrams implements FeatureExtractor {
     private final int ngramSize;
 
     /**
-	 *
+	 * Extracting ngram features along the dependency path
 	 */
     public DependencyPathNgrams(String dependencyViewName, int ngramSize) {
         this.dependencyViewName = dependencyViewName;
@@ -85,51 +86,52 @@ public class DependencyPathNgrams implements FeatureExtractor {
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
-
+        Set<Feature> features = new LinkedHashSet<>();
         TreeView parse = (TreeView) ta.getView(dependencyViewName);
-
-        Constituent c1 =
-                parse.getConstituentsCoveringToken(
-                        c.getIncomingRelations().get(0).getSource().getStartSpan()).get(0);
+        // get equivalent of c in the parse view
         Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
+        List<Relation> incomingRelations = c2.getIncomingRelations();
+        if(incomingRelations.size() > 0) {
+            Constituent c1 =
+                    parse.getConstituentsCoveringToken(
+                            incomingRelations.get(0).getSource().getStartSpan()).get(0);
 
-        Pair<List<Constituent>, List<Constituent>> paths =
-                PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
+            Pair<List<Constituent>, List<Constituent>> paths =
+                    PathFeatureHelper.getPathsToCommonAncestor(c1, c2, 400);
 
-        List<String> path = new ArrayList<>();
-        List<String> pos = new ArrayList<>();
+            List<String> path = new ArrayList<>();
+            List<String> pos = new ArrayList<>();
 
-        for (int i = 0; i < paths.getFirst().size() - 1; i++) {
-            Constituent cc = paths.getFirst().get(i);
-            path.add(cc.getIncomingRelations().get(0).getRelationName()
-                    + PathFeatureHelper.PATH_UP_STRING);
-
-            pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":"
-                    + cc.getIncomingRelations().get(0).getRelationName()
-                    + PathFeatureHelper.PATH_UP_STRING);
-
-        }
-
-        Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
-
-        pos.add(WordHelpers.getPOS(ta, top.getStartSpan()) + ":*");
-        path.add("*");
-
-        if (paths.getSecond().size() > 1) {
-            for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
-                Constituent cc = paths.getSecond().get(i);
+            for (int i = 0; i < paths.getFirst().size() - 1; i++) {
+                Constituent cc = paths.getFirst().get(i);
+                path.add(cc.getIncomingRelations().get(0).getRelationName()
+                        + PathFeatureHelper.PATH_UP_STRING);
 
                 pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":"
-                        + PathFeatureHelper.PATH_DOWN_STRING);
-                path.add(PathFeatureHelper.PATH_DOWN_STRING);
+                        + cc.getIncomingRelations().get(0).getRelationName()
+                        + PathFeatureHelper.PATH_UP_STRING);
 
             }
+
+            Constituent top = paths.getFirst().get(paths.getFirst().size() - 1);
+
+            pos.add(WordHelpers.getPOS(ta, top.getStartSpan()) + ":*");
+            path.add("*");
+
+            if (paths.getSecond().size() > 1) {
+                for (int i = paths.getSecond().size() - 2; i >= 0; i--) {
+                    Constituent cc = paths.getSecond().get(i);
+
+                    pos.add(WordHelpers.getPOS(ta, cc.getStartSpan()) + ":"
+                            + PathFeatureHelper.PATH_DOWN_STRING);
+                    path.add(PathFeatureHelper.PATH_DOWN_STRING);
+
+                }
+            }
+
+            features.addAll(getNgrams(path, ""));
+            features.addAll(getNgrams(pos, "pos"));
         }
-        Set<Feature> features = new LinkedHashSet<>();
-
-        features.addAll(getNgrams(path, ""));
-        features.addAll(getNgrams(pos, "pos"));
-
         return features;
 
     }
