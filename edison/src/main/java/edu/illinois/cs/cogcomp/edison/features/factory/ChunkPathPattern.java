@@ -11,10 +11,7 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
@@ -56,56 +53,55 @@ public class ChunkPathPattern implements FeatureExtractor {
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-        TextAnnotation ta = c.getTextAnnotation();
-
-        Constituent pred = c.getIncomingRelations().get(0).getSource();
-
-        SpanLabelView shallowParse = (SpanLabelView) ta.getView(viewName);
-
-        List<Constituent> constituents = new ArrayList<>();
-
-        boolean beforePredicate = Queries.before(pred).transform(c);
-        boolean afterPredicate = Queries.after(pred).transform(c);
-        if (beforePredicate)
-            constituents =
-                    SpanLabelsHelper.getConstituentsInBetween(shallowParse, c.getEndSpan(),
-                            pred.getStartSpan());
-        else if (afterPredicate)
-            constituents =
-                    SpanLabelsHelper.getConstituentsInBetween(shallowParse, pred.getEndSpan(),
-                            c.getStartSpan());
-
-        Collections.sort(constituents, new Comparator<Constituent>() {
-            public int compare(Constituent o1, Constituent o2) {
-                if (o1.getStartSpan() < o2.getStartSpan())
-                    return -1;
-                else if (o1.getStartSpan() > o2.getStartSpan())
-                    return 1;
-                else
-                    return 0;
-
-            }
-        });
-
-        StringBuilder sb = new StringBuilder();
-        for (Constituent constituent : constituents) {
-            sb.append(constituent.getLabel()).append("-");
-        }
-
-        if (constituents.size() <= 1)
-            sb.append("<empty>");
-
+        List<Relation> incomingRelation = c.getIncomingRelations();
         Set<Feature> features = new LinkedHashSet<>();
+        if(incomingRelation.size() > 0) {
+            TextAnnotation ta = c.getTextAnnotation();
+            Constituent pred = incomingRelation.get(0).getSource();
 
-        if (beforePredicate)
-            features.add(DiscreteFeature.create("*" + sb.toString()));
-        else if (afterPredicate)
-            features.add(DiscreteFeature.create(sb.toString() + "*"));
-        else
-            features.add(DiscreteFeature.create("same"));
+            SpanLabelView shallowParse = (SpanLabelView) ta.getView(viewName);
 
-        features.add(RealFeature.create("l", constituents.size()));
+            List<Constituent> constituents = new ArrayList<>();
 
+            boolean beforePredicate = Queries.before(pred).transform(c);
+            boolean afterPredicate = Queries.after(pred).transform(c);
+            if (beforePredicate)
+                constituents =
+                        SpanLabelsHelper.getConstituentsInBetween(shallowParse, c.getEndSpan(),
+                                pred.getStartSpan());
+            else if (afterPredicate)
+                constituents =
+                        SpanLabelsHelper.getConstituentsInBetween(shallowParse, pred.getEndSpan(),
+                                c.getStartSpan());
+
+            Collections.sort(constituents, new Comparator<Constituent>() {
+                public int compare(Constituent o1, Constituent o2) {
+                    if (o1.getStartSpan() < o2.getStartSpan())
+                        return -1;
+                    else if (o1.getStartSpan() > o2.getStartSpan())
+                        return 1;
+                    else
+                        return 0;
+                }
+            });
+
+            StringBuilder sb = new StringBuilder();
+            for (Constituent constituent : constituents) {
+                sb.append(constituent.getLabel()).append("-");
+            }
+
+            if (constituents.size() <= 1)
+                sb.append("<empty>");
+
+            if (beforePredicate)
+                features.add(DiscreteFeature.create("*" + sb.toString()));
+            else if (afterPredicate)
+                features.add(DiscreteFeature.create(sb.toString() + "*"));
+            else
+                features.add(DiscreteFeature.create("same"));
+
+            features.add(RealFeature.create("l", constituents.size()));
+        }
         return features;
     }
 
