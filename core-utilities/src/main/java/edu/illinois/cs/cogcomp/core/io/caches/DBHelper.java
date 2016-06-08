@@ -77,7 +77,7 @@ public class DBHelper {
 
     public static boolean dbFileExists(String dbFile) {
         boolean create = false;
-        if (!IOUtils.exists(dbFile + ".h2.db"))
+        if (!IOUtils.exists(dbFile + ".h2.db") && !IOUtils.exists(dbFile + ".mv.db"))
             create = true;
         return create;
     }
