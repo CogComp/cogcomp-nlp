@@ -10,4 +10,4 @@ OPTIONS="-ea $MEMORY -cp $CP "
 
 MAINCLASS=edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler
 
-time nice java $OPTIONS $MAINCLASS config\srl-config.properties
+java $OPTIONS $MAINCLASS config/srl-config.properties
