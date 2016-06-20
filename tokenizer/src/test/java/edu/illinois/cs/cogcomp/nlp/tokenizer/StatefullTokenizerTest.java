@@ -36,6 +36,9 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by mssammon on 8/17/15.
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
@@ -205,6 +208,7 @@ public class StatefullTokenizerTest {
         }
         cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
         String cleanText = cleanTextBldr.toString();
+        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
 
         // count whitespace chars in string
 
@@ -216,22 +220,6 @@ public class StatefullTokenizerTest {
         Set<IntPair> sunSpans = new HashSet<>();
         while( sunMatcher.find() )
             sunSpans.add( new IntPair(sunMatcher.start(), sunMatcher.end() ) );
-
-
-        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
-        Sentence[] sents = splitter.splitAll();
-        Sentence s = sents[ 0 ];
-        LinkedVector words = s.wordSplit();
-        for ( int i = 0; i < words.size(); ++i ) {
-
-            Word firstWord = (Word) words.get(0);
-            if ( "Sun".equals( firstWord.form ) )
-            {
-                IntPair tokenCharOffsets = new IntPair(firstWord.start, firstWord.end);
-
-                assertTrue( sunSpans.contains( tokenCharOffsets ) );
-            }
-        }
 
         StatefulTokenizer statefulTokenizer = new StatefulTokenizer();
         Tokenizer.Tokenization tokenInfo = statefulTokenizer.tokenizeTextSpan( cleanText );
