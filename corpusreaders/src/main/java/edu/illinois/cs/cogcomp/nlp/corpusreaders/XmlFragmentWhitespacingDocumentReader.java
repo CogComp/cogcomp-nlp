@@ -81,7 +81,14 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
      */
     public XmlFragmentWhitespacingDocumentReader(String corpusName, String sourceDirectory) throws Exception {
         super(buildResourceManager( corpusName, sourceDirectory ));
-        taBuilder = new TokenizerTextAnnotationBuilder( new IllinoisTokenizer() );
+        taBuilder = new TokenizerTextAnnotationBuilder( new StatefulTokenizer() );
+    }
+
+    private static ResourceManager buildResourceManager(String corpusName, String sourceDirectory) {
+        Properties props = new Properties();
+        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpusName );
+        props.setProperty( CorpusReaderConfigurator.CORPUS_DIRECTORY.key, sourceDirectory );
+        return new ResourceManager( props );
     }
 
     private static ResourceManager buildResourceManager(String corpusName, String sourceDirectory) {
