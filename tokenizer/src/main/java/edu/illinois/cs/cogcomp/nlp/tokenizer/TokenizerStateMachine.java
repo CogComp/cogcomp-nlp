@@ -487,8 +487,10 @@ public class TokenizerStateMachine {
     		return;
     	this.text = new char[i];
     	intext.getChars(0, i, this.text, 0);
-    	
-        this.textstring = intext.trim();
+
+        // MS CHANGED IN CONFLICTING UPDATE
+//        this.textstring = intext.trim();
+//        this.textstring = intext.trim();
         // CHANGE (MS): no trim of input text
         this.textstring = intext;
         this.text = this.textstring.toCharArray();
