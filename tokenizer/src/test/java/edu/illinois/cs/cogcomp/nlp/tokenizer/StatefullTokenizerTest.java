@@ -27,13 +27,14 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.io.FileNotFoundException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by mssammon on 8/17/15.
@@ -177,7 +178,7 @@ public class StatefullTokenizerTest {
      *    has been replaced with whitespace of equal span.
      */
     @Test
-    public void testSplitter()
+    public void testWhitespaceBehavior()
     {
         String origText = null;
         try {
@@ -204,27 +205,59 @@ public class StatefullTokenizerTest {
         }
         cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
         String cleanText = cleanTextBldr.toString();
-        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
 
         // count whitespace chars in string
 
         // check token offsets in tokens returned by SentenceSplitter
 
-        Pattern wsPattern = Pattern.compile( "\\s+" );
+        Pattern sun = Pattern.compile( "\\w*Sun\\w*" );
+        Matcher sunMatcher = sun.matcher( cleanText );
 
-        Matcher wsMatcher = wsPattern.matcher( cleanText );
+        Set<IntPair> sunSpans = new HashSet<>();
+        while( sunMatcher.find() )
+            sunSpans.add( new IntPair(sunMatcher.start(), sunMatcher.end() ) );
 
-        int lastWsIndex = 0;
 
-        if ( wsMatcher.find() )
-            lastWsIndex = wsMatcher.end();
-
+        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
         Sentence[] sents = splitter.splitAll();
         Sentence s = sents[ 0 ];
         LinkedVector words = s.wordSplit();
-        Word firstWord =  (Word) words.get( 0 );
+        for ( int i = 0; i < words.size(); ++i ) {
 
-        assertEquals( lastWsIndex, firstWord.start );
+            Word firstWord = (Word) words.get(0);
+            if ( "Sun".equals( firstWord.form ) )
+            {
+                IntPair tokenCharOffsets = new IntPair(firstWord.start, firstWord.end);
+
+                assertTrue( sunSpans.contains( tokenCharOffsets ) );
+            }
+        }
+
+        StatefulTokenizer statefulTokenizer = new StatefulTokenizer();
+        Tokenizer.Tokenization tokenInfo = statefulTokenizer.tokenizeTextSpan( cleanText );
+
+        assertEquals( tokenInfo.getCharacterOffsets().length, tokenInfo.getTokens().length );
+        for ( int i = 0; i < tokenInfo.getTokens().length; ++i )
+        {
+            String tok = tokenInfo.getTokens()[ i ];
+            if ( tok.equals( "Sun") )
+            {
+                IntPair tokCharOffsets = tokenInfo.getCharacterOffsets()[i];
+
+                if ( !sunSpans.contains( tokCharOffsets ) )
+                {
+                    String origTextSubstring = cleanText.substring( tokCharOffsets.getFirst(), tokCharOffsets.getSecond() );
+                    System.err.println( "ERROR: tokenizer has form '" + tok + "', but offsets refer to substring '" +
+                        origTextSubstring + "'." );
+                }
+                assertTrue( sunSpans.contains( tokCharOffsets ) );
+            }
+        }
+
+        TextAnnotation statefulTa = new TextAnnotation("test", "test", cleanText, tokenInfo.getCharacterOffsets(),
+                tokenInfo.getTokens(), tokenInfo.getSentenceEndTokenIndexes());
+
+        assertNotNull( statefulTa );
     }
 
 }
