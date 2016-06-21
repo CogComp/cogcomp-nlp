@@ -33,7 +33,7 @@ import static org.junit.Assert.fail;
  *
  * @author mssammon
  */
-public class EreSentimentDocumentReaderTest {
+public class XmlFragmentWhitespacingReaderTest {
 
     private final static String REF_FILE_ONE = "59f8514f6db132207ba9e5828f73d706.cmp.txt";
     private final static String REF_FILE_TWO = "593cb5020613a4695859130542f7fc94.cmp.txt";
@@ -55,10 +55,10 @@ public class EreSentimentDocumentReaderTest {
     @Test
     public void testReader()
     {
-        EreSentimentDocumentReader reader = null;
+        XmlFragmentWhitespacingDocumentReader reader = null;
         try {
-            reader = new EreSentimentDocumentReader( TEST_DIR );
-        } catch (IOException e) {
+            reader = new XmlFragmentWhitespacingDocumentReader( "test", TEST_DIR );
+        } catch (Exception e) {
             e.printStackTrace();
             fail( e.getMessage() );
         }
@@ -89,7 +89,7 @@ public class EreSentimentDocumentReaderTest {
             try {
                 tas.put( file.getName( file.getNameCount() - 1 ).toString(),
                         reader.getTextAnnotationsFromFile( file ).get(0) );
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 fail( e.getMessage());
             }

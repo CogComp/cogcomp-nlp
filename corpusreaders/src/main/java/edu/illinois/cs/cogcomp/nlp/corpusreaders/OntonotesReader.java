@@ -43,7 +43,7 @@ public class OntonotesReader extends TextAnnotationReader {
     private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
 
     public OntonotesReader(String ontonotesDirectory) {
-        super("Ontonotes");
+        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes"));
         this.ontonotesDirectory = ontonotesDirectory;
         this.taCounter = 0;
         this.textAnnotations = new ArrayList<>();
