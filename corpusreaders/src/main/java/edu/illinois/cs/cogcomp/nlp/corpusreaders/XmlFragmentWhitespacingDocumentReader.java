@@ -15,10 +15,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,11 +28,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
+import java.util.Properties;
 
 /**
- * Generates a TextAnnotation object per file in the DEFT ERE collection for Belief and Sentiment task
- * (corpus LDC2016E27).
+ * Generates a TextAnnotation object per file for a corpus consisting of files containing xml fragments.
+ * Created for the DEFT ERE collection for Belief and Sentiment task (LDC2016E27).
  * All documents appear to be forum data, not full xml, but xml-ish. LDC README IN LDC2016E27 INDICATES
  *    THAT THESE DOCUMENTS ARE XML FRAGMENTS, NOT FULL XML. Therefore, they should be treated as raw text,
  *    even though they contain xml-escaped character forms: character offsets for standoff annotation will
@@ -66,19 +66,29 @@ import java.util.regex.Pattern;
  file will produce a string that exactly matches the source text.
  </quote>
  */
-public class EreSentimentDocumentReader extends AbstractCorpusReader
+public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCorpusReader
 {
     private TextAnnotationBuilder taBuilder;
+    private String fileId;
+    private String newFileText;
 
     /**
-     * crude xml tag matcher: attempt to avoid lone left angle brackets by adding newline/linefeed characters
-     *     to the
+     * assumes files are all from a single source directory.
+     *
+     * @param corpusName
+     * @param sourceDirectory
+     * @throws IOException
      */
-
-
-    public EreSentimentDocumentReader(String sourceDirectory) throws IOException {
-        super(sourceDirectory);
+    public XmlFragmentWhitespacingDocumentReader(String corpusName, String sourceDirectory) throws Exception {
+        super(buildResourceManager( corpusName, sourceDirectory ));
         taBuilder = new TokenizerTextAnnotationBuilder( new IllinoisTokenizer() );
+    }
+
+    private static ResourceManager buildResourceManager(String corpusName, String sourceDirectory) {
+        Properties props = new Properties();
+        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpusName );
+        props.setProperty( CorpusReaderConfigurator.CORPUS_DIRECTORY.key, sourceDirectory );
+        return new ResourceManager( props );
     }
 
     /**
@@ -116,16 +126,22 @@ public class EreSentimentDocumentReader extends AbstractCorpusReader
      * @param corpusFileListEntry corpus file containing content to be processed
      * @return List of TextAnnotation objects extracted from the corpus file
      */
-    @Override
-    public List<TextAnnotation> getTextAnnotationsFromFile(Path corpusFileListEntry) throws FileNotFoundException {
-        String fileId = corpusFileListEntry.getName( corpusFileListEntry.getNameCount() - 1).toString();
+    public List<TextAnnotation> getTextAnnotationsFromFile(Path corpusFileListEntry) throws Exception {
+        fileId = corpusFileListEntry.getName( corpusFileListEntry.getNameCount() - 1).toString();
         String fileText = LineIO.slurp( corpusFileListEntry.toString() );
-        String newFileText = TextCleaner.replaceXmlTags( fileText );
-        TextAnnotation ta = taBuilder.createTextAnnotation( fileId, "1", newFileText.toString());
+        newFileText = TextCleaner.replaceXmlTags( fileText );
+
+
+        TextAnnotation ta = makeTextAnnotation();
 
         List<TextAnnotation> taList = new ArrayList<>(1);
         taList.add( ta );
 
         return taList;
+    }
+
+    @Override
+    protected TextAnnotation makeTextAnnotation() throws Exception {
+        return taBuilder.createTextAnnotation( fileId, "1", newFileText.toString());
     }
 }
