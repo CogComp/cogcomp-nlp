@@ -60,4 +60,5 @@ public class TextAnnotationSerializationTest extends TestCase {
                 Arrays.toString(ta.getTokensInSpan(1, 3)));
         assertEquals(ta2.getText(), ta.getText());
     }
+
 }
