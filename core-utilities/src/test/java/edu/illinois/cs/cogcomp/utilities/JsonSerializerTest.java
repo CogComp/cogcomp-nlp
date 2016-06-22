@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -24,6 +25,7 @@ import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,6 +77,47 @@ public class JsonSerializerTest {
 
         assertNotNull( deserializedForm );
         assertEquals( seventhTokenForm, deserializedForm );
+
+
     }
+
+    @Test
+    public void testJsonSerializabilityWithOffsets() throws Exception {
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false);
+
+        // making sure serialization does not fail, when some views (possibly by mistake) are null
+        ta.addView("nullView", null);
+
+        // create (redundant) token offset info in output for non-CCG readers
+        String json = SerializationHelper.serializeToJson(ta, true);
+
+
+
+        TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
+        assertEquals(ta2.getCorpusId(), ta.getCorpusId());
+        assertEquals(ta2.getId(), ta.getId());
+        assertEquals(ta2.getNumberOfSentences(), ta.getNumberOfSentences());
+        assertEquals(ta2.getSentence(1), ta.getSentence(1));
+        assertEquals(ta2.getSentenceFromToken(2), ta.getSentenceFromToken(2));
+        assertEquals(ta2.getTokenIdFromCharacterOffset(5), ta.getTokenIdFromCharacterOffset(5));
+        assertEquals(ta2.getToken(4), ta.getToken(4));
+        assertEquals(ta2.getAvailableViews(), ta.getAvailableViews());
+        assertEquals(Arrays.toString(ta2.getTokensInSpan(1, 3)),
+                Arrays.toString(ta.getTokensInSpan(1, 3)));
+        assertEquals(ta2.getText(), ta.getText());
+
+        Constituent seventhToken = ta.getView( ViewNames.TOKENS ).getConstituents().get( 6 );
+        IntPair tokCharOffsets = new IntPair(seventhToken.getStartCharOffset(), seventhToken.getEndCharOffset());
+        String seventhTokenForm = seventhToken.getSurfaceForm();
+
+        Constituent seventhTokenCopy = ta2.getView( ViewNames.TOKENS ).getConstituents().get( 6 );
+        IntPair tokCharOffsets2 = new IntPair(seventhTokenCopy.getStartCharOffset(), seventhTokenCopy.getEndCharOffset());
+        String seventhTokenForm2 = seventhTokenCopy.getSurfaceForm();
+        assertEquals( seventhTokenForm, seventhTokenForm2 );
+        assertEquals( tokCharOffsets, tokCharOffsets2 );
+
+    }
+
+
 
 }
