@@ -57,10 +57,13 @@ public class XmlFragmentWhitespacingReaderTest {
     {
         XmlFragmentWhitespacingDocumentReader reader = null;
         try {
-            reader = new XmlFragmentWhitespacingDocumentReader( "test", TEST_DIR );
-        } catch (Exception e) {
+            reader = new XmlFragmentWhitespacingDocumentReader( "ERE_BEST", TEST_DIR );
+        } catch (IOException e) {
             e.printStackTrace();
             fail( e.getMessage() );
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail( e.getMessage());
         }
 
         List<Path> files = null;
@@ -92,6 +95,9 @@ public class XmlFragmentWhitespacingReaderTest {
             } catch (Exception e) {
                 e.printStackTrace();
                 fail( e.getMessage());
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail( e.getMessage() );
             }
         }
         System.out.println( "----\n" +  tas.get( REF_FILE_ONE ).getText() + "----\n" );
