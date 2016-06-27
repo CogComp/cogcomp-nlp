@@ -142,8 +142,8 @@ public abstract class IOUtils {
     public static String[] lsFilesRecursive(String directory, FilenameFilter filter) throws IOException {
         File dir = new File(directory);
         ArrayList<String> files = new ArrayList<>();
-        for (File filepath : dir.listFiles()) {
-            if (isFile(filepath.getAbsolutePath()) && filter.accept( dir, filepath.getName() ))
+        for (File filepath : dir.listFiles(filter)) {
+            if (isFile(filepath.getAbsolutePath()))
                 files.add(filepath.getAbsolutePath());
             else if ( isDirectory( filepath.getAbsolutePath() ) )
                 files.addAll( Arrays.asList( lsFilesRecursive(filepath.getAbsolutePath(), filter ) ) );
