@@ -14,8 +14,7 @@ configFile="config/ner.properties"
 # Classpath
 cpath="target/classes:target/dependency/*:config"
 
-CMD="java -classpath  ${cpath} -Xmx20g edu.illinois.cs.cogcomp.ner.NerTagger -train $train 
-$test -c $configFile"
+CMD="java -classpath  ${cpath} -Xmx20g edu.illinois.cs.cogcomp.ner.NerTagger -train $train $test -c $configFile"
 
 echo "$0: running command '$CMD'..."
 
