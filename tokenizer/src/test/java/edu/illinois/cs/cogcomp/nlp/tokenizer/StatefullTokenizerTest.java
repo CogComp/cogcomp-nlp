@@ -16,6 +16,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
+import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
@@ -23,14 +28,21 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by mssammon on 8/17/15.
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
+
+
+    private static final String INFILE = "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
 
     /**
      * test whether the mapping between character offset and token index is correct.
@@ -160,5 +172,59 @@ public class StatefullTokenizerTest {
     }
 
 
+    /**
+     * Test Splitter behavior on text with leading/trailing whitespace.  Example is use case where xml markup
+     *    has been replaced with whitespace of equal span.
+     */
+    @Test
+    public void testSplitter()
+    {
+        String origText = null;
+        try {
+            origText = LineIO.slurp(INFILE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        Pattern xmlTagPattern = Pattern.compile( "(<[^>\\r\\n]+>)");
+
+        Matcher xmlMatcher = xmlTagPattern.matcher( origText );
+        StringBuilder cleanTextBldr = new StringBuilder();
+        int lastAppendedCharOffset = 0;
+
+        while ( xmlMatcher.find() )
+        {
+            int start = xmlMatcher.start();
+            int end = xmlMatcher.end();
+            cleanTextBldr.append( origText.substring( lastAppendedCharOffset, start ) );
+            for ( int i = start; i < end; ++i )
+                cleanTextBldr.append( " " );
+            lastAppendedCharOffset = end;
+        }
+        cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
+        String cleanText = cleanTextBldr.toString();
+        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
+
+        // count whitespace chars in string
+
+        // check token offsets in tokens returned by SentenceSplitter
+
+        Pattern wsPattern = Pattern.compile( "\\s+" );
+
+        Matcher wsMatcher = wsPattern.matcher( cleanText );
+
+        int lastWsIndex = 0;
+
+        if ( wsMatcher.find() )
+            lastWsIndex = wsMatcher.end();
+
+        Sentence[] sents = splitter.splitAll();
+        Sentence s = sents[ 0 ];
+        LinkedVector words = s.wordSplit();
+        Word firstWord =  (Word) words.get( 0 );
+
+        assertEquals( lastWsIndex, firstWord.start );
+    }
 
 }
