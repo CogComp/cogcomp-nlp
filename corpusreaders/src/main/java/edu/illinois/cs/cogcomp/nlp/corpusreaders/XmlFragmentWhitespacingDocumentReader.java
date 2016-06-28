@@ -84,19 +84,6 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
         taBuilder = new TokenizerTextAnnotationBuilder( new IllinoisTokenizer() );
     }
 
-    private static ResourceManager buildResourceManager(String corpusName, String sourceDirectory) {
-        Properties props = new Properties();
-        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpusName );
-        props.setProperty( CorpusReaderConfigurator.CORPUS_DIRECTORY.key, sourceDirectory );
-        return new ResourceManager( props );
-    }
-
-    private static ResourceManager buildResourceManager(String corpusName, String sourceDirectory) {
-        Properties props = new Properties();
-        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpusName );
-        props.setProperty( CorpusReaderConfigurator.CORPUS_DIRECTORY.key, sourceDirectory );
-        return new ResourceManager( props );
-    }
 
     /**
      * generate a list of files comprising the corpus. Each is expected to generate
