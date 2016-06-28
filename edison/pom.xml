@@ -32,7 +32,6 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-<<<<<<< dff121696877d745d6f36d10e305fc10c8e8f1b4
             <version>3.0.50</version>
             <scope>test</scope>
         </dependency>
