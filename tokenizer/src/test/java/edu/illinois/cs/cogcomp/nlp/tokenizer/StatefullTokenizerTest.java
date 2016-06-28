@@ -20,7 +20,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
@@ -266,26 +265,26 @@ public class StatefullTokenizerTest {
 
         assertNotNull( statefulTa );
 
-        AnnotatorService annotator = null;
-        try {
-            annotator = CuratorFactory.buildCuratorClient();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
-        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
-                new StatefulTokenizer());
-//        TextAnnotation ta = tab.createTextAnnotation("  \"Hi,   Bob, how are you?\" "
-//                + "Jerry has no bag for his binoculars.  ");
-        try {
-            annotator.addView(statefulTa, ViewNames.COREF);
-        } catch (AnnotatorException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
-        View v = statefulTa.getView(ViewNames.COREF);
-        assertNotNull( v );
-        System.out.println(v);
+//        AnnotatorService annotator = null;
+//        try {
+//            annotator = CuratorFactory.buildCuratorClient();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
+//                new StatefulTokenizer());
+////        TextAnnotation ta = tab.createTextAnnotation("  \"Hi,   Bob, how are you?\" "
+////                + "Jerry has no bag for his binoculars.  ");
+//        try {
+//            annotator.addView(statefulTa, ViewNames.COREF);
+//        } catch (AnnotatorException e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//        View v = statefulTa.getView(ViewNames.COREF);
+//        assertNotNull( v );
+//        System.out.println(v);
 
     }
 
