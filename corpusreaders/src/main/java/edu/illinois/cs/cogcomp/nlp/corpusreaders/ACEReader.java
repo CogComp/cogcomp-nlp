@@ -81,7 +81,7 @@ public class ACEReader extends TextAnnotationReader {
      * @throws Exception Exception thrown in-case of major failure.
      */
     public ACEReader(String aceCorpusHome, String[] sections, boolean is2004mode) throws Exception {
-        super(aceCorpusHome);
+        super(CorpusReaderConfigurator.buildResourceManager(aceCorpusHome));
 
         this.aceCorpusHome = aceCorpusHome;
         this.corpusId = is2004mode ? "ACE2004" : "ACE2005";

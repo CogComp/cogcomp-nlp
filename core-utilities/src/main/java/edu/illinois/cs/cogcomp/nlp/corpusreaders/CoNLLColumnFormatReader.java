@@ -19,11 +19,13 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -59,7 +61,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
     public CoNLLColumnFormatReader(String corpus, String section, String columnFile,
             String predicateArgumentViewName, TextAnnotationBuilder textAnnotationBuilder)
             throws Exception {
-        super(corpus);
+        super(CorpusReaderConfigurator.buildResourceManager( corpus ));
         this.section = section;
         this.predicateArgumentViewName = predicateArgumentViewName;
         this.textAnnotationBuilder = textAnnotationBuilder;
@@ -79,6 +81,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
             lines = LineIO.read(columnFile);
         }
     }
+
 
     public boolean hasNext() {
         return currentLine < lines.size();

@@ -80,6 +80,14 @@ public class StatefulTokenizer implements Tokenizer {
                 wordOffsets[wordIndex++] = new IntPair(ms.start, ms.end);
             }
         }
+        
+        // Removing any training sentence containing no words.
+        if (sentences > 1)
+        	if (sentenceEnds[sentences-1] == sentenceEnds[sentences-2]) {
+        		int [] temp = new int[sentences-1];
+        		System.arraycopy(sentenceEnds,0,temp,0,sentences-1);
+        		sentenceEnds = temp;
+        	}
         return new Tokenization(tokens, wordOffsets, sentenceEnds);
     }
     

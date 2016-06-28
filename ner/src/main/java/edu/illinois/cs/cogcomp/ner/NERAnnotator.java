@@ -48,7 +48,7 @@ public class NERAnnotator extends Annotator {
     private NETaggerLevel2 t2 = null;
 
     /** shallow parsing is required. */
-    private static final String[] REQUIRED_VIEWS = {ViewNames.SHALLOW_PARSE};
+    private static final String[] REQUIRED_VIEWS = {};
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
