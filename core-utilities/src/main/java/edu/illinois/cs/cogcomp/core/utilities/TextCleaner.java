@@ -39,8 +39,9 @@ public class TextCleaner {
 
     private static final int REGEX_TEXT_LIMIT = 10000;
 
-    private static Pattern repeatPunctuationPattern = Pattern
-            .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
+    private static Pattern repeatPunctuationPattern = Pattern.compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
+    private static Pattern xmlTagPattern = Pattern.compile( "(<[^>\\r\\n]+>)");
+
     private boolean removeRepeatPunctuation;
     private boolean replaceUnderscores;
     private boolean replaceControlSequence;
@@ -112,6 +113,26 @@ public class TextCleaner {
         return origText_.replaceAll("\"s(\\s+)", "'s$1");
     }
 
+
+    public static String replaceXmlTags( String origText )
+    {
+        Matcher xmlMatcher = xmlTagPattern.matcher( origText );
+        StringBuilder cleanTextBldr = new StringBuilder();
+        int lastAppendedCharOffset = 0;
+
+        while ( xmlMatcher.find() )
+        {
+            int start = xmlMatcher.start();
+            int end = xmlMatcher.end();
+            cleanTextBldr.append( origText.substring( lastAppendedCharOffset, start ) );
+            for ( int i = start; i < end; ++i )
+                cleanTextBldr.append( " " );
+            lastAppendedCharOffset = end;
+        }
+        cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
+
+        return cleanTextBldr.toString();
+    }
 
     /**
      * replaces underscores with dashes (many crawled news articles seem to have substituted em- or

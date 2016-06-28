@@ -85,9 +85,8 @@ public class PennTreebankReader extends TextAnnotationReader {
      *
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
-    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
-            throws Exception {
-        super(PENN_TREEBANK_WSJ);
+    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName) throws Exception {
+        super( CorpusReaderConfigurator.buildResourceManager( PENN_TREEBANK_WSJ, treebankHome ));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 

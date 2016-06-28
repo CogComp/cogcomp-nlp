@@ -10,27 +10,46 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
+import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
+import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by mssammon on 8/17/15.
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
+
+
+    private static final String INFILE = "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
 
     /**
      * test whether the mapping between character offset and token index is correct.
@@ -160,5 +179,113 @@ public class StatefullTokenizerTest {
     }
 
 
+    /**
+     * Test Splitter behavior on text with leading/trailing whitespace.  Example is use case where xml markup
+     *    has been replaced with whitespace of equal span.
+     */
+    @Test
+    public void testWhitespaceBehavior()
+    {
+        String origText = null;
+        try {
+            origText = LineIO.slurp(INFILE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        Pattern xmlTagPattern = Pattern.compile( "(<[^>\\r\\n]+>)");
+
+        Matcher xmlMatcher = xmlTagPattern.matcher( origText );
+        StringBuilder cleanTextBldr = new StringBuilder();
+        int lastAppendedCharOffset = 0;
+
+        while ( xmlMatcher.find() )
+        {
+            int start = xmlMatcher.start();
+            int end = xmlMatcher.end();
+            cleanTextBldr.append( origText.substring( lastAppendedCharOffset, start ) );
+            for ( int i = start; i < end; ++i )
+                cleanTextBldr.append( " " );
+            lastAppendedCharOffset = end;
+        }
+        cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
+        String cleanText = cleanTextBldr.toString();
+
+        // count whitespace chars in string
+
+        // check token offsets in tokens returned by SentenceSplitter
+
+        Pattern sun = Pattern.compile( "\\w*Sun\\w*" );
+        Matcher sunMatcher = sun.matcher( cleanText );
+
+        Set<IntPair> sunSpans = new HashSet<>();
+        while( sunMatcher.find() )
+            sunSpans.add( new IntPair(sunMatcher.start(), sunMatcher.end() ) );
+
+
+        SentenceSplitter splitter = new SentenceSplitter(new String[]{ cleanText });
+        Sentence[] sents = splitter.splitAll();
+        Sentence s = sents[ 0 ];
+        LinkedVector words = s.wordSplit();
+        for ( int i = 0; i < words.size(); ++i ) {
+
+            Word firstWord = (Word) words.get(0);
+            if ( "Sun".equals( firstWord.form ) )
+            {
+                IntPair tokenCharOffsets = new IntPair(firstWord.start, firstWord.end);
+
+                assertTrue( sunSpans.contains( tokenCharOffsets ) );
+            }
+        }
+
+        StatefulTokenizer statefulTokenizer = new StatefulTokenizer();
+        Tokenizer.Tokenization tokenInfo = statefulTokenizer.tokenizeTextSpan( cleanText );
+
+        assertEquals( tokenInfo.getCharacterOffsets().length, tokenInfo.getTokens().length );
+        for ( int i = 0; i < tokenInfo.getTokens().length; ++i )
+        {
+            String tok = tokenInfo.getTokens()[ i ];
+            if ( tok.equals( "Sun") )
+            {
+                IntPair tokCharOffsets = tokenInfo.getCharacterOffsets()[i];
+
+                if ( !sunSpans.contains( tokCharOffsets ) )
+                {
+                    String origTextSubstring = cleanText.substring( tokCharOffsets.getFirst(), tokCharOffsets.getSecond() );
+                    System.err.println( "ERROR: tokenizer has form '" + tok + "', but offsets refer to substring '" +
+                        origTextSubstring + "'." );
+                }
+                assertTrue( sunSpans.contains( tokCharOffsets ) );
+            }
+        }
+
+        TextAnnotation statefulTa = new TextAnnotation("test", "test", cleanText, tokenInfo.getCharacterOffsets(),
+                tokenInfo.getTokens(), tokenInfo.getSentenceEndTokenIndexes());
+
+        assertNotNull( statefulTa );
+
+//        AnnotatorService annotator = null;
+//        try {
+//            annotator = CuratorFactory.buildCuratorClient();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
+//                new StatefulTokenizer());
+////        TextAnnotation ta = tab.createTextAnnotation("  \"Hi,   Bob, how are you?\" "
+////                + "Jerry has no bag for his binoculars.  ");
+//        try {
+//            annotator.addView(statefulTa, ViewNames.COREF);
+//        } catch (AnnotatorException e) {
+//            e.printStackTrace();
+//            fail( e.getMessage() );
+//        }
+//        View v = statefulTa.getView(ViewNames.COREF);
+//        assertNotNull( v );
+//        System.out.println(v);
+
+    }
 
 }
