@@ -10,13 +10,17 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
@@ -261,6 +265,28 @@ public class StatefullTokenizerTest {
                 tokenInfo.getTokens(), tokenInfo.getSentenceEndTokenIndexes());
 
         assertNotNull( statefulTa );
+
+        AnnotatorService annotator = null;
+        try {
+            annotator = CuratorFactory.buildCuratorClient();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
+                new StatefulTokenizer());
+//        TextAnnotation ta = tab.createTextAnnotation("  \"Hi,   Bob, how are you?\" "
+//                + "Jerry has no bag for his binoculars.  ");
+        try {
+            annotator.addView(statefulTa, ViewNames.COREF);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+        View v = statefulTa.getView(ViewNames.COREF);
+        assertNotNull( v );
+        System.out.println(v);
+
     }
 
 }

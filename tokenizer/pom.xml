@@ -23,6 +23,12 @@
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-curator</artifactId>
+            <version>3.0.50-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 </project>
