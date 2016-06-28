@@ -95,9 +95,6 @@ public class XmlFragmentWhitespacingReaderTest {
             } catch (Exception e) {
                 e.printStackTrace();
                 fail( e.getMessage());
-            } catch (Exception e) {
-                e.printStackTrace();
-                fail( e.getMessage() );
             }
         }
         System.out.println( "----\n" +  tas.get( REF_FILE_ONE ).getText() + "----\n" );
