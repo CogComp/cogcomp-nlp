@@ -473,7 +473,8 @@ public class TokenizerStateMachine {
      * @param intext the text to parse.
      */
     protected void parseText(String intext) {
-    	// find index of last non whitespace
+    	// CHANGE (MS): preserve trailing whitespace (disabled find index of last non whitespace)
+//        int i = intext.length();
     	int i = intext.length()-1;
     	for (; i >=0 ; i--) {
     		if (!Character.isWhitespace(intext.charAt(i)))
@@ -487,7 +488,9 @@ public class TokenizerStateMachine {
     	this.text = new char[i];
     	intext.getChars(0, i, this.text, 0);
     	
-        this.textstring = intext.trim();
+        this.textstring = intext.trim();        this.textstring = intext.trim();
+        // CHANGE (MS): no trim of input text
+//        this.textstring = intext;
         this.text = this.textstring.toCharArray();
         current = 0;
         this.push(new State(TokenizerState.IN_SENTENCE), current);
