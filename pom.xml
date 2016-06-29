@@ -144,6 +144,7 @@
                         <exclude>**/*.xml</exclude>
                         <exclude>**/*.properties</exclude>
                         <exclude>**/*.md</exclude>
+                        <exclude>**/*.py</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
                     </excludes>
