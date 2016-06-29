@@ -15,7 +15,7 @@ import java.util.Random;
 /**
  * Keeps track of maximum and the object that corresponds to the maximum.
  * <p>
- * K: type of value over which the max decision is made. T: type of the objects which generate the
+ * V: type of value over which the max decision is made. T: type of the objects which generate the
  * values
  * <p>
  * In case of ties, if {@link #randomTieBreak} is {@code false} the first object is chosen;
@@ -41,15 +41,15 @@ import java.util.Random;
  * @author Vivek Srikumar
  * @author Christos Christodouloupoulos
  */
-public class ArgMin<T, K extends Comparable<K>> {
-    private K value;
+public class ArgMin<T, V extends Comparable<V>> {
+    private V value;
     private T object;
     private boolean randomTieBreak;
 
     // Always starting with the same seed for replicability
     private Random random = new Random(42);
 
-    public void update(T object, K value) {
+    public void update(T object, V value) {
         if (randomTieBreak && this.value.compareTo(value) == 0) {
             if (random.nextBoolean()) {
                 this.value = value;
@@ -62,7 +62,7 @@ public class ArgMin<T, K extends Comparable<K>> {
         }
     }
 
-    public K getMinValue() {
+    public V getMinValue() {
         return value;
     }
 
@@ -70,11 +70,11 @@ public class ArgMin<T, K extends Comparable<K>> {
         return object;
     }
 
-    public ArgMin(T initialObject, K initialValue) {
+    public ArgMin(T initialObject, V initialValue) {
         this(initialObject, initialValue, false);
     }
 
-    public ArgMin(T initialObject, K initialValue, boolean randomTieBreak) {
+    public ArgMin(T initialObject, V initialValue, boolean randomTieBreak) {
         this.value = initialValue;
         this.object = initialObject;
         this.randomTieBreak = randomTieBreak;
