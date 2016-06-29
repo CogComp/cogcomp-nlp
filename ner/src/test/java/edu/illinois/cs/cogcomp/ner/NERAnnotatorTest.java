@@ -11,15 +11,15 @@
 package edu.illinois.cs.cogcomp.ner;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
@@ -31,6 +31,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import weka.core.Debug.Random;
+
+import static org.junit.Assert.*;
 
 /**
  * This tests the NERAnnotator. Includes a test to ensure we are extracting the expected entiies,
@@ -350,5 +352,19 @@ public class NERAnnotatorTest {
     public static View getView(TextAnnotation ta) {
         nerAnnotator.addView(ta);
         return ta.getView(nerAnnotator.getViewName());
+    }
+
+    /**
+     * Test for corner case where user specifies a single label and non-zero noise level.
+     *
+     */
+    @Test
+    public void testSingleLabelNoise()
+    {
+        String[] labels = new String[]{ "PER" };
+        RandomLabelGenerator rlg =
+                new RandomLabelGenerator( labels, TextChunkRepresentationManager.EncodingScheme.BILOU, 2.0 );
+        for( int i = 0; i < 1000; ++i )
+           assertFalse( rlg.useNoise() );
     }
 }
