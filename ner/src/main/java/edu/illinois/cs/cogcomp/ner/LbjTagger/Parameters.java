@@ -238,13 +238,15 @@ public class Parameters {
                 param.treatAllFilesInFolderAsOneBigDocument =
                         Boolean.parseBoolean(rm.getString("treatAllFilesInFolderAsOneBigDocument"));
             }
-            if (rm.containsKey("thresholdPrediction")) {
-                param.thresholdPrediction =
-                        Boolean.parseBoolean(rm.getString("thresholdPrediction"));
+
+            if (rm.containsKey("minConfidencePredictionsLevel1")) {
+                param.minConfidencePredictionsLevel1 =
+                        Double.parseDouble(rm.getString("minConfidencePredictionsLevel1"));
             }
-            if (rm.containsKey("predictionConfidenceThreshold")) {
-                param.predictionConfidenceThreshold =
-                        Double.parseDouble(rm.getString("predictionConfidenceThreshold"));
+
+            if (rm.containsKey("minConfidencePredictionsLevel2")) {
+                param.minConfidencePredictionsLevel2 =
+                        Double.parseDouble(rm.getString("minConfidencePredictionsLevel2"));
             }
 
             // labelTypes is just a String[]

@@ -38,9 +38,9 @@ public class NerBaseConfigurator extends Configurator {
 
     public final static String NORMALIZE_TITLE_TEXT = "normalizeTitleText";
     public final static String PATH_TO_TOKEN_NORM_DATA = "pathToTokenNormalizationData";
-    public final static String PREDICTION_CONFIDENCE_THRESHOLD = "predictionConfidenceThreshold";
     public final static String SORT_FILES_LEXICALLY = "sortLexicallyFilesInFolders";
-    public final static String THRESHOLD_PREDICTION = "thresholdPrediction";
+    public final static String MIN_CONFIDENCE_PREDICTIONS_1 = "minConfidencePredictionsLevel1";
+    public final static String MIN_CONFIDENCE_PREDICTIONS_2 = "minConfidencePredictionsLevel2";
     public final static String TREAT_ALL_FILES_AS_ONE = "treatAllFilesInFolderAsOneBigDocument";
     public final static String DEBUG = "debug";
 
@@ -105,9 +105,9 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_NORMALIZE_TITLE = FALSE;
     private final static String DEFAULT_PATH_TO_TOKEN_NORM_DATA =
             "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
-    private final static String DEFAULT_PREDICTION_CONFIDENCE_THRESHOLD = "-1";
     private final static String DEFAULT_SORT_FILES_LEXICALLY = TRUE;
-    private final static String DEFAULT_THRESHOLD_PREDICTION = FALSE;
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL";
@@ -142,14 +142,14 @@ public class NerBaseConfigurator extends Configurator {
         props.setProperty(TREAT_ALL_FILES_AS_ONE, DEFAULT_TREAT_ALL_FILES_AS_ONE);
         props.setProperty(PATH_TO_TOKEN_NORM_DATA, DEFAULT_PATH_TO_TOKEN_NORM_DATA);
 
-        props.setProperty(PREDICTION_CONFIDENCE_THRESHOLD, DEFAULT_PREDICTION_CONFIDENCE_THRESHOLD);
+        props.setProperty(MIN_CONFIDENCE_PREDICTIONS_1, DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1);
+        props.setProperty(MIN_CONFIDENCE_PREDICTIONS_2, DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2);
         props.setProperty(SORT_FILES_LEXICALLY, DEFAULT_SORT_FILES_LEXICALLY);
         props.setProperty(PREV_TAG_1, DEFAULT_PREV_TAG_1);
         props.setProperty(PREV_TAG_2, DEFAULT_PREV_TAG_2);
         props.setProperty(PREV_TAG_PATTERN_1, DEFAULT_PREV_TAG_PATTERN_1);
         props.setProperty(PREV_TAG_PATTERN_2, DEFAULT_PREV_TAG_PATTERN_2);
         props.setProperty(PREV_TAGS_FOR_CONTEXT, DEFAULT_PREV_TAGS_FOR_CONTEXT);
-        props.setProperty(THRESHOLD_PREDICTION, DEFAULT_THRESHOLD_PREDICTION);
         props.setProperty(WORD_TYPE_INFORMATION, DEFAULT_WORD_TYPE_INFORMATION);
         props.setProperty(PREDICTIONS_1, DEFAULT_PREDICTIONS_1);
         props.setProperty(PATHS_TO_BROWN_CLUSTERS, DEFAULT_PATHS_TO_BROWN_CLUSTERS);
