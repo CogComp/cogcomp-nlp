@@ -15,3 +15,6 @@ Made Gurobi an optional dependency
 Version 0.5.0
 Added the oj! Algorithm (ojAlgo) solver
 Updated dependencies
+
+Version 0.6.0
+Moving augmenting the current ilp-solvers with lbjava's ilp-solver
