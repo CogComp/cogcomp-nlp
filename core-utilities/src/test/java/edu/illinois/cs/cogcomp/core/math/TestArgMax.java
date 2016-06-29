@@ -24,4 +24,31 @@ public class TestArgMax extends TestCase {
         assertEquals(5, argmax.getArgmax().intValue());
         assertEquals(94d, argmax.getMaxValue());
     }
+
+    public void testRandomTieBreak() {
+        ArgMax<Integer, Double> argmax = new ArgMax<>(-1, Double.NEGATIVE_INFINITY, true);
+
+        double[] r = {-1, -30, -4, 1, -4, 94, 19, 1, 94, -19};
+
+        // Try the update 5 times and check if at least one of them is different
+        // NB: Given that the random seed is fixed, this test should always pass
+        // (the switch happens on the 2nd iteration)
+        for (int i = 0; i < r.length; i++) {
+            argmax.update(i, r[i]);
+        }
+        int argMaxPos = argmax.getArgmax();
+        boolean changed = false;
+        for (int iters = 0; iters < 5; iters++) {
+            for (int i = 0; i < r.length; i++) {
+                argmax.update(i, r[i]);
+            }
+            if (argMaxPos != argmax.getArgmax()) {
+                changed = true;
+                break;
+            }
+        }
+
+        assertTrue(changed);
+        assertEquals(94d, argmax.getMaxValue());
+    }
 }
