@@ -4,16 +4,14 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>edu.illinois.cs.cogcomp</groupId>
-	<artifactId>inference</artifactId>
+	<artifactId>illinois-inference</artifactId>
 	<packaging>jar</packaging>
-	<version>0.5.0</version>
-
+	<version>0.6.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-
 
 	<repositories>
 		<repository>
@@ -23,39 +21,33 @@
 		</repository>
 	</repositories>
 
-
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.12</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.gurobi</groupId>
 			<artifactId>gurobi</artifactId>
 			<version>6.5</version>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>net.sf.jgrapht</groupId>
 			<artifactId>jgrapht</artifactId>
 			<version>0.8.3</version>
 		</dependency>
-
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-core-utilities</artifactId>
-			<version>3.0.27</version>
+			<version>3.0.51</version>
 		</dependency>
-
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-sl-core</artifactId>
@@ -67,7 +59,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>org.ojalgo</groupId>
 			<artifactId>ojalgo</artifactId>
@@ -121,6 +112,5 @@
 			<url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
 		</repository>
 	</distributionManagement>
-
 
 </project>
