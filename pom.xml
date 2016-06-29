@@ -28,11 +28,6 @@
 			<version>4.12</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.12</version>
-		</dependency>
-		<dependency>
 			<groupId>com.gurobi</groupId>
 			<artifactId>gurobi</artifactId>
 			<version>6.5</version>
@@ -47,17 +42,6 @@
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-core-utilities</artifactId>
 			<version>3.0.51</version>
-		</dependency>
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-sl-core</artifactId>
-			<version>1.0.2</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>guava</artifactId>
-					<groupId>com.google.guava</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.ojalgo</groupId>
