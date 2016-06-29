@@ -239,18 +239,6 @@ public class Parameters {
                         Boolean.parseBoolean(rm.getString("treatAllFilesInFolderAsOneBigDocument"));
             }
 
-            // TODO: Not ever used. Remove this parameter completely.
-            if (rm.containsKey("thresholdPrediction")) {
-                param.thresholdPrediction =
-                        Boolean.parseBoolean(rm.getString("thresholdPrediction"));
-            }
-
-            // TODO: Not ever used. Remove this parameter completely.
-            if (rm.containsKey("predictionConfidenceThreshold")) {
-                param.predictionConfidenceThreshold =
-                        Double.parseDouble(rm.getString("predictionConfidenceThreshold"));
-            }
-
             if (rm.containsKey("minConfidencePredictionsLevel1")) {
                 param.minConfidencePredictionsLevel1 =
                         Double.parseDouble(rm.getString("minConfidencePredictionsLevel1"));

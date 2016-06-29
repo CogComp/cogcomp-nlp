@@ -51,9 +51,6 @@ public class ParametersForLbjCode {
     // the predictions of these models will be the input to the classifier
     public Vector<ParametersForLbjCode> auxiliaryModels = new Vector<>();
 
-    public boolean thresholdPrediction = false;
-    public double predictionConfidenceThreshold = -1;
-
     public boolean debug = false;
 
     public boolean sortLexicallyFilesInFolders = true;
