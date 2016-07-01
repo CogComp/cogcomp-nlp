@@ -23,7 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Extracts the k Tokens to the left and k Tokens to the right of the Constituent object.
+ * Extracts the k tokens to the left and k tokens to the right of the {@link Constituent} object.
  * Generates a conjunction of 3-shingles from a window of 2 tokens.
  *
  * @keywords chunker, shallow-parser, pos-tagger, words, tokens, window, trigram
@@ -41,15 +41,14 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
     }
 
     /**
+     * Extracts an array of tokens from a uniform window of size k
      *
-     * @param TOKENS The Tokens View of the TextAnnotation object
-     * @param startspan The span at the beginning of the Constituent object
-     * @param endspan The span at the end of the Constituent object
-     * @param k The number of Tokens to the left and right of the current Constituent object to get
-     * @return Return the window of k Tokens to the left and k Tokens to the right of the current
-     *         Constituent object
+     * @param TOKENS    The tokens {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan   The span at the end of the {@link Constituent} object
+     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
+     * @return The window of k tokens to the left and k tokens to the right of the current {@link Constituent} object
      */
-
     private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
@@ -78,7 +77,6 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-
         TextAnnotation ta = c.getTextAnnotation();
         TOKENS = ta.getView(ViewNames.TOKENS);
 
@@ -88,7 +86,6 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
         // k is 3 since we need up to 3-grams
         int k = 3;
         int window = 2;
-
 
         // All our constituents are words(tokens)
         String[] forms = getWindowK(TOKENS, startspan, endspan, window);
@@ -117,14 +114,13 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
                     f.append(forms[i + context]);
                 }
 
-                // 2 is the center object in the array so i should go from -2 to +2
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being the center)
                 // j is the size of the n-gram so it goes 1 to 3
                 id = classifier + ":" + ((i - window) + "_" + (j + 1));
                 value = "(" + (f.toString()) + ")";
                 result.add(new DiscreteFeature(id + value));
             }
         }
-
         return result;
     }
 
