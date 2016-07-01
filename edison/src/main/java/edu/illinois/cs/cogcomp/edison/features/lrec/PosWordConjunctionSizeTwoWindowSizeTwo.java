@@ -37,7 +37,7 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         this.viewName = viewName;
     }
 
-    private String[] getwindowkfrom(View TOKENS, int startspan, int endspan, int k) {
+    private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
@@ -59,7 +59,7 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         return window;
     }
 
-    private String[] getwindowtagskfrom(View POS, int startspan, int endspan, int k) {
+    private String[] getWindowKTags(View POS, int startspan, int endspan, int k) {
         String tags[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
@@ -109,8 +109,8 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         int k = 2; // words two before & after
         int window = 2;
 
-        String[] forms = getwindowkfrom(TOKENS, startspan, endspan, k);
-        String[] tags = getwindowtagskfrom(POS, startspan, endspan, k);
+        String[] forms = getWindowK(TOKENS, startspan, endspan, k);
+        String[] tags = getWindowKTags(POS, startspan, endspan, k);
 
         String classifier = "PosWordConjunctionSizeTwoWindowSizeTwo";
         String id, value;
