@@ -50,7 +50,7 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
      *         Constituent object
      */
 
-    private String[] getWindowKFrom(View TOKENS, int startspan, int endspan, int k) {
+    private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
@@ -91,7 +91,7 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
 
 
         // All our constituents are words(tokens)
-        String[] forms = getWindowKFrom(TOKENS, startspan, endspan, window);
+        String[] forms = getWindowK(TOKENS, startspan, endspan, window);
 
         String id, value;
         String classifier = "WordConjunctionOneTwoThreeGramWindowTwo";
