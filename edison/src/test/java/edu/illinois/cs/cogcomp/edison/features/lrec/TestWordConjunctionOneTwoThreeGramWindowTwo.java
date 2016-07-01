@@ -27,7 +27,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Test class for SHALLOW PARSER Formpp Feature Extractor
+ * Unit test for {@link WordConjunctionOneTwoThreeGramWindowTwo} extractor, which generates a conjunction of 3-shingles
+ * from a window of 2 tokens. The extractor is originally used in illinois-chunker (shallow parser).
  *
  * @author Christos Christodoulopoulos
  */

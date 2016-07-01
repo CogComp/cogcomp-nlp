@@ -37,6 +37,15 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         this.viewName = viewName;
     }
 
+    /**
+     * Extracts an array of tokens from a uniform window of size k
+     *
+     * @param TOKENS    The tokens {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan   The span at the end of the {@link Constituent} object
+     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
+     * @return The window of k tokens to the left and k tokens to the right of the current {@link Constituent} object
+     */
     private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
@@ -54,11 +63,19 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         for (int i = startwin; i < endwin; i++) {
             window[index] = TOKENS.getConstituentsCoveringSpan(i, i + 1).get(0).getSurfaceForm();
             index++;
-
         }
         return window;
     }
 
+    /**
+     * Extracts an array of POS-tags from a uniform window of size k
+     *
+     * @param POS       The part-of-speech {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan   The span at the end of the {@link Constituent} object
+     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
+     * @return The window of k POS-tags to the left and k tokens to the right of the current {@link Constituent} object
+     */
     private String[] getWindowKTags(View POS, int startspan, int endspan, int k) {
         String tags[] = new String[2 * k + 1];
 
@@ -88,7 +105,6 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-
         TextAnnotation ta = c.getTextAnnotation();
 
         View TOKENS = null, POS = null;
@@ -127,13 +143,12 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
                     f.append("-");
                     f.append(forms[i + context]);
                 }
-                // 2 is the center object in the array so i should go from -2 to +2
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being the center)
                 // j is the size of the n-gram so it goes 1 to 2
                 id = classifier + ":" + ((i - window) + "_" + (j + 1));
                 value = "(" + (f.toString()) + ")";
                 result.add(new DiscreteFeature(id + value));
             }
-
         }
         return result;
     }
