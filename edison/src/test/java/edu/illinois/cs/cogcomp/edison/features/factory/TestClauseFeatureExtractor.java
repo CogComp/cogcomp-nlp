@@ -58,8 +58,6 @@ public class TestClauseFeatureExtractor extends TestCase {
             ta.addView(ClauseViewGenerator.CHARNIAK);
             ta.addView(PseudoParse.CHARNIAK);
 
-            System.out.println(ta.getView(ViewNames.PSEUDO_PARSE_CHARNIAK));
-
             PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
 
             for (Constituent predicate : pav.getPredicates()) {
