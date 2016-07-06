@@ -45,7 +45,11 @@ public class ClauseFeatureExtractor implements FeatureExtractor {
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
-        TreeView pseudoParseView = (TreeView) ta.getView(parseViewName);
+        TreeView pseudoParseView;
+        // If the real parse view exists, use that
+        if (ta.hasView(parseViewName.replace("PSEUDO_", "")))
+            pseudoParseView = (TreeView) ta.getView(parseViewName.replace("PSEUDO_", ""));
+        else pseudoParseView = (TreeView) ta.getView(parseViewName);
         List<Relation> incomingRelations = c.getIncomingRelations();
         Set<Feature> features = new LinkedHashSet<>();
 
