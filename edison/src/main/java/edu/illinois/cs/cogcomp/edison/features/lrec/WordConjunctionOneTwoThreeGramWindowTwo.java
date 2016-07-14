@@ -12,24 +12,22 @@ package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.RealFeature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
+ * Extracts the k tokens to the left and k tokens to the right of the {@link Constituent} object.
+ * Generates a conjunction of 3-shingles from a window of 2 tokens.
  *
- * @author Paul Vijayakumar, Mazin Bokhari Extracts the k Tokens to the left and k Tokens to the
- *         right of the Constituent object. Generates a conjunction of 3-shingles from a window of 2
- *         tokens.
- *
+ * @keywords chunker, shallow-parser, pos-tagger, words, tokens, window, trigram
+ * @author Paul Vijayakumar, Mazin Bokhari, Christos Christodoulopoulos
  */
 public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor {
 
@@ -43,17 +41,15 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
     }
 
     /**
+     * Extracts an array of tokens from a uniform window of size k
      *
-     * @param TOKENS The Tokens View of the TextAnnotation object
-     * @param startspan The span at the beginning of the Constituent object
-     * @param endspan The span at the end of the Constituent object
-     * @param k The number of Tokens to the left and right of the current Constituent object to get
-     * @return Return the window of k Tokens to the left and k Tokens to the right of the current
-     *         Constituent object
+     * @param TOKENS    The tokens {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan   The span at the end of the {@link Constituent} object
+     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
+     * @return The window of k tokens to the left and k tokens to the right of the current {@link Constituent} object
      */
-
-    public String[] getWindowKFrom(View TOKENS, int startspan, int endspan, int k) {
-
+    private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
@@ -66,10 +62,10 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
             startwin = 0;
         }
 
+        int index = 0;
         for (int i = startwin; i < endwin; i++) {
-
-            window[i] = TOKENS.getConstituentsCoveringSpan(i, i + 1).get(0).getSurfaceForm();
-
+            window[index] = TOKENS.getConstituentsCoveringSpan(i, i + 1).get(0).getSurfaceForm();
+            index++;
         }
         return window;
     }
@@ -81,40 +77,36 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-
         TextAnnotation ta = c.getTextAnnotation();
         TOKENS = ta.getView(ViewNames.TOKENS);
 
-        // We can assume that the constituent in this case is a Word(Token) described by the LBJ
-        // chunk definition
-
+        // We can assume that the constituent in this case is a Word(Token)
         int startspan = c.getStartSpan();
         int endspan = c.getEndSpan();
-        int k = 2;
-
+        // k is 3 since we need up to 3-grams
+        int k = 3;
+        int window = 2;
 
         // All our constituents are words(tokens)
-        String[] forms = getWindowKFrom(TOKENS, startspan, endspan, 2);
+        String[] forms = getWindowK(TOKENS, startspan, endspan, window);
 
-        String __id, __value;
+        String id, value;
         String classifier = "WordConjunctionOneTwoThreeGramWindowTwo";
-        Set<Feature> __result = new LinkedHashSet<Feature>();
+        Set<Feature> result = new LinkedHashSet<>();
 
         for (int j = 0; j < k; j++) {
-            // k = 2, j goes from 0 to 1
+            // k = 3, j goes from 0 to 2
 
             for (int i = 0; i < forms.length; i++) {
-                // forms.length = 5, So i goes from 0 to 4, for each String
-                // in the forms array.
+                // forms.length = 5, So i goes from 0 to 4, for each String in the forms array.
 
-                StringBuffer f = new StringBuffer();
+                StringBuilder f = new StringBuilder();
 
                 // Starts with context = 0 and then increments context as long as it is below
                 // the current value of j and is not out of index of the forms array.
                 // This is basically creating a discrete feature for each combination of one, two
                 // and three word combinations within [-2,2] window or words.
                 for (int context = 0; context <= j && i + context < forms.length; context++) {
-
                     // add a '_' between words to conjoin them together
                     if (context != 0) {
                         f.append("_");
@@ -122,13 +114,14 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
                     f.append(forms[i + context]);
                 }
 
-                __id = classifier + ":" + (i + "_" + j);
-                __value = "(" + (f.toString()) + ")";
-                __result.add(new DiscreteFeature(__id + __value));
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being the center)
+                // j is the size of the n-gram so it goes 1 to 3
+                id = classifier + ":" + ((i - window) + "_" + (j + 1));
+                value = "(" + (f.toString()) + ")";
+                result.add(new DiscreteFeature(id + value));
             }
         }
-
-        return __result;
+        return result;
     }
 
     @Override
