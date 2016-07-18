@@ -133,6 +133,8 @@ public class TokenizerStateMachine {
                     @Override
                     public void process(char token) {
                         switch (token) {
+                        	case '_':
+                        		break;
                             case '/':
                                 // numbers well may contain a comma or a period, check for an entirely numeric word.
                                 if (getCurrent().isNumeric()) {
@@ -185,7 +187,16 @@ public class TokenizerStateMachine {
                                 char nnc = peek(2);
                                 char nnnc = peek(3);
                                 char pc = peek(-1);
-                                if (Character.isLetter(nc) && Character.isLetter(pc)) {
+                                
+                                // if it ends with "in'", and the first character is upper case, it's part of the word.
+                                if (token == '\'' && (pc == 'n' && peek(-2) == 'i')) {
+                                	State s = getCurrent();
+                                	if (!Character.isUpperCase(text[s.start]))
+                                		// dropped the 'g' off of 'ing', the single quote is part of the word.
+                                		return;
+                                }
+                                
+                                if (Character.isLetter(nc) && (Character.isLetter(pc) || pc == '.')) {
                                     
                                     // look for contractions, and if we find one, separate at the word boundry.
                                     if ((nc == 's' || nc == 'm' || nc == 'd') && Character.isWhitespace(nnc)) {
@@ -286,17 +297,12 @@ public class TokenizerStateMachine {
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
-                        switch (token) {
-                            case '-': case '.': case '\'': case '`':
-                                if (peek(-1) == token) {
-                                    // well, we have a contiguous run of "."s or "-"s, they will occupy the same word.
-                                    return;
-                                }
-                            default :
-                                pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter what we push a new word token.
-                                break;
-                        }
+                    	
+                    	// we will keep like special characters together.
+                        if (peek(-1) != token) {
+                            pop(current); // the current word is finished.
+                            push(new State(TokenizerState.IN_SPECIAL), current); // No matter what we push a new word token.
+                        } 
                     }
                 },
 
@@ -304,6 +310,23 @@ public class TokenizerStateMachine {
                 new StateProcessor() {
                     @Override
                     public void process(char token) {
+                    	String cword = getCurrent().getWord();
+                    	// let's see if this is a contraction.
+                    	if (cword.equals("'")) {
+                    		String word = getNextWord();
+                    		if (Contractions.contains(word)) {
+                    			
+                    			// just change the state type to text, this will end up being a word.
+                    			getCurrent().stateindex = TokenType.TEXT.ordinal();
+                    			state = getCurrent().stateindex;
+                    			return;
+                    		}
+                    	} else if (cword.equals(".") && Character.isDigit(token)) {
+                			// This is a decimal number (probably), just keep the current state and make it a word token
+                			getCurrent().stateindex = TokenType.TEXT.ordinal();
+                			state = getCurrent().stateindex;
+                			return;
+                    	}
                         pop(current);
                         push(new State(TokenizerState.IN_WORD), current);
                     }
@@ -458,7 +481,23 @@ public class TokenizerStateMachine {
         newState.push(where);
         stack.add(newState);
     }
-
+    
+    /**
+     * Get the next word, this is a lookahead operation.
+     * @returns the next word.
+     */
+    String getNextWord() {
+    	int texttype = TokenType.TEXT.ordinal();
+    	int n = current;
+	    for (; n < this.text.length; n++) {
+	        char character = this.text[n];
+	        int tokentype = classify(character);
+	        if (tokentype != texttype)
+	        	return textstring.substring(current, n);
+	    }
+    	return textstring.substring(current, n);
+    }
+    
     /**
      * Process the input text delineating sentences and words. Purpose is to produce a 
      * TextAnnotation object, that requires these:
@@ -512,6 +551,8 @@ public class TokenizerStateMachine {
      * @return the index of the associated type.
      */
     private int classify(char c) {
+    	if (c == '_')
+            return TokenType.TEXT.ordinal();
         if (Character.isAlphabetic(c) || Character.isDigit(c)) {
             return TokenType.TEXT.ordinal();
         } else if (Character.isWhitespace(c)) {
