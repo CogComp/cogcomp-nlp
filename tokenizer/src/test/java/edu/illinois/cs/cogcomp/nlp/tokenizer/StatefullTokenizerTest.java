@@ -10,37 +10,32 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.FileNotFoundException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.Test;
+
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-
-import org.junit.Test;
-
-import java.io.FileNotFoundException;
-import java.util.HashSet;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by mssammon on 8/17/15.
@@ -262,30 +257,7 @@ public class StatefullTokenizerTest {
 
         TextAnnotation statefulTa = new TextAnnotation("test", "test", cleanText, tokenInfo.getCharacterOffsets(),
                 tokenInfo.getTokens(), tokenInfo.getSentenceEndTokenIndexes());
-
         assertNotNull( statefulTa );
-
-//        AnnotatorService annotator = null;
-//        try {
-//            annotator = CuratorFactory.buildCuratorClient();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            fail( e.getMessage() );
-//        }
-//        TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
-//                new StatefulTokenizer());
-////        TextAnnotation ta = tab.createTextAnnotation("  \"Hi,   Bob, how are you?\" "
-////                + "Jerry has no bag for his binoculars.  ");
-//        try {
-//            annotator.addView(statefulTa, ViewNames.COREF);
-//        } catch (AnnotatorException e) {
-//            e.printStackTrace();
-//            fail( e.getMessage() );
-//        }
-//        View v = statefulTa.getView(ViewNames.COREF);
-//        assertNotNull( v );
-//        System.out.println(v);
-
     }
 
 }
