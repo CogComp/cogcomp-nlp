@@ -68,30 +68,3 @@ O	0	5	x	.	.	x	x	0
 
 B-LOC	0	0	x	NNP	LONDON	x	x	0
 O	0	1	x	CD	1996-08-30	x	x	0
-
-O	0	0	x	NNS	Results	x	x	0
-O	0	1	x	IN	of	x	x	0
-B-MISC	0	2	x	JJ	English	x	x	0
-O	0	3	x	NN	league	x	x	0
-O	0	4	x	NNS	matches	x	x	0
-
-O	0	0	x	IN	on	x	x	0
-O	0	1	x	NNP	Friday	x	x	0
-O	0	2	x	:	:	x	x	0
-
-O	0	0	x	NN	Division	x	x	0
-O	0	1	x	CD	two	x	x	0
-
-B-ORG	0	0	x	NN	Plymouth	x	x	0
-O	0	1	x	CD	2	x	x	0
-B-ORG	0	2	x	NNP	Preston	x	x	0
-O	0	3	x	CD	1	x	x	0
-
-O	0	0	x	NN	Division	x	x	0
-O	0	1	x	CD	three	x	x	0
-
-B-ORG	0	0	x	NN	Swansea	x	x	0
-O	0	1	x	CD	1	x	x	0
-B-ORG	0	2	x	NNP	Lincoln	x	x	0
-O	0	3	x	CD	2	x	x	0
-

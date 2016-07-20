@@ -27,6 +27,7 @@ public class CoNLLNerReaderTest {
 
     @Test
     public void testCreateTextAnnotation() throws Exception {
+        // The files have an equal number of annotations... this way we don't rely on a certain ordering.
         CoNLLNerReader cnr = new CoNLLNerReader("src/test/resources/conlldocs/");
 
         TextAnnotation ta = cnr.next();
@@ -35,7 +36,7 @@ public class CoNLLNerReaderTest {
 
         TextAnnotation ta2 = cnr.next();
         cons = ta2.getView(ViewNames.NER_CONLL).getConstituents();
-        assertEquals(cons.size(), 18);
+        assertEquals(cons.size(), 13);
 
     }
 }
