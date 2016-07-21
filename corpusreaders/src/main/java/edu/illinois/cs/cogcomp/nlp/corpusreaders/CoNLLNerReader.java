@@ -109,6 +109,13 @@ public class CoNLLNerReader extends TextAnnotationReader {
 
 
             if(line.startsWith("B-")){
+                // two consecutive entities.
+                if(start > -1){
+                    // peel off a constituent if it exists.
+                    spans.add(new IntPair(start, i));
+                    labels.add(label);
+                }
+
                 start = i;
                 label = sline[0].split("-")[1];
 
