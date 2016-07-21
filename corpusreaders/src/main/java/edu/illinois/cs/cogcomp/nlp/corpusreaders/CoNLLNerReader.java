@@ -11,8 +11,10 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +57,9 @@ public class CoNLLNerReader extends TextAnnotationReader {
         } else {
             try {
                 files = IOUtils.ls(corpusdirectory);
+                for(int i = 0; i < files.length; i++) {
+                    files[i] = Paths.get(corpusdirectory, files[i]).toString();
+                }
             } catch (IOException e) {
                 logger.error("Error listing directory.");
                 logger.error(e.getMessage());
@@ -62,7 +67,7 @@ public class CoNLLNerReader extends TextAnnotationReader {
         }
         try {
             for (String file : files) {
-                textAnnotations.add(loadCoNLLfile(corpusdirectory + "/" + file));
+                textAnnotations.add(loadCoNLLfile(file));
             }
         } catch (IOException e) {
             logger.error("Error reading file.");
