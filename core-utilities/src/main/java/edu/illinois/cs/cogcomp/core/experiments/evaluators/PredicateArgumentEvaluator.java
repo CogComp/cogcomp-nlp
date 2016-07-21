@@ -14,7 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+
 
 import java.util.*;
 
@@ -35,13 +35,13 @@ public class PredicateArgumentEvaluator extends Evaluator {
         for (Constituent gp : gold.getPredicates()) {
             if (goldToPredictionPredicateMapping.containsKey(gp)) {
                 Constituent pp = goldToPredictionPredicateMapping.get(gp);
-                String goldSense = gp.getAttribute(CoNLLColumnFormatReader.SenseIdentifer);
+                String goldSense = gp.getAttribute(PredicateArgumentView.SenseIdentifer);
 
                 // XXX: As in training, all predicates that are labeled as XX are marked as 01
                 if (goldSense.equals("XX"))
                     goldSense = "01";
 
-                String predSense = pp.getAttribute(CoNLLColumnFormatReader.SenseIdentifer);
+                String predSense = pp.getAttribute(PredicateArgumentView.SenseIdentifer);
 
                 assert predSense != null;
                 senseTester.record(goldSense, predSense);

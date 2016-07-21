@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -326,9 +326,9 @@ public class DummyTextAnnotationGenerator {
         Constituent predicate =
                 new Constituent("predicate", viewName, ta, verbSRLPredicate.getFirst(),
                         verbSRLPredicate.getSecond());
-        predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+        predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
                 lemmas[verbSRLPredicate.getFirst()]);
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+            predicate.addAttribute(PredicateArgumentView.SenseIdentifer,
                     sense);
         List<Constituent> args = new ArrayList<>();
         List<String> tempArgLabels = new ArrayList<>();
