@@ -17,13 +17,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -267,9 +264,9 @@ public class OntonotesReader extends TextAnnotationReader {
                     new Constituent("Predicate", 1.0, ViewNames.SRL_VERB, ta, predicatePos,
                             predicatePos + 1);
 
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+            predicate.addAttribute(PredicateArgumentView.SenseIdentifer,
                     verbSenses.get(predicateId));
-            predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+            predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
                     baseForms.get(predicateId));
 
             double[] scoresDoubleArray = new double[relations.size()];

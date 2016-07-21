@@ -11,11 +11,11 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class HyphenTagFeature  implements FeatureExtractor {
 		if (surfaceString.contains("-") && c.length() == 1) {
 			Constituent predicate = c.getIncomingRelations().get(0).getSource();
 
-			String lemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+			String lemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
 			assert lemma != null;
 

@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,11 +33,19 @@ public class CoNLLNerReaderTest {
 
         TextAnnotation ta = cnr.next();
         List<Constituent> cons = ta.getView(ViewNames.NER_CONLL).getConstituents();
-        assertEquals(cons.size(), 13);
+        assertEquals(cons.size(), 14);
+
+        List<Constituent> sentcons = ta.getView(ViewNames.SENTENCE).getConstituents();
+        assert(sentcons.size() > 1);
 
         TextAnnotation ta2 = cnr.next();
         cons = ta2.getView(ViewNames.NER_CONLL).getConstituents();
-        assertEquals(cons.size(), 13);
+        assertEquals(cons.size(), 14);
 
+        List<TextAnnotation> tas = new ArrayList<>();
+        tas.add(ta);
+        tas.add(ta2);
+
+        CoNLLNerReader.TaToConll(tas, "/tmp/conlltests");
     }
 }

@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
@@ -307,12 +306,12 @@ public class CuratorDataStructureInterface {
                 Map<String, String> attr = rootSpan.getAttributes();
 
                 if (attr.containsKey("sense")) {
-                    predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+                    predicate.addAttribute(PredicateArgumentView.SenseIdentifer,
                             attr.get("sense"));
                 }
 
                 if (attr.containsKey("predicate")) {
-                    predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+                    predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
                             attr.get("predicate"));
                 }
             }
@@ -456,7 +455,7 @@ public class CuratorDataStructureInterface {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
      *
      * <b>NOTE:</b> must correct for one-past-the-end labeling when calling
-     * {@link TextAnnotation.getTokenIdFromCharacterOffset() }.
+     * {@link TextAnnotation#getTokenIdFromCharacterOffset(int)}.
      * @return A TokenLabelView
      */
     public static TokenLabelView alignLabelingToTokenLabelView(String viewName, TextAnnotation ta,

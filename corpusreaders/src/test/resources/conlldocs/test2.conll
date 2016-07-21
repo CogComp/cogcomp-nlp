@@ -24,6 +24,7 @@ O	0	5	x	,	,	x	x	0
 B-PER	0	6	x	NNP	Bradley	x	x	0
 I-PER	0	7	x	NNP	Hughes	x	x	0
 O	0	8	x	(	(	x	x	0
+B-LOC	0	9	x	NNP	Brisbane	x	x	0
 B-LOC	0	9	x	NNP	Australia	x	x	0
 O	0	10	x	)	)	x	x	0
 O	0	11	x	CD	73	x	x	0
@@ -65,6 +66,7 @@ B-MISC	0	2	x	JJ	ENGLISH	x	x	0
 O	0	3	x	NNP	SOCCER	x	x	0
 O	0	4	x	NNS	RESULTS	x	x	0
 O	0	5	x	.	.	x	x	0
+O	0	5	x	.		x	x	0
 
 B-LOC	0	0	x	NNP	LONDON	x	x	0
 O	0	1	x	CD	1996-08-30	x	x	0
