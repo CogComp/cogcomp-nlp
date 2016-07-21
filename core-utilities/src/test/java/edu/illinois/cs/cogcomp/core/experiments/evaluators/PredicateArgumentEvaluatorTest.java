@@ -17,7 +17,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +47,7 @@ public class PredicateArgumentEvaluatorTest {
         assertEquals(1.0, senseTester.getMicroF1(), 0);
 
         // Override the sense
-        predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
+        predicted.getPredicates().get(0).addAttribute(PredicateArgumentView.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
         evaluator.evaluateSense(senseTester, gold, predicted);
         assertEquals(0.875, senseTester.getMicroF1(), 0.01);

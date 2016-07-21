@@ -19,15 +19,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
 import java.io.FileNotFoundException;
 import java.util.*;
 
 public abstract class AbstractSRLAnnotationReader extends PennTreebankReader {
-    public static final String LemmaIdentifier = CoNLLColumnFormatReader.LemmaIdentifier;
-    public static final String SenseIdentifier = CoNLLColumnFormatReader.SenseIdentifer;
+    public static final String LemmaIdentifier = PredicateArgumentView.LemmaIdentifier;
+    public static final String SenseIdentifier = PredicateArgumentView.SenseIdentifer;
     public static final String HyphenTagInfo = "HyphenTagInfo";
 
     static abstract class Fields {

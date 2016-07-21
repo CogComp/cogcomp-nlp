@@ -12,13 +12,13 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.VerbClassDictionary;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -29,7 +29,7 @@ import java.util.Set;
  * "English Verb Classes And Alternations: A Preliminary Investigation"
  * <p>
  * This class assumes the existence of a file called <i>verbClass.txt</i> in the class path. If the
- * input constituent has an attribute called {@link CoNLLColumnFormatReader#LemmaIdentifier}, it
+ * input constituent has an attribute called {@link PredicateArgumentView#LemmaIdentifier}, it
  * treats the attribute as the lemma of the verb. This lemma is used to index Levin's list and the
  * corresponding verb classes are returned as discrete features. If the lemma is not present in the
  * list, then the feature set contains a single feature: "unknown". If the input constituent doesn't
@@ -67,8 +67,8 @@ public class LevinVerbClassFeature implements FeatureExtractor {
     }
 
     private String getLemma(Constituent c) {
-        if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
-            return c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+        if (c.hasAttribute(PredicateArgumentView.LemmaIdentifier)) {
+            return c.getAttribute(PredicateArgumentView.LemmaIdentifier);
         } else if (c.getTextAnnotation().hasView(ViewNames.LEMMA)) {
             return WordHelpers.getLemma(c.getTextAnnotation(), c.getEndSpan() - 1);
         } else

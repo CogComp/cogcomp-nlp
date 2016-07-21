@@ -11,6 +11,7 @@
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
@@ -19,7 +20,6 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry;
 import edu.illinois.cs.cogcomp.edison.utilities.NomLexReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.Set;
 
 /**
  * Adds NomLex based features. If the input constituent contains an attribute called
- * {@link CoNLLColumnFormatReader#LemmaIdentifier}, the corresponding value is used to identify the
+ * {@link PredicateArgumentView#LemmaIdentifier}, the corresponding value is used to identify the
  * features. Otherwise, the lemma of the last token is used. If the lemma is not an element of
  * NomLex, then the last token (lower cased) is tested. If NomLex does not contain the last token,
  * then an indicator feature is added that this token is not a member of NomLex.
@@ -55,8 +55,8 @@ public class NomLexClassFeature implements FeatureExtractor {
         TextAnnotation ta = c.getTextAnnotation();
         String predicateWord = ta.getToken(tokenId).toLowerCase().trim();
         String predicateLemma;
-        if (c.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier))
-            predicateLemma = c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+        if (c.hasAttribute(PredicateArgumentView.LemmaIdentifier))
+            predicateLemma = c.getAttribute(PredicateArgumentView.LemmaIdentifier);
         else
             predicateLemma = WordHelpers.getLemma(ta, tokenId);
 

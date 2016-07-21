@@ -19,13 +19,11 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.Scanner;
 
 /**
@@ -37,9 +35,6 @@ import java.util.Scanner;
  * @author Vivek Srikumar
  */
 public class CoNLLColumnFormatReader extends TextAnnotationReader {
-
-    public static final String LemmaIdentifier = "predicate";
-    public static final String SenseIdentifer = "SenseNumber";
 
     protected final String predicateArgumentViewName;
     private final TextAnnotationBuilder textAnnotationBuilder;
@@ -301,9 +296,9 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
                     new Constituent("Predicate", 1.0, predicateArgumentViewName, ta, predicatePos,
                             predicatePos + 1);
 
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+            predicate.addAttribute(PredicateArgumentView.SenseIdentifer,
                     verbSenses.get(predicateId));
-            predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+            predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
                     baseForms.get(predicateId));
 
             double[] scoresDoubleArray = new double[relations.size()];
@@ -357,7 +352,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
             List<Constituent> predicates2 = pav.getPredicates();
             counter.incrementCount("Predicates", predicates2.size());
             for (Constituent c : predicates2) {
-                predicates.add(c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier));
+                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
             }
 
         }
