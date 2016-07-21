@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -255,12 +256,9 @@ public class CoNLLNerReader extends TextAnnotationReader {
                         logger.error("Sentences: " + sents);
                     }
                 }
-
-
-
             }
 
-            LineIO.write(Paths.get(outpath, ta.getId()).toString(), talines);
+            FileUtils.writeLines(Paths.get(outpath, ta.getId()).toFile(), talines);
         }
 
     }
