@@ -92,6 +92,7 @@ public class CoNLLNerReader extends TextAnnotationReader {
      * @throws FileNotFoundException
      */
     private TextAnnotation loadCoNLLfile(String filename) throws FileNotFoundException {
+        logger.info("Reading: " + filename);
         List<String> lines = LineIO.read(filename);
 
         List<IntPair> spans = new ArrayList<>();
@@ -143,7 +144,7 @@ public class CoNLLNerReader extends TextAnnotationReader {
             }
 
             // add the word form to the sentence.
-            if(sline.length > 5 && !sline[5].equals("-DOCSTART-")) {
+            if(sline.length > 5 && !sline[5].equals("-DOCSTART-") && sline[5].trim().length() > 0) {
                 text.append(sline[5] + " ");
                 i++;
             }

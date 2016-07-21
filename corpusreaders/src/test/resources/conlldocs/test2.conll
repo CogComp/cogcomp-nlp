@@ -66,6 +66,7 @@ B-MISC	0	2	x	JJ	ENGLISH	x	x	0
 O	0	3	x	NNP	SOCCER	x	x	0
 O	0	4	x	NNS	RESULTS	x	x	0
 O	0	5	x	.	.	x	x	0
+O	0	5	x	.		x	x	0
 
 B-LOC	0	0	x	NNP	LONDON	x	x	0
 O	0	1	x	CD	1996-08-30	x	x	0
