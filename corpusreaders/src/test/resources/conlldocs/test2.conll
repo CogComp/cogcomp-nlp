@@ -24,6 +24,7 @@ O	0	5	x	,	,	x	x	0
 B-PER	0	6	x	NNP	Bradley	x	x	0
 I-PER	0	7	x	NNP	Hughes	x	x	0
 O	0	8	x	(	(	x	x	0
+B-LOC	0	9	x	NNP	Brisbane	x	x	0
 B-LOC	0	9	x	NNP	Australia	x	x	0
 O	0	10	x	)	)	x	x	0
 O	0	11	x	CD	73	x	x	0
