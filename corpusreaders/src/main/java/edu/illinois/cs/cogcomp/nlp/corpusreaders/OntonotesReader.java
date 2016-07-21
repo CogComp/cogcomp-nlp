@@ -23,8 +23,10 @@ import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,17 +38,15 @@ import java.util.Map;
  * are ignored.
  */
 public class OntonotesReader extends TextAnnotationReader {
-    private String ontonotesDirectory;
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
 
     private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
 
     public OntonotesReader(String ontonotesDirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes"));
-        this.ontonotesDirectory = ontonotesDirectory;
+        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory));
         this.taCounter = 0;
-        this.textAnnotations = new ArrayList<>();
+
     }
 
     @Override
@@ -56,6 +56,10 @@ public class OntonotesReader extends TextAnnotationReader {
 
     @Override
     protected void initializeReader() {
+        this.textAnnotations = new ArrayList<>();
+
+        String ontonotesDirectory= this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
+
         String[] files = new String[0];
         // In case the input argument is a single file
         if (!IOUtils.isDirectory(ontonotesDirectory)) {
@@ -63,6 +67,9 @@ public class OntonotesReader extends TextAnnotationReader {
         } else {
             try {
                 files = IOUtils.ls(ontonotesDirectory);
+                for(int i = 0; i < files.length; i++) {
+                    files[i] = Paths.get(ontonotesDirectory, files[i]).toString();
+                }
             } catch (IOException e) {
                 logger.error("Error listing directory.");
                 logger.error(e.getMessage());
