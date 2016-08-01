@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import matplotlib.pyplot as plt
 
+# This plots results according to training size. Used to make that cool figure in the paper (but not used)
+
 x = []
 y = []
 

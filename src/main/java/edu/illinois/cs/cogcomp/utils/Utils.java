@@ -168,6 +168,8 @@ public class Utils {
 
         HashSet<Example> unique = new HashSet<>();
 
+        int skipping = 0;
+
         for(String line : lines)
         {
             if(line.contains("#")){
@@ -189,8 +191,20 @@ public class Utils {
 
             if(ftoks.length != etoks.length){
                 logger.error("Mismatching length of tokens: " + english);
+                skipping++;
                 continue;
             }
+
+            // other heuristics to help clean data
+            if(english.contains("jr.") || english.contains("sr.") ||
+                    english.contains(" of ") || english.contains(" de ") ||
+                    english.contains("(") || english.contains("pope ")){
+                skipping++;
+                //logger.debug("Skipping: " + english);
+                continue;
+            }
+
+
 
             int numtoks = ftoks.length;
 
@@ -235,6 +249,7 @@ public class Utils {
 
         }
         //System.out.println(file.split("\\.")[1] + " & " + numnames + " & " + examples.size() + " & " + unique.size() + " \\\\");
+        logger.debug(String.format("Skipped %d lines", skipping));
         return new ArrayList<>(unique);
 
     }

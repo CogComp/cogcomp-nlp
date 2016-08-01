@@ -10,15 +10,12 @@ import edu.illinois.cs.cogcomp.utils.TopList;
 import edu.illinois.cs.cogcomp.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import static com.ibm.icu.impl.duration.impl.DataRecord.EGender.N;
 
 class Runner {
 
@@ -44,8 +41,11 @@ class Runner {
         String trainfile = args[0];
         String testfile = args[1];
 
-        //String trainfile = "/tmp/wikidata.heb";
-        //String testfile = "/tmp/wikidata.heb";
+//        String trainfile = tl + "wikidata.tt/Hebrew/wikidata.train.Hebrew";
+//        String testfile = tl + "wikidata.tt/Hebrew/wikidata.test.Hebrew";
+
+//        String trainfile = tl + "test/hebToUrom.uromtest";
+//        String testfile = trainfile;
 
         String trainlang = "Hindi";
         String testlang = "Hindi";
@@ -58,10 +58,7 @@ class Runner {
 
         String method = "wikidata";
 
-        if(method == "interactive"){
-            interactive();
-
-        }else if(method == "wikidata") {
+        if(method == "wikidata") {
             TrainAndTest(trainfile, testfile);
         }else if(method == "wikidata-pretrain"){
             LoadAndTest(probFile, testfile);
@@ -326,39 +323,7 @@ class Runner {
     }
 
 
-    static void interactive() throws Exception {
-        SPModel model = new SPModel("probs-arabic.txt");
 
-        //List<String> arabicStrings = Program.getForeignWords(wikidata + "wikidata.Armenian");
-        //model.SetLanguageModel(arabicStrings);
-
-        Scanner scanner = new Scanner(System.in);
-
-        while(true){
-            System.out.print("Enter something:");
-            String name = scanner.nextLine().toLowerCase();
-
-            if(name.equals("exit")){
-                break;
-            }
-
-            System.out.println(name);
-
-            TopList<Double, String> cands = model.Generate(name);
-            Iterator<Pair<Double,String>> ci = cands.iterator();
-
-            int lim = Math.min(5, cands.size());
-
-            if(lim == 0){
-                System.out.println("No candidates for this...");
-            }else {
-                for (int i = 0; i < lim; i++) {
-                    Pair<Double, String> p = ci.next();
-                    System.out.println(p.getFirst() + ": " + p.getSecond());
-                }
-            }
-        }
-    }
 
     /**
      * Given a model and set of testing examples, this will get scores using the generation method.
@@ -641,6 +606,8 @@ class Runner {
         List<Example> training = Utils.readWikiData(trainfile);
         logger.info(String.format("Loaded %s training examples.", training.size()));
 
+        List<String> langstrings = Program.getForeignWords(training);
+
         if(trainfile.equals(testfile)){
             logger.info("Train and test are the same... using just train.");
             // then don't need to load testing.
@@ -684,13 +651,17 @@ class Runner {
         for (int i = 0; i < num; i++) {
 
             java.util.Collections.shuffle(subtraining);
-        
-            
+
             SPModel model = new SPModel(subtraining);
+
+
             //model.setUseNPLM(true);
             //model.setNPLMfile("lm/newar/nplm-new.txt");
-            //List<String> langstrings = Program.getForeignWords(training);
+
             //model.SetLanguageModel(langstrings);
+//            model.setNgramSize(2);
+
+            model.setMaxCandidates(25);
 
             model.Train(emiterations, rom, subtesting);
 
@@ -711,7 +682,7 @@ class Runner {
             avgacc += acc;
             avgf1 += f1;
             System.out.println(subtraining.size() + "," + subtesting.size() + "," + mrr + "," + acc + "," + f1);
-            //model.WriteProbs("output/probs-" + trainlang +".txt");
+            model.WriteProbs("models/probs-" + trainlang +".txt");
         }
 
         //System.out.println("=============");
@@ -723,6 +694,9 @@ class Runner {
         return " & " + avgmrr / num + " & " + avgacc / num + " & " + avgf1 / num + " \\\\";
 
     }
+
+
+
 
 
     /**

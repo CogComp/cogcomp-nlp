@@ -144,6 +144,9 @@ class WikiTransliteration {
 
     /**
      * Given a word, ngramProbs, and an ngramSize, this predicts the probability of the word with respect to this language model.
+     *
+     * Compare this against:
+     *
      * @param word
      * @param ngramProbs
      * @param ngramSize
@@ -151,7 +154,7 @@ class WikiTransliteration {
      */
     public static double GetLanguageProbability(String word, HashMap<String, Double> ngramProbs, int ngramSize) {
         double probability = 1;
-        String paddedExample = StringUtils.repeat('_', ngramSize - 1) + word;
+        String paddedExample = StringUtils.repeat('_', ngramSize - 1) + word + StringUtils.repeat('_', ngramSize - 1);
         for (int i = ngramSize - 1; i < paddedExample.length(); i++) {
             int n = ngramSize;
             //while (!ngramProbs.TryGetValue(paddedExample.substring(i - n + 1, n), out localProb)) {
@@ -161,7 +164,7 @@ class WikiTransliteration {
             Double localProb = ngramProbs.get(ss);
             while(localProb == null){
                 n--;
-                if (n == 0)
+                if (n == 1)
                     return 0; // final backoff probability. Be careful with this... can result in names with 0 probability if the LM isn't large enough.
                 ss = paddedExample.substring(i-n+1, i+1);
                 localProb = ngramProbs.get(ss);
@@ -292,10 +295,20 @@ class WikiTransliteration {
         return result;
     }
 
-    public static HashMap<String, Integer> GetNgramCounts(int n, Iterable<String> examples, Boolean pad) {
+    /**
+     *
+     * This makes sure to pad front and back of the string, if pad is True.
+     *
+     * @param n size of ngram
+     * @param examples list of examples
+     * @param pad whether or not we should use padding.
+     * @return
+     */
+    public static HashMap<String, Integer> GetNgramCounts(int n, Iterable<String> examples, boolean pad) {
         HashMap<String, Integer> result = new HashMap<>();
         for (String example : examples) {
-            String paddedExample = (pad ? StringUtils.repeat('_', n - 1) + example : example);
+            String padstring = StringUtils.repeat("_", n-1);
+            String paddedExample = (pad ? padstring + example + padstring : example);
 
             for (int i = 0; i <= paddedExample.length() - n; i++) {
                 //System.out.println(i + ": " + n);
@@ -337,7 +350,17 @@ class WikiTransliteration {
         return result;
     }
 
-    public static HashMap<String, Double> GetNgramCounts(int minN, int maxN, Iterable<String> examples, Boolean padding) {
+    /**
+     * This function loops over all sizes of ngrams, from minN to maxN, and creates
+     * an ngram model, and also normalizes it.
+     *
+     * @param minN minimum size ngram
+     * @param maxN maximum size ngram
+     * @param examples list of examples
+     * @param padding whether or not this should be padded
+     * @return a hashmap of ngrams.
+     */
+    public static HashMap<String, Double> GetNgramCounts(int minN, int maxN, Iterable<String> examples, boolean padding) {
         HashMap<String, Double> result = new HashMap<>();
         for (int i = minN; i <= maxN; i++) {
             HashMap<String, Integer> counts = GetNgramCounts(i, examples, padding);

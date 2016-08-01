@@ -30,8 +30,8 @@ public class SPModel
     {
         private Logger logger = LoggerFactory.getLogger(SPModel.class);
         double minProductionProbability = 0.000000000000001;
-        int maxSubstringLength1 = 15;
-        int maxSubstringLength2 = 15;
+        int maxSubstringLength1 = 4;
+        int maxSubstringLength2 = 4;
 
         /**
          * How many origins do we expect there to be? This should probably be about 50 or less.
@@ -209,7 +209,7 @@ public class SPModel
             });
             for(Production t : keys){
                 if(probs.get(t) > threshold) {
-                    String tstr = t.getFirst() + "\t" + t.getSecond() + "\t" + t.getOrigin();
+                    String tstr = t.getFirst() + "\t" + t.getSecond();
                     outlines.add(tstr + "\t" + probs.get(t));
                 }
             }
@@ -357,13 +357,20 @@ public class SPModel
             }
 
             HashMap<Production, Double> memoizationTable = new HashMap<>();
-            double[] scores = new double[SPModel.numOrigins];
-            for(int orig = 0; orig < SPModel.numOrigins; orig++){
-                scores[orig] = WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability, orig)
-                        / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+            int orig = -1;
+
+            if(sourceWord.length() > Program.segSums.length){
+                System.err.println("Sourceword is too long (length " + sourceWord.length() + "). Setting prob=0");
+                return 0;
+            }else if(transliteratedWord.length() > Program.segSums.length){
+                System.err.println("TransliterateWord is too long (length " + transliteratedWord.length() + "). Setting prob=0");
+                return 0;
             }
 
-            return scores[0];
+            double score = WikiTransliteration.GetSummedAlignmentProbability(sourceWord, transliteratedWord, maxSubstringLength1, maxSubstringLength2, multiprobs, memoizationTable, minProductionProbability, orig)
+                        / Program.segSums[sourceWord.length() - 1][transliteratedWord.length() - 1];
+
+            return score;
         }
 
         /**
@@ -439,9 +446,6 @@ public class SPModel
                 }
                 result = fPredictions;
             }
-
-
-
 
             return result;
         }

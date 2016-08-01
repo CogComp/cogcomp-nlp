@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.utils.Dictionaries;
 import edu.illinois.cs.cogcomp.utils.InternDictionary;
 import edu.illinois.cs.cogcomp.utils.SparseDoubleVector;
 import edu.illinois.cs.cogcomp.utils.TopList;
+
 import java.io.FileNotFoundException;
 import java.text.Normalizer;
 import java.util.*;
@@ -174,63 +175,61 @@ class Program {
     /**
      * Calculates a probability table for P(String2 | String1)
      * This normalizes by source counts for each production.
-     *
+     * <p>
      * FIXME: This is identical to... WikiTransliteration.NormalizeBySourceSubstring
      *
      * @param ?
      * @return
      */
-        public static HashMap<Production, Double> PSecondGivenFirst(HashMap<Production, Double> counts)
+    public static HashMap<Production, Double> PSecondGivenFirst(HashMap<Production, Double> counts) {
+        // counts of first words in productions.
+        HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
+
+        HashMap<Production, Double> result = new HashMap<>(counts.size());
+        for (Production prod : counts.keySet()) // loop over all productions
         {
-            // counts of first words in productions.
-            HashMap<String, Double> totals1 = WikiTransliteration.GetAlignmentTotals1(counts);
-
-            HashMap<Production, Double> result = new HashMap<>(counts.size());
-            for (Production prod : counts.keySet()) // loop over all productions
-            {
-                double prodcount = counts.get(prod);
-                double sourcecounts = totals1.get(prod.getFirst()); // be careful of unboxing!
-                double value = sourcecounts == 0 ? 0 : (prodcount / sourcecounts);
-                result.put(prod, value);
-            }
-
-            return result;
+            double prodcount = counts.get(prod);
+            double sourcecounts = totals1.get(prod.getFirst()); // be careful of unboxing!
+            double value = sourcecounts == 0 ? 0 : (prodcount / sourcecounts);
+            result.put(prod, value);
         }
 
+        return result;
+    }
 
 
-
-        private static HashMap<Production, Double> SumNormalize(HashMap<Production, Double> vector)
-        {
-            HashMap<Production, Double> result = new HashMap<>(vector.size());
-            double sum = 0;
-            for (double value : vector.values()) {
-                sum += value;
-            }
-
-            for (Production key : vector.keySet()) {
-                Double value = vector.get(key);
-                result.put(key, value / sum);
-            }
-
-            return result;
+    private static HashMap<Production, Double> SumNormalize(HashMap<Production, Double> vector) {
+        HashMap<Production, Double> result = new HashMap<>(vector.size());
+        double sum = 0;
+        for (double value : vector.values()) {
+            sum += value;
         }
 
+        for (Production key : vector.keySet()) {
+            Double value = vector.get(key);
+            result.put(key, value / sum);
+        }
+
+        return result;
+    }
 
 
     /**
      * Does this not need to have access to ngramsize? No. It gets all ngrams so it can backoff.
+     * <p>
+     * By default, this includes padding.
+     *
      * @param examples
      * @param maxSubstringLength
      * @return
      */
-    public static HashMap<String, Double> GetNgramCounts(List<String> examples, int maxSubstringLength)
-    {
-        return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, false);
+    public static HashMap<String, Double> GetNgramCounts(List<String> examples, int maxSubstringLength) {
+        return WikiTransliteration.GetNgramCounts(1, maxSubstringLength, examples, true);
     }
 
     /**
      * Given a wikidata file, this gets all the words in the foreign language for the language model.
+     *
      * @param fname
      * @return
      */
@@ -238,12 +237,12 @@ class Program {
         List<String> lines = LineIO.read(fname);
         List<String> words = new ArrayList<>();
 
-        for(String line : lines){
+        for (String line : lines) {
             String[] parts = line.trim().split("\t");
             String foreign = parts[0];
 
             String[] fsplit = foreign.split(" ");
-            for(String word : fsplit){
+            for (String word : fsplit) {
                 words.add(word);
             }
         }
@@ -253,13 +252,14 @@ class Program {
 
     /**
      * Given a wikidata file, this gets all the words in the foreign language for the language model.
+     *
      * @return
      */
     public static List<String> getForeignWords(List<Example> examples) throws FileNotFoundException {
 
         List<String> words = new ArrayList<>();
 
-        for(Example e : examples){
+        for (Example e : examples) {
             words.add(e.getTransliteratedWord());
         }
 
@@ -285,7 +285,7 @@ class Program {
     /**
      * This returns a map of productions to counts. These are counts over the entire training corpus. These are all possible
      * productions seen in training data. If a production does not show up in training, it will not be seen here.
-     *
+     * <p>
      * normalization parameter decides if it is normalized (typically not).
      *
      * @param maxSubstringLength1
@@ -297,7 +297,7 @@ class Program {
      * @param getExampleCounts
      * @return
      */
-     static HashMap<Production, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Production, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
+    static HashMap<Production, Double> MakeRawAlignmentTable(int maxSubstringLength1, int maxSubstringLength2, List<Triple<String, String, Double>> examples, HashMap<Production, Double> probs, WeightingMode weightingMode, WikiTransliteration.NormalizationMode normalization, boolean getExampleCounts) {
         InternDictionary<String> internTable = new InternDictionary<>();
         HashMap<Production, Double> counts = new HashMap<>();
 
@@ -321,7 +321,7 @@ class Program {
 
                     HashMap<Production, Double> cached = new HashMap<>();
                     Production p = new Production(sourceWord, bestWord);
-                    if(maxCache.containsKey(p)){
+                    if (maxCache.containsKey(p)) {
                         cached = maxCache.get(p);
                     }
 
@@ -362,8 +362,7 @@ class Program {
     }
 
 
-    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionProbs)
-    {
+    public static SparseDoubleVector<Pair<Triple<String, String, String>, String>> PSecondGivenFirst(SparseDoubleVector<Pair<Triple<String, String, String>, String>> productionProbs) {
         SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<>();
         SparseDoubleVector<Triple<String, String, String>> totals = new SparseDoubleVector<>();
         for (Pair<Triple<String, String, String>, String> key : productionProbs.keySet()) {
@@ -383,6 +382,7 @@ class Program {
 
     /**
      * Calculates a probability table for P(String2 | String1)
+     *
      * @param counts
      * @return
      */
@@ -394,8 +394,7 @@ class Program {
         }
 
         SparseDoubleVector<Pair<Triple<String, String, String>, String>> result = new SparseDoubleVector<Pair<Triple<String, String, String>, String>>(counts.size());
-        for (Pair<Triple<String, String, String>, String> key : counts.keySet())
-        {
+        for (Pair<Triple<String, String, String>, String> key : counts.keySet()) {
             Double value = counts.get(key);
             double total = totals.get(key.getFirst());
             result.put(key, total == 0 ? 0 : value / total);
@@ -436,51 +435,48 @@ class Program {
     }
 
 
-        static double Choose(double n, double k)
-        {
-            double result = 1;
+    static double Choose(double n, double k) {
+        double result = 1;
 
-            for (double i = Math.max(k, n - k) + 1; i <= n; ++i)
-                result *= i;
+        for (double i = Math.max(k, n - k) + 1; i <= n; ++i)
+            result *= i;
 
-            for (double i = 2; i <= Math.min(k, n - k); ++i)
-                result /= i;
+        for (double i = 2; i <= Math.min(k, n - k); ++i)
+            result /= i;
 
-            return result;
+        return result;
+    }
+
+    public static double[][] SegmentationCounts(int maxLength) {
+        double[][] result = new double[maxLength][];
+        for (int i = 0; i < maxLength; i++) {
+            result[i] = new double[i + 1];
+            for (int j = 0; j <= i; j++)
+                result[i][j] = Choose(i, j);
         }
 
-        public static double[][] SegmentationCounts(int maxLength)
-        {
-            double[][] result = new double[maxLength][];
-            for (int i = 0; i < maxLength; i++)
-            {
-                result[i] = new double[i+1];
-                for (int j = 0; j <= i; j++)
-                    result[i][j] = Choose(i, j);
+        return result;
+    }
+
+    public static double[][] SegSums(int maxLength) {
+        double[][] segmentationCounts = SegmentationCounts(maxLength);
+        double[][] result = new double[maxLength][];
+        for (int i = 0; i < maxLength; i++) {
+            result[i] = new double[maxLength];
+            for (int j = 0; j < maxLength; j++) {
+                int minIJ = Math.min(i, j);
+                for (int k = 0; k <= minIJ; k++)
+                    result[i][j] += segmentationCounts[i][k] * segmentationCounts[j][k];// *Math.Pow(0.5, k + 1);
             }
-
-            return result;
         }
 
-        public static double[][] SegSums(int maxLength)
-        {
-            double[][] segmentationCounts = SegmentationCounts(maxLength);
-            double[][] result = new double[maxLength][];
-            for (int i = 0; i < maxLength; i++)
-            {
-                result[i] = new double[maxLength];
-                for (int j = 0; j < maxLength; j++)
-                {
-                    int minIJ = Math.min(i, j);
-                    for (int k = 0; k <= minIJ; k++)
-                        result[i][j] += segmentationCounts[i][k] * segmentationCounts[j][k];// *Math.Pow(0.5, k + 1);
-                }
-            }
+        return result;
+    }
 
-            return result;
-        }
-
-        public static double[][] segSums = SegSums(40);
+    /**
+     * Number of possible segmentations.
+     */
+    public static double[][] segSums = SegSums(40);
 
     public static void DiscoveryEM(int iterations, List<String> candidateWords, List<Pair<String, String>> trainingPairs, HashMap<String, List<String>> testingPairs, TransliterationModel model) {
         List<Triple<String, String, Double>> trainingTriples = ConvertExamples(trainingPairs);
@@ -665,23 +661,23 @@ class Program {
 //        }
 
         // get all values from training.
-        for(Triple<String, String, Double> t : trainingTriples){
+        for (Triple<String, String, Double> t : trainingTriples) {
             String chinese = t.getSecond();
-            for(char c : chinese.toCharArray()){
+            for (char c : chinese.toCharArray()) {
                 // CHINESE
                 String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
-                for(String s : res) {
+                for (String s : res) {
                     // FIXME: strip number from s?
-                    String ss = s.substring(0,s.length()-1);
+                    String ss = s.substring(0, s.length() - 1);
                     probs.put(new Production(ss, c + ""), 1.);
                 }
             }
         }
 
         // get all values from testing also
-        for(MultiExample t : testing){
+        for (MultiExample t : testing) {
             List<String> chineseWords = t.getTransliteratedWords();
-            for(String chinese : chineseWords) {
+            for (String chinese : chineseWords) {
                 for (char c : chinese.toCharArray()) {
                     // CHINESE
                     String[] res = PinyinHelper.toHanyuPinyinStringArray(c);
@@ -701,6 +697,7 @@ class Program {
 
     /**
      * Convert each production into a set of productions with different origins
+     *
      * @param probs
      * @param numOrigins
      * @return
@@ -709,9 +706,9 @@ class Program {
 
         SparseDoubleVector<Production> newprobs = new SparseDoubleVector<>();
 
-        for(Production p : probs.keySet()){
+        for (Production p : probs.keySet()) {
             double prob = probs.get(p);
-            for(int i = 0; i < numOrigins; i++){
+            for (int i = 0; i < numOrigins; i++) {
                 Production po = new Production(p.segS, p.segT, i);
                 newprobs.put(po, prob / numOrigins);
             }
@@ -719,7 +716,6 @@ class Program {
 
         return newprobs;
     }
-
 
 
     public enum WeightingMode {

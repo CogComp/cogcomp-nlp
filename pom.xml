@@ -6,7 +6,7 @@ http://www.w3.org/2001/XMLSchema-instance ">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-transliteration</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <url>http://cogcomp.cs.illinois.edu</url>

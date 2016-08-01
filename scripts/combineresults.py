@@ -95,10 +95,9 @@ def getScores(ans,pred):
     return MRR,ACC,F1
 
 
-
 def writeAnsFile(ans,ranking):
 
-    with open("../out-gen-Combined.txt", "w") as out:
+    with open("out-gen-Combined.txt", "w") as out:
         for a,p in zip(ans,ranking):
             query = p[0]
             gold = a[1]
@@ -167,12 +166,7 @@ def combine(*fnames):
     
 
     print "overall: ", getScores(ans, reranked)
-    writeAnsFile(ans,reranked)
-
-
-        
-        
-                
+    writeAnsFile(ans,reranked)      
 
         
     
