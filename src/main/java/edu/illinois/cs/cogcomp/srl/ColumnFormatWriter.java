@@ -1,25 +1,14 @@
 package edu.illinois.cs.cogcomp.srl;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * Prints text annotation formatted with one word per line as follows.
@@ -345,8 +334,8 @@ public class ColumnFormatWriter {
 		Map<Integer, String> lemmaMap = new HashMap<>();
 
 		for (Constituent c : predicates) {
-			senseMap.put(c.getStartSpan(), c.getAttribute(CoNLLColumnFormatReader.SenseIdentifer));
-			lemmaMap.put(c.getStartSpan(), c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier));
+			senseMap.put(c.getStartSpan(), c.getAttribute(PredicateArgumentView.SenseIdentifer));
+			lemmaMap.put(c.getStartSpan(), c.getAttribute(PredicateArgumentView.LemmaIdentifier));
 		}
 
 		String[] sense = new String[size];

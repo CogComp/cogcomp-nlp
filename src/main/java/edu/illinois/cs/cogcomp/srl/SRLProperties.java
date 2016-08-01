@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;
-import org.apache.commons.configuration.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +22,7 @@ public class SRLProperties {
      * @param configFile file with configuration parameters
      */
 
-    private SRLProperties( String configFile ) throws ConfigurationException, IOException {
+    private SRLProperties( String configFile ) throws IOException {
         this(new ResourceManager(configFile));
     }
 

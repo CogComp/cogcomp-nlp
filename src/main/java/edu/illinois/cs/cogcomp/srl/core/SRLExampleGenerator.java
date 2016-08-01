@@ -6,7 +6,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.learn.*;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.Map;
 public class SRLExampleGenerator {
 	private SRLManager manager;
 
-	public SRLExampleGenerator(SRLManager manager) {
+	SRLExampleGenerator(SRLManager manager) {
 		this.manager = manager;
 	}
 
@@ -43,7 +42,7 @@ public class SRLExampleGenerator {
 		AbstractPredicateDetector predicateDetector = manager.getLearnedPredicateDetector();
 
 		for (Constituent predicate : predicateDetector.getPredicates(ta)) {
-			if (!predicate.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
+			if (!predicate.hasAttribute(PredicateArgumentView.LemmaIdentifier)) {
 				System.out.println(ta);
 				System.out.println(predicate + " has no lemma!");
 				assert false;
@@ -60,7 +59,7 @@ public class SRLExampleGenerator {
 		PredicateArgumentView pav = (PredicateArgumentView) ta.getView(manager.getGoldViewName());
 
 		for (Constituent predicate : pav.getPredicates()) {
-			if (!predicate.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
+			if (!predicate.hasAttribute(PredicateArgumentView.LemmaIdentifier)) {
 				System.out.println(ta);
 				System.out.println(pav);
 				System.out.println(predicate + " has no lemma!");
@@ -99,7 +98,7 @@ public class SRLExampleGenerator {
 				id++;
 			}
 
-			int sense = manager.getSenseId(predicate.getAttribute(CoNLLColumnFormatReader.SenseIdentifer));
+			int sense = manager.getSenseId(predicate.getAttribute(PredicateArgumentView.SenseIdentifer));
 			SRLPredicateStructure y = new SRLPredicateStructure(x, argLabels, sense, manager);
 
 			predicates.add(x);

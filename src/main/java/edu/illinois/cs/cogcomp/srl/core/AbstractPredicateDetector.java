@@ -2,8 +2,8 @@ package edu.illinois.cs.cogcomp.srl.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public abstract class AbstractPredicateDetector {
 
 			if (opt.isPresent()) {
 				Constituent c = new Constituent("", "", ta, i, i + 1);
-				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, opt.get());
+				c.addAttribute(PredicateArgumentView.LemmaIdentifier, opt.get());
 				list.add(c);
 			}
 		}

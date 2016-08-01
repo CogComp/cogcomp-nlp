@@ -3,8 +3,8 @@ package edu.illinois.cs.cogcomp.srl.learn;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.SparseFeatureVector;
@@ -32,7 +32,7 @@ public class SRLMulticlassInstance implements IInstance {
 		this.c = c;
 		this.predicate = predicate;
 		this.manager = manager;
-		predicateLemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+		predicateLemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
 		features = new ConcurrentHashMap<>();
 	}

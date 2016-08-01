@@ -5,14 +5,12 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.infer.ilp.*;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassInstance;
 import edu.illinois.cs.cogcomp.srl.learn.SRLPredicateInstance;
 import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceInstance;
 import edu.illinois.cs.cogcomp.srl.learn.SRLSentenceStructure;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +51,7 @@ final public class SRLILPInference extends AbstractILPInference<SRLSentenceStruc
 			Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
 			SRLPredicateInstance x;
 
-			assert predicateClone.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+			assert predicateClone.hasAttribute(PredicateArgumentView.LemmaIdentifier);
 
 			x = new SRLPredicateInstance(predicateClone, manager, manager.getArgumentIdentifier());
 			x.cacheAllFeatureVectors(false);

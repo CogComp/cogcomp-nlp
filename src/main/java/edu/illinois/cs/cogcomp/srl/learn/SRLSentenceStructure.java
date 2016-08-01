@@ -4,7 +4,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 
@@ -36,10 +35,10 @@ public class SRLSentenceStructure implements IStructure {
 
 			Constituent predicate = new Constituent("Predicate", viewName, ta,
 					predicateSpan.getFirst(), predicateSpan.getSecond());
-			predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, predicateLemma);
+			predicate.addAttribute(PredicateArgumentView.LemmaIdentifier, predicateLemma);
 
 			String sense = manager.getSense(y.getSense());
-			predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, sense);
+			predicate.addAttribute(PredicateArgumentView.SenseIdentifer, sense);
 
 			List<Constituent> args = new ArrayList<>();
 			List<String> relations = new ArrayList<>();

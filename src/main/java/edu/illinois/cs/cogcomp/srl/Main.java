@@ -41,7 +41,6 @@ import edu.illinois.cs.cogcomp.srl.learn.IdentifierThresholdTuner;
 import edu.illinois.cs.cogcomp.srl.nom.NomSRLManager;
 import edu.illinois.cs.cogcomp.srl.utilities.WeightVectorUtils;
 import edu.illinois.cs.cogcomp.srl.verb.VerbSRLManager;
-import org.apache.commons.configuration.ConfigurationException;
 import edu.illinois.cs.cogcomp.core.experiments.evaluators.PredicateArgumentEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +59,7 @@ public class Main {
 
 
 	@CommandIgnore
-	public static void main(String[] arguments) throws ConfigurationException {
+	public static void main(String[] arguments) {
 
 		InteractiveShell<Main> shell = new InteractiveShell<>(Main.class);
 
@@ -509,9 +508,8 @@ public class Main {
 			assert inference != null;
 			PredicateArgumentView prediction = inference.getOutputView();
 
-            evaluator.setViews(gold, prediction);
-            evaluator.evaluate(tester);
-            evaluator.evaluateSense(senseTester);
+            evaluator.evaluate(tester, gold, prediction);
+            evaluator.evaluateSense(senseTester, gold, prediction);
 
 			if (outDir != null) {
 				writer.printPredicateArgumentView(gold, goldWriter);
@@ -521,7 +519,7 @@ public class Main {
 			if (count % 1000 == 0) {
 				long end = System.currentTimeMillis();
 				log.info(count + " sentences done. Took " + (end - start) + "ms, " +
-                        "F1 so far = " + tester.getAverageF1());
+                        "F1 so far = " + tester.getMacroF1());
 			}
 		}
 		long end = System.currentTimeMillis();
