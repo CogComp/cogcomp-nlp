@@ -163,7 +163,10 @@ public class FramesManager {
 			for (int j = 0; j < roles.getLength(); j++) {
 				Element role = (Element) roles.item(j);
 
-				String argLabel = "A" + role.getAttribute("n");
+				String label = role.getAttribute("n");
+				if (role.hasAttribute("f"))
+					label += "-" + role.getAttribute("f");
+				String argLabel = "A" + label;
 				fData.addArgument(sense, argLabel);
 
 				if (role.hasAttribute("descr")) {
@@ -250,8 +253,8 @@ public class FramesManager {
      */
     public static void main(String[] args) throws IOException {
         List<String> outLines = new ArrayList<>();
-//        FramesManager manager = new FramesManager(propFramesDir);
-        FramesManager manager = new FramesManager(nomFramesDir);
+        FramesManager manager = new FramesManager(propFramesDir);
+//        FramesManager manager = new FramesManager(nomFramesDir);
         for (String predicate : manager.getPredicates()) {
             FrameData frame = manager.getFrame(predicate);
             Set<String> senses = frame.getSenses();
@@ -267,7 +270,7 @@ public class FramesManager {
             outLines.add(predicate + "\t" + senseStr.trim());
         }
         Collections.sort(outLines);
-//        LineIO.write("src/main/resources/Verb.legal.arguments", outLines);
-        LineIO.write("src/main/resources/Nom.legal.arguments", outLines);
+        LineIO.write("src/main/resources/Verb.legal.arguments", outLines);
+//        LineIO.write("src/main/resources/Nom.legal.arguments", outLines);
     }
 }
