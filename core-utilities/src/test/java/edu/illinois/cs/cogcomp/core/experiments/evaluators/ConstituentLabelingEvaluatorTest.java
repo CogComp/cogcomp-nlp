@@ -30,9 +30,9 @@ public class ConstituentLabelingEvaluatorTest {
         splittingTester = new ClassificationTester();
         String[] viewsToAdd = {ViewNames.POS};
         TextAnnotation goldTA =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         TextAnnotation predictionTA =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true, 3);
         gold = (SpanLabelView) goldTA.getView(ViewNames.POS);
         predicted = (SpanLabelView) predictionTA.getView(ViewNames.POS);
     }
