@@ -20,7 +20,6 @@ import java.util.*;
 
 /**
  * Generator of dummy {@link TextAnnotation}s and their {@link View}s, used for testing.
- *
  * @author Daniel Khashabi
  * @author Christos Christodoulopoulos
  */
@@ -34,12 +33,13 @@ public class DummyTextAnnotationGenerator {
     static String annotatedString2 = "The $10M building was designed in 2016 .";
     static String annotatedString3 = "The paving commenced Monday and will finish in June .";
 
-    static List<String[]> annotatedTokenizedStringArray;
+    static List<String[]> annotatedTokenizedStringArray1 = new ArrayList<>();
+    static List<String[]> annotatedTokenizedStringArray2 = new ArrayList<>();
+    static List<String[]> annotatedTokenizedStringArray3 = new ArrayList<>();
     static {
-        annotatedTokenizedStringArray = new ArrayList<>();
-        annotatedTokenizedStringArray.add(annotatedString1.split(" "));
-        annotatedTokenizedStringArray.add(annotatedString2.split(" "));
-        annotatedTokenizedStringArray.add(annotatedString3.split(" "));
+        annotatedTokenizedStringArray1.add(annotatedString1.split(" "));
+        annotatedTokenizedStringArray2.add(annotatedString2.split(" "));
+        annotatedTokenizedStringArray3.add(annotatedString3.split(" "));
     };
 
     static String[] pos1 = {"DT", "NN", "IN", "DT", "NNP", "NNP", "NN", "VBD", "IN", "NN", "."};
@@ -56,6 +56,12 @@ public class DummyTextAnnotationGenerator {
     static String[] lemmas2 = {"The", "$10M", "building", "be", "design", "in", "2016", "."};
     static String[] lemmas3 = {"The", "paving", "commence", "Monday", "and", "will", "finish",
             "in", "June", "."};
+    static String[] lemmasAll = new String[lemmas1.length + lemmas2.length + lemmas3.length];
+    static {
+        System.arraycopy(lemmas1, 0, lemmasAll, 0, lemmas1.length);
+        System.arraycopy(lemmas2, 0, lemmasAll, lemmas1.length, lemmas2.length);
+        System.arraycopy(lemmas3, 0, lemmasAll, lemmas1.length + lemmas2.length, lemmas3.length);
+    }
 
     static String[] lemmas_noisy1 = {"the", "construct", "of", "the", "John", "Smith", "library",
             "fin", "on", "time", "."};
@@ -215,9 +221,13 @@ public class DummyTextAnnotationGenerator {
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
                                                                  boolean withNoisyLabels, int sentenceLength) {
-        TextAnnotation ta =
-                BasicTextAnnotationBuilder
-                        .createTextAnnotationFromTokens(annotatedTokenizedStringArray);
+        List<String[]> annotatedTokenizedStringArrayAll = new ArrayList<>();
+        annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray1);
+        if(sentenceLength > 1)
+            annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray2);
+        if(sentenceLength > 2)
+            annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray3);
+        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(annotatedTokenizedStringArrayAll);
 
         for (String viewName : viewsToAdd) {
             switch (viewName) {
@@ -230,10 +240,10 @@ public class DummyTextAnnotationGenerator {
                         posView.addTokenLabel(i, pos1Overall[i], 1.0);
                     if (sentenceLength > 1)
                         for (int i = 0; i < pos2Overall.length; i++)
-                            posView.addTokenLabel(i, pos2Overall[i], 1.0);
+                            posView.addTokenLabel(pos1Overall.length + i, pos2Overall[i], 1.0);
                     if (sentenceLength > 2)
                         for (int i = 0; i < pos3Overall.length; i++)
-                            posView.addTokenLabel(i, pos3Overall[i], 1.0);
+                            posView.addTokenLabel(pos1Overall.length + pos2Overall.length + i, pos3Overall[i], 1.0);
                     ta.addView(viewName, posView);
                     break;
                 case ViewNames.LEMMA:
@@ -245,10 +255,10 @@ public class DummyTextAnnotationGenerator {
                         lemmaView.addTokenLabel(i, lemmaOveral1[i], 1.0);
                     if (sentenceLength > 1)
                         for (int i = 0; i < lemmaOveral2.length; i++)
-                            lemmaView.addTokenLabel(i, lemmaOveral2[i], 1.0);
+                            lemmaView.addTokenLabel(lemmaOveral1.length + i, lemmaOveral2[i], 1.0);
                     if (sentenceLength > 2)
                         for (int i = 0; i < lemmaOveral3.length; i++)
-                            lemmaView.addTokenLabel(i, lemmaOveral3[i], 1.0);
+                            lemmaView.addTokenLabel(lemmaOveral1.length + lemmaOveral2.length +  i, lemmaOveral3[i], 1.0);
                     ta.addView(viewName, lemmaView);
                     break;
                 case ViewNames.SHALLOW_PARSE:
@@ -320,29 +330,33 @@ public class DummyTextAnnotationGenerator {
                             (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
                             (withNoisyLabels ? verbSRLArgs_noisy1 : verbSRLArgs1));
 
-                    addSrlFrame(
-                            verbSRLView,
-                            viewName,
-                            ta,
-                            verbSRLPredicate2,
-                            (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
-                            (withNoisyLabels ? verbSRLArgs_noisy2 : verbSRLArgs1));
+                    if(sentenceLength > 1) {
+                        addSrlFrame(
+                                verbSRLView,
+                                viewName,
+                                ta,
+                                verbSRLPredicate2,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                                (withNoisyLabels ? verbSRLArgs_noisy2 : verbSRLArgs2));
+                    }
 
-                    addSrlFrame(
-                            verbSRLView,
-                            viewName,
-                            ta,
-                            verbSRLPredicate3,
-                            (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
-                            (withNoisyLabels ? verbSRLArgs_noisy3 : verbSRLArgs1));
+                    if(sentenceLength > 2) {
+                        addSrlFrame(
+                                verbSRLView,
+                                viewName,
+                                ta,
+                                verbSRLPredicate3,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                                (withNoisyLabels ? verbSRLArgs_noisy3 : verbSRLArgs3));
 
-                    addSrlFrame(
-                            verbSRLView,
-                            viewName,
-                            ta,
-                            verbSRLPredicate4,
-                            (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
-                            (withNoisyLabels ? verbSRLArgs_noisy4 : verbSRLArgs1));
+                        addSrlFrame(
+                                verbSRLView,
+                                viewName,
+                                ta,
+                                verbSRLPredicate4,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                                (withNoisyLabels ? verbSRLArgs_noisy4 : verbSRLArgs4));
+                    }
 
                     ta.addView(viewName, verbSRLView);
 
@@ -363,7 +377,7 @@ public class DummyTextAnnotationGenerator {
                 new Constituent("predicate", viewName, ta, verbSRLPredicate.getFirst(),
                         verbSRLPredicate.getSecond());
         predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
-                lemmas1[verbSRLPredicate.getFirst()]);
+                lemmasAll[verbSRLPredicate.getFirst()]);
         predicate.addAttribute(PredicateArgumentView.SenseIdentifer, sense);
         List<Constituent> args = new ArrayList<>();
         List<String> tempArgLabels = new ArrayList<>();
@@ -375,5 +389,11 @@ public class DummyTextAnnotationGenerator {
         double[] scores = new double[args.size()];
         srlView.addPredicateArguments(predicate, args, argLabels, scores);
 
+    }
+
+    public static void main(String[] args) {
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
+        System.out.println(ta);
+        System.out.println(SerializationHelper.serializeToJson(ta));
     }
 }
