@@ -37,7 +37,7 @@ public class TestWordConjunctionOneTwoThreeGramWindowTwo {
 
     @Before
     public void setUp() throws Exception {
-        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{}, false);
+        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{}, false, 3);
     }
 
     @Test

@@ -37,7 +37,7 @@ public class TestPosWordConjunctionSizeTwoWindowSizeTwo {
 
     @Before
     public void setUp() throws Exception {
-        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS}, false);
+        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS}, false, 3);
     }
 
     @Test

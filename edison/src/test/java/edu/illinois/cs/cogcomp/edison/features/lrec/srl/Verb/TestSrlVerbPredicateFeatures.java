@@ -40,7 +40,7 @@ public class TestSrlVerbPredicateFeatures extends TestCase {
 
 		String[] viewsToAdd = {ViewNames.POS, ViewNames.LEMMA, ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
 				ViewNames.SRL_VERB, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
-		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
+		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true, 3);
 		int i = 0;
 		ta.addView(ClauseViewGenerator.STANFORD);
 		ta.addView(PseudoParse.STANFORD);
