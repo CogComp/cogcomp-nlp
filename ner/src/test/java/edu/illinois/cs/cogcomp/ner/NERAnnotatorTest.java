@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner;
@@ -130,9 +127,8 @@ public class NERAnnotatorTest {
     }
 
     /**
-     * See if we get the right entities back.
-     * TODO: MS removed @Test annotation as this test currently fails, but benchmark performance
-     *    is good
+     * See if we get the right entities back. TODO: MS removed @Test annotation as this test
+     * currently fails, but benchmark performance is good
      */
 
 
@@ -167,7 +163,7 @@ public class NERAnnotatorTest {
      * Make sure it runs in reasonable time. We will test the performance of the machine we run on
      * to get a better measure.
      */
-    //@Test
+    // @Test
     public void evaluatePerformance() {
         // now do performance.
         final int SIZE = 100;
@@ -248,7 +244,7 @@ public class NERAnnotatorTest {
     /**
      * on every core we should get performance below 300 ticks and the results should still be good.
      */
-    //@Test
+    // @Test
     public void evaluateMultiThreaded() {
         final int SIZE = 1000;
 

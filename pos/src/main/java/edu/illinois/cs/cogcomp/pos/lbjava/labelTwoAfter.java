@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -25,102 +22,111 @@ import edu.illinois.cs.cogcomp.pos.*;
 
 
 /**
-  * Returns the value of {@link labelOrBaseline} on the word after the next
-  * word.
-  *
-  * @author Nick Rizzolo
+ * Returns the value of {@link labelOrBaseline} on the word after the next word.
+ *
+ * @author Nick Rizzolo
  **/
-public class labelTwoAfter extends Classifier
-{
-  private static final labelOrBaseline __labelOrBaseline = new labelOrBaseline();
+public class labelTwoAfter extends Classifier {
+    private static final labelOrBaseline __labelOrBaseline = new labelOrBaseline();
 
-  private static ThreadLocal __cache = new ThreadLocal(){ };
-  private static ThreadLocal __exampleCache = new ThreadLocal(){ };
-  public static void clearCache() { __exampleCache = new ThreadLocal(){ }; }
+    private static ThreadLocal __cache = new ThreadLocal() {};
+    private static ThreadLocal __exampleCache = new ThreadLocal() {};
 
-  public labelTwoAfter()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.pos.lbjava";
-    name = "labelTwoAfter";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token"; }
-  public String getOutputType() { return "discrete"; }
-
-  private Feature cachedFeatureValue(Object __example)
-  {
-    if (__example == __exampleCache.get()) return (Feature) __cache.get();
-    __exampleCache.set(__example);
-    String __cachedValue = _discreteValue(__example);
-    Feature __result = new DiscretePrimitiveStringFeature(containingPackage, name, "", __cachedValue, valueIndexOf(__cachedValue), (short) allowableValues().length);
-    __cache.set(__result);
-    return __result;
-  }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof Token))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public static void clearCache() {
+        __exampleCache = new ThreadLocal() {};
     }
 
-    return new FeatureVector(cachedFeatureValue(__example));
-  }
-
-  public Feature featureValue(Object __example)
-  {
-    if (!(__example instanceof Token))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public labelTwoAfter() {
+        containingPackage = "edu.illinois.cs.cogcomp.pos.lbjava";
+        name = "labelTwoAfter";
     }
 
-    return cachedFeatureValue(__example);
-  }
-
-  public String discreteValue(Object __example)
-  {
-    if (!(__example instanceof Token))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token";
     }
 
-    return cachedFeatureValue(__example).getStringValue();
-  }
-
-  private String _discreteValue(Object __example)
-  {
-    Token w = (Token) __example;
-
-    if (w.next != null && w.next.next != null)
-    {
-      return "" + (__labelOrBaseline.discreteValue(w.next.next));
-    }
-    return "";
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof Token[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getOutputType() {
+        return "discrete";
     }
 
-    return super.classify(examples);
-  }
+    private Feature cachedFeatureValue(Object __example) {
+        if (__example == __exampleCache.get())
+            return (Feature) __cache.get();
+        __exampleCache.set(__example);
+        String __cachedValue = _discreteValue(__example);
+        Feature __result =
+                new DiscretePrimitiveStringFeature(containingPackage, name, "", __cachedValue,
+                        valueIndexOf(__cachedValue), (short) allowableValues().length);
+        __cache.set(__result);
+        return __result;
+    }
 
-  public int hashCode() { return "labelTwoAfter".hashCode(); }
-  public boolean equals(Object o) { return o instanceof labelTwoAfter; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof Token)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return new FeatureVector(cachedFeatureValue(__example));
+    }
+
+    public Feature featureValue(Object __example) {
+        if (!(__example instanceof Token)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return cachedFeatureValue(__example);
+    }
+
+    public String discreteValue(Object __example) {
+        if (!(__example instanceof Token)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return cachedFeatureValue(__example).getStringValue();
+    }
+
+    private String _discreteValue(Object __example) {
+        Token w = (Token) __example;
+
+        if (w.next != null && w.next.next != null) {
+            return "" + (__labelOrBaseline.discreteValue(w.next.next));
+        }
+        return "";
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof Token[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'labelTwoAfter(Token)' defined on line 120 of POSKnown.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "labelTwoAfter".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof labelTwoAfter;
+    }
 }
-

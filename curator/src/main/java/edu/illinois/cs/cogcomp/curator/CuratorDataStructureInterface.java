@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.curator;
@@ -455,8 +452,9 @@ public class CuratorDataStructureInterface {
      * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
      *
-     * <b>NOTE:</b> must correct for one-past-the-end labeling when calling
-     * {@link TextAnnotation.getTokenIdFromCharacterOffset() }.
+     * <b>NOTE:</b> must correct for one-past-the-end labeling when calling {@link
+     * TextAnnotation.getTokenIdFromCharacterOffset() }.
+     * 
      * @return A TokenLabelView
      */
     public static TokenLabelView alignLabelingToTokenLabelView(String viewName, TextAnnotation ta,
@@ -471,7 +469,7 @@ public class CuratorDataStructureInterface {
 
             int tokenId = ta.getTokenIdFromCharacterOffset(span.getStart());
 
-            int endTokenId = ta.getTokenIdFromCharacterOffset(span.getEnding()-1);
+            int endTokenId = ta.getTokenIdFromCharacterOffset(span.getEnding() - 1);
 
             if (tokenId == endTokenId)
                 endTokenId++;

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -28,8 +25,8 @@ import java.io.FilenameFilter;
 import java.util.*;
 
 /**
- * Corpus reader for the ACE data-set.
- * This reader currently only supports only the ACE-2004 and ACE-2005 data-sets.
+ * Corpus reader for the ACE data-set. This reader currently only supports only the ACE-2004 and
+ * ACE-2005 data-sets.
  *
  * @author Bhargav Mangipudi
  */
@@ -66,7 +63,8 @@ public class ACEReader extends TextAnnotationReader {
     public static final String RelationTenseAttribute = "RelationTense"; /* Optional */
 
     public static final String RelationMentionIDAttribute = "RelationMentionID";
-    public static final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
+    public static final String RelationMentionLexicalConditionAttribute =
+            "RelationMentionLexicalCondition";
 
     public static final String RelationMentionArgumentIDAttribute = "RelationMentionArgumentID";
     public static final String RelationMentionArgumentRoleAttribute = "RelationMentionArgumentRole";
@@ -75,9 +73,9 @@ public class ACEReader extends TextAnnotationReader {
      * Constructor for the ACE Data-set Reader
      *
      * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
-     * @param sections      List of sections to parse. eg. `new String[] { "nw", "bn" }`
-     *                      Pass `null` to parse all available sections.
-     * @param is2004mode    Boolean representing if the data-set is the ACE-2004.
+     * @param sections List of sections to parse. eg. `new String[] { "nw", "bn" }` Pass `null` to
+     *        parse all available sections.
+     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
      * @throws Exception Exception thrown in-case of major failure.
      */
     public ACEReader(String aceCorpusHome, String[] sections, boolean is2004mode) throws Exception {
@@ -101,7 +99,7 @@ public class ACEReader extends TextAnnotationReader {
      * Constructor for the ACE Data-set Reader
      *
      * @param aceCorpusHome Path of the data. eg. `data/ace2004/data/English`
-     * @param is2004mode    Boolean representing if the data-set is the ACE-2004.
+     * @param is2004mode Boolean representing if the data-set is the ACE-2004.
      * @throws Exception Exception thrown in-case of major failure.
      */
     public ACEReader(String aceCorpusHome, boolean is2004mode) throws Exception {
@@ -133,8 +131,10 @@ public class ACEReader extends TextAnnotationReader {
         };
 
         ReadACEAnnotation.is2004mode = this.is2004mode;
-        AceFileProcessor fileProcessor = new AceFileProcessor(new TokenizerTextAnnotationBuilder(new IllinoisTokenizer()));
-        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+        AceFileProcessor fileProcessor =
+                new AceFileProcessor(new TokenizerTextAnnotationBuilder(new IllinoisTokenizer()));
+        TextAnnotationBuilder taBuilder =
+                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
         for (String section : this.sections) {
             File sectionDir = new File(corpusHomeDir.getAbsolutePath() + "/" + section);
@@ -155,10 +155,9 @@ public class ACEReader extends TextAnnotationReader {
 
                 // Adding `section/fileName` as textId for annotation.
                 String textId = fileName.substring(fileName.indexOf(section + File.separator));
-                TextAnnotation ta = taBuilder.createTextAnnotation(
-                        this.corpusId,
-                        textId,
-                        doc.contentRemovingTags);
+                TextAnnotation ta =
+                        taBuilder.createTextAnnotation(this.corpusId, textId,
+                                doc.contentRemovingTags);
 
                 this.addEntityViews(ta, doc.aceAnnotation, file);
                 this.addRelationView(ta, doc.aceAnnotation, file);
@@ -173,64 +172,94 @@ public class ACEReader extends TextAnnotationReader {
     /**
      * Adds an Entity Extent View and a Coreference View to the TextAnnotation.
      *
-     * @param ta            TextAnnotation instance to add the Entity View to.
+     * @param ta TextAnnotation instance to add the Entity View to.
      * @param docAnnotation Annotation for the current document.
-     * @param file          Link to the .apf.xml file for the current document.
+     * @param file Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityCoarseView = new SpanLabelView(ViewNames.NER_ACE_COARSE_HEAD, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityFineView = new SpanLabelView(ViewNames.NER_ACE_FINE_HEAD, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityCoarseExtentView = new SpanLabelView(ViewNames.NER_ACE_COARSE_EXTENT, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityFineExtentView = new SpanLabelView(ViewNames.NER_ACE_FINE_EXTENT, ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        CoreferenceView corefHeadView = new CoreferenceView(ViewNames.COREF_HEAD, ACEReader.class.getCanonicalName(), ta, 1.0f);
-        CoreferenceView corefExtentView = new CoreferenceView(ViewNames.COREF_EXTENT, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        SpanLabelView entityCoarseView =
+                new SpanLabelView(ViewNames.NER_ACE_COARSE_HEAD,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityFineView =
+                new SpanLabelView(ViewNames.NER_ACE_FINE_HEAD, ACEReader.class.getCanonicalName(),
+                        ta, 1.0f, true);
+        SpanLabelView entityCoarseExtentView =
+                new SpanLabelView(ViewNames.NER_ACE_COARSE_EXTENT,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        SpanLabelView entityFineExtentView =
+                new SpanLabelView(ViewNames.NER_ACE_FINE_EXTENT,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f, true);
+        CoreferenceView corefHeadView =
+                new CoreferenceView(ViewNames.COREF_HEAD, ACEReader.class.getCanonicalName(), ta,
+                        1.0f);
+        CoreferenceView corefExtentView =
+                new CoreferenceView(ViewNames.COREF_EXTENT, ACEReader.class.getCanonicalName(), ta,
+                        1.0f);
 
         for (ACEEntity entity : docAnnotation.entityList) {
             List<Constituent> corefMentions = new ArrayList<>(docAnnotation.entityList.size());
             List<Constituent> corefMentionHeads = new ArrayList<>(docAnnotation.entityList.size());
 
             for (ACEEntityMention entityMention : entity.entityMentionList) {
-                int extentStartTokenId = ta.getTokenIdFromCharacterOffset(entityMention.extentStart);
+                int extentStartTokenId =
+                        ta.getTokenIdFromCharacterOffset(entityMention.extentStart);
                 int extentEndTokenId = ta.getTokenIdFromCharacterOffset(entityMention.extentEnd);
 
-                if (extentStartTokenId < 0 || extentEndTokenId < 0 || extentStartTokenId > extentEndTokenId + 1) {
-                    logger.error("Incorrect Extent Token Span for mention - " + entity.id + " " + entityMention.id);
+                if (extentStartTokenId < 0 || extentEndTokenId < 0
+                        || extentStartTokenId > extentEndTokenId + 1) {
+                    logger.error("Incorrect Extent Token Span for mention - " + entity.id + " "
+                            + entityMention.id);
                     continue;
                 }
 
-                Constituent extentConstituent = new Constituent(entity.type, ViewNames.NER_ACE_COARSE_EXTENT, ta, extentStartTokenId, extentEndTokenId + 1);
+                Constituent extentConstituent =
+                        new Constituent(entity.type, ViewNames.NER_ACE_COARSE_EXTENT, ta,
+                                extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
                 extentConstituent.addAttribute(EntityMentionTypeAttribute, entityMention.type);
                 extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
 
-                if (entity.subtype != null) extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
+                if (entity.subtype != null)
+                    extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
                 if (entityMention.ldcType != null)
-                    extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
+                    extentConstituent.addAttribute(EntityMentionLDCTypeAttribute,
+                            entityMention.ldcType);
 
-                extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
+                extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart
+                        + "");
                 extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
 
                 entityCoarseExtentView.addConstituent(extentConstituent);
 
                 // Clone constituent for the ENTITYVIEW_FINE SpanLabelView
                 String subTypeLabel = (entity.subtype != null) ? entity.subtype : entity.type;
-                Constituent fineExtentConstituent = extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.NER_ACE_FINE_EXTENT, subTypeLabel);
+                Constituent fineExtentConstituent =
+                        extentConstituent.cloneForNewViewWithDestinationLabel(
+                                ViewNames.NER_ACE_FINE_EXTENT, subTypeLabel);
                 entityFineExtentView.addConstituent(fineExtentConstituent);
 
-                Constituent headConstituent = ACEReader.getEntityHeadForConstituent(extentConstituent, ta, ViewNames.NER_ACE_COARSE_HEAD);
+                Constituent headConstituent =
+                        ACEReader.getEntityHeadForConstituent(extentConstituent, ta,
+                                ViewNames.NER_ACE_COARSE_HEAD);
                 if (headConstituent != null) {
                     entityCoarseView.addConstituent(headConstituent);
-                    Constituent fineHead = headConstituent.cloneForNewViewWithDestinationLabel(ViewNames.NER_ACE_FINE_HEAD, subTypeLabel);
+                    Constituent fineHead =
+                            headConstituent.cloneForNewViewWithDestinationLabel(
+                                    ViewNames.NER_ACE_FINE_HEAD, subTypeLabel);
 
                     entityFineView.addConstituent(fineHead);
                 }
 
-                Constituent corefExtentConstituent = extentConstituent.cloneForNewViewWithDestinationLabel(ViewNames.COREF_EXTENT, entity.id);
+                Constituent corefExtentConstituent =
+                        extentConstituent.cloneForNewViewWithDestinationLabel(
+                                ViewNames.COREF_EXTENT, entity.id);
                 corefMentions.add(corefExtentConstituent);
 
-                Constituent corefHeadConstituent = getEntityHeadForConstituent(corefExtentConstituent, ta, ViewNames.COREF_HEAD);
+                Constituent corefHeadConstituent =
+                        getEntityHeadForConstituent(corefExtentConstituent, ta,
+                                ViewNames.COREF_HEAD);
                 if (corefHeadConstituent != null) {
                     corefMentionHeads.add(corefHeadConstituent);
                 }
@@ -245,7 +274,8 @@ public class ACEReader extends TextAnnotationReader {
                 scores[i] = cons.getConstituentScore();
 
                 if (canonicalMention == null
-                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm().length())
+                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm()
+                                .length())
                     canonicalMention = cons;
             }
 
@@ -265,7 +295,8 @@ public class ACEReader extends TextAnnotationReader {
                 scores[i] = cons.getConstituentScore();
 
                 if (canonicalMention == null
-                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm().length())
+                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm()
+                                .length())
                     canonicalMention = cons;
             }
 
@@ -287,20 +318,28 @@ public class ACEReader extends TextAnnotationReader {
 
 
     /**
-     * Adds a PredicateArgumentView for ACE Relations between Entities.
-     * The Predicate constituent of the View presents the first Argument in the ACE Relation.
-     * The Argument constituent of the View presents the second Argument in the ACE Relation.
+     * Adds a PredicateArgumentView for ACE Relations between Entities. The Predicate constituent of
+     * the View presents the first Argument in the ACE Relation. The Argument constituent of the
+     * View presents the second Argument in the ACE Relation.
      *
-     * @param ta            TextAnnotation instance to add the Relation View to.
+     * @param ta TextAnnotation instance to add the Relation View to.
      * @param docAnnotation Annotation for the current document.
-     * @param file          Link to the .apf.xml file for the current document.
+     * @param file Link to the .apf.xml file for the current document.
      */
     private void addRelationView(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        PredicateArgumentView relationCoarseView = new PredicateArgumentView(ViewNames.RELATION_ACE_COARSE_EXTENT, ACEReader.class.getCanonicalName(), ta, 1.0f);
-        PredicateArgumentView relationFineView = new PredicateArgumentView(ViewNames.RELATION_ACE_FINE_EXTENT, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationCoarseView =
+                new PredicateArgumentView(ViewNames.RELATION_ACE_COARSE_EXTENT,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationFineView =
+                new PredicateArgumentView(ViewNames.RELATION_ACE_FINE_EXTENT,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f);
 
-        PredicateArgumentView relationCoarseHeadView = new PredicateArgumentView(ViewNames.RELATION_ACE_COARSE_HEAD, ACEReader.class.getCanonicalName(), ta, 1.0f);
-        PredicateArgumentView relationFineHeadView = new PredicateArgumentView(ViewNames.RELATION_ACE_FINE_HEAD, ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationCoarseHeadView =
+                new PredicateArgumentView(ViewNames.RELATION_ACE_COARSE_HEAD,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f);
+        PredicateArgumentView relationFineHeadView =
+                new PredicateArgumentView(ViewNames.RELATION_ACE_FINE_HEAD,
+                        ACEReader.class.getCanonicalName(), ta, 1.0f);
 
         CoreferenceView entityCorefView = (CoreferenceView) ta.getView(ViewNames.COREF_EXTENT);
         Set<Constituent> allCanonicalEntities = entityCorefView.getCanonicalEntitiesViaRelations();
@@ -357,13 +396,16 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 if (firstArgumentMention == null || secondArgumentMention == null) {
-                    logger.error("Cannot find participating mention for relation id - " + relation.id + " " + relationMention.id);
+                    logger.error("Cannot find participating mention for relation id - "
+                            + relation.id + " " + relationMention.id);
                     continue;
                 }
 
-                // Use the coreference view edges to find the coreferent mentions that is used in the current relation mention.
+                // Use the coreference view edges to find the coreferent mentions that is used in
+                // the current relation mention.
                 Constituent firstArgument = null;
-                for (Constituent args : entityCorefView.getCoreferentMentionsViaRelations(firstArgumentCanonicalMention)) {
+                for (Constituent args : entityCorefView
+                        .getCoreferentMentionsViaRelations(firstArgumentCanonicalMention)) {
                     if (args.getAttribute(EntityMentionIDAttribute).equals(firstArgumentMention.id)) {
                         firstArgument = args;
                         break;
@@ -371,79 +413,96 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 Constituent secondArgument = null;
-                for (Constituent args : entityCorefView.getCoreferentMentionsViaRelations(secondArgumentCanonicalMention)) {
-                    if (args.getAttribute(EntityMentionIDAttribute).equals(secondArgumentMention.id)) {
+                for (Constituent args : entityCorefView
+                        .getCoreferentMentionsViaRelations(secondArgumentCanonicalMention)) {
+                    if (args.getAttribute(EntityMentionIDAttribute)
+                            .equals(secondArgumentMention.id)) {
                         secondArgument = args;
                         break;
                     }
                 }
 
                 if (firstArgument == null || secondArgument == null) {
-                    logger.error("Failed to find mentions for relation id - " + relation.id + " " + relationMention.id);
+                    logger.error("Failed to find mentions for relation id - " + relation.id + " "
+                            + relationMention.id);
                     continue;
                 }
 
                 // Clone mentions for the relation view.
-                firstArgument = firstArgument.cloneForNewViewWithDestinationLabel(ViewNames.RELATION_ACE_COARSE_EXTENT, firstArgumentMention.role);
-                secondArgument = secondArgument.cloneForNewViewWithDestinationLabel(ViewNames.RELATION_ACE_COARSE_EXTENT, secondArgumentMention.role);
+                firstArgument =
+                        firstArgument.cloneForNewViewWithDestinationLabel(
+                                ViewNames.RELATION_ACE_COARSE_EXTENT, firstArgumentMention.role);
+                secondArgument =
+                        secondArgument.cloneForNewViewWithDestinationLabel(
+                                ViewNames.RELATION_ACE_COARSE_EXTENT, secondArgumentMention.role);
 
                 // Add attributes to each of the constituents.
                 for (Constituent arg : Arrays.asList(firstArgument, secondArgument)) {
                     arg.addAttribute(RelationIDAttribute, relation.id);
                     arg.addAttribute(RelationTypeAttribute, relation.type);
 
-                    if (relation.subtype != null) arg.addAttribute(RelationSubtypeAttribute, relation.subtype);
-                    if (relation.tense != null) arg.addAttribute(RelationTenseAttribute, relation.tense);
-                    if (relation.modality != null) arg.addAttribute(RelationModalityAttribute, relation.modality);
+                    if (relation.subtype != null)
+                        arg.addAttribute(RelationSubtypeAttribute, relation.subtype);
+                    if (relation.tense != null)
+                        arg.addAttribute(RelationTenseAttribute, relation.tense);
+                    if (relation.modality != null)
+                        arg.addAttribute(RelationModalityAttribute, relation.modality);
 
                     arg.addAttribute(RelationMentionIDAttribute, relationMention.id);
-                    arg.addAttribute(RelationMentionLexicalConditionAttribute, relationMention.lexicalCondition);
+                    arg.addAttribute(RelationMentionLexicalConditionAttribute,
+                            relationMention.lexicalCondition);
                 }
 
-                firstArgument.addAttribute(RelationMentionArgumentIDAttribute, firstArgumentMention.id);
-                firstArgument.addAttribute(RelationMentionArgumentRoleAttribute, firstArgumentMention.role);
+                firstArgument.addAttribute(RelationMentionArgumentIDAttribute,
+                        firstArgumentMention.id);
+                firstArgument.addAttribute(RelationMentionArgumentRoleAttribute,
+                        firstArgumentMention.role);
 
-                secondArgument.addAttribute(RelationMentionArgumentIDAttribute, secondArgumentMention.id);
-                secondArgument.addAttribute(RelationMentionArgumentRoleAttribute, secondArgumentMention.role);
+                secondArgument.addAttribute(RelationMentionArgumentIDAttribute,
+                        secondArgumentMention.id);
+                secondArgument.addAttribute(RelationMentionArgumentRoleAttribute,
+                        secondArgumentMention.role);
 
                 // Add relation to the coarse view.
-                relationCoarseView.addPredicateArguments(
-                        firstArgument,
-                        Collections.singletonList(secondArgument),
-                        new String[]{relation.type},
-                        new double[]{1.0f});
+                relationCoarseView.addPredicateArguments(firstArgument,
+                        Collections.singletonList(secondArgument), new String[] {relation.type},
+                        new double[] {1.0f});
 
-                Constituent firstArgumentHead = getEntityHeadForConstituent(firstArgument, ta, ViewNames.RELATION_ACE_COARSE_HEAD);
-                Constituent secondArgumentHead = getEntityHeadForConstituent(secondArgument, ta, ViewNames.RELATION_ACE_COARSE_HEAD);
+                Constituent firstArgumentHead =
+                        getEntityHeadForConstituent(firstArgument, ta,
+                                ViewNames.RELATION_ACE_COARSE_HEAD);
+                Constituent secondArgumentHead =
+                        getEntityHeadForConstituent(secondArgument, ta,
+                                ViewNames.RELATION_ACE_COARSE_HEAD);
 
                 if (firstArgumentHead != null && secondArgumentHead != null) {
-                    relationCoarseHeadView.addPredicateArguments(
-                            firstArgumentHead,
+                    relationCoarseHeadView.addPredicateArguments(firstArgumentHead,
                             Collections.singletonList(secondArgumentHead),
-                            new String[]{relation.type},
-                            new double[]{1.0f});
+                            new String[] {relation.type}, new double[] {1.0f});
                 }
 
                 // Adding relation to the fine view.
-                Constituent fineFirstArg = firstArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE_EXTENT);
-                Constituent fineSecondArg = secondArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE_EXTENT);
+                Constituent fineFirstArg =
+                        firstArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE_EXTENT);
+                Constituent fineSecondArg =
+                        secondArgument.cloneForNewView(ViewNames.RELATION_ACE_FINE_EXTENT);
 
                 String subTypeLabel = (relation.subtype != null) ? relation.subtype : relation.type;
-                relationFineView.addPredicateArguments(
-                        fineFirstArg,
-                        Collections.singletonList(fineSecondArg),
-                        new String[]{subTypeLabel},
-                        new double[]{1.0f});
+                relationFineView.addPredicateArguments(fineFirstArg,
+                        Collections.singletonList(fineSecondArg), new String[] {subTypeLabel},
+                        new double[] {1.0f});
 
-                Constituent fineFirstArgumentHead = getEntityHeadForConstituent(fineFirstArg, ta, ViewNames.RELATION_ACE_COARSE_HEAD);
-                Constituent fineSecondArgumentHead = getEntityHeadForConstituent(fineSecondArg, ta, ViewNames.RELATION_ACE_COARSE_HEAD);
+                Constituent fineFirstArgumentHead =
+                        getEntityHeadForConstituent(fineFirstArg, ta,
+                                ViewNames.RELATION_ACE_COARSE_HEAD);
+                Constituent fineSecondArgumentHead =
+                        getEntityHeadForConstituent(fineSecondArg, ta,
+                                ViewNames.RELATION_ACE_COARSE_HEAD);
 
                 if (fineFirstArgumentHead != null && fineSecondArgumentHead != null) {
-                    relationFineHeadView.addPredicateArguments(
-                            fineFirstArgumentHead,
+                    relationFineHeadView.addPredicateArguments(fineFirstArgumentHead,
                             Collections.singletonList(fineSecondArgumentHead),
-                            new String[]{subTypeLabel},
-                            new double[]{1.0f});
+                            new String[] {subTypeLabel}, new double[] {1.0f});
                 }
             }
         }
@@ -462,9 +521,8 @@ public class ACEReader extends TextAnnotationReader {
     }
 
     /**
-     * Returns {@code true} if the iteration has more elements.
-     * (In other words, returns {@code true} if {@link #next} would
-     * return an element rather than throwing an exception.)
+     * Returns {@code true} if the iteration has more elements. (In other words, returns
+     * {@code true} if {@link #next} would return an element rather than throwing an exception.)
      *
      * @return {@code true} if the iteration has more elements
      */
@@ -473,21 +531,22 @@ public class ACEReader extends TextAnnotationReader {
         return this.documents.size() > this.currentAnnotationId;
     }
 
-    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent, TextAnnotation textAnnotation, String viewName) {
-        int startCharOffset = Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadStartCharOffset));
-        int endCharOffset = Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset));
+    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
+            TextAnnotation textAnnotation, String viewName) {
+        int startCharOffset =
+                Integer.parseInt(extentConstituent
+                        .getAttribute(ACEReader.EntityHeadStartCharOffset));
+        int endCharOffset =
+                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset));
         int start_token = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
         int end_token = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
 
         if (start_token >= 0 && end_token >= 0 && !(end_token - start_token < 0)) {
-            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token number exclusive
-            Constituent cons = new Constituent(
-                    extentConstituent.getLabel(),
-                    1.0,
-                    viewName,
-                    textAnnotation,
-                    start_token,
-                    end_token + 1);
+            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token
+            // number exclusive
+            Constituent cons =
+                    new Constituent(extentConstituent.getLabel(), 1.0, viewName, textAnnotation,
+                            start_token, end_token + 1);
 
             for (String attributeKey : extentConstituent.getAttributeKeys()) {
                 cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));

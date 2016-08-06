@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments;
@@ -179,7 +176,7 @@ public class ClassificationTester {
     // Average of macro statistics, returns average of the F1, P and R across different labels
     public double getMacroF1() {
         double sumF1 = 0;
-        for(EvaluationRecord e : labelWiseRecords.values()) {
+        for (EvaluationRecord e : labelWiseRecords.values()) {
             sumF1 += e.getF1();
         }
         return sumF1 / labelWiseRecords.size();
@@ -187,7 +184,7 @@ public class ClassificationTester {
 
     public double getMacroPrecision() {
         double sumPrecision = 0;
-        for(EvaluationRecord e : labelWiseRecords.values()) {
+        for (EvaluationRecord e : labelWiseRecords.values()) {
             sumPrecision += e.getPrecision();
         }
         return sumPrecision / labelWiseRecords.size();
@@ -195,7 +192,7 @@ public class ClassificationTester {
 
     public double getMacroRecall() {
         double sumRecall = 0;
-        for(EvaluationRecord e : labelWiseRecords.values()) {
+        for (EvaluationRecord e : labelWiseRecords.values()) {
             sumRecall += e.getRecall();
         }
         return sumRecall / labelWiseRecords.size();

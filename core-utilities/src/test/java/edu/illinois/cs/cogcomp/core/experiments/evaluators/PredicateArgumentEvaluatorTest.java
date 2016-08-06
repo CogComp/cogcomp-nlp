@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -34,9 +31,9 @@ public class PredicateArgumentEvaluatorTest {
 
         String[] viewsToAdd = {ViewNames.SRL_VERB};
         TextAnnotation taGold =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         TextAnnotation taPred =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         gold = (PredicateArgumentView) taGold.getView(ViewNames.SRL_VERB);
         predicted = (PredicateArgumentView) taPred.getView(ViewNames.SRL_VERB);
     }

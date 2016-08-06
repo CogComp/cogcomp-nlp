@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -31,9 +28,9 @@ import java.util.Map.Entry;
 import java.util.zip.GZIPInputStream;
 
 /**
- * Use this class to create a brown cluster view for your text.
- * Modified May 2016 to support multiple simulatenous brown cluster views,
- *    distinguished by the name passed by the client (suffix to ViewNames.BROWN_CLUSTERS)
+ * Use this class to create a brown cluster view for your text. Modified May 2016 to support
+ * multiple simulatenous brown cluster views, distinguished by the name passed by the client (suffix
+ * to ViewNames.BROWN_CLUSTERS)
  *
  * @author Vivek Srikumar
  */
@@ -149,8 +146,7 @@ public class BrownClusterViewGenerator extends Annotator {
 
         lazyLoadClusters();
 
-        SpanLabelView view =
-                new SpanLabelView(getViewName(), "BrownClusters", ta, 1.0, true);
+        SpanLabelView view = new SpanLabelView(getViewName(), "BrownClusters", ta, 1.0, true);
 
         Map<String, List<IntPair>> m = getMatchingSpans(ta);
 

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -25,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 public class JsonToolsTest {
 
     @Test
-    public void testStringArray(){
+    public void testStringArray() {
         String[] array = new String[] {"a", "b", "c"};
         JsonArray jsonArray = JsonTools.createJsonArrayFromArray(array);
 
@@ -34,8 +31,10 @@ public class JsonToolsTest {
     }
 
     @Test
-    public void testTextAnnotationArray(){
-        TextAnnotation[] array = new TextAnnotation[]{DummyTextAnnotationGenerator.generateBasicTextAnnotation(2), DummyTextAnnotationGenerator.generateBasicTextAnnotation(1)};
+    public void testTextAnnotationArray() {
+        TextAnnotation[] array =
+                new TextAnnotation[] {DummyTextAnnotationGenerator.generateBasicTextAnnotation(2),
+                        DummyTextAnnotationGenerator.generateBasicTextAnnotation(1)};
         JsonArray jsonArray = JsonTools.createJsonArrayFromArray(array);
 
         assertEquals(2, jsonArray.size());

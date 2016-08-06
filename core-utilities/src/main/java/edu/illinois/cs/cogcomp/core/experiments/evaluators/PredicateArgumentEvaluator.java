@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -29,8 +26,8 @@ public class PredicateArgumentEvaluator extends Evaluator {
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
     public void evaluateSense(ClassificationTester senseTester, View goldView, View predictionView) {
-        gold = (PredicateArgumentView)goldView;
-        prediction = (PredicateArgumentView)predictionView;
+        gold = (PredicateArgumentView) goldView;
+        prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (goldToPredictionPredicateMapping.containsKey(gp)) {
@@ -57,8 +54,8 @@ public class PredicateArgumentEvaluator extends Evaluator {
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
         super.cleanAttributes(goldView, predictionView);
-        gold = (PredicateArgumentView)goldView;
-        prediction = (PredicateArgumentView)predictionView;
+        gold = (PredicateArgumentView) goldView;
+        prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (!goldToPredictionPredicateMapping.containsKey(gp)) {
