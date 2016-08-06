@@ -390,10 +390,4 @@ public class DummyTextAnnotationGenerator {
         srlView.addPredicateArguments(predicate, args, argLabels, scores);
 
     }
-
-    public static void main(String[] args) {
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
-        System.out.println(ta);
-        System.out.println(SerializationHelper.serializeToJson(ta));
-    }
 }
