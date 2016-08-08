@@ -203,7 +203,7 @@ DummyTextAnnotationGenerator {
      *
      * @param withNoisyLabels whether to nosify the annotation or not
      * @param sentenceNum The number of sentences that the {@link TextAnnotation} will contain
-     * @return A dummy basic {@link TextAnnotation}
+     * @return An annotated {@link TextAnnotation}
      */
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels,
                                                                  int sentenceNum) {
@@ -212,9 +212,18 @@ DummyTextAnnotationGenerator {
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
                                                                  boolean withNoisyLabels, int sentenceNum) {
+        // we can do at-most 3 sentences, for now
+        if(sentenceNum > 3) {
+            logger.error("Currently this function supports at most 3 sentences per TextAnnotation. If you need more, " +
+                    "you have to augment this function");
+            throw new RuntimeException();
+        }
+
         // at least one sentence
-        // and we can do at-most 3 sentences, for now
-        assert (sentenceNum <= 3 && sentenceNum >= 1);
+        if(sentenceNum < 1) {
+            logger.error("The requested TextAnnotation has to have at least one sentence. ");
+            throw new RuntimeException();
+        }
 
         List<String[]> annotatedTokenizedStringArrayAll = new ArrayList<>();
         annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray1);
