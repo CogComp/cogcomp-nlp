@@ -23,10 +23,9 @@ import java.util.*;
  * @author Daniel Khashabi
  * @author Christos Christodoulopoulos
  */
-public class DummyTextAnnotationGenerator {
+public class
+DummyTextAnnotationGenerator {
     static Logger logger = LoggerFactory.getLogger(DummyTextAnnotationGenerator.class);
-
-    static String basicString = "To annotate or not ; that is the question .";
 
     static String annotatedString1 =
             "The construction of the John Smith library finished on time .";
@@ -193,39 +192,35 @@ public class DummyTextAnnotationGenerator {
         verbSRLArgs_noisy4.put(new IntPair(26, 28), "AM-MNR");
     }
 
-    /**
-     * Generate a basic {@link TextAnnotation} (containing just SENTENCE and TOKENS {@link View}s)
-     * with the same dummy text repeated over a number of sentences.
-     *
-     * @param numSentences The number of sentences that the {@link TextAnnotation} will contain
-     * @return A dummy basic {@link TextAnnotation}
-     */
-    public static TextAnnotation generateBasicTextAnnotation(int numSentences) {
-        int i = 0;
-        List<String[]> docs = new ArrayList<>();
-        while (i < numSentences) {
-            docs.add(basicString.split(" "));
-            i++;
-        }
-        return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(docs);
-    }
 
     private static String[] allPossibleViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
             ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB, ViewNames.NER_CONLL,
             ViewNames.PSEUDO_PARSE_STANFORD};
 
+    /**
+     * Generate a {@link TextAnnotation} (containing a set of {@link View}s specified in the input)
+     * with the some dummy text repeated over a number of sentences.
+     *
+     * @param withNoisyLabels whether to nosify the annotation or not
+     * @param sentenceNum The number of sentences that the {@link TextAnnotation} will contain
+     * @return A dummy basic {@link TextAnnotation}
+     */
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels,
-                                                                 int sentenceLength) {
-        return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels, sentenceLength);
+                                                                 int sentenceNum) {
+        return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels, sentenceNum);
     }
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
-                                                                 boolean withNoisyLabels, int sentenceLength) {
+                                                                 boolean withNoisyLabels, int sentenceNum) {
+        // at least one sentence
+        // and we can do at-most 3 sentences, for now
+        assert (sentenceNum <= 3 && sentenceNum >= 1);
+
         List<String[]> annotatedTokenizedStringArrayAll = new ArrayList<>();
         annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray1);
-        if(sentenceLength > 1)
+        if(sentenceNum > 1)
             annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray2);
-        if(sentenceLength > 2)
+        if(sentenceNum > 2)
             annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray3);
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(annotatedTokenizedStringArrayAll);
 
@@ -233,30 +228,30 @@ public class DummyTextAnnotationGenerator {
             switch (viewName) {
                 case ViewNames.POS:
                     TokenLabelView posView = new TokenLabelView(viewName, ta);
-                    String[] pos1Overall = (withNoisyLabels) ? pos1 : pos_noisy1;
-                    String[] pos2Overall = (withNoisyLabels) ? pos2 : pos_noisy2;
-                    String[] pos3Overall = (withNoisyLabels) ? pos3 : pos_noisy3;
+                    String[] pos1Overall = withNoisyLabels ? pos1 : pos_noisy1;
+                    String[] pos2Overall = withNoisyLabels ? pos2 : pos_noisy2;
+                    String[] pos3Overall = withNoisyLabels ? pos3 : pos_noisy3;
                     for (int i = 0; i < pos1Overall.length; i++)
                         posView.addTokenLabel(i, pos1Overall[i], 1.0);
-                    if (sentenceLength > 1)
+                    if (sentenceNum > 1)
                         for (int i = 0; i < pos2Overall.length; i++)
                             posView.addTokenLabel(pos1Overall.length + i, pos2Overall[i], 1.0);
-                    if (sentenceLength > 2)
+                    if (sentenceNum > 2)
                         for (int i = 0; i < pos3Overall.length; i++)
                             posView.addTokenLabel(pos1Overall.length + pos2Overall.length + i, pos3Overall[i], 1.0);
                     ta.addView(viewName, posView);
                     break;
                 case ViewNames.LEMMA:
                     TokenLabelView lemmaView = new TokenLabelView(ViewNames.LEMMA, ta);
-                    String[] lemmaOveral1 = (withNoisyLabels) ? lemmas1 : lemmas_noisy1;
-                    String[] lemmaOveral2 = (withNoisyLabels) ? lemmas2 : lemmas_noisy2;
-                    String[] lemmaOveral3 = (withNoisyLabels) ? lemmas3 : lemmas_noisy3;
+                    String[] lemmaOveral1 = withNoisyLabels ? lemmas1 : lemmas_noisy1;
+                    String[] lemmaOveral2 = withNoisyLabels ? lemmas2 : lemmas_noisy2;
+                    String[] lemmaOveral3 = withNoisyLabels ? lemmas3 : lemmas_noisy3;
                     for (int i = 0; i < lemmaOveral1.length; i++)
                         lemmaView.addTokenLabel(i, lemmaOveral1[i], 1.0);
-                    if (sentenceLength > 1)
+                    if (sentenceNum > 1)
                         for (int i = 0; i < lemmaOveral2.length; i++)
                             lemmaView.addTokenLabel(lemmaOveral1.length + i, lemmaOveral2[i], 1.0);
-                    if (sentenceLength > 2)
+                    if (sentenceNum > 2)
                         for (int i = 0; i < lemmaOveral3.length; i++)
                             lemmaView.addTokenLabel(lemmaOveral1.length + lemmaOveral2.length +  i, lemmaOveral3[i], 1.0);
                     ta.addView(viewName, lemmaView);
@@ -264,19 +259,19 @@ public class DummyTextAnnotationGenerator {
                 case ViewNames.SHALLOW_PARSE:
                     SpanLabelView chunkView = new SpanLabelView(ViewNames.SHALLOW_PARSE, ta);
                     Map<IntPair, String> chunkOverall1 =
-                            (withNoisyLabels) ? chunks_noisy1 : chunks1;
+                            withNoisyLabels ? chunks_noisy1 : chunks1;
                     Map<IntPair, String> chunkOverall2 =
-                            (withNoisyLabels) ? chunks_noisy2 : chunks2;
+                            withNoisyLabels ? chunks_noisy2 : chunks2;
                     Map<IntPair, String> chunkOverall3 =
-                            (withNoisyLabels) ? chunks_noisy3 : chunks3;
+                            withNoisyLabels ? chunks_noisy3 : chunks3;
                     for (IntPair span : chunkOverall1.keySet())
                         chunkView.addSpanLabel(span.getFirst(), span.getSecond(),
                                 chunkOverall1.get(span), 1.0);
-                    if (sentenceLength > 1)
+                    if (sentenceNum > 1)
                         for (IntPair span : chunkOverall2.keySet())
                             chunkView.addSpanLabel(span.getFirst(), span.getSecond(),
                                     chunkOverall2.get(span), 1.0);
-                    if (sentenceLength > 2)
+                    if (sentenceNum > 2)
                         for (IntPair span : chunkOverall3.keySet())
                             chunkView.addSpanLabel(span.getFirst(), span.getSecond(),
                                     chunkOverall3.get(span), 1.0);
@@ -290,11 +285,11 @@ public class DummyTextAnnotationGenerator {
                     for (IntPair span : nerSource1.keySet())
                         nerView.addSpanLabel(span.getFirst(), span.getSecond(),
                                 nerSource1.get(span), 1.0);
-                    if (sentenceLength > 1)
+                    if (sentenceNum > 1)
                         for (IntPair span : nerSource2.keySet())
                             nerView.addSpanLabel(span.getFirst(), span.getSecond(),
                                     nerSource2.get(span), 1.0);
-                    if (sentenceLength > 2)
+                    if (sentenceNum > 2)
                         for (IntPair span : nerSource3.keySet())
                             nerView.addSpanLabel(span.getFirst(), span.getSecond(),
                                     nerSource3.get(span), 1.0);
@@ -311,10 +306,10 @@ public class DummyTextAnnotationGenerator {
                     String treeOveral3 = withNoisyLabels ? tree_noisy3 : tree3;
                     parseView.setParseTree(0,
                             TreeParserFactory.getStringTreeParser().parse(treeOveral1));
-                    if (sentenceLength > 1)
+                    if (sentenceNum > 1)
                         parseView.setParseTree(1,
                                 TreeParserFactory.getStringTreeParser().parse(treeOveral2));
-                    if (sentenceLength > 2)
+                    if (sentenceNum > 2)
                         parseView.setParseTree(2,
                                 TreeParserFactory.getStringTreeParser().parse(treeOveral3));
                     ta.addView(viewName, parseView);
@@ -330,7 +325,7 @@ public class DummyTextAnnotationGenerator {
                             (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
                             (withNoisyLabels ? verbSRLArgs_noisy1 : verbSRLArgs1));
 
-                    if(sentenceLength > 1) {
+                    if(sentenceNum > 1) {
                         addSrlFrame(
                                 verbSRLView,
                                 viewName,
@@ -340,7 +335,7 @@ public class DummyTextAnnotationGenerator {
                                 (withNoisyLabels ? verbSRLArgs_noisy2 : verbSRLArgs2));
                     }
 
-                    if(sentenceLength > 2) {
+                    if(sentenceNum > 2) {
                         addSrlFrame(
                                 verbSRLView,
                                 viewName,
