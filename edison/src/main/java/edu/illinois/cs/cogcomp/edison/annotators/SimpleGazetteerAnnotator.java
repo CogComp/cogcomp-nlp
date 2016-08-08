@@ -45,8 +45,8 @@ public class SimpleGazetteerAnnotator extends Annotator {
     ArrayList<GazetteerTree> dictionariesIgnoreCase = new ArrayList<>();
 
     /**
-     * Making this private ensures singleton.
-     * @param phrase_length the max length of the phrases we will consider.
+     * Loads phrases of length 4 or less from specified gazetteers.
+     * @param pathToDictionaries directory containing the gazetteer files
      * @throws IOException
      * @throws URISyntaxException 
      */
@@ -56,8 +56,8 @@ public class SimpleGazetteerAnnotator extends Annotator {
     }
 
     /**
-     * Making this private ensures singleton.
      * @param phrase_length the max length of the phrases we will consider.
+     * @param pathToDictionaries directory containing the gazetteer files
      * @throws IOException
      * @throws URISyntaxException 
      */
@@ -69,7 +69,7 @@ public class SimpleGazetteerAnnotator extends Annotator {
     /**
      * Lists the contents of a directory that exists either in the local path or in the classpath
      * 
-     * @param directory The name of the directory containing the gazetteers
+     * @param resourceDir The name of the directory containing the gazetteers
      * @return An array of URL objects to be read
      * @throws IOException
      * @throws  
