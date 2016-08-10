@@ -41,7 +41,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class SimpleGazetteerAnnotatorTest {
-    /** this helper can create text annotations from text. */
+	private static final boolean IS_LAZILY_INITIALIZED = false;
+	/** this helper can create text annotations from text. */
     protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
 	/**
@@ -79,7 +80,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testMultiThreading() throws IOException, URISyntaxException, AnnotatorException {
-		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
+		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/", IS_LAZILY_INITIALIZED);
 		class TestThread extends Thread {
 			Throwable throwable;
 			public void run() {
@@ -153,7 +154,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testAddView() throws IOException, URISyntaxException, AnnotatorException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/", false);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		TextAnnotation ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -177,7 +178,7 @@ public class SimpleGazetteerAnnotatorTest {
 		assertEquals(c4.getLabel(),"places(IC)");
 		assertEquals(c5.getLabel(),"places(IC)");
 		
-		sga = new SimpleGazetteerAnnotator(4, "/testgazetteers");
+		sga = new SimpleGazetteerAnnotator(4, "/testgazetteers", false);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -211,25 +212,25 @@ public class SimpleGazetteerAnnotatorTest {
 	}
 
 	/**
-	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(java.lang.String)}.
+	 * Test method for {@link SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(String, boolean)}.
 	 * @throws URISyntaxException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSimpleGazetteerAnnotatorString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator("/testgazetteers/");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator("/testgazetteers/", false);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 	}
 
 	/**
-	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(int, java.lang.String)}.
+	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(int, java.lang.String, boolean}.
 	 * @throws URISyntaxException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSimpleGazetteerAnnotatorIntString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/", false);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 	}

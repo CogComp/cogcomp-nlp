@@ -36,15 +36,38 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 public class ChunkerAnnotator extends Annotator {
     private static final String NAME = ChunkerAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(ChunkerAnnotator.class);
-    private Chunker tagger = new Chunker();
+    private Chunker tagger;
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
     private String sentencesfield = ViewNames.SENTENCE;
 
 
-    public ChunkerAnnotator() {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS});
+    /**
+     * default: don't use lazy initialization
+     */
+    public ChunkerAnnotator()
+    {
+        this( false );
     }
+
+    /**
+     * Constructor parameter allows user to specify whether or not to lazily initialize.
+     *
+     * @param lazilyInitialize If set to 'true', models will not be loaded until first call requiring Chunker annotation.
+     */
+    public ChunkerAnnotator(boolean lazilyInitialize ) {
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize );
+
+    }
+
+    @Override
+    public void initialize()
+    {
+        logger.info( "Initializing " + NAME );
+        tagger = new Chunker();
+        super.setIsInitialized();
+    }
+
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {

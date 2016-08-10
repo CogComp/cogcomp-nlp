@@ -33,10 +33,14 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
  * This class contains all the gazetteer data and the tree used to search for 
  * term and phrase matches. This class SHOULD ONLY BE INSTANTIATED once per 
  * gazetteer set, as the gazetteers are quite large and thread safe.
+ * By default, uses lazy initialization.
  * 
  * @author redman
  */
 public class SimpleGazetteerAnnotator extends Annotator {
+
+    private final int phraseLength;
+    private final String pathToDictionaries;
 
     /** this hash tree contains the terms as exactly as they are. */
     ArrayList<GazetteerTree> dictionaries = new ArrayList<>();
@@ -44,26 +48,40 @@ public class SimpleGazetteerAnnotator extends Annotator {
     /** this hash tree contains the terms in lowercase. */
     ArrayList<GazetteerTree> dictionariesIgnoreCase = new ArrayList<>();
 
+
     /**
-     * Loads phrases of length 4 or less from specified gazetteers.
+     * Loads phrases of length 4 or less from specified gazetteers. Uses lazy initialization: resource files won't be
+     *     loaded until this annotator is called on to populate a View.
+     *
      * @param pathToDictionaries directory containing the gazetteer files
      * @throws IOException
-     * @throws URISyntaxException 
+     * @throws URISyntaxException
      */
     public SimpleGazetteerAnnotator(String pathToDictionaries) throws IOException, URISyntaxException {
-        super(ViewNames.TREE_GAZETTEER, new String[] {ViewNames.SENTENCE, ViewNames.TOKENS});
-        init(4, pathToDictionaries);
+        this(4, pathToDictionaries, true );
     }
 
     /**
-     * @param phrase_length the max length of the phrases we will consider.
+     * Loads phrases of length 4 or less from specified gazetteers.
+     * @param pathToDictionaries directory containing the gazetteer files
+     * @param isLazilyInitialized if 'true', won't load resources until this annotator is required to populate a View
+     * @throws IOException
+     * @throws URISyntaxException 
+     */
+    public SimpleGazetteerAnnotator(String pathToDictionaries, boolean isLazilyInitialized) throws IOException, URISyntaxException {
+        this(4, pathToDictionaries, isLazilyInitialized );
+    }
+
+    /**
+     * @param phraseLength the max length of the phrases we will consider.
      * @param pathToDictionaries directory containing the gazetteer files
      * @throws IOException
      * @throws URISyntaxException 
      */
-    public SimpleGazetteerAnnotator(int phrase_length, String pathToDictionaries) throws IOException, URISyntaxException {
-        super(ViewNames.TREE_GAZETTEER, new String[] {ViewNames.SENTENCE, ViewNames.TOKENS});
-        init(phrase_length, pathToDictionaries);
+    public SimpleGazetteerAnnotator(int phraseLength, String pathToDictionaries, boolean isLazilyInitialized) throws IOException, URISyntaxException {
+        super(ViewNames.TREE_GAZETTEER, new String[] {ViewNames.SENTENCE, ViewNames.TOKENS}, isLazilyInitialized);
+        this.phraseLength = phraseLength;
+        this.pathToDictionaries = pathToDictionaries;
     }
 
     /**
@@ -90,16 +108,21 @@ public class SimpleGazetteerAnnotator extends Annotator {
     /**
      * init all the gazetters, read the terms from a file.
      * 
-     * @param pathToDictionaries the path to the dictionary files.
-     * @param phrase_length the max length of the phrases we will consider.
      * @throws IOException
      * @throws URISyntaxException 
      */
-    private void init(int phrase_length, String pathToDictionaries) throws IOException {
+    @Override
+    public void initialize() {
+//        int phrase_length, String pathToDictionaries) throws IOException {
         ArrayList<URL> filenames = new ArrayList<>();
 
         // List the Gazetteers directory (either local or in the classpath)
-        URL[] allfiles = listGazetteers(pathToDictionaries);
+        URL[] allfiles = new URL[0];
+        try {
+            allfiles = listGazetteers(pathToDictionaries);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         for (URL file : allfiles) {
         	filenames.add(file);
         }
@@ -113,8 +136,8 @@ public class SimpleGazetteerAnnotator extends Annotator {
         // init the dictionaries.
         dictionaries = new ArrayList<>(filenames.size());
         dictionariesIgnoreCase = new ArrayList<>(filenames.size());
-        GazetteerTree gaz = new GazetteerTree(phrase_length);
-        GazetteerTree gazIC = new GazetteerTree(phrase_length, new GazetteerTree.StringSplitterInterface() {
+        GazetteerTree gaz = new GazetteerTree(phraseLength);
+        GazetteerTree gazIC = new GazetteerTree(phraseLength, new GazetteerTree.StringSplitterInterface() {
             @Override
             public String[] split(String line) {
                 String tmp = line.toLowerCase();
@@ -133,18 +156,19 @@ public class SimpleGazetteerAnnotator extends Annotator {
 
         // for each dictionary, compile each of the gaz trees for each phrase permutation.
         for (URL file : filenames) {
-        	InputStream is = file.openStream();
-        	try {
+
+        	try (InputStream is = file.openStream() ) {
         		gaz.readDictionary(IOUtils.getFileName(file.getPath()), "", is);
-        	} finally {
-        		is.close();
-        	}
-        	is = file.openStream();
-        	try {
+        	} catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            try ( InputStream is = file.openStream() ) {
         		gazIC.readDictionary(IOUtils.getFileName(file.getPath()), "(IC)", is);
-        	} finally {
-        		is.close();
-        	}
+        	} catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         gaz.trimToSize();
         gazIC.trimToSize();
