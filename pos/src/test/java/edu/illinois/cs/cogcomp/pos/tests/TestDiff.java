@@ -104,7 +104,7 @@ public class TestDiff {
         TextAnnotation record =
                 BasicTextAnnotationBuilder.createTextAnnotationFromTokens(refTokens);
         try {
-            annotator.addView(record);
+            annotator.getView(record);
         } catch (AnnotatorException e) {
             fail("AnnotatorException thrown!\n" + e.getMessage());
         }
