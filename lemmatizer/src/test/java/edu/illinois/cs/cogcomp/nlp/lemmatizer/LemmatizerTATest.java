@@ -53,8 +53,11 @@ public class LemmatizerTATest {
         // set non-default lemmatizer constructor params
         props.setProperty(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key,
                 LemmatizerConfigurator.TRUE);
-        IllinoisLemmatizer lem = new IllinoisLemmatizer(new ResourceManager(props));
+        ResourceManager rm = new ResourceManager(props);
 
+        IllinoisLemmatizer lem = new IllinoisLemmatizer( new LemmatizerConfigurator().getConfig(rm));
+
+        lem.initialize();
         String lemma = lem.getLemma("me", "PRP");
         assertTrue(lemma.equals("i"));
     }

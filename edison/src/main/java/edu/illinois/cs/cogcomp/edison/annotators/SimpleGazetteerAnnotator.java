@@ -27,6 +27,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.edison.config.SimpleGazetteerAnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
 
 /**
@@ -39,49 +41,37 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
  */
 public class SimpleGazetteerAnnotator extends Annotator {
 
-    private final int phraseLength;
-    private final String pathToDictionaries;
+    private int phraseLength;
+    private String pathToDictionaries;
 
     /** this hash tree contains the terms as exactly as they are. */
-    ArrayList<GazetteerTree> dictionaries = new ArrayList<>();
+    ArrayList<GazetteerTree> dictionaries;
 
     /** this hash tree contains the terms in lowercase. */
-    ArrayList<GazetteerTree> dictionariesIgnoreCase = new ArrayList<>();
+    ArrayList<GazetteerTree> dictionariesIgnoreCase;
 
 
-    /**
-     * Loads phrases of length 4 or less from specified gazetteers. Uses lazy initialization: resource files won't be
-     *     loaded until this annotator is called on to populate a View.
-     *
-     * @param pathToDictionaries directory containing the gazetteer files
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    public SimpleGazetteerAnnotator(String pathToDictionaries) throws IOException, URISyntaxException {
-        this(4, pathToDictionaries, true );
-    }
 
     /**
-     * Loads phrases of length 4 or less from specified gazetteers.
-     * @param pathToDictionaries directory containing the gazetteer files
-     * @param isLazilyInitialized if 'true', won't load resources until this annotator is required to populate a View
+     * Loads phrases of length 4 or less from gazetteers specified in default parameter
+     *   {@link SimpleGazetteerAnnotatorConfigurator#PATH_TO_DICTIONARIES}
      * @throws IOException
      * @throws URISyntaxException 
      */
-    public SimpleGazetteerAnnotator(String pathToDictionaries, boolean isLazilyInitialized) throws IOException, URISyntaxException {
-        this(4, pathToDictionaries, isLazilyInitialized );
+    public SimpleGazetteerAnnotator() throws IOException, URISyntaxException {
+        this(new SimpleGazetteerAnnotatorConfigurator().getDefaultConfig());
     }
 
     /**
-     * @param phraseLength the max length of the phrases we will consider.
-     * @param pathToDictionaries directory containing the gazetteer files
+     * ResourceManager can override properties in {@link SimpleGazetteerAnnotatorConfigurator}
      * @throws IOException
      * @throws URISyntaxException 
      */
-    public SimpleGazetteerAnnotator(int phraseLength, String pathToDictionaries, boolean isLazilyInitialized) throws IOException, URISyntaxException {
-        super(ViewNames.TREE_GAZETTEER, new String[] {ViewNames.SENTENCE, ViewNames.TOKENS}, isLazilyInitialized);
-        this.phraseLength = phraseLength;
-        this.pathToDictionaries = pathToDictionaries;
+    public SimpleGazetteerAnnotator(ResourceManager nonDefaultRm) throws IOException, URISyntaxException {
+        super(ViewNames.TREE_GAZETTEER,
+                new String[] {ViewNames.SENTENCE, ViewNames.TOKENS},
+                new SimpleGazetteerAnnotatorConfigurator().getConfig( nonDefaultRm ) );
+
     }
 
     /**
@@ -113,6 +103,8 @@ public class SimpleGazetteerAnnotator extends Annotator {
      */
     @Override
     public void initialize() {
+        this.phraseLength = nonDefaultRm.getInt( SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH );
+        this.pathToDictionaries = nonDefaultRm.getString( SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES );
 //        int phrase_length, String pathToDictionaries) throws IOException {
         ArrayList<URL> filenames = new ArrayList<>();
 

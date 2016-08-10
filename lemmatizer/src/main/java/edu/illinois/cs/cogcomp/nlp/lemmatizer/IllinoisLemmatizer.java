@@ -86,6 +86,7 @@ public class IllinoisLemmatizer extends Annotator {
         toStanford.put("them", "they");
         toStanford.put("me", "i");
         toStanford.put("an", "a");
+        setIsInitialized();
     }
 
     private void loadExceptionMap() {
@@ -179,6 +180,8 @@ public class IllinoisLemmatizer extends Annotator {
 
     public String getLemma(String word, String pos) {
 
+        if ( !isInitialized() )
+            throw new IllegalStateException( "Not initialized! are you using lazy initialization? Need to call 'initialize()' before calling this method." );
         word = word.toLowerCase();
 
         // look at file

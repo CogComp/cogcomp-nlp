@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -23,6 +24,7 @@ import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  *  A test that excludes big resource files for a quick assessment of basic NER behavior,
@@ -50,7 +52,12 @@ public class NerInitTest
         TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder( new StatefulTokenizer() );
         TextAnnotation ta = tab.createTextAnnotation(TESTSTR);
 
-        ner.addView( ta );
+        try {
+            ner.getView( ta );
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         assert( ta.hasView( ViewNames.NER_CONLL ) );
         assertEquals( ta.getView( ViewNames.NER_CONLL ).getConstituents().size(), 2 );

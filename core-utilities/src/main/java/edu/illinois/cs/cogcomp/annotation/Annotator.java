@@ -12,6 +12,7 @@ package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
@@ -46,9 +47,28 @@ public abstract class Annotator {
         this(viewName, requiredViews, false);
     }
 
+    /**
+     * explicitly declare whether lazy initialization should be used
+     * @param viewName
+     * @param requiredViews
+     * @param isLazilyInitialized
+     */
     public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized ) {
         this(viewName, requiredViews, isLazilyInitialized, new ResourceManager(new Properties()));
     }
+
+
+    /**
+     * If lazy initialization is desired, set the property {@link Configurator#IS_LAZILY_INITIALIZED} in
+     *   the ResourceManager argument
+     * @param viewName
+     * @param requiredViews
+     * @param rm
+     */
+    public Annotator(String viewName, String[] requiredViews, ResourceManager rm  ) {
+        this(viewName, requiredViews, rm.getBoolean(Configurator.IS_LAZILY_INITIALIZED.key), rm);
+    }
+
 
     /**
      * some annotators have complex initialization, so will have to pass a ResourceManager to be on hand for their
@@ -96,7 +116,7 @@ public abstract class Annotator {
      *
      * @param ta the TextAnnotation to modify.
      */
-    public abstract void addView(TextAnnotation ta) throws AnnotatorException;
+    protected abstract void addView(TextAnnotation ta) throws AnnotatorException;
 
 
     /**
