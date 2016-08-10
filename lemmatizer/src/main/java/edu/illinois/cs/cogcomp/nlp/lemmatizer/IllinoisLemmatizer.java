@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
@@ -49,16 +50,20 @@ public class IllinoisLemmatizer extends Annotator {
     private static boolean useStanford_default = false;
 
     public IllinoisLemmatizer() {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        initialize(new LemmatizerConfigurator().getDefaultConfig());
+        this(true);
+    }
+    public IllinoisLemmatizer(boolean isLazilyInitialized) {
+
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS}, isLazilyInitialized, new LemmatizerConfigurator().getDefaultConfig() );
+        initialize();
     }
 
     public IllinoisLemmatizer(ResourceManager rm) {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        initialize(new LemmatizerConfigurator().getConfig(rm));
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS}, rm.getBoolean(Configurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ), rm );
     }
 
-    private void initialize(ResourceManager rm) {
+    public void initialize() {
+        ResourceManager rm = super.nonDefaultRm;
         this.useStanford = rm.getBoolean(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key);
         wnLemmaReader = new WordnetLemmaReader(rm.getString(LemmatizerConfigurator.WN_PATH.key));
         loadVerbMap();

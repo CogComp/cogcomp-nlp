@@ -12,6 +12,9 @@ package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+
+import java.util.Properties;
 
 /**
  * An interface for creating views of a specified name from a {@link TextAnnotation}
@@ -23,21 +26,70 @@ public abstract class Annotator {
 
     protected String viewName;
     protected String[] requiredViews;
+    protected boolean isInitialized;
+
+    /**
+     * stores configuration for lazy initialization.
+     */
+    protected ResourceManager nonDefaultRm;
 
 
     /**
      * set the name of the View this Annotator creates, and the list of prerequisite Views that this
      * Annotator requires as input
      *
-     * @param viewName The name of the View this annotator will populate. This will be used to
-     *        access the created view from the TextAnnotation holding it.
+     * @param viewName      The name of the View this annotator will populate. This will be used to
+     *                      access the created view from the TextAnnotation holding it.
      * @param requiredViews The views that must be populated for this new view to be created.
      */
     public Annotator(String viewName, String[] requiredViews) {
-        this.viewName = viewName;
-        this.requiredViews = requiredViews;
+        this(viewName, requiredViews, false);
     }
 
+    public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized ) {
+        this(viewName, requiredViews, isLazilyInitialized, new ResourceManager(new Properties()));
+    }
+
+    /**
+     * some annotators have complex initialization, so will have to pass a ResourceManager to be on hand for their
+     *    initialization if non-lazy initialization is desired.
+     * @param viewName
+     * @param requiredViews
+     * @param isLazilyInitialized
+     * @param nonDefaultRm
+     */
+    public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized, ResourceManager nonDefaultRm ) {
+        this.viewName = viewName;
+        this.requiredViews = requiredViews;
+        this.isInitialized = !isLazilyInitialized;
+        this.nonDefaultRm = nonDefaultRm;
+
+        if ( !isLazilyInitialized )
+            initialize();
+    }
+
+
+
+
+    /**
+     * If you want lazy initialization, this method must load the component models/resources, allowing lazy initialization,
+     * and set the isInitialized field to 'true'.
+     * Default implementation just sets the relevant field to 'true'.
+     */
+    public void initialize()
+    {
+        isInitialized = true;
+    }
+
+
+    /**
+     * Indicates whether or not all models/resources have been loaded. Purpose is to support lazy initialization.
+     * @return 'true' if model is initialized, 'false' otherwise.
+     */
+    public boolean isInitialized()
+    {
+        return isInitialized;
+    }
 
     /**
      * create and add the view named by getViewName() to the TextAnnotation argument.
@@ -58,16 +110,31 @@ public abstract class Annotator {
 
 
     /**
-     * add the view named by getViewName() to the TextAnnotation argument, and return the View
-     *
+     * Add the view named by getViewName() to the TextAnnotation argument, and return the View
      * @param ta
      * @return the newly created View.
      * @throws AnnotatorException
      */
     public final View getView(TextAnnotation ta) throws AnnotatorException {
-        addView(ta);
+        lazyAddView(ta);
         return ta.getView(viewName);
     }
+
+    /**
+     * First, checks whether model is initialized, and calls initialize() if not.
+     * Then, calls addView().
+     * @param ta
+     */
+    private void lazyAddView(TextAnnotation ta) throws AnnotatorException {
+
+        if ( !isInitialized() )
+        {
+            initialize();
+            isInitialized = true;
+        }
+        addView(ta);
+    }
+
 
     /**
      * Can be used internally by {@link BasicAnnotatorService} to check for pre-requisites before
@@ -80,4 +147,10 @@ public abstract class Annotator {
         return requiredViews;
     }
 
+    /**
+     * derived classes call this to set the state to indicate the Annotator is initialized.
+     */
+    protected void setIsInitialized() {
+        isInitialized = true;
+    }
 }

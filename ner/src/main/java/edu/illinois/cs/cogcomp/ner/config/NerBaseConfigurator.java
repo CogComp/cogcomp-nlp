@@ -160,6 +160,8 @@ public class NerBaseConfigurator extends Configurator {
 
         props.setProperty(RANDOM_NOISE_LEVEL, DEFAULT_RANDOM_NOISE_LEVEL);
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
+        props.setProperty( Configurator.IS_LAZILY_INITIALIZED.key, TRUE );
+
         return new ResourceManager(props);
     }
 }

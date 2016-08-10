@@ -38,6 +38,7 @@ public abstract class Configurator {
 
     public static final String TRUE = Boolean.TRUE.toString();
     public static final String FALSE = Boolean.FALSE.toString();
+    public static Property IS_LAZILY_INITIALIZED = new Property( "isLazilyInitialized", FALSE );
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator

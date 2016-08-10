@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
@@ -47,8 +48,9 @@ public class NERAnnotator extends Annotator {
     /** the level two tagger. */
     private NETaggerLevel2 t2 = null;
 
-    /** shallow parsing is required. */
+    /** POS, shallow parsing are NOT required. */
     private static final String[] REQUIRED_VIEWS = {};
+
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
@@ -66,11 +68,28 @@ public class NERAnnotator extends Annotator {
         this(new ResourceManager(new Properties()), viewName);
     }
 
+    /**
+     * Default behavior is to use lazy initialization; override with ResourceManager entry per the Configurator
+     *     property {@link Configurator#IS_LAZILY_INITIALIZED}
+     *
+     * @param nonDefaultRm specify properties to override defaults, including lazy initialization
+     * @param viewName name of the view to add to the TextAnnotation (and for client to request)
+     */
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
-        super(viewName, REQUIRED_VIEWS);
-        ResourceManager nerRm;
+        super(viewName,
+                REQUIRED_VIEWS,
+                nonDefaultRm.getBoolean( Configurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
+                nonDefaultRm);
+    }
 
-        if (ViewNames.NER_ONTONOTES.equals(viewName))
+
+
+    @Override
+    public void initialize()
+    {
+        ResourceManager nerRm = null;
+
+        if (ViewNames.NER_ONTONOTES.equals(getViewName()))
             nerRm = new NerOntonotesConfigurator().getConfig(nonDefaultRm);
         else
             nerRm = new NerBaseConfigurator().getConfig(nonDefaultRm);

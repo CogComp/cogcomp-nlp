@@ -34,18 +34,35 @@ import java.util.List;
  */
 public class POSAnnotator extends Annotator {
 
-    private static final String NAME = "illinoispos";
+    private static final String NAME =  POSAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-    private final POSTagger tagger = new POSTagger();
+    private POSTagger tagger = null;
     private String tokensfield = "tokens";
     private String sentencesfield = "sentences";
 
+    /**
+     * do not lazily initialize by default.
+     */
     public POSAnnotator() {
-        super(ViewNames.POS, new String[0]);
-        tokensfield = ViewNames.TOKENS;
-        sentencesfield = ViewNames.SENTENCE;
+        this(true);
     }
 
+    public POSAnnotator(boolean lazilyInitialize) {
+        super(ViewNames.POS, new String[0], lazilyInitialize );
+        tokensfield = ViewNames.TOKENS;
+        sentencesfield = ViewNames.SENTENCE;
+        if ( !lazilyInitialize )
+            initialize();
+    }
+
+
+    @Override
+    public void initialize()
+    {
+        logger.info( "Initializing " + NAME );
+        tagger = new POSTagger();
+        super.setIsInitialized();
+    }
 
     /**
      * annotates TextAnnotation with POS view and adds it to the TextAnnotation.
@@ -57,6 +74,7 @@ public class POSAnnotator extends Annotator {
         if (!record.hasView(tokensfield) && !record.hasView(sentencesfield)) {
             throw new AnnotatorException("Record must be tokenized and sentence split first");
         }
+
         long startTime = System.currentTimeMillis();
         List<Token> input = LBJavaUtils.recordToLBJTokens(record);
 
