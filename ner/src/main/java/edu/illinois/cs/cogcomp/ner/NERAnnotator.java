@@ -86,7 +86,12 @@ public class NERAnnotator extends Annotator {
     }
 
 
-
+    /**
+     * Superclass calls this method either on instantiation or at first call to getView().
+     * Logging has been disabled because non-static logger is not initialized at the time this is called if
+     *   non-lazy initialization is specified.
+     * @param nerRm configuration parameters passed to constructor
+     */
     @Override
     public void initialize( ResourceManager nerRm )
     {
@@ -98,8 +103,8 @@ public class NERAnnotator extends Annotator {
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
 
-        logger.info("Reading model file: {}",
-                ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
+//        logger.info("Reading model file: {}",
+//                ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
@@ -107,8 +112,8 @@ public class NERAnnotator extends Annotator {
 
         NETaggerLevel2 tagger2 = null;
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            logger.info("Reading model file: {}",
-                    ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
+//            logger.info("Reading model file: {}",
+//                    ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
             tagger2 =
                     new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
                             + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile

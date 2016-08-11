@@ -64,7 +64,6 @@ public class ChunkerAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager rm)
     {
-        logger.info( "Initializing " + NAME );
         tagger = new Chunker();
     }
 

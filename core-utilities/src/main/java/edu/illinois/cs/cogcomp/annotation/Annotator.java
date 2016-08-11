@@ -85,9 +85,8 @@ public abstract class Annotator {
     public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized, ResourceManager nonDefaultRm ) {
         this.viewName = viewName;
         this.requiredViews = requiredViews;
-        this.isInitialized = !isLazilyInitialized;
         this.nonDefaultRm = nonDefaultRm;
-
+        isInitialized = false;
         if ( !isLazilyInitialized )
             doInitialize();
     }
@@ -95,7 +94,9 @@ public abstract class Annotator {
 
     /**
      * Derived classes use this to load memory- or time-consuming resources.
-     *
+     * <b>Don't try to log from this method unless your Logger is static.</b> Generated code puts non-static
+     *    Logger initialization in the constructor, so if lazyInitialize is 'false' you'll get a null pointer
+     *    exception trying to write to Logger in initialize().
      * @param rm configuration parameters
      */
     public abstract void initialize( ResourceManager rm );
