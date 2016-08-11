@@ -55,7 +55,6 @@ public class IllinoisLemmatizer extends Annotator {
     public IllinoisLemmatizer(boolean isLazilyInitialized) {
 
         super(ViewNames.LEMMA, new String[] {ViewNames.POS}, isLazilyInitialized, new LemmatizerConfigurator().getDefaultConfig() );
-        initialize();
     }
 
     public IllinoisLemmatizer(ResourceManager rm) {
