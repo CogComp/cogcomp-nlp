@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
@@ -39,17 +40,14 @@ import java.util.Properties;
  */
 public class NERAnnotator extends Annotator {
 
-    /** our specific logger. */
-    private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
-
-    /** the level one tagger. */
-    private NETaggerLevel1 t1 = null;
-
-    /** the level two tagger. */
-    private NETaggerLevel2 t2 = null;
-
     /** POS, shallow parsing are NOT required. */
     private static final String[] REQUIRED_VIEWS = {};
+    /** our specific logger. */
+    private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
+    /** the level one tagger. */
+    private NETaggerLevel1 t1 = null;
+    /** the level two tagger. */
+    private NETaggerLevel2 t2 = null;
 
 
     /**
@@ -64,13 +62,18 @@ public class NERAnnotator extends Annotator {
 
     }
 
+    /**
+     * default constructor -- NER_CONLL models will be loaded. Lazily initialized by default.
+     * @param viewName name of view this annotator will add.
+     * @throws IOException
+     */
     public NERAnnotator(String viewName) throws IOException {
         this(new ResourceManager(new Properties()), viewName);
     }
 
     /**
      * Default behavior is to use lazy initialization; override with ResourceManager entry per the Configurator
-     *     property {@link Configurator#IS_LAZILY_INITIALIZED}
+     *     property {@link AnnotatorConfigurator#IS_LAZILY_INITIALIZED}
      *
      * @param nonDefaultRm specify properties to override defaults, including lazy initialization
      * @param viewName name of the view to add to the TextAnnotation (and for client to request)
@@ -78,17 +81,15 @@ public class NERAnnotator extends Annotator {
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
         super(viewName,
                 REQUIRED_VIEWS,
-                nonDefaultRm.getBoolean( Configurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
+                nonDefaultRm.getBoolean( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
                 nonDefaultRm);
     }
 
 
 
     @Override
-    public void initialize()
+    public void initialize( ResourceManager nerRm )
     {
-        ResourceManager nerRm = null;
-
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
             nerRm = new NerOntonotesConfigurator().getConfig(nonDefaultRm);
         else

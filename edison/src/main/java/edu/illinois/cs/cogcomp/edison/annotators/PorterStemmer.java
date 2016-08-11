@@ -15,6 +15,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
@@ -26,9 +27,12 @@ import org.tartarus.snowball.ext.englishStemmer;
  */
 public class PorterStemmer extends Annotator {
 
+    private final static SnowballStemmer stemmer = new englishStemmer();
     private static PorterStemmer instance = null; // = new PorterStemmer();
 
-    private final static SnowballStemmer stemmer = new englishStemmer();
+    private PorterStemmer(String viewName, String[] prerequisiteViews) {
+        super(viewName, prerequisiteViews);
+    }
 
     public static PorterStemmer getInstance() {
         if (null == instance)
@@ -36,8 +40,13 @@ public class PorterStemmer extends Annotator {
         return instance;
     }
 
-    private PorterStemmer(String viewName, String[] prerequisiteViews) {
-        super(viewName, prerequisiteViews);
+    /**
+     * noop.
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {
+
     }
 
     @Override

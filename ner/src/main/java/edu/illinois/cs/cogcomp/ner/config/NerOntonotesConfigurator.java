@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.config;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
@@ -20,7 +21,7 @@ import java.util.Properties;
  *
  * Created by mssammon on 10/15/15.
  */
-public class NerOntonotesConfigurator extends Configurator {
+public class NerOntonotesConfigurator extends AnnotatorConfigurator {
     private static final String DEFAULT_ONTONOTES_MODEL_PATH = "ner/models";
     private static final String ONTONOTES_LABEL_TYPES =
             "TIME LAW GPE NORP LANGUAGE PERCENT FAC PRODUCT ORDINAL LOC PERSON WORK_OF_ART MONEY DATE EVENT QUANTITY ORG CARDINAL";

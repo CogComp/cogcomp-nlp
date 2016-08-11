@@ -8,22 +8,17 @@
  * University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.config;
+package edu.illinois.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
- *
- * Created by mssammon on 8/10/16.
+ * Annotator configuration options.
  */
-public class SimpleGazetteerAnnotatorConfigurator extends AnnotatorConfigurator {
-
-
-    public static final Property PATH_TO_DICTIONARIES = new Property( "pathToDictionaries", "somepath" );
-    public static final Property PHRASE_LENGTH = new Property("phraseLength", "4" );
+public class AnnotatorConfigurator extends Configurator {
+    public static Property IS_LAZILY_INITIALIZED = new Property( "isLazilyInitialized", FALSE );
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -32,8 +27,7 @@ public class SimpleGazetteerAnnotatorConfigurator extends AnnotatorConfigurator 
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[]{ PATH_TO_DICTIONARIES, PHRASE_LENGTH,
-                new Property(IS_LAZILY_INITIALIZED.key, TRUE) };
-        return new ResourceManager(generateProperties(props));
+        Property[] props = new Property[] { IS_LAZILY_INITIALIZED };
+        return new ResourceManager(generateProperties( props ));
     }
 }

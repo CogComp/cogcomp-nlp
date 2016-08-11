@@ -38,71 +38,11 @@ public abstract class Configurator {
 
     public static final String TRUE = Boolean.TRUE.toString();
     public static final String FALSE = Boolean.FALSE.toString();
-    public static Property IS_LAZILY_INITIALIZED = new Property( "isLazilyInitialized", FALSE );
-
-    /**
-     * get a ResourceManager object with the default key/value pairs for this configurator
-     * 
-     * @return a non-null ResourceManager with appropriate values set.
-     */
-    abstract public ResourceManager getDefaultConfig();
-
-    /**
-     * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a
-     * list of default {@link Property} entries.
-     * 
-     * @param properties The list default {@link Property} entries
-     * @return The {@link java.util.Properties} containing the defined properties
-     */
-    protected Properties generateProperties(Property[] properties) {
-        Properties props = new Properties();
-        for (Property property : properties)
-            props.setProperty(property.key, property.value);
-        return props;
-    }
-
-    /**
-     * get a Properties object with default values except for those provided in the
-     * 'nonDefaultValues' argument
-     * 
-     * @param nonDefaultValues specify ONLY those values you wish to override
-     * @return a {@link ResourceManager} containing the defined properties
-     */
-    public ResourceManager getConfig(Map<String, String> nonDefaultValues) {
-        ResourceManager props = getDefaultConfig();
-        Properties nonDefProps = new Properties();
-        nonDefProps.putAll(nonDefaultValues);
-
-        return mergeProperties(props, new ResourceManager(nonDefProps));
-    }
-
-
-    /**
-     * get a Properties object with default values except for those provided in the
-     * 'nonDefaultValues' argument
-     * 
-     * @param nonDefaultRm specify ONLY those values you wish to override
-     * @return a {@link ResourceManager} containing the defined properties
-     */
-    public ResourceManager getConfig(ResourceManager nonDefaultRm) {
-        ResourceManager props = getDefaultConfig();
-        Properties nonDefProps = new Properties();
-
-        Enumeration<String> keys =
-                (Enumeration<String>) nonDefaultRm.getProperties().propertyNames();
-
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-            nonDefProps.put(key, nonDefaultRm.getString(key));
-        }
-        return mergeProperties(props, new ResourceManager(nonDefProps));
-    }
-
 
     /**
      * combine two sets of properties to make a third Properties object; throw exception if two
      * properties clash (have same name)
-     * 
+     *
      * @param first ResourceManager with first set of properties
      * @param second ResourceManager with second set of properties
      * @return a brand new ResourceManager with the union of the properties
@@ -130,7 +70,7 @@ public abstract class Configurator {
 
     /**
      * merge a list of ResourceManager objects
-     * 
+     *
      * @param rmList list of ResourceManager objects
      * @return single ResourceManager containing union of properties of objects in argument
      */
@@ -145,6 +85,63 @@ public abstract class Configurator {
             finalRm = Configurator.mergeProperties(finalRm, rmList.get(i));
 
         return finalRm;
+    }
+
+    /**
+     * get a ResourceManager object with the default key/value pairs for this configurator
+     *
+     * @return a non-null ResourceManager with appropriate values set.
+     */
+    abstract public ResourceManager getDefaultConfig();
+
+    /**
+     * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a
+     * list of default {@link Property} entries.
+     *
+     * @param properties The list default {@link Property} entries
+     * @return The {@link java.util.Properties} containing the defined properties
+     */
+    protected Properties generateProperties(Property[] properties) {
+        Properties props = new Properties();
+        for (Property property : properties)
+            props.setProperty(property.key, property.value);
+        return props;
+    }
+
+    /**
+     * get a Properties object with default values except for those provided in the
+     * 'nonDefaultValues' argument
+     *
+     * @param nonDefaultValues specify ONLY those values you wish to override
+     * @return a {@link ResourceManager} containing the defined properties
+     */
+    public ResourceManager getConfig(Map<String, String> nonDefaultValues) {
+        ResourceManager props = getDefaultConfig();
+        Properties nonDefProps = new Properties();
+        nonDefProps.putAll(nonDefaultValues);
+
+        return mergeProperties(props, new ResourceManager(nonDefProps));
+    }
+
+    /**
+     * get a Properties object with default values except for those provided in the
+     * 'nonDefaultValues' argument
+     *
+     * @param nonDefaultRm specify ONLY those values you wish to override
+     * @return a {@link ResourceManager} containing the defined properties
+     */
+    public ResourceManager getConfig(ResourceManager nonDefaultRm) {
+        ResourceManager props = getDefaultConfig();
+        Properties nonDefProps = new Properties();
+
+        Enumeration<String> keys =
+                (Enumeration<String>) nonDefaultRm.getProperties().propertyNames();
+
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            nonDefProps.put(key, nonDefaultRm.getString(key));
+        }
+        return mergeProperties(props, new ResourceManager(nonDefProps));
     }
 
 }
