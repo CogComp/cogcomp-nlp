@@ -151,9 +151,7 @@ public class BrownClusterViewGenerator extends Annotator {
      * @param rm configuration parameters
      */
     @Override
-    public void initialize(ResourceManager rm) {
-        ;
-    }
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation ta) {

@@ -59,10 +59,13 @@ public class POSAnnotator extends Annotator {
     }
 
 
+    /**
+     * called by superclass either on instantiation, or on first call to getView().
+     * @param rm configuration parameters
+     */
     @Override
     public void initialize(ResourceManager rm)
     {
-        logger.info( "Initializing " + NAME );
         tagger = new POSTagger();
     }
 
