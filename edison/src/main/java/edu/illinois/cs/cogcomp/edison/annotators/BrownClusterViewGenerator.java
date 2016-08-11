@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -143,6 +144,16 @@ public class BrownClusterViewGenerator extends Annotator {
 
     }
 
+
+    /**
+     * noop -- uses its own lazy initialization.
+     *
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {
+        ;
+    }
 
     @Override
     public void addView(TextAnnotation ta) {

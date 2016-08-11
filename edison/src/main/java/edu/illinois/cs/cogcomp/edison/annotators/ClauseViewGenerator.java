@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
@@ -46,6 +47,15 @@ public class ClauseViewGenerator extends Annotator {
         this.clauseViewName = clauseViewName;
     }
 
+
+    /**
+     * noop.
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {
+        ;
+    }
 
     @Override
     public void addView(TextAnnotation ta) {

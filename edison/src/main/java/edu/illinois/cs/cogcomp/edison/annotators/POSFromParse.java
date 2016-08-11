@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
 /**
@@ -33,6 +34,15 @@ public class POSFromParse extends Annotator {
     public POSFromParse(String parseViewName) {
         super(ViewNames.POS, new String[] {parseViewName});
         this.parseViewName = parseViewName;
+    }
+
+    /**
+     * noop.
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {
+        ;
     }
 
     @Override

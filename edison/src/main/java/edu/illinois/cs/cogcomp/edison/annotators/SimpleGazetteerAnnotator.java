@@ -41,14 +41,12 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
  */
 public class SimpleGazetteerAnnotator extends Annotator {
 
-    private int phraseLength;
-    private String pathToDictionaries;
-
     /** this hash tree contains the terms as exactly as they are. */
     ArrayList<GazetteerTree> dictionaries;
-
     /** this hash tree contains the terms in lowercase. */
     ArrayList<GazetteerTree> dictionariesIgnoreCase;
+    private int phraseLength;
+    private String pathToDictionaries;
 
 
 
@@ -102,9 +100,9 @@ public class SimpleGazetteerAnnotator extends Annotator {
      * @throws URISyntaxException 
      */
     @Override
-    public void initialize() {
-        this.phraseLength = nonDefaultRm.getInt( SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH );
-        this.pathToDictionaries = nonDefaultRm.getString( SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES );
+    public void initialize( ResourceManager rm ) {
+        this.phraseLength = rm.getInt( SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH );
+        this.pathToDictionaries = rm.getString( SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES );
 //        int phrase_length, String pathToDictionaries) throws IOException {
         ArrayList<URL> filenames = new ArrayList<>();
 

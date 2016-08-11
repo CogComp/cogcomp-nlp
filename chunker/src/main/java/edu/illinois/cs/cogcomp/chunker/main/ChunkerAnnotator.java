@@ -21,6 +21,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,11 +62,10 @@ public class ChunkerAnnotator extends Annotator {
     }
 
     @Override
-    public void initialize()
+    public void initialize(ResourceManager rm)
     {
         logger.info( "Initializing " + NAME );
         tagger = new Chunker();
-        super.setIsInitialized();
     }
 
 

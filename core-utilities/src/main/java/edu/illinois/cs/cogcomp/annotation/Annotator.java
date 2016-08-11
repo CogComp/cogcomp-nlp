@@ -49,9 +49,10 @@ public abstract class Annotator {
 
     /**
      * explicitly declare whether lazy initialization should be used
-     * @param viewName
-     * @param requiredViews
-     * @param isLazilyInitialized
+     * @param viewName      The name of the View this annotator will populate. This will be used to
+     *                      access the created view from the TextAnnotation holding it.
+     * @param requiredViews The views that must be populated for this new view to be created.
+     * @param isLazilyInitialized if 'true', defers the initialization of the derived class until getView() is called.
      */
     public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized ) {
         this(viewName, requiredViews, isLazilyInitialized, new ResourceManager(new Properties()));
@@ -59,24 +60,27 @@ public abstract class Annotator {
 
 
     /**
-     * If lazy initialization is desired, set the property {@link Configurator#IS_LAZILY_INITIALIZED} in
+     * If lazy initialization is desired, set the property {@link AnnotatorConfigurator#IS_LAZILY_INITIALIZED} in
      *   the ResourceManager argument
-     * @param viewName
-     * @param requiredViews
-     * @param rm
+     * @param viewName      The name of the View this annotator will populate. This will be used to
+     *                      access the created view from the TextAnnotation holding it.
+     * @param requiredViews The views that must be populated for this new view to be created.
+     * @param rm            configuration parameters. lazy initialization is set to 'false' by default.
      */
     public Annotator(String viewName, String[] requiredViews, ResourceManager rm  ) {
-        this(viewName, requiredViews, rm.getBoolean(Configurator.IS_LAZILY_INITIALIZED.key), rm);
+        this(viewName, requiredViews, rm.getBoolean(AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.FALSE),
+                new AnnotatorConfigurator().getConfig( rm ));
     }
 
 
     /**
      * some annotators have complex initialization, so will have to pass a ResourceManager to be on hand for their
      *    initialization if non-lazy initialization is desired.
-     * @param viewName
-     * @param requiredViews
-     * @param isLazilyInitialized
-     * @param nonDefaultRm
+     * @param viewName      The name of the View this annotator will populate. This will be used to
+     *                      access the created view from the TextAnnotation holding it.
+     * @param requiredViews The views that must be populated for this new view to be created.
+     * @param isLazilyInitialized if 'true', defers the initialization of the derived class until getView() is called.
+     * @param nonDefaultRm these properties are stored for use by derived class, esp. in initialize()
      */
     public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized, ResourceManager nonDefaultRm ) {
         this.viewName = viewName;
@@ -85,19 +89,25 @@ public abstract class Annotator {
         this.nonDefaultRm = nonDefaultRm;
 
         if ( !isLazilyInitialized )
-            initialize();
+            doInitialize();
     }
 
 
+    /**
+     * Derived classes use this to load memory- or time-consuming resources.
+     *
+     * @param rm configuration parameters
+     */
+    public abstract void initialize( ResourceManager rm );
 
 
     /**
-     * If you want lazy initialization, this method must load the component models/resources, allowing lazy initialization,
-     * and set the isInitialized field to 'true'.
+     * If you want lazy initialization, this method must load the component models/resources,
      * Default implementation just sets the relevant field to 'true'.
      */
-    public void initialize()
+    final public void doInitialize()
     {
+        initialize( nonDefaultRm );
         isInitialized = true;
     }
 
@@ -143,14 +153,14 @@ public abstract class Annotator {
     /**
      * First, checks whether model is initialized, and calls initialize() if not.
      * Then, calls addView().
+     * IMPORTANT: clients should always call getView().
      * @param ta
      */
     private void lazyAddView(TextAnnotation ta) throws AnnotatorException {
 
         if ( !isInitialized() )
         {
-            initialize();
-            isInitialized = true;
+            doInitialize();
         }
         addView(ta);
     }
@@ -167,10 +177,5 @@ public abstract class Annotator {
         return requiredViews;
     }
 
-    /**
-     * derived classes call this to set the state to indicate the Annotator is initialized.
-     */
-    protected void setIsInitialized() {
-        isInitialized = true;
-    }
+
 }

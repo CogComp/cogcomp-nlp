@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
@@ -41,27 +42,28 @@ public class POSAnnotator extends Annotator {
     private String sentencesfield = "sentences";
 
     /**
-     * do not lazily initialize by default.
+     * lazily initialize by default.
      */
     public POSAnnotator() {
         this(true);
     }
 
+    /**
+     * Constructor allowing choice whether or not to lazily initialize.
+     * @param lazilyInitialize  if 'true', load models only on first call to {@link Annotator#getView(TextAnnotation)}
+     */
     public POSAnnotator(boolean lazilyInitialize) {
         super(ViewNames.POS, new String[0], lazilyInitialize );
         tokensfield = ViewNames.TOKENS;
         sentencesfield = ViewNames.SENTENCE;
-        if ( !lazilyInitialize )
-            initialize();
     }
 
 
     @Override
-    public void initialize()
+    public void initialize(ResourceManager rm)
     {
         logger.info( "Initializing " + NAME );
         tagger = new POSTagger();
-        super.setIsInitialized();
     }
 
     /**
@@ -96,12 +98,6 @@ public class POSAnnotator extends Annotator {
 
         record.addView(ViewNames.POS, posView);
 
-    }
-
-
-    @Override
-    public String getViewName() {
-        return ViewNames.POS;
     }
 
 
