@@ -67,13 +67,13 @@ public class IllinoisLemmatizer extends Annotator {
 
     /**
      * Override default config parameters with properties in rm. Is lazily initialized by default.
-     * @param rm non-default configuration params
+     * @param nonDefaultRm non-default configuration params
      */
-    public IllinoisLemmatizer(ResourceManager rm) {
+    public IllinoisLemmatizer(ResourceManager nonDefaultRm) {
         super(ViewNames.LEMMA,
                 new String[] {ViewNames.POS},
-                rm.getBoolean(AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
-                rm );
+                nonDefaultRm.getBoolean(AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
+                new LemmatizerConfigurator().getConfig(nonDefaultRm) );
     }
 
     public static List<String> readFromClasspath(String filename) {
