@@ -37,6 +37,7 @@ public class LemmatizerPlainTest {
     @Test
     public void test() {
         IllinoisLemmatizer lem = new IllinoisLemmatizer();
+
         ArrayList<String> lemmas = new ArrayList<>();
 
         for (String token : input) {

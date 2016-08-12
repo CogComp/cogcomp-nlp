@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 
 import java.util.ArrayList;
@@ -48,6 +49,13 @@ public class PseudoParse extends Annotator {
         this.pseudoParseViewName = pseudoParseViewName;
 
     }
+
+    /**
+     * noop.
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation ta) {

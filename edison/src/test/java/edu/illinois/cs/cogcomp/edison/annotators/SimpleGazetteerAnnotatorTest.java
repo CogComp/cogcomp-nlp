@@ -19,7 +19,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.edison.config.SimpleGazetteerAnnotatorConfigurator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -41,14 +45,22 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class SimpleGazetteerAnnotatorTest {
-    /** this helper can create text annotations from text. */
+	private static final boolean IS_LAZILY_INITIALIZED = false;
+	/** this helper can create text annotations from text. */
     protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
+
+    private static ResourceManager defaultRm;
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
+        Properties props = new Properties();
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.FALSE);
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key, "/testgazetteers/" );
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "6" );
+        defaultRm = new ResourceManager(props);
 	}
 
 	/**
@@ -79,7 +91,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testMultiThreading() throws IOException, URISyntaxException, AnnotatorException {
-		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
+		final SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator( defaultRm );
 		class TestThread extends Thread {
 			Throwable throwable;
 			public void run() {
@@ -153,7 +165,7 @@ public class SimpleGazetteerAnnotatorTest {
 	 */
 	@Test
 	public void testAddView() throws IOException, URISyntaxException, AnnotatorException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(defaultRm);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		TextAnnotation ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -176,8 +188,12 @@ public class SimpleGazetteerAnnotatorTest {
 		assertEquals(c3.getLabel(),"places(IC)");
 		assertEquals(c4.getLabel(),"places(IC)");
 		assertEquals(c5.getLabel(),"places(IC)");
-		
-		sga = new SimpleGazetteerAnnotator(4, "/testgazetteers");
+
+        Properties props = new Properties();
+        props.setProperty( SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "4" );
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key, "/testgazetteers/");
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key,  SimpleGazetteerAnnotatorConfigurator.FALSE );
+		sga = new SimpleGazetteerAnnotator(new ResourceManager( props ));
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 		ta = tab.createTextAnnotation("I hail from the university of illinois at champaign urbana.");
@@ -211,26 +227,30 @@ public class SimpleGazetteerAnnotatorTest {
 	}
 
 	/**
-	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(java.lang.String)}.
+	 * Test method for {@link SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(ResourceManager)}.
 	 * @throws URISyntaxException 
 	 * @throws IOException 
 	 */
 	@Test
 	public void testSimpleGazetteerAnnotatorString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator("/testgazetteers/");
+        Properties props = new Properties();
+        props.setProperty( SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key, "/testgazetteers/" );
+        props.setProperty( SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, SimpleGazetteerAnnotatorConfigurator.FALSE );
+        ResourceManager localRm = new SimpleGazetteerAnnotatorConfigurator().getConfig( new ResourceManager(props));
+		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(localRm);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
 		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
 	}
 
-	/**
-	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(int, java.lang.String)}.
-	 * @throws URISyntaxException 
-	 * @throws IOException 
-	 */
-	@Test
-	public void testSimpleGazetteerAnnotatorIntString() throws IOException, URISyntaxException {
-		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/");
-		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
-		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
-	}
+//	/**
+//	 * Test method for {@link edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator#SimpleGazetteerAnnotator(int, java.lang.String, boolean}.
+//	 * @throws URISyntaxException
+//	 * @throws IOException
+//	 */
+//	@Test
+//	public void testSimpleGazetteerAnnotatorIntString() throws IOException, URISyntaxException {
+//		SimpleGazetteerAnnotator sga = new SimpleGazetteerAnnotator(6, "/testgazetteers/", false);
+//		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionaries.size() == 1);
+//		assertTrue ("Wrong number of dictionaries loaded.",sga.dictionariesIgnoreCase.size() == 1);
+//	}
 }
