@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -20,6 +21,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
@@ -37,28 +39,89 @@ public class IllinoisLemmatizer extends Annotator {
 
     private static final String verbLemmaFile = "verb-lemDict.txt";
     private static final String exceptionsFile = "exceptions.txt";
+    private static boolean useStanford_default = false;
     private Map<String, String> verbLemmaMap;
     private Map<String, String> verbBaseMap;
     private Map<String, String> exceptionsMap;
     private WordnetLemmaReader wnLemmaReader;
     private Map<String, String> contractions;
     private Map<String, String> toStanford;
-
     private boolean useStanford;
 
-    private static boolean useStanford_default = false;
-
+    /**
+     * default configuration, lazily initialized
+     */
     public IllinoisLemmatizer() {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        initialize(new LemmatizerConfigurator().getDefaultConfig());
+        this(true);
     }
 
-    public IllinoisLemmatizer(ResourceManager rm) {
-        super(ViewNames.LEMMA, new String[] {ViewNames.POS});
-        initialize(new LemmatizerConfigurator().getConfig(rm));
+    /**
+     * default parameters, but set whether lazily initialized or not
+     * @param isLazilyInitialized   if 'true', defer loading resources until getView() is called.
+     */
+    public IllinoisLemmatizer(boolean isLazilyInitialized) {
+
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS}, isLazilyInitialized,
+                new LemmatizerConfigurator().getDefaultConfig() );
     }
 
-    private void initialize(ResourceManager rm) {
+    /**
+     * Override default config parameters with properties in rm. Is lazily initialized by default.
+     * @param nonDefaultRm non-default configuration params
+     */
+    public IllinoisLemmatizer(ResourceManager nonDefaultRm) {
+        super(ViewNames.LEMMA,
+                new String[] {ViewNames.POS},
+                nonDefaultRm.getBoolean(AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
+                new LemmatizerConfigurator().getConfig(nonDefaultRm) );
+    }
+
+    public static List<String> readFromClasspath(String filename) {
+        List<String> lines = null;
+        try {
+            InputStream resource =
+                    IOUtils.lsResources(IllinoisLemmatizer.class, filename).get(0).openStream();
+            lines =
+                    LineIO.read(resource, Charset.defaultCharset().name(),
+                            new ITransformer<String, String>() {
+                                public String transform(String line) {
+                                    return line;
+                                }
+                            });
+        } catch (IOException | URISyntaxException e) {
+            System.err.println("Error while trying to read " + filename + ".");
+            System.exit(-1);
+        }
+        return lines;
+    }
+
+    // main
+    public static void main(String[] args) {
+        IllinoisLemmatizer lem = new IllinoisLemmatizer();
+
+        System.out.println("Getting lemma for 'media': ");
+        String lemma = lem.getLemma("media", "NNS");
+        System.out.println(lemma);
+
+        System.out.println("Getting lemma for 'men': ");
+        lemma = lem.getLemma("men", "NNS");
+        System.out.println(lemma);
+
+        System.out.println("Getting lemmas for 'retakes': ");
+        lemma = lem.getLemma("retakes", "VBZ");
+        System.out.println(lemma);
+
+        System.out.println("Getting lemmas for 'putting': ");
+        lemma = lem.getLemma("putting", "VBG");
+        System.out.println(lemma);
+
+    }
+
+    /**
+     * loads resources used by lemmatizer. By default, is called by Annotator superclass with ResourceManager
+     *     passed in at construction time.
+     */
+    public void initialize( ResourceManager rm ) {
         this.useStanford = rm.getBoolean(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key);
         wnLemmaReader = new WordnetLemmaReader(rm.getString(LemmatizerConfigurator.WN_PATH.key));
         loadVerbMap();
@@ -107,25 +170,6 @@ public class IllinoisLemmatizer extends Annotator {
         }
     }
 
-    public static List<String> readFromClasspath(String filename) {
-        List<String> lines = null;
-        try {
-            InputStream resource =
-                    IOUtils.lsResources(IllinoisLemmatizer.class, filename).get(0).openStream();
-            lines =
-                    LineIO.read(resource, Charset.defaultCharset().name(),
-                            new ITransformer<String, String>() {
-                                public String transform(String line) {
-                                    return line;
-                                }
-                            });
-        } catch (IOException | URISyntaxException e) {
-            System.err.println("Error while trying to read " + filename + ".");
-            System.exit(-1);
-        }
-        return lines;
-    }
-
     /**
      * get a lemma for the token at index tokIndex in TextAnnotation ta.
      *
@@ -148,7 +192,6 @@ public class IllinoisLemmatizer extends Annotator {
         String pos = ta.getView(ViewNames.POS).getLabelsCoveringToken(tokIndex).get(0);
         return getLemma(word, pos);
     }
-
 
     /**
      * included for backward compatibility: wraps getLemma().
@@ -174,6 +217,8 @@ public class IllinoisLemmatizer extends Annotator {
 
     public String getLemma(String word, String pos) {
 
+        if ( !isInitialized() )
+            super.doInitialize();
         word = word.toLowerCase();
 
         // look at file
@@ -280,31 +325,6 @@ public class IllinoisLemmatizer extends Annotator {
 
         return lemmaView;
     }
-
-
-    // main
-    public static void main(String[] args) {
-        IllinoisLemmatizer lem = new IllinoisLemmatizer();
-
-        System.out.println("Getting lemma for 'media': ");
-        String lemma = lem.getLemma("media", "NNS");
-        System.out.println(lemma);
-
-        System.out.println("Getting lemma for 'men': ");
-        lemma = lem.getLemma("men", "NNS");
-        System.out.println(lemma);
-
-        System.out.println("Getting lemmas for 'retakes': ");
-        lemma = lem.getLemma("retakes", "VBZ");
-        System.out.println(lemma);
-
-        System.out.println("Getting lemmas for 'putting': ");
-        lemma = lem.getLemma("putting", "VBG");
-        System.out.println(lemma);
-
-    }
-
-
 
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {

@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
@@ -37,6 +38,13 @@ public class WordNetLemmaViewGenerator extends Annotator {
         super(ViewNames.LEMMA, new String[] {ViewNames.POS});
         this.wn = wn;
     }
+
+    /**
+     * noop.
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation ta) {
