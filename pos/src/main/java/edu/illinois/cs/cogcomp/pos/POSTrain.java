@@ -124,7 +124,7 @@ public class POSTrain {
         mikheevTable.save();
         taggerKnown.save();
         taggerUnknown.save();
-        System.out.println("Done training");
+        System.out.println("Done training, wrote models to disk.");
     }
 
     public static void main(String[] args) {

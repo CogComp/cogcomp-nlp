@@ -8,21 +8,18 @@
  * University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.lemmatizer;
+package edu.illinois.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
- * Lemmatizer constructor parameters Created by mssammon on 1/5/16.
+ * Annotator configuration options.
  */
-public class LemmatizerConfigurator extends AnnotatorConfigurator {
+public class AnnotatorConfigurator extends Configurator {
+    public static Property IS_LAZILY_INITIALIZED = new Property( "isLazilyInitialized", FALSE );
 
-    public final static Property WN_PATH = new Property("wnPath", "wordnet-dict");
-    public final static Property USE_STNFRD_CONVENTIONS = new Property("useStanfordConventions",
-            FALSE);
-    public final static Property LEMMA_LAZY_INITIALIZE = new Property( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE );
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
      *
@@ -30,7 +27,7 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE};
-        return new ResourceManager(generateProperties(props));
+        Property[] props = new Property[] { IS_LAZILY_INITIALIZED };
+        return new ResourceManager(generateProperties( props ));
     }
 }

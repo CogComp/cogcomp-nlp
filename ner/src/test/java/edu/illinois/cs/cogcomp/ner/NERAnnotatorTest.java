@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
@@ -140,7 +141,13 @@ public class NERAnnotatorTest {
 
     public void testResults() {
         TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-        View view = getView(ta);
+        View view = null;
+        try {
+            view = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
         for (Constituent c : view.getConstituents()) {
             assertTrue("No entity named \"" + c.toString() + "\"", entities.contains(c.toString()));
         }
@@ -176,19 +183,36 @@ public class NERAnnotatorTest {
 
         // make sure any lazy loading is done outside the performance test.
         TextAnnotation tat = tab.createTextAnnotation(TEST_INPUT);
-        getView(tat);
+        try {
+            getView(tat);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
         long expectedPerformance = this.measureMachinePerformance();
         System.out.println("Expect " + expectedPerformance);
         {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail( e.getMessage() );
+            }
             assertTrue(view != null);
         }
         // start the performance test.
         long start = System.currentTimeMillis();
         for (int i = 0; i < SIZE; i++) {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail( e.getMessage() );
+            }
             assertTrue(view != null);
             for (Constituent c : view.getConstituents()) {
                 assertTrue("No entity named \"" + c.toString() + "\"",
@@ -230,13 +254,23 @@ public class NERAnnotatorTest {
         public void run() {
             TextAnnotation ta1 = tab.createTextAnnotation(TEST_INPUT);
             {
-                view = getView(ta1);
+                try {
+                    view = getView(ta1);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail( e.getMessage() );
+                }
                 assertTrue(view != null);
             }
             long start = System.currentTimeMillis();
             for (int i = 0; i < duration; i++) {
                 TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-                view = getView(ta);
+                try {
+                    view = getView(ta);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail( e.getMessage() );
+                }
                 for (Constituent c : view.getConstituents()) {
                     if (!entities.contains(c.toString()))
                         error = "No entity named \"" + c.toString() + "\"";
@@ -291,7 +325,13 @@ public class NERAnnotatorTest {
     @Test
     public void testTokenization() {
         TextAnnotation ta = tab.createTextAnnotation(TOKEN_TEST);
-        View nerView = getView(ta);
+        View nerView = null;
+        try {
+            nerView = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
         assertEquals(nerView.getConstituents().size(), 2);
 
         String tokTestB =
@@ -299,7 +339,12 @@ public class NERAnnotatorTest {
                         + "nuclear waste, is released on parole after serving two-thirds of his four-year prison sentence.";
 
         ta = tab.createTextAnnotation(tokTestB);
-        nerView = getView(ta);
+        try {
+            nerView = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
 
         assertEquals(3, nerView.getNumberOfConstituents());
     }
@@ -316,7 +361,13 @@ public class NERAnnotatorTest {
         // need to get any lazy data initialization out of the way to get a good read.
         {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail( e.getMessage() );
+            }
             for (Constituent c : view.getConstituents()) {
                 assertTrue(entities.contains(c.toString()));
             }
@@ -349,8 +400,8 @@ public class NERAnnotatorTest {
         System.out.println("Average runtime is " + (avg / count));
     }
 
-    public static View getView(TextAnnotation ta) {
-        nerAnnotator.addView(ta);
+    public static View getView(TextAnnotation ta) throws AnnotatorException {
+        nerAnnotator.getView(ta);
         return ta.getView(nerAnnotator.getViewName());
     }
 

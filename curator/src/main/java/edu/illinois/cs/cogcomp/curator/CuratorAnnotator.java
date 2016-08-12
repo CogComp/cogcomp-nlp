@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.ServiceUnavailableException;
 import org.apache.thrift.TException;
@@ -39,6 +40,14 @@ public class CuratorAnnotator extends Annotator {
         this.curatorClient = curatorClient;
     }
 
+
+    /**
+     * noop
+     *
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation ta) throws AnnotatorException {

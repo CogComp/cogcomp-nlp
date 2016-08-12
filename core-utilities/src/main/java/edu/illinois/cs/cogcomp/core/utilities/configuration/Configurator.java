@@ -40,8 +40,51 @@ public abstract class Configurator {
     public static final String FALSE = Boolean.FALSE.toString();
 
     /**
+     * combine two sets of properties to make a third Properties object; if both sets contain a value
+     *    for the same key, the value from the second ResourceManager is selected.
+     *
+     * @param first ResourceManager with first set of properties
+     * @param second ResourceManager with second set of properties
+     * @return a brand new ResourceManager with the union of the properties, favoring the second
+     *         if the same property is set in both
+     */
+    public static ResourceManager mergeProperties(ResourceManager first, ResourceManager second) {
+        Properties firstProps = first.getProperties();
+        Properties secondProps = second.getProperties();
+
+        Properties newProps = new Properties();
+
+        for (String key : firstProps.stringPropertyNames())
+            newProps.put(key, firstProps.getProperty(key));
+
+        for (String key : secondProps.stringPropertyNames())
+            newProps.put(key, secondProps.getProperty(key));
+        
+        return new ResourceManager(newProps);
+    }
+
+    /**
+     * merge a list of ResourceManager objects
+     *
+     * @param rmList list of ResourceManager objects
+     * @return single ResourceManager containing union of properties of objects in argument
+     */
+    public static ResourceManager mergeProperties(List<ResourceManager> rmList) {
+        if (rmList.isEmpty())
+            throw new IllegalArgumentException(
+                    "ERROR: called with empty list of ResourceManager as argument.");
+
+        ResourceManager finalRm = rmList.get(0);
+
+        for (int i = 1; i < rmList.size(); ++i)
+            finalRm = Configurator.mergeProperties(finalRm, rmList.get(i));
+
+        return finalRm;
+    }
+
+    /**
      * get a ResourceManager object with the default key/value pairs for this configurator
-     * 
+     *
      * @return a non-null ResourceManager with appropriate values set.
      */
     abstract public ResourceManager getDefaultConfig();
@@ -49,7 +92,7 @@ public abstract class Configurator {
     /**
      * Creates the {@link java.util.Properties} that is passed on to {@link ResourceManager} from a
      * list of default {@link Property} entries.
-     * 
+     *
      * @param properties The list default {@link Property} entries
      * @return The {@link java.util.Properties} containing the defined properties
      */
@@ -63,7 +106,7 @@ public abstract class Configurator {
     /**
      * get a Properties object with default values except for those provided in the
      * 'nonDefaultValues' argument
-     * 
+     *
      * @param nonDefaultValues specify ONLY those values you wish to override
      * @return a {@link ResourceManager} containing the defined properties
      */
@@ -75,11 +118,10 @@ public abstract class Configurator {
         return mergeProperties(props, new ResourceManager(nonDefProps));
     }
 
-
     /**
      * get a Properties object with default values except for those provided in the
      * 'nonDefaultValues' argument
-     * 
+     *
      * @param nonDefaultRm specify ONLY those values you wish to override
      * @return a {@link ResourceManager} containing the defined properties
      */
@@ -95,55 +137,6 @@ public abstract class Configurator {
             nonDefProps.put(key, nonDefaultRm.getString(key));
         }
         return mergeProperties(props, new ResourceManager(nonDefProps));
-    }
-
-
-    /**
-     * combine two sets of properties to make a third Properties object; throw exception if two
-     * properties clash (have same name)
-     * 
-     * @param first ResourceManager with first set of properties
-     * @param second ResourceManager with second set of properties
-     * @return a brand new ResourceManager with the union of the properties
-     * @throws IllegalArgumentException if the same key appears in both objects
-     */
-    public static ResourceManager mergeProperties(ResourceManager first, ResourceManager second) {
-        Properties firstProps = first.getProperties();
-        Properties secondProps = second.getProperties();
-
-        Properties newProps = new Properties();
-
-        for (String key : firstProps.stringPropertyNames())
-            newProps.put(key, firstProps.getProperty(key));
-
-        for (String key : secondProps.stringPropertyNames()) {
-            // if ( newProps.containsKey( key ) )
-            // throw new IllegalArgumentException( "ERROR: key '" + key +
-            // "' was already set in first ResourceManager." );
-
-            newProps.put(key, secondProps.getProperty(key));
-        }
-
-        return new ResourceManager(newProps);
-    }
-
-    /**
-     * merge a list of ResourceManager objects
-     * 
-     * @param rmList list of ResourceManager objects
-     * @return single ResourceManager containing union of properties of objects in argument
-     */
-    public static ResourceManager mergeProperties(List<ResourceManager> rmList) {
-        if (rmList.isEmpty())
-            throw new IllegalArgumentException(
-                    "ERROR: called with empty list of ResourceManager as argument.");
-
-        ResourceManager finalRm = rmList.get(0);
-
-        for (int i = 1; i < rmList.size(); ++i)
-            finalRm = Configurator.mergeProperties(finalRm, rmList.get(i));
-
-        return finalRm;
     }
 
 }

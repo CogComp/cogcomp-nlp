@@ -10,8 +10,8 @@
  */
 package edu.illinois.cs.cogcomp.ner.config;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
@@ -25,7 +25,7 @@ import java.util.Properties;
  * individually, and the client will use the inherited {#getConfig( ResourceManager rm )} method to
  * override only those values that conflict with defaults. Created by mssammon on 10/14/15.
  */
-public class NerBaseConfigurator extends Configurator {
+public class NerBaseConfigurator extends AnnotatorConfigurator {
 
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
@@ -72,7 +72,8 @@ public class NerBaseConfigurator extends Configurator {
 
     public final static String RANDOM_NOISE_LEVEL = "randomNoiseLevel";
     public final static String OMISSION_RATE = "omissionRate";
-
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_BROWN_CLUSTER_PATHS = "1";
     private final static String DEFAULT_IS_LOWERCASE_BROWN_CLUSTERS = "false false false";
     private final static String DEFAULT_PATHS_TO_BROWN_CLUSTERS =
@@ -81,7 +82,6 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_GAZETTEER_FEATURES = "1";
     private final static String DEFAULT_PATHS_TO_GAZETTEERS = "gazetteers";
     private final static String DEFAULT_WORD_EMBEDDINGS = "0";
-
     private final static String DEFAULT_MODEL_PATH = "ner/models";
     private final static String DEFAULT_FORMS = "1";
     private final static String DEFAULT_PHRASE_LENGTH = "5";
@@ -96,7 +96,6 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_AGGREGATE_GAZETTEER = "0";
     private final static String DEFAULT_PREV_TAGS_FOR_CONTEXT = "1";
     private final static String DEFAULT_PREDICTIONS_1 = "1";
-
     // private final static String DEFAULT_BEAM_SIZE = "5";
     private final static String DEFAULT_FORCE_LINE_BREAKS = TRUE;
     private final static String DEFAULT_LABELS = "PER ORG LOC MISC";
@@ -106,8 +105,6 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_PATH_TO_TOKEN_NORM_DATA =
             "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
     private final static String DEFAULT_SORT_FILES_LEXICALLY = TRUE;
-    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
-    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL";
@@ -160,6 +157,8 @@ public class NerBaseConfigurator extends Configurator {
 
         props.setProperty(RANDOM_NOISE_LEVEL, DEFAULT_RANDOM_NOISE_LEVEL);
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
+        props.setProperty( IS_LAZILY_INITIALIZED.key, TRUE );
+
         return new ResourceManager(props);
     }
 }

@@ -10,6 +10,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -22,6 +23,7 @@ import org.junit.Test;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class NerOntonotesTest {
 
@@ -40,7 +42,12 @@ public class NerOntonotesTest {
 
         TextAnnotation taOnto = tab.createTextAnnotation("", "", TEST_INPUT);
 
-        nerOntonotes.addView(taOnto);
+        try {
+            nerOntonotes.getView(taOnto);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
         View v = taOnto.getView(nerOntonotes.getViewName());
 
         assertEquals(v.getConstituents().size(), 4);
