@@ -22,6 +22,7 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
     public final static Property WN_PATH = new Property("wnPath", "wordnet-dict");
     public final static Property USE_STNFRD_CONVENTIONS = new Property("useStanfordConventions",
             FALSE);
+    public final static Property LEMMA_LAZY_INITIALIZE = new Property( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE );
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
      *
@@ -29,7 +30,7 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS};
+        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE};
         return new ResourceManager(generateProperties(props));
     }
 }
