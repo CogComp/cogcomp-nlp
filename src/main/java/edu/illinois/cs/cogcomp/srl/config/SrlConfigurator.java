@@ -1,8 +1,10 @@
 package edu.illinois.cs.cogcomp.srl.config;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.srl.core.SRLType;
 
 /**
  * A configuration helper to allow centralization of config options in dependencies with
@@ -14,7 +16,9 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  *
  * Created by mssammon on 12/21/15.
  */
-public class SrlConfigurator extends Configurator {
+public class SrlConfigurator extends AnnotatorConfigurator {
+
+
     public static final Property USE_CURATOR = new Property("UseCurator", FALSE);
     public static final Property DEFAULT_PARSER = new Property("DefaultParser", "Stanford" );
 
@@ -52,10 +56,29 @@ public class SrlConfigurator extends Configurator {
     public static final Property OUTPUT_DIR = new Property( "OutputDirectory", "srl-out");
 
 
+    /**
+     * whether to instantiate a preprocessing pipeline to provide needed inputs to standalone SRL
+     */
+    public static final Property INSTANTIATE_PREPROCESSOR = new Property( "instantiatePreprocessor", FALSE );
+
+    /**
+     * whether to use lazy initialization to defer loading of models etc until actually needed
+     */
+    public static final Property LAZILY_INITIALIZE =
+            new Property( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, FALSE );
+
+
+    /**
+     * SRL models to load
+     */
+    public static final Property SRL_TYPE = new Property( "srlType", SRLType.Verb.name() );
+
+
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] properties = {USE_CURATOR, DEFAULT_PARSER, NUM_FEX_THREADS, PENNTB_HOME, PROPBANK_PARSER,
-                NOMBANK_HOME, CACHE_DIR, MODEL_DIR, OUTPUT_DIR, ILP_SOLVER};
+                NOMBANK_HOME, CACHE_DIR, MODEL_DIR, OUTPUT_DIR, ILP_SOLVER, INSTANTIATE_PREPROCESSOR,
+                LAZILY_INITIALIZE, SRL_TYPE};
         return (new LearnerConfigurator().getConfig(new ResourceManager(generateProperties(properties))) );
     }
 }

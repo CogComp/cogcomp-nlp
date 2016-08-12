@@ -9,11 +9,13 @@ import edu.illinois.cs.cogcomp.srl.data.Dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.NamingEnumeration;
 import java.io.IOException;
 import java.util.Properties;
 
 public class SRLProperties {
 	private static final Logger log = LoggerFactory.getLogger(SRLProperties.class);
+	private static final String NAME = SRLProperties.class.getCanonicalName();
 	private static SRLProperties theInstance;
 	private ResourceManager config;
 
@@ -56,6 +58,7 @@ public class SRLProperties {
 
     public static void initialize( ResourceManager rm )
     {
+		log.info( "## initializing {}.", NAME );
 		ResourceManager fullRm = new SrlConfigurator().getConfig(rm);
 		theInstance = new SRLProperties(fullRm);
 	}

@@ -5,14 +5,14 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-srl</artifactId>
     <packaging>jar</packaging>
-    <version>5.1.14</version>
+    <version>5.1.15-SNAPSHOT</version>
 
     <url>http://cogcomp.cs.illinois.edu</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.0.58</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.59-SNAPSHOT</cogcomp-nlp-version>
         <cogcomp-nlp-pipeline-version>0.1.23</cogcomp-nlp-pipeline-version>
     </properties>
 

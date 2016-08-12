@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class TextPreProcessor {
 	private final static Logger log = LoggerFactory.getLogger(TextPreProcessor.class);
+    private static final String NAME = TextPreProcessor.class.getCanonicalName();
 
 	private static TextPreProcessor instance;
     private final AnnotatorService annotator;
@@ -58,6 +59,7 @@ public class TextPreProcessor {
 
     public static void initialize( SRLProperties props )
     {
+        log.info("## initializing {}.", NAME );
 		try {
 			instance = new TextPreProcessor( props );
 		} catch (Exception e) {

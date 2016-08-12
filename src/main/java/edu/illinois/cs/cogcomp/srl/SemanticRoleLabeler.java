@@ -21,13 +21,15 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class SemanticRoleLabeler extends Annotator {
 	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
-	public final SRLManager manager;
+	public SRLManager manager;
 	private static SRLProperties properties;
 
-	public static void main(String[] arguments) {
+
+    public static void main(String[] arguments) {
 		if (arguments.length < 1) {
 			System.err.println("Usage: <config-file> [Verb | Nom]");
 			System.exit(-1);
@@ -46,13 +48,22 @@ public class SemanticRoleLabeler extends Annotator {
 
 		String input;
 		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
+
+        Properties props = new Properties();
+        props.setProperty( SrlConfigurator.SRL_TYPE.key, SRLType.Verb.name() );
+        props.setProperty( SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, SrlConfigurator.TRUE );
+        SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
+
 		try {
 			if (srlType != null)
-				srlLabelers.add(new SemanticRoleLabeler(rm, srlType, true));
+				srlLabelers.add(new SemanticRoleLabeler(rm));
 			else {
 				for (SRLType type : SRLType.values()) {
-					srlType = type.name();
-					srlLabelers.add(new SemanticRoleLabeler(rm, srlType, true));
+				//	srlType = type.name();
+                    props.setProperty( SrlConfigurator.SRL_TYPE.key, type.name() );
+                    SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
+
+					srlLabelers.add(new SemanticRoleLabeler(rm));
 				}
 			}
 		} catch (Exception e) {
@@ -98,32 +109,67 @@ public class SemanticRoleLabeler extends Annotator {
 		} while (!input.equals("_"));
 	}
 
-	public SemanticRoleLabeler(String srlType) throws Exception {
-		this( new SrlConfigurator().getDefaultConfig(), srlType );
+    /**
+     * default loads Verb srl
+     * @throws Exception
+     */
+	public SemanticRoleLabeler() throws Exception {
+		this( new ResourceManager( new Properties() ) );
 	}
 
-	public SemanticRoleLabeler(ResourceManager rm, String srlType) throws Exception {
-		this(rm, srlType, false);
+	public SemanticRoleLabeler(ResourceManager rm ) throws Exception {
+		this(rm, false);
 	}
 
-	public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean initialize) throws Exception {
-		super( getViewNameForType(srlType), TextPreProcessor.requiredViews );
+    /**
+     * @param rm fully populated configuration (all fields from SrlConfigurator must be set)
+     * @param lazilyInitialize if 'true', defer loading resources until getView() is called
+     * @throws Exception
+     */
+	public SemanticRoleLabeler(ResourceManager rm, boolean lazilyInitialize) throws Exception {
+        this(new SrlConfigurator().getConfig(rm), lazilyInitialize, false);
+    }
 
-		log.info("Initializing config");
+    /**
+     * protected because ResourceManager argument must have all entries in SrlConfigurator set
+     *    before super() is called.
+     * @param config fully populated configuration (all fields from SrlConfigurator must be set)
+     * @param lazilyInitialize if 'true', defer loading resources until getView() is called
+     * @param irrelevantFlag a spurious argument to distinguish this protected constructor
+     */
+    protected SemanticRoleLabeler(ResourceManager config, boolean lazilyInitialize, boolean irrelevantFlag ) {
+        super(getViewNameForType( config.getString( SrlConfigurator.SRL_TYPE.key ) ),
+                TextPreProcessor.requiredViews, lazilyInitialize, config );
+	}
+//    public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean isLazilyInitialized ) throws Exception {
+//        super(getViewNameForType(srlType), TextPreProcessor.requiredViews, isLazilyInitialized, new SrlConfigurator().getConfig(rm));
+//    }
+
+	@Override
+	public void initialize( ResourceManager rm )
+	{
 		SRLProperties.initialize(rm);
-		properties = SRLProperties.getInstance();
+        properties = SRLProperties.getInstance();
+        boolean initialize = rm.getBoolean( SrlConfigurator.INSTANTIATE_PREPROCESSOR.key );
 
 		if(initialize) {
-			log.info("Initializing pre-processor");
 			TextPreProcessor.initialize(properties);
 		}
-		log.info("Creating {} manager", srlType);
 
-		manager = Main.getManager(SRLType.valueOf(srlType), false);
+        String srlType = rm.getString( SrlConfigurator.SRL_TYPE );
+        try {
+            manager = Main.getManager(SRLType.valueOf(srlType), false);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-		log.info("Loading models");
-		loadModels();
-	}
+//		log.info("Loading models");
+        try {
+            loadModels();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	private static String getViewNameForType(String srlType) {
 		if ( srlType.equals( SRLType.Verb.name() ) )
