@@ -40,13 +40,13 @@ public abstract class Configurator {
     public static final String FALSE = Boolean.FALSE.toString();
 
     /**
-     * combine two sets of properties to make a third Properties object; throw exception if two
-     * properties clash (have same name)
+     * combine two sets of properties to make a third Properties object; if both sets contain a value
+     *    for the same key, the value from the second ResourceManager is selected.
      *
      * @param first ResourceManager with first set of properties
      * @param second ResourceManager with second set of properties
-     * @return a brand new ResourceManager with the union of the properties
-     * @throws IllegalArgumentException if the same key appears in both objects
+     * @return a brand new ResourceManager with the union of the properties, favoring the second
+     *         if the same property is set in both
      */
     public static ResourceManager mergeProperties(ResourceManager first, ResourceManager second) {
         Properties firstProps = first.getProperties();
@@ -57,14 +57,9 @@ public abstract class Configurator {
         for (String key : firstProps.stringPropertyNames())
             newProps.put(key, firstProps.getProperty(key));
 
-        for (String key : secondProps.stringPropertyNames()) {
-            // if ( newProps.containsKey( key ) )
-            // throw new IllegalArgumentException( "ERROR: key '" + key +
-            // "' was already set in first ResourceManager." );
-
+        for (String key : secondProps.stringPropertyNames())
             newProps.put(key, secondProps.getProperty(key));
-        }
-
+        
         return new ResourceManager(newProps);
     }
 
