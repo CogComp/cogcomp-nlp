@@ -35,7 +35,10 @@ public class JsonToolsTest {
 
     @Test
     public void testTextAnnotationArray(){
-        TextAnnotation[] array = new TextAnnotation[]{DummyTextAnnotationGenerator.generateBasicTextAnnotation(2), DummyTextAnnotationGenerator.generateBasicTextAnnotation(1)};
+        TextAnnotation[] array = new TextAnnotation[]{
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 1),
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2)
+        };
         JsonArray jsonArray = JsonTools.createJsonArrayFromArray(array);
 
         assertEquals(2, jsonArray.size());
