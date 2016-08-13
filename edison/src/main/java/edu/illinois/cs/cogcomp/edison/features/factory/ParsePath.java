@@ -61,18 +61,21 @@ public class ParsePath implements FeatureExtractor {
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+
+        // if a constituent is given to the feature extractor, it should belong to the parse view that was just passed
+        // to the feature extractor
+        assert (ViewNames.isItParseView(c.getViewName()) && c.getViewName().equals(this.parseViewName) );
+
         TextAnnotation ta = c.getTextAnnotation();
         TreeView parse = (TreeView) ta.getView(parseViewName);
-        Constituent cEquivalentInParseView = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
         Set<Feature> features = new LinkedHashSet<>();
-        List<Relation> incomingRelations = cEquivalentInParseView.getIncomingRelations();
-
+        List<Relation> incomingRelations = c.getIncomingRelations();
 
         if(incomingRelations.size() > 0) {
             Constituent c1, c2;
             try {
                 c1 = parse.getParsePhrase(incomingRelations.get(0).getSource());
-                c2 = parse.getParsePhrase(cEquivalentInParseView);
+                c2 = parse.getParsePhrase(c);
             } catch (Exception e) {
                 throw new EdisonException(e);
             }
