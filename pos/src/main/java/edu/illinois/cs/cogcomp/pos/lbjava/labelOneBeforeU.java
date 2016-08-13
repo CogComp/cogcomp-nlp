@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -19,10 +16,9 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.POSConfigurator;
 
 /**
- * Produces the POS tag label of the word one before the target word.  During
- * the training of {@link POSTaggerUnknown}, these labels are present in the
- * data, so the value of {@link POSLabel} is simply returned.  Otherwise, the
- * prediction made by {@link POSTaggerUnknown} is returned.
+ * Produces the POS tag label of the word one before the target word. During the training of
+ * {@link POSTaggerUnknown}, these labels are present in the data, so the value of {@link POSLabel}
+ * is simply returned. Otherwise, the prediction made by {@link POSTaggerUnknown} is returned.
  *
  * @author Nick Rizzolo
  **/
@@ -33,7 +29,8 @@ public class labelOneBeforeU extends Classifier {
     private static String mikheevModelFile = rm.getString("mikheevModelPath");
     private static String mikheevLexFile = rm.getString("mikheevLexPath");
     private static MikheevTable mikheevTable = new MikheevTable(mikheevModelFile, mikheevLexFile);
-    private static final POSTaggerUnknown __POSTaggerUnknown = new POSTaggerUnknown(unknownModelFile, unknownLexFile, mikheevTable);
+    private static final POSTaggerUnknown __POSTaggerUnknown = new POSTaggerUnknown(
+            unknownModelFile, unknownLexFile, mikheevTable);
     private static final POSLabel __POSLabel = new POSLabel();
 
     private static ThreadLocal __cache = new ThreadLocal() {};
@@ -52,13 +49,14 @@ public class labelOneBeforeU extends Classifier {
         return "discrete";
     }
 
-    private Feature cachedFeatureValue(Object __example)
-    {
-        if (__example == __exampleCache.get()) return (Feature) __cache.get();
+    private Feature cachedFeatureValue(Object __example) {
+        if (__example == __exampleCache.get())
+            return (Feature) __cache.get();
         __exampleCache.set(__example);
         String __cachedValue = _discreteValue(__example);
-        Feature __result = new DiscretePrimitiveStringFeature(containingPackage, name, "", __cachedValue,
-                valueIndexOf(__cachedValue), (short) allowableValues().length);
+        Feature __result =
+                new DiscretePrimitiveStringFeature(containingPackage, name, "", __cachedValue,
+                        valueIndexOf(__cachedValue), (short) allowableValues().length);
         __cache.set(__result);
         return __result;
     }
@@ -95,4 +93,3 @@ public class labelOneBeforeU extends Classifier {
         return o instanceof labelOneBeforeU;
     }
 }
-

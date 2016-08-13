@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos;
@@ -35,7 +32,7 @@ import java.util.List;
  */
 public class POSAnnotator extends Annotator {
 
-    private static final String NAME =  POSAnnotator.class.getCanonicalName();
+    private static final String NAME = POSAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
     private POSTagger tagger = null;
     private String tokensfield = "tokens";
@@ -50,10 +47,12 @@ public class POSAnnotator extends Annotator {
 
     /**
      * Constructor allowing choice whether or not to lazily initialize.
-     * @param lazilyInitialize  if 'true', load models only on first call to {@link Annotator#getView(TextAnnotation)}
+     * 
+     * @param lazilyInitialize if 'true', load models only on first call to
+     *        {@link Annotator#getView(TextAnnotation)}
      */
     public POSAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.POS, new String[0], lazilyInitialize );
+        super(ViewNames.POS, new String[0], lazilyInitialize);
         tokensfield = ViewNames.TOKENS;
         sentencesfield = ViewNames.SENTENCE;
     }
@@ -61,11 +60,11 @@ public class POSAnnotator extends Annotator {
 
     /**
      * called by superclass either on instantiation, or on first call to getView().
+     * 
      * @param rm configuration parameters
      */
     @Override
-    public void initialize(ResourceManager rm)
-    {
+    public void initialize(ResourceManager rm) {
         tagger = new POSTagger();
     }
 

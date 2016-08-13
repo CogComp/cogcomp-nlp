@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure;
@@ -14,19 +11,19 @@ import java.io.Serializable;
 
 public class ACEEntityMention implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public String id;
-	public String type;
-	public String ldcType;
-//	public String ldcATR;
+    public String id;
+    public String type;
+    public String ldcType;
+    // public String ldcATR;
 
-	public int extentStart;
-	public int extentEnd;
-	public String extent;
+    public int extentStart;
+    public int extentEnd;
+    public String extent;
 
-	public int headStart;
-	public int headEnd;
-	public String head;
+    public int headStart;
+    public int headEnd;
+    public String head;
 
 }

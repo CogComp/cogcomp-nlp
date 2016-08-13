@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -55,7 +52,8 @@ public class OntonotesReader extends TextAnnotationReader {
     protected void initializeReader() {
         this.textAnnotations = new ArrayList<>();
 
-        String ontonotesDirectory= this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
+        String ontonotesDirectory =
+                this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
 
         String[] files = new String[0];
         // In case the input argument is a single file
@@ -64,7 +62,7 @@ public class OntonotesReader extends TextAnnotationReader {
         } else {
             try {
                 files = IOUtils.ls(ontonotesDirectory);
-                for(int i = 0; i < files.length; i++) {
+                for (int i = 0; i < files.length; i++) {
                     files[i] = Paths.get(ontonotesDirectory, files[i]).toString();
                 }
             } catch (IOException e) {

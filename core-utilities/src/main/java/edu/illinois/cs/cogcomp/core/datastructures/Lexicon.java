@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures;
@@ -24,10 +21,8 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 /**
- * A lexicon manager that manages features.
- * Stores a hash value for string features and maps to an integer id.
- * Optionally stores the string values too.
- * Method previewFeature( String ) gets the
+ * A lexicon manager that manages features. Stores a hash value for string features and maps to an
+ * integer id. Optionally stores the string values too. Method previewFeature( String ) gets the
  *
  * @author Vivek Srikumar
  */
@@ -162,16 +157,15 @@ public class Lexicon {
 
 
     /**
-     * a more intuitive method for adding a feature.  If already added, return id that was assigned; if not,
-     *    add it with a unique id and return that id.
+     * a more intuitive method for adding a feature. If already added, return id that was assigned;
+     * if not, add it with a unique id and return that id.
      *
-     * @param feature  Feature value to put in lexicon
+     * @param feature Feature value to put in lexicon
      * @return integer id for feature
      */
-    public synchronized int getFeatureId( String feature )
-    {
-        previewFeature( feature );
-        return this.lookupId( feature );
+    public synchronized int getFeatureId(String feature) {
+        previewFeature(feature);
+        return this.lookupId(feature);
     }
 
     /**
@@ -283,23 +277,22 @@ public class Lexicon {
     }
 
 
-    public void writeIntegerToFeatureStringFormat( PrintStream out ) throws IOException {
-        if ( null == this.featureNames )
-            throw new IllegalStateException( "Error: Lexicon has not been configured to store feature names." );
+    public void writeIntegerToFeatureStringFormat(PrintStream out) throws IOException {
+        if (null == this.featureNames)
+            throw new IllegalStateException(
+                    "Error: Lexicon has not been configured to store feature names.");
 
-        TreeMap< Integer, String > idToFeat = new TreeMap();
+        TreeMap<Integer, String> idToFeat = new TreeMap();
 
-        for ( String feat : this.featureNames )
-        {
-            int id = lookupId( feat );
-            idToFeat.put( id, feat );
+        for (String feat : this.featureNames) {
+            int id = lookupId(feat);
+            idToFeat.put(id, feat);
         }
 
-        for ( Integer id : idToFeat.keySet() )
-        {
-            out.print( id );
-            out.print( "\t" );
-            out.print( idToFeat.get( id ) );
+        for (Integer id : idToFeat.keySet()) {
+            out.print(id);
+            out.print("\t");
+            out.print(idToFeat.get(id));
         }
         out.flush();
     }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.annotation;
@@ -233,27 +230,31 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
     /**
-     * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized text by using the
-     * {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that this method works only with
+     * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized
+     * text by using the {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that
+     * this method works only with
      * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
+     * 
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = getTextAnnotationFromCache(text);
         if (ta == null)
             ta = createTextAnnotationAndCache(corpusId, docId, text, tokenization);
         return ta;
     }
 
-    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
-        TextAnnotation ta = textAnnotationBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
+    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        TextAnnotation ta =
+                textAnnotationBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
         if (!disableCache) {
             putTextAnnotationInCache(text, ta);
         }
@@ -271,21 +272,25 @@ public class BasicAnnotatorService implements AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} and adding
      * all the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s supported by
      * this {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService}. This amounts to calling
-     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and successive calls of
-     * {@link #addView(edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation, String)}. Note that
-     * this method works only with {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
+     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and
+     * successive calls of
+     * {@link #addView(edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation, String)}
+     * . Note that this method works only with
+     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @return
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
-        return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization, viewProviders.keySet());
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization,
+                viewProviders.keySet());
     }
 
 
@@ -312,16 +317,18 @@ public class BasicAnnotatorService implements AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @param viewNames Views to add
      * @return
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
+            throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
         for (String view : viewNames)
             addView(ta, view);

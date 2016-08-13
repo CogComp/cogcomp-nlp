@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -27,8 +24,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Unit test for {@link WordConjunctionOneTwoThreeGramWindowTwo} extractor, which generates a conjunction of 3-shingles
- * from a window of 2 tokens. The extractor is originally used in illinois-chunker (shallow parser).
+ * Unit test for {@link WordConjunctionOneTwoThreeGramWindowTwo} extractor, which generates a
+ * conjunction of 3-shingles from a window of 2 tokens. The extractor is originally used in
+ * illinois-chunker (shallow parser).
  *
  * @author Christos Christodoulopoulos
  */
@@ -37,7 +35,9 @@ public class TestWordConjunctionOneTwoThreeGramWindowTwo {
 
     @Before
     public void setUp() throws Exception {
-        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{}, false, 3);
+        ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 3);
     }
 
     @Test
@@ -46,7 +46,8 @@ public class TestWordConjunctionOneTwoThreeGramWindowTwo {
         List<Constituent> testList = ta.getView("TOKENS").getConstituents();
         Constituent test = testList.get(3);
 
-        WordConjunctionOneTwoThreeGramWindowTwo fex = new WordConjunctionOneTwoThreeGramWindowTwo("WordConj3GramWin2");
+        WordConjunctionOneTwoThreeGramWindowTwo fex =
+                new WordConjunctionOneTwoThreeGramWindowTwo("WordConj3GramWin2");
 
         Set<Feature> feats = fex.getFeatures(test);
         String[] expected_outputs =
@@ -66,7 +67,8 @@ public class TestWordConjunctionOneTwoThreeGramWindowTwo {
                         "WordConjunctionOneTwoThreeGramWindowTwo:1_3(John_Smith)",
                         "WordConjunctionOneTwoThreeGramWindowTwo:2_3(Smith)"};
 
-        if (feats == null) fail("Feats are returning NULL.");
+        if (feats == null)
+            fail("Feats are returning NULL.");
 
         for (Feature f : feats) {
             assertTrue(ArrayUtils.contains(expected_outputs, f.getName()));

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -17,9 +14,10 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 /**
- * Returns the <i>form</i> of the word, i.e, the raw text that represents it. The only exceptions are the brackets
- * <code>'('</code>, <code>'['</code>, and <code>'{'</code> which are translated to <code>'-LRB-'</code> and
- * <code>')'</code>, <code>']'</code>, <code>'}'</code> which are translated to <code>'-RRB-'</code>.
+ * Returns the <i>form</i> of the word, i.e, the raw text that represents it. The only exceptions
+ * are the brackets <code>'('</code>, <code>'['</code>, and <code>'{'</code> which are translated to
+ * <code>'-LRB-'</code> and <code>')'</code>, <code>']'</code>, <code>'}'</code> which are
+ * translated to <code>'-RRB-'</code>.
  *
  * @author Nick Rizzolo
  **/
@@ -43,8 +41,8 @@ public class WordForm extends Classifier {
 
     public Feature featureValue(Object __example) {
         String result = discreteValue(__example);
-        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result, valueIndexOf(result),
-                (short) allowableValues().length);
+        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result,
+                valueIndexOf(result), (short) allowableValues().length);
     }
 
     public String discreteValue(Object __example) {
@@ -69,4 +67,3 @@ public class WordForm extends Classifier {
         return o instanceof WordForm;
     }
 }
-

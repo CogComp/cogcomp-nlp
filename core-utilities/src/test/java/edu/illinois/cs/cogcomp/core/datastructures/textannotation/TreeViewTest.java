@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
@@ -37,7 +34,8 @@ public class TreeViewTest {
         // Create a multi-sentence TA and add dummy dep trees
         List<String[]> sents = new ArrayList<>();
         sents.add("It 's a tough job hosting the Academy Awards .".split(" "));
-        sents.add("On Friday , the organization behind the Academy Awards named a host .".split(" "));
+        sents.add("On Friday , the organization behind the Academy Awards named a host ."
+                .split(" "));
         depTA = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(sents);
         depTreeSent0 = new Tree<>(new Pair<>("hosting", 5));
         Tree<Pair<String, Integer>> tree1 = new Tree<>(new Pair<>("job", 4));

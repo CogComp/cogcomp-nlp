@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.config;
@@ -22,8 +19,9 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 public class SimpleGazetteerAnnotatorConfigurator extends AnnotatorConfigurator {
 
 
-    public static final Property PATH_TO_DICTIONARIES = new Property( "pathToDictionaries", "somepath" );
-    public static final Property PHRASE_LENGTH = new Property("phraseLength", "4" );
+    public static final Property PATH_TO_DICTIONARIES = new Property("pathToDictionaries",
+            "somepath");
+    public static final Property PHRASE_LENGTH = new Property("phraseLength", "4");
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -32,8 +30,9 @@ public class SimpleGazetteerAnnotatorConfigurator extends AnnotatorConfigurator 
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[]{ PATH_TO_DICTIONARIES, PHRASE_LENGTH,
-                new Property(IS_LAZILY_INITIALIZED.key, TRUE) };
+        Property[] props =
+                new Property[] {PATH_TO_DICTIONARIES, PHRASE_LENGTH,
+                        new Property(IS_LAZILY_INITIALIZED.key, TRUE)};
         return new ResourceManager(generateProperties(props));
     }
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.helpers;
@@ -115,7 +112,8 @@ public class GazetteerTree {
         /**
          * Term from a phrase, beyond the first term. If this is the last term, it indicates a
          * match, otherwise it does not, and the children must be constructed.
-         * @param entries the 
+         * 
+         * @param entries the
          */
         GazEntry(String[] entries, int i, String n) {
             if (entries.length == i) {
@@ -188,22 +186,23 @@ public class GazetteerTree {
          * @param index index of the current word.
          * @param view the view we are populating.
          */
-        final public void compileMatches(List<Constituent> words, int start, int index, SpanLabelView view) {
+        final public void compileMatches(List<Constituent> words, int start, int index,
+                SpanLabelView view) {
             // is this match a leaf, if so, we have a real match.
             if (names != null) {
 
                 // We have matched one or more dictionaries, make the spans to reflect that.
                 for (String dn : names) {
-                	view.addSpanLabel(start, index+1, dn, 1d);
+                    view.addSpanLabel(start, index + 1, dn, 1d);
                 }
             }
 
             // do we need to check down the tree
             if (requiredChildren != null) {
-            	index++;
-            	if (index == words.size())
-            		return;
-            	Constituent next = words.get(index);
+                index++;
+                if (index == words.size())
+                    return;
+                Constituent next = words.get(index);
                 GazEntry ge = requiredChildren.get(splitter.normalize(next.getSurfaceForm()));
                 if (ge != null) {
                     ge.compileMatches(words, start, index, view);
@@ -317,9 +316,9 @@ public class GazetteerTree {
                 continue; // just ignore blank lines, or lines stripped by the splitter
             GazEntry ge = gaz.get(terms[0]);
             if (ge == null) {
-                gaz.put(terms[0], new GazEntry(terms, 1, filename+suffix));
+                gaz.put(terms[0], new GazEntry(terms, 1, filename + suffix));
             } else {
-                ge.addChild(terms, 1, filename+suffix);
+                ge.addChild(terms, 1, filename + suffix);
             }
         }
         in.close();
@@ -344,7 +343,7 @@ public class GazetteerTree {
             ge.trimToSize();
         }
     }
-    
+
     /**
      * to string prints a representation of every string contained in the gazetteer.
      * 
@@ -359,4 +358,3 @@ public class GazetteerTree {
         return printstring.toString();
     }
 }
-

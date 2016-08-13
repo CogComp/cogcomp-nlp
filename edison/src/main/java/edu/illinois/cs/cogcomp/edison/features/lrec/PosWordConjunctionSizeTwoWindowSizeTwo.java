@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -23,8 +20,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Extracts the POS Tags as well as the form (text) of tokens 2 before and 2 after from
- * the given token and generates a discrete feature from it.
+ * Extracts the POS Tags as well as the form (text) of tokens 2 before and 2 after from the given
+ * token and generates a discrete feature from it.
  *
  * @keywords pos-tagger, words, tokens, window
  * @author Paul Vijayakumar, Mazin Bokhari, Christos Christodoulopoulos
@@ -40,11 +37,13 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
     /**
      * Extracts an array of tokens from a uniform window of size k
      *
-     * @param TOKENS    The tokens {@link View} of the {@link TextAnnotation} object
+     * @param TOKENS The tokens {@link View} of the {@link TextAnnotation} object
      * @param startspan The span at the beginning of the {@link Constituent} object
-     * @param endspan   The span at the end of the {@link Constituent} object
-     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
-     * @return The window of k tokens to the left and k tokens to the right of the current {@link Constituent} object
+     * @param endspan The span at the end of the {@link Constituent} object
+     * @param k The number of tokens to the left and right of the current {@link Constituent} object
+     *        to get
+     * @return The window of k tokens to the left and k tokens to the right of the current
+     *         {@link Constituent} object
      */
     private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
@@ -70,11 +69,13 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
     /**
      * Extracts an array of POS-tags from a uniform window of size k
      *
-     * @param POS       The part-of-speech {@link View} of the {@link TextAnnotation} object
+     * @param POS The part-of-speech {@link View} of the {@link TextAnnotation} object
      * @param startspan The span at the beginning of the {@link Constituent} object
-     * @param endspan   The span at the end of the {@link Constituent} object
-     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
-     * @return The window of k POS-tags to the left and k tokens to the right of the current {@link Constituent} object
+     * @param endspan The span at the end of the {@link Constituent} object
+     * @param k The number of tokens to the left and right of the current {@link Constituent} object
+     *        to get
+     * @return The window of k POS-tags to the left and k tokens to the right of the current
+     *         {@link Constituent} object
      */
     private String[] getWindowKTags(View POS, int startspan, int endspan, int k) {
         String tags[] = new String[2 * k + 1];
@@ -143,7 +144,8 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
                     f.append("-");
                     f.append(forms[i + context]);
                 }
-                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being the center)
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being
+                // the center)
                 // j is the size of the n-gram so it goes 1 to 2
                 id = classifier + ":" + ((i - window) + "_" + (j + 1));
                 value = "(" + (f.toString()) + ")";

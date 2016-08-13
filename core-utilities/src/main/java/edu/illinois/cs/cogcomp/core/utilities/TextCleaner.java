@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -39,8 +36,9 @@ public class TextCleaner {
 
     private static final int REGEX_TEXT_LIMIT = 10000;
 
-    private static Pattern repeatPunctuationPattern = Pattern.compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
-    private static Pattern xmlTagPattern = Pattern.compile( "(<[^>\\r\\n]+>)");
+    private static Pattern repeatPunctuationPattern = Pattern
+            .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
+    private static Pattern xmlTagPattern = Pattern.compile("(<[^>\\r\\n]+>)");
 
     private boolean removeRepeatPunctuation;
     private boolean replaceUnderscores;
@@ -114,22 +112,20 @@ public class TextCleaner {
     }
 
 
-    public static String replaceXmlTags( String origText )
-    {
-        Matcher xmlMatcher = xmlTagPattern.matcher( origText );
+    public static String replaceXmlTags(String origText) {
+        Matcher xmlMatcher = xmlTagPattern.matcher(origText);
         StringBuilder cleanTextBldr = new StringBuilder();
         int lastAppendedCharOffset = 0;
 
-        while ( xmlMatcher.find() )
-        {
+        while (xmlMatcher.find()) {
             int start = xmlMatcher.start();
             int end = xmlMatcher.end();
-            cleanTextBldr.append( origText.substring( lastAppendedCharOffset, start ) );
-            for ( int i = start; i < end; ++i )
-                cleanTextBldr.append( " " );
+            cleanTextBldr.append(origText.substring(lastAppendedCharOffset, start));
+            for (int i = start; i < end; ++i)
+                cleanTextBldr.append(" ");
             lastAppendedCharOffset = end;
         }
-        cleanTextBldr.append( origText.substring( lastAppendedCharOffset ) );
+        cleanTextBldr.append(origText.substring(lastAppendedCharOffset));
 
         return cleanTextBldr.toString();
     }
