@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,74 +25,84 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class Capitalization extends Classifier
-{
-  public Capitalization()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "Capitalization";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete%"; }
-
-  private static String[] __allowableValues = DiscreteFeature.BooleanValues;
-  public static String[] getAllowableValues() { return __allowableValues; }
-  public String[] allowableValues() { return __allowableValues; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 253 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class Capitalization extends Classifier {
+    public Capitalization() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "Capitalization";
     }
 
-    NEWord word = (NEWord) __example;
-
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
-
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Capitalization"))
-    {
-      int i;
-      NEWord w = word, last = word;
-      for (i = 0; i <= 2 && last != null; ++i)
-      {
-        last = (NEWord) last.next;
-      }
-      for (i = 0; i > -2 && w.previous != null; --i)
-      {
-        w = (NEWord) w.previous;
-      }
-      for (; w != last; w = (NEWord) w.next)
-      {
-        __id = "" + (i++);
-        __value = "" + (w.capitalized);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-      }
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 253 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-  public int hashCode() { return "Capitalization".hashCode(); }
-  public boolean equals(Object o) { return o instanceof Capitalization; }
+    private static String[] __allowableValues = DiscreteFeature.BooleanValues;
+
+    public static String[] getAllowableValues() {
+        return __allowableValues;
+    }
+
+    public String[] allowableValues() {
+        return __allowableValues;
+    }
+
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'Capitalization(NEWord)' defined on line 253 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Capitalization")) {
+            int i;
+            NEWord w = word, last = word;
+            for (i = 0; i <= 2 && last != null; ++i) {
+                last = (NEWord) last.next;
+            }
+            for (i = 0; i > -2 && w.previous != null; --i) {
+                w = (NEWord) w.previous;
+            }
+            for (; w != last; w = (NEWord) w.next) {
+                __id = "" + (i++);
+                __value = "" + (w.capitalized);
+                __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                        this.name, __id, __value, valueIndexOf(__value), (short) 2));
+            }
+        }
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'Capitalization(NEWord)' defined on line 253 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "Capitalization".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof Capitalization;
+    }
 }
-

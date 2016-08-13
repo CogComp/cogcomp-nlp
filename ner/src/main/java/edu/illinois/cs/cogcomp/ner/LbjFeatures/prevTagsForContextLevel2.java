@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,103 +25,99 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class prevTagsForContextLevel2 extends Classifier
-{
-  public prevTagsForContextLevel2()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "prevTagsForContextLevel2";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "real%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'prevTagsForContextLevel2(NEWord)' defined on line 493 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class prevTagsForContextLevel2 extends Classifier {
+    public prevTagsForContextLevel2() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "prevTagsForContextLevel2";
     }
 
-    NEWord word = (NEWord) __example;
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
+    }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    double __value;
+    public String getOutputType() {
+        return "real%";
+    }
 
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext"))
-    {
-      int i, j;
-      NEWord w = word;
-      String[] words = new String[3];
-      OccurrenceCounter[] count = new OccurrenceCounter[3];
-      for (i = 0; i <= 2 && w != null; ++i)
-      {
-        count[i] = new OccurrenceCounter();
-        words[i] = w.form;
-        w = (NEWord) w.next;
-      }
-      w = (NEWord) word.previousIgnoreSentenceBoundary;
-      for (i = 0; i < 1000 && w != null; i++)
-      {
-        for (j = 0; j < words.length; j++)
-        {
-          if (words[j] != null && w.form.equals(words[j]))
-          {
-            if (NETaggerLevel2.isTraining)
-            {
-              if (ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.useNoise())
-              {
-                count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.randomLabel());
-              }
-              else
-              {
-                count[j].addToken(w.neLabel);
-              }
-            }
-            else
-            {
-              count[j].addToken(w.neTypeLevel2);
-            }
-          }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'prevTagsForContextLevel2(NEWord)' defined on line 493 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
         }
-        w = (NEWord) w.previousIgnoreSentenceBoundary;
-      }
-      for (j = 0; j < count.length; j++)
-      {
-        if (count[j] != null)
-        {
-          String[] all = count[j].getTokens();
-          for (i = 0; i < all.length; i++)
-          {
-            __id = "" + (j + "_" + all[i]);
-            __value = count[j].getCount(all[i]) / ((double) count[j].totalTokens);
-            __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-          }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        double __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext")) {
+            int i, j;
+            NEWord w = word;
+            String[] words = new String[3];
+            OccurrenceCounter[] count = new OccurrenceCounter[3];
+            for (i = 0; i <= 2 && w != null; ++i) {
+                count[i] = new OccurrenceCounter();
+                words[i] = w.form;
+                w = (NEWord) w.next;
+            }
+            w = (NEWord) word.previousIgnoreSentenceBoundary;
+            for (i = 0; i < 1000 && w != null; i++) {
+                for (j = 0; j < words.length; j++) {
+                    if (words[j] != null && w.form.equals(words[j])) {
+                        if (NETaggerLevel2.isTraining) {
+                            if (ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator
+                                    .useNoise()) {
+                                count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator
+                                        .randomLabel());
+                            } else {
+                                count[j].addToken(w.neLabel);
+                            }
+                        } else {
+                            count[j].addToken(w.neTypeLevel2);
+                        }
+                    }
+                }
+                w = (NEWord) w.previousIgnoreSentenceBoundary;
+            }
+            for (j = 0; j < count.length; j++) {
+                if (count[j] != null) {
+                    String[] all = count[j].getTokens();
+                    for (i = 0; i < all.length; i++) {
+                        __id = "" + (j + "_" + all[i]);
+                        __value = count[j].getCount(all[i]) / ((double) count[j].totalTokens);
+                        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage,
+                                this.name, __id, __value));
+                    }
+                }
+            }
         }
-      }
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'prevTagsForContextLevel2(NEWord)' defined on line 493 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+        return __result;
     }
 
-    return super.classify(examples);
-  }
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'prevTagsForContextLevel2(NEWord)' defined on line 493 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
 
-  public int hashCode() { return "prevTagsForContextLevel2".hashCode(); }
-  public boolean equals(Object o) { return o instanceof prevTagsForContextLevel2; }
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "prevTagsForContextLevel2".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof prevTagsForContextLevel2;
+    }
 }
-

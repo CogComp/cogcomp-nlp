@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.curator;
@@ -135,8 +132,8 @@ public class CuratorAnnotatorService implements AnnotatorService {
     }
 
     @Override
-    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException {
         return taBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
     }
 
@@ -150,8 +147,8 @@ public class CuratorAnnotatorService implements AnnotatorService {
     }
 
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
@@ -168,8 +165,9 @@ public class CuratorAnnotatorService implements AnnotatorService {
     }
 
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
+            throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
         for (String viewName : viewNames)
             addView(ta, viewName);

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.helpers;
@@ -31,18 +28,24 @@ public class WordEmbeddings {
         INDEPENDENT, OVERALL
     }
 
-    
-    static class WordEmbeddingsConfigurator extends Configurator
-    {
-        public static final Property fileNames = new Property( "pathsToWordEmbeddings", 
-                "WordEmbedding/model-2280000000.LEARNING_RATE=1e-08.EMBEDDING_LEARNING_RATE=1e-07.EMBEDDING_SIZE=50.gz" );
-        public static final Property dimensionalities = new Property( "embeddingDimensionalities", "50" );
-        public static final Property wordNumThreshold = new Property( "minWordAppThresholdsForEmbeddings", "0" );
-        public static final Property normalizationConstants  = new Property( "normalizationConstantsForEmbeddings", "1.0");
-        
-        public static final Property normalizationMethods = new Property( "normalizationMethodsForEmbeddings", "OVERALL");
-        public static final Property isLowercase = new Property( "isLowercaseWordEmbeddings", Configurator.FALSE );
-        
+
+    static class WordEmbeddingsConfigurator extends Configurator {
+        public static final Property fileNames =
+                new Property(
+                        "pathsToWordEmbeddings",
+                        "WordEmbedding/model-2280000000.LEARNING_RATE=1e-08.EMBEDDING_LEARNING_RATE=1e-07.EMBEDDING_SIZE=50.gz");
+        public static final Property dimensionalities = new Property("embeddingDimensionalities",
+                "50");
+        public static final Property wordNumThreshold = new Property(
+                "minWordAppThresholdsForEmbeddings", "0");
+        public static final Property normalizationConstants = new Property(
+                "normalizationConstantsForEmbeddings", "1.0");
+
+        public static final Property normalizationMethods = new Property(
+                "normalizationMethodsForEmbeddings", "OVERALL");
+        public static final Property isLowercase = new Property("isLowercaseWordEmbeddings",
+                Configurator.FALSE);
+
         /**
          * get a ResourceManager object with the default key/value pairs for this configurator
          *
@@ -50,54 +53,58 @@ public class WordEmbeddings {
          */
         @Override
         public ResourceManager getDefaultConfig() {
-            Property[] props = { fileNames, dimensionalities, wordNumThreshold,
-                    normalizationConstants, normalizationMethods, isLowercase };
-            return new ResourceManager( generateProperties( props ));
+            Property[] props =
+                    {fileNames, dimensionalities, wordNumThreshold, normalizationConstants,
+                            normalizationMethods, isLowercase};
+            return new ResourceManager(generateProperties(props));
         }
     }
 
-    
+
     public static List<Boolean> isLowercasedEmbeddingByResource = null;
     public static List<String> resources = null;
     public static List<Integer> embeddingDimensionalities = null;
     public static int dimensionalitiesSum = 0;
     public static List<HashMap<String, double[]>> embeddingByResource = null;
 
-    
+
     public static void initWithDefaults() throws IOException {
-        ResourceManager rm = ( new WordEmbeddingsConfigurator() ).getDefaultConfig();
-        
-        List< String > fileNames = new LinkedList<>();
-        fileNames.add( rm.getString( WordEmbeddingsConfigurator.fileNames.key ) );
+        ResourceManager rm = (new WordEmbeddingsConfigurator()).getDefaultConfig();
+
+        List<String> fileNames = new LinkedList<>();
+        fileNames.add(rm.getString(WordEmbeddingsConfigurator.fileNames.key));
 
         List<Integer> embeddingDimensionality = new LinkedList<>();
-        embeddingDimensionality.add( rm.getInt( WordEmbeddingsConfigurator.dimensionalities.key ) );
+        embeddingDimensionality.add(rm.getInt(WordEmbeddingsConfigurator.dimensionalities.key));
 
         List<Integer> minWordAppearanceThres = new LinkedList<>();
-        minWordAppearanceThres.add( rm.getInt( WordEmbeddingsConfigurator.wordNumThreshold.key ) );
+        minWordAppearanceThres.add(rm.getInt(WordEmbeddingsConfigurator.wordNumThreshold.key));
 
         List<Boolean> isLowercasedEmbedding = new LinkedList<>();
-        isLowercasedEmbedding.add( rm.getBoolean( WordEmbeddingsConfigurator.isLowercase.key ) );
+        isLowercasedEmbedding.add(rm.getBoolean(WordEmbeddingsConfigurator.isLowercase.key));
 
 
         List<Double> normalizationConstant = new LinkedList<>();
-        normalizationConstant.add( rm.getDouble( WordEmbeddingsConfigurator.normalizationConstants.key ));
+        normalizationConstant.add(rm
+                .getDouble(WordEmbeddingsConfigurator.normalizationConstants.key));
 
 
         List<NormalizationMethod> normalizationMethods = new LinkedList<>();
-        normalizationMethods.add( NormalizationMethod.valueOf( rm.getString( WordEmbeddingsConfigurator.normalizationMethods.key )));
+        normalizationMethods.add(NormalizationMethod.valueOf(rm
+                .getString(WordEmbeddingsConfigurator.normalizationMethods.key)));
 
-        init( fileNames, embeddingDimensionality, minWordAppearanceThres, isLowercasedEmbedding,
-                normalizationConstant, normalizationMethods );
+        init(fileNames, embeddingDimensionality, minWordAppearanceThres, isLowercasedEmbedding,
+                normalizationConstant, normalizationMethods);
     }
-    
+
     /*
      * For now, the parameter minWordAppearanceThres is not used, but I'm planning to use it like I
      * was using the word appearance thresholds on Brown Clusters
      */
     public static void init(List<String> filenames, List<Integer> embeddingDimensionality,
             List<Integer> minWordAppearanceThres, List<Boolean> isLowecasedEmbedding,
-            List<Double> normalizationConstant, List<NormalizationMethod> methods) throws IOException {
+            List<Double> normalizationConstant, List<NormalizationMethod> methods)
+            throws IOException {
         dimensionalitiesSum = 0;
         embeddingDimensionalities = new LinkedList<>();
         resources = new LinkedList<>();
@@ -105,8 +112,9 @@ public class WordEmbeddings {
         isLowercasedEmbeddingByResource = new LinkedList<>();
         for (int resourceId = 0; resourceId < filenames.size(); resourceId++) {
             HashMap<String, double[]> embedding = new HashMap<>();
-            BufferedReader in = new BufferedReader( new
-                    InputStreamReader(LineIO.getInputStream(filenames.get(resourceId))));
+            BufferedReader in =
+                    new BufferedReader(new InputStreamReader(LineIO.getInputStream(filenames
+                            .get(resourceId))));
             double maxAbsValueInAnyDimension = 0;
             String line = in.readLine();
             while (line != null) {

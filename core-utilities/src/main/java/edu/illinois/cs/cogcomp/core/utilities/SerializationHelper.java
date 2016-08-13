@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -31,8 +28,8 @@ public class SerializationHelper {
     private static final String NAME = SerializationHelper.class.getCanonicalName();
 
     /**
-     * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set
-     * to false and file already exists, this method throws an exception.
+     * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set to false and
+     * file already exists, this method throws an exception.
      *
      * @param ta The text annotation to be serialized
      * @param fileName Name of file to write to
@@ -88,8 +85,8 @@ public class SerializationHelper {
     }
 
     /**
-     * Serialize a text annotation into a json string, with option for explicit offsets for tokens. This is
-     *    potentially useful for generating annotated data for use with other tool sets.
+     * Serialize a text annotation into a json string, with option for explicit offsets for tokens.
+     * This is potentially useful for generating annotated data for use with other tool sets.
      *
      * @param ta The text annotation to be serialized
      * @param writeTokenCharacterOffsets whether or not to write explicit token offsets.
@@ -105,13 +102,13 @@ public class SerializationHelper {
         return gson.toJson(json);
     }
 
-        /**
-         * Serialize a text annotation into a json string. This can be useful for writing into a file or
-         * a database record
-         *
-         * @param ta The text annotation to be serialized
-         * @return A json string
-         */
+    /**
+     * Serialize a text annotation into a json string. This can be useful for writing into a file or
+     * a database record
+     *
+     * @param ta The text annotation to be serialized
+     * @return A json string
+     */
     public static String serializeToJson(TextAnnotation ta) {
         return serializeToJson(ta, false);
     }

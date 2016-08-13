@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
@@ -57,23 +54,24 @@ public class IllinoisLemmatizer extends Annotator {
 
     /**
      * default parameters, but set whether lazily initialized or not
-     * @param isLazilyInitialized   if 'true', defer loading resources until getView() is called.
+     * 
+     * @param isLazilyInitialized if 'true', defer loading resources until getView() is called.
      */
     public IllinoisLemmatizer(boolean isLazilyInitialized) {
 
         super(ViewNames.LEMMA, new String[] {ViewNames.POS}, isLazilyInitialized,
-                new LemmatizerConfigurator().getDefaultConfig() );
+                new LemmatizerConfigurator().getDefaultConfig());
     }
 
     /**
      * Override default config parameters with properties in rm. Is lazily initialized by default.
+     * 
      * @param nonDefaultRm non-default configuration params
      */
     public IllinoisLemmatizer(ResourceManager nonDefaultRm) {
-        super(ViewNames.LEMMA,
-                new String[] {ViewNames.POS},
-                nonDefaultRm.getBoolean(AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
-                new LemmatizerConfigurator().getConfig(nonDefaultRm) );
+        super(ViewNames.LEMMA, new String[] {ViewNames.POS}, nonDefaultRm.getBoolean(
+                AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE),
+                new LemmatizerConfigurator().getConfig(nonDefaultRm));
     }
 
     public static List<String> readFromClasspath(String filename) {
@@ -118,10 +116,10 @@ public class IllinoisLemmatizer extends Annotator {
     }
 
     /**
-     * loads resources used by lemmatizer. By default, is called by Annotator superclass with ResourceManager
-     *     passed in at construction time.
+     * loads resources used by lemmatizer. By default, is called by Annotator superclass with
+     * ResourceManager passed in at construction time.
      */
-    public void initialize( ResourceManager rm ) {
+    public void initialize(ResourceManager rm) {
         this.useStanford = rm.getBoolean(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key);
         wnLemmaReader = new WordnetLemmaReader(rm.getString(LemmatizerConfigurator.WN_PATH.key));
         loadVerbMap();
@@ -217,7 +215,7 @@ public class IllinoisLemmatizer extends Annotator {
 
     public String getLemma(String word, String pos) {
 
-        if ( !isInitialized() )
+        if (!isInitialized())
             super.doInitialize();
         word = word.toLowerCase();
 
