@@ -32,7 +32,7 @@ public class TreeViewTest {
     @Before
     public void setUp() throws Exception {
         String[] viewsToAdd = {ViewNames.POS, ViewNames.PARSE_STANFORD};
-        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
 
         // Create a multi-sentence TA and add dummy dep trees
         List<String[]> sents = new ArrayList<>();

@@ -41,7 +41,7 @@ public class JsonSerializerTest {
     TextAnnotation ta =
             DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(
                     new String[]{ ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB },
-                    false ); // no noise
+                    false, 3); // no noise
 
     @Test
     public void testSerializerWithCharOffsets()
@@ -83,7 +83,7 @@ public class JsonSerializerTest {
 
     @Test
     public void testJsonSerializabilityWithOffsets() throws Exception {
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false);
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
 
         // making sure serialization does not fail, when some views (possibly by mistake) are null
         ta.addView("nullView", null);

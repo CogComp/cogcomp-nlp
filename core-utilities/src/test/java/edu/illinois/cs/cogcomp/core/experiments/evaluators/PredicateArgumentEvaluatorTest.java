@@ -33,9 +33,9 @@ public class PredicateArgumentEvaluatorTest {
 
         String[] viewsToAdd = {ViewNames.SRL_VERB};
         TextAnnotation taGold =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         TextAnnotation taPred =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         gold = (PredicateArgumentView) taGold.getView(ViewNames.SRL_VERB);
         predicted = (PredicateArgumentView) taPred.getView(ViewNames.SRL_VERB);
     }
