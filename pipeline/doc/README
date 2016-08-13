@@ -1,0 +1,293 @@
+CONTENTS
+=================
+1 PURPOSE  
+	1.1  Purpose 
+	1.2  License 
+2 System requirements 
+3 Download contents 
+4 Dependencies
+5 Compiling
+6 Running the illinois-nlp-pipeline
+7 Troubleshooting 
+8 Contact Information 
+
+
+==============================
+
+1. PURPOSE
+
+This software bundles some basic preprocessing steps that a lot of NLP
+applications need, with the goal of making them run locally. Some
+components have significant memory requirements, but given a machine
+with sufficient memory, you can instantiate a AnnotatorService
+object that provides plain text tokenization, Part-of-Speech tagging,
+chunking, Named Entity tagging, lemmatization, dependency and
+constituency parsing, and (verb) semantic role labeling.
+
+By default, the illinois-nlp-pipeline will cache its outputs in a local
+directory, so that if you process overlapping data sets (or process 
+the same data set multiple times), it will use a cached copy of the
+system outputs and run much faster.
+
+
+1.1 ...A LITTLE MORE SPECIFICALLY
+
+The illinois-nlp-pipeline package is intended to be used PROGRAMMATICALLY. 
+Some rudimentary command-line functionality is provided principally to
+allow you to test that it is working properly.
+
+IllinoisPreprocessor works only for English plain text. You will need
+to remove XML/HTML mark-up, as well as formatting like bulleted lists
+if you want well-formed output. (IllinoisPreprocesor may generate
+output for such texts, but it is not guaranteed that the different
+tools will succeed in producing mutually consistent output.)
+
+One important note: if you wish to use your own tokenization, you should 
+implement a class that follows the Tokenizer interface from 
+illinois-core-utilities, and use it as an argument to a TextAnnotationBuilder
+(also from illinois-core-utilities). 
+
+The pipeline has the following annotators. To understand the annotations,
+please refer to the descriptions of the individual packages at the URLs
+provided. These annotations are stored as Views in a single TextAnnotation
+data structure -- see README_DEVELOPER and the illinois-cogcomp-nlp library
+(https://github.com/IllinoisCogComp/illinois-cogcomp-nlp).
+
+Unless otherwise indicated, the NLP tools listed below are part of the
+illinois-cogcomp-nlp package. The memory is expected MAXIMUM memory required 
+for the component itself EXCLUDING dependencies.
+
+1. Lemmatizer: <1G memory, no dependencies.
+2. Part-of-Speech tagger: <1G, no dependencies.
+3. Chunker: <1G, requires Part-of-Speech tagger.
+4. Named Entity Recognizer (CoNLL): 2G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+5. Named Entity Recognizer (OntoNotes) 4G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+6. Constituency Parser (Stanford): 1G, no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+5. Dependency Parser (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+   Constituency Parser.
+8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+   Constituency Parser.
+
+
+1.2 LICENSE
+
+illinois-nlp-pipeline is available under a Research and Academic use
+license. For more details, visit the CCG website and click the
+download link for this software.
+
+
+==============================
+
+2.0 PREREQUISITES
+
+The Illinois NLP Pipeline provides a suite of state-of-the-art
+Natural Language Processing tools of varying complexity.  Some have
+specific prerequisites that must be present if you want to run them.
+
+
+2.1 GENERAL REQUIREMENTS: SYSTEM
+
+This software was developed on the following platform:
+
+Scientific Linux (2.6.32-279.5.2.el6.x86_64)
+Java 1.7
+
+The memory required depends on the options you set in the config
+file. 2G should be plenty to run the Tokenizer, POS tagger, and
+lemmatizer, and Shallow Parser (a.k.a. Chunker).  NER will require
+an additional 2G (CoNLL model) or 4G (OntoNotes model). The Stanford
+Syntactic and Dependency Parsers require approximately 2G. The
+Ilinois Verb Semantic Role Labeler requires 4G.
+
+Note that individual Illinois NLP tools may depend on other tools
+for inputs, and will not work unless those components are also active.
+If you try to run the system with an invalid configuration, it will
+print a warning about the missing components.
+
+2.2 SPECIFIC REQUIREMENTS: SRL
+
+To run the Semantic Role Labeler you must have an instance of the
+Gurobi license on your machine, and set the relevant environment
+variables (see
+http://www.gurobi.com/products/licensing-pricing/licensing-overview
+-- note that there is a free academic use license).
+
+==============================
+
+3. DOWNLOAD CONTENTS
+
+config/ : configuration files
+dist/ : the Illinois Preprocessor jar
+lib/ : dependencies 
+scripts/ : scripts to allow command-line test of the Illinois Preprocessor
+src/ : source code for the IllinoisPreprocessor
+test/ : test files used for the command line test of the Illinois Preprocessor
+doc/ : documentation, including this README. 
+
+==============================
+
+4. DEPENDENCIES
+
+This distribution contains all the dependencies needed to run the
+Illinois NLP Pipeline. This includes configuration files for some
+individual components; scripts to process plain text files from the
+command line; and .jar files for the libraries used by the pipeline and
+its components.
+
+The complete Illinois NLP Pipeline package includes configuration files
+that specify which components are active and which can be used to control
+individual component behaviors. A set of default values is specified
+programmatically; refer to the documentation of individual packages
+to learn about their specific configuration options. If you specify
+the relevant values in the single configuration file used by the pipeline
+constructor, they will override only those defaults for which you have
+specified values.
+
+==============================
+
+5. COMPILING
+
+See README_DEVELOPER.txt.
+
+
+==============================
+
+6. RUNNING THE ILLINOIS PREPROCESSOR
+
+This software is intended to be run PROGRAMMATICALLY, not as a tool to
+write annotations to file for later use. It has been developed to
+allow some of our more complex tools to be run completely within a
+single JVM instead of in tandem with the CCG NLP Curator
+(http://cogcomp.cs.illinois.edu/page/software_view/Curator).
+
+You need to set the relevant options in the pipeline configuration
+file, including specifying the location of the WordNet dictionary files.
+The configuration file is used to construct a ResourceManager object,
+which is passed to the IllinoisPreprocessor as a constructor argument.
+
+The standard distribution for this package puts dependencies in lib/;
+the parser model in data/; and the config file in config/. There are
+two sample scripts that are provided to test that the
+IllinoisProcessor works after you have downloaded
+it. scripts/runPreprocessor.sh takes as arguments a configuration file
+and a text file; it processes the text file according to the
+properties set in the config file, and writes output to STDOUT.
+scripts/testPreprocessor.sh is a self-contained script that calls
+runPreprocessor.sh with fixed arguments and compares the output to
+some reference output. If the new output and reference output are
+different, the script prints an error message and indicates the
+differences.
+
+6.1 Running a Simple Command-Line Test
+
+Running the test:
+
+   scripts/testPreprocessor.sh
+
+
+Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
+
+   scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+
+
+Changing the logging settings: modify config/.  For the
+settings in this file to take effect, you will need to put directory
+containing it on your classpath.
+
+
+==============================
+
+PROGRAMMATIC USE
+
+You can check the javadoc for detailed information about the
+IllinoisPreprocessor API.
+
+The main class is IllinoisPipelineFactory, in the package
+edu.illinois.cs.cogcomp.nlp.pipeline. For an example showing how the
+IllinoisPipelineFactory and AnnotatorService (the class it
+instantiates, which is the pipeline itself) can be used, look at 
+IllinoisNewPipelineTest class PreprocessorTester in
+edu.illinois.cs.cogcomp.nlp.main.
+
+To process text input, use the 'getCachedTextAnnotation()' method: 
+
+        String docId = "APW-20140101.3018"; // arbitrary string identifier
+        String textId = "body"; // arbitrary string identifier
+        String text = ...; // contains plain text to be annotated
+
+        ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
+        AnnotatorService pipeline = IllinoisPipelineFactory.buildPipeline( rm );
+        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
+
+This method takes as its argument a String variable containing the
+text you want to process. This String should not be too long --
+depending on the annotators you plan to use, a reasonable upper limit
+is 1,000 words (fewer if you use resource-intensive annotators).
+
+The method returns a TextAnnotation data structure (see the 
+illinois-core-utilities package for details), which contains 
+a View corresponding to each annotation source. Each View contains
+a set of Constituents and Relations representing the annotator output.
+Access views and constituents via:
+
+        String viewName = ViewNames.POS; // example using ViewNames class constants
+        View view = ta.getView( viewName );
+        List< Constituent > constituents = view.getConstituents();
+
+See the documentation for individual components (links in section 1 above) for
+more information about the annotations and their representation as Constituents and
+Relations.
+
+
+==============================
+
+
+CONFIGURATION OPTIONS
+
+The default configuration options are specified in the class edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator.
+Each property has a String as a key and a value.  If you want to change specific behaviors,
+such as activating or deactivating specific components, you can write non-default entries
+in a configuration file and use this to instantiate an instance of the pipeline (any entries
+that duplicate default values will have no effect and are not required).
+The default keys and values are specified below; comments provide more information where the
+values themselves are not self-explanatory.  Note that the key/value pairs each appear
+on a separate line and are themselves separated by a tab key. If you have limited memory or wish
+to save on processing time, you should set the values for unnecessary annotations to 'false'
+-- in particular, SRL components require more time and memory than most other components,
+and the parsers can take a relatively long time on long sentences.
+
+
+// in milliseconds
+stanfordMaxTimePerSentence  1000
+
+// in tokens
+stanfordParseMaxSentenceLength  60
+
+// directory in which cached annotations will be written.
+simpleCacheDir simple-annotation-cache
+
+// flags indicating which NLP components will be used
+usePos  true
+useLemma    true
+useShallowParse true
+
+// "standard" NER: see http://cogcomp.cs.illinois.edu/page/demo_view/NER
+useNerConll true
+
+// "extended" NER -- see http://cogcomp.cs.illinois.edu/page/demo_view/NERextended
+useNerOntonotes true
+
+useStanfordParse    true
+useStanfordDep  true
+
+// semantic role labelers
+useSrlVerb  true
+useSrlNom   true
+
+
+Note that individuals have their own configuration options -- see the documentation
+for individual components for details.
+
+==============================
+

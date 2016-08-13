@@ -1,0 +1,38 @@
+you can use Maven:
+add the illinois-nlp-pipeline entry to your own project's pom.xml
+file, and Maven will automatically find all the dependencies for you.
+
+<dependencies>
+...
+   <dependency>
+	<groupId>edu.illinois.cs.cogcomp</groupId>
+	<artifactId>illinois-nlp-pipeline</artifactId>
+	<version>0.1.5-SNAPSHOT</version>
+   </dependency>
+...
+</dependencies>
+
+
+You will also need to add the address of the CCG Maven repository
+to your pom file:
+
+<repositories>
+...
+    <repository>
+	<id>CogcompSoftware</id>
+	<name>CogcompSoftware</name>
+	<url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+    </repository>
+</repositories>
+
+
+============================
+
+
+You will need to
+specify values in the configuration file as described in section 
+of these instructions. In particular, you will need to download 
+WordNet version 3.0 or later and set the corresponding path value
+in the configuration file in config/pipelineConfig.txt and
+src/test/resources/testConfig.txt.
+
