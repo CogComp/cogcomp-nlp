@@ -237,9 +237,9 @@ DummyTextAnnotationGenerator {
             switch (viewName) {
                 case ViewNames.POS:
                     TokenLabelView posView = new TokenLabelView(viewName, ta);
-                    String[] pos1Overall = withNoisyLabels ? pos1 : pos_noisy1;
-                    String[] pos2Overall = withNoisyLabels ? pos2 : pos_noisy2;
-                    String[] pos3Overall = withNoisyLabels ? pos3 : pos_noisy3;
+                    String[] pos1Overall = withNoisyLabels ? pos_noisy1 : pos1;
+                    String[] pos2Overall = withNoisyLabels ? pos_noisy2 : pos2;
+                    String[] pos3Overall = withNoisyLabels ? pos_noisy3 : pos3;
                     for (int i = 0; i < pos1Overall.length; i++)
                         posView.addTokenLabel(i, pos1Overall[i], 1.0);
                     if (sentenceNum > 1)
@@ -252,9 +252,9 @@ DummyTextAnnotationGenerator {
                     break;
                 case ViewNames.LEMMA:
                     TokenLabelView lemmaView = new TokenLabelView(ViewNames.LEMMA, ta);
-                    String[] lemmaOveral1 = withNoisyLabels ? lemmas1 : lemmas_noisy1;
-                    String[] lemmaOveral2 = withNoisyLabels ? lemmas2 : lemmas_noisy2;
-                    String[] lemmaOveral3 = withNoisyLabels ? lemmas3 : lemmas_noisy3;
+                    String[] lemmaOveral1 = withNoisyLabels ? lemmas_noisy1 : lemmas1;
+                    String[] lemmaOveral2 = withNoisyLabels ? lemmas_noisy2 : lemmas2;
+                    String[] lemmaOveral3 = withNoisyLabels ? lemmas_noisy3 : lemmas3;
                     for (int i = 0; i < lemmaOveral1.length; i++)
                         lemmaView.addTokenLabel(i, lemmaOveral1[i], 1.0);
                     if (sentenceNum > 1)
