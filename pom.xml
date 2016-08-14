@@ -12,7 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.0.59-SNAPSHOT</cogcomp-nlp-version>
+        <cogcomp-nlp-version>3.0.59</cogcomp-nlp-version>
         <cogcomp-nlp-pipeline-version>0.1.23</cogcomp-nlp-pipeline-version>
     </properties>
 
