@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -19,10 +16,9 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.POSConfigurator;
 
 /**
- * After {@link POSTaggerKnown} and {@link POSTaggerUnknown} are trained,
- * this classifier will return the prediction of {@link POSTaggerKnown} if
- * the input word was observed during training or of {@link POSTaggerUnknown}
- * if it wasn't.
+ * After {@link POSTaggerKnown} and {@link POSTaggerUnknown} are trained, this classifier will
+ * return the prediction of {@link POSTaggerKnown} if the input word was observed during training or
+ * of {@link POSTaggerUnknown} if it wasn't.
  *
  * @author Nick Rizzolo
  **/
@@ -38,9 +34,12 @@ public class POSTagger extends Classifier {
     private static String mikheevLexFile = rm.getString("mikheevLexPath");
 
     private static MikheevTable mikheevTable = new MikheevTable(mikheevModelFile, mikheevLexFile);
-    private static final BaselineTarget baselineTarget = new BaselineTarget(baselineModelFile, baselineLexFile);
-    private static final POSTaggerKnown taggerKnown = new POSTaggerKnown(knownModelFile, knownLexFile, baselineTarget);
-    private static final POSTaggerUnknown taggerUnknown = new POSTaggerUnknown(unknownModelFile, unknownLexFile, mikheevTable);
+    private static final BaselineTarget baselineTarget = new BaselineTarget(baselineModelFile,
+            baselineLexFile);
+    private static final POSTaggerKnown taggerKnown = new POSTaggerKnown(knownModelFile,
+            knownLexFile, baselineTarget);
+    private static final POSTaggerUnknown taggerUnknown = new POSTaggerUnknown(unknownModelFile,
+            unknownLexFile, mikheevTable);
 
     private static final WordForm __wordForm = new WordForm();
 
@@ -57,15 +56,14 @@ public class POSTagger extends Classifier {
         return "discrete";
     }
 
-    public FeatureVector classify(Object __example)
-    {
+    public FeatureVector classify(Object __example) {
         return new FeatureVector(featureValue(__example));
     }
 
     public Feature featureValue(Object __example) {
         String result = discreteValue(__example);
-        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result, valueIndexOf(result),
-                (short) allowableValues().length);
+        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result,
+                valueIndexOf(result), (short) allowableValues().length);
     }
 
     public String discreteValue(Object __example) {
@@ -85,4 +83,3 @@ public class POSTagger extends Classifier {
         return o instanceof POSTagger;
     }
 }
-

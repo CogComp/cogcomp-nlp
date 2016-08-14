@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos;
@@ -49,8 +46,8 @@ public class POSConfigurator extends Configurator {
             MODEL_PATH.value + BASELINE_NAME.value + ".lex");
     public static final Property MIKHEEV_MODEL_PATH = new Property("mikheevModelPath",
             MODEL_PATH.value + MIKHEEV_NAME.value + ".lc");
-    public static final Property MIKHEEV_LEX_PATH = new Property("mikheevLexPath",
-            MODEL_PATH.value + MIKHEEV_NAME.value + ".lex");
+    public static final Property MIKHEEV_LEX_PATH = new Property("mikheevLexPath", MODEL_PATH.value
+            + MIKHEEV_NAME.value + ".lex");
     public static final Property KNOWN_MODEL_PATH = new Property("knownModelPath", MODEL_PATH.value
             + KNOWN_NAME.value + ".lc");
     public static final Property KNOWN_LEX_PATH = new Property("knownLexPath", MODEL_PATH.value

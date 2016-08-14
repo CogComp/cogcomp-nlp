@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.curator;
@@ -55,8 +52,7 @@ public class CuratorFactoryTest {
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail(e.getMessage());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // If this is a "connection timeout" exception we can ignore it
             if (e.getMessage().contains("Connection timed out"))
                 return;
@@ -82,8 +78,7 @@ public class CuratorFactoryTest {
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail(e.getMessage());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // If this is a "connection timeout" exception we can ignore it
             if (e.getMessage().contains("Connection timed out"))
                 return;
@@ -99,8 +94,7 @@ public class CuratorFactoryTest {
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail(e.getMessage());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             // If this is a "connection timeout" exception we can ignore it
             if (e.getMessage().contains("Connection timed out"))
                 return;
@@ -128,8 +122,8 @@ public class CuratorFactoryTest {
         // Currently, there is no way to access the number of trees in
         // a TreeView (protected variable, no getter)
         assertEquals(56, ta.getView(ViewNames.PARSE_CHARNIAK).getNumberOfConstituents());
-        assertEquals(NUM_SRL_FRAMES,
-                ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB)).getPredicates().size());
+        assertEquals(NUM_SRL_FRAMES, ((PredicateArgumentView) ta.getView(ViewNames.SRL_VERB))
+                .getPredicates().size());
         assertEquals(NUM_CHUNKS, ta.getView(ViewNames.SHALLOW_PARSE).getNumberOfConstituents());
         assertEquals(NUM_TOKS, ta.getView(ViewNames.LEMMA).getNumberOfConstituents());
     }

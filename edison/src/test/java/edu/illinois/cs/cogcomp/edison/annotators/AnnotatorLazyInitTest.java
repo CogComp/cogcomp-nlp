@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -32,27 +29,28 @@ import static org.junit.Assert.fail;
 
 /**
  * Test lazy initialization behavior of Annotator.
+ * 
  * @author mssammon
  */
-public class AnnotatorLazyInitTest
-{
+public class AnnotatorLazyInitTest {
     private static ResourceManager defaultRm;
-    protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+    protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
+            new StatefulTokenizer());
 
     @BeforeClass
-    public static void setUpOnce()
-    {
+    public static void setUpOnce() {
         Properties props = new Properties();
-        props.setProperty(SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.FALSE);
-        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key, "/testgazetteers/" );
-        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "6" );
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key,
+                Configurator.FALSE);
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key,
+                "/testgazetteers/");
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "6");
         defaultRm = new ResourceManager(props);
     }
 
 
     @Test
-    public void testNonLazy()
-    {
+    public void testNonLazy() {
         SimpleGazetteerAnnotator sga = null;
         try {
             sga = new SimpleGazetteerAnnotator(defaultRm);
@@ -61,46 +59,50 @@ public class AnnotatorLazyInitTest
             fail(e.getMessage());
         }
 
-        assertTrue( sga.isInitialized() );
+        assertTrue(sga.isInitialized());
 
-        assertTrue( sga.dictionaries.size() > 0 );
-        assertTrue( sga.dictionariesIgnoreCase.size() > 0 );
+        assertTrue(sga.dictionaries.size() > 0);
+        assertTrue(sga.dictionariesIgnoreCase.size() > 0);
     }
 
     @Test
-    public void testLazy()
-    {
+    public void testLazy() {
         SimpleGazetteerAnnotator sga = null;
         Properties props = new Properties();
-        props.setProperty( SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key, "/testgazetteers/" );
-        props.setProperty( SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "6" );
-        props.setProperty( SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, SimpleGazetteerAnnotatorConfigurator.TRUE );
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PATH_TO_DICTIONARIES.key,
+                "/testgazetteers/");
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.PHRASE_LENGTH.key, "6");
+        props.setProperty(SimpleGazetteerAnnotatorConfigurator.IS_LAZILY_INITIALIZED.key,
+                SimpleGazetteerAnnotatorConfigurator.TRUE);
         try {
-            sga = new SimpleGazetteerAnnotator( new ResourceManager(props) );
+            sga = new SimpleGazetteerAnnotator(new ResourceManager(props));
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
 
-        assertFalse( sga.isInitialized() );
+        assertFalse(sga.isInitialized());
 
-        assertTrue( null == sga.dictionaries ? true : sga.dictionaries.size() > 0 );
-        assertTrue( null == sga.dictionariesIgnoreCase ? true : sga.dictionariesIgnoreCase.size() > 0 );
+        assertTrue(null == sga.dictionaries ? true : sga.dictionaries.size() > 0);
+        assertTrue(null == sga.dictionariesIgnoreCase ? true
+                : sga.dictionariesIgnoreCase.size() > 0);
 
-        TextAnnotation ta = tab.createTextAnnotation("The CIA has no London headquarters, though General Electric does." );
+        TextAnnotation ta =
+                tab.createTextAnnotation("The CIA has no London headquarters, though General Electric does.");
 
         try {
-            sga.getView( ta );
+            sga.getView(ta);
         } catch (AnnotatorException e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         }
-        assertTrue( ta.hasView( sga.getViewName() ) );
-        assertTrue( sga.isInitialized() );
-        assertTrue( null == sga.dictionaries ? true : sga.dictionaries.size() > 0 );
-        assertTrue( null == sga.dictionariesIgnoreCase ? true : sga.dictionariesIgnoreCase.size() > 0 );
+        assertTrue(ta.hasView(sga.getViewName()));
+        assertTrue(sga.isInitialized());
+        assertTrue(null == sga.dictionaries ? true : sga.dictionaries.size() > 0);
+        assertTrue(null == sga.dictionariesIgnoreCase ? true
+                : sga.dictionariesIgnoreCase.size() > 0);
 
-        assertTrue(ta.hasView( sga.getViewName() ));
+        assertTrue(ta.hasView(sga.getViewName()));
     }
 
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -20,7 +17,7 @@ public class JsonTools {
 
     private static JsonParser parser = new JsonParser();
 
-    public static JsonArray createJsonArrayFromArray(TextAnnotation[] annotations){
+    public static JsonArray createJsonArrayFromArray(TextAnnotation[] annotations) {
         JsonConverter<TextAnnotation> converter = new JsonConverter<TextAnnotation>() {
             @Override
             public JsonElement convertToJson(TextAnnotation object) {
@@ -31,9 +28,9 @@ public class JsonTools {
         return createJsonArrayFromArray(annotations, converter);
     }
 
-    public static JsonArray createJsonArrayFromArray(String[] array){
-        JsonConverter<String> converter = new JsonConverter<String>(){
-            public JsonElement convertToJson(String object){
+    public static JsonArray createJsonArrayFromArray(String[] array) {
+        JsonConverter<String> converter = new JsonConverter<String>() {
+            public JsonElement convertToJson(String object) {
                 return new JsonPrimitive(object);
             }
         };
@@ -41,9 +38,9 @@ public class JsonTools {
         return createJsonArrayFromArray(array, converter);
     }
 
-    private static <T> JsonArray createJsonArrayFromArray(T[] array, JsonConverter<T> converter){
+    private static <T> JsonArray createJsonArrayFromArray(T[] array, JsonConverter<T> converter) {
         JsonArray jsonArray = new JsonArray();
-        for(int i=0;i<array.length;i++){
+        for (int i = 0; i < array.length; i++) {
             jsonArray.add(converter.convertToJson(array[i]));
         }
         return jsonArray;

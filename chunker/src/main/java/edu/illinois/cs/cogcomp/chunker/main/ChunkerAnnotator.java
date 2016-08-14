@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.chunker.main;
@@ -46,24 +43,23 @@ public class ChunkerAnnotator extends Annotator {
     /**
      * default: don't use lazy initialization
      */
-    public ChunkerAnnotator()
-    {
-        this( false );
+    public ChunkerAnnotator() {
+        this(false);
     }
 
     /**
      * Constructor parameter allows user to specify whether or not to lazily initialize.
      *
-     * @param lazilyInitialize If set to 'true', models will not be loaded until first call requiring Chunker annotation.
+     * @param lazilyInitialize If set to 'true', models will not be loaded until first call
+     *        requiring Chunker annotation.
      */
-    public ChunkerAnnotator(boolean lazilyInitialize ) {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize );
+    public ChunkerAnnotator(boolean lazilyInitialize) {
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize);
 
     }
 
     @Override
-    public void initialize(ResourceManager rm)
-    {
+    public void initialize(ResourceManager rm) {
         tagger = new Chunker();
     }
 

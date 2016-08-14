@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -32,60 +29,59 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class PPFeatures implements FeatureExtractor {
-	private final String parseViewName;
-	
-	public PPFeatures(String parseViewName){
-		this.parseViewName = parseViewName;
-	}
-	
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		TextAnnotation ta = c.getTextAnnotation();
+    private final String parseViewName;
 
-		TreeView parse = (TreeView) ta.getView(parseViewName);
+    public PPFeatures(String parseViewName) {
+        this.parseViewName = parseViewName;
+    }
 
-		Set<Feature> feats = new HashSet<>();
-		try {
-			Constituent phrase = parse.getParsePhrase(c);
-			// if the phrase is a PP, then the head word of its
-			// rightmost NP child.
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        TextAnnotation ta = c.getTextAnnotation();
 
-			List<Relation> rels = phrase.getOutgoingRelations();
-			for (int i = rels.size() - 1; i >= 0; i--) {
-				Relation relation = rels.get(i);
-				if (relation == null) continue;
-				Constituent target = relation.getTarget();
-				if (ParseTreeProperties.isNominal(target.getLabel())) {
-					int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
+        TreeView parse = (TreeView) ta.getView(parseViewName);
 
-					feats.add(DiscreteFeature.create("np-head:"
-							+ ta.getToken(head).toLowerCase()));
-					feats.add(DiscreteFeature.create("np-head-pos:"
-							+ WordHelpers.getPOS(ta, head)));
+        Set<Feature> feats = new HashSet<>();
+        try {
+            Constituent phrase = parse.getParsePhrase(c);
+            // if the phrase is a PP, then the head word of its
+            // rightmost NP child.
 
-					break;
-				}
-			}
+            List<Relation> rels = phrase.getOutgoingRelations();
+            for (int i = rels.size() - 1; i >= 0; i--) {
+                Relation relation = rels.get(i);
+                if (relation == null)
+                    continue;
+                Constituent target = relation.getTarget();
+                if (ParseTreeProperties.isNominal(target.getLabel())) {
+                    int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
 
-			// if the phrase's parent is a PP, then the head of that PP.
-			Constituent parent = phrase.getIncomingRelations().get(0).getSource();
+                    feats.add(DiscreteFeature.create("np-head:" + ta.getToken(head).toLowerCase()));
+                    feats.add(DiscreteFeature.create("np-head-pos:" + WordHelpers.getPOS(ta, head)));
 
-			if (parent.getLabel().equals("PP")) {
-				int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
-				feats.add(DiscreteFeature.create("p-head:" + ta.getToken(head).toLowerCase()));
-			}
+                    break;
+                }
+            }
 
-		} catch (EdisonException e) {
-			throw new RuntimeException(e);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            // if the phrase's parent is a PP, then the head of that PP.
+            Constituent parent = phrase.getIncomingRelations().get(0).getSource();
 
-		return feats;
-	}
-	
-	@Override
-	public String getName() {
-		return "#pp-feats";
-	}
+            if (parent.getLabel().equals("PP")) {
+                int head = CollinsHeadFinder.getInstance().getHeadWordPosition(phrase);
+                feats.add(DiscreteFeature.create("p-head:" + ta.getToken(head).toLowerCase()));
+            }
+
+        } catch (EdisonException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return feats;
+    }
+
+    @Override
+    public String getName() {
+        return "#pp-feats";
+    }
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,58 +25,65 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class nonLocalFeatures extends Classifier
-{
-  public nonLocalFeatures()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "nonLocalFeatures";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "real%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 316 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class nonLocalFeatures extends Classifier {
+    public nonLocalFeatures() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "nonLocalFeatures";
     }
 
-    NEWord word = (NEWord) __example;
-
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    double __value;
-
-    String[] feats = word.getAllNonlocalFeatures();
-    for (int i = 0; i < feats.length; i++)
-    {
-      __id = "" + (feats[i]);
-      __value = word.getNonLocFeatCount(feats[i]);
-      __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 316 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "real%";
+    }
 
-  public int hashCode() { return "nonLocalFeatures".hashCode(); }
-  public boolean equals(Object o) { return o instanceof nonLocalFeatures; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'nonLocalFeatures(NEWord)' defined on line 316 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        double __value;
+
+        String[] feats = word.getAllNonlocalFeatures();
+        for (int i = 0; i < feats.length; i++) {
+            __id = "" + (feats[i]);
+            __value = word.getNonLocFeatCount(feats[i]);
+            __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name,
+                    __id, __value));
+        }
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'nonLocalFeatures(NEWord)' defined on line 316 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "nonLocalFeatures".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof nonLocalFeatures;
+    }
 }
-
