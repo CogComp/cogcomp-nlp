@@ -39,7 +39,7 @@ public class SemanticRoleLabelerTest extends TestCase {
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
         if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
             ta.addView(ClauseViewGenerator.STANFORD);
-		PredicateArgumentView srl = verbSRL.getSRL(ta);
+		PredicateArgumentView srl = (PredicateArgumentView) verbSRL.getView(ta);
 
         String expected = "finish:02\n    A1: The construction of the John Smith library\n    AM-MNR: on time\n" +
                 "design:01\n    A1: The $10M building\n    AM-MNR: designed\n    AM-TMP: in 2016\n" +
@@ -60,7 +60,7 @@ public class SemanticRoleLabelerTest extends TestCase {
 
         SemanticRoleLabeler nomSRL = new SemanticRoleLabeler(rm);
 		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
-		PredicateArgumentView srl = nomSRL.getSRL(ta);
+		PredicateArgumentView srl = (PredicateArgumentView) nomSRL.getView(ta);
 
         String expected = "construction:01\n    A1: of the John Smith library\nlibrary:01\n";
         assertEquals(expected, srl.toString());

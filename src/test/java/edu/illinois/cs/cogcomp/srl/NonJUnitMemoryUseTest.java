@@ -93,10 +93,10 @@ public class NonJUnitMemoryUseTest {
     public void testVerbSRL(boolean isStatic) throws Exception {
 
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
-        if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
-            ta.addView(ClauseViewGenerator.STANFORD);
+//        if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
+//            ta.addView(ClauseViewGenerator.STANFORD);
         SemanticRoleLabeler verbSRL = getSrl(isStatic);
-        PredicateArgumentView srl = verbSRL.getSRL(ta);
+        PredicateArgumentView srl = (PredicateArgumentView) verbSRL.getView(ta);
 
         System.out.println( "SRL output: " + srl.toString() );
         System.out.println( "memory use" + (isStatic ?  "before srl goes out of scope" : "") +":" );
@@ -112,7 +112,7 @@ public class NonJUnitMemoryUseTest {
         SemanticRoleLabeler verbSRL = null;
 
         if ( !isStatic ||  null == srlStatic )
-            verbSRL = new SemanticRoleLabeler(rm);
+            verbSRL = new SemanticRoleLabeler(rm, false);
 
         if ( isStatic && null == srlStatic )
             srlStatic = verbSRL;

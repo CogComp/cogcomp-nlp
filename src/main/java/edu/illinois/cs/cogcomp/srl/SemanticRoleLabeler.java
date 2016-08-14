@@ -8,6 +8,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.Models;
@@ -220,11 +221,16 @@ public class SemanticRoleLabeler extends Annotator {
 	@Override
 	public void addView(TextAnnotation ta) throws AnnotatorException {
 		// Check if all required views are present
+
+		if (ta.hasView(ViewNames.PARSE_STANFORD) && !ta.hasView(ViewNames.CLAUSES_STANFORD))
+			ta.addView(ClauseViewGenerator.STANFORD);
+
 		for (String view : getRequiredViews()) {
 			if (!ta.hasView(view)) {
 				throw new AnnotatorException("Missing required view: " + view);
 			}
 		}
+
 		try {
             View srlView = getSRL(ta);
             ta.addView( getViewName(), srlView);
