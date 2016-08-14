@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner;
@@ -64,6 +61,7 @@ public class NERAnnotator extends Annotator {
 
     /**
      * default constructor -- NER_CONLL models will be loaded. Lazily initialized by default.
+     * 
      * @param viewName name of view this annotator will add.
      * @throws IOException
      */
@@ -72,29 +70,27 @@ public class NERAnnotator extends Annotator {
     }
 
     /**
-     * Default behavior is to use lazy initialization; override with ResourceManager entry per the Configurator
-     *     property {@link AnnotatorConfigurator#IS_LAZILY_INITIALIZED}
+     * Default behavior is to use lazy initialization; override with ResourceManager entry per the
+     * Configurator property {@link AnnotatorConfigurator#IS_LAZILY_INITIALIZED}
      *
      * @param nonDefaultRm specify properties to override defaults, including lazy initialization
      * @param viewName name of the view to add to the TextAnnotation (and for client to request)
      */
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
-        super(viewName,
-                REQUIRED_VIEWS,
-                nonDefaultRm.getBoolean( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE ),
-                nonDefaultRm);
+        super(viewName, REQUIRED_VIEWS, nonDefaultRm.getBoolean(
+                AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE), nonDefaultRm);
     }
 
 
     /**
-     * Superclass calls this method either on instantiation or at first call to getView().
-     * Logging has been disabled because non-static logger is not initialized at the time this is called if
-     *   non-lazy initialization is specified.
+     * Superclass calls this method either on instantiation or at first call to getView(). Logging
+     * has been disabled because non-static logger is not initialized at the time this is called if
+     * non-lazy initialization is specified.
+     * 
      * @param nerRm configuration parameters passed to constructor
      */
     @Override
-    public void initialize( ResourceManager nerRm )
-    {
+    public void initialize(ResourceManager nerRm) {
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
             nerRm = new NerOntonotesConfigurator().getConfig(nonDefaultRm);
         else
@@ -103,8 +99,8 @@ public class NERAnnotator extends Annotator {
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
 
-//        logger.info("Reading model file: {}",
-//                ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
+        // logger.info("Reading model file: {}",
+        // ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
@@ -112,8 +108,8 @@ public class NERAnnotator extends Annotator {
 
         NETaggerLevel2 tagger2 = null;
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-//            logger.info("Reading model file: {}",
-//                    ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
+            // logger.info("Reading model file: {}",
+            // ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
             tagger2 =
                     new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
                             + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile

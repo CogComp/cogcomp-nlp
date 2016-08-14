@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -27,8 +24,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
- * Unit test for {@link PosWordConjunctionSizeTwoWindowSizeTwo} extractor, which generates a conjunction of 2-shingles
- * from a window of 2 tokens. The extractor is originally used in illinois-chunker (shallow parser).
+ * Unit test for {@link PosWordConjunctionSizeTwoWindowSizeTwo} extractor, which generates a
+ * conjunction of 2-shingles from a window of 2 tokens. The extractor is originally used in
+ * illinois-chunker (shallow parser).
  *
  * @author Christos Christodoulopoulos
  */
@@ -37,16 +35,19 @@ public class TestPosWordConjunctionSizeTwoWindowSizeTwo {
 
     @Before
     public void setUp() throws Exception {
-        ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS}, false, 3);
+        ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(
+                        new String[] {ViewNames.POS}, false, 3);
     }
 
     @Test
     public final void test() throws EdisonException {
-        /// Using the 3rd constituent as a test
+        // / Using the 3rd constituent as a test
         List<Constituent> testList = ta.getView("TOKENS").getConstituents();
         Constituent test = testList.get(3);
 
-        PosWordConjunctionSizeTwoWindowSizeTwo fex = new PosWordConjunctionSizeTwoWindowSizeTwo("PosWordConj2Win2");
+        PosWordConjunctionSizeTwoWindowSizeTwo fex =
+                new PosWordConjunctionSizeTwoWindowSizeTwo("PosWordConj2Win2");
 
         Set<Feature> feats = fex.getFeatures(test);
         String[] expected_outputs =
@@ -62,7 +63,8 @@ public class TestPosWordConjunctionSizeTwoWindowSizeTwo {
                         "PosWordConjunctionSizeTwoWindowSizeTwo:2_2(NNP-Smith)"};
 
 
-        if (feats == null) fail("Feats are returning NULL.");
+        if (feats == null)
+            fail("Feats are returning NULL.");
 
         for (Feature f : feats) {
             assertTrue(ArrayUtils.contains(expected_outputs, f.getName()));

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -20,8 +17,9 @@ import java.util.Properties;
  * Created by mssammon on 6/21/16.
  */
 public class CorpusReaderConfigurator extends Configurator {
-    public static final Property CORPUS_NAME = new Property( "corpusName", "dummyCorpusName" );
-    public static final Property CORPUS_DIRECTORY = new Property("corpusDirectory", "dummyCorpusDirectory");
+    public static final Property CORPUS_NAME = new Property("corpusName", "dummyCorpusName");
+    public static final Property CORPUS_DIRECTORY = new Property("corpusDirectory",
+            "dummyCorpusDirectory");
 
 
     /**
@@ -31,21 +29,21 @@ public class CorpusReaderConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[]{ CORPUS_NAME, CORPUS_DIRECTORY };
-        return new ResourceManager( generateProperties( props ));
+        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY};
+        return new ResourceManager(generateProperties(props));
     }
 
     public static ResourceManager buildResourceManager(String corpus) {
         Properties props = new Properties();
-        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpus );
-        return new ResourceManager( props );
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpus);
+        return new ResourceManager(props);
     }
 
     public static ResourceManager buildResourceManager(String corpusName, String corpusDirectory) {
         Properties props = new Properties();
-        props.setProperty( CorpusReaderConfigurator.CORPUS_NAME.key, corpusName );
-        props.setProperty( CorpusReaderConfigurator.CORPUS_DIRECTORY.key, corpusDirectory );
-        return new ResourceManager( props );
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
+        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, corpusDirectory);
+        return new ResourceManager(props);
     }
 
 }

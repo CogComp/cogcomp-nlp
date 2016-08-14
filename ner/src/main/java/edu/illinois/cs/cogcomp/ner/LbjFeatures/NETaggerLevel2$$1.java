@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,59 +25,66 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class NETaggerLevel2$$1 extends Classifier
-{
-  private static final FeaturesLevel1SharedWithLevel2 __FeaturesLevel1SharedWithLevel2 = new FeaturesLevel1SharedWithLevel2();
-  private static final FeaturesLevel2 __FeaturesLevel2 = new FeaturesLevel2();
+public class NETaggerLevel2$$1 extends Classifier {
+    private static final FeaturesLevel1SharedWithLevel2 __FeaturesLevel1SharedWithLevel2 =
+            new FeaturesLevel1SharedWithLevel2();
+    private static final FeaturesLevel2 __FeaturesLevel2 = new FeaturesLevel2();
 
-  public NETaggerLevel2$$1()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "NETaggerLevel2$$1";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "mixed%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 600 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public NETaggerLevel2$$1() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "NETaggerLevel2$$1";
     }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    __result.addFeatures(__FeaturesLevel1SharedWithLevel2.classify(__example));
-    __result.addFeatures(__FeaturesLevel2.classify(__example));
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 600 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "mixed%";
+    }
 
-  public int hashCode() { return "NETaggerLevel2$$1".hashCode(); }
-  public boolean equals(Object o) { return o instanceof NETaggerLevel2$$1; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 600 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
 
-  public java.util.LinkedList getCompositeChildren()
-  {
-    java.util.LinkedList result = new java.util.LinkedList();
-    result.add(__FeaturesLevel1SharedWithLevel2);
-    result.add(__FeaturesLevel2);
-    return result;
-  }
+        FeatureVector __result;
+        __result = new FeatureVector();
+        __result.addFeatures(__FeaturesLevel1SharedWithLevel2.classify(__example));
+        __result.addFeatures(__FeaturesLevel2.classify(__example));
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 600 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "NETaggerLevel2$$1".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof NETaggerLevel2$$1;
+    }
+
+    public java.util.LinkedList getCompositeChildren() {
+        java.util.LinkedList result = new java.util.LinkedList();
+        result.add(__FeaturesLevel1SharedWithLevel2);
+        result.add(__FeaturesLevel2);
+        return result;
+    }
 }
-

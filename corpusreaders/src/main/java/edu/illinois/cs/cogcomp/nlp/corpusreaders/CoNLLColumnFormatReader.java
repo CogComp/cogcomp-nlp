@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -56,7 +53,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
     public CoNLLColumnFormatReader(String corpus, String section, String columnFile,
             String predicateArgumentViewName, TextAnnotationBuilder textAnnotationBuilder)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager( corpus ));
+        super(CorpusReaderConfigurator.buildResourceManager(corpus));
         this.section = section;
         this.predicateArgumentViewName = predicateArgumentViewName;
         this.textAnnotationBuilder = textAnnotationBuilder;

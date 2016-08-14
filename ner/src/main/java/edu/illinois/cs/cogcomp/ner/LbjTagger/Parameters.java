@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
@@ -179,8 +176,10 @@ public class Parameters {
                     fullModelFile2Lex.exists()
                             || IOUtilities.existsInClasspath(NETaggerLevel2.class, modelFile2Lex);
 
-            if (!file1Exists || !file1LexExists
-                    || (rm.containsKey("PredictionsLevel1") && rm.getString("PredictionsLevel1").equals("1") && (!file2Exists || !file2LexExists))) {
+            if (!file1Exists
+                    || !file1LexExists
+                    || (rm.containsKey("PredictionsLevel1")
+                            && rm.getString("PredictionsLevel1").equals("1") && (!file2Exists || !file2LexExists))) {
                 // if we are not training
                 if (!areWeTraining) {
                     throw new IllegalArgumentException("Config File Error: one of "

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,88 +25,99 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class WordTypeInformation extends Classifier
-{
-  public WordTypeInformation()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "WordTypeInformation";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete%"; }
-
-  private static String[] __allowableValues = DiscreteFeature.BooleanValues;
-  public static String[] getAllowableValues() { return __allowableValues; }
-  public String[] allowableValues() { return __allowableValues; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 267 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class WordTypeInformation extends Classifier {
+    public WordTypeInformation() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "WordTypeInformation";
     }
 
-    NEWord word = (NEWord) __example;
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
+    }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTypeInformation"))
-    {
-      int i;
-      NEWord w = word, last = word;
-      for (i = 0; i <= 2 && last != null; ++i)
-      {
-        last = (NEWord) last.next;
-      }
-      for (i = 0; i > -2 && w.previous != null; --i)
-      {
-        w = (NEWord) w.previous;
-      }
-      for (; w != last; w = (NEWord) w.next, ++i)
-      {
-        boolean allCapitalized = true, allDigits = true, allNonLetters = true;
-        for (int j = 0; j < w.form.length(); ++j)
-        {
-          char c = w.form.charAt(j);
-          allCapitalized &= Character.isUpperCase(c);
-          allDigits &= (Character.isDigit(c) || c == '.' || c == ',');
-          allNonLetters &= !Character.isLetter(c);
+    private static String[] __allowableValues = DiscreteFeature.BooleanValues;
+
+    public static String[] getAllowableValues() {
+        return __allowableValues;
+    }
+
+    public String[] allowableValues() {
+        return __allowableValues;
+    }
+
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'WordTypeInformation(NEWord)' defined on line 267 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
         }
-        __id = "" + ("c" + i);
-        __value = "" + (allCapitalized);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + ("d" + i);
-        __value = "" + (allDigits);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + ("p" + i);
-        __value = "" + (allNonLetters);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-      }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTypeInformation")) {
+            int i;
+            NEWord w = word, last = word;
+            for (i = 0; i <= 2 && last != null; ++i) {
+                last = (NEWord) last.next;
+            }
+            for (i = 0; i > -2 && w.previous != null; --i) {
+                w = (NEWord) w.previous;
+            }
+            for (; w != last; w = (NEWord) w.next, ++i) {
+                boolean allCapitalized = true, allDigits = true, allNonLetters = true;
+                for (int j = 0; j < w.form.length(); ++j) {
+                    char c = w.form.charAt(j);
+                    allCapitalized &= Character.isUpperCase(c);
+                    allDigits &= (Character.isDigit(c) || c == '.' || c == ',');
+                    allNonLetters &= !Character.isLetter(c);
+                }
+                __id = "" + ("c" + i);
+                __value = "" + (allCapitalized);
+                __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                        this.name, __id, __value, valueIndexOf(__value), (short) 2));
+                __id = "" + ("d" + i);
+                __value = "" + (allDigits);
+                __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                        this.name, __id, __value, valueIndexOf(__value), (short) 2));
+                __id = "" + ("p" + i);
+                __value = "" + (allNonLetters);
+                __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                        this.name, __id, __value, valueIndexOf(__value), (short) 2));
+            }
+        }
+        return __result;
     }
-    return __result;
-  }
 
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 267 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'WordTypeInformation(NEWord)' defined on line 267 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
     }
 
-    return super.classify(examples);
-  }
+    public int hashCode() {
+        return "WordTypeInformation".hashCode();
+    }
 
-  public int hashCode() { return "WordTypeInformation".hashCode(); }
-  public boolean equals(Object o) { return o instanceof WordTypeInformation; }
+    public boolean equals(Object o) {
+        return o instanceof WordTypeInformation;
+    }
 }
-
