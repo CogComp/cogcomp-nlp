@@ -184,6 +184,7 @@ public class ViewNames {
     /* whether a given input is a parse view or not */
     public static boolean isItParseView(String viewName) {
         return viewName.equals(ViewNames.PARSE_BERKELEY) || viewName.equals(ViewNames.PARSE_CHARNIAK) ||
-                viewName.equals(ViewNames.PARSE_CHARNIAK_KBEST) || viewName.equals(ViewNames.PARSE_GOLD);
+                viewName.equals(ViewNames.PARSE_CHARNIAK_KBEST) || viewName.equals(ViewNames.PARSE_GOLD) ||
+                viewName.equals(ViewNames.PARSE_STANFORD);
     }
 }

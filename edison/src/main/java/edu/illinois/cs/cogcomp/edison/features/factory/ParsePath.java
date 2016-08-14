@@ -22,6 +22,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -53,18 +55,20 @@ public class ParsePath implements FeatureExtractor {
     public static ParsePath CHARNIAK = new ParsePath(ViewNames.PARSE_CHARNIAK);
     public static ParsePath STANFORD = new ParsePath(ViewNames.PARSE_STANFORD);
 
+    private final static Logger log = LoggerFactory.getLogger(Feature.class);
+
     private final String parseViewName;
 
     public ParsePath(String parseViewName) {
+        // it should belong to the parse view
+        if (!ViewNames.isItParseView(parseViewName)) {
+            log.warn("The view doesn't seem to belong to the parse view . . . ");
+        }
         this.parseViewName = parseViewName;
     }
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-
-        // if a constituent is given to the feature extractor, it should belong to the parse view that was just passed
-        // to the feature extractor
-        assert (ViewNames.isItParseView(c.getViewName()) && c.getViewName().equals(this.parseViewName) );
 
         TextAnnotation ta = c.getTextAnnotation();
         TreeView parse = (TreeView) ta.getView(parseViewName);
