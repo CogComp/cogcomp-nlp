@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -23,11 +20,11 @@ import java.util.*;
 
 /**
  * Generator of dummy {@link TextAnnotation}s and their {@link View}s, used for testing.
+ * 
  * @author Daniel Khashabi
  * @author Christos Christodoulopoulos
  */
-public class
-DummyTextAnnotationGenerator {
+public class DummyTextAnnotationGenerator {
     static Logger logger = LoggerFactory.getLogger(DummyTextAnnotationGenerator.class);
 
     static String annotatedString1 =
@@ -208,32 +205,34 @@ DummyTextAnnotationGenerator {
      * @return An annotated {@link TextAnnotation}
      */
     public static TextAnnotation generateAnnotatedTextAnnotation(boolean withNoisyLabels,
-                                                                 int sentenceNum) {
+            int sentenceNum) {
         return generateAnnotatedTextAnnotation(allPossibleViews, withNoisyLabels, sentenceNum);
     }
 
     public static TextAnnotation generateAnnotatedTextAnnotation(String[] viewsToAdd,
-                                                                 boolean withNoisyLabels, int sentenceNum) {
+            boolean withNoisyLabels, int sentenceNum) {
         // we can do at-most 3 sentences, for now
-        if(sentenceNum > 3) {
-            logger.error("Currently this function supports at most 3 sentences per TextAnnotation. If you need more, " +
-                    "you have to augment this function");
+        if (sentenceNum > 3) {
+            logger.error("Currently this function supports at most 3 sentences per TextAnnotation. If you need more, "
+                    + "you have to augment this function");
             throw new RuntimeException();
         }
 
         // at least one sentence
-        if(sentenceNum < 1) {
+        if (sentenceNum < 1) {
             logger.error("The requested TextAnnotation has to have at least one sentence. ");
             throw new RuntimeException();
         }
 
         List<String[]> annotatedTokenizedStringArrayAll = new ArrayList<>();
         annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray1);
-        if(sentenceNum > 1)
+        if (sentenceNum > 1)
             annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray2);
-        if(sentenceNum > 2)
+        if (sentenceNum > 2)
             annotatedTokenizedStringArrayAll.addAll(annotatedTokenizedStringArray3);
-        TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(annotatedTokenizedStringArrayAll);
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder
+                        .createTextAnnotationFromTokens(annotatedTokenizedStringArrayAll);
 
         for (String viewName : viewsToAdd) {
             switch (viewName) {
@@ -249,7 +248,8 @@ DummyTextAnnotationGenerator {
                             posView.addTokenLabel(pos1Overall.length + i, pos2Overall[i], 1.0);
                     if (sentenceNum > 2)
                         for (int i = 0; i < pos3Overall.length; i++)
-                            posView.addTokenLabel(pos1Overall.length + pos2Overall.length + i, pos3Overall[i], 1.0);
+                            posView.addTokenLabel(pos1Overall.length + pos2Overall.length + i,
+                                    pos3Overall[i], 1.0);
                     ta.addView(viewName, posView);
                     break;
                 case ViewNames.LEMMA:
@@ -264,17 +264,15 @@ DummyTextAnnotationGenerator {
                             lemmaView.addTokenLabel(lemmaOveral1.length + i, lemmaOveral2[i], 1.0);
                     if (sentenceNum > 2)
                         for (int i = 0; i < lemmaOveral3.length; i++)
-                            lemmaView.addTokenLabel(lemmaOveral1.length + lemmaOveral2.length +  i, lemmaOveral3[i], 1.0);
+                            lemmaView.addTokenLabel(lemmaOveral1.length + lemmaOveral2.length + i,
+                                    lemmaOveral3[i], 1.0);
                     ta.addView(viewName, lemmaView);
                     break;
                 case ViewNames.SHALLOW_PARSE:
                     SpanLabelView chunkView = new SpanLabelView(ViewNames.SHALLOW_PARSE, ta);
-                    Map<IntPair, String> chunkOverall1 =
-                            withNoisyLabels ? chunks_noisy1 : chunks1;
-                    Map<IntPair, String> chunkOverall2 =
-                            withNoisyLabels ? chunks_noisy2 : chunks2;
-                    Map<IntPair, String> chunkOverall3 =
-                            withNoisyLabels ? chunks_noisy3 : chunks3;
+                    Map<IntPair, String> chunkOverall1 = withNoisyLabels ? chunks_noisy1 : chunks1;
+                    Map<IntPair, String> chunkOverall2 = withNoisyLabels ? chunks_noisy2 : chunks2;
+                    Map<IntPair, String> chunkOverall3 = withNoisyLabels ? chunks_noisy3 : chunks3;
                     for (IntPair span : chunkOverall1.keySet())
                         chunkView.addSpanLabel(span.getFirst(), span.getSecond(),
                                 chunkOverall1.get(span), 1.0);
@@ -336,31 +334,22 @@ DummyTextAnnotationGenerator {
                             (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
                             (withNoisyLabels ? verbSRLArgs_noisy1 : verbSRLArgs1));
 
-                    if(sentenceNum > 1) {
-                        addSrlFrame(
-                                verbSRLView,
-                                viewName,
-                                ta,
-                                verbSRLPredicate2,
-                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                    if (sentenceNum > 1) {
+                        addSrlFrame(verbSRLView, viewName, ta, verbSRLPredicate2,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy
+                                        : verbSRLPredicateSense),
                                 (withNoisyLabels ? verbSRLArgs_noisy2 : verbSRLArgs2));
                     }
 
-                    if(sentenceNum > 2) {
-                        addSrlFrame(
-                                verbSRLView,
-                                viewName,
-                                ta,
-                                verbSRLPredicate3,
-                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                    if (sentenceNum > 2) {
+                        addSrlFrame(verbSRLView, viewName, ta, verbSRLPredicate3,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy
+                                        : verbSRLPredicateSense),
                                 (withNoisyLabels ? verbSRLArgs_noisy3 : verbSRLArgs3));
 
-                        addSrlFrame(
-                                verbSRLView,
-                                viewName,
-                                ta,
-                                verbSRLPredicate4,
-                                (withNoisyLabels ? verbSRLPredicateSense_noisy : verbSRLPredicateSense),
+                        addSrlFrame(verbSRLView, viewName, ta, verbSRLPredicate4,
+                                (withNoisyLabels ? verbSRLPredicateSense_noisy
+                                        : verbSRLPredicateSense),
                                 (withNoisyLabels ? verbSRLArgs_noisy4 : verbSRLArgs4));
                     }
 
@@ -378,7 +367,7 @@ DummyTextAnnotationGenerator {
     }
 
     private static void addSrlFrame(PredicateArgumentView srlView, String viewName,
-                                    TextAnnotation ta, IntPair verbSRLPredicate, String sense, Map<IntPair, String> srlArgs) {
+            TextAnnotation ta, IntPair verbSRLPredicate, String sense, Map<IntPair, String> srlArgs) {
         Constituent predicate =
                 new Constituent("predicate", viewName, ta, verbSRLPredicate.getFirst(),
                         verbSRLPredicate.getSecond());

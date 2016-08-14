@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner;
@@ -18,12 +15,12 @@ import java.io.File;
  * This runs a standard benchmark test across several datasets for the NER package. Training can be
  * enabled by passing in the "-training" flag. The configurations and data are expected in the
  * "benchmark" directory. Within, there will be a directory for each dataset you want to run
- * against. Within those individual dataset directories, there will be a "config" directory containing one or
- * more configuration files, a "test" directory (which can be a link to the directory with the test
- * data), and a "train" directory where the training data files are found. If only a "train" directory is
- * located in the directory, that will be used for both test and train directories. Each configuration file
- * will result in a run to evaluate the results, and potentially one run to train up the model. The
- * results are presented on standard out.
+ * against. Within those individual dataset directories, there will be a "config" directory
+ * containing one or more configuration files, a "test" directory (which can be a link to the
+ * directory with the test data), and a "train" directory where the training data files are found.
+ * If only a "train" directory is located in the directory, that will be used for both test and
+ * train directories. Each configuration file will result in a run to evaluate the results, and
+ * potentially one run to train up the model. The results are presented on standard out.
  * <p>
  *
  * {@code

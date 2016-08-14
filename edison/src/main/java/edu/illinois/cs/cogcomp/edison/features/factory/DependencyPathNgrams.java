@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -76,8 +73,8 @@ public class DependencyPathNgrams implements FeatureExtractor {
     private final int ngramSize;
 
     /**
-	 * Extracting ngram features along the dependency path
-	 */
+     * Extracting ngram features along the dependency path
+     */
     public DependencyPathNgrams(String dependencyViewName, int ngramSize) {
         this.dependencyViewName = dependencyViewName;
         this.ngramSize = ngramSize;
@@ -91,7 +88,7 @@ public class DependencyPathNgrams implements FeatureExtractor {
         // get equivalent of c in the parse view
         Constituent c2 = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
         List<Relation> incomingRelations = c2.getIncomingRelations();
-        if(incomingRelations.size() > 0) {
+        if (incomingRelations.size() > 0) {
             Constituent c1 =
                     parse.getConstituentsCoveringToken(
                             incomingRelations.get(0).getSource().getStartSpan()).get(0);

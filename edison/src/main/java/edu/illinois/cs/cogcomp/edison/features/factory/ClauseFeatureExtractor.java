@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -52,11 +49,12 @@ public class ClauseFeatureExtractor implements FeatureExtractor {
         // where the user has already created a full parse view (for other features)
         if (ta.hasView(parseViewName.replace("PSEUDO_", "")))
             pseudoParseView = (TreeView) ta.getView(parseViewName.replace("PSEUDO_", ""));
-        else pseudoParseView = (TreeView) ta.getView(parseViewName);
+        else
+            pseudoParseView = (TreeView) ta.getView(parseViewName);
         List<Relation> incomingRelations = c.getIncomingRelations();
         Set<Feature> features = new LinkedHashSet<>();
 
-        if(incomingRelations.size() > 0) {
+        if (incomingRelations.size() > 0) {
             Constituent p = incomingRelations.get(0).getSource();
 
             String clauseRelativePosition;

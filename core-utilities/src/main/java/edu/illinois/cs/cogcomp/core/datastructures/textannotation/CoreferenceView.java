@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
@@ -70,7 +67,8 @@ public class CoreferenceView extends View {
     }
 
     /**
-     * @param canonicalMention: The assumption is that all nodes with no parent are canonical entities.
+     * @param canonicalMention: The assumption is that all nodes with no parent are canonical
+     *        entities.
      * @param coreferentMentions
      */
     public void addCorefEdges(Constituent canonicalMention, List<Constituent> coreferentMentions) {
@@ -172,12 +170,13 @@ public class CoreferenceView extends View {
         List<Relation> incomingRelations = getFilteredIncomingRelations(c);
 
         // The assumption is that all nodes with no parent are canonical entities.
-        if(incomingRelations.isEmpty())
+        if (incomingRelations.isEmpty())
             return c;
-        if(incomingRelations.size() > 1)
-            System.out.println("Warning: constituent belongs to more than one cluster; we returned only one of them.\n" +
-                    "If you are deadline with overlapping clusters, and want to get all of the canonical elements, " +
-                    "\"getCanonicalEntitySetViaRelation\" function. ");
+        if (incomingRelations.size() > 1)
+            System.out
+                    .println("Warning: constituent belongs to more than one cluster; we returned only one of them.\n"
+                            + "If you are deadline with overlapping clusters, and want to get all of the canonical elements, "
+                            + "\"getCanonicalEntitySetViaRelation\" function. ");
         return incomingRelations.get(0).source;
     }
 
@@ -188,29 +187,32 @@ public class CoreferenceView extends View {
         List<Relation> incomingRelations = getFilteredIncomingRelations(c);
 
         // The assumption is that all nodes with no parent are canonical entities.
-        if(incomingRelations.isEmpty())
+        if (incomingRelations.isEmpty())
             return new HashSet(Arrays.asList(c));
         Set<Constituent> canonical = new HashSet<>();
-        for(Relation r: incomingRelations)
+        for (Relation r : incomingRelations)
             canonical.add(r.source);
         return canonical;
     }
 
     /**
-     * Given a mention, it returns the list of canonical mentions of the coref chains which
-     * overlap with the input constituent
+     * Given a mention, it returns the list of canonical mentions of the coref chains which overlap
+     * with the input constituent
+     * 
      * @param c the input constituent
      * @return canonical consittuents of the overlalpping chains with the input constituent
      */
     public HashSet<Constituent> getOverlappingChainsCanonicalMentions(Constituent c) {
         List<Constituent> overlappingCons = c.getView().getConstituentsCovering(c);
         HashSet<Constituent> canonicalCons = new HashSet<>();
-        for(Constituent cc : overlappingCons)
+        for (Constituent cc : overlappingCons)
             canonicalCons.addAll(getCanonicalEntitySetViaRelation(cc));
         return canonicalCons;
     }
 
-    /** given the canonical constituent, returns back the constitunts connected to it.
+    /**
+     * given the canonical constituent, returns back the constitunts connected to it.
+     * 
      * @param mention canonical mention
      * @return the connected constituents
      */
@@ -236,8 +238,8 @@ public class CoreferenceView extends View {
     public Set<Constituent> getCoreferentMentionsViaRelations(Constituent mention) {
         Set<Constituent> canonicalMentionSet = getCanonicalEntitySetViaRelation(mention);
         Set<Constituent> coreferentMentions = new HashSet<>();
-        for(Constituent c : canonicalMentionSet) {
-            for(Relation r: getFilteredOutgoingRelations(c)) {
+        for (Constituent c : canonicalMentionSet) {
+            for (Relation r : getFilteredOutgoingRelations(c)) {
                 coreferentMentions.add(r.target);
             }
         }
@@ -267,13 +269,14 @@ public class CoreferenceView extends View {
         return sb.toString();
     }
 
-    /** Since all the relations are being populated inside the View class, we need to filter out the relations which
-     * are irrelevant to coreference. This function, given a constituent, returns all of the outgoing coreference
-     * relations.
+    /**
+     * Since all the relations are being populated inside the View class, we need to filter out the
+     * relations which are irrelevant to coreference. This function, given a constituent, returns
+     * all of the outgoing coreference relations.
      */
     public List<Relation> getFilteredOutgoingRelations(Constituent c) {
         List<Relation> filteredOutgoingRelations = new ArrayList<>();
-        for(Relation r : c.getOutgoingRelations() ) {
+        for (Relation r : c.getOutgoingRelations()) {
             if (!Objects.equals(r.getRelationName(), viewName))
                 continue;
             filteredOutgoingRelations.add(r);
@@ -283,7 +286,7 @@ public class CoreferenceView extends View {
 
     public List<Relation> getFilteredIncomingRelations(Constituent c) {
         List<Relation> filteredIncomingRelations = new ArrayList<>();
-        for(Relation r : c.getIncomingRelations() ) {
+        for (Relation r : c.getIncomingRelations()) {
             if (!Objects.equals(r.getRelationName(), viewName))
                 continue;
             filteredIncomingRelations.add(r);

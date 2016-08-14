@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -27,24 +24,33 @@ public class POSLabel extends Classifier {
         name = "POSLabel";
     }
 
-    public String getInputType() { return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token"; }
-    public String getOutputType() { return "discrete"; }
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token";
+    }
 
-    public FeatureVector classify(Object __example)
-    {
+    public String getOutputType() {
+        return "discrete";
+    }
+
+    public FeatureVector classify(Object __example) {
         return new FeatureVector(featureValue(__example));
     }
 
     public Feature featureValue(Object __example) {
         String result = discreteValue(__example);
-        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result, valueIndexOf(result), (short) allowableValues().length);
+        return new DiscretePrimitiveStringFeature(containingPackage, name, "", result,
+                valueIndexOf(result), (short) allowableValues().length);
     }
 
     public String discreteValue(Object __example) {
         return ((Token) __example).label;
     }
 
-    public int hashCode() { return "POSLabel".hashCode(); }
-    public boolean equals(Object o) { return o instanceof POSLabel; }
-}
+    public int hashCode() {
+        return "POSLabel".hashCode();
+    }
 
+    public boolean equals(Object o) {
+        return o instanceof POSLabel;
+    }
+}

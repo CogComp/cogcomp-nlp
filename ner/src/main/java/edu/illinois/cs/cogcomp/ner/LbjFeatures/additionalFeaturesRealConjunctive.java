@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,85 +25,92 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class additionalFeaturesRealConjunctive extends Classifier
-{
-  public additionalFeaturesRealConjunctive()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "additionalFeaturesRealConjunctive";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "real%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'additionalFeaturesRealConjunctive(NEWord)' defined on line 101 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class additionalFeaturesRealConjunctive extends Classifier {
+    public additionalFeaturesRealConjunctive() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "additionalFeaturesRealConjunctive";
     }
 
-    NEWord word = (NEWord) __example;
-
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    double __value;
-
-//    for (int fid = 0; fid < word.getGeneratedRealFeaturesConjunctive().size(); fid++)
-//    {
-//      NEWord.RealFeature feature = word.getGeneratedRealFeaturesConjunctive().get(fid);
-//      if (!feature.useWithinTokenWindow)
-//      {
-//        __id = "" + (feature.featureGroupName);
-//        __value = feature.featureValue;
-//        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-//      }
-//    }
-    int i;
-    NEWord w = word, last = word;
-    for (i = 0; i <= 2 && last != null; ++i)
-    {
-      last = (NEWord) last.next;
-    }
-    for (i = 0; i > -2 && w.previous != null; --i)
-    {
-      w = (NEWord) w.previous;
-    }
-//    for (; w != last; w = (NEWord) w.next)
-//    {
-//      for (int fid = 0; fid < w.getGeneratedRealFeaturesConjunctive().size(); fid++)
-//      {
-//        NEWord.RealFeature feature = w.getGeneratedRealFeaturesConjunctive().get(fid);
-//        if (feature.useWithinTokenWindow)
-//        {
-//          __id = "" + ("pos" + i + "group" + feature.featureGroupName);
-//          __value = feature.featureValue;
-//          __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-//        }
-//      }
-//      i++;
-//    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'additionalFeaturesRealConjunctive(NEWord)' defined on line 101 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "real%";
+    }
 
-  public int hashCode() { return "additionalFeaturesRealConjunctive".hashCode(); }
-  public boolean equals(Object o) { return o instanceof additionalFeaturesRealConjunctive; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'additionalFeaturesRealConjunctive(NEWord)' defined on line 101 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        double __value;
+
+        // for (int fid = 0; fid < word.getGeneratedRealFeaturesConjunctive().size(); fid++)
+        // {
+        // NEWord.RealFeature feature = word.getGeneratedRealFeaturesConjunctive().get(fid);
+        // if (!feature.useWithinTokenWindow)
+        // {
+        // __id = "" + (feature.featureGroupName);
+        // __value = feature.featureValue;
+        // __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name,
+        // __id, __value));
+        // }
+        // }
+        int i;
+        NEWord w = word, last = word;
+        for (i = 0; i <= 2 && last != null; ++i) {
+            last = (NEWord) last.next;
+        }
+        for (i = 0; i > -2 && w.previous != null; --i) {
+            w = (NEWord) w.previous;
+        }
+        // for (; w != last; w = (NEWord) w.next)
+        // {
+        // for (int fid = 0; fid < w.getGeneratedRealFeaturesConjunctive().size(); fid++)
+        // {
+        // NEWord.RealFeature feature = w.getGeneratedRealFeaturesConjunctive().get(fid);
+        // if (feature.useWithinTokenWindow)
+        // {
+        // __id = "" + ("pos" + i + "group" + feature.featureGroupName);
+        // __value = feature.featureValue;
+        // __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name,
+        // __id, __value));
+        // }
+        // }
+        // i++;
+        // }
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'additionalFeaturesRealConjunctive(NEWord)' defined on line 101 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "additionalFeaturesRealConjunctive".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof additionalFeaturesRealConjunctive;
+    }
 }
-
