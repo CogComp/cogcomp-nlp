@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.io;
@@ -136,17 +133,18 @@ public abstract class IOUtils {
 
 
     /**
-     * Filters the files contained in a directory or in its subdirectory structure.
-     * Returns all files (not directories) that pass the filter.
+     * Filters the files contained in a directory or in its subdirectory structure. Returns all
+     * files (not directories) that pass the filter.
      */
-    public static String[] lsFilesRecursive(String directory, FilenameFilter filter) throws IOException {
+    public static String[] lsFilesRecursive(String directory, FilenameFilter filter)
+            throws IOException {
         File dir = new File(directory);
         ArrayList<String> files = new ArrayList<>();
         for (File filepath : dir.listFiles(filter)) {
             if (isFile(filepath.getAbsolutePath()))
                 files.add(filepath.getAbsolutePath());
-            else if ( isDirectory( filepath.getAbsolutePath() ) )
-                files.addAll( Arrays.asList( lsFilesRecursive(filepath.getAbsolutePath(), filter ) ) );
+            else if (isDirectory(filepath.getAbsolutePath()))
+                files.addAll(Arrays.asList(lsFilesRecursive(filepath.getAbsolutePath(), filter)));
         }
         return files.toArray(new String[files.size()]);
     }
@@ -379,8 +377,7 @@ public abstract class IOUtils {
                 ZipFile zf;
                 try {
                     zf = new ZipFile(resource);
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     continue;
                 }
                 final Enumeration e = zf.entries();

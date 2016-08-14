@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.annotation;
@@ -88,8 +85,8 @@ public class BasicTextAnnotationBuilder implements TextAnnotationBuilder {
     }
 
     @Override
-    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text, Tokenization
-            tokenization) throws IllegalArgumentException {
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text,
+            Tokenization tokenization) throws IllegalArgumentException {
         return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
                 tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
     }

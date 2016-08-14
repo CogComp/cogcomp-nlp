@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -38,32 +35,35 @@ public class XmlFragmentWhitespacingReaderTest {
     private final static String REF_FILE_ONE = "59f8514f6db132207ba9e5828f73d706.cmp.txt";
     private final static String REF_FILE_TWO = "593cb5020613a4695859130542f7fc94.cmp.txt";
 
-    private static final String RAW_FILE_DIR = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
-//    private static final String REF_FILE_DIR = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereReferenceDocuments";
+    private static final String RAW_FILE_DIR =
+            "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
+    // private static final String REF_FILE_DIR =
+    // "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereReferenceDocuments";
 
     private static String REF_TEXT_ONE;
     private static String REF_TEXT_TWO;
 
-    private static String readReferenceText(String dir, String referenceFile) throws FileNotFoundException {
-        return LineIO.slurp( dir + "/" + referenceFile );
+    private static String readReferenceText(String dir, String referenceFile)
+            throws FileNotFoundException {
+        return LineIO.slurp(dir + "/" + referenceFile);
     }
 
 
 
-    private final static String TEST_DIR = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
+    private final static String TEST_DIR =
+            "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
 
     @Test
-    public void testReader()
-    {
+    public void testReader() {
         XmlFragmentWhitespacingDocumentReader reader = null;
         try {
-            reader = new XmlFragmentWhitespacingDocumentReader( "ERE_BEST", TEST_DIR );
+            reader = new XmlFragmentWhitespacingDocumentReader("ERE_BEST", TEST_DIR);
         } catch (IOException e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            fail( e.getMessage());
+            fail(e.getMessage());
         }
 
         List<Path> files = null;
@@ -75,65 +75,64 @@ public class XmlFragmentWhitespacingReaderTest {
         }
 
 
-        assertEquals( 2, files.size() );
+        assertEquals(2, files.size());
 
 
-        Set< String > names = new TreeSet<>();
-        for ( Path file : files )
-            names.add( file.getName( file.getNameCount() - 1 ).toString() );
+        Set<String> names = new TreeSet<>();
+        for (Path file : files)
+            names.add(file.getName(file.getNameCount() - 1).toString());
 
-        assertTrue( names.contains( REF_FILE_ONE ) );
-        assertTrue( names.contains( REF_FILE_TWO ) );
+        assertTrue(names.contains(REF_FILE_ONE));
+        assertTrue(names.contains(REF_FILE_TWO));
 
 
-        Map< String, TextAnnotation> tas = new HashMap<>();
-        for ( Path file : files )
-        {
+        Map<String, TextAnnotation> tas = new HashMap<>();
+        for (Path file : files) {
             try {
-                tas.put( file.getName( file.getNameCount() - 1 ).toString(),
-                        reader.getTextAnnotationsFromFile( file ).get(0) );
+                tas.put(file.getName(file.getNameCount() - 1).toString(), reader
+                        .getTextAnnotationsFromFile(file).get(0));
             } catch (Exception e) {
                 e.printStackTrace();
-                fail( e.getMessage());
+                fail(e.getMessage());
             }
         }
-        System.out.println( "----\n" +  tas.get( REF_FILE_ONE ).getText() + "----\n" );
-        System.out.println( "----\n" +  tas.get( REF_FILE_TWO ).getText() + "----\n" );
+        System.out.println("----\n" + tas.get(REF_FILE_ONE).getText() + "----\n");
+        System.out.println("----\n" + tas.get(REF_FILE_TWO).getText() + "----\n");
 
 
         String FIRST_ERE_FILE = RAW_FILE_DIR + "/" + REF_FILE_ONE;
         String firstRawText = null;
         try {
-            firstRawText = LineIO.slurp( FIRST_ERE_FILE );
+            firstRawText = LineIO.slurp(FIRST_ERE_FILE);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         }
 
 
-        Pattern sun = Pattern.compile( "\\w*Sun\\w*" );
-        Matcher sunMatcher = sun.matcher( firstRawText );
+        Pattern sun = Pattern.compile("\\w*Sun\\w*");
+        Matcher sunMatcher = sun.matcher(firstRawText);
 
         Set<IntPair> sunSpans = new HashSet<>();
-        while( sunMatcher.find() )
-            sunSpans.add( new IntPair(sunMatcher.start(), sunMatcher.end() ) );
+        while (sunMatcher.find())
+            sunSpans.add(new IntPair(sunMatcher.start(), sunMatcher.end()));
 
-        TextAnnotation ta = tas.get( REF_FILE_ONE );
+        TextAnnotation ta = tas.get(REF_FILE_ONE);
 
-        for ( Constituent c : ta.getView(ViewNames.TOKENS ).getConstituents() )
-        {
-            if ( c.getSurfaceForm().contains( "Sun") )
-            {
-                IntPair cCharSpan = new IntPair( c.getStartCharOffset(), c.getEndCharOffset() );
-                assertTrue( sunSpans.contains( cCharSpan ) );
-                sunSpans.remove( cCharSpan );
+        for (Constituent c : ta.getView(ViewNames.TOKENS).getConstituents()) {
+            if (c.getSurfaceForm().contains("Sun")) {
+                IntPair cCharSpan = new IntPair(c.getStartCharOffset(), c.getEndCharOffset());
+                assertTrue(sunSpans.contains(cCharSpan));
+                sunSpans.remove(cCharSpan);
 
-                System.err.println( "FOUND OVERLAPPING SPAN: '" + printSpanInContext( firstRawText, cCharSpan ));
+                System.err.println("FOUND OVERLAPPING SPAN: '"
+                        + printSpanInContext(firstRawText, cCharSpan));
             }
         }
-        for ( IntPair missedSpan : sunSpans )
-            System.err.println( "MISSED SPAN: '" + printSpanInContext( firstRawText, missedSpan ) + "'." );
-        assertTrue( sunSpans.isEmpty());
+        for (IntPair missedSpan : sunSpans)
+            System.err.println("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan)
+                    + "'.");
+        assertTrue(sunSpans.isEmpty());
 
     }
 
@@ -141,9 +140,9 @@ public class XmlFragmentWhitespacingReaderTest {
         int start = span.getFirst();
         int contextStart = Math.max(0, start - 15);
         int end = span.getSecond();
-        int contextEnd = Math.min( rawText.length(), end + 15 );
-        return rawText.substring( contextStart, start ) + "###" +
-                rawText.substring( start, end ) + "###" + rawText.substring( end, contextEnd ) + "'." ;
+        int contextEnd = Math.min(rawText.length(), end + 15);
+        return rawText.substring(contextStart, start) + "###" + rawText.substring(start, end)
+                + "###" + rawText.substring(end, contextEnd) + "'.";
 
     }
 

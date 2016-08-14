@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier;
@@ -27,19 +24,20 @@ import java.util.Set;
  * @author Xinbo Wu
  */
 public class SrlNomArgumentFeatureConjunction implements FeatureExtractor {
-	private final FeatureCollection base = new FeatureCollection(this.getName());
-	
-	public SrlNomArgumentFeatureConjunction() throws Exception{
-		this.base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlNomArgumentFeatures(),new SrlNomArgumentFeatures()));
-	}
-	
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		return base.getFeatures(c);
-	}
-	
-	@Override
-	public String getName() {
-		return "#NomClassifier#";
-	}
+    private final FeatureCollection base = new FeatureCollection(this.getName());
+
+    public SrlNomArgumentFeatureConjunction() throws Exception {
+        this.base.addFeatureExtractor(FeatureUtilities.conjoin(new SrlNomArgumentFeatures(),
+                new SrlNomArgumentFeatures()));
+    }
+
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        return base.getFeatures(c);
+    }
+
+    @Override
+    public String getName() {
+        return "#NomClassifier#";
+    }
 }

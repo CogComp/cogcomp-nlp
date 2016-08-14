@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,79 +25,82 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class GazetteersFeatures extends Classifier
-{
-  public GazetteersFeatures()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "GazetteersFeatures";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'GazetteersFeatures(NEWord)' defined on line 124 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class GazetteersFeatures extends Classifier {
+    public GazetteersFeatures() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "GazetteersFeatures";
     }
 
-    NEWord word = (NEWord) __example;
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
+    }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("GazetteersFeatures"))
-    {
-      int i = 0;
-      NEWord w = word, last = (NEWord) word.next;
-      for (i = 0; i < 2 && last != null; ++i)
-      {
-        last = (NEWord) last.next;
-      }
-      for (i = 0; i > -2 && w.previous != null; --i)
-      {
-        w = (NEWord) w.previous;
-      }
-      do
-      {
-        if (w.gazetteers != null)
-        {
-          for (int j = 0; j < w.gazetteers.size(); j++)
-          {
-            __id = "" + (i);
-            __value = "" + (w.gazetteers.get(j));
-            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'GazetteersFeatures(NEWord)' defined on line 124 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
         }
-        i++;
-        w = (NEWord) w.next;
-      }      while (w != last);
 
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("GazetteersFeatures")) {
+            int i = 0;
+            NEWord w = word, last = (NEWord) word.next;
+            for (i = 0; i < 2 && last != null; ++i) {
+                last = (NEWord) last.next;
+            }
+            for (i = 0; i > -2 && w.previous != null; --i) {
+                w = (NEWord) w.previous;
+            }
+            do {
+                if (w.gazetteers != null) {
+                    for (int j = 0; j < w.gazetteers.size(); j++) {
+                        __id = "" + (i);
+                        __value = "" + (w.gazetteers.get(j));
+                        __result.addFeature(new DiscretePrimitiveStringFeature(
+                                this.containingPackage, this.name, __id, __value,
+                                valueIndexOf(__value), (short) 0));
+                    }
+                }
+                i++;
+                w = (NEWord) w.next;
+            } while (w != last);
+
+        }
+        return __result;
     }
-    return __result;
-  }
 
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'GazetteersFeatures(NEWord)' defined on line 124 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'GazetteersFeatures(NEWord)' defined on line 124 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
     }
 
-    return super.classify(examples);
-  }
+    public int hashCode() {
+        return "GazetteersFeatures".hashCode();
+    }
 
-  public int hashCode() { return "GazetteersFeatures".hashCode(); }
-  public boolean equals(Object o) { return o instanceof GazetteersFeatures; }
+    public boolean equals(Object o) {
+        return o instanceof GazetteersFeatures;
+    }
 }
-

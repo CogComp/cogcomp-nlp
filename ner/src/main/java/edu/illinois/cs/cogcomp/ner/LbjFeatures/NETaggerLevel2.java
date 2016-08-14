@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -29,65 +26,69 @@ import java.util.*;
 
 
 
-
-public class NETaggerLevel2 extends SparseNetworkLearner
-{
-  private static java.net.URL _lcFilePath;
-  private static java.net.URL _lexFilePath;
+public class NETaggerLevel2 extends SparseNetworkLearner {
+    private static java.net.URL _lcFilePath;
+    private static java.net.URL _lexFilePath;
 
 
-  public static boolean isTraining;
-  public static NETaggerLevel2 instance;
+    public static boolean isTraining;
+    public static NETaggerLevel2 instance;
 
 
 
-	public NETaggerLevel2(String modelPath, String lexiconPath) { this(new Parameters(), modelPath, lexiconPath); }
+    public NETaggerLevel2(String modelPath, String lexiconPath) {
+        this(new Parameters(), modelPath, lexiconPath);
+    }
 
-	public NETaggerLevel2(Parameters p, String modelPath, String lexiconPath) {
-		super(p);
-		try {
-			lcFilePath = new java.net.URL("file:" + modelPath);
-			lexFilePath = new java.net.URL("file:" + lexiconPath);
-		}
-		catch (Exception e) {
-			System.err.println("ERROR: Can't create model or lexicon URL: " + e);
-			e.printStackTrace();
-			System.exit(1);
-		}
+    public NETaggerLevel2(Parameters p, String modelPath, String lexiconPath) {
+        super(p);
+        try {
+            lcFilePath = new java.net.URL("file:" + modelPath);
+            lexFilePath = new java.net.URL("file:" + lexiconPath);
+        } catch (Exception e) {
+            System.err.println("ERROR: Can't create model or lexicon URL: " + e);
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-		if (new java.io.File(modelPath).exists()) {
-			readModel(lcFilePath);
-			readLexiconOnDemand(lexFilePath);
-		}
-		else if (IOUtilities.existsInClasspath(NETaggerLevel2.class, modelPath)) {
-			readModel(IOUtilities.loadFromClasspath(NETaggerLevel2.class, modelPath));
-			readLexiconOnDemand(IOUtilities.loadFromClasspath(NETaggerLevel2.class, lexiconPath));
-		}
-		else {
-			containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-			name = "NETaggerLevel2";
-			setLabeler(new NELabel());
-			setExtractor(new NETaggerLevel2$$1());
-		}
-	}
+        if (new java.io.File(modelPath).exists()) {
+            readModel(lcFilePath);
+            readLexiconOnDemand(lexFilePath);
+        } else if (IOUtilities.existsInClasspath(NETaggerLevel2.class, modelPath)) {
+            readModel(IOUtilities.loadFromClasspath(NETaggerLevel2.class, modelPath));
+            readLexiconOnDemand(IOUtilities.loadFromClasspath(NETaggerLevel2.class, lexiconPath));
+        } else {
+            containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+            name = "NETaggerLevel2";
+            setLabeler(new NELabel());
+            setExtractor(new NETaggerLevel2$$1());
+        }
+    }
 
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete"; }
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
+    }
 
-
-  public FeatureVector classify(Object __example)
-  {
-    return new FeatureVector(featureValue(__example));
-  }
-
-  public String discreteValue(Object __example)
-  {
-    return featureValue(__example).getStringValue();
-  }
+    public String getOutputType() {
+        return "discrete";
+    }
 
 
-  public int hashCode() { return "NETaggerLevel2".hashCode(); }
-  public boolean equals(Object o) { return o instanceof NETaggerLevel2; }
+    public FeatureVector classify(Object __example) {
+        return new FeatureVector(featureValue(__example));
+    }
+
+    public String discreteValue(Object __example) {
+        return featureValue(__example).getStringValue();
+    }
+
+
+    public int hashCode() {
+        return "NETaggerLevel2".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof NETaggerLevel2;
+    }
 
 }
-

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
@@ -20,11 +17,11 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 public class TextAnnotationUtilities {
-	
-	/**
-	 * This comparator will sort entities on start location, but where start is equal on
-	 * end as well so the shorter entities come first.
-	 */
+
+    /**
+     * This comparator will sort entities on start location, but where start is equal on end as well
+     * so the shorter entities come first.
+     */
     public final static Comparator<Constituent> constituentStartEndComparator =
             new Comparator<Constituent>() {
                 public int compare(Constituent arg0, Constituent arg1) {

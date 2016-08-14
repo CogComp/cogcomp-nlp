@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -63,12 +60,13 @@ public class ParsePath implements FeatureExtractor {
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
         TreeView parse = (TreeView) ta.getView(parseViewName);
-        Constituent cEquivalentInParseView = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
+        Constituent cEquivalentInParseView =
+                parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
         Set<Feature> features = new LinkedHashSet<>();
         List<Relation> incomingRelations = cEquivalentInParseView.getIncomingRelations();
 
 
-        if(incomingRelations.size() > 0) {
+        if (incomingRelations.size() > 0) {
             Constituent c1, c2;
             try {
                 c1 = parse.getParsePhrase(incomingRelations.get(0).getSource());

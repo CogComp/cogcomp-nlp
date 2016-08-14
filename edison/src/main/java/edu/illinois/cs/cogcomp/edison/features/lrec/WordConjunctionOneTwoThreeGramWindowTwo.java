@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -43,11 +40,13 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
     /**
      * Extracts an array of tokens from a uniform window of size k
      *
-     * @param TOKENS    The tokens {@link View} of the {@link TextAnnotation} object
+     * @param TOKENS The tokens {@link View} of the {@link TextAnnotation} object
      * @param startspan The span at the beginning of the {@link Constituent} object
-     * @param endspan   The span at the end of the {@link Constituent} object
-     * @param k         The number of tokens to the left and right of the current {@link Constituent} object to get
-     * @return The window of k tokens to the left and k tokens to the right of the current {@link Constituent} object
+     * @param endspan The span at the end of the {@link Constituent} object
+     * @param k The number of tokens to the left and right of the current {@link Constituent} object
+     *        to get
+     * @return The window of k tokens to the left and k tokens to the right of the current
+     *         {@link Constituent} object
      */
     private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
@@ -114,7 +113,8 @@ public class WordConjunctionOneTwoThreeGramWindowTwo implements FeatureExtractor
                     f.append(forms[i + context]);
                 }
 
-                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being the center)
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being
+                // the center)
                 // j is the size of the n-gram so it goes 1 to 3
                 id = classifier + ":" + ((i - window) + "_" + (j + 1));
                 value = "(" + (f.toString()) + ")";
