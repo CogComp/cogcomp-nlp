@@ -91,7 +91,7 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(".cmp.txt");
+                return true;
             }
         };
 
