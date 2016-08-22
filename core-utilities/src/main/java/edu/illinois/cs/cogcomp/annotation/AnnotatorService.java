@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
+import javax.xml.soap.Text;
 import java.util.Set;
 
 /**
@@ -148,4 +149,36 @@ public interface AnnotatorService {
      * @throws AnnotatorException If this AnnotatorService cannot provide this {@code viewName},
      */
     boolean addView(TextAnnotation ta, String viewName) throws AnnotatorException;
+
+
+    /**
+     * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
+     *    known to this {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService}.
+     * @param annotator the {@link Annotator} to be added.
+     * @throws {@link AnnotatorException} if the annotator requires views that cannot be satisfied.
+     */
+    void addAnnotator( Annotator annotator ) throws AnnotatorException;
+
+
+    /**
+     * Return a set containing the names of all {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s
+     *     that this service can provide.
+     * @return a set of view names corresponding to annotators known to this AnnotatorService
+     */
+    Set< String > getAvailableViews();
+
+
+    /**
+     * Add the specified views to the TextAnnotation argument. This is useful when TextAnnotation objects are
+     *    built independently of the service, perhaps by a different system component (e.g. a corpus reader).
+     * If so specified, overwrite existing views.
+     *
+     * @param ta The {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to annotate
+     * @param replaceExistingViews if 'true', annotate a
+     *                              {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} even if
+     *                              it is already present in the ta argument, replacing the original corresponding View.
+     * @return a reference to the updated TextAnnotation
+     */
+    TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews ) throws AnnotatorException;
+
 }
