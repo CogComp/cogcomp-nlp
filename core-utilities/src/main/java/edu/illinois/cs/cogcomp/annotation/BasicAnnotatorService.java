@@ -157,7 +157,28 @@ public class BasicAnnotatorService implements AnnotatorService {
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
     }
 
+    /**
+     * Generates a hash key based on the basic {@link TextAnnotation} information (TextAnnotation's
+     * own hash function) and the {@link View} name.
+     *
+     * @param ta The {@link TextAnnotation} to be hashed
+     * @param viewName The name of the {@link View} to be cached
+     * @return The cache key
+     */
+    public static String getCacheKey(TextAnnotation ta, String viewName) {
+        return ta.hashCode() + ":" + viewName;
+    }
 
+    /**
+     * get a hash key based on the text value provided
+     *
+     * @param text a text that has been used as the basis of a TextAnnotation object
+     * @param taBuilderName name of TextAnnotationBuilder that created the basic TextAnnotation
+     * @return a key for this TextAnnotation
+     */
+    public static String getTextAnnotationCacheKey(String text, String taBuilderName) {
+        return text.hashCode() * 13 + ":" + taBuilderName;
+    }
 
     /**
      * This opens a cache with the name cacheName, or adds it if it doesn't exist.
@@ -234,7 +255,7 @@ public class BasicAnnotatorService implements AnnotatorService {
      * text by using the {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that
      * this method works only with
      * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
-     * 
+     *
      * @param text The raw text
      * @param tokenization An instance of
      *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
@@ -292,7 +313,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization,
                 viewProviders.keySet());
     }
-
 
     @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
@@ -381,8 +401,54 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
     /**
+     * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
+     * known to this {@link AnnotatorService}.
+     *
+     * @param annotator the {@link Annotator} to be added.
+     * @throws {@link AnnotatorException} if the annotator requires views that cannot be satisfied.
+     */
+    @Override
+    public void addAnnotator(Annotator annotator) throws AnnotatorException {
+        String[] prerequisites = annotator.getRequiredViews();
+        for ( String pre : prerequisites )
+            if ( !this.getAvailableViews().contains( pre ) )
+                throw new AnnotatorException("Missing prerequisite: " + pre );
+
+        this.viewProviders.put( annotator.getViewName(), annotator );
+    }
+
+    /**
+     * Return a set containing the names of all {@link View}s
+     * that this service can provide.
+     *
+     * @return a set of view names corresponding to annotators known to this AnnotatorService
+     */
+    @Override
+    public Set<String> getAvailableViews() {
+        return this.viewProviders.keySet();
+    }
+
+    /**
+     * Add the specified views to the TextAnnotation argument. This is useful when TextAnnotation objects are
+     * built independently of the service, perhaps by a different system component (e.g. a corpus reader).
+     * If so specified, overwrite existing views.
+     *
+     * @param ta                   The {@link TextAnnotation} to annotate
+     * @param replaceExistingViews if 'true', annotate a
+     *                             {@link View} even if
+     *                             it is already present in the ta argument, replacing the original corresponding View.
+     * @return a reference to the updated TextAnnotation
+     */
+    @Override
+    public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
+        for ( String key : getAvailableViews() )
+            addView( ta, key );
+        return ta;
+    }
+
+    /**
      * run the named annotator on the TextAnnotation provided
-     * 
+     *
      * @param ta TextAnnotation to update
      * @param viewName name of View to populate
      * @throws AnnotatorException
@@ -413,29 +479,6 @@ public class BasicAnnotatorService implements AnnotatorService {
             removeKeyFromCache(cacheKey);
             putInCache(cacheKey, SerializationUtils.serialize(view));
         }
-    }
-
-    /**
-     * Generates a hash key based on the basic {@link TextAnnotation} information (TextAnnotation's
-     * own hash function) and the {@link View} name.
-     *
-     * @param ta The {@link TextAnnotation} to be hashed
-     * @param viewName The name of the {@link View} to be cached
-     * @return The cache key
-     */
-    public static String getCacheKey(TextAnnotation ta, String viewName) {
-        return ta.hashCode() + ":" + viewName;
-    }
-
-    /**
-     * get a hash key based on the text value provided
-     *
-     * @param text a text that has been used as the basis of a TextAnnotation object
-     * @param taBuilderName name of TextAnnotationBuilder that created the basic TextAnnotation
-     * @return a key for this TextAnnotation
-     */
-    public static String getTextAnnotationCacheKey(String text, String taBuilderName) {
-        return text.hashCode() * 13 + ":" + taBuilderName;
     }
 
     /**
@@ -502,4 +545,7 @@ public class BasicAnnotatorService implements AnnotatorService {
             throw new AnnotatorException(e.getMessage());
         }
     }
+
+
+
 }

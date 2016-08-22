@@ -8,6 +8,10 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Vivek Srikumar
@@ -17,12 +21,11 @@ import java.io.Serializable;
 public class Relation implements Serializable {
 
     private static final long serialVersionUID = -1005341815252250162L;
-
+    protected final int relationName;
     protected Constituent source;
     protected Constituent target;
-
     protected double score;
-    protected final int relationName;
+    protected Map<String, String> attributes;
 
     public Relation(String relationName, Constituent source, Constituent target, double score) {
 
@@ -52,7 +55,17 @@ public class Relation implements Serializable {
         if (!(obj instanceof Relation))
             return false;
 
+
         Relation r = (Relation) obj;
+
+        if (this.attributes == null && r.attributes != null)
+            return false;
+        if (this.attributes != null && r.attributes == null)
+            return false;
+
+        if (this.attributes != null && r.attributes != null)
+            if (!this.attributes.equals(r.attributes))
+                return false;
 
         return r.getRelationName().equals(this.relationName)
                 && r.getSource().equals(this.getSource()) && r.getTarget().equals(this.getTarget())
@@ -85,14 +98,56 @@ public class Relation implements Serializable {
         return target;
     }
 
+
+    public void setAttribute( String key, String value )
+    {
+        if ( null == attributes )
+            attributes = new HashMap<>();
+
+        attributes.put( key, value );
+    }
+
+
+    public String getAttribute(String key) {
+        if (attributes == null)
+            return null;
+        else
+            return attributes.get(key);
+    }
+
+    public Set<String> getAttributeKeys() {
+
+        if (this.attributes == null)
+            return new HashSet<>();
+        else
+            return this.attributes.keySet();
+    }
+
+    /**
+     * Removes all attributes from a Constituent.
+     */
+    public void removeAllAttributes() {
+        this.attributes = null;
+    }
+
+
     @Override
     public int hashCode() {
-        return this.getRelationName().hashCode() * 79 + this.getSource().hashCode() * 7
+        int hashCode =  this.getRelationName().hashCode() * 79 + this.getSource().hashCode() * 7
                 + this.getTarget().hashCode() * 13 + (new Double(this.getScore())).hashCode() * 17;
+        hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 13);
+
+        return hashCode;
     }
 
     @Override
     public String toString() {
-        return source + "--" + getRelationName() + "--> " + target + "(" + getScore() + ")";
+        StringBuilder bldr = new StringBuilder( source.toString() );
+        bldr.append( "--" ).append( getRelationName() ).append("--> ");
+        bldr.append( target ).append("(").append( getScore() ).append( ")" );
+        return bldr.toString();
     }
+
+
+
 }
