@@ -28,9 +28,10 @@ import java.io.File;
  * - "benchmark"
  *   - <dataset name> there can be as many of these directories as you like, Reuters, Ontonotes, MUC7
  *    and Web are examples of datasets one might run.
- *     - "config" - this must contain one or more configuration files, there will be at least one run per config file.
+ *     - "config" : this must contain one or more configuration files, there will be at least one run per config file.
  *     - "test" : the test directory. If training, and not test directory, the "train" directory will be used for both.
  *     - "train" : the directory with the training data, only needed if "-training" passed.
+ *     - "dev" : the hold out set for training.
  * 
  * Command Line Options:
  * -verbose : provide detailed report on all scoring methods with separate evaluation for phrase level tokenization, 
@@ -122,11 +123,20 @@ public class NerBenchmark {
         for (String benchmarkdir : configs) {
             String dir = directory + "/" + benchmarkdir;
             File configsDir = new File(dir + "/config/");
+            
+            // training data.
             String trainDirName = dir + "/train/";
             File trainDir = new File(trainDirName);
+            
+            // hold out set for training
+            String devDirName = dir + "/dev/";
+            File devDir = new File(devDirName);
+
+            // final test set.
             String testDirName = dir + "/test/";
             if (!new File(testDirName).exists())
                 testDirName = dir + "/train/";
+            
             if (configsDir.exists() && configsDir.isDirectory()) {
                 String[] configfiles = configsDir.list();
                 for (String confFile : configfiles) {
@@ -138,12 +148,21 @@ public class NerBenchmark {
                                     + ", but it is not there.");
                             System.exit(0);
                         }
-                        System.out.print("training...");
+                        System.out.println("----- Training up the model ------");
 
-                        // there is a training directory, with training enabled, so train.
-                        LearningCurveMultiDataset.getLearningCurve(-1, trainDirName, testDirName);
-                        System.out.print(" completed, Benchmark against configuration : "
-                                + confFile);
+                        // there is a training directory, with training enabled, so train. We use the same dataset
+                        // for both training and evaluating.
+                        LearningCurveMultiDataset.getLearningCurve(-1, trainDirName, devDirName);
+                        System.out.println("completed training against configuration : " + confFile);
+                        System.out.println("\n\n\n\n----- Final Results, testing against test set ------");
+                        NETesterMultiDataset.test(testDirName, true,
+                                ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                        System.out.println("\n\n----- Final Results, F1 only ------");
+                        NETesterMultiDataset.test(testDirName, false,
+                                ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                        
                     } else {
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         System.out.println("Benchmark against configuration : " + confFile);
@@ -152,9 +171,7 @@ public class NerBenchmark {
                         else if (reportFeatures)
                             NETesterMultiDataset.dumpFeaturesLabeledData(testDirName, output);
                         else
-                            NETesterMultiDataset
-                                    .test(testDirName,
-                                            verbose,
+                            NETesterMultiDataset.test(testDirName, verbose,
                                             ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                             ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
                     }
