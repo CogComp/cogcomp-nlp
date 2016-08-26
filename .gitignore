@@ -1,6 +1,8 @@
-### Maven files
-target/
+.idea
+*.log
+**/target
+*.iml
+*.DS_Store
+*.settings
+edison/wordnet/
 
-### IntelliJ files
-.idea/
-LBJava-NLP-tools.iml
