@@ -9,11 +9,12 @@ package edu.illinois.cs.cogcomp.pos;
 
 import java.util.*;
 import java.io.*;
+
+import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessInputStream;
+import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessOutputStream;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
-import edu.illinois.cs.cogcomp.lbjava.util.ExceptionlessInputStream;
-import edu.illinois.cs.cogcomp.lbjava.util.ExceptionlessOutputStream;
 
 
 /**
