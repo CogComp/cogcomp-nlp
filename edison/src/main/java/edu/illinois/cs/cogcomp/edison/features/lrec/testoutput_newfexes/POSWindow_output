@@ -1,0 +1,30 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestPOSWindow
+POSWindow Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+The constituent we are extracting features from in this test is: is
+POSWindow:0(DT)
+POSWindow:1(VBZ)
+POSWindow:2(DT)
+POSWindow:3(NN)
+Printing Set of Features
+POSWindow:0(DT)
+POSWindow:1(VBZ)
+POSWindow:2(DT)
+POSWindow:3(NN)
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.06 sec

@@ -1,0 +1,17 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestAffixes
+Affixes Feature Extractor
+GOT TOKENS FROM TEXTAnn
+I
+give
+John
+$900
+today
+.
+Testlist size is 6
+The constituent we are extracting features from in this test is: give
+Printing Set of Features
+Affixes:p|(giv)
+Affixes:s|(e)
+Affixes:s|(ve)
+Affixes:s|(ive)
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.062 sec

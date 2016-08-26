@@ -1,0 +1,60 @@
+(define features
+  
+  (define word-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     word))
+
+  (define pos-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     pos))
+  
+  (define predicate-features
+    (list word
+  	  pos
+  	  lemma
+  	  capitalization
+
+  	  word-context
+  	  pos-context
+
+	  (attribute :name predicate)
+
+  	  (subcat-frame :parse-view *default-parser*)
+  	  nom-lex-class))
+
+  (define arg-features
+    (list (transform-input constituent-parent
+			   predicate-features)
+	  (head-features :parse-view *default-parser*
+			 (list word
+			       pos
+			       numbers
+			       gerunds
+			       
+			       nom
+			       days-of-week
+			       
+			       months
+			       date
+			       wn:synsets-first-sense
+                   wn:hypernyms-first-sense))
+	  currency
+	  linear-position
+
+	  hyphen-argument-feature
+
+	  (parse-phrase-features :parse-view *default-parser*)
+
+	  (parse-path :parse-view *default-parser*)
+	  chunk-embedding
+	  chunk-path
+	  ne-embedding
+
+	  (parse-siblings :parse-view *default-parser*)
+	  word-context
+	  pos-context))
+arg-features)
