@@ -21,7 +21,7 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-common-resources</artifactId>
             <version>1.3</version>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
