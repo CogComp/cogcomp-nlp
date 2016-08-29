@@ -28,13 +28,15 @@ public class ViewNames {
     /** the tree gazetteer produced by the SimpleGazetteerAnnotator. */
     public static final String TREE_GAZETTEER = "TREE_GAZETTEER";
 
+    /** View for Mentions and Relations for the ACE Dataset */
+    public static final String MENTION_ACE = "MENTION_ACE";
+
     /**
      * @deprecated Replaced by ViewNames#NER_CONLL, ViewNames#NER_ONTONOTES
      */
     @Deprecated
     public static final String NER = "NER";
 
-    public static final String NER_ACE = "NER_ACE";
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
 
@@ -118,7 +120,7 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
-            case NER_ACE:
+            case MENTION_ACE:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
