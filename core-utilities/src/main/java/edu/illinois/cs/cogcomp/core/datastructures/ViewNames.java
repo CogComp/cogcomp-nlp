@@ -34,13 +34,7 @@ public class ViewNames {
     @Deprecated
     public static final String NER = "NER";
 
-    // Constituents in this view contains heads of mentions only
-    public static final String NER_ACE_COARSE_HEAD = "NER_ACE_COARSE_HEAD";
-    public static final String NER_ACE_FINE_HEAD = "NER_ACE_FINE_HEAD";
-    // Constituents in this view contains extents of mentions.
-    public static final String NER_ACE_COARSE_EXTENT = "NER_ACE_COARSE_EXTENT";
-    public static final String NER_ACE_FINE_EXTENT = "NER_ACE_FINE_EXTENT";
-
+    public static final String NER_ACE = "NER_ACE";
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
 
@@ -131,10 +125,7 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
-            case NER_ACE_COARSE_HEAD:
-            case NER_ACE_FINE_HEAD:
-            case NER_ACE_COARSE_EXTENT:
-            case NER_ACE_FINE_EXTENT:
+            case NER_ACE:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
