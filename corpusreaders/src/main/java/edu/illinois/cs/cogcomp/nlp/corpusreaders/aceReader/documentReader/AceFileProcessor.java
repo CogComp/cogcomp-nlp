@@ -114,12 +114,13 @@ public class AceFileProcessor {
         }
         StringBuilder textContentWithoutTagsBuilder = new StringBuilder();
 
+        // Replace context before the TEXT start with appropriate number of spaces.
         String preTextMarketString = removeXMLTags(contentWithoutEnter.substring(0, textContentStartPosition));
         for (int i = 0; i < preTextMarketString.length(); i++) textContentWithoutTagsBuilder.append(" ");
 
+        // Extract the text content for the document.
         String textContent = removeXMLTags(
                 contentWithoutEnter.substring(textContentStartPosition, textContentEndPosition));
-
         textContentWithoutTagsBuilder.append(textContent);
 
         String contentRemovingTags = textContentWithoutTagsBuilder.toString();
@@ -151,13 +152,16 @@ public class AceFileProcessor {
         return aceDoc;
     }
 
+    /**
+     * Remove XML tags (both opening and closing) from the input text string.
+     */
     private static String removeXMLTags(String inputText) {
+        if (inputText == null) return null;
+
         while (inputText.contains("<")) {
             int p = inputText.indexOf('<');
             int q = inputText.indexOf('>');
-            inputText =
-                    inputText.substring(0, p)
-                            + inputText.substring(q + 1, inputText.length());
+            inputText = inputText.substring(0, p) + inputText.substring(q + 1, inputText.length());
         }
 
         return inputText;

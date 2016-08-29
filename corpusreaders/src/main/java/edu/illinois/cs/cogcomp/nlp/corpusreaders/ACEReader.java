@@ -213,9 +213,8 @@ public class ACEReader extends TextAnnotationReader {
                 extentConstituent.addAttribute(EntityMentionTypeAttribute, entityMention.type);
                 extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
 
-                if (entity.subtype != null) {
-                    extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
-                }
+                String entitySubType = (entity.subtype != null) ? entity.subtype : entity.type;
+                extentConstituent.addAttribute(EntitySubtypeAttribute, entitySubType);
 
                 if (entityMention.ldcType != null) {
                     extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
@@ -288,9 +287,7 @@ public class ACEReader extends TextAnnotationReader {
     }
 
     /**
-     * Adds a PredicateArgumentView for ACE Relations between Entities. The Predicate constituent of
-     * the View presents the first Argument in the ACE Relation. The Argument constituent of the
-     * View presents the second Argument in the ACE Relation.
+     * Adds {@link Relation} edges to relations between mentions from the Entity View.
      *
      * @param ta TextAnnotation instance to add the Relation View to.
      * @param docAnnotation Annotation for the current document.
