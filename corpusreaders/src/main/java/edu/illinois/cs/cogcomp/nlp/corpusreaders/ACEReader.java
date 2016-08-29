@@ -176,17 +176,8 @@ public class ACEReader extends TextAnnotationReader {
      * @param file Link to the .apf.xml file for the current document.
      */
     public void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityCoarseView =
-                new SpanLabelView(ViewNames.NER_ACE_COARSE_HEAD,
-                        ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityFineView =
-                new SpanLabelView(ViewNames.NER_ACE_FINE_HEAD, ACEReader.class.getCanonicalName(),
-                        ta, 1.0f, true);
-        SpanLabelView entityCoarseExtentView =
-                new SpanLabelView(ViewNames.NER_ACE_COARSE_EXTENT,
-                        ACEReader.class.getCanonicalName(), ta, 1.0f, true);
-        SpanLabelView entityFineExtentView =
-                new SpanLabelView(ViewNames.NER_ACE_FINE_EXTENT,
+        SpanLabelView entityView =
+                new SpanLabelView(ViewNames.NER_ACE,
                         ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefHeadView =
                 new CoreferenceView(ViewNames.COREF_HEAD, ACEReader.class.getCanonicalName(), ta,
@@ -212,44 +203,25 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 Constituent extentConstituent =
-                        new Constituent(entity.type, ViewNames.NER_ACE_COARSE_EXTENT, ta,
-                                extentStartTokenId, extentEndTokenId + 1);
+                        new Constituent(entity.type, ViewNames.NER_ACE, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
                 extentConstituent.addAttribute(EntityMentionTypeAttribute, entityMention.type);
                 extentConstituent.addAttribute(EntityClassAttribute, entity.classEntity);
 
-                if (entity.subtype != null)
+                if (entity.subtype != null) {
                     extentConstituent.addAttribute(EntitySubtypeAttribute, entity.subtype);
-                if (entityMention.ldcType != null)
-                    extentConstituent.addAttribute(EntityMentionLDCTypeAttribute,
-                            entityMention.ldcType);
+                }
 
-                extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart
-                        + "");
+                if (entityMention.ldcType != null) {
+                    extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
+                }
+
+                extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
                 extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
 
-                entityCoarseExtentView.addConstituent(extentConstituent);
-
-                // Clone constituent for the ENTITYVIEW_FINE SpanLabelView
-                String subTypeLabel = (entity.subtype != null) ? entity.subtype : entity.type;
-                Constituent fineExtentConstituent =
-                        extentConstituent.cloneForNewViewWithDestinationLabel(
-                                ViewNames.NER_ACE_FINE_EXTENT, subTypeLabel);
-                entityFineExtentView.addConstituent(fineExtentConstituent);
-
-                Constituent headConstituent =
-                        ACEReader.getEntityHeadForConstituent(extentConstituent, ta,
-                                ViewNames.NER_ACE_COARSE_HEAD);
-                if (headConstituent != null) {
-                    entityCoarseView.addConstituent(headConstituent);
-                    Constituent fineHead =
-                            headConstituent.cloneForNewViewWithDestinationLabel(
-                                    ViewNames.NER_ACE_FINE_HEAD, subTypeLabel);
-
-                    entityFineView.addConstituent(fineHead);
-                }
+                entityView.addConstituent(extentConstituent);
 
                 Constituent corefExtentConstituent =
                         extentConstituent.cloneForNewViewWithDestinationLabel(
@@ -273,9 +245,9 @@ public class ACEReader extends TextAnnotationReader {
                 scores[i] = cons.getConstituentScore();
 
                 if (canonicalMention == null
-                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm()
-                                .length())
+                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm().length()) {
                     canonicalMention = cons;
+                }
             }
 
             if (corefMentions.size() > 0) {
@@ -294,9 +266,9 @@ public class ACEReader extends TextAnnotationReader {
                 scores[i] = cons.getConstituentScore();
 
                 if (canonicalMention == null
-                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm()
-                                .length())
+                        || canonicalMention.getSurfaceForm().length() < cons.getSurfaceForm().length()) {
                     canonicalMention = cons;
+                }
             }
 
             if (corefMentionHeads.size() > 0) {
@@ -306,15 +278,11 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(ViewNames.NER_ACE_COARSE_HEAD, entityCoarseView);
-        ta.addView(ViewNames.NER_ACE_FINE_HEAD, entityFineView);
-        ta.addView(ViewNames.NER_ACE_COARSE_EXTENT, entityCoarseExtentView);
-        ta.addView(ViewNames.NER_ACE_FINE_EXTENT, entityFineExtentView);
+        ta.addView(ViewNames.NER_ACE, entityView);
 
         ta.addView(ViewNames.COREF_HEAD, corefHeadView);
         ta.addView(ViewNames.COREF_EXTENT, corefExtentView);
     }
-
 
     /**
      * Adds a PredicateArgumentView for ACE Relations between Entities. The Predicate constituent of
