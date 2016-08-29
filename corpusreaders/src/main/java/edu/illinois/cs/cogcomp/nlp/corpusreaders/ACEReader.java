@@ -14,7 +14,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import org.slf4j.Logger;
@@ -131,10 +131,8 @@ public class ACEReader extends TextAnnotationReader {
         };
 
         ReadACEAnnotation.is2004mode = this.is2004mode;
-        AceFileProcessor fileProcessor =
-                new AceFileProcessor(new TokenizerTextAnnotationBuilder(new IllinoisTokenizer()));
-        TextAnnotationBuilder taBuilder =
-                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+        AceFileProcessor fileProcessor = new AceFileProcessor();
+        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
         for (String section : this.sections) {
             File sectionDir = new File(corpusHomeDir.getAbsolutePath() + "/" + section);
@@ -145,7 +143,6 @@ public class ACEReader extends TextAnnotationReader {
 
                 try {
                     doc = fileProcessor.processAceEntry(sectionDir, fileName);
-                    doc.taList.get(0); // Only pick documents that have at-least one TA.
                 } catch (Exception ex) {
                     logger.warn("Error while reading document - " + file.getName(), ex);
                     continue;
@@ -156,7 +153,9 @@ public class ACEReader extends TextAnnotationReader {
                 // Adding `section/fileName` as textId for annotation.
                 String textId = fileName.substring(fileName.indexOf(section + File.separator));
                 TextAnnotation ta =
-                        taBuilder.createTextAnnotation(this.corpusId, textId,
+                        taBuilder.createTextAnnotation(
+                                this.corpusId,
+                                textId,
                                 doc.contentRemovingTags);
 
                 this.addEntityViews(ta, doc.aceAnnotation, file);
