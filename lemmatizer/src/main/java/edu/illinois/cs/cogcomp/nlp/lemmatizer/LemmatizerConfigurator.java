@@ -22,6 +22,9 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
     public final static Property LEMMA_LAZY_INITIALIZE = new Property(
             AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
 
+    public final static Property VERB_LEMMA_FILE = new Property( "verbLemmaFile", "verb-lemDict.txt" );
+    public static final Property EXCEPTIONS_FILE = new Property("exceptionsFile", "exceptions.txt");
+
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
      *
@@ -29,7 +32,8 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE};
+        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE,
+            VERB_LEMMA_FILE, EXCEPTIONS_FILE};
         return new ResourceManager(generateProperties(props));
     }
 }

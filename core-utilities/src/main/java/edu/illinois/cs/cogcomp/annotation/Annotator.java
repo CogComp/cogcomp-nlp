@@ -16,6 +16,10 @@ import java.util.Properties;
 
 /**
  * An interface for creating views of a specified name from a {@link TextAnnotation}
+ * IMPORTANT FOR DERIVED CLASSES: if you initialize fields at declaration rather than in the constructor,
+ *     those assignments take place AFTER the super.constructor has run -- so e.g. you cannot
+ *     use a Logger you declare in this way to log messages in the initialize() method that
+ *     is called by the Annotator class constructor.
  *
  * @author Vivek Srikumar, Mark Sammons, Christos Christodoulopoulos
  */
