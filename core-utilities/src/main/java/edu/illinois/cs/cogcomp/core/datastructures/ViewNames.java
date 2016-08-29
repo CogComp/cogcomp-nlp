@@ -28,18 +28,14 @@ public class ViewNames {
     /** the tree gazetteer produced by the SimpleGazetteerAnnotator. */
     public static final String TREE_GAZETTEER = "TREE_GAZETTEER";
 
+    /** View for Mentions and Relations for the ACE Dataset */
+    public static final String MENTION_ACE = "MENTION_ACE";
+
     /**
      * @deprecated Replaced by ViewNames#NER_CONLL, ViewNames#NER_ONTONOTES
      */
     @Deprecated
     public static final String NER = "NER";
-
-    // Constituents in this view contains heads of mentions only
-    public static final String NER_ACE_COARSE_HEAD = "NER_ACE_COARSE_HEAD";
-    public static final String NER_ACE_FINE_HEAD = "NER_ACE_FINE_HEAD";
-    // Constituents in this view contains extents of mentions.
-    public static final String NER_ACE_COARSE_EXTENT = "NER_ACE_COARSE_EXTENT";
-    public static final String NER_ACE_FINE_EXTENT = "NER_ACE_FINE_EXTENT";
 
     public static final String NER_CONLL = "NER_CONLL";
     public static final String NER_ONTONOTES = "NER_ONTONOTES";
@@ -51,13 +47,6 @@ public class ViewNames {
      */
     @Deprecated
     public static final String CHUNK = "CHUNK";
-
-    // Constituents in this view contains heads of mentions only
-    public static final String RELATION_ACE_COARSE_HEAD = "RELATION_ACE_COARSE_HEAD";
-    public static final String RELATION_ACE_FINE_HEAD = "RELATION_ACE_FINE_HEAD";
-    // Constituents in this view contains extents of mentions only
-    public static final String RELATION_ACE_COARSE_EXTENT = "RELATION_ACE_COARSE_EXTENT";
-    public static final String RELATION_ACE_FINE_EXTENT = "RELATION_ACE_FINE_EXTENT";
 
     /**
      * @deprecated Replaced by {@link #SRL_VERB}
@@ -131,10 +120,7 @@ public class ViewNames {
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
-            case NER_ACE_COARSE_HEAD:
-            case NER_ACE_FINE_HEAD:
-            case NER_ACE_COARSE_EXTENT:
-            case NER_ACE_FINE_EXTENT:
+            case MENTION_ACE:
             case NER_CONLL:
             case NER_ONTONOTES:
             case SHALLOW_PARSE:
@@ -165,10 +151,6 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
-            case RELATION_ACE_COARSE_HEAD:
-            case RELATION_ACE_FINE_HEAD:
-            case RELATION_ACE_COARSE_EXTENT:
-            case RELATION_ACE_FINE_EXTENT:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
             case COREF_HEAD:
