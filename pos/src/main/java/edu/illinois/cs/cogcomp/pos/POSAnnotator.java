@@ -32,11 +32,15 @@ import java.util.List;
  */
 public class POSAnnotator extends Annotator {
 
+    /**
+     * NOTE: if you assign values here, these fields are initialized AFTER THE CONSTRUCTOR!!
+     *    Therefore you CANNOT log messages in the constructor.
+     */
     private static final String NAME = POSAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-    private POSTagger tagger = null;
-    private String tokensfield = "tokens";
-    private String sentencesfield = "sentences";
+    private POSTagger tagger;
+    private String tokensfield;// = "tokens";
+    private String sentencesfield;// = "sentences";
 
     /**
      * lazily initialize by default.
