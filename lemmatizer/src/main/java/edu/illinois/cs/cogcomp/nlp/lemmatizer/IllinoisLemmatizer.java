@@ -34,8 +34,8 @@ public class IllinoisLemmatizer extends Annotator {
 
     private static final String NAME = IllinoisLemmatizer.class.getCanonicalName();
 
-    private static final String verbLemmaFile = "verb-lemDict.txt";
-    private static final String exceptionsFile = "exceptions.txt";
+    private static String verbLemmaFile;
+    private static String exceptionsFile;
     private static boolean useStanford_default = false;
     private Map<String, String> verbLemmaMap;
     private Map<String, String> verbBaseMap;
@@ -122,6 +122,8 @@ public class IllinoisLemmatizer extends Annotator {
     public void initialize(ResourceManager rm) {
         this.useStanford = rm.getBoolean(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key);
         wnLemmaReader = new WordnetLemmaReader(rm.getString(LemmatizerConfigurator.WN_PATH.key));
+        verbLemmaFile = rm.getString( LemmatizerConfigurator.VERB_LEMMA_FILE.key );
+        exceptionsFile = rm.getString( LemmatizerConfigurator.EXCEPTIONS_FILE.key );
         loadVerbMap();
         loadExceptionMap();
         contractions = new HashMap<>();
