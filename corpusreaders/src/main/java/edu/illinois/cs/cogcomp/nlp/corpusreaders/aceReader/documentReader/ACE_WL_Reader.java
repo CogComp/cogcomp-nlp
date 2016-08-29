@@ -7,41 +7,17 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 
-import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ACE_WL_Reader {
+final class ACE_WL_Reader {
 
     static boolean isDebug = false;
-
-    public static void main(String[] args) throws FileNotFoundException {
-        // String file =
-        // "/shared/shelley/yqsong/eventData/ace2005Modify/data/English/wl/adj/MARKBACKER_20041217.1639.sgm";
-
-        String file =
-                "/shared/shelley/yqsong/eventData/ace2005Modify/data/English/wl/adj/BACONSREBELLION_20050205.1919.sgm";
-        List<String> lines = LineIO.read(file);
-        String content = "";
-        for (int i = 0; i < lines.size(); ++i) {
-            content += lines.get(i) + " ";
-        }
-        String contentRemovingTags = content;
-        while (contentRemovingTags.contains("<")) {
-            int p = contentRemovingTags.indexOf('<');
-            int q = contentRemovingTags.indexOf('>');
-            contentRemovingTags =
-                    contentRemovingTags.substring(0, p)
-                            + contentRemovingTags.substring(q + 1, contentRemovingTags.length());
-        }
-        parse(content, contentRemovingTags);
-    }
 
     public static List<Pair<String, Paragraph>> parse(String content, String contentRemovingTags) {
         List<Pair<String, Paragraph>> paragraphs = new ArrayList<Pair<String, Paragraph>>();
