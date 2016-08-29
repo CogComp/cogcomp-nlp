@@ -63,7 +63,7 @@ public class ACEReaderParseTest {
 
             Set<String> documentViews = doc.getAvailableViews();
             assertTrue(documentViews.contains(ViewNames.TOKENS));
-            assertTrue(documentViews.contains(ViewNames.NER_ACE));
+            assertTrue(documentViews.contains(ViewNames.MENTION_ACE));
             assertTrue(documentViews.contains(ViewNames.COREF_HEAD));
             assertTrue(documentViews.contains(ViewNames.COREF_EXTENT));
 
@@ -71,7 +71,7 @@ public class ACEReaderParseTest {
             for (ACEEntity entity : annotation.entityList)
                 entityMentions += entity.entityMentionList.size();
 
-            SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.NER_ACE);
+            SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.MENTION_ACE);
             assertEquals(entityView.getNumberOfConstituents(), entityMentions);
 
             CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF_HEAD);

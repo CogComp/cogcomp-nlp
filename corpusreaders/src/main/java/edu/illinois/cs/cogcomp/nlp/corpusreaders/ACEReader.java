@@ -180,7 +180,7 @@ public class ACEReader extends TextAnnotationReader {
      */
     private void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
         SpanLabelView entityView =
-                new SpanLabelView(ViewNames.NER_ACE,
+                new SpanLabelView(ViewNames.MENTION_ACE,
                         ACEReader.class.getCanonicalName(), ta, 1.0f, true);
         CoreferenceView corefHeadView =
                 new CoreferenceView(ViewNames.COREF_HEAD, ACEReader.class.getCanonicalName(), ta,
@@ -206,7 +206,7 @@ public class ACEReader extends TextAnnotationReader {
                 }
 
                 Constituent extentConstituent =
-                        new Constituent(entity.type, ViewNames.NER_ACE, ta, extentStartTokenId, extentEndTokenId + 1);
+                        new Constituent(entity.type, ViewNames.MENTION_ACE, ta, extentStartTokenId, extentEndTokenId + 1);
                 extentConstituent.addAttribute(EntityTypeAttribute, entity.type);
                 extentConstituent.addAttribute(EntityIDAttribute, entity.id);
                 extentConstituent.addAttribute(EntityMentionIDAttribute, entityMention.id);
@@ -280,7 +280,7 @@ public class ACEReader extends TextAnnotationReader {
             }
         }
 
-        ta.addView(ViewNames.NER_ACE, entityView);
+        ta.addView(ViewNames.MENTION_ACE, entityView);
 
         ta.addView(ViewNames.COREF_HEAD, corefHeadView);
         ta.addView(ViewNames.COREF_EXTENT, corefExtentView);
@@ -294,7 +294,7 @@ public class ACEReader extends TextAnnotationReader {
      * @param file Link to the .apf.xml file for the current document.
      */
     private void addEntityRelations(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
-        SpanLabelView entityView = (SpanLabelView) ta.getView(ViewNames.NER_ACE);
+        SpanLabelView entityView = (SpanLabelView) ta.getView(ViewNames.MENTION_ACE);
         Map<Pair<String, String>, Constituent> entityIdMap = new HashMap<>();
 
         // Prepare a mapping for entityId, entityMentionId to the corresponding constituent.
