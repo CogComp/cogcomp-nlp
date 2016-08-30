@@ -28,6 +28,8 @@ import static org.junit.Assert.*;
 
 public class ACEReaderParseTest {
 
+    private static final String ACE2005CORPUS = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ace2005";
+
     @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2004Dataset() throws Exception {
@@ -91,5 +93,23 @@ public class ACEReaderParseTest {
         }
 
         assertEquals(numDocs, numberOfDocs);
+    }
+
+
+
+    @Test
+    public void testAce2005()
+    {
+        boolean is2004 = false;
+        ACEReader reader = null;
+        try {
+            reader = new ACEReader( ACE2005CORPUS, is2004 );
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        assertTrue( reader.hasNext() );
+
     }
 }
