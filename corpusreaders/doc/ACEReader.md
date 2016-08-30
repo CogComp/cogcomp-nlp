@@ -49,6 +49,11 @@ Each of the sub-directories represents a **section** and has different text pars
 - **un** : Usenet Newsgroups/Discussion Forum
 - **cts** : Conversational Telephone Speech
 
+
+**Note:** The version of the 2005 corpus for which this reader was developed had the markup files (.xml, .sgm etc.) in a single directory ```timex2norm``` under each section.
+The reader should work for this directory structure too. 
+
+
 ### Java Usage
 
 ```java

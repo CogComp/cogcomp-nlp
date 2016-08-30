@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -32,39 +33,32 @@ import java.util.*;
  * @author Bhargav Mangipudi
  */
 public class ACEReader extends TextAnnotationReader {
-    private String aceCorpusHome;
-    private boolean is2004mode;
-    private String[] sections;
-    private String corpusId;
-    private List<TextAnnotation> documents;
-
-    private static final String RelationFirstArgumentTag = "Arg-1";
-    private static final String RelationSecondArgumentTag = "Arg-2";
-
-    private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
-
     // Entity Constants
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
     public static final String EntitySubtypeAttribute = "EntitySubtype"; /* Optional */
     public static final String EntityClassAttribute = "EntityClass";
-
     public static final String EntityMentionIDAttribute = "EntityMentionID";
     public static final String EntityMentionTypeAttribute = "EntityMentionType";
     public static final String EntityMentionLDCTypeAttribute = "EntityMentionLDCType"; /* Optional */
-
     public static final String EntityHeadStartCharOffset = "EntityHeadStartCharOffset";
     public static final String EntityHeadEndCharOffset = "EntityHeadEndCharOffset";
-
     // Relation Constants
     public static final String RelationIDAttribute = "RelationID";
     public static final String RelationTypeAttribute = "RelationType";
     public static final String RelationSubtypeAttribute = "RelationSubtype"; /* Optional */
     public static final String RelationModalityAttribute = "RelationModality"; /* Optional */
     public static final String RelationTenseAttribute = "RelationTense"; /* Optional */
-
     public static final String RelationMentionIDAttribute = "RelationMentionID";
     public static final String RelationMentionLexicalConditionAttribute = "RelationMentionLexicalCondition";
+    private static final String RelationFirstArgumentTag = "Arg-1";
+    private static final String RelationSecondArgumentTag = "Arg-2";
+    private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
+    private String aceCorpusHome;
+    private boolean is2004mode;
+    private String[] sections;
+    private String corpusId;
+    private List<TextAnnotation> documents;
 
     /**
      * Constructor for the ACE Data-set Reader
@@ -104,6 +98,37 @@ public class ACEReader extends TextAnnotationReader {
     }
 
     /**
+     * Helper function to create a head constituent from an extent constituent.
+     */
+    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
+                                                           TextAnnotation textAnnotation,
+                                                           String viewName) {
+        int startCharOffset =
+                Integer.parseInt(extentConstituent
+                        .getAttribute(ACEReader.EntityHeadStartCharOffset));
+        int endCharOffset =
+                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset));
+        int start_token = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
+        int end_token = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
+
+        if (start_token >= 0 && end_token >= 0 && !(end_token - start_token < 0)) {
+            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token
+            // number exclusive
+            Constituent cons =
+                    new Constituent(extentConstituent.getLabel(), 1.0, viewName, textAnnotation,
+                            start_token, end_token + 1);
+
+            for (String attributeKey : extentConstituent.getAttributeKeys()) {
+                cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));
+            }
+
+            return cons;
+        }
+
+        return null;
+    }
+
+    /**
      * @return Boolean representing if the reader is in 2004 mode.
      */
     public boolean Is2004Mode() {
@@ -113,17 +138,16 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     protected void initializeReader() {
         // This is called even before our class's constructor initializations.
-        // Useless method is useless.
     }
 
     // Lists out all files and creates TextAnnotation for each document
-    protected void updateCurrentFiles() {
+    protected void updateCurrentFiles() throws IOException {
         File corpusHomeDir = new File(this.aceCorpusHome);
         assert corpusHomeDir.isDirectory();
 
         FilenameFilter apfFileFilter = new FilenameFilter() {
             public boolean accept(File directory, String fileName) {
-                return fileName.endsWith(".apf.xml");
+                return ( new File(directory + "/" + fileName).isDirectory() || fileName.endsWith(".apf.xml") );
             }
         };
 
@@ -133,25 +157,25 @@ public class ACEReader extends TextAnnotationReader {
 
         for (String section : this.sections) {
             File sectionDir = new File(corpusHomeDir.getAbsolutePath() + "/" + section);
-            File[] xmlFiles = sectionDir.listFiles(apfFileFilter);
+
+            String[] xmlFiles = IOUtils.lsFilesRecursive( sectionDir.getAbsolutePath(), apfFileFilter );
 
             if (xmlFiles == null) {
                 logger.error("No valid xml file found. Skipping section " + section);
                 continue;
             }
 
-            for (File file : xmlFiles) {
+            for (String fileName : xmlFiles) {
                 ACEDocument doc;
-                String fileName = file.getAbsolutePath();
 
                 try {
                     doc = fileProcessor.processAceEntry(sectionDir, fileName);
                 } catch (Exception ex) {
-                    logger.warn("Error while reading document - " + file.getName(), ex);
+                    logger.warn("Error while reading document - " + fileName, ex);
                     continue;
                 }
 
-                logger.info("Parsing file - " + file.getName());
+                logger.info("Parsing file - " + fileName);
 
                 // Adding `section/fileName` as textId for annotation.
                 String textId = fileName.substring(fileName.indexOf(section + File.separator));
@@ -161,6 +185,7 @@ public class ACEReader extends TextAnnotationReader {
                                 textId,
                                 doc.contentRemovingTags);
 
+                File file = new File( fileName );
                 this.addEntityViews(ta, doc.aceAnnotation, file);
                 this.addEntityRelations(ta, doc.aceAnnotation, file);
 
@@ -402,36 +427,5 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     public boolean hasNext() {
         return this.documents.size() > this.currentAnnotationId;
-    }
-
-    /**
-     * Helper function to create a head constituent from an extent constituent.
-     */
-    private static Constituent getEntityHeadForConstituent(Constituent extentConstituent,
-                                                           TextAnnotation textAnnotation,
-                                                           String viewName) {
-        int startCharOffset =
-                Integer.parseInt(extentConstituent
-                        .getAttribute(ACEReader.EntityHeadStartCharOffset));
-        int endCharOffset =
-                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset));
-        int start_token = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
-        int end_token = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
-
-        if (start_token >= 0 && end_token >= 0 && !(end_token - start_token < 0)) {
-            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token
-            // number exclusive
-            Constituent cons =
-                    new Constituent(extentConstituent.getLabel(), 1.0, viewName, textAnnotation,
-                            start_token, end_token + 1);
-
-            for (String attributeKey : extentConstituent.getAttributeKeys()) {
-                cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));
-            }
-
-            return cons;
-        }
-
-        return null;
     }
 }
