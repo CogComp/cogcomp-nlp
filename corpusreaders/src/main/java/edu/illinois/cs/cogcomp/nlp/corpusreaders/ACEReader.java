@@ -138,7 +138,6 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     protected void initializeReader() {
         // This is called even before our class's constructor initializations.
-        // Useless method is useless.
     }
 
     // Lists out all files and creates TextAnnotation for each document
@@ -168,8 +167,6 @@ public class ACEReader extends TextAnnotationReader {
 
             for (String fileName : xmlFiles) {
                 ACEDocument doc;
-//                File file = new File( fileName );
-//                String fileName = file.getAbsolutePath();
 
                 try {
                     doc = fileProcessor.processAceEntry(sectionDir, fileName);
