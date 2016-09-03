@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -36,9 +33,6 @@ import java.util.Scanner;
  */
 public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
-    public static final String LemmaIdentifier = "predicate";
-    public static final String SenseIdentifer = "SenseNumber";
-
     protected final String predicateArgumentViewName;
     private final TextAnnotationBuilder textAnnotationBuilder;
     protected int currentLine;
@@ -59,7 +53,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
     public CoNLLColumnFormatReader(String corpus, String section, String columnFile,
             String predicateArgumentViewName, TextAnnotationBuilder textAnnotationBuilder)
             throws Exception {
-        super(corpus);
+        super(CorpusReaderConfigurator.buildResourceManager(corpus));
         this.section = section;
         this.predicateArgumentViewName = predicateArgumentViewName;
         this.textAnnotationBuilder = textAnnotationBuilder;
@@ -79,6 +73,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
             lines = LineIO.read(columnFile);
         }
     }
+
 
     public boolean hasNext() {
         return currentLine < lines.size();
@@ -298,9 +293,9 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
                     new Constituent("Predicate", 1.0, predicateArgumentViewName, ta, predicatePos,
                             predicatePos + 1);
 
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer,
+            predicate.addAttribute(PredicateArgumentView.SenseIdentifer,
                     verbSenses.get(predicateId));
-            predicate.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier,
+            predicate.addAttribute(PredicateArgumentView.LemmaIdentifier,
                     baseForms.get(predicateId));
 
             double[] scoresDoubleArray = new double[relations.size()];
@@ -354,7 +349,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
             List<Constituent> predicates2 = pav.getPredicates();
             counter.incrementCount("Predicates", predicates2.size());
             for (Constituent c : predicates2) {
-                predicates.add(c.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier));
+                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
             }
 
         }

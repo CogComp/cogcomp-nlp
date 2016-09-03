@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -14,7 +11,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.*;
 
@@ -29,19 +25,19 @@ public class PredicateArgumentEvaluator extends Evaluator {
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
     public void evaluateSense(ClassificationTester senseTester, View goldView, View predictionView) {
-        gold = (PredicateArgumentView)goldView;
-        prediction = (PredicateArgumentView)predictionView;
+        gold = (PredicateArgumentView) goldView;
+        prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (goldToPredictionPredicateMapping.containsKey(gp)) {
                 Constituent pp = goldToPredictionPredicateMapping.get(gp);
-                String goldSense = gp.getAttribute(CoNLLColumnFormatReader.SenseIdentifer);
+                String goldSense = gp.getAttribute(PredicateArgumentView.SenseIdentifer);
 
                 // XXX: As in training, all predicates that are labeled as XX are marked as 01
                 if (goldSense.equals("XX"))
                     goldSense = "01";
 
-                String predSense = pp.getAttribute(CoNLLColumnFormatReader.SenseIdentifer);
+                String predSense = pp.getAttribute(PredicateArgumentView.SenseIdentifer);
 
                 assert predSense != null;
                 senseTester.record(goldSense, predSense);
@@ -57,8 +53,8 @@ public class PredicateArgumentEvaluator extends Evaluator {
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
         super.cleanAttributes(goldView, predictionView);
-        gold = (PredicateArgumentView)goldView;
-        prediction = (PredicateArgumentView)predictionView;
+        gold = (PredicateArgumentView) goldView;
+        prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (!goldToPredictionPredicateMapping.containsKey(gp)) {

@@ -1,15 +1,13 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -22,6 +20,7 @@ import org.junit.Test;
 import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class NerOntonotesTest {
 
@@ -40,7 +39,12 @@ public class NerOntonotesTest {
 
         TextAnnotation taOnto = tab.createTextAnnotation("", "", TEST_INPUT);
 
-        nerOntonotes.addView(taOnto);
+        try {
+            nerOntonotes.getView(taOnto);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
         View v = taOnto.getView(nerOntonotes.getViewName());
 
         assertEquals(v.getConstituents().size(), 4);

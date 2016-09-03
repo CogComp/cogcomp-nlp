@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
@@ -27,12 +24,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * For a given Constituent, sweeps a window of specified size, optionally ignoring sentence boundaries,
- *    and for each relative window position, creates a feature recording that relative position and
- *    any word embedding value corresponding to the token at that position.
+ * For a given Constituent, sweeps a window of specified size, optionally ignoring sentence
+ * boundaries, and for each relative window position, creates a feature recording that relative
+ * position and any word embedding value corresponding to the token at that position.
  *
- *  @keywords embedding, window, token
- *  @author mssammon
+ * @keywords embedding, window, token
+ * @author mssammon
  */
 public class WordEmbeddingWindow implements FeatureExtractor {
 
@@ -41,7 +38,7 @@ public class WordEmbeddingWindow implements FeatureExtractor {
     private final boolean ignoreSentenceBoundaries;
 
 
-    public WordEmbeddingWindow(int windowSize, boolean ignoreSentenceBoundaries ) throws IOException {
+    public WordEmbeddingWindow(int windowSize, boolean ignoreSentenceBoundaries) throws IOException {
         this.windowStart = 0 - windowSize;
         this.windowEnd = windowSize;
         this.ignoreSentenceBoundaries = ignoreSentenceBoundaries;
@@ -57,22 +54,22 @@ public class WordEmbeddingWindow implements FeatureExtractor {
 
         // get allowable window given position in text
 
-        IntPair relativeWindow = FeatureCreatorUtil.getWindowSpan( c, windowStart, windowEnd, ignoreSentenceBoundaries );
+        IntPair relativeWindow =
+                FeatureCreatorUtil.getWindowSpan(c, windowStart, windowEnd,
+                        ignoreSentenceBoundaries);
 
         int absStart = c.getStartSpan() - relativeWindow.getFirst();
 
-        View tokens = c.getTextAnnotation().getView( ViewNames.TOKENS );
+        View tokens = c.getTextAnnotation().getView(ViewNames.TOKENS);
 
-        for ( int i = relativeWindow.getFirst(); i <= relativeWindow.getSecond(); ++i )
-        {
-            Constituent word = tokens.getConstituentsCoveringToken( absStart + i ).get( 0 );
-            double[] embedding = WordEmbeddings.getEmbedding( word );
-            if (embedding != null)
-            {
-                for (int dim = 0; dim < embedding.length; dim++)
-                {
-                    final String[] pieces = { getName(), ":", "place", Integer.toString(i), "dim",
-                            Integer.toString(dim), ":", Double.toString(embedding[dim]) };
+        for (int i = relativeWindow.getFirst(); i <= relativeWindow.getSecond(); ++i) {
+            Constituent word = tokens.getConstituentsCoveringToken(absStart + i).get(0);
+            double[] embedding = WordEmbeddings.getEmbedding(word);
+            if (embedding != null) {
+                for (int dim = 0; dim < embedding.length; dim++) {
+                    final String[] pieces =
+                            {getName(), ":", "place", Integer.toString(i), "dim",
+                                    Integer.toString(dim), ":", Double.toString(embedding[dim])};
                     features.add(FeatureCreatorUtil.createFeatureFromArray(pieces));
                 }
             }

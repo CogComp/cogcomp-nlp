@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -19,11 +16,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Evaluate a Clustering using the MUC evaluation metric. See Marc
- * Vilain, John Burger, John Aberdeen, Dennis Connolly, and Lynette
- * Hirschman. 1995. A model-theoretic coreference scoring scheme. In
- * Proceedings fo the 6th Message Understanding Conference
- * (MUC6). 45--52. Morgan Kaufmann.
+ * Evaluate a Clustering using the MUC evaluation metric. See Marc Vilain, John Burger, John
+ * Aberdeen, Dennis Connolly, and Lynette Hirschman. 1995. A model-theoretic coreference scoring
+ * scheme. In Proceedings fo the 6th Message Understanding Conference (MUC6). 45--52. Morgan
+ * Kaufmann.
  *
  * Note that MUC more or less ignores singleton clusters.
  */
@@ -36,17 +32,20 @@ public class CorefMUCEvaluator extends Evaluator {
         this.prediction = (CoreferenceView) predictionView;
         // Recall = \sum_i [ |si| - |pOfsi| ] / \sum_i [ |si| - 1 ]
         // where si is a true cluster, pOfsi is the set of predicted
-        // clusters that contain elements of si (i.e. number of predicted clusters having some overlap with
+        // clusters that contain elements of si (i.e. number of predicted clusters having some
+        // overlap with
         // this gold cluster)
         int numerator1 = 0;
         int denominator1 = 0;
-         for(Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations() ) {
-            HashSet consInGoldCluster =  new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
-            for(Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
-                HashSet consInPredCluster = new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
+        for (Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
+            HashSet consInGoldCluster =
+                    new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
+            for (Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
+                HashSet consInPredCluster =
+                        new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
                 Set<String> intersection = new HashSet(consInGoldCluster);
                 intersection.retainAll(consInPredCluster);
-                if(!intersection.isEmpty())
+                if (!intersection.isEmpty())
                     numerator1 -= 1;
             }
             numerator1 += consInGoldCluster.size();
@@ -61,13 +60,15 @@ public class CorefMUCEvaluator extends Evaluator {
         // true clusters that contain elements of siprime.
         int numerator2 = 0;
         int denominator2 = 0;
-        for(Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations() ) {
-            HashSet consInPredCluster =  new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
-            for(Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
-                HashSet consInGoldCluster = new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
+        for (Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
+            HashSet consInPredCluster =
+                    new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
+            for (Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
+                HashSet consInGoldCluster =
+                        new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
                 Set<String> intersection = new HashSet(consInPredCluster);
                 intersection.retainAll(consInGoldCluster);
-                if(!intersection.isEmpty())
+                if (!intersection.isEmpty())
                     numerator2 -= 1;
             }
             numerator2 += consInPredCluster.size();
@@ -77,5 +78,5 @@ public class CorefMUCEvaluator extends Evaluator {
 
         assert (numerator1 == numerator2);
         tester.recordCount("coref", denominator1, denominator2, numerator1);
-     }
+    }
 }

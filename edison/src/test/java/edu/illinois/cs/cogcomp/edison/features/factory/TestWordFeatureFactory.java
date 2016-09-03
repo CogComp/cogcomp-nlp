@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -142,23 +139,23 @@ public class TestWordFeatureFactory extends TestCase {
     }
 
     /**
-     * MS: this next test stored null values for features because the code was buggy.
-     * I've commented it for now because regenerating a serialized feature output file is a pain;
-     * there is anyway a new TestBrownClusterFeatureExtractor class to assess the
-     * BrownClusterFeatureExtractor.
+     * MS: this next test stored null values for features because the code was buggy. I've commented
+     * it for now because regenerating a serialized feature output file is a pain; there is anyway a
+     * new TestBrownClusterFeatureExtractor class to assess the BrownClusterFeatureExtractor.
+     * 
      * @throws EdisonException
      */
 
-//    public final void testBrownFeatures() throws EdisonException {
-//        System.out.println("\tTesting Brown cluster features");
-//        WordFeatureExtractor brownFeatureGenerator =
-//                WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
-//                        new int[] {4, 5});
-//        for (TextAnnotation ta : tas) {
-//            runTest(ta, brownFeatureGenerator);
-//        }
-//
-//    }
+    // public final void testBrownFeatures() throws EdisonException {
+    // System.out.println("\tTesting Brown cluster features");
+    // WordFeatureExtractor brownFeatureGenerator =
+    // WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
+    // new int[] {4, 5});
+    // for (TextAnnotation ta : tas) {
+    // runTest(ta, brownFeatureGenerator);
+    // }
+    //
+    // }
 
     public final void testWordNet() throws EdisonException {
         System.out.println("\tTesting wordNet");

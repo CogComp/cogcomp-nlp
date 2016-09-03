@@ -1,17 +1,13 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 import java.util.*;
 
@@ -19,6 +15,9 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 public class PredicateArgumentView extends View {
+
+    public static final String LemmaIdentifier = "predicate";
+    public static final String SenseIdentifer = "SenseNumber";
 
     private static final long serialVersionUID = 4100738005147066812L;
     private List<Constituent> predicates;
@@ -83,16 +82,16 @@ public class PredicateArgumentView extends View {
     }
 
     public String getPredicateLemma(Constituent predicate) {
-        if (predicate.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier))
-            return predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+        if (predicate.hasAttribute(LemmaIdentifier))
+            return predicate.getAttribute(LemmaIdentifier);
         else
             return predicate.getTokenizedSurfaceForm().toLowerCase().trim();
 
     }
 
     public String getPredicateSense(Constituent predicate) {
-        if (predicate.hasAttribute(CoNLLColumnFormatReader.SenseIdentifer))
-            return predicate.getAttribute(CoNLLColumnFormatReader.SenseIdentifer);
+        if (predicate.hasAttribute(SenseIdentifer))
+            return predicate.getAttribute(SenseIdentifer);
         else
             return "";
     }

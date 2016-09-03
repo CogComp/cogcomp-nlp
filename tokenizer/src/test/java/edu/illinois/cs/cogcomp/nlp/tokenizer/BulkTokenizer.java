@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 /**
@@ -30,13 +27,14 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 /**
- * Tokenize all the files (assume text) in a directory, report difference in the ways 
+ * Tokenize all the files (assume text) in a directory, report difference in the ways
  * IllinoisTokenizer and StatefulTokenizer tokenize the text. Output is in a file called
  * "tokenizerdiffs.out".
+ * 
  * @author redman
  */
 public class BulkTokenizer {
-    
+
     /** report more. */
     static private boolean verbose = false;
 
@@ -45,25 +43,27 @@ public class BulkTokenizer {
 
     /** file or directory to process. */
     static private String file = null;
-    
+
     /**
      * read an entire file into a string.
+     * 
      * @param f the file
      * @return the string.
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     private static String readString(File f) throws FileNotFoundException {
-        Scanner scanner = new Scanner(f, "UTF-8" );
+        Scanner scanner = new Scanner(f, "UTF-8");
         String text = scanner.useDelimiter("\\A").next();
         scanner.close(); // Put this call in a finally block
         return text;
     }
-    
+
     /**
      * read all the files in teh directory, return them as an array of strings.
+     * 
      * @param files the files to read.
      * @return strings with all the data for each fiel
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException
      */
     private static ArrayList<String> readAllFiles(File[] files) throws FileNotFoundException {
         ArrayList<String> strings = new ArrayList<String>();
@@ -72,16 +72,18 @@ public class BulkTokenizer {
         }
         return strings;
     }
-    
+
     /**
-     * comprare two strings ignoring differences in "'"s and their relative positions and white space.
+     * comprare two strings ignoring differences in "'"s and their relative positions and white
+     * space.
+     * 
      * @param oo the old string.
      * @param no the new string.
      * @return true if they are equal, false if they are not.
      */
     private static boolean compareSentences(String oo, String no) {
-        char [] ochars = oo.toCharArray();
-        char [] nchars = no.toCharArray();
+        char[] ochars = oo.toCharArray();
+        char[] nchars = no.toCharArray();
         int oindex = 0;
         int nindex = 0;
         while (true) {
@@ -98,7 +100,8 @@ public class BulkTokenizer {
             }
             if (ochars[oindex] != nchars[nindex]) {
                 // if start of single quote, previous char must have been "'" for both
-                if (oindex > 0 && nindex > 0 && ochars[oindex-1] == '\'' && nchars[nindex-1] == '\'' && nchars[nindex] == ' ') {
+                if (oindex > 0 && nindex > 0 && ochars[oindex - 1] == '\''
+                        && nchars[nindex - 1] == '\'' && nchars[nindex] == ' ') {
                     nindex++;
                     continue;
                 } else if (ochars[oindex] == '\'' && nchars[nindex] == ' ') {
@@ -118,9 +121,10 @@ public class BulkTokenizer {
             }
         }
     }
-    
+
     /**
      * parse the argumewnts.
+     * 
      * @param args the arguments.
      */
     static private void parseArgs(String[] args) {
@@ -133,9 +137,10 @@ public class BulkTokenizer {
                 file = args[i];
         }
     }
+
     /**
      * @param args
-     * @throws IOException 
+     * @throws IOException
      */
     public static void main(String[] args) throws IOException {
         parseArgs(args);
@@ -144,7 +149,7 @@ public class BulkTokenizer {
             return;
         }
         File[] files;
-        File nf = new File (file);
+        File nf = new File(file);
         if (nf.isDirectory())
             files = new File(args[0]).listFiles();
         else {
@@ -153,18 +158,21 @@ public class BulkTokenizer {
         }
         ArrayList<String> datas = readAllFiles(files);
         BufferedWriter fw = new BufferedWriter(new FileWriter(new File("tokenizerdiffs.out")));
-        final TextAnnotationBuilder stab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        final TextAnnotationBuilder stab =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
         if (profile) {
             System.out.println("Starting profiling");
             while (true) {
                 for (String data : datas) {
-                    stab.createTextAnnotation(data);                }
+                    stab.createTextAnnotation(data);
+                }
             }
         } else {
             System.out.println("Starting new annotations");
             long nt = System.currentTimeMillis();
-            ArrayList<TextAnnotation> newannotations = new ArrayList<TextAnnotation>();            
-            final TextAnnotationBuilder ntab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+            ArrayList<TextAnnotation> newannotations = new ArrayList<TextAnnotation>();
+            final TextAnnotationBuilder ntab =
+                    new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
             for (String data : datas) {
                 TextAnnotation ta = ntab.createTextAnnotation(data);
                 newannotations.add(ta);
@@ -173,14 +181,15 @@ public class BulkTokenizer {
             System.out.println("Starting old annotations");
             long ot = System.currentTimeMillis();
             ArrayList<TextAnnotation> oldannotations = new ArrayList<TextAnnotation>();
-            final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+            final TextAnnotationBuilder tab =
+                    new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
             for (String data : datas) {
                 TextAnnotation ta = tab.createTextAnnotation(data);
                 oldannotations.add(ta);
             }
             ot = System.currentTimeMillis() - ot;
-            System.out.println("new way = "+nt+", old way = "+ot);
-            
+            System.out.println("new way = " + nt + ", old way = " + ot);
+
             int good = 0, bad = 0;
             for (int i = 0; i < oldannotations.size(); i++) {
                 File file = files[i];
@@ -190,29 +199,35 @@ public class BulkTokenizer {
                     good++;
                 } else {
                     bad++;
-                    fw.write("-"+file+"\n");
+                    fw.write("-" + file + "\n");
                     if (verbose) {
                         List<Sentence> newsentences = newone.sentences();
                         List<Sentence> oldsentences = oldone.sentences();
-                        int max = newsentences.size() > oldsentences.size() ? newsentences.size() : oldsentences.size();
+                        int max =
+                                newsentences.size() > oldsentences.size() ? newsentences.size()
+                                        : oldsentences.size();
                         boolean sentencewritten = false;
                         for (int j = 0; j < max; j++) {
-                            String news = newsentences.size() > j ? newsentences.get(j).toString() : "???";
-                            String olds = oldsentences.size() > j ? oldsentences.get(j).toString() : "???";
-                            if (!compareSentences(olds,news)) {
+                            String news =
+                                    newsentences.size() > j ? newsentences.get(j).toString()
+                                            : "???";
+                            String olds =
+                                    oldsentences.size() > j ? oldsentences.get(j).toString()
+                                            : "???";
+                            if (!compareSentences(olds, news)) {
                                 if (!sentencewritten) {
                                     sentencewritten = true;
-                                    fw.write("-"+file+"\n");
-                                    fw.write(newone.toString()+"\n");
+                                    fw.write("-" + file + "\n");
+                                    fw.write(newone.toString() + "\n");
                                 }
-                                fw.write(" new : "+news+"\n old : "+olds+"\n");
+                                fw.write(" new : " + news + "\n old : " + olds + "\n");
                             }
                         }
-                   }
+                    }
                 }
             }
             fw.close();
-            System.out.println(good+" correct, "+bad+" wrong.");
+            System.out.println(good + " correct, " + bad + " wrong.");
         }
     }
 }

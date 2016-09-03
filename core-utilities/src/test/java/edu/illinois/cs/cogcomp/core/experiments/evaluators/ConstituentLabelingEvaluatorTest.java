@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -30,9 +27,9 @@ public class ConstituentLabelingEvaluatorTest {
         splittingTester = new ClassificationTester();
         String[] viewsToAdd = {ViewNames.POS};
         TextAnnotation goldTA =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         TextAnnotation predictionTA =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true, 3);
         gold = (SpanLabelView) goldTA.getView(ViewNames.POS);
         predicted = (SpanLabelView) predictionTA.getView(ViewNames.POS);
     }
@@ -49,7 +46,7 @@ public class ConstituentLabelingEvaluatorTest {
     public void testEvaluateNoisySpanLabels() throws Exception {
         ConstituentLabelingEvaluator evaluator = new ConstituentLabelingEvaluator();
         evaluator.evaluate(splittingTester, gold, predicted);
-        assertEquals( 0.636, splittingTester.getMicroF1(), 0.01);
+        assertEquals(0.636, splittingTester.getMicroF1(), 0.01);
         assertEquals(0.568, splittingTester.getMicroPrecision(), 0.01);
     }
 }

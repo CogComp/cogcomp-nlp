@@ -1,0 +1,1525 @@
+<?xml version="1.0"?>
+<!DOCTYPE AGSet SYSTEM "ag-1.1.dtd">
+<AGSet xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/DC/documents/rec-dces-19990702.htm" id="XIN_ENG_20030616.0274" version="1.0" xmlns="http://www.ldc.upenn.edu/atlas/ag/">
+<Metadata>
+<MetadataElement name="author">LDC</MetadataElement>
+<MetadataElement name="encoding">UTF-8</MetadataElement>
+<MetadataElement name="source"></MetadataElement>
+<MetadataElement name="type">text</MetadataElement>
+<MetadataElement name="uri">XIN_ENG_20030616.0274.sgm</MetadataElement>
+<MetadataElement name="version">3.1</MetadataElement>
+</Metadata>
+<Timeline id="XIN_ENG_20030616.0274:T1">
+<Signal id="XIN_ENG_20030616.0274:T1:1" mimeClass="text" mimeType="NULL" encoding="unknown" unit="char" xlink:type="simple" xlink:href="URI" track="NULL"></Signal>
+</Timeline>
+<AG id="XIN_ENG_20030616.0274:1" timeline="XIN_ENG_20030616.0274:T1">
+<Metadata>
+<MetadataElement name="docid">XIN_ENG_20030616.0274</MetadataElement>
+</Metadata>
+<Anchor id="XIN_ENG_20030616.0274:1:4I" offset="106.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4J" offset="113.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1" offset="210.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3" offset="210.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2" offset="219.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4" offset="219.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4M" offset="222.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4N" offset="228.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:9" offset="231.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:B" offset="231.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:A" offset="236.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:C" offset="236.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1C" offset="240.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4d" offset="240.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4l" offset="240.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1F" offset="248.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1G" offset="256.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:Q" offset="261.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:h" offset="261.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:S" offset="265.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:U" offset="278.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2D" offset="281.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2G" offset="281.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1D" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2F" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2H" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4e" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:R" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:i" offset="282.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:j" offset="290.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:l" offset="290.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:k" offset="293.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:m" offset="293.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4Q" offset="295.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4R" offset="300.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:n" offset="307.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:p" offset="307.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:o" offset="310.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:q" offset="310.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:r" offset="360.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:t" offset="360.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:s" offset="363.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:u" offset="363.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:z" offset="387.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:11" offset="391.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:12" offset="424.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2K" offset="427.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2M" offset="427.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:10" offset="430.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2L" offset="430.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2N" offset="430.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4m" offset="430.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5Z" offset="435.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4V" offset="461.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4W" offset="467.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5b" offset="469.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5c" offset="475.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1H" offset="480.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4v" offset="480.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1L" offset="484.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1N" offset="484.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1M" offset="485.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1O" offset="485.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1J" offset="495.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1I" offset="503.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1K" offset="503.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4w" offset="503.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1R" offset="515.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1U" offset="515.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1S" offset="518.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1V" offset="518.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1B" offset="680.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2Q" offset="680.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:27" offset="698.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:28" offset="702.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1W" offset="707.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1Y" offset="711.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1X" offset="717.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1Z" offset="717.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:26" offset="717.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2R" offset="717.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5a" offset="717.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1a" offset="734.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1c" offset="738.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1b" offset="739.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1d" offset="739.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1e" offset="771.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1g" offset="771.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1f" offset="774.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1h" offset="774.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1i" offset="807.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1k" offset="807.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1j" offset="808.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1l" offset="808.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1m" offset="834.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1o" offset="838.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1n" offset="841.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1p" offset="841.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1q" offset="896.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1s" offset="896.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1r" offset="899.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1t" offset="899.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1u" offset="945.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1w" offset="945.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1v" offset="947.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1x" offset="947.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1y" offset="1000.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:20" offset="1000.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2a" offset="1000.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2l" offset="1000.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2n" offset="1000.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1z" offset="1016.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:21" offset="1016.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2f" offset="1019.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5B" offset="1019.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2h" offset="1027.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2i" offset="1034.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2p" offset="1039.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2r" offset="1039.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:39" offset="1039.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3B" offset="1039.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2q" offset="1044.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2s" offset="1044.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2x" offset="1047.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:I" offset="1051.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:J" offset="1057.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2z" offset="1059.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:30" offset="1064.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:33" offset="1073.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:35" offset="1073.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:34" offset="1074.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:36" offset="1074.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2b" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2g" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2m" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2o" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2y" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3A" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3C" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5C" offset="1085.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3D" offset="1093.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3G" offset="1093.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3F" offset="1094.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3H" offset="1094.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3I" offset="1125.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3Q" offset="1125.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3X" offset="1125.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3Z" offset="1125.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5K" offset="1125.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3Y" offset="1128.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3a" offset="1128.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3S" offset="1130.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3R" offset="1145.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3U" offset="1145.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5L" offset="1145.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3K" offset="1147.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3J" offset="1163.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3L" offset="1163.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3d" offset="1182.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3f" offset="1182.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3e" offset="1184.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3g" offset="1184.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3h" offset="1208.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3p" offset="1208.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3r" offset="1208.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5S" offset="1208.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3q" offset="1209.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3s" offset="1209.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3j" offset="1219.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3i" offset="1227.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3k" offset="1227.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5U" offset="1227.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3v" offset="1271.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3x" offset="1271.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3w" offset="1274.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3y" offset="1274.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3z" offset="1301.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:41" offset="1301.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:40" offset="1304.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:42" offset="1304.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:43" offset="1322.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:45" offset="1322.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:51" offset="1322.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:44" offset="1325.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:46" offset="1325.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:47" offset="1342.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:49" offset="1346.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:48" offset="1347.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4A" offset="1347.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4B" offset="1442.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4D" offset="1442.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4C" offset="1445.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4F" offset="1445.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:57" offset="1447.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:58" offset="1453.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4Z" offset="1458.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4a" offset="1464.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:52" offset="1464.000000"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:13"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:14"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:15"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:16"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:1Q"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:22"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:23"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:24"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:25"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:29"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2A"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2B"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2C"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2I"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2J"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2O"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2S"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2U"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2V"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2W"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2X"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2Y"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2Z"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2c"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2d"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2e"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2j"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2k"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2t"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2u"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2v"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:2w"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:31"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:32"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:37"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:38"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3M"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3N"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3O"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3V"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3W"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3b"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3c"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3l"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3m"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3n"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3o"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3t"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:3u"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4G"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4H"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4K"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4L"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4O"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4S"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4U"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4X"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4Y"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4b"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4c"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4f"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4g"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4h"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4i"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4j"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4k"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4n"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4o"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4p"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4q"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4r"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4s"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4t"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4u"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4x"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4y"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:4z"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:50"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:53"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:54"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:55"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:56"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:59"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5A"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5D"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5F"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5G"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5H"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5I"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5J"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5M"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5N"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5O"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5Q"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5R"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5V"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5W"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5X"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5Y"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5d"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:5e"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:6"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:7"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:8"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:D"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:F"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:G"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:H"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:K"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:L"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:M"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:N"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:O"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:P"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:V"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:W"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:X"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:Y"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:v"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:w"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:x"></Anchor>
+<Anchor id="XIN_ENG_20030616.0274:1:y"></Anchor>
+<Annotation id="XIN_ENG_20030616.0274:1:E11" type="entity" start="XIN_ENG_20030616.0274:1:22" end="XIN_ENG_20030616.0274:1:23">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E12</Feature>
+<Feature name="id">E10</Feature>
+<Feature name="subtype">Individual</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">PER</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E12" type="composite_entity" start="XIN_ENG_20030616.0274:1:24" end="XIN_ENG_20030616.0274:1:25">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE8</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E15" type="entity" start="XIN_ENG_20030616.0274:1:29" end="XIN_ENG_20030616.0274:1:2A">
+<Feature name="class">GEN</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E16</Feature>
+<Feature name="id">E27</Feature>
+<Feature name="subtype">Region-General</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">LOC</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E16" type="composite_entity" start="XIN_ENG_20030616.0274:1:2B" end="XIN_ENG_20030616.0274:1:2C">
+<Feature name="composite_entity_class">GEN</Feature>
+<Feature name="id">CE7</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E19" type="entity" start="XIN_ENG_20030616.0274:1:2I" end="XIN_ENG_20030616.0274:1:2J">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EH</Feature>
+<Feature name="id">E28</Feature>
+<Feature name="subtype">GPE-Cluster</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1C" type="entity" start="XIN_ENG_20030616.0274:1:2O" end="XIN_ENG_20030616.0274:1:2P">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EZ</Feature>
+<Feature name="id">E29</Feature>
+<Feature name="subtype">NON</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">ORG</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1F" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:2S" end="XIN_ENG_20030616.0274:1:2U">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E13</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E1D</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1G" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:2V" end="XIN_ENG_20030616.0274:1:2W">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:El</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E1D</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1H" type="relation" start="XIN_ENG_20030616.0274:1:2X" end="XIN_ENG_20030616.0274:1:2Y">
+<Feature name="id">R3</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="subtype">Geographical</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Unspecified</Feature>
+<Feature name="type">PART-WHOLE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1J" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:2Z" end="XIN_ENG_20030616.0274:1:2c">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1i</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2e</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1M" type="entity" start="XIN_ENG_20030616.0274:1:2j" end="XIN_ENG_20030616.0274:1:2k">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E12</Feature>
+<Feature name="id">E15</Feature>
+<Feature name="subtype">Individual</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">PER</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1R" type="entity" start="XIN_ENG_20030616.0274:1:2t" end="XIN_ENG_20030616.0274:1:2u">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E1S</Feature>
+<Feature name="id">E16</Feature>
+<Feature name="subtype">Nation</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1S" type="composite_entity" start="XIN_ENG_20030616.0274:1:2v" end="XIN_ENG_20030616.0274:1:2w">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE9</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1W" type="entity" start="XIN_ENG_20030616.0274:1:31" end="XIN_ENG_20030616.0274:1:32">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E1S</Feature>
+<Feature name="id">E17</Feature>
+<Feature name="subtype">Nation</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1Z" type="entity" start="XIN_ENG_20030616.0274:1:37" end="XIN_ENG_20030616.0274:1:38">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EH</Feature>
+<Feature name="id">E18</Feature>
+<Feature name="subtype">GPE-Cluster</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1g" type="entity" start="XIN_ENG_20030616.0274:1:3M" end="XIN_ENG_20030616.0274:1:3N">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E1h</Feature>
+<Feature name="id">E19</Feature>
+<Feature name="subtype">Individual</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">PER</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1h" type="composite_entity" start="XIN_ENG_20030616.0274:1:3O" end="XIN_ENG_20030616.0274:1:3P">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE10</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1k" type="entity" start="XIN_ENG_20030616.0274:1:3V" end="XIN_ENG_20030616.0274:1:3W">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E1h</Feature>
+<Feature name="id">E20</Feature>
+<Feature name="subtype">Individual</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">PER</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1n" type="entity" start="XIN_ENG_20030616.0274:1:3b" end="XIN_ENG_20030616.0274:1:3c">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EZ</Feature>
+<Feature name="id">E21</Feature>
+<Feature name="subtype">NON</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">ORG</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1s" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:2d" end="XIN_ENG_20030616.0274:1:2e">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1l</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2e</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1w" type="entity" start="XIN_ENG_20030616.0274:1:3t" end="XIN_ENG_20030616.0274:1:3u">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EH</Feature>
+<Feature name="id">E23</Feature>
+<Feature name="subtype">GPE-Cluster</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E27" type="entity" start="XIN_ENG_20030616.0274:1:4G" end="XIN_ENG_20030616.0274:1:4H">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EZ</Feature>
+<Feature name="id">E24</Feature>
+<Feature name="subtype">NON</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">ORG</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E29" type="value" start="XIN_ENG_20030616.0274:1:4K" end="XIN_ENG_20030616.0274:1:4L">
+<Feature name="id">Q1</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir"></Feature>
+<Feature name="timex2_anchor_val"></Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">2003-06-16</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2B" type="value" start="XIN_ENG_20030616.0274:1:4O" end="XIN_ENG_20030616.0274:1:4P">
+<Feature name="id">Q2</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir"></Feature>
+<Feature name="timex2_anchor_val"></Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">2003-06-16</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2D" type="value" start="XIN_ENG_20030616.0274:1:4S" end="XIN_ENG_20030616.0274:1:4U">
+<Feature name="id">Q3</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir"></Feature>
+<Feature name="timex2_anchor_val"></Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">2003-06-16</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2G" type="value" start="XIN_ENG_20030616.0274:1:4X" end="XIN_ENG_20030616.0274:1:4Y">
+<Feature name="id">Q4</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir">STARTING</Feature>
+<Feature name="timex2_anchor_val">2003-06-16</Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">P2D</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2I" type="value" start="XIN_ENG_20030616.0274:1:4b" end="XIN_ENG_20030616.0274:1:4c">
+<Feature name="id">Q5</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir"></Feature>
+<Feature name="timex2_anchor_val"></Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">2003-06-17</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2K" type="relation" start="XIN_ENG_20030616.0274:1:4f" end="XIN_ENG_20030616.0274:1:4g">
+<Feature name="id">R1</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="subtype">Employment</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Unspecified</Feature>
+<Feature name="type">ORG-AFF</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2L" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4h" end="XIN_ENG_20030616.0274:1:4i">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:Ec</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2J</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2M" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4j" end="XIN_ENG_20030616.0274:1:4k">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:ED</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2J</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2O" type="relation" start="XIN_ENG_20030616.0274:1:4n" end="XIN_ENG_20030616.0274:1:4o">
+<Feature name="id">R2</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="subtype">Located</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Past</Feature>
+<Feature name="type">PHYS</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2P" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4p" end="XIN_ENG_20030616.0274:1:4q">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:Ec</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2N</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2Q" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4r" end="XIN_ENG_20030616.0274:1:4s">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:EN</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2N</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2R" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4t" end="XIN_ENG_20030616.0274:1:4u">
+<Feature name="argnum">3</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E2C</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2N</Feature>
+<Feature name="subrole">Within</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2U" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4x" end="XIN_ENG_20030616.0274:1:4y">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:Ee</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2S</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2V" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:4z" end="XIN_ENG_20030616.0274:1:50">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:Eg</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2S</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2W" type="event_mention_participant" start="XIN_ENG_20030616.0274:1:53" end="XIN_ENG_20030616.0274:1:54">
+<Feature name="event_mention">XIN_ENG_20030616.0274:1:E1t</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E25</Feature>
+<Feature name="role">Entity</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2X" type="event_mention_participant" start="XIN_ENG_20030616.0274:1:55" end="XIN_ENG_20030616.0274:1:56">
+<Feature name="event_mention">XIN_ENG_20030616.0274:1:E1t</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E2H</Feature>
+<Feature name="role">Time</Feature>
+<Feature name="subrole">Within</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2Z" type="event" start="XIN_ENG_20030616.0274:1:59" end="XIN_ENG_20030616.0274:1:5A">
+<Feature name="genericity">Specific</Feature>
+<Feature name="id">V2</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="polarity">Positive</Feature>
+<Feature name="subtype">Meet</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Future</Feature>
+<Feature name="type">Contact</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2b" type="relation" start="XIN_ENG_20030616.0274:1:5D" end="XIN_ENG_20030616.0274:1:5F">
+<Feature name="id">R4</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="subtype">Employment</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Unspecified</Feature>
+<Feature name="type">ORG-AFF</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2c" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:5G" end="XIN_ENG_20030616.0274:1:5H">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1K</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2a</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2d" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:5I" end="XIN_ENG_20030616.0274:1:5J">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1P</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2a</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2f" type="relation" start="XIN_ENG_20030616.0274:1:5M" end="XIN_ENG_20030616.0274:1:5N">
+<Feature name="id">R5</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="subtype">Employment</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Unspecified</Feature>
+<Feature name="type">ORG-AFF</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2g" type="event_mention_participant" start="XIN_ENG_20030616.0274:1:5O" end="XIN_ENG_20030616.0274:1:5P">
+<Feature name="event_mention">XIN_ENG_20030616.0274:1:E2l</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:Ee</Feature>
+<Feature name="role">Entity</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2h" type="event_mention_participant" start="XIN_ENG_20030616.0274:1:5Q" end="XIN_ENG_20030616.0274:1:5R">
+<Feature name="event_mention">XIN_ENG_20030616.0274:1:E2l</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E2F</Feature>
+<Feature name="role">Time</Feature>
+<Feature name="subrole">Holds</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2j" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:5V" end="XIN_ENG_20030616.0274:1:5W">
+<Feature name="argnum">1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1q</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2i</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2k" type="relation_mention_argument" start="XIN_ENG_20030616.0274:1:5X" end="XIN_ENG_20030616.0274:1:5Y">
+<Feature name="argnum">2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="object_mention">XIN_ENG_20030616.0274:1:E1u</Feature>
+<Feature name="relation_mention">XIN_ENG_20030616.0274:1:E2i</Feature>
+<Feature name="subrole"></Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2n" type="event" start="XIN_ENG_20030616.0274:1:5d" end="XIN_ENG_20030616.0274:1:5e">
+<Feature name="genericity">Specific</Feature>
+<Feature name="id">V1</Feature>
+<Feature name="modality">Asserted</Feature>
+<Feature name="polarity">Positive</Feature>
+<Feature name="subtype">Meet</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="tense">Past</Feature>
+<Feature name="type">Contact</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E3" type="entity" start="XIN_ENG_20030616.0274:1:5" end="XIN_ENG_20030616.0274:1:6">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E4</Feature>
+<Feature name="id">E1</Feature>
+<Feature name="subtype">Population-Center</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E4" type="composite_entity" start="XIN_ENG_20030616.0274:1:7" end="XIN_ENG_20030616.0274:1:8">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE1</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E7" type="entity" start="XIN_ENG_20030616.0274:1:D" end="XIN_ENG_20030616.0274:1:F">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:E8</Feature>
+<Feature name="id">E2</Feature>
+<Feature name="subtype">MED</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">ORG</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E8" type="composite_entity" start="XIN_ENG_20030616.0274:1:G" end="XIN_ENG_20030616.0274:1:H">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE2</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EA" type="value" start="XIN_ENG_20030616.0274:1:K" end="XIN_ENG_20030616.0274:1:L">
+<Feature name="id">Q6</Feature>
+<Feature name="subtype"></Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="timex2_anchor_dir">AS_OF</Feature>
+<Feature name="timex2_anchor_val">2003-06-16</Feature>
+<Feature name="timex2_comment"></Feature>
+<Feature name="timex2_mod"></Feature>
+<Feature name="timex2_set"></Feature>
+<Feature name="timex2_val">PRESENT_REF</Feature>
+<Feature name="type">TIME</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EB" type="entity" start="XIN_ENG_20030616.0274:1:M" end="XIN_ENG_20030616.0274:1:N">
+<Feature name="class">USP</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EC</Feature>
+<Feature name="id">E3</Feature>
+<Feature name="subtype">Group</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">PER</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EC" type="composite_entity" start="XIN_ENG_20030616.0274:1:O" end="XIN_ENG_20030616.0274:1:P">
+<Feature name="composite_entity_class">USP</Feature>
+<Feature name="id">CE3</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EG" type="entity" start="XIN_ENG_20030616.0274:1:V" end="XIN_ENG_20030616.0274:1:W">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EH</Feature>
+<Feature name="id">E4</Feature>
+<Feature name="subtype">GPE-Cluster</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EH" type="composite_entity" start="XIN_ENG_20030616.0274:1:X" end="XIN_ENG_20030616.0274:1:Y">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE4</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EU" type="entity" start="XIN_ENG_20030616.0274:1:v" end="XIN_ENG_20030616.0274:1:w">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EV</Feature>
+<Feature name="id">E6</Feature>
+<Feature name="subtype">Nation</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EV" type="composite_entity" start="XIN_ENG_20030616.0274:1:x" end="XIN_ENG_20030616.0274:1:y">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE5</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EY" type="entity" start="XIN_ENG_20030616.0274:1:13" end="XIN_ENG_20030616.0274:1:14">
+<Feature name="class">SPC</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EZ</Feature>
+<Feature name="id">E7</Feature>
+<Feature name="subtype">NON</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">ORG</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EZ" type="composite_entity" start="XIN_ENG_20030616.0274:1:15" end="XIN_ENG_20030616.0274:1:16">
+<Feature name="composite_entity_class">SPC</Feature>
+<Feature name="id">CE6</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ei" type="entity" start="XIN_ENG_20030616.0274:1:1P" end="XIN_ENG_20030616.0274:1:1Q">
+<Feature name="class">ATR</Feature>
+<Feature name="class_difficultDecision">FALSE</Feature>
+<Feature name="composite_entity">XIN_ENG_20030616.0274:1:EH</Feature>
+<Feature name="id">E9</Feature>
+<Feature name="subtype">GPE-Cluster</Feature>
+<Feature name="subtype_difficultDecision">FALSE</Feature>
+<Feature name="type">GPE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E28" type="value_mention" start="XIN_ENG_20030616.0274:1:4I" end="XIN_ENG_20030616.0274:1:4J">
+<Feature name="id">QM1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:E29</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1" type="entity_mention" start="XIN_ENG_20030616.0274:1:1" end="XIN_ENG_20030616.0274:1:2">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E3</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E2</Feature>
+<Feature name="id">EM1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">LOC</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3" end="XIN_ENG_20030616.0274:1:4">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2A" type="value_mention" start="XIN_ENG_20030616.0274:1:4M" end="XIN_ENG_20030616.0274:1:4N">
+<Feature name="id">QM2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:E2B</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E5" type="entity_mention" start="XIN_ENG_20030616.0274:1:9" end="XIN_ENG_20030616.0274:1:A">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E7</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E6</Feature>
+<Feature name="id">EM2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E6" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:B" end="XIN_ENG_20030616.0274:1:C">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2J" type="relation_mention" start="XIN_ENG_20030616.0274:1:4d" end="XIN_ENG_20030616.0274:1:4e">
+<Feature name="id">RM1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">Preposition</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2K</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ec" type="entity_mention" start="XIN_ENG_20030616.0274:1:1C" end="XIN_ENG_20030616.0274:1:1D">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EB</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Ed</Feature>
+<Feature name="id">EM3</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">BAR</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2N" type="relation_mention" start="XIN_ENG_20030616.0274:1:4l" end="XIN_ENG_20030616.0274:1:4m">
+<Feature name="id">RM2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">Verbal</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2O</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ed" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1F" end="XIN_ENG_20030616.0274:1:1G">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:ED" type="entity_mention" start="XIN_ENG_20030616.0274:1:Q" end="XIN_ENG_20030616.0274:1:R">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EG</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:EF</Feature>
+<Feature name="id">EM4</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EF" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:S" end="XIN_ENG_20030616.0274:1:U">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E17" type="entity_mention" start="XIN_ENG_20030616.0274:1:2D" end="XIN_ENG_20030616.0274:1:2F">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E19</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E18</Feature>
+<Feature name="id">EM5</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">TRUE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">TRUE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E18" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:2G" end="XIN_ENG_20030616.0274:1:2H">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EN" type="entity_mention" start="XIN_ENG_20030616.0274:1:j" end="XIN_ENG_20030616.0274:1:k">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E3</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:EO</Feature>
+<Feature name="id">EM6</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">LOC</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EO" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:l" end="XIN_ENG_20030616.0274:1:m">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2C" type="value_mention" start="XIN_ENG_20030616.0274:1:4Q" end="XIN_ENG_20030616.0274:1:4R">
+<Feature name="id">QM3</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:E2D</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EP" type="entity_mention" start="XIN_ENG_20030616.0274:1:n" end="XIN_ENG_20030616.0274:1:o">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EB</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:EQ</Feature>
+<Feature name="id">EM7</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EQ" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:p" end="XIN_ENG_20030616.0274:1:q">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:ER" type="entity_mention" start="XIN_ENG_20030616.0274:1:r" end="XIN_ENG_20030616.0274:1:s">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:ES</Feature>
+<Feature name="id">EM8</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:ES" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:t" end="XIN_ENG_20030616.0274:1:u">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EW" type="entity_mention" start="XIN_ENG_20030616.0274:1:z" end="XIN_ENG_20030616.0274:1:10">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EY</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:EX</Feature>
+<Feature name="id">EM9</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:EX" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:11" end="XIN_ENG_20030616.0274:1:12">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1A" type="entity_mention" start="XIN_ENG_20030616.0274:1:2K" end="XIN_ENG_20030616.0274:1:2L">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1C</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1B</Feature>
+<Feature name="id">EM10</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">TRUE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">TRUE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1B" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:2M" end="XIN_ENG_20030616.0274:1:2N">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2l" type="event_mention" start="XIN_ENG_20030616.0274:1:5Z" end="XIN_ENG_20030616.0274:1:5a">
+<Feature name="anchor">XIN_ENG_20030616.0274:1:E2m</Feature>
+<Feature name="event">XIN_ENG_20030616.0274:1:E2n</Feature>
+<Feature name="event_difficultDecision">FALSE</Feature>
+<Feature name="id">VM1</Feature>
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2F" type="value_mention" start="XIN_ENG_20030616.0274:1:4V" end="XIN_ENG_20030616.0274:1:4W">
+<Feature name="id">QM4</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:E2G</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2m" type="event_mention_anchor" start="XIN_ENG_20030616.0274:1:5b" end="XIN_ENG_20030616.0274:1:5c">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2S" type="relation_mention" start="XIN_ENG_20030616.0274:1:4v" end="XIN_ENG_20030616.0274:1:4w">
+<Feature name="id">RM3</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">PreMod</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2K</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ee" type="entity_mention" start="XIN_ENG_20030616.0274:1:1H" end="XIN_ENG_20030616.0274:1:1I">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EB</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Ef</Feature>
+<Feature name="id">EM11</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NOM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Eg" type="entity_mention" start="XIN_ENG_20030616.0274:1:1L" end="XIN_ENG_20030616.0274:1:1M">
+<Feature name="entity">XIN_ENG_20030616.0274:1:Ei</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Eh</Feature>
+<Feature name="id">EM12</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Eh" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1N" end="XIN_ENG_20030616.0274:1:1O">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ef" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1J" end="XIN_ENG_20030616.0274:1:1K">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ej" type="entity_mention" start="XIN_ENG_20030616.0274:1:1R" end="XIN_ENG_20030616.0274:1:1S">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Ek</Feature>
+<Feature name="id">EM13</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ek" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1U" end="XIN_ENG_20030616.0274:1:1V">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E13" type="entity_mention" start="XIN_ENG_20030616.0274:1:1B" end="XIN_ENG_20030616.0274:1:26">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E15</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E14</Feature>
+<Feature name="id">EM14</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">BAR</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1D" type="relation_mention" start="XIN_ENG_20030616.0274:1:2Q" end="XIN_ENG_20030616.0274:1:2R">
+<Feature name="id">RM4</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">Preposition</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E1H</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E14" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:27" end="XIN_ENG_20030616.0274:1:28">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:El" type="entity_mention" start="XIN_ENG_20030616.0274:1:1W" end="XIN_ENG_20030616.0274:1:1X">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Em</Feature>
+<Feature name="id">EM15</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">LOC</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NOM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Em" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1Y" end="XIN_ENG_20030616.0274:1:1Z">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:En" type="entity_mention" start="XIN_ENG_20030616.0274:1:1a" end="XIN_ENG_20030616.0274:1:1b">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EG</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Eo</Feature>
+<Feature name="id">EM16</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Eo" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1c" end="XIN_ENG_20030616.0274:1:1d">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ep" type="entity_mention" start="XIN_ENG_20030616.0274:1:1e" end="XIN_ENG_20030616.0274:1:1f">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Eq</Feature>
+<Feature name="id">EM17</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Eq" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1g" end="XIN_ENG_20030616.0274:1:1h">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Er" type="entity_mention" start="XIN_ENG_20030616.0274:1:1i" end="XIN_ENG_20030616.0274:1:1j">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Es</Feature>
+<Feature name="id">EM18</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Es" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1k" end="XIN_ENG_20030616.0274:1:1l">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Et" type="entity_mention" start="XIN_ENG_20030616.0274:1:1m" end="XIN_ENG_20030616.0274:1:1n">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EY</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Eu</Feature>
+<Feature name="id">EM19</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Eu" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1o" end="XIN_ENG_20030616.0274:1:1p">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ev" type="entity_mention" start="XIN_ENG_20030616.0274:1:1q" end="XIN_ENG_20030616.0274:1:1r">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Ew</Feature>
+<Feature name="id">EM20</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ew" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1s" end="XIN_ENG_20030616.0274:1:1t">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ex" type="entity_mention" start="XIN_ENG_20030616.0274:1:1u" end="XIN_ENG_20030616.0274:1:1v">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:Ey</Feature>
+<Feature name="id">EM21</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ey" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:1w" end="XIN_ENG_20030616.0274:1:1x">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E10" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:20" end="XIN_ENG_20030616.0274:1:21">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:Ez" type="entity_mention" start="XIN_ENG_20030616.0274:1:1y" end="XIN_ENG_20030616.0274:1:1z">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E11</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E10</Feature>
+<Feature name="id">EM23</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1N" type="entity_mention" start="XIN_ENG_20030616.0274:1:2l" end="XIN_ENG_20030616.0274:1:2m">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E11</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head"></Feature>
+<Feature name="id">EM22</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">APP</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1K" type="entity_mention" start="XIN_ENG_20030616.0274:1:2f" end="XIN_ENG_20030616.0274:1:2g">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1M</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1L</Feature>
+<Feature name="id">EM24</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">BAR</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2a" type="relation_mention" start="XIN_ENG_20030616.0274:1:5B" end="XIN_ENG_20030616.0274:1:5C">
+<Feature name="id">RM5</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">Preposition</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2b</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1L" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:2h" end="XIN_ENG_20030616.0274:1:2i">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1P" type="entity_mention" start="XIN_ENG_20030616.0274:1:2p" end="XIN_ENG_20030616.0274:1:2q">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1R</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1Q</Feature>
+<Feature name="id">EM25</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1Q" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:2r" end="XIN_ENG_20030616.0274:1:2s">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1a" type="entity_mention" start="XIN_ENG_20030616.0274:1:39" end="XIN_ENG_20030616.0274:1:3A">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1R</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head"></Feature>
+<Feature name="id">EM26</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">APP</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1U" type="entity_mention" start="XIN_ENG_20030616.0274:1:2x" end="XIN_ENG_20030616.0274:1:2y">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1W</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1V</Feature>
+<Feature name="id">EM27</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NOM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E9" type="value_mention" start="XIN_ENG_20030616.0274:1:I" end="XIN_ENG_20030616.0274:1:J">
+<Feature name="id">QM6</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:EA</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1V" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:2z" end="XIN_ENG_20030616.0274:1:30">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1X" type="entity_mention" start="XIN_ENG_20030616.0274:1:33" end="XIN_ENG_20030616.0274:1:34">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1Z</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1Y</Feature>
+<Feature name="id">EM28</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1Y" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:35" end="XIN_ENG_20030616.0274:1:36">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1c" type="entity_mention" start="XIN_ENG_20030616.0274:1:3D" end="XIN_ENG_20030616.0274:1:3F">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E11</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1d</Feature>
+<Feature name="id">EM29</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1d" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3G" end="XIN_ENG_20030616.0274:1:3H">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1l" type="entity_mention" start="XIN_ENG_20030616.0274:1:3X" end="XIN_ENG_20030616.0274:1:3Y">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1n</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1m</Feature>
+<Feature name="id">EM32</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1m" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3Z" end="XIN_ENG_20030616.0274:1:3a">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1i" type="entity_mention" start="XIN_ENG_20030616.0274:1:3Q" end="XIN_ENG_20030616.0274:1:3R">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1k</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1j</Feature>
+<Feature name="id">EM31</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NOMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2e" type="relation_mention" start="XIN_ENG_20030616.0274:1:5K" end="XIN_ENG_20030616.0274:1:5L">
+<Feature name="id">RM6</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">PreMod</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2f</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1e" type="entity_mention" start="XIN_ENG_20030616.0274:1:3I" end="XIN_ENG_20030616.0274:1:3J">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1g</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1f</Feature>
+<Feature name="id">EM30</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1j" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3S" end="XIN_ENG_20030616.0274:1:3U">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1f" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3K" end="XIN_ENG_20030616.0274:1:3L">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1o" type="entity_mention" start="XIN_ENG_20030616.0274:1:3d" end="XIN_ENG_20030616.0274:1:3e">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1g</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1p</Feature>
+<Feature name="id">EM33</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1p" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3f" end="XIN_ENG_20030616.0274:1:3g">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1u" type="entity_mention" start="XIN_ENG_20030616.0274:1:3p" end="XIN_ENG_20030616.0274:1:3q">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E1w</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1v</Feature>
+<Feature name="id">EM35</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1v" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3r" end="XIN_ENG_20030616.0274:1:3s">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1q" type="entity_mention" start="XIN_ENG_20030616.0274:1:3h" end="XIN_ENG_20030616.0274:1:3i">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EB</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1r</Feature>
+<Feature name="id">EM34</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">BAR</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2i" type="relation_mention" start="XIN_ENG_20030616.0274:1:5S" end="XIN_ENG_20030616.0274:1:5U">
+<Feature name="id">RM7</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="lexical_condition">PreMod</Feature>
+<Feature name="lexical_condition_difficultDecision">FALSE</Feature>
+<Feature name="relation">XIN_ENG_20030616.0274:1:E2K</Feature>
+<Feature name="relation_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1r" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3j" end="XIN_ENG_20030616.0274:1:3k">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1x" type="entity_mention" start="XIN_ENG_20030616.0274:1:3v" end="XIN_ENG_20030616.0274:1:3w">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E1y</Feature>
+<Feature name="id">EM36</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">GPE</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1y" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:3x" end="XIN_ENG_20030616.0274:1:3y">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1z" type="entity_mention" start="XIN_ENG_20030616.0274:1:3z" end="XIN_ENG_20030616.0274:1:40">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EU</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E20</Feature>
+<Feature name="id">EM37</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E20" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:41" end="XIN_ENG_20030616.0274:1:42">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E21" type="entity_mention" start="XIN_ENG_20030616.0274:1:43" end="XIN_ENG_20030616.0274:1:44">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EB</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E22</Feature>
+<Feature name="id">EM38</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">PRO</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E22" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:45" end="XIN_ENG_20030616.0274:1:46">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E1t" type="event_mention" start="XIN_ENG_20030616.0274:1:51" end="XIN_ENG_20030616.0274:1:52">
+<Feature name="anchor">XIN_ENG_20030616.0274:1:E2Y</Feature>
+<Feature name="event">XIN_ENG_20030616.0274:1:E2Z</Feature>
+<Feature name="event_difficultDecision">FALSE</Feature>
+<Feature name="id">VM2</Feature>
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E23" type="entity_mention" start="XIN_ENG_20030616.0274:1:47" end="XIN_ENG_20030616.0274:1:48">
+<Feature name="entity">XIN_ENG_20030616.0274:1:EG</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E24</Feature>
+<Feature name="id">EM39</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role">ORG</Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAM</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E24" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:49" end="XIN_ENG_20030616.0274:1:4A">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E25" type="entity_mention" start="XIN_ENG_20030616.0274:1:4B" end="XIN_ENG_20030616.0274:1:4C">
+<Feature name="entity">XIN_ENG_20030616.0274:1:E27</Feature>
+<Feature name="entity_difficultDecision">FALSE</Feature>
+<Feature name="head">XIN_ENG_20030616.0274:1:E26</Feature>
+<Feature name="id">EM40</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="role"></Feature>
+<Feature name="role_difficultDecision">FALSE</Feature>
+<Feature name="type">NAMPRE</Feature>
+<Feature name="type_difficultDecision">FALSE</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E26" type="entity_mention_head" start="XIN_ENG_20030616.0274:1:4D" end="XIN_ENG_20030616.0274:1:4F">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2Y" type="event_mention_anchor" start="XIN_ENG_20030616.0274:1:57" end="XIN_ENG_20030616.0274:1:58">
+<Feature name="indexing_type">charseq</Feature>
+</Annotation>
+<Annotation id="XIN_ENG_20030616.0274:1:E2H" type="value_mention" start="XIN_ENG_20030616.0274:1:4Z" end="XIN_ENG_20030616.0274:1:4a">
+<Feature name="id">QM5</Feature>
+<Feature name="indexing_type">charseq</Feature>
+<Feature name="value">XIN_ENG_20030616.0274:1:E2I</Feature>
+</Annotation>
+</AG>
+</AGSet>
+

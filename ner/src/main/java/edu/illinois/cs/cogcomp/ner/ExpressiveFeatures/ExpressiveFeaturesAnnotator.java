@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
@@ -145,24 +142,24 @@ public class ExpressiveFeaturesAnnotator {
                     TextChunkRepresentationManager.EncodingScheme.BIO,
                     TextChunkRepresentationManager.EncodingScheme.BILOU, data,
                     NEWord.LabelToLookAt.PredictionLevel2Tagger);
-//            addAuxiliaryClassifierFeatures(data, "aux_model_" + i);
+            // addAuxiliaryClassifierFeatures(data, "aux_model_" + i);
 
             ParametersForLbjCode.currentParameters = currentModel;
         }
     }
 
-//    private static void addAuxiliaryClassifierFeatures(Data data, String auxModelId) {
-//        for (int docid = 0; docid < data.documents.size(); docid++) {
-//            ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
-//            for (LinkedVector sentence : sentences)
-//                for (int k = 0; k < sentence.size(); k++) {
-//                    NEWord w = (NEWord) sentence.get(k);
-//                    NEWord.DiscreteFeature f = new NEWord.DiscreteFeature();
-//                    f.featureGroupName = auxModelId;
-//                    f.featureValue = w.neTypeLevel2;
-//                    f.useWithinTokenWindow = true;
-//                    w.getGeneratedDiscreteFeaturesNonConjunctive().add(f);
-//                }
-//        }
-//    }
+    // private static void addAuxiliaryClassifierFeatures(Data data, String auxModelId) {
+    // for (int docid = 0; docid < data.documents.size(); docid++) {
+    // ArrayList<LinkedVector> sentences = data.documents.get(docid).sentences;
+    // for (LinkedVector sentence : sentences)
+    // for (int k = 0; k < sentence.size(); k++) {
+    // NEWord w = (NEWord) sentence.get(k);
+    // NEWord.DiscreteFeature f = new NEWord.DiscreteFeature();
+    // f.featureGroupName = auxModelId;
+    // f.featureValue = w.neTypeLevel2;
+    // f.useWithinTokenWindow = true;
+    // w.getGeneratedDiscreteFeaturesNonConjunctive().add(f);
+    // }
+    // }
+    // }
 }

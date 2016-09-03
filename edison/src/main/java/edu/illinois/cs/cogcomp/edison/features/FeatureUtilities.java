@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features;
@@ -302,12 +299,13 @@ public class FeatureUtilities {
             for (Feature b : feats2) {
 
                 /**
-                 * this next equality is correct: checking for literally the same Feature object, in which case only
-                 *    return the single object. Regular equality filters out instances where two identical feature
-                 *    strings occur next to each other -- e.g. the words "buffalo buffalo" -- in which case you
-                 *    want the conjoined feature "buffalo&buffalo" and not just "buffalo".
+                 * this next equality is correct: checking for literally the same Feature object, in
+                 * which case only return the single object. Regular equality filters out instances
+                 * where two identical feature strings occur next to each other -- e.g. the words
+                 * "buffalo buffalo" -- in which case you want the conjoined feature
+                 * "buffalo&buffalo" and not just "buffalo".
                  */
-                if (a == b )
+                if (a == b)
                     features.add(a);
                 else
                     features.add(a.conjoinWith(b));

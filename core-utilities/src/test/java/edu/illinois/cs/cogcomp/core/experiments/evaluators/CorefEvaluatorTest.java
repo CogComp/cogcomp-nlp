@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -26,9 +23,9 @@ import static org.junit.Assert.assertEquals;
 // http://alias-i.com/lingpipe/docs/api/com/aliasi/cluster/ClusterScore.html
 // gold = { {1, 2, 3, 4, 5}, {6, 7}, {8, 9, A, B, C} }
 // prediction = { { 1, 2, 3, 4, 5, 8, 9, A, B, C }, { 6, 7} }
-// MUC: P:	0.9  -  R:	1.0  - F:   0.947
-// b3Element:  P:	0.583 -  R:  1.0 - F:  0.737
-// b3Cluster:  P:   0.75  -  R:  1.0 - F:  0.857
+// MUC: P: 0.9 - R: 1.0 - F: 0.947
+// b3Element: P: 0.583 - R: 1.0 - F: 0.737
+// b3Cluster: P: 0.75 - R: 1.0 - F: 0.857
 public class CorefEvaluatorTest {
     CoreferenceView gold, predicted;
 
@@ -37,7 +34,8 @@ public class CorefEvaluatorTest {
         String[] toks = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"};
         List<String[]> tokens = new ArrayList<>();
         tokens.add(toks);
-        TextAnnotation dummyTextAnnotation = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokens);
+        TextAnnotation dummyTextAnnotation =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokens);
         List<Constituent> allCons = dummyTextAnnotation.getView(ViewNames.TOKENS).getConstituents();
         gold = new CoreferenceView("gold", dummyTextAnnotation);
         gold.addCorefEdges(allCons.get(0), allCons.subList(1, 5));

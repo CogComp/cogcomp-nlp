@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -30,7 +27,7 @@ public class ParsePhraseTypeOnlyTest {
                 {ViewNames.PARSE_STANFORD, ViewNames.PARSE_CHARNIAK, ViewNames.PARSE_GOLD,
                         ViewNames.SRL_VERB};
         TextAnnotation ta =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         PredicateArgumentView srlView = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         predicate = srlView.getPredicates().get(0);
         arg1 = srlView.getArguments(predicate).get(0).getTarget();

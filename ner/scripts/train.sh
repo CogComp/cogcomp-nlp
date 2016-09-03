@@ -9,7 +9,7 @@ test="$DATA_ROOT/Test/"
 # you will probably want to create a new config file
 configFile="config/ner.properties"
 
-#configFile="config/ontonotes.config"
+#configFile="config/ner-ontonotes.properties"
 
 # Classpath
 cpath="target/classes:target/dependency/*:config"
