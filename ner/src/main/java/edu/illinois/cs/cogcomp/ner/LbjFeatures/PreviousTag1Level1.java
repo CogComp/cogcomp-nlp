@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,71 +25,75 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class PreviousTag1Level1 extends Classifier
-{
-  public PreviousTag1Level1()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "PreviousTag1Level1";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PreviousTag1Level1(NEWord)' defined on line 325 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class PreviousTag1Level1 extends Classifier {
+    public PreviousTag1Level1() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "PreviousTag1Level1";
     }
 
-    NEWord word = (NEWord) __example;
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
+    }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1"))
-    {
-      int i;
-      NEWord w = word;
-      if (w.previous != null)
-      {
-        if (NETaggerLevel1.isTraining)
-        {
-          __id = "-1";
-          __value = "" + (((NEWord) w.previous).neLabel);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'PreviousTag1Level1(NEWord)' defined on line 325 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
         }
-        else
-        {
-          __id = "-1";
-          __value = "" + (((NEWord) w.previous).neTypeLevel1);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1")) {
+            int i;
+            NEWord w = word;
+            if (w.previous != null) {
+                if (NETaggerLevel1.isTraining) {
+                    __id = "-1";
+                    __value = "" + (((NEWord) w.previous).neLabel);
+                    __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                            this.name, __id, __value, valueIndexOf(__value), (short) 0));
+                } else {
+                    __id = "-1";
+                    __value = "" + (((NEWord) w.previous).neTypeLevel1);
+                    __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                            this.name, __id, __value, valueIndexOf(__value), (short) 0));
+                }
+            }
         }
-      }
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PreviousTag1Level1(NEWord)' defined on line 325 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+        return __result;
     }
 
-    return super.classify(examples);
-  }
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'PreviousTag1Level1(NEWord)' defined on line 325 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
 
-  public int hashCode() { return "PreviousTag1Level1".hashCode(); }
-  public boolean equals(Object o) { return o instanceof PreviousTag1Level1; }
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "PreviousTag1Level1".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof PreviousTag1Level1;
+    }
 }
-

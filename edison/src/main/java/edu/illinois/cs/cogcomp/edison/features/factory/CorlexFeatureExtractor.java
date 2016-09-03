@@ -1,17 +1,14 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
@@ -20,15 +17,14 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.net.URL;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class CorlexFeatureExtractor extends WordFeatureExtractor {
 
     public static final CorlexFeatureExtractor instance = new CorlexFeatureExtractor(true);
     private final static Logger log = LoggerFactory.getLogger(CorlexFeatureExtractor.class);
-    private final static String CORLEX_FILE = "resources/CORLEX/corelex_nouns";
+    private final static String CORLEX_FILE = "CORLEX/corelex_nouns";
 
     private final static Map<String, String> data = new HashMap<>();
 
@@ -45,28 +41,17 @@ public class CorlexFeatureExtractor extends WordFeatureExtractor {
         if (data.size() > 0)
             return;
 
-        List<URL> list;
+        List<String> lines;
         try {
-            list = IOUtils.lsResources(CorlexFeatureExtractor.class, CORLEX_FILE);
-        } catch (Exception e) {
-            throw new EdisonException(e);
-        }
-        if (list.size() == 0) {
+            lines = LineIO.readFromClasspath(CORLEX_FILE);
+            System.out.println();
+        } catch (FileNotFoundException e) {
             throw new EdisonException("CORLEX not found in class path at " + CORLEX_FILE);
         }
 
         log.info("Loading CORLEX from {}", CORLEX_FILE);
 
-        Scanner scanner;
-        try {
-            scanner = new Scanner(list.get(0).openStream());
-        } catch (IOException e) {
-            throw new EdisonException(e);
-        }
-
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine().trim();
-
+        for (String line : lines) {
             if (line.length() == 0)
                 continue;
 
@@ -81,8 +66,6 @@ public class CorlexFeatureExtractor extends WordFeatureExtractor {
                 data.put(lemma, type);
             }
         }
-
-        scanner.close();
 
         log.info("Finished loading CORLEX. Found {} nouns", data.size());
     }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -87,7 +84,7 @@ public class PennTreebankReader extends TextAnnotationReader {
      */
     public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
             throws Exception {
-        super(PENN_TREEBANK_WSJ);
+        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 

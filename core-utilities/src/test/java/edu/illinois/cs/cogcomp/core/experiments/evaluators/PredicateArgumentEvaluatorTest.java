@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -17,7 +14,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,9 +30,9 @@ public class PredicateArgumentEvaluatorTest {
 
         String[] viewsToAdd = {ViewNames.SRL_VERB};
         TextAnnotation taGold =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         TextAnnotation taPred =
-                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false);
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         gold = (PredicateArgumentView) taGold.getView(ViewNames.SRL_VERB);
         predicted = (PredicateArgumentView) taPred.getView(ViewNames.SRL_VERB);
     }
@@ -48,7 +44,7 @@ public class PredicateArgumentEvaluatorTest {
         assertEquals(1.0, senseTester.getMicroF1(), 0);
 
         // Override the sense
-        predicted.getPredicates().get(0).addAttribute(CoNLLColumnFormatReader.SenseIdentifer, "02");
+        predicted.getPredicates().get(0).addAttribute(PredicateArgumentView.SenseIdentifer, "02");
         evaluator = new PredicateArgumentEvaluator();
         evaluator.evaluateSense(senseTester, gold, predicted);
         assertEquals(0.875, senseTester.getMicroF1(), 0.01);

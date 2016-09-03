@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos;
@@ -16,6 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
@@ -34,18 +32,45 @@ import java.util.List;
  */
 public class POSAnnotator extends Annotator {
 
-    private static final String NAME = "illinoispos";
+    /**
+     * NOTE: if you assign values here, these fields are initialized AFTER THE CONSTRUCTOR!!
+     *    Therefore you CANNOT log messages in the constructor.
+     */
+    private static final String NAME = POSAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(POSAnnotator.class);
-    private final POSTagger tagger = new POSTagger();
-    private String tokensfield = "tokens";
-    private String sentencesfield = "sentences";
+    private POSTagger tagger;
+    private String tokensfield;// = "tokens";
+    private String sentencesfield;// = "sentences";
 
+    /**
+     * lazily initialize by default.
+     */
     public POSAnnotator() {
-        super(ViewNames.POS, new String[0]);
+        this(true);
+    }
+
+    /**
+     * Constructor allowing choice whether or not to lazily initialize.
+     * 
+     * @param lazilyInitialize if 'true', load models only on first call to
+     *        {@link Annotator#getView(TextAnnotation)}
+     */
+    public POSAnnotator(boolean lazilyInitialize) {
+        super(ViewNames.POS, new String[0], lazilyInitialize);
         tokensfield = ViewNames.TOKENS;
         sentencesfield = ViewNames.SENTENCE;
     }
 
+
+    /**
+     * called by superclass either on instantiation, or on first call to getView().
+     * 
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {
+        tagger = new POSTagger();
+    }
 
     /**
      * annotates TextAnnotation with POS view and adds it to the TextAnnotation.
@@ -57,6 +82,7 @@ public class POSAnnotator extends Annotator {
         if (!record.hasView(tokensfield) && !record.hasView(sentencesfield)) {
             throw new AnnotatorException("Record must be tokenized and sentence split first");
         }
+
         long startTime = System.currentTimeMillis();
         List<Token> input = LBJavaUtils.recordToLBJTokens(record);
 
@@ -78,12 +104,6 @@ public class POSAnnotator extends Annotator {
 
         record.addView(ViewNames.POS, posView);
 
-    }
-
-
-    @Override
-    public String getViewName() {
-        return ViewNames.POS;
     }
 
 

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -19,17 +16,15 @@ import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 /**
- * Predicting the part of speech of the given word, this classifier is
- * intended to be applied only on words whose forms were <i>not</i> observed
- * during training.  {@link WordForm}, {@link BaselineTarget},
- * {@link labelTwoBeforeU}, {@link labelOneBeforeU}, {@link labelOneAfterU},
- * {@link labelTwoAfterU}, {@link L2bL1bU}, {@link L1bL1aU}, {@link L1aL2aU}
- * and {@link suffixFeatures} are all used as features.  At test-time, the
- * learning algorithm is restricted to return a prediction from the set of
- * tags returned by the Mikheev rules (see {@link MikheevTable}), which were
- * learned at training-time.  The prediction is cached in the
- * <code>Word.partOfSpeech</code> field, and the value of that field will
- * simply be returned whenever it is non-<code>null</code>.
+ * Predicting the part of speech of the given word, this classifier is intended to be applied only
+ * on words whose forms were <i>not</i> observed during training. {@link WordForm},
+ * {@link BaselineTarget}, {@link labelTwoBeforeU}, {@link labelOneBeforeU}, {@link labelOneAfterU},
+ * {@link labelTwoAfterU}, {@link L2bL1bU}, {@link L1bL1aU}, {@link L1aL2aU} and
+ * {@link suffixFeatures} are all used as features. At test-time, the learning algorithm is
+ * restricted to return a prediction from the set of tags returned by the Mikheev rules (see
+ * {@link MikheevTable}), which were learned at training-time. The prediction is cached in the
+ * <code>Word.partOfSpeech</code> field, and the value of that field will simply be returned
+ * whenever it is non-<code>null</code>.
  *
  * @author Nick Rizzolo
  **/
@@ -42,7 +37,8 @@ public class POSTaggerUnknown extends SparseNetworkLearner {
         this(new Parameters(), modelPath, lexiconPath, mikheevTable);
     }
 
-    private POSTaggerUnknown(Parameters p, String modelPath, String lexiconPath, MikheevTable mikheevTable) {
+    private POSTaggerUnknown(Parameters p, String modelPath, String lexiconPath,
+            MikheevTable mikheevTable) {
         super(p);
         try {
             lcFilePath = new java.net.URL("file:" + modelPath);
@@ -94,7 +90,8 @@ public class POSTaggerUnknown extends SparseNetworkLearner {
     public FeatureVector classify(Object __example) {
         if (__example instanceof Object[]) {
             Object[] a = (Object[]) __example;
-            if (a[0] instanceof int[]) return super.classify((int[]) a[0], (double[]) a[1]);
+            if (a[0] instanceof int[])
+                return super.classify((int[]) a[0], (double[]) a[1]);
         }
         return new FeatureVector(cachedFeatureValue(__example));
     }
@@ -102,7 +99,8 @@ public class POSTaggerUnknown extends SparseNetworkLearner {
     public Feature featureValue(Object __example) {
         if (__example instanceof Object[]) {
             Object[] a = (Object[]) __example;
-            if (a[0] instanceof int[]) return super.featureValue((int[]) a[0], (double[]) a[1]);
+            if (a[0] instanceof int[])
+                return super.featureValue((int[]) a[0], (double[]) a[1]);
         }
 
         return cachedFeatureValue(__example);
@@ -111,7 +109,8 @@ public class POSTaggerUnknown extends SparseNetworkLearner {
     public String discreteValue(Object __example) {
         if (__example instanceof Object[]) {
             Object[] a = (Object[]) __example;
-            if (a[0] instanceof int[]) return super.discreteValue((int[]) a[0], (double[]) a[1]);
+            if (a[0] instanceof int[])
+                return super.discreteValue((int[]) a[0], (double[]) a[1]);
         }
 
         return cachedFeatureValue(__example).getStringValue();
@@ -134,4 +133,3 @@ public class POSTaggerUnknown extends SparseNetworkLearner {
         }
     }
 }
-

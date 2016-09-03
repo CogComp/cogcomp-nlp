@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -15,6 +12,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.tartarus.snowball.SnowballStemmer;
 import org.tartarus.snowball.ext.englishStemmer;
 
@@ -26,9 +24,12 @@ import org.tartarus.snowball.ext.englishStemmer;
  */
 public class PorterStemmer extends Annotator {
 
-    private static PorterStemmer instance = null; // = new PorterStemmer();
-
     private final static SnowballStemmer stemmer = new englishStemmer();
+    private static PorterStemmer instance; // = new PorterStemmer();
+
+    private PorterStemmer(String viewName, String[] prerequisiteViews) {
+        super(viewName, prerequisiteViews);
+    }
 
     public static PorterStemmer getInstance() {
         if (null == instance)
@@ -36,9 +37,13 @@ public class PorterStemmer extends Annotator {
         return instance;
     }
 
-    private PorterStemmer(String viewName, String[] prerequisiteViews) {
-        super(viewName, prerequisiteViews);
-    }
+    /**
+     * noop.
+     * 
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation input) {

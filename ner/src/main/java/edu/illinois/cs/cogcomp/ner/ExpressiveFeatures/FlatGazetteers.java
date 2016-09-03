@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
@@ -30,9 +27,11 @@ import java.util.Arrays;
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
  * the get() method all constructors are private.
  *
- * annotate() takes a NEWord object and scans up to 4 words beyond. For each k-word expression 1 <= k <=5,
- *    it checks if that expression is present in any gazetteer. If so, every NEWord object corresponding
- *    to a word in that expression gets a new gazetteers attribute with a BIOLU tag plus gazetteer name as label.
+ * annotate() takes a NEWord object and scans up to 4 words beyond. For each k-word expression 1 <=
+ * k <=5, it checks if that expression is present in any gazetteer. If so, every NEWord object
+ * corresponding to a word in that expression gets a new gazetteers attribute with a BIOLU tag plus
+ * gazetteer name as label.
+ * 
  * @author redman
  */
 public class FlatGazetteers implements Gazetteers {
@@ -125,7 +124,8 @@ public class FlatGazetteers implements Gazetteers {
         NEWord endWord = (NEWord) (w.next);
         String expression = w.form;
         boolean changeEnd = true;
-        // w.normalizedMostLinkableExpression is populated if wikifier link functionality is active; default inactive
+        // w.normalizedMostLinkableExpression is populated if wikifier link functionality is active;
+        // default inactive
         if (w.normalizedMostLinkableExpression != null) {
             if (w.gazetteers == null)
                 w.gazetteers = new ArrayList<>();

@@ -1,22 +1,22 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.math;
 
+import java.util.Random;
+
 /**
  * Keeps track of maximum and the object that corresponds to the maximum.
  * <p>
- * K: type of value over which the max decision is made. T: type of the objects which generate the
+ * V: type of value over which the max decision is made. T: type of the objects which generate the
  * values
  * <p>
- * In case of ties, the first object is chosen.
+ * In case of ties, if {@link #randomTieBreak} is {@code false} the first object is chosen;
+ * otherwise it's a random choice.
  * <p>
  * <b>Example:</b>
  * <p>
@@ -36,34 +36,49 @@ package edu.illinois.cs.cogcomp.core.math;
  * </pre>
  *
  * @author Vivek Srikumar
+ * @author Christos Christodouloupoulos
  */
-public class ArgMin<T, K extends Comparable<K>> {
-    private K key;
+public class ArgMin<T, V extends Comparable<V>> {
+    private V value;
     private T object;
+    private boolean randomTieBreak;
 
-    public void update(T object, K value) {
-        if (key.compareTo(value) >= 0) {
-            key = value;
+    // Always starting with the same seed for replicability
+    private Random random = new Random(42);
+
+    public void update(T object, V value) {
+        if (randomTieBreak && this.value.compareTo(value) == 0) {
+            if (random.nextBoolean()) {
+                this.value = value;
+                this.object = object;
+            }
+        } else if (this.value.compareTo(value) >= 0) {
+            this.value = value;
             this.object = object;
         }
     }
 
-    public K getMinValue() {
-        return key;
+    public V getMinValue() {
+        return value;
     }
 
     public T getArgmin() {
         return object;
     }
 
-    public ArgMin(T initialObject, K initialValue) {
-        key = initialValue;
+    public ArgMin(T initialObject, V initialValue) {
+        this(initialObject, initialValue, false);
+    }
+
+    public ArgMin(T initialObject, V initialValue, boolean randomTieBreak) {
+        this.value = initialValue;
         this.object = initialObject;
+        this.randomTieBreak = randomTieBreak;
     }
 
     @Override
     public String toString() {
-        return "value: " + key + ", object: " + object;
+        return "value: " + value + ", object: " + object;
     }
 
 }

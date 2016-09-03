@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -27,8 +24,12 @@ public class ConstituentSpanSplittingEvaluatorTest {
     @Before
     public void setUp() throws Exception {
         splittingTester = new ClassificationTester();
-        TextAnnotation prediction1TA = DummyTextAnnotationGenerator.generateBasicTextAnnotation(4);
-        TextAnnotation prediction2TA = DummyTextAnnotationGenerator.generateBasicTextAnnotation(1);
+        TextAnnotation prediction1TA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 1);
+        TextAnnotation prediction2TA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 2);
         prediction1 = (SpanLabelView) prediction1TA.getView(ViewNames.TOKENS);
         prediction2 = (SpanLabelView) prediction2TA.getView(ViewNames.TOKENS);
     }
@@ -45,15 +46,15 @@ public class ConstituentSpanSplittingEvaluatorTest {
     public void testShorterPredictionSpans() throws Exception {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.evaluate(splittingTester, prediction1, prediction2);
-        assertEquals(0.4, splittingTester.getMicroF1(), 0);
-        assertEquals(1.0, splittingTester.getMicroPrecision(), 0);
+        assertEquals(0.73, splittingTester.getMicroF1(), 0.01);
+        assertEquals(0.58, splittingTester.getMicroPrecision(), 0.03);
     }
 
     @Test
     public void testLongerPredictionSpans() throws Exception {
         ConstituentSpanSplittingEvaluator evaluator = new ConstituentSpanSplittingEvaluator();
         evaluator.evaluate(splittingTester, prediction2, prediction1);
-        assertEquals(0.4, splittingTester.getMicroF1(), 0);
-        assertEquals(0.25, splittingTester.getMicroPrecision(), 0);
+        assertEquals(0.73, splittingTester.getMicroF1(), 0.01);
+        assertEquals(1.0, splittingTester.getMicroPrecision(), 0.01);
     }
 }

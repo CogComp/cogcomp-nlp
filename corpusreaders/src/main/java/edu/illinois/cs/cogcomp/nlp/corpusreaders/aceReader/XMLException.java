@@ -1,18 +1,14 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader;
 
 /**
- * @author Eric Bengtson
- * Encapsulates various exceptions that may arise during XML processing. 
+ * @author Eric Bengtson Encapsulates various exceptions that may arise during XML processing.
  */
 public class XMLException extends Exception {
     private static final long serialVersionUID = 8648357765896557182L;
@@ -22,6 +18,7 @@ public class XMLException extends Exception {
 
     /**
      * Constructor
+     * 
      * @param error The relevant error message
      * @param ex The exception to encapsulate
      */
@@ -38,7 +35,7 @@ public class XMLException extends Exception {
     }
 
     /**
-     * @return The nested exception.  null if none given.
+     * @return The nested exception. null if none given.
      */
     public Exception getNestedException() {
         return m_nestedException;
@@ -46,14 +43,15 @@ public class XMLException extends Exception {
 
     public String getMessage() {
         if (m_nestedException != null)
-            return m_error + "\nCause:\n  "+m_nestedException.getMessage();
-        else return m_error;
+            return m_error + "\nCause:\n  " + m_nestedException.getMessage();
+        else
+            return m_error;
     }
 
     public String toString() {
         String errString = this.getClass().getName() + ": " + m_error;
         if (m_nestedException != null)
-            errString += "\nCause:\n  "+m_nestedException.getMessage();
+            errString += "\nCause:\n  " + m_nestedException.getMessage();
         return errString;
     }
 

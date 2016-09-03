@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.annotation;
@@ -160,7 +157,28 @@ public class BasicAnnotatorService implements AnnotatorService {
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
     }
 
+    /**
+     * Generates a hash key based on the basic {@link TextAnnotation} information (TextAnnotation's
+     * own hash function) and the {@link View} name.
+     *
+     * @param ta The {@link TextAnnotation} to be hashed
+     * @param viewName The name of the {@link View} to be cached
+     * @return The cache key
+     */
+    public static String getCacheKey(TextAnnotation ta, String viewName) {
+        return ta.hashCode() + ":" + viewName;
+    }
 
+    /**
+     * get a hash key based on the text value provided
+     *
+     * @param text a text that has been used as the basis of a TextAnnotation object
+     * @param taBuilderName name of TextAnnotationBuilder that created the basic TextAnnotation
+     * @return a key for this TextAnnotation
+     */
+    public static String getTextAnnotationCacheKey(String text, String taBuilderName) {
+        return text.hashCode() * 13 + ":" + taBuilderName;
+    }
 
     /**
      * This opens a cache with the name cacheName, or adds it if it doesn't exist.
@@ -233,27 +251,31 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
     /**
-     * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized text by using the
-     * {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that this method works only with
+     * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized
+     * text by using the {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that
+     * this method works only with
      * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
+     *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
+    public TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = getTextAnnotationFromCache(text);
         if (ta == null)
             ta = createTextAnnotationAndCache(corpusId, docId, text, tokenization);
         return ta;
     }
 
-    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
-        TextAnnotation ta = textAnnotationBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
+    private TextAnnotation createTextAnnotationAndCache(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        TextAnnotation ta =
+                textAnnotationBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
         if (!disableCache) {
             putTextAnnotationInCache(text, ta);
         }
@@ -271,23 +293,26 @@ public class BasicAnnotatorService implements AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} and adding
      * all the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s supported by
      * this {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService}. This amounts to calling
-     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and successive calls of
-     * {@link #addView(edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation, String)}. Note that
-     * this method works only with {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
+     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and
+     * successive calls of
+     * {@link #addView(edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation, String)}
+     * . Note that this method works only with
+     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @return
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization) throws AnnotatorException {
-        return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization, viewProviders.keySet());
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
+        return createAnnotatedTextAnnotation(corpusId, textId, text, tokenization,
+                viewProviders.keySet());
     }
-
 
     @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
@@ -312,16 +337,18 @@ public class BasicAnnotatorService implements AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder}.
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @param viewNames Views to add
      * @return
      * @throws AnnotatorException
      */
     @Override
-    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer
-            .Tokenization tokenization, Set<String> viewNames) throws AnnotatorException {
+    public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
+            String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
+            throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
         for (String view : viewNames)
             addView(ta, view);
@@ -374,8 +401,54 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
     /**
+     * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
+     * known to this {@link AnnotatorService}.
+     *
+     * @param annotator the {@link Annotator} to be added.
+     * @throws {@link AnnotatorException} if the annotator requires views that cannot be satisfied.
+     */
+    @Override
+    public void addAnnotator(Annotator annotator) throws AnnotatorException {
+        String[] prerequisites = annotator.getRequiredViews();
+        for ( String pre : prerequisites )
+            if ( !this.getAvailableViews().contains( pre ) )
+                throw new AnnotatorException("Missing prerequisite: " + pre );
+
+        this.viewProviders.put( annotator.getViewName(), annotator );
+    }
+
+    /**
+     * Return a set containing the names of all {@link View}s
+     * that this service can provide.
+     *
+     * @return a set of view names corresponding to annotators known to this AnnotatorService
+     */
+    @Override
+    public Set<String> getAvailableViews() {
+        return this.viewProviders.keySet();
+    }
+
+    /**
+     * Add the specified views to the TextAnnotation argument. This is useful when TextAnnotation objects are
+     * built independently of the service, perhaps by a different system component (e.g. a corpus reader).
+     * If so specified, overwrite existing views.
+     *
+     * @param ta                   The {@link TextAnnotation} to annotate
+     * @param replaceExistingViews if 'true', annotate a
+     *                             {@link View} even if
+     *                             it is already present in the ta argument, replacing the original corresponding View.
+     * @return a reference to the updated TextAnnotation
+     */
+    @Override
+    public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
+        for ( String key : getAvailableViews() )
+            addView( ta, key );
+        return ta;
+    }
+
+    /**
      * run the named annotator on the TextAnnotation provided
-     * 
+     *
      * @param ta TextAnnotation to update
      * @param viewName name of View to populate
      * @throws AnnotatorException
@@ -406,29 +479,6 @@ public class BasicAnnotatorService implements AnnotatorService {
             removeKeyFromCache(cacheKey);
             putInCache(cacheKey, SerializationUtils.serialize(view));
         }
-    }
-
-    /**
-     * Generates a hash key based on the basic {@link TextAnnotation} information (TextAnnotation's
-     * own hash function) and the {@link View} name.
-     *
-     * @param ta The {@link TextAnnotation} to be hashed
-     * @param viewName The name of the {@link View} to be cached
-     * @return The cache key
-     */
-    public static String getCacheKey(TextAnnotation ta, String viewName) {
-        return ta.hashCode() + ":" + viewName;
-    }
-
-    /**
-     * get a hash key based on the text value provided
-     *
-     * @param text a text that has been used as the basis of a TextAnnotation object
-     * @param taBuilderName name of TextAnnotationBuilder that created the basic TextAnnotation
-     * @return a key for this TextAnnotation
-     */
-    public static String getTextAnnotationCacheKey(String text, String taBuilderName) {
-        return text.hashCode() * 13 + ":" + taBuilderName;
     }
 
     /**
@@ -495,4 +545,7 @@ public class BasicAnnotatorService implements AnnotatorService {
             throw new AnnotatorException(e.getMessage());
         }
     }
+
+
+
 }

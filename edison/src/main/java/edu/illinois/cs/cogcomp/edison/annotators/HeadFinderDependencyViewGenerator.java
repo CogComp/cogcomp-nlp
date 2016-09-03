@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -15,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,20 +91,25 @@ public class HeadFinderDependencyViewGenerator extends Annotator {
         return depTreeView;
     }
 
+    private static String buildViewName(String parseViewName) {
+        return ViewNames.DEPENDENCY_HEADFINDER + ":" + parseViewName;
+    }
+
+    /**
+     * noop.
+     *
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
+
     @Override
     public void addView(TextAnnotation ta) {
         ta.addView(getViewName(), getDependencyTree(ta, parseViewName, getViewName()));
     }
 
-
     @Override
     public String getViewName() {
         return buildViewName(parseViewName);
-    }
-
-
-
-    private static String buildViewName(String parseViewName) {
-        return ViewNames.DEPENDENCY_HEADFINDER + ":" + parseViewName;
     }
 }

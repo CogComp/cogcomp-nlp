@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -57,8 +54,6 @@ public class TestClauseFeatureExtractor extends TestCase {
 
             ta.addView(ClauseViewGenerator.CHARNIAK);
             ta.addView(PseudoParse.CHARNIAK);
-
-            System.out.println(ta.getView(ViewNames.PSEUDO_PARSE_CHARNIAK));
 
             PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
 

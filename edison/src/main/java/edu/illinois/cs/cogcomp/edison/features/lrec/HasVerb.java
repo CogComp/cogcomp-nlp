@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -29,29 +26,28 @@ import java.util.Set;
  */
 public class HasVerb implements FeatureExtractor {
 
-	@Override
-	public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-		boolean hasVerb = false;
-		TextAnnotation ta = c.getTextAnnotation();
+    @Override
+    public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        boolean hasVerb = false;
+        TextAnnotation ta = c.getTextAnnotation();
 
-		for (int i = c.getStartSpan(); i < c.getEndSpan(); i++) {
+        for (int i = c.getStartSpan(); i < c.getEndSpan(); i++) {
 
-			if (POSUtils.isPOSVerb(WordHelpers.getPOS(ta, i))) {
-				hasVerb = true;
-				break;
-			}
-		}
-		Set<Feature> feats = new HashSet<>();
+            if (POSUtils.isPOSVerb(WordHelpers.getPOS(ta, i))) {
+                hasVerb = true;
+                break;
+            }
+        }
+        Set<Feature> feats = new HashSet<>();
 
-		if (hasVerb) {
-			feats.add(DiscreteFeature.create(getName()));
-		}
-		return feats;
-	}
-	
-	@Override
-	public String getName() {
-		return "#has-verb";
-	}
+        if (hasVerb) {
+            feats.add(DiscreteFeature.create(getName()));
+        }
+        return feats;
+    }
+
+    @Override
+    public String getName() {
+        return "#has-verb";
+    }
 }
-

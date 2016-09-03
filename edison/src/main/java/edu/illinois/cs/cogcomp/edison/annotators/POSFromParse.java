@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -14,6 +11,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
 /**
@@ -34,6 +32,14 @@ public class POSFromParse extends Annotator {
         super(ViewNames.POS, new String[] {parseViewName});
         this.parseViewName = parseViewName;
     }
+
+    /**
+     * noop.
+     * 
+     * @param rm configuration parameters
+     */
+    @Override
+    public void initialize(ResourceManager rm) {}
 
     @Override
     public void addView(TextAnnotation ta) {

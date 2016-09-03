@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -22,6 +19,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -53,9 +52,15 @@ public class ParsePath implements FeatureExtractor {
     public static ParsePath CHARNIAK = new ParsePath(ViewNames.PARSE_CHARNIAK);
     public static ParsePath STANFORD = new ParsePath(ViewNames.PARSE_STANFORD);
 
+    private final static Logger log = LoggerFactory.getLogger(Feature.class);
+
     private final String parseViewName;
 
     public ParsePath(String parseViewName) {
+        // it should belong to the parse view
+        if (!ViewNames.isItParseView(parseViewName)) {
+            log.warn("The view doesn't seem to belong to the parse view . . . ");
+        }
         this.parseViewName = parseViewName;
     }
 
@@ -63,16 +68,14 @@ public class ParsePath implements FeatureExtractor {
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         TextAnnotation ta = c.getTextAnnotation();
         TreeView parse = (TreeView) ta.getView(parseViewName);
-        Constituent cEquivalentInParseView = parse.getConstituentsCoveringToken(c.getStartSpan()).get(0);
         Set<Feature> features = new LinkedHashSet<>();
-        List<Relation> incomingRelations = cEquivalentInParseView.getIncomingRelations();
-
+        List<Relation> incomingRelations = c.getIncomingRelations();
 
         if(incomingRelations.size() > 0) {
             Constituent c1, c2;
             try {
                 c1 = parse.getParsePhrase(incomingRelations.get(0).getSource());
-                c2 = parse.getParsePhrase(cEquivalentInParseView);
+                c2 = parse.getParsePhrase(c);
             } catch (Exception e) {
                 throw new EdisonException(e);
             }

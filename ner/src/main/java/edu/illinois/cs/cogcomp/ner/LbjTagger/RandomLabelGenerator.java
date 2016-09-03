@@ -1,14 +1,14 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
@@ -16,6 +16,7 @@ import java.util.Random;
  * A class to generate random labels...
  */
 public class RandomLabelGenerator {
+    private Logger logger = LoggerFactory.getLogger(RandomLabelGenerator.class);
     private String[] labelTypes = null; // will be initialized to something like:
                                         // {"O","PER","ORG","LOC","MISC"};
     private String[] labelNames = null; // will be initialized to something like:
@@ -28,7 +29,15 @@ public class RandomLabelGenerator {
 
     public RandomLabelGenerator(String[] _labelTypes,
             TextChunkRepresentationManager.EncodingScheme encodingScheme, double noiseLevel) {
+
         this.noiseLevel = noiseLevel;
+
+        if (_labelTypes.length == 1 && noiseLevel > 0.) {
+            logger.warn("ERROR: only one label has been specified and noise level is non-zero. "
+                    + "setting noise level to zero.");
+            this.noiseLevel = 0;
+        }
+
         rand = new Random(randomizationSeed);
         labelTypes = new String[_labelTypes.length + 1];
         labelTypes[0] = "O";
