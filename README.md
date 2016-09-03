@@ -5,6 +5,8 @@
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
 by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.illinois.edu).  
 
+Each library contains detailed readme and instructions on how to use it. In addition the javadoc of the whole project is available [here](http://cogcomp.cs.illinois.edu/software/doc/apidocs/). 
+
 CogComp's main NLP libraries
 
   - [illinois-core-utilities](core-utilities/README.md)
