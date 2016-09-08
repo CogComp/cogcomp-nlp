@@ -21,7 +21,7 @@ public class DVector implements Cloneable, java.io.Serializable {
     protected static final int defaultCapacity = 8;
 
     /** The elements of the vector. */
-    protected double[] vector;
+    protected float[] vector;
     /** The number of elements in the vector. */
     protected int size;
 
@@ -39,7 +39,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @param c The initial capacity for the new vector.
      **/
     public DVector(int c) {
-        vector = new double[Math.max(defaultCapacity, c)];
+        vector = new float[Math.max(defaultCapacity, c)];
     }
 
     /**
@@ -49,9 +49,11 @@ public class DVector implements Cloneable, java.io.Serializable {
      **/
     public DVector(double[] v) {
         if (v.length == 0)
-            vector = new double[defaultCapacity];
+            vector = new float[defaultCapacity];
         else {
-            vector = v;
+            vector = new float[v.length];
+            for (int i = 0; i < v.length; i++)
+            	vector[i] = (float)v[i];
             size = vector.length;
         }
     }
@@ -123,7 +125,7 @@ public class DVector implements Cloneable, java.io.Serializable {
         boundsCheck(i);
         expandFor(i, d);
         double result = vector[i];
-        vector[i] = v;
+        vector[i] = (float)v;
         return result;
     }
 
@@ -135,7 +137,7 @@ public class DVector implements Cloneable, java.io.Serializable {
      **/
     public void add(double v) {
         expandFor(size, 0);
-        vector[size - 1] = v;
+        vector[size - 1] = (float)v;
     }
 
 
@@ -178,7 +180,7 @@ public class DVector implements Cloneable, java.io.Serializable {
 
     /** Returns the value of the maximum element in the vector. */
     public double max() {
-        double result = -Double.MAX_VALUE;
+    	double result = -Double.MAX_VALUE;
         for (int i = 0; i < size; ++i)
             if (vector[i] > result)
                 result = vector[i];
@@ -239,10 +241,10 @@ public class DVector implements Cloneable, java.io.Serializable {
             return;
         while (capacity < size)
             capacity *= 2;
-        double[] t = new double[capacity];
+        float[] t = new float[capacity];
         System.arraycopy(vector, 0, t, 0, oldSize);
         if (d != 0)
-            Arrays.fill(t, oldSize, size, d);
+            Arrays.fill(t, oldSize, size, (float)d);
         vector = t;
     }
 
@@ -287,7 +289,7 @@ public class DVector implements Cloneable, java.io.Serializable {
             System.exit(1);
         }
 
-        clone.vector = (double[]) vector.clone();
+        clone.vector = (float[]) vector.clone();
         return clone;
     }
 
@@ -327,11 +329,11 @@ public class DVector implements Cloneable, java.io.Serializable {
     public void read(ExceptionlessInputStream in) {
         size = in.readInt();
         if (size == 0)
-            vector = new double[defaultCapacity];
+            vector = new float[defaultCapacity];
         else {
-            vector = new double[size];
+            vector = new float[size];
             for (int i = 0; i < size; ++i)
-                vector[i] = in.readDouble();
+                vector[i] = in.readFloat();
         }
     }
 }
