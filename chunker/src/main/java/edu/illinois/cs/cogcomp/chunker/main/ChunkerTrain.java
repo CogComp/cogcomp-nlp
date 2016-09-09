@@ -90,7 +90,10 @@ public class ChunkerTrain {
         chunker.save();
         System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
     }
-
+    public void writeModelsToDisk(String dir, String modelName){
+        chunker.write(dir + modelName + ".lc", dir + modelName + ".lex");
+        System.out.println("Done training, models are in " + dir+modelName+".lc (.lex)");
+    }
     public static void main(String[] args) {
         ChunkerTrain trainer = new ChunkerTrain();
         trainer.trainModels();
