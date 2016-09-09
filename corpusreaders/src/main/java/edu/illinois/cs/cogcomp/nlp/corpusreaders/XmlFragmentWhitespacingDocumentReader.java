@@ -73,7 +73,14 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
         taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
     }
 
-
+    /**
+     * Exclude any files not possessing this extension.
+     * @return the required file extension.
+     */
+    protected String getRequiredFileExtension() {
+        return ".cmp.txt";
+    }
+    
     /**
      * generate a list of files comprising the corpus. Each is expected to generate one or more
      * TextAnnotation objects, though the way the iterator is implemented allows for corpus files to
@@ -83,14 +90,12 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
      */
     @Override
     public List<Path> getFileListing() throws IOException {
-
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(".cmp.txt");
+                return name.endsWith(getRequiredFileExtension());
             }
         };
-
         String[] fileList = IOUtils.lsFilesRecursive(super.getSourceDirectory(), filter);
         List<Path> pathList = new ArrayList<>(fileList.length);
         for (String file : fileList)

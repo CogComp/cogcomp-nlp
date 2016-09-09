@@ -47,6 +47,14 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
     }
     
     /**
+     * Exclude any files not possessing this extension.
+     * @return the required file extension.
+     */
+    protected String getRequiredFileExtension() {
+        return ".xml";
+    }
+
+    /**
      * Test here.
      * @param args not used.
      * @throws Exception 
