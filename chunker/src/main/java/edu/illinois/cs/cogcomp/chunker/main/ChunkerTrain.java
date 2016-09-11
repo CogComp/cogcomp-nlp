@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
 /**
  * Trains chunker models with user specified labeled data in the CoNLL2000 format. Similar to
@@ -91,8 +92,9 @@ public class ChunkerTrain {
         System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
     }
     public void writeModelsToDisk(String dir, String modelName){
-        chunker.write(dir + modelName + ".lc", dir + modelName + ".lex");
-        System.out.println("Done training, models are in " + dir+modelName+".lc (.lex)");
+        IOUtils.mkdir(dir);
+        chunker.write(dir + File.separator + modelName + ".lc", dir + File.separator + modelName + ".lex");
+        System.out.println("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
     }
     public static void main(String[] args) {
         ChunkerTrain trainer = new ChunkerTrain();
