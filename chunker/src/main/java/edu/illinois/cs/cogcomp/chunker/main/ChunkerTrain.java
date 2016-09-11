@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import java.io.File;
 
 /**
  * Trains chunker models with user specified labeled data in the CoNLL2000 format. Similar to
