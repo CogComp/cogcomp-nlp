@@ -15,8 +15,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -27,27 +27,31 @@ import static org.junit.Assert.fail;
  */
 public class TestWriteSVMLightFormat {
     private static final String EXPECTED_BINARY_NEG =
-            "-1 0:1 1:1 2:1 3:1 4:1 5:1 6:1 7:1 8:1 9:1 10:1 11:1 12:1"
-                    + " 13:1 14:1 15:1 16:1 17:1 18:1 19:1 20:1 21:1 22:1 23:1 24:1 25:1 26:1 27:1 28:1 29:1 30:1 31:1 32:1 33:1 34:1 35:1";
+            "-1 0:1 0:1 0:1 0:1 0:1 1:1 1:1 1:1 1:1 2:1 3:1 3:1 4:1 5:1 6:1 7:1 8:1 8:1 9:1 10:1 11:1 11:1 12:1 12:1 " +
+                    "13:1 13:1 14:1 14:1 14:1 14:1 15:1 15:1 15:1 15:1 16:1 16:1 17:1 17:1 17:1 18:1 19:1 19:1 20:1 20:1" +
+                    " 21:1 22:1 22:1 22:1 23:1 23:1 24:1 25:1 26:1 27:1 28:1 29:1 30:1 31:1 32:1 33:1 34:1 35:1";
     private static final String EXPECTED_BINARY_POS =
-            "1 0:1 5:1 7:1 9:1 11:1 12:1 14:1 15:1 16:1 18:1 19:1 24:1 25:1 27:1 29:1 33:1 34:1 35:1 36:1 37:1 38:1"
-                    + " 39:1 40:1 41:1 42:1 43:1 44:1 45:1 46:1";
+            "1 0:1 0:1 0:1 0:1 0:1 1:1 1:1 1:1 2:1 8:1 8:1 8:1 8:1 8:1 9:1 9:1 9:1 11:1 12:1 13:1 14:1 17:1 17:1 19:1 " +
+                    "19:1 20:1 20:1 21:1 22:1 23:1 24:1 33:1 33:1 34:1 36:1 37:1 38:1 38:1 39:1 40:1 41:1 42:1 43:1 44:1" +
+                    " 45:1 46:1";
 
     private static final String EXPECTED_MULTI_FIRST =
-            "0 0:1 1:1 2:1 3:1 4:1 5:1 6:1 7:1 8:1 9:1 10:1 11:1 12:1 13:1"
-                    + " 14:1 15:1 16:1 17:1 18:1 19:1 20:1 21:1 22:1 23:1 24:1 25:1 26:1 27:1 28:1 29:1 30:1 31:1 32:1 33:1 34:1 35:1";
+            "0 0:1 0:1 0:1 0:1 0:1 1:1 1:1 1:1 1:1 2:1 3:1 3:1 4:1 5:1 6:1 7:1 8:1 8:1 9:1 10:1 11:1 11:1 12:1 12:1 13:1 " +
+                    "13:1 14:1 14:1 14:1 14:1 15:1 15:1 15:1 15:1 16:1 16:1 17:1 17:1 17:1 18:1 19:1 19:1 20:1 20:1 21:1 " +
+                    "22:1 22:1 22:1 23:1 23:1 24:1 25:1 26:1 27:1 28:1 29:1 30:1 31:1 32:1 33:1 34:1 35:1";
 
     private static final String EXPECTED_MULTI_SECOND =
-            "1 0:1 5:1 7:1 9:1 11:1 12:1 14:1 15:1 16:1 18:1 19:1 24:1 25:1 27:1 29:1 33:1 34:1 35:1 36:1 37:1 38:1"
-                    + " 39:1 40:1 41:1 42:1 43:1 44:1 45:1 46:1";
+            "1 0:1 0:1 0:1 0:1 0:1 1:1 1:1 1:1 2:1 8:1 8:1 8:1 8:1 8:1 9:1 9:1 9:1 11:1 12:1 13:1 14:1 17:1 17:1 19:1 19:1 " +
+                    "20:1 20:1 21:1 22:1 23:1 24:1 33:1 33:1 34:1 36:1 37:1 38:1 38:1 39:1 40:1 41:1 42:1 43:1 44:1 45:1 46:1";
 
 
     static private BrownClusterFeatureExtractor bcfex;
     static private TokenizerTextAnnotationBuilder taBldr;
     static private TextAnnotation ta;
-    static private Set<Feature> feats;
+    // khashab2: changed from Set to List to ensure that it will not mess up on different OS
+    static private List<Feature> feats;
     private static TextAnnotation ta2;
-    static private Set<Feature> feats2;
+    static private List<Feature> feats2;
 
     @BeforeClass
     public static void runBeforeAllTests() {
@@ -65,7 +69,7 @@ public class TestWriteSVMLightFormat {
                         "Why Joynt should have anything to do beyond JFK and Jimmy Carter "
                                 + "is beyond your oh-so-humble British writer.");
 
-        feats = new HashSet<>();
+        feats = new ArrayList<>();
 
         for (int wordIndex = 0; wordIndex < ta.size(); ++wordIndex)
             try {
@@ -75,7 +79,7 @@ public class TestWriteSVMLightFormat {
                 fail(e.getMessage());
             }
 
-        feats2 = new HashSet<>();
+        feats2 = new ArrayList<>();
         for (int wordIndex = 0; wordIndex < ta2.size(); ++wordIndex)
             try {
                 feats2.addAll(bcfex.getWordFeatures(ta2, wordIndex));
