@@ -336,8 +336,8 @@ public abstract class IOUtils {
                 String name = element.getName();
 
                 // FIXME: this is a very bad way to deal with file paths.
-                if (name.startsWith(path) && !name.equals(path + "/")) {
-                    URL url = new URL("jar:" + jarRoot + "/" + name);
+                if (name.startsWith(path) && !name.equals(path + File.separator)) {
+                    URL url = new URL("jar:" + jarRoot + File.separator + name);
                     urls.add(url);
                 }
             }
@@ -385,7 +385,7 @@ public abstract class IOUtils {
                     final ZipEntry ze = (ZipEntry) e.nextElement();
                     final String fileName = ze.getName();
                     if (pattern.matcher(fileName).matches()) {
-                        urls.add(new URL("jar:" + jarPath + "/" + fileName));
+                        urls.add(new URL("jar:" + jarPath + File.separator + fileName));
                     }
                 }
                 zf.close();
@@ -406,7 +406,7 @@ public abstract class IOUtils {
             } else {
                 final String fileName = file.getCanonicalPath();
                 if (pattern.matcher(fileName).matches()) {
-                    urls.add(new URL(resource + "/" + fileName));
+                    urls.add(new URL(resource + File.separator + fileName));
                 }
             }
         }
