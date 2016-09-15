@@ -200,24 +200,11 @@ Sample bracket format (the spaces before the close brackets (]) are not importan
     Now the [ORG National Weather Service  ] is calling for above-normal temperatures in more than half of the [LOC U.S.  ] 
 
 The column format used here is a little different from CoNLL03
-annotation format. Note that there is shallow parse and POS info there, 
-but it is not used, so these values can be replaced by dummy values. The 
+annotation format. The files are tab separated, and have the tag in column 0,
+and the word in column 5. Note that there are shallow parse and POS, but these values
+can simply be replaced by dummy values. The
 importance of the column format is that sentence boundaries are clearly 
 marked, which is not the case for "brackets format".
 
-Sample column format:
-```
-    O        0    0    O       -X-    -DOCSTART-    x    x    0
-    B-LOC    0    0    I-NP    NNP    Portugal      x    x    0
-    O        0    1    I-VP    VBD    called        x    x    0
-    O        0    2    I-PP    IN     up            x    x    0
-    B-ORG    0    3    I-NP    NNP    Porto         x    x    0
-    O        0    4    I-NP    JJ     central       x    x    0
-    O        0    5    I-NP    NN     defender      x    x    0
-    B-PER    0    6    I-NP    NNP    Joao          x    x    0
-    I-PER    0    7    I-NP    NNP    Manuel        x    x    0
-    I-PER    0    8    I-VP    NNP    Pinto         x    x    0
-    O        0    9    I-PP    IN     on            x    x    0
-    O        0    10   I-NP    NNP    Friday        x    x    0
-```
+See the files in [test/Test/](test/Test/) for sample column format.
 
