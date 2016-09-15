@@ -149,9 +149,9 @@ Where the parameters are:
     - the training file
 - development-set-file 
     - this file is used for parameter tuning of the training, use the training file if you don't have a development set (use the same file both for training and for development)
- - files-format can be either:
-     - -c (for column format) or 
-     - -r (for brackets format. 
+- files-format can be either:
+    - -c (for column format) or
+    - -r (for brackets format.
     - See below for more information on the formats). Both the training and the development files have to be in the same format.
 
 Complete, working example:
