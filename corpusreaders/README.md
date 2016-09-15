@@ -1,5 +1,7 @@
 # illinois-corpusreaders
 
+Thank you for citing us if you use us in your work! 
+
 ## Overview
 
 This module includes NLP Corpus readers that reads into datastructures
