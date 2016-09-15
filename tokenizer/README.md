@@ -1,5 +1,7 @@
 # Illinois Tokenizer
 
+Thank you for citing us if you use us in your work!
+
 This project is based on work by Yiming Jiang, who wrote the initial
 version and evaluated CCG and Stanford tokenizers against a corpus
 drawn from OntoNotes.
