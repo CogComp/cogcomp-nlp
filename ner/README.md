@@ -34,7 +34,7 @@ under the directory `output/`.
 ### PROGRAMMATIC USE
 
 If you want to use the NER tagger programmatically, we recommend
-using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner/NERAnnotator.java). Like any other annotator,
+using the class [`NERAnnotator`](src/main/java/edu/illinois/cs/cogcomp/ner/NERAnnotator.java) class. Like any other annotator,
 it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
 To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONLL`/`ViewNames.NER_ONTONOTES`. (CoNLL Format NER used in example below)
@@ -54,6 +54,7 @@ import java.io.IOException;
 
 import java.util.Properties;
 
+// Filename: App.java
 public class App
 {
     public static void main( String[] args ) throws IOException
@@ -81,7 +82,14 @@ public class App
 }
 ```
 
-We strongly recommend the use of Maven. You can easily incorporate the Illinois Named Entity Recognizer into
+Note that you will need to include all the included jars on the classpath, as before.
+
+```bash
+$ javac -cp "dist/*:lib/*:models/*" App.java
+$ java -cp "dist/*:lib/*:models/*:." App
+```
+
+If you have Maven installed,  you can easily incorporate the Illinois Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
