@@ -17,38 +17,71 @@ This assumes you have downloaded the package from the [Cogcomp download page](ht
 
 ### FROM THE COMMAND LINE
 
-Assuming you have plain text files you want to process in directory `input/`, you can generate the annotated versions
-in a new directory (suppose you create `output/`) by navigating to the root directory and running the command:
+To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
+following commands (plain text files are included in `test/SampleInputs/`).
 
 ```bash
-java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate input output config/ner.properties"
+$ mkdir output
+$ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
-This will annotate with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you change the `modelName` parameter
+This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you change the `modelName` parameter
 of `config/ner.properties` to **NER_ONTONOTES**, your input text will be annotated with 18 labels. In both cases, 
 each input file will be annotated in bracket format and the result written to a file with the same name 
 under the directory `output/`.
 
-Alternatively, you can run the `runNER.sh` script, which allows you to tag input files, or to tag text typed into the console.
-
-```bash
-$ ./scripts/runNER.sh
-```
 
 ### PROGRAMMATIC USE
 
 If you want to use the NER tagger programmatically, we recommend
-using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner/NERAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
+using the class [`NERAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/ner/NERAnnotator.java). Like any other annotator,
+it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
 To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator object with the appropriate ViewName, `ViewNames.NER_CONLL`/`ViewNames.NER_ONTONOTES`. (CoNLL Format NER used in example below)
 
-```java
-NERAnnotator CoNLLannotator = new NERAnnotator(new ResourceManager(new Properties()), ViewNames.NER_CONLL);
+A complete example follows.
 
-CoNLLannotator.addView(ta);											
+```java
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.ner.NERAnnotator;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
+import java.io.IOException;
+
+import java.util.Properties;
+
+public class App
+{
+    public static void main( String[] args ) throws IOException
+    {
+        String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
+            + "computer. I was born in Urbana, Il. in 1992";
+
+        String corpus = "2001_ODYSSEY";
+        String textId = "001";
+
+        // Create a TextAnnotation using the LBJ sentence splitter
+        // and tokenizers.
+        TextAnnotationBuilder tab;
+        tab = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+
+        TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
+
+        NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
+        co.doInitialize();
+
+        co.addView(ta);
+
+        System.out.println(ta.getView(ViewNames.NER_CONLL));
+    }
+}
 ```
 
-You can easily incorporate the Illinois Named Entity Recognizer into
+We strongly recommend the use of Maven. You can easily incorporate the Illinois Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
@@ -72,12 +105,10 @@ system (see [here](https://www.java.com/en/download/help/download_options.xml)).
 
 ### COMPILATION
 
-If you have downloaded the package from the Cogcomp website, then the compiled jars can be found in the `dist/` folder.
-
-Otherwise, it is not hard to compile. cd to the main directory
+It is not hard to compile. cd to the main directory (`ner/`)
 and run: 
 ```bash
-$ mvn lbjava:clean lbjava:compile compile 
+$ mvn compile
 $ mvn dependency:copy-dependencies
 ```
 
@@ -88,17 +119,10 @@ models as maven dependencies if you wish.
 Note that you cannot install the software in the usual way: you will
 need to run the command
 ```bash
-$ mvn -DskipTests install
+$ mvn -DskipTests=true -Dlicense.skip=true install
 ```
 as you must train the models separately from the install process, and the
 junit tests will fail without models already being present.  
-
-
-## Compiling the Source
-Assuming you have models, you will still need source data to run some tests.
-The appropriate values are set in ```src/test/resources/ner-test.properties```
-(note that this is distinct from the config file for the ner itself). 
-
 
 
 ## How to train the tagger on new data
@@ -135,14 +159,6 @@ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.N
 ```
 Where do you get the data from? Unfortunately, the data that was used to train 
 the system is copyrighted. So you need to obtain your own data.
-
-What if you have some data, and you want to incrementally train the model? 
-Unfortunately, you'll have to obtain the original copyrighted data, append the 
-new data to the original data, and then to retrain the model. It's best if you mix
-up the datasets --- that is, the merged dataset will be a mixture of documents 
-from the old and new datasets. The perceptron learning algorithm needs to 
-be presented with examples in "random" order. There is currently no support 
-for this.
 
 There are two trained models packaged with this softare: CoNLL and Ontonotes. The 
 CoNLL data came from the CoNLL03 shared task, which is a subset of the Reuters
