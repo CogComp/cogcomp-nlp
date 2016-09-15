@@ -1,10 +1,6 @@
 Illinois NER Tagger
 ====================
 
-L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
-
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/NETagger
-
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
 (people / organizations / locations / miscellaneous), while the most recent can also tag entities with a larger 
@@ -203,3 +199,8 @@ Sample column format:
     O        0    10   I-NP    NNP    Friday        x    x    0
 ```
 
+##Citation
+
+L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/NETagger
