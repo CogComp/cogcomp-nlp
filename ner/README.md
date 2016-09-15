@@ -104,12 +104,11 @@ your Maven project by adding the following dependencies to your pom.xml file:
 
 ### PREREQUISITES
 
-- To run the Named entity tagger, you will need Java installed on your
-system (see [here](https://www.java.com/en/download/help/download_options.xml)).
-- If you are running it on Windows, you may need to set path variables 
+- Java 1.7+ (see [here](https://www.java.com/en/download/help/download_options.xml)).
+- Maven 3 (see [here](http://maven.apache.org/download.cgi))
+- If you are running it on Windows, you may need to set path variables
 (see [here](http://docs.oracle.com/javase/tutorial/essential/environment/paths.html)).
-- To compile the code you will need the Maven project management tool. 
-(see [here](http://maven.apache.org/download.cgi))
+
 
 ### COMPILATION
 
