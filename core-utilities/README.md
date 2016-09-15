@@ -1,5 +1,7 @@
 # illinois-core-utilities
 
+Thank you for citing us if you use us in your work! 
+
    illinois-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
    annotations of text (like parse trees, parts of speech, semantic
