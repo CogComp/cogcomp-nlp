@@ -107,16 +107,14 @@ public class ACEReader extends TextAnnotationReader {
                 Integer.parseInt(extentConstituent
                         .getAttribute(ACEReader.EntityHeadStartCharOffset));
         int endCharOffset =
-                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset));
-        int start_token = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
-        int end_token = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
+                Integer.parseInt(extentConstituent.getAttribute(ACEReader.EntityHeadEndCharOffset)) - 1;
+        int startToken = textAnnotation.getTokenIdFromCharacterOffset(startCharOffset);
+        int endToken = textAnnotation.getTokenIdFromCharacterOffset(endCharOffset);
 
-        if (start_token >= 0 && end_token >= 0 && !(end_token - start_token < 0)) {
-            // Be careful with the +1 in end_span below. Regular TextAnnotation likes the end_token
-            // number exclusive
+        if (startToken >= 0 && endToken >= 0 && !(endToken - startToken < 0)) {
             Constituent cons =
                     new Constituent(extentConstituent.getLabel(), 1.0, viewName, textAnnotation,
-                            start_token, end_token + 1);
+                            startToken, endToken + 1);
 
             for (String attributeKey : extentConstituent.getAttributeKeys()) {
                 cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));
@@ -245,8 +243,10 @@ public class ACEReader extends TextAnnotationReader {
                     extentConstituent.addAttribute(EntityMentionLDCTypeAttribute, entityMention.ldcType);
                 }
 
+                // ACE Annotation have character offsets inclusive of start/end.
+                // Converting them to a one-after-then-end.
                 extentConstituent.addAttribute(EntityHeadStartCharOffset, entityMention.headStart + "");
-                extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + "");
+                extentConstituent.addAttribute(EntityHeadEndCharOffset, entityMention.headEnd + 1 + "");
 
                 entityView.addConstituent(extentConstituent);
 
