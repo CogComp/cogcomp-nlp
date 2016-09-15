@@ -1,6 +1,6 @@
 # illinois-edison
 
-J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
+Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
 
 Thank you for citing us if you use us in your work! 
 http://cogcomp.cs.illinois.edu/page/software_view/Edison
