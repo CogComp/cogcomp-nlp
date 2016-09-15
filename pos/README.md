@@ -1,5 +1,8 @@
 # Illinois Part-of-Speech Tagger
 
+D. Roth and D. Zelenko, Part of Speech Tagging Using a Network of Linear Separators. Coling-Acl, The 17th International Conference on Computational Linguistics (1998) pp.1136--1142
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/POS
 
 Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. The system implemented 
 here is based of the following paper: 
