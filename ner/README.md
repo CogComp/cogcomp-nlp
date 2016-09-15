@@ -154,7 +154,8 @@ Where the parameters are:
     - -r (for brackets format.
     - See below for more information on the formats). Both the training and the development files have to be in the same format.
 
-Complete, working example:
+Complete, working example. Before running this, open [`config/ner.properties`](config/ner.properties) and change the `pathToModelFile` to
+something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.
 
 ```bash
 $ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt -c config/ner.properties
@@ -189,10 +190,6 @@ This means that 2 files will be created in the folder './data/Models/MyNERModel'
 ./data/Models/MyNERModel/myNewNERModel.model.level1
 ./data/Models/MyNERModel/myNewNERModel.model.level2
 ```
-    
-If you copy-paste one of the config files for your own configuration,
-make sure that you specify a new `pathToModelFile`. Otherwise, you will get
-an error: "Can't open URL with protocol 'jar' for output."
 
 Sample bracket format (the spaces before the close brackets (]) are not important):
 
@@ -200,10 +197,9 @@ Sample bracket format (the spaces before the close brackets (]) are not importan
 
 The column format used here is a little different from CoNLL03
 annotation format. The files are tab separated, and have the tag in column 0,
-and the word in column 5. Note that there are shallow parse and POS, but these values
-can simply be replaced by dummy values. The
-importance of the column format is that sentence boundaries are clearly 
-marked, which is not the case for "brackets format".
+and the word in column 5. Note that shallow parse and POS can also be included, but these values
+can also simply be replaced by dummy values. The importance of the column format is that sentence boundaries are clearly
+marked with an empty line, which is not the case for "brackets format".
 
 See the files in [test/Test/](test/Test/) for sample column format.
 
