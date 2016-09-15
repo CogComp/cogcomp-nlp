@@ -1,7 +1,5 @@
 # Illinois Tokenizer
 
-Thank you for citing us if you use us in your work!
-
 This project is based on work by Yiming Jiang, who wrote the initial
 version and evaluated CCG and Stanford tokenizers against a corpus
 drawn from OntoNotes.
@@ -121,3 +119,7 @@ evaluator.evaluateStanfordTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_ST
 * Developed by: Yiming Jiang
 * Advised by: Professor Dan Roth
 * Mentored by: Mark Sammons
+
+##Citation
+
+Thank you for citing us if you use us in your work!
