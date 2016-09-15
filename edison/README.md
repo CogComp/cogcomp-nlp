@@ -1,10 +1,5 @@
 # illinois-edison
 
-Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
-
-Thank you for citing us if you use us in your work! 
-http://cogcomp.cs.illinois.edu/page/software_view/Edison
-
 *Edison* is a feature extraction framework that uses the data structures of [illinois-core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
@@ -97,3 +92,9 @@ keywordbody := (conjoin ??) | (list leaf*) | (conjoin-and-include) | (bigram) | 
 name := <string>
 leaf := must be in KnownFexes.fexes
 ```
+
+##Citation
+
+Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Edison
