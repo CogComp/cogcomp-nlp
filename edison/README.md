@@ -1,9 +1,9 @@
 # illinois-edison
 
+J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
+
 Thank you for citing us if you use us in your work! 
 http://cogcomp.cs.illinois.edu/page/software_view/Edison
-
-J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
 
 *Edison* is a feature extraction framework that uses the data structures of [illinois-core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
