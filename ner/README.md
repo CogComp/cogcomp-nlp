@@ -134,17 +134,13 @@ junit tests will fail without models already being present.
 
 ## How to train the tagger on new data
 
-NB: Please make sure that no files exist in the models directory (or the classpath)
-    before training new models. If you have included the pre-trained models jar in
-    the pom.xml as a dependency please remove it and delete the corresponding file in
-    target/dependency.
+For this section, we will assume you use Maven, and have compiled the code, and copied dependencies. If you
+ are using the downloaded package, you can just replace the classpath in each commend with `dist/*:lib/*`.
 
-Scripts are provided by way of example: [train.sh](scripts/train.sh). There is no file in the folder test/Train for the moment and the user should copy her/his files there to use the script with the default path.
-
-The script [train.sh](scripts/train.sh) runs a model like this below:
+The example script [train.sh](scripts/train.sh) trains a model like this:
 
 ```bash
-java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train <training-file> -test  <development-set-file> <files-format> <force-sentence-splitting-on-newlines> <config-file>
+$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train <training-file> <development-set-file> <files-format> <config-file>
 ```
 
 Where the parameters are:
@@ -157,17 +153,19 @@ Where the parameters are:
      - -c (for column format) or 
      - -r (for brackets format. 
     - See below for more information on the formats). Both the training and the development files have to be in the same format.
-- force-sentence-splitting-on-newlines
-    - can be either true or false.
 
-Sample training command:
+Complete, working example:
+
 ```bash
-java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train Data/GoldData/Reuters/train.brackets.gold -test  Data/GoldData/Reuters/test.brackets.gold -r true Config/allLayer1.config
+$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt -c config/ner.properties
 ```
+
+(This is is just dummy data, so it gives a score of about 12 F1).
+
 Where do you get the data from? Unfortunately, the data that was used to train 
 the system is copyrighted. So you need to obtain your own data.
 
-There are two trained models packaged with this softare: CoNLL and Ontonotes. The 
+There are two trained models packaged with this software: CoNLL and Ontonotes. The
 CoNLL data came from the CoNLL03 shared task, which is a subset of the Reuters
 1996 news corpus. This is annotated with 4 entity types: PER, ORG, LOC, MISC.
 
@@ -176,24 +174,25 @@ you have an appropriate license. This data is annotated with 18 different labels
 
 A note on the training procedure:
 The config file specifies where to put the models. (To understand the structure 
-of the config files, take a look at the code in [LbjTagger.Parameters.java](src/main/java/edu/illinois/cs/cogcomp/ner/LbjTagger/Parameters.java)). Here are sample lines from a config file that 
+of the config files, take a look at the code in [LbjTagger/Parameters.java](src/main/java/edu/illinois/cs/cogcomp/ner/LbjTagger/Parameters.java)).
+Here are sample lines from a config file that
 specify the paths for the models:
 
-```bash
-configFileName                myNewNERModel
-pathToModelFile                ./data/Models/MyNERModel/
+```config
+modelName = myNewNERModel
+pathToModelFile = ./data/Models/MyNERModel/
 ```
 
 This means that 2 files will be created in the folder './data/Models/MyNERModel':
 
-```bash
+```config
 ./data/Models/MyNERModel/myNewNERModel.model.level1
 ./data/Models/MyNERModel/myNewNERModel.model.level2
 ```
     
-If you copy-paste one of the config files trying to make up your own configuration, 
-make sure that you specify the new path for saving the models, otherwise, the 
-old good models will be overwritten.
+If you copy-paste one of the config files for your own configuration,
+make sure that you specify a new `pathToModelFile`. Otherwise, you will get
+an error: "Can't open URL with protocol 'jar' for output."
 
 Sample bracket format (the spaces before the close brackets (]) are not important):
 
