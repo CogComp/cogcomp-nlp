@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos;
@@ -27,7 +24,8 @@ public class POSLabeledUnknownWordParser extends POSBracketToToken {
     private static ResourceManager rm = new POSConfigurator().getDefaultConfig();
     private static String baselineModelFile = rm.getString("baselineModelPath");
     private static String baselineLexFile = rm.getString("baselineLexPath");
-    private static final BaselineTarget baseline = new BaselineTarget(baselineModelFile, baselineLexFile);
+    private static final BaselineTarget baseline = new BaselineTarget(baselineModelFile,
+            baselineLexFile);
     /** Only words that were observed this many times or fewer are returned. */
     public static int threshold = 3;
 

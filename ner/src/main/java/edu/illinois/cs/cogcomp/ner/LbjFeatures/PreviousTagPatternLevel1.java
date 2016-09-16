@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
@@ -28,105 +25,98 @@ import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 import java.util.*;
 
 
-public class PreviousTagPatternLevel1 extends Classifier
-{
-  public PreviousTagPatternLevel1()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
-    name = "PreviousTagPatternLevel1";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord"; }
-  public String getOutputType() { return "discrete%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof NEWord))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 404 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class PreviousTagPatternLevel1 extends Classifier {
+    public PreviousTagPatternLevel1() {
+        containingPackage = "edu.illinois.cs.cogcomp.ner.LbjFeatures";
+        name = "PreviousTagPatternLevel1";
     }
 
-    NEWord word = (NEWord) __example;
-
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
-
-    if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTagPatternLevel1"))
-    {
-      NEWord w = (NEWord) word.previous;
-      Vector pattern = new Vector();
-      String label = "O";
-      if (w != null)
-      {
-        if (NETaggerLevel1.isTraining)
-        {
-          label = ((NEWord) w).neLabel;
-        }
-        else
-        {
-          label = ((NEWord) w).neTypeLevel1;
-        }
-      }
-      else
-      {
-        label = null;
-      }
-      for (int i = 0; i < 2 && label != null && label.equals("O"); i++)
-      {
-        pattern.addElement(w.form);
-        w = (NEWord) w.previous;
-        if (w != null)
-        {
-          if (NETaggerLevel1.isTraining)
-          {
-            label = ((NEWord) w).neLabel;
-          }
-          else
-          {
-            label = ((NEWord) w).neTypeLevel1;
-          }
-        }
-        else
-        {
-          label = null;
-        }
-      }
-      if (pattern.size() > 0 && label != null && !label.equals("O"))
-      {
-        label = label.substring(2);
-        String res = "";
-        for (int i = 0; i < pattern.size(); i++)
-        {
-          res = (String) pattern.elementAt(i) + "_" + res;
-        }
-        res = label + "_" + res;
-        __id = "";
-        __value = "" + (res);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-      }
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof NEWord[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 404 of LbjTagger.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-  public int hashCode() { return "PreviousTagPatternLevel1".hashCode(); }
-  public boolean equals(Object o) { return o instanceof PreviousTagPatternLevel1; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof NEWord)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 404 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        NEWord word = (NEWord) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        if (ParametersForLbjCode.currentParameters.featuresToUse
+                .containsKey("PreviousTagPatternLevel1")) {
+            NEWord w = (NEWord) word.previous;
+            Vector pattern = new Vector();
+            String label = "O";
+            if (w != null) {
+                if (NETaggerLevel1.isTraining) {
+                    label = ((NEWord) w).neLabel;
+                } else {
+                    label = ((NEWord) w).neTypeLevel1;
+                }
+            } else {
+                label = null;
+            }
+            for (int i = 0; i < 2 && label != null && label.equals("O"); i++) {
+                pattern.addElement(w.form);
+                w = (NEWord) w.previous;
+                if (w != null) {
+                    if (NETaggerLevel1.isTraining) {
+                        label = ((NEWord) w).neLabel;
+                    } else {
+                        label = ((NEWord) w).neTypeLevel1;
+                    }
+                } else {
+                    label = null;
+                }
+            }
+            if (pattern.size() > 0 && label != null && !label.equals("O")) {
+                label = label.substring(2);
+                String res = "";
+                for (int i = 0; i < pattern.size(); i++) {
+                    res = (String) pattern.elementAt(i) + "_" + res;
+                }
+                res = label + "_" + res;
+                __id = "";
+                __value = "" + (res);
+                __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                        this.name, __id, __value, valueIndexOf(__value), (short) 0));
+            }
+        }
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof NEWord[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 404 of LbjTagger.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "PreviousTagPatternLevel1".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof PreviousTagPatternLevel1;
+    }
 }
-

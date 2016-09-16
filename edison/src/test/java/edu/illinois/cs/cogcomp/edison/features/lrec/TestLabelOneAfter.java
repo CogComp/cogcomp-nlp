@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
@@ -38,7 +35,7 @@ import java.util.Set;
 
 public class TestLabelOneAfter extends TestCase {
 
-    private static Logger logger = LoggerFactory.getLogger( TestLabelOneAfter.class );
+    private static Logger logger = LoggerFactory.getLogger(TestLabelOneAfter.class);
     private static List<TextAnnotation> tas;
 
     static {
@@ -83,7 +80,7 @@ public class TestLabelOneAfter extends TestCase {
             posBaseLine.buildTable(TestPosHelper.corpus);
         } catch (Exception e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         }
 
         POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
@@ -91,7 +88,7 @@ public class TestLabelOneAfter extends TestCase {
             posMikheev.buildTable(TestPosHelper.corpus);
         } catch (Exception e) {
             e.printStackTrace();
-            fail( e.getMessage() );
+            fail(e.getMessage());
         }
 
         LabelOneAfter l1aPOS = new LabelOneAfter("l1aPOS");
@@ -105,7 +102,7 @@ public class TestLabelOneAfter extends TestCase {
             try {
                 featslist.add(l1aPOS.getFeatures(test));
             } catch (EdisonException e) {
-                fail( e.getMessage() );
+                fail(e.getMessage());
             }
 
         if (featslist.isEmpty()) {
@@ -128,7 +125,7 @@ public class TestLabelOneAfter extends TestCase {
                 featslist.add(l1aPOSBaseLine.getFeatures(test));
             } catch (EdisonException e) {
                 e.printStackTrace();
-                fail( e.getMessage() );
+                fail(e.getMessage());
             }
 
         if (featslist.isEmpty()) {
@@ -150,7 +147,7 @@ public class TestLabelOneAfter extends TestCase {
                 featslist.add(l1aPOSMikheev.getFeatures(test));
             } catch (EdisonException e) {
                 e.printStackTrace();
-                fail( e.getMessage() );
+                fail(e.getMessage());
             }
 
         if (featslist.isEmpty()) {
@@ -174,7 +171,7 @@ public class TestLabelOneAfter extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    logger.info( (ta.getView(viewName)).toString() );
+                    logger.info((ta.getView(viewName)).toString());
         }
     }
 }

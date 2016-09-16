@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.annotators;
@@ -28,7 +25,7 @@ import org.tartarus.snowball.ext.englishStemmer;
 public class PorterStemmer extends Annotator {
 
     private final static SnowballStemmer stemmer = new englishStemmer();
-    private static PorterStemmer instance = null; // = new PorterStemmer();
+    private static PorterStemmer instance; // = new PorterStemmer();
 
     private PorterStemmer(String viewName, String[] prerequisiteViews) {
         super(viewName, prerequisiteViews);
@@ -42,6 +39,7 @@ public class PorterStemmer extends Annotator {
 
     /**
      * noop.
+     * 
      * @param rm configuration parameters
      */
     @Override

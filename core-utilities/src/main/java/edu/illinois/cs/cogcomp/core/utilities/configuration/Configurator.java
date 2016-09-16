@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities.configuration;
@@ -40,13 +37,13 @@ public abstract class Configurator {
     public static final String FALSE = Boolean.FALSE.toString();
 
     /**
-     * combine two sets of properties to make a third Properties object; if both sets contain a value
-     *    for the same key, the value from the second ResourceManager is selected.
+     * combine two sets of properties to make a third Properties object; if both sets contain a
+     * value for the same key, the value from the second ResourceManager is selected.
      *
      * @param first ResourceManager with first set of properties
      * @param second ResourceManager with second set of properties
-     * @return a brand new ResourceManager with the union of the properties, favoring the second
-     *         if the same property is set in both
+     * @return a brand new ResourceManager with the union of the properties, favoring the second if
+     *         the same property is set in both
      */
     public static ResourceManager mergeProperties(ResourceManager first, ResourceManager second) {
         Properties firstProps = first.getProperties();
@@ -59,7 +56,7 @@ public abstract class Configurator {
 
         for (String key : secondProps.stringPropertyNames())
             newProps.put(key, secondProps.getProperty(key));
-        
+
         return new ResourceManager(newProps);
     }
 

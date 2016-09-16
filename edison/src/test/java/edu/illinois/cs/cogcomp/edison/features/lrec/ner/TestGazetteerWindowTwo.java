@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
@@ -18,14 +15,12 @@ import org.junit.Test;
  * @author mssammon
  */
 
-public class TestGazetteerWindowTwo
-{
+public class TestGazetteerWindowTwo {
     /**
      * not yet implemented... awaiting creation of gazetteer annotator
      */
     @Test
-    public final void test()
-    {
-        assert( true );
+    public final void test() {
+        assert (true);
     }
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.annotation;
@@ -22,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This testcase is for ensuring that BasicTextAnnotationBuilder can create TextAnnotation from a Tokenization object.
+ * This testcase is for ensuring that BasicTextAnnotationBuilder can create TextAnnotation from a
+ * Tokenization object.
  *
  * @author Narender Gupta
  */
@@ -41,19 +39,19 @@ public class TextAnnotationFromTokenizationTest extends TestCase {
         int[] sentenceEndArray = new int[sentences.length];
         int sentenceCharOffset = 0;
         int lastTokenCount = 0;
-        for (int iSentence=0; iSentence<sentences.length; iSentence++) {
+        for (int iSentence = 0; iSentence < sentences.length; iSentence++) {
             String sentence = sentences[iSentence];
             String[] sentenceTokens = sentence.split("\\s");
             tokens = (String[]) ArrayUtils.addAll(tokens, sentenceTokens);
             int charOffsetBegin = sentenceCharOffset;
             int charOffsetEnd = sentenceCharOffset;
-            for (int i=0; i<sentence.length(); i++) {
+            for (int i = 0; i < sentence.length(); i++) {
                 char c = sentence.charAt(i);
                 if (Character.isWhitespace(c)) {
                     charOffsetEnd = sentenceCharOffset + i;
                     IntPair tokenOffsets = new IntPair(charOffsetBegin, charOffsetEnd);
                     characterOffsets.add(tokenOffsets);
-                    charOffsetBegin = charOffsetEnd+1;
+                    charOffsetBegin = charOffsetEnd + 1;
                 }
             }
             charOffsetEnd = sentenceCharOffset + sentence.length();
@@ -64,10 +62,11 @@ public class TextAnnotationFromTokenizationTest extends TestCase {
             sentenceEndArray[iSentence] = lastTokenCount;
         }
         IntPair[] charOffsetArray = new IntPair[characterOffsets.size()];
-        for (int i=0; i<characterOffsets.size(); i++) {
+        for (int i = 0; i < characterOffsets.size(); i++) {
             charOffsetArray[i] = characterOffsets.get(i);
         }
-        Tokenizer.Tokenization tokenization = new Tokenizer.Tokenization(tokens, charOffsetArray, sentenceEndArray);
+        Tokenizer.Tokenization tokenization =
+                new Tokenizer.Tokenization(tokens, charOffsetArray, sentenceEndArray);
         return tokenization;
     }
 

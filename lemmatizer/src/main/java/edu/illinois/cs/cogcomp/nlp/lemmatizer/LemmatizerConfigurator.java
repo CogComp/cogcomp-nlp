@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
@@ -22,7 +19,12 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
     public final static Property WN_PATH = new Property("wnPath", "wordnet-dict");
     public final static Property USE_STNFRD_CONVENTIONS = new Property("useStanfordConventions",
             FALSE);
-    public final static Property LEMMA_LAZY_INITIALIZE = new Property( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE );
+    public final static Property LEMMA_LAZY_INITIALIZE = new Property(
+            AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
+
+    public final static Property VERB_LEMMA_FILE = new Property( "verbLemmaFile", "verb-lemDict.txt" );
+    public static final Property EXCEPTIONS_FILE = new Property("exceptionsFile", "exceptions.txt");
+
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
      *
@@ -30,7 +32,8 @@ public class LemmatizerConfigurator extends AnnotatorConfigurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE};
+        Property[] props = {WN_PATH, USE_STNFRD_CONVENTIONS, LEMMA_LAZY_INITIALIZE,
+            VERB_LEMMA_FILE, EXCEPTIONS_FILE};
         return new ResourceManager(generateProperties(props));
     }
 }

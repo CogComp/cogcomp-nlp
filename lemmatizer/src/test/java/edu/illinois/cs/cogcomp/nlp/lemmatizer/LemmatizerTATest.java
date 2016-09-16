@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.lemmatizer;
@@ -54,11 +51,12 @@ public class LemmatizerTATest {
         props.setProperty(LemmatizerConfigurator.USE_STNFRD_CONVENTIONS.key,
                 LemmatizerConfigurator.TRUE);
         // since we are calling
-        props.setProperty( LemmatizerConfigurator.IS_LAZILY_INITIALIZED.key, LemmatizerConfigurator.FALSE );
+        props.setProperty(LemmatizerConfigurator.IS_LAZILY_INITIALIZED.key,
+                LemmatizerConfigurator.FALSE);
 
         ResourceManager rm = new LemmatizerConfigurator().getConfig(new ResourceManager(props));
 
-        IllinoisLemmatizer lem = new IllinoisLemmatizer( new LemmatizerConfigurator().getConfig(rm));
+        IllinoisLemmatizer lem = new IllinoisLemmatizer(new LemmatizerConfigurator().getConfig(rm));
 
         String lemma = lem.getLemma("me", "PRP");
         assertTrue(lemma.equals("i"));

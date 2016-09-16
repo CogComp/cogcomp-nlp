@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
@@ -38,12 +35,13 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
 
     /**
      * ResourceManager must provide a value for {@link CorpusReaderConfigurator}.CORPUS_NAME, plus
-     *    whatever is required by derived class for its initializeReader() and reset() methods.
+     * whatever is required by derived class for its initializeReader() and reset() methods.
+     * 
      * @param rm ResourceManager with constructor arguments.
      */
     public TextAnnotationReader(ResourceManager rm) {
         this.resourceManager = rm;
-        this.corpusName = rm.getString( CorpusReaderConfigurator.CORPUS_NAME.key );
+        this.corpusName = rm.getString(CorpusReaderConfigurator.CORPUS_NAME.key);
         initializeReader();
         reset();
     }
@@ -83,6 +81,8 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
     /**
      * @throws {@link UnsupportedOperationException} to let user know nothing happens.
      */
-    public void remove() {throw new UnsupportedOperationException();}
+    public void remove() {
+        throw new UnsupportedOperationException();
+    }
 
 }

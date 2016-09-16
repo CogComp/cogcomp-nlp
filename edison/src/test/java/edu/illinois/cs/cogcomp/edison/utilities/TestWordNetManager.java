@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.utilities;
@@ -29,7 +26,6 @@ public class TestWordNetManager extends TestCase {
     protected void setUp() throws Exception {
         WordNetManager.loadConfigAsClasspathResource(true);
         wordnet = WordNetManager.getInstance();
-
     }
 
     public void testExistsEntry() throws Exception {
@@ -88,62 +84,69 @@ public class TestWordNetManager extends TestCase {
     }
 
     public void testGetHypernyms() throws Exception {
+        // hyperNymsFirstOnly
+        assertEquals(wordnet.getHypernyms("test", true).toString(),
+                "[experiment, experimentation, evaluate, pass_judgment, judge]");
 
-        System.out.println(wordnet.getHypernyms("test", false));
-        System.out.println(wordnet.getHypernyms("test", true));
+        // hyperNymsAllRelatedWords
+        assertEquals(wordnet.getHypernyms("test", false).toString(),
+                "[experiment, experimentation, mental_measurement, communication, communicating, attempt, effort, endeavor, endeavour, try, attempt, effort, endeavor, endeavour, try, covering, natural_covering, cover, evaluate, pass_judgment, judge, check, examine, be, score, determine, check, find_out, see, ascertain, watch, learn, take, submit]");
 
-        System.out.println(wordnet.getHypernyms("test", POS.NOUN, false));
-        System.out.println(wordnet.getHypernyms("test", POS.NOUN, true));
+        // hyperNymsFirstOnlyOnlyNouns
+        assertEquals(wordnet.getHypernyms("test", POS.NOUN, true).toString(), "[experiment, experimentation]");
+
+        // hyperNymsAllRelatedWordsOnlyNouns
+        assertEquals(wordnet.getHypernyms("test", POS.NOUN, false).toString(),
+                "[experiment, experimentation, mental_measurement, communication, communicating, attempt, effort, endeavor, endeavour, try, attempt, effort, endeavor, endeavour, try, covering, natural_covering, cover]");
     }
 
     public void testGetLexicographerFileNames() throws JWNLException {
-        System.out.println(wordnet.getLexicographerFileNames("test", false));
-        System.out.println(wordnet.getLexicographerFileNames("test", true));
+        assertEquals(wordnet.getLexicographerFileNames("test", true).toString(), "[noun.cognition, verb.social]");
+        assertEquals(wordnet.getLexicographerFileNames("test", false).toString(),
+                "[noun.cognition, noun.act, noun.communication, noun.act, noun.act, noun.animal, verb.social, verb.social, verb.communication, verb.stative, verb.competition, verb.communication, verb.cognition]");
 
-        System.out.println(wordnet.getLexicographerFileNames("test", POS.NOUN, false));
-        System.out.println(wordnet.getLexicographerFileNames("test", POS.NOUN, true));
-
+        assertEquals(wordnet.getLexicographerFileNames("test", POS.NOUN, true).toString(), "[noun.cognition]");
+        assertEquals(wordnet.getLexicographerFileNames("test", POS.NOUN, false).toString(),
+                "[noun.cognition, noun.act, noun.communication, noun.act, noun.act, noun.animal]");
     }
 
     public void testGetPointerTypes() throws JWNLException {
-        System.out.println(wordnet.getPointers("test", false));
-        System.out.println(wordnet.getPointers("test", true));
+        assertEquals(wordnet.getPointers("test", false).toString(), "[hypernym, nominalization, hyponym, verb group]");
+        assertEquals(wordnet.getPointers("test", true).toString(), "[hypernym, nominalization, hyponym]");
 
-        System.out.println(wordnet.getPointers("test", POS.NOUN, false));
-        System.out.println(wordnet.getPointers("test", POS.NOUN, true));
+        assertEquals(wordnet.getPointers("test", POS.NOUN, false).toString(), "[hypernym, nominalization, hyponym]");
+        assertEquals(wordnet.getPointers("test", POS.NOUN, true).toString(), "[hypernym, nominalization, hyponym]");
     }
 
     public void testGetSentenceFrames() throws JWNLException {
-        System.out.println(wordnet.getVerbFrames("test", false));
-        System.out.println(wordnet.getVerbFrames("test", true));
-
+        assertEquals(wordnet.getVerbFrames("test", false).toString(), "[Something ----s, Somebody ----s]");
+        assertEquals(wordnet.getVerbFrames("test", true).toString(), "[Something ----s]");
     }
 
     public void testGetHolonyms() throws JWNLException {
+        assertEquals(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, false).toString(), "[sandwich]");
+        assertEquals(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, true).toString(), "[sandwich]");
 
-        System.out.println(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, false));
-        System.out.println(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, true));
+        assertEquals(wordnet.getRelatedWords("bread", POS.NOUN, PointerType.PART_HOLONYM, false).toString(), "[sandwich]");
+        assertEquals(wordnet.getRelatedWords("bread", POS.NOUN, PointerType.PART_HOLONYM, true).toString(), "[sandwich]");
 
-        System.out.println(wordnet.getRelatedWords("bread", POS.NOUN, PointerType.PART_HOLONYM,
-                false));
-        System.out.println(wordnet.getRelatedWords("bread", POS.NOUN, PointerType.PART_HOLONYM,
-                true));
+        assertEquals(wordnet.getRelatedWords("human", PointerType.MEMBER_HOLONYM, false).toString(), "[genus_Homo]");
+        assertEquals(wordnet.getRelatedWords("dog", PointerType.MEMBER_HOLONYM, true).toString(),
+                "[Canis, genus_Canis, pack]");
 
-        System.out.println(wordnet.getRelatedWords("human", PointerType.MEMBER_HOLONYM, false));
-        System.out.println(wordnet.getRelatedWords("dog", PointerType.MEMBER_HOLONYM, true));
+        assertEquals(wordnet.getRelatedWords("dog", POS.NOUN, PointerType.MEMBER_HOLONYM, false).toString(),
+                "[Canis, genus_Canis, pack]");
+        assertEquals(wordnet.getRelatedWords("dog", POS.NOUN, PointerType.MEMBER_HOLONYM, true).toString(),
+                "[Canis, genus_Canis, pack]");
 
-        System.out.println(wordnet.getRelatedWords("dog", POS.NOUN, PointerType.MEMBER_HOLONYM,
-                false));
-        System.out.println(wordnet.getRelatedWords("dog", POS.NOUN, PointerType.MEMBER_HOLONYM,
-                true));
+        assertEquals(wordnet.getRelatedWords("water", PointerType.SUBSTANCE_HOLONYM, false).toString(),
+                "[tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]");
+        assertEquals(wordnet.getRelatedWords("water", PointerType.SUBSTANCE_HOLONYM, true).toString(),
+                "[tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]");
 
-        System.out.println(wordnet.getRelatedWords("water", PointerType.SUBSTANCE_HOLONYM, false));
-        System.out.println(wordnet.getRelatedWords("water", PointerType.SUBSTANCE_HOLONYM, true));
-
-        System.out.println(wordnet.getRelatedWords("water", POS.NOUN,
-                PointerType.SUBSTANCE_HOLONYM, false));
-        System.out.println(wordnet.getRelatedWords("water", POS.NOUN,
-                PointerType.SUBSTANCE_HOLONYM, true));
-
+        assertEquals(wordnet.getRelatedWords("water", POS.NOUN, PointerType.SUBSTANCE_HOLONYM, false).toString(),
+                "[tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]");
+        assertEquals(wordnet.getRelatedWords("water", POS.NOUN, PointerType.SUBSTANCE_HOLONYM, true).toString(),
+                "[tear, teardrop, perspiration, sweat, sudor, snowflake, flake, ice, water_ice, ice_crystal, snow_mist, diamond_dust, poudrin, ice_needle, frost_snow, frost_mist, body_of_water, water]");
     }
 }

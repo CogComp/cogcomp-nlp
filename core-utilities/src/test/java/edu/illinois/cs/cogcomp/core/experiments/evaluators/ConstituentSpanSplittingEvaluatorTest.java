@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.experiments.evaluators;
@@ -27,8 +24,12 @@ public class ConstituentSpanSplittingEvaluatorTest {
     @Before
     public void setUp() throws Exception {
         splittingTester = new ClassificationTester();
-        TextAnnotation prediction1TA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{}, false, 1);
-        TextAnnotation prediction2TA = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{}, false, 2);
+        TextAnnotation prediction1TA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 1);
+        TextAnnotation prediction2TA =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 2);
         prediction1 = (SpanLabelView) prediction1TA.getView(ViewNames.TOKENS);
         prediction2 = (SpanLabelView) prediction2TA.getView(ViewNames.TOKENS);
     }

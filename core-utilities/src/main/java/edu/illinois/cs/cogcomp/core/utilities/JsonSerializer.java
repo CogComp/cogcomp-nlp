@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.utilities;
@@ -39,15 +36,15 @@ public class JsonSerializer extends AbstractSerializer {
     public static final String ENDCHAROFFSET = "endCharOffset";
     public static final String TOKENOFFSETS = "tokenOffsets";
 
-    JsonObject writeTextAnnotation(TextAnnotation ta ) {
+    JsonObject writeTextAnnotation(TextAnnotation ta) {
         return writeTextAnnotation(ta, false);
     }
 
-    JsonObject writeTextAnnotation(TextAnnotation ta, boolean doWriteTokenOffsets ) {
+    JsonObject writeTextAnnotation(TextAnnotation ta, boolean doWriteTokenOffsets) {
 
         // get rid of the views that are empty
         Set<String> viewNames = new HashSet<>(ta.getAvailableViews());
-        for(String vu : viewNames) {
+        for (String vu : viewNames) {
             if (ta.getView(vu) == null) {
                 logger.warn("View " + vu + " is null");
                 ta.removeView(vu);
@@ -60,8 +57,8 @@ public class JsonSerializer extends AbstractSerializer {
         writeString("id", ta.getId(), json);
         writeString("text", ta.getText(), json);
         writeStringArray("tokens", ta.getTokens(), json);
-        if ( doWriteTokenOffsets )
-            writeTokenOffsets( TOKENOFFSETS, ta.getView(ViewNames.TOKENS), json);
+        if (doWriteTokenOffsets)
+            writeTokenOffsets(TOKENOFFSETS, ta.getView(ViewNames.TOKENS), json);
 
         writeSentences(ta, json);
 
@@ -95,22 +92,22 @@ public class JsonSerializer extends AbstractSerializer {
     /**
      * Add an array of objects reporting View's Constituents' surface form and character offsets.
      * May make deserialization to TextAnnotation problematic, as the relevant methods deduce token
-     *     character offsets directly from list of token strings and raw text.
+     * character offsets directly from list of token strings and raw text.
+     * 
      * @param fieldName name to give to this field
      * @param view view whose character offsets will be serialized
      * @param json Json object to which resulting array will be added
      */
     private static void writeTokenOffsets(String fieldName, View view, JsonObject json) {
         JsonArray offsetArray = new JsonArray();
-        for ( Constituent c: view.getConstituents() )
-        {
+        for (Constituent c : view.getConstituents()) {
             JsonObject cJ = new JsonObject();
             writeString(FORM, c.getSurfaceForm(), cJ);
             writeInt(STARTCHAROFFSET, c.getStartCharOffset(), cJ);
             writeInt(ENDCHAROFFSET, c.getEndCharOffset(), cJ);
-            offsetArray.add( cJ );
+            offsetArray.add(cJ);
         }
-        json.add( fieldName, offsetArray );
+        json.add(fieldName, offsetArray);
     }
 
     TextAnnotation readTextAnnotation(String string) throws Exception {
