@@ -36,6 +36,9 @@ public class ACEReaderParseTest {
         String corpusHomeDir = "src/test/resources/ACE/ace2004/data/English";
         ACEReader reader = new ACEReader(corpusHomeDir, true);
         testReaderParse(reader, corpusHomeDir, 2);
+
+        reader.reset();
+        testReaderParse(reader, corpusHomeDir, 2);
     }
 
     @Ignore("ACE Dataset files will not be commited to repo.")
@@ -43,6 +46,9 @@ public class ACEReaderParseTest {
     public void test2005Dataset() throws Exception {
         String corpusHomeDir = "src/test/resources/ACE/ace2005/data/English";
         ACEReader reader = new ACEReader(corpusHomeDir, false);
+        testReaderParse(reader, corpusHomeDir, 6);
+
+        reader.reset();
         testReaderParse(reader, corpusHomeDir, 6);
     }
 
@@ -92,7 +98,7 @@ public class ACEReaderParseTest {
             numDocs++;
         }
 
-        assertEquals(numDocs, numberOfDocs);
+        assertEquals(numberOfDocs, numDocs);
     }
 
 
