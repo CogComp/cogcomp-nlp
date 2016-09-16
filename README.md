@@ -2,8 +2,6 @@
 
 [![Build Status](https://semaphoreci.com/api/v1/cogcomp/illinois-cogcomp-nlp/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/illinois-cogcomp-nlp)
 
-[![Build Status](192.17.58.154:8080/buildStatus/icon?job=illinois-cogcomp-nlp-pipeline)](192.17.58.154:8080/job/illinois-cogcomp-nlp-pipeline/)
-
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=illinois-cogcomp-nlp-pipeline)](http://morgoth.cs.illinois.edu:8080/job/illinois-cogcomp-nlp-pipeline/)
 
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
