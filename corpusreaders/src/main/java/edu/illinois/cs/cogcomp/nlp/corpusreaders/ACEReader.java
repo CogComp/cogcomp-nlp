@@ -23,8 +23,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Corpus reader for the ACE data-set. This reader currently only supports only the ACE-2004 and
@@ -54,11 +55,14 @@ public class ACEReader extends TextAnnotationReader {
     private static final String RelationFirstArgumentTag = "Arg-1";
     private static final String RelationSecondArgumentTag = "Arg-2";
     private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
-    private String aceCorpusHome;
-    private boolean is2004mode;
-    private String[] sections;
-    private String corpusId;
-    private List<TextAnnotation> documents;
+    private static final AceFileProcessor fileProcessor = new AceFileProcessor();
+    private static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+    private final String aceCorpusHome;
+    private final boolean is2004mode;
+    private final String corpusId;
+    private AtomicReference<TextAnnotation> currentTextAnnotation;
+    private List<Pair<String, String>> fileList;
+    private AtomicInteger fileListPosition;
 
     /**
      * Constructor for the ACE Data-set Reader
@@ -74,16 +78,38 @@ public class ACEReader extends TextAnnotationReader {
 
         this.aceCorpusHome = aceCorpusHome;
         this.corpusId = is2004mode ? "ACE2004" : "ACE2005";
-        this.documents = new ArrayList<>();
         this.is2004mode = is2004mode;
-        this.sections = sections;
 
-        if (this.sections == null || this.sections.length == 0) {
-            this.sections = IOUtils.lsDirectories(this.aceCorpusHome);
+        if (sections == null || sections.length == 0) {
+            sections = IOUtils.lsDirectories(this.aceCorpusHome);
         }
 
-        // TODO:Ideally constructor should'nt be reading and processing I/O.
-        this.updateCurrentFiles();
+        File corpusHomeDir = new File(this.aceCorpusHome);
+        assert corpusHomeDir.isDirectory();
+
+        FilenameFilter apfFileFilter = new FilenameFilter() {
+            public boolean accept(File directory, String fileName) {
+                return ( new File(directory + "/" + fileName).isDirectory() || fileName.endsWith(".apf.xml") );
+            }
+        };
+
+        List<Pair<String, String>> fileNames = new ArrayList<>();
+        for (String section : sections) {
+            File sectionDir = new File(this.aceCorpusHome + File.separator + section);
+
+            String[] xmlFiles = IOUtils.lsFilesRecursive(sectionDir.getAbsolutePath(), apfFileFilter);
+
+            if (xmlFiles.length == 0) {
+                logger.error("No valid xml file found. Skipping section " + section);
+                continue;
+            }
+
+            for (String fileName : xmlFiles) {
+                fileNames.add(new Pair<>(section, fileName));
+            }
+        }
+
+        this.fileList = Collections.unmodifiableList(fileNames);
     }
 
     /**
@@ -136,62 +162,49 @@ public class ACEReader extends TextAnnotationReader {
     @Override
     protected void initializeReader() {
         // This is called even before our class's constructor initializations.
+        this.fileList = new ArrayList<>();
+        this.fileListPosition = new AtomicInteger(0);
+        this.currentTextAnnotation = new AtomicReference<>();
     }
 
-    // Lists out all files and creates TextAnnotation for each document
-    protected void updateCurrentFiles() throws IOException {
-        File corpusHomeDir = new File(this.aceCorpusHome);
-        assert corpusHomeDir.isDirectory();
+    /**
+     * Parse a single ACE Document.
+     *
+     * @param section Section that the document belongs to.
+     * @param fileName Name of the annotation file.
+     * @return TextAnnotation instance.
+     */
+    private TextAnnotation parseSingleACEFile(String section, String fileName) {
+        ACEDocument doc;
 
-        FilenameFilter apfFileFilter = new FilenameFilter() {
-            public boolean accept(File directory, String fileName) {
-                return ( new File(directory + "/" + fileName).isDirectory() || fileName.endsWith(".apf.xml") );
-            }
-        };
-
+        // TODO: Static field might cause issue if we try to parse both versions in parallel.
         ReadACEAnnotation.is2004mode = this.is2004mode;
-        AceFileProcessor fileProcessor = new AceFileProcessor();
-        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
-        for (String section : this.sections) {
-            File sectionDir = new File(corpusHomeDir.getAbsolutePath() + "/" + section);
-
-            String[] xmlFiles = IOUtils.lsFilesRecursive( sectionDir.getAbsolutePath(), apfFileFilter );
-
-            if (xmlFiles == null) {
-                logger.error("No valid xml file found. Skipping section " + section);
-                continue;
-            }
-
-            for (String fileName : xmlFiles) {
-                ACEDocument doc;
-
-                try {
-                    doc = fileProcessor.processAceEntry(sectionDir, fileName);
-                } catch (Exception ex) {
-                    logger.warn("Error while reading document - " + fileName, ex);
-                    continue;
-                }
-
-                logger.info("Parsing file - " + fileName);
-
-                // Adding `section/fileName` as textId for annotation.
-                String textId = fileName.substring(fileName.indexOf(section + File.separator));
-                TextAnnotation ta =
-                        taBuilder.createTextAnnotation(
-                                this.corpusId,
-                                textId,
-                                doc.contentRemovingTags);
-
-                File file = new File( fileName );
-                this.addEntityViews(ta, doc.aceAnnotation, file);
-                this.addEntityRelations(ta, doc.aceAnnotation, file);
-
-                // TODO: Pending Event, TimeEx and Value Views
-
-                this.documents.add(ta);
-            }
+        try {
+            File sectionDir = new File(this.aceCorpusHome + File.separator + section);
+            doc = fileProcessor.processAceEntry(sectionDir, fileName);
+        } catch (Exception ex) {
+            logger.warn("Error while reading document - " + fileName, ex);
+            return null;
         }
+
+        logger.info("Parsing file - " + fileName);
+
+        // Adding `section/fileName` as textId for annotation.
+        String textId = fileName.substring(fileName.indexOf(section + File.separator));
+        TextAnnotation ta =
+                taBuilder.createTextAnnotation(
+                        this.corpusId,
+                        textId,
+                        doc.contentRemovingTags);
+
+        File file = new File( fileName );
+        this.addEntityViews(ta, doc.aceAnnotation, file);
+        this.addEntityRelations(ta, doc.aceAnnotation, file);
+
+        // TODO: Pending Event, TimeEx and Value Views
+
+        return ta;
     }
 
     /**
@@ -415,7 +428,13 @@ public class ACEReader extends TextAnnotationReader {
 
     @Override
     protected TextAnnotation makeTextAnnotation() throws Exception {
-        return this.documents.get(this.currentAnnotationId);
+        return this.currentTextAnnotation.getAndSet(null);
+    }
+
+    @Override
+    public void reset() {
+        this.currentTextAnnotation.set(null);
+        this.fileListPosition.set(0);
     }
 
     /**
@@ -426,6 +445,26 @@ public class ACEReader extends TextAnnotationReader {
      */
     @Override
     public boolean hasNext() {
-        return this.documents.size() > this.currentAnnotationId;
+        if (this.currentTextAnnotation.get() != null) {
+            return true;
+        }
+
+        int currentPosition;
+        TextAnnotation textAnnotation = null;
+
+        do {
+            currentPosition = this.fileListPosition.getAndIncrement();
+
+            if (currentPosition >= this.fileList.size()) {
+                break;
+            }
+
+            Pair<String, String> currentFileInfo = this.fileList.get(currentPosition);
+            textAnnotation = parseSingleACEFile(currentFileInfo.getFirst(), currentFileInfo.getSecond());
+
+            this.currentTextAnnotation.set(textAnnotation);
+        } while(textAnnotation == null); // If parsing fails, continue looking for more items.
+
+        return textAnnotation != null;
     }
 }
