@@ -7,49 +7,52 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReaderTests;
 
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.CoreferenceView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocumentAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntity;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntityMention;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 
 public class ACEReaderParseTest {
 
-    private static final String ACE2005CORPUS = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ace2005";
+    public static final String ACE2005CORPUS = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ace2005";
+    public static final String ACE2004CORPUS = "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ace2004";
 
-    @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2004Dataset() throws Exception {
-        String corpusHomeDir = "src/test/resources/ACE/ace2004/data/English";
+        String corpusHomeDir = ACE2004CORPUS;
         ACEReader reader = new ACEReader(corpusHomeDir, true);
-        testReaderParse(reader, corpusHomeDir, 2);
-
-        reader.reset();
-        testReaderParse(reader, corpusHomeDir, 2);
+        testReaderParse(reader, corpusHomeDir, 1);
     }
 
-    @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2005Dataset() throws Exception {
-        String corpusHomeDir = "src/test/resources/ACE/ace2005/data/English";
+        String corpusHomeDir = ACE2005CORPUS;
         ACEReader reader = new ACEReader(corpusHomeDir, false);
-        testReaderParse(reader, corpusHomeDir, 6);
+        testReaderParse(reader, corpusHomeDir, 1);
+    }
+
+    @Test
+    public void testReaderReset() throws Exception {
+        String corpusHomeDir = ACE2004CORPUS;
+        ACEReader reader = new ACEReader(corpusHomeDir, true);
+        testReaderParse(reader, corpusHomeDir, 1);
 
         reader.reset();
-        testReaderParse(reader, corpusHomeDir, 6);
+        testReaderParse(reader, corpusHomeDir, 1);
     }
 
     private void testReaderParse(ACEReader reader, String corpusHomeDir, int numberOfDocs)
@@ -75,18 +78,19 @@ public class ACEReaderParseTest {
             assertTrue(documentViews.contains(ViewNames.COREF_HEAD));
             assertTrue(documentViews.contains(ViewNames.COREF_EXTENT));
 
-            int entityMentions = 0;
-            for (ACEEntity entity : annotation.entityList)
-                entityMentions += entity.entityMentionList.size();
+            List<ACEEntityMention> entityMentionList = new ArrayList<>();
+            for (ACEEntity entity : annotation.entityList) {
+                entityMentionList.addAll(entity.entityMentionList);
+            }
 
             SpanLabelView entityView = (SpanLabelView) doc.getView(ViewNames.MENTION_ACE);
-            assertEquals(entityView.getNumberOfConstituents(), entityMentions);
+            assertEquals(entityView.getNumberOfConstituents(), entityMentionList.size());
 
             CoreferenceView coreferenceView = (CoreferenceView) doc.getView(ViewNames.COREF_HEAD);
-            assertEquals(coreferenceView.getNumberOfConstituents(), entityMentions);
+            assertEquals(coreferenceView.getNumberOfConstituents(), entityMentionList.size());
 
             CoreferenceView coreferenceExtentView = (CoreferenceView) doc.getView(ViewNames.COREF_EXTENT);
-            assertEquals(coreferenceExtentView.getNumberOfConstituents(), entityMentions);
+            assertEquals(coreferenceExtentView.getNumberOfConstituents(), entityMentionList.size());
 
             int relationMentions = 0;
             for (ACERelation relation : annotation.relationList) {
@@ -94,6 +98,36 @@ public class ACEReaderParseTest {
             }
 
             assertEquals(entityView.getRelations().size(), relationMentions);
+
+            // Sort entityMention annotation based on their extent starts
+            Collections.sort(entityMentionList, new Comparator<ACEEntityMention>() {
+                @Override
+                public int compare(ACEEntityMention o1, ACEEntityMention o2) {
+                    return Integer.compare(o1.extentStart, o2.extentStart);
+                }
+            });
+
+            int index = 0;
+            for (Constituent mention : entityView.getConstituents()) {
+                ACEEntityMention mentionAnnotation = entityMentionList.get(index++);
+
+                int startTokenId =
+                        doc.getTokenIdFromCharacterOffset(
+                                Integer.parseInt(
+                                        mention.getAttribute(ACEReader.EntityHeadStartCharOffset)));
+                int endTokenId =
+                        doc.getTokenIdFromCharacterOffset(
+                                Integer.parseInt(
+                                        mention.getAttribute(ACEReader.EntityHeadEndCharOffset)) - 1) + 1;
+
+                // Get the HEAD Mention String
+                String headMentionString = TextAnnotationUtilities.getTokenSequence(doc, startTokenId, endTokenId);
+
+                // Assert that HEAD Mention String is same as in the mention annotation.
+                assertTrue(
+                        String.format("Expected :\"%s\", Found:\"%s\"", headMentionString, mentionAnnotation.head),
+                        headMentionString.equalsIgnoreCase(mentionAnnotation.head));
+            }
 
             numDocs++;
         }
@@ -116,6 +150,5 @@ public class ACEReaderParseTest {
         }
 
         assertTrue( reader.hasNext() );
-
     }
 }
