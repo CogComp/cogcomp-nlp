@@ -89,7 +89,7 @@ public class ACEReader extends TextAnnotationReader {
 
         FilenameFilter apfFileFilter = new FilenameFilter() {
             public boolean accept(File directory, String fileName) {
-                return ( new File(directory + "/" + fileName).isDirectory() || fileName.endsWith(".apf.xml") );
+                return ( new File(directory + File.separator + fileName).isDirectory() || fileName.endsWith(".apf.xml") );
             }
         };
 
