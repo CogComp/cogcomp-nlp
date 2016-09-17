@@ -17,6 +17,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ParsePhraseTypeOnlyTest {
 
     private Constituent predicate, arg1, arg2;
@@ -38,23 +42,35 @@ public class ParsePhraseTypeOnlyTest {
     public void testParsePhraseCharniak() throws Exception {
         ParsePhraseTypeOnly charniak = ParsePhraseTypeOnly.CHARNIAK;
         assertEquals("[VBD]", charniak.getFeatures(predicate).toString());
-        assertEquals("[NP]", charniak.getFeatures(arg1).toString());
-        assertEquals("[PP]", charniak.getFeatures(arg2).toString());
+        List<String> sortedList = new ArrayList<String>();
+        sortedList.add(charniak.getFeatures(arg1).toString());
+        sortedList.add(charniak.getFeatures(arg2).toString());
+        Collections.sort(sortedList);
+        assertEquals("[NP]", sortedList.get(0));
+        assertEquals("[PP]", sortedList.get(1));
     }
 
     @Test
     public void testParsePhraseStanford() throws Exception {
         ParsePhraseTypeOnly stanford = ParsePhraseTypeOnly.STANFORD;
         assertEquals("[VBD]", stanford.getFeatures(predicate).toString());
-        assertEquals("[NP]", stanford.getFeatures(arg1).toString());
-        assertEquals("[PP]", stanford.getFeatures(arg2).toString());
+        List<String> sortedList = new ArrayList<String>();
+        sortedList.add(stanford.getFeatures(arg1).toString());
+        sortedList.add(stanford.getFeatures(arg2).toString());
+        Collections.sort(sortedList);
+        assertEquals("[NP]", sortedList.get(0));
+        assertEquals("[PP]", sortedList.get(1));
     }
 
     @Test
     public void testParsePhraseGold() throws Exception {
         ParsePhraseTypeOnly gold = new ParsePhraseTypeOnly(ViewNames.PARSE_GOLD);
         assertEquals("[VBD]", gold.getFeatures(predicate).toString());
-        assertEquals("[NP]", gold.getFeatures(arg1).toString());
-        assertEquals("[PP]", gold.getFeatures(arg2).toString());
+        List<String> sortedList = new ArrayList<String>();
+        sortedList.add(gold.getFeatures(arg1).toString());
+        sortedList.add(gold.getFeatures(arg2).toString());
+        Collections.sort(sortedList);
+        assertEquals("[NP]", sortedList.get(0));
+        assertEquals("[PP]", sortedList.get(1));
     }
 }
