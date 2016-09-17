@@ -1,5 +1,6 @@
 #!/bin/bash
  
+ 
 #################################################################################
 # This script, run from the root of a Maven single or multi-module project, will
 # update the pom files to increment the build number on the version.
