@@ -1,6 +1,5 @@
 # Illinois Part-of-Speech Tagger
 
-
 Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. The system implemented 
 here is based of the following paper: 
 
@@ -64,4 +63,8 @@ of the POS sub-project using the following command.
 
     mvn exec:java -Dexec.mainClass="edu.illinois.cs.cogcomp.pos.POSTrain"
 
+##Citation
 
+D. Roth and D. Zelenko, Part of Speech Tagging Using a Network of Linear Separators. Coling-Acl, The 17th International Conference on Computational Linguistics (1998) pp.1136--1142
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/POS

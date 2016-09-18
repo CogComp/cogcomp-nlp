@@ -1,4 +1,5 @@
 # illinois-curator
+
 The Curator acts as a central server that can annotate text using
 several annotators. With this package, we can connect to the Curator to
 get those annotations and build our own NLP-driven
@@ -44,3 +45,9 @@ for (int i = 0; i < ta.size(); i++) {
     System.out.println(i + ":" + posView.getLabel(i));
 }
 ```
+
+##Citation
+
+J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Curator

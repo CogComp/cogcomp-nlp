@@ -27,21 +27,14 @@ public class Constituent implements Serializable {
     protected final double constituentScore;
 
     protected final TextAnnotation textAnnotation;
-
-    protected Map<String, String> attributes;
-
     protected final IntPair span; // span start/end token offsets
-
     // Curator-style offsets -- end char offset numbers position AFTER
     // constituent
     protected final int startCharOffset;
     protected final int endCharOffset;
-
     protected final List<Relation> outgoingRelations;
     protected final List<Relation> incomingRelations;
-
     protected final int label;
-
     /**
      * This indicates whether the element {@code Constituent#constituentTokens} is a two element
      * list consisting of a start and an end tokenId, specifying a span, instead of explicitly
@@ -50,6 +43,7 @@ public class Constituent implements Serializable {
     // protected boolean useConstituentTokensAsSpan;
 
     protected final String viewName;
+    protected Map<String, String> attributes;
 
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
@@ -355,6 +349,9 @@ public class Constituent implements Serializable {
         return (this.attributes != null) && (attributes.containsKey(key));
     }
 
+    /**
+     * @return
+     */
     @Override
     public int hashCode() {
 
@@ -373,7 +370,6 @@ public class Constituent implements Serializable {
             hashCode += relation.getRelationName().hashCode() * 3;
             hashCode += relation.getSource().getStartSpan() * 11;
             hashCode += relation.getSource().getEndSpan() * 17;
-
         }
 
         for (Relation relation : this.getOutgoingRelations()) {
@@ -383,6 +379,7 @@ public class Constituent implements Serializable {
             hashCode += relation.getTarget().getEndSpan() * 19;
 
         }
+
 
         return hashCode;
 

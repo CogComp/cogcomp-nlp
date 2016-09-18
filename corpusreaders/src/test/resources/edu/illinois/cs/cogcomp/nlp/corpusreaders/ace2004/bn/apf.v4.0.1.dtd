@@ -1,0 +1,407 @@
+<!-- 
+			      A DTD for
+		     Reference Key Annotation of
+			   EDT Entities and
+			 RDC Relations in the
+			   ACE Evaluations
+
+			  John C. Henderson
+				MITRE
+                             2000-01-05
+
+v 1.1 Added versioning for semantic compatibility.
+      Added CHARSEQ in reponse to request from George Doddington.
+      Replaced ENTITY_NAME tag for encoding attribute with a general
+      ENTITY_ATTRIBUTES tag within which can be multiple attributes,
+      the only one of which we now have being NAME.
+
+v 1.2 Added extra attributes to SOURCE_FILE element, indicating source,
+      author and encoding.
+
+v 1.3 Added ROLE attribute under entity_mention and added GENERIC attribute
+      under entity_type.  Also added REFERENCE attribute to entity_mention
+      to indicate whether literal or intended.  Also changed ID attribute value
+      within document to CDATA (instead of ID)
+
+v 1.4 Added support for RDC relations, their attributes and mentions.
+      Also cleaned up and brought things up to date for EDT entities.
+      2002/03/24.  David Day.
+
+v 1.4.2 Removed rel_arg_role element, since this is now established within
+        SUBTYPE attribute on relation elements.  Added NA as valid value for
+        entity_mention REFERENCE attribute.
+        2002/05/01.  David Day.
+
+v 1.4.3 Changed all RELATION SUBTYPE values to use hyphens instead of underscore
+        characters in the case of multi-word phrases (e.g., "LOCATED-IN").
+        2002/05/28.  David Day.
+
+v 1.4.4 Modified RELATION element SUBTYPE attribute values: Added BASED-IN.
+        Removed NA from ENTITY_MENTION attribute values for ROLE and REFERENCE.
+        Instead of being REQUIRED these attributes are now IMPLIED (that is,
+        they are optional).
+
+v 2.0   SUBTYPE modifications:
+          Added:   CLIENT.
+          Changed: MEMBER-OF to MEMBER.
+          Removed: CONTAINED-IN.
+        VERSION modifications:
+          Changed: 1.4.4 to 2.0.
+        David; 2002-06-20.
+
+v 2.0.1 SUBTYPE modifications:
+		  Added: FROM
+				 BRANCH
+			     LOCATED-IN (LOCATED already existed; left both)
+		Robyn; 2002-06-28
+
+v 3.* became ALF (ACE LDC Format)
+
+v 4.0.0 LDC and BBN update: updated to version 4.0.0 to match new ALF dtd
+-->
+
+<!-- URI should be a unique identifier for the source file in question.
+     SOURCE is a more general indicator of the news source from whence
+       the source_file has been retrieved.  Likely values are CNN, APW,
+       NPR, etc.
+     TYPE indicates general class of signal (text, audio or image).
+     VERSION attribute is used to perform optionaly versioning by
+       matching against its value.
+     AUTHOR attribute value should indicate the organization and/or
+       person who produced the annotations contained in this file
+       (e.g., "Ramshaw/BBN", "Ferro/MITRE", etc.).
+     ENCODING indicates type-specific encoding standard being used
+       in source file, such as UTF-8 for text data, wav for speech
+       signals, etc.
+
+-->     
+
+<!ELEMENT source_file      (document)+>
+<!ATTLIST source_file
+                           URI      CDATA              #REQUIRED
+                           SOURCE   CDATA              #IMPLIED
+                           TYPE     (text|audio|image) #REQUIRED
+                           VERSION  (2.0|3.0|4.0)      #IMPLIED
+                           AUTHOR   CDATA              #IMPLIED
+                           ENCODING CDATA              #IMPLIED
+>
+
+
+<!-- By giving document ID the XML type ID (see entity), an implicit
+     promise is being made that there will be no duplicate document
+     IDs in a file.  CDATA will be used for now because IDREFs should
+     not be allowed to point to these DOCID ID's. --> 
+
+<!ELEMENT document         (entity*,relation*,event*)>
+<!ATTLIST document
+                           DOCID CDATA #REQUIRED
+>
+
+<!-- ********************************************** -->
+<!-- Entities, their attributes and their mentions. -->
+<!-- ********************************************** -->
+
+
+<!-- LDC: "entity_type" is now an attribute of entity 
+
+          SUBTYPE and CLASS added
+
+	  SUBTYPE is optional: Type "PER" does not have
+	  SUBTYPE, for example. 
+
+	  The following is a complete list of TYPE SUBTYPE pairs (as of 
+	  Nov. 19, 2003). 
+
+TYPE="PER" (no SUBTYPE)
+
+TYPE="ORG" SUBTYPE="Government"
+TYPE="ORG" SUBTYPE="Commercial"
+TYPE="ORG" SUBTYPE="Educational"
+TYPE="ORG" SUBTYPE="Non-Profit"
+TYPE="ORG" SUBTYPE="Other"
+
+TYPE="LOC" SUBTYPE="Address"
+TYPE="LOC" SUBTYPE="Boundary"
+TYPE="LOC" SUBTYPE="Celestial"
+TYPE="LOC" SUBTYPE="Water-Body"
+TYPE="LOC" SUBTYPE="Land-Region-Natural"
+TYPE="LOC" SUBTYPE="Region-Local"
+TYPE="LOC" SUBTYPE="Region-Subnational"
+TYPE="LOC" SUBTYPE="Region-National"
+TYPE="LOC" SUBTYPE="Region-International"
+
+TYPE="GPE" SUBTYPE="Continent"
+TYPE="GPE" SUBTYPE="Nation"
+TYPE="GPE" SUBTYPE="State-or-Province"
+TYPE="GPE" SUBTYPE="County-or-District"
+TYPE="GPE" SUBTYPE="Population-Center"
+TYPE="GPE" SUBTYPE="Other"
+
+TYPE="FAC" SUBTYPE="Building"
+TYPE="FAC" SUBTYPE="Subarea-Building"
+TYPE="FAC" SUBTYPE="Bounded-Area"
+TYPE="FAC" SUBTYPE="Conduit"
+TYPE="FAC" SUBTYPE="Path"
+TYPE="FAC" SUBTYPE="Barrier"
+TYPE="FAC" SUBTYPE="Plant"
+TYPE="FAC" SUBTYPE="Other"
+
+TYPE="VEH" SUBTYPE="Land"
+TYPE="VEH" SUBTYPE="Air"
+TYPE="VEH" SUBTYPE="Water"
+TYPE="VEH" SUBTYPE="Subarea-Vehicle"
+TYPE="VEH" SUBTYPE="Other"
+
+TYPE="WEA" SUBTYPE="Blunt"
+TYPE="WEA" SUBTYPE="Exploding"
+TYPE="WEA" SUBTYPE="Sharp"
+TYPE="WEA" SUBTYPE="Chemical"
+TYPE="WEA" SUBTYPE="Biological"
+TYPE="WEA" SUBTYPE="Shooting"
+TYPE="WEA" SUBTYPE="Projectile"
+TYPE="WEA" SUBTYPE="Nuclear"
+TYPE="WEA" SUBTYPE="Other"
+-->
+
+<!ELEMENT entity           (entity_mention+,entity_attributes*)>
+<!ATTLIST entity
+                         ID      CDATA                             #REQUIRED
+                         TYPE    (PER|ORG|LOC|GPE|FAC|VEH|WEA) #REQUIRED
+                         SUBTYPE (Government|Commercial|Educational|
+			          Non-Profit|Other|Address|Boundary|Celestial|
+				  Water-Body|Land-Region-Natural|Region-Local|
+				  Region-Subnational|Region-National|
+				  Region-International|Continent|Nation|
+				  State-or-Province|County-or-District|
+				  Population-Center|Building|
+				  Subarea-Building|Bounded-Area|Conduit|
+				  Path|Barrier|Plant|Land|Air|Water|
+				  Subarea-Vehicle|Blunt|Exploding|Sharp|
+				  Chemical|Biological|Shooting|Projectile|
+				  Nuclear)                         #IMPLIED
+                         CLASS   (NEG|SPC|GEN|USP)                 #REQUIRED
+
+>
+
+<!-- entity_mention -->
+
+<!ELEMENT entity_mention   (extent,head?)>
+<!ATTLIST entity_mention
+                           ID    CDATA                            #REQUIRED
+                           TYPE	(NAM|NOM|PRO|PRE)                 #REQUIRED
+                           LDCTYPE	(NAM|NOM|BAR|MWH|PRO|WHQ|PRE|HLS|MSC|
+                              PTV|CMC|APP|ARC|DE|PCN|PMM|EPM|EAP) #IMPLIED
+			   ROLE	(PER|ORG|LOC|GPE|FAC)             #IMPLIED
+			   REFERENCE (LITERAL|INTENDED)           #IMPLIED
+			   METONYMY_MENTION (TRUE|FALSE)	  #IMPLIED
+			   LDCATR   (TRUE|FALSE)                  #IMPLIED
+>
+
+<!-- There may be new attributes introduced in the future.  We incorporate
+     additional attributes underneath the single entity_attributes tag.
+     The name indexes directly into a portion of the signal, using one
+     of the four indexing types. -->
+
+<!ELEMENT entity_attributes (name*)>
+
+<!ELEMENT name             (bblist|charspan|charseq|timespan)>
+
+<!-- The extent is the maximal subset of the signal permitted in
+     judging correctness, and the head is the minimal subset. -->
+
+
+<!-- LDC: anchor added for events -->
+
+<!ELEMENT ldc_extent           (bblist|charspan|charseq|timespan)>
+<!ELEMENT extent           (bblist|charspan|charseq|timespan)>
+<!ELEMENT head             (bblist|charspan|charseq|timespan)>
+<!ELEMENT anchor           (bblist|charspan|charseq|timespan)>
+
+<!-- LDC: -->
+
+<!ELEMENT charspan         (#PCDATA)>
+<!ATTLIST charspan         START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!ELEMENT charseq          (#PCDATA)>
+<!ATTLIST charseq          START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!ELEMENT timespan         (#PCDATA)>
+<!ATTLIST timespan         START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!-- A list of bounding boxes is needed to describe wrapped words in
+     an image. -->
+
+<!ELEMENT bblist           (pixelboundingbox)+>
+
+<!-- Alternate habits for describing bounding boxes.
+     Both can be supported because the tags wrap the elements. 
+     (x1,y1) will presumably be upper left point and 
+     (x2,y2) will be lower right point (suggested by English
+     reading order). --> 
+
+<!ELEMENT pixelboundingbox (x1,((x2,y1,y2)|(y1,x2,y2)))>
+
+<!-- A character SPAN (charspan) is a pair of indices that wraps
+     the signal being annotated in text.   This means that the first
+     index points to the imaginary gap *before* the first character
+     and the second index points to the imaginary gap *after* the
+     final character in the span.
+
+     A character SEQUENCE (charseq) is a pair of indices pointing to
+     the first and last character of the text being annotated.  This
+     means that the first index points to the first character of the
+     text being annotated (which is the same as pointing to the
+     imaginary gap *before* the first character), and the second index
+     points to the last character in the annotated text (the imaginary
+     gap *before* the last character in the annotated text). -->
+
+
+<!-- Perhaps these next elements are better suited to life as
+     attributes of the previous elements.  This is  an artform, after
+     all.  The other version would be *equivalent*, which is all
+     anyone should ask. -->
+
+<!ELEMENT x1               (#PCDATA)>
+<!ELEMENT x2               (#PCDATA)>
+<!ELEMENT y1               (#PCDATA)>
+<!ELEMENT y2               (#PCDATA)>
+
+<!-- *********************************************** -->
+<!-- RELATIONS, their attributes and their mentions. -->
+<!-- *********************************************** -->
+
+<!-- LDC: SUBTYPE is optional -->
+<!-- LDC: List of TYPE/SUBTYPE pairs (as of Nov. 19, 2003)
+
+TYPE="PHYS" SUBTYPE="Located"
+TYPE="PHYS" SUBTYPE="Near"
+TYPE="PHYS" SUBTYPE="Part-Whole"
+
+TYPE="PER-SOC" SUBTYPE="Business"
+TYPE="PER-SOC" SUBTYPE="Family"
+TYPE="PER-SOC" SUBTYPE="Other"
+
+TYPE="EMP-ORG" SUBTYPE="Employ-Executive"
+TYPE="EMP-ORG" SUBTYPE="Employ-Staff"
+TYPE="EMP-ORG" SUBTYPE="Employ-Undetermined"
+TYPE="EMP-ORG" SUBTYPE="Member-of-Group"
+TYPE="EMP-ORG" SUBTYPE="Subsidiary"
+TYPE="EMP-ORG" SUBTYPE="Partner"
+TYPE="EMP-ORG" SUBTYPE="Other"
+
+TYPE="ART" SUBTYPE="User-or-Owner"
+TYPE="ART" SUBTYPE="Inventor-or-Manufacturer"
+TYPE="ART" SUBTYPE="Other"
+
+TYPE="OTHER-AFF" SUBTYPE="Ethnic"
+TYPE="OTHER-AFF" SUBTYPE="Ideology"
+TYPE="OTHER-AFF" SUBTYPE="Other"
+
+TYPE="GPE-AFF" SUBTYPE="Citizen-or-Resident"
+TYPE="GPE-AFF" SUBTYPE="Based-In"
+TYPE="GPE-AFF" SUBTYPE="Other"
+
+TYPE="DISC" (no SUBTYPE)
+
+-->
+
+<!ELEMENT relation           (rel_entity_arg+, relation_mention*)>
+<!ATTLIST relation           
+                             ID       CDATA                     #REQUIRED
+                             TYPE     (PHYS|PER-SOC|EMP-ORG|ART|
+			               OTHER-AFF|GPE-AFF|DISC|
+				       METONYMY)                #REQUIRED
+                             SUBTYPE  (Located|Near|Part-Whole|Business|
+			               Family|Other|Employ-Executive|
+				       Employ-Staff|Employ-Undetermined|
+				       Member-of-Group|Subsidiary|Partner|
+				       User-or-Owner|
+				       Inventor-or-Manufacturer|Ethnic|
+				       Ideology|Citizen-or-Resident|
+				       Based-In)                 #IMPLIED
+>
+
+
+<!-- Note: rel_entity_arg elements carry all their information within
+     their arguments, so they be "empty" (without any further xml
+     or PCDATA content).  -->
+
+<!ELEMENT rel_entity_arg   (#PCDATA)>
+<!ATTLIST rel_entity_arg   ENTITYID CDATA  #REQUIRED
+                           ARGNUM   CDATA  #REQUIRED
+>
+
+<!ELEMENT relation_mentions   (relation_mention+)>
+
+<!ELEMENT relation_mention  (ldc_extent?,
+                             rel_mention_arg,
+                             rel_mention_arg+,
+                             rel_mention_time*)>
+<!ATTLIST relation_mention   
+                            ID                CDATA             #REQUIRED
+                            LDCLEXICALCONDITION  (Possessive|Preposition|
+                                               PreMod|Formulaic|Verbal|
+                                               Participial)     #IMPLIED
+>
+
+<!ELEMENT rel_mention_arg (extent?)>
+<!ATTLIST rel_mention_arg  
+                                     ENTITYMENTIONID CDATA  #REQUIRED	
+                                     ARGNUM          CDATA  #REQUIRED
+>
+
+<!-- The relation_mention_time element may be of two basic types: 
+     VALUE or ANCHOR.
+     If type VALUE,  the two attributes that it must specify are VAL and MOD.
+     If type ANCHOR, the two attributes that it must specify are VAL and DIR.
+     In each case the source string of the time information should be specified
+     via the source element.
+-->
+
+<!ELEMENT relation_mention_time  (source*)>
+<!ATTLIST relation_mention_time
+                                 TYPE  (VALUE|ANCHOR) #REQUIRED
+                                 VAL   CDATA          #REQUIRED
+                                 MOD   CDATA          #IMPLIED
+                                 DIR   CDATA          #IMPLIED
+>
+
+<!-- ****************************************************************** -->
+<!-- LDC: EVENTS, their attributes and their mentions.                  -->
+<!-- ****************************************************************** -->
+
+<!ELEMENT event             (event_mention+)>
+<!ATTLIST event 
+                            ID       CDATA                      #REQUIRED
+			    TYPE     (BRK|MAK|GIV|MOV|INT|OTH)  #REQUIRED
+			    MODALITY (Real|NotReal)             #REQUIRED
+>
+
+<!-- LDC: extent and anchor are required -->
+
+<!ELEMENT event_mention     (extent,anchor,event_mention_participant*)>
+<!ATTLIST event_mention   
+                            ID   CDATA      #REQUIRED
+                            TYPE (NOM|SEN)  #REQUIRED
+>
+
+<!ELEMENT event_mention_participant  (extent?,
+                                      event_mention_participant_relation_extent?)>
+<!ATTLIST event_mention_participant   
+                                     ENTITYID        CDATA   #REQUIRED
+                                     ENTITYMENTIONID CDATA   #REQUIRED
+                                     ROLE   (Agent|Object|Source|Target|
+	                                     Location|Time|
+			                     Modifier)       #REQUIRED
+	                             SOURCE (Event|Relation) #REQUIRED
+>
+
+<!ELEMENT event_mention_participant_relation_extent   (extent)>
+
+<!ELEMENT source            (extent)>

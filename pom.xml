@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.60</version>
+    <version>3.0.72</version>
 
     <modules>
         <module>core-utilities</module>
@@ -19,6 +19,7 @@
         <module>chunker</module>
         <module>ner</module>
         <module>corpusreaders</module>
+        <module>lbjava-nlp-tools</module>
     </modules>
 
     <properties>
@@ -145,6 +146,7 @@
                         <exclude>**/*.properties</exclude>
                         <exclude>**/*.md</exclude>
                         <exclude>**/*.py</exclude>
+                        <exclude>**/*.yml</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
                     </excludes>

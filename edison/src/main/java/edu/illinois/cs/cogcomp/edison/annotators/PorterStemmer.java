@@ -25,7 +25,7 @@ import org.tartarus.snowball.ext.englishStemmer;
 public class PorterStemmer extends Annotator {
 
     private final static SnowballStemmer stemmer = new englishStemmer();
-    private static PorterStemmer instance = null; // = new PorterStemmer();
+    private static PorterStemmer instance; // = new PorterStemmer();
 
     private PorterStemmer(String viewName, String[] prerequisiteViews) {
         super(viewName, prerequisiteViews);
