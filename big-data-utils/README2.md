@@ -4,7 +4,7 @@ This is a utility package containing easy to use interfaces for several librarie
 
 Maven Coordinates
 -----------------
-```
+```xml
   <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>big-data-utils</artifactId>
   <version>1.0.1</version> 
@@ -17,7 +17,7 @@ Using MapDB
 -----
 Simple use case - a disk based map for your too-large-to-fit-in-memory hashMap needs.
 
-```
+```java 
 	// creates a hashmap named "freebase_cache" stored on disk under "data/freebaseRawResponseCache/" and returns it. 
 	// if a disk based map named "freebase_cache" was already stored there, then simply reopens that map.
 	// so basically just use this.
@@ -32,7 +32,7 @@ Simple use case - a disk based map for your too-large-to-fit-in-memory hashMap n
 This will be nearly as fast as a memory based map in terms of access, but just not stored in memory.
 
 For read-only writing to mapDB map use,
-```
+```java
 	DBMaker dbmaker=MapDB.newDefaultDb(wikititle2freebaseMidcacheLocation,"freebase_cache")
 	DB db=MapDB.DBConfig.READ_ONLY.configure(dbmaker).make();
 	Map<String, String> readonlyMap=db.getHashMap("freebase_cache");
@@ -40,7 +40,7 @@ For read-only writing to mapDB map use,
 
 Faster insertion into map using pump,
 
-```
+```java
 	Map newMap = db.createTreeMap("map")
 	    .pumpSource(randomIterator)  //source of data to import
             .pumpBatchSize(1000000)      //sort data from source, batch size must be set so it fits into memory
@@ -54,9 +54,11 @@ Using H2 Database helper
 Look at  `DBExample`  in test package `edu.illinois.cs.cogcomp.bigdata.database`.
 This shows how to create a db for you at the location specified by dbFile
 Once you are done populating, you can view the db by connecting to it by running
-```
+
+```bash
 java -cp target/dependency/h2-1.4.182.jar org.h2.tools.Server -web -webPort 9090
 ```
+
 and connecting to the dbURL. The default username is blank, dbURL
 should have absolute system path
 (eg. `"jdbc:h2:/Users/Shyam/java_code/wikiutils/database"`).
@@ -65,7 +67,8 @@ should have absolute system path
 Using Lucene
 -----
 You can easily call commonly used Lucene classes from the static utility library Lucene. It also houses functions for getting term freqs and the like.
-```
+
+```java
 	public class LuceneExample {
 
 	public static void main(String[] args) throws IOException, ParseException {
