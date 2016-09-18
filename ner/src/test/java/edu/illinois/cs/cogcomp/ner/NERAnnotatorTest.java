@@ -1,25 +1,23 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
+import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
@@ -31,6 +29,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import weka.core.Debug.Random;
+
+import static org.junit.Assert.*;
 
 /**
  * This tests the NERAnnotator. Includes a test to ensure we are extracting the expected entiies,
@@ -130,15 +130,20 @@ public class NERAnnotatorTest {
     }
 
     /**
-     * See if we get the right entities back.
-     * TODO: MS removed @Test annotation as this test currently fails, but benchmark performance
-     *    is good
+     * See if we get the right entities back. TODO: MS removed @Test annotation as this test
+     * currently fails, but benchmark performance is good
      */
 
 
     public void testResults() {
         TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-        View view = getView(ta);
+        View view = null;
+        try {
+            view = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
         for (Constituent c : view.getConstituents()) {
             assertTrue("No entity named \"" + c.toString() + "\"", entities.contains(c.toString()));
         }
@@ -167,26 +172,43 @@ public class NERAnnotatorTest {
      * Make sure it runs in reasonable time. We will test the performance of the machine we run on
      * to get a better measure.
      */
-    //@Test
+    // @Test
     public void evaluatePerformance() {
         // now do performance.
         final int SIZE = 100;
 
         // make sure any lazy loading is done outside the performance test.
         TextAnnotation tat = tab.createTextAnnotation(TEST_INPUT);
-        getView(tat);
+        try {
+            getView(tat);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
         long expectedPerformance = this.measureMachinePerformance();
         System.out.println("Expect " + expectedPerformance);
         {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
             assertTrue(view != null);
         }
         // start the performance test.
         long start = System.currentTimeMillis();
         for (int i = 0; i < SIZE; i++) {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
             assertTrue(view != null);
             for (Constituent c : view.getConstituents()) {
                 assertTrue("No entity named \"" + c.toString() + "\"",
@@ -228,13 +250,23 @@ public class NERAnnotatorTest {
         public void run() {
             TextAnnotation ta1 = tab.createTextAnnotation(TEST_INPUT);
             {
-                view = getView(ta1);
+                try {
+                    view = getView(ta1);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail(e.getMessage());
+                }
                 assertTrue(view != null);
             }
             long start = System.currentTimeMillis();
             for (int i = 0; i < duration; i++) {
                 TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-                view = getView(ta);
+                try {
+                    view = getView(ta);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail(e.getMessage());
+                }
                 for (Constituent c : view.getConstituents()) {
                     if (!entities.contains(c.toString()))
                         error = "No entity named \"" + c.toString() + "\"";
@@ -248,7 +280,7 @@ public class NERAnnotatorTest {
     /**
      * on every core we should get performance below 300 ticks and the results should still be good.
      */
-    //@Test
+    // @Test
     public void evaluateMultiThreaded() {
         final int SIZE = 1000;
 
@@ -289,7 +321,13 @@ public class NERAnnotatorTest {
     @Test
     public void testTokenization() {
         TextAnnotation ta = tab.createTextAnnotation(TOKEN_TEST);
-        View nerView = getView(ta);
+        View nerView = null;
+        try {
+            nerView = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
         assertEquals(nerView.getConstituents().size(), 2);
 
         String tokTestB =
@@ -297,7 +335,12 @@ public class NERAnnotatorTest {
                         + "nuclear waste, is released on parole after serving two-thirds of his four-year prison sentence.";
 
         ta = tab.createTextAnnotation(tokTestB);
-        nerView = getView(ta);
+        try {
+            nerView = getView(ta);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
 
         assertEquals(3, nerView.getNumberOfConstituents());
     }
@@ -314,7 +357,13 @@ public class NERAnnotatorTest {
         // need to get any lazy data initialization out of the way to get a good read.
         {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = getView(ta);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
             for (Constituent c : view.getConstituents()) {
                 assertTrue(entities.contains(c.toString()));
             }
@@ -347,8 +396,22 @@ public class NERAnnotatorTest {
         System.out.println("Average runtime is " + (avg / count));
     }
 
-    public static View getView(TextAnnotation ta) {
-        nerAnnotator.addView(ta);
+    public static View getView(TextAnnotation ta) throws AnnotatorException {
+        nerAnnotator.getView(ta);
         return ta.getView(nerAnnotator.getViewName());
+    }
+
+    /**
+     * Test for corner case where user specifies a single label and non-zero noise level.
+     *
+     */
+    @Test
+    public void testSingleLabelNoise() {
+        String[] labels = new String[] {"PER"};
+        RandomLabelGenerator rlg =
+                new RandomLabelGenerator(labels,
+                        TextChunkRepresentationManager.EncodingScheme.BILOU, 2.0);
+        for (int i = 0; i < 1000; ++i)
+            assertFalse(rlg.useNoise());
     }
 }

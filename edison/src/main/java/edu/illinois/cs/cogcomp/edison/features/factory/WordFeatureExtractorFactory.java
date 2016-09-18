@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.factory;
@@ -33,10 +30,10 @@ import java.util.*;
  */
 public class WordFeatureExtractorFactory {
 
-  /**
-   * An indicator for whether the word ends with an `-ing`.
-   */
-  public static final WordFeatureExtractor gerundMarker = new WordFeatureExtractor() {
+    /**
+     * An indicator for whether the word ends with an `-ing`.
+     */
+    public static final WordFeatureExtractor gerundMarker = new WordFeatureExtractor() {
 
         private final Feature gerundMarker = DiscreteFeature.create("GerundMarker");
 
@@ -55,10 +52,10 @@ public class WordFeatureExtractorFactory {
 
     };
 
-  /**
-   * An indicator for whether the token is a valid date.
-   */
-  public static final WordFeatureExtractor dateMarker = new WordFeatureExtractor() {
+    /**
+     * An indicator for whether the token is a valid date.
+     */
+    public static final WordFeatureExtractor dateMarker = new WordFeatureExtractor() {
 
         private final Feature dateMarker = DiscreteFeature.create("Y");
 
@@ -168,38 +165,38 @@ public class WordFeatureExtractorFactory {
 
     };
 
-  /**
-   * An indicator for whether the word ends with a de- adjectival suffix.
-   * The list of such suffixes is in {@link WordLists#DE_ADJ_SUFFIXES}.
-   */
-  public static SuffixFeatureExtractor deAdjectivalAbstractNounsSuffixes =
+    /**
+     * An indicator for whether the word ends with a de- adjectival suffix. The list of such
+     * suffixes is in {@link WordLists#DE_ADJ_SUFFIXES}.
+     */
+    public static SuffixFeatureExtractor deAdjectivalAbstractNounsSuffixes =
             new SuffixFeatureExtractor(WordLists.DE_ADJ_SUFFIXES, "de-adj", true);
 
-  /**
-   * An indicator for whether the word ends with a de- nominal noun producing suffix.
-   * The list of such suffixes is in {@link WordLists#DENOM_SUFFIXES}.
-   */
-  public static SuffixFeatureExtractor deNominalNounProducingSuffixes =
+    /**
+     * An indicator for whether the word ends with a de- nominal noun producing suffix. The list of
+     * such suffixes is in {@link WordLists#DENOM_SUFFIXES}.
+     */
+    public static SuffixFeatureExtractor deNominalNounProducingSuffixes =
             new SuffixFeatureExtractor(WordLists.DENOM_SUFFIXES, "de-nom", true);
 
-  /**
-   * An indicator for whether the word ends with a de- verbal producing suffix.
-   * The list of such suffixes is in {@link WordLists#DE_VERB_SUFFIXES}.
-   */
-  public static SuffixFeatureExtractor deVerbalSuffix = new SuffixFeatureExtractor(
+    /**
+     * An indicator for whether the word ends with a de- verbal producing suffix. The list of such
+     * suffixes is in {@link WordLists#DE_VERB_SUFFIXES}.
+     */
+    public static SuffixFeatureExtractor deVerbalSuffix = new SuffixFeatureExtractor(
             WordLists.DE_VERB_SUFFIXES, "de-verb", true);
 
     /**
-     * An indicator for whether the word starts with one of the following:
-     * `poly`, `ultra`, `post`, `multi`, `pre`, `fore`, `ante`, `pro`, `meta` or `out`
+     * An indicator for whether the word starts with one of the following: `poly`, `ultra`, `post`,
+     * `multi`, `pre`, `fore`, `ante`, `pro`, `meta` or `out`
      */
     public static PrefixFeatureExtractor knownPrefixes = new PrefixFeatureExtractor(
             WordLists.PREFIXES, "prefixes", true);
 
-  /**
-   * The lemma of the word, taken from the LEMMA view (that is, {@link ViewNames#LEMMA})
-   */
-  public static WordFeatureExtractor lemma = new WordFeatureExtractor() {
+    /**
+     * The lemma of the word, taken from the LEMMA view (that is, {@link ViewNames#LEMMA})
+     */
+    public static WordFeatureExtractor lemma = new WordFeatureExtractor() {
 
         public String getName() {
             return "#lmm";
@@ -218,10 +215,10 @@ public class WordFeatureExtractorFactory {
         }
     };
 
-  /**
-   * An indicator for whether the word is a nominalization
-   */
-  public static WordFeatureExtractor nominalizationMarker = new WordFeatureExtractor() {
+    /**
+     * An indicator for whether the word is a nominalization
+     */
+    public static WordFeatureExtractor nominalizationMarker = new WordFeatureExtractor() {
 
         private final Feature isNom = DiscreteFeature.create("Y");
 
@@ -255,10 +252,10 @@ public class WordFeatureExtractorFactory {
         }
     };
 
-  /**
-   * An indicator for whether the word is a number
-   */
-  public static WordFeatureExtractor numberNormalizer = new WordFeatureExtractor() {
+    /**
+     * An indicator for whether the word is a number
+     */
+    public static WordFeatureExtractor numberNormalizer = new WordFeatureExtractor() {
 
         private final DiscreteFeature NUMBER_IDENTIFIER = DiscreteFeature.create("Y");
 
@@ -285,10 +282,10 @@ public class WordFeatureExtractorFactory {
         }
     };
 
-  /**
-   * The part of speech tag of the word (taken  from {@link ViewNames#POS})
-   */
-  public static WordFeatureExtractor pos = new WordFeatureExtractor() {
+    /**
+     * The part of speech tag of the word (taken from {@link ViewNames#POS})
+     */
+    public static WordFeatureExtractor pos = new WordFeatureExtractor() {
 
         public String getName() {
             return "#pos";
@@ -306,10 +303,10 @@ public class WordFeatureExtractorFactory {
         }
     };
 
-  /**
-   * The first and last two, three characters in the lower cased word
-   */
-  public static WordFeatureExtractor prefixSuffixes = new WordFeatureExtractor() {
+    /**
+     * The first and last two, three characters in the lower cased word
+     */
+    public static WordFeatureExtractor prefixSuffixes = new WordFeatureExtractor() {
 
         public String getName() {
             return "#pr-sf";
@@ -335,10 +332,10 @@ public class WordFeatureExtractorFactory {
         }
     };
 
-  /**
-   * The word, without changing the case.
-   */
-  public static WordFeatureExtractor wordCase = new WordFeatureExtractor() {
+    /**
+     * The word, without changing the case.
+     */
+    public static WordFeatureExtractor wordCase = new WordFeatureExtractor() {
 
         public String getName() {
             return "#wordC";

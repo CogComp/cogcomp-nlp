@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Identifier;
@@ -34,52 +31,57 @@ import java.util.List;
  */
 public class TestSrlVerbIdentifierArgumentFeatures extends TestCase {
 
-	/**
-	 * Only in and out relations in the SRL_VERB view are used for the purpose of testing.
-	 *
-	 */
-	public final void test() throws Exception {
-		System.out.println("ArgumentFeatures Feature Extractor");
+    /**
+     * Only in and out relations in the SRL_VERB view are used for the purpose of testing.
+     *
+     */
+    public final void test() throws Exception {
+        System.out.println("ArgumentFeatures Feature Extractor");
 
-		String[] viewsToAdd = {ViewNames.POS, ViewNames.LEMMA, ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
-				ViewNames.SRL_VERB, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
-		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd,true);
-		int i = 0;
-		ta.addView(ClauseViewGenerator.STANFORD);
-		ta.addView(PseudoParse.STANFORD);
+        String[] viewsToAdd =
+                {ViewNames.POS, ViewNames.LEMMA, ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
+                        ViewNames.SRL_VERB, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
+        TextAnnotation ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true, 3);
+        int i = 0;
+        ta.addView(ClauseViewGenerator.STANFORD);
+        ta.addView(PseudoParse.STANFORD);
 
-		System.out.println("This textannotation annotates the text: \n" + ta.getText());
+        System.out.println("This textannotation annotates the text: \n" + ta.getText());
 
-		View SRL_VERB = ta.getView("SRL_VERB");
+        View SRL_VERB = ta.getView("SRL_VERB");
 
-		List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(10,13);
-		testlist.addAll(SRL_VERB.getConstituentsCoveringSpan(26,27));
+        List<Constituent> testlist = SRL_VERB.getConstituentsCoveringSpan(10, 13);
+        testlist.addAll(SRL_VERB.getConstituentsCoveringSpan(26, 27));
 
-		FeatureManifest featureManifest;
-		FeatureExtractor fex;
-		String fileName = Constant.prefix + "/Verb/Identifier/arg-features.fex";
+        FeatureManifest featureManifest;
+        FeatureExtractor fex;
+        String fileName = Constant.prefix + "/Verb/Identifier/arg-features.fex";
 
-		featureManifest = new FeatureManifest(new FileInputStream(fileName));
-		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
-		FeatureManifest.setTransformer("parse-left-sibling", FeatureGenerators.getParseLeftSibling(ViewNames.PARSE_STANFORD));
-		FeatureManifest.setTransformer("parse-right-sibling", FeatureGenerators.getParseRightSibling(ViewNames.PARSE_STANFORD));
-		FeatureManifest.setFeatureExtractor("pp-features", FeatureGenerators.ppFeatures(ViewNames.PARSE_STANFORD));
-		FeatureManifest.setFeatureExtractor("projected-path", new ProjectedPath(ViewNames.PARSE_STANFORD));
+        featureManifest = new FeatureManifest(new FileInputStream(fileName));
+        FeatureManifest.setFeatureExtractor("hyphen-argument-feature",
+                FeatureGenerators.hyphenTagFeature);
+        FeatureManifest.setTransformer("parse-left-sibling",
+                FeatureGenerators.getParseLeftSibling(ViewNames.PARSE_STANFORD));
+        FeatureManifest.setTransformer("parse-right-sibling",
+                FeatureGenerators.getParseRightSibling(ViewNames.PARSE_STANFORD));
+        FeatureManifest.setFeatureExtractor("pp-features",
+                FeatureGenerators.ppFeatures(ViewNames.PARSE_STANFORD));
+        FeatureManifest.setFeatureExtractor("projected-path", new ProjectedPath(
+                ViewNames.PARSE_STANFORD));
 
-		featureManifest.useCompressedName();
-		featureManifest.setVariable("*default-parser*", ViewNames.PARSE_STANFORD);
+        featureManifest.useCompressedName();
+        featureManifest.setVariable("*default-parser*", ViewNames.PARSE_STANFORD);
 
-		fex = featureManifest.createFex();
-
-
-		SrlVerbIdentifierArgumentFeatures af = new SrlVerbIdentifierArgumentFeatures();
+        fex = featureManifest.createFex();
 
 
-		for (Constituent test : testlist){
-			assertTrue(SRLFeaturesComparator.isNoCacheEqual(test, fex, af));
-		}
-	}
+        SrlVerbIdentifierArgumentFeatures af = new SrlVerbIdentifierArgumentFeatures();
+
+
+        for (Constituent test : testlist) {
+            assertTrue(SRLFeaturesComparator.isNoCacheEqual(test, fex, af));
+        }
+    }
 
 }
-
-

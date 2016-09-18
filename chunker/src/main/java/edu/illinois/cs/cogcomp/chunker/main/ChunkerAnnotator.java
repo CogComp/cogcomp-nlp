@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.chunker.main;
@@ -21,6 +18,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +34,35 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 public class ChunkerAnnotator extends Annotator {
     private static final String NAME = ChunkerAnnotator.class.getCanonicalName();
     private final Logger logger = LoggerFactory.getLogger(ChunkerAnnotator.class);
-    private Chunker tagger = new Chunker();
+    private Chunker tagger;
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
     private String sentencesfield = ViewNames.SENTENCE;
 
 
+    /**
+     * default: don't use lazy initialization
+     */
     public ChunkerAnnotator() {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS});
+        this(false);
     }
+
+    /**
+     * Constructor parameter allows user to specify whether or not to lazily initialize.
+     *
+     * @param lazilyInitialize If set to 'true', models will not be loaded until first call
+     *        requiring Chunker annotation.
+     */
+    public ChunkerAnnotator(boolean lazilyInitialize) {
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize);
+
+    }
+
+    @Override
+    public void initialize(ResourceManager rm) {
+        tagger = new Chunker();
+    }
+
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {

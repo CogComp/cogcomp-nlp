@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 /**
@@ -18,37 +15,38 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * This is an abstract base class that can be used build a menu driven command
- * line interface. Processing state (e.g. what submenu you are on) is maintained by
- * subclasses. This class extends Thread, the thread starts in the constructure.
+ * This is an abstract base class that can be used build a menu driven command line interface.
+ * Processing state (e.g. what submenu you are on) is maintained by subclasses. This class extends
+ * Thread, the thread starts in the constructure.
  * <p>
- * Menus and prompts are displayed on standard output. The {@link inputMenu} method is
- * called to render the current menu to standard out. When the user issues a selection
- * on standard output, the {@link processCommand} method is called to perform whatever
- * required action.
+ * Menus and prompts are displayed on standard output. The {@link inputMenu} method is called to
+ * render the current menu to standard out. When the user issues a selection on standard output, the
+ * {@link processCommand} method is called to perform whatever required action.
  * <p>
- * There are also abstract methods that parse command line arguments ({@link processArguments}
- * and to present the command line syntax ({@link getCommandSyntax})  in the event of a command 
- * line argument error. Any exception thrown by the processArguments method will result in the 
- * command line syntax being displayed, then the system will exit. Subclasses may also call the 
- * {@link errorProcessingArguments} method with a message argument to provide a custom error message.
- * If the processArguments method throws an exception, the message associated with that exception will
- * be displayed along with the command line syntax.
+ * There are also abstract methods that parse command line arguments ({@link processArguments} and
+ * to present the command line syntax ({@link getCommandSyntax}) in the event of a command line
+ * argument error. Any exception thrown by the processArguments method will result in the command
+ * line syntax being displayed, then the system will exit. Subclasses may also call the
+ * {@link errorProcessingArguments} method with a message argument to provide a custom error
+ * message. If the processArguments method throws an exception, the message associated with that
+ * exception will be displayed along with the command line syntax.
+ * 
  * @author redman
  */
 abstract public class AbstractMain extends Thread {
-    
+
     /**
-     * This class takes a list of command line arguments. Typically a configuration file
-     * will be passed in.
+     * This class takes a list of command line arguments. Typically a configuration file will be
+     * passed in.
+     * 
      * @param args the arguments.
      */
-    protected AbstractMain(String[] args) {
-    }
-    
+    protected AbstractMain(String[] args) {}
+
     /**
-     * this method is called if there is a catastrophic error processing arguments. It will
-     * report the message, report the command syntax, and exit.
+     * this method is called if there is a catastrophic error processing arguments. It will report
+     * the message, report the command syntax, and exit.
+     * 
      * @param message the error message to report before the command line syntax.
      */
     protected void errorProcessingArguments(String message) {
@@ -58,11 +56,13 @@ abstract public class AbstractMain extends Thread {
     }
 
     /**
-     * this method will traverse all arguments calling the processArgument method with each argument.
+     * this method will traverse all arguments calling the processArgument method with each
+     * argument.
+     * 
      * @param args the array of arguments.
      */
-    protected void processArguments(String [] args) {
-        
+    protected void processArguments(String[] args) {
+
         // traverse the args.
         for (int i = 0; i < args.length; i++) {
             try {
@@ -75,16 +75,16 @@ abstract public class AbstractMain extends Thread {
 
     /** the buffered reader. */
     BufferedReader bis = new BufferedReader(new InputStreamReader(System.in));
-    
+
     /**
-     * Present a menu indicating the current display and providing an input menu, fetch the 
-     * next line, the process the assumed command there.
+     * Present a menu indicating the current display and providing an input menu, fetch the next
+     * line, the process the assumed command there.
      */
     @Override
     public void run() {
         while (true) {
             this.inputMenu();
-            String line ;
+            String line;
             try {
                 line = bis.readLine();
             } catch (IOException e1) {
@@ -99,7 +99,7 @@ abstract public class AbstractMain extends Thread {
                 e.printStackTrace();
                 System.exit(-1);
             }
-            if (Thread.currentThread().isInterrupted()){
+            if (Thread.currentThread().isInterrupted()) {
                 System.out.println("Bye");
                 System.exit(0);
             }
@@ -108,8 +108,9 @@ abstract public class AbstractMain extends Thread {
 
     /**
      * Process the command provided in line.
+     * 
      * @param line the command to process.
-     * @throws Exception 
+     * @throws Exception
      */
     abstract protected void processCommand(String line) throws Exception;
 
@@ -117,18 +118,20 @@ abstract public class AbstractMain extends Thread {
      * present the input menu to standard out.
      */
     abstract protected void inputMenu();
-    
+
     /**
      * This method will return a string which documents the command line arguments before a system
      * exit.
+     * 
      * @return the command line systex documented in a string.
      */
     abstract protected String getCommandSyntax();
-    
+
     /**
      * This will process the current argument, and return the integer indicating the next argument
      * to be processed. This mechanism will allow the implementer to pull additional arguments off
      * the stack as needed.
+     * 
      * @param args the arguments.
      * @param current the index of the current argument.
      * @return the index of the next argument.

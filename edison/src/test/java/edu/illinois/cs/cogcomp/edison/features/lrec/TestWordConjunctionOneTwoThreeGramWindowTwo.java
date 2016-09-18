@@ -1,118 +1,77 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
-import org.apache.commons.lang.ArrayUtils;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import junit.framework.TestCase;
+import org.apache.commons.lang.ArrayUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Random;
-import java.io.Writer;
 
-import org.apache.log4j.Logger;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
- * Test class for SHALLOW PARSER Formpp Feature Extractor
+ * Unit test for {@link WordConjunctionOneTwoThreeGramWindowTwo} extractor, which generates a
+ * conjunction of 3-shingles from a window of 2 tokens. The extractor is originally used in
+ * illinois-chunker (shallow parser).
  *
- * @author Paul Vijayakumar, Mazin Bokhari
+ * @author Christos Christodoulopoulos
  */
-public class TestWordConjunctionOneTwoThreeGramWindowTwo extends TestCase {
-    static Logger log = Logger.getLogger(TestAffixes.class.getName());
+public class TestWordConjunctionOneTwoThreeGramWindowTwo {
+    private TextAnnotation ta;
 
-    private static List<TextAnnotation> tas;
-
-    static {
-        try {
-            tas =
-                    IOUtils.readObjectAsResource(TestWordConjunctionOneTwoThreeGramWindowTwo.class,
-                            "test.ta");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Before
+    public void setUp() throws Exception {
+        ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {},
+                        false, 3);
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
+        // Using the 3rd constituent as a test
+        List<Constituent> testList = ta.getView("TOKENS").getConstituents();
+        Constituent test = testList.get(3);
 
-        log.debug("Formpp");
-        // Using the first TA and a constituent between span of 30-40 as a test
-        TextAnnotation ta = tas.get(1);
-        View TOKENS = ta.getView("TOKENS");
+        WordConjunctionOneTwoThreeGramWindowTwo fex =
+                new WordConjunctionOneTwoThreeGramWindowTwo("WordConj3GramWin2");
 
-        log.debug("GOT TOKENS FROM TEXTAnn");
-
-        List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
-
-        for (Constituent c : testlist) {
-            log.debug(c.getSurfaceForm());
-        }
-
-        log.debug("Testlist size is " + testlist.size());
-
-        Constituent test = testlist.get(2);
-
-        log.debug("The constituent we are extracting features from in this test is: "
-                + test.getSurfaceForm());
-
-        WordConjunctionOneTwoThreeGramWindowTwo WordConjunctionOneTwoThreeGramWindowTwo =
-                new WordConjunctionOneTwoThreeGramWindowTwo(
-                        "WordConjunctionOneTwoThreeGramWindowTwo");
-
-        log.debug("Startspan is " + test.getStartSpan() + " and Endspan is " + test.getEndSpan());
-
-        Set<Feature> feats = WordConjunctionOneTwoThreeGramWindowTwo.getFeatures(test);
+        Set<Feature> feats = fex.getFeatures(test);
         String[] expected_outputs =
-                {"WordConjunctionOneTwoThreeGramWindowTwo:0_0(I)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:1_0(give)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:2_0(John)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:3_0($900)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:4_0(today)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:0_1(I_give)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:1_1(give_John)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:2_1(John_$900)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:3_1($900_today)",
-                        "WordConjunctionOneTwoThreeGramWindowTwo:4_1(today)"};
+                {"WordConjunctionOneTwoThreeGramWindowTwo:-2_1(construction)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:-1_1(of)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:0_1(the)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:1_1(John)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:2_1(Smith)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:-2_2(construction_of)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:-1_2(of_the)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:0_2(the_John)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:1_2(John_Smith)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:2_2(Smith)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:-2_3(construction_of_the)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:-1_3(of_the_John)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:0_3(the_John_Smith)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:1_3(John_Smith)",
+                        "WordConjunctionOneTwoThreeGramWindowTwo:2_3(Smith)"};
 
-        if (feats == null) {
-            log.debug("Feats are returning NULL.");
-        }
+        if (feats == null)
+            fail("Feats are returning NULL.");
 
-        log.debug("Printing Set of Features");
         for (Feature f : feats) {
-            log.debug(f.getName());
-            assert (ArrayUtils.contains(expected_outputs, f.getName()));
+            assertTrue(ArrayUtils.contains(expected_outputs, f.getName()));
         }
-
-        log.debug("GOT FEATURES YES!");
-
-        // System.exit(0);
     }
-
-
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -21,7 +18,8 @@ public class POSTaggerUnknown$$1 extends Classifier {
     private static ResourceManager rm = new POSConfigurator().getDefaultConfig();
     private static String baselineModelFile = rm.getString("baselineModelPath");
     private static String baselineLexFile = rm.getString("baselineLexPath");
-    private static final BaselineTarget __baselineTarget = new BaselineTarget(baselineModelFile, baselineLexFile);
+    private static final BaselineTarget __baselineTarget = new BaselineTarget(baselineModelFile,
+            baselineLexFile);
     private static final WordForm __wordForm = new WordForm();
     private static final labelTwoBeforeU __labelTwoBeforeU = new labelTwoBeforeU();
     private static final labelOneBeforeU __labelOneBeforeU = new labelOneBeforeU();
@@ -37,8 +35,13 @@ public class POSTaggerUnknown$$1 extends Classifier {
         name = "POSTaggerUnknown$$1";
     }
 
-    public String getInputType() { return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token"; }
-    public String getOutputType() { return "discrete%"; }
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token";
+    }
+
+    public String getOutputType() {
+        return "discrete%";
+    }
 
     public FeatureVector classify(Object __example) {
 
@@ -57,8 +60,13 @@ public class POSTaggerUnknown$$1 extends Classifier {
         return __result;
     }
 
-    public int hashCode() { return "POSTaggerUnknown$$1".hashCode(); }
-    public boolean equals(Object o) { return o instanceof POSTaggerUnknown$$1; }
+    public int hashCode() {
+        return "POSTaggerUnknown$$1".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof POSTaggerUnknown$$1;
+    }
 
     public LinkedList getCompositeChildren() {
         LinkedList result = new LinkedList();
@@ -75,4 +83,3 @@ public class POSTaggerUnknown$$1 extends Classifier {
         return result;
     }
 }
-

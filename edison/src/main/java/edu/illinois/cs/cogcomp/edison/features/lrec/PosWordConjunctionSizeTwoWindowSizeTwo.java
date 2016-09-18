@@ -1,40 +1,30 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.RealFeature;
-import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
-import java.util.*;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
+ * Extracts the POS Tags as well as the form (text) of tokens 2 before and 2 after from the given
+ * token and generates a discrete feature from it.
  *
- * @author Paul Vijayakumar, Mazin Bokhari Extracts the POS Tags as well as the form (text) of
- *         tokens 2 before and 2 after from the given token and generates a discrete feature from
- *         it.
- *
+ * @keywords pos-tagger, words, tokens, window
+ * @author Paul Vijayakumar, Mazin Bokhari, Christos Christodoulopoulos
  */
 public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor {
 
@@ -44,8 +34,18 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
         this.viewName = viewName;
     }
 
-    public String[] getwindowkfrom(View TOKENS, int startspan, int endspan, int k) {
-
+    /**
+     * Extracts an array of tokens from a uniform window of size k
+     *
+     * @param TOKENS The tokens {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan The span at the end of the {@link Constituent} object
+     * @param k The number of tokens to the left and right of the current {@link Constituent} object
+     *        to get
+     * @return The window of k tokens to the left and k tokens to the right of the current
+     *         {@link Constituent} object
+     */
+    private String[] getWindowK(View TOKENS, int startspan, int endspan, int k) {
         String window[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
@@ -58,32 +58,42 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
             startwin = 0;
         }
 
+        int index = 0;
         for (int i = startwin; i < endwin; i++) {
-
-            window[i] = TOKENS.getConstituentsCoveringSpan(i, i + 1).get(0).getSurfaceForm();
-
+            window[index] = TOKENS.getConstituentsCoveringSpan(i, i + 1).get(0).getSurfaceForm();
+            index++;
         }
         return window;
     }
 
-    public String[] getwindowtagskfrom(View TOKENS, View POS, int startspan, int endspan, int k) {
-
+    /**
+     * Extracts an array of POS-tags from a uniform window of size k
+     *
+     * @param POS The part-of-speech {@link View} of the {@link TextAnnotation} object
+     * @param startspan The span at the beginning of the {@link Constituent} object
+     * @param endspan The span at the end of the {@link Constituent} object
+     * @param k The number of tokens to the left and right of the current {@link Constituent} object
+     *        to get
+     * @return The window of k POS-tags to the left and k tokens to the right of the current
+     *         {@link Constituent} object
+     */
+    private String[] getWindowKTags(View POS, int startspan, int endspan, int k) {
         String tags[] = new String[2 * k + 1];
 
         int startwin = startspan - k;
         int endwin = endspan + k;
 
-        if (endwin > TOKENS.getEndSpan()) {
-            endwin = TOKENS.getEndSpan();
+        if (endwin > POS.getEndSpan()) {
+            endwin = POS.getEndSpan();
         }
         if (startwin < 0) {
             startwin = 0;
         }
 
+        int index = 0;
         for (int i = startwin; i < endwin; i++) {
-
-            tags[i] = POS.getLabelsCoveringSpan(i, i + 1).get(0);
-
+            tags[index] = POS.getLabelsCoveringSpan(i, i + 1).get(0);
+            index++;
         }
         return tags;
     }
@@ -96,7 +106,6 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
      *
      **/
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
-
         TextAnnotation ta = c.getTextAnnotation();
 
         View TOKENS = null, POS = null;
@@ -115,39 +124,35 @@ public class PosWordConjunctionSizeTwoWindowSizeTwo implements FeatureExtractor 
 
         // All our constituents are words(tokens)
         int k = 2; // words two before & after
+        int window = 2;
 
-        String[] forms = getwindowkfrom(TOKENS, startspan, endspan, k);
-        String[] tags = getwindowtagskfrom(TOKENS, POS, startspan, endspan, k);
+        String[] forms = getWindowK(TOKENS, startspan, endspan, k);
+        String[] tags = getWindowKTags(POS, startspan, endspan, k);
 
         String classifier = "PosWordConjunctionSizeTwoWindowSizeTwo";
-        String __id, __value;
-        Set<Feature> __result = new LinkedHashSet<Feature>();
+        String id, value;
+        Set<Feature> result = new LinkedHashSet<>();
 
-        int maxcontext = 2;
-
-        for (int j = 1; j < maxcontext; j++) {
-            for (int x = 0; x < 2; x++) {
-                boolean t = true;
-                for (int i = 0; i < tags.length; i++) {
-                    StringBuffer f = new StringBuffer();
-                    for (int context = 0; context <= j && i + context < tags.length; context++) {
-                        if (context != 0) {
-                            f.append("_");
-                        }
-                        if (t && x == 0) {
-                            f.append(tags[i + context]);
-                        } else {
-                            f.append(forms[i + context]);
-                        }
-                        t = !t;
+        for (int j = 0; j < k; j++) {
+            for (int i = 0; i < tags.length; i++) {
+                StringBuilder f = new StringBuilder();
+                for (int context = 0; context <= j && i + context < tags.length; context++) {
+                    if (context != 0) {
+                        f.append("_");
                     }
-                    __id = classifier + ":" + (i + "_" + j);
-                    __value = "(" + (f.toString()) + ")";
-                    __result.add(new DiscreteFeature(__id + __value));
+                    f.append(tags[i + context]);
+                    f.append("-");
+                    f.append(forms[i + context]);
                 }
+                // 2 is the center object in the array so i should go from -2 to +2 (with 0 being
+                // the center)
+                // j is the size of the n-gram so it goes 1 to 2
+                id = classifier + ":" + ((i - window) + "_" + (j + 1));
+                value = "(" + (f.toString()) + ")";
+                result.add(new DiscreteFeature(id + value));
             }
         }
-        return __result;
+        return result;
     }
 
     @Override

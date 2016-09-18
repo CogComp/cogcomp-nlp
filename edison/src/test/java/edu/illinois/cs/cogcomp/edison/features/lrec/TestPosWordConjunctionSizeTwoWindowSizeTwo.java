@@ -1,120 +1,73 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
-import org.apache.commons.lang.ArrayUtils;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
+import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import junit.framework.TestCase;
+import org.apache.commons.lang.ArrayUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Random;
-import java.io.Writer;
 
-import org.apache.log4j.Logger;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
- * Test class for SHALLOW PARSER Formpp Feature Extractor
+ * Unit test for {@link PosWordConjunctionSizeTwoWindowSizeTwo} extractor, which generates a
+ * conjunction of 2-shingles from a window of 2 tokens. The extractor is originally used in
+ * illinois-chunker (shallow parser).
  *
- * @author Paul Vijayakumar, Mazin Bokhari
+ * @author Christos Christodoulopoulos
  */
-public class TestPosWordConjunctionSizeTwoWindowSizeTwo extends TestCase {
-    static Logger log = Logger
-            .getLogger(TestPosWordConjunctionSizeTwoWindowSizeTwo.class.getName());
+public class TestPosWordConjunctionSizeTwoWindowSizeTwo {
+    private TextAnnotation ta;
 
-    private static List<TextAnnotation> tas;
-
-    static {
-        try {
-            tas =
-                    IOUtils.readObjectAsResource(TestPosWordConjunctionSizeTwoWindowSizeTwo.class,
-                            "test.ta");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Before
+    public void setUp() throws Exception {
+        ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(
+                        new String[] {ViewNames.POS}, false, 3);
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
+        // / Using the 3rd constituent as a test
+        List<Constituent> testList = ta.getView("TOKENS").getConstituents();
+        Constituent test = testList.get(3);
 
-        log.debug("PosWordConjunctionSizeTwoWindowSizeTwo Feature Extractor");
-        // Using the first TA and a constituent between span of 30-40 as a test
-        TextAnnotation ta = tas.get(1);
-        View TOKENS = ta.getView("TOKENS");
+        PosWordConjunctionSizeTwoWindowSizeTwo fex =
+                new PosWordConjunctionSizeTwoWindowSizeTwo("PosWordConj2Win2");
 
-        log.debug("GOT TOKENS FROM TEXTAnn");
-
-        List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
-
-        for (Constituent c : testlist) {
-            log.debug(c.getSurfaceForm());
-        }
-
-        log.debug("Testlist size is " + testlist.size());
-
-        Constituent test = testlist.get(1);
-
-        log.debug("The constituent we are extracting features from in this test is: "
-                + test.getSurfaceForm());
-
-        PosWordConjunctionSizeTwoWindowSizeTwo M =
-                new PosWordConjunctionSizeTwoWindowSizeTwo("PosWordConjunctionSizeTwoWindowSizeTwo");
-
-        log.debug("Init Views");
-
-        // Formpp.initViews(test);
-
-        log.debug("Startspan is " + test.getStartSpan() + " and Endspan is " + test.getEndSpan());
-
-        Set<Feature> feats = M.getFeatures(test);
+        Set<Feature> feats = fex.getFeatures(test);
         String[] expected_outputs =
-                {"PosWordConjunctionSizeTwoWindowSizeTwo:0_1(PRP_give)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:1_1(VBP_John)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:2_1(NNP_$900)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:3_1(NN_null)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:4_1(null)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:0_1(I_give)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:1_1(give_John)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:2_1(John_$900)",
-                        "PosWordConjunctionSizeTwoWindowSizeTwo:3_1($900_null)"};
+                {"PosWordConjunctionSizeTwoWindowSizeTwo:-2_1(NN-construction)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:-1_1(IN-of)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:0_1(DT-the)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:1_1(NNP-John)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:2_1(NNP-Smith)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:-2_2(NN-construction_IN-of)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:-1_2(IN-of_DT-the)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:0_2(DT-the_NNP-John)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:1_2(NNP-John_NNP-Smith)",
+                        "PosWordConjunctionSizeTwoWindowSizeTwo:2_2(NNP-Smith)"};
 
 
-        if (feats == null) {
-            log.debug("Feats are returning NULL.");
-        }
+        if (feats == null)
+            fail("Feats are returning NULL.");
 
-        log.debug("Printing Set of Features");
         for (Feature f : feats) {
-            log.debug(f.getName());
-            assert (ArrayUtils.contains(expected_outputs, f.getName()));
+            assertTrue(ArrayUtils.contains(expected_outputs, f.getName()));
         }
-
-        log.debug("GOT FEATURES YES!");
-
-        // System.exit(0);
     }
 }

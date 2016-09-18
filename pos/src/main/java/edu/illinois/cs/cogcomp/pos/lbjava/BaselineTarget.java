@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.pos.lbjava;
@@ -15,8 +12,8 @@ import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.pos.POSBaselineLearner;
 
 /**
- * Learned with {@link POSBaselineLearner}, this classifier returns the tag most often associated with the given word.
- * Only {@link WordForm} is used as a feature.
+ * Learned with {@link POSBaselineLearner}, this classifier returns the tag most often associated
+ * with the given word. Only {@link WordForm} is used as a feature.
  *
  * @author Nick Rizzolo
  **/
@@ -75,4 +72,3 @@ public class BaselineTarget extends POSBaselineLearner {
         return o instanceof BaselineTarget;
     }
 }
-

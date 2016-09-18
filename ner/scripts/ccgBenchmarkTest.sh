@@ -13,7 +13,7 @@ mvn dependency:copy-dependencies
 
 test="/shared/corpora/ratinov2/NER/Data/GoldData/Reuters/BracketsFormatDocumentsSplitMyTokenization/Test/"
 
-configFile="config/conll.config"
+configFile="config/ner.properties"
 
 # Classpath
 cpath="target/classes:target/dependency/*"

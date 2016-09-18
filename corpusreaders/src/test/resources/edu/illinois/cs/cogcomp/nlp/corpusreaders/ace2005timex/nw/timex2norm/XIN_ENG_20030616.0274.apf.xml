@@ -1,0 +1,659 @@
+<?xml version="1.0"?>
+<!DOCTYPE source_file SYSTEM
+        "/shared/experiments/mssammon/workspace-github/illinois-cogcomp-nlp-1/corpusreaders/src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ace2005timex/nw/timex2norm/apf.v5.1.1.dtd">
+<source_file URI="XIN_ENG_20030616.0274.sgm" SOURCE="newswire" TYPE="text" AUTHOR="LDC" ENCODING="UTF-8">
+<document DOCID="XIN_ENG_20030616.0274">
+<entity ID="XIN_ENG_20030616.0274-E1" TYPE="PER" SUBTYPE="Individual" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E1-5" TYPE="NOM" LDCTYPE="BAR" LDCATR="TRUE">
+    <extent>
+      <charseq START="908" END="974">foreign minister of Greece, the current holder of
+the EU presidency</charseq>
+    </extent>
+    <head>
+      <charseq START="916" END="923">minister</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E1-11" TYPE="PRO" LDCTYPE="PRO" LDCATR="FALSE">
+    <extent>
+      <charseq START="982" END="983">he</charseq>
+    </extent>
+    <head>
+      <charseq START="982" END="983">he</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E1-40" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="889" END="905">George Papandreou</charseq>
+    </extent>
+    <head>
+      <charseq START="889" END="905">George Papandreou</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="George Papandreou">
+      <charseq START="889" END="905">George Papandreou</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E2" TYPE="LOC" SUBTYPE="Region-General" CLASS="GEN">
+  <entity_mention ID="XIN_ENG_20030616.0274-E2-2" TYPE="NOM" LDCTYPE="BAR">
+    <extent>
+      <charseq START="569" END="606">suspected nuclear sites in
+the country</charseq>
+    </extent>
+    <head>
+      <charseq START="587" END="591">sites</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E3" TYPE="GPE" SUBTYPE="GPE-Cluster" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-3" TYPE="NAM" LDCTYPE="NAM" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="170" END="171">EU</charseq>
+    </extent>
+    <head>
+      <charseq START="170" END="171">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-9" TYPE="NAM" LDCTYPE="NAMPRE" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="962" END="963">EU</charseq>
+    </extent>
+    <head>
+      <charseq START="962" END="963">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-17" TYPE="NAM" LDCTYPE="NAMPRE" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="1097" END="1098">EU</charseq>
+    </extent>
+    <head>
+      <charseq START="1097" END="1098">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-21" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG" LDCATR="TRUE">
+    <extent>
+      <charseq START="1231" END="1236">the EU</charseq>
+    </extent>
+    <head>
+      <charseq START="1235" END="1236">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-24" TYPE="NAM" LDCTYPE="NAM" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="150" END="171">the European Union (EU</charseq>
+    </extent>
+    <head>
+      <charseq START="154" END="167">European Union</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-31" TYPE="NAM" LDCTYPE="NAMPRE" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="373" END="374">EU</charseq>
+    </extent>
+    <head>
+      <charseq START="373" END="374">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E3-34" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG" LDCATR="TRUE">
+    <extent>
+      <charseq START="623" END="628">the EU</charseq>
+    </extent>
+    <head>
+      <charseq START="627" END="628">EU</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="EU">
+      <charseq START="962" END="963">EU</charseq>
+    </name>
+    <name NAME="EU">
+      <charseq START="1097" END="1098">EU</charseq>
+    </name>
+    <name NAME="EU">
+      <charseq START="1235" END="1236">EU</charseq>
+    </name>
+    <name NAME="European Union">
+      <charseq START="154" END="167">European Union</charseq>
+    </name>
+    <name NAME="EU">
+      <charseq START="373" END="374">EU</charseq>
+    </name>
+    <name NAME="EU">
+      <charseq START="627" END="628">EU</charseq>
+    </name>
+    <name NAME="EU">
+      <charseq START="170" END="171">EU</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E4" TYPE="ORG" SUBTYPE="Non-Governmental" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E4-4" TYPE="NAM" LDCTYPE="NAM" LDCATR="TRUE">
+    <extent>
+      <charseq START="316" END="319">IAEA</charseq>
+    </extent>
+    <head>
+      <charseq START="316" END="319">IAEA</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E4-14" TYPE="NAM" LDCTYPE="NAMPRE" LDCATR="TRUE">
+    <extent>
+      <charseq START="1014" END="1017">IAEA</charseq>
+    </extent>
+    <head>
+      <charseq START="1014" END="1017">IAEA</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E4-22" TYPE="NAM" LDCTYPE="NAMPRE" LDCATR="TRUE">
+    <extent>
+      <charseq START="1331" END="1334">IAEA</charseq>
+    </extent>
+    <head>
+      <charseq START="1331" END="1334">IAEA</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E4-28" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="276" END="319">the International Atomic Energy Agency (IAEA</charseq>
+    </extent>
+    <head>
+      <charseq START="280" END="313">International Atomic Energy Agency</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E4-37" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="723" END="730">the IAEA</charseq>
+    </extent>
+    <head>
+      <charseq START="727" END="730">IAEA</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="IAEA">
+      <charseq START="1014" END="1017">IAEA</charseq>
+    </name>
+    <name NAME="IAEA">
+      <charseq START="1331" END="1334">IAEA</charseq>
+    </name>
+    <name NAME="International Atomic Energy Agency">
+      <charseq START="280" END="313">International Atomic Energy Agency</charseq>
+    </name>
+    <name NAME="IAEA">
+      <charseq START="727" END="730">IAEA</charseq>
+    </name>
+    <name NAME="IAEA">
+      <charseq START="316" END="319">IAEA</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E6" TYPE="GPE" SUBTYPE="Nation" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E6-7" TYPE="NAM" LDCTYPE="NAM" ROLE="GPE" LDCATR="FALSE">
+    <extent>
+      <charseq START="928" END="933">Greece</charseq>
+    </extent>
+    <head>
+      <charseq START="928" END="933">Greece</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E6-8" TYPE="NOM" LDCTYPE="NOM" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="936" END="974">the current holder of
+the EU presidency</charseq>
+    </extent>
+    <head>
+      <charseq START="948" END="953">holder</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="Greece">
+      <charseq START="928" END="933">Greece</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E9" TYPE="PER" SUBTYPE="Individual" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E9-12" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="1014" END="1052">IAEA
+Director-General Mohamed ElBaradei</charseq>
+    </extent>
+    <head>
+      <charseq START="1036" END="1052">Mohamed ElBaradei</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E9-13" TYPE="NOM" LDCTYPE="NOMPRE" LDCATR="TRUE">
+    <extent>
+      <charseq START="1014" END="1034">IAEA
+Director-General</charseq>
+    </extent>
+    <head>
+      <charseq START="1019" END="1034">Director-General</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E9-15" TYPE="PRO" LDCTYPE="PRO" LDCATR="FALSE">
+    <extent>
+      <charseq START="1071" END="1073">his</charseq>
+    </extent>
+    <head>
+      <charseq START="1071" END="1073">his</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="Mohamed ElBaradei">
+      <charseq START="1036" END="1052">Mohamed ElBaradei</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E14" TYPE="GPE" SUBTYPE="Population-Center" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E14-1" TYPE="NAM" LDCTYPE="NAM" ROLE="LOC">
+    <extent>
+      <charseq START="99" END="108">LUXEMBOURG</charseq>
+    </extent>
+    <head>
+      <charseq START="99" END="108">LUXEMBOURG</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E14-25" TYPE="PRO" LDCTYPE="PRO" ROLE="LOC">
+    <extent>
+      <charseq START="179" END="182">here</charseq>
+    </extent>
+    <head>
+      <charseq START="179" END="182">here</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="LUXEMBOURG">
+      <charseq START="99" END="108">LUXEMBOURG</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E15" TYPE="ORG" SUBTYPE="Media" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E15-23" TYPE="NAM" LDCTYPE="NAM">
+    <extent>
+      <charseq START="120" END="125">Xinhua</charseq>
+    </extent>
+    <head>
+      <charseq START="120" END="125">Xinhua</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="Xinhua">
+      <charseq START="120" END="125">Xinhua</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E16" TYPE="PER" SUBTYPE="Group" CLASS="USP">
+  <entity_mention ID="XIN_ENG_20030616.0274-E16-16" TYPE="NOM" LDCTYPE="BAR">
+    <extent>
+      <charseq START="1097" END="1116">EU foreign ministers</charseq>
+    </extent>
+    <head>
+      <charseq START="1108" END="1116">ministers</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E16-20" TYPE="PRO" LDCTYPE="PRO">
+    <extent>
+      <charseq START="1211" END="1214">They</charseq>
+    </extent>
+    <head>
+      <charseq START="1211" END="1214">They</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E16-26" TYPE="PRO" LDCTYPE="PRO">
+    <extent>
+      <charseq START="196" END="199">they</charseq>
+    </extent>
+    <head>
+      <charseq START="196" END="199">they</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E16-29" TYPE="NOM" LDCTYPE="BAR">
+    <extent>
+      <charseq START="129" END="171">Foreign ministers of the European Union (EU</charseq>
+    </extent>
+    <head>
+      <charseq START="137" END="145">ministers</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E16-30" TYPE="NOM" LDCTYPE="NOM">
+    <extent>
+      <charseq START="369" END="392">the EU foreign ministers</charseq>
+    </extent>
+    <head>
+      <charseq START="384" END="392">ministers</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="XIN_ENG_20030616.0274-E18" TYPE="GPE" SUBTYPE="Nation" CLASS="SPC">
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-18" TYPE="NAM" LDCTYPE="NAM" ROLE="GPE">
+    <extent>
+      <charseq START="1160" END="1163">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="1160" END="1163">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-19" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG">
+    <extent>
+      <charseq START="1190" END="1193">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="1190" END="1193">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-27" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG">
+    <extent>
+      <charseq START="249" END="252">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="249" END="252">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-32" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG">
+    <extent>
+      <charseq START="404" END="407">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="404" END="407">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-33" TYPE="NOM" LDCTYPE="NOM" ROLE="LOC">
+    <extent>
+      <charseq START="596" END="606">the country</charseq>
+    </extent>
+    <head>
+      <charseq START="600" END="606">country</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-35" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG">
+    <extent>
+      <charseq START="660" END="663">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="660" END="663">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-36" TYPE="PRO" LDCTYPE="PRO" ROLE="ORG">
+    <extent>
+      <charseq START="696" END="697">it</charseq>
+    </extent>
+    <head>
+      <charseq START="696" END="697">it</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-38" TYPE="NAM" LDCTYPE="NAM" ROLE="ORG">
+    <extent>
+      <charseq START="785" END="788">Iran</charseq>
+    </extent>
+    <head>
+      <charseq START="785" END="788">Iran</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="XIN_ENG_20030616.0274-E18-39" TYPE="PRO" LDCTYPE="PRO" ROLE="ORG">
+    <extent>
+      <charseq START="834" END="836">its</charseq>
+    </extent>
+    <head>
+      <charseq START="834" END="836">its</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name NAME="Iran">
+      <charseq START="1160" END="1163">Iran</charseq>
+    </name>
+    <name NAME="Iran">
+      <charseq START="1190" END="1193">Iran</charseq>
+    </name>
+    <name NAME="Iran">
+      <charseq START="249" END="252">Iran</charseq>
+    </name>
+    <name NAME="Iran">
+      <charseq START="404" END="407">Iran</charseq>
+    </name>
+    <name NAME="Iran">
+      <charseq START="660" END="663">Iran</charseq>
+    </name>
+    <name NAME="Iran">
+      <charseq START="785" END="788">Iran</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<timex2 ID="XIN_ENG_20030616.0274-T1" VAL="2003-06-16">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T1-1">
+    <extent>
+      <charseq START="39" END="46">20030616</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<timex2 ID="XIN_ENG_20030616.0274-T2" VAL="2003-06-16">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T2-1">
+    <extent>
+      <charseq START="111" END="117">June 16</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<timex2 ID="XIN_ENG_20030616.0274-T3" VAL="2003-06-16">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T3-1">
+    <extent>
+      <charseq START="184" END="189">Monday</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<timex2 ID="XIN_ENG_20030616.0274-T4" VAL="P2D" ANCHOR_VAL="2003-06-16" ANCHOR_DIR="STARTING">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T4-1">
+    <extent>
+      <charseq START="350" END="356">two-day</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<timex2 ID="XIN_ENG_20030616.0274-T5" VAL="2003-06-17">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T5-1">
+    <extent>
+      <charseq START="1347" END="1353">Tuesday</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<timex2 ID="XIN_ENG_20030616.0274-T6" VAL="PRESENT_REF" ANCHOR_VAL="2003-06-16" ANCHOR_DIR="AS_OF">
+  <timex2_mention ID="XIN_ENG_20030616.0274-T6-1">
+    <extent>
+      <charseq START="940" END="946">current</charseq>
+    </extent>
+  </timex2_mention>
+</timex2>
+<relation ID="XIN_ENG_20030616.0274-R1" TYPE="PART-WHOLE" SUBTYPE="Geographical" TENSE="Unspecified" MODALITY="Asserted">
+  <relation_argument REFID="XIN_ENG_20030616.0274-E2" ROLE="Arg-1"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-E18" ROLE="Arg-2"/>
+  <relation_mention ID="XIN_ENG_20030616.0274-R1-1" LEXICALCONDITION="Preposition">
+    <extent>
+      <charseq START="569" END="606">suspected nuclear sites in
+the country</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E2-2" ROLE="Arg-1">
+      <extent>
+        <charseq START="569" END="606">suspected nuclear sites in
+the country</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E18-33" ROLE="Arg-2">
+      <extent>
+        <charseq START="596" END="606">the country</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+</relation>
+<relation ID="XIN_ENG_20030616.0274-R2" TYPE="ORG-AFF" SUBTYPE="Employment" TENSE="Unspecified" MODALITY="Asserted">
+  <relation_argument REFID="XIN_ENG_20030616.0274-E16" ROLE="Arg-1"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-E3" ROLE="Arg-2"/>
+  <relation_mention ID="XIN_ENG_20030616.0274-R2-1" LEXICALCONDITION="Preposition">
+    <extent>
+      <charseq START="129" END="171">Foreign ministers of the European Union (EU</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E16-29" ROLE="Arg-1">
+      <extent>
+        <charseq START="129" END="171">Foreign ministers of the European Union (EU</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E3-24" ROLE="Arg-2">
+      <extent>
+        <charseq START="150" END="171">the European Union (EU</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+  <relation_mention ID="XIN_ENG_20030616.0274-R2-2" LEXICALCONDITION="PreMod">
+    <extent>
+      <charseq START="369" END="392">the EU foreign ministers</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E16-30" ROLE="Arg-1">
+      <extent>
+        <charseq START="369" END="392">the EU foreign ministers</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E3-31" ROLE="Arg-2">
+      <extent>
+        <charseq START="373" END="374">EU</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+  <relation_mention ID="XIN_ENG_20030616.0274-R2-3" LEXICALCONDITION="PreMod">
+    <extent>
+      <charseq START="1097" END="1116">EU foreign ministers</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E16-16" ROLE="Arg-1">
+      <extent>
+        <charseq START="1097" END="1116">EU foreign ministers</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E3-17" ROLE="Arg-2">
+      <extent>
+        <charseq START="1097" END="1098">EU</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+</relation>
+<relation ID="XIN_ENG_20030616.0274-R3" TYPE="PHYS" SUBTYPE="Located" TENSE="Past" MODALITY="Asserted">
+  <relation_argument REFID="XIN_ENG_20030616.0274-E16" ROLE="Arg-1"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-E14" ROLE="Arg-2"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-T3" ROLE="Time-Within"/>
+  <relation_mention ID="XIN_ENG_20030616.0274-R3-1" LEXICALCONDITION="Verbal">
+    <extent>
+      <charseq START="129" END="319">Foreign ministers of the European Union (EU) said here Monday that
+they fully supported stricter nuclear inspections of Iran's nuclear
+programs by the International Atomic Energy Agency (IAEA</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E16-29" ROLE="Arg-1">
+      <extent>
+        <charseq START="129" END="171">Foreign ministers of the European Union (EU</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E14-25" ROLE="Arg-2">
+      <extent>
+        <charseq START="179" END="182">here</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-T3-1" ROLE="Time-Within">
+      <extent>
+        <charseq START="184" END="189">Monday</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+</relation>
+<relation ID="XIN_ENG_20030616.0274-R4" TYPE="ORG-AFF" SUBTYPE="Employment" TENSE="Unspecified" MODALITY="Asserted">
+  <relation_argument REFID="XIN_ENG_20030616.0274-E1" ROLE="Arg-1"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-E6" ROLE="Arg-2"/>
+  <relation_mention ID="XIN_ENG_20030616.0274-R4-1" LEXICALCONDITION="Preposition">
+    <extent>
+      <charseq START="908" END="974">foreign minister of Greece, the current holder of
+the EU presidency</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E1-5" ROLE="Arg-1">
+      <extent>
+        <charseq START="908" END="974">foreign minister of Greece, the current holder of
+the EU presidency</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E6-7" ROLE="Arg-2">
+      <extent>
+        <charseq START="928" END="933">Greece</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+</relation>
+<relation ID="XIN_ENG_20030616.0274-R5" TYPE="ORG-AFF" SUBTYPE="Employment" TENSE="Unspecified" MODALITY="Asserted">
+  <relation_argument REFID="XIN_ENG_20030616.0274-E9" ROLE="Arg-1"/>
+  <relation_argument REFID="XIN_ENG_20030616.0274-E4" ROLE="Arg-2"/>
+  <relation_mention ID="XIN_ENG_20030616.0274-R5-1" LEXICALCONDITION="PreMod">
+    <extent>
+      <charseq START="1014" END="1034">IAEA
+Director-General</charseq>
+    </extent>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E9-13" ROLE="Arg-1">
+      <extent>
+        <charseq START="1014" END="1034">IAEA
+Director-General</charseq>
+      </extent>
+    </relation_mention_argument>
+    <relation_mention_argument REFID="XIN_ENG_20030616.0274-E4-14" ROLE="Arg-2">
+      <extent>
+        <charseq START="1014" END="1017">IAEA</charseq>
+      </extent>
+    </relation_mention_argument>
+  </relation_mention>
+</relation>
+<event ID="XIN_ENG_20030616.0274-EV1" TYPE="Contact" SUBTYPE="Meet" MODALITY="Asserted" POLARITY="Positive" GENERICITY="Specific" TENSE="Future">
+  <event_argument REFID="XIN_ENG_20030616.0274-E4" ROLE="Entity"/>
+  <event_argument REFID="XIN_ENG_20030616.0274-T5" ROLE="Time-Within"/>
+  <event_mention ID="XIN_ENG_20030616.0274-EV1-1">
+    <extent>
+      <charseq START="1331" END="1353">IAEA meeting on
+Tuesday</charseq>
+    </extent>
+    <ldc_scope>
+      <charseq START="1211" END="1353">They also said that the EU was closely following the nuclear issue
+and would revert it to the forthcoming debate of the IAEA meeting on
+Tuesday</charseq>
+    </ldc_scope>
+    <anchor>
+      <charseq START="1336" END="1342">meeting</charseq>
+    </anchor>
+    <event_mention_argument REFID="XIN_ENG_20030616.0274-E4-22" ROLE="Entity">
+      <extent>
+        <charseq START="1331" END="1334">IAEA</charseq>
+      </extent>
+    </event_mention_argument>
+    <event_mention_argument REFID="XIN_ENG_20030616.0274-T5-1" ROLE="Time-Within">
+      <extent>
+        <charseq START="1347" END="1353">Tuesday</charseq>
+      </extent>
+    </event_mention_argument>
+  </event_mention>
+</event>
+<event ID="XIN_ENG_20030616.0274-EV2" TYPE="Contact" SUBTYPE="Meet" MODALITY="Asserted" POLARITY="Positive" GENERICITY="Specific" TENSE="Past">
+  <event_argument REFID="XIN_ENG_20030616.0274-E16" ROLE="Entity"/>
+  <event_argument REFID="XIN_ENG_20030616.0274-T4" ROLE="Time-Holds"/>
+  <event_mention ID="XIN_ENG_20030616.0274-EV2-1">
+    <extent>
+      <charseq START="350" END="392">two-day meeting of the EU foreign ministers</charseq>
+    </extent>
+    <ldc_scope>
+      <charseq START="324" END="606">A statement issued at the two-day meeting of the EU foreign ministers
+called on Iran to conclude and implement urgently and unconditionally
+an additional protocol to the Nuclear Non- Proliferation Treaty
+allowing for short-notice inspections of suspected nuclear sites in
+the country</charseq>
+    </ldc_scope>
+    <anchor>
+      <charseq START="358" END="364">meeting</charseq>
+    </anchor>
+    <event_mention_argument REFID="XIN_ENG_20030616.0274-E16-30" ROLE="Entity">
+      <extent>
+        <charseq START="369" END="392">the EU foreign ministers</charseq>
+      </extent>
+    </event_mention_argument>
+    <event_mention_argument REFID="XIN_ENG_20030616.0274-T4-1" ROLE="Time-Holds">
+      <extent>
+        <charseq START="350" END="356">two-day</charseq>
+      </extent>
+    </event_mention_argument>
+  </event_mention>
+</event>
+</document>
+</source_file>

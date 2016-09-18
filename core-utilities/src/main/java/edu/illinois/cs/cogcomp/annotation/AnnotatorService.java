@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.annotation;
@@ -15,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
+import javax.xml.soap.Text;
 import java.util.Set;
 
 /**
@@ -42,18 +40,19 @@ public interface AnnotatorService {
 
     /**
      * A convenience method for creating a
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
-     * while respecting the pre-tokenization of text passed in the form of
+     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} while
+     * respecting the pre-tokenization of text passed in the form of
      * {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization}.
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @throws AnnotatorException If the service cannot create requested object
      */
-    TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text, Tokenizer.Tokenization
-            tokenization) throws AnnotatorException;
+    TextAnnotation createBasicTextAnnotation(String corpusId, String docId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException;
 
 
     /**
@@ -80,17 +79,20 @@ public interface AnnotatorService {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} and adding
      * all the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s supported by
      * this {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService}. This amounts to calling
-     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and successive calls of
+     * {@link #createBasicTextAnnotation(String, String, String, Tokenizer.Tokenization)} and
+     * successive calls of
      * {@link #addView(edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation, String)}
      *
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
-     * @throws AnnotatorException If none of the {@code viewProviders} supports this {@code viewName}
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @throws AnnotatorException If none of the {@code viewProviders} supports this
+     *         {@code viewName}
      */
-    TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
-            tokenization) throws AnnotatorException;
+    TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text,
+            Tokenizer.Tokenization tokenization) throws AnnotatorException;
 
 
     /**
@@ -111,19 +113,23 @@ public interface AnnotatorService {
 
 
     /**
-     * An overloaded version of {@link #createAnnotatedTextAnnotation(String, String, String, Tokenizer.Tokenization)} that
+     * An overloaded version of
+     * {@link #createAnnotatedTextAnnotation(String, String, String, Tokenizer.Tokenization)} that
      * adds only the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s
      * requested.
+     * 
      * @param text The raw text
-     * @param tokenization An instance of {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which
-     *                     contains tokens, character offsets, and sentence boundaries to be used while constructing
-     *                     the {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
+     * @param tokenization An instance of
+     *        {@link edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization} which contains
+     *        tokens, character offsets, and sentence boundaries to be used while constructing the
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}.
      * @param viewNames Views to add
      * @return
-     * @throws AnnotatorException If none of the {@code viewProviders} supports this {@code viewName}
+     * @throws AnnotatorException If none of the {@code viewProviders} supports this
+     *         {@code viewName}
      */
-    TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text, Tokenizer.Tokenization
-            tokenization, Set<String> viewNames) throws AnnotatorException;
+    TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text,
+            Tokenizer.Tokenization tokenization, Set<String> viewNames) throws AnnotatorException;
 
 
     /**
@@ -143,4 +149,36 @@ public interface AnnotatorService {
      * @throws AnnotatorException If this AnnotatorService cannot provide this {@code viewName},
      */
     boolean addView(TextAnnotation ta, String viewName) throws AnnotatorException;
+
+
+    /**
+     * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
+     *    known to this {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService}.
+     * @param annotator the {@link Annotator} to be added.
+     * @throws {@link AnnotatorException} if the annotator requires views that cannot be satisfied.
+     */
+    void addAnnotator( Annotator annotator ) throws AnnotatorException;
+
+
+    /**
+     * Return a set containing the names of all {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s
+     *     that this service can provide.
+     * @return a set of view names corresponding to annotators known to this AnnotatorService
+     */
+    Set< String > getAvailableViews();
+
+
+    /**
+     * Add the specified views to the TextAnnotation argument. This is useful when TextAnnotation objects are
+     *    built independently of the service, perhaps by a different system component (e.g. a corpus reader).
+     * If so specified, overwrite existing views.
+     *
+     * @param ta The {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to annotate
+     * @param replaceExistingViews if 'true', annotate a
+     *                              {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} even if
+     *                              it is already present in the ta argument, replacing the original corresponding View.
+     * @return a reference to the updated TextAnnotation
+     */
+    TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews ) throws AnnotatorException;
+
 }

@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
@@ -35,7 +32,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     private static final long serialVersionUID = -1308407121595094945L;
 
-    private org.slf4j.Logger logger = LoggerFactory.getLogger( TextAnnotation.class );
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(TextAnnotation.class);
 
     /**
      * An identifier for the corpus
@@ -239,17 +236,19 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * Get the position of token that corresponds to the character offset that is passed as a
      * parameter. This function could be useful when dealing with corpora that specify annotation in
      * terms of character offsets. In particular, the CuratorClient uses this function to convert
-     * views from the Curator representation.
-     * NOTE: one-past-the-end indexing can make this problematic. Currently, constituents are processed so that
-     *   only characters <i>within</i> tokens are mapped to token ids (avoiding ambiguity at the cost of introducing
-     *   complexity for users thinking of one-past-the-end indexing). <b>I.E. you MUST modify the end offset in
-     *   the call if you are using one-past-the-end offsets.</b> (example: curator data structures use one-past-the-
-     *   end, as do TextAnnotation Views/Constituents. This behavior was chosen to handle the case where there is
-     *   arbitrary whitespace, and to avoid confusion when two tokens are contiguous (the first character of the
-     *   second token would conflict with the last (one-past-the-end) character of the first.
+     * views from the Curator representation. NOTE: one-past-the-end indexing can make this
+     * problematic. Currently, constituents are processed so that only characters <i>within</i>
+     * tokens are mapped to token ids (avoiding ambiguity at the cost of introducing complexity for
+     * users thinking of one-past-the-end indexing). <b>I.E. you MUST modify the end offset in the
+     * call if you are using one-past-the-end offsets.</b> (example: curator data structures use
+     * one-past-the- end, as do TextAnnotation Views/Constituents. This behavior was chosen to
+     * handle the case where there is arbitrary whitespace, and to avoid confusion when two tokens
+     * are contiguous (the first character of the second token would conflict with the last
+     * (one-past-the-end) character of the first.
      *
-     * UPDATED to allow non-zero first token character offset (i.e. in case where source text has markup preamble
-     *    that you want to ignore. Current implementation maps char offsets not representing tokens to the index '-1'.
+     * UPDATED to allow non-zero first token character offset (i.e. in case where source text has
+     * markup preamble that you want to ignore. Current implementation maps char offsets not
+     * representing tokens to the index '-1'.
      */
     public int getTokenIdFromCharacterOffset(int characterOffset) {
         if (characterOffsetsToTokens == null) {
@@ -261,10 +260,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
             int characterId = 0;
             int tokenId = 0;
-            View tokenView = this.getView( ViewNames.TOKENS );
-            for (Constituent tok : tokenView.getConstituents() ) {
+            View tokenView = this.getView(ViewNames.TOKENS);
+            for (Constituent tok : tokenView.getConstituents()) {
 
-                //TODO: decide how to map whitespace, or how to handle failure to find token otherwise
+                // TODO: decide how to map whitespace, or how to handle failure to find token
+                // otherwise
                 int start = tok.getStartCharOffset();
                 int end = tok.getEndCharOffset();
                 for (characterId = start; characterId < end; characterId++) {
@@ -284,19 +284,20 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             }
 
             // all the whitespace characters that come after this token also
-//            // point to the end.
-//            while (characterId < this.getText().length()
-//                    && Character.isWhitespace(this.getText().charAt(characterId))) {
-//                characterOffsetsToTokens[characterId] = this.size();
-//                characterId++;
-//            }
+            // // point to the end.
+            // while (characterId < this.getText().length()
+            // && Character.isWhitespace(this.getText().charAt(characterId))) {
+            // characterOffsetsToTokens[characterId] = this.size();
+            // characterId++;
+            // }
         }
 
         if (characterOffset < 0 || characterOffset > characterOffsetsToTokens.length) {
-//            throw new IllegalArgumentException("Invalid character offset. The character position "
-//                    + characterOffset + " does not correspond to any token.");
-            logger.debug("Invalid character offset. The character position "
-                    + characterOffset + " does not correspond to any token.");
+            // throw new
+            // IllegalArgumentException("Invalid character offset. The character position "
+            // + characterOffset + " does not correspond to any token.");
+            logger.debug("Invalid character offset. The character position " + characterOffset
+                    + " does not correspond to any token.");
         }
 
         // If the characterOffset is the number of characters (and hence doesn't
@@ -330,9 +331,9 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                                     .synchronizedMap(new TIntObjectHashMap<ArrayList<IntPair>>());
 
                     /**
-                     * creates a hash for each contiguous substring, and creates an entry for it in allSpans
-                     * NOTE: spans previously used "at-the-end" indexing but then the offsets won't agree with actual
-                     *    constituents, so CHANGED IT 2016/05/11. MS
+                     * creates a hash for each contiguous substring, and creates an entry for it in
+                     * allSpans NOTE: spans previously used "at-the-end" indexing but then the
+                     * offsets won't agree with actual constituents, so CHANGED IT 2016/05/11. MS
                      */
                     for (int start = 0; start < this.size() - 1; start++) {
                         StringBuilder sb = new StringBuilder();
@@ -351,7 +352,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
                                 allSpans.put(hash, new ArrayList<IntPair>());
 
                             List<IntPair> list = allSpans.get(hash);
-                            list.add(new IntPair(start, end+1));
+                            list.add(new IntPair(start, end + 1));
                         }
                     }
                 }
@@ -368,13 +369,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // This is a hack to deal with the fact that sometimes, two strings in
         // Java could have the same hashCode even if they aren't identical. This
         // won't weed out all such cases, but will remove most.v
-        // MS: don't see that this does anything except filter out spans of length 1.  How is that helpful?
-//        List<IntPair> newList = new ArrayList<>();
-//        for (IntPair item : list) {
-//            if (item.getSecond() - item.getFirst() == length)
-//                newList.add(item);
-//        }
-//        return newList;
+        // MS: don't see that this does anything except filter out spans of length 1. How is that
+        // helpful?
+        // List<IntPair> newList = new ArrayList<>();
+        // for (IntPair item : list) {
+        // if (item.getSecond() - item.getFirst() == length)
+        // newList.add(item);
+        // }
+        // return newList;
 
         return list;
     }

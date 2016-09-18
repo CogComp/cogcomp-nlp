@@ -1,11 +1,8 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader;
@@ -27,10 +24,8 @@ import java.io.IOException;
  */
 public class SimpleXMLParser {
     /**
-     * @param filename
-     *                The file to parse
-     * @return The {@code Document} XML tag -- the root of the
-     *         document.
+     * @param filename The file to parse
+     * @return The {@code Document} XML tag -- the root of the document.
      * @throws edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException
      */
     public static Document getDocument(String filename) throws XMLException {
@@ -38,10 +33,8 @@ public class SimpleXMLParser {
     }
 
     /**
-     * @param file
-     *                The file to parse.
-     * @return The {@code Document} XML tag -- the root of the
-     *         document.
+     * @param file The file to parse.
+     * @return The {@code Document} XML tag -- the root of the document.
      * @throws XMLException
      */
     public static Document getDocument(File file) throws XMLException {
@@ -50,15 +43,12 @@ public class SimpleXMLParser {
     }
 
     /**
-     * @param parent
-     *                The node containing the desired element tag
-     * @param tagName
-     *                The name of the tag
+     * @param parent The node containing the desired element tag
+     * @param tagName The name of the tag
      * @return the first target element inside the parent Node.
      * @throws XMLException
      */
-    public static Element getElement(Element parent, String tagName)
-            throws XMLException {
+    public static Element getElement(Element parent, String tagName) throws XMLException {
         NodeList nl = parent.getElementsByTagName(tagName);
         if (nl.getLength() <= 0)
             throw new XMLException("Element Not Found");
@@ -66,8 +56,7 @@ public class SimpleXMLParser {
     }
 
     /**
-     * @param tag
-     *                (start) tag that encloses desired text.
+     * @param tag (start) tag that encloses desired text.
      * @return The contents of the tag.
      * @throws XMLException If the tag has no children.
      */
@@ -78,27 +67,21 @@ public class SimpleXMLParser {
     }
 
     /**
-     * @param parent
-     *                A node containing the tag enclosing desired text.
-     * @param tagName
-     *                Name of tag containing desired text.
+     * @param parent A node containing the tag enclosing desired text.
+     * @param tagName Name of tag containing desired text.
      * @return The desired text.
      * @throws XMLException
      */
-    public static String getTagContent(Element parent, String tagName)
-            throws XMLException {
+    public static String getTagContent(Element parent, String tagName) throws XMLException {
         return getContentString(getElement(parent, tagName));
     }
 
     /**
-     * @param parent
-     *                A node containing the tag enclosing desired text.
-     * @param tagName
-     *                Name of tag containing desired text.
+     * @param parent A node containing the tag enclosing desired text.
+     * @param tagName Name of tag containing desired text.
      * @return The desired text, or if tag not found, defaultResult.
      */
-    public static String getTagContent(Element parent, String tagName,
-                                       String defaultResult) {
+    public static String getTagContent(Element parent, String tagName, String defaultResult) {
         NodeList nl = parent.getElementsByTagName(tagName);
         if (nl.getLength() <= 0)
             return defaultResult;
@@ -120,9 +103,7 @@ public class SimpleXMLParser {
         }
     }
 
-    private static Document getDocument(File file,
-                                        DocumentBuilder docBuilder)
-            throws XMLException {
+    private static Document getDocument(File file, DocumentBuilder docBuilder) throws XMLException {
         try {
             return docBuilder.parse(file);
         } catch (SAXException e) {

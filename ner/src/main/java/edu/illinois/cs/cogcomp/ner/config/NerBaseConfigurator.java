@@ -1,17 +1,14 @@
 /**
- * This software is released under the University of Illinois/Research and
- *  Academic Use License. See the LICENSE file in the root folder for details.
- * Copyright (c) 2016
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
  *
- * Developed by:
- * The Cognitive Computation Group
- * University of Illinois at Urbana-Champaign
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
 package edu.illinois.cs.cogcomp.ner.config;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
@@ -25,7 +22,7 @@ import java.util.Properties;
  * individually, and the client will use the inherited {#getConfig( ResourceManager rm )} method to
  * override only those values that conflict with defaults. Created by mssammon on 10/14/15.
  */
-public class NerBaseConfigurator extends Configurator {
+public class NerBaseConfigurator extends AnnotatorConfigurator {
 
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
@@ -38,9 +35,9 @@ public class NerBaseConfigurator extends Configurator {
 
     public final static String NORMALIZE_TITLE_TEXT = "normalizeTitleText";
     public final static String PATH_TO_TOKEN_NORM_DATA = "pathToTokenNormalizationData";
-    public final static String PREDICTION_CONFIDENCE_THRESHOLD = "predictionConfidenceThreshold";
     public final static String SORT_FILES_LEXICALLY = "sortLexicallyFilesInFolders";
-    public final static String THRESHOLD_PREDICTION = "thresholdPrediction";
+    public final static String MIN_CONFIDENCE_PREDICTIONS_1 = "minConfidencePredictionsLevel1";
+    public final static String MIN_CONFIDENCE_PREDICTIONS_2 = "minConfidencePredictionsLevel2";
     public final static String TREAT_ALL_FILES_AS_ONE = "treatAllFilesInFolderAsOneBigDocument";
     public final static String DEBUG = "debug";
 
@@ -72,7 +69,8 @@ public class NerBaseConfigurator extends Configurator {
 
     public final static String RANDOM_NOISE_LEVEL = "randomNoiseLevel";
     public final static String OMISSION_RATE = "omissionRate";
-
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1 = "0.0";
+    public final static String DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2 = "0.0";
     private final static String DEFAULT_BROWN_CLUSTER_PATHS = "1";
     private final static String DEFAULT_IS_LOWERCASE_BROWN_CLUSTERS = "false false false";
     private final static String DEFAULT_PATHS_TO_BROWN_CLUSTERS =
@@ -81,7 +79,6 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_GAZETTEER_FEATURES = "1";
     private final static String DEFAULT_PATHS_TO_GAZETTEERS = "gazetteers";
     private final static String DEFAULT_WORD_EMBEDDINGS = "0";
-
     private final static String DEFAULT_MODEL_PATH = "ner/models";
     private final static String DEFAULT_FORMS = "1";
     private final static String DEFAULT_PHRASE_LENGTH = "5";
@@ -96,7 +93,6 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_AGGREGATE_GAZETTEER = "0";
     private final static String DEFAULT_PREV_TAGS_FOR_CONTEXT = "1";
     private final static String DEFAULT_PREDICTIONS_1 = "1";
-
     // private final static String DEFAULT_BEAM_SIZE = "5";
     private final static String DEFAULT_FORCE_LINE_BREAKS = TRUE;
     private final static String DEFAULT_LABELS = "PER ORG LOC MISC";
@@ -105,9 +101,7 @@ public class NerBaseConfigurator extends Configurator {
     private final static String DEFAULT_NORMALIZE_TITLE = FALSE;
     private final static String DEFAULT_PATH_TO_TOKEN_NORM_DATA =
             "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
-    private final static String DEFAULT_PREDICTION_CONFIDENCE_THRESHOLD = "-1";
     private final static String DEFAULT_SORT_FILES_LEXICALLY = TRUE;
-    private final static String DEFAULT_THRESHOLD_PREDICTION = FALSE;
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL";
@@ -142,14 +136,14 @@ public class NerBaseConfigurator extends Configurator {
         props.setProperty(TREAT_ALL_FILES_AS_ONE, DEFAULT_TREAT_ALL_FILES_AS_ONE);
         props.setProperty(PATH_TO_TOKEN_NORM_DATA, DEFAULT_PATH_TO_TOKEN_NORM_DATA);
 
-        props.setProperty(PREDICTION_CONFIDENCE_THRESHOLD, DEFAULT_PREDICTION_CONFIDENCE_THRESHOLD);
+        props.setProperty(MIN_CONFIDENCE_PREDICTIONS_1, DEFAULT_MIN_CONFIDENCE_PREDICTIONS_1);
+        props.setProperty(MIN_CONFIDENCE_PREDICTIONS_2, DEFAULT_MIN_CONFIDENCE_PREDICTIONS_2);
         props.setProperty(SORT_FILES_LEXICALLY, DEFAULT_SORT_FILES_LEXICALLY);
         props.setProperty(PREV_TAG_1, DEFAULT_PREV_TAG_1);
         props.setProperty(PREV_TAG_2, DEFAULT_PREV_TAG_2);
         props.setProperty(PREV_TAG_PATTERN_1, DEFAULT_PREV_TAG_PATTERN_1);
         props.setProperty(PREV_TAG_PATTERN_2, DEFAULT_PREV_TAG_PATTERN_2);
         props.setProperty(PREV_TAGS_FOR_CONTEXT, DEFAULT_PREV_TAGS_FOR_CONTEXT);
-        props.setProperty(THRESHOLD_PREDICTION, DEFAULT_THRESHOLD_PREDICTION);
         props.setProperty(WORD_TYPE_INFORMATION, DEFAULT_WORD_TYPE_INFORMATION);
         props.setProperty(PREDICTIONS_1, DEFAULT_PREDICTIONS_1);
         props.setProperty(PATHS_TO_BROWN_CLUSTERS, DEFAULT_PATHS_TO_BROWN_CLUSTERS);
@@ -160,6 +154,8 @@ public class NerBaseConfigurator extends Configurator {
 
         props.setProperty(RANDOM_NOISE_LEVEL, DEFAULT_RANDOM_NOISE_LEVEL);
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
+        props.setProperty(IS_LAZILY_INITIALIZED.key, TRUE);
+
         return new ResourceManager(props);
     }
 }

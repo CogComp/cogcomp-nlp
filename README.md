@@ -1,11 +1,16 @@
 # illinois-cogcomp-nlp
 
-[![Build Status](https://semaphoreci.com/api/v1/projects/7db00c92-df2a-457e-8067-e1012deaca74/785552/badge.svg)](https://semaphoreci.com/cogcomp-dev/illinois-cogcomp-nlp-2)
+[![Build Status](https://semaphoreci.com/api/v1/cogcomp/illinois-cogcomp-nlp/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/illinois-cogcomp-nlp)
+[![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
+[![Build status](https://ci.appveyor.com/api/projects/status/f7g2y0vyjsrrypck/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
+
 
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
 by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.illinois.edu).  
 
-CogComp's main NLP libraries
+## CogComp's main NLP libraries
+
+Each library contains detailed readme and instructions on how to use it. In addition the javadoc of the whole project is available [here](http://cogcomp.cs.illinois.edu/software/doc/apidocs/). 
 
   - [illinois-core-utilities](core-utilities/README.md)
 Provides a set of NLP-friendly data structures and a number of 
