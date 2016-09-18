@@ -53,7 +53,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>1.2.18</version>
+            <version>3.0.72</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
