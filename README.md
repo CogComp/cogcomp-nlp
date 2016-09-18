@@ -1,10 +1,8 @@
 # illinois-cogcomp-nlp
 
 [![Build Status](https://semaphoreci.com/api/v1/cogcomp/illinois-cogcomp-nlp/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/illinois-cogcomp-nlp)
-
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
-
-AppVeyor - Windows CI Status [![Build status](https://ci.appveyor.com/api/projects/status/f7g2y0vyjsrrypck/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/f7g2y0vyjsrrypck/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
 
 
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
