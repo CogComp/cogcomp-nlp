@@ -38,13 +38,13 @@ import java.util.Properties;
 public class NERAnnotator extends Annotator {
 
     /** POS, shallow parsing are NOT required. */
-    private static final String[] REQUIRED_VIEWS = {};
+//    private static final String[] REQUIRED_VIEWS = {};
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
     /** the level one tagger. */
-    private NETaggerLevel1 t1 = null;
+    private NETaggerLevel1 t1;
     /** the level two tagger. */
-    private NETaggerLevel2 t2 = null;
+    private NETaggerLevel2 t2;
 
 
     /**
@@ -77,7 +77,7 @@ public class NERAnnotator extends Annotator {
      * @param viewName name of the view to add to the TextAnnotation (and for client to request)
      */
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
-        super(viewName, REQUIRED_VIEWS, nonDefaultRm.getBoolean(
+        super(viewName, new String[]{}, nonDefaultRm.getBoolean(
                 AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE), nonDefaultRm);
     }
 
