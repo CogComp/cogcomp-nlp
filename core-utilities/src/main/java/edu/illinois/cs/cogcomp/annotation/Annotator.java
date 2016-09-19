@@ -16,7 +16,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * An interface for creating views of a specified name from a {@link TextAnnotation}
+ * An interface for creating views of a specified name from a {@link TextAnnotation}. Supports lazy initialization.
  * IMPORTANT FOR DERIVED CLASSES: if you initialize fields at declaration rather than in the constructor,
  *     those assignments take place AFTER the super.constructor has run -- so e.g. you cannot
  *     use a Logger you declare in this way to log messages in the initialize() method that
