@@ -29,7 +29,9 @@ public class ChunkerConfigurator extends Configurator {
     public static final Property MODEL_NAME = new Property("modelName", "Chunker");
 
     public static final Property MODEL_DIR_PATH = new Property("modelDirPath",
-            "edu/illinois/cs/cogcomp/chunker/main/lbjava/");
+            "chunker/target/classes/edu/illinois/cs/cogcomp/chunker/main/lbjava/");
+    /*public static final Property MODEL_DIR_PATH = new Property("modelDirPath",
+            "edu/illinois/cs/cogcomp/chunker/main/lbjava/");*/
 
     public static final Property MODEL_PATH = new Property("modelPath", MODEL_DIR_PATH.value
             + MODEL_NAME.value + ".lc");

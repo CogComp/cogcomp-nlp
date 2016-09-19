@@ -44,11 +44,25 @@ import static org.junit.Assert.assertNotNull;
  * @author Nick Rizzolo
  **/
 public class ChunkTester {
+    public static void chunkTester(String testFile){
+        Parser parser;
+        parser = new CoNLL2000Parser(testFile);
+        BIOTester tester =
+                new BIOTester(new Chunker(), new ChunkLabel(), new ChildrenFromVectors(parser));
+        tester.test().printPerformance(System.out);
+    }
+    public static void main(String[] args){
+        ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
+        String testFileName = rm.getString("testGoldPOSData");
+        String testNoPOSFileName = rm.getString("testNoPOSData");
 
-    /**
-     * Implements the program described above.
-     **/
-    public static void main(String[] args) {
+        System.out.println("\nWith Gold POS");
+        chunkTester(testFileName);
+
+        System.out.println("\nWith NO POS");
+        chunkTester(testNoPOSFileName);
+    }
+    /*public static void main(String[] args) {
         ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
         String testFileName = rm.getString("testGoldPOSData");
         String testNoPOSFileName = rm.getString("testNoPOSData");
@@ -76,5 +90,5 @@ public class ChunkTester {
 
         tester = new BIOTester(new Chunker(), new ChunkLabel(), new ChildrenFromVectors(parser));
         tester.test().printPerformance(System.out);
-    }
+    }*/
 }

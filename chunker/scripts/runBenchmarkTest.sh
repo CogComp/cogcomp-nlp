@@ -5,7 +5,7 @@
 # Labelled test data needs to be provided (not included)
 
 
-VERSION=2.1.0
+VERSION=3.0.72
 MAIN_JAR=target/illinois-chunker-${VERSION}.jar
 MAIN=edu.illinois.cs.cogcomp.chunker.main.ChunkTester
 LIB=target/dependency
@@ -17,7 +17,7 @@ for JAR in `ls $LIB`; do
 done
 
 
-TESTDATA="src/main/resources/test.txt"
+TESTDATA="/shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.txt"
 
 
 CMD="java -Xmx2g -cp $CP $MAIN $TESTDATA"
