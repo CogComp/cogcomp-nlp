@@ -1,3 +1,11 @@
+@REM
+@REM This software is released under the University of Illinois/Research and Academic Use License. See
+@REM the LICENSE file in the root folder for details. Copyright (c) 2016
+@REM
+@REM Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+@REM http://cogcomp.cs.illinois.edu/
+@REM
+
 rem Moving to root directory
 cd ..
 
