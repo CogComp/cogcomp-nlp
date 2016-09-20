@@ -1,16 +1,8 @@
-### illinois-srl
-models/
-srl-out/
-
-### Maven
-target/
-
-### Eclipse
-local.properties
-.settings/
-.loadpath
-
-### JetBrains
+.idea
+*.log
+**/target
 *.iml
-.idea/
-/bin/
+*.DS_Store
+*.settings
+edison/wordnet/
+

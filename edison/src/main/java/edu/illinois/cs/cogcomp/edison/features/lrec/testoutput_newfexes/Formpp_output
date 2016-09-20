@@ -1,0 +1,24 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestFormpp
+Formpp
+GOT TOKENS FROM TEXTAnn
+I
+give
+John
+$900
+today
+.
+Testlist size is 6
+The constituent we are extracting features from in this test is: John
+Printing Set of Features
+Formpp:0_0(I)
+Formpp:1_0(give)
+Formpp:2_0(John)
+Formpp:3_0($900)
+Formpp:4_0(today)
+Formpp:0_1(I_give)
+Formpp:1_1(give_John)
+Formpp:2_1(John_$900)
+Formpp:3_1($900_today)
+Formpp:4_1(today)
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.06 sec

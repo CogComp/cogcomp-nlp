@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.0.73</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>illinois-tokenizer</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-core-utilities</artifactId>
+            <version>3.0.73</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>LBJava-NLP-tools</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-curator</artifactId>
+            <version>3.0.73</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
