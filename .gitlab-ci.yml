@@ -1,4 +1,0 @@
-job:
-  script:
-    - mvn clean compile
-    - mvn test
