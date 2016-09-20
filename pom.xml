@@ -18,6 +18,7 @@
         <module>pos</module>
         <module>chunker</module>
         <module>ner</module>
+        <module>srl</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
     </modules>

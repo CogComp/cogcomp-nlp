@@ -1,12 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.0.73</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-srl</artifactId>
     <packaging>jar</packaging>
-    <version>5.1.15</version>
-
     <url>http://cogcomp.cs.illinois.edu</url>
 
     <properties>
@@ -15,14 +18,6 @@
         <cogcomp-nlp-version>3.0.59</cogcomp-nlp-version>
         <cogcomp-nlp-pipeline-version>0.1.24</cogcomp-nlp-pipeline-version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- Include the pre-trained SRL models for running SemanticRoleLabeler -->
@@ -117,7 +112,6 @@
         </dependency>
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
@@ -167,17 +161,5 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <distributionManagement>
-        <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-        </repository>
-        <site>
-            <id>CogcompSoftwareDoc</id>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
-        </site>
-    </distributionManagement>
 
 </project>
