@@ -1,3 +1,6 @@
+Version 3.0.73
+Moved to the super-project and changed the versioning to the super-project versioning
+
 Version 5.1.12
 Added Windows support (including access to non-Gurobi solver)
 

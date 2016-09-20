@@ -21,7 +21,7 @@ run-interactive-win.bat
 ```
 
 #### As an `Annotator` component
-**illinois-srl** can also be used programmatically through the `SemanticRoleLabeler` class which implemnts CogComp's
+**illinois-srl** can also be used programmatically through the `SemanticRoleLabeler` class which implements CogComp's
 [Annotator interface](http://cogcomp.cs.illinois.edu/software/doc/illinois-core-utilities/apidocs/edu/illinois/cs/cogcomp/core/datastructures/textannotation/Annotator.html).
 
 The main method is `getView(TextAnnotation)` inside `SemanticRoleLabeler`. This will add a new 
