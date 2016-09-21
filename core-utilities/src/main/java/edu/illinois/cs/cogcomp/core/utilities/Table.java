@@ -77,7 +77,7 @@ public class Table extends DefaultTableModel {
         // Change the space between '|' if the longest word has length longer than 10(default)
         if (longestWordSize > 10) {
             for (int i = 1; i < formatterList.size(); i += 2) {
-                // All columns are of equal size of Max(10, longest word)
+                // All columns will have same width of Math.max(10, longest word)
                 formatterList.set(i, "%-" + longestWordSize + "s ");
             }
         }
@@ -196,4 +196,5 @@ public class Table extends DefaultTableModel {
     public void addSeparator() {
         separators.add(this.getRowCount());
     }
+
 }
