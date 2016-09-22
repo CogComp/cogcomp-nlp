@@ -15,7 +15,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.0.59</cogcomp-nlp-version>
         <cogcomp-nlp-pipeline-version>0.1.24</cogcomp-nlp-pipeline-version>
     </properties>
 
@@ -52,19 +51,19 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.0.73</version>
         </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.0.73</version>
         </dependency>
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.0.73</version>
         </dependency>
 
         <dependency>
@@ -101,8 +100,8 @@
 
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>inference</artifactId>
-            <version>0.5.0</version>
+            <artifactId>illinois-inference</artifactId>
+            <version>0.6.0</version>
         </dependency>
 
         <dependency>
@@ -111,45 +110,6 @@
             <version>1.0</version>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-ssh</artifactId>
-                <version>2.4</version>
-            </extension>
-        </extensions>
-    </build>
 
     <reporting>
         <excludeDefaults>true</excludeDefaults>

@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.srl.SRLProperties;
 import edu.illinois.cs.cogcomp.srl.data.Dataset;
+import edu.illinois.cs.cogcomp.core.io.caches.DBHelper;
 
 import org.slf4j.Logger;
 

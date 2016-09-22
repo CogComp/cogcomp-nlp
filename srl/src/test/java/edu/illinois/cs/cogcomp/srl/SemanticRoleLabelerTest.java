@@ -43,7 +43,7 @@ public class SemanticRoleLabelerTest extends TestCase {
         rm = SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
 
         SemanticRoleLabeler verbSRL = new SemanticRoleLabeler(rm);
-		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
+		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false, 1);
         if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
             ta.addView(ClauseViewGenerator.STANFORD);
 		PredicateArgumentView srl = (PredicateArgumentView) verbSRL.getView(ta);
@@ -66,7 +66,7 @@ public class SemanticRoleLabelerTest extends TestCase {
         rm = SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
 
         SemanticRoleLabeler nomSRL = new SemanticRoleLabeler(rm);
-		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
+		TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false, 1);
 		PredicateArgumentView srl = (PredicateArgumentView) nomSRL.getView(ta);
 
         String expected = "construction:01\n    A1: of the John Smith library\nlibrary:01\n";

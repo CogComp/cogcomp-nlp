@@ -99,7 +99,7 @@ public class NonJUnitMemoryUseTest {
 
     public void testVerbSRL(boolean isStatic) throws Exception {
 
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false);
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false, 1);
 //        if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
 //            ta.addView(ClauseViewGenerator.STANFORD);
         SemanticRoleLabeler verbSRL = getSrl(isStatic);
