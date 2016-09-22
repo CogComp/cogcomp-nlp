@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ParsePhraseTypeOnlyTest {
@@ -34,43 +36,36 @@ public class ParsePhraseTypeOnlyTest {
                 DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         PredicateArgumentView srlView = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         predicate = srlView.getPredicates().get(0);
-        arg1 = srlView.getArguments(predicate).get(0).getTarget();
-        arg2 = srlView.getArguments(predicate).get(1).getTarget();
+        List<Relation> arguments = new ArrayList<>(srlView.getArguments(predicate));
+
+        // Making the order of arg1 and arg2 deterministic by sorting them according to their relation target.
+        arguments.sort((o1, o2) -> Integer.compare(o1.getTarget().getStartSpan(), o2.getTarget().getStartSpan()));
+
+        arg1 = arguments.get(0).getTarget();
+        arg2 = arguments.get(1).getTarget();
     }
 
     @Test
     public void testParsePhraseCharniak() throws Exception {
         ParsePhraseTypeOnly charniak = ParsePhraseTypeOnly.CHARNIAK;
         assertEquals("[VBD]", charniak.getFeatures(predicate).toString());
-        List<String> sortedList = new ArrayList<String>();
-        sortedList.add(charniak.getFeatures(arg1).toString());
-        sortedList.add(charniak.getFeatures(arg2).toString());
-        Collections.sort(sortedList);
-        assertEquals("[NP]", sortedList.get(0));
-        assertEquals("[PP]", sortedList.get(1));
+        assertEquals("[NP]", charniak.getFeatures(arg1).toString());
+        assertEquals("[PP]", charniak.getFeatures(arg2).toString());
     }
 
     @Test
     public void testParsePhraseStanford() throws Exception {
         ParsePhraseTypeOnly stanford = ParsePhraseTypeOnly.STANFORD;
         assertEquals("[VBD]", stanford.getFeatures(predicate).toString());
-        List<String> sortedList = new ArrayList<String>();
-        sortedList.add(stanford.getFeatures(arg1).toString());
-        sortedList.add(stanford.getFeatures(arg2).toString());
-        Collections.sort(sortedList);
-        assertEquals("[NP]", sortedList.get(0));
-        assertEquals("[PP]", sortedList.get(1));
+        assertEquals("[NP]", stanford.getFeatures(arg1).toString());
+        assertEquals("[PP]", stanford.getFeatures(arg2).toString());
     }
 
     @Test
     public void testParsePhraseGold() throws Exception {
         ParsePhraseTypeOnly gold = new ParsePhraseTypeOnly(ViewNames.PARSE_GOLD);
         assertEquals("[VBD]", gold.getFeatures(predicate).toString());
-        List<String> sortedList = new ArrayList<String>();
-        sortedList.add(gold.getFeatures(arg1).toString());
-        sortedList.add(gold.getFeatures(arg2).toString());
-        Collections.sort(sortedList);
-        assertEquals("[NP]", sortedList.get(0));
-        assertEquals("[PP]", sortedList.get(1));
+        assertEquals("[NP]", gold.getFeatures(arg1).toString());
+        assertEquals("[PP]", gold.getFeatures(arg2).toString());
     }
 }
