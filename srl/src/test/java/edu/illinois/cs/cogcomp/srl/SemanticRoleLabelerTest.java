@@ -15,11 +15,12 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
-import junit.framework.TestCase;
+import org.junit.*;
 
 import java.util.Properties;
 
-public class SemanticRoleLabelerTest extends TestCase {
+public class SemanticRoleLabelerTest {
+
     private static final String CONFIG = "src/test/resources/srl-config.properties";
 
     private static String[] requiredViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
@@ -27,15 +28,21 @@ public class SemanticRoleLabelerTest extends TestCase {
 
     private ResourceManager rm;
 
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
+
+        // at least 4GB memory required to run these tests
+        Assume.assumeTrue(Runtime.getRuntime().maxMemory() / Math.pow(10, 9) > 4.0);
+
         ResourceManager tempRm = new ResourceManager(CONFIG);
         Properties props = new Properties();
         props.setProperty(SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, SrlConfigurator.TRUE);
         rm = new ResourceManager(props);
         rm = SrlConfigurator.mergeProperties(tempRm, rm);
+
     }
 
+    @Test
     public void testVerbSRL() throws Exception {
         Properties props = new Properties();
         props.setProperty(SrlConfigurator.SRL_TYPE.key, SRLType.Verb.name());
@@ -56,14 +63,16 @@ public class SemanticRoleLabelerTest extends TestCase {
                         + "paving:01\ncommence:01\n    A0: The paving\n    A1: Monday\n"
                         + "finish:02\n    A1: finish\n    AM-MOD: will\n    AM-TMP: in June\n";
         // "finish:02\n    A1: The construction of the library\n    AM-TMP: on time\n"
-        assertEquals(expected, srl.toString());
+        Assert.assertEquals(expected, srl.toString());
     }
+
 
     /**
      * TODO: why does nom only annotate the first sentence? no predicates in other sentences?
      * 
      * @throws Exception
      */
+    @Test
     public void testNomSRL() throws Exception {
         Properties props = new Properties();
         props.setProperty(SrlConfigurator.SRL_TYPE.key, SRLType.Nom.name());
@@ -76,6 +85,6 @@ public class SemanticRoleLabelerTest extends TestCase {
         PredicateArgumentView srl = (PredicateArgumentView) nomSRL.getView(ta);
 
         String expected = "construction:01\n    A1: of the John Smith library\nlibrary:01\n";
-        assertEquals(expected, srl.toString());
+        Assert.assertEquals(expected, srl.toString());
     }
 }
