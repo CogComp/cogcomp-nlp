@@ -31,8 +31,8 @@ public class SemanticRoleLabelerTest {
     @Before
     public void setUp() throws Exception {
 
-        // at least 4GB memory required to run these tests
-        Assume.assumeTrue(Runtime.getRuntime().maxMemory() / Math.pow(10, 9) > 4.0);
+        // at least 8GB memory required to run these tests
+        Assume.assumeTrue(Runtime.getRuntime().maxMemory() / Math.pow(10, 9) > 8.0);
 
         ResourceManager tempRm = new ResourceManager(CONFIG);
         Properties props = new Properties();
