@@ -42,7 +42,7 @@ public class FrameData {
     }
 
     public void addExample(String sense, String name, String text,
-                           Map<String, String> argDescriptions, Map<String, String> argExamples) {
+            Map<String, String> argDescriptions, Map<String, String> argExamples) {
         Example ex = new Example();
         ex.name = name;
         ex.text = text;
@@ -73,13 +73,12 @@ public class FrameData {
 
     public Set<String> getArgsForSense(String sense) {
 
-        assert this.senseFrameData.containsKey(sense) : sense
-                + " missing for predicate lemma " + this.lemma;
+        assert this.senseFrameData.containsKey(sense) : sense + " missing for predicate lemma "
+                + this.lemma;
         return this.senseFrameData.get(sense).argDescription.keySet();
     }
 
-    public void addArgumentDescription(String sense, String arg,
-                                       String description) {
+    public void addArgumentDescription(String sense, String arg, String description) {
         assert this.senseFrameData.containsKey(sense);
         assert this.senseFrameData.get(sense).argDescription.containsKey(arg);
 
@@ -109,8 +108,8 @@ public class FrameData {
     }
 
     public String getSenseName(String sense) {
-        assert this.senseFrameData.containsKey(sense) : sense
-                + " missing for predicate lemma " + this.lemma;
+        assert this.senseFrameData.containsKey(sense) : sense + " missing for predicate lemma "
+                + this.lemma;
         return this.senseFrameData.get(sense).senseName;
     }
 }

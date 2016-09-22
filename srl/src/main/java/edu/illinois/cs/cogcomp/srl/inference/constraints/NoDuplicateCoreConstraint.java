@@ -26,118 +26,117 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This says that some arguments can't be repeated for a predicate. Originally,
- * it was just used for core arguments, but it turns out that it applies to
- * others too.
+ * This says that some arguments can't be repeated for a predicate. Originally, it was just used for
+ * core arguments, but it turns out that it applies to others too.
  * 
  * @author Vivek Srikumar
  * 
  */
 public class NoDuplicateCoreConstraint extends SRLILPConstraintGenerator {
 
-	public final static String name = "noDuplicateCore";
-	private final Set<String> argSet;
+    public final static String name = "noDuplicateCore";
+    private final Set<String> argSet;
 
-	public NoDuplicateCoreConstraint(SRLManager manager) {
-		super(manager, name, true);
+    public NoDuplicateCoreConstraint(SRLManager manager) {
+        super(manager, name, true);
 
-		argSet = new HashSet<>(manager.getCoreArguments());
+        argSet = new HashSet<>(manager.getCoreArguments());
 
-		// XXX: This might be a bit dubious.
-		boolean nom = manager.getSRLType() == SRLType.Nom;
-		if (nom)
-			argSet.add("SUP");
+        // XXX: This might be a bit dubious.
+        boolean nom = manager.getSRLType() == SRLType.Nom;
+        if (nom)
+            argSet.add("SUP");
 
-		// XXX: These come from statistics on the training set. The following
-		// hold more than 99% of the time in the training set.
+        // XXX: These come from statistics on the training set. The following
+        // hold more than 99% of the time in the training set.
 
-		if (nom) {
-			// 100 %
-			argSet.add("AM-ADV");
-			argSet.add("AM-DIR");
-			argSet.add("AM-DIS");
-			argSet.add("AM-EXT");
+        if (nom) {
+            // 100 %
+            argSet.add("AM-ADV");
+            argSet.add("AM-DIR");
+            argSet.add("AM-DIS");
+            argSet.add("AM-EXT");
 
-			// following are not always true, but very often
-			argSet.add("AM-LOC");
-			argSet.add("AM-MNR");
+            // following are not always true, but very often
+            argSet.add("AM-LOC");
+            argSet.add("AM-MNR");
 
-		} else {
-			argSet.add("AM-REC");
-		}
+        } else {
+            argSet.add("AM-REC");
+        }
 
-		argSet.add("AM-NEG");
-		argSet.add("AM-PNC");
-		argSet.add("AM-PRD");
+        argSet.add("AM-NEG");
+        argSet.add("AM-PNC");
+        argSet.add("AM-PRD");
 
-	}
+    }
 
-	@Override
-	public List<ILPConstraint> getILPConstraints(IInstance x,
-			InferenceVariableLexManager variables) {
-		return getViolatedILPConstraints(x, null, variables);
-	}
+    @Override
+    public List<ILPConstraint> getILPConstraints(IInstance x, InferenceVariableLexManager variables) {
+        return getViolatedILPConstraints(x, null, variables);
+    }
 
-	private List<ILPConstraint> addPredicateConstraints(SRLManager manager,
-			InferenceVariableLexManager variables, Set<String> coreArgs,
-			int predicateId, SRLPredicateInstance x, SRLPredicateStructure y) {
+    private List<ILPConstraint> addPredicateConstraints(SRLManager manager,
+            InferenceVariableLexManager variables, Set<String> coreArgs, int predicateId,
+            SRLPredicateInstance x, SRLPredicateStructure y) {
 
-		String type = manager.getPredictedViewName();
-		int numCandidates = x.getCandidateInstances().size();
+        String type = manager.getPredictedViewName();
+        int numCandidates = x.getCandidateInstances().size();
 
-		List<ILPConstraint> list = new ArrayList<>();
+        List<ILPConstraint> list = new ArrayList<>();
 
-		for (String coreArgument : coreArgs) {
-			int count = 0;
+        for (String coreArgument : coreArgs) {
+            int count = 0;
 
-			int argId = manager.getArgumentId(coreArgument);
+            int argId = manager.getArgumentId(coreArgument);
 
-			int[] vars = new int[numCandidates];
-			double[] coefs = new double[numCandidates];
-			for (int candidateId = 0; candidateId < numCandidates; candidateId++) {
-				vars[candidateId] = getArgumentVariable(variables, type, predicateId, candidateId, coreArgument);
+            int[] vars = new int[numCandidates];
+            double[] coefs = new double[numCandidates];
+            for (int candidateId = 0; candidateId < numCandidates; candidateId++) {
+                vars[candidateId] =
+                        getArgumentVariable(variables, type, predicateId, candidateId, coreArgument);
 
-				coefs[candidateId] = 1;
+                coefs[candidateId] = 1;
 
-				if (y != null) {
-					if (y.getArgLabel(candidateId) == argId)
-						count++;
-				}
-			}
+                if (y != null) {
+                    if (y.getArgLabel(candidateId) == argId)
+                        count++;
+                }
+            }
 
-			// XXX count == 0 doesn't seem right
-			if (y != null && count < 2)
-				continue;
+            // XXX count == 0 doesn't seem right
+            if (y != null && count < 2)
+                continue;
 
-			Pair<int[], double[]> cleanedVar = cleanupVariables(vars, coefs);
-			vars = cleanedVar.getFirst();
-			coefs = cleanedVar.getSecond();
+            Pair<int[], double[]> cleanedVar = cleanupVariables(vars, coefs);
+            vars = cleanedVar.getFirst();
+            coefs = cleanedVar.getSecond();
 
-			if (vars.length > 0)
-				list.add(new ILPConstraint(vars, coefs, 1.0, ILPConstraint.LESS_THAN));
+            if (vars.length > 0)
+                list.add(new ILPConstraint(vars, coefs, 1.0, ILPConstraint.LESS_THAN));
 
-		}
+        }
 
-		return list;
-	}
+        return list;
+    }
 
-	@Override
-	public List<ILPConstraint> getViolatedILPConstraints(IInstance ins,
-			IStructure s, InferenceVariableLexManager variables) {
+    @Override
+    public List<ILPConstraint> getViolatedILPConstraints(IInstance ins, IStructure s,
+            InferenceVariableLexManager variables) {
 
-		SRLSentenceInstance x = (SRLSentenceInstance) ins;
-		SRLSentenceStructure y = (SRLSentenceStructure) s;
+        SRLSentenceInstance x = (SRLSentenceInstance) ins;
+        SRLSentenceStructure y = (SRLSentenceStructure) s;
 
-		List<ILPConstraint> list = new ArrayList<>();
+        List<ILPConstraint> list = new ArrayList<>();
 
-		for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
-			SRLPredicateInstance xp = x.predicates.get(predicateId);
+        for (int predicateId = 0; predicateId < x.numPredicates(); predicateId++) {
+            SRLPredicateInstance xp = x.predicates.get(predicateId);
 
-			SRLPredicateStructure yp = y == null ? null : y.ys.get(predicateId);
+            SRLPredicateStructure yp = y == null ? null : y.ys.get(predicateId);
 
-			list.addAll(addPredicateConstraints(manager, variables, argSet, predicateId, xp, yp));
-		}
+            list.addAll(addPredicateConstraints(manager, variables, argSet, predicateId, xp, yp));
+        }
 
-		return list;
-	}
+        return list;
+    }
 }

@@ -30,101 +30,99 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 
  */
 public class PruningPreExtractor extends
-		ProducerConsumer<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> {
-	protected final FeatureVectorCacheFile cache;
+        ProducerConsumer<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> {
+    protected final FeatureVectorCacheFile cache;
 
-	private SRLManager manager;
-	private Models modelToExtract;
+    private SRLManager manager;
+    private Models modelToExtract;
 
-	protected final List<PreExtractRecord> buffer = new ArrayList<>();
+    protected final List<PreExtractRecord> buffer = new ArrayList<>();
 
-	private AtomicInteger counter = new AtomicInteger();
-	private Logger log = org.slf4j.LoggerFactory.getLogger(PruningPreExtractor.class);
+    private AtomicInteger counter = new AtomicInteger();
+    private Logger log = org.slf4j.LoggerFactory.getLogger(PruningPreExtractor.class);
 
-	public PruningPreExtractor(SRLManager manager, Models modelToExtract,
-			FeatureVectorCacheFile examples, FeatureVectorCacheFile cache,
-			int nThreads) {
+    public PruningPreExtractor(SRLManager manager, Models modelToExtract,
+            FeatureVectorCacheFile examples, FeatureVectorCacheFile cache, int nThreads) {
 
-		super(examples, nThreads);
+        super(examples, nThreads);
 
-		this.manager = manager;
-		this.modelToExtract = modelToExtract;
-		this.cache = cache;
+        this.manager = manager;
+        this.modelToExtract = modelToExtract;
+        this.cache = cache;
 
-	}
+    }
 
-	@Override
-	protected void initialize() {
+    @Override
+    protected void initialize() {
 
-	}
+    }
 
-	@Override
-	protected boolean prerequisiteCheck(
-			Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
-		return true;
-	}
+    @Override
+    protected boolean prerequisiteCheck(Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
+        return true;
+    }
 
-	@Override
-	protected void consume(Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
+    @Override
+    protected void consume(Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
 
-		SRLMulticlassInstance x = input.getFirst();
-		SRLMulticlassLabel y = input.getSecond();
+        SRLMulticlassInstance x = input.getFirst();
+        SRLMulticlassLabel y = input.getSecond();
 
-		SparseFeatureVector features = (SparseFeatureVector)x.getCachedFeatureVector(modelToExtract);
+        SparseFeatureVector features =
+                (SparseFeatureVector) x.getCachedFeatureVector(modelToExtract);
 
-		ModelInfo modelInfo = manager.getModelInfo(modelToExtract);
-		Lexicon lexicon = modelInfo.getLexicon();
+        ModelInfo modelInfo = manager.getModelInfo(modelToExtract);
+        Lexicon lexicon = modelInfo.getLexicon();
 
-		int threshold = manager.getPruneSize(modelToExtract);
+        int threshold = manager.getPruneSize(modelToExtract);
 
-		Pair<int[], float[]> pair = lexicon.pruneFeaturesByCount(
-				features.getIndices(), features.getValues(), threshold);
+        Pair<int[], float[]> pair =
+                lexicon.pruneFeaturesByCount(features.getIndices(), features.getValues(), threshold);
 
-		features = new SparseFeatureVector(pair.getFirst(), pair.getSecond());
+        features = new SparseFeatureVector(pair.getFirst(), pair.getSecond());
 
-		synchronized (buffer) {
-			buffer.add(new PreExtractRecord(x.getPredicateLemma(),
-					y.getLabel(), features));
+        synchronized (buffer) {
+            buffer.add(new PreExtractRecord(x.getPredicateLemma(), y.getLabel(), features));
 
-		}
+        }
 
-		if (buffer.size() > 10000) {
-			synchronized (buffer) {
-				if (buffer.size() > 10000) {
-					for (PreExtractRecord r : buffer) {
-						try {
-							cache.put(r.lemma, r.label, r.features);
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
-					}
-					buffer.clear();
-				}
-			}
-		}
+        if (buffer.size() > 10000) {
+            synchronized (buffer) {
+                if (buffer.size() > 10000) {
+                    for (PreExtractRecord r : buffer) {
+                        try {
+                            cache.put(r.lemma, r.label, r.features);
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    buffer.clear();
+                }
+            }
+        }
 
-		counter.incrementAndGet();
-	}
+        counter.incrementAndGet();
+    }
 
-	@Override
-	protected String getStatus() {
-		return counter.get() + " examples processed";
-	}
+    @Override
+    protected String getStatus() {
+        return counter.get() + " examples processed";
+    }
 
-	@Override
-	protected List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> process(
-			Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
-		List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<>();
-		l.add(input);
-		return l;
-	}
+    @Override
+    protected List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> process(
+            Pair<SRLMulticlassInstance, SRLMulticlassLabel> input) {
+        List<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> l = new ArrayList<>();
+        l.add(input);
+        return l;
+    }
 
-	public void finalize() throws Exception {
-		for (PreExtractRecord r : buffer) {
-			cache.put(r.lemma, r.label, r.features);
+    public void finalize() throws Exception {
+        for (PreExtractRecord r : buffer) {
+            cache.put(r.lemma, r.label, r.features);
 
-		}
-		log.info("Saving pruned feature cache done!");
-		cache.close();
-	}
+        }
+        log.info("Saving pruned feature cache done!");
+        cache.close();
+    }
 }

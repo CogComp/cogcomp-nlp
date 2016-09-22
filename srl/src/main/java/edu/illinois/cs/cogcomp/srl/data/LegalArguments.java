@@ -17,32 +17,32 @@ import java.util.*;
 
 public class LegalArguments {
 
-	private final static Logger log = LoggerFactory.getLogger(LegalArguments.class);
+    private final static Logger log = LoggerFactory.getLogger(LegalArguments.class);
 
-	private final Map<String, Set<String>> legalArgs = new HashMap<>();
+    private final Map<String, Set<String>> legalArgs = new HashMap<>();
     private final Map<String, Set<String>> legalArgsForSense = new HashMap<>();
     private final Map<String, Set<String>> legalSenses = new HashMap<>();
 
-	public LegalArguments(String file) throws Exception {
-		List<URL> list = IOUtils.lsResources(LegalArguments.class, file);
-		if (list.size() == 0) {
-			log.error("Cannot find file " + file + " in the classpath.");
-		}
-		else {
-			URL url = list.get(0);
-			Scanner scanner = new Scanner(url.openStream());
+    public LegalArguments(String file) throws Exception {
+        List<URL> list = IOUtils.lsResources(LegalArguments.class, file);
+        if (list.size() == 0) {
+            log.error("Cannot find file " + file + " in the classpath.");
+        } else {
+            URL url = list.get(0);
+            Scanner scanner = new Scanner(url.openStream());
 
-			log.info("Loading legal arguments from {}", file);
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine().trim();
-				if (line.length() == 0) continue;
+            log.info("Loading legal arguments from {}", file);
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine().trim();
+                if (line.length() == 0)
+                    continue;
 
-				String[] strings = line.split("\t");
+                String[] strings = line.split("\t");
 
-				String lemma = strings[0].trim();
+                String lemma = strings[0].trim();
 
-				Set<String> set = new HashSet<>();
-				Set<String> sensesSet = new HashSet<>();
+                Set<String> set = new HashSet<>();
+                Set<String> sensesSet = new HashSet<>();
 
                 if (strings.length == 2) {
                     for (String argsForSense : strings[1].split("\\s+")) {
@@ -55,21 +55,21 @@ public class LegalArguments {
                     }
                 }
 
-				set.add(SRLManager.NULL_LABEL);
-				legalArgs.put(lemma, set);
+                set.add(SRLManager.NULL_LABEL);
+                legalArgs.put(lemma, set);
                 legalSenses.put(lemma, sensesSet);
-			}
-			scanner.close();
-		}
-	}
+            }
+            scanner.close();
+        }
+    }
 
-	public boolean hasLegalArguments(String lemma) {
-		return this.legalArgs.containsKey(lemma);
-	}
+    public boolean hasLegalArguments(String lemma) {
+        return this.legalArgs.containsKey(lemma);
+    }
 
-	public Set<String> getLegalArguments(String lemma) {
-		return this.legalArgs.get(lemma);
-	}
+    public Set<String> getLegalArguments(String lemma) {
+        return this.legalArgs.get(lemma);
+    }
 
     public boolean hasLegalSenses(String lemma) {
         return this.legalSenses.containsKey(lemma);

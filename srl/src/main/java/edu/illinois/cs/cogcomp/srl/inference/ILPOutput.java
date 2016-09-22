@@ -21,120 +21,115 @@ import java.util.List;
 import java.util.Set;
 
 public class ILPOutput implements ILPOutputGenerator {
-	private final static Logger log = LoggerFactory.getLogger(ILPOutput.class);
-	private SRLManager manager;
+    private final static Logger log = LoggerFactory.getLogger(ILPOutput.class);
+    private SRLManager manager;
 
-	public ILPOutput(SRLManager manager) {
-		this.manager = manager;
+    public ILPOutput(SRLManager manager) {
+        this.manager = manager;
 
-	}
+    }
 
-	public SRLSentenceStructure getOutput(ILPSolver xmp,
-										  InferenceVariableLexManager variableManager, IInstance ins) {
+    public SRLSentenceStructure getOutput(ILPSolver xmp,
+            InferenceVariableLexManager variableManager, IInstance ins) {
 
-		SRLSentenceInstance instance = (SRLSentenceInstance) ins;
+        SRLSentenceInstance instance = (SRLSentenceInstance) ins;
 
-		int numPredicates = instance.numPredicates();
-		List<SRLPredicateStructure> output = new ArrayList<>();
+        int numPredicates = instance.numPredicates();
+        List<SRLPredicateStructure> output = new ArrayList<>();
 
-		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
+        for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
 
-			SRLPredicateInstance x = instance.predicates.get(predicateId);
+            SRLPredicateInstance x = instance.predicates.get(predicateId);
 
-			SRLMulticlassInstance senseInstance = x.getSenseInstance();
+            SRLMulticlassInstance senseInstance = x.getSenseInstance();
 
-			String lemma = senseInstance.getPredicateLemma();
+            String lemma = senseInstance.getPredicateLemma();
 
-			int senseLabel = getSenseLabelFromPrediction(xmp, variableManager,
-					manager, predicateId, lemma);
+            int senseLabel =
+                    getSenseLabelFromPrediction(xmp, variableManager, manager, predicateId, lemma);
 
-			int[] argLabels = getArgumentLabels(xmp, variableManager, manager,
-					predicateId, x, lemma);
+            int[] argLabels =
+                    getArgumentLabels(xmp, variableManager, manager, predicateId, x, lemma);
 
-			output.add(new SRLPredicateStructure(x, argLabels, senseLabel,
-					manager));
-		}
+            output.add(new SRLPredicateStructure(x, argLabels, senseLabel, manager));
+        }
 
-		return new SRLSentenceStructure(instance, output);
-	}
+        return new SRLSentenceStructure(instance, output);
+    }
 
-	private int[] getArgumentLabels(ILPSolver xmp,
-			InferenceVariableLexManager variableManager, SRLManager manager,
-			int predicateId, SRLPredicateInstance x, String lemma) {
-		Set<String> legalArgsSet = manager.getLegalArguments(lemma);
+    private int[] getArgumentLabels(ILPSolver xmp, InferenceVariableLexManager variableManager,
+            SRLManager manager, int predicateId, SRLPredicateInstance x, String lemma) {
+        Set<String> legalArgsSet = manager.getLegalArguments(lemma);
 
-		List<SRLMulticlassInstance> candidateInstances = x
-				.getCandidateInstances();
+        List<SRLMulticlassInstance> candidateInstances = x.getCandidateInstances();
 
-		int numCandidates = candidateInstances.size();
+        int numCandidates = candidateInstances.size();
 
-		int[] argLabels = new int[numCandidates];
+        int[] argLabels = new int[numCandidates];
 
-		log.debug("Getting output for " + x);
+        log.debug("Getting output for " + x);
 
-		for (int candidateId = 0; candidateId < numCandidates; candidateId++) {
+        for (int candidateId = 0; candidateId < numCandidates; candidateId++) {
 
-			log.debug("Considering {}",
-					x.getCandidateInstances().get(candidateId));
-			String label = null;
-			for (String l : legalArgsSet) {
-				String variableIdentifier = SRLILPInference
-						.getArgumentVariableIdentifier(
-								manager.getPredictedViewName(), predicateId,
-								candidateId, l);
-				int var = variableManager.getVariable(variableIdentifier);
+            log.debug("Considering {}", x.getCandidateInstances().get(candidateId));
+            String label = null;
+            for (String l : legalArgsSet) {
+                String variableIdentifier =
+                        SRLILPInference.getArgumentVariableIdentifier(
+                                manager.getPredictedViewName(), predicateId, candidateId, l);
+                int var = variableManager.getVariable(variableIdentifier);
 
-				if (var < 0)
-					continue;
+                if (var < 0)
+                    continue;
 
-				boolean value = xmp.getBooleanValue(var);
+                boolean value = xmp.getBooleanValue(var);
 
-				log.debug("  {}: {}", l, value);
+                log.debug("  {}: {}", l, value);
 
-				if (value) {
+                if (value) {
 
-					label = l;
+                    label = l;
 
-					log.debug("Variable: " + var + ", label = " + label
-							+ ", label-id = " + manager.getArgumentId(label));
-					break;
-				}
-			}
+                    log.debug("Variable: " + var + ", label = " + label + ", label-id = "
+                            + manager.getArgumentId(label));
+                    break;
+                }
+            }
 
-			assert label != null;
-			argLabels[candidateId] = manager.getArgumentId(label);
+            assert label != null;
+            argLabels[candidateId] = manager.getArgumentId(label);
 
-			log.debug("Prediction for {}: {}",
-					x.getCandidateInstances().get(candidateId), label);
+            log.debug("Prediction for {}: {}", x.getCandidateInstances().get(candidateId), label);
 
-		}
-		return argLabels;
-	}
+        }
+        return argLabels;
+    }
 
-	private int getSenseLabelFromPrediction(ILPSolver xmp,
-			InferenceVariableLexManager variableManager, SRLManager manager,
-			int predicateId, String lemma) {
-		String sense = null;
-		Set<String> validSenseLabels = manager.getLegalSenses(lemma);
-		for (String label : validSenseLabels) {
-			String varName = SRLILPInference.getSenseVariableIdentifier(
-					manager.getPredictedViewName(), predicateId, label);
+    private int getSenseLabelFromPrediction(ILPSolver xmp,
+            InferenceVariableLexManager variableManager, SRLManager manager, int predicateId,
+            String lemma) {
+        String sense = null;
+        Set<String> validSenseLabels = manager.getLegalSenses(lemma);
+        for (String label : validSenseLabels) {
+            String varName =
+                    SRLILPInference.getSenseVariableIdentifier(manager.getPredictedViewName(),
+                            predicateId, label);
 
-			int var = variableManager.getVariable(varName);
+            int var = variableManager.getVariable(varName);
 
-			if (var < 0)
-				continue;
+            if (var < 0)
+                continue;
 
-			if (xmp.getBooleanValue(var)) {
-				sense = label;
-				break;
-			}
-		}
+            if (xmp.getBooleanValue(var)) {
+                sense = label;
+                break;
+            }
+        }
 
-		assert sense != null;
+        assert sense != null;
 
-		int senseLabel = manager.getSenseId(sense);
-		return senseLabel;
-	}
+        int senseLabel = manager.getSenseId(sense);
+        return senseLabel;
+    }
 
 }

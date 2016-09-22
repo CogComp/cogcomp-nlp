@@ -32,146 +32,151 @@ import java.util.List;
 import java.util.Properties;
 
 public class SemanticRoleLabeler extends Annotator {
-	private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
-	public SRLManager manager;
-	private static SRLProperties properties;
+    private final static Logger log = LoggerFactory.getLogger(SemanticRoleLabeler.class);
+    public SRLManager manager;
+    private static SRLProperties properties;
 
 
     public static void main(String[] arguments) {
-		if (arguments.length < 1) {
-			System.err.println("Usage: <config-file> [Verb | Nom]");
-			System.exit(-1);
-		}
-		String configFile = arguments[0];
+        if (arguments.length < 1) {
+            System.err.println("Usage: <config-file> [Verb | Nom]");
+            System.exit(-1);
+        }
+        String configFile = arguments[0];
         ResourceManager rm = null;
         try {
-            rm = new SrlConfigurator().getConfig( new ResourceManager( configFile ) );
+            rm = new SrlConfigurator().getConfig(new ResourceManager(configFile));
         } catch (IOException e) {
             e.printStackTrace();
-            System.exit( -1 );
+            System.exit(-1);
         }
         String srlType;
-		// If no second argument is provided it means we need all the SRL types
-		srlType = arguments.length == 1 ? null : arguments[1];
+        // If no second argument is provided it means we need all the SRL types
+        srlType = arguments.length == 1 ? null : arguments[1];
 
-		String input;
-		List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
+        String input;
+        List<SemanticRoleLabeler> srlLabelers = new ArrayList<>();
 
         Properties props = new Properties();
-        props.setProperty( SrlConfigurator.SRL_TYPE.key, SRLType.Verb.name() );
-        props.setProperty( SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, SrlConfigurator.TRUE );
-        SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
+        props.setProperty(SrlConfigurator.SRL_TYPE.key, SRLType.Verb.name());
+        props.setProperty(SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, SrlConfigurator.TRUE);
+        SrlConfigurator.mergeProperties(rm, new ResourceManager(props));
 
-		try {
-			if (srlType != null)
-				srlLabelers.add(new SemanticRoleLabeler(rm));
-			else {
-				for (SRLType type : SRLType.values()) {
-				//	srlType = type.name();
-                    props.setProperty( SrlConfigurator.SRL_TYPE.key, type.name() );
-                    SrlConfigurator.mergeProperties( rm, new ResourceManager(props));
+        try {
+            if (srlType != null)
+                srlLabelers.add(new SemanticRoleLabeler(rm));
+            else {
+                for (SRLType type : SRLType.values()) {
+                    // srlType = type.name();
+                    props.setProperty(SrlConfigurator.SRL_TYPE.key, type.name());
+                    SrlConfigurator.mergeProperties(rm, new ResourceManager(props));
 
-					srlLabelers.add(new SemanticRoleLabeler(rm));
-				}
-			}
-		} catch (Exception e) {
-			log.error("Unable to initialize SemanticRoleLabeler:");
-			e.printStackTrace();
-			System.exit(-1);
-		}
+                    srlLabelers.add(new SemanticRoleLabeler(rm));
+                }
+            }
+        } catch (Exception e) {
+            log.error("Unable to initialize SemanticRoleLabeler:");
+            e.printStackTrace();
+            System.exit(-1);
+        }
 
-		do {
-			System.out.print("Enter text (underscore to quit): ");
-			input = System.console().readLine().trim();
-			if (input.equals("_"))
-				return;
+        do {
+            System.out.print("Enter text (underscore to quit): ");
+            input = System.console().readLine().trim();
+            if (input.equals("_"))
+                return;
 
-			if (!input.isEmpty()) {
-				// XXX Assuming that all SRL types require the same views
-				TextAnnotation ta;
-				try {
-					ta = TextPreProcessor.getInstance().preProcessText(input);
-				} catch (Exception e) {
-					log.error("Unable to pre-process the text:");
-					e.printStackTrace();
-					continue;
-				}
+            if (!input.isEmpty()) {
+                // XXX Assuming that all SRL types require the same views
+                TextAnnotation ta;
+                try {
+                    ta = TextPreProcessor.getInstance().preProcessText(input);
+                } catch (Exception e) {
+                    log.error("Unable to pre-process the text:");
+                    e.printStackTrace();
+                    continue;
+                }
 
-				for (SemanticRoleLabeler srl : srlLabelers) {
-					if (srlLabelers.size() > 1)
-						System.out.println(srl.getViewName());
+                for (SemanticRoleLabeler srl : srlLabelers) {
+                    if (srlLabelers.size() > 1)
+                        System.out.println(srl.getViewName());
 
-					PredicateArgumentView p;
-					try {
-						p = srl.getSRL(ta);
-					} catch (Exception e) {
-						log.error("Unable to produce SRL annotation:");
-						e.printStackTrace();
-						continue;
-					}
+                    PredicateArgumentView p;
+                    try {
+                        p = srl.getSRL(ta);
+                    } catch (Exception e) {
+                        log.error("Unable to produce SRL annotation:");
+                        e.printStackTrace();
+                        continue;
+                    }
 
-					System.out.println(p);
-					System.out.println();
-				}
-			}
-		} while (!input.equals("_"));
-	}
+                    System.out.println(p);
+                    System.out.println();
+                }
+            }
+        } while (!input.equals("_"));
+    }
 
     /**
      * default loads Verb srl
+     * 
      * @throws Exception
      */
-	public SemanticRoleLabeler() throws Exception {
-		this( new ResourceManager( new Properties() ) );
-	}
+    public SemanticRoleLabeler() throws Exception {
+        this(new ResourceManager(new Properties()));
+    }
 
-	public SemanticRoleLabeler(ResourceManager rm ) throws Exception {
-		this(rm, false);
-	}
+    public SemanticRoleLabeler(ResourceManager rm) throws Exception {
+        this(rm, false);
+    }
 
     /**
      * @param rm fully populated configuration (all fields from SrlConfigurator must be set)
      * @param lazilyInitialize if 'true', defer loading resources until getView() is called
      * @throws Exception
      */
-	public SemanticRoleLabeler(ResourceManager rm, boolean lazilyInitialize) throws Exception {
+    public SemanticRoleLabeler(ResourceManager rm, boolean lazilyInitialize) throws Exception {
         this(new SrlConfigurator().getConfig(rm), lazilyInitialize, false);
     }
 
     /**
      * protected because ResourceManager argument must have all entries in SrlConfigurator set
-     *    before super() is called.
+     * before super() is called.
+     * 
      * @param config fully populated configuration (all fields from SrlConfigurator must be set)
      * @param lazilyInitialize if 'true', defer loading resources until getView() is called
      * @param irrelevantFlag a spurious argument to distinguish this protected constructor
      */
-    protected SemanticRoleLabeler(ResourceManager config, boolean lazilyInitialize, boolean irrelevantFlag ) {
-        super(getViewNameForType( config.getString( SrlConfigurator.SRL_TYPE.key ) ),
-                TextPreProcessor.requiredViews, lazilyInitialize, config );
-	}
-//    public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean isLazilyInitialized ) throws Exception {
-//        super(getViewNameForType(srlType), TextPreProcessor.requiredViews, isLazilyInitialized, new SrlConfigurator().getConfig(rm));
-//    }
+    protected SemanticRoleLabeler(ResourceManager config, boolean lazilyInitialize,
+            boolean irrelevantFlag) {
+        super(getViewNameForType(config.getString(SrlConfigurator.SRL_TYPE.key)),
+                TextPreProcessor.requiredViews, lazilyInitialize, config);
+    }
 
-	@Override
-	public void initialize( ResourceManager rm )
-	{
-		SRLProperties.initialize(rm);
+    // public SemanticRoleLabeler(ResourceManager rm, String srlType, boolean isLazilyInitialized )
+    // throws Exception {
+    // super(getViewNameForType(srlType), TextPreProcessor.requiredViews, isLazilyInitialized, new
+    // SrlConfigurator().getConfig(rm));
+    // }
+
+    @Override
+    public void initialize(ResourceManager rm) {
+        SRLProperties.initialize(rm);
         properties = SRLProperties.getInstance();
-        boolean initialize = rm.getBoolean( SrlConfigurator.INSTANTIATE_PREPROCESSOR.key );
+        boolean initialize = rm.getBoolean(SrlConfigurator.INSTANTIATE_PREPROCESSOR.key);
 
-		if(initialize) {
-			TextPreProcessor.initialize(properties);
-		}
+        if (initialize) {
+            TextPreProcessor.initialize(properties);
+        }
 
-        String srlType = rm.getString( SrlConfigurator.SRL_TYPE );
+        String srlType = rm.getString(SrlConfigurator.SRL_TYPE);
         try {
             manager = Main.getManager(SRLType.valueOf(srlType), false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-//		log.info("Loading models");
+        // log.info("Loading models");
         try {
             loadModels();
         } catch (Exception e) {
@@ -179,81 +184,81 @@ public class SemanticRoleLabeler extends Annotator {
         }
     }
 
-	private static String getViewNameForType(String srlType) {
-		if ( srlType.equals( SRLType.Verb.name() ) )
-			return ViewNames.SRL_VERB;
-		else if ( srlType.equals( SRLType.Nom.name() ) )
-			return ViewNames.SRL_NOM;
-		else
-			throw new IllegalArgumentException( "ERROR: type '" + srlType + "' not recognized." );
-	}
+    private static String getViewNameForType(String srlType) {
+        if (srlType.equals(SRLType.Verb.name()))
+            return ViewNames.SRL_VERB;
+        else if (srlType.equals(SRLType.Nom.name()))
+            return ViewNames.SRL_NOM;
+        else
+            throw new IllegalArgumentException("ERROR: type '" + srlType + "' not recognized.");
+    }
 
-	public String getSRLCuratorName() {
-		return manager.getSRLSystemIdentifier();
-	}
+    public String getSRLCuratorName() {
+        return manager.getSRLSystemIdentifier();
+    }
 
-	public String getVersion() {
-		return properties.getSRLVersion();
-	}
+    public String getVersion() {
+        return properties.getSRLVersion();
+    }
 
     private void loadModels() throws Exception {
-		for (Models m : Models.values()) {
-			if (manager.getSRLType() == SRLType.Verb && m == Models.Predicate)
-				continue;
+        for (Models m : Models.values()) {
+            if (manager.getSRLType() == SRLType.Verb && m == Models.Predicate)
+                continue;
 
-			log.info("Loading model {}", m);
-			manager.getModelInfo(m).loadWeightVector();
-		}
+            log.info("Loading model {}", m);
+            manager.getModelInfo(m).loadWeightVector();
+        }
 
-		log.info("Finished loading all models");
-	}
+        log.info("Finished loading all models");
+    }
 
-	public PredicateArgumentView getSRL(TextAnnotation ta) throws Exception {
-		log.debug("Input: {}", ta.getText());
+    public PredicateArgumentView getSRL(TextAnnotation ta) throws Exception {
+        log.debug("Input: {}", ta.getText());
 
-		List<Constituent> predicates;
-		if (manager.getSRLType() == SRLType.Verb)
-			predicates = manager.getHeuristicPredicateDetector().getPredicates(ta);
-		else
-			predicates = manager.getLearnedPredicateDetector().getPredicates(ta);
+        List<Constituent> predicates;
+        if (manager.getSRLType() == SRLType.Verb)
+            predicates = manager.getHeuristicPredicateDetector().getPredicates(ta);
+        else
+            predicates = manager.getLearnedPredicateDetector().getPredicates(ta);
 
-		if (predicates.isEmpty())
-			return null;
-		ILPSolverFactory s = new ILPSolverFactory(properties.getILPSolverType(false));
+        if (predicates.isEmpty())
+            return null;
+        ILPSolverFactory s = new ILPSolverFactory(properties.getILPSolverType(false));
         SRLILPInference inference = new SRLILPInference(s, manager, predicates);
 
-		return inference.getOutputView();
-	}
+        return inference.getOutputView();
+    }
 
-	@Override
-	public void addView(TextAnnotation ta) throws AnnotatorException {
-		// Check if all required views are present
+    @Override
+    public void addView(TextAnnotation ta) throws AnnotatorException {
+        // Check if all required views are present
 
-		if (ta.hasView(ViewNames.PARSE_STANFORD) && !ta.hasView(ViewNames.CLAUSES_STANFORD))
-			ta.addView(ClauseViewGenerator.STANFORD);
+        if (ta.hasView(ViewNames.PARSE_STANFORD) && !ta.hasView(ViewNames.CLAUSES_STANFORD))
+            ta.addView(ClauseViewGenerator.STANFORD);
 
-		for (String view : getRequiredViews()) {
-			if (!ta.hasView(view)) {
-				throw new AnnotatorException("Missing required view: " + view);
-			}
-		}
+        for (String view : getRequiredViews()) {
+            if (!ta.hasView(view)) {
+                throw new AnnotatorException("Missing required view: " + view);
+            }
+        }
 
-		try {
+        try {
             View srlView = getSRL(ta);
-            ta.addView( getViewName(), srlView);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new AnnotatorException(e.getMessage());
-		}
-	}
+            ta.addView(getViewName(), srlView);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AnnotatorException(e.getMessage());
+        }
+    }
 
-	@Override
-	public String getViewName() {
-		if (manager.getSRLType() == SRLType.Verb) {
-			return ViewNames.SRL_VERB;
-		} else if (manager.getSRLType() == SRLType.Nom)
-			return ViewNames.SRL_NOM;
-		return null;
-	}
+    @Override
+    public String getViewName() {
+        if (manager.getSRLType() == SRLType.Verb) {
+            return ViewNames.SRL_VERB;
+        } else if (manager.getSRLType() == SRLType.Nom)
+            return ViewNames.SRL_NOM;
+        return null;
+    }
 
 }

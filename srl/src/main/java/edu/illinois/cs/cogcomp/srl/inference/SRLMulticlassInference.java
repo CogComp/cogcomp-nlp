@@ -19,113 +19,109 @@ import edu.illinois.cs.cogcomp.srl.learn.SRLMulticlassLabel;
 @SuppressWarnings("serial")
 public class SRLMulticlassInference extends AbstractInferenceSolver {
 
-	private final Models type;
-	private final SRLManager manager;
-	private boolean stepThrough;
+    private final Models type;
+    private final SRLManager manager;
+    private boolean stepThrough;
 
-	public SRLMulticlassInference(SRLManager manager, Models type) {
-		this.manager = manager;
-		this.type = type;
-	}
+    public SRLMulticlassInference(SRLManager manager, Models type) {
+        this.manager = manager;
+        this.type = type;
+    }
 
     @Override
-	public IStructure getLossAugmentedBestStructure(
-			WeightVector weight, IInstance ins, IStructure goldStructure)
-					throws Exception {
-		SRLMulticlassInstance x = (SRLMulticlassInstance) ins;
-		SRLMulticlassLabel yGold = null;
-		if (goldStructure != null)
-			yGold = (SRLMulticlassLabel) goldStructure;
+    public IStructure getLossAugmentedBestStructure(WeightVector weight, IInstance ins,
+            IStructure goldStructure) throws Exception {
+        SRLMulticlassInstance x = (SRLMulticlassInstance) ins;
+        SRLMulticlassLabel yGold = null;
+        if (goldStructure != null)
+            yGold = (SRLMulticlassLabel) goldStructure;
 
-		int numLabels = manager.getNumLabels(type);
-		assert numLabels > 0;
+        int numLabels = manager.getNumLabels(type);
+        assert numLabels > 0;
 
-		if (type == Models.Identifier)
-			assert numLabels == 2;
+        if (type == Models.Identifier)
+            assert numLabels == 2;
 
-		double max = Double.NEGATIVE_INFINITY;
-		SRLMulticlassLabel best = null;
-		double loss = 0;
+        double max = Double.NEGATIVE_INFINITY;
+        SRLMulticlassLabel best = null;
+        double loss = 0;
 
-		if (stepThrough) {
-			System.out.println("Stepping through inference");
-		}
+        if (stepThrough) {
+            System.out.println("Stepping through inference");
+        }
 
-		for (int label = 0; label < numLabels; label++) {
+        for (int label = 0; label < numLabels; label++) {
 
-			if (stepThrough) {
-				System.out.println("Label: " + manager.getArgument(label));
-			}
+            if (stepThrough) {
+                System.out.println("Label: " + manager.getArgument(label));
+            }
 
-			if (!manager.isValidLabel(x, type, label)) {
-				if (stepThrough)
-					System.out.println("Label is not valid for "
-							+ x.getPredicateLemma());
-				continue;
-			}
+            if (!manager.isValidLabel(x, type, label)) {
+                if (stepThrough)
+                    System.out.println("Label is not valid for " + x.getPredicateLemma());
+                continue;
+            }
 
-			SRLMulticlassLabel y = new SRLMulticlassLabel(label, type,
-					manager);
+            SRLMulticlassLabel y = new SRLMulticlassLabel(label, type, manager);
 
-			double score = weight.dotProduct(x.getCachedFeatureVector(type),label * manager.getModelInfo(type).getLexicon().size());
+            double score =
+                    weight.dotProduct(x.getCachedFeatureVector(type),
+                            label * manager.getModelInfo(type).getLexicon().size());
 
-			if (stepThrough)
-				System.out.println("\t Score = " + score);
+            if (stepThrough)
+                System.out.println("\t Score = " + score);
 
-			double l = 0;
-			if (goldStructure != null) {
-				if (yGold.getLabel() != label)
-					l++;
-			}
+            double l = 0;
+            if (goldStructure != null) {
+                if (yGold.getLabel() != label)
+                    l++;
+            }
 
-			if (score + l > max + loss) {
-				max = score;
-				loss = l;
-				best = y;
-				if (stepThrough)
-					System.out.println("\t\tBest so far");
-			}
+            if (score + l > max + loss) {
+                max = score;
+                loss = l;
+                best = y;
+                if (stepThrough)
+                    System.out.println("\t\tBest so far");
+            }
 
-		}
+        }
 
-		if (best == null) {
-			if (type == Models.Sense) {
-				System.out.println(ins);
-				System.out
-				.println(manager.getLegalSenses(x.getPredicateLemma()));
-			}
+        if (best == null) {
+            if (type == Models.Sense) {
+                System.out.println(ins);
+                System.out.println(manager.getLegalSenses(x.getPredicateLemma()));
+            }
 
-		}
+        }
 
-		if (stepThrough) {
-			System.out.println("\nBest label: "
-					+ manager.getArgument(best.getLabel()));
-		}
+        if (stepThrough) {
+            System.out.println("\nBest label: " + manager.getArgument(best.getLabel()));
+        }
 
-		assert best != null : type + "\t" + ins;
-//		return new Pair<IStructure, Double>(best, loss);
-return best;
-	}
+        assert best != null : type + "\t" + ins;
+        // return new Pair<IStructure, Double>(best, loss);
+        return best;
+    }
 
-	@Override
-	public float getLoss(IInstance ins, IStructure gold, IStructure pred) {
-		SRLMulticlassLabel yGold = (SRLMulticlassLabel) gold;
-		SRLMulticlassLabel ypred= (SRLMulticlassLabel) pred;
-		float l=0;
-			if (yGold.getLabel() != ypred.getLabel())
-				l++;
+    @Override
+    public float getLoss(IInstance ins, IStructure gold, IStructure pred) {
+        SRLMulticlassLabel yGold = (SRLMulticlassLabel) gold;
+        SRLMulticlassLabel ypred = (SRLMulticlassLabel) pred;
+        float l = 0;
+        if (yGold.getLabel() != ypred.getLabel())
+            l++;
 
-		return l;
-	}
+        return l;
+    }
 
-	@Override
-	public IStructure getBestStructure(WeightVector weight, IInstance ins)
-			throws Exception {
-		return getLossAugmentedBestStructure(weight, ins, null);
-	}
+    @Override
+    public IStructure getBestStructure(WeightVector weight, IInstance ins) throws Exception {
+        return getLossAugmentedBestStructure(weight, ins, null);
+    }
 
-	@Override
-	public Object clone() {
-		return new SRLMulticlassInference(manager, type);
-	}
+    @Override
+    public Object clone() {
+        return new SRLMulticlassInference(manager, type);
+    }
 }

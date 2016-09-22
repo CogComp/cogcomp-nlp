@@ -17,44 +17,43 @@ import java.util.List;
 
 abstract public class SRLILPConstraintGenerator extends ILPConstraintGenerator {
 
-	protected SRLManager manager;
+    protected SRLManager manager;
 
-	public SRLILPConstraintGenerator(SRLManager manager, String name,
-			boolean delayedConstraint) {
-		super(name, delayedConstraint);
-		this.manager = manager;
-	}
+    public SRLILPConstraintGenerator(SRLManager manager, String name, boolean delayedConstraint) {
+        super(name, delayedConstraint);
+        this.manager = manager;
+    }
 
-	protected Pair<int[], double[]> cleanupVariables(int[] vars, double[] coefs) {
-		List<Double> c = new ArrayList<>();
-		List<Integer> v = new ArrayList<>();
+    protected Pair<int[], double[]> cleanupVariables(int[] vars, double[] coefs) {
+        List<Double> c = new ArrayList<>();
+        List<Integer> v = new ArrayList<>();
 
-		for (int i = 0; i < vars.length; i++) {
-			if (vars[i] >= 0) {
-				v.add(vars[i]);
-				c.add(coefs[i]);
+        for (int i = 0; i < vars.length; i++) {
+            if (vars[i] >= 0) {
+                v.add(vars[i]);
+                c.add(coefs[i]);
 
-			}
-		}
+            }
+        }
 
-		int[] v1 = new int[v.size()];
-		double[] d = new double[c.size()];
+        int[] v1 = new int[v.size()];
+        double[] d = new double[c.size()];
 
-		for (int i = 0; i < c.size(); i++) {
-			v1[i] = v.get(i);
-			d[i] = c.get(i);
-		}
+        for (int i = 0; i < c.size(); i++) {
+            v1[i] = v.get(i);
+            d[i] = c.get(i);
+        }
 
-		return new Pair<>(v1, d);
+        return new Pair<>(v1, d);
 
-	}
+    }
 
-	protected int getArgumentVariable(InferenceVariableLexManager variables,
-			String type, int predicateId, int candidateId, String arg) {
+    protected int getArgumentVariable(InferenceVariableLexManager variables, String type,
+            int predicateId, int candidateId, String arg) {
 
-		String identifier = SRLILPInference.getArgumentVariableIdentifier(type,
-				predicateId, candidateId, arg);
+        String identifier =
+                SRLILPInference.getArgumentVariableIdentifier(type, predicateId, candidateId, arg);
 
-		return variables.getVariable(identifier);
-	}
+        return variables.getVariable(identifier);
+    }
 }

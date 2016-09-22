@@ -26,92 +26,92 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SRLMulticlassInstance implements IInstance {
 
-	private final Constituent c;
+    private final Constituent c;
 
-	private final Map<Models, IFeatureVector> features;
-	private String predicateLemma;
+    private final Map<Models, IFeatureVector> features;
+    private String predicateLemma;
 
-	private final Constituent predicate;
+    private final Constituent predicate;
 
-	private SRLManager manager;
+    private SRLManager manager;
 
-	public SRLMulticlassInstance(Constituent c, Constituent predicate, SRLManager manager) {
-		this.c = c;
-		this.predicate = predicate;
-		this.manager = manager;
-		predicateLemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
+    public SRLMulticlassInstance(Constituent c, Constituent predicate, SRLManager manager) {
+        this.c = c;
+        this.predicate = predicate;
+        this.manager = manager;
+        predicateLemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
-		features = new ConcurrentHashMap<>();
-	}
+        features = new ConcurrentHashMap<>();
+    }
 
-	public SRLMulticlassInstance(Models model, String lemma, String features) {
-		c = null;
-		this.predicate = null;
-		this.predicateLemma = lemma;
+    public SRLMulticlassInstance(Models model, String lemma, String features) {
+        c = null;
+        this.predicate = null;
+        this.predicateLemma = lemma;
 
-		this.features = new ConcurrentHashMap<>();
+        this.features = new ConcurrentHashMap<>();
 
-		this.cacheFeatureVector(model, getFeatureVector(features));
-	}
+        this.cacheFeatureVector(model, getFeatureVector(features));
+    }
 
-	public double size() {
-		return 1;
-	}
+    public double size() {
+        return 1;
+    }
 
-	public String getPredicateLemma() {
-		return predicateLemma;
-	}
+    public String getPredicateLemma() {
+        return predicateLemma;
+    }
 
-	@Override
-	public String toString() {
-		return "SRLMulticlassInstance [cand=" + c + ", predicate=" + predicateLemma + "]";
-	}
+    @Override
+    public String toString() {
+        return "SRLMulticlassInstance [cand=" + c + ", predicate=" + predicateLemma + "]";
+    }
 
-	public void cacheFeatureVector(Models m, IFeatureVector f) {
-		assert !features.containsKey(m);
-		features.put(m, f);
-	}
+    public void cacheFeatureVector(Models m, IFeatureVector f) {
+        assert !features.containsKey(m);
+        features.put(m, f);
+    }
 
-	public IFeatureVector getCachedFeatureVector(Models m) {
-		assert features.containsKey(m);
-		return features.get(m);
-	}
+    public IFeatureVector getCachedFeatureVector(Models m) {
+        assert features.containsKey(m);
+        return features.get(m);
+    }
 
-	private IFeatureVector getFeatureVector(String features) {
-		String[] parts = features.split(" ");
-		int[] idx = new int[parts.length];
-		float[] vals = new float[parts.length];
+    private IFeatureVector getFeatureVector(String features) {
+        String[] parts = features.split(" ");
+        int[] idx = new int[parts.length];
+        float[] vals = new float[parts.length];
 
-		for (int i = 0; i < parts.length; i++) {
-			String[] f = parts[i].split(":");
+        for (int i = 0; i < parts.length; i++) {
+            String[] f = parts[i].split(":");
 
-			idx[i] = Integer.parseInt(f[0]);
-			vals[i] = Float.parseFloat(f[1]);
-		}
+            idx[i] = Integer.parseInt(f[0]);
+            vals[i] = Float.parseFloat(f[1]);
+        }
 
-		return new SparseFeatureVector(idx, vals);
-	}
+        return new SparseFeatureVector(idx, vals);
+    }
 
-	public Constituent getConstituent() {
-		return c;
-	}
+    public Constituent getConstituent() {
+        return c;
+    }
 
-	public IntPair getSpan() {
-		return c.getSpan();
-	}
+    public IntPair getSpan() {
+        return c.getSpan();
+    }
 
-	public Constituent getPredicate() {
-		return predicate;
-	}
+    public Constituent getPredicate() {
+        return predicate;
+    }
 
-	public void cacheFeatureVector(Models model, Set<Feature> features) {
-		Map<String, Float> featureMap = new HashMap<>();
-		for (Feature f : features) {
-			featureMap.put(f.getName(), f.getValue());
-		}
+    public void cacheFeatureVector(Models model, Set<Feature> features) {
+        Map<String, Float> featureMap = new HashMap<>();
+        for (Feature f : features) {
+            featureMap.put(f.getName(), f.getValue());
+        }
 
-		ModelInfo modelInfo = manager.getModelInfo(model);
-		Pair<int[], float[]> feats = modelInfo.getLexicon().getFeatureVector(featureMap);
-		this.cacheFeatureVector(model, new SparseFeatureVector(feats.getFirst(), feats.getSecond()));
-	}
+        ModelInfo modelInfo = manager.getModelInfo(model);
+        Pair<int[], float[]> feats = modelInfo.getLexicon().getFeatureVector(featureMap);
+        this.cacheFeatureVector(model, new SparseFeatureVector(feats.getFirst(), feats.getSecond()));
+    }
 }

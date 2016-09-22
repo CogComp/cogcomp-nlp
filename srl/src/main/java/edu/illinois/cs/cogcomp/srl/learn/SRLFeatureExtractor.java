@@ -17,9 +17,9 @@ import edu.illinois.cs.cogcomp.srl.core.SRLManager;
 import edu.illinois.cs.cogcomp.srl.experiment.PreExtractor;
 
 /**
- * A wrapper for the feature extractor required by illinois-sl. The real feature extraction happens in
- * {@link PreExtractor#consumeInstance(SRLMulticlassInstance, SRLMulticlassLabel)} during training
- * and {@link SRLPredicateInstance#cacheAllFeatureVectors(boolean)} during testing.
+ * A wrapper for the feature extractor required by illinois-sl. The real feature extraction happens
+ * in {@link PreExtractor#consumeInstance(SRLMulticlassInstance, SRLMulticlassLabel)} during
+ * training and {@link SRLPredicateInstance#cacheAllFeatureVectors(boolean)} during testing.
  *
  * @author upadhya3
  */

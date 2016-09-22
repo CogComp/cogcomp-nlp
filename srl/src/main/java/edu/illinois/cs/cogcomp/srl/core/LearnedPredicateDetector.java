@@ -22,72 +22,71 @@ import java.util.Set;
 
 public class LearnedPredicateDetector extends AbstractPredicateDetector {
 
-	private AbstractPredicateDetector heuristic;
-	private final String heuristicPredicateView;
-	private WeightVector w;
+    private AbstractPredicateDetector heuristic;
+    private final String heuristicPredicateView;
+    private WeightVector w;
 
-	public LearnedPredicateDetector(SRLManager manager) throws Exception {
-		super(manager);
-		heuristic = manager.getHeuristicPredicateDetector();
-		heuristicPredicateView = "HeuristicPredicateView:" + manager.getSRLType().name();
-		w = manager.getModelInfo(Models.Predicate).getWeights();
-	}
+    public LearnedPredicateDetector(SRLManager manager) throws Exception {
+        super(manager);
+        heuristic = manager.getHeuristicPredicateDetector();
+        heuristicPredicateView = "HeuristicPredicateView:" + manager.getSRLType().name();
+        w = manager.getModelInfo(Models.Predicate).getWeights();
+    }
 
-	@Override
-	public Option<String> getLemma(TextAnnotation ta, int tokenId)
-			throws Exception {
-		if (!ta.hasView(heuristicPredicateView)) {
-			addHeuristicPredicateView(ta);
-		}
+    @Override
+    public Option<String> getLemma(TextAnnotation ta, int tokenId) throws Exception {
+        if (!ta.hasView(heuristicPredicateView)) {
+            addHeuristicPredicateView(ta);
+        }
 
-		View view = ta.getView(heuristicPredicateView);
+        View view = ta.getView(heuristicPredicateView);
 
-		List<Constituent> constituentsCoveringToken = view
-				.getConstituentsCoveringToken(tokenId);
-		if (constituentsCoveringToken.size() == 0)
-			return Option.empty();
+        List<Constituent> constituentsCoveringToken = view.getConstituentsCoveringToken(tokenId);
+        if (constituentsCoveringToken.size() == 0)
+            return Option.empty();
 
-		Constituent c = constituentsCoveringToken.get(0);
+        Constituent c = constituentsCoveringToken.get(0);
 
-		String lemma = c.getAttribute(PredicateArgumentView.LemmaIdentifier);
+        String lemma = c.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
-		SRLManager manager = getManager();
+        SRLManager manager = getManager();
 
-		boolean isPredicate;
-		if (manager.getSRLType() == SRLType.Verb && lemma.equals("be")) {
-			isPredicate = true;
-		}
-		else {
-			SRLMulticlassInstance x = new SRLMulticlassInstance(c, c, manager);
+        boolean isPredicate;
+        if (manager.getSRLType() == SRLType.Verb && lemma.equals("be")) {
+            isPredicate = true;
+        } else {
+            SRLMulticlassInstance x = new SRLMulticlassInstance(c, c, manager);
 
-			Set<Feature> features = manager.getModelInfo(Models.Predicate).fex.getFeatures(c);
-			x.cacheFeatureVector(Models.Predicate, features);
+            Set<Feature> features = manager.getModelInfo(Models.Predicate).fex.getFeatures(c);
+            x.cacheFeatureVector(Models.Predicate, features);
 
-			SRLMulticlassLabel y0 = new SRLMulticlassLabel(0, Models.Predicate, manager);
-			SRLMulticlassLabel y1 = new SRLMulticlassLabel(1, Models.Predicate, manager);
-			double score1= w.dotProduct(x.getCachedFeatureVector(Models.Predicate), manager.getModelInfo(Models.Predicate).getLexicon().size());
-			double score2= w.dotProduct(x.getCachedFeatureVector(Models.Predicate));
+            SRLMulticlassLabel y0 = new SRLMulticlassLabel(0, Models.Predicate, manager);
+            SRLMulticlassLabel y1 = new SRLMulticlassLabel(1, Models.Predicate, manager);
+            double score1 =
+                    w.dotProduct(x.getCachedFeatureVector(Models.Predicate),
+                            manager.getModelInfo(Models.Predicate).getLexicon().size());
+            double score2 = w.dotProduct(x.getCachedFeatureVector(Models.Predicate));
 
-			double score = score1 - score2;
+            double score = score1 - score2;
 
-			if (debug) {
-				System.out.println("Score = " + score);
-			}
-			isPredicate = score >= 0;
-		}
+            if (debug) {
+                System.out.println("Score = " + score);
+            }
+            isPredicate = score >= 0;
+        }
 
-		if (isPredicate) {
-			return new Option<>(lemma);
-		} else
-			return Option.empty();
+        if (isPredicate) {
+            return new Option<>(lemma);
+        } else
+            return Option.empty();
 
-	}
+    }
 
-	private void addHeuristicPredicateView(TextAnnotation ta) throws Exception {
-		View view = new View(heuristicPredicateView, "", ta, 1.0);
-		List<Constituent> predicates = heuristic.getPredicates(ta);
-		for (Constituent c : predicates)
-			view.addConstituent(c);
-		ta.addView(heuristicPredicateView, view);
-	}
+    private void addHeuristicPredicateView(TextAnnotation ta) throws Exception {
+        View view = new View(heuristicPredicateView, "", ta, 1.0);
+        List<Constituent> predicates = heuristic.getPredicates(ta);
+        for (Constituent c : predicates)
+            view.addConstituent(c);
+        ta.addView(heuristicPredicateView, view);
+    }
 }

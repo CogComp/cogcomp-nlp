@@ -19,14 +19,16 @@ import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import java.util.Properties;
 
 /**
- * Attempt to determine whether the lazy initialization Annotator API from i-c-u creates memory use problems
+ * Attempt to determine whether the lazy initialization Annotator API from i-c-u creates memory use
+ * problems
+ * 
  * @author mssammon
  */
 public class NonJUnitMemoryUseTest {
 
     private static final String CONFIG = "src/test/resources/srl-config.properties";
 
-    private static String[] requiredViews = new String[]{ViewNames.POS, ViewNames.LEMMA,
+    private static String[] requiredViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
             ViewNames.SHALLOW_PARSE, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
 
     private ResourceManager rm;
@@ -42,11 +44,11 @@ public class NonJUnitMemoryUseTest {
             test.setUp();
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit( -1 );
+            System.exit(-1);
         }
 
         boolean isStatic = false;
-        System.out.println( "Test method-scope SRL:" );
+        System.out.println("Test method-scope SRL:");
 
         try {
             test.testVerbSRL(isStatic);
@@ -55,7 +57,7 @@ public class NonJUnitMemoryUseTest {
             System.exit(-1);
         }
 
-        System.out.println( "Finished first test. Running again." );
+        System.out.println("Finished first test. Running again.");
 
         try {
             test.testVerbSRL(isStatic);
@@ -64,7 +66,7 @@ public class NonJUnitMemoryUseTest {
             System.exit(-1);
         }
 
-        System.out.println( "Running test again, this time with static field." );
+        System.out.println("Running test again, this time with static field.");
 
         isStatic = true;
 
@@ -75,7 +77,7 @@ public class NonJUnitMemoryUseTest {
             System.exit(-1);
         }
 
-        System.out.println( "setting static field to null, and rerunning..." );
+        System.out.println("setting static field to null, and rerunning...");
         srlStatic = null;
         showMemoryUsage();
         try {
@@ -99,14 +101,16 @@ public class NonJUnitMemoryUseTest {
 
     public void testVerbSRL(boolean isStatic) throws Exception {
 
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false, 1);
-//        if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
-//            ta.addView(ClauseViewGenerator.STANFORD);
+        TextAnnotation ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(requiredViews, false,
+                        1);
+        // if (!ta.hasView(ViewNames.CLAUSES_STANFORD)) // an additional "invisible" dependency
+        // ta.addView(ClauseViewGenerator.STANFORD);
         SemanticRoleLabeler verbSRL = getSrl(isStatic);
         PredicateArgumentView srl = (PredicateArgumentView) verbSRL.getView(ta);
 
-        System.out.println( "SRL output: " + srl.toString() );
-        System.out.println( "memory use" + (isStatic ?  "before srl goes out of scope" : "") +":" );
+        System.out.println("SRL output: " + srl.toString());
+        System.out.println("memory use" + (isStatic ? "before srl goes out of scope" : "") + ":");
         showMemoryUsage();
     }
 
@@ -118,37 +122,34 @@ public class NonJUnitMemoryUseTest {
 
         SemanticRoleLabeler verbSRL = null;
 
-        if ( !isStatic ||  null == srlStatic )
+        if (!isStatic || null == srlStatic)
             verbSRL = new SemanticRoleLabeler(rm, false);
 
-        if ( isStatic && null == srlStatic )
+        if (isStatic && null == srlStatic)
             srlStatic = verbSRL;
 
         return verbSRL;
     }
 
 
-    public static void showMemoryUsage()
-    {
-        int mb = 1024*1024;
+    public static void showMemoryUsage() {
+        int mb = 1024 * 1024;
 
-        //Getting the runtime reference from system
+        // Getting the runtime reference from system
         Runtime runtime = Runtime.getRuntime();
 
         System.out.println("##### Heap utilization statistics [MB] #####");
 
-        //Print used memory
-        System.out.println("Used Memory:"
-                + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+        // Print used memory
+        System.out.println("Used Memory:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
-        //Print free memory
-        System.out.println("Free Memory:"
-                + runtime.freeMemory() / mb);
+        // Print free memory
+        System.out.println("Free Memory:" + runtime.freeMemory() / mb);
 
-        //Print total available memory
+        // Print total available memory
         System.out.println("Total Memory:" + runtime.totalMemory() / mb);
 
-        //Print Maximum available memory
+        // Print Maximum available memory
         System.out.println("Max Memory:" + runtime.maxMemory() / mb);
     }
 

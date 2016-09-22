@@ -23,138 +23,137 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class FeatureVectorCacheFile implements Closeable,
-		Iterator<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> {
+        Iterator<Pair<SRLMulticlassInstance, SRLMulticlassLabel>> {
 
-	private final static Logger log = LoggerFactory.getLogger(FeatureVectorCacheFile.class);
+    private final static Logger log = LoggerFactory.getLogger(FeatureVectorCacheFile.class);
 
-	private BufferedWriter writer;
-	private BufferedReader reader;
-	private String file;
-	private Models model;
-	private SRLManager manager;
+    private BufferedWriter writer;
+    private BufferedReader reader;
+    private String file;
+    private Models model;
+    private SRLManager manager;
 
-	private String nextLine = null;
+    private String nextLine = null;
 
-	public FeatureVectorCacheFile(String file, Models model, SRLManager manager) throws IOException {
-		this.file = file;
-		this.model = model;
-		this.manager = manager;
-	}
+    public FeatureVectorCacheFile(String file, Models model, SRLManager manager) throws IOException {
+        this.file = file;
+        this.model = model;
+        this.manager = manager;
+    }
 
-	private void openWriter(String file) throws IOException {
-		BufferedOutputStream stream = new BufferedOutputStream(
-				new GZIPOutputStream(new FileOutputStream(file)));
+    private void openWriter(String file) throws IOException {
+        BufferedOutputStream stream =
+                new BufferedOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 
-		writer = new BufferedWriter(new OutputStreamWriter(stream));
-	}
+        writer = new BufferedWriter(new OutputStreamWriter(stream));
+    }
 
-	public synchronized void put(String lemma, int label, IFeatureVector features)
-			throws Exception {
+    public synchronized void put(String lemma, int label, IFeatureVector features) throws Exception {
 
-		if (writer == null) {
-			openWriter(file);
-		}
-		StringBuilder sb = new StringBuilder();
-		sb.append(lemma).append("\t").append(label).append("\t");
-		int[] idx = features.getIndices();
-		float[] value = features.getValues();
-		for (int i = 0; i < idx.length; i++) {
-			sb.append(idx[i]).append(":").append(value[i]).append(" ");
-		}
+        if (writer == null) {
+            openWriter(file);
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(lemma).append("\t").append(label).append("\t");
+        int[] idx = features.getIndices();
+        float[] value = features.getValues();
+        for (int i = 0; i < idx.length; i++) {
+            sb.append(idx[i]).append(":").append(value[i]).append(" ");
+        }
 
-		writer.write(sb.toString().trim());
-		writer.newLine();
-	}
+        writer.write(sb.toString().trim());
+        writer.newLine();
+    }
 
-	public void close() {
-		try {
-			if (writer != null)
-				writer.close();
+    public void close() {
+        try {
+            if (writer != null)
+                writer.close();
 
-			if (reader != null)
-				reader.close();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+            if (reader != null)
+                reader.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public synchronized Pair<SRLMulticlassInstance, SRLMulticlassLabel> next() {
-		try {
-			assert reader != null;
+    public synchronized Pair<SRLMulticlassInstance, SRLMulticlassLabel> next() {
+        try {
+            assert reader != null;
 
-			if (nextLine == null)
-				hasNext();
+            if (nextLine == null)
+                hasNext();
 
-			String[] parts = nextLine.split("\t");
-			String lemma = parts[0].trim();
-			int label = Integer.parseInt(parts[1]);
+            String[] parts = nextLine.split("\t");
+            String lemma = parts[0].trim();
+            int label = Integer.parseInt(parts[1]);
 
-			String features = parts[2];
+            String features = parts[2];
 
-			SRLMulticlassInstance x = new SRLMulticlassInstance(model, lemma, features);
-			SRLMulticlassLabel y = new SRLMulticlassLabel(label, model, manager);
+            SRLMulticlassInstance x = new SRLMulticlassInstance(model, lemma, features);
+            SRLMulticlassLabel y = new SRLMulticlassLabel(label, model, manager);
 
-			return new Pair<>(x, y);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+            return new Pair<>(x, y);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	public void openReader() throws IOException {
-		GZIPInputStream zipin = new GZIPInputStream(new FileInputStream(file));
-		reader = new BufferedReader(new InputStreamReader(zipin));
-	}
+    public void openReader() throws IOException {
+        GZIPInputStream zipin = new GZIPInputStream(new FileInputStream(file));
+        reader = new BufferedReader(new InputStreamReader(zipin));
+    }
 
-	@Override
-	public boolean hasNext() {
-		try {
-			if (reader == null)
-				openReader();
+    @Override
+    public boolean hasNext() {
+        try {
+            if (reader == null)
+                openReader();
 
-			nextLine = reader.readLine();
+            nextLine = reader.readLine();
 
-			if (nextLine == null)
-				return false;
+            if (nextLine == null)
+                return false;
 
-			nextLine = nextLine.trim();
+            nextLine = nextLine.trim();
 
-			return true;
+            return true;
 
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-	}
+    }
 
-	@Override
-	public void remove() {}
+    @Override
+    public void remove() {}
 
-	public SLProblem getStructuredProblem() {
-		return getStructuredProblem(-1);
-	}
+    public SLProblem getStructuredProblem() {
+        return getStructuredProblem(-1);
+    }
 
-	public SLProblem getStructuredProblem(int sizeLimit) {
-		int count = 0;
-		SLProblem problem = new SLProblem();
+    public SLProblem getStructuredProblem(int sizeLimit) {
+        int count = 0;
+        SLProblem problem = new SLProblem();
 
-		log.info("Creating structured problem");
-		while (hasNext()) {
-			Pair<SRLMulticlassInstance, SRLMulticlassLabel> pair = next();
-			problem.instanceList.add(pair.getFirst());
-			problem.goldStructureList.add(pair.getSecond());
+        log.info("Creating structured problem");
+        while (hasNext()) {
+            Pair<SRLMulticlassInstance, SRLMulticlassLabel> pair = next();
+            problem.instanceList.add(pair.getFirst());
+            problem.goldStructureList.add(pair.getSecond());
 
-			count++;
-			if (sizeLimit >= 0 && count >= sizeLimit)
-				break;
+            count++;
+            if (sizeLimit >= 0 && count >= sizeLimit)
+                break;
 
-			if (count % 10000 == 0) {
-				log.info("{} examples loaded", count);
-			}
-		}
+            if (count % 10000 == 0) {
+                log.info("{} examples loaded", count);
+            }
+        }
 
-		log.info("{} examples loaded. Finished creating structured problem", count);
+        log.info("{} examples loaded. Finished creating structured problem", count);
 
-		return problem;
-	}
+        return problem;
+    }
 
 }
