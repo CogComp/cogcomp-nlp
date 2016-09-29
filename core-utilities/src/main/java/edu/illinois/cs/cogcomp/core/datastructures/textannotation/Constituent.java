@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class Constituent implements Serializable {
+public class Constituent implements Serializable, HasAttributes {
 
     private static final long serialVersionUID = -4241917156773356414L;
 
@@ -154,10 +155,9 @@ public class Constituent implements Serializable {
         return endCharOffset - 1;
     }
 
+    @Deprecated
     public void addAttribute(String key, String value) {
-        if (attributes == null)
-            attributes = new HashMap<>();
-        attributes.put(key, value);
+        this.setAttribute(key, value);
     }
 
     public boolean doesConstituentCover(int tokenId) {
@@ -244,6 +244,12 @@ public class Constituent implements Serializable {
                 && this.constituentScore == that.constituentScore
                 && this.getViewName().equals(that.getViewName());
 
+    }
+
+    public void setAttribute(String key, String value) {
+        if (attributes == null)
+            attributes = new HashMap<>();
+        attributes.put(key, value);
     }
 
     public String getAttribute(String key) {
