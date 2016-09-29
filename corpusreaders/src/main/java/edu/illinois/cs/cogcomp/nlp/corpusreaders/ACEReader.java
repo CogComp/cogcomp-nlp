@@ -198,6 +198,13 @@ public class ACEReader extends TextAnnotationReader {
                         textId,
                         doc.contentRemovingTags);
 
+        // Add metadata attributes to the generated Text Annotation.
+        if (doc.metadata != null) {
+            for (String metadataKey : doc.metadata.keySet()) {
+                ta.setAttribute(metadataKey, doc.metadata.get(metadataKey));
+            }
+        }
+
         File file = new File( fileName );
         this.addEntityViews(ta, doc.aceAnnotation, file);
         this.addEntityRelations(ta, doc.aceAnnotation, file);
