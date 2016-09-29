@@ -374,7 +374,7 @@ public abstract class IOUtils {
                 urls.addAll(getResourcesFromDirectory(resource, pattern));
             }
 
-            // The resource is a jar                        
+            // The resource is a jar
             else {
                 String jarPath = "file:" + resource.getPath() + "!";
                 ZipFile zf;
