@@ -101,7 +101,7 @@ public class Relation implements Serializable, HasAttributes {
     }
 
 
-    public void setAttribute( String key, String value )
+    public void addAttribute(String key, String value )
     {
         if ( null == attributes )
             attributes = new HashMap<>();

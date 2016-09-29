@@ -13,7 +13,7 @@ import java.util.Set;
  * Interface for common methods when supporting attributes.
  */
 public interface HasAttributes {
-    void setAttribute(String key, String value);
+    void addAttribute(String key, String value);
 
     String getAttribute(String key);
 

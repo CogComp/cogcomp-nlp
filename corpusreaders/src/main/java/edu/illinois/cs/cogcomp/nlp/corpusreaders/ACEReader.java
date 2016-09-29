@@ -201,7 +201,10 @@ public class ACEReader extends TextAnnotationReader {
         // Add metadata attributes to the generated Text Annotation.
         if (doc.metadata != null) {
             for (String metadataKey : doc.metadata.keySet()) {
-                ta.setAttribute(metadataKey, doc.metadata.get(metadataKey));
+                String value = doc.metadata.get(metadataKey);
+                if (!value.isEmpty()) {
+                    ta.addAttribute(metadataKey, value);
+                }
             }
         }
 
@@ -410,22 +413,22 @@ public class ACEReader extends TextAnnotationReader {
                 Relation entityRelation = new Relation(relation.type, firstArgument, secondArgument, 1.0f);
 
                 // Add attributes to each of the relation.
-                entityRelation.setAttribute(RelationIDAttribute, relation.id);
-                entityRelation.setAttribute(RelationTypeAttribute, relation.type);
+                entityRelation.addAttribute(RelationIDAttribute, relation.id);
+                entityRelation.addAttribute(RelationTypeAttribute, relation.type);
 
                 String relationSubType = (relation.subtype != null) ? relation.subtype : relation.type;
-                entityRelation.setAttribute(RelationSubtypeAttribute, relationSubType);
+                entityRelation.addAttribute(RelationSubtypeAttribute, relationSubType);
 
                 if (relation.tense != null) {
-                    entityRelation.setAttribute(RelationTenseAttribute, relation.tense);
+                    entityRelation.addAttribute(RelationTenseAttribute, relation.tense);
                 }
 
                 if (relation.modality != null) {
-                    entityRelation.setAttribute(RelationModalityAttribute, relation.modality);
+                    entityRelation.addAttribute(RelationModalityAttribute, relation.modality);
                 }
 
-                entityRelation.setAttribute(RelationMentionIDAttribute, relationMention.id);
-                entityRelation.setAttribute(RelationMentionLexicalConditionAttribute, relationMention.lexicalCondition);
+                entityRelation.addAttribute(RelationMentionIDAttribute, relationMention.id);
+                entityRelation.addAttribute(RelationMentionLexicalConditionAttribute, relationMention.lexicalCondition);
 
                 // Add relation to the entity view.
                 entityView.addRelation(entityRelation);

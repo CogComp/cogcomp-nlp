@@ -155,9 +155,10 @@ public class Constituent implements Serializable, HasAttributes {
         return endCharOffset - 1;
     }
 
-    @Deprecated
     public void addAttribute(String key, String value) {
-        this.setAttribute(key, value);
+        if (attributes == null)
+            attributes = new HashMap<>();
+        attributes.put(key, value);
     }
 
     public boolean doesConstituentCover(int tokenId) {
@@ -244,12 +245,6 @@ public class Constituent implements Serializable, HasAttributes {
                 && this.constituentScore == that.constituentScore
                 && this.getViewName().equals(that.getViewName());
 
-    }
-
-    public void setAttribute(String key, String value) {
-        if (attributes == null)
-            attributes = new HashMap<>();
-        attributes.put(key, value);
     }
 
     public String getAttribute(String key) {

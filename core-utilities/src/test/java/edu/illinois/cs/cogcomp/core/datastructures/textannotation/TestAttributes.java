@@ -7,7 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,13 +27,13 @@ public class TestAttributes {
         assert ta.hashCode() == taCopy.hashCode();
 
         // Adding same attribute to both TextAnnotations
-        ta.setAttribute("Test", "TestValue");
-        taCopy.setAttribute("Test", "TestValue");
+        ta.addAttribute("Test", "TestValue");
+        taCopy.addAttribute("Test", "TestValue");
 
         assert ta.equals(taCopy);
         assert ta.hashCode() == taCopy.hashCode();
 
-        ta.setAttribute("Test2", "TestValue");
+        ta.addAttribute("Test2", "TestValue");
 
         assert !ta.equals(taCopy);
         assert ta.hashCode() != taCopy.hashCode();
@@ -47,7 +46,7 @@ public class TestAttributes {
     public void testAttributeRemove() throws CloneNotSupportedException {
         TextAnnotation taCopy = (TextAnnotation) ta.clone();
 
-        taCopy.setAttribute("Test", "TestValue");
+        taCopy.addAttribute("Test", "TestValue");
         taCopy.removeAllAttributes();
 
         assert ta.equals(taCopy);
