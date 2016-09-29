@@ -335,7 +335,10 @@ public abstract class IOUtils {
 
                 String name = element.getName();
 
-                // FIXME: this is a very bad way to deal with file paths.
+                // Because the path string comes from JarEntry, We SHOULD use
+                // '/'' instead of File.SEPERATOR.
+                // And it seems that the only way to figure out if a JarEntry
+                //  path is a folder or file is to check the last character.
                 if (name.startsWith(path) && !name.equals(path + "/")) {
                     URL url = new URL("jar:" + jarRoot + "/" + name);
                     urls.add(url);
@@ -371,7 +374,7 @@ public abstract class IOUtils {
                 urls.addAll(getResourcesFromDirectory(resource, pattern));
             }
 
-            // The resource is a jar
+            // The resource is a jar                        
             else {
                 String jarPath = "file:" + resource.getPath() + "!";
                 ZipFile zf;
@@ -406,7 +409,7 @@ public abstract class IOUtils {
             } else {
                 final String fileName = file.getCanonicalPath();
                 if (pattern.matcher(fileName).matches()) {
-                    urls.add(new URL(resource + "/" + fileName));
+                    urls.add(file.getCanonicalFile().toURI().toURL());
                 }
             }
         }
@@ -446,4 +449,11 @@ public abstract class IOUtils {
         in.close();
         return obj;
     }
+
+    public static void main(String[] args) throws IOException {
+        for(URL url : getResourcesFromDirectory(new File("./testdata"), Pattern.compile(".*"))){
+            System.out.println(url.toString());
+        }
+    }
+
 }
