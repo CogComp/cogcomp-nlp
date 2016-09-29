@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<!DOCTYPE source_file SYSTEM "apf.v4.0.1.dtd">
+<source_file URI="VOA20001231.2000.3520.sgm" SOURCE="broadcast news" TYPE="text" VERSION="4.0" AUTHOR="LDC" ENCODING="UTF-8">
+<document DOCID="VOA20001231.2000.3520">
+<entity ID="VOA20001231.2000.3520-E1" TYPE="PER" CLASS="SPC">
+  <entity_mention ID="1-2" TYPE="PRO" LDCTYPE="PTV">
+    <extent>
+      <charseq START="249" END="265">most of the world</charseq>
+    </extent>
+    <head>
+      <charseq START="249" END="252">most</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="VOA20001231.2000.3520-E2" TYPE="PER" CLASS="SPC">
+  <entity_mention ID="2-1" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="65" END="89">Cuban leader Fidel Castro</charseq>
+    </extent>
+    <head>
+      <charseq START="78" END="89">Fidel Castro</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="2-3" TYPE="PRE" LDCTYPE="PRE" LDCATR="TRUE">
+    <extent>
+      <charseq START="65" END="76">Cuban leader</charseq>
+    </extent>
+    <head>
+      <charseq START="71" END="76">leader</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="2-16" TYPE="NAM" LDCTYPE="NAM" LDCATR="FALSE">
+    <extent>
+      <charseq START="755" END="770">President Castro</charseq>
+    </extent>
+    <head>
+      <charseq START="765" END="770">Castro</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="2-17" TYPE="PRE" LDCTYPE="PRE" LDCATR="TRUE">
+    <extent>
+      <charseq START="755" END="763">President</charseq>
+    </extent>
+    <head>
+      <charseq START="755" END="763">President</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="2-18" TYPE="PRO" LDCTYPE="PRO" LDCATR="FALSE">
+    <extent>
+      <charseq START="776" END="778">his</charseq>
+    </extent>
+    <head>
+      <charseq START="776" END="778">his</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name>
+      <charseq START="78" END="89">Fidel Castro</charseq>
+    </name>
+    <name>
+      <charseq START="765" END="770">Castro</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="VOA20001231.2000.3520-E4" TYPE="GPE" SUBTYPE="Nation" CLASS="SPC">
+  <entity_mention ID="4-4" TYPE="PRE" LDCTYPE="PRE" ROLE="GPE" LDCATR="TRUE">
+    <extent>
+      <charseq START="65" END="69">Cuban</charseq>
+    </extent>
+    <head>
+      <charseq START="65" END="69">Cuban</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="4-5" TYPE="NOM" LDCTYPE="NOM" ROLE="LOC" LDCATR="FALSE">
+    <extent>
+      <charseq START="130" END="146">the
+island nation</charseq>
+    </extent>
+    <head>
+      <charseq START="141" END="146">nation</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="4-14" TYPE="NAM" LDCTYPE="NAM" ROLE="LOC" LDCATR="FALSE">
+    <extent>
+      <charseq START="736" END="814">Cuba though, where President Castro had his country sit out last
+year's revelry</charseq>
+    </extent>
+    <head>
+      <charseq START="736" END="739">Cuba</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="4-15" TYPE="PRO" LDCTYPE="WHQ" ROLE="LOC" LDCATR="FALSE">
+    <extent>
+      <charseq START="749" END="753">where</charseq>
+    </extent>
+    <head>
+      <charseq START="749" END="753">where</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="4-19" TYPE="NOM" LDCTYPE="NOM" ROLE="GPE" LDCATR="FALSE">
+    <extent>
+      <charseq START="776" END="786">his country</charseq>
+    </extent>
+    <head>
+      <charseq START="780" END="786">country</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="4-20" TYPE="PRO" LDCTYPE="PRO" ROLE="GPE" LDCATR="FALSE">
+    <extent>
+      <charseq START="817" END="820">they</charseq>
+    </extent>
+    <head>
+      <charseq START="817" END="820">they</charseq>
+    </head>
+  </entity_mention>
+  <entity_attributes>
+    <name>
+      <charseq START="736" END="739">Cuba</charseq>
+    </name>
+  </entity_attributes>
+</entity>
+<entity ID="VOA20001231.2000.3520-E6" TYPE="LOC" SUBTYPE="Land-Region-Natural" CLASS="SPC">
+  <entity_mention ID="6-6" TYPE="PRE" LDCTYPE="PRE">
+    <extent>
+      <charseq START="134" END="139">island</charseq>
+    </extent>
+    <head>
+      <charseq START="134" END="139">island</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="VOA20001231.2000.3520-E7" TYPE="GPE" SUBTYPE="Other" CLASS="SPC">
+  <entity_mention ID="7-7" TYPE="NOM" LDCTYPE="NOM" ROLE="GPE">
+    <extent>
+      <charseq START="205" END="225">the rest of the world</charseq>
+    </extent>
+    <head>
+      <charseq START="209" END="212">rest</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="VOA20001231.2000.3520-E8" TYPE="LOC" SUBTYPE="Celestial" CLASS="SPC">
+  <entity_mention ID="8-8" TYPE="NOM" LDCTYPE="NOM">
+    <extent>
+      <charseq START="217" END="225">the world</charseq>
+    </extent>
+    <head>
+      <charseq START="221" END="225">world</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="8-10" TYPE="NOM" LDCTYPE="NOM">
+    <extent>
+      <charseq START="257" END="265">the world</charseq>
+    </extent>
+    <head>
+      <charseq START="261" END="265">world</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="VOA20001231.2000.3520-E9" TYPE="PER" CLASS="SPC">
+  <entity_mention ID="9-9" TYPE="NOM" LDCTYPE="NOM">
+    <extent>
+      <charseq START="228" END="239">Many experts</charseq>
+    </extent>
+    <head>
+      <charseq START="233" END="239">experts</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="9-11" TYPE="NOM" LDCTYPE="NOM">
+    <extent>
+      <charseq START="369" END="381">These experts</charseq>
+    </extent>
+    <head>
+      <charseq START="375" END="381">experts</charseq>
+    </head>
+  </entity_mention>
+  <entity_mention ID="9-12" TYPE="PRO" LDCTYPE="PRO">
+    <extent>
+      <charseq START="503" END="506">They</charseq>
+    </extent>
+    <head>
+      <charseq START="503" END="506">They</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<entity ID="VOA20001231.2000.3520-E10" TYPE="PER" CLASS="GEN">
+  <entity_mention ID="10-13" TYPE="PRO" LDCTYPE="HLS">
+    <extent>
+      <charseq START="572" END="647">those observing the start of
+2001 as a true dawn of the twenty-first century</charseq>
+    </extent>
+    <head>
+      <charseq START="572" END="576">those</charseq>
+    </head>
+  </entity_mention>
+</entity>
+<relation ID="VOA20001231.2000.3520-R1" TYPE="PHYS" SUBTYPE="Part-Whole">
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E7" ARGNUM="1" />
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E8" ARGNUM="2" />
+  <relation_mention ID="1-1" LDCLEXICALCONDITION="Preposition">
+    <ldc_extent>
+      <charseq START="205" END="225">the rest of the world</charseq>
+    </ldc_extent>
+    <rel_mention_arg ENTITYMENTIONID="7-7" ARGNUM="1">
+      <extent>
+        <charseq START="205" END="225">the rest of the world</charseq>
+      </extent>
+    </rel_mention_arg>
+    <rel_mention_arg ENTITYMENTIONID="8-8" ARGNUM="2">
+      <extent>
+        <charseq START="217" END="225">the world</charseq>
+      </extent>
+    </rel_mention_arg>
+  </relation_mention>
+</relation>
+<relation ID="VOA20001231.2000.3520-R2" TYPE="EMP-ORG" SUBTYPE="Employ-Executive">
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E2" ARGNUM="1" />
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E4" ARGNUM="2" />
+  <relation_mention ID="2-1" LDCLEXICALCONDITION="Possessive">
+    <ldc_extent>
+      <charseq START="776" END="786">his country</charseq>
+    </ldc_extent>
+    <rel_mention_arg ENTITYMENTIONID="2-18" ARGNUM="1">
+      <extent>
+        <charseq START="776" END="778">his</charseq>
+      </extent>
+    </rel_mention_arg>
+    <rel_mention_arg ENTITYMENTIONID="4-19" ARGNUM="2">
+      <extent>
+        <charseq START="776" END="786">his country</charseq>
+      </extent>
+    </rel_mention_arg>
+  </relation_mention>
+  <relation_mention ID="2-2" LDCLEXICALCONDITION="PreMod">
+    <ldc_extent>
+      <charseq START="65" END="76">Cuban leader</charseq>
+    </ldc_extent>
+    <rel_mention_arg ENTITYMENTIONID="4-4" ARGNUM="2">
+      <extent>
+        <charseq START="65" END="69">Cuban</charseq>
+      </extent>
+    </rel_mention_arg>
+    <rel_mention_arg ENTITYMENTIONID="2-3" ARGNUM="1">
+      <extent>
+        <charseq START="65" END="76">Cuban leader</charseq>
+      </extent>
+    </rel_mention_arg>
+  </relation_mention>
+</relation>
+<relation ID="VOA20001231.2000.3520-R3" TYPE="PHYS" SUBTYPE="Located">
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E1" ARGNUM="1" />
+  <rel_entity_arg ENTITYID="VOA20001231.2000.3520-E8" ARGNUM="2" />
+  <relation_mention ID="3-1" LDCLEXICALCONDITION="Preposition">
+    <ldc_extent>
+      <charseq START="249" END="265">most of the world</charseq>
+    </ldc_extent>
+    <rel_mention_arg ENTITYMENTIONID="1-2" ARGNUM="1">
+      <extent>
+        <charseq START="249" END="265">most of the world</charseq>
+      </extent>
+    </rel_mention_arg>
+    <rel_mention_arg ENTITYMENTIONID="8-10" ARGNUM="2">
+      <extent>
+        <charseq START="257" END="265">the world</charseq>
+      </extent>
+    </rel_mention_arg>
+  </relation_mention>
+</relation>
+</document>
+</source_file>
