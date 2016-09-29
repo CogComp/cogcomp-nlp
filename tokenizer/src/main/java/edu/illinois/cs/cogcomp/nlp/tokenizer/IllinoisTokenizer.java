@@ -19,6 +19,7 @@ import java.util.*;
 
 /**
  * Created by mssammon on 7/27/15.
+ * @deprecated use StatefulTokenizer instead.
  */
 public class IllinoisTokenizer implements Tokenizer {
 

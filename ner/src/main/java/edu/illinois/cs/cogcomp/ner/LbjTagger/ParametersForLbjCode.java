@@ -45,6 +45,18 @@ public class ParametersForLbjCode {
     // predictions with lower confidence will be pruned
     public double minConfidencePredictionsLevel2 = 0;
 
+    // predictions with lower confidence will be pruned
+    public double learningRatePredictionsLevel1 = 0.06;
+    
+    // predictions with lower confidence will be pruned
+    public double learningRatePredictionsLevel2 = 0.05;
+
+    // predictions with lower confidence will be pruned
+    public int thicknessPredictionsLevel1 = 50;
+    
+    // predictions with lower confidence will be pruned
+    public int thicknessPredictionsLevel2 = 30;
+
     // the predictions of these models will be the input to the classifier
     public Vector<ParametersForLbjCode> auxiliaryModels = new Vector<>();
 

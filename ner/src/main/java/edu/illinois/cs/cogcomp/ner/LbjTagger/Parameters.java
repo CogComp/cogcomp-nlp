@@ -248,7 +248,27 @@ public class Parameters {
                         Double.parseDouble(rm.getString("minConfidencePredictionsLevel2"));
             }
 
-            // labelTypes is just a String[]
+            if (rm.containsKey("learningRatePredictionsLevel1")) {
+                param.learningRatePredictionsLevel1 =
+                        Double.parseDouble(rm.getString("learningRatePredictionsLevel1"));
+            }
+
+            if (rm.containsKey("learningRatePredictionsLevel2")) {
+                param.learningRatePredictionsLevel2 =
+                        Double.parseDouble(rm.getString("learningRatePredictionsLevel2"));
+            }
+            
+            if (rm.containsKey("thicknessPredictionsLevel1")) {
+                param.thicknessPredictionsLevel1 =
+                        Integer.parseInt(rm.getString("thicknessPredictionsLevel1"));
+            }
+
+            if (rm.containsKey("thicknessPredictionsLevel2")) {
+                param.thicknessPredictionsLevel2 =
+                        Integer.parseInt(rm.getString("thicknessPredictionsLevel2"));
+            }
+            
+           // labelTypes is just a String[]
             if (rm.containsKey("labelTypes")) {
                 param.labelTypes = rm.getString("labelTypes").split("\\s+"); // split on whitespace
             }

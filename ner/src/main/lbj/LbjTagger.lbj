@@ -20,105 +20,6 @@ discrete% wordType(NEWord word) <-
 	}
 }
 
-discrete% additionalFeaturesDiscreteNonConjunctive(NEWord word) <-
-{
-	for(int fid=0;fid<word.getGeneratedDiscreteFeaturesNonConjunctive().size();fid++){
-		NEWord.DiscreteFeature feature=word.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
-		if(!feature.useWithinTokenWindow)
-			sense feature.featureGroupName : feature.featureValue;
-	}
-	int i;
-  	NEWord w = word, last = word;
-  	for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
-  	for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
-
-  	for (; w != last; w = (NEWord) w.next){
-		for(int fid=0;fid<w.getGeneratedDiscreteFeaturesNonConjunctive().size();fid++){
-			NEWord.DiscreteFeature feature=w.getGeneratedDiscreteFeaturesNonConjunctive().get(fid);
-			if(feature.useWithinTokenWindow)
-				sense "pos"+i+"group"+feature.featureGroupName : feature.featureValue;
-		}
-  		i++;
-  	}
-}
-
-//
-// these will be used by themselves AND with conjunctions. particularly with the previous predictions
-//
-discrete% additionalFeaturesDiscreteConjunctive(NEWord word) <-
-{
-	for(int fid=0;fid<word.getGeneratedDiscreteFeaturesConjunctive().size();fid++){
-		NEWord.DiscreteFeature feature=word.getGeneratedDiscreteFeaturesConjunctive().get(fid);
-		if(!feature.useWithinTokenWindow)
-			sense feature.featureGroupName : feature.featureValue;
-	}
-	int i;
-  	NEWord w = word, last = word;
-  	for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
-  	for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
-
-  	for (; w != last; w = (NEWord) w.next){
-		for(int fid=0;fid<w.getGeneratedDiscreteFeaturesConjunctive().size();fid++){
-			NEWord.DiscreteFeature feature=w.getGeneratedDiscreteFeaturesConjunctive().get(fid);
-			if(feature.useWithinTokenWindow)
-				sense "pos"+i+"group"+feature.featureGroupName : feature.featureValue;
-		}
-  		i++;
-  	}
-}
-
-
-
-real% additionalFeaturesRealNonConjunctive(NEWord word) <-
-{
-	for(int fid=0;fid<word.getGeneratedRealFeaturesNonConjunctive().size();fid++){
-		NEWord.RealFeature feature=word.getGeneratedRealFeaturesNonConjunctive().get(fid);
-		if(!feature.useWithinTokenWindow)
-			sense feature.featureGroupName : feature.featureValue;
-	}
-	int i;
-  	NEWord w = word, last = word;
-  	for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
-  	for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
-
-  	for (; w != last; w = (NEWord) w.next){
-		for(int fid=0;fid<w.getGeneratedRealFeaturesNonConjunctive().size();fid++){
-			NEWord.RealFeature feature=w.getGeneratedRealFeaturesNonConjunctive().get(fid);
-			if(feature.useWithinTokenWindow)
-				sense "pos"+i+"group"+feature.featureGroupName : feature.featureValue;
-		}
-  		i++;
-  	}
-}
-
-
-
-//
-// these will be used by themselves AND with conjunctions. particularly with the previous predictions
-//
-real% additionalFeaturesRealConjunctive(NEWord word) <-
-{
-	for(int fid=0;fid<word.getGeneratedRealFeaturesConjunctive().size();fid++){
-		NEWord.RealFeature feature=word.getGeneratedRealFeaturesConjunctive().get(fid);
-		if(!feature.useWithinTokenWindow)
-			sense feature.featureGroupName : feature.featureValue;
-	}
-	int i;
-  	NEWord w = word, last = word;
-  	for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
-  	for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
-
-  	for (; w != last; w = (NEWord) w.next){
-  		for(int fid=0;fid<w.getGeneratedRealFeaturesConjunctive().size();fid++){
-			NEWord.RealFeature feature=w.getGeneratedRealFeaturesConjunctive().get(fid);
-			if(feature.useWithinTokenWindow)
-				sense "pos"+i+"group"+feature.featureGroupName : feature.featureValue;
-		}
-  		i++;
-  	}
-}
-
-
 discrete% GazetteersFeatures(NEWord word) <-
 {
 	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("GazetteersFeatures"))
@@ -437,16 +338,16 @@ discrete% PreviousTagPatternLevel1(NEWord word) <-
 	}
 }
 
-mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, additionalFeaturesDiscreteNonConjunctive,additionalFeaturesDiscreteConjunctive, additionalFeaturesRealNonConjunctive
+mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures
 
 mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp /*,  IsWordCaseNormalized&&FeaturesSharedTemp*/
 
-mixed% FeaturesLevel1Only(NEWord word) <- PreviousTagPatternLevel1, PreviousTag1Level1,PreviousTag2Level1, prevTagsForContextLevel1, PreviousTag1Level1&&Forms,  /*PreviousTag1Level1&&BrownClusterPaths, PreviousTag1Level1&&WordEmbeddingFeatures,  PreviousTag1Level1&& HmmEmbeddingFeatures,*/  PreviousTag1Level1&&additionalFeaturesRealConjunctive, PreviousTag1Level1&& additionalFeaturesDiscreteConjunctive
+mixed% FeaturesLevel1Only(NEWord word) <- PreviousTagPatternLevel1, PreviousTag1Level1,PreviousTag2Level1, prevTagsForContextLevel1, PreviousTag1Level1&&Forms
 
 discrete NETaggerLevel1(NEWord word)  <-
 learn NELabel
   using FeaturesLevel1SharedWithLevel2,FeaturesLevel1Only
-  with new SparseNetworkLearner(new SparseAveragedPerceptron(.1, 0, 20))
+  with new SparseNetworkLearner(new SparseAveragedPerceptron(.05, 0, 30))
 end
 
 //---------------- CLASSIFIER LEVEL 2 -------------------
@@ -592,12 +493,12 @@ discrete% PreviousTagPatternLevel2(NEWord word) <-
 
 
 
-mixed% FeaturesLevel2(NEWord word) <-   PreviousTagPatternLevel2, Level1AggregationFeatures,  PreviousTag1Level2, PreviousTag2Level2 ,  prevTagsForContextLevel2, PreviousTag1Level2&&Forms, /* PreviousTag1Level2&&BrownClusterPaths, PreviousTag1Level2&&WordEmbeddingFeatures, PreviousTag1Level2&&HmmEmbeddingFeatures,  */PreviousTag1Level2&&additionalFeaturesDiscreteConjunctive, PreviousTag1Level2&&additionalFeaturesRealConjunctive
+mixed% FeaturesLevel2(NEWord word) <-   PreviousTagPatternLevel2, Level1AggregationFeatures,  PreviousTag1Level2, PreviousTag2Level2 ,  prevTagsForContextLevel2, PreviousTag1Level2&&Forms
 																	
 
 discrete NETaggerLevel2(NEWord word)  <-
 learn NELabel 
   using FeaturesLevel1SharedWithLevel2,FeaturesLevel2
-  with new SparseNetworkLearner(new SparseAveragedPerceptron(.1, 0, 20))
+  with new SparseNetworkLearner(new SparseAveragedPerceptron(.05, 0, 30))
 end
 

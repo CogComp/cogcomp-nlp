@@ -50,39 +50,6 @@ public class NEWord extends Word {
      */
     public String[] parts;
 
-
-    // private ArrayList<DiscreteFeature> generatedDiscreteFeaturesNonConjunctive = null;
-    //
-    // public ArrayList<DiscreteFeature> getGeneratedDiscreteFeaturesNonConjunctive() {
-    // if (generatedDiscreteFeaturesNonConjunctive == null)
-    // generatedDiscreteFeaturesNonConjunctive = new ArrayList<>(0);
-    // return generatedDiscreteFeaturesNonConjunctive;
-    // }
-    //
-    // private ArrayList<DiscreteFeature> generatedDiscreteFeaturesConjunctive = null;
-    //
-    // public ArrayList<DiscreteFeature> getGeneratedDiscreteFeaturesConjunctive() {
-    // if (generatedDiscreteFeaturesConjunctive == null)
-    // generatedDiscreteFeaturesConjunctive = new ArrayList<>(0);
-    // return generatedDiscreteFeaturesConjunctive;
-    // }
-    //
-    // private ArrayList<RealFeature> generatedRealFeaturesNonConjunctive = null;
-    //
-    // public ArrayList<RealFeature> getGeneratedRealFeaturesNonConjunctive() {
-    // if (generatedRealFeaturesNonConjunctive == null)
-    // generatedRealFeaturesNonConjunctive = new ArrayList<>(0);
-    // return generatedRealFeaturesNonConjunctive;
-    // }
-    //
-    // private ArrayList<RealFeature> generatedRealFeaturesConjunctive = null;
-    //
-    // public ArrayList<RealFeature> getGeneratedRealFeaturesConjunctive() {
-    // if (generatedRealFeaturesConjunctive == null)
-    // generatedRealFeaturesConjunctive = new ArrayList<>(0);
-    // return generatedRealFeaturesConjunctive;
-    // }
-
     /** used by wikipedia linkability. */
     public String normalizedMostLinkableExpression = null;
     public ArrayList<String> gazetteers;

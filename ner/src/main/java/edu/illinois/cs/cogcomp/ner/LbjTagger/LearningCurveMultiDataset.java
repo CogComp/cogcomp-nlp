@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
@@ -76,8 +77,12 @@ public class LearningCurveMultiDataset {
             IOUtils.mkdir(modelPathDir);
         }
 
+        SparseNetworkLearner.Parameters p = new SparseNetworkLearner.Parameters();
+        p.baseLTU = new SparseAveragedPerceptron(
+            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1, 0, 
+            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
         NETaggerLevel1 tagger1 =
-                new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
+                new NETaggerLevel1(p, modelPath + ".level1", modelPath + ".level1.lex");
         tagger1.forget();
 
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
@@ -153,12 +158,16 @@ public class LearningCurveMultiDataset {
         double f1Level1 = results[0].getOverallStats()[2];
         logger.info("Level 1; round " + bestRoundLevel1 + "\t" + f1Level1);
 
-
+        p = new SparseNetworkLearner.Parameters();
+        p.baseLTU = new SparseAveragedPerceptron(
+            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
+            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
         NETaggerLevel2 tagger2 =
-                new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
+                new NETaggerLevel2(p, ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2.lex");
         tagger2.forget();
+        
         // Previously checked if PatternFeatures was in featuresToUse.
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
             double bestF1Level2 = -1;

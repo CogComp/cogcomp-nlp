@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,8 +45,11 @@ public class TextCleaner {
     /** used to extract the name of the tag, so we can match tag and attribute name. */
     private static Pattern xmlTagNamePattern = Pattern.compile("<([^\\s>]+)");
     
-    /** find attributes in an xml tag instance. Match whitespace then word*/
-    private static Pattern tagAttributePattern = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s\"']*([^\\s\"'>]+)");
+    /** find attributes in an xml tag instance. Match whitespace then word. Group one is the 
+     * attribute name, group 2 is the quote mark used, three is the value. */
+    private static Pattern tagAttributePatter2 = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s\"']*([^\\s\"'>]+)");
+
+    private static Pattern tagAttributePattern = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s]*[\"']([^\"']+)");
 
     private boolean removeRepeatPunctuation;
     private boolean replaceUnderscores;
@@ -156,8 +160,9 @@ public class TextCleaner {
 	}
 
     /**
-     * This class remove XML markup, for the most part, but for the provided set of attribute names,
-     * it will leave their values in place and in the same position.
+     * This class removes XML markup, for the most part, but for the provided set of attribute names,
+     * it will leave their values in place and in the same position. Content within <code>quote</code> 
+     * tags is also replaced with white space (for the purpose of cleaning up the ERE code only).
      * @param origText the original text markup.
      * @param tagNames the names of tags containing the attributes leave, MUST BE LOWERCASE.
      * @param attributeNames the names of attributes to leave, MUST BE LOWERCASE.
@@ -185,23 +190,30 @@ public class TextCleaner {
             Matcher tagMatcher = xmlTagNamePattern.matcher(substr);
             if (tagMatcher.find()) {
             	String tagname = tagMatcher.group(1);
-            	
-            	// substring beyond the tag name.
-            	int substrstart = start + tagMatcher.end();
-            	substr = substr.substring(tagMatcher.end());
-            	Matcher attrMatcher = tagAttributePattern.matcher(substr);
-            	while (attrMatcher.find()) {
-            		String attrName = attrMatcher.group(1);
-            		String attrVal = attrMatcher.group(2);
-            		if (keep(tagNames, attributeNames, tagname, attrName)) {
-	            		int attrend = substrstart + (attrMatcher.end() - attrVal.length());
-	            		String value = origText.substring(attrend, attrend+attrVal.length());
-	    	            for (; start < attrend; start++)
-	    	                cleanTextBldr[start] = ' ';
-	    	            for (int i = 0 ; i < value.length(); i++)
-							cleanTextBldr[start+i] = value.charAt(i);
-		                start += value.length();
-	            	}
+            	if (tagname.equals("quote")) {
+            	    // skip the entire quote
+            	    end = origText.indexOf("</quote>", end);
+            	    if (end == -1) 
+            	        throw new IllegalArgumentException("No end quote");
+            	    end += 8;
+            	} else {
+                	// substring beyond the tag name.
+                	int substrstart = start + tagMatcher.end();
+                	substr = substr.substring(tagMatcher.end());
+                	Matcher attrMatcher = tagAttributePattern.matcher(substr);
+                	while (attrMatcher.find()) {
+                		String attrName = attrMatcher.group(1);
+                		String attrVal = attrMatcher.group(2);
+                		if (keep(tagNames, attributeNames, tagname, attrName)) {
+    	            		int attrend = substrstart + (attrMatcher.end() - attrVal.length());
+    	            		String value = origText.substring(attrend, attrend+attrVal.length());
+    	    	            for (; start < attrend; start++)
+    	    	                cleanTextBldr[start] = ' ';
+    	    	            for (int i = 0 ; i < value.length(); i++)
+    							cleanTextBldr[start+i] = value.charAt(i);
+    		                start += value.length();
+    	            	}
+                	}
             	}
             }
             for (; start < end; ++start)
@@ -277,6 +289,26 @@ public class TextCleaner {
         cleanText = cleanText.replaceAll("\\^", "");
         cleanText = cleanText.replaceAll("@ ", " ");
         return cleanText;
+    }
+
+    
+    /**
+     * Test here.
+     * @param args not used.
+     * @throws Exception 
+     */
+    static public void main (String[] args) throws Exception {
+        String origText = "<post author='John Marston' toop='1'>Hi, how do you do?</post>";
+        ArrayList<String> tagNames = new ArrayList<String>();
+        tagNames.add("post");
+        ArrayList<String> attributeNames = new ArrayList<String>();
+        attributeNames.add("author");
+        System.out.println(origText);
+        String nt = removeXmlLeaveAttributes(origText,tagNames,attributeNames);
+        System.out.println("\n"+nt);
+        System.out.println("John is at "+origText.indexOf("John Marston"));
+        System.out.println("John is at "+nt.indexOf("John Marston"));
+
     }
 
 }

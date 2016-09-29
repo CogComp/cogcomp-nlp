@@ -114,15 +114,23 @@ public class NerBenchmark {
 
         // Loop over every directory within the benchmark directory. Each subdirectory will contain
         // a configuration file, and a directory with the test data at the very least. If there is
-        // also
-        // a train directory, a new model will be trained.
+        // also a train directory, a new model will be trained.
         String[] configs = new File(directory).list();
-
+        if (configs == null || configs.length == 0) {
+            throw new RuntimeException("There were no directories within \""+directory+"\". "
+                + "Expected directories for each dataset to evaluate.");
+        }
+        
         // for each directory, run the benchmark test once for each config file within the config
         // directory.
         for (String benchmarkdir : configs) {
             String dir = directory + "/" + benchmarkdir;
+            if (!new File(dir).isDirectory())
+                continue;
+            
             File configsDir = new File(dir + "/config/");
+            if (!configsDir.exists())
+                continue;
             
             // training data.
             String trainDirName = dir + "/train/";
@@ -130,7 +138,6 @@ public class NerBenchmark {
             
             // hold out set for training
             String devDirName = dir + "/dev/";
-            File devDir = new File(devDirName);
 
             // final test set.
             String testDirName = dir + "/test/";

@@ -201,8 +201,10 @@ public class TokenizerStateMachine {
                                 // If there is a character before and after, this is a word.
                                 char after = peek(1);
                                 char before = peek(-1);
-                                if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
-                                        .isAlphabetic(after) || Character.isDigit(after)))) {
+                                if (!(Character.isDigit(before) && Character.isDigit(after))) {
+                                    /*
+                                         if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
+                                                .isAlphabetic(after) || Character.isDigit(after)))) {*/
                                     pop(current); // the current word is finished.
                                     push(new State(TokenizerState.IN_SPECIAL), current); // No
                                                                                          // matter
@@ -287,11 +289,9 @@ public class TokenizerStateMachine {
                             }
                             case '.': {
                                 // we have a period, this is often an end-of-sentence marker. There
-                                // are other
-                                // examples of areas where it is not, No.2, U.S., US., Hi., and Feb.
-                                // 4. Rule here is
-                                // that if it is followed by a printable character, it is just part
-                                // of the word.
+                                // are other examples of areas where it is not, No.2, U.S., US., 
+                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable 
+                                // character, it is just part of the word.
                                 // If it is followed by a space, but appears to be part of an
                                 // acronym(starts with a
                                 // period), it's part word, otherwise, it's punctuation.
@@ -313,7 +313,7 @@ public class TokenizerStateMachine {
                                             // punctuation then, pass through
                                         }
                                     } else {
-                                        if (Character.isAlphabetic(c) || Character.isDigit(c))
+                                        if ( (Character.isAlphabetic(c) && !Character.isUpperCase(c)) || Character.isDigit(c))
                                             // the next character is not white space, so the period
                                             // is part of the word
                                             return;

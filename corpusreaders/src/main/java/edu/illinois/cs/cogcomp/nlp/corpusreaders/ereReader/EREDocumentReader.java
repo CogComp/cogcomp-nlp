@@ -53,23 +53,4 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
     protected String getRequiredFileExtension() {
         return ".xml";
     }
-
-    /**
-     * Test here.
-     * @param args not used.
-     * @throws Exception 
-     */
-    static public void main (String[] args) throws Exception {
-    	String origText = LineIO.slurp("/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/source/ENG_DF_000170_20150322_F00000082.xml");
-    	EREDocumentReader p = new EREDocumentReader("CleanERE","/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/source/");
-        ArrayList<String> tagNames = new ArrayList<String>();
-        tagNames.add("poogers");
-        tagNames.add("dream");
-        ArrayList<String> attributeNames = new ArrayList<String>();
-        attributeNames.add("johnny");
-        attributeNames.add("theater");
-        System.out.println(origText);
-        String nt = p.stripText(origText);
-        System.out.println("\n"+nt);
-    }
 }

@@ -18,7 +18,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class NamedEntityTagger {
 
     /** this helper can create text annotations from text. */
     protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
-            new IllinoisTokenizer());
+            new StatefulTokenizer());
 
     /** the annotator. */
     protected NERAnnotator nerAnnotator = null;
