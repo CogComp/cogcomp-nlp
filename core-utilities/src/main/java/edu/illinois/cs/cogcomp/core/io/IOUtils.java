@@ -450,10 +450,4 @@ public abstract class IOUtils {
         return obj;
     }
 
-    public static void main(String[] args) throws IOException {
-        for(URL url : getResourcesFromDirectory(new File("./testdata"), Pattern.compile(".*"))){
-            System.out.println(url.toString());
-        }
-    }
-
 }
