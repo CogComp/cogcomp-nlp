@@ -89,6 +89,7 @@ public class ChunkerTrain {
      * modelName ("Chunker", as specified in ChunkerConfigurator) is fixed
      */
     public void writeModelsToDisk() {
+        IOUtils.mkdir(rm.getString("modelDirPath"));
         chunker.save();
         System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
     }
@@ -97,10 +98,9 @@ public class ChunkerTrain {
         chunker.write(dir + File.separator + modelName + ".lc", dir + File.separator + modelName + ".lex");
         System.out.println("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
     }
-    public ResourceManager getRm(){return rm;}
     public static void main(String[] args) {
         ChunkerTrain trainer = new ChunkerTrain();
         trainer.trainModels();
-        trainer.writeModelsToDisk(trainer.getRm().getString("modelDirPath"),trainer.getRm().getString("modelName"));
+        trainer.writeModelsToDisk();
     }
 }
