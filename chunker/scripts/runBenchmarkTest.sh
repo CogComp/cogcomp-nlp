@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ###
+# This script is outdated since ChunkTester is not taking filename as input anymore. @@Qiang
 # Runs a benchmark evaluation for the Illinois Chunker.
 # Labelled test data needs to be provided (not included)
 
