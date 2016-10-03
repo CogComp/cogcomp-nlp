@@ -19,20 +19,18 @@ import org.junit.Test;
  */
 public class SerializationTests {
 
-    @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2004Dataset() throws Exception {
-        ACEReader reader = new ACEReader("src/test/resources/ACE/ace2004/data/English", true);
+        ACEReader reader = new ACEReader(ACEReaderParseTest.ACE2004CORPUS, true);
 
         for (TextAnnotation ta : reader) {
             testDocumentSerialization(ta);
         }
     }
 
-    @Ignore("ACE Dataset files will not be commited to repo.")
     @Test
     public void test2005Dataset() throws Exception {
-        ACEReader reader = new ACEReader("src/test/resources/ACE/ace2005/data/English", false);
+        ACEReader reader = new ACEReader(ACEReaderParseTest.ACE2005CORPUS, false);
 
         for (TextAnnotation ta : reader) {
             testDocumentSerialization(ta);
