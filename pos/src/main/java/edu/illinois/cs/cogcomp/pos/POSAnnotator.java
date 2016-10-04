@@ -22,6 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Set;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Wraps the Illinois part-of-speech tagger in an illinois-core-utilites Annotator, to be a pipeline
@@ -122,5 +125,24 @@ public class POSAnnotator extends Annotator {
 
     public String getAnnotatorName() {
         return NAME;
+    }
+
+    /**
+     * Return possible tag values that the POSAnnotator can produce.
+     * The tag information for POS is found here:
+     * http://cogcomp.cs.illinois.edu/page/demo_view/POS
+     *
+     * @return the set of string representing the tag values
+     */
+    @Override
+    public Set<String> getTagValues() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        String tagValues[] = {"#", "$", "''", "``", "'", "`", ",", ".", ":", "-LRB-", "-RRB-", "CC", "CD",
+                "DT", "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNS", "NNP", "NNPS", "PDT",
+                "POS", "PRP", "PP$", "RB", "RBR", "RBS", "RP", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN",
+                "VBP", "VBZ", "WDT", "WP", "WP$", "WRB"};
+        return new HashSet<String>(Arrays.asList(tagValues));
     }
 }

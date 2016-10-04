@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * An interface for creating views of a specified name from a {@link TextAnnotation}
@@ -186,6 +187,16 @@ public abstract class Annotator {
      */
     public String[] getRequiredViews() {
         return requiredViews;
+    }
+
+    /**
+     * Return possible tag values that the annotator can produce.
+     *
+     * @return the set of string representing the tag values
+     */
+    public Set<String> getTagValues() {
+        System.err.println("Not yet implemented.");
+        return null;
     }
 
 
