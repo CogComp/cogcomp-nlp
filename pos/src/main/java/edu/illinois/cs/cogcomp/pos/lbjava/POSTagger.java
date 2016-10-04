@@ -15,6 +15,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.POSConfigurator;
 
+import java.util.Set;
+
 /**
  * After {@link POSTaggerKnown} and {@link POSTaggerUnknown} are trained, this classifier will
  * return the prediction of {@link POSTaggerKnown} if the input word was observed during training or
@@ -73,6 +75,13 @@ public class POSTagger extends Classifier {
             return taggerKnown.discreteValue(w);
         }
         return taggerUnknown.discreteValue(w);
+    }
+
+    // TODO(Yewen): find a better way to extract the labels from the classifier.
+    // we tried to extract labels from LabelLexicon, but needed non-trivial amount of post-processing to get the raw
+    // label strings.
+    public Set<String> getTagValues() {
+        return taggerKnown.scores(new Token()).values();
     }
 
     public int hashCode() {

@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+import edu.illinois.cs.cogcomp.pos.lbjava.POSTaggerKnown;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,8 +130,6 @@ public class POSAnnotator extends Annotator {
 
     /**
      * Return possible tag values that the POSAnnotator can produce.
-     * The tag information for POS is found here:
-     * http://cogcomp.cs.illinois.edu/page/demo_view/POS
      *
      * @return the set of string representing the tag values
      */
@@ -139,10 +138,6 @@ public class POSAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        String tagValues[] = {"#", "$", "''", "``", "'", "`", ",", ".", ":", "-LRB-", "-RRB-", "CC", "CD",
-                "DT", "EX", "FW", "IN", "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNS", "NNP", "NNPS", "PDT",
-                "POS", "PRP", "PP$", "RB", "RBR", "RBS", "RP", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN",
-                "VBP", "VBZ", "WDT", "WP", "WP$", "WRB"};
-        return new HashSet<String>(Arrays.asList(tagValues));
+        return tagger.getTagValues();
     }
 }

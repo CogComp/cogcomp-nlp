@@ -47,6 +47,14 @@ public class Token extends Word {
 
 
     /**
+     * Creates dummy token with empty string
+     */
+    public Token() {
+        super("");
+        label = "";
+    }
+
+    /**
      * Produces a simple <code>String</code> representation of this word in
      * which the {@link #label} field appears followed by the word's part
      * of speech and finally the form (i.e., spelling) of the word all
