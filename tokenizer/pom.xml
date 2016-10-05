@@ -20,7 +20,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>1.0.1</version>
+            <version>3.0.76</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
