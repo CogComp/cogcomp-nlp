@@ -8,8 +8,11 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class TestAttributes {
     private TextAnnotation ta;
@@ -20,7 +23,7 @@ public class TestAttributes {
     }
 
     @Test
-    public void testAttributes() throws CloneNotSupportedException {
+    public void testAttributes() throws Exception {
         TextAnnotation taCopy = (TextAnnotation) ta.clone();
 
         assert ta.equals(taCopy);
@@ -40,6 +43,16 @@ public class TestAttributes {
 
         assert ta.hasAttribute("Test2");
         assert ta.getAttribute("Test2").equals("TestValue");
+
+        String jsonSerialized = SerializationHelper.serializeToJson(ta);
+        TextAnnotation deserializedCopy = SerializationHelper.deserializeFromJson(jsonSerialized);
+
+        assertEquals("JSON Deserialized TA should have same attributes as original TA.", deserializedCopy, ta);
+
+        TextAnnotation bytesDeserialized = SerializationHelper.deserializeTextAnnotationFromBytes(
+                SerializationHelper.serializeTextAnnotationToBytes(ta));
+
+        assertEquals("Bytes Deserialized TA should have same attributes as original TA.", bytesDeserialized, ta);
     }
 
     @Test
