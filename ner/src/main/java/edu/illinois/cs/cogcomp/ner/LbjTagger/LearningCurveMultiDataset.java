@@ -106,12 +106,14 @@ public class LearningCurveMultiDataset {
             IOUtils.mkdir(modelPathDir);
         }
 
-        SparseNetworkLearner.Parameters p = new SparseNetworkLearner.Parameters();
-        p.baseLTU = new SparseAveragedPerceptron(
+        NETaggerLevel1.Parameters paramLevel1 = new NETaggerLevel1.Parameters();
+        paramLevel1.baseLTU = new SparseAveragedPerceptron(
             ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1, 0, 
             ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+        logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
+            ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
         NETaggerLevel1 tagger1 =
-                new NETaggerLevel1(p, modelPath + ".level1", modelPath + ".level1.lex");
+                new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
         tagger1.forget();
 
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
@@ -168,18 +170,20 @@ public class LearningCurveMultiDataset {
         if (deleteme.exists())
             deleteme.delete();
 
-        p = new SparseNetworkLearner.Parameters();
-        p.baseLTU = new SparseAveragedPerceptron(
+        NETaggerLevel2.Parameters paramLevel2 = new NETaggerLevel2.Parameters();
+        paramLevel2.baseLTU = new SparseAveragedPerceptron(
             ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
             ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
         NETaggerLevel2 tagger2 =
-                new NETaggerLevel2(p, ParametersForLbjCode.currentParameters.pathToModelFile
+                new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2.lex");
         tagger2.forget();
         
         // Previously checked if PatternFeatures was in featuresToUse.
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+            logger.info("Level 2 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2+
+                ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
             double bestF1Level2 = -1;
             int bestRoundLevel2 = 0;
             logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
