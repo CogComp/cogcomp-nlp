@@ -137,6 +137,11 @@ public class JLISCuttingPlaneILPSolverGurobi implements ILPSolver {
         return baseSolver.objectiveValue();
     }
 
+    @Override
+    public double objectiveCoeff(int index) {
+        return 0;
+    }
+
     public void reset() {
 
         baseSolver.reset();

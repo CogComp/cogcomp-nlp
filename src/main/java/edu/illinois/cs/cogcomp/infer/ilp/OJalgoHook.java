@@ -21,9 +21,6 @@ public class OJalgoHook implements ILPSolver {
 
     private ExpressionsBasedModel model = new ExpressionsBasedModel();
 
-    private String nameOfObjectiveExpression = "objective";
-    private Expression objectiveFunction =  model.getObjectiveExpression();
-
     // Internal flag for keeping optimization state
     private boolean minimize = true;
 
@@ -299,6 +296,11 @@ public class OJalgoHook implements ILPSolver {
         if(log)
             System.out.println("OJalgoHook: objectiveValue()");
         return result.getValue();
+    }
+
+    @Override
+    public double objectiveCoeff(int index) {
+        return model.getVariable(index).getContributionWeight().doubleValue();
     }
 
     public void reset() {

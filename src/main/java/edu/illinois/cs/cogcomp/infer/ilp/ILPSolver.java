@@ -162,6 +162,11 @@ public interface ILPSolver {
 
 
     /**
+     * The coefficient of the variable in the objective function.
+     */
+    public double objectiveCoeff(int index);
+
+    /**
      * This method clears the all constraints and variables out of the ILP solver's problem
      * representation, bringing the <code>ILPSolver</code> instance back to the state it was in when
      * first constructed.
