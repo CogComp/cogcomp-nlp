@@ -60,7 +60,7 @@ public class ChunkerAnnotator extends Annotator {
 
     @Override
     public void initialize(ResourceManager rm) {
-        tagger = new Chunker();
+        tagger = new Chunker(rm.getString("modelPath"),rm.getString("modelLexPath"));
     }
 
 

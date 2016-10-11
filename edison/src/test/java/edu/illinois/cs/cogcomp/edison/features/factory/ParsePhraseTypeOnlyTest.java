@@ -10,12 +10,18 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class ParsePhraseTypeOnlyTest {
 
@@ -30,8 +36,13 @@ public class ParsePhraseTypeOnlyTest {
                 DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
         PredicateArgumentView srlView = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
         predicate = srlView.getPredicates().get(0);
-        arg1 = srlView.getArguments(predicate).get(0).getTarget();
-        arg2 = srlView.getArguments(predicate).get(1).getTarget();
+        List<Relation> arguments = new ArrayList<>(srlView.getArguments(predicate));
+
+        // Making the order of arg1 and arg2 deterministic by sorting them according to their relation target.
+        arguments.sort((o1, o2) -> Integer.compare(o1.getTarget().getStartSpan(), o2.getTarget().getStartSpan()));
+
+        arg1 = arguments.get(0).getTarget();
+        arg2 = arguments.get(1).getTarget();
     }
 
     @Test

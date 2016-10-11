@@ -125,19 +125,19 @@ public class AceFileProcessor {
 
         String contentRemovingTags = textContentWithoutTagsBuilder.toString();
 
-        List<Pair<String, Paragraph>> paraList = null;
+        Pair<List<Pair<String, Paragraph>>, Map<String, String>> parsedResult = null;
         if (subFolderEntry.getAbsolutePath().endsWith("bc")) {
-            paraList = ACE_BC_Reader.parse(contentWithoutEnter, contentRemovingTags);
+            parsedResult = ACE_BC_Reader.parse(contentWithoutEnter, contentRemovingTags);
         } else if (subFolderEntry.getAbsolutePath().endsWith("bn")) {
-            paraList = ACE_BN_Reader.parse(contentWithoutEnter, contentRemovingTags, is2004mode);
+            parsedResult = ACE_BN_Reader.parse(contentWithoutEnter, contentRemovingTags, is2004mode);
         } else if (subFolderEntry.getAbsolutePath().endsWith("cts")) {
-            paraList = ACE_CTS_Reader.parse(contentWithoutEnter, contentRemovingTags);
+            parsedResult = ACE_CTS_Reader.parse(contentWithoutEnter, contentRemovingTags);
         } else if (subFolderEntry.getAbsolutePath().endsWith("nw")) {
-            paraList = ACE_NW_Reader.parse(contentWithoutEnter, contentRemovingTags);
+            parsedResult = ACE_NW_Reader.parse(contentWithoutEnter, contentRemovingTags);
         } else if (subFolderEntry.getAbsolutePath().endsWith("un")) {
-            paraList = ACE_UN_Reader.parse(contentWithoutEnter, contentRemovingTags);
+            parsedResult = ACE_UN_Reader.parse(contentWithoutEnter, contentRemovingTags);
         } else if (subFolderEntry.getAbsolutePath().endsWith("wl")) {
-            paraList = ACE_WL_Reader.parse(contentWithoutEnter, contentRemovingTags);
+            parsedResult = ACE_WL_Reader.parse(contentWithoutEnter, contentRemovingTags);
         }
 
         // Normalize the text content
@@ -147,7 +147,11 @@ public class AceFileProcessor {
         aceDoc.orginalContent = content;
         aceDoc.contentRemovingTags = cleanedTextContent;
         aceDoc.originalLines = lines;
-        aceDoc.paragraphs = paraList;
+
+        if (parsedResult != null) {
+            aceDoc.paragraphs = parsedResult.getFirst();
+            aceDoc.metadata = parsedResult.getSecond();
+        }
 
         return aceDoc;
     }

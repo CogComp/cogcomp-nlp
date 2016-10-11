@@ -19,7 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class TextAnnotationDBHandler {
+public class TextAnnotationDBHandler implements TextAnnotationCache {
     private Logger log = LoggerFactory.getLogger(TextAnnotationDBHandler.class);
 
     private final String dbFile;
@@ -85,6 +85,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public void addTextAnnotation(String dataset, TextAnnotation ta) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);
@@ -139,6 +140,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public void updateTextAnnotation(TextAnnotation ta) {
 
         try {
@@ -173,6 +175,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public IResetableIterator<TextAnnotation> getDataset(String dataset) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);
@@ -233,6 +236,7 @@ public class TextAnnotationDBHandler {
 
     }
 
+    @Override
     public boolean contains(TextAnnotation ta) {
         int id = ta.getTokenizedText().hashCode();
         Connection connection = DBHelper.getConnection(dbFile);
@@ -249,6 +253,7 @@ public class TextAnnotationDBHandler {
 
     }
 
+    @Override
     public void removeTextAnnotation(TextAnnotation ta) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);

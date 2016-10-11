@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +20,7 @@ import java.util.Set;
  *         <p>
  *         Aug 4, 2009
  */
-public class Relation implements Serializable {
+public class Relation implements Serializable, HasAttributes {
 
     private static final long serialVersionUID = -1005341815252250162L;
     protected final int relationName;
@@ -99,7 +101,7 @@ public class Relation implements Serializable {
     }
 
 
-    public void setAttribute( String key, String value )
+    public void addAttribute(String key, String value )
     {
         if ( null == attributes )
             attributes = new HashMap<>();
@@ -121,6 +123,10 @@ public class Relation implements Serializable {
             return new HashSet<>();
         else
             return this.attributes.keySet();
+    }
+
+    public boolean hasAttribute(String key) {
+        return this.attributes != null && this.attributes.containsKey(key);
     }
 
     /**
