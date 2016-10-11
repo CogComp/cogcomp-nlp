@@ -470,6 +470,11 @@ public class GurobiHook implements ILPSolver {
         return 0;
     }
 
+    @Override
+    public double objectiveCoeff(int index) {
+        return 0;
+    }
+
 
     /**
      * Given an array of variable indexes, this method returns the corresponding Gurobi variable

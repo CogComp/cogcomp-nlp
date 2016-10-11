@@ -148,6 +148,11 @@ public class BeamSearch implements ILPSolver {
 		return this.objectiveValue;
 	}
 
+	@Override
+	public double objectiveCoeff(int index) {
+		return scores.get(index)[0];
+	}
+
 	public void reset() {
 		this.constraints = new ArrayList<ILPConstraint>();
 		this.scores = new ArrayList<double[]>();
