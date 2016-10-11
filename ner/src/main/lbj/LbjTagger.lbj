@@ -598,6 +598,6 @@ mixed% FeaturesLevel2(NEWord word) <-   PreviousTagPatternLevel2, Level1Aggregat
 discrete NETaggerLevel2(NEWord word)  <-
 learn NELabel 
   using FeaturesLevel1SharedWithLevel2,FeaturesLevel2
-  with new SparseNetworkLearner(new SparseAveragedPerceptron(.1, 0, 20))
+  with new SparseNetworkLearner(new SparseAveragedPerceptron(.05, 0, 30))
 end
 
