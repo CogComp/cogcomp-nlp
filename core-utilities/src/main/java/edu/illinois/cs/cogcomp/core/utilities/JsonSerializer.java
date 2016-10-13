@@ -7,11 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.utilities;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -20,6 +17,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -86,6 +84,8 @@ public class JsonSerializer extends AbstractSerializer {
 
         json.add("views", views);
 
+        writeAttributes(ta, json);
+
         return json;
     }
 
@@ -142,6 +142,8 @@ public class JsonSerializer extends AbstractSerializer {
             ta.addTopKView(viewName, topKViews);
         }
 
+        readAttributes(ta, json);
+
         return ta;
     }
 
@@ -192,6 +194,7 @@ public class JsonSerializer extends AbstractSerializer {
                     writeDouble("score", r.getScore(), rJ);
                 writeInt("srcConstituent", srcId, rJ);
                 writeInt("targetConstituent", tgtId, rJ);
+                writeAttributes(r, rJ);
 
                 rJson.add(rJ);
             }
@@ -243,6 +246,7 @@ public class JsonSerializer extends AbstractSerializer {
                 int tgt = readInt("targetConstituent", rJ);
 
                 Relation rel = new Relation(name, constituents.get(src), constituents.get(tgt), s);
+                readAttributes(rel, rJ);
 
                 view.addRelation(rel);
             }
@@ -258,15 +262,7 @@ public class JsonSerializer extends AbstractSerializer {
         writeInt("start", c.getStartSpan(), cJ);
         writeInt("end", c.getEndSpan(), cJ);
 
-        if (c.getAttributeKeys().size() > 0) {
-            JsonObject properties = new JsonObject();
-
-            for (String key : Sorters.sortSet(c.getAttributeKeys())) {
-                writeString(key, c.getAttribute(key), properties);
-            }
-
-            cJ.add("properties", properties);
-        }
+        writeAttributes(c, cJ);
     }
 
     private static Constituent readConstituent(JsonObject cJ, TextAnnotation ta, String viewName) {
@@ -276,15 +272,10 @@ public class JsonSerializer extends AbstractSerializer {
             score = readDouble("score", cJ);
         int start = readInt("start", cJ);
         int end = readInt("end", cJ);
+
         Constituent c = new Constituent(label, score, viewName, ta, start, end);
+        readAttributes(c, cJ);
 
-        if (cJ.has("properties")) {
-            JsonObject properties = cJ.getAsJsonObject("properties");
-
-            for (Entry<String, JsonElement> entry : properties.entrySet()) {
-                c.addAttribute(entry.getKey(), entry.getValue().getAsString());
-            }
-        }
         return c;
     }
 
@@ -385,5 +376,27 @@ public class JsonSerializer extends AbstractSerializer {
 
     private static double readDouble(String name, JsonObject obj) {
         return obj.get(name).getAsDouble();
+    }
+
+    private static void writeAttributes(HasAttributes obj, JsonObject out) {
+        if (obj.getAttributeKeys().size() > 0) {
+            JsonObject properties = new JsonObject();
+
+            for (String key : Sorters.sortSet(obj.getAttributeKeys())) {
+                writeString(key, obj.getAttribute(key), properties);
+            }
+
+            out.add("properties", properties);
+        }
+    }
+
+    private static void readAttributes(HasAttributes obj, JsonObject json) {
+        if (json.has("properties")) {
+            JsonObject properties = json.getAsJsonObject("properties");
+
+            for (Entry<String, JsonElement> entry : properties.entrySet()) {
+                obj.addAttribute(entry.getKey(), entry.getValue().getAsString());
+            }
+        }
     }
 }

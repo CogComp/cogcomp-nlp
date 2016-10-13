@@ -7,11 +7,14 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 
+import edu.illinois.cs.cogcomp.core.constants.DocumentMetadata;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +22,10 @@ final class ACE_CTS_Reader {
 
     static boolean isDebug = false;
 
-    public static List<Pair<String, Paragraph>> parse(String content, String contentRemovingTags) {
+    public static Pair<List<Pair<String, Paragraph>>, Map<String, String>> parse(String content,
+                                                                                 String contentRemovingTags) {
         List<Pair<String, Paragraph>> paragraphs = new ArrayList<>();
+        Map<String, String> metadata = new HashMap<>();
 
         Pattern pattern = null;
         Matcher matcher = null;
@@ -35,20 +40,14 @@ final class ACE_CTS_Reader {
         while (matcher.find()) {
             docID = (matcher.group(1)).trim();
         }
-        int index1 = content.indexOf(docID);
-        Paragraph para1 = new Paragraph(index1, docID);
-        Pair<String, Paragraph> pair1 = new Pair<String, Paragraph>("docID", para1);
-        paragraphs.add(pair1);
+        metadata.put(DocumentMetadata.DocumentID, docID);
 
         pattern = Pattern.compile("<DATETIME>(.*?)</DATETIME>");
         matcher = pattern.matcher(content);
         while (matcher.find()) {
             dateTime = (matcher.group(1)).trim();
         }
-        int index2 = content.indexOf(dateTime);
-        Paragraph para2 = new Paragraph(index2, dateTime);
-        Pair<String, Paragraph> pair2 = new Pair<String, Paragraph>("dateTime", para2);
-        paragraphs.add(pair2);
+        metadata.put(DocumentMetadata.DocumentCreationTime, dateTime);
 
         pattern = Pattern.compile("<TURN>(.*?)</TURN>");
         matcher = pattern.matcher(content);
@@ -86,17 +85,6 @@ final class ACE_CTS_Reader {
             }
         }
 
-        // if (isDebug) {
-        // for (int i = 0; i < paragraphs.size(); ++i) {
-        // System.out.println(paragraphs.get(i).getFirst() + "--> " +
-        // paragraphs.get(i).getSecond().content);
-        // System.out.println(content.substring(paragraphs.get(i).getSecond().offset,
-        // paragraphs.get(i).getSecond().offset + paragraphs.get(i).getSecond().content.length()));
-        // System.out.println();
-        // }
-        // }
-
-        return paragraphs;
+        return new Pair<>(paragraphs, metadata);
     }
-
 }
