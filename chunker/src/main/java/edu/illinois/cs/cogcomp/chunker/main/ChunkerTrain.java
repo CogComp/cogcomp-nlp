@@ -86,9 +86,10 @@ public class ChunkerTrain {
 
     /**
      * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor The
-     * modelName ("illinois-chunker") is fixed
+     * modelName ("Chunker", as specified in ChunkerConfigurator) is fixed
      */
     public void writeModelsToDisk() {
+        IOUtils.mkdir(rm.getString("modelDirPath"));
         chunker.save();
         System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
     }
