@@ -142,19 +142,18 @@ public class Main {
 
         // Add Propbank data
         log.info("Caching PropBank data");
-        cacheVerbNom(SRLType.Verb);
+        cacheVerbNom(SRLType.Verb, taCache);
 
         log.info("Caching NomBank data");
-        cacheVerbNom(SRLType.Nom);
+        cacheVerbNom(SRLType.Nom, taCache);
 
         log.info("Cached all datasets");
 
         log.info("Adding required views in PTB");
-        addRequiredViews(taCache.getDataset(Dataset.PTBAll.name()));
+        addRequiredViews(taCache.getDataset(Dataset.PTBAll.name()), taCache);
     }
 
-    private static void cacheVerbNom(SRLType srlType) throws Exception {
-        TextAnnotationCache taCache = getTextAnnotationCache();
+    private static void cacheVerbNom(SRLType srlType, TextAnnotationCache taCache) throws Exception {
         String treebankHome = properties.getPennTreebankHome();
         String[] allSectionsArray = properties.getAllSections();
         List<String> trainSections = Arrays.asList(properties.getAllTrainSections());
@@ -203,10 +202,9 @@ public class Main {
         taCache.close();
     }
 
-    private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset)
+    private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset, TextAnnotationCache taCache)
             throws IOException {
         Counter<String> addedViews = new Counter<>();
-        TextAnnotationCache taCache = getTextAnnotationCache();
         log.info("Initializing pre-processor");
         TextPreProcessor.initialize(new ResourceManager(configFile));
 
