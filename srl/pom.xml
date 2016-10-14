@@ -4,7 +4,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.73</version>
+        <version>3.0.77</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -51,29 +51,23 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.73</version>
+            <version>3.0.77</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.73</version>
+            <version>3.0.77</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
-            <version>3.0.73</version>
+            <version>3.0.77</version>
         </dependency>
         <dependency>
             <groupId>com.gurobi</groupId>
             <artifactId>gurobi</artifactId>
             <version>6.5</version>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-common-resources</artifactId>
-            <classifier>illinoisSRL</classifier>
-            <version>1.4</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>

@@ -8,5 +8,15 @@
 package edu.illinois.cs.cogcomp.srl.data;
 
 public enum Dataset {
-    PTBAll, PTBTrain, PTBDev, PTBTest, PTB0204, PTBTrainDev
+    PTBAll, PTBTrain, PTBDev, PTBTest, PTB0204, PTBTrainDev;
+
+    public static String[] stringValues() {
+        String[] values = new String[Dataset.values().length];
+        Dataset[] datasets = Dataset.values();
+        for (int i = 0; i < datasets.length; i++) {
+            Dataset d = datasets[i];
+            values[i] = d.name();
+        }
+        return values;
+    }
 }

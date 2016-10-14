@@ -15,6 +15,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationDBHandler;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
@@ -30,7 +33,6 @@ import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
 import edu.illinois.cs.cogcomp.sl.util.IFeatureVector;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 import edu.illinois.cs.cogcomp.srl.caches.FeatureVectorCacheFile;
-import edu.illinois.cs.cogcomp.srl.caches.SentenceDBHandler;
 import edu.illinois.cs.cogcomp.srl.core.ModelInfo;
 import edu.illinois.cs.cogcomp.srl.core.Models;
 import edu.illinois.cs.cogcomp.srl.core.SRLManager;
@@ -136,7 +138,7 @@ public class Main {
     @CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
     public static void cacheDatasets() throws Exception {
         log.info("Initializing datasets");
-        SentenceDBHandler.instance.initializeDatasets(properties.getSentenceDBFile());
+        TextAnnotationCache taCache = getTextAnnotationCache();
 
         // Add Propbank data
         log.info("Caching PropBank data");
@@ -148,10 +150,11 @@ public class Main {
         log.info("Cached all datasets");
 
         log.info("Adding required views in PTB");
-        addRequiredViews(SentenceDBHandler.instance.getDataset(Dataset.PTBAll));
+        addRequiredViews(taCache.getDataset(Dataset.PTBAll.name()));
     }
 
     private static void cacheVerbNom(SRLType srlType) throws Exception {
+        TextAnnotationCache taCache = getTextAnnotationCache();
         String treebankHome = properties.getPennTreebankHome();
         String[] allSectionsArray = properties.getAllSections();
         List<String> trainSections = Arrays.asList(properties.getAllTrainSections());
@@ -180,29 +183,30 @@ public class Main {
             if (ta.hasView(goldView)) {
                 String id = ta.getId();
                 String section = id.substring(id.indexOf('/') + 1, id.lastIndexOf('/'));
-                SentenceDBHandler.instance.addTextAnnotation(Dataset.PTBAll, ta);
+                taCache.addTextAnnotation(Dataset.PTBAll.name(), ta);
                 if (trainSections.contains(section))
-                    SentenceDBHandler.instance.addTextAnnotation(Dataset.PTBTrain, ta);
+                    taCache.addTextAnnotation(Dataset.PTBTrain.name(), ta);
                 if (devSections.contains(section))
-                    SentenceDBHandler.instance.addTextAnnotation(Dataset.PTBDev, ta);
+                    taCache.addTextAnnotation(Dataset.PTBDev.name(), ta);
                 if (trainDevSections.contains(section))
-                    SentenceDBHandler.instance.addTextAnnotation(Dataset.PTBTrainDev, ta);
+                    taCache.addTextAnnotation(Dataset.PTBTrainDev.name(), ta);
                 if (testSections.contains(section))
-                    SentenceDBHandler.instance.addTextAnnotation(Dataset.PTBTest, ta);
+                    taCache.addTextAnnotation(Dataset.PTBTest.name(), ta);
                 if (ptb0204Sections.contains(section))
-                    SentenceDBHandler.instance.addTextAnnotation(Dataset.PTB0204, ta);
+                    taCache.addTextAnnotation(Dataset.PTB0204.name(), ta);
             }
 
             count++;
             if (count % 10000 == 0)
                 System.out.println(count + " sentences done");
         }
+        taCache.close();
     }
 
     private static void addRequiredViews(IResetableIterator<TextAnnotation> dataset)
             throws IOException {
         Counter<String> addedViews = new Counter<>();
-
+        TextAnnotationCache taCache = getTextAnnotationCache();
         log.info("Initializing pre-processor");
         TextPreProcessor.initialize(new ResourceManager(configFile));
 
@@ -216,7 +220,7 @@ public class Main {
             } catch (Exception e) {
                 // Remove from dataset
                 log.error("Annotation failed, removing sentence from dataset");
-                SentenceDBHandler.instance.removeTextAnnotation(ta);
+                taCache.removeTextAnnotation(ta);
                 continue;
             }
             String parserView = ViewNames.DEPENDENCY + ":";
@@ -229,7 +233,7 @@ public class Main {
                 parserView += ViewNames.PARSE_STANFORD;
             if (ta.getView(parserView).getNumberOfConstituents() != ta.getSentence(0).size()) {
                 log.error("Head-dependency mismatch, removing sentence from dataset");
-                SentenceDBHandler.instance.removeTextAnnotation(ta);
+                taCache.removeTextAnnotation(ta);
                 continue;
             }
 
@@ -237,7 +241,7 @@ public class Main {
             newViews.removeAll(views);
 
             if (newViews.size() > 0) {
-                SentenceDBHandler.instance.updateTextAnnotation(ta);
+                taCache.updateTextAnnotation(ta);
                 for (String s : newViews)
                     addedViews.incrementCount(s);
             }
@@ -248,10 +252,11 @@ public class Main {
         log.info("New views: ");
         for (String s : addedViews.items())
             log.info(s + "\t" + addedViews.getCount(s));
+        taCache.close();
     }
 
     @CommandIgnore
-    public static SRLManager getManager(SRLType srlType, boolean trainingMode) throws Exception {
+    static SRLManager getManager(SRLType srlType, boolean trainingMode) throws Exception {
         String viewName;
         if (defaultParser == null)
             defaultParser = SRLProperties.getInstance().getDefaultParser();
@@ -382,12 +387,12 @@ public class Main {
             vectorCacheFile.openReader();
             return vectorCacheFile;
         }
-
+        TextAnnotationCache taCache = getTextAnnotationCache();
         FeatureVectorCacheFile featureCache =
                 new FeatureVectorCacheFile(cacheFile, modelToExtract, manager);
-        Iterator<TextAnnotation> data = SentenceDBHandler.instance.getDataset(dataset);
-        PreExtractor p =
-                new PreExtractor(manager, data, numConsumers, modelToExtract, featureCache);
+        Iterator<TextAnnotation> data = taCache.getDataset(dataset.name());
+        PreExtractor p = new PreExtractor(manager, data, numConsumers, modelToExtract, featureCache);
+        taCache.close();
 
         if (lockLexicon)
             p.lockLexicon();
@@ -525,10 +530,11 @@ public class Main {
 
         manager.getModelInfo(Models.Identifier).loadWeightVector();
         manager.getModelInfo(Models.Classifier).loadWeightVector();
-
         manager.getModelInfo(Models.Sense).loadWeightVector();
-        IResetableIterator<TextAnnotation> dataset = SentenceDBHandler.instance.getDataset(testSet);
         log.info("All models weights loaded now!");
+
+        TextAnnotationCache taCache = getTextAnnotationCache();
+        IResetableIterator<TextAnnotation> dataset = taCache.getDataset(testSet.name());
         PredicateArgumentEvaluator evaluator = new PredicateArgumentEvaluator();
 
         while (dataset.hasNext()) {
@@ -575,5 +581,16 @@ public class Main {
             System.out.println("To use standard CoNLL evaluation, compare the following files:\n"
                     + goldOutFile + " " + predOutFile);
         }
+        taCache.close();
+    }
+
+    private static TextAnnotationCache getTextAnnotationCache() {
+        TextAnnotationCache taCache;
+        if (properties.getDatasetCache().equals("H2"))
+            taCache = new TextAnnotationDBHandler(properties.getSentenceDBFile(), Dataset.stringValues());
+        else if (properties.getDatasetCache().equals("MapDB"))
+            taCache = new TextAnnotationMapDBHandler(properties.getSentenceDBFile());
+        else throw new RuntimeException("Unknown Dataset Cache type");
+        return taCache;
     }
 }

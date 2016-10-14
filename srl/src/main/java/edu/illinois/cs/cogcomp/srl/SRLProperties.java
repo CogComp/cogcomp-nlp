@@ -200,4 +200,8 @@ public class SRLProperties {
                 return ILPSolverFactory.SolverType.OJAlgo;
         }
     }
+
+    public String getDatasetCache() {
+        return config.getString("DatasetCache");
+    }
 }
