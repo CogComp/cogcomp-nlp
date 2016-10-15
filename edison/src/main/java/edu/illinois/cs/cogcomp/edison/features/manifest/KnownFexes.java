@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.edison.features.manifest;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.edison.features.CurrencyIndicator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
@@ -102,11 +101,11 @@ class KnownFexes {
         fexes.put("brown-clusters-1000", BrownClusterFeatureExtractor.instance1000);
         fexes.put("brown-clusters-3200", BrownClusterFeatureExtractor.instance3200);
 
-        fexes.put("gazetteers", WordFeatureExtractorFactory.getGazetteerFeatureExtractor(
-                "gazetteers", GazetteerViewGenerator.gazetteersInstance));
-
-        fexes.put("cbc", WordFeatureExtractorFactory.getGazetteerFeatureExtractor("cbc",
-                GazetteerViewGenerator.gazetteersInstance));
+//        fexes.put("gazetteers", WordFeatureExtractorFactory.getGazetteerFeatureExtractor(
+//                "gazetteers", GazetteerViewGenerator.gazetteersInstance));
+//
+//        fexes.put("cbc", WordFeatureExtractorFactory.getGazetteerFeatureExtractor("cbc",
+//                GazetteerViewGenerator.gazetteersInstance));
 
         fexes.put("CORLEX", CorlexFeatureExtractor.instance);
         fexes.put("roget-thesaurus", RogetThesaurusFeatures.INSTANCE);
