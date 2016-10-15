@@ -194,17 +194,17 @@ public class TestWordFeatureFactory extends TestCase {
             }
         }
     }
-
-    public final void testGazetteerFeatures() throws Exception {
-        logger.info("\tTesting gazetteer features");
-        WordFeatureExtractor fex =
-                WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
-                        new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
-
-        for (TextAnnotation ta : tas) {
-            runTest(ta, fex);
-        }
-    }
+// Not needed anymore, test of SimpleGazetteerAnnotator suffice.
+//    public final void testGazetteerFeatures() throws Exception {
+//        System.out.println("\tTesting gazetteer features");
+//        WordFeatureExtractor fex =
+//                WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
+//                        new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
+//
+//        for (TextAnnotation ta : tas) {
+//            runTest(ta, fex);
+//        }
+//    }
 
     private void runTest(TextAnnotation ta, WordFeatureExtractor fex) throws EdisonException {
 
