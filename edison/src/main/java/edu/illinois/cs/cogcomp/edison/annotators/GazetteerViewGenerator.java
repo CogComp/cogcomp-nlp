@@ -47,6 +47,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
+@Deprecated
 public class GazetteerViewGenerator extends Annotator {
     public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
     private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
