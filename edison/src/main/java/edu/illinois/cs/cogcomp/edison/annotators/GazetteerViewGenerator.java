@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * Use SimpleGazetteerAnnotator instead
  * Use this class to create a gazetteer view for your text.
  *
  * Use this in combination with cogcomp-common-resources, and pass in
