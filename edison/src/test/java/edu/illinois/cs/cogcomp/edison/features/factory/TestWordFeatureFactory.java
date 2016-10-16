@@ -191,7 +191,7 @@ public class TestWordFeatureFactory extends TestCase {
             }
         }
     }
-// Not needed anymore, test of SimpleGazetteerAnnotator suffice.
+// Not needed anymore, as test of SimpleGazetteerAnnotator in SimpleGazetteerAnnotatorTest.java suffice.
 //    public final void testGazetteerFeatures() throws Exception {
 //        System.out.println("\tTesting gazetteer features");
 //        WordFeatureExtractor fex =
