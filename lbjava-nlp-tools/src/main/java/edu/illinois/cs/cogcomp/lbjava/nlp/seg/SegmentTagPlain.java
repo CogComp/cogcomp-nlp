@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -54,6 +56,7 @@ import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
  * @author Nick Rizzolo
  **/
 public class SegmentTagPlain {
+    private static Logger logger = LoggerFactory.getLogger(SegmentTagPlain.class);
     public static void main(String[] args) {
         String taggerName = null;
         String inputFile = null;
@@ -68,7 +71,7 @@ public class SegmentTagPlain {
                 if (args.length > 3) throw new Exception();
             }
         } catch (Exception e) {
-            System.err.println(
+            logger.error(
                     "usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.seg.SegmentTagPlain <word classifier> "
                             + "<input file> \\\n"
                             + "                                         [<parser>]");
@@ -103,7 +106,7 @@ public class SegmentTagPlain {
                     || !tagger.discreteValue(w.next)
                     .endsWith(prediction.substring(2))))
                 System.out.print("] ");
-            if (w.next == null) System.out.println();
+            if (w.next == null) logger.info("\n");
             previous = prediction;
         }
     }

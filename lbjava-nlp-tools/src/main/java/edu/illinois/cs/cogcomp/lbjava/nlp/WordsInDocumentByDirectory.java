@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.*;
  * @author Nick Rizzolo
  **/
 public class WordsInDocumentByDirectory implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(WordsInDocumentByDirectory.class);
     /**
      * The list of all files to be parsed.
      */
@@ -103,7 +106,7 @@ public class WordsInDocumentByDirectory implements Parser {
                                       boolean shuffle, long seed) {
         File d = new File(directory);
         if (!d.exists() || !d.isDirectory()) {
-            System.err.println(
+            logger.error(
                     "Error: '" + directory + "' does not exist or is not a directory.");
             new Exception().printStackTrace();
             System.exit(1);
@@ -214,7 +217,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             in = new BufferedReader(new FileReader(inputFile));
         } catch (Exception e) {
-            System.err.println("Can't open '" + inputFile + "' for input: " + e);
+            logger.error("Can't open '" + inputFile + "' for input: " + e);
             System.exit(1);
         }
 
@@ -238,7 +241,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             line = in.readLine();
         } catch (Exception e) {
-            System.err.println("Can't read from '" + inputFile + "': " + e);
+            logger.error("Can't read from '" + inputFile + "': " + e);
             System.exit(1);
         }
 
@@ -258,7 +261,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             in.close();
         } catch (Exception e) {
-            System.err.println("Can't close input file '" + inputFile + "': " + e);
+            logger.error("Can't close input file '" + inputFile + "': " + e);
             System.exit(1);
         }
     }

@@ -9,6 +9,8 @@ package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +26,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * @author Nick Rizzolo
  **/
 public class WordSplitter implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(WordSplitter.class);
     /**
      * Run this program on a file containing plain text, and it will produce
      * the same text on <code>STDOUT</code> rearranged so that each line
@@ -42,7 +45,7 @@ public class WordSplitter implements Parser {
             filename = args[0];
             if (args.length > 1) throw new Exception();
         } catch (Exception e) {
-            System.err.println("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter <file name>");
+            logger.error("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter <file name>");
             System.exit(1);
         }
 
@@ -57,7 +60,7 @@ public class WordSplitter implements Parser {
                     System.out.print(" " + w.form);
             }
 
-            System.out.println();
+            logger.info("\n");
         }
     }
 

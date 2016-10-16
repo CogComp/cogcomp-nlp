@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 
@@ -45,6 +47,8 @@ import static org.junit.Assert.assertNotNull;
  * @author Updated: Qiang Ning
  **/
 public class ChunkTester {
+    private static final Logger logger = LoggerFactory.getLogger(ChunkTester.class);
+
     public static void chunkTester(String testFile){
         Parser parser;
         parser = new CoNLL2000Parser(testFile);
@@ -57,10 +61,10 @@ public class ChunkTester {
         String testFileName = rm.getString("testGoldPOSData");
         String testNoPOSFileName = rm.getString("testNoPOSData");
 
-        System.out.println("\nWith Gold POS");
+        logger.info("\nWith Gold POS");
         chunkTester(testFileName);
 
-        System.out.println("\nWith NO POS");
+        logger.info("\nWith NO POS");
         chunkTester(testNoPOSFileName);
     }
 }

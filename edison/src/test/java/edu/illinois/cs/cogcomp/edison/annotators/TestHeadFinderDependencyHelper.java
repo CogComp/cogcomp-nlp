@@ -14,8 +14,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestHeadFinderDependencyHelper extends TestCase {
+    private static Logger logger = LoggerFactory.getLogger(TestHeadFinderDependencyHelper.class);
 
     public final void testHeadFinderDependencyHelper() {
         String s = "There is no recovery period -- it 's go , go , go .";
@@ -32,7 +35,7 @@ public class TestHeadFinderDependencyHelper extends TestCase {
 
         ta.addView(ViewNames.PARSE_CHARNIAK, parse);
 
-        System.out.println(ta.getView(ViewNames.PARSE_CHARNIAK));
+        logger.info(ta.getView(ViewNames.PARSE_CHARNIAK).toString());
 
         HeadFinderDependencyViewGenerator dep =
                 new HeadFinderDependencyViewGenerator(ViewNames.PARSE_CHARNIAK);
@@ -44,7 +47,7 @@ public class TestHeadFinderDependencyHelper extends TestCase {
             e.printStackTrace();
             fail(e.getMessage());
         }
-        System.out.println(depTree);
+        logger.info(depTree.toString());
 
         assertEquals(depTree.getNumberOfConstituents(), ta.size());
     }

@@ -18,9 +18,12 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LuceneExample {
-
+	private static final Logger logger = LoggerFactory.getLogger(LuceneExample.class);
+	
 	public static void main(String[] args) throws IOException, ParseException {
 
 		String pathToIndexDir = "testIndex";
@@ -28,15 +31,15 @@ public class LuceneExample {
 		IndexReader reader = Lucene.reader(pathToIndexDir);
 		Map<String, Float> idfs = Lucene.getIdfs(reader, "text");
 		for (String k : idfs.keySet()) {
-			System.out.println(k + " " + idfs.get(k));
+			logger.info(k + " " + idfs.get(k));
 		}
-		System.out.println("TFS");
+		logger.info("TFS");
 		for (int i = 0; i < reader.maxDoc(); i++) {
-			System.out.println(reader.document(i).getField("title")
+			logger.info(reader.document(i).getField("title")
 					.stringValue());
 			Map<String, Float> tfs = Lucene.getTfs(reader, "text", i);
 			for (String k : tfs.keySet()) {
-				System.out.println(k + " " + tfs.get(k));
+				logger.info(k + " " + tfs.get(k));
 			}
 		}
 

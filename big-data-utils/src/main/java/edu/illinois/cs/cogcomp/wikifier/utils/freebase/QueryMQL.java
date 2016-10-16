@@ -194,9 +194,9 @@ public class QueryMQL {
 			e.printStackTrace();
 			
 			int statusCode = e.getStatusCode();
-			System.err.println("StatusCode "+statusCode);
-			System.err.println("Query URL was "+url.toString());
-			System.err.println("Query was "+mqlQuery);
+			logger.error("StatusCode "+statusCode);
+			logger.error("Query URL was "+url.toString());
+			logger.error("Query was "+mqlQuery);
 			
 			if(statusCode==403)	// max limit reached for a day
 			{
@@ -232,13 +232,13 @@ public class QueryMQL {
 //		String mqlQuery = mql.MQLquery;
 //		// first check mid in cache
 //		if (IOUtils.exists(typeCacheLocation + "/" + mid + ".cached")) {
-//			System.out.println("Found!");
+//			logger.info("Found!");
 //			JSONParser jsonParser = new JSONParser();
 //			response = (JSONObject) jsonParser.parse(FileUtils
 //					.readFileToString(new File(typeCacheLocation + "/" + mid
 //							+ ".cached"), "UTF-8"));
 //		} else {
-//			System.out.println("Caching");
+//			logger.info("Caching");
 //			response = getResponse(mqlQuery);
 //			FileUtils.writeStringToFile(new File(typeCacheLocation + "/" + mid
 //					+ ".cached"), response.toString(), "UTF-8");
@@ -277,7 +277,7 @@ public class QueryMQL {
 //					}
 //				}
 //			} catch (HttpResponseException e){
-//				System.out.println("title: "+title);
+//				logger.info("title: "+title);
 //				e.printStackTrace();
 //				if(e.getStatusCode() == 403)
 //					System.exit(0);
@@ -373,13 +373,13 @@ public class QueryMQL {
 		JSONObject response;
 
 		if (IOUtils.exists(midCacheLocation + "/" + checksum + ".cached")) {
-			System.out.println("Found!");
+			logger.info("Found!");
 			JSONParser jsonParser = new JSONParser();
 			response = (JSONObject) jsonParser.parse(FileUtils
 					.readFileToString(new File(midCacheLocation + "/"
 							+ checksum + ".cached"), "UTF-8"));
 		} else {
-			System.out.println("Caching");
+			logger.info("Caching");
 			response = getResponse(mqlQuery);
 			FileUtils.writeStringToFile(new File(midCacheLocation + "/"
 					+ checksum + ".cached"), response.toString(), "UTF-8");
@@ -494,18 +494,18 @@ public class QueryMQL {
 
 	public static void main(String[] args) throws Exception {
 		QueryMQL mql = new QueryMQL();
-//		System.out.println(encodeMQL("Darker_than_darkness-style93-"));
-//		System.out.println(encodeMQL("Frank_Black_93-03"));
+//		logger.info(encodeMQL("Darker_than_darkness-style93-"));
+//		logger.info(encodeMQL("Frank_Black_93-03"));
 //		System.exit(-1);
 		// Example 1: query for mid from freebase of wiki title
 		// Washington_(U.S._state)
-		// System.out.println(mql.lookupMid(mql.buildQuery(null,
+		// logger.info(mql.lookupMid(mql.buildQuery(null,
 		// "/wikipedia/en",
 		// encodeMQL("Washington_(U.S._state)"))));
 		// Example 2: to lookup fine grained types from freebase using mid
-		// System.out.println(mql.lookupType(mql.buildQuery("/m/01nf0c")));
+		// logger.info(mql.lookupType(mql.buildQuery("/m/01nf0c")));
 		// Example 3: To get the fine grained type, first get the mid using
-		// System.out.println(mql.lookupTypeFromTitle(mql.buildQuery(
+		// logger.info(mql.lookupTypeFromTitle(mql.buildQuery(
 		// "/wikipedia/en", "Barack_Obama")));
 		// Code for generating training data for Fine2CoarseNER classifier
 //		List<String> lines = FileUtils.readLines(new File("sortedTarget"),
@@ -516,29 +516,29 @@ public class QueryMQL {
 //			c++;
 //			List<String> type = mql.lookupTypeFromTitle(mql.buildQuery(
 //					"/wikipedia/en", QueryMQL.encodeMQL(title)));
-//			System.out.println(type);
+//			logger.info(type);
 //		}
 		String mid = mql.lookupMidFromTitle(mql.buildQuery(
 				"/wikipedia/en", QueryMQL.encodeMQL("Benjamin_Franklin")));
 //		String mid = mql.lookupMid(mql.buildQuery(
 //				"/wikipedia/en", QueryMQL.encodeMQL("xyzabc")));
-		System.out.println(mid);
-//		System.out.println(mid);
+		logger.info(mid);
+//		logger.info(mid);
 		// for (String title : lines) {
 		// title=title.split("\\t")[0];
-		// System.out.println(title);
+		// logger.info(title);
 		// String mid = mql.lookupMid(mql.buildQuery(null, "/wikipedia/en",
 		// encodeMQL(title)));
 		// if (mid == null)
 		// continue;
 		// // w.print(title+"\t");
 		// List<String> type = mql.lookupType(mql.buildQuery(mid));
-		// System.out.println(type);
+		// logger.info(type);
 		// }
 		// w.close();
 		// }
 		// for (String title : titles.keySet()) {
-		// System.out.println(title + "\t" + titles.get(title));
+		// logger.info(title + "\t" + titles.get(title));
 		//
 		// String mid;
 		// try {
@@ -550,7 +550,7 @@ public class QueryMQL {
 		// }
 		// List<String> type = mql.lookupType(mql.buildQuery(mid));
 		// if (type != null) {
-		// System.out.println(type);
+		// logger.info(type);
 		// w.print(title + "\t" + titles.get(title));
 		// for (String t : type) {
 		// w.print("\t" + t);

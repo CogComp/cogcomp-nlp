@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -36,6 +38,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * @author Nick Rizzolo
  **/
 public class ChunksAndPOSTags {
+    private static final Logger logger = LoggerFactory.getLogger(ChunksAndPOSTags.class);
+
     public static void main(String[] args) {
         String filename = null;
 
@@ -65,7 +69,7 @@ public class ChunksAndPOSTags {
                             .discreteValue(w.next).endsWith(prediction.substring(2))))
                 System.out.print("] ");
             if (w.next == null)
-                System.out.println();
+                logger.info("\n");
             previous = prediction;
         }
     }
