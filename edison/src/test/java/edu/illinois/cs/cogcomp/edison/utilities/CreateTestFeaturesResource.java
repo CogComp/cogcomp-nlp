@@ -7,11 +7,10 @@
  */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
@@ -181,7 +180,7 @@ public class CreateTestFeaturesResource {
         System.out.println("\tadding gazetteer features");
         WordFeatureExtractor fex =
                 WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
-                        new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
+                        new SimpleGazetteerAnnotator());
 
         for (TextAnnotation ta : tas) {
             addFeatures(ta, fex);

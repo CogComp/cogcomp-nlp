@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * Use SimpleGazetteerAnnotator instead
  * Use this class to create a gazetteer view for your text.
  *
  * Use this in combination with cogcomp-common-resources, and pass in
@@ -47,6 +48,7 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
+@Deprecated
 public class GazetteerViewGenerator extends Annotator {
     public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
     private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
