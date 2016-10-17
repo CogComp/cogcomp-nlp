@@ -1,4 +1,11 @@
 /**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
+/**
  * Classes here are used to read the LDC ERE data corpuse. The EREDocumentReader
  * will read an ERE XML source document and produce a TextAnnotation that preserves
  * the character offsets for retained text, while stripping XML markup. There are
