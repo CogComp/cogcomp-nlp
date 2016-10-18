@@ -13,12 +13,15 @@ package edu.illinois.cs.cogcomp.chunker.main;
 
 
 import java.util.List;
+import java.util.Set;
+
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +57,8 @@ public class ChunkerAnnotator extends Annotator {
      *        requiring Chunker annotation.
      */
     public ChunkerAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize);
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize,
+                new ChunkerConfigurator().getDefaultConfig());
 
     }
 
@@ -155,6 +159,19 @@ public class ChunkerAnnotator extends Annotator {
     @Override
     public String[] getRequiredViews() {
         return new String[] {ViewNames.POS};
+    }
+
+    /**
+     * Return possible tag values that the ChunkerAnnotator can produce.
+     *
+     * @return the set of string representing the tag values
+     */
+    @Override
+    public Set<String> getTagValues() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        return tagger.scores(new Token()).values();
     }
 
 

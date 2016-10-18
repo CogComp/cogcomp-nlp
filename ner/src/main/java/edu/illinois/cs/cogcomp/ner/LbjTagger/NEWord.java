@@ -140,6 +140,19 @@ public class NEWord extends Word {
         neTypeLevel1 = null;
     }
 
+    /**
+     * Creates dummy NEWord with empty string
+     */
+    public NEWord() {
+        super("");
+        label = "";
+        form = "";
+        originalForm = "";
+        neLabel = "";
+        neTypeLevel1 = "";
+        parts = new String[0];
+    }
+
 
     /**
      * Produces a simple <code>String</code> representation of this word in which the

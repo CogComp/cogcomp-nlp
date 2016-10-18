@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Generate NER annotations using the Annotator API.
@@ -230,5 +232,18 @@ public class NERAnnotator extends Annotator {
             }
         }
         ta.addView(viewName, nerView);
+    }
+
+    /**
+     * Return possible tag values that the NERAnnotator can produce.
+     *
+     * @return the set of string representing the tag values
+     */
+    @Override
+    public Set<String> getTagValues() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        return t1.scores(new NEWord()).values();
     }
 }
