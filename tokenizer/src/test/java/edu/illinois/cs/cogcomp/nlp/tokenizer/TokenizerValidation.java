@@ -19,6 +19,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Using an instance of a MySQL database containing the ontonotes data, validate the tokenizers
@@ -30,6 +32,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  *
  */
 public class TokenizerValidation {
+    private static Logger logger = LoggerFactory.getLogger(TokenizerValidation.class);
 
     /** the account name. */
     static String account = null;
@@ -94,10 +97,10 @@ public class TokenizerValidation {
         List<Constituent> t2 = tr2.getView(ViewNames.TOKENS).getConstituents();
         int idx = 0;
         for (Constituent ntt : t)
-            System.out.println(ntt.getSurfaceForm());
-        System.out.println();
+            logger.info(ntt.getSurfaceForm());
+        logger.info("");
         for (Constituent ntt : t2)
-            System.out.println(ntt.getSurfaceForm());
+            logger.info(ntt.getSurfaceForm());
 
         Connection con = getConnection();
         String sentencequery =
@@ -110,7 +113,7 @@ public class TokenizerValidation {
         try (ResultSet rs1 = con.createStatement().executeQuery(sentencequery)) {
             while (rs1.next()) {
                 counter++;
-                // System.out.println("counter = "+counter);
+                // logger.info("counter = "+counter);
                 String id = rs1.getString(1);
                 String sentence = rs1.getString(2);
                 if (sentence.length() == 0)
@@ -128,7 +131,7 @@ public class TokenizerValidation {
                 try {
                     stateful = statefulBuilder.createTextAnnotation("test1", "state", sentence);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    System.out.println("Bad Sentence : " + sentence);
+                    logger.info("Bad Sentence : " + sentence);
                     System.exit(1);;
                 }
                 TextAnnotation il = ilBuilder.createTextAnnotation("test2", "il", sentence);
@@ -144,15 +147,15 @@ public class TokenizerValidation {
                         String stok = statefulToks.get(sidx).getSurfaceForm();
                         String itok = ilToks.get(iidx).getSurfaceForm();
                         if (!stok.equals(itok)) {
-                            System.out.println(sentence);
-                            System.out.println("stateful:" + stok + " il:" + itok);
+                            logger.info(sentence);
+                            logger.info("stateful:" + stok + " il:" + itok);
                             bad++;
                             break;
                         }
                     } else {
                         if (statefulToks.size() != ilToks.size()) {
-                            System.out.println(sentence);
-                            System.out.println("stateful size:" + statefulToks.size() + " il size:"
+                            logger.info(sentence);
+                            logger.info("stateful size:" + statefulToks.size() + " il size:"
                                     + ilToks.size());
                             bad++;
                         }
@@ -167,20 +170,20 @@ public class TokenizerValidation {
                  * "' AND part_of_speech!='-NONE-'"; try (ResultSet rs2 =
                  * con.createStatement().executeQuery(tokequery)) { int iindex = 0; int sindex = 0;
                  * while (rs2.next()) { String word = rs2.getString(1); if (sindex >=
-                 * statefulToks.size()) { System.out.println("On token '"+word+
+                 * statefulToks.size()) { logger.info("On token '"+word+
                  * ", stateful parsing revealed too few tokens."); } else { String stok =
                  * statefulToks.get(sindex).getSurfaceForm(); if (!word.equals(stok))
-                 * System.out.println("On token '"+word+"', stateful parsing token was '"+stok+"'");
-                 * } if (iindex >= ilToks.size()) { System.out.println("On token '"+word+
+                 * logger.info("On token '"+word+"', stateful parsing token was '"+stok+"'");
+                 * } if (iindex >= ilToks.size()) { logger.info("On token '"+word+
                  * "', illinois parsing revealed too few tokens."); } else { String stok =
                  * ilToks.get(iindex).getSurfaceForm(); if (!word.equals(stok))
-                 * System.out.println("On token '"+word+"', illinois parsing token was '"+stok+"'");
+                 * logger.info("On token '"+word+"', illinois parsing token was '"+stok+"'");
                  * 
                  * } iindex++; sindex++; } }
                  */
             }
         }
-        System.out.println("Done of " + counter + ", " + bad + " were bad.");
+        logger.info("Done of " + counter + ", " + bad + " were bad.");
     }
 
 }

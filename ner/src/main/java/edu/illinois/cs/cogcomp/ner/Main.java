@@ -35,6 +35,8 @@ import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Process command line NER request in the simplest most untuitive possible ways.
@@ -42,6 +44,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class Main extends AbstractMain {
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
 
     /** set to true to produce bracketed output, otherwise CoNLL output. */
     boolean bracketedOutput = true;
@@ -121,9 +124,9 @@ public class Main extends AbstractMain {
             bracketedOutput = false;
         else {
             if (new File(args[current]).exists()) {
-                System.out.println("Loading properties from " + args[current]);
+                logger.info("Loading properties from " + args[current]);
                 this.resourceManager = new ResourceManager(args[current]);
-                System.out.println("Completed loading properties.");
+                logger.info("Completed loading properties.");
             } else
                 throw new RuntimeException("The configuration file \"" + args[current]
                         + "\" did not exist.");
@@ -150,7 +153,7 @@ public class Main extends AbstractMain {
         switch (inswitch) {
             case MENU:
                 if (line.length() == 0) {
-                    System.err.println("There is nothing to process.");
+                    logger.error("There is nothing to process.");
                     return;
                 }
                 switch (line.charAt(0)) {
@@ -172,11 +175,11 @@ public class Main extends AbstractMain {
                         inswitch = InputSwitch.SHOW_CONFIG;
                         break;
                     case 'q':
-                        System.out.println("Bye");
+                        logger.info("Bye");
                         System.exit(0);
                         break;
                     default:
-                        System.err.println("Bad menu selection : " + line.charAt(0));
+                        logger.error("Bad menu selection : " + line.charAt(0));
                 }
                 break;
             case ENTER_IN:
@@ -227,13 +230,13 @@ public class Main extends AbstractMain {
                 } else {
                     int endkeyindex = line.indexOf(" ");
                     if (endkeyindex == -1) {
-                        System.out.println("Invalid key value separator, expected a space.");
+                        logger.info("Invalid key value separator, expected a space.");
                         return;
                     }
                     String key = line.substring(0, endkeyindex);
                     String value = line.substring(endkeyindex + 1);
                     this.resourceManager.getProperties().setProperty(key, value);
-                    System.out.println(key + "=" + value);
+                    logger.info(key + "=" + value);
                     changedproperty = true;
                 }
                 break;
@@ -246,17 +249,17 @@ public class Main extends AbstractMain {
     @Override
     protected void inputMenu() {
         if (this.nerAnnotator == null) {
-            System.out.println("Loading resources...");
+            logger.info("Loading resources...");
             if (resourceManager == null)
                 this.resourceManager = new NerBaseConfigurator().getDefaultConfig();
             this.nerAnnotator = new NERAnnotator(this.resourceManager, "CONLL_DEFAULT");
-            System.out.println("Completed loading resources.");
+            logger.info("Completed loading resources.");
         }
 
         // display the command prompt depending on the mode we are in.
         switch (inswitch) {
             case MENU:
-                System.out.println();
+                logger.info("");
                 String outdesc;
                 String indesc;
                 String in;
@@ -316,10 +319,10 @@ public class Main extends AbstractMain {
                 break;
 
             case SHOW_CONFIG:
-                System.out.println("\nConfiguration parameters: ");
+                logger.info("\nConfiguration parameters: ");
                 Properties p = this.resourceManager.getProperties();
                 for (Entry<Object, Object> entry : p.entrySet())
-                    System.out.println("    " + entry.getKey() + " = " + entry.getValue());
+                    logger.info("    " + entry.getKey() + " = " + entry.getValue());
                 System.out
                         .print("Enter property name followed a space and the new value, a blank entry to return to the main menu.\n: ");
                 break;
@@ -358,7 +361,7 @@ public class Main extends AbstractMain {
                     completed++;
                     i++;
                 }
-                System.out.println();
+                logger.info("");
             } else {
                 int i = 0;
                 for (; i < files.length; i++) {
@@ -370,7 +373,7 @@ public class Main extends AbstractMain {
         } else {
             processInputFile(indirectory);
             this.getResultProcessor().done();
-            System.out.println("Completed");
+            logger.info("Completed");
         }
     }
 

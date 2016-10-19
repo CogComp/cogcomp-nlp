@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.TokenizerStateMachine.State;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the entry point to the tokenizer state machine. This class is thread-safe, the
@@ -21,6 +23,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class StatefulTokenizer implements Tokenizer {
+    private static Logger logger = LoggerFactory.getLogger(StatefulTokenizer.class);
+
     @Override
     public Pair<String[], IntPair[]> tokenizeSentence(String sentence) {
         // parse the test
@@ -137,14 +141,14 @@ public class StatefulTokenizer implements Tokenizer {
                     new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
             ta = tab.createTextAnnotation(issue);
             for (int i = 0; i < ta.getNumberOfSentences(); i++)
-                System.out.println(ta.getSentence(i));
-            System.out.println("\n");
+                logger.info(ta.getSentence(i).toString());
+            logger.info("\n");
             final TextAnnotationBuilder stab =
                     new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
             ta = stab.createTextAnnotation(issue);
-            System.out.println(ta);
+            logger.info(ta.toString());
             for (int i = 0; i < ta.getNumberOfSentences(); i++)
-                System.out.println(ta.getSentence(i));
+                logger.info(ta.getSentence(i).toString());
 
         }
     }

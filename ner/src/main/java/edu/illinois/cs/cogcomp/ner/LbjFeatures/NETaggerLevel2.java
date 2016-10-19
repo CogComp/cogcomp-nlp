@@ -22,6 +22,9 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordTopicAndLayoutFeatures
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 
 
@@ -33,6 +36,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner {
 
     public static boolean isTraining;
     public static NETaggerLevel2 instance;
+    private static Logger logger = LoggerFactory.getLogger(NETaggerLevel2.class);
 
 
 
@@ -46,7 +50,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner {
             lcFilePath = new java.net.URL("file:" + modelPath);
             lexFilePath = new java.net.URL("file:" + lexiconPath);
         } catch (Exception e) {
-            System.err.println("ERROR: Can't create model or lexicon URL: " + e);
+            logger.error("ERROR: Can't create model or lexicon URL: " + e);
             e.printStackTrace();
             System.exit(1);
         }

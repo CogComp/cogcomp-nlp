@@ -25,6 +25,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Tokenize all the files (assume text) in a directory, report difference in the ways
@@ -34,6 +36,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class BulkTokenizer {
+    private static Logger logger = LoggerFactory.getLogger(BulkTokenizer.class);
 
     /** report more. */
     static private boolean verbose = false;
@@ -145,7 +148,7 @@ public class BulkTokenizer {
     public static void main(String[] args) throws IOException {
         parseArgs(args);
         if (file == null) {
-            System.err.println("Must provide a file or directory name on the command line.");
+            logger.error("Must provide a file or directory name on the command line.");
             return;
         }
         File[] files;
@@ -161,14 +164,14 @@ public class BulkTokenizer {
         final TextAnnotationBuilder stab =
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
         if (profile) {
-            System.out.println("Starting profiling");
+            logger.info("Starting profiling");
             while (true) {
                 for (String data : datas) {
                     stab.createTextAnnotation(data);
                 }
             }
         } else {
-            System.out.println("Starting new annotations");
+            logger.info("Starting new annotations");
             long nt = System.currentTimeMillis();
             ArrayList<TextAnnotation> newannotations = new ArrayList<TextAnnotation>();
             final TextAnnotationBuilder ntab =
@@ -178,7 +181,7 @@ public class BulkTokenizer {
                 newannotations.add(ta);
             }
             nt = System.currentTimeMillis() - nt;
-            System.out.println("Starting old annotations");
+            logger.info("Starting old annotations");
             long ot = System.currentTimeMillis();
             ArrayList<TextAnnotation> oldannotations = new ArrayList<TextAnnotation>();
             final TextAnnotationBuilder tab =
@@ -188,7 +191,7 @@ public class BulkTokenizer {
                 oldannotations.add(ta);
             }
             ot = System.currentTimeMillis() - ot;
-            System.out.println("new way = " + nt + ", old way = " + ot);
+            logger.info("new way = " + nt + ", old way = " + ot);
 
             int good = 0, bad = 0;
             for (int i = 0; i < oldannotations.size(); i++) {
@@ -227,7 +230,7 @@ public class BulkTokenizer {
                 }
             }
             fw.close();
-            System.out.println(good + " correct, " + bad + " wrong.");
+            logger.info(good + " correct, " + bad + " wrong.");
         }
     }
 }

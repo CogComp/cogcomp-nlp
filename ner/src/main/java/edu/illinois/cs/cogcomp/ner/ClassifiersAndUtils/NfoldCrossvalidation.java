@@ -8,7 +8,12 @@
 package edu.illinois.cs.cogcomp.ner.ClassifiersAndUtils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class NfoldCrossvalidation {
+    private static Logger logger = LoggerFactory.getLogger(NfoldCrossvalidation.class);
+
     private DocumentCollection[] folds = null;
 
     public NfoldCrossvalidation(DocumentCollection docs, int foldsNum) {
@@ -56,15 +61,15 @@ public class NfoldCrossvalidation {
                     precision++;
             }
         }
-        System.out.println("Accuracy: " + acc);
-        System.out.println("Within " + thres + " confidence threshold:");
-        System.out.println("\tPrecision=" + precision / recall);
-        System.out.println("\tRecall=" + recall / total);
-        System.out.println("\tConfusion matrix within confidence threshold:");
+        logger.info("Accuracy: " + acc);
+        logger.info("Within " + thres + " confidence threshold:");
+        logger.info("\tPrecision=" + precision / recall);
+        logger.info("\tRecall=" + recall / total);
+        logger.info("\tConfusion matrix within confidence threshold:");
         for (int i = 0; i < classesNum; i++) {
             for (int j = 0; j < classesNum; j++)
                 System.out.print(confusionMatrix[i][j] + "\t");
-            System.out.println();
+            logger.info("");
         }
     }
 }

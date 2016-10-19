@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.lbjava.parse.FoldSeparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -34,6 +36,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.FoldSeparator;
  * @author Nick Rizzolo
  **/
 public class FeatureVectorParser implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(FeatureVectorParser.class);
+
     /** Reader for file currently being parsed. */
     protected DataInputStream in;
     /** The name of the file to parse. */
@@ -55,7 +59,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in = new DataInputStream(new BufferedInputStream(new FileInputStream(exampleFileName)));
         } catch (Exception e) {
-            System.err.println("Can't open '" + exampleFileName + "' for input:");
+            logger.error("Can't open '" + exampleFileName + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -85,7 +89,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexIn = new ObjectInputStream(new FileInputStream(lexiconFile));
         } catch (Exception e) {
-            System.err.println("Can't open '" + lexiconFile + "' for input:");
+            logger.error("Can't open '" + lexiconFile + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -93,7 +97,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexicon = (Feature[]) lexIn.readObject();
         } catch (Exception e) {
-            System.err.println("Can't read from '" + lexiconFile + "':");
+            logger.error("Can't read from '" + lexiconFile + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -101,7 +105,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexIn.close();
         } catch (Exception e) {
-            System.err.println("Can't close '" + lexiconFile + "':");
+            logger.error("Can't close '" + lexiconFile + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -132,7 +136,7 @@ public class FeatureVectorParser implements Parser {
             result = null;
             close();
         } catch (Exception e) {
-            System.err.println("Can't read from '" + exampleFileName + "':");
+            logger.error("Can't read from '" + exampleFileName + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -150,7 +154,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in = new DataInputStream(new BufferedInputStream(new FileInputStream(exampleFileName)));
         } catch (Exception e) {
-            System.err.println("Can't open '" + exampleFileName + "' for input:");
+            logger.error("Can't open '" + exampleFileName + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -180,7 +184,7 @@ public class FeatureVectorParser implements Parser {
         for (FeatureVector v = (FeatureVector) parser.next(); v != null; v =
                 (FeatureVector) parser.next()) {
             v.sort();
-            System.out.println(v);
+            logger.info(v.toString());
         }
     }
 
@@ -192,7 +196,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in.close();
         } catch (Exception e) {
-            System.err.println("Can't close '" + exampleFileName + "':");
+            logger.error("Can't close '" + exampleFileName + "':");
             e.printStackTrace();
             System.exit(1);
         }

@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -41,6 +43,7 @@ import java.io.File;
  * }
  */
 public class NerBenchmark {
+    private static Logger logger = LoggerFactory.getLogger(NerBenchmark.class);
 
     /** default directory containing benchmark runs. */
     static String directory = "benchmark";
@@ -148,24 +151,24 @@ public class NerBenchmark {
                                     + ", but it is not there.");
                             System.exit(0);
                         }
-                        System.out.println("----- Training up the model ------");
+                        logger.info("----- Training up the model ------");
 
                         // there is a training directory, with training enabled, so train. We use the same dataset
                         // for both training and evaluating.
                         LearningCurveMultiDataset.getLearningCurve(-1, trainDirName, devDirName);
-                        System.out.println("completed training against configuration : " + confFile);
-                        System.out.println("\n\n\n\n----- Final Results, testing against test set ------");
+                        logger.info("completed training against configuration : " + confFile);
+                        logger.info("\n\n\n\n----- Final Results, testing against test set ------");
                         NETesterMultiDataset.test(testDirName, true,
                                 ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                 ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
-                        System.out.println("\n\n----- Final Results, F1 only ------");
+                        logger.info("\n\n----- Final Results, F1 only ------");
                         NETesterMultiDataset.test(testDirName, false,
                                 ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                 ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
                         
                     } else {
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-                        System.out.println("Benchmark against configuration : " + confFile);
+                        logger.info("Benchmark against configuration : " + confFile);
                         if (reportLabels)
                             NEDisplayPredictions.test(testDirName, "-c", verbose);
                         else if (reportFeatures)
