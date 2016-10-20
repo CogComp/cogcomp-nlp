@@ -27,10 +27,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -123,5 +123,15 @@ public class TestDiff {
                     + thresholdAcc);
         }
 
+    }
+
+    @Test
+    public void testGetTagValues() {
+        POSAnnotator annotator = new POSAnnotator();
+        String elements[] = { "#", "$", "''", ",", "-LRB-", "-RRB-", ".", ":", "CC", "CD", "DT", "EX", "FW", "IN",
+                "JJ", "JJR", "JJS", "LS", "MD", "NN", "NNP", "NNPS", "NNS", "PDT", "POS", "PRP", "PRP$", "RB", "RBR",
+                "RBS", "RP", "SYM", "TO", "UH", "VB", "VBD", "VBG", "VBN", "VBP", "VBZ", "WDT", "WP", "WP$", "WRB", "``" };
+        Set<String> set = new HashSet(Arrays.asList(elements));
+        assertTrue(annotator.getTagValues().equals(set));
     }
 }
