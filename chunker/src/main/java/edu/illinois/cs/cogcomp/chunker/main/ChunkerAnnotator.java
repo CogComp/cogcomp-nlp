@@ -12,6 +12,7 @@ package edu.illinois.cs.cogcomp.chunker.main;
  */
 
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +58,11 @@ public class ChunkerAnnotator extends Annotator {
      *        requiring Chunker annotation.
      */
     public ChunkerAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize,
-                new ChunkerConfigurator().getDefaultConfig());
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize);
+    }
 
+    public ChunkerAnnotator(boolean lazilyInitialize, ResourceManager rm) {
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize, rm);
     }
 
     @Override
@@ -171,7 +174,12 @@ public class ChunkerAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        return tagger.scores(new Token()).values();
+        Lexicon labelLexicon = tagger.getLabelLexicon();
+        Set<String> tagSet = new HashSet();
+        for (int i =0; i < labelLexicon.size(); ++i) {
+            tagSet.add(labelLexicon.lookupKey(i).getStringValue());
+        }
+        return tagSet;
     }
 
 

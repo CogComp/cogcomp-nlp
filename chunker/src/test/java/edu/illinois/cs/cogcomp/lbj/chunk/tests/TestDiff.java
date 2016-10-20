@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
@@ -91,7 +92,7 @@ public class TestDiff extends TestCase {
 
     @Test
     public void testGetTagValues() {
-        ChunkerAnnotator annotator = new ChunkerAnnotator(true);
+        ChunkerAnnotator annotator = new ChunkerAnnotator(true, new ChunkerConfigurator().getDefaultConfig());
         String elements[] = { "B-ADJP", "B-ADVP", "B-CONJP", "B-INTJ", "B-LST", "B-NP", "B-PP", "B-PRT", "B-SBAR",
                 "B-UCP", "B-VP", "I-ADJP", "I-ADVP", "I-CONJP", "I-INTJ", "I-NP", "I-PP", "I-PRT", "I-SBAR", "I-UCP",
                 "I-VP", "O"};

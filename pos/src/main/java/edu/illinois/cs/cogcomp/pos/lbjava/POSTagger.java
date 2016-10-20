@@ -12,9 +12,11 @@ import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.POSConfigurator;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -77,11 +79,13 @@ public class POSTagger extends Classifier {
         return taggerUnknown.discreteValue(w);
     }
 
-    // TODO(Yewen): find a better way to extract the labels from the classifier.
-    // we tried to extract labels from LabelLexicon, but needed non-trivial amount of post-processing to get the raw
-    // label strings.
     public Set<String> getTagValues() {
-        return taggerKnown.scores(new Token()).values();
+        Lexicon labelLexicon = taggerKnown.getLabelLexicon();
+        Set<String> tagSet = new HashSet();
+        for (int i =0; i < labelLexicon.size(); ++i) {
+            tagSet.add(labelLexicon.lookupKey(i).getStringValue());
+        }
+        return tagSet;
     }
 
     public int hashCode() {
