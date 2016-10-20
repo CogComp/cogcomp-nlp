@@ -9,7 +9,7 @@ package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -244,6 +245,11 @@ public class NERAnnotator extends Annotator {
         if (!isInitialized()) {
             doInitialize();
         }
-        return t1.scores(new NEWord()).values();
+        Lexicon labelLexicon = t1.getLabelLexicon();
+        Set<String> tagSet = new HashSet();
+        for (int i =0; i < labelLexicon.size(); ++i) {
+            tagSet.add(labelLexicon.lookupKey(i).getStringValue());
+        }
+        return tagSet;
     }
 }

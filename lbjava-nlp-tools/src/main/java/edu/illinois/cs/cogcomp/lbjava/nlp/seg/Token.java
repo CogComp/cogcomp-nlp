@@ -45,15 +45,6 @@ public class Token extends Word {
         label = type;
     }
 
-
-    /**
-     * Creates dummy token with empty string
-     */
-    public Token() {
-        super("");
-        label = "";
-    }
-
     /**
      * Produces a simple <code>String</code> representation of this word in
      * which the {@link #label} field appears followed by the word's part
