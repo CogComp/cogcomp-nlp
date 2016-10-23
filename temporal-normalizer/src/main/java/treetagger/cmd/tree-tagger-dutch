@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Set these paths appropriately
+
+BIN=/Users/zhilifeng/Desktop/DanRothResearch/TempEval3/treetagger/bin
+CMD=/Users/zhilifeng/Desktop/DanRothResearch/TempEval3/treetagger/cmd
+LIB=/Users/zhilifeng/Desktop/DanRothResearch/TempEval3/treetagger/lib
+
+OPTIONS="-token -lemma -sgml"
+
+TAGGER=${BIN}/tree-tagger
+TOKENIZER=${CMD}/utf8-tokenize.perl
+ABBR_LIST=${LIB}/dutch-abbreviations
+PARFILE=${LIB}/dutch-utf8.par
+
+$TOKENIZER -a $ABBR_LIST $* |
+$TAGGER $OPTIONS $PARFILE

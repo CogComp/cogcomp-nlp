@@ -81,7 +81,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                 DocumentType.COLLOQUIAL,
                 OutputType.TIMEML,
                 "conf/config.props",
-                POSTagger.NO, true);
+                POSTagger.TREETAGGER, true);
     }
 
     @Override

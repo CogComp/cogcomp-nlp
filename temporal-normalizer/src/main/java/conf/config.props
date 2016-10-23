@@ -19,7 +19,7 @@ considerTime = true
 # Path to TreeTagger home directory
 ###################################
 # Ensure there is no white space in path (try to escape white spaces)
-treeTaggerHome = /Users/zhilifeng/Desktop/DanRothResearch/TempEval3/treetagger
+treeTaggerHome = ./treetagger
 # This one is only necessary if you want to process chinese documents.
 chineseTokenizerPath = SET ME IN CONFIG.PROPS!
 
