@@ -57,7 +57,7 @@ public class NerTest {
                                 + ".level2.lex");
             }
         } catch (Exception e) {
-            logger.info("Cannot initialise the test, the exception was: ");
+            System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
             fail();
         }

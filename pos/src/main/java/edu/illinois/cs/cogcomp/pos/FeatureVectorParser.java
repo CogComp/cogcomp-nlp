@@ -59,7 +59,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in = new DataInputStream(new BufferedInputStream(new FileInputStream(exampleFileName)));
         } catch (Exception e) {
-            logger.error("Can't open '" + exampleFileName + "' for input:");
+            System.err.println("Can't open '" + exampleFileName + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -89,7 +89,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexIn = new ObjectInputStream(new FileInputStream(lexiconFile));
         } catch (Exception e) {
-            logger.error("Can't open '" + lexiconFile + "' for input:");
+            System.err.println("Can't open '" + lexiconFile + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -97,7 +97,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexicon = (Feature[]) lexIn.readObject();
         } catch (Exception e) {
-            logger.error("Can't read from '" + lexiconFile + "':");
+            System.err.println("Can't read from '" + lexiconFile + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -105,7 +105,7 @@ public class FeatureVectorParser implements Parser {
         try {
             lexIn.close();
         } catch (Exception e) {
-            logger.error("Can't close '" + lexiconFile + "':");
+            System.err.println("Can't close '" + lexiconFile + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -136,7 +136,7 @@ public class FeatureVectorParser implements Parser {
             result = null;
             close();
         } catch (Exception e) {
-            logger.error("Can't read from '" + exampleFileName + "':");
+            System.err.println("Can't read from '" + exampleFileName + "':");
             e.printStackTrace();
             System.exit(1);
         }
@@ -154,7 +154,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in = new DataInputStream(new BufferedInputStream(new FileInputStream(exampleFileName)));
         } catch (Exception e) {
-            logger.error("Can't open '" + exampleFileName + "' for input:");
+            System.err.println("Can't open '" + exampleFileName + "' for input:");
             e.printStackTrace();
             System.exit(1);
         }
@@ -196,7 +196,7 @@ public class FeatureVectorParser implements Parser {
         try {
             in.close();
         } catch (Exception e) {
-            logger.error("Can't close '" + exampleFileName + "':");
+            System.err.println("Can't close '" + exampleFileName + "':");
             e.printStackTrace();
             System.exit(1);
         }

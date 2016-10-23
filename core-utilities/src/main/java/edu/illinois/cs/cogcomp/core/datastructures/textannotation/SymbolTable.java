@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +23,7 @@ import java.util.Map;
  * @author Vivek Srikumar
  */
 class SymbolTable implements Serializable {
+    private static Logger logger = LoggerFactory.getLogger(SymbolTable.class);
 
     /*
      * Experimented with using TIntIntHashMap to store the symbol table as a map from string
@@ -44,7 +48,7 @@ class SymbolTable implements Serializable {
             int id = symtab.get(label);
 
             if (!strings.get(id).equals(label)) {
-                System.out.println("Error with label " + label + ", confused with "
+                logger.info("Error with label " + label + ", confused with "
                         + strings.get(id));
                 throw new RuntimeException();
             }

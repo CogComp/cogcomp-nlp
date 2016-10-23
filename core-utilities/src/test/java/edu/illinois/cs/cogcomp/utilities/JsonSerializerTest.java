@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.core.utilities.JsonSerializer;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import org.json.simple.JSONObject;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ import static org.junit.Assert.assertNotNull;
  * @author mssammon
  */
 public class JsonSerializerTest {
+    private static Logger logger = LoggerFactory.getLogger(JsonSerializerTest.class);
 
     TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {
             ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB}, false, 3); // no noise
@@ -42,7 +45,7 @@ public class JsonSerializerTest {
     @Test
     public void testSerializerWithCharOffsets() {
         String taJson = SerializationHelper.serializeToJson(ta, true);
-        System.err.println(taJson);
+        logger.error(taJson);
 
         JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
 

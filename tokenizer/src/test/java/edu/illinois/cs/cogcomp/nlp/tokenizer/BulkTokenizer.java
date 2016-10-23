@@ -148,7 +148,7 @@ public class BulkTokenizer {
     public static void main(String[] args) throws IOException {
         parseArgs(args);
         if (file == null) {
-            logger.error("Must provide a file or directory name on the command line.");
+            System.err.println("Must provide a file or directory name on the command line.");
             return;
         }
         File[] files;
@@ -164,14 +164,14 @@ public class BulkTokenizer {
         final TextAnnotationBuilder stab =
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
         if (profile) {
-            logger.info("Starting profiling");
+            System.out.println("Starting profiling");
             while (true) {
                 for (String data : datas) {
                     stab.createTextAnnotation(data);
                 }
             }
         } else {
-            logger.info("Starting new annotations");
+            System.out.println("Starting new annotations");
             long nt = System.currentTimeMillis();
             ArrayList<TextAnnotation> newannotations = new ArrayList<TextAnnotation>();
             final TextAnnotationBuilder ntab =
@@ -181,7 +181,7 @@ public class BulkTokenizer {
                 newannotations.add(ta);
             }
             nt = System.currentTimeMillis() - nt;
-            logger.info("Starting old annotations");
+            System.out.println("Starting old annotations");
             long ot = System.currentTimeMillis();
             ArrayList<TextAnnotation> oldannotations = new ArrayList<TextAnnotation>();
             final TextAnnotationBuilder tab =
@@ -191,7 +191,7 @@ public class BulkTokenizer {
                 oldannotations.add(ta);
             }
             ot = System.currentTimeMillis() - ot;
-            logger.info("new way = " + nt + ", old way = " + ot);
+            System.out.println("new way = " + nt + ", old way = " + ot);
 
             int good = 0, bad = 0;
             for (int i = 0; i < oldannotations.size(); i++) {
@@ -230,7 +230,7 @@ public class BulkTokenizer {
                 }
             }
             fw.close();
-            logger.info(good + " correct, " + bad + " wrong.");
+            System.out.println(good + " correct, " + bad + " wrong.");
         }
     }
 }

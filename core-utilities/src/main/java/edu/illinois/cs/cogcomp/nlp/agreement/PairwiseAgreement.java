@@ -8,11 +8,14 @@
 package edu.illinois.cs.cogcomp.nlp.agreement;
 
 import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Vivek Srikumar
  */
 public abstract class PairwiseAgreement extends AnnotatorAgreement {
+    private static Logger logger = LoggerFactory.getLogger(PairwiseAgreement.class);
 
     public PairwiseAgreement(int numItems, int numLabels) {
         this(2, numItems, numLabels);
@@ -47,9 +50,9 @@ public abstract class PairwiseAgreement extends AnnotatorAgreement {
 
         for (int i = 0; i < numLabels; i++) {
             for (int j = 0; j < numLabels; j++) {
-                System.out.print(matrix[i][j] + "\t");
+                logger.info(matrix[i][j] + "\t");
             }
-            System.out.println();
+            logger.info("");
         }
     }
 
@@ -79,10 +82,10 @@ public abstract class PairwiseAgreement extends AnnotatorAgreement {
             agreementCalculator.addAnnotation(1, i, 1);
 
         }
-        System.out.println(agreementCalculator.getObservedAgreement());
+        logger.info(String.valueOf(agreementCalculator.getObservedAgreement()));
 
-        System.out.println(agreementCalculator.getExpectedAgreement());
-        System.out.println(agreementCalculator.getAgreementCoefficient());
+        logger.info(String.valueOf(agreementCalculator.getExpectedAgreement()));
+        logger.info(String.valueOf(agreementCalculator.getAgreementCoefficient()));
 
     }
 

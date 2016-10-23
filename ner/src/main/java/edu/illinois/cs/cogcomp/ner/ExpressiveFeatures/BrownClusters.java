@@ -122,7 +122,7 @@ public class BrownClusters {
 
     private static void printArr(String[] arr) {
         for (String anArr : arr)
-            System.out.print(" " + anArr);
+            logger.info(" " + anArr);
         logger.info("");
     }
 
@@ -140,10 +140,10 @@ public class BrownClusters {
                 tokensHashIC.put(form.toLowerCase(), true);
             }
         /*
-         * logger.info("Data statistics:");
-         * logger.info("\t\t- Total tokens with repetitions ="+ totalTokens);
-         * logger.info("\t\t- Total unique tokens  ="+ tokensHash.size());
-         * logger.info("\t\t- Total unique tokens ignore case ="+ tokensHashIC.size());
+         * System.out.println("Data statistics:");
+         * System.out.println("\t\t- Total tokens with repetitions ="+ totalTokens);
+         * System.out.println("\t\t- Total unique tokens  ="+ tokensHash.size());
+         * System.out.println("\t\t- Total unique tokens ignore case ="+ tokensHashIC.size());
          */
         for (THashMap<String, String> wordToPath : wordToPathByResource) {
             HashMap<String, Boolean> oovCaseSensitiveHash = new HashMap<>();

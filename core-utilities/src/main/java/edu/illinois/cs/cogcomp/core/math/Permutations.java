@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.math;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +21,8 @@ import java.util.Random;
  * @author Vivek Srikumar
  */
 public class Permutations {
+    private static Logger logger = LoggerFactory.getLogger(Permutations.class);
+
     public static List<int[]> getAllBinaryCombinations(int numElements) {
         List<int[]> output = new ArrayList<>();
 
@@ -115,7 +120,7 @@ public class Permutations {
         items.add(Arrays.asList(c));
 
         for (List<String> s : crossProduct(items)) {
-            System.out.println(s);
+            logger.info(s.toString());
         }
 
     }

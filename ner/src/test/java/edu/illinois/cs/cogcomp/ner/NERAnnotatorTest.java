@@ -120,7 +120,7 @@ public class NERAnnotatorTest {
                     NerAnnotatorManager.buildNerAnnotator(new ResourceManager(new Properties()),
                             ViewNames.NER_CONLL);
         } catch (Exception e) {
-            logger.info("Cannot initialise the test, the exception was: ");
+            System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
             fail();
         }
@@ -167,7 +167,7 @@ public class NERAnnotatorTest {
             counter += r.nextDouble();
         }
         if (counter < 0)
-            logger.info("this should never happen.");
+            System.err.println("this should never happen.");
         return System.currentTimeMillis() - start;
     }
 

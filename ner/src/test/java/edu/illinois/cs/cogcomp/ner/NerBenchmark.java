@@ -147,28 +147,28 @@ public class NerBenchmark {
                     if (!skiptraining) {
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         if (!trainDir.exists()) {
-                            System.out.print("Expected a training directory named " + trainDirName
+                            System.err.print("Expected a training directory named " + trainDirName
                                     + ", but it is not there.");
                             System.exit(0);
                         }
-                        logger.info("----- Training up the model ------");
+                        System.out.println("----- Training up the model ------");
 
                         // there is a training directory, with training enabled, so train. We use the same dataset
                         // for both training and evaluating.
                         LearningCurveMultiDataset.getLearningCurve(-1, trainDirName, devDirName);
-                        logger.info("completed training against configuration : " + confFile);
-                        logger.info("\n\n\n\n----- Final Results, testing against test set ------");
+                        System.out.println("completed training against configuration : " + confFile);
+                        System.out.println("\n\n\n\n----- Final Results, testing against test set ------");
                         NETesterMultiDataset.test(testDirName, true,
                                 ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                 ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
-                        logger.info("\n\n----- Final Results, F1 only ------");
+                        System.out.println("\n\n----- Final Results, F1 only ------");
                         NETesterMultiDataset.test(testDirName, false,
                                 ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                 ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
                         
                     } else {
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-                        logger.info("Benchmark against configuration : " + confFile);
+                        System.out.println("Benchmark against configuration : " + confFile);
                         if (reportLabels)
                             NEDisplayPredictions.test(testDirName, "-c", verbose);
                         else if (reportFeatures)

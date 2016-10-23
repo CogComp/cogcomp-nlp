@@ -311,8 +311,7 @@ public class ReadACEAnnotation {
         eventArgument.role = nnMap.getNamedItem("ROLE").getNodeValue();
 
         if (isDebug) {
-            System.out
-                    .println("  Event argument:\t" + eventArgument.id + "\t" + eventArgument.role);
+            logger.info("  Event argument:\t" + eventArgument.id + "\t" + eventArgument.role);
             logger.info("\n");
         }
 

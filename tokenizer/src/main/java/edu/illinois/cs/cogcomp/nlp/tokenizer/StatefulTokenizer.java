@@ -141,14 +141,14 @@ public class StatefulTokenizer implements Tokenizer {
                     new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
             ta = tab.createTextAnnotation(issue);
             for (int i = 0; i < ta.getNumberOfSentences(); i++)
-                logger.info(ta.getSentence(i).toString());
-            logger.info("\n");
+                System.out.println(ta.getSentence(i));
+            System.out.println();
             final TextAnnotationBuilder stab =
                     new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
             ta = stab.createTextAnnotation(issue);
-            logger.info(ta.toString());
+            System.out.println(ta);
             for (int i = 0; i < ta.getNumberOfSentences(); i++)
-                logger.info(ta.getSentence(i).toString());
+                System.out.println(ta.getSentence(i));
 
         }
     }

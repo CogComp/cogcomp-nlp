@@ -505,19 +505,19 @@ public class TokenizerStateMachine {
                     this.current = cs.start + (ss.length() - 1);
                     this.pop(this.current + 1);
                     if (debug)
-                        logger.info("Good : " + ss);
+                        System.err.println("Good : " + ss);
                     return true;
                 }
             } catch (URISyntaxException e) {
                 if (debug)
-                    logger.info("Invalid : " + ss);
+                    System.err.println("Invalid : " + ss);
                 return false;
             }
         } else {
             if (debug) {
                 int len = Math.min(100, text.length - cs.start);
                 String ss = new String(text, cs.start, len);
-                logger.info("Not even close : " + ss);
+                System.err.println("Not even close : " + ss);
             }
 
         }

@@ -161,36 +161,36 @@ public class NETesterMultiDataset {
             TestDiscrete[] resCurrentData = {resultsPhraseLevel1, resultsPhraseLevel2};
             res.addElement(resCurrentData);
             if (verbose) {
-                logger.info("------------------------------------------------------------");
-                logger.info("******	Performance on dataset "
+                System.out.println("------------------------------------------------------------");
+                System.out.println("******	Performance on dataset "
                         + dataCollection.elementAt(dataSetId).datasetPath + "  **********");
-                logger.info("------------------------------------------------------------");
+                System.out.println("------------------------------------------------------------");
                 if (ParametersForLbjCode.currentParameters.featuresToUse
                         .containsKey("PredictionsLevel1")) {
-                    logger.info("Phrase-level Acc Level2:");
+                    System.out.println("Phrase-level Acc Level2:");
                     resultsPhraseLevel2.printPerformance(System.out);
-                    logger.info("Token-level Acc Level2:");
+                    System.out.println("Token-level Acc Level2:");
                     resultsTokenLevel2.printPerformance(System.out);
-                    logger.info("Level2 BILOU Accuracy, letter-by-letter:");
+                    System.out.println("Level2 BILOU Accuracy, letter-by-letter:");
                     resultsByBILOU.printPerformance(System.out);
-                    logger.info("Level2 BILOU PHRASE/BOUNDARY DETECTION Accuracy");
+                    System.out.println("Level2 BILOU PHRASE/BOUNDARY DETECTION Accuracy");
                     resultsSegmentation.printPerformance(System.out);
                 }
-                logger.info("Phrase-level Acc Level1:");
+                System.out.println("Phrase-level Acc Level1:");
                 resultsPhraseLevel1.printPerformance(System.out);
-                logger.info("Token-level Acc Level1:");
+                System.out.println("Token-level Acc Level1:");
                 resultsTokenLevel1.printPerformance(System.out);
-                logger.info("------------------------------------------------------------");
-                logger.info("****** (END)	Performance on dataset "
+                System.out.println("------------------------------------------------------------");
+                System.out.println("****** (END)	Performance on dataset "
                         + dataCollection.elementAt(dataSetId).datasetPath + "  **********");
-                logger.info("------------------------------------------------------------");
+                System.out.println("------------------------------------------------------------");
             } else {
-                logger.info(">>>>>>>>>	Phrase-level F1 on the dataset: "
+                System.out.println(">>>>>>>>>	Phrase-level F1 on the dataset: "
                         + dataCollection.elementAt(dataSetId).datasetPath);
-                logger.info("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
+                System.out.println("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
                 if (ParametersForLbjCode.currentParameters.featuresToUse
                         .containsKey("PredictionsLevel1"))
-                    logger.info("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
+                    System.out.println("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
             }
         }
         return res;

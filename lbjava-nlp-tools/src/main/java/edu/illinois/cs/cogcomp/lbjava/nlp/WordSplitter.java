@@ -55,9 +55,9 @@ public class WordSplitter implements Parser {
              s = (LinkedVector) splitter.next()) {
             if (s.size() > 0) {
                 Word w = (Word) s.get(0);
-                System.out.print(w.form);
+                logger.info(w.form);
                 for (w = (Word) w.next; w != null; w = (Word) w.next)
-                    System.out.print(" " + w.form);
+                    logger.info(" " + w.form);
             }
 
             logger.info("\n");

@@ -71,7 +71,7 @@ public class POSTagTokenized {
                 sentence += " (" + tag + " " + word.form + ")";
             }
 
-            logger.info(sentence.substring(1));
+            System.out.println(sentence.substring(1));
         }
     }
 }

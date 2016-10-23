@@ -99,15 +99,15 @@ public class POSTrain {
 
         // Run the learner
         for (int i = 0; i < iter; i++) {
-            logger.info("Training round " + i);
+            System.out.println("Training round " + i);
             while ((ex = trainingParser.next()) != null) {
                 taggerKnown.learn(ex);
             }
-            logger.info("\tFinished training " + rm.getString("knownName"));
+            System.out.println("\tFinished training " + rm.getString("knownName"));
             while ((ex = trainingParserUnknown.next()) != null) {
                 taggerUnknown.learn(ex);
             }
-            logger.info("\tFinished training " + rm.getString("unknownName"));
+            System.out.println("\tFinished training " + rm.getString("unknownName"));
             trainingParser.reset();
             trainingParserUnknown.reset();
             taggerKnown.doneWithRound();

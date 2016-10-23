@@ -253,7 +253,7 @@ public class StatefullTokenizerTest {
                     String origTextSubstring =
                             cleanText.substring(tokCharOffsets.getFirst(),
                                     tokCharOffsets.getSecond());
-                    logger.error("ERROR: tokenizer has form '" + tok
+                    System.err.println("ERROR: tokenizer has form '" + tok
                             + "', but offsets refer to substring '" + origTextSubstring + "'.");
                 }
                 assertTrue(sunSpans.contains(tokCharOffsets));

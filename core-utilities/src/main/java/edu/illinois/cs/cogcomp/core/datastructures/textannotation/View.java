@@ -494,7 +494,7 @@ public class View implements Serializable, IQueryable<Constituent> {
 
         addRelatedConstituents(restriction, constituentsToConsider);
 
-        // System.out.println(restriction);
+        // logger.info(restriction);
 
         return restriction;
     }

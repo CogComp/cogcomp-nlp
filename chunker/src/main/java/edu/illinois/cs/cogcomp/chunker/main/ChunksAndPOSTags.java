@@ -61,13 +61,13 @@ public class ChunksAndPOSTags {
             String prediction = chunker.discreteValue(w);
             if (prediction.startsWith("B-") || prediction.startsWith("I-")
                     && !previous.endsWith(prediction.substring(2)))
-                System.out.print("[" + prediction.substring(2) + " ");
-            System.out.print("(" + w.partOfSpeech + " " + w.form + ") ");
+                logger.info("[" + prediction.substring(2) + " ");
+            logger.info("(" + w.partOfSpeech + " " + w.form + ") ");
             if (!prediction.equals("O")
                     && (w.next == null || chunker.discreteValue(w.next).equals("O")
                             || chunker.discreteValue(w.next).startsWith("B-") || !chunker
                             .discreteValue(w.next).endsWith(prediction.substring(2))))
-                System.out.print("] ");
+                logger.info("] ");
             if (w.next == null)
                 logger.info("\n");
             previous = prediction;

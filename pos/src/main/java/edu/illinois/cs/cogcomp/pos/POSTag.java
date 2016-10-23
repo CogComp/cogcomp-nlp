@@ -77,22 +77,22 @@ public class POSTag {
                 if (prediction.equals(label)) {
                     ++correct;
                     if (!quiet)
-                        System.out.print("+");
+                        System.out.println("+");
                 } else {
                     ++incorrect;
                     if (!quiet)
-                        System.out.print("-[" + label + "]");
+                        System.out.println("-[" + label + "]");
                 }
 
                 if (!quiet)
-                    System.out.print(word + " ");
+                    System.out.println(word + " ");
             }
 
             if (!quiet)
-                logger.info("");
+                System.out.println("");
         }
 
-        logger.info("Accuracy: " + (100 * correct / (double) (correct + incorrect)) + "%");
+        System.out.println("Accuracy: " + (100 * correct / (double) (correct + incorrect)) + "%");
     }
 
 
@@ -107,7 +107,7 @@ public class POSTag {
         try {
             result = new BufferedReader(new FileReader(testingFile));
         } catch (Exception e) {
-            logger.error("Can't open " + testingFile + " for input: " + e);
+            System.err.println("Can't open " + testingFile + " for input: " + e);
             System.exit(1);
         }
 
@@ -127,7 +127,7 @@ public class POSTag {
         try {
             result = in.readLine();
         } catch (Exception e) {
-            logger.error("Can't read from " + testingFile + ": " + e);
+            System.err.println("Can't read from " + testingFile + ": " + e);
             System.exit(1);
         }
 

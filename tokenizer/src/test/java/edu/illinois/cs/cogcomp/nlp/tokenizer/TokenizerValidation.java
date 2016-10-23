@@ -97,10 +97,10 @@ public class TokenizerValidation {
         List<Constituent> t2 = tr2.getView(ViewNames.TOKENS).getConstituents();
         int idx = 0;
         for (Constituent ntt : t)
-            logger.info(ntt.getSurfaceForm());
-        logger.info("");
+            System.out.println(ntt.getSurfaceForm());
+        System.err.println();
         for (Constituent ntt : t2)
-            logger.info(ntt.getSurfaceForm());
+            System.out.println(ntt.getSurfaceForm());
 
         Connection con = getConnection();
         String sentencequery =
@@ -131,7 +131,7 @@ public class TokenizerValidation {
                 try {
                     stateful = statefulBuilder.createTextAnnotation("test1", "state", sentence);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    logger.info("Bad Sentence : " + sentence);
+                    System.err.println("Bad Sentence : " + sentence);
                     System.exit(1);;
                 }
                 TextAnnotation il = ilBuilder.createTextAnnotation("test2", "il", sentence);

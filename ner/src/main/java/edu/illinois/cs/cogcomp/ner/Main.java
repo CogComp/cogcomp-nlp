@@ -166,8 +166,7 @@ public class Main extends AbstractMain {
                     case '3':
                         if (indirectory == null) {
                             inswitch = InputSwitch.ENTER_STRING;
-                            System.out
-                                    .println("Enter the text to process, or blank line to return to the menu.\n");
+                            logger.info("Enter the text to process, or blank line to return to the menu.\n");
                         } else
                             execute();
                         break;
@@ -188,7 +187,7 @@ public class Main extends AbstractMain {
                 else {
                     File tryin = new File(line);
                     if (!tryin.exists()) {
-                        System.out.print("\"" + line
+                        logger.info("\"" + line
                                 + "\" did not exist, as an input it must exist.");
                     } else {
                         indirectory = tryin;
@@ -299,30 +298,28 @@ public class Main extends AbstractMain {
                         out = outdirectory.toString();
                     }
                 }
-                System.out.print("1 - select input [" + in + "]\n" + "2 - change output [" + out
+                logger.info("1 - select input [" + in + "]\n" + "2 - change output [" + out
                         + "]\n" + "3 - annotate " + indesc + ", " + outdesc + ".\n"
                         + "4 - show and modify configuration parameters.\n"
                         + "q - exit the application.\n" + "Choose from above options: ");
                 break;
             case ENTER_IN:
-                System.out
-                        .print("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
+                logger.info("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
                 break;
 
             case ENTER_OUT:
-                System.out
-                        .print("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
+                logger.info("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
                 break;
 
             case ENTER_STRING:
-                System.out.print(": ");
+                logger.info(": ");
                 break;
 
             case SHOW_CONFIG:
-                logger.info("\nConfiguration parameters: ");
+                System.out.println("\nConfiguration parameters: ");
                 Properties p = this.resourceManager.getProperties();
                 for (Entry<Object, Object> entry : p.entrySet())
-                    logger.info("    " + entry.getKey() + " = " + entry.getValue());
+                    System.out.println("    " + entry.getKey() + " = " + entry.getValue());
                 System.out
                         .print("Enter property name followed a space and the new value, a blank entry to return to the main menu.\n: ");
                 break;
@@ -339,9 +336,8 @@ public class Main extends AbstractMain {
         if (indirectory.isDirectory()) {
             File[] files = indirectory.listFiles();
             if (outdirectory != null) {
-                System.out
-                        .println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
-                System.out.print("Completed   : ");
+                logger.info("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
+                logger.info("Completed   : ");
                 double ratio = 50.0 / (double) files.length;
                 int completed = 0;
                 int i = 0;
@@ -351,13 +347,13 @@ public class Main extends AbstractMain {
 
                     // present completion.
                     while ((i * ratio) > completed) {
-                        System.out.print("•");
+                        logger.info("•");
                         completed++;
                     }
                 }
                 this.getResultProcessor().done();
                 while ((i * ratio) > completed) {
-                    System.out.print("•");
+                    logger.info("•");
                     completed++;
                     i++;
                 }

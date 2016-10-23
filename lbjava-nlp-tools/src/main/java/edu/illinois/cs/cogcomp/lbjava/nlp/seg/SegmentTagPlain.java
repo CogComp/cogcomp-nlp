@@ -97,15 +97,15 @@ public class SegmentTagPlain {
             if (prediction.startsWith("B-")
                     || prediction.startsWith("I-")
                     && !previous.endsWith(prediction.substring(2)))
-                System.out.print("[" + prediction.substring(2) + " ");
-            System.out.print(w.form + " ");
+                logger.info("[" + prediction.substring(2) + " ");
+            logger.info(w.form + " ");
             if (!prediction.equals("O")
                     && (w.next == null
                     || tagger.discreteValue(w.next).equals("O")
                     || tagger.discreteValue(w.next).startsWith("B-")
                     || !tagger.discreteValue(w.next)
                     .endsWith(prediction.substring(2))))
-                System.out.print("] ");
+                logger.info("] ");
             if (w.next == null) logger.info("\n");
             previous = prediction;
         }

@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.core.algorithms;
 
 import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +22,29 @@ import java.util.List;
  */
 @AvoidUsing(reason = "", alternative = "BoyerMooreHorspoolMatch")
 public class NaiveListMatcher<T> extends ListMatch<T> {
+    private static Logger logger = LoggerFactory.getLogger(NaiveListMatcher.class);
+
     public NaiveListMatcher(List<T> pattern) {
         super(pattern);
     }
 
     public List<Integer> matches(List<T> text) {
-        System.out.println(text);
+        logger.info(text.toString());
         List<Integer> results = new ArrayList<>();
 
         for (int textId = 0; textId < text.size() - pattern.size() + 1; textId++) {
-            System.out.print("Searching at " + text.subList(textId, text.size()));
+            logger.info("Searching at " + text.subList(textId, text.size()));
 
             boolean found = true;
             for (int patternId = 0; patternId < pattern.size(); patternId++) {
                 if (!text.get(textId + patternId).equals(pattern.get(patternId))) {
-                    System.out.println("...Not found");
+                    logger.info("...Not found");
                     found = false;
                     break;
                 }
             }
             if (found) {
-                System.out.println("...Found");
+                logger.info("...Found");
                 results.add(textId);
             }
         }

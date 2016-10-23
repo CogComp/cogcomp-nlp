@@ -78,7 +78,7 @@ public class NEDisplayPredictions {
                             + word.neTypeLevel1 + "\t2:" + word.neTypeLevel2 + "\t(" + doc.docname
                             + ")");
                     for (String h2 : word.gazetteers)
-                        System.out.print(" " + h2);
+                        logger.info(" " + h2);
                     logger.info("");
                 }
             }

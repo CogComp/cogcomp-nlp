@@ -34,7 +34,7 @@ public class BaselineTarget extends POSBaselineLearner {
             lcFilePath = new java.net.URL("file:" + modelPath);
             lexFilePath = new java.net.URL("file:" + lexiconPath);
         } catch (Exception e) {
-            logger.error("ERROR: Can't create model or lexicon URL: " + e);
+            System.err.println("ERROR: Can't create model or lexicon URL: " + e);
             e.printStackTrace();
             System.exit(1);
         }

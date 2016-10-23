@@ -65,7 +65,7 @@ public class TestPOSModels {
             numSeen++;
         }
 
-        logger.info("Total accuracy over " + numSeen + " items: "
+        System.out.println("Total accuracy over " + numSeen + " items: "
                 + String.format("%.2f", 100.0 * (double) numEqual / (double) numSeen) + "%");
     }
 

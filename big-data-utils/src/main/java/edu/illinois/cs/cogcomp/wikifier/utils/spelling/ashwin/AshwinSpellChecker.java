@@ -340,7 +340,7 @@ public class AshwinSpellChecker extends AbstractSurfaceQueryEngine {
 						sortCan.add(str);
 					Collections.sort(sortCan);
 					for (int i = 0; i < sortCan.size(); i++)
-						System.out.print(sortCan.get(i) + "|");
+						logger.info(sortCan.get(i) + "|");
 					logger.info("\n");
 				}
 			}
