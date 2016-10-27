@@ -152,7 +152,41 @@
                         <exclude>src/main/resources/**</exclude>
 
 			<!-- don't add license headers to LBJava generated files. -->
-                        <exclude>ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures/*.java</exclude>
+                        <exclude>**/Affixes.java</exclude>
+                        <exclude>**/BrownClusterPaths.java</exclude>
+                        <exclude>**/Capitalization.java</exclude>
+                        <exclude>**/FeaturesLevel1Only.java</exclude>
+                        <exclude>**/FeaturesLevel1Only*.java</exclude>
+                        <exclude>**/FeaturesLevel2*.java</exclude>
+                        <exclude>**/NETaggerLevel2*.java</exclude>
+                        <exclude>**/FeaturesLevel1Only*.java</exclude>
+                        <exclude>**/FeaturesLevel2.java</exclude>
+                        <exclude>**/FeaturesLevel1SharedWithLevel2.java</exclude>
+                        <exclude>**/NETaggerLevel1*.java</exclude>
+                        <exclude>**/NETaggerLevel1.java</exclude>
+                        <exclude>**/NETaggerLevel2.java</exclude>
+                        <exclude>**/IsSentenceStart.java</exclude>
+                        <exclude>**/NETaggerLevel2*.java</exclude>
+                        <exclude>**/PreviousTag1Level1.java</exclude>
+                        <exclude>**/FormParts.java</exclude>
+                        <exclude>**/PreviousTag2Level1.java</exclude>
+                        <exclude>**/PreviousTagPatternLevel1.java</exclude>
+                        <exclude>**/PreviousTag1Level2.java</exclude>
+                        <exclude>**/GazetteersFeatures.java</exclude>
+                        <exclude>**/Forms.java</exclude>
+                        <exclude>**/WordEmbeddingFeatures.java</exclude>
+                        <exclude>**/FeaturesSharedTemp.java</exclude>
+                        <exclude>**/NELabel.java</exclude>
+                        <exclude>**/prevTagsForContextLevel1.java</exclude>
+                        <exclude>**/WordTypeInformation.java</exclude>
+                        <exclude>**/Level1AggregationFeatures.java</exclude>
+                        <exclude>**/FeaturesLevel2*.java</exclude>
+                        <exclude>**/PreviousTagPatternLevel2.java</exclude>
+                        <exclude>**/nonLocalFeatures.java</exclude>
+                        <exclude>**/PreviousTag2Level2.java</exclude>
+                        <exclude>**/wordType.java</exclude>
+                        <exclude>**/prevTagsForContextLevel2.java</exclude>
+
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
                         <exclude>**/*.config</exclude>
