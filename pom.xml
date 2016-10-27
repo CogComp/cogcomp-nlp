@@ -149,6 +149,9 @@
                         <exclude>**/*.yml</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
+                        <exclude>ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures</exclude>
+                        <exclude>**/*.lex</exclude>
+                        <exclude>**/*.lc</exclude>
                     </excludes>
                 </configuration>
                 <executions>

@@ -32,13 +32,6 @@
             <version>3.0.76</version>
         </dependency>
         
-<!--
-       <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-common-resources</artifactId>
-            <version>1.3</version>
-        </dependency>
-       --> 
         <!-- Contains the gazetteers and Brown clusters -->
 	    <dependency>
 	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
