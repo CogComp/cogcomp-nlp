@@ -150,9 +150,12 @@
                         <exclude>**/*.yml</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
-                        <exclude>ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures</exclude>
+
+			<!-- don't add license headers to LBJava generated files. -->
+                        <exclude>ner/src/main/java/edu/illinois/cs/cogcomp/ner/LbjFeatures/*.java</exclude>
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
+                        <exclude>**/*.config</exclude>
                     </excludes>
                 </configuration>
                 <executions>
