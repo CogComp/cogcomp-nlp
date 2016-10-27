@@ -7,12 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Random;
+import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
@@ -413,5 +408,14 @@ public class NERAnnotatorTest {
                         TextChunkRepresentationManager.EncodingScheme.BILOU, 2.0);
         for (int i = 0; i < 1000; ++i)
             assertFalse(rlg.useNoise());
+    }
+
+    @Test
+    public void testGetTagValue() {
+        Set<String> tags = nerAnnotator.getTagValues();
+        String elements[] = {"B-LOC", "B-MISC", "B-ORG", "B-PER", "I-LOC", "I-MISC", "I-ORG", "I-PER", "L-LOC",
+                "L-MISC", "L-ORG", "L-PER", "O", "U-LOC", "U-MISC", "U-ORG", "U-PER"};
+        Set<String> set = new HashSet(Arrays.asList(elements));
+        assertTrue(tags.equals(set));
     }
 }
