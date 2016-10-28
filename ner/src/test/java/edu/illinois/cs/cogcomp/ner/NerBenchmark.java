@@ -10,7 +10,6 @@ package edu.illinois.cs.cogcomp.ner;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FilenameFilter;
 
 /**
@@ -132,7 +131,7 @@ public class NerBenchmark {
      * Run a benchmark test against each subdirectory within the benchmark directory.
      * 
      * @param args may specify the directory containing the benchmarks.
-     * @throws Exception
+     * @throws Exception if anything goes wrong.
      */
     public static void main(String[] args) throws Exception {
         parseArguments(args);
