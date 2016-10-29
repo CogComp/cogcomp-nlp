@@ -1,4 +1,0 @@
-modelName = TBAQ_full_1label_corr50
-modelDirPath = chunker/src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava/
-modelPath = chunker/src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava/TBAQ_full_1label_corr50.lc
-modelLexPath = chunker/src/main/java/edu/illinois/cs/cogcomp/chunker/main/lbjava/TBAQ_full_1label_corr50.lex

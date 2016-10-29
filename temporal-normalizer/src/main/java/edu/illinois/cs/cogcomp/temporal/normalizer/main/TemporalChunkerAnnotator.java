@@ -47,7 +47,7 @@ import java.util.List;
  */
 public class TemporalChunkerAnnotator extends Annotator{
     private static final String NAME = TemporalChunkerAnnotator.class.getCanonicalName();
-    private final Logger logger = LoggerFactory.getLogger(TemporalChunkerAnnotator.class);
+    private static final Logger logger = LoggerFactory.getLogger(TemporalChunkerAnnotator.class);
     private Chunker tagger;
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
@@ -64,24 +64,35 @@ public class TemporalChunkerAnnotator extends Annotator{
 
     /**
      * Constructor parameter allows user to specify whether or not to lazily initialize.
+     * PLEASE DO NOT USE THIS CONSTRUCTOR
      *
      * @param lazilyInitialize If set to 'true', models will not be loaded until first call
      *        requiring Chunker annotation.
      */
     public TemporalChunkerAnnotator(boolean lazilyInitialize) {
         super(ViewNames.TIMEX3, new String[] {ViewNames.POS}, lazilyInitialize);
-
     }
 
-    public TemporalChunkerAnnotator(ResourceManager nonDefaultRm) {
+    /**
+     * DO USE THIS CONSTRUCTOR
+     * Refer to main() to see detailed usage
+     * @param nonDefaultRm ResourceManager that specifies model paths, etc
+     * @param docType MUST be one of "NEWS", "NARRATIVES", "COLLOQUIAL", or "SCIENTIFIC"
+     * @param outputType MUST be either "TIMEML" or "XMI"
+     * @param configPath the path of heideltime's config file
+     */
+    public TemporalChunkerAnnotator(
+            ResourceManager nonDefaultRm,
+            String docType,
+            String outputType,
+            String configPath) {
         super(ViewNames.TIMEX3, new String[]{}, nonDefaultRm.getBoolean(
                 AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.FALSE), nonDefaultRm);
-
-        heidelTime = new HeidelTimeStandalone(Language.ENGLISH,
-                DocumentType.COLLOQUIAL,
-                OutputType.TIMEML,
-                "conf/config.props",
-                POSTagger.TREETAGGER, true);
+        this.heidelTime = new HeidelTimeStandalone(Language.ENGLISH,
+                DocumentType.valueOf(docType),
+                OutputType.valueOf(outputType),
+                configPath,
+                POSTagger.NO, true);
     }
 
     @Override
@@ -92,7 +103,6 @@ public class TemporalChunkerAnnotator extends Annotator{
                 rm.getString(ChunkerConfigurator.MODEL_PATH), rm.getString(ChunkerConfigurator.MODEL_LEX_PATH)
         );
     }
-
 
     @Override
     public void addView(TextAnnotation record) throws AnnotatorException {
@@ -148,7 +158,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                     try {
                         clabel = heidelTimeNormalize(temp_label);
                     } catch (Exception e) {
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                     Constituent label =
                             new Constituent(clabel, ViewNames.TIMEX3, record,
@@ -173,7 +183,7 @@ public class TemporalChunkerAnnotator extends Annotator{
             try {
                 clabel = heidelTimeNormalize(temp_label);
             } catch (Exception e) {
-                System.out.println(e);
+                e.printStackTrace();
             }
 
             Constituent label =
@@ -186,6 +196,11 @@ public class TemporalChunkerAnnotator extends Annotator{
         return; // chunkView;
     }
 
+    /**
+     * Use this function to add specific document creation time
+     * The default DCT is current date
+     * @param date the DCT you want to set
+     */
     public void addDocumentCreationTime(String date) {
         SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy");
         try {
@@ -195,13 +210,19 @@ public class TemporalChunkerAnnotator extends Annotator{
         }
     }
 
+    /**
+     * Normalize temporal phrase
+     * @param temporal_phrase
+     * @return
+     * @throws Exception
+     */
     private String heidelTimeNormalize(Constituent temporal_phrase) throws Exception {
         // If user didn't specify document creation date, use the current date
         if (this.dct == null) {
             this.dct = new Date();
         }
 
-        String xml_res = heidelTime.process(temporal_phrase.toString(), this.dct);
+        String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -258,16 +279,11 @@ public class TemporalChunkerAnnotator extends Annotator{
 
 
     public static void main(String []args) throws Exception{
-
-        System.out.println("Working Directory = " +
-                System.getProperty("user.dir"));
-
-
         ResourceManager rm = new ResourceManager("./conf/chunker_config.props");
-        TemporalChunkerAnnotator tca = new TemporalChunkerAnnotator(rm);
+        TemporalChunkerAnnotator tca =
+                new TemporalChunkerAnnotator(rm, "NEWS", "TIMEML", "conf/heideltime_config.props");
 
-
-        String path = "./test.txt";
+        String path = "./test2.txt";
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         String text = new String(encoded, StandardCharsets.UTF_8);
 
@@ -298,7 +314,6 @@ public class TemporalChunkerAnnotator extends Annotator{
             compressedSpans[i] = new Span(spanStart, builder.length()-2);
         }
         String compressedText = builder.toString();
-
-        System.out.println(compressedText);
+        logger.info(compressedText);
     }
 }
