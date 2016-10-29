@@ -11,8 +11,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * An interface for creating views of a specified name from a {@link TextAnnotation}
@@ -24,7 +27,7 @@ import java.util.Properties;
  * @author Vivek Srikumar, Mark Sammons, Christos Christodoulopoulos
  */
 public abstract class Annotator {
-
+    private static Logger logger = LoggerFactory.getLogger(Annotator.class);
 
     protected String viewName;
     protected String[] requiredViews;
@@ -186,6 +189,16 @@ public abstract class Annotator {
      */
     public String[] getRequiredViews() {
         return requiredViews;
+    }
+
+    /**
+     * Return possible tag values that the annotator can produce.
+     *
+     * @return the set of string representing the tag values
+     */
+    public Set<String> getTagValues() {
+        logger.error("Not yet implemented.");
+        return null;
     }
 
 

@@ -20,6 +20,8 @@ import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,6 +50,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * }
  */
 public class NamedEntityTagger {
+    private static Logger logger = LoggerFactory.getLogger(NamedEntityTagger.class);
 
     /** input directory (or file) containing data to run. */
     protected File indirectory = null;
@@ -71,7 +74,7 @@ public class NamedEntityTagger {
      * @param message error message.
      */
     private void parsingError(String message) {
-        System.err.println(message);
+        logger.error(message);
         String o =
                 "Command Line Options:\n"
                         + "  -i <file or directory name> : the name of a directory or file containing the input.\n"
@@ -81,7 +84,7 @@ public class NamedEntityTagger {
                         + "  -c <file name> : the name of the configuration file.\n"
                         + "  -t <number of threads> : Allows users to specify the number of threads to use, by default there will be one"
                         + "     thread for every core on the machine.\n";
-        System.err.println(o);
+        logger.error(o);
         System.exit(-1);
     }
 
@@ -179,7 +182,7 @@ public class NamedEntityTagger {
     private void generateOutput(View view, TextAnnotation ta, String filename) {
         String outputstring = renderString(view, ta);
         if (outdirectory == null) {
-            System.out.println(outputstring);
+            logger.info(outputstring);
         } else if (outdirectory.isDirectory()) {
             File outputfile = new File(outdirectory, filename);
             OutFile of = new OutFile(outputfile.toString());
@@ -257,7 +260,7 @@ public class NamedEntityTagger {
                         tts[i] = new TaggerThread(jobqueue);
                         tts[i].start();
                     }
-                    System.out.println("Begin processing " + indirectory);
+                    logger.info("Begin processing " + indirectory);
 
                     // process data.
                     File[] files = indirectory.listFiles();
@@ -302,10 +305,10 @@ public class NamedEntityTagger {
                     totalread /= max;
                     totalcompute /= max;
                     totalwrite /= max;
-                    System.out.println("Completed " + count + " files in "
+                    logger.info("Completed " + count + " files in "
                             + (System.currentTimeMillis() - start) + " ticks, " + heapsize
                             + " average heap size.");
-                    System.out.println("Average time per document: read = " + totalread
+                    logger.info("Average time per document: read = " + totalread
                             + ", compute = " + totalcompute + ", and write = " + totalwrite);
                 } else {
                     // Loop over every file within the input directory. We will do this multi

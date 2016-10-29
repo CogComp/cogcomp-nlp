@@ -45,7 +45,6 @@ public class Token extends Word {
         label = type;
     }
 
-
     /**
      * Produces a simple <code>String</code> representation of this word in
      * which the {@link #label} field appears followed by the word's part

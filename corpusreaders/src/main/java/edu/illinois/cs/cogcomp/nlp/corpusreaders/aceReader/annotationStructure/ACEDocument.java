@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ACEDocument implements Serializable {
 
@@ -23,6 +24,7 @@ public class ACEDocument implements Serializable {
 
     public List<String> originalLines;
 
-    public List<Pair<String, Paragraph>> paragraphs;
+    public Map<String, String> metadata;
 
+    public List<Pair<String, Paragraph>> paragraphs;
 }

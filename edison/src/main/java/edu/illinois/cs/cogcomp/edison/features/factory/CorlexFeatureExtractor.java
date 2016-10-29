@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class CorlexFeatureExtractor extends WordFeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(CorlexFeatureExtractor.class);
 
     public static final CorlexFeatureExtractor instance = new CorlexFeatureExtractor(true);
     private final static Logger log = LoggerFactory.getLogger(CorlexFeatureExtractor.class);
@@ -44,7 +45,7 @@ public class CorlexFeatureExtractor extends WordFeatureExtractor {
         List<String> lines;
         try {
             lines = LineIO.readFromClasspath(CORLEX_FILE);
-            System.out.println();
+            logger.info("\n");
         } catch (FileNotFoundException e) {
             throw new EdisonException("CORLEX not found in class path at " + CORLEX_FILE);
         }

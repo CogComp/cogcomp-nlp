@@ -7,16 +7,17 @@
  */
 package edu.illinois.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
 import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public class CreateTestFeaturesResource {
     public static final String WORD_FEATURES_FILE = "src/test/resources/word.features.test";
     private static List<TextAnnotation> tas;
     private static Map<Integer, String> feats;
+    private static Logger logger = LoggerFactory.getLogger(CreateTestFeaturesResource.class);
 
     public CreateTestFeaturesResource() throws Exception {
         feats = new HashMap<>();
@@ -73,91 +75,91 @@ public class CreateTestFeaturesResource {
     }
 
     private void addCapitalization() throws EdisonException {
-        System.out.println("\tadding capitalization");
+        logger.info("\tadding capitalization");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.capitalization);
         }
     }
 
     private void addConflatedPOS() throws EdisonException {
-        System.out.println("\tadding conflated POS");
+        logger.info("\tadding conflated POS");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.conflatedPOS);
         }
     }
 
     private void addDeAdjectivalAbstractNounsSuffixes() throws EdisonException {
-        System.out.println("\tadding de-adjectival abstract noun suffixes");
+        logger.info("\tadding de-adjectival abstract noun suffixes");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.deAdjectivalAbstractNounsSuffixes);
         }
     }
 
     private void addDeNominalNounProducingSuffixes() throws EdisonException {
-        System.out.println("\tadding de-nominal noun producing suffixes");
+        logger.info("\tadding de-nominal noun producing suffixes");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.deNominalNounProducingSuffixes);
         }
     }
 
     private void addDeVerbalSuffixes() throws EdisonException {
-        System.out.println("\tadding de-verbal suffixes");
+        logger.info("\tadding de-verbal suffixes");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.deVerbalSuffix);
         }
     }
 
     private void addGerundMarker() throws EdisonException {
-        System.out.println("\tadding gerund marker");
+        logger.info("\tadding gerund marker");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.gerundMarker);
         }
     }
 
     private void addKnownPrefixes() throws EdisonException {
-        System.out.println("\tadding known prefixes");
+        logger.info("\tadding known prefixes");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.knownPrefixes);
         }
     }
 
     private void addLemma() throws EdisonException {
-        System.out.println("\tadding lemma");
+        logger.info("\tadding lemma");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.lemma);
         }
     }
 
     private void addNominalizationMarker() throws EdisonException {
-        System.out.println("\tadding nominalization marker");
+        logger.info("\tadding nominalization marker");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.nominalizationMarker);
         }
     }
 
     private void addPOS() throws EdisonException {
-        System.out.println("\tadding POS");
+        logger.info("\tadding POS");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.pos);
         }
     }
 
     private void addPrefixSuffixes() throws EdisonException {
-        System.out.println("\tadding prefix, suffixes");
+        logger.info("\tadding prefix, suffixes");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.prefixSuffixes);
         }
     }
 
     private void addWord() throws EdisonException {
-        System.out.println("\tadding word");
+        logger.info("\tadding word");
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.word);
         }
     }
 
     private void addBrownFeatures() throws EdisonException {
-        System.out.println("\tadding Brown cluster features");
+        logger.info("\tadding Brown cluster features");
         WordFeatureExtractor brownFeatureGenerator =
                 WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
                         new int[] {4, 5});
@@ -167,7 +169,7 @@ public class CreateTestFeaturesResource {
     }
 
     private void addWordNet() throws EdisonException {
-        System.out.println("\tadding wordNet");
+        logger.info("\tadding wordNet");
         WordNetManager.loadConfigAsClasspathResource(true);
         for (TextAnnotation ta : tas) {
             addFeatures(ta, WordFeatureExtractorFactory.getWordNetFeatureExtractor(
@@ -178,10 +180,10 @@ public class CreateTestFeaturesResource {
     }
 
     private void addGazetteerFeatures() throws Exception {
-        System.out.println("\tadding gazetteer features");
+        logger.info("\tadding gazetteer features");
         WordFeatureExtractor fex =
                 WordFeatureExtractorFactory.getGazetteerFeatureExtractor("gazetteer",
-                        new GazetteerViewGenerator("gazetteers", ViewNames.GAZETTEER));
+                        new SimpleGazetteerAnnotator());
 
         for (TextAnnotation ta : tas) {
             addFeatures(ta, fex);

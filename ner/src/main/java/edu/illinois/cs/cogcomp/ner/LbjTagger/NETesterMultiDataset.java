@@ -16,12 +16,15 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotato
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
 public class NETesterMultiDataset {
+    private static Logger logger = LoggerFactory.getLogger(NETesterMultiDataset.class);
 
     /**
      * NB: assuming column format
@@ -218,36 +221,36 @@ public class NETesterMultiDataset {
                     resultsTokenLevel2, resultsPhraseLevel1, resultsPhraseLevel2, resultsByBILOU,
                     resultsSegmentation);
 
-        System.out.println("------------------------------------------------------------");
-        System.out.println("******	Combined performance on all the datasets :");
+        logger.info("------------------------------------------------------------");
+        logger.info("******	Combined performance on all the datasets :");
         for (int i = 0; i < dataCollection.size(); i++)
-            System.out.println("\t>>> Dataset path : \t" + dataCollection.elementAt(i).datasetPath);
-        System.out.println("------------------------------------------------------------");
+            logger.info("\t>>> Dataset path : \t" + dataCollection.elementAt(i).datasetPath);
+        logger.info("------------------------------------------------------------");
         if (verbose) {
             if (ParametersForLbjCode.currentParameters.featuresToUse
                     .containsKey("PredictionsLevel1")) {
-                System.out.println("Phrase-level Acc Level2:");
+                logger.info("Phrase-level Acc Level2:");
                 resultsPhraseLevel2.printPerformance(System.out);
-                System.out.println("Token-level Acc Level2:");
+                logger.info("Token-level Acc Level2:");
                 resultsTokenLevel2.printPerformance(System.out);
-                System.out.println("Level2 BILOU Accuracy, letter-by-letter:");
+                logger.info("Level2 BILOU Accuracy, letter-by-letter:");
                 resultsByBILOU.printPerformance(System.out);
-                System.out.println("Level2 BILOU PHRASE/BOUNDARY DETECTION Accuracy");
+                logger.info("Level2 BILOU PHRASE/BOUNDARY DETECTION Accuracy");
                 resultsSegmentation.printPerformance(System.out);
             }
-            System.out.println("Phrase-level Acc Level1:");
+            logger.info("Phrase-level Acc Level1:");
             resultsPhraseLevel1.printPerformance(System.out);
-            System.out.println("Token-level Acc Level1:");
+            logger.info("Token-level Acc Level1:");
             resultsTokenLevel1.printPerformance(System.out);
         } else {
-            System.out.println("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
+            logger.info("\t Level 1: " + resultsPhraseLevel1.getOverallStats()[2]);
             if (ParametersForLbjCode.currentParameters.featuresToUse
                     .containsKey("PredictionsLevel1"))
-                System.out.println("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
+                logger.info("\t Level 2: " + resultsPhraseLevel2.getOverallStats()[2]);
         }
-        System.out.println("------------------------------------------------------------");
-        System.out.println("************************************************************");
-        System.out.println("------------------------------------------------------------");
+        logger.info("------------------------------------------------------------");
+        logger.info("************************************************************");
+        logger.info("------------------------------------------------------------");
 
         return new TestDiscrete[] {resultsPhraseLevel1, resultsPhraseLevel2};
     }
@@ -275,7 +278,7 @@ public class NETesterMultiDataset {
                             && dataSet.labelsToAnonymizeForEvaluation.contains(w.neLabel
                                     .substring(2))) {
                         w.neLabel = w.neLabel.substring(0, 2) + "ENTITY";
-                        // System.out.println("replace!!!");
+                        // logger.info("replace!!!");
                     }
                     w.neTypeLevel1 = originalW.neTypeLevel1;
                     if (w.neTypeLevel1.indexOf('-') > -1

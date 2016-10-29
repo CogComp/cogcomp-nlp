@@ -17,6 +17,9 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +27,7 @@ import java.util.*;
 
 
 public class TestPOSMikheevFeatureExtractor extends TestCase {
+    private static Logger logger = LoggerFactory.getLogger(TestPOSMikheevFeatureExtractor.class);
 
     private static List<TextAnnotation> tas;
 
@@ -44,8 +48,8 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
         POSMikheevFeatureExtractor posMikheev =
                 new POSMikheevFeatureExtractor("posMikheev", "test_corpus", TestPosHelper.corpus);
 
-        System.out.println("POSMikheev Feature Extractor");
-        System.out.println("Only print the features with known tags");
+        logger.info("POSMikheev Feature Extractor");
+        logger.info("Only print the features with known tags");
         // Using the first TA and a constituent between span of 30-40 as a test
         int i = 0;
         for (TextAnnotation ta : tas) {
@@ -55,7 +59,7 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
             for (Constituent TOKEN : TOKENS) {
                 Set<Feature> feats = posMikheev.getFeatures(TOKEN);
                 if (feats.isEmpty()) {
-                    System.out.println("Feats list is returning NULL.");
+                    logger.info("Feats list is returning NULL.");
                 }
                 for (Feature f : feats)
                     if (!f.getName().contains("UNKNOWN")) {
@@ -64,19 +68,19 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
             }
 
             if (!outFeatures.isEmpty()) {
-                System.out.println("-------------------------------------------------------");
-                System.out.println("Text Annotation: " + i);
-                System.out.println("Text Features: ");
+                logger.info("-------------------------------------------------------");
+                logger.info("Text Annotation: " + i);
+                logger.info("Text Features: ");
 
                 for (String out : outFeatures)
-                    System.out.println(out);
+                    logger.info(out);
 
-                System.out.println("-------------------------------------------------------");
+                logger.info("-------------------------------------------------------");
             }
 
             i++;
         }
-        System.out.println("GOT FEATURES YES!");
+        logger.info("GOT FEATURES YES!");
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
@@ -85,7 +89,7 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    System.out.println(ta.getView(viewName));
+                    logger.info(ta.getView(viewName).toString());
         }
     }
 }

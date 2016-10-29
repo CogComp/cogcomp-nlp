@@ -14,6 +14,9 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 
 /**
@@ -26,6 +29,7 @@ public class ChunkerTrain {
     private int iter; // Number of iterations to be used when training the chunker
     private Chunker chunker;
     private ResourceManager rm;
+    private static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
 
     public ChunkerTrain() {
         this(50);
@@ -47,7 +51,7 @@ public class ChunkerTrain {
      * Trains the taggers with the default training data found in ChunkerConfigurator.java
      */
     public void trainModels() {
-        System.out.println("Using default training data: " + rm.getString("trainingData"));
+        logger.info("Using default training data: " + rm.getString("trainingData"));
         trainModels(rm.getString("trainingData"));
     }
 
@@ -79,23 +83,24 @@ public class ChunkerTrain {
             }
             parser.reset();
             chunker.doneWithRound();
-            System.out.println("Iteration number : " + i);
+            logger.info("Iteration number : " + i);
         }
         chunker.doneLearning();
     }
 
     /**
      * Saves the ".lc" and ".lex" models to disk in the modelPath specified by the constructor The
-     * modelName ("illinois-chunker") is fixed
+     * modelName ("Chunker", as specified in ChunkerConfigurator) is fixed
      */
     public void writeModelsToDisk() {
+        IOUtils.mkdir(rm.getString("modelDirPath"));
         chunker.save();
-        System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
+        logger.info("Done training, models are in " + rm.getString("modelDirPath"));
     }
     public void writeModelsToDisk(String dir, String modelName){
         IOUtils.mkdir(dir);
         chunker.write(dir + File.separator + modelName + ".lc", dir + File.separator + modelName + ".lex");
-        System.out.println("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
+        logger.info("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
     }
     public static void main(String[] args) {
         ChunkerTrain trainer = new ChunkerTrain();

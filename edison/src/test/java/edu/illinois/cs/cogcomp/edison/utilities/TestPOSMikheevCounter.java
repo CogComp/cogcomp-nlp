@@ -16,8 +16,11 @@ import java.util.TreeMap;
 
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestPOSMikheevCounter extends TestCase {
+    private static Logger logger = LoggerFactory.getLogger(TestPOSMikheevCounter.class);
 
     public final void test() throws Exception {
 
@@ -46,7 +49,7 @@ public class TestPOSMikheevCounter extends TestCase {
 
         }
 
-        System.out.println(str);
+        logger.info(str);
 
         try {
             File file = new File("src/test/resources/outputFiles/TestMikheevCounterOutput");

@@ -16,6 +16,8 @@ import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,8 @@ import static org.junit.Assert.fail;
 
 
 public class NerTest {
+    private static Logger logger = LoggerFactory.getLogger(NerTest.class);
+
     private static final String TEST_INPUT =
             "JFK has one dog and Newark has a handful, Farbstein said.";
     private static final String TEST_OUTPUT =
@@ -37,7 +41,7 @@ public class NerTest {
         try {
             Parameters.readConfigAndLoadExternalData(new NerBaseConfigurator().getDefaultConfig());
             ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
-            System.out.println("Reading model file : "
+            logger.info("Reading model file : "
                     + ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
             t1 =
                     new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
@@ -45,7 +49,7 @@ public class NerTest {
                             + ".level1.lex");
             if (ParametersForLbjCode.currentParameters.featuresToUse
                     .containsKey("PredictionsLevel1")) {
-                System.out.println("Reading model file : "
+                logger.info("Reading model file : "
                         + ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
                 t2 =
                         new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
@@ -53,7 +57,7 @@ public class NerTest {
                                 + ".level2.lex");
             }
         } catch (Exception e) {
-            System.out.println("Cannot initialise the test, the exception was: ");
+            System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
             fail();
         }
@@ -67,7 +71,7 @@ public class NerTest {
         try {
             output = NETagPlain.tagData(data, t1, t2);
         } catch (Exception e) {
-            System.out.println("Cannot annotate the test, the exception was: ");
+            logger.info("Cannot annotate the test, the exception was: ");
             e.printStackTrace();
             fail();
         }
