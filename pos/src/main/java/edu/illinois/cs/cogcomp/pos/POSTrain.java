@@ -43,7 +43,7 @@ public class POSTrain {
 
     public POSTrain(int iter, String configFile) throws IOException {
         this.iter = iter;
-        rm = new POSConfigurator().getConfigFromFile(configFile);
+        rm = new POSConfigurator().getConfig(new ResourceManager(configFile));
         this.init();
     }
 

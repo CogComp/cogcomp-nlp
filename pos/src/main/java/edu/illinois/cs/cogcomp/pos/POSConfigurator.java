@@ -69,7 +69,4 @@ public class POSConfigurator extends Configurator {
         return new ResourceManager(generateProperties(props));
     }
 
-    public ResourceManager getConfigFromFile(String configFile) throws IOException {
-        return new ResourceManager(configFile);
-    }
 }
