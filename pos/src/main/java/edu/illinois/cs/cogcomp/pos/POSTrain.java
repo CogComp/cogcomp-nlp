@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Simple class to build and train models from existing training data, as opposed to using the
@@ -36,6 +37,13 @@ public class POSTrain {
 
     public POSTrain(int iter) {
         this.iter = iter;
+        rm = new POSConfigurator().getDefaultConfig();
+        this.init();
+    }
+
+    public POSTrain(int iter, String configFile) throws IOException {
+        this.iter = iter;
+        rm = new POSConfigurator().getConfig(new ResourceManager(configFile));
         this.init();
     }
 
@@ -43,7 +51,6 @@ public class POSTrain {
      * Known and unknown taggers to be trained later.
      */
     private void init() {
-        rm = new POSConfigurator().getDefaultConfig();
         String knownModelFile = rm.getString("knownModelPath");
         String knownLexFile = rm.getString("knownLexPath");
         String unknownModelFile = rm.getString("unknownModelPath");
@@ -124,8 +131,14 @@ public class POSTrain {
         System.out.println("Done training, wrote models to disk.");
     }
 
-    public static void main(String[] args) {
-        POSTrain trainer = new POSTrain();
+    public static void main(String[] args) throws Exception{
+        POSTrain trainer;
+        if(args.length > 0) {
+            System.out.printf("Use config file : %s\n", args[0]);
+            trainer = new POSTrain(50, args[0]);
+        }
+        else
+            trainer = new POSTrain(50);
         trainer.trainModels();
         trainer.writeModelsToDisk();
     }

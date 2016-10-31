@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
+import java.io.IOException;
+
 /**
  * Constant values used by the LBJ source file.
  *
@@ -66,4 +68,5 @@ public class POSConfigurator extends Configurator {
                         UNKNOWN_MODEL_PATH, UNKNOWN_LEX_PATH, BASELINE_LEX_PATH, MIKHEEV_LEX_PATH};
         return new ResourceManager(generateProperties(props));
     }
+
 }
