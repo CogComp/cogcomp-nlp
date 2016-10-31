@@ -19,6 +19,8 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -30,6 +32,7 @@ import java.util.*;
  */
 public class WordFeatureExtractorFactory {
 
+    private static Logger logger = LoggerFactory.getLogger(WordFeatureExtractorFactory.class);
     /**
      * An indicator for whether the word ends with an `-ing`.
      */
@@ -245,7 +248,7 @@ public class WordFeatureExtractorFactory {
                     features.add(isNom);
                 }
             } catch (Exception e) {
-                System.err.println("Could not read nombank.list.gz file from classpath");
+                logger.error("Could not read nombank.list.gz file from classpath");
                 e.printStackTrace();
             }
             return features;

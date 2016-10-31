@@ -27,9 +27,8 @@ import java.util.zip.GZIPOutputStream;
  * @author Vivek Srikumar
  */
 public class Lexicon {
-
-    private final static Logger log = LoggerFactory.getLogger(Lexicon.class);
-
+    private static Logger logger = LoggerFactory.getLogger(Lexicon.class);    
+    
     private static final String lexManagerVersion = "0.1";
 
     public static final String GLOBAL_BIAS = "*-global-bias-*";
@@ -101,7 +100,7 @@ public class Lexicon {
 
         }
 
-        log.info("Found {} features", feature2Id.size());
+        logger.info("Found {} features", feature2Id.size());
 
         if (loadStrings) {
             featureNames = new ArrayList<>();
@@ -117,7 +116,7 @@ public class Lexicon {
 
         long end = System.currentTimeMillis();
 
-        log.info("Loading lexicon took {} ms", (end - start));
+        logger.info("Loading lexicon took {} ms", (end - start));
 
         featureCounts = new TIntIntHashMap();
     }
@@ -176,7 +175,7 @@ public class Lexicon {
 
         // If there is a hash collision, print a warning
         if (feature2Id.containsKey(featureHash)) {
-            log.warn("Possible hash collision in lexicon " + "for feature name = {}, hash = {}", f,
+            logger.warn("Possible hash collision in lexicon " + "for feature name = {}, hash = {}", f,
                     featureHash);
         } else {
 
@@ -311,7 +310,7 @@ public class Lexicon {
 
         writeInt(writer, nextFeatureId);
 
-        log.info("Lexicon contains {} features", feature2Id.size());
+        logger.info("Lexicon contains {} features", feature2Id.size());
 
         writeInt(writer, feature2Id.size());
 
@@ -343,9 +342,9 @@ public class Lexicon {
 
         writer.close();
 
-        log.info("Verifying save...");
+        logger.info("Verifying save...");
         new Lexicon(new FileInputStream(new File(file)), false);
-        log.info("Done.");
+        logger.info("Done.");
     }
 
     private void writeInt(BufferedWriter writer, int integer) throws IOException {
@@ -371,7 +370,7 @@ public class Lexicon {
         });
         lex.nextFeatureId = this.nextFeatureId;
 
-        System.out.println("Number of features after pruning: " + lex.size());
+        logger.info("Number of features after pruning: " + lex.size());
 
         return lex;
     }

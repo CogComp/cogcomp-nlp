@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +46,7 @@ public class IllinoisLemmatizer extends Annotator {
     private Map<String, String> contractions;
     private Map<String, String> toStanford;
     private boolean useStanford;
+    private static Logger logger = LoggerFactory.getLogger(IllinoisLemmatizer.class);
 
     /**
      * default configuration, lazily initialized
@@ -87,7 +90,7 @@ public class IllinoisLemmatizer extends Annotator {
                                 }
                             });
         } catch (IOException | URISyntaxException e) {
-            System.err.println("Error while trying to read " + filename + ".");
+            logger.error("Error while trying to read " + filename + ".");
             System.exit(-1);
         }
         return lines;
@@ -97,21 +100,21 @@ public class IllinoisLemmatizer extends Annotator {
     public static void main(String[] args) {
         IllinoisLemmatizer lem = new IllinoisLemmatizer();
 
-        System.out.println("Getting lemma for 'media': ");
+        logger.info("Getting lemma for 'media': ");
         String lemma = lem.getLemma("media", "NNS");
-        System.out.println(lemma);
+        logger.info(lemma);
 
-        System.out.println("Getting lemma for 'men': ");
+        logger.info("Getting lemma for 'men': ");
         lemma = lem.getLemma("men", "NNS");
-        System.out.println(lemma);
+        logger.info(lemma);
 
-        System.out.println("Getting lemmas for 'retakes': ");
+        logger.info("Getting lemmas for 'retakes': ");
         lemma = lem.getLemma("retakes", "VBZ");
-        System.out.println(lemma);
+        logger.info(lemma);
 
-        System.out.println("Getting lemmas for 'putting': ");
+        logger.info("Getting lemmas for 'putting': ");
         lemma = lem.getLemma("putting", "VBG");
-        System.out.println(lemma);
+        logger.info(lemma);
 
     }
 
@@ -184,7 +187,7 @@ public class IllinoisLemmatizer extends Annotator {
                     "ERROR: " + NAME + ".getLemma(): index '" + tokIndex
                             + "' is out of range of textAnnotation, " + "which has '"
                             + ta.getTokens().length + "' tokens.";
-            System.err.println(msg);
+            logger.error(msg);
             throw new IllegalArgumentException(msg);
         }
 

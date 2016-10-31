@@ -19,6 +19,8 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
@@ -33,6 +35,7 @@ import java.util.Set;
  */
 public class TestClauseFeatureExtractor extends TestCase {
     private static List<TextAnnotation> tas;
+    private static Logger logger = LoggerFactory.getLogger(TestClauseFeatureExtractor.class);
 
     static {
         try {
@@ -67,7 +70,7 @@ public class TestClauseFeatureExtractor extends TestCase {
 
                     Set<Feature> features = fex.getFeatures(c);
 
-                    System.out.println(c + "\t" + features);
+                    logger.info(c + "\t" + features);
                 }
             }
         }

@@ -8,10 +8,14 @@
 package edu.illinois.cs.cogcomp.nlp.pmi;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class PMIHelper {
+    private static Logger logger = LoggerFactory.getLogger(PMIHelper.class);
+
     private final static double EPSILON = 1e-15;
 
     private final CachedNgramCounter ngrams;
@@ -173,7 +177,7 @@ public class PMIHelper {
             String x = parts[0];
             String y = parts[1];
 
-            System.out.println(xy + "\t" + pmi.getPMI(xy, x, y) + "\t" + pmi.getNPMI(xy, x, y));
+            logger.info(xy + "\t" + pmi.getPMI(xy, x, y) + "\t" + pmi.getNPMI(xy, x, y));
         }
 
         List<Pair<String, String>> items = new ArrayList<>();
@@ -183,7 +187,7 @@ public class PMIHelper {
         for (Pair<String, String> item : items) {
             String xy = item.getFirst() + " of " + item.getSecond();
 
-            System.out.println(xy + "\t" + pmi.getPMI(xy, item.getFirst(), item.getSecond()) + "\t"
+            logger.info(xy + "\t" + pmi.getPMI(xy, item.getFirst(), item.getSecond()) + "\t"
                     + pmi.getNPMI(xy, item.getFirst(), item.getSecond()));
         }
 
@@ -193,7 +197,7 @@ public class PMIHelper {
         String[] x = {"a girl", "girl", "the girl"};
         String[] y = {"hair", "the hair"};
 
-        System.out.println("girl with hair" + "\t" + pmi.getPMI(xy, x, y) + "\t"
+        logger.info("girl with hair" + "\t" + pmi.getPMI(xy, x, y) + "\t"
                 + pmi.getNPMI(xy, x, y));
 
     }

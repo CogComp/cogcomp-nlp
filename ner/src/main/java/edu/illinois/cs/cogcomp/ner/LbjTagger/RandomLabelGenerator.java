@@ -82,8 +82,8 @@ public class RandomLabelGenerator {
     }
 
     public String randomLabel() {
-        // System.out.println(rand);
-        // System.out.println(labelNames);
+        // logger.info(rand);
+        // logger.info(labelNames);
         int pos = (int) (rand.nextDouble() * labelNames.length);
         if (pos >= labelNames.length)
             pos = labelNames.length - 1;

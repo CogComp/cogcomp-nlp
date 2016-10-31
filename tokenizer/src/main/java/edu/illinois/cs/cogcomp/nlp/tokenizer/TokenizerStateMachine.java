@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,6 +53,8 @@ import java.util.regex.Pattern;
  * @author redman
  */
 public class TokenizerStateMachine {
+    private static Logger logger = LoggerFactory.getLogger(TokenizerStateMachine.class);
+
 
     /** the state stack, since state can be nested. */
     protected ArrayList<State> stack;
@@ -500,19 +505,19 @@ public class TokenizerStateMachine {
                     this.current = cs.start + (ss.length() - 1);
                     this.pop(this.current + 1);
                     if (debug)
-                        System.out.println("Good : " + ss);
+                        System.err.println("Good : " + ss);
                     return true;
                 }
             } catch (URISyntaxException e) {
                 if (debug)
-                    System.out.println("Invalid : " + ss);
+                    System.err.println("Invalid : " + ss);
                 return false;
             }
         } else {
             if (debug) {
                 int len = Math.min(100, text.length - cs.start);
                 String ss = new String(text, cs.start, len);
-                System.out.println("Not even close : " + ss);
+                System.err.println("Not even close : " + ss);
             }
 
         }

@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import java.util.Set;
@@ -25,7 +27,7 @@ import java.util.Set;
  * @author Vivek Srikumar, Mark Sammons, Christos Christodoulopoulos
  */
 public abstract class Annotator {
-
+    private static Logger logger = LoggerFactory.getLogger(Annotator.class);
 
     protected String viewName;
     protected String[] requiredViews;
@@ -195,7 +197,7 @@ public abstract class Annotator {
      * @return the set of string representing the tag values
      */
     public Set<String> getTagValues() {
-        System.err.println("Not yet implemented.");
+        logger.error("Not yet implemented.");
         return null;
     }
 

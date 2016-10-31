@@ -26,7 +26,7 @@ class ColumnFileReader extends ColumnFormat {
     }
 
     public Object next() {
-        // System.out.println("next");
+        // logger.info("next");
         String[] line = (String[]) super.next();
         while (line != null && (line.length == 0 || line[4].equals("-X-")))
             line = (String[]) super.next();

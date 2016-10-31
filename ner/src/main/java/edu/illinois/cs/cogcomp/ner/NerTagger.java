@@ -61,7 +61,7 @@ public class NerTagger {
                         String s = st.nextToken();
                         output.append(" ").append(s);
                     }
-                    System.out.println(output.toString());
+                    logger.info(output.toString());
                 }
             }
             if (args[0].equalsIgnoreCase("-test"))
@@ -75,9 +75,9 @@ public class NerTagger {
                 LearningCurveMultiDataset.getLearningCurve(Integer.parseInt(args[1]), args[2],
                         args[3]);
         } catch (Exception e) {
-            System.err.println("Exception caught: ");
+            logger.error("Exception caught: ");
             e.printStackTrace();
-            System.err.println();
+            logger.error("");
             printUsage(System.err);
         }
     }

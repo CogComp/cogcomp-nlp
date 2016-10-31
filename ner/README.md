@@ -78,7 +78,7 @@ public class App
 
         co.addView(ta);
 
-        System.out.println(ta.getView(ViewNames.NER_CONLL));
+        logger.info(ta.getView(ViewNames.NER_CONLL));
     }
 }
 ```

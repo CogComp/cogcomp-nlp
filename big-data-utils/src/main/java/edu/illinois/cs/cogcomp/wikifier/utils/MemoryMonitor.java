@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.wikifier.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 
@@ -19,7 +22,7 @@ public class MemoryMonitor {
     
     private static final MemoryMXBean bean = ManagementFactory.getMemoryMXBean();
     public static final long memLimit = Runtime.getRuntime().maxMemory();
-    
+	private static final Logger logger = LoggerFactory.getLogger(MemoryMonitor.class);
     /**
      * 
      * @return whether used memory is more than 75% of max available
@@ -31,13 +34,13 @@ public class MemoryMonitor {
     
 	public static void printMemoryUsage(String announcement){
 //		runGC(r,10);
-		System.out.printf(announcement+" memory usage: %sMB\n",memoryUsageInMB());
+		logger.info(announcement+" memory usage: {}MB\n",memoryUsageInMB());
 	}
 	
 	public static void printSystemMemory(){
 	    long heap = bean.getHeapMemoryUsage().getUsed() >> 20;
 	    long nonheap = bean.getNonHeapMemoryUsage().getUsed() >> 20;
-        System.out.printf("Heap: %dMB;Non-heap %dMB\n", heap, nonheap);
+        logger.info("Heap: {}MB;Non-heap {}MB\n", heap, nonheap);
 	}
 
 	public static long usedMemory(){
@@ -50,11 +53,11 @@ public class MemoryMonitor {
     }
 
 	public static void runGC(Runtime r, int loops) throws Exception {
-		System.out.println("running garbage collecting");
+		logger.info("running garbage collecting");
 		for(int i=0; i<loops; i++) {
 			r.gc();
 			Thread.sleep(1000);
 		}
-		System.out.println("done running garbage collecting");
+		logger.info("done running garbage collecting");
 	}
 }

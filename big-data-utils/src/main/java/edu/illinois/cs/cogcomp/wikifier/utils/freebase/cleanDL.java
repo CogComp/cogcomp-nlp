@@ -21,9 +21,12 @@ import org.apache.commons.io.FileUtils;
 
 import com.google.api.client.util.Maps;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class cleanDL {
 	static Map<String, List<DocMention>> mentions = Maps.newLinkedHashMap();
+	private static final Logger logger = LoggerFactory.getLogger(cleanDL.class);
 
 	public static void main(String[] args) throws IOException {
 		List<String> lines = FileUtils.readLines(new File(
@@ -31,12 +34,12 @@ public class cleanDL {
 
 		for (String line : lines) {
 			String[] parts = line.split("\\s+");
-			System.out.println(parts[0] + parts[1] + parts[2]);
+			logger.info(parts[0] + parts[1] + parts[2]);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 3; i < parts.length; i++)
 				sb.append(parts[i] + " ");
 			if (mentionFilter(parts)) {
-				System.out.println("removing " + Arrays.asList(parts));
+				logger.info("removing " + Arrays.asList(parts));
 				continue;
 			}
 			if (mentions.containsKey(parts[0])) {
@@ -82,7 +85,7 @@ public class cleanDL {
 					continue;
 				if (m1.mention.contains(m2.mention) && m1.start <= m2.start
 						&& m1.end >= m2.end) {
-					System.out.println("removing substring mention "
+					logger.info("removing substring mention "
 							+ m2.mention + "," + m2.start + "," + m2.end
 							+ " for " + m1.mention + "," + m1.start + ","
 							+ m1.end);
@@ -90,7 +93,7 @@ public class cleanDL {
 				}
 				if (m2.mention.contains(m1.mention) && m2.start <= m1.start
 						&& m2.end >= m1.end) {
-					System.out.println("removing substring mention "
+					logger.info("removing substring mention "
 							+ m1.mention + " for " + m2.mention);
 					toRemove.add(m1);
 				}

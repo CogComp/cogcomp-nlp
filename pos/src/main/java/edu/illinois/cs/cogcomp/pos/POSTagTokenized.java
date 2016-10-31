@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.*;
 import edu.illinois.cs.cogcomp.pos.lbjava.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -31,6 +33,8 @@ import edu.illinois.cs.cogcomp.pos.lbjava.*;
  * @author Nick Rizzolo
  **/
 public class POSTagTokenized {
+    private static Logger logger = LoggerFactory.getLogger(POSTagTokenized.class);
+
     /**
      * Implements the program described above.
      *

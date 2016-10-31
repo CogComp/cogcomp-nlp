@@ -11,11 +11,15 @@ import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.OccurrenceCounter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Hashtable;
 import java.util.Vector;
 
 public class MemoryEfficientNB extends Classifier {
+    private static Logger logger = LoggerFactory.getLogger(MemoryEfficientNB.class);
+
     public static final double smooth = 0.0001;
     public double sampleSize = 0;
     public double[] weights; // weights[i]=how many words we observed in class i
@@ -90,7 +94,7 @@ public class MemoryEfficientNB extends Classifier {
     public MemoryEfficientNB(DocumentCollection docs, FeatureMap _map, int _classesN) {
         allocateSpace(_map, _classesN);
         for (int i = 0; i < docs.docs.size(); i++) {
-            // System.out.println("Learning - document "+i+" of "+docs.docs.size());
+            // logger.info("Learning - document "+i+" of "+docs.docs.size());
             onlineLearning(docs.docs.elementAt(i));
         }
     }
@@ -212,7 +216,7 @@ public class MemoryEfficientNB extends Classifier {
         for (int i = 0; i < classesN; i++) {
             CharacteristicWords words =
                     this.getTopPmiWords(i, maxWordsPerClass, confThres, minAppThres);
-            System.out.println(words.toString());
+            logger.info(words.toString());
             for (int j = 0; j < words.topWords.size(); j++)
                 if (!coolWords.containsKey(words.topWords.elementAt(j)))
                     coolWords.put(words.topWords.elementAt(j), 1);

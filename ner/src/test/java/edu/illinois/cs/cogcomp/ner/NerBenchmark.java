@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -41,6 +43,7 @@ import java.io.File;
  * }
  */
 public class NerBenchmark {
+    private static Logger logger = LoggerFactory.getLogger(NerBenchmark.class);
 
     /** default directory containing benchmark runs. */
     static String directory = "benchmark";
@@ -144,7 +147,7 @@ public class NerBenchmark {
                     if (!skiptraining) {
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         if (!trainDir.exists()) {
-                            System.out.print("Expected a training directory named " + trainDirName
+                            System.err.print("Expected a training directory named " + trainDirName
                                     + ", but it is not there.");
                             System.exit(0);
                         }

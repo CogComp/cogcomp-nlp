@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.bigdata.database;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +27,7 @@ import java.util.Map;
 public class DBHelper {
 
 	private static final String sqlDriver = "org.h2.Driver";
+	private static final Logger logger = LoggerFactory.getLogger(DBHelper.class);
 
 	static {
 		try {
@@ -72,7 +75,7 @@ public class DBHelper {
 		String sql = "create table " + tableName + " ( " + tableDefinition
 				+ " )";
 
-		System.out.println(sql);
+		logger.info(sql);
 		statement.executeUpdate(sql);
 
 		statement.close();
@@ -110,7 +113,7 @@ public class DBHelper {
 	private static void checkConnection(String dbFile) {
 		try {
 			Connection connection = connections.get(dbFile);
-			System.out.println("This is "+connection);
+			logger.info("This is "+connection);
 			if (connection.isClosed())
 				initializeConnection(dbFile);
 		} catch (SQLException e) {

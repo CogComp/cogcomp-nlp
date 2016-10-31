@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscreteFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a classifier that takes a {@link Word} as input and
@@ -28,6 +30,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
  * @author Nick Rizzolo
  **/
 public class Capitalization extends Classifier {
+    private static Logger logger = LoggerFactory.getLogger(Capitalization.class);
     public Capitalization() {
         containingPackage = "edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp";
         name = "Capitalization";
@@ -54,7 +57,7 @@ public class Capitalization extends Classifier {
     public FeatureVector classify(Object __example) {
         if (!(__example instanceof Word)) {
             String type = __example == null ? "null" : __example.getClass().getName();
-            System.err.println("Classifier 'Capitalization(Word)' defined on line 45 of CommonFeatures.lbj received '"
+            logger.error("Classifier 'Capitalization(Word)' defined on line 45 of CommonFeatures.lbj received '"
                     + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
@@ -87,7 +90,7 @@ public class Capitalization extends Classifier {
     public FeatureVector[] classify(Object[] examples) {
         if (!(examples instanceof Word[])) {
             String type = examples == null ? "null" : examples.getClass().getName();
-            System.err.println("Classifier 'Capitalization(Word)' defined on line 45 of CommonFeatures.lbj received '"
+            logger.error("Classifier 'Capitalization(Word)' defined on line 45 of CommonFeatures.lbj received '"
                     + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
