@@ -14,18 +14,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSTaggerKnown;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Arrays;
-import java.util.HashSet;
 
 /**
  * Wraps the Illinois part-of-speech tagger in an illinois-core-utilites Annotator, to be a pipeline
