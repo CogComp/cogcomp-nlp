@@ -99,8 +99,11 @@ public class ChunkerTrain {
         System.out.println("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
     }
     public static void main(String[] args) {
-        ChunkerTrain trainer = new ChunkerTrain();
-        trainer.trainModels();
-        trainer.writeModelsToDisk();
+        if(args.length!=4){
+            System.out.println("Usage: ...ChunkerTrain traindata modeldir modelname round");
+        }
+        ChunkerTrain trainer = new ChunkerTrain(Integer.parseInt(args[3]));
+        trainer.trainModels(args[0]);
+        trainer.writeModelsToDisk(args[1],args[2]);
     }
 }

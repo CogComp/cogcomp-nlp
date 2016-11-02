@@ -1,0 +1,3 @@
+[ADVP (RB Arguably) ] (, ,) [NP (DT both) ] [VP (VBD were) ] [PP (IN on) ] [NP (NN notice) ] [SBAR (IN that) ] [NP (PRP$ their) (NN behavior) ] [VP (VBD was) ] [ADVP (IN at) (JJS least) ] [ADJP (JJ risky) ] (. .) 
+[NP (NNP Mr.) (NNP Bush) ] [VP (VBD had) (VBN threatened) ] [NP (DT a) (NN veto) ] [ADVP (RB previously) ] (. .) 
+[NP (DT The) (NN volatility) ] [VP (VBD was) ] [ADJP (JJ dizzying) ] [PP (IN for) ] [NP (NNS traders) ] (. .) 

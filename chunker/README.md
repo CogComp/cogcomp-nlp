@@ -47,21 +47,51 @@ Here is how you can add maven dependencies into your program:
 In general, the best way to use the Chunker is through the [`ChunkerAnnotator class`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerAnnotator.java). Like any other annotator, it is used by calling the `addView()` method on the `TextAnnotation` containing sentences to be tagged.
 
 ```java
-	ChunkerAnnotator chunker  = new ChunkerAnnotator();
+	ChunkerAnnotator chunker  = new ChunkerAnnotator(true);
+	chunker.initialize(new ChunkerConfigurator().getDefaultConfig());
 	chunker.addView(ta);
 ```
+Please also check [ChunkerDemo](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerDemo.java) for more details.
 
 ## Models
 When using`ChunkerAnnotator`, the models are loaded automatically from the directory specified in the `Property` [`ChunkerConfigurator.MODEL_DIR_PATH`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerConfigurator.java)
 
-Thus, to use your own models, simply place them in this directory and they will be loaded; otherwise, the model version 
+Thus, to use your own models, simply place them in this directory and they will be loaded; otherwise, the model version
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
-Note : To use your own models, exclude the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml`.
+Note : To use your own models, exclude the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml` to avoid potential conflicts.
 
 ## Training
-The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to 
-train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level 
+The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to
+train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level
 of the Chunker sub-project using the following command.
 
-    mvn exec:java -Dexec.mainClass="edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain"
+    mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain -Dexec.args="$TRAINFILE $MODELDIR $MODELNAME $ROUND"
+
+Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for more details.
+
+## Off-the-shelf scripts
+There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., illinois-cogcomp-nlp/chunker/. For example,
+```
+cd illinois-cogcomp-nlp/chunker/
+sh scripts/mvn_demo.sh
+```
+1. `mvn_compile.sh`: to compile the illinois-chunker module.
+2. `mvn_validate.sh`: to validate if the illinois-chunker is functioning properly. Specifically, a test run is performed and we compare its output with a provided reference output.
+3. `mvn_benchmark.sh`: to run benchmark tests, access to cogcomp server is required. If the user wants to run his/her own benchmark tests, please change the two properties, `TEST_GOLDPOS_DATA` and `TEST_NOPOS_DATA` in `ChunkerConfigurator.java` and re-compile. Make sure the provided test sets are in the CoNLL2000 format. For example,
+```
+Old - B-NP
+Environmentalism - I-NP
+involved - B-VP
+microbe - B-NP
+hunters - I-NP
+and - O
+sanitationists - B-NP
+. - O
+```
+4. `mvn_demo.sh`: to process a test file (raw text) and output the chunking results (along with the POS annotation). Change the variable `TESTFILE` in it to process your own files.
+5. `mvn_train.sh`: to retrain the chunker model, provided access to proper training sets. Change the `MODELDIR` and `MODELNAME` in it if you need.
+6. `mvn_test_conll.sh`: to test the chunker on a test file (must be in the CoNLL2000 format). If no arguments (for `MODELDIR` and `MODELNAME`) are specified, the chunker will load the default chunker model. To specify `MODELDIR` and `MODELNAME`, use as
+```
+sh scripts/mvn_test_conll.sh (model directory) (model name)
+```
