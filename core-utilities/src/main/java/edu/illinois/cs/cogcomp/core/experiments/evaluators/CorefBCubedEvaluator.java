@@ -47,9 +47,17 @@ public class CorefBCubedEvaluator extends Evaluator {
      * or "macro" statistics. It is more common to use "macro" statistics for BCubed metric.
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
-        this.gold = (CoreferenceView) goldView;
-        this.prediction = (CoreferenceView) predictionView;
+        View goldClone = null;
+        View predictionClone = null;
+        try {
+            goldClone = (View) goldView.clone();
+            predictionClone = (View) predictionView.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        super.cleanAttributes(goldClone, predictionClone);
+        this.gold = (CoreferenceView) goldClone;
+        this.prediction = (CoreferenceView) predictionClone;
         List<Constituent> allGoldConstituents = gold.getConstituents();
         for (Constituent cons : allGoldConstituents) {
             HashSet<Constituent> overlappingGoldCanonicalCons =

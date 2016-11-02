@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * @author Vivek Srikumar
  */
-public class PredicateArgumentView extends View {
+public class PredicateArgumentView extends View implements Cloneable {
 
     public static final String LemmaIdentifier = "predicate";
     public static final String SenseIdentifer = "SenseNumber";
@@ -147,5 +147,10 @@ public class PredicateArgumentView extends View {
         constituents.clear();
         predicates.clear();
         removeAllRelations();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

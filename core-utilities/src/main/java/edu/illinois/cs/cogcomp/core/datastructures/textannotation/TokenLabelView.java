@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class TokenLabelView extends SpanLabelView {
+public class TokenLabelView extends SpanLabelView implements Cloneable {
 
     private static final long serialVersionUID = 2993609232596055554L;
 
@@ -87,5 +87,10 @@ public class TokenLabelView extends SpanLabelView {
                         .append(this.textAnnotation.getToken(i)).append(") ");
         }
         return sb.toString();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

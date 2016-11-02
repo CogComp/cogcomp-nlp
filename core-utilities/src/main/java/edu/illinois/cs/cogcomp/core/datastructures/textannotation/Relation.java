@@ -20,7 +20,7 @@ import java.util.Set;
  *         <p>
  *         Aug 4, 2009
  */
-public class Relation implements Serializable, HasAttributes {
+public class Relation implements Serializable, HasAttributes, Cloneable {
 
     private static final long serialVersionUID = -1005341815252250162L;
     protected final int relationName;
@@ -154,6 +154,11 @@ public class Relation implements Serializable, HasAttributes {
         return bldr.toString();
     }
 
-
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Relation clonedRelation = (Relation) super.clone();
+        //clonedRelation.attributes = new HashMap<>();
+        if(this.attributes != null) clonedRelation.attributes.putAll(this.attributes);
+        return clonedRelation;
+    }
 }

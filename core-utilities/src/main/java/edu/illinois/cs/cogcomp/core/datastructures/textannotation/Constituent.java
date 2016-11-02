@@ -21,7 +21,7 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class Constituent implements Serializable, HasAttributes {
+public class Constituent implements Serializable, HasAttributes, Cloneable {
 
     private static final long serialVersionUID = -4241917156773356414L;
 
@@ -470,6 +470,13 @@ public class Constituent implements Serializable, HasAttributes {
     @Override
     public String toString() {
         return this.getTokenizedSurfaceForm();
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Constituent clonedCons = (Constituent) super.clone();
+        clonedCons.attributes.putAll(this.attributes);
+        return clonedCons;
     }
 
     /**

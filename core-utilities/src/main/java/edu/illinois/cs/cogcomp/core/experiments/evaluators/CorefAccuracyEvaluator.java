@@ -21,12 +21,21 @@ import java.util.List;
  */
 public class CorefAccuracyEvaluator extends Evaluator {
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
+        View goldClone = null;
+        View predictionClone = null;
+        try {
+            goldClone = (View) goldView.clone();
+            predictionClone = (View) predictionView.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        super.cleanAttributes(goldClone, predictionClone);
+
         int overlapCount = 0;
         int predCount = 0;
         int goldCount = 0;
-        CoreferenceView gold = (CoreferenceView) goldView;
-        CoreferenceView prediction = (CoreferenceView) predictionView;
+        CoreferenceView gold = (CoreferenceView) goldClone;
+        CoreferenceView prediction = (CoreferenceView) predictionClone;
         List<Constituent> allGoldConstituents = gold.getConstituents();
         for (Constituent cons1 : allGoldConstituents) {
             HashSet<Constituent> conferents1gold =

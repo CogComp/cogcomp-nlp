@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import com.sun.tools.internal.jxc.ap.Const;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -559,4 +560,9 @@ public class View implements Serializable, IQueryable<Constituent> {
         return this.constituents.size();
     }
 
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        View view = (View) super.clone();
+        return view;
+    }
 }
