@@ -55,8 +55,8 @@ public class PredicateArgumentEvaluator extends Evaluator {
         View goldClone = null;
         View predictionClone = null;
         try {
-            goldClone = (View) gold.clone();
-            predictionClone = (View) prediction.clone();
+            goldClone = (View) goldView.clone();
+            predictionClone = (View) predictionView.clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }

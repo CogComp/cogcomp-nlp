@@ -20,7 +20,7 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 
-public class CoreferenceView extends View {
+public class CoreferenceView extends View implements Cloneable {
 
     private static final long serialVersionUID = -5490913231260663181L;
 
