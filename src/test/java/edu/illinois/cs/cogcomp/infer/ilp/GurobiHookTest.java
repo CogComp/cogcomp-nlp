@@ -17,9 +17,9 @@ public class GurobiHookTest {
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
-        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
         ojaHook.setMaximize(false);
 
@@ -46,9 +46,9 @@ public class GurobiHookTest {
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
-        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
         ojaHook.setMaximize(true);
 
@@ -76,9 +76,9 @@ public class GurobiHookTest {
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
-        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
         ojaHook.setMaximize(true);
 
@@ -106,9 +106,9 @@ public class GurobiHookTest {
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
-        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
         ojaHook.setMaximize(false);
 
@@ -128,17 +128,17 @@ public class GurobiHookTest {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
-        double[] objCoefs = {1.5, 2.5};
+        double[] objcoeffs = {1.5, 2.5};
         int i = 0;
         while (i< 2) {
-            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
-        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
         ojaHook.setMaximize(true);
 
@@ -158,17 +158,17 @@ public class GurobiHookTest {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
-        double[] objCoefs = {1.5, 2.5};
+        double[] objcoeffs = {1.5, 2.5};
         int i = 0;
         while (i< 2) {
-            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
-        ojaHook.addLessThanConstraint(varInds, coefs, 2);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 2);
 
         ojaHook.setMaximize(false);
 
@@ -188,17 +188,17 @@ public class GurobiHookTest {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
-        double[] objCoefs = {1.5, 2.5};
+        double[] objcoeffs = {1.5, 2.5};
         int i = 0;
         while (i< 2) {
-            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coefs = { 1, 2 };
-        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
-        ojaHook.addLessThanConstraint(varInds, coefs, 2);
+        double[] coeffs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
+        ojaHook.addLessThanConstraint(varInds, coeffs, 2);
 
         ojaHook.setMaximize(true);
 
@@ -218,16 +218,16 @@ public class GurobiHookTest {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[3];
 
-        double[] objCoefs = {-1, -1, -1};
+        double[] objcoeffs = {-1, -1, -1};
         int i = 0;
         while (i< 3) {
-            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coefs = { 1, 1, 1};
-        ojaHook.addEqualityConstraint(varInds, coefs, 3);
+        double[] coeffs = { 1, 1, 1};
+        ojaHook.addEqualityConstraint(varInds, coeffs, 3);
         ojaHook.setMaximize(true);
 
         try {
@@ -246,14 +246,14 @@ public class GurobiHookTest {
     public void testProgram9() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
 
-        double[] objCoefs = {0, -1};
-        ojaHook.addDiscreteVariable(objCoefs);
-        ojaHook.addDiscreteVariable(objCoefs);
-        ojaHook.addDiscreteVariable(objCoefs);
+        double[] objcoeffs = {0, -1};
+        ojaHook.addDiscreteVariable(objcoeffs);
+        ojaHook.addDiscreteVariable(objcoeffs);
+        ojaHook.addDiscreteVariable(objcoeffs);
 
-        double[] coefs = { 1, 1, 1};
+        double[] coeffs = { 1, 1, 1};
         int[] varInds = {1, 3, 5};
-        ojaHook.addEqualityConstraint(varInds, coefs, 3);
+        ojaHook.addEqualityConstraint(varInds, coeffs, 3);
         ojaHook.setMaximize(true);
 
         try {
