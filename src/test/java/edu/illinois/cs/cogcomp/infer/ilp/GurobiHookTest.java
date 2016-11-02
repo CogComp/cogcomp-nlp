@@ -1,50 +1,289 @@
 package edu.illinois.cs.cogcomp.infer.ilp;
 
-import gurobi.*;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.assertTrue;
 
 public class GurobiHookTest {
+    @Test
+    public void testProgram1() throws Exception {
+        GurobiHook ojaHook = new GurobiHook();
+        int[] varInds = new int[2];
+
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(-1.0);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
+        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+
+        ojaHook.setMaximize(false);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(ojaHook.objectiveValue() == -2.0);
+        assertTrue(ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+    }
 
     @Test
-    public void testGurobi() throws GRBException {
-        try {
-            GRBEnv env = new GRBEnv();
-            GRBModel model = new GRBModel(env);
+    public void testProgram2() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
 
-            // Create variables
-            GRBVar x = model.addVar(0.0, 1.0, -1.0, GRB.BINARY, "x");
-            GRBVar y = model.addVar(0.0, 1.0, -1.0, GRB.BINARY, "y");
-            GRBVar z = model.addVar(0.0, 1.0, -2.0, GRB.BINARY, "z");
-
-            // Integrate new variables
-            model.update();
-
-            // Add constraint: x + 2 y + 3 z <= 4
-            GRBLinExpr expr = new GRBLinExpr();
-            expr.addTerm(1.0, x);
-            expr.addTerm(2.0, y);
-            expr.addTerm(3, z);
-            model.addConstr(expr, GRB.LESS_EQUAL, 4.0, "c0");
-
-            // Add constraint: x + y >= 1
-            expr = new GRBLinExpr();
-            expr.addTerm(1.0, x);
-            expr.addTerm(1.0, y);
-            model.addConstr(expr, GRB.GREATER_EQUAL, 1.0, "c1");
-
-            // Optimize model
-            model.optimize();
-
-            assertEquals("x", x.get(GRB.StringAttr.VarName));
-            assertEquals(1.0, x.get(GRB.DoubleAttr.X), 0.0);
-            assertEquals(0.0, y.get(GRB.DoubleAttr.X), 0.0);
-            assertEquals(1.0, z.get(GRB.DoubleAttr.X), 0.0);
-            assertEquals(-3.0, model.get(GRB.DoubleAttr.ObjVal), 0.0);
-        } catch (UnsatisfiedLinkError e) {
-            System.out.println("\n\n**** GUROBI LICENSE NOT FOUND! SKIPPING THE TEST ****\n\n");
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(-1.0);
+            varInds[i] = x;
+            i++;
         }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
+        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 0);
+        assertTrue(!ojaHook.getBooleanValue(0));
+        assertTrue(!ojaHook.getBooleanValue(1));
     }
+
+
+    @Test
+    public void testProgram3() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
+
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(1.5);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
+        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 3);
+        assertTrue(ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+    }
+
+    @Test
+    public void testProgram4() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
+
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(1.5);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, -3);
+        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+
+        ojaHook.setMaximize(false);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 0);
+        assertTrue(!ojaHook.getBooleanValue(0));
+        assertTrue(!ojaHook.getBooleanValue(1));
+    }
+
+    @Test
+    public void testProgram5() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
+
+        double[] objCoefs = {1.5, 2.5};
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
+        ojaHook.addLessThanConstraint(varInds, coefs, 4);
+
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 4);
+        assertTrue(ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+    }
+
+    @Test
+    public void testProgram6() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
+
+        double[] objCoefs = {1.5, 2.5};
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
+        ojaHook.addLessThanConstraint(varInds, coefs, 2);
+
+        ojaHook.setMaximize(false);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 1.5);
+        assertTrue(ojaHook.getBooleanValue(0));
+        assertTrue(!ojaHook.getBooleanValue(1));
+    }
+
+    @Test
+    public void testProgram7() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[2];
+
+        double[] objCoefs = {1.5, 2.5};
+        int i = 0;
+        while (i< 2) {
+            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 2 };
+        ojaHook.addGreaterThanConstraint(varInds, coefs, 1);
+        ojaHook.addLessThanConstraint(varInds, coefs, 2);
+
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == 2.5);
+        assertTrue(!ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+    }
+
+    @Test
+    public void testProgram8() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+        int[] varInds = new int[3];
+
+        double[] objCoefs = {-1, -1, -1};
+        int i = 0;
+        while (i< 3) {
+            int x = ojaHook.addBooleanVariable(objCoefs[i]);
+            varInds[i] = x;
+            i++;
+        }
+
+        double[] coefs = { 1, 1, 1};
+        ojaHook.addEqualityConstraint(varInds, coefs, 3);
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == -3);
+        assertTrue(ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+        assertTrue(ojaHook.getBooleanValue(2));
+    }
+
+    @Test
+    public void testProgram9() throws Exception {
+        OJalgoHook ojaHook = new OJalgoHook();
+
+        double[] objCoefs = {0, -1};
+        ojaHook.addDiscreteVariable(objCoefs);
+        ojaHook.addDiscreteVariable(objCoefs);
+        ojaHook.addDiscreteVariable(objCoefs);
+
+        double[] coefs = { 1, 1, 1};
+        int[] varInds = {1, 3, 5};
+        ojaHook.addEqualityConstraint(varInds, coefs, 3);
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ojaHook.printModelInfo();
+
+        assertTrue(ojaHook.objectiveValue() == -3);
+        assertTrue(!ojaHook.getBooleanValue(0));
+        assertTrue(ojaHook.getBooleanValue(1));
+        assertTrue(!ojaHook.getBooleanValue(2));
+        assertTrue(ojaHook.getBooleanValue(3));
+        assertTrue(!ojaHook.getBooleanValue(4));
+        assertTrue(ojaHook.getBooleanValue(5));
+    }
+
 }
