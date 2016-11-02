@@ -36,7 +36,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram2() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         int i = 0;
@@ -58,8 +58,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == 0);
         assertTrue(!ojaHook.getBooleanValue(0));
         assertTrue(!ojaHook.getBooleanValue(1));
@@ -68,7 +66,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram3() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         int i = 0;
@@ -90,7 +88,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
 
         assertTrue(ojaHook.objectiveValue() == 3);
         assertTrue(ojaHook.getBooleanValue(0));
@@ -99,7 +96,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram4() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         int i = 0;
@@ -121,8 +118,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == 0);
         assertTrue(!ojaHook.getBooleanValue(0));
         assertTrue(!ojaHook.getBooleanValue(1));
@@ -130,7 +125,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram5() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         double[] objCoefs = {1.5, 2.5};
@@ -153,8 +148,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == 4);
         assertTrue(ojaHook.getBooleanValue(0));
         assertTrue(ojaHook.getBooleanValue(1));
@@ -162,7 +155,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram6() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         double[] objCoefs = {1.5, 2.5};
@@ -185,8 +178,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == 1.5);
         assertTrue(ojaHook.getBooleanValue(0));
         assertTrue(!ojaHook.getBooleanValue(1));
@@ -194,7 +185,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram7() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
 
         double[] objCoefs = {1.5, 2.5};
@@ -217,8 +208,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == 2.5);
         assertTrue(!ojaHook.getBooleanValue(0));
         assertTrue(ojaHook.getBooleanValue(1));
@@ -226,7 +215,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram8() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[3];
 
         double[] objCoefs = {-1, -1, -1};
@@ -247,8 +236,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == -3);
         assertTrue(ojaHook.getBooleanValue(0));
         assertTrue(ojaHook.getBooleanValue(1));
@@ -257,7 +244,7 @@ public class GurobiHookTest {
 
     @Test
     public void testProgram9() throws Exception {
-        OJalgoHook ojaHook = new OJalgoHook();
+        GurobiHook ojaHook = new GurobiHook();
 
         double[] objCoefs = {0, -1};
         ojaHook.addDiscreteVariable(objCoefs);
@@ -275,8 +262,6 @@ public class GurobiHookTest {
             e.printStackTrace();
         }
 
-        ojaHook.printModelInfo();
-
         assertTrue(ojaHook.objectiveValue() == -3);
         assertTrue(!ojaHook.getBooleanValue(0));
         assertTrue(ojaHook.getBooleanValue(1));
@@ -285,5 +270,8 @@ public class GurobiHookTest {
         assertTrue(!ojaHook.getBooleanValue(4));
         assertTrue(ojaHook.getBooleanValue(5));
     }
+
+
+
 
 }
