@@ -271,7 +271,30 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(5));
     }
 
+    @Test
+    public void testProgram10() throws Exception {
+        GurobiHook ojaHook = new GurobiHook();
+
+        double[] objcoeffs = {0, 1, 2};
+        int[] indices = ojaHook.addDiscreteVariable(objcoeffs);
 
 
+        ojaHook.setMaximize(true);
+
+        try {
+            ojaHook.solve();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(indices[0] + "/ " + indices[1] + " / " + indices[2]);
+        ojaHook.printSolution();
+        ojaHook.printModelStatus();
+
+        assertTrue(ojaHook.objectiveValue() == 2);
+        assertTrue(ojaHook.getBooleanValue(indices[2]));
+        assertTrue(!ojaHook.getBooleanValue(indices[1]));
+        assertTrue(!ojaHook.getBooleanValue(indices[0]));
+    }
 
 }

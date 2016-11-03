@@ -6,7 +6,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-inference</artifactId>
 	<packaging>jar</packaging>
-	<version>0.7.0</version>
+	<version>0.8.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

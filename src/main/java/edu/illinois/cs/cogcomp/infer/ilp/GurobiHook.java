@@ -439,12 +439,27 @@ public class GurobiHook implements ILPSolver {
 
     @Override
     public int getIntegerValue(int index) {
+        if (!isSolved)
+            return 0;
+        try {
+            double x = ((GRBVar) variables.get(index)).get(GRB.DoubleAttr.X);
+            return (int)Math.round(x);
+        } catch (GRBException e) {
+            handleException(e);
+        }
         return 0;
     }
 
     @Override
     public double getRealValue(int index) {
-        return 0;
+        if (!isSolved)
+            return 0.0;
+        try {
+            return ((GRBVar) variables.get(index)).get(GRB.DoubleAttr.X);
+        } catch (GRBException e) {
+            handleException(e);
+        }
+        return 0.0;
     }
 
 

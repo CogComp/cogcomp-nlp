@@ -287,5 +287,4 @@ public class OJalgoHookTest {
         assertTrue(!ojaHook.getBooleanValue(4));
         assertTrue(ojaHook.getBooleanValue(5));
     }
-
 }
