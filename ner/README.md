@@ -16,7 +16,37 @@ and press 'Download'. The next screen displays the license.
 
 This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
 
-### FROM THE COMMAND LINE
+### Using the Menu Driven Command Line Application
+
+IllinoisNER now includes a powerful menu driven command line application. This application provides users a flexible environment
+supporting applications ranging from simple evaluation to complex bulk tagging. The configuration file must be passed in on the command
+line, although there is the option to modify the confiruation during at runtime.
+
+The top level menu is as follows:
+
+```bash
+1 - select input [<input file or directory>]
+2 - change output [<output file or directory>]
+3 - annotate <input file or directory>, storing <output file or directory>
+4 - show and modify configuration parameters.
+q - exit the application.
+Choose from above options:
+```
+The first option(enter "1" on the keyboard) allows users to enter the name of an input file or directory. The second likewise
+for an output file or directory. Once these parameters have been set it is possible to do multiple runs, potentially changing
+configuration parameters. If no input is specified, standard input is assumed. If output is not specified, it is delivered on 
+standard out. When the user selects option 3, all inputs will be processed and delivered as separate files if an output directory
+is selected, or in a single file, or if nothing is selected to standard out. If you want to change configuration parameters, enter
+"4" and follow the instructions on the following page.
+
+To run this application run the runNER.sh bash script:
+
+```bash
+$ ./scripts/runNER.sh configFilename
+```
+This script requires the configuration file name.
+
+### Simple COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
 following commands (plain text files are included in `test/SampleInputs/`).
@@ -30,7 +60,6 @@ This will annotate each file in the input directory with 4 NER categories: PER, 
 of `config/ner.properties` to **NER_ONTONOTES**, your input text will be annotated with 18 labels. In both cases, 
 each input file will be annotated in bracket format and the result written to a file with the same name 
 under the directory `output/`.
-
 
 ### PROGRAMMATIC USE
 

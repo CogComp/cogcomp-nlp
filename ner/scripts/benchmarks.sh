@@ -18,7 +18,6 @@
 #     train/, and evaluating on the data in test/.
 
 
-DATADIR=benchmarkData
 DIST=target
 LIB=target/dependency
 
@@ -43,7 +42,7 @@ for JAR in `ls $LIB/*jar`; do
     cpath="$cpath:$JAR"
 done
 
-CMD="java -classpath  ${cpath} -Xmx12g edu.illinois.cs.cogcomp.ner.NerBenchmark -d $DATADIR $1 $2 $3"
+CMD="java -classpath  ${cpath} -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8001 -Xmx12g edu.illinois.cs.cogcomp.ner.NerBenchmark $1 $2 $3 $4 $5"
 
 echo "$0: running command '$CMD'..."
 

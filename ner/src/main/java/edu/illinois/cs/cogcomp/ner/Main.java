@@ -409,15 +409,16 @@ public class Main extends AbstractMain {
                 else if (token.getEndCharOffset() <= entity.getEndCharOffset())
                     break; // we are inside of the entity.
             }
-            sb.append(token.getSurfaceForm());
+            String sf = token.getSurfaceForm();
+            sb.append(sf);
             sb.append(' ');
             if (entityindx < entities.size()) {
                 Constituent entity = entities.get(entityindx);
                 if (token.getStartCharOffset() == entity.getStartCharOffset()) {
                     if (token.getEndCharOffset() == entity.getEndCharOffset()) {
-                        sb.append("U-" + entity.getLabel());
+                        sb.append("B-" + entity.getLabel());
                     } else if (token.getEndCharOffset() > entity.getEndCharOffset()) {
-                        sb.append("U-" + entity.getLabel());
+                        sb.append("B-" + entity.getLabel());
                         System.err
                                 .println("Odd. There is an entity enclosed within a single token!");
                     } else {

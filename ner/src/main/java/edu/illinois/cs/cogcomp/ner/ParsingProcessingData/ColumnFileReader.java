@@ -25,26 +25,57 @@ class ColumnFileReader extends ColumnFormat {
         filename = file;
     }
 
+    int linec = 0;
     public Object next() {
-        // System.out.println("next");
+        String token = null;
+        String pos = null;
+        String label = null;
+        linec++;
+        // Skip to start of next line, skip unnecessary blank lines, headers and so on.
         String[] line = (String[]) super.next();
-        while (line != null && (line.length == 0 || line[4].equals("-X-")))
+        while (line != null && (line.length == 0 || (line.length > 4 && line[4].equals("-X-")))) {
             line = (String[]) super.next();
+            linec++;
+        }
         if (line == null)
             return null;
+        
+        // parse the data, CoNLL 2002 or CoNLL 2003.
+        if (line.length == 2) {
+            token = line[0];
+            label = line[1];
+        } else {
+            token = line[5];
+            label = line[0];
+            pos = line[4];
+        }
 
         LinkedVector res = new LinkedVector();
-        NEWord w = new NEWord(new Word(line[5], line[4]), null, line[0]);
+        NEWord w = new NEWord(new Word(token, pos), null, label);
         NEWord.addTokenToSentence(res, w.form, w.neLabel);
-
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {
-            w = new NEWord(new Word(line[5], line[4]), null, line[0]);
+            linec++;
+            
+            // parse the data, CoNLL 2002 or CoNLL 2003.
+            if (line.length == 2) {
+                token = line[0];
+                label = line[1];
+            } else  if (line.length > 5) {
+                token = line[5];
+                label = line[0];
+                pos = line[4];
+            } else {
+                System.out.println("Line "+linec+" in "+filename+" is wrong with "+line.length);
+                for (String a : line) System.out.print(":"+a);
+                System.out.println();
+                continue;
+            }
+            w = new NEWord(new Word(token, pos), null, label);
             NEWord.addTokenToSentence(res, w.form, w.neLabel);
         }
         if (res.size() == 0)
             return null;
-
         return res;
     }
 

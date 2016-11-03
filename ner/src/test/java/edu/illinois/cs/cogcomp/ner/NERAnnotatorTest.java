@@ -7,7 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
-
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -15,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
@@ -24,8 +24,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import weka.core.Debug.Random;
 
 import static org.junit.Assert.*;
 
@@ -104,7 +102,7 @@ public class NERAnnotatorTest {
 
     /** this helper can create text annotations from text. */
     private static final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
-            new IllinoisTokenizer());
+            new StatefulTokenizer());
 
     /** static annotator. */
     static private NERAnnotator nerAnnotator = null;

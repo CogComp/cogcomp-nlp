@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -56,7 +56,7 @@ public class TestWriteSVMLightFormat {
     @BeforeClass
     public static void runBeforeAllTests() {
         bcfex = BrownClusterFeatureExtractor.instance1000; // "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt"
-        taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        taBldr = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
         ta =
                 taBldr.createTextAnnotation(
                         "test",
