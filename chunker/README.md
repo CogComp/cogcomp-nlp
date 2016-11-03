@@ -1,6 +1,6 @@
 # Illinois Chunker (Shallow Parser)
 
-Chunking(Shallow Parsing) is the identification of constituents (noun groups, verbs, verb groups etc.) in a sentence. The system implemented here is based of the following paper: 
+Chunking (Shallow Parsing) is the identification of constituents (noun groups, verbs, verb groups etc.) in a sentence. The system implemented here is based of the following paper: 
 
 ```
 @inproceedings{PunyakanokRo01,
@@ -34,6 +34,7 @@ Here is how you can add maven dependencies into your program:
     </repositories>
     
     <dependencies>
+    <!--Remove this dependency if you want to train your own model-->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
@@ -56,19 +57,19 @@ Please also check [ChunkerDemo](src/main/java/edu/illinois/cs/cogcomp/chunker/ma
 ## Models
 When using`ChunkerAnnotator`, the models are loaded automatically from the directory specified in the `Property` [`ChunkerConfigurator.MODEL_DIR_PATH`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerConfigurator.java)
 
-Thus, to use your own models, simply place them in this directory and they will be loaded; otherwise, the model version
+Thus, to use your own models (maybe you need to train your models first; please read the following section `Training`), simply place them in this directory and they will be loaded; otherwise, the model version
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
-Note : To use your own models, exclude the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml` to avoid potential conflicts.
+**Note** : To use your own models, **exclude** the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml` to avoid potential conflicts.
 
 ## Training
 The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to
 train the models for a Chunker provided you have access to the necessary training data. It can be called from the top-level
-of the Chunker sub-project using the following command.
-
-    mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain -Dexec.args="$TRAINFILE $MODELDIR $MODELNAME $ROUND"
-
-Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for more details.
+of the Chunker sub-project using the following command (`[DEV_RATIO]` means optional). `MODELDIR` and `MODELNAME` are the dir and name of the model you want to save, respectively. `ROUND` is the number of iterations. `DEV_RATIO` is the portion of training set you want to use as development set and it should be between 0 and 1. When `DEV_RATIO` is specified, `ROUND` is explained as the maximum number of iterations and the chunker will select the iter number (from 1 to `ROUND`) based on its performance on development set.
+```
+mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain -Dexec.args="$TRAINFILE $MODELDIR $MODELNAME $ROUND [$DEV_RATIO]"
+```
+Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for an example of usage.
 
 ## Off-the-shelf scripts
 There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., illinois-cogcomp-nlp/chunker/. For example,
@@ -89,7 +90,7 @@ and - O
 sanitationists - B-NP
 . - O
 ```
-4. `mvn_demo.sh`: to process a test file (raw text) and output the chunking results (along with the POS annotation). Change the variable `TESTFILE` in it to process your own files.
+4. `mvn_demo.sh`: to process a test file (raw text) and output the chunking results (along with the POS annotation). Change the variable `TESTFILE` in it to process your own files. The demo script uses `ChunkerAnnotator`, which loads the model specified in `ChunkerConfigurator` (the two properties therein, `MODEL_DIR_PATH` and `MODEL_NAME`). The current configuration loads the `illinois-chunker-model` from the dependency list. Therefore, if a new model is needed, please change the two properties correspondingly to your own dir.
 5. `mvn_train.sh`: to retrain the chunker model, provided access to proper training sets. Change the `MODELDIR` and `MODELNAME` in it if you need.
 6. `mvn_test_conll.sh`: to test the chunker on a test file (must be in the CoNLL2000 format). If no arguments (for `MODELDIR` and `MODELNAME`) are specified, the chunker will load the default chunker model. To specify `MODELDIR` and `MODELNAME`, use as
 ```
