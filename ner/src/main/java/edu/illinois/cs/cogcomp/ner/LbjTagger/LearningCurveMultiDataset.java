@@ -32,7 +32,7 @@ public class LearningCurveMultiDataset {
 
     /**
      * Build a final model, using both test and train as training data, and using dev
-     * as a hold-out set for automatic conversion.
+     * as a hold-out set for automatic convergence.
      * <p>
      * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
      * @param fixedNumIterations -1 to auto-converge, otherwise number of iterations.
