@@ -11,7 +11,6 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Document;
@@ -29,26 +28,28 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 
 /**
  * Read the ERE data and produce, in CoNLL format, gold standard 
- * data includeding named and nominal named entities, but excluding
- * pronouns.
+ * data including named and nominal named entities, but excluding pronouns.
  * @author redman
  */
-public class ConvertEREToGoldStandard {
+public class ConvertEREToCoNLLFormat {
 
     /**
      * @param args
      * @throws Exception 
      */
     public static void main(String[] args) throws Exception {
-        final String source = 
-                        "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/source/";
-        final String golds = 
-                        "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/ere/";
-        final String conll = 
-                        "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/inCoNLL/";
+        if (args.length < 3) {
+            System.err.println("Three arguments are required in the following order:\n"
+                + "<argument 1> should be the source directory containing the ERE unstructured source text.\n"
+                + "<argument 2> should contain the ERE labeled data.\n"
+                + "<argument 3> is the directory were results will be placed.");
+            System.exit(1);
+        }
+        final String source = args[0];  //  "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/source/";
+        final String golds = args[1];   // "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/ere/";
+        final String conll = args[2];   // "/Volumes/xdata/CCGStuff/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/inCoNLL/";
         String[] goldfiles = new File(golds).list();
         EREDocumentReader dr = new EREDocumentReader("ERE Corpora",  source);
-        int counter = 0;
         int gold_counter = 0;
         while(dr.hasNext()) {
             TextAnnotation ta = dr.next();            
@@ -63,7 +64,6 @@ public class ConvertEREToGoldStandard {
                 System.out.println(ta.getCorpusId()+"="+goldfiles[gold_counter]);
                 Document doc = SimpleXMLParser.getDocument(golds+goldfiles[gold_counter]);
                 Element element = doc.getDocumentElement();
-                NamedNodeMap nnMap = element.getAttributes();
                 Element entityElement = SimpleXMLParser.getElement(element, "entities");
                 NodeList entityNL = entityElement.getElementsByTagName("entity");
                 for (int i = 0; i < entityNL.getLength(); ++i) {
@@ -74,7 +74,6 @@ public class ConvertEREToGoldStandard {
                 gold_counter++;
             }
             CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta, conll+ta.getCorpusId()+".txt");
-            counter++;
         }
     }
     static private int starts [];
@@ -198,8 +197,8 @@ public class ConvertEREToGoldStandard {
             } catch (RuntimeException re) {
                 boolean siwaszero = false;
                 if (si == 0) {siwaszero = true;}
-                si = ConvertEREToGoldStandard.findStartIndexIgnoreError(offset);
-                ei = ConvertEREToGoldStandard.findEndIndexIgnoreError(offset+length);
+                si = ConvertEREToCoNLLFormat.findStartIndexIgnoreError(offset);
+                ei = ConvertEREToCoNLLFormat.findEndIndexIgnoreError(offset+length);
                 if (siwaszero)
                     System.err.println("Could not find start token : text='"+text+"' at "+offset+" to "+ (offset + length));
                 else
