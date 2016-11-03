@@ -462,6 +462,13 @@ public class GurobiHook implements ILPSolver {
         return 0.0;
     }
 
+    public int getVariableSize() {
+        return variables.size();
+    }
+
+    public OVector getVariables() {
+        return variables;
+    }
 
     /**
      * When the problem has been solved, use this method to retrieve the value of the objective
