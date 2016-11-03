@@ -95,3 +95,9 @@ sanitationists - B-NP
 ```
 sh scripts/mvn_test_conll.sh (model directory) (model name)
 ```
+## Tips for IntelliJ users
+Command line use can be found in [scripts](scripts/). But if you want to use IDEs like IntelliJ, please check the following tips before running.
+### Import project
+Please import the `illinois-cogcomp-nlp` project from `Existing Sources` using the external model `Maven`.
+### Setup
+Select the `Run` tab. From the drop-down menu, select `Edit Configurations`. In the `Configuration` tab therein, specify the `Working directory` to be `$MODULE_DIR$`. Also, don't forget to set up corresponding `Program arguments`.
