@@ -183,6 +183,7 @@ public class ChunkerTrain {
         if(args.length!=4&&args.length!=5){
             System.out.println("Usage1: ...ChunkerTrain traindata modeldir modelname round");
             System.out.println("Usage2: ...ChunkerTrain traindata modeldir modelname max_round dev_ratio");
+            System.exit(-1);
         }
         ChunkerTrain trainer = new ChunkerTrain(Integer.parseInt(args[3]));
         if(args.length==4) {
