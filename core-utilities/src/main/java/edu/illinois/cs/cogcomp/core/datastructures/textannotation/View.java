@@ -561,6 +561,16 @@ public class View implements Serializable, IQueryable<Constituent> {
     @Override
     public Object clone() throws CloneNotSupportedException {
         View view = (View) super.clone();
+        QueryableList<Relation> relationsTmp = new QueryableList<>(view.relations);
+        view.relations.clear();
+        for(Relation r : relationsTmp) {
+            view.relations.add((Relation) r.clone());
+        }
+        QueryableList<Constituent> constituentsTmp = new QueryableList<>(view.constituents);
+        view.constituents.clear();
+        for(Constituent r : constituentsTmp) {
+            view.constituents.add((Constituent) r.clone());
+        }
         return view;
     }
 }
