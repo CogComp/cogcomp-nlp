@@ -475,7 +475,8 @@ public class Constituent implements Serializable, HasAttributes, Cloneable {
     @Override
     public Object clone() throws CloneNotSupportedException {
         Constituent clonedCons = (Constituent) super.clone();
-        clonedCons.attributes = new HashMap<>(this.attributes);
+        if(this.attributes != null)
+            clonedCons.attributes = new HashMap<>(this.attributes);
         return clonedCons;
     }
 
