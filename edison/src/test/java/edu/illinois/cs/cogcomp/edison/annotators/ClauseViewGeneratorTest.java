@@ -15,13 +15,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ClauseViewGeneratorTest extends TestCase {
+import static org.junit.Assert.fail;
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class ClauseViewGeneratorTest {
 
+//    public void setUp() throws Exception {
+//        super.setUp();
+//    }
+
+    @Test
     public final void testClauseViewGenerator() {
         String text =
                 "Freeport-McMoRan Inc. said it will convert its Freeport-McMoRan Energy Partners Ltd. "

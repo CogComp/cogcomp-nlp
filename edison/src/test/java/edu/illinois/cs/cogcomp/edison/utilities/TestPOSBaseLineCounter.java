@@ -15,9 +15,11 @@ import java.util.TreeMap;
 
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestPOSBaseLineCounter extends TestCase {
+public class TestPOSBaseLineCounter {
 
+    @Test
     public final void test() throws Exception {
 
         POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");

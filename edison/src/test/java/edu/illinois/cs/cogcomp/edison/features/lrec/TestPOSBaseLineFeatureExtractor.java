@@ -16,12 +16,13 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestPOSBaseLineFeatureExtractor extends TestCase {
+public class TestPOSBaseLineFeatureExtractor {
 
     private static List<TextAnnotation> tas;
 
@@ -33,10 +34,7 @@ public class TestPOSBaseLineFeatureExtractor extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
         System.out.println("POSBaseLine Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test

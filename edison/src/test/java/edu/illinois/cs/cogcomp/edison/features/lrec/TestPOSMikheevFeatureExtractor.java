@@ -17,13 +17,15 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import junit.framework.TestCase;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.*;
 
 
-public class TestPOSMikheevFeatureExtractor extends TestCase {
+public class TestPOSMikheevFeatureExtractor {
 
     private static List<TextAnnotation> tas;
 
@@ -35,10 +37,7 @@ public class TestPOSMikheevFeatureExtractor extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
 
         POSMikheevFeatureExtractor posMikheev =
