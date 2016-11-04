@@ -19,6 +19,7 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
@@ -31,7 +32,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TestClauseFeatureExtractor extends TestCase {
+public class TestClauseFeatureExtractor {
     private static List<TextAnnotation> tas;
 
     static {
@@ -42,6 +43,7 @@ public class TestClauseFeatureExtractor extends TestCase {
         }
     }
 
+    @Test
     public final void testClauseView() throws Exception {
         testFex(ClauseFeatureExtractor.CHARNIAK);
     }

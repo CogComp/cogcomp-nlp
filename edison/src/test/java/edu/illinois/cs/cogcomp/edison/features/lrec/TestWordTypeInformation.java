@@ -31,13 +31,16 @@ import java.util.Random;
 import java.io.Writer;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
 
 /**
  * Test class for SHALLOW PARSER WordTypeInformation Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestWordTypeInformation extends TestCase {
+public class TestWordTypeInformation {
     static Logger log = Logger.getLogger(TestAffixes.class.getName());
 
     private static List<TextAnnotation> tas;
@@ -50,10 +53,7 @@ public class TestWordTypeInformation extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
 
         log.debug("WordTypeInformation");

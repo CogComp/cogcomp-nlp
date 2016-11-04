@@ -13,20 +13,20 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Vivek Srikumar
  */
-public class TestContextFeatureExtractor extends TestCase {
+public class TestContextFeatureExtractor {
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public void testGetFeaturesIndexWithoutConstituent() throws EdisonException {
         ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, true);
 
@@ -71,6 +71,7 @@ public class TestContextFeatureExtractor extends TestCase {
 
     }
 
+    @Test
     public void testGetFeaturesIndexWithConstituent() throws EdisonException {
         ContextFeatureExtractor fex = new ContextFeatureExtractor(2, true, false);
 
@@ -117,6 +118,7 @@ public class TestContextFeatureExtractor extends TestCase {
 
     }
 
+    @Test
     public void testGetFeaturesNoIndexWithoutConstituent() throws EdisonException {
         ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, true);
 
@@ -160,6 +162,7 @@ public class TestContextFeatureExtractor extends TestCase {
 
     }
 
+    @Test
     public void testGetFeaturesNoIndexWithConstituent() throws EdisonException {
         ContextFeatureExtractor fex = new ContextFeatureExtractor(2, false, false);
 

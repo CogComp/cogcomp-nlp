@@ -30,13 +30,14 @@ import java.util.Random;
 import java.io.Writer;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * Test class for SHALLOW PARSER SOPrevious Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestMixedChunkWindowTwoBeforePOSWindowThreeBefore extends TestCase {
+public class TestMixedChunkWindowTwoBeforePOSWindowThreeBefore {
     static Logger log = Logger.getLogger(TestMixedChunkWindowTwoBeforePOSWindowThreeBefore.class
             .getName());
 
@@ -52,10 +53,7 @@ public class TestMixedChunkWindowTwoBeforePOSWindowThreeBefore extends TestCase 
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
 
         log.debug("SOPREVIOUS");

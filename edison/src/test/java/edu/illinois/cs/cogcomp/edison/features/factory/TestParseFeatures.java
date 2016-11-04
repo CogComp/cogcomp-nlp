@@ -14,11 +14,14 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class
@@ -30,7 +33,7 @@ import java.util.Set;
  * edited by Pavankumar Reddy M
  *
  */
-public class TestParseFeatures extends TestCase {
+public class TestParseFeatures {
     private static List<TextAnnotation> tas;
 
     private static String annotatedString = "TextAnnotation: " +
@@ -50,11 +53,12 @@ public class TestParseFeatures extends TestCase {
     }
 
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
     
 
+    @Test
     public final void testSampleAnnotation() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
         if (!ta.toString().equals(annotatedString)) {
@@ -66,7 +70,7 @@ public class TestParseFeatures extends TestCase {
             throw new EdisonException("SRL_VERB view is missing");
     }
     
-
+    @Test
     public final void testParseHeadWordPOS() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
 
@@ -109,7 +113,7 @@ public class TestParseFeatures extends TestCase {
 
     }
     
-
+    @Test
     public final void testParsePath() throws Exception {
         System.out.println("Testing parse path: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
@@ -149,7 +153,7 @@ public class TestParseFeatures extends TestCase {
 
     }
     
-
+    @Test
     public final void testParsePhraseType() throws Exception {
         System.out.println("Testing parse phrase: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
@@ -189,7 +193,7 @@ public class TestParseFeatures extends TestCase {
 
     }
 
-
+    @Test
     public final void testParseSiblings() throws Exception {
         System.out.println("Testing parse siblings: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
@@ -229,7 +233,7 @@ public class TestParseFeatures extends TestCase {
 
     }
 
-
+    @Test
     public final void testVerbVoiceIndicator() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
 
@@ -271,7 +275,7 @@ public class TestParseFeatures extends TestCase {
 
     }
 
-    
+
     private void testFex(FeatureExtractor fex, boolean printBoth, Set<String> validResponses)
             throws EdisonException {
 

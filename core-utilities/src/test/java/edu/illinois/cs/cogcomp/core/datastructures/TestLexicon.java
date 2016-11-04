@@ -8,10 +8,13 @@
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.*;
 
-public class TestLexicon extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class TestLexicon {
 
     private final Random random = new Random();
     private final String alphabet =
@@ -21,6 +24,7 @@ public class TestLexicon extends TestCase {
     int maxLen = 4;
     int N = 50000;
 
+    @Test
     public void testLexicon() throws Exception {
         Lexicon lexicon = new Lexicon(true, true);
 
