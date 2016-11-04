@@ -6,7 +6,7 @@
 	<groupId>edu.illinois.cs.cogcomp</groupId>
 	<artifactId>illinois-inference</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.1</version>
+	<version>0.9.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.ojalgo</groupId>
 			<artifactId>ojalgo</artifactId>
-			<version>37.1.1</version>
+			<version>40.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.gurobi</groupId>

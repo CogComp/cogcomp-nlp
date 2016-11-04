@@ -18,7 +18,6 @@ public class BeamSearchTest {
         // x, y, z binary.
 
         int x = solver.addBooleanVariable(1);
-
         int y = solver.addBooleanVariable(1);
         int z = solver.addBooleanVariable(2);
 
