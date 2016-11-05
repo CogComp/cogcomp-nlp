@@ -18,5 +18,7 @@ provided by the `illinois-core-utilities` package.
 
 Thank you for citing us if you use us in your work! 
 
+```
 @inproceedings{
 }
+```
