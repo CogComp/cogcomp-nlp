@@ -7,4 +7,7 @@ project. Meant to be used in conjunction with LBJava.
 
 Thank you for citing us if you use us in your work!
 
-@inproceedings{ }
+```
+@inproceedings{
+}
+```
