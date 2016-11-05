@@ -74,6 +74,7 @@ D. Roth and D. Zelenko, Part of Speech Tagging Using a Network of Linear Separat
 
 Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/POS
 
+```
 @inproceedings{RothZe98,
     author = {D. Roth and D. Zelenko},
     title = {Part of Speech Tagging Using a Network of Linear Separators},
@@ -85,3 +86,4 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     funding = {NSF98,KDI},
     projects = {SI,NLP},
 }
+```
