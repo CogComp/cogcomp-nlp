@@ -127,3 +127,8 @@ You can easily call commonly used Lucene classes from the static utility library
 	}
 ```
 
+## Citation
+
+Thank you for citing us if you use us in your work!
+
+@inproceedings{ }
