@@ -15,9 +15,13 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
@@ -57,14 +61,20 @@ public class TreeGazetteers implements Gazetteers {
         ArrayList<String> filenames = new ArrayList<>();
 
         // List the Gazetteers directory (either local or in the classpath)
-        String[] allfiles =
-                ResourceUtilities.lsDirectory(pathToDictionaries, "gazetteers-list.txt");
-        for (String file : allfiles) {
-            if (!IOUtils.isDirectory(file)) {
-                filenames.add(file);
-            }
-        }
-        Arrays.sort(allfiles);
+//        String[] allfiles =
+//                ResourceUtilities.lsDirectory(pathToDictionaries, "gazetteers-list.txt");
+        InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+        String line;
+        while((line = br.readLine()) != null)
+            filenames.add(line);
+
+//        for (String file : allfiles) {
+//            if (!IOUtils.isDirectory(file)) {
+//                filenames.add(file);
+//            }
+//        }
+//        Arrays.sort(allfiles);
 
         // init the dictionaries.
         dictionaries = new ArrayList<>(filenames.size());
@@ -77,8 +87,17 @@ public class TreeGazetteers implements Gazetteers {
                 if (tmp.equals("in") || tmp.equals("on") || tmp.equals("us") || tmp.equals("or")
                         || tmp.equals("am"))
                     return new String[0];
-                else
-                    return normalize(line).split("[\\s]+");
+                else {
+                    if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
+                        String[] chars = new String[line.length()];
+                        for(int i = 0; i < line.length(); i++)
+                            chars[i] = String.valueOf(line.charAt(i));
+                        return chars;
+                    }
+                    else
+                        return normalize(line).split("[\\s]+");
+                }
+
 
             }
 

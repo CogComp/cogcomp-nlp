@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import gnu.trove.map.hash.THashMap;
 
 import java.io.BufferedReader;
@@ -35,7 +36,14 @@ public class GazetteerTree {
     private StringSplitterInterface splitter = new StringSplitterInterface() {
         @Override
         public String[] split(String line) {
-            return line.split("[\\s]+");
+            if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
+                String[] chars = new String[line.length()];
+                for(int i = 0; i < line.length(); i++)
+                    chars[i] = String.valueOf(line.charAt(i));
+                return chars;
+            }
+            else
+                return line.split("[\\s]+");
         }
 
         @Override

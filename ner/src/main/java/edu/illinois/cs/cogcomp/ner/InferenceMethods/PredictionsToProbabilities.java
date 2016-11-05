@@ -27,7 +27,7 @@ class PredictionsToProbabilities {
         Score[] scores = c.scores(w).toArray();
 
         if (logger.isDebugEnabled()) {
-            logger.debug("## {}.getAndSetPredictionConfidences(): c.scores: {}", NAME, c.scores(w));
+//            logger.debug("## {}.getAndSetPredictionConfidences(): c.scores: {}", NAME, c.scores(w));
         }
         double[] correctedScores = new double[scores.length];
         double min = scores[0].score;

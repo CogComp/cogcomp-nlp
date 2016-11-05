@@ -21,7 +21,8 @@ import java.util.zip.GZIPInputStream;
 public class ResourceUtilities {
     private static Logger log = LoggerFactory.getLogger(ResourceUtilities.class);
     // TODO Ideally this should be read from the config file
-    private static final String localResourceDir = "data/";
+//    private static final String localResourceDir = "data/";
+    private static final String localResourceDir = "";
 
     /**
      * Loads a resource either from the local resource directory or from the classpath
@@ -37,14 +38,15 @@ public class ResourceUtilities {
             // jar)
             if (!new File(file).exists()) {
                 log.debug("Loading {} from classpath", resourceFile);
-                List<URL> list = IOUtils.lsResources(ResourceUtilities.class, resourceFile);
-                if (list.isEmpty()) {
-                    System.err.println("Could not load " + resourceFile);
-                    System.exit(-1);
-                }
-                URL fileURL = list.get(0);
-                URLConnection connection = fileURL.openConnection();
-                stream = connection.getInputStream();
+//                List<URL> list = IOUtils.lsResources(ResourceUtilities.class, resourceFile);
+//                if (list.isEmpty()) {
+//                    System.err.println("Could not load " + resourceFile);
+//                    System.exit(-1);
+//                }
+//                URL fileURL = list.get(0);
+//                URLConnection connection = fileURL.openConnection();
+//                stream = connection.getInputStream();
+                stream = ResourceUtilities.class.getResourceAsStream("/"+resourceFile);
             } else {
                 log.debug("Loading {} from local directory", resourceFile);
                 stream = new FileInputStream(file);

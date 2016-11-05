@@ -35,6 +35,10 @@ public class BrownClusters {
         return brownclusters;
     }
 
+    static public void setBrownClusters(BrownClusters bc){
+        brownclusters = bc;
+    }
+
     /** ensures singleton-ness. */
     private BrownClusters() {
 

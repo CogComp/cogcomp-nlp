@@ -68,6 +68,8 @@ public class ParametersForLbjCode {
     // this will selectively lowercase the text in the first sentence if it's all-capitalized
     public boolean normalizeTitleText = false;
 
+    public String language = null;
+
     // can be:
     // ".data/ner-ext/BrownHierarchicalWordClusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
     public String pathToTokenNormalizationData = null;

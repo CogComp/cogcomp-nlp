@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode.TokenizationScheme;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
@@ -63,6 +64,7 @@ public class NEWord extends Word {
     }
 
     private String[] nonLocFeatArray = null;
+    public String[] wikifierFeatures = null;
 
     /** these are referencence to previous and next words, ignoring sentence boundries. */
     public NEWord nextIgnoreSentenceBoundary = null;
@@ -142,6 +144,10 @@ public class NEWord extends Word {
      */
     public static void addTokenToSentence(LinkedVector sentence, String token, String tag) {
         NEWord word = new NEWord(new Word(token), null, tag);
+        addTokenToSentence(sentence, word);
+    }
+
+    public static void addTokenToSentence(LinkedVector sentence, NEWord word) {
         Vector<NEWord> v = NEWord.splitWord(word);
         if (ParametersForLbjCode.currentParameters.tokenizationScheme
                 .equals(TokenizationScheme.DualTokenizationScheme)) {

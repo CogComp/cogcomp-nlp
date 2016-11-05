@@ -145,16 +145,16 @@ public class LearningCurveMultiDataset {
         for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel1 < 10)
                 || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
             bt1train.train(1);
-            testParser1.reset();
-            TestDiscrete simpleTest = new TestDiscrete();
-            simpleTest.addNull("O");
-            TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
-            double f1Level1 = simpleTest.getOverallStats()[2];
-            if (f1Level1 > bestF1Level1) {
-                bestF1Level1 = f1Level1;
-                bestRoundLevel1 = i;
-                tagger1.save();
-            }
+//            testParser1.reset();
+//            TestDiscrete simpleTest = new TestDiscrete();
+//            simpleTest.addNull("O");
+//            TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
+//            double f1Level1 = simpleTest.getOverallStats()[2];
+//            if (f1Level1 > bestF1Level1) {
+//                bestF1Level1 = f1Level1;
+//                bestRoundLevel1 = i;
+//                tagger1.save();
+//            }
             logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
                         + bestF1Level1);
         }
@@ -198,20 +198,20 @@ public class LearningCurveMultiDataset {
                     || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
                 logger.info("Learning level 2 classifier; round " + i);
                 bt2train.train(1);
-                logger.info("Testing level 2 classifier;  on prefetched data, round: " + i);
-                testParser2.reset();
-                TestDiscrete simpleTest = new TestDiscrete();
-                simpleTest.addNull("O");
-                TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
-
-                double f1Level2 = simpleTest.getOverallStats()[2];
-                if (f1Level2 > bestF1Level2) {
-                    bestF1Level2 = f1Level2;
-                    bestRoundLevel2 = i;
-                    tagger2.save();
-                }
-                logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
-                            + bestF1Level2);
+//                logger.info("Testing level 2 classifier;  on prefetched data, round: " + i);
+//                testParser2.reset();
+//                TestDiscrete simpleTest = new TestDiscrete();
+//                simpleTest.addNull("O");
+//                TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
+//
+//                double f1Level2 = simpleTest.getOverallStats()[2];
+//                if (f1Level2 > bestF1Level2) {
+//                    bestF1Level2 = f1Level2;
+//                    bestRoundLevel2 = i;
+//                    tagger2.save();
+//                }
+//                logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
+//                            + bestF1Level2);
             }
             
             // trash the l2 prefetch data

@@ -42,7 +42,7 @@ public class Parameters {
             "Affixes", "PreviousTag1", "PreviousTag2", "PreviousTagPatternLevel1",
             "PreviousTagPatternLevel2", "AggregateContext", "AggregateGazetteerMatches",
             "PrevTagsForContext", "PredictionsLevel1", "GazetteersFeatures", "WordEmbeddings",
-            "BrownClusterPaths", "Linkability"};
+            "BrownClusterPaths", "Linkability", "WikifierFeatures"};
 
 
     /**
@@ -136,6 +136,13 @@ public class Parameters {
                                 + NerBaseConfigurator.MODEL_NAME + "'");
             }
             param.configFilename = cFilename;
+
+            if (rm.containsKey("language")) {
+                param.language = rm.getString("language");
+
+                // becuase it is used in initializing tree gazetteers
+                ParametersForLbjCode.currentParameters.language = rm.getString("language");
+            }
 
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {
                 String labelsToAnonymizeInEvaluation =
