@@ -239,6 +239,7 @@ L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Rec
 
 Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/NETagger
 
+```
 @inproceedings{RatinovRo09,
     author = {L. Ratinov and D. Roth},
     title = {Design Challenges and Misconceptions in Named Entity Recognition},
@@ -250,3 +251,4 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     projects = {IE},
     comment = {Named entity recognition; information extraction; knowledge resources; word class models; gazetteers; non-local features; global features; inference methods; BIO vs. BIOLU; text chunk representation},
 }
+```
