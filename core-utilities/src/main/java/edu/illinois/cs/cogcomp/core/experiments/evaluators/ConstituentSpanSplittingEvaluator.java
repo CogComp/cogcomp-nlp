@@ -17,23 +17,13 @@ import java.util.Set;
 public class ConstituentSpanSplittingEvaluator extends Evaluator {
 
     public void evaluate(ClassificationTester tester, View gold, View prediction) {
-        View goldClone = null;
-        View predictionClone = null;
-        try {
-            goldClone = (View) gold.clone();
-            predictionClone = (View) prediction.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        super.cleanAttributes(goldClone, predictionClone);
-
         Set<IntPair> goldSpans = new HashSet<>();
-        for (Constituent cons : goldClone.getConstituents()) {
+        for (Constituent cons : gold.getConstituents()) {
             goldSpans.add(cons.getSpan());
         }
 
         Set<IntPair> predictedSpans = new HashSet<>();
-        for (Constituent cons : predictionClone.getConstituents()) {
+        for (Constituent cons : prediction.getConstituents()) {
             predictedSpans.add(cons.getSpan());
         }
 

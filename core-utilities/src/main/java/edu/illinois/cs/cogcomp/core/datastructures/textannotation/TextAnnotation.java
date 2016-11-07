@@ -331,13 +331,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     @Override
     public Object clone() throws CloneNotSupportedException {
         TextAnnotation ta = (TextAnnotation) super.clone();
-        for(String vuName : ta.getAvailableViews()) {
-            List<View> clonedViewList = new ArrayList<>();
-            for(View vu: ta.views.get(vuName)) {
-                clonedViewList.add((View)vu.clone());
-            }
-            ta.views.put(vuName, clonedViewList);
-        }
+        ta.views = new HashMap<>(ta.views);
         return ta;
     }
 

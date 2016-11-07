@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class TokenLabelView extends SpanLabelView implements Cloneable {
+public class TokenLabelView extends SpanLabelView {
 
     private static final long serialVersionUID = 2993609232596055554L;
 

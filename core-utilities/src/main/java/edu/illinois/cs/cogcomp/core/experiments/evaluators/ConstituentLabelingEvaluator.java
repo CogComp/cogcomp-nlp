@@ -17,24 +17,18 @@ import java.util.Set;
 public class ConstituentLabelingEvaluator extends Evaluator {
 
     public void evaluate(ClassificationTester tester, View gold, View prediction) {
-        View goldClone = null;
-        View predictionClone = null;
-        try {
-            goldClone = (View) gold.clone();
-            predictionClone = (View) prediction.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        super.cleanAttributes(goldClone, predictionClone);
-
-        Set<Constituent> goldCons = new HashSet<>(goldClone.getConstituents());
-        Set<Constituent> predictionCons = new HashSet<>(predictionClone.getConstituents());
+        Set<Constituent> goldCons = new HashSet<>(gold.getConstituents());
+        Set<Constituent> predictionCons = new HashSet<>(prediction.getConstituents());
 
         Set<Constituent> predictionConsMinusGoldCons = new HashSet<>(predictionCons);
         predictionConsMinusGoldCons.removeAll(goldCons);
 
         for (Constituent c : goldCons) {
-            if (predictionCons.contains(c))
+            boolean contains = false;
+            for(Constituent cPred: predictionCons)
+                if (cPred.equalsWithoutAttributeEqualityCheck(c)) contains = true;
+
+            if (contains)
                 tester.recordCount(c.getLabel(), 1/* gold */, 1/* prediction */, 1/* correct */);
             else
                 tester.recordCount(c.getLabel(), 1/* gold */, 1/* prediction */, 0/* correct */);

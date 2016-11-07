@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class TreeView extends View implements Cloneable {
+public class TreeView extends View {
 
     private static final String PARENT_OF_STRING = "ParentOf";
 

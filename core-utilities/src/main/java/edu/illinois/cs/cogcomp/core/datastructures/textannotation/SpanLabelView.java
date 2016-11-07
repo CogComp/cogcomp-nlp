@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class SpanLabelView extends View implements Cloneable {
+public class SpanLabelView extends View {
 
     /**
      * serialization id

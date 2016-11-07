@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * @author Vivek Srikumar
  */
-public class PredicateArgumentView extends View implements Cloneable {
+public class PredicateArgumentView extends View {
 
     public static final String LemmaIdentifier = "predicate";
     public static final String SenseIdentifer = "SenseNumber";

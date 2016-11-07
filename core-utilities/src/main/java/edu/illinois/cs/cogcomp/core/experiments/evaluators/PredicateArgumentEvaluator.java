@@ -52,17 +52,8 @@ public class PredicateArgumentEvaluator extends Evaluator {
      * @param tester The multi-class {@link ClassificationTester} for the argument labels
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        View goldClone = null;
-        View predictionClone = null;
-        try {
-            goldClone = (View) goldView.clone();
-            predictionClone = (View) predictionView.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
-        super.cleanAttributes(goldClone, predictionClone);
-        gold = (PredicateArgumentView) goldClone;
-        prediction = (PredicateArgumentView) predictionClone;
+        gold = (PredicateArgumentView) goldView;
+        prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
         for (Constituent gp : gold.getPredicates()) {
             if (!goldToPredictionPredicateMapping.containsKey(gp)) {
