@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class CorefAccuracyEvaluator extends Evaluator {
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
         int overlapCount = 0;
         int predCount = 0;
         int goldCount = 0;
@@ -29,25 +28,39 @@ public class CorefAccuracyEvaluator extends Evaluator {
         CoreferenceView prediction = (CoreferenceView) predictionView;
         List<Constituent> allGoldConstituents = gold.getConstituents();
         for (Constituent cons1 : allGoldConstituents) {
-            HashSet<Constituent> conferents1gold =
+            HashSet<Constituent> coreferents1gold =
                     gold.getOverlappingChainsCanonicalMentions(cons1);
-            HashSet<Constituent> conferents1pred =
+            HashSet<Constituent> coreferents1pred =
                     prediction.getOverlappingChainsCanonicalMentions(cons1);
-            for (Constituent c : conferents1gold)
-                conferents1gold.addAll(gold.getCoreferentMentionsViaRelations(c));
-            for (Constituent c : conferents1gold)
-                conferents1pred.addAll(prediction.getCoreferentMentionsViaRelations(c));
+            for (Constituent c : coreferents1gold)
+                coreferents1gold.addAll(gold.getCoreferentMentionsViaRelations(c));
+            for (Constituent c : coreferents1gold)
+                coreferents1pred.addAll(prediction.getCoreferentMentionsViaRelations(c));
 
             for (Constituent cons2 : allGoldConstituents) {
                 // are the two constituents in the same cluster, in gold annotation?
-                if (conferents1gold.contains(cons2)) {
+
+                boolean coreferents1goldContains = false;
+                for(Constituent goldC:  coreferents1gold)
+                    if(goldC.equalsWithoutAttributeEqualityCheck(cons2)) coreferents1goldContains = true;
+
+                if(coreferents1goldContains) {
                     // are the two constituents in the same cluster, in pred annotation?
-                    if (conferents1pred.contains(cons2))
+                    boolean coreferents1predContains = false;
+                    for(Constituent predC:  coreferents1pred)
+                        if(predC.equalsWithoutAttributeEqualityCheck(cons2)) coreferents1predContains = true;
+                    if(coreferents1predContains) {
                         overlapCount += 1;
+                    }
                     goldCount += 1;
                 }
+
                 // are the two constituents in the same cluster, in pred annotation?
-                if (conferents1pred.contains(cons2))
+                boolean coreferents1predContainsCons2 = false;
+                for(Constituent predC:  coreferents1pred)
+                    if(predC.equalsWithoutAttributeEqualityCheck(cons2)) coreferents1predContainsCons2 = true;
+
+                if (coreferents1predContainsCons2)
                     predCount += 1;
             }
 

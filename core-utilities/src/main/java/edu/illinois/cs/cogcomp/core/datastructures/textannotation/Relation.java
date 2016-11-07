@@ -153,7 +153,4 @@ public class Relation implements Serializable, HasAttributes {
         bldr.append( target ).append("(").append( getScore() ).append( ")" );
         return bldr.toString();
     }
-
-
-
 }

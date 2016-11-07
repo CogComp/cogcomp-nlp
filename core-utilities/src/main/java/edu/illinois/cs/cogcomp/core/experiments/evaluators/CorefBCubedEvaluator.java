@@ -47,7 +47,6 @@ public class CorefBCubedEvaluator extends Evaluator {
      * or "macro" statistics. It is more common to use "macro" statistics for BCubed metric.
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
         this.gold = (CoreferenceView) goldView;
         this.prediction = (CoreferenceView) predictionView;
         List<Constituent> allGoldConstituents = gold.getConstituents();
@@ -61,13 +60,18 @@ public class CorefBCubedEvaluator extends Evaluator {
             int predCount = 0;
             int goldCount = 0;
             for (Constituent predCanonicalCons : overlappingPredCanonicalCons) {
-                HashSet consInPredCluster =
+                HashSet<Constituent> consInPredCluster =
                         new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
                 for (Constituent goldCanonicalCons : overlappingGoldCanonicalCons) {
-                    HashSet consInGoldCluster =
+                    HashSet<Constituent> consInGoldCluster =
                             new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
-                    Set<String> intersection = new HashSet(consInGoldCluster);
-                    intersection.retainAll(consInPredCluster);
+
+                    Set<Constituent> intersection = new HashSet();
+                    for(Constituent gold: consInGoldCluster) {
+                        for(Constituent pred: consInPredCluster) {
+                            if(gold.equalsWithoutAttributeEqualityCheck(pred)) intersection.add(pred);
+                        }
+                    }
                     overlapCount += intersection.size();
                     predCount += consInPredCluster.size();
                     goldCount += consInGoldCluster.size();

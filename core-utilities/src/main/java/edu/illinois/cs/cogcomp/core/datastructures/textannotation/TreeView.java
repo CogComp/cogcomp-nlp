@@ -716,5 +716,4 @@ public class TreeView extends View {
     public static Constituent getParent(Constituent constituent) {
         return constituent.getIncomingRelations().get(0).getSource();
     }
-
 }

@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 
@@ -558,5 +557,4 @@ public class View implements Serializable, IQueryable<Constituent> {
     public int count() {
         return this.constituents.size();
     }
-
 }
