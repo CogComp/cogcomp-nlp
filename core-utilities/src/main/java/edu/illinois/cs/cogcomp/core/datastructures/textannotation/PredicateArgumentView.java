@@ -148,9 +148,4 @@ public class PredicateArgumentView extends View {
         predicates.clear();
         removeAllRelations();
     }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

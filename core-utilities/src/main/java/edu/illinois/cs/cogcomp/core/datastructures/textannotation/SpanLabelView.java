@@ -125,9 +125,4 @@ public class SpanLabelView extends View {
 
         return sb.toString();
     }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

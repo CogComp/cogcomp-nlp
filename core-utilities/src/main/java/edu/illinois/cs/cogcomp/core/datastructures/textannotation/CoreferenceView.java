@@ -299,9 +299,4 @@ public class CoreferenceView extends View {
         constituents.clear();
         removeAllRelations();
     }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }

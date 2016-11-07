@@ -88,9 +88,4 @@ public class TokenLabelView extends SpanLabelView {
         }
         return sb.toString();
     }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }
