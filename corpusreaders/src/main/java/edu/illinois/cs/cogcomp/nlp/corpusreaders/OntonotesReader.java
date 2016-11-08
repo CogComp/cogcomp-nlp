@@ -21,16 +21,15 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
+ * Reads ontonotes files in CoNLL format.
  * Based on {@code edu.illinois.cs.cogcomp.lbj.coref.io.loaders.DocCoNLLLoader} from the Coref
  * package. This reader just processes {@link TextAnnotation}s; Coreference mentions and gold labels
  * are ignored.
  */
+
 public class OntonotesReader extends TextAnnotationReader {
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
@@ -130,6 +129,7 @@ public class OntonotesReader extends TextAnnotationReader {
             }
         } else {
             m_docID = filename;
+            documentStart = 1;
         }
 
         boolean sentenceStart = true;

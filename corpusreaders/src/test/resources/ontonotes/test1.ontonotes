@@ -1,0 +1,27 @@
+#begin document (bc/cnn/00/cnn_0001); part 000
+bc/cnn/00/cnn_0001   0   0       Sunday   NNP   (TOP(FRAG(NP*)          -    -   -    Larry     (DATE)       *   -
+bc/cnn/00/cnn_0001   0   1          the    DT         (NP(NP*           -    -   -    Larry         *        *   -
+bc/cnn/00/cnn_0001   0   2    interview    NN               *)   interview  01   1    Larry         *      (V*)  -
+bc/cnn/00/cnn_0001   0   3         with    IN            (PP*           -    -   -    Larry         *   (ARG1*   -
+bc/cnn/00/cnn_0001   0   4          Bob   NNP            (NP*           -    -   -    Larry  (PERSON*        *   -
+bc/cnn/00/cnn_0001   0   5      Shapiro   NNP             *)))          -    -   -    Larry         *)       *)  -
+bc/cnn/00/cnn_0001   0   6           /.     .              *))          -    -   -    Larry         *        *   -
+
+bc/cnn/00/cnn_0001   0   0    Newsnight   NNP   (TOP(S(NP*)       -    -   -    Larry   (WORK_OF_ART)       (ARG1*)    (85)
+bc/cnn/00/cnn_0001   0   1      returns   VBZ         (VP*    return  03   1    Larry              *           (V*)      -
+bc/cnn/00/cnn_0001   0   2           to    IN         (PP*        -    -   -    Larry              *        (ARG2*       -
+bc/cnn/00/cnn_0001   0   3          duo    JJ         (NP*        -    -   -    Larry              *             *       -
+bc/cnn/00/cnn_0001   0   4       action    NN           *))   action   -   3    Larry              *             *)      -
+bc/cnn/00/cnn_0001   0   5      tonight    NN        (NP*))       -    -   -    Larry          (TIME)   (ARGM-TMP*)   (175)
+bc/cnn/00/cnn_0001   0   6           /.     .           *))       -    -   -    Larry              *             *       -
+
+bc/cnn/00/cnn_0001   0   0         The    DT  (TOP(S(NP*    -    -   -    Larry         *   (ARG1*           -
+bc/cnn/00/cnn_0001   0   1    co-hosts   NNS           *)   -    -   -    Larry         *        *)          -
+bc/cnn/00/cnn_0001   0   2         are   VBP        (VP*    be  01   2    Larry         *      (V*)          -
+bc/cnn/00/cnn_0001   0   3        Kira   NNP     (NP(NP*    -    -   -    Larry  (PERSON*   (ARG2*   (134|(165
+bc/cnn/00/cnn_0001   0   4    Phillips   NNP           *)   -    -   -    Larry         *)       *         165)
+bc/cnn/00/cnn_0001   0   5         and    CC           *    -    -   -    Larry         *        *           -
+bc/cnn/00/cnn_0001   0   6        Rick   NNP        (NP*    -    -   -    Larry  (PERSON*        *          (2
+bc/cnn/00/cnn_0001   0   7     Sanchez   NNP         *)))   -    -   -    Larry         *)       *)     134)|2)
+bc/cnn/00/cnn_0001   0   8          /.     .          *))   -    -   -    Larry         *        *           -
+
