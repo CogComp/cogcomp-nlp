@@ -179,6 +179,12 @@ public class Constituent implements Serializable, HasAttributes {
         return true;
     }
 
+    /**
+     * This function can be used in scenarios where there is a need for Constituent equality, ignoring the values
+     * of the attributes. Note that many equality functions in Java automatically call the `equals' function.
+     * @param that the input constituent you compare with
+     * @return whether the two constituents are the same or not.
+     */
     public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
         if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
             return false;
