@@ -349,8 +349,8 @@ for (int i = 0; i < ta.size(); i++) {
 ###Creating Annotators
 
 The `AnnotatorService` class is based on stringing together classes that
-extend the `Annotator` abstract class. This class is used within the project
-to wrap the Illinois POS, Chunker, Lemmatizer, and NER.
+extend the `Annotator` abstract class. This class is used within the 
+project to wrap the Illinois POS, Chunker, Lemmatizer, and NER.
 
 In your extension of `Annotator` you need to define the following methods:
 
@@ -373,9 +373,15 @@ argument to the `Annotator` constructor. This is used for lazy
 initialization, if active, in which case the first call to `getView()`
 will call `initialize()` with this configuration. 
 
-For ease of use, you are encouraged to create a `Configurator` class
-that specifies configuration flags and their default values. The
-POS, Chunker, Lemmatizer and NER modules all have their own 
+
+###Configurators
+
+For ease of use of your own NLP software, especially classes that
+extend `Annotator` or `AnnotatorService`, you are encouraged to create 
+a `Configurator` class that specifies the relevant configuration flags 
+and their default values. 
+
+The POS, Chunker, Lemmatizer and NER modules all have their own 
 extension of the `Configurator` class for this purpose.  This makes
 it easy to specify a default constructor for your annotator, and
 to specify only non-default configuration options when you instantiate
