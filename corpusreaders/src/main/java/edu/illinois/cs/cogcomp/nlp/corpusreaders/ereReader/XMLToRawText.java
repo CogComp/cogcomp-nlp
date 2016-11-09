@@ -1,4 +1,11 @@
 /**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
+/**
  * 
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
@@ -18,13 +25,14 @@ import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
 public class XMLToRawText {
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<String>();
+    /** the attributes to keep for the above tags. */
+    static private ArrayList<String> retainAttributes = new ArrayList<String>();
+    
     static {
         retainTags.add("quote");
         retainTags.add("post");
     }
-    
-    /** the attributes to keep for the above tags. */
-    static private ArrayList<String> retainAttributes = new ArrayList<String>();
+
     static {
         retainAttributes.add("orig_author");
         retainAttributes.add("author");
