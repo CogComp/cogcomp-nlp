@@ -24,10 +24,6 @@ import java.util.Vector;
 
 public class NEWord extends Word {
 
-    public enum LabelToLookAt {
-        PredictionLevel2Tagger, PredictionLevel1Tagger, GoldLabel
-    }
-
     /** This field is used to store a computed named entity type tag. */
     public String neTypeLevel1;
     public String neTypeLevel2;
@@ -36,10 +32,9 @@ public class NEWord extends Word {
     public CharacteristicWords predictionConfidencesLevel1Classifier = null;
     public CharacteristicWords predictionConfidencesLevel2Classifier = null;
     public NamedEntity goldEntity = null;// if non-null it keeps the named entity the tagger
-                                         // annotated this word with
     /** This field stores the named entity type tag found in labeled data. */
     public String neLabel = null;
-
+                                         // annotated this word with
     /**
      * contains the parts of this word if DualTokenization is enabled, otherwise a waste of space.
      * used by the Affixes and FormParts classifiers. This appears to be an additional tokenization
@@ -49,46 +44,23 @@ public class NEWord extends Word {
      * operation twice in those cases where both classifiers are utilized.
      */
     public String[] parts;
-
     /** used by wikipedia linkability. */
     public String normalizedMostLinkableExpression = null;
     public ArrayList<String> gazetteers;
-
-    private HashMap<String, Integer> nonLocalFeatures = null;
-
-    public HashMap<String, Integer> getNonLocalFeatures() {
-        if (nonLocalFeatures == null)
-            nonLocalFeatures = new HashMap<>(0);
-        return nonLocalFeatures;
-    }
-
-    private String[] nonLocFeatArray = null;
-
     /** these are referencence to previous and next words, ignoring sentence boundries. */
     public NEWord nextIgnoreSentenceBoundary = null;
     public NEWord previousIgnoreSentenceBoundary = null;
-
     public ArrayList<RealFeature> level1AggregationFeatures = null;
-
-    public ArrayList<RealFeature> getLevel1AggregationFeatures() {
-        if (level1AggregationFeatures == null)
-            level1AggregationFeatures = new ArrayList<>(0);
-        return level1AggregationFeatures;
-    }
-
-    public ArrayList<RealFeature> resetLevel1AggregationFeatures() {
-        level1AggregationFeatures = new ArrayList<>(0);
-        return level1AggregationFeatures;
-    }
-
-    /*
-     * This stuff was added for form normalization purposes.
-     */
-
     public String form = null;// override the Word.form field!
     public String originalForm = null;// what was the form that we read from the file
     public String normalizedForm = null;// after the title normalization stage
     public boolean isCaseNormalized = false;
+    private HashMap<String, Integer> nonLocalFeatures = null;
+    private String[] nonLocFeatArray = null;
+
+    /*
+     * This stuff was added for form normalization purposes.
+     */
 
     /**
      * An <code>NEWord</code> can be constructed from a <code>Word</code> object representing the
@@ -108,47 +80,8 @@ public class NEWord extends Word {
     }
 
     /**
-     * Creates dummy NEWord with empty string
-     */
-    public NEWord() {
-        super("");
-        label = "";
-        form = "";
-        originalForm = "";
-        neLabel = "";
-        neTypeLevel1 = "";
-        parts = new String[0];
-    }
-
-
-    /**
-     * Produces a simple <code>String</code> representation of this word in which the
-     * <code>neLabel</code> field appears followed by the word's part of speech and finally the form
-     * (i.e., spelling) of the word all surrounded by parentheses.
-     **/
-    public String toString() {
-        return "(" + neLabel + " " + partOfSpeech + " " + form + ")";
-    }
-
-    public String[] getAllNonlocalFeatures() {
-        if (nonLocFeatArray == null) {
-            Vector<String> v = new Vector<>();
-            for (Iterator<String> i = getNonLocalFeatures().keySet().iterator(); i.hasNext(); v
-                    .addElement(i.next()));
-            nonLocFeatArray = new String[v.size()];
-            for (int i = 0; i < v.size(); i++)
-                nonLocFeatArray[i] = v.elementAt(i);
-        }
-        return nonLocFeatArray;
-    }
-
-    public int getNonLocFeatCount(String nonLocFeat) {
-        return this.getNonLocalFeatures().get(nonLocFeat);
-    }
-
-    /**
      * Add the provided token to the sentence, for also do any additional word spliting.
-     * 
+     *
      * @param sentence the sentence to add the word to.
      * @param token the individual token.
      * @param tag the tag to annotate the word with.
@@ -198,6 +131,48 @@ public class NEWord extends Word {
         return res;
     }
 
+    public HashMap<String, Integer> getNonLocalFeatures() {
+        if (nonLocalFeatures == null)
+            nonLocalFeatures = new HashMap<>(0);
+        return nonLocalFeatures;
+    }
+
+    public ArrayList<RealFeature> getLevel1AggregationFeatures() {
+        if (level1AggregationFeatures == null)
+            level1AggregationFeatures = new ArrayList<>(0);
+        return level1AggregationFeatures;
+    }
+
+    public ArrayList<RealFeature> resetLevel1AggregationFeatures() {
+        level1AggregationFeatures = new ArrayList<>(0);
+        return level1AggregationFeatures;
+    }
+
+    /**
+     * Produces a simple <code>String</code> representation of this word in which the
+     * <code>neLabel</code> field appears followed by the word's part of speech and finally the form
+     * (i.e., spelling) of the word all surrounded by parentheses.
+     **/
+    public String toString() {
+        return "(" + neLabel + " " + partOfSpeech + " " + form + ")";
+    }
+
+    public String[] getAllNonlocalFeatures() {
+        if (nonLocFeatArray == null) {
+            Vector<String> v = new Vector<>();
+            for (Iterator<String> i = getNonLocalFeatures().keySet().iterator(); i.hasNext(); v
+                    .addElement(i.next()));
+            nonLocFeatArray = new String[v.size()];
+            for (int i = 0; i < v.size(); i++)
+                nonLocFeatArray[i] = v.elementAt(i);
+        }
+        return nonLocFeatArray;
+    }
+
+    public int getNonLocFeatCount(String nonLocFeat) {
+        return this.getNonLocalFeatures().get(nonLocFeat);
+    }
+
     public String getPrediction(LabelToLookAt labelType) {
         if (labelType == LabelToLookAt.GoldLabel)
             return this.neLabel;
@@ -208,7 +183,6 @@ public class NEWord extends Word {
         return null;
     }
 
-
     public void setPrediction(String label, LabelToLookAt labelType) {
         if (labelType == LabelToLookAt.GoldLabel)
             this.neLabel = label;
@@ -216,6 +190,11 @@ public class NEWord extends Word {
             this.neTypeLevel1 = label;
         if (labelType == LabelToLookAt.PredictionLevel2Tagger)
             this.neTypeLevel2 = label;
+    }
+
+
+    public enum LabelToLookAt {
+        PredictionLevel2Tagger, PredictionLevel1Tagger, GoldLabel
     }
 
     public static class DiscreteFeature {
