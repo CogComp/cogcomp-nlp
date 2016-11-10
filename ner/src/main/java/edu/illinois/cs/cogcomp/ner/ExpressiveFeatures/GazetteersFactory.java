@@ -38,28 +38,28 @@ public class GazetteersFactory {
     static public void init(int maxPhraseLength, String path, boolean flatgazetteers)
             throws IOException {
         synchronized (GAZ_INIT_LOCK) {
-//            if (gazetteers == null) {
+            if (gazetteers == null) {
                 if (flatgazetteers) {
                     gazetteers = new FlatGazetteers(path);
                 } else {
                     gazetteers = new TreeGazetteers(maxPhraseLength, path);
                 }
-//            } else {
-//                if (flatgazetteers) {
-//                    if (gazetteers instanceof TreeGazetteers ) {
-//                        logger.warn("We had previously loaded a TreeGazetteers, but reloading a FlatGazetteers");
-//                        // we want a flat gazetteer, but we have a tree gazetteer
-//                        gazetteers = null;
-//                        gazetteers = new FlatGazetteers(path);
-//                    }
-//                } else {
-//                    if (gazetteers instanceof FlatGazetteers ) {
-//                        logger.warn("We had previously loaded a FlatGazetteers, but reloading a TreeGazetteers");
-//                        gazetteers = null;
-//                        gazetteers = new TreeGazetteers(maxPhraseLength, path);
-//                    }
-//                }
-//            }
+            } else {
+                if (flatgazetteers) {
+                    if (gazetteers instanceof TreeGazetteers ) {
+                        logger.warn("We had previously loaded a TreeGazetteers, but reloading a FlatGazetteers");
+                        // we want a flat gazetteer, but we have a tree gazetteer
+                        gazetteers = null;
+                        gazetteers = new FlatGazetteers(path);
+                    }
+                } else {
+                    if (gazetteers instanceof FlatGazetteers ) {
+                        logger.warn("We had previously loaded a FlatGazetteers, but reloading a TreeGazetteers");
+                        gazetteers = null;
+                        gazetteers = new TreeGazetteers(maxPhraseLength, path);
+                    }
+                }
+            }
         }
     }
 
@@ -70,9 +70,5 @@ public class GazetteersFactory {
      */
     static public Gazetteers get() {
         return gazetteers;
-    }
-
-    static public void set(Gazetteers gaz){
-        gazetteers = gaz;
     }
 }
