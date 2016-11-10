@@ -156,6 +156,7 @@ public class ViewNames {
             case COREF_HEAD:
             case COREF_EXTENT:
                 return ViewTypes.COREF_VIEW;
+            case TIMEX3:
         }
         return null;
     }
