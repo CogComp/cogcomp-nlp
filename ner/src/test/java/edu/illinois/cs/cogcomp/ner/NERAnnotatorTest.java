@@ -418,6 +418,7 @@ public class NERAnnotatorTest {
     @Test
     public void testGetTagValue() {
         Set<String> tags = nerAnnotator.getTagValues();
+        System.out.println("dummy");
         String elements[] = {"B-LOC", "B-MISC", "B-ORG", "B-PER", "I-LOC", "I-MISC", "I-ORG", "I-PER", "L-LOC",
                 "L-MISC", "L-ORG", "L-PER", "O", "U-LOC", "U-MISC", "U-ORG", "U-PER"};
         Set<String> set = new HashSet(Arrays.asList(elements));

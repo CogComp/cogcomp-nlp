@@ -1,4 +1,0 @@
-modelName = TBAQ_full_1label_corr50
-modelDirPath = edu/illinois/cs/cogcomp/temporal/normalizer/main/lbjava/
-modelPath = edu/illinois/cs/cogcomp/temporal/normalizer/main/lbjava/TBAQ_full_1label_corr50.lc
-modelLexPath = edu/illinois/cs/cogcomp/temporal/normalizer/main/lbjava/TBAQ_full_1label_corr50.lex

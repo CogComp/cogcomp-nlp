@@ -9,21 +9,17 @@ import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
-import edu.illinois.cs.cogcomp.thrift.base.Span;
-import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +29,10 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URL;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -52,14 +48,16 @@ public class TemporalChunkerAnnotator extends Annotator{
     private String posfield = ViewNames.POS;
     private String tokensfield = ViewNames.TOKENS;
     private String sentencesfield = ViewNames.SENTENCE;
-    private HeidelTimeStandalone heidelTime = null;
-    private Date dct = null;
+    private HeidelTimeStandalone heidelTime;
+    private Date dct;
+    private DocumentBuilderFactory factory;
+    private DocumentBuilder builder;
 
     /**
      * default: don't use lazy initialization
      */
     public TemporalChunkerAnnotator() {
-        this(false);
+        this(true);
     }
 
     /**
@@ -70,37 +68,59 @@ public class TemporalChunkerAnnotator extends Annotator{
      *        requiring Chunker annotation.
      */
     public TemporalChunkerAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.TIMEX3, new String[] {ViewNames.POS}, lazilyInitialize);
+        super(
+                ViewNames.TIMEX3,
+                new String[] {ViewNames.POS},
+                lazilyInitialize,
+                new TemporalChunkerConfigurator().getDefaultConfig()
+        );
+        initialize(nonDefaultRm);
     }
 
     /**
      * DO USE THIS CONSTRUCTOR
      * Refer to main() to see detailed usage
      * @param nonDefaultRm ResourceManager that specifies model paths, etc
-     * @param docType MUST be one of "NEWS", "NARRATIVES", "COLLOQUIAL", or "SCIENTIFIC"
-     * @param outputType MUST be either "TIMEML" or "XMI"
-     * @param configPath the path of heideltime's config file
      */
-    public TemporalChunkerAnnotator(
-            ResourceManager nonDefaultRm,
-            String docType,
-            String outputType,
-            String configPath) {
-        super(ViewNames.TIMEX3, new String[]{}, nonDefaultRm.getBoolean(
-                AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.FALSE), nonDefaultRm);
-        this.heidelTime = new HeidelTimeStandalone(Language.ENGLISH,
-                DocumentType.valueOf(docType),
-                OutputType.valueOf(outputType),
-                configPath,
-                POSTagger.NO, true);
+    public TemporalChunkerAnnotator (ResourceManager nonDefaultRm) {
+        super(ViewNames.TIMEX3, new String[] {ViewNames.POS}, false, nonDefaultRm);
     }
 
     @Override
     public void initialize(ResourceManager rm) {
-        rm = new ChunkerConfigurator().getConfig(nonDefaultRm);
-        String model = rm.getString(ChunkerConfigurator.MODEL_PATH);
+        factory = DocumentBuilderFactory.newInstance();
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String temp = new File(IOUtilities.loadFromClasspath(
+                TemporalChunkerAnnotator.class,
+                rm.getString(TemporalChunkerConfigurator.MODEL_PATH)
+        ).toString()).getPath();
+        URL lcPath =
+                IOUtilities.loadFromClasspath(
+                        TemporalChunkerAnnotator.class,
+                        rm.getString(TemporalChunkerConfigurator.MODEL_PATH)
+                );
+        URL lexPath =
+                IOUtilities.loadFromClasspath(
+                        TemporalChunkerAnnotator.class,
+                        rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH)
+                );
+
         tagger = new Chunker(
-                rm.getString(ChunkerConfigurator.MODEL_PATH), rm.getString(ChunkerConfigurator.MODEL_LEX_PATH)
+                rm.getString(TemporalChunkerConfigurator.MODEL_PATH),
+                rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH));
+        tagger.readModel(lcPath);
+        tagger.readLexicon(lexPath);
+        this.heidelTime = new HeidelTimeStandalone(
+                Language.ENGLISH,
+                DocumentType.valueOf(rm.getString(TemporalChunkerConfigurator.DOCUMENT_TYPE)),
+                OutputType.valueOf(rm.getString(TemporalChunkerConfigurator.OUTPUT_TYPE)),
+                rm.getString(TemporalChunkerConfigurator.HEIDELTIME_CONFIG),
+                POSTagger.valueOf(rm.getString(TemporalChunkerConfigurator.POSTAGGER_TYPE)),
+                true
         );
     }
 
@@ -114,7 +134,6 @@ public class TemporalChunkerAnnotator extends Annotator{
         }
 
         List<Constituent> tags = record.getView(posfield).getConstituents();
-        // String rawText = record.getText();
 
         List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens(record);
 
@@ -224,8 +243,6 @@ public class TemporalChunkerAnnotator extends Annotator{
 
         String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
 
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.parse(new InputSource(new StringReader(xml_res)));
 
         Element rootElement = document.getDocumentElement();
@@ -277,43 +294,4 @@ public class TemporalChunkerAnnotator extends Annotator{
         return new String[] {ViewNames.POS};
     }
 
-
-    public static void main(String []args) throws Exception{
-        ResourceManager rm = new ResourceManager("./conf/chunker_config.props");
-        TemporalChunkerAnnotator tca =
-                new TemporalChunkerAnnotator(rm, "NEWS", "TIMEML", "conf/heideltime_config.props");
-
-        String path = "./test2.txt";
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        String text = new String(encoded, StandardCharsets.UTF_8);
-
-        AnnotatorService annotator = CuratorFactory.buildCuratorClient();
-        TextAnnotation ta = annotator.createBasicTextAnnotation("corpus", "id", text);
-        annotator.addView(ta, ViewNames.POS);
-
-        tca.addView(ta);
-
-        View timexView = ta.getView(ViewNames.TIMEX3);
-
-        String corpId = "IllinoisTimeAnnotator";
-        List<Constituent> timeCons = timexView.getConstituents();
-
-        // Keep track of the compressed index of each constituent.
-        Span[] compressedSpans = new Span[timeCons.size()];
-        int spanStart;
-
-        // Builds a string of the concatenated constituents from a labeled view.
-        StringBuilder builder = new StringBuilder();
-        for (int i=0; i<timeCons.size(); i++){
-            Constituent c = timeCons.get(i);
-            spanStart = builder.length();
-
-            builder.append(c.toString());
-            builder.append("; ");
-
-            compressedSpans[i] = new Span(spanStart, builder.length()-2);
-        }
-        String compressedText = builder.toString();
-        logger.info(compressedText);
-    }
 }
