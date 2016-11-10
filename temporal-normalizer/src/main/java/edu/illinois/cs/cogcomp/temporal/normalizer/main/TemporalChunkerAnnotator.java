@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 
 
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
+import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -50,8 +52,7 @@ public class TemporalChunkerAnnotator extends Annotator{
     private String sentencesfield = ViewNames.SENTENCE;
     private HeidelTimeStandalone heidelTime;
     private Date dct;
-    private DocumentBuilderFactory factory;
-    private DocumentBuilder builder;
+    private TimexNormalizer timexNormalizer;
 
     /**
      * default: don't use lazy initialization
@@ -88,16 +89,6 @@ public class TemporalChunkerAnnotator extends Annotator{
 
     @Override
     public void initialize(ResourceManager rm) {
-        factory = DocumentBuilderFactory.newInstance();
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String temp = new File(IOUtilities.loadFromClasspath(
-                TemporalChunkerAnnotator.class,
-                rm.getString(TemporalChunkerConfigurator.MODEL_PATH)
-        ).toString()).getPath();
         URL lcPath =
                 IOUtilities.loadFromClasspath(
                         TemporalChunkerAnnotator.class,
@@ -122,6 +113,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                 POSTagger.valueOf(rm.getString(TemporalChunkerConfigurator.POSTAGGER_TYPE)),
                 true
         );
+        timexNormalizer = new TimexNormalizer();
     }
 
     @Override
@@ -224,6 +216,7 @@ public class TemporalChunkerAnnotator extends Annotator{
         SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy");
         try {
             this.dct = f.parse(date);
+            timexNormalizer.setTime(this.dct);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -239,42 +232,18 @@ public class TemporalChunkerAnnotator extends Annotator{
         // If user didn't specify document creation date, use the current date
         if (this.dct == null) {
             this.dct = new Date();
+            timexNormalizer.setTime(this.dct);
         }
 
         String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
+        int startIndex = xml_res.indexOf("<TimeML>");
+        xml_res = xml_res.substring(startIndex);
+        Interval interval_res = timexNormalizer.normalize(xml_res);
+        String string_res = interval_res==null?"":interval_res.toString();
 
-        Document document = builder.parse(new InputSource(new StringReader(xml_res)));
-
-        Element rootElement = document.getDocumentElement();
-        String res = recurseNormalizedTimeML(rootElement);
-        return res;
+        return string_res;
     }
 
-
-    private String recurseNormalizedTimeML(Node node) {
-        // Base case: return empty string
-        if (node == null) {
-            return "";
-        }
-
-        // Iterate over every node, if the node is a TIMEX3 node, then concatenate all its attributes, and recurse
-        NodeList nodeList = node.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node currentNode = nodeList.item(i);
-            if (currentNode.getNodeType() == Node.ELEMENT_NODE && currentNode.getNodeName().indexOf("TIMEX3")!=-1) {
-                //calls this method for all the children which is Element
-                NamedNodeMap attrs = currentNode.getAttributes();
-                String attrPair = "";
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    attrPair += "["
-                            + attrs.item(j).getNodeName() + "="
-                            + attrs.item(j).getNodeValue() + "]" ;
-                }
-                return attrPair + recurseNormalizedTimeML(currentNode);
-            }
-        }
-        return "";
-    }
 
     @Override
     public String getViewName() {
