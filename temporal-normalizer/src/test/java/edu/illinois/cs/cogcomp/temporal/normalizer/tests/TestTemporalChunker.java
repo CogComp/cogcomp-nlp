@@ -62,11 +62,7 @@ public class TestTemporalChunker {
         } catch (Exception e) {
             fail("Exception while creating AnnotatorService " + e.getStackTrace());
         }
-        URL modelPath =
-                IOUtilities.loadFromClasspath(
-                        TemporalChunkerAnnotator.class,
-                        "modelDirPath"
-                );
+
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));
         TextAnnotation ta = null;
