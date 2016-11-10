@@ -34,7 +34,7 @@ public class NEWord extends Word {
     public NamedEntity goldEntity = null;// if non-null it keeps the named entity the tagger
     /** This field stores the named entity type tag found in labeled data. */
     public String neLabel = null;
-                                         // annotated this word with
+
     /**
      * contains the parts of this word if DualTokenization is enabled, otherwise a waste of space.
      * used by the Affixes and FormParts classifiers. This appears to be an additional tokenization
