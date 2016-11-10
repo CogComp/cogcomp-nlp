@@ -25,14 +25,6 @@ import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNorm
 import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
-import java.io.StringReader;
 import java.net.URL;
 
 import java.text.ParseException;
