@@ -21,6 +21,7 @@
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
         <module>big-data-utils</module>
+        <module>similarity</module>
     </modules>
 
     <properties>
