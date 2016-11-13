@@ -19,4 +19,5 @@ Thank you for citing us if you use us in your work!
     funding = {NSF-SoD},
     projects = {LBP, CCM},
     comment = {Learning Based Java: a Modeling language that facilitates development of systems with learning and inference components.},
+}
 ```
