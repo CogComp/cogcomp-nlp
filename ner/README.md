@@ -238,3 +238,17 @@ See the files in [test/Test/](test/Test/) for sample column format.
 L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
 
 Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/NETagger
+
+```
+@inproceedings{RatinovRo09,
+    author = {L. Ratinov and D. Roth},
+    title = {Design Challenges and Misconceptions in Named Entity Recognition},
+    booktitle = {CoNLL},
+    month = {6},
+    year = {2009},
+    url = " http://cogcomp.cs.illinois.edu/papers/RatinovRo09.pdf",
+    funding = {MIAS, SoD, Library},
+    projects = {IE},
+    comment = {Named entity recognition; information extraction; knowledge resources; word class models; gazetteers; non-local features; global features; inference methods; BIO vs. BIOLU; text chunk representation},
+}
+```

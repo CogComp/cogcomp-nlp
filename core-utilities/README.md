@@ -391,8 +391,6 @@ to manage configuration options.
 
 ##Citation
 
-If you use this code in your research, please provide the URL for this 
-github repository in the relevant publications.  If you use any of 
-the NLP modules, please check their README files to see if there
-are relevant publications to cite. 
-
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.  
+If you use any of the NLP modules, please check their README files to see if there are relevant publications to cite. 
+Thank you for citing us if you use us in your work! 
