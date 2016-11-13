@@ -348,9 +348,5 @@ for (int i = 0; i < ta.size(); i++) {
 
 ##Citation
 
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.
 Thank you for citing us if you use us in your work! 
-
-```
-@inproceedings{
-}
-```
