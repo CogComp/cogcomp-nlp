@@ -16,7 +16,7 @@ import java.util.Properties;
 import java.util.Set;
 
 /**
- * An interface for creating views of a specified name from a {@link TextAnnotation}
+ * An interface for creating views of a specified name from a {@link TextAnnotation}. Supports lazy initialization.
  * IMPORTANT FOR DERIVED CLASSES: if you initialize fields at declaration rather than in the constructor,
  *     those assignments take place AFTER the super.constructor has run -- so e.g. you cannot
  *     use a Logger you declare in this way to log messages in the initialize() method that
@@ -34,7 +34,7 @@ public abstract class Annotator {
     /**
      * stores configuration for lazy initialization.
      */
-    protected ResourceManager nonDefaultRm;
+    protected ResourceManager config;
 
 
     /**
@@ -88,14 +88,14 @@ public abstract class Annotator {
      * @param requiredViews The views that must be populated for this new view to be created.
      * @param isLazilyInitialized if 'true', defers the initialization of the derived class until
      *        getView() is called.
-     * @param nonDefaultRm these properties are stored for use by derived class, esp. in
+     * @param config these properties are stored for use by derived class, esp. in
      *        initialize()
      */
     public Annotator(String viewName, String[] requiredViews, boolean isLazilyInitialized,
-            ResourceManager nonDefaultRm) {
+            ResourceManager config) {
         this.viewName = viewName;
         this.requiredViews = requiredViews;
-        this.nonDefaultRm = nonDefaultRm;
+        this.config = config;
         isInitialized = false;
         if (!isLazilyInitialized)
             doInitialize();
@@ -118,7 +118,7 @@ public abstract class Annotator {
      * Default implementation just sets the relevant field to 'true'.
      */
     final public void doInitialize() {
-        initialize(nonDefaultRm);
+        initialize(config);
         isInitialized = true;
     }
 
