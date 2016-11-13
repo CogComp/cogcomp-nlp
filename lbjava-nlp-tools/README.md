@@ -18,6 +18,6 @@ Thank you for citing us if you use us in your work!
     url = " http://cogcomp.cs.illinois.edu/papers/RizzoloRo10.pdf",
     funding = {NSF-SoD},
     projects = {LBP, CCM},
-    comment = {Learning Based Java: a Modeling language that facilitates development of systems with learning and inference componenets.},
+    comment = {Learning Based Java: a Modeling language that facilitates development of systems with learning and inference components.},
 }
 ```
