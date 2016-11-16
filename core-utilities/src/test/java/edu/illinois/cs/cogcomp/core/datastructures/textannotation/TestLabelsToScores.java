@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * tests that exercise Constituent and Relation functionality relating to labels and scores.
@@ -31,17 +32,14 @@ public class TestLabelsToScores {
 
         Map<String, Double> labelsToScores = pred.getLabelsToScores();
 
-        assertEquals( labelsToScores.size(), 1 );
-
-        assertEquals( labelsToScores.get(pred.getLabel()), 1.0, 0.01);
+        assertNull(labelsToScores);
 
         Relation rel = pred.getOutgoingRelations().get(0);
 
         labelsToScores = rel.getLabelsToScores();
 
-        assertEquals( labelsToScores.size(), 1 );
+        assertNull(labelsToScores);
 
-        assertEquals( labelsToScores.get(rel.getRelationName()), 1.0, 0.01);
     }
 
 
