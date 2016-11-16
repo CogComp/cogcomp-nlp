@@ -62,6 +62,8 @@ public class TestLabelsToScores {
 
         Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
 
+        assertEquals( "mo", first.getLabel() );
+
         /**
          * check constituent has own copy of label dist
          */
@@ -73,6 +75,22 @@ public class TestLabelsToScores {
         assertEquals( storedLabelsToScores.size(), 4 );
 
         assertEquals( storedLabelsToScores.get("eeny"), 0.15, 0.01);
+
+        /**
+         * verify that changing returned map doesn't affect original
+         */
+        storedLabelsToScores.put( "MAURICE", 10000.0 );
+        storedLabelsToScores.put( "eeny", -1.0 );
+
+        assertEquals( "mo", first.getLabel() );
+
+        storedLabelsToScores = first.getLabelsToScores();
+
+        assertEquals( storedLabelsToScores.size(), 4 );
+
+        assertEquals( storedLabelsToScores.get("eeny"), 0.15, 0.01);
+
+
 
         rhymeView.addConstituent(first);
 
@@ -106,5 +124,18 @@ public class TestLabelsToScores {
         assertEquals( storedLabelsToScores.size(), 2 );
 
         assertEquals(storedLabelsToScores.get("No"), 0.2, 0.001 );
+
+        assertEquals( "Yes", rel.getRelationName() );
+
+        storedLabelsToScores.put( "MAYBE", 3.0 );
+
+        assertEquals( "Yes", rel.getRelationName() );
+
+        storedLabelsToScores = rel.getLabelsToScores();
+
+        assertEquals( storedLabelsToScores.size(), 2 );
+
+        assertEquals(storedLabelsToScores.get("No"), 0.2, 0.001 );
+
     }
 }

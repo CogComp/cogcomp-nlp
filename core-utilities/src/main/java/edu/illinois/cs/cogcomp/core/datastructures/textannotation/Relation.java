@@ -93,7 +93,9 @@ public class Relation implements Serializable, HasAttributes {
             labelsToScores = Maps.newHashMap();
             labelsToScores.put( this.getRelationName(), 1.0 );
         }
-        return labelsToScores;
+        Map<String, Double> toReturn = new HashMap<>();
+        toReturn.putAll(labelsToScores);
+        return toReturn;
     }
 
 
