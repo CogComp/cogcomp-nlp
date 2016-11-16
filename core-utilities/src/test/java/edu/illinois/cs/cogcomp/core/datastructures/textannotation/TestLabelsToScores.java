@@ -63,7 +63,6 @@ public class TestLabelsToScores {
         Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
 
         assertEquals( "mo", first.getLabel() );
-
         /**
          * check constituent has own copy of label dist
          */
@@ -89,8 +88,6 @@ public class TestLabelsToScores {
         assertEquals( storedLabelsToScores.size(), 4 );
 
         assertEquals( storedLabelsToScores.get("eeny"), 0.15, 0.01);
-
-
 
         rhymeView.addConstituent(first);
 
@@ -136,6 +133,5 @@ public class TestLabelsToScores {
         assertEquals( storedLabelsToScores.size(), 2 );
 
         assertEquals(storedLabelsToScores.get("No"), 0.2, 0.001 );
-
     }
 }

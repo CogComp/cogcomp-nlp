@@ -161,20 +161,22 @@ public class Constituent implements Serializable, HasAttributes {
 
     /**
      * return map of labels to scores. If not explicitly created, generates a trivial distribution
+<<<<<<< HEAD
      *    using the label assigned at construction.  The returned map is a copy, to avoid inadvertant
      *    changes to the label/score mapping.
+=======
+     *    using the label assigned at construction.
+>>>>>>> added label distributions to Constituents and Relations.
      *
      * @return map of labels to scores
      */
     public Map<String, Double> getLabelsToScores()
     {
-
         if ( null == labelsToScores)
         {
             labelsToScores = Maps.newHashMap();
             labelsToScores.put( getLabel(), 1.0 );
         }
-
         Map<String, Double> returnMap = new HashMap<>();
         returnMap.putAll(labelsToScores);
         return returnMap;
