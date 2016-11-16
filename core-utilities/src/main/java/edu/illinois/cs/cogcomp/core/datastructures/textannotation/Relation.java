@@ -17,8 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static java.awt.SystemColor.text;
-
 /**
  * @author Vivek Srikumar
  *         <p>
