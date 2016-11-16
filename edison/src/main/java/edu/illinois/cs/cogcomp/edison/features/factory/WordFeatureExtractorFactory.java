@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
@@ -406,7 +406,7 @@ public class WordFeatureExtractorFactory {
     }
 
     public static WordFeatureExtractor getGazetteerFeatureExtractor(final String name,
-            final GazetteerViewGenerator gazetteerViewGenerator) {
+            final SimpleGazetteerAnnotator gazetteerViewGenerator) {
 
         if (!gazetteerFeatureExtractors.containsKey(name)) {
 

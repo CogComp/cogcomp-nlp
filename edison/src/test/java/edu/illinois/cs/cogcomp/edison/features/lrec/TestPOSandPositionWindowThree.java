@@ -30,13 +30,14 @@ import java.util.Random;
 import java.io.Writer;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * Test class for SHALLOW PARSER Formpp Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestPOSandPositionWindowThree extends TestCase {
+public class TestPOSandPositionWindowThree {
     static Logger log = Logger.getLogger(TestPOSandPositionWindowThree.class.getName());
 
     private static List<TextAnnotation> tas;
@@ -49,10 +50,7 @@ public class TestPOSandPositionWindowThree extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
 
         log.debug("POSWindowpp Feature Extractor");

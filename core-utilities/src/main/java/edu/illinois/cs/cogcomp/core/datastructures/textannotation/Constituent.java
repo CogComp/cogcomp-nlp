@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ import java.util.*;
  *
  * @author Vivek Srikumar
  */
-public class Constituent implements Serializable {
+public class Constituent implements Serializable, HasAttributes {
 
     private static final long serialVersionUID = -4241917156773356414L;
 
@@ -178,29 +179,13 @@ public class Constituent implements Serializable {
         return true;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof Constituent))
-            return false;
-
-        Constituent that = (Constituent) obj;
-
-        if (this.getStartSpan() < 0) {
-            return false;
-        }
-
-        if (this.attributes == null && that.attributes != null)
-            return false;
-        if (this.attributes != null && that.attributes == null)
-            return false;
-
-        if (this.attributes != null && that.attributes != null)
-            if (!this.attributes.equals(that.attributes))
-                return false;
-
+    /**
+     * This function can be used in scenarios where there is a need for Constituent equality, ignoring the values
+     * of the attributes. Note that many equality functions in Java automatically call the `equals' function.
+     * @param that the input constituent you compare with
+     * @return whether the two constituents are the same or not.
+     */
+    public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
         if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
             return false;
 
@@ -216,7 +201,6 @@ public class Constituent implements Serializable {
 
             if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
                 return false;
-
         }
 
         if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
@@ -243,7 +227,32 @@ public class Constituent implements Serializable {
                 && this.getLabel().equals(that.getLabel())
                 && this.constituentScore == that.constituentScore
                 && this.getViewName().equals(that.getViewName());
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Constituent))
+            return false;
+
+        Constituent that = (Constituent) obj;
+
+        if (this.getStartSpan() < 0) {
+            return false;
+        }
+
+        if (this.attributes == null && that.attributes != null)
+            return false;
+        if (this.attributes != null && that.attributes == null)
+            return false;
+
+        if (this.attributes != null && that.attributes != null)
+            if (!this.attributes.equals(that.attributes))
+                return false;
+
+        return equalsWithoutAttributeEqualityCheck(that);
     }
 
     public String getAttribute(String key) {

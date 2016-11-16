@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +41,15 @@ public class TextCleaner {
     private static Pattern repeatPunctuationPattern = Pattern
             .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
     private static Pattern xmlTagPattern = Pattern.compile("(<[^>\\r\\n]+>)");
+    
+    /** used to extract the name of the tag, so we can match tag and attribute name. */
+    private static Pattern xmlTagNamePattern = Pattern.compile("<([^\\s>]+)");
+    
+    /** find attributes in an xml tag instance. Match whitespace then word. Group one is the 
+     * attribute name, group 2 is the quote mark used, three is the value. */
+    private static Pattern tagAttributePatter2 = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s\"']*([^\\s\"'>]+)");
+
+    private static Pattern tagAttributePattern = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s]*[\"']([^\"']+)");
 
     private boolean removeRepeatPunctuation;
     private boolean replaceUnderscores;
@@ -129,6 +140,92 @@ public class TextCleaner {
 
         return cleanTextBldr.toString();
     }
+    
+    /**
+     * determine if we should keep the value for this tag/attr.
+     * @param tagNames the names of the tags to keep.
+     * @param attributeNames the corresponding attributes within the above tag we want to keep.
+     * @param tagname the name of the current tag.
+     * @param attrName the name of the current attrigute.
+     * @return true if we keep the tag value.
+     */
+	private static boolean keep(List<String> tagNames, List<String> attributeNames, String tagname,
+			String attrName) {
+		for (int i = 0; i < tagNames.size(); i++) {
+			if (tagNames.get(i).equals(tagname))
+				if (attributeNames.get(i).equals(attrName))
+					return true;
+		}
+		return false;
+	}
+
+    /**
+     * This class removes XML markup, for the most part, but for the provided set of attribute names,
+     * it will leave their values in place and in the same position. Content within <code>quote</code> 
+     * tags is also replaced with white space (for the purpose of cleaning up the ERE code only).
+     * @param origText the original text markup.
+     * @param tagNames the names of tags containing the attributes leave, MUST BE LOWERCASE.
+     * @param attributeNames the names of attributes to leave, MUST BE LOWERCASE.
+     * @return the string.
+     */
+    public static String removeXmlLeaveAttributes(String origText, List<String>tagNames, List<String>attributeNames) {
+    	if (tagNames.size() != attributeNames.size()) {
+    		throw new RuntimeException("TextCleaner.removeXmlLeaveAttributes requires same number of tags and attributes.");
+    	}
+        Matcher xmlMatcher = xmlTagPattern.matcher(origText);
+        char[] cleanTextBldr = origText.toCharArray();
+        int last = 0;
+
+        // match mark-up
+        while (xmlMatcher.find()) {
+        	String substr = xmlMatcher.group(0);
+            int start = xmlMatcher.start();
+            int end = xmlMatcher.end();
+            
+            for (; last < start; ++last)
+    			cleanTextBldr[last] = origText.charAt(last);
+            
+            // identify any attribute values we need to retain.
+            substr = substr.toLowerCase();
+            Matcher tagMatcher = xmlTagNamePattern.matcher(substr);
+            if (tagMatcher.find()) {
+            	String tagname = tagMatcher.group(1);
+            	if (tagname.equals("quote")) {
+            	    // skip the entire quote
+            	    end = origText.indexOf("</quote>", end);
+            	    if (end == -1) 
+            	        throw new IllegalArgumentException("No end quote");
+            	    end += 8;
+            	} else {
+                	// substring beyond the tag name.
+                	int substrstart = start + tagMatcher.end();
+                	substr = substr.substring(tagMatcher.end());
+                	Matcher attrMatcher = tagAttributePattern.matcher(substr);
+                	while (attrMatcher.find()) {
+                		String attrName = attrMatcher.group(1);
+                		String attrVal = attrMatcher.group(2);
+                		if (keep(tagNames, attributeNames, tagname, attrName)) {
+    	            		int attrend = substrstart + (attrMatcher.end() - attrVal.length());
+    	            		String value = origText.substring(attrend, attrend+attrVal.length());
+    	    	            for (; start < attrend; start++)
+    	    	                cleanTextBldr[start] = ' ';
+    	    	            for (int i = 0 ; i < value.length(); i++)
+    							cleanTextBldr[start+i] = value.charAt(i);
+    		                start += value.length();
+    	            	}
+                	}
+            	}
+            }
+            for (; start < end; ++start)
+                cleanTextBldr[start] = ' ';
+            
+            last = end;
+        }
+        for (; last < cleanTextBldr.length; ++last)
+			cleanTextBldr[last] = origText.charAt(last);
+        return new String(cleanTextBldr);
+    }
+
 
     /**
      * replaces underscores with dashes (many crawled news articles seem to have substituted em- or
@@ -192,6 +289,26 @@ public class TextCleaner {
         cleanText = cleanText.replaceAll("\\^", "");
         cleanText = cleanText.replaceAll("@ ", " ");
         return cleanText;
+    }
+
+    
+    /**
+     * Test here.
+     * @param args not used.
+     * @throws Exception 
+     */
+    static public void main (String[] args) throws Exception {
+        String origText = "<post author='John Marston' toop='1'>Hi, how do you do?</post>";
+        ArrayList<String> tagNames = new ArrayList<String>();
+        tagNames.add("post");
+        ArrayList<String> attributeNames = new ArrayList<String>();
+        attributeNames.add("author");
+        System.out.println(origText);
+        String nt = removeXmlLeaveAttributes(origText,tagNames,attributeNames);
+        System.out.println("\n"+nt);
+        System.out.println("John is at "+origText.indexOf("John Marston"));
+        System.out.println("John is at "+nt.indexOf("John Marston"));
+
     }
 
 }

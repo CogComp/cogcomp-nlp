@@ -343,11 +343,16 @@ public class GazetteerTree {
         String line;
         while ((line = in.readLine()) != null) {
             String[] terms = splitter.split(line);
+            
+            // ignore any phrases more than maxPhraseLength words.
             if (terms.length > maxPhraseLength)
                 continue;
-
+            
+             // just ignore blank lines, or lines stripped by the splitter
             if (terms.length == 0)
-                continue; // just ignore blank lines, or lines stripped by the splitter
+                continue;
+            
+            // make the entry.
             GazEntry ge = gaz.get(terms[0]);
             if (ge == null) {
                 gaz.put(terms[0], new GazEntry(terms, 1, nms));

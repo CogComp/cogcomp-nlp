@@ -7,17 +7,14 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Properties;
+import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
@@ -27,8 +24,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
-import weka.core.Debug.Random;
 
 import static org.junit.Assert.*;
 
@@ -107,7 +102,7 @@ public class NERAnnotatorTest {
 
     /** this helper can create text annotations from text. */
     private static final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
-            new IllinoisTokenizer());
+            new StatefulTokenizer());
 
     /** static annotator. */
     static private NERAnnotator nerAnnotator = null;
@@ -413,5 +408,14 @@ public class NERAnnotatorTest {
                         TextChunkRepresentationManager.EncodingScheme.BILOU, 2.0);
         for (int i = 0; i < 1000; ++i)
             assertFalse(rlg.useNoise());
+    }
+
+    @Test
+    public void testGetTagValue() {
+        Set<String> tags = nerAnnotator.getTagValues();
+        String elements[] = {"B-LOC", "B-MISC", "B-ORG", "B-PER", "I-LOC", "I-MISC", "I-ORG", "I-PER", "L-LOC",
+                "L-MISC", "L-ORG", "L-PER", "O", "U-LOC", "U-MISC", "U-ORG", "U-PER"};
+        Set<String> set = new HashSet(Arrays.asList(elements));
+        assertTrue(tags.equals(set));
     }
 }

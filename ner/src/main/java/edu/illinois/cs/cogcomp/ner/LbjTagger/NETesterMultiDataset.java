@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
@@ -44,12 +45,16 @@ public class NETesterMultiDataset {
                 new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1.lex");
+        SparseAveragedPerceptron sap1 = (SparseAveragedPerceptron)taggerLevel1.getBaseLTU();
+        System.out.println("L1 SparseAveragedPerceptron learning rate = "+sap1.getLearningRate()+", thickness = "+sap1.getPositiveThickness());
         NETaggerLevel2 taggerLevel2 = null;
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
             taggerLevel2 =
                     new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
                             + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                             + ".level2.lex");
+            SparseAveragedPerceptron sap2 = (SparseAveragedPerceptron)taggerLevel2.getBaseLTU();
+            System.out.println("L2 SparseAveragedPerceptron learning rate = "+sap2.getLearningRate()+", thickness = "+sap2.getPositiveThickness());
         }
         printTestResultsByDataset(data, taggerLevel1, taggerLevel2, verbose);
     }

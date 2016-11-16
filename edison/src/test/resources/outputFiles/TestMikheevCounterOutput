@@ -1,374 +1,374 @@
 Test Corpus: section0.br
 
-notFirstCapitalized
-		rnal: 
-			NNP: 1
-		tch: 
-			NNP: 1
-		nal: 
-			NNP: 2
-		vard: 
-			NNP: 1
-		ston: 
-			NNP: 2
-		tish: 
-			JJ: 1
-		elds: 
-			NNP: 1
-		nite: 
-			NN: 1
-		land: 
-			NNP: 1
-		rber: 
-			NNP: 1
-		ased: 
-			JJ: 1
-		cer: 
-			NNP: 2
-		ity: 
-			NNP: 2
-		cott: 
-			NNP: 2
-		ier: 
-			NNP: 1
-		ted: 
-			NNP: 1
-		ish: 
-			JJ: 1
-		ated: 
-			NNP: 1
-		ard: 
-			NNP: 4
-		ken: 
-			NNP: 2
-		mes: 
-			NNP: 1
-		ott: 
-			NNP: 2
-		ton: 
-			NNP: 2
-		onal: 
-			NNP: 1
-		tute: 
-			NNP: 2
-		nken: 
-			NNP: 2
-		cine: 
-			NNP: 1
-		ber: 
-			NNP: 1
-		ine: 
-			NNP: 1
-		ute: 
-			NNP: 2
-		ews: 
-			NNP: 1
-		and: 
-			NNP: 1
-		new: 
-			NNP: 1
-		sed: 
-			JJ: 1
-		ite: 
-			NN: 1
-		lard: 
-			NNP: 3
-		ncer: 
-			NNP: 2
-		lds: 
-			NNP: 1
-		sity: 
-			NNP: 2
-		vier: 
-			NNP: 1
-
-table
-		blem: 
-			NN: 1
-		arch: 
-			NN: 1
-		ial: 
-			JJ: 1
-		test: 
-			JJS: 1
-		aced: 
-			VBN: 1
-		ures: 
-			NNS: 1
-		ther: 
-			IN: 1
-		ties: 
-			NNS: 1
-		rted: 
-			VBD: 1
-			VBN: 1
-		ngs: 
-			NNS: 2
-		are: 
-			JJ: 1
-		ard: 
-			NN: 1
-			VBD: 1
-		est: 
-			JJ: 1
-			JJS: 1
-		rked: 
-			VBD: 1
-		hing: 
-			VBG: 1
-		her: 
-			IN: 1
-		ades: 
-			NNS: 1
-		lter: 
-			NN: 1
-		cts: 
-			NNS: 1
-		ving: 
-			VBG: 2
-		ars: 
-			NNS: 4
-		tive: 
-			JJ: 2
-		ary: 
-			JJ: 1
-		ance: 
-			NN: 1
-		ely: 
-			JJ: 1
-			RB: 1
-		ear: 
-			VBP: 1
-		ite: 
-			NN: 2
-		ical: 
-			JJ: 1
-		ncer: 
-			NN: 1
-		rmer: 
-			JJ: 1
-		ttes: 
-			NNS: 3
-		res: 
-			NNS: 1
-		des: 
-			NNS: 1
-		ore: 
-			IN: 1
-		cer: 
-			NN: 1
-		rum: 
-			NN: 1
-		king: 
-			VBG: 2
-		yone: 
-			NN: 1
-		ette: 
-			NN: 2
-		sely: 
-			RB: 1
-		rent: 
-			JJ: 1
-		rman: 
-			NN: 2
-		fore: 
-			IN: 1
-		man: 
-			NN: 4
-		ced: 
-			VBN: 1
-		ory: 
-			NN: 1
-		lion: 
-			CD: 1
-		ble: 
-			JJ: 1
-		ools: 
-			NNS: 1
-		tte: 
-			NN: 2
-		oman: 
-			NN: 2
-		ped: 
-			VBD: 1
-		lem: 
-			NN: 1
-		ent: 
-			JJ: 2
-		ree: 
-			CD: 1
-		toms: 
-			NNS: 1
-		dest: 
-			JJ: 1
-		tage: 
-			NN: 1
-		per: 
-			NN: 1
-		ctor: 
-			NN: 2
-		ings: 
-			NNS: 1
-		ient: 
-			JJ: 1
-		pped: 
-			VBD: 1
-		ive: 
-			JJ: 2
-		nary: 
-			JJ: 1
-		pear: 
-			VBP: 1
-		rly: 
-			JJ: 1
-		kers: 
-			NNS: 4
-		mber: 
-			NN: 1
-		lly: 
-			RB: 1
-		lts: 
-			NNS: 1
-		ked: 
-			VBD: 1
-		osed: 
-			VBN: 1
-		nce: 
-			NN: 1
-		used: 
-			VBN: 1
-		ted: 
-			VBD: 1
-			VBN: 2
-		ies: 
-			NNS: 1
-		ied: 
-			VBD: 1
-		ols: 
-			NNS: 1
-		ief: 
-			JJ: 1
-		died: 
-			VBD: 1
-		nts: 
-			NNS: 1
-		any: 
-			NN: 1
-		age: 
-			NN: 1
-		kes: 
-			VBZ: 1
-		cted: 
-			VBN: 1
-		ults: 
-			NNS: 1
-		unts: 
-			NNS: 1
-		rial: 
-			JJ: 1
-		ion: 
-			CD: 1
-			NN: 2
-		eful: 
-			JJ: 1
-		hers: 
-			NNS: 4
-		ber: 
-			NN: 2
-		ful: 
-			JJ: 1
-		ing: 
-			VB: 1
-			VBG: 7
-		ucts: 
-			NNS: 1
-		sing: 
-			VBG: 1
-		rch: 
-			NN: 1
-		day: 
-			NN: 1
-		tes: 
-			NNS: 3
-		aths: 
-			NNS: 1
-		ter: 
-			JJ: 1
-			NN: 1
-		med: 
-			VBN: 1
-		stos: 
-			NN: 5
-		one: 
-			NN: 1
-		ong: 
-			IN: 1
-		tos: 
-			NN: 5
-		ally: 
-			RB: 1
-		rate: 
-			NN: 1
-		tion: 
-			NN: 2
-		mes: 
-			NNS: 1
-		able: 
-			JJ: 1
-		mer: 
-			JJ: 1
-		ate: 
-			NN: 1
-		lite: 
-			NN: 2
-		cal: 
-			JJ: 1
-		tor: 
-			NN: 2
-		ths: 
-			NNS: 1
-		ters: 
-			NNS: 4
-			VBZ: 1
-		kely: 
-			JJ: 1
-		sed: 
-			VBN: 2
-		oms: 
-			NNS: 1
-		pany: 
-			NN: 1
-		oup: 
-			NN: 2
-		ers: 
-			NNS: 13
-			VBZ: 1
-		out: 
-			IN: 1
-
 firstCapitalized
-		ugh: 
-			IN: 1
-		ough: 
-			IN: 1
+		olph: 
+			NNP: 1
 		ard: 
 			NNP: 1
-		ere: 
-			EX: 1
-		ther: 
-			DT: 1
-		ong: 
+		ough: 
 			IN: 1
 		rre: 
 			NNP: 1
 		her: 
 			DT: 1
-		lard: 
-			NNP: 1
-		olph: 
-			NNP: 1
 		lph: 
 			NNP: 1
+		lard: 
+			NNP: 1
+		ugh: 
+			IN: 1
+		ther: 
+			DT: 1
+		ere: 
+			EX: 1
+		ong: 
+			IN: 1
 		erre: 
 			NNP: 1
+
+notFirstCapitalized
+		ews: 
+			NNP: 1
+		cott: 
+			NNP: 2
+		tute: 
+			NNP: 2
+		ber: 
+			NNP: 1
+		cer: 
+			NNP: 2
+		ncer: 
+			NNP: 2
+		ted: 
+			NNP: 1
+		rnal: 
+			NNP: 1
+		ard: 
+			NNP: 4
+		ton: 
+			NNP: 2
+		sed: 
+			JJ: 1
+		ken: 
+			NNP: 2
+		nken: 
+			NNP: 2
+		lard: 
+			NNP: 3
+		and: 
+			NNP: 1
+		ier: 
+			NNP: 1
+		vier: 
+			NNP: 1
+		tch: 
+			NNP: 1
+		nal: 
+			NNP: 2
+		elds: 
+			NNP: 1
+		land: 
+			NNP: 1
+		mes: 
+			NNP: 1
+		ite: 
+			NN: 1
+		nite: 
+			NN: 1
+		new: 
+			NNP: 1
+		ine: 
+			NNP: 1
+		ute: 
+			NNP: 2
+		rber: 
+			NNP: 1
+		vard: 
+			NNP: 1
+		ott: 
+			NNP: 2
+		sity: 
+			NNP: 2
+		ity: 
+			NNP: 2
+		cine: 
+			NNP: 1
+		ston: 
+			NNP: 2
+		lds: 
+			NNP: 1
+		tish: 
+			JJ: 1
+		ased: 
+			JJ: 1
+		onal: 
+			NNP: 1
+		ated: 
+			NNP: 1
+		ish: 
+			JJ: 1
+
+table
+		lter: 
+			NN: 1
+		nary: 
+			JJ: 1
+		ion: 
+			CD: 1
+			NN: 2
+		rent: 
+			JJ: 1
+		ped: 
+			VBD: 1
+		ncer: 
+			NN: 1
+		ted: 
+			VBD: 1
+			VBN: 2
+		des: 
+			NNS: 1
+		her: 
+			IN: 1
+		lem: 
+			NN: 1
+		ther: 
+			IN: 1
+		ttes: 
+			NNS: 3
+		per: 
+			NN: 1
+		rmer: 
+			JJ: 1
+		ter: 
+			JJ: 1
+			NN: 1
+		tion: 
+			NN: 2
+		tes: 
+			NNS: 3
+		cts: 
+			NNS: 1
+		kers: 
+			NNS: 4
+		lion: 
+			CD: 1
+		mber: 
+			NN: 1
+		stos: 
+			NN: 5
+		ols: 
+			NNS: 1
+		ctor: 
+			NN: 2
+		ades: 
+			NNS: 1
+		tage: 
+			NN: 1
+		ures: 
+			NNS: 1
+		ced: 
+			VBN: 1
+		ters: 
+			NNS: 4
+			VBZ: 1
+		pany: 
+			NN: 1
+		hing: 
+			VBG: 1
+		oup: 
+			NN: 2
+		ked: 
+			VBD: 1
+		ette: 
+			NN: 2
+		out: 
+			IN: 1
+		cer: 
+			NN: 1
+		nce: 
+			NN: 1
+		ard: 
+			NN: 1
+			VBD: 1
+		sed: 
+			VBN: 2
+		aths: 
+			NNS: 1
+		ools: 
+			NNS: 1
+		rted: 
+			VBD: 1
+			VBN: 1
+		oms: 
+			NNS: 1
+		ial: 
+			JJ: 1
+		kely: 
+			JJ: 1
+		are: 
+			JJ: 1
+		tor: 
+			NN: 2
+		rch: 
+			NN: 1
+		toms: 
+			NNS: 1
+		ear: 
+			VBP: 1
+		kes: 
+			VBZ: 1
+		tos: 
+			NN: 5
+		ble: 
+			JJ: 1
+		man: 
+			NN: 4
+		blem: 
+			NN: 1
+		ults: 
+			NNS: 1
+		ance: 
+			NN: 1
+		ars: 
+			NNS: 4
+		ers: 
+			NNS: 13
+			VBZ: 1
+		one: 
+			NN: 1
+		ong: 
+			IN: 1
+		ary: 
+			JJ: 1
+		sely: 
+			RB: 1
+		nts: 
+			NNS: 1
+		aced: 
+			VBN: 1
+		yone: 
+			NN: 1
+		able: 
+			JJ: 1
+		arch: 
+			NN: 1
+		ful: 
+			JJ: 1
+		ths: 
+			NNS: 1
+		rly: 
+			JJ: 1
+		est: 
+			JJ: 1
+			JJS: 1
+		used: 
+			VBN: 1
+		rum: 
+			NN: 1
+		fore: 
+			IN: 1
+		dest: 
+			JJ: 1
+		ber: 
+			NN: 2
+		ate: 
+			NN: 1
+		ree: 
+			CD: 1
+		rial: 
+			JJ: 1
+		ite: 
+			NN: 2
+		ving: 
+			VBG: 2
+		lite: 
+			NN: 2
+		rman: 
+			NN: 2
+		day: 
+			NN: 1
+		res: 
+			NNS: 1
+		test: 
+			JJS: 1
+		king: 
+			VBG: 2
+		pped: 
+			VBD: 1
+		rked: 
+			VBD: 1
+		ely: 
+			JJ: 1
+			RB: 1
+		osed: 
+			VBN: 1
+		sing: 
+			VBG: 1
+		ucts: 
+			NNS: 1
+		oman: 
+			NN: 2
+		ied: 
+			VBD: 1
+		ief: 
+			JJ: 1
+		died: 
+			VBD: 1
+		med: 
+			VBN: 1
+		hers: 
+			NNS: 4
+		cal: 
+			JJ: 1
+		tive: 
+			JJ: 2
+		pear: 
+			VBP: 1
+		ient: 
+			JJ: 1
+		rate: 
+			NN: 1
+		ally: 
+			RB: 1
+		ties: 
+			NNS: 1
+		ies: 
+			NNS: 1
+		eful: 
+			JJ: 1
+		ive: 
+			JJ: 2
+		mes: 
+			NNS: 1
+		mer: 
+			JJ: 1
+		ngs: 
+			NNS: 2
+		ings: 
+			NNS: 1
+		ing: 
+			VB: 1
+			VBG: 7
+		ore: 
+			IN: 1
+		tte: 
+			NN: 2
+		ent: 
+			JJ: 2
+		lts: 
+			NNS: 1
+		any: 
+			NN: 1
+		unts: 
+			NNS: 1
+		ical: 
+			JJ: 1
+		ory: 
+			NN: 1
+		lly: 
+			RB: 1
+		age: 
+			NN: 1
+		cted: 
+			VBN: 1
 

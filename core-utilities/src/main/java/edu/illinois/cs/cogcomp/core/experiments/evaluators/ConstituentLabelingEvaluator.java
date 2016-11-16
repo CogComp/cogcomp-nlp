@@ -25,7 +25,11 @@ public class ConstituentLabelingEvaluator extends Evaluator {
         predictionConsMinusGoldCons.removeAll(goldCons);
 
         for (Constituent c : goldCons) {
-            if (predictionCons.contains(c))
+            boolean contains = false;
+            for(Constituent cPred: predictionCons)
+                if (cPred.equalsWithoutAttributeEqualityCheck(c)) contains = true;
+
+            if (contains)
                 tester.recordCount(c.getLabel(), 1/* gold */, 1/* prediction */, 1/* correct */);
             else
                 tester.recordCount(c.getLabel(), 1/* gold */, 1/* prediction */, 0/* correct */);

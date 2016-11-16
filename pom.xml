@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.72</version>
+    <version>3.0.83</version>
 
     <modules>
         <module>core-utilities</module>
@@ -20,6 +20,8 @@
         <module>ner</module>
         <module>corpusreaders</module>
         <module>lbjava-nlp-tools</module>
+        <module>big-data-utils</module>
+        <module>similarity</module>
     </modules>
 
     <properties>
@@ -64,10 +66,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
+                <version>3.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -146,8 +148,49 @@
                         <exclude>**/*.properties</exclude>
                         <exclude>**/*.md</exclude>
                         <exclude>**/*.py</exclude>
+                        <exclude>**/*.yml</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
+
+			<!-- don't add license headers to LBJava generated files. -->
+                        <exclude>**/Affixes.java</exclude>
+                        <exclude>**/BrownClusterPaths.java</exclude>
+                        <exclude>**/Capitalization.java</exclude>
+                        <exclude>**/FeaturesLevel1Only.java</exclude>
+                        <exclude>**/FeaturesLevel1Only*.java</exclude>
+                        <exclude>**/FeaturesLevel2*.java</exclude>
+                        <exclude>**/NETaggerLevel2*.java</exclude>
+                        <exclude>**/FeaturesLevel1Only*.java</exclude>
+                        <exclude>**/FeaturesLevel2.java</exclude>
+                        <exclude>**/FeaturesLevel1SharedWithLevel2.java</exclude>
+                        <exclude>**/NETaggerLevel1*.java</exclude>
+                        <exclude>**/NETaggerLevel1.java</exclude>
+                        <exclude>**/NETaggerLevel2.java</exclude>
+                        <exclude>**/IsSentenceStart.java</exclude>
+                        <exclude>**/NETaggerLevel2*.java</exclude>
+                        <exclude>**/PreviousTag1Level1.java</exclude>
+                        <exclude>**/FormParts.java</exclude>
+                        <exclude>**/PreviousTag2Level1.java</exclude>
+                        <exclude>**/PreviousTagPatternLevel1.java</exclude>
+                        <exclude>**/PreviousTag1Level2.java</exclude>
+                        <exclude>**/GazetteersFeatures.java</exclude>
+                        <exclude>**/Forms.java</exclude>
+                        <exclude>**/WordEmbeddingFeatures.java</exclude>
+                        <exclude>**/FeaturesSharedTemp.java</exclude>
+                        <exclude>**/NELabel.java</exclude>
+                        <exclude>**/prevTagsForContextLevel1.java</exclude>
+                        <exclude>**/WordTypeInformation.java</exclude>
+                        <exclude>**/Level1AggregationFeatures.java</exclude>
+                        <exclude>**/FeaturesLevel2*.java</exclude>
+                        <exclude>**/PreviousTagPatternLevel2.java</exclude>
+                        <exclude>**/nonLocalFeatures.java</exclude>
+                        <exclude>**/PreviousTag2Level2.java</exclude>
+                        <exclude>**/wordType.java</exclude>
+                        <exclude>**/prevTagsForContextLevel2.java</exclude>
+
+                        <exclude>**/*.lex</exclude>
+                        <exclude>**/*.lc</exclude>
+                        <exclude>**/*.config</exclude>
                     </excludes>
                 </configuration>
                 <executions>

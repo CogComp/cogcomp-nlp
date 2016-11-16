@@ -10,11 +10,15 @@ package edu.illinois.cs.cogcomp.core.math;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.List;
 
-public class PermutationsTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class PermutationsTest {
+
+    @Test
     public void testGetAllBinaryCombinations() {
         for (int numElements : new int[] {3, 4}) {
 
@@ -35,7 +39,7 @@ public class PermutationsTest extends TestCase {
 
             for (int i = 0; i < numElements; i++) {
                 assertEquals((double) MathUtilities.binomialCoeffs(numElements, i),
-                        numOnes.getCount(i));
+                        numOnes.getCount(i), 0.0);
             }
         }
 

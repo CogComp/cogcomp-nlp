@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 /**
  * This runs a standard benchmark test across several datasets for the NER package. Training can be
@@ -28,7 +29,8 @@ import java.io.File;
  * - "benchmark"
  *   - <dataset name> there can be as many of these directories as you like, Reuters, Ontonotes, MUC7
  *    and Web are examples of datasets one might run.
- *     - "config" : this must contain one or more configuration files, there will be at least one run per config file.
+ *     - "config" : this must contain one or more configuration files, there will be a run per config file, only files 
+ *     ending with ".config" are processed
  *     - "test" : the test directory. If training, and not test directory, the "train" directory will be used for both.
  *     - "train" : the directory with the training data, only needed if "-training" passed.
  *     - "dev" : the hold out set for training.
@@ -38,6 +40,9 @@ import java.io.File;
  * word level tokenization and so on. Alternatively, only the overall F1 scores are reported.
  * -training : this option will cause a training run, if training, evaluation will not be performed, that requires another run.
  * -features : for debugging, reports the feature vector for each token in the dataset. Output produced in a "features.out" file.
+ * -iterations : specify a fixed number of iterations, or -1 (the default) means auto converge requiring a "dev" directory.
+ * -release : build a final model for release, it will build on test and train, and unless "-iterations" specified, it will autoconvert
+ * using "dev" for a holdout set.
  * }
  */
 public class NerBenchmark {
@@ -57,12 +62,19 @@ public class NerBenchmark {
     /** Report the input features for each level */
     static boolean reportFeatures = false;
 
+    /** build the final release model, using test and train to train on, dev as a hold out 
+     * for auto convergence. */
+    static boolean release = false;
+
     /** Report the input features for each level */
     static boolean verbose = false;
 
     /** the output file name. */
     static String output = null;
 
+    /** -1 to converge automatically, positive number to do a fixed number of iterations. */
+    static int iterations = -1;
+    
     /**
      * parse the arguments, only the directory.
      * 
@@ -90,6 +102,18 @@ public class NerBenchmark {
                 case "-report":
                     reportLabels = true;
                     break;
+                case "-release":
+                    release = true;
+                    break;
+                case "-iterations":
+                    i++;
+                    if (args.length <= i) {
+                        throw new IllegalArgumentException(
+                                "The \"-iterations\" command line argument must be followed by an integer "
+                                + "indicating the number of training iterations.");
+                    }
+                    iterations = Integer.parseInt(args[i]);
+                    break;
                 case "-features":
                     reportFeatures = true;
                     if (args.length <= i + 1) {
@@ -107,23 +131,32 @@ public class NerBenchmark {
      * Run a benchmark test against each subdirectory within the benchmark directory.
      * 
      * @param args may specify the directory containing the benchmarks.
-     * @throws Exception
+     * @throws Exception if anything goes wrong.
      */
     public static void main(String[] args) throws Exception {
         parseArguments(args);
 
         // Loop over every directory within the benchmark directory. Each subdirectory will contain
         // a configuration file, and a directory with the test data at the very least. If there is
-        // also
-        // a train directory, a new model will be trained.
+        // also a train directory, a new model will be trained.
         String[] configs = new File(directory).list();
-
+        if (configs == null || configs.length == 0) {
+            throw new RuntimeException("There were no directories within \""+directory+"\". "
+                + "Expected directories for each dataset to evaluate.");
+        }
+        
         // for each directory, run the benchmark test once for each config file within the config
         // directory.
         for (String benchmarkdir : configs) {
             String dir = directory + "/" + benchmarkdir;
+            if (!new File(dir).isDirectory())
+                continue;
             File configsDir = new File(dir + "/config/");
-            
+            if (!configsDir.exists()) {
+                System.err.println("There was no config file in "+configsDir);
+                continue;
+            }
+
             // training data.
             String trainDirName = dir + "/train/";
             File trainDir = new File(trainDirName);
@@ -134,36 +167,39 @@ public class NerBenchmark {
 
             // final test set.
             String testDirName = dir + "/test/";
-            if (!new File(testDirName).exists())
-                testDirName = dir + "/train/";
+            File testDir = new File(testDirName);
             
             if (configsDir.exists() && configsDir.isDirectory()) {
-                String[] configfiles = configsDir.list();
+                String[] configfiles = configsDir.list(new FilenameFilter() {
+                    @Override
+                    public boolean accept(File dir, String name) {
+                        return name.endsWith(".config");
+                    }
+                });
                 for (String confFile : configfiles) {
                     confFile = dir + "/config/" + confFile;
                     if (!skiptraining) {
-                        Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-                        if (!trainDir.exists()) {
-                            System.out.print("Expected a training directory named " + trainDirName
-                                    + ", but it is not there.");
-                            System.exit(0);
+                        if (trainDir.exists() && testDir.exists() && devDir.exists()) {
+                            System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
+                            Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
+                            
+                            // there is a training directory, with training enabled, so train. We use the same dataset
+                            // for both training and evaluating.
+                            LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName);
+                            System.out.println("\n\n----- Final results for "+confFile+", verbose ------");
+                            NETesterMultiDataset.test(testDirName, true,
+                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                            System.out.println("\n\n----- Final results for "+confFile+", F1 only ------");
+                            NETesterMultiDataset.test(testDirName, false,
+                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                        } else {
+                            System.out.println("Training requires a \"train\", \"test\" and \"dev\" subdirectory, "
+                                + "not so within "+dir+", skipping that directory.");
                         }
-                        System.out.println("----- Training up the model ------");
-
-                        // there is a training directory, with training enabled, so train. We use the same dataset
-                        // for both training and evaluating.
-                        LearningCurveMultiDataset.getLearningCurve(-1, trainDirName, devDirName);
-                        System.out.println("completed training against configuration : " + confFile);
-                        System.out.println("\n\n\n\n----- Final Results, testing against test set ------");
-                        NETesterMultiDataset.test(testDirName, true,
-                                ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
-                        System.out.println("\n\n----- Final Results, F1 only ------");
-                        NETesterMultiDataset.test(testDirName, false,
-                                ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
-                                ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
-                        
-                    } else {
+                    } else if (!release) {
+                        System.out.println("\n\n----- Reporting results from existing models for "+confFile+" ------");
                         Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
                         System.out.println("Benchmark against configuration : " + confFile);
                         if (reportLabels)
@@ -174,6 +210,28 @@ public class NerBenchmark {
                             NETesterMultiDataset.test(testDirName, verbose,
                                             ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                             ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                    }
+                    
+                    if (release) {
+                        if (trainDir.exists() && testDir.exists() && devDir.exists()) {
+                            Parameters.readConfigAndLoadExternalData(confFile, true);
+                            System.out.println("\n\n----- Building a final model for "+confFile+" ------");
+
+                            // there is a training directory, with training enabled, so train. We use the same dataset
+                            // for both training and evaluating.
+                            LearningCurveMultiDataset.buildFinalModel(iterations, trainDirName, testDirName, devDirName);
+                            System.out.println("\n\n----- Release results for "+confFile+", verbose ------");
+                            NETesterMultiDataset.test(devDirName, true,
+                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                            System.out.println("\n\n----- Release results for "+confFile+", F1 only ------");
+                            NETesterMultiDataset.test(devDirName, false,
+                                    ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
+                                    ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
+                        } else {
+                            System.out.println("Building a final model requires a \"train\", \"test\" and \"dev\" subdirectory, "
+                                + "not so within "+dir+", skipping that directory.");
+                        }
                     }
                 }
             }

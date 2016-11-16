@@ -14,14 +14,18 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Collections;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Vivek Srikumar
  */
-public class TestCollinsHeadFinder extends TestCase {
+public class TestCollinsHeadFinder {
 
+    @Test
     public final void test1() throws Exception {
 
         String sentence = "Central Asia , North east Europe and Africa are continents .";
@@ -52,6 +56,7 @@ public class TestCollinsHeadFinder extends TestCase {
         assertEquals(headWord.getStartSpan(), 9);
     }
 
+    @Test
     public final void test2() throws Exception {
         String sentence = "Mr. Gorbachev 's publicized tongue - lashing of the press on Oct. 13";
 
