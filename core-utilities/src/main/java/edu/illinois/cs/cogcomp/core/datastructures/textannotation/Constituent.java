@@ -172,6 +172,7 @@ public class Constituent implements Serializable, HasAttributes {
      */
     public Map<String, Double> getLabelsToScores()
     {
+
         if ( null == labelsToScores)
         {
             labelsToScores = Maps.newHashMap();
