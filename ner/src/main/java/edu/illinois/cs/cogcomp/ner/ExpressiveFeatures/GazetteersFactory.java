@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,10 @@ public class GazetteersFactory {
 
     /** this is a token whose only use it to ensure thread safety. */
     private static String GAZ_INIT_LOCK = "GAZ_INIT_LOCK";
+
+    /** keep the already initialized gazetteers, this is for multilingual NER */
+    private static Map<String, Gazetteers> gazetteers_map = new HashMap<>();
+
     /**
      * Initialize the gazetteers. This method requires some exception handling, so the
      * initialization is separated from the fetching.
@@ -37,29 +43,37 @@ public class GazetteersFactory {
      */
     static public void init(int maxPhraseLength, String path, boolean flatgazetteers)
             throws IOException {
-        synchronized (GAZ_INIT_LOCK) {
-            if (gazetteers == null) {
-                if (flatgazetteers) {
-                    gazetteers = new FlatGazetteers(path);
-                } else {
-                    gazetteers = new TreeGazetteers(maxPhraseLength, path);
-                }
-            } else {
-                if (flatgazetteers) {
-                    if (gazetteers instanceof TreeGazetteers ) {
-                        logger.warn("We had previously loaded a TreeGazetteers, but reloading a FlatGazetteers");
-                        // we want a flat gazetteer, but we have a tree gazetteer
-                        gazetteers = null;
+
+        if(gazetteers_map.containsKey(path)) {
+            gazetteers = gazetteers_map.get(path);
+        } else {
+
+            synchronized (GAZ_INIT_LOCK) {
+//                if (gazetteers == null) {
+                    if (flatgazetteers) {
                         gazetteers = new FlatGazetteers(path);
-                    }
-                } else {
-                    if (gazetteers instanceof FlatGazetteers ) {
-                        logger.warn("We had previously loaded a FlatGazetteers, but reloading a TreeGazetteers");
-                        gazetteers = null;
+                    } else {
                         gazetteers = new TreeGazetteers(maxPhraseLength, path);
                     }
-                }
+//                } else {
+//                    if (flatgazetteers) {
+//                        if (gazetteers instanceof TreeGazetteers) {
+//                            logger.warn("We had previously loaded a TreeGazetteers, but reloading a FlatGazetteers");
+//                            // we want a flat gazetteer, but we have a tree gazetteer
+//                            gazetteers = null;
+//                            gazetteers = new FlatGazetteers(path);
+//                        }
+//                    } else {
+//                        if (gazetteers instanceof FlatGazetteers) {
+//                            logger.warn("We had previously loaded a FlatGazetteers, but reloading a TreeGazetteers");
+//                            gazetteers = null;
+//                            gazetteers = new TreeGazetteers(maxPhraseLength, path);
+//                        }
+//                    }
+//                }
             }
+
+            gazetteers_map.put(path, gazetteers);
         }
     }
 
@@ -70,5 +84,9 @@ public class GazetteersFactory {
      */
     static public Gazetteers get() {
         return gazetteers;
+    }
+
+    static public void set(Gazetteers gaz){
+        gazetteers = gaz;
     }
 }
