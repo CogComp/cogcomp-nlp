@@ -160,26 +160,19 @@ public class Constituent implements Serializable, HasAttributes {
     }
 
     /**
-     * return map of labels to scores. If not explicitly created, generates a trivial distribution
-<<<<<<< HEAD
-     *    using the label assigned at construction.  The returned map is a copy, to avoid inadvertant
-     *    changes to the label/score mapping.
-=======
-     *    using the label assigned at construction.
->>>>>>> added label distributions to Constituents and Relations.
+     * Return map of labels to scores. If not explicitly created, returns null.
+     * The returned map is a copy, to avoid inadvertant changes to the label/score mapping.
      *
      * @return map of labels to scores
      */
     public Map<String, Double> getLabelsToScores()
     {
+        Map<String, Double> returnMap = null;
 
-        if ( null == labelsToScores)
-        {
-            labelsToScores = Maps.newHashMap();
-            labelsToScores.put( getLabel(), 1.0 );
+        if ( null != labelsToScores) {
+            returnMap = new HashMap<>();
+            returnMap.putAll(labelsToScores);
         }
-        Map<String, Double> returnMap = new HashMap<>();
-        returnMap.putAll(labelsToScores);
         return returnMap;
     }
 
@@ -442,7 +435,6 @@ public class Constituent implements Serializable, HasAttributes {
 
         }
 
-
         return hashCode;
 
     }
@@ -605,4 +597,5 @@ public class Constituent implements Serializable, HasAttributes {
     public void removeAllAttributes() {
         this.attributes = null;
     }
+
 }

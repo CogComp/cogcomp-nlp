@@ -86,15 +86,14 @@ public class Relation implements Serializable, HasAttributes {
      */
     public Map<String, Double> getLabelsToScores()
     {
-        if ( null == labelsToScores)
-        {
-            labelsToScores = Maps.newHashMap();
-            labelsToScores.put( this.getRelationName(), 1.0 );
+        Map<String, Double> returnMap = null;
+        if ( null != labelsToScores) {
+            returnMap = new HashMap<>();
+            returnMap.putAll(labelsToScores);
         }
-        Map<String, Double> toReturn = new HashMap<>();
-        toReturn.putAll(labelsToScores);
-        return toReturn;
+        return returnMap;
     }
+
 
 
     @Override
