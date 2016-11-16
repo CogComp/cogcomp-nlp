@@ -7,8 +7,10 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import com.google.common.collect.Maps;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.math.ArgMax;
 
 import java.io.Serializable;
 import java.util.*;
@@ -45,6 +47,7 @@ public class Constituent implements Serializable, HasAttributes {
 
     protected final String viewName;
     protected Map<String, String> attributes;
+    protected Map<String, Double> labelsToScores;
 
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
@@ -64,6 +67,29 @@ public class Constituent implements Serializable, HasAttributes {
         this(label, 1.0, viewName, text, start, end);
     }
 
+    /**
+     * instantiate a constituent with a set of labels and corresponding scores: the 'main' label (returned by
+     *    #getLabel()) will be the label with the highest score, as decided by {@link ArgMax}.
+     *
+     * Start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
+     * constituent right at the beginning of a text has start/end (0,1) offsets are relative to the
+     * entire text span (i.e. NOT sentence-relative) This constructor assigns default score to
+     * the constituent.
+     *
+     * @param labelsToScores set of possible labels and corresponding scores.
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
+     * @param start start token offset
+     * @param end end token offset (one-past-the-end)
+     */
+    public Constituent(Map<String, Double> labelsToScores, String viewName, TextAnnotation text, int start, int end)
+    {
+        this( new ArgMax<>(labelsToScores).getArgmax(), new ArgMax<>(labelsToScores).getMaxValue(), viewName, text, start, end );
+        this.labelsToScores = Maps.newHashMap();
+        this.labelsToScores.putAll(labelsToScores);
+    }
 
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
@@ -82,13 +108,7 @@ public class Constituent implements Serializable, HasAttributes {
     public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
             int end) {
 
-        if (label == null)
-            label = "";
-        int labelId = text.symtab.getId(label);
-        if (labelId == -1)
-            labelId = text.symtab.add(label);
-
-        this.label = labelId;
+        this.label = getLabelId(label, text);
         this.constituentScore = score;
         this.viewName = viewName;
         textAnnotation = text;
@@ -137,6 +157,31 @@ public class Constituent implements Serializable, HasAttributes {
                 + "), -> ("
                 + startCharOffset
                 + ", " + endCharOffset + ")";
+    }
+
+    /**
+     * return map of labels to scores. If not explicitly created, generates a trivial distribution
+     *    using the label assigned at construction.
+     *
+     * @return map of labels to scores
+     */
+    public Map<String, Double> getLabelsToScores()
+    {
+        if ( null == labelsToScores)
+        {
+            labelsToScores = Maps.newHashMap();
+            labelsToScores.put( getLabel(), 1.0 );
+        }
+        return labelsToScores;
+    }
+
+    private int getLabelId(String label, TextAnnotation text) {
+        if (label == null)
+            label = "";
+        int labelId = text.symtab.getId(label);
+        if (labelId == -1)
+            labelId = text.symtab.add(label);
+        return labelId;
     }
 
     public int getStartCharOffset() {
