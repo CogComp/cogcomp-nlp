@@ -106,6 +106,10 @@ public class TemporalChunkerAnnotator extends Annotator{
                 true
         );
         timexNormalizer = new TimexNormalizer();
+
+        this.dct = new Date();
+        timexNormalizer.setTime(this.dct);
+
     }
 
     @Override
@@ -158,14 +162,19 @@ public class TemporalChunkerAnnotator extends Annotator{
                     Constituent temp_label =
                             new Constituent(clabel, ViewNames.TIMEX3, record,
                                     currentChunkStart, currentChunkEnd);
-                    try {
-                        clabel = heidelTimeNormalize(temp_label);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    Constituent label =
-                            new Constituent(clabel, ViewNames.TIMEX3, record,
-                                    currentChunkStart, currentChunkEnd);
+//                    try {
+//                        clabel = heidelTimeNormalize(temp_label);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    Constituent label =
+//                            new Constituent(clabel, ViewNames.TIMEX3, record,
+//                                    currentChunkStart, currentChunkEnd);
+                    Interval normRes = timexNormalizer.normalize(temp_label.toString());
+                    Constituent label = new Constituent(normRes==null?"":normRes.toString(),
+                            ViewNames.TIMEX3, record,
+                            currentChunkStart, currentChunkEnd);
+
                     chunkView.addConstituent(label);
                     clabel = null;
                 } // else no chunk in progress (we are at the start of the doc)
@@ -183,15 +192,19 @@ public class TemporalChunkerAnnotator extends Annotator{
             Constituent temp_label =
                     new Constituent(clabel, ViewNames.TIMEX3, record,
                             currentChunkStart, currentChunkEnd);
-            try {
-                clabel = heidelTimeNormalize(temp_label);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Constituent label =
-                    new Constituent(clabel, ViewNames.TIMEX3, record,
-                            currentChunkStart, currentChunkEnd);
+//            try {
+//                clabel = heidelTimeNormalize(temp_label);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            Constituent label =
+//                    new Constituent(clabel, ViewNames.TIMEX3, record,
+//                            currentChunkStart, currentChunkEnd);
+            Interval normRes = timexNormalizer.normalize(temp_label.toString());
+            Constituent label = new Constituent(normRes==null?"":normRes.toString(),
+                    ViewNames.TIMEX3, record,
+                    currentChunkStart, currentChunkEnd);
             chunkView.addConstituent(label);
         }
         record.addView(ViewNames.TIMEX3, chunkView);
@@ -227,10 +240,17 @@ public class TemporalChunkerAnnotator extends Annotator{
             timexNormalizer.setTime(this.dct);
         }
 
+        String text = "DAVAO, Philippines, March 4 (AFP). At least 19 people were killed and 114 people were wounded in Tuesday's southern Philippines airport blast, officials said, but reports said the death toll could climb to 30. Radio station DXDC placed the death toll at 30, without giving a source for the figure, which officials could not immediately confirm. The Davao Medical Center, a regional government hospital, recorded 19 deaths with 50 wounded. Medical evacuation workers however said the injured list was around 114, spread out at various hospitals. A powerful bomb tore through a waiting shed at the Davao City international airport at about 5.15 pm (0915 GMT) while another explosion hit a bus terminal at the city. There were no reports of injuries in the second blast. \"It's a very powerful bomb. The waiting shed literally exploded,\" said Vice Mayor Luis Bongoyan, speaking to local radio station. Television footage showed medical teams carting away dozens of wounded victims with fully armed troops on guard. Many of the victims were shown with hastily applied bandages, and teams of nurses and doctors were seen in packed emergency rooms attending to the wounded.";
+
+        //String temp = this.heidelTime.process(text, this.dct);
+        //System.out.println(temp);
         String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
+        System.out.println(xml_res);
         int startIndex = xml_res.indexOf("<TimeML>");
         xml_res = xml_res.substring(startIndex);
         Interval interval_res = timexNormalizer.normalize(xml_res);
+        System.out.println(timexNormalizer.normalize("march 4"
+              ));
         String string_res = interval_res==null?"":interval_res.toString();
 
         return string_res;

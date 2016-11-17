@@ -105,6 +105,7 @@ public class TestTemporalChunker {
         }
         String compressedText = builder.toString();
         logger.info(compressedText);
+        logger.info(timexView.toString());
         assertNotNull(compressedText);
 
     }
