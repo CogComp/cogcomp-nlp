@@ -58,20 +58,6 @@ public class DVector implements Cloneable, java.io.Serializable {
         }
     }
 
-
-    /**
-     * Throws an exception when the specified index is negative.
-     *
-     * @param i The index.
-     * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
-     **/
-    protected void boundsCheck(int i) {
-        if (i < 0)
-            throw new ArrayIndexOutOfBoundsException(
-                    "Attempted to access negative index of DVector.");
-    }
-
-
     /**
      * Retrieves the value stored at the specified index of the vector, or 0 if the vector isn't
      * long enough.
@@ -94,7 +80,6 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
      **/
     public double get(int i, double d) {
-        boundsCheck(i);
         return i < size ? vector[i] : d;
     }
 
@@ -122,7 +107,6 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @throws ArrayIndexOutOfBoundsException When <code>i</code> &lt; 0.
      **/
     public double set(int i, double v, double d) {
-        boundsCheck(i);
         expandFor(i, d);
         double result = vector[i];
         vector[i] = (float)v;
@@ -160,7 +144,6 @@ public class DVector implements Cloneable, java.io.Serializable {
      * @return The removed element.
      **/
     public double remove(int i) {
-        boundsCheck(i);
         if (i >= size)
             throw new ArrayIndexOutOfBoundsException("LBJ: DVector: Can't remove element at index "
                     + i + " as it is larger than the size (" + size + ")");
