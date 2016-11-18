@@ -15,7 +15,9 @@ import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.JsonSerializer;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
@@ -25,6 +27,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -41,6 +44,37 @@ public class JsonSerializerTest {
 
     @Test
     public void testSerializerWithCharOffsets() {
+
+        View rhymeView = new View("rhyme", "test", ta, 0.4 );
+
+        Map< String, Double > newLabelsToScores = new TreeMap< String, Double >();
+        String[] labels = { "eeny", "meeny", "miny", "mo" };
+        double[] scores = { 0.15, 0.15, 0.3, 0.4 };
+
+        for ( int i = 0; i < labels.length; ++i )
+            newLabelsToScores.put(labels[i], scores[i]);
+
+        Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        rhymeView.addConstituent(first);
+
+        /**
+         * no constraint on scores -- don't have to sum to 1.0
+         */
+        for ( int i = labels.length -1; i > 0; --i )
+            newLabelsToScores.put( labels[i], scores[3-i] );
+
+        Constituent second = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        rhymeView.addConstituent(second);
+
+        Map<String, Double> relLabelsToScores = new TreeMap<>();
+        relLabelsToScores.put( "Yes", 0.8 );
+        relLabelsToScores.put( "No", 0.2 );
+
+        Relation rel = new Relation( relLabelsToScores, first, second );
+        rhymeView.addRelation(rel);
+
+        ta.addView("rhyme", rhymeView);
+
         String taJson = SerializationHelper.serializeToJson(ta, true);
         System.err.println(taJson);
 
@@ -73,6 +107,21 @@ public class JsonSerializerTest {
         assertNotNull(deserializedForm);
         assertEquals(seventhTokenForm, deserializedForm);
 
+        Constituent thirdPos = ta.getView(ViewNames.POS).getConstituents().get(3);
+
+        assertEquals(null, thirdPos.getLabelsToScores());
+
+        View rhymeRecons = ta.getView("rhyme");
+        assertNotNull(rhymeRecons);
+        Relation r = rhymeRecons.getRelations().get(0);
+        Map<String, Double> relLabelScores = r.getLabelsToScores();
+        assertNotNull(relLabelScores);
+        assertEquals(2, relLabelScores.size());
+
+        Constituent c = r.getSource();
+        Map<String, Double> cLabelScores = c.getLabelsToScores();
+        assertNotNull(cLabelScores);
+        assertEquals(4, cLabelScores.size());
 
     }
 
