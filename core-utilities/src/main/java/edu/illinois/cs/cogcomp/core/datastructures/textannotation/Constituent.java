@@ -46,8 +46,8 @@ public class Constituent implements Serializable, HasAttributes {
     // protected boolean useConstituentTokensAsSpan;
 
     protected final String viewName;
+    protected final Map<String, Double> labelsToScores;
     protected Map<String, String> attributes;
-    protected Map<String, Double> labelsToScores;
 
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
@@ -64,7 +64,7 @@ public class Constituent implements Serializable, HasAttributes {
      * @param end end token offset (one-past-the-end)
      */
     public Constituent(String label, String viewName, TextAnnotation text, int start, int end) {
-        this(label, 1.0, viewName, text, start, end);
+        this(null, label, 1.0, viewName, text, start, end);
     }
 
     /**
@@ -86,9 +86,7 @@ public class Constituent implements Serializable, HasAttributes {
      */
     public Constituent(Map<String, Double> labelsToScores, String viewName, TextAnnotation text, int start, int end)
     {
-        this( new ArgMax<>(labelsToScores).getArgmax(), new ArgMax<>(labelsToScores).getMaxValue(), viewName, text, start, end );
-        this.labelsToScores = Maps.newHashMap();
-        this.labelsToScores.putAll(labelsToScores);
+        this( labelsToScores, new ArgMax<>(labelsToScores).getArgmax(), new ArgMax<>(labelsToScores).getMaxValue(), viewName, text, start, end );
     }
 
     /**
@@ -107,6 +105,28 @@ public class Constituent implements Serializable, HasAttributes {
      */
     public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
             int end) {
+        this(null, label, score, viewName, text, start, end);
+    }
+
+    /**
+     * private constructor to allow immutable labels to scores map
+     *
+     * @param label label of this Constituent
+     * @param score confidence in label
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
+     * @param start start token offset
+     * @param end end token offset (one-past-the-end)
+     */
+    private Constituent(Map<String, Double> labelsToScores, String label, double score, String viewName, TextAnnotation text, int start, int end) {
+        if (null != labelsToScores) {
+            this.labelsToScores = Maps.newHashMap();
+            this.labelsToScores.putAll(labelsToScores);
+        }
+        else
+            this.labelsToScores = null;
 
         this.label = getLabelId(label, text);
         this.constituentScore = score;
@@ -302,8 +322,9 @@ public class Constituent implements Serializable, HasAttributes {
             return false;
         if (null == this.labelsToScores && null != that.labelsToScores)
             return false;
-        if (!this.labelsToScores.equals(that.labelsToScores))
-            return false;
+        if ( null != this.labelsToScores && null != that.labelsToScores)
+            if (!this.labelsToScores.equals(that.labelsToScores))
+                return false;
 
         return equalsWithoutAttributeEqualityCheck(that);
     }
