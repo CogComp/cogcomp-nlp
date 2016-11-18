@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestLabelTwoBefore extends TestCase {
+public class TestLabelTwoBefore {
     private static Logger logger = LoggerFactory.getLogger(TestLabelTwoBefore.class);
 
     private static List<TextAnnotation> tas;
@@ -38,10 +39,7 @@ public class TestLabelTwoBefore extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
         logger.info("LabelTwoBefore Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test

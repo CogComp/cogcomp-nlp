@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.core.utilities;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import junit.framework.TestCase;
 import org.junit.After;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,9 +18,12 @@ import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class XMLSerializationTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class XMLSerializationTest {
     private static Logger logger = LoggerFactory.getLogger(XMLSerializationTest.class);
 
+    @Test
     public void testSanity() {
         logger.info("Example Usage");
         XMLModelExample ob = new XMLModelExample("1", "2", "3");

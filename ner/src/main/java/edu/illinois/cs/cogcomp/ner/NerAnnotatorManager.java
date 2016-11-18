@@ -9,8 +9,6 @@ package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,9 +21,9 @@ import java.util.Map;
  * Created by mssammon on 8/25/15.
  */
 public class NerAnnotatorManager {
-    private static Logger logger = LoggerFactory.getLogger(NerAnnotatorManager.class);
 
-    private static Map<String, NERAnnotator> nerAnnotatorMap;
+    /** this maps annotators to labels for the ner system, there can be only one. */
+    private static Map<String, NERAnnotator> nerAnnotatorMap = new HashMap<>();
 
     /**
      * the viewName will be used as a KEY to instantiate/get the corresponding NER instance
@@ -61,20 +59,13 @@ public class NerAnnotatorManager {
      *         parameters in nonDefaultConfig.
      */
     public static NERAnnotator buildNerAnnotator(ResourceManager nonDefaultRm, String viewName) {
-
-        if (null == nerAnnotatorMap)
-            nerAnnotatorMap = new HashMap<>();
-
-        if (!nerAnnotatorMap.containsKey(viewName)) {
-
-            NERAnnotator ner = new NERAnnotator(nonDefaultRm, viewName);
-            nerAnnotatorMap.put(viewName, ner);
-        } else {
-            logger.warn("You are replacing an existing NER model for the view name '" + viewName
-                    + "'. ");
+        synchronized (nerAnnotatorMap) {
+            NERAnnotator ner = nerAnnotatorMap.get(viewName);
+            if (ner == null) {
+                ner = new NERAnnotator(nonDefaultRm, viewName);
+                nerAnnotatorMap.put(viewName, ner);
+            }
+            return ner;
         }
-
-
-        return nerAnnotatorMap.get(viewName);
     }
 }

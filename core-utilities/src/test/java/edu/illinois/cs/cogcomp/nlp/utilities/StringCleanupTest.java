@@ -8,10 +8,13 @@
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StringCleanupTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class StringCleanupTest {
     private static Logger logger = LoggerFactory.getLogger(StringCleanupTest.class);
 
     private static final String utf8RefStr = "A𝔊BC ﾁｮｺﾚｰﾄ —interet”";
@@ -25,16 +28,17 @@ public class StringCleanupTest extends TestCase {
     private static String combinedStr = suppSample + " " + halfWidthKatanaSample + " "
             + diacriticSample;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
+//
+//    protected void tearDown() throws Exception {
+//        super.tearDown();
+//    }
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
 
-
-    public static void testStringCleanup() {
+    @Test
+    public void testStringCleanup() {
         String inStr = combinedStr;
         String utf8Str = StringCleanup.normalizeToUtf8(inStr);
 

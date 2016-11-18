@@ -17,19 +17,23 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
 import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Vivek Srikumar
  */
-public class TestParseViewGenerator extends TestCase {
+public class TestParseViewGenerator {
     private static Logger logger = LoggerFactory.getLogger(TestParseViewGenerator.class);
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
+    @Test
     public final void testCharniakParseViewGenerator() {
         String sentence = "This is a test .";
 

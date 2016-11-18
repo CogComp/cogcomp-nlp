@@ -11,22 +11,25 @@
 package edu.illinois.cs.cogcomp.core.algorithms;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Vivek Srikumar Jul 7, 2009
  */
-public class TestLongestCommonSubsequence extends TestCase {
+public class TestLongestCommonSubsequence {
 
-    protected void setUp() throws Exception {
+//    protected void setUp() throws Exception {
+//
+//    }
 
-    }
-
+    @Test
     public void testGetLCSMatchSentence() {
 
         String s1 = "Dan bought two books.";
@@ -40,6 +43,7 @@ public class TestLongestCommonSubsequence extends TestCase {
         }
     }
 
+    @Test
     public void testGetLCSMatchMap() {
         String s1 = "Mr. John Smith-Murray died at Denver, CO.";
         String s2 = "Mr. John Smith - Murray died at Denver , CO .";
@@ -52,6 +56,7 @@ public class TestLongestCommonSubsequence extends TestCase {
 
     }
 
+    @Test
     public void testGetLCSMatch() {
         String strA = "ABABAB";
         String strB = "BABA";

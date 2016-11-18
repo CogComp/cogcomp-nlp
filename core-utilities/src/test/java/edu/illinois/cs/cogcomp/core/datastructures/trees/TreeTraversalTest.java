@@ -8,11 +8,15 @@
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author vivek
  */
-public class TreeTraversalTest extends TestCase {
+public class TreeTraversalTest {
 
     private Tree<String> tree;
     String treeString = "(Root (Leaf1)\n" + "      (Child1 (Child1Leaf))\n"
@@ -23,9 +27,9 @@ public class TreeTraversalTest extends TestCase {
      * 
      * @see junit.framework.TestCase#setUp()
      */
-    protected void setUp() throws Exception {
-        super.setUp();
 
+    @Before
+    public void setUp() throws Exception {
         tree = Tree.readTreeFromString(treeString);
     }
 
@@ -34,6 +38,7 @@ public class TreeTraversalTest extends TestCase {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal#breadthFirstTraversal(Tree)}
      * .
      */
+    @Test
     public final void testBreadthFirstTraversal() {
 
         String[] output =
@@ -52,6 +57,7 @@ public class TreeTraversalTest extends TestCase {
      * {@link edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal#depthFirstTraversal(Tree)}
      * .
      */
+    @Test
     public final void testDepthFirstTraversal() {
 
         String[] output =

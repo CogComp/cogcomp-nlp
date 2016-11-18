@@ -14,12 +14,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TestHeadFinderDependencyHelper extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class TestHeadFinderDependencyHelper {
     private static Logger logger = LoggerFactory.getLogger(TestHeadFinderDependencyHelper.class);
 
+    @Test
     public final void testHeadFinderDependencyHelper() {
         String s = "There is no recovery period -- it 's go , go , go .";
 

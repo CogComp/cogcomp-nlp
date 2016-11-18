@@ -8,12 +8,15 @@
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class TestLexicon extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class TestLexicon {
     private static Logger logger = LoggerFactory.getLogger(TestLexicon.class);
 
     private final Random random = new Random();
@@ -24,6 +27,7 @@ public class TestLexicon extends TestCase {
     int maxLen = 4;
     int N = 50000;
 
+    @Test
     public void testLexicon() throws Exception {
         Lexicon lexicon = new Lexicon(true, true);
 

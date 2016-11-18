@@ -11,23 +11,31 @@ import junit.framework.TestCase;
 import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.POS;
 import net.didion.jwnl.data.PointerType;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Vivek Srikumar
  */
-public class TestWordNetManager extends TestCase {
+public class TestWordNetManager {
 
     WordNetManager wordnet;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         WordNetManager.loadConfigAsClasspathResource(true);
         wordnet = WordNetManager.getInstance();
     }
 
+    @Test
     public void testExistsEntry() throws Exception {
         assertTrue(wordnet.existsEntry("help", POS.NOUN));
         assertTrue(wordnet.existsEntry("help", POS.VERB));
@@ -41,6 +49,7 @@ public class TestWordNetManager extends TestCase {
         assertTrue(wordnet.existsEntry("beautiful", POS.ADJECTIVE));
     }
 
+    @Test
     public void testGetGlosses() throws Exception {
         List<String> g = wordnet.getGlosses("test", POS.VERB, false);
         assertEquals(g.size(), 7);
@@ -53,6 +62,7 @@ public class TestWordNetManager extends TestCase {
                 + "This approach has been tried with good results\"; " + "\"Test this recipe\""));
     }
 
+    @Test
     public void testGetSynonyms() throws JWNLException {
 
         assertEquals(Arrays.asList("trial", "trial_run", "test", "tryout", "test", "mental_test",
@@ -83,6 +93,7 @@ public class TestWordNetManager extends TestCase {
 
     }
 
+    @Test
     public void testGetHypernyms() throws Exception {
         // hyperNymsFirstOnly
         assertEquals(wordnet.getHypernyms("test", true).toString(),
@@ -100,6 +111,7 @@ public class TestWordNetManager extends TestCase {
                 "[experiment, experimentation, mental_measurement, communication, communicating, attempt, effort, endeavor, endeavour, try, attempt, effort, endeavor, endeavour, try, covering, natural_covering, cover]");
     }
 
+    @Test
     public void testGetLexicographerFileNames() throws JWNLException {
         assertEquals(wordnet.getLexicographerFileNames("test", true).toString(), "[noun.cognition, verb.social]");
         assertEquals(wordnet.getLexicographerFileNames("test", false).toString(),
@@ -110,6 +122,7 @@ public class TestWordNetManager extends TestCase {
                 "[noun.cognition, noun.act, noun.communication, noun.act, noun.act, noun.animal]");
     }
 
+    @Test
     public void testGetPointerTypes() throws JWNLException {
         assertEquals(wordnet.getPointers("test", false).toString(), "[hypernym, nominalization, hyponym, verb group]");
         assertEquals(wordnet.getPointers("test", true).toString(), "[hypernym, nominalization, hyponym]");
@@ -118,11 +131,13 @@ public class TestWordNetManager extends TestCase {
         assertEquals(wordnet.getPointers("test", POS.NOUN, true).toString(), "[hypernym, nominalization, hyponym]");
     }
 
+    @Test
     public void testGetSentenceFrames() throws JWNLException {
         assertEquals(wordnet.getVerbFrames("test", false).toString(), "[Something ----s, Somebody ----s]");
         assertEquals(wordnet.getVerbFrames("test", true).toString(), "[Something ----s]");
     }
 
+    @Test
     public void testGetHolonyms() throws JWNLException {
         assertEquals(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, false).toString(), "[sandwich]");
         assertEquals(wordnet.getRelatedWords("bread", PointerType.PART_HOLONYM, true).toString(), "[sandwich]");
