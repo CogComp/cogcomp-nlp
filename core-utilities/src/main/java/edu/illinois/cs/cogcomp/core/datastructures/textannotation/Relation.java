@@ -116,6 +116,13 @@ public class Relation implements Serializable, HasAttributes {
             if (!this.attributes.equals(r.attributes))
                 return false;
 
+        if (this.labelsToScores == null && r.labelsToScores != null)
+            return false;
+        if (this.labelsToScores != null && r.labelsToScores == null)
+            return false;
+        if (!this.labelsToScores.equals(r.labelsToScores))
+            return false;
+
         return r.getRelationName().equals(this.relationName)
                 && r.getSource().equals(this.getSource()) && r.getTarget().equals(this.getTarget())
                 && r.getScore() == this.getScore();
@@ -189,6 +196,7 @@ public class Relation implements Serializable, HasAttributes {
         int hashCode =  this.getRelationName().hashCode() * 79 + this.getSource().hashCode() * 7
                 + this.getTarget().hashCode() * 13 + (new Double(this.getScore())).hashCode() * 17;
         hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 13);
+        hashCode += (this.labelsToScores == null ? 0 : this.labelsToScores.hashCode() * 23);
 
         return hashCode;
     }

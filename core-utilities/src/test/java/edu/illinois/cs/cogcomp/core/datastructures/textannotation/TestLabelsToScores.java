@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 
 /**
@@ -130,6 +131,41 @@ public class TestLabelsToScores {
 
         assertEquals( storedLabelsToScores.size(), 2 );
 
-        assertEquals(storedLabelsToScores.get("No"), 0.2, 0.001 );
+        assertEquals( storedLabelsToScores.get("No"), 0.2, 0.001 );
+    }
+
+
+    @Test
+    public void testHashCode()
+    {
+        TextAnnotation ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS}, false, 1);
+
+        Map< String, Double > newLabelsToScores = new TreeMap< String, Double >();
+        String[] labels = { "eeny", "meeny", "miny", "mo" };
+        double[] scores = { 0.15, 0.15, 0.3, 0.4 };
+
+        for ( int i = 0; i < labels.length; ++i )
+            newLabelsToScores.put(labels[i], scores[i]);
+
+        Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        Constituent firstDup = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+
+        assertEquals(first, firstDup);
+        assertEquals(first.hashCode(), firstDup.hashCode());
+
+        /**
+         * no constraint on scores -- don't have to sum to 1.0
+         */
+        for ( int i = 0; i < labels.length - 1; ++i )
+            newLabelsToScores.put( labels[i], scores[i] );
+
+        newLabelsToScores.put( "mo", 0.41 );
+
+        Constituent second = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+
+        assertFalse(second.equals(first));
+
+        assertFalse(second.hashCode() == first.hashCode());
     }
 }

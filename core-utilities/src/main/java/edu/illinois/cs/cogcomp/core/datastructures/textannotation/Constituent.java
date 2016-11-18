@@ -298,6 +298,13 @@ public class Constituent implements Serializable, HasAttributes {
             if (!this.attributes.equals(that.attributes))
                 return false;
 
+        if (null != this.labelsToScores && null == that.labelsToScores)
+            return false;
+        if (null == this.labelsToScores && null != that.labelsToScores)
+            return false;
+        if (!this.labelsToScores.equals(that.labelsToScores))
+            return false;
+
         return equalsWithoutAttributeEqualityCheck(that);
     }
 
@@ -417,6 +424,7 @@ public class Constituent implements Serializable, HasAttributes {
 
         hashCode += this.getLabel().hashCode() * 91;
         hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 7);
+        hashCode += (this.labelsToScores == null ? 0 : this.labelsToScores.hashCode() * 23);
         hashCode += (new Double(this.constituentScore)).hashCode() * 67;
         hashCode += this.getViewName().hashCode();
 
