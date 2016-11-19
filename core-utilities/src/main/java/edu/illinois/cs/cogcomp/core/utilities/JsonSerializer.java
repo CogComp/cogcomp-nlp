@@ -27,73 +27,19 @@ import org.slf4j.LoggerFactory;
 
 public class JsonSerializer extends AbstractSerializer {
 
-    private final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
-
     public static final String FORM = "form";
     public static final String STARTCHAROFFSET = "startCharOffset";
     public static final String ENDCHAROFFSET = "endCharOffset";
     public static final String TOKENOFFSETS = "tokenOffsets";
-
-    JsonObject writeTextAnnotation(TextAnnotation ta) {
-        return writeTextAnnotation(ta, false);
-    }
-
-    JsonObject writeTextAnnotation(TextAnnotation ta, boolean doWriteTokenOffsets) {
-
-        // get rid of the views that are empty
-        Set<String> viewNames = new HashSet<>(ta.getAvailableViews());
-        for (String vu : viewNames) {
-            if (ta.getView(vu) == null) {
-                logger.warn("View " + vu + " is null");
-                ta.removeView(vu);
-            }
-        }
-
-        JsonObject json = new JsonObject();
-
-        writeString("corpusId", ta.getCorpusId(), json);
-        writeString("id", ta.getId(), json);
-        writeString("text", ta.getText(), json);
-        writeStringArray("tokens", ta.getTokens(), json);
-        if (doWriteTokenOffsets)
-            writeTokenOffsets(TOKENOFFSETS, ta.getView(ViewNames.TOKENS), json);
-
-        writeSentences(ta, json);
-
-        JsonArray views = new JsonArray();
-        for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-            if (viewName.equals(ViewNames.SENTENCE))
-                continue;
-
-            JsonObject view = new JsonObject();
-
-            writeString("viewName", viewName, view);
-            views.add(view);
-
-            JsonArray viewData = new JsonArray();
-            List<View> topKViews = ta.getTopKViews(viewName);
-
-            for (View topKView : topKViews) {
-                JsonObject kView = new JsonObject();
-                writeView(topKView, kView);
-                viewData.add(kView);
-            }
-
-            view.add("viewData", viewData);
-        }
-
-        json.add("views", views);
-
-        writeAttributes(ta, json);
-
-        return json;
-    }
+    public static final String LABEL_SCORE_MAP = "labelScoreMap";
+    public static final String PROPERTIES = "properties";
+    private final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     /**
      * Add an array of objects reporting View's Constituents' surface form and character offsets.
      * May make deserialization to TextAnnotation problematic, as the relevant methods deduce token
      * character offsets directly from list of token strings and raw text.
-     * 
+     *
      * @param fieldName name to give to this field
      * @param view view whose character offsets will be serialized
      * @param json Json object to which resulting array will be added
@@ -108,43 +54,6 @@ public class JsonSerializer extends AbstractSerializer {
             offsetArray.add(cJ);
         }
         json.add(fieldName, offsetArray);
-    }
-
-    TextAnnotation readTextAnnotation(String string) throws Exception {
-        JsonObject json = (JsonObject) new JsonParser().parse(string);
-
-        String corpusId = readString("corpusId", json);
-        String id = readString("id", json);
-        String text = readString("text", json);
-        String[] tokens = readStringArray("tokens", json);
-
-        Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
-
-        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
-
-        TextAnnotation ta =
-                new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());
-
-        JsonArray views = json.getAsJsonArray("views");
-        for (int i = 0; i < views.size(); i++) {
-            JsonObject view = (JsonObject) views.get(i);
-            String viewName = readString("viewName", view);
-
-            JsonArray viewData = view.getAsJsonArray("viewData");
-            List<View> topKViews = new ArrayList<>();
-
-            for (int k = 0; k < viewData.size(); k++) {
-                JsonObject kView = (JsonObject) viewData.get(k);
-
-                topKViews.add(readView(kView, ta));
-            }
-
-            ta.addTopKView(viewName, topKViews);
-        }
-
-        readAttributes(ta, json);
-
-        return ta;
     }
 
     private static void writeView(View view, JsonObject json) {
@@ -196,6 +105,11 @@ public class JsonSerializer extends AbstractSerializer {
                 writeInt("targetConstituent", tgtId, rJ);
                 writeAttributes(r, rJ);
 
+                Map<String, Double> labelsToScores = r.getLabelsToScores();
+
+                if (null != labelsToScores)
+                    writeLabelsToScores(labelsToScores, rJ);
+
                 rJson.add(rJ);
             }
 
@@ -245,7 +159,20 @@ public class JsonSerializer extends AbstractSerializer {
                 int src = readInt("srcConstituent", rJ);
                 int tgt = readInt("targetConstituent", rJ);
 
-                Relation rel = new Relation(name, constituents.get(src), constituents.get(tgt), s);
+                Map<String, Double> labelsToScores = null;
+                if (rJ.has(LABEL_SCORE_MAP))
+                {
+                    labelsToScores = new HashMap<>();
+                    readLabelsToScores(labelsToScores, rJ);
+                }
+
+                Relation rel = null;
+
+                if (null == labelsToScores)
+                    rel = new Relation(name, constituents.get(src), constituents.get(tgt), s);
+                else
+                    rel = new Relation(labelsToScores, constituents.get(src), constituents.get(tgt));
+
                 readAttributes(rel, rJ);
 
                 view.addRelation(rel);
@@ -263,6 +190,10 @@ public class JsonSerializer extends AbstractSerializer {
         writeInt("end", c.getEndSpan(), cJ);
 
         writeAttributes(c, cJ);
+        Map<String, Double> labelsToScores = c.getLabelsToScores();
+
+        if ( null != labelsToScores )
+            writeLabelsToScores(labelsToScores, cJ);
     }
 
     private static Constituent readConstituent(JsonObject cJ, TextAnnotation ta, String viewName) {
@@ -273,7 +204,19 @@ public class JsonSerializer extends AbstractSerializer {
         int start = readInt("start", cJ);
         int end = readInt("end", cJ);
 
-        Constituent c = new Constituent(label, score, viewName, ta, start, end);
+        Map<String, Double> labelsToScores = null;
+
+        if (cJ.has(LABEL_SCORE_MAP)) {
+            labelsToScores = new HashMap<>();
+            readLabelsToScores(labelsToScores, cJ );
+        }
+
+        Constituent c = null;
+        if (null == labelsToScores)
+            c = new Constituent(label, score, viewName, ta, start, end);
+        else
+            c = new Constituent(labelsToScores, viewName, ta, start, end);
+
         readAttributes(c, cJ);
 
         return c;
@@ -398,5 +341,116 @@ public class JsonSerializer extends AbstractSerializer {
                 obj.addAttribute(entry.getKey(), entry.getValue().getAsString());
             }
         }
+    }
+
+    private static void readLabelsToScores(Map<String, Double> obj, JsonObject json)
+    {
+        if (json.has(LABEL_SCORE_MAP)) {
+            JsonObject map = json.getAsJsonObject(LABEL_SCORE_MAP);
+            for(Entry<String, JsonElement> e : map.entrySet()) {
+                obj.put( e.getKey(), e.getValue().getAsDouble() );
+            }
+        }
+    }
+
+    private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out)
+    {
+        JsonObject labelScoreMap = new JsonObject();
+        for (String key : Sorters.sortSet(obj.keySet()))
+            writeDouble( key, obj.get(key), out);
+        out.add(LABEL_SCORE_MAP, labelScoreMap);
+    }
+
+    JsonObject writeTextAnnotation(TextAnnotation ta) {
+        return writeTextAnnotation(ta, false);
+    }
+
+    JsonObject writeTextAnnotation(TextAnnotation ta, boolean doWriteTokenOffsets) {
+
+        // get rid of the views that are empty
+        Set<String> viewNames = new HashSet<>(ta.getAvailableViews());
+        for (String vu : viewNames) {
+            if (ta.getView(vu) == null) {
+                logger.warn("View " + vu + " is null");
+                ta.removeView(vu);
+            }
+        }
+
+        JsonObject json = new JsonObject();
+
+        writeString("corpusId", ta.getCorpusId(), json);
+        writeString("id", ta.getId(), json);
+        writeString("text", ta.getText(), json);
+        writeStringArray("tokens", ta.getTokens(), json);
+        if (doWriteTokenOffsets)
+            writeTokenOffsets(TOKENOFFSETS, ta.getView(ViewNames.TOKENS), json);
+
+        writeSentences(ta, json);
+
+        JsonArray views = new JsonArray();
+        for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
+            if (viewName.equals(ViewNames.SENTENCE))
+                continue;
+
+            JsonObject view = new JsonObject();
+
+            writeString("viewName", viewName, view);
+            views.add(view);
+
+            JsonArray viewData = new JsonArray();
+            List<View> topKViews = ta.getTopKViews(viewName);
+
+            for (View topKView : topKViews) {
+                JsonObject kView = new JsonObject();
+                writeView(topKView, kView);
+                viewData.add(kView);
+            }
+
+            view.add("viewData", viewData);
+        }
+
+        json.add("views", views);
+
+        writeAttributes(ta, json);
+
+
+        return json;
+    }
+
+    TextAnnotation readTextAnnotation(String string) throws Exception {
+        JsonObject json = (JsonObject) new JsonParser().parse(string);
+
+        String corpusId = readString("corpusId", json);
+        String id = readString("id", json);
+        String text = readString("text", json);
+        String[] tokens = readStringArray("tokens", json);
+
+        Pair<Pair<String, Double>, int[]> sentences = readSentences(json);
+
+        IntPair[] offsets = TokenUtils.getTokenOffsets(text, tokens);
+
+        TextAnnotation ta =
+                new TextAnnotation(corpusId, id, text, offsets, tokens, sentences.getSecond());
+
+        JsonArray views = json.getAsJsonArray("views");
+        for (int i = 0; i < views.size(); i++) {
+            JsonObject view = (JsonObject) views.get(i);
+            String viewName = readString("viewName", view);
+
+            JsonArray viewData = view.getAsJsonArray("viewData");
+            List<View> topKViews = new ArrayList<>();
+
+            for (int k = 0; k < viewData.size(); k++) {
+                JsonObject kView = (JsonObject) viewData.get(k);
+
+                topKViews.add(readView(kView, ta));
+            }
+
+            ta.addTopKView(viewName, topKViews);
+        }
+
+        readAttributes(ta, json);
+
+        return ta;
     }
 }
