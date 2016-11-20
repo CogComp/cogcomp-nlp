@@ -7,6 +7,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.quant.lbj.*;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
@@ -27,7 +28,9 @@ public class Quantifier extends Annotator {
 	private String dataDir = "data";
     private String modelsDir = "models";
     private String modelName = modelsDir + File.separator + new QuantitiesClassifier();
-	
+
+	private QuantitiesClassifier chunker;
+
 	static {
         IllinoisTokenizer tokenizer = new IllinoisTokenizer();
         taBuilder = new TokenizerTextAnnotationBuilder( tokenizer );
@@ -93,7 +96,6 @@ public class Quantifier extends Annotator {
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
 			sentences[i] = taQuant.getSentence(i).getText();
 		}
-		QuantitiesClassifier chunker = new QuantitiesClassifier(modelName + ".lc", modelName + ".lex");
 		DataReader.preprocessor = new Preprocessor(PreprocessorConfigurator.defaults());
 		DataReader.preprocessor.annotate(taQuant);
 		String previous = "";
@@ -164,11 +166,10 @@ public class Quantifier extends Annotator {
 		}
 	    return ans;
 	}
-	
-	public static void main(String args[]) throws Throwable {
-		Quantifier quantifier = new Quantifier();
-		quantifier.trainOnAll();
-		quantifier.test();
+
+	@Override
+	public void initialize(ResourceManager resourceManager) {
+		chunker = new QuantitiesClassifier("models/QuantitiesClassifier.lc", "models/QuantitiesClassifier.lex");
 	}
 
 	@Override
@@ -208,4 +209,10 @@ public class Quantifier extends Annotator {
         tester.addNull("O");
         TestDiscrete.testDiscrete(tester, classifier, new QuantitiesLabel(), testReader, true, 1000);
     }
+
+	public static void main(String args[]) throws Throwable {
+		Quantifier quantifier = new Quantifier();
+		quantifier.trainOnAll();
+		quantifier.test();
+	}
 }

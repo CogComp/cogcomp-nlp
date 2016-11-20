@@ -6,7 +6,7 @@
 
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-quantifier</artifactId>
-    <version>2.0.5</version>
+    <version>2.0.6</version>
     <name>Illinois Quantifier</name>
     <description>Detects and normalizes quantities</description>
 
@@ -22,7 +22,7 @@
       <dependency>
         <groupId>edu.illinois.cs.cogcomp</groupId>
         <artifactId>LBJava</artifactId>
-        <version>1.2.15</version>
+        <version>1.2.26</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>
@@ -33,39 +33,38 @@
    	  <dependency>
      	<groupId>edu.illinois.cs.cogcomp</groupId>
      	<artifactId>illinois-core-utilities</artifactId>
-     	<version>3.0.22</version>
-     	<scope>compile</scope>
-   	  </dependency>
-   	  <dependency>
-     	<groupId>edu.illinois.cs.cogcomp</groupId>
-     	<artifactId>illinois-tokenizer</artifactId>
-     	<version>3.0.22</version>
+     	<version>3.0.83</version>
      	<scope>compile</scope>
    	  </dependency>
    	  <dependency>
      	<groupId>edu.illinois.cs.cogcomp</groupId>
      	<artifactId>illinois-pos</artifactId>
-     	<version>3.0.22</version>
+     	<version>3.0.83</version>
      	<scope>compile</scope>
    	  </dependency>
    	  <dependency>
      	<groupId>edu.illinois.cs.cogcomp</groupId>
      	<artifactId>illinois-tokenizer</artifactId>
-     	<version>3.0.22</version>
+     	<version>3.0.83</version>
      	<scope>compile</scope>
    	  </dependency>
    	  <dependency>
      	<groupId>edu.illinois.cs.cogcomp</groupId>
      	<artifactId>illinois-edison</artifactId>
-     	<version>3.0.22</version>
+     	<version>3.0.83</version>
      	<scope>compile</scope>
    	  </dependency>
    	  <dependency>
      	<groupId>edu.illinois.cs.cogcomp</groupId>
      	<artifactId>illinois-curator</artifactId>
-     	<version>3.0.22</version>
+     	<version>3.0.83</version>
      	<scope>compile</scope>
    	  </dependency>
+        <dependency>
+           <groupId>edu.illinois.cs.cogcomp</groupId>
+           <artifactId>illinois-quantifier-models</artifactId>
+           <version>2.0.5</version>
+        </dependency>
     </dependencies>
 
     <!-- needed for lbj plugin -->
@@ -104,7 +103,7 @@
         <plugin>
           <groupId>edu.illinois.cs.cogcomp</groupId>
           <artifactId>lbjava-maven-plugin</artifactId>
-          <version>2.1</version>
+          <version>1.2.26</version>
           <configuration>
             <lbjavaInputFileList>
               <param>src/main/lbj/chunk.lbj</param>
@@ -117,7 +116,7 @@
         <extension>
           <groupId>org.apache.maven.wagon</groupId>
           <artifactId>wagon-ssh</artifactId>
-          <version>2.4</version>
+          <version>2.10</version>
         </extension>
       </extensions>
     </build>
