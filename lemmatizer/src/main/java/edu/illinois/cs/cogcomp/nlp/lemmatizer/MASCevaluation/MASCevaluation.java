@@ -179,7 +179,7 @@ public class MASCevaluation {
             type = args[3];
         } else {
             // set defaults
-            logger.info("No arguments, using defaults.");
+            System.out.println("No arguments, using defaults.");
             masc = "MASC-3.0.0/data/written/";
             output = "output/new_illinois_result_wn5.txt";
             analysis = "analysis/new_illinois_result_wn5.txt";

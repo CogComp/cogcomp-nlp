@@ -248,7 +248,7 @@ public class WordFeatureExtractorFactory {
                     features.add(isNom);
                 }
             } catch (Exception e) {
-                logger.error("Could not read nombank.list.gz file from classpath");
+                System.err.println("Could not read nombank.list.gz file from classpath");
                 e.printStackTrace();
             }
             return features;

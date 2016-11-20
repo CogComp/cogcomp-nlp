@@ -112,8 +112,7 @@ public class CountsCache {
             stmt.setLong(2, count);
             stmt.executeUpdate();
         } catch (Exception ex) {
-
-            logger.info("Cannot add (" + item + ", " + count + ")");
+            System.err.println("Cannot add (" + item + ", " + count + ")");
             throw new RuntimeException(ex);
         }
 

@@ -79,7 +79,7 @@ public class JsonSerializerTest {
         ta.addView("rhyme", rhymeView);
 
         String taJson = SerializationHelper.serializeToJson(ta, true);
-        logger.error(taJson);
+        logger.info(taJson);
 
         JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
 

@@ -188,7 +188,7 @@ public class PredicateArgumentEvaluator extends Evaluator {
             output.add(new Pair<>(r.getRelationName(), target));
 
             if (spans.contains(target.getSpan()))
-                logger.info("Error! Overlapping spans in " + view.getViewName() + "\n"
+                logger.error("Error! Overlapping spans in " + view.getViewName() + "\n"
                         + view.getTextAnnotation() + "\n" + view);
 
             spans.add(target.getSpan());

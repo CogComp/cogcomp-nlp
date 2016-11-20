@@ -82,7 +82,7 @@ public class SentenceSplitter extends LineByLine {
             filename = args[0];
             if (args.length > 1) throw new Exception();
         } catch (Exception e) {
-            logger.error("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter <file name>");
+            System.err.println("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter <file name>");
             System.exit(1);
         }
 
@@ -97,7 +97,7 @@ public class SentenceSplitter extends LineByLine {
                 if (c == '\n' || c == '\r' || c == '\f') buffer.setCharAt(i, ' ');
             }
 
-            logger.info(buffer.toString());
+            System.out.println(buffer.toString());
         }
     }
 

@@ -125,7 +125,7 @@ public class Serializer {
                 output.close();
             }
         } catch (IOException ex) {
-            logger.error("Cannot write to output." + ex);
+            System.err.println("Cannot write to output." + ex);
         }
     }
 

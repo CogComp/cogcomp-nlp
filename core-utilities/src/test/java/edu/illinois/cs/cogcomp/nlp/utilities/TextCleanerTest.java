@@ -102,7 +102,7 @@ public class TextCleanerTest {
         String cleanText = TextCleaner.replaceUnderscores(badText);
 
         boolean isGood = !(cleanText.contains("_"));
-        logger.error(cleanText);
+        logger.info(cleanText);
         assertEquals(true, isGood);
     }
 

@@ -34,12 +34,12 @@ public class cleanDL {
 
 		for (String line : lines) {
 			String[] parts = line.split("\\s+");
-			logger.info(parts[0] + parts[1] + parts[2]);
+			System.out.println(parts[0] + parts[1] + parts[2]);
 			StringBuilder sb = new StringBuilder();
 			for (int i = 3; i < parts.length; i++)
 				sb.append(parts[i] + " ");
 			if (mentionFilter(parts)) {
-				logger.info("removing " + Arrays.asList(parts));
+				System.out.println("removing " + Arrays.asList(parts));
 				continue;
 			}
 			if (mentions.containsKey(parts[0])) {

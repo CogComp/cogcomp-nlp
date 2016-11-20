@@ -30,11 +30,11 @@ public class WordnetLemmaReader {
     public WordnetLemmaReader(String wordnetPath) {
         try {
             if (IOUtils.lsResources(WordnetLemmaReader.class, wordnetPath).size() == 0) {
-                logger.error("Wordnet path does not point to a directory.");
+                System.err.println("Wordnet path does not point to a directory.");
                 System.exit(-1);
             }
         } catch (URISyntaxException | IOException e) {
-            logger.error("Error while trying to access Wordnet.");
+            System.err.println("Error while trying to access Wordnet.");
             System.exit(-1);
         }
 
