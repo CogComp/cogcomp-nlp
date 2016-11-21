@@ -19,6 +19,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -28,6 +30,7 @@ import java.util.*;
  *
  */
 public class POSandPositionWindowThree implements FeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(POSandPositionWindowThree.class);
 
     public static View POS, TOKENS;
 
@@ -111,7 +114,7 @@ public class POSandPositionWindowThree implements FeatureExtractor {
                     POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (POS_tag.size() != 1) {
-                System.out.println("Error token has more than one POS tag.");
+                logger.warn("Error token has more than one POS tag.");
             }
 
             tags[i] = POS_tag.get(0);
@@ -131,7 +134,7 @@ public class POSandPositionWindowThree implements FeatureExtractor {
                     POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (POS_tag.size() != 1) {
-                System.out.println("Error token has more than one POS tag.");
+                logger.info("Error token has more than one POS tag.");
             }
 
             tags[i] = POS_tag.get(0);

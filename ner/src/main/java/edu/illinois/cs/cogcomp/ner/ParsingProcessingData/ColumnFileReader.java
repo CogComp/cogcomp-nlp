@@ -39,7 +39,7 @@ class ColumnFileReader extends ColumnFormat {
         }
         if (line == null)
             return null;
-        
+
         // parse the data, CoNLL 2002 or CoNLL 2003.
         if (line.length == 2) {
             token = line[0];
@@ -56,7 +56,7 @@ class ColumnFileReader extends ColumnFormat {
         for (line = (String[]) super.next(); line != null && line.length > 0; line =
                 (String[]) super.next()) {
             linec++;
-            
+
             // parse the data, CoNLL 2002 or CoNLL 2003.
             if (line.length == 2) {
                 token = line[0];

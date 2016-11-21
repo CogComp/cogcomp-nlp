@@ -17,6 +17,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,6 +40,8 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
     protected final ArrayList<String> lines;
     protected final String section;
 
+    private static org.slf4j.Logger logger =
+            LoggerFactory.getLogger(CoNLLColumnFormatReader.class);
     /**
      * Initialize the reader.
      *
@@ -131,7 +134,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
             line = line.trim();
 
-            // System.out.println(line);
+            // logger.info(line);
 
             if (line.length() == 0)
                 break;

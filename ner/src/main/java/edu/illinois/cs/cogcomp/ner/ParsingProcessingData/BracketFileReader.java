@@ -12,14 +12,18 @@ import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
 class BracketFileReader {
+    private static Logger logger = LoggerFactory.getLogger(BracketFileReader.class);
+
     public static NERDocument read(String fileName, String docname) throws Exception {
-        System.out.println("Reading the file: " + fileName);
+        logger.info("Reading the file: " + fileName);
         String annotatedText = PlainTextReader.normalizeText(getFileText(fileName));
         return parseTextWithBrackets(annotatedText, docname);
     }
@@ -35,7 +39,7 @@ class BracketFileReader {
         for (int i = 0; i < bracketTokens.size(); i++)
             buff.append(bracketTokens.elementAt(i)).append(" ");
         // the tokens below will have no newline characters.
-        // System.out.println("Raw text: "+buff);
+        // logger.info("Raw text: "+buff);
         Vector<Vector<String>> parsedTokens =
                 PlainTextReader.sentenceSplitAndTokenizeText(buff.toString());
         // now we need to align the bracket tokens to the sentence split and tokenized tokens.
@@ -47,7 +51,7 @@ class BracketFileReader {
         for (int i = 0; i < parsedTokens.size(); i++)
             for (int j = 0; j < parsedTokens.elementAt(i).size(); j++)
                 parsedTokensFlat.addElement(parsedTokens.elementAt(i).elementAt(j));
-        // System.out.println("----"+parsedTokensFlat.size());
+        // logger.info("----"+parsedTokensFlat.size());
         Vector<String> parsedTokensTagsFlat = new Vector<>();// to be filled later
         StringBuilder bracketTokensText = new StringBuilder(bracketTokens.size() * 20);
         StringBuilder parsedTokensText = new StringBuilder(parsedTokensFlat.size() * 20);

@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.LineByLine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
@@ -37,6 +39,8 @@ import java.util.regex.Pattern;
  * @see Sentence
  **/
 public class SentenceSplitter extends LineByLine {
+    private static final Logger logger = LoggerFactory.getLogger(SentenceSplitter.class);
+
     /**
      * Regular expression matching whitespace separated words including those
      * that are hyphenated and cross over a line boundary.
@@ -93,7 +97,7 @@ public class SentenceSplitter extends LineByLine {
                 if (c == '\n' || c == '\r' || c == '\f') buffer.setCharAt(i, ' ');
             }
 
-            System.out.println(buffer);
+            System.out.println(buffer.toString());
         }
     }
 

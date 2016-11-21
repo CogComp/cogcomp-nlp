@@ -17,12 +17,15 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotato
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
 public class NETesterMultiDataset {
+    private static Logger logger = LoggerFactory.getLogger(NETesterMultiDataset.class);
 
     /**
      * NB: assuming column format
@@ -280,7 +283,7 @@ public class NETesterMultiDataset {
                             && dataSet.labelsToAnonymizeForEvaluation.contains(w.neLabel
                                     .substring(2))) {
                         w.neLabel = w.neLabel.substring(0, 2) + "ENTITY";
-                        // System.out.println("replace!!!");
+                        // logger.info("replace!!!");
                     }
                     w.neTypeLevel1 = originalW.neTypeLevel1;
                     if (w.neTypeLevel1.indexOf('-') > -1
