@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
@@ -20,6 +21,7 @@ import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -27,6 +29,34 @@ public class LearningCurveMultiDataset {
 
     private static final String NAME = LearningCurveMultiDataset.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(LearningCurveMultiDataset.class);
+
+    /**
+     * Build a final model, using both test and train as training data, and using dev
+     * as a hold-out set for automatic convergence.
+     * <p>
+     * use fixedNumIterations=-1 if you want to use the automatic convergence criterion
+     * @param fixedNumIterations -1 to auto-converge, otherwise number of iterations.
+     * @param trainDataPath training data.
+     * @param testDataPath test data.
+     * @param devDataPath data used to auto-converge.
+     */
+    public static void buildFinalModel(int fixedNumIterations, String trainDataPath,
+            String testDataPath, String devDataPath) throws Exception {
+        Data trainData = new Data(trainDataPath, trainDataPath, "-c", new String[] {}, new String[] {});
+        ExpressiveFeaturesAnnotator.annotate(trainData);
+        Data testData = new Data(testDataPath, testDataPath, "-c", new String[] {}, new String[] {});
+        ExpressiveFeaturesAnnotator.annotate(testData);
+        Data devData = new Data(devDataPath, devDataPath, "-c", new String[] {}, new String[] {});
+        ExpressiveFeaturesAnnotator.annotate(devData);
+        Vector<Data> train = new Vector<>();
+        train.addElement(trainData);
+        train.addElement(testData);
+        Vector<Data> test = new Vector<>();
+        test.addElement(devData);
+        logger.debug("Building final model: iterations = " + fixedNumIterations + " train = '"
+                        + trainDataPath + "' test = '"+testDataPath+"' dev = '" + testDataPath+"'");
+        getLearningCurve(train, test, fixedNumIterations);
+    }
 
     /**
      * train a model with the specified inputs, evaluate with the specified test data
@@ -76,8 +106,14 @@ public class LearningCurveMultiDataset {
             IOUtils.mkdir(modelPathDir);
         }
 
+        NETaggerLevel1.Parameters paramLevel1 = new NETaggerLevel1.Parameters();
+        paramLevel1.baseLTU = new SparseAveragedPerceptron(
+            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1, 0, 
+            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
+        logger.info("Level 1 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel1+
+            ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel1);
         NETaggerLevel1 tagger1 =
-                new NETaggerLevel1(modelPath + ".level1", modelPath + ".level1.lex");
+                new NETaggerLevel1(paramLevel1, modelPath + ".level1", modelPath + ".level1.lex");
         tagger1.forget();
 
         for (int dataId = 0; dataId < trainDataSet.size(); dataId++) {
@@ -90,111 +126,83 @@ public class LearningCurveMultiDataset {
             }
         }
 
-
-        logger.info("Pre-extracting the training data for Level 1 classifier");
-        // TODO: 2/22/16 This is not OS-neutral, should be removed
-        Runtime rt = Runtime.getRuntime();
-        Process pr =
-                rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.prefetchedTrainData*");
-        pr.waitFor();
-        pr =
-                rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.prefetchedTestData*");
-        pr.waitFor();
-        String arg =
-                ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.prefetchedTrainData";
-        logger.info("Pre-extracting the training data for Level 1 classifier");
-        BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, arg);
-        arg = ParametersForLbjCode.currentParameters.pathToModelFile + ".level1.prefetchedTestData";
-
-        logger.info("Pre-extracting the testing data for Level 1 classifier, argument '" + arg
-                + "...");
-        BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, arg);
+        // preextract the L1 test and train data.
+        String path = ParametersForLbjCode.currentParameters.pathToModelFile;
+        String trainPathL1 = path + ".level1.prefetchedTrainData";
+        File deleteme = new File(trainPathL1);
+        if (deleteme.exists())
+            deleteme.delete();
+        String testPathL1 = path + ".level1.prefetchedTestData";
+        deleteme = new File(testPathL1);
+        if (deleteme.exists())
+            deleteme.delete();
+        logger.info("Pre-extracting the training data for Level 1 classifier, saving to "+trainPathL1);
+        BatchTrainer bt1train = prefetchAndGetBatchTrainer(tagger1, trainDataSet, trainPathL1);
+        logger.info("Pre-extracting the testing data for Level 1 classifier, saving to "+testPathL1);
+        BatchTrainer bt1test = prefetchAndGetBatchTrainer(tagger1, testDataSet, testPathL1);
         Parser testParser1 = bt1test.getParser();
 
         for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel1 < 10)
                 || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
-            logger.info("Learning first level classifier; round " + i);
             bt1train.train(1);
-
-            logger.info("Testing level 1 classifier;  on prefetched data, round: " + i);
             testParser1.reset();
             TestDiscrete simpleTest = new TestDiscrete();
             simpleTest.addNull("O");
             TestDiscrete.testDiscrete(simpleTest, tagger1, null, testParser1, true, 0);
-
             double f1Level1 = simpleTest.getOverallStats()[2];
             if (f1Level1 > bestF1Level1) {
                 bestF1Level1 = f1Level1;
                 bestRoundLevel1 = i;
                 tagger1.save();
             }
-
-            if (i % 5 == 0)
-                logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
+            logger.info(i + " rounds.  Best so far for Level1 : (" + bestRoundLevel1 + ")="
                         + bestF1Level1);
         }
-        // TODO: 2/22/16 This is not OS-neutral, should be removed
-        pr =
-                rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.prefetchedTrainData*");
-        pr.waitFor();
-        pr =
-                rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                        + ".level1.prefetchedTestData*");
-        pr.waitFor();
+        logger.info("Level 1; best round : " + bestRoundLevel1 + "\tbest F1 : " + bestF1Level1);
 
-        logger.info("Testing level 1 classifier, final performance: ");
-        TestDiscrete[] results =
-                NETesterMultiDataset.printAllTestResultsAsOneDataset(testDataSet, tagger1, null,
-                        false);
-        double f1Level1 = results[0].getOverallStats()[2];
-        logger.info("Level 1; round " + bestRoundLevel1 + "\t" + f1Level1);
+        // trash the l2 prefetch data
+        String trainPathL2 = path + ".level2.prefetchedTrainData";
+        deleteme = new File(trainPathL2);
+        if (deleteme.exists())
+            deleteme.delete();
+        String testPathL2 = path + ".level2.prefetchedTestData";
+        deleteme = new File(testPathL1);
+        if (deleteme.exists())
+            deleteme.delete();
 
-
+        NETaggerLevel2.Parameters paramLevel2 = new NETaggerLevel2.Parameters();
+        paramLevel2.baseLTU = new SparseAveragedPerceptron(
+            ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2, 0, 
+            ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
         NETaggerLevel2 tagger2 =
-                new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
+                new NETaggerLevel2(paramLevel2, ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level2.lex");
         tagger2.forget();
+        
         // Previously checked if PatternFeatures was in featuresToUse.
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
+            logger.info("Level 2 classifier learning rate = "+ParametersForLbjCode.currentParameters.learningRatePredictionsLevel2+
+                ", thickness = "+ParametersForLbjCode.currentParameters.thicknessPredictionsLevel2);
             double bestF1Level2 = -1;
             int bestRoundLevel2 = 0;
-            // TODO: 2/22/16 This is not OS-neutral, should be removed
-            pr =
-                    rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.prefetchedTrainData*");
-            pr.waitFor();
-            pr =
-                    rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.prefetchedTestData*");
-            pr.waitFor();
-            logger.info("Pre-extracting the training data for Level 2 classifier");
+            logger.info("Pre-extracting the training data for Level 2 classifier, saving to "+trainPathL2);
             BatchTrainer bt2train =
-                    prefetchAndGetBatchTrainer(tagger2, trainDataSet,
-                            ParametersForLbjCode.currentParameters.pathToModelFile
-                                    + ".level2.prefetchedTrainData");
-            logger.info("Pre-extracting the testing data for Level 2 classifier");
+                    prefetchAndGetBatchTrainer(tagger2, trainDataSet, trainPathL2);
+            logger.info("Pre-extracting the testing data for Level 2 classifier, saving to "+testPathL2);
             BatchTrainer bt2test =
-                    prefetchAndGetBatchTrainer(tagger2, testDataSet,
-                            ParametersForLbjCode.currentParameters.pathToModelFile
-                                    + ".level2.prefetchedTestData");
+                    prefetchAndGetBatchTrainer(tagger2, testDataSet, testPathL2);
             Parser testParser2 = bt2test.getParser();
 
             for (int i = 0; (fixedNumIterations == -1 && i < 200 && i - bestRoundLevel2 < 10)
                     || (fixedNumIterations > 0 && i <= fixedNumIterations); ++i) {
-                logger.info("Learning Level2 ; round " + i);
+                logger.info("Learning level 2 classifier; round " + i);
                 bt2train.train(1);
-
                 logger.info("Testing level 2 classifier;  on prefetched data, round: " + i);
                 testParser2.reset();
                 TestDiscrete simpleTest = new TestDiscrete();
                 simpleTest.addNull("O");
                 TestDiscrete.testDiscrete(simpleTest, tagger2, null, testParser2, true, 0);
-
 
                 double f1Level2 = simpleTest.getOverallStats()[2];
                 if (f1Level2 > bestF1Level2) {
@@ -202,29 +210,20 @@ public class LearningCurveMultiDataset {
                     bestRoundLevel2 = i;
                     tagger2.save();
                 }
-
-                if (i % 5 == 0)
-                    logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
+                logger.info(i + " rounds.  Best so far for Level2 : (" + bestRoundLevel2 + ") "
                             + bestF1Level2);
             }
-            // TODO: 2/22/16 This is not OS-neutral, should be removed
-            pr =
-                    rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.prefetchedTrainData*");
-            pr.waitFor();
-            pr =
-                    rt.exec("rm ./ " + ParametersForLbjCode.currentParameters.pathToModelFile
-                            + ".level2.prefetchedTestData*");
-            pr.waitFor();
+            
+            // trash the l2 prefetch data
+            deleteme = new File(trainPathL2);
+            if (deleteme.exists())
+                deleteme.delete();
+            deleteme = new File(testPathL1);
+            if (deleteme.exists())
+                deleteme.delete();
 
-            logger.info("Testing both levels ...");
-            results =
-                    NETesterMultiDataset.printAllTestResultsAsOneDataset(testDataSet, tagger1,
-                            tagger2, false);
-            f1Level1 = results[0].getOverallStats()[2];
-            double f1Level2 = results[1].getOverallStats()[2];
-            logger.info("Level1: bestround=" + bestRoundLevel1 + "\t F1=" + f1Level1
-                    + "\t Level2: bestround=" + bestRoundLevel2 + "\t F1=" + f1Level2);
+            logger.info("Level1: bestround=" + bestRoundLevel1 + "\t F1=" + bestF1Level1
+                    + "\t Level2: bestround=" + bestRoundLevel2 + "\t F1=" + bestF1Level2);
         }
 
 
@@ -240,13 +239,12 @@ public class LearningCurveMultiDataset {
         }
     }
 
-    /*
+    /**
      * Parts is the number of parts to which we split the data. in training - if you have a lot of
      * samples- use 100 partitions otherwise, the zip doesn't work on training files larger than 4G
      */
     private static BatchTrainer prefetchAndGetBatchTrainer(SparseNetworkLearner classifier,
             Vector<Data> dataSets, String exampleStorePath) {
-        logger.info("Pre-extracting the training data for Level 1 classifier");
         for (int dataId = 0; dataId < dataSets.size(); dataId++) {
             Data data = dataSets.elementAt(dataId);
             TextChunkRepresentationManager.changeChunkRepresentation(
@@ -254,7 +252,7 @@ public class LearningCurveMultiDataset {
                     ParametersForLbjCode.currentParameters.taggingEncodingScheme, data,
                     NEWord.LabelToLookAt.GoldLabel);
         }
-        BatchTrainer bt = new BatchTrainer(classifier, new SampleReader(dataSets), 1000);
+        BatchTrainer bt = new BatchTrainer(classifier, new SampleReader(dataSets), 0);
         logger.debug("setting lexicon from batchtrainer, exampleStorePath is '" + exampleStorePath
                 + "'...");
 

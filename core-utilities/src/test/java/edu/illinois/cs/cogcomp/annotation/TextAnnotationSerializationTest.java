@@ -11,15 +11,16 @@ import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TextAnnotationSerializationTest extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(TextAnnotationSerializationTest.class);
+import static org.junit.Assert.*;
+
+public class TextAnnotationSerializationTest {
 
     String sentA = "This is a text that contains pre-tokenized sentences .";
     String sentB = "For the purposes of this test , tokens are separated by whitespace .";
@@ -28,9 +29,9 @@ public class TextAnnotationSerializationTest extends TestCase {
 
     private List<String[]> tokenizedSentences;
 
-    public void setUp() throws Exception {
-        super.setUp();
-        logger.info(rawText);
+    @Before
+    public void init() throws Exception {
+        System.out.println(rawText);
         String[] sentences = rawText.split(System.lineSeparator());
         tokenizedSentences = new ArrayList<>(sentences.length);
         for (String sentTokens : sentences) {
@@ -38,6 +39,7 @@ public class TextAnnotationSerializationTest extends TestCase {
         }
     }
 
+    @Test
     public void testJsonSerializability() throws Exception {
         TextAnnotation ta =
                 BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);

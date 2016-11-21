@@ -10,24 +10,25 @@ package edu.illinois.cs.cogcomp.core.algorithms;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParser;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Vivek Srikumar Jun 23, 2009
  */
-public class TreeGrepTest extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(TreeGrepTest.class);
+public class TreeGrepTest {
 
     Tree<String> tree;
     List<Tree<String>> foundPatterns;
     List<Tree<String>> notFoundPatterns;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void init() throws Exception {
 
         TreeParser<String> parser = TreeParserFactory.getStringTreeParser();
 
@@ -56,6 +57,7 @@ public class TreeGrepTest extends TestCase {
 
     }
 
+    @Test
     public void testNotFoundPatternGetMatchPositions() throws Exception {
         for (Tree<String> p : notFoundPatterns) {
             TreeGrep<String> matcher = new TreeGrep<>(p);
@@ -64,6 +66,7 @@ public class TreeGrepTest extends TestCase {
         }
     }
 
+    @Test
     public void testGetMatchPositions() {
 
         for (Tree<String> p : foundPatterns) {
@@ -71,7 +74,7 @@ public class TreeGrepTest extends TestCase {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // logger.info(match);
+            // System.out.println(match);
             // }
 
             assertEquals(true, result);
@@ -80,6 +83,7 @@ public class TreeGrepTest extends TestCase {
 
     }
 
+    @Test
     public void testEnd() {
         String[] endPatternStrings = {"(B F $$$)", "(A B C $$$)"};
 
@@ -91,13 +95,14 @@ public class TreeGrepTest extends TestCase {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // logger.info("End: " + match.getRootMatch());
+            // System.out.println("End: " + match.getRootMatch());
             // }
 
             assertEquals(true, result);
         }
     }
 
+    @Test
     public void testStart() {
         String[] startPatternStrings = {"(B ^^^ F)", "(A ^^^ B C)"};
 
@@ -109,7 +114,7 @@ public class TreeGrepTest extends TestCase {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // logger.info("Start: " + match.getRootMatch());
+            // System.out.println("Start: " + match.getRootMatch());
             // }
 
             assertEquals(true, result);

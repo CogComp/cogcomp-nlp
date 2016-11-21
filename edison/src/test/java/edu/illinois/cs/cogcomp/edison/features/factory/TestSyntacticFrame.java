@@ -17,11 +17,12 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class
@@ -31,9 +32,8 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TestSyntacticFrame extends TestCase {
+public class TestSyntacticFrame {
     private static List<TextAnnotation> tas;
-    private static Logger logger = LoggerFactory.getLogger(TestSyntacticFrame.class);
 
     static {
         try {
@@ -43,6 +43,7 @@ public class TestSyntacticFrame extends TestCase {
         }
     }
 
+    @Test
     public final void testSyntacticFrame() throws Exception {
         testFex(SyntacticFrame.CHARNIAK);
     }
@@ -65,7 +66,7 @@ public class TestSyntacticFrame extends TestCase {
 
                     Set<Feature> features = fex.getFeatures(c);
 
-                    logger.info(c + "\t" + features);
+                    System.out.println(c + "\t" + features);
 
                     assertEquals(3, features.size());
                 }

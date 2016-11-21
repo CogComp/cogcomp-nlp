@@ -16,17 +16,15 @@ import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestPOSBaseLineFeatureExtractor extends TestCase {
+public class TestPOSBaseLineFeatureExtractor {
 
     private static List<TextAnnotation> tas;
-    private static Logger logger = LoggerFactory.getLogger(TestPOSBaseLineFeatureExtractor.class);
 
     static {
         try {
@@ -36,33 +34,30 @@ public class TestPOSBaseLineFeatureExtractor extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
-        logger.info("POSBaseLine Feature Extractor");
+        System.out.println("POSBaseLine Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test
         TextAnnotation ta = tas.get(2);
         View TOKENS = ta.getView("TOKENS");
 
-        logger.info("GOT TOKENS FROM TEXTAnn");
+        System.out.println("GOT TOKENS FROM TEXTAnn");
 
         List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
         for (Constituent c : testlist) {
-            logger.info(c.getSurfaceForm());
+            System.out.println(c.getSurfaceForm());
         }
 
-        logger.info("Testlist size is " + testlist.size());
+        System.out.println("Testlist size is " + testlist.size());
 
         // Constituent test = testlist.get(1);
 
-        // logger.info("The constituent we are extracting features from
+        // System.out.println("The constituent we are extracting features from
         // in this test is: " + test.getSurfaceForm());
 
-        // logger.info(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
-        // logger.info(System.getProperty("user.dir"));
+        // System.out.println(TestPOSBaseLineFeatureExtractor.class.getProtectionDomain().getCodeSource().getLocation());
+        // System.out.println(System.getProperty("user.dir"));
 
         POSBaseLineFeatureExtractor posBaseLine =
                 new POSBaseLineFeatureExtractor("posBaseLine", "test_corpus", TestPosHelper.corpus);
@@ -73,27 +68,27 @@ public class TestPOSBaseLineFeatureExtractor extends TestCase {
             featslist.add(posBaseLine.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            logger.info("Feats list is returning NULL.");
+            System.out.println("Feats list is returning NULL.");
         }
 
-        logger.info("Printing list of Feature set");
+        System.out.println("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
             for (Feature f : feats)
-                logger.info(f.getName());
+                System.out.println(f.getName());
         }
 
         /*
          * Set<Feature> feats = posBaseLine.getFeatures(test);
          * 
-         * if (feats == null) { logger.info("Feats are returning NULL."); }
+         * if (feats == null) { System.out.println("Feats are returning NULL."); }
          * 
-         * logger.info("Printing Set of Features");
+         * System.out.println("Printing Set of Features");
          * 
-         * for (Feature f : feats) { logger.info(f.getName()); }
+         * for (Feature f : feats) { System.out.println(f.getName()); }
          */
 
-        logger.info("GOT FEATURES YES!");
+        System.out.println("GOT FEATURES YES!");
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
@@ -102,7 +97,7 @@ public class TestPOSBaseLineFeatureExtractor extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    logger.info(ta.getView(viewName).toString());
+                    System.out.println(ta.getView(viewName));
         }
     }
 }

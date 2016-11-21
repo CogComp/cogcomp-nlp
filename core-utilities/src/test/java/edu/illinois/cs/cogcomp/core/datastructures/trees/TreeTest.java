@@ -8,16 +8,17 @@
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author vivek
  */
-public class TreeTest extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(TreeTest.class);
+public class TreeTest {
 
     class Node {
         int nodeId;
@@ -45,6 +46,7 @@ public class TreeTest extends TestCase {
      * @see junit.framework.TestCase#setUp()
      */
 
+    @Before
     public void setUp() throws Exception {
         tree = new Tree<>("Root");
         tree.addLeaf("Leaf");
@@ -64,6 +66,7 @@ public class TreeTest extends TestCase {
 
     }
 
+    @Test
     public final void testCreateTree() {
         // (A (B ( C )))
 
@@ -115,12 +118,12 @@ public class TreeTest extends TestCase {
 
         assertEquals(4, tree.size());
 
-        // logger.info(tree);
+        // System.out.println(tree);
         tree.getChild(0).addLeaf("B1");
 
         assertEquals(5, tree.size());
 
-        // logger.info(tree);
+        // System.out.println(tree);
 
         tree.getChild(0).addSubtreeAt(expectedTree, 1);
 
@@ -129,11 +132,13 @@ public class TreeTest extends TestCase {
 
     }
 
+    @Test
     public final void testAddLeaf() {
 
         assertEquals(t1.toString(), "(Child1 Child1Leaf)");
     }
 
+    @Test
     public final void testAddSubtree() {
         Tree<String> tree = new Tree<>("Root");
         tree.addLeaf("Leaf");
@@ -146,45 +151,51 @@ public class TreeTest extends TestCase {
         assertEquals("(Root Leaf\n      (Child1 Child1Leaf))", tree.toString());
     }
 
+    @Test
     public final void testAddSubtreeAt() {
         assertEquals("(Root Leaf\n" + "      (Child1 Child1Leaf)\n" + "      (Child2 Child2Leaf1\n"
                 + "              Child2Leaf2)\n" + "      Leaf)", tree.toString());
 
     }
 
+    @Test
     public final void testGetChild() {
         assertEquals(tree.getChild(0).toString(), "(Leaf)");
         assertEquals(tree.getChild(1).toString(), "(Child1 Child1Leaf)");
 
     }
 
+    @Test
     public final void testGetLabel() {
         assertEquals(tree.getLabel(), "Root");
     }
 
+    @Test
     public final void testGetHeight() {
         assertEquals(tree.getHeight(), 3);
         tree.getChild(2).getChild(1).addLeaf("GrandChild");
         assertEquals(tree.getHeight(), 4);
     }
 
+    @Test
     public final void testSize() {
         assertEquals(tree.size(), 8);
 
         tree.getChild(2).getChild(1).addLeaf("GrandChild");
 
-        logger.info("");
+        System.out.println();
 
         assertEquals(tree.size(), 9);
 
     }
 
+    @Test
     public final void testGetYield() {
         String[] leaves = new String[] {"Leaf", "Child1Leaf", "Child2Leaf1", "Child2Leaf2", "Leaf"};
 
         int i = 0;
         for (Tree<String> s : tree.getYield()) {
-            // logger.info(leaves[i] + "\t" + s.getLabel());
+            // System.out.println(leaves[i] + "\t" + s.getLabel());
             assertEquals(leaves[i++], s.getLabel());
         }
 
@@ -198,12 +209,14 @@ public class TreeTest extends TestCase {
 
     }
 
+    @Test
     public final void testIsLeaf() {
         assertEquals(tree.isLeaf(), false);
         assertEquals(tree.getChild(0).isLeaf(), true);
         assertEquals(tree.getChild(1).getChild(0).isLeaf(), true);
     }
 
+    @Test
     public final void testEquals() {
         Tree<String> t = (new TreeParser<>(new INodeReader<String>() {
 
@@ -215,10 +228,12 @@ public class TreeTest extends TestCase {
         assertEquals(tree.equals(t), true);
     }
 
+    @Test
     public final void testClone() throws CloneNotSupportedException {
         assertEquals(tree.equals(tree.clone()), true);
     }
 
+    @Test
     public final void testHashCode() {
 
         Tree<String> t = (new TreeParser<>(new INodeReader<String>() {
@@ -232,6 +247,7 @@ public class TreeTest extends TestCase {
 
     }
 
+    @Test
     public final void testAddSubtrees() {
 
         Tree<String> tree2 = new Tree<>("Root");
@@ -260,20 +276,24 @@ public class TreeTest extends TestCase {
 
     }
 
+    @Test
     public final void testChildrenIterator() {
         // this works
     }
 
+    @Test
     public final void testGetNumberOfChildren() {
         assertEquals(tree.getNumberOfChildren(), 4);
     }
 
+    @Test
     public final void testGetParent() {
         for (Tree<String> t : tree.childrenIterator()) {
             assertEquals(t.getParent().equals(tree), true);
         }
     }
 
+    @Test
     public final void testIsRoot() {
         assertEquals(tree.isRoot(), true);
         for (Tree<String> t : tree.childrenIterator()) {

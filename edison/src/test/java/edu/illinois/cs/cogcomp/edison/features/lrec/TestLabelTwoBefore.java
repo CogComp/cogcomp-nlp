@@ -18,15 +18,13 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestLabelTwoBefore extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(TestLabelTwoBefore.class);
+public class TestLabelTwoBefore {
 
     private static List<TextAnnotation> tas;
 
@@ -38,29 +36,26 @@ public class TestLabelTwoBefore extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
-        logger.info("LabelTwoBefore Feature Extractor");
+        System.out.println("LabelTwoBefore Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test
         TextAnnotation ta = tas.get(2);
         View TOKENS = ta.getView("TOKENS");
 
-        logger.info("GOT TOKENS FROM TEXTAnn");
+        System.out.println("GOT TOKENS FROM TEXTAnn");
 
         List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
         for (Constituent c : testlist) {
-            logger.info(c.getSurfaceForm());
+            System.out.println(c.getSurfaceForm());
         }
 
-        logger.info("Testlist size is " + testlist.size());
+        System.out.println("Testlist size is " + testlist.size());
 
         // Constituent test = testlist.get(1);
 
-        // logger.info("The constituent we are extracting features from
+        // System.out.println("The constituent we are extracting features from
         // in this test is: " + test.getSurfaceForm());
 
 
@@ -81,15 +76,15 @@ public class TestLabelTwoBefore extends TestCase {
             featslist.add(l2bPOS.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            logger.info("Feats list is returning NULL.");
+            System.out.println("Feats list is returning NULL.");
         }
 
-        logger.info("\n" + "Test when using POS View");
-        logger.info("Printing list of Feature set");
+        System.out.println("\n" + "Test when using POS View");
+        System.out.println("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
             for (Feature f : feats)
-                logger.info(f.getName());
+                System.out.println(f.getName());
         }
 
         // Test when using POS baseline Counting
@@ -99,15 +94,15 @@ public class TestLabelTwoBefore extends TestCase {
             featslist.add(l2bPOSBaseLine.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            logger.info("Feats list is returning NULL.");
+            System.out.println("Feats list is returning NULL.");
         }
 
-        logger.info("\n" + "Test when using POS baseline Counting");
-        logger.info("Printing list of Feature set");
+        System.out.println("\n" + "Test when using POS baseline Counting");
+        System.out.println("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
             for (Feature f : feats)
-                logger.info(f.getName());
+                System.out.println(f.getName());
         }
         // Test when using POS Mikheev Counting
         featslist.clear();
@@ -116,18 +111,18 @@ public class TestLabelTwoBefore extends TestCase {
             featslist.add(l2bPOSMikheev.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            logger.info("Feats list is returning NULL.");
+            System.out.println("Feats list is returning NULL.");
         }
 
-        logger.info("\n" + "Test when using POS Mikheev Counting");
-        logger.info("Printing list of Feature set");
+        System.out.println("\n" + "Test when using POS Mikheev Counting");
+        System.out.println("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
             for (Feature f : feats)
-                logger.info(f.getName());
+                System.out.println(f.getName());
         }
 
-        logger.info("GOT FEATURES YES!");
+        System.out.println("GOT FEATURES YES!");
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
@@ -136,7 +131,7 @@ public class TestLabelTwoBefore extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    logger.info(ta.getView(viewName).toString());
+                    System.out.println(ta.getView(viewName));
         }
     }
 }

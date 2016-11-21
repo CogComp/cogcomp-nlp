@@ -17,19 +17,20 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
 import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Vivek Srikumar
  */
-public class TestParseViewGenerator extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(TestParseViewGenerator.class);
+public class TestParseViewGenerator {
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
+    @Test
     public final void testCharniakParseViewGenerator() {
         String sentence = "This is a test .";
 
@@ -46,7 +47,7 @@ public class TestParseViewGenerator extends TestCase {
         ta.addView(ViewNames.PARSE_CHARNIAK, parseView);
 
         TreeView view = (TreeView) ta.getView(ViewNames.PARSE_CHARNIAK);
-        logger.info(ParseHelper.getParseTree(ViewNames.PARSE_CHARNIAK, ta, 0).toString());
+        System.out.println(ParseHelper.getParseTree(ViewNames.PARSE_CHARNIAK, ta, 0));
 
         assertEquals(tree, view.getTree(0));
 
@@ -56,14 +57,14 @@ public class TestParseViewGenerator extends TestCase {
 
         TreeView depView = new TreeView(ViewNames.DEPENDENCY, "HeadRuleDependencyTree", ta, 1.0);
 
-        logger.info(depTree.toString());
+        System.out.println(depTree);
 
         depView.setDependencyTree(0, depTree);
 
         ta.addView(ViewNames.DEPENDENCY, depView);
 
-        logger.info(depView.toString());
+        System.out.println(depView);
 
-        logger.info(depView.getTree(0).toString());
+        System.out.println(depView.getTree(0));
     }
 }

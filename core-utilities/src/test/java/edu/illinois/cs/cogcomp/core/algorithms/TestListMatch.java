@@ -7,15 +7,19 @@
  */
 package edu.illinois.cs.cogcomp.core.algorithms;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TestListMatch extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+public class TestListMatch {
+
+    @Test
     public void testRegexMatchesList() {
         String textString = "gcatcgcagagagtatacagtacg";
         List<String> pattern = Arrays.asList("g", "a", "g");
@@ -35,6 +39,7 @@ public class TestListMatch extends TestCase {
         }
     }
 
+    @Test
     public void testRegexMatchesSeuss() {
 
         List<String> pattern = Arrays.asList("do", "not", "like");
@@ -59,6 +64,7 @@ public class TestListMatch extends TestCase {
         }
     }
 
+    @Test
     public void testRegexMatchesSeussSpecial() {
 
         List<String> pattern = Arrays.asList("****", "*not", "li+e");
@@ -83,6 +89,7 @@ public class TestListMatch extends TestCase {
         }
     }
 
+    @Test
     public void testBMatchesList() {
         String textString = "gcatcgcagagagtatacagtacg";
         List<String> pattern = Arrays.asList("g", "a", "g");
@@ -97,6 +104,7 @@ public class TestListMatch extends TestCase {
         }
     }
 
+    @Test
     public void testBMatchesSeuss() {
 
         List<String> pattern = Arrays.asList("do", "not", "like");
@@ -121,6 +129,7 @@ public class TestListMatch extends TestCase {
         }
     }
 
+    @Test
     public void testBMatchesSeussSpecial() {
 
         List<String> pattern = Arrays.asList("****", "*not", "li+e");

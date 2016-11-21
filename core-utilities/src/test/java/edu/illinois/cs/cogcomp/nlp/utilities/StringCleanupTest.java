@@ -8,12 +8,11 @@
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
 import junit.framework.TestCase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
-public class StringCleanupTest extends TestCase {
-    private static Logger logger = LoggerFactory.getLogger(StringCleanupTest.class);
+import static org.junit.Assert.assertEquals;
 
+public class StringCleanupTest {
     private static final String utf8RefStr = "A𝔊BC ﾁｮｺﾚｰﾄ —interet”";
     private static final String latin1RefStr = "-interet\"";
     private static final String asciiRefStr = "-interet\"";
@@ -25,42 +24,43 @@ public class StringCleanupTest extends TestCase {
     private static String combinedStr = suppSample + " " + halfWidthKatanaSample + " "
             + diacriticSample;
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
+//
+//    protected void tearDown() throws Exception {
+//        super.tearDown();
+//    }
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
 
-
-    public static void testStringCleanup() {
+    @Test
+    public void testStringCleanup() {
         String inStr = combinedStr;
         String utf8Str = StringCleanup.normalizeToUtf8(inStr);
 
-        logger.info("Normalized to UTF-8:");
-        logger.info(utf8Str);
+        System.out.println("Normalized to UTF-8:");
+        System.out.println(utf8Str);
 
         assertEquals(utf8RefStr, utf8Str);
 
         String latin1Str = StringCleanup.normalizeToLatin1(diacriticSample);
 
-        logger.info("Normalized to Latin1:");
-        logger.info(latin1Str);
+        System.out.println("Normalized to Latin1:");
+        System.out.println(latin1Str);
 
         assertEquals(latin1RefStr, latin1Str);
 
         String asciiStr = StringCleanup.normalizeToLatin1(diacriticSample);
 
-        logger.info("Normalized to ascii:");
-        logger.info(asciiStr);
+        System.out.println("Normalized to ascii:");
+        System.out.println(asciiStr);
 
         assertEquals(asciiRefStr, asciiStr);
 
         String withoutCtrlCharStr = StringCleanup.removeControlCharacters(ctrlSample);
 
-        logger.info("Removed Control Characters:");
-        logger.info(withoutCtrlCharStr);
+        System.out.println("Removed Control Characters:");
+        System.out.println(withoutCtrlCharStr);
 
         assertEquals(ctrlRefStr, withoutCtrlCharStr);
 

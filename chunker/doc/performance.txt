@@ -1,40 +1,50 @@
-Model 3.0.25, test with gold POS: (conll format, test.txt)
+Date: 10/20/2016
+Tested: Qiang (John) Ning
+Contact: qning2@illinois.edu
+
+Chunker model version: illinois-chunker-model-3.0.77
+Trainset: /shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/train.txt (trained with 50 iterations.)
+Testset:
+Gold POS: /shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.txt
+No POS: /shared/corpora/corporaWeb/written/eng/chunking/conll2000distributions/test.noPOS.txt
+Performance:
+
+With Gold POS
  Label   Precision Recall   F1   LCount PCount
 ----------------------------------------------
-ADJP        74.815 69.178 71.886    438    405
-ADVP        81.235 78.984 80.094    866    842
-CONJP       33.333 55.556 41.667      9     15
+ADJP        76.633 69.635 72.967    438    398
+ADVP        81.862 79.215 80.516    866    838
+CONJP       45.455 55.556 50.000      9     11
 INTJ        50.000 50.000 50.000      2      2
 LST          0.000  0.000  0.000      5      1
-NP          93.923 94.067 93.995  12422  12441
-PP          96.896 97.963 97.426   4811   4864
-PRT         71.429 75.472 73.394    106    112
-SBAR        87.594 87.103 87.348    535    532
-UCP          0.000  0.000  0.000      0      4
-VP          93.552 93.753 93.652   4658   4668
+NP          94.106 93.962 94.034  12422  12403
+PP          96.770 97.776 97.270   4811   4861
+PRT         72.072 75.472 73.733    106    111
+SBAR        88.280 87.290 87.782    535    529
+UCP          0.000  0.000  0.000      0      5
+VP          93.416 93.517 93.466   4658   4663
 ----------------------------------------------
-O            0.000  0.000  0.000   1273   1239
+O            0.000  0.000  0.000   1244   1274
 ----------------------------------------------
-Overall     93.377 93.510 93.443  23852  23886
-Accuracy    88.772   -      -      -     25125
+Overall     93.510 93.393 93.451  23852  23822
+Accuracy    88.763   -      -      -     25096
 
-Model 3.0.25, test with no POS (illinois-pos-models:3.0.12) : (conll format, test.noPOStxt)
-
+With NO POS
  Label   Precision Recall   F1   LCount PCount
 ----------------------------------------------
-ADJP        75.422 71.461 73.388    438    415
-ADVP        80.706 79.215 79.953    866    850
-CONJP       33.333 55.556 41.667      9     15
-INTJ        33.333 50.000 40.000      2      3
+ADJP        78.608 69.635 73.850    438    388
+ADVP        80.427 78.291 79.345    866    843
+CONJP       45.455 55.556 50.000      9     11
+INTJ       100.000 50.000 66.667      2      1
 LST          0.000  0.000  0.000      5      0
-NP          94.121 94.091 94.106  12422  12418
-PP          96.797 98.005 97.397   4811   4871
-PRT         65.649 81.132 72.574    106    131
-SBAR        85.560 88.598 87.052    535    554
-UCP          0.000  0.000  0.000      0      5
-VP          94.259 94.118 94.188   4658   4651
+NP          94.193 94.019 94.106  12422  12399
+PP          96.656 97.942 97.295   4811   4875
+PRT         60.417 82.075 69.600    106    144
+SBAR        86.813 88.598 87.697    535    546
+UCP          0.000  0.000  0.000      0      4
+VP          94.105 94.246 94.176   4658   4665
 ----------------------------------------------
-O            0.000  0.000  0.000   1236   1175
+O            0.000  0.000  0.000   1231   1207
 ----------------------------------------------
-Overall     93.472 93.711 93.592  23852  23913
-Accuracy    89.094   -      -      -     25088
+Overall     93.529 93.623 93.576  23852  23876
+Accuracy    89.028   -      -      -     25083
