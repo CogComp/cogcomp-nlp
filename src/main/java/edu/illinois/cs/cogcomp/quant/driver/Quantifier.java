@@ -87,12 +87,16 @@ public class Quantifier extends Annotator {
 		}
 		return sentence;
 	}
-	
-	public List<QuantSpan> getSpans(String text, boolean standardized) throws AnnotatorException {
-		TextAnnotation taCurator = taBuilder.createTextAnnotation(text);
+
+	/**
+	 * @param inputTA the tokenized annotation of text input. If this parameter is not available, the user
+	 *                can pass null, in which case we will tokenize it ourselves.
+	 */
+	public List<QuantSpan> getSpans(String text, boolean standardized, TextAnnotation inputTA) throws AnnotatorException {
+		TextAnnotation tokenizedTA = (inputTA!=null)?inputTA:taBuilder.createTextAnnotation(text);
 		TextAnnotation taQuant = taBuilder.createTextAnnotation(wordsplitSentence(text).trim());
 		List<QuantSpan> quantSpans = new ArrayList<QuantSpan>();
-		String sentences[] = new String[taQuant.getNumberOfSentences()];
+		String[] sentences = new String[taQuant.getNumberOfSentences()];
 		for(int i=0; i<taQuant.getNumberOfSentences(); ++i) {
 			sentences[i] = taQuant.getSentence(i).getText();
 		}
@@ -108,23 +112,23 @@ public class Quantifier extends Annotator {
 		    	prediction = chunker.discreteValue(tokens.get(i));
 		    	if (prediction.startsWith("B-")|| prediction.startsWith("I-")
 		    							&& !previous.endsWith(prediction.substring(2))){
-		    		if( !inChunk && tokenPos < taCurator.size()){
+		    		if( !inChunk && tokenPos < tokenizedTA.size()){
 		    			inChunk = true;
-		    			startPos = taCurator.getTokenCharacterOffset(tokenPos).getFirst();
+		    			startPos = tokenizedTA.getTokenCharacterOffset(tokenPos).getFirst();
 		    		}	
 		    	}
 		    	if( inChunk ){
 		    		chunk += tokens.get(i).getSurfaceForm()+" ";
 		    	}
 	    		if (!prediction.equals("O")
-	    					&& tokenPos < taCurator.size()
+	    					&& tokenPos < tokenizedTA.size()
 	    					&& (i == (tokens.size()-1)
 	    					|| chunker.discreteValue(tokens.get(i+1)).equals("O")
 	    					|| chunker.discreteValue(tokens.get(i+1)).startsWith("B-")
 	    					|| !chunker.discreteValue(tokens.get(i+1)).endsWith(
 	    							prediction.substring(2)))){
 	    			
-	    			endPos = taCurator.getTokenCharacterOffset(tokenPos).getSecond();
+	    			endPos = tokenizedTA.getTokenCharacterOffset(tokenPos).getSecond();
 	    			QuantSpan span = new QuantSpan(null, startPos, endPos);
 	    			try { 
 		    			if(standardized) {
@@ -139,18 +143,18 @@ public class Quantifier extends Annotator {
 	    			chunk = "";
 	    		}
 	    		previous = prediction;
-	    		if(tokenPos < taCurator.size() && taCurator.getToken(tokenPos).trim().
+	    		if(tokenPos < tokenizedTA.size() && tokenizedTA.getToken(tokenPos).trim().
 	    				endsWith(tokens.get(i).getSurfaceForm().trim())){
 	    			tokenPos++;
 	    		}
 	    }
 		return quantSpans;
 	}
-	
+
 	public String getAnnotatedString(String text, boolean standardized) throws Exception {
 		String ans = "";
 		TextAnnotation ta = taBuilder.createTextAnnotation(text);
-		List<QuantSpan> quantSpans = getSpans(text, standardized);
+		List<QuantSpan> quantSpans = getSpans(text, standardized, null);
 		int quantIndex = 0;
 		for(int i=0; i<ta.size(); ++i) {
 			if(quantSpans.get(quantIndex).start == 
@@ -177,7 +181,7 @@ public class Quantifier extends Annotator {
 		assert (ta.hasView(ViewNames.SENTENCE));
 		SpanLabelView quantifierView = new SpanLabelView(
 				ViewNames.QUANTITIES, "illinois-quantifier", ta, 1d);
-		List<QuantSpan> quantSpans = getSpans(ta.getTokenizedText(), true);
+		List<QuantSpan> quantSpans = getSpans(ta.getTokenizedText(), true, ta);
 		for (QuantSpan span : quantSpans) {
 			int startToken = ta.getTokenIdFromCharacterOffset(span.start);
 			int endToken = ta.getTokenIdFromCharacterOffset(span.end);

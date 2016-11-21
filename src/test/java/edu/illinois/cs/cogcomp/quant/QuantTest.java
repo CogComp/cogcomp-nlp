@@ -23,6 +23,14 @@ public class QuantTest extends TestCase {
 		assertTrue(ta.hasView(ViewNames.QUANTITIES));
 		assertTrue(isEqual("[= Date(05/XX/2008)]", ta.getView(ViewNames.QUANTITIES).getConstituents()
 				.get(0).getLabel()));
+
+		ta = Quantifier.taBuilder.createTextAnnotation("This month is the 20th of the year. Everything is above 20$.");
+		quantifier.addView(ta);
+		assertTrue(ta.hasView(ViewNames.QUANTITIES));
+		System.out.println(ta.getView(ViewNames.QUANTITIES).getConstituents().get(0).getLabel());
+		System.out.println(ta.getView(ViewNames.QUANTITIES).getConstituents().get(1).getLabel());
+		assertTrue(isEqual("[= 1.0 year]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(0).getLabel()));
+		assertTrue(isEqual("[= 20.0 US$]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(1).getLabel()));
 	}
 
 	@Test
