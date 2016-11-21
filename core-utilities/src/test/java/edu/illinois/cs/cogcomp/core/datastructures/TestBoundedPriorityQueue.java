@@ -8,11 +8,15 @@
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Comparator;
 
-public class TestBoundedPriorityQueue extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class TestBoundedPriorityQueue {
+
+    @Test
     public final void testBoundedPriorityQueue() {
         BoundedPriorityQueue<Integer> queue =
                 new BoundedPriorityQueue<>(2, new Comparator<Integer>() {

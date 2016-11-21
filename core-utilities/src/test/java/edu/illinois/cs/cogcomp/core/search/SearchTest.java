@@ -12,15 +12,18 @@ package edu.illinois.cs.cogcomp.core.search;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author Vivek Srikumar May 1, 2009
  */
-public class SearchTest extends TestCase {
+public class SearchTest {
 
     IStateManager<Pair<Integer, Integer>> stateManager =
             new IStateManager<Pair<Integer, Integer>>() {
@@ -43,6 +46,7 @@ public class SearchTest extends TestCase {
         return Math.max(element.getFirst(), element.getSecond());
     }
 
+    @Test
     public final void testDepthFirstSearch() {
         DepthFirstSearch<Pair<Integer, Integer>> dfs = new DepthFirstSearch<>();
 
@@ -51,6 +55,7 @@ public class SearchTest extends TestCase {
         assertEquals(result, new Pair<>(0, 4));
     }
 
+    @Test
     public final void testBreadthFirstSearch() {
         GraphSearch<Pair<Integer, Integer>> dfs = new BreadthFirstSearch<>();
 
@@ -59,6 +64,7 @@ public class SearchTest extends TestCase {
         assertEquals(result, new Pair<>(4, 0));
     }
 
+    @Test
     public final void testUniformCostSearch() {
         GraphSearch<Pair<Integer, Integer>> dfs =
                 new UniformCostSearch<>(new Comparator<Pair<Integer, Integer>>() {
@@ -71,6 +77,7 @@ public class SearchTest extends TestCase {
         assertEquals(result, new Pair<>(4, 0));
     }
 
+    @Test
     public final void testBeamSearch() {
         GraphSearch<Pair<Integer, Integer>> dfs =
                 new BeamSearch<>(4, new Comparator<Pair<Integer, Integer>>() {

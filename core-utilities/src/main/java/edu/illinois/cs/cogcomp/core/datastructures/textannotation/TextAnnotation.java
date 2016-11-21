@@ -412,7 +412,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     }
 
     public boolean hasAttribute(String key) {
-        return this.attributes == null ? false : this.attributes.containsKey(key);
+        return this.attributes != null && this.attributes.containsKey(key);
     }
 
     public void removeAllAttributes() {

@@ -10,13 +10,17 @@ package edu.illinois.cs.cogcomp.core.utilities;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import junit.framework.TestCase;
 import org.junit.After;
+import org.junit.Test;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class XMLSerializationTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class XMLSerializationTest {
+
+    @Test
     public void testSanity() {
         System.out.println("Example Usage");
         XMLModelExample ob = new XMLModelExample("1", "2", "3");

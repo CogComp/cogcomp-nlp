@@ -16,9 +16,11 @@ import java.util.TreeMap;
 
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestPOSMikheevCounter extends TestCase {
+public class TestPOSMikheevCounter {
 
+    @Test
     public final void test() throws Exception {
 
         POSMikheevCounter posMikheev = new POSMikheevCounter("posMikheev");
