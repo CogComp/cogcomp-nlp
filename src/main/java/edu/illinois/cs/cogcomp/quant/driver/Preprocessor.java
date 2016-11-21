@@ -1,5 +1,6 @@
 package edu.illinois.cs.cogcomp.quant.driver;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,15 +12,15 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 
 /**
  * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient}
- * or {@link PipelineAnnotator}. The configurations parameters are set in {@link PreprocessorConfigurator} and
+ * or {@link IllinoisPipelineFactory}. The configurations parameters are set in {@link PreprocessorConfigurator} and
  * should be merged with {@link ESRLConfigurator}.
  */
 public class Preprocessor {
 
-	public enum Type {pipeline, curator}
     private final ResourceManager rm;
     private AnnotatorService annotator;
 
@@ -27,11 +28,22 @@ public class Preprocessor {
     		Map<String, String> nonDefaultValues = new HashMap<String, String>();
     		nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
         this.rm = Configurator.mergeProperties(rm, new CuratorConfigurator().getConfig(nonDefaultValues));
-        	try {
-        		annotator = CuratorFactory.buildCuratorClient(this.rm);
-        	} catch (Exception e) {
-        		e.printStackTrace();
-		}
+        if(rm.getBoolean(PreprocessorConfigurator.USE_PIPELINE_KEY)) {
+            try {
+                annotator = IllinoisPipelineFactory.buildPipeline(this.rm);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            try {
+                annotator = CuratorFactory.buildCuratorClient(this.rm);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
