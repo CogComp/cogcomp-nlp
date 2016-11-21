@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +24,7 @@ import java.util.Vector;
 
 
 public class BrownClusters {
+    private static Logger logger = LoggerFactory.getLogger(BrownClusters.class);
 
     /** the sole instance of this class. */
     private static BrownClusters brownclusters = null;
@@ -78,7 +81,7 @@ public class BrownClusters {
             }
 
             if (ParametersForLbjCode.currentParameters.debug) {
-                System.out.println(wordsAdded + " words added");
+                logger.info(wordsAdded + " words added");
             }
             brownclusters.wordToPathByResource.add(h);
             brownclusters.isLowercaseBrownClustersByResource[i] =
@@ -123,8 +126,8 @@ public class BrownClusters {
 
     private static void printArr(String[] arr) {
         for (String anArr : arr)
-            System.out.print(" " + anArr);
-        System.out.println("");
+            logger.info(" " + anArr);
+        logger.info("");
     }
 
     final public void printOovData(Data data) {
@@ -171,13 +174,13 @@ public class BrownClusters {
          * resources.addElement("Data/BrownHierarchicalWordClusters/brownBllipClusters");
          * Vector<Integer> thres=new Vector<>(); thres.addElement(5); Vector<Boolean> lowercase=new
          * Vector<>(); lowercase.addElement(false); init(resources,thres,lowercase);
-         * System.out.println("finance "); printArr(getPrefixes(new NEWord(new
-         * Word("finance"),null,null))); System.out.println("help"); printArr(getPrefixes(new
-         * NEWord(new Word("help"),null,null))); System.out.println("resque ");
+         * logger.info("finance "); printArr(getPrefixes(new NEWord(new
+         * Word("finance"),null,null))); logger.info("help"); printArr(getPrefixes(new
+         * NEWord(new Word("help"),null,null))); logger.info("resque ");
          * printArr(getPrefixes(new NEWord(new Word("resque"),null,null)));
-         * System.out.println("assist "); printArr(getPrefixes(new NEWord(new
-         * Word("assist"),null,null))); System.out.println("assistance "); printArr(getPrefixes(new
-         * NEWord(new Word("assistance"),null,null))); System.out.println("guidance ");
+         * logger.info("assist "); printArr(getPrefixes(new NEWord(new
+         * Word("assist"),null,null))); logger.info("assistance "); printArr(getPrefixes(new
+         * NEWord(new Word("assistance"),null,null))); logger.info("guidance ");
          * printArr(getPrefixes(new NEWord(new Word("guidance"),null,null)));
          */
     }

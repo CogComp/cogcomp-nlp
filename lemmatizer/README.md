@@ -160,4 +160,6 @@ TODO
 
 ##Citation
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/illinois-lemmatizer
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.
+Thank you for citing us if you use us in your work! 
+More info at http://cogcomp.cs.illinois.edu/page/software_view/illinois-lemmatizer

@@ -18,6 +18,9 @@ import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.lang.Math;
 /**
@@ -30,6 +33,7 @@ public class ChunkerTrain {
     private int iter; // Number of iterations to be used when training the chunker
     private Chunker chunker;
     private ResourceManager rm;
+    private static final Logger logger = LoggerFactory.getLogger(ChunkerTrain.class);
 
     public ChunkerTrain() {
         this(50);
@@ -51,7 +55,7 @@ public class ChunkerTrain {
      * Trains the taggers with the default training data found in ChunkerConfigurator.java
      */
     public void trainModels() {
-        System.out.println("Using default training data: " + rm.getString("trainingData"));
+        logger.info("Using default training data: " + rm.getString("trainingData"));
         trainModels(rm.getString("trainingData"));
     }
 
@@ -88,7 +92,7 @@ public class ChunkerTrain {
             }
             parser.reset();
             chunker.doneWithRound();
-            System.out.println("Iteration number : " + i);
+            logger.info("Iteration number : " + i);
         }
         chunker.doneLearning();
     }
@@ -172,12 +176,12 @@ public class ChunkerTrain {
     public void writeModelsToDisk() {
         IOUtils.mkdir(rm.getString("modelDirPath"));
         chunker.save();
-        System.out.println("Done training, models are in " + rm.getString("modelDirPath"));
+        logger.info("Done training, models are in " + rm.getString("modelDirPath"));
     }
     public void writeModelsToDisk(String dir, String modelName){
         IOUtils.mkdir(dir);
         chunker.write(dir + File.separator + modelName + ".lc", dir + File.separator + modelName + ".lex");
-        System.out.println("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
+        logger.info("Done training, models are in " + dir+File.separator+modelName+".lc (.lex)");
     }
     public static void main(String[] args) {
         if(args.length!=4&&args.length!=5){

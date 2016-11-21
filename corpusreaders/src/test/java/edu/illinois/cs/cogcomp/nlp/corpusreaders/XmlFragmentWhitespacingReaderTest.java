@@ -13,11 +13,13 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,10 @@ public class XmlFragmentWhitespacingReaderTest {
 
     private static String REF_TEXT_ONE;
     private static String REF_TEXT_TWO;
+
+    private static org.slf4j.Logger logger =
+            LoggerFactory.getLogger(XmlFragmentWhitespacingReaderTest.class);
+
 
     private static String readReferenceText(String dir, String referenceFile)
             throws FileNotFoundException {
@@ -96,8 +102,8 @@ public class XmlFragmentWhitespacingReaderTest {
                 fail(e.getMessage());
             }
         }
-        System.out.println("----\n" + tas.get(REF_FILE_ONE).getText() + "----\n");
-        System.out.println("----\n" + tas.get(REF_FILE_TWO).getText() + "----\n");
+        logger.info("----\n" + tas.get(REF_FILE_ONE).getText() + "----\n");
+        logger.info("----\n" + tas.get(REF_FILE_TWO).getText() + "----\n");
 
 
         String FIRST_ERE_FILE = RAW_FILE_DIR + "/" + REF_FILE_ONE;
@@ -125,12 +131,12 @@ public class XmlFragmentWhitespacingReaderTest {
                 assertTrue(sunSpans.contains(cCharSpan));
                 sunSpans.remove(cCharSpan);
 
-                System.err.println("FOUND OVERLAPPING SPAN: '"
+                logger.error("FOUND OVERLAPPING SPAN: '"
                         + printSpanInContext(firstRawText, cCharSpan));
             }
         }
         for (IntPair missedSpan : sunSpans)
-            System.err.println("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan)
+            logger.error("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan)
                     + "'.");
         assertTrue(sunSpans.isEmpty());
 

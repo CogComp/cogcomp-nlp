@@ -9,6 +9,8 @@ package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +26,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * @author Nick Rizzolo
  **/
 public class WordSplitter implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(WordSplitter.class);
     /**
      * Run this program on a file containing plain text, and it will produce
      * the same text on <code>STDOUT</code> rearranged so that each line

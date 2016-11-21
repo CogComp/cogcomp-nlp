@@ -12,6 +12,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParser;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import org.junit.Before;
 import org.junit.Test;
+import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import static org.junit.Assert.assertEquals;
  * @author Vivek Srikumar Jun 23, 2009
  */
 public class TreeGrepTest {
+    private static Logger logger = LoggerFactory.getLogger(TreeGrepTest.class);
 
     Tree<String> tree;
     List<Tree<String>> foundPatterns;
@@ -74,7 +78,7 @@ public class TreeGrepTest {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // System.out.println(match);
+            // logger.info(match);
             // }
 
             assertEquals(true, result);
@@ -95,7 +99,7 @@ public class TreeGrepTest {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // System.out.println("End: " + match.getRootMatch());
+            // logger.info("End: " + match.getRootMatch());
             // }
 
             assertEquals(true, result);
@@ -114,7 +118,7 @@ public class TreeGrepTest {
             boolean result = matcher.matches(tree);
 
             // for (TreeGrepMatch<String> match : matcher.getMatches()) {
-            // System.out.println("Start: " + match.getRootMatch());
+            // logger.info("Start: " + match.getRootMatch());
             // }
 
             assertEquals(true, result);

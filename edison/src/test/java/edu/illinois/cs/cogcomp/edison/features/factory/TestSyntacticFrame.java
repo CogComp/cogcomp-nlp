@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import junit.framework.TestCase;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Set;
@@ -34,6 +36,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestSyntacticFrame {
     private static List<TextAnnotation> tas;
+    private static Logger logger = LoggerFactory.getLogger(TestSyntacticFrame.class);
 
     static {
         try {
@@ -66,7 +69,7 @@ public class TestSyntacticFrame {
 
                     Set<Feature> features = fex.getFeatures(c);
 
-                    System.out.println(c + "\t" + features);
+                    logger.info(c + "\t" + features);
 
                     assertEquals(3, features.size());
                 }

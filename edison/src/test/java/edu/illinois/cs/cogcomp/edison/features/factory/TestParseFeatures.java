@@ -15,6 +15,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -43,6 +45,7 @@ public class TestParseFeatures {
     // index of the annotated text in the tas list
     private static int annotatedTAIndex = 34;
 
+    private static Logger logger = LoggerFactory.getLogger(TestParseFeatures.class);
 
     static {
         try {
@@ -62,8 +65,8 @@ public class TestParseFeatures {
     public final void testSampleAnnotation() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
         if (!ta.toString().equals(annotatedString)) {
-            System.out.println("Text Annotation string: \n" + ta.toString());
-            System.out.println("Reference String: \n" + annotatedString);
+            logger.info("Text Annotation string: \n" + ta.toString());
+            logger.info("Reference String: \n" + annotatedString);
             throw new Exception("The text in the Text Annotation doesn't match the Reference String");
         }
         if (!ta.hasView(ViewNames.SRL_VERB))
@@ -74,7 +77,7 @@ public class TestParseFeatures {
     public final void testParseHeadWordPOS() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
 
-        System.out.println("Testing parse head-word+POS: Charniak");
+        logger.info("Testing parse head-word+POS: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[hw:classics, h-pos:NNS]",
@@ -92,7 +95,7 @@ public class TestParseFeatures {
         ));
         testFex(ParseHeadWordPOS.CHARNIAK, true, validCharniakResponses);
 
-        System.out.println("Testing parse head-word+POS: Stanford");
+        logger.info("Testing parse head-word+POS: Stanford");
 
         Set<String> validStanfordResponses = new HashSet<>(Arrays.asList(
                 new String[] {
@@ -115,7 +118,7 @@ public class TestParseFeatures {
     
     @Test
     public final void testParsePath() throws Exception {
-        System.out.println("Testing parse path: Charniak");
+        logger.info("Testing parse path: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[VBN^NPvNNS, VBN^, l=3.0]",
@@ -133,7 +136,7 @@ public class TestParseFeatures {
         ));
         testFex(ParsePath.CHARNIAK, true, validCharniakResponses);
 
-        System.out.println("Testing parse path: Stanford");
+        logger.info("Testing parse path: Stanford");
         Set<String> validStanfordResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[VBN^NPvNNS, VBN^, l=3.0]",
@@ -155,7 +158,7 @@ public class TestParseFeatures {
     
     @Test
     public final void testParsePhraseType() throws Exception {
-        System.out.println("Testing parse phrase: Charniak");
+        logger.info("Testing parse phrase: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[NNS, pt:h:classics, pt:h-pos:NNS, pt:NP]",
@@ -173,7 +176,7 @@ public class TestParseFeatures {
         ));
         testFex(ParsePhraseType.CHARNIAK, true, validCharniakResponses);
 
-        System.out.println("Testing parse phrase: Stanford");
+        logger.info("Testing parse phrase: Stanford");
         Set<String> validStanfordResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[NNS, pt:h:classics, pt:h-pos:NNS, pt:NP]",
@@ -195,7 +198,7 @@ public class TestParseFeatures {
 
     @Test
     public final void testParseSiblings() throws Exception {
-        System.out.println("Testing parse siblings: Charniak");
+        logger.info("Testing parse siblings: Charniak");
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[LAST_CHILD, lsis.pt:VBN, lsis.hw:revitalized, lsis.hw.pos:VBN]",
@@ -213,7 +216,7 @@ public class TestParseFeatures {
         ));
         testFex(ParseSiblings.CHARNIAK, true, validCharniakResponses);
 
-        System.out.println("Testing parse siblings: Stanford");
+        logger.info("Testing parse siblings: Stanford");
         Set<String> validStanfordResponses = new HashSet<>(Arrays.asList(
                 new String[] {
                         "Revitalized----> Classics(1.0)	[LAST_CHILD, lsis.pt:VBN, lsis.hw:revitalized, lsis.hw.pos:VBN]",
@@ -237,7 +240,7 @@ public class TestParseFeatures {
     public final void testVerbVoiceIndicator() throws Exception {
         TextAnnotation ta = tas.get(annotatedTAIndex);
 
-        System.out.println("Testing verb voice: Charniak");
+        logger.info("Testing verb voice: Charniak");
 
         Set<String> validCharniakResponses = new HashSet<>(Arrays.asList(
                 new String[] {
@@ -255,7 +258,7 @@ public class TestParseFeatures {
             assertTrue(validCharniakResponses.contains(response));
         }
 
-        System.out.println("Testing verb voice: Stanford");
+        logger.info("Testing verb voice: Stanford");
 
         Set<String> validStanfordResponses = new HashSet<>(Arrays.asList(
                 new String[] {

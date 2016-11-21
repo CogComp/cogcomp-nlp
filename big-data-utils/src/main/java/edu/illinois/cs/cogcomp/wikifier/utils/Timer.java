@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.wikifier.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,7 +37,8 @@ public abstract class Timer implements Runnable{
         private long lastReport;
         private AtomicInteger counter = new AtomicInteger(0);
         private boolean disabled = false;
-        
+        private static final Logger logger = LoggerFactory.getLogger(Reporter.class);
+
         public Reporter(long reporteringInterval){
             this(reporteringInterval,"");
         }
@@ -102,7 +106,7 @@ public abstract class Timer implements Runnable{
                 .append(", ");
             }
             sb.deleteCharAt(sb.length()-1);
-            System.out.println(sb.toString());
+            logger.info(sb.toString());
         }
 
         /**

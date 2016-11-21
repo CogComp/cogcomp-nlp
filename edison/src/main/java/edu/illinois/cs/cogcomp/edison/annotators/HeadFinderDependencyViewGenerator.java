@@ -24,7 +24,7 @@ import java.util.Set;
  * @author Vivek Srikumar
  */
 public class HeadFinderDependencyViewGenerator extends Annotator {
-    private final static Logger log = LoggerFactory
+    private final static Logger logger = LoggerFactory
             .getLogger(HeadFinderDependencyViewGenerator.class);
     static String viewGenerator = "HeadFinderDependencies";
     private final String parseViewName;
@@ -56,9 +56,9 @@ public class HeadFinderDependencyViewGenerator extends Annotator {
                     depTreeView.setDependencyTree(i, labeledDependencyTree);
 
                 } catch (IllegalStateException e) {
-                    System.out.println(parseTreeView);
-                    System.out.println("Unlabeled dependency tree (for debugging): ");
-                    System.out.println(depParser.getDependencyTree(parseTreeRoot));
+                    System.err.println(parseTreeView);
+                    System.err.println("Unlabeled dependency tree (for debugging): ");
+                    System.err.println(depParser.getDependencyTree(parseTreeRoot));
 
                     throw e;
                 }
@@ -67,7 +67,7 @@ public class HeadFinderDependencyViewGenerator extends Annotator {
                 int nConstituents = depTreeView.getNumberOfConstituents();
                 if (nConstituents != size) {
 
-                    log.error("{} nodes in dependency tree, " + "{} tokens in text so far",
+                    logger.error("{} nodes in dependency tree, " + "{} tokens in text so far",
                             nConstituents, size);
 
                     Set<Integer> set = new LinkedHashSet<>();
@@ -83,7 +83,7 @@ public class HeadFinderDependencyViewGenerator extends Annotator {
                     for (int tokenId : set) {
                         sb.append(input.getToken(tokenId)).append(" ");
                     }
-                    log.error("Dependency tree does not cover tokens: {}", sb.toString());
+                    logger.error("Dependency tree does not cover tokens: {}", sb.toString());
 
                 }
             }

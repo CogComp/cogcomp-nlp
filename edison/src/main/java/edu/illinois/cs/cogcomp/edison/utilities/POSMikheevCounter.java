@@ -59,7 +59,7 @@ public class POSMikheevCounter extends POSBaseLineCounter {
         else if (IOUtils.isDirectory(home)) {
             String[] files = IOUtils.lsFiles(home);
             for (String file : files) {
-                // System.out.println(file);
+                // logger.info(file);
                 this.buildTableHelper(home + "\\" + file);
             }
         }

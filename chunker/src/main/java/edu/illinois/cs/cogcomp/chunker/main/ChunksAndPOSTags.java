@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -36,6 +38,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
  * @author Nick Rizzolo
  **/
 public class ChunksAndPOSTags {
+    private static final Logger logger = LoggerFactory.getLogger(ChunksAndPOSTags.class);
+
     public static void main(String[] args) {
         String filename = null;
 
@@ -57,15 +61,15 @@ public class ChunksAndPOSTags {
             String prediction = chunker.discreteValue(w);
             if (prediction.startsWith("B-") || prediction.startsWith("I-")
                     && !previous.endsWith(prediction.substring(2)))
-                System.out.print("[" + prediction.substring(2) + " ");
-            System.out.print("(" + w.partOfSpeech + " " + w.form + ") ");
+                logger.info("[" + prediction.substring(2) + " ");
+            logger.info("(" + w.partOfSpeech + " " + w.form + ") ");
             if (!prediction.equals("O")
                     && (w.next == null || chunker.discreteValue(w.next).equals("O")
                             || chunker.discreteValue(w.next).startsWith("B-") || !chunker
                             .discreteValue(w.next).endsWith(prediction.substring(2))))
-                System.out.print("] ");
+                logger.info("] ");
             if (w.next == null)
-                System.out.println();
+                logger.info("\n");
             previous = prediction;
         }
     }

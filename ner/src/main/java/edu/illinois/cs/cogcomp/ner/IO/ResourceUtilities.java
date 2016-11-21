@@ -7,7 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.ner.IO;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 
 public class ResourceUtilities {
-    private static Logger log = LoggerFactory.getLogger(ResourceUtilities.class);
+    private static Logger logger = LoggerFactory.getLogger(ResourceUtilities.class);
     // TODO Ideally this should be read from the config file
 //    private static final String localResourceDir = "data/";
     private static final String localResourceDir = "";
@@ -37,24 +36,16 @@ public class ResourceUtilities {
             // If the file doesn't exist locally it must be in the classpath (in common-resources
             // jar)
             if (!new File(file).exists()) {
-                log.debug("Loading {} from classpath", resourceFile);
-//                List<URL> list = IOUtils.lsResources(ResourceUtilities.class, resourceFile);
-//                if (list.isEmpty()) {
-//                    System.err.println("Could not load " + resourceFile);
-//                    System.exit(-1);
-//                }
-//                URL fileURL = list.get(0);
-//                URLConnection connection = fileURL.openConnection();
-//                stream = connection.getInputStream();
+                logger.debug("Loading {} from classpath", resourceFile);
                 stream = ResourceUtilities.class.getResourceAsStream("/"+resourceFile);
             } else {
-                log.debug("Loading {} from local directory", resourceFile);
+                logger.debug("Loading {} from local directory", resourceFile);
                 stream = new FileInputStream(file);
             }
             // Open stream as GZipped if needed
             stream = checkGZipped(stream);
         } catch (Exception e) {
-            log.error("Could not load {}. Exception {}", resourceFile, e.toString());
+            logger.error("Could not load {}. Exception {}", resourceFile, e.toString());
             System.exit(-1);
         }
         return stream;
@@ -72,7 +63,7 @@ public class ResourceUtilities {
             // Open stream as GZipped if needed
             stream = checkGZipped(stream);
         } catch (Exception e) {
-            log.error("Could not load {}. Exception {}", resourceURL, e.toString());
+            logger.error("Could not load {}. Exception {}", resourceURL, e.toString());
             System.exit(-1);
         }
         return stream;
@@ -91,11 +82,11 @@ public class ResourceUtilities {
         String dir = localResourceDir + resourceDir;
         if (!new File(dir).exists()) {
             if (dirListingFile == null) {
-                log.error("Could not list dir {} from classpath without a listing file.",
+                logger.error("Could not list dir {} from classpath without a listing file.",
                         resourceDir);
                 System.exit(-1);
             }
-            log.debug("Loading dir listing {} from classpath.", dirListingFile);
+            logger.debug("Loading dir listing {} from classpath.", dirListingFile);
             InputStream stream = loadResource(resourceDir + "/" + dirListingFile);
             InFile in = new InFile(stream);
             String line;
@@ -106,7 +97,7 @@ public class ResourceUtilities {
             in.close();
             return files.toArray(new String[files.size()]);
         } else {
-            log.debug("Found dir {} in local path.", resourceDir);
+            logger.debug("Found dir {} in local path.", resourceDir);
             String[] files = new File(dir).list();
             for (int i = 0; i < files.length; i++) {
                 files[i] = resourceDir + "/" + files[i];

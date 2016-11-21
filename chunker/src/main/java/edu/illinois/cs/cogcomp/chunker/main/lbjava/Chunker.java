@@ -17,6 +17,8 @@ import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Learned classifier that predicts a BIO chunk tag given a word represented as a <code>Token</code>
@@ -38,6 +40,8 @@ public class Chunker extends SparseNetworkLearner {
 
     public static boolean isTraining;
 
+    private static final Logger logger = LoggerFactory.getLogger(Chunker.class);
+
     public Chunker() {
         this(new Parameters(), modelFile, modelLexFile);
     }
@@ -53,7 +57,7 @@ public class Chunker extends SparseNetworkLearner {
             lcFilePath = new java.net.URL("file:" + modelPath);
             lexFilePath = new java.net.URL("file:" + lexiconPath);
         } catch (Exception e) {
-            System.err.println("ERROR: Can't create model or lexicon URL: " + e);
+            logger.error("ERROR: Can't create model or lexicon URL: " + e);
             e.printStackTrace();
             System.exit(1);
         }

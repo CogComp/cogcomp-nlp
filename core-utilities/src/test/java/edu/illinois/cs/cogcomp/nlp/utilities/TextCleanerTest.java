@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,6 +24,8 @@ import static org.junit.Assert.fail;
 
 
 public class TextCleanerTest {
+    private static Logger logger = LoggerFactory.getLogger(TextCleanerTest.class);
+
     private static final String CONFIG = "src/test/resources/testCleanerConfig.txt";
     private static final String LONG_BAD_TEXT_FILE = "src/test/resources/testCleaner.txt";
 
@@ -98,7 +102,7 @@ public class TextCleanerTest {
         String cleanText = TextCleaner.replaceUnderscores(badText);
 
         boolean isGood = !(cleanText.contains("_"));
-        System.err.println(cleanText);
+        logger.info(cleanText);
         assertEquals(true, isGood);
     }
 
@@ -109,7 +113,7 @@ public class TextCleanerTest {
         String cleanText = TextCleaner.replaceTildesAndStars(badText);
 
         boolean isGood = !(cleanText.contains("~"));
-        System.err.println(cleanText);
+        logger.error(cleanText);
         assertEquals(true, isGood);
     }
 
@@ -125,7 +129,7 @@ public class TextCleanerTest {
                         && !(cleanText.contains("..")) && cleanText.contains(",")
                         && cleanText.contains("!") && cleanText.contains("-");
 
-        System.err.println(cleanText);
+        logger.error(cleanText);
 
         assertEquals(true, isGood);
     }
@@ -138,7 +142,7 @@ public class TextCleanerTest {
 
         boolean isGood = !(cleanText.contains("^@"));
 
-        System.err.println(cleanText);
+        logger.error(cleanText);
 
         assertEquals(true, isGood);
     }
@@ -164,7 +168,7 @@ public class TextCleanerTest {
 
         boolean isGood = !(cleanText.contains("^@"));
 
-        System.err.println(cleanText);
+        logger.error(cleanText);
 
         assertEquals(true, isGood);
     }

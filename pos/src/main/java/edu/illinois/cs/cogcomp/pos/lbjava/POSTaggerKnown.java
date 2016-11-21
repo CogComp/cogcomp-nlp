@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Predicting the part of speech of the given word, this classifier is intended to be applied only
@@ -27,6 +29,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
  * @author Nick Rizzolo
  **/
 public class POSTaggerKnown extends SparseNetworkLearner {
+    private static Logger logger = LoggerFactory.getLogger(POSTaggerKnown.class);
+
     private final BaselineTarget baselineTarget;
 
     private static final WordForm wordForm = new WordForm();

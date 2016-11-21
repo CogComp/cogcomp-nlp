@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -39,6 +41,7 @@ public class InFile {
 	public static boolean pruneStopSymbols=false;
 	public BufferedReader  in = null;
 	public static String stopSymbols="@";
+	private static final Logger logger = LoggerFactory.getLogger(InFile.class);
 
 	public InFile(String filename){
 		try{
@@ -116,7 +119,7 @@ public class InFile {
         File f = new File(file);
         InputStreamReader isr = new InputStreamReader(
                                 new FileInputStream(f));
-        System.out.println("character encoding = " + isr.getEncoding());
+        logger.info("character encoding = " + isr.getEncoding());
         int c;
         StringBuffer res = new StringBuffer();
         while( (c = isr.read()) != -1 ) {
@@ -130,7 +133,7 @@ public class InFile {
         File f = new File(file);
         InputStreamReader isr = new InputStreamReader(
                                 new FileInputStream(f), encoding);
-        System.out.println("character encoding = " + isr.getEncoding());
+		logger.info("character encoding = " + isr.getEncoding());
         int c;
         StringBuffer res = new StringBuffer();
         while( (c = isr.read()) != -1 ) {

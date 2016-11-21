@@ -24,6 +24,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import weka.core.Debug.Random;
 
 import static org.junit.Assert.*;
 
@@ -38,6 +42,7 @@ import static org.junit.Assert.*;
  * @author redman
  */
 public class NERAnnotatorTest {
+    private static Logger logger = LoggerFactory.getLogger(NERAnnotatorTest.class);
 
     final static String TOKEN_TEST = "NOHO Ltd. partners with Telford International Company Inc";
 
@@ -112,7 +117,7 @@ public class NERAnnotatorTest {
                     NerAnnotatorManager.buildNerAnnotator(new ResourceManager(new Properties()),
                             ViewNames.NER_CONLL);
         } catch (Exception e) {
-            System.out.println("Cannot initialise the test, the exception was: ");
+            System.err.println("Cannot initialise the test, the exception was: ");
             e.printStackTrace();
             fail();
         }
@@ -159,7 +164,7 @@ public class NERAnnotatorTest {
             counter += r.nextDouble();
         }
         if (counter < 0)
-            System.out.println("this should never happen.");
+            System.err.println("this should never happen.");
         return System.currentTimeMillis() - start;
     }
 
@@ -181,7 +186,7 @@ public class NERAnnotatorTest {
             fail(e.getMessage());
         }
         long expectedPerformance = this.measureMachinePerformance();
-        System.out.println("Expect " + expectedPerformance);
+        logger.info("Expect " + expectedPerformance);
         {
             TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
             View view = null;
@@ -299,7 +304,7 @@ public class NERAnnotatorTest {
 
         for (NERThread t : threads) {
             if (t.averageRunTime == -1) {
-                System.out.println("Error : " + t.error);
+                logger.info("Error : " + t.error);
                 assertTrue(t.error, false);
             }
             assertTrue("Deficient average run time.", t.averageRunTime < 100);
@@ -372,7 +377,7 @@ public class NERAnnotatorTest {
             threads.add(t);
             t.start();
         }
-        System.out.println("Running on " + numcores);
+        logger.info("Running on " + numcores);
 
         // wait for all to complete.
         for (Thread t : threads) {
@@ -388,7 +393,7 @@ public class NERAnnotatorTest {
         for (NERThread t : threads) {
             avg += t.averageRunTime;
         }
-        System.out.println("Average runtime is " + (avg / count));
+        logger.info("Average runtime is " + (avg / count));
     }
 
     public static View getView(TextAnnotation ta) throws AnnotatorException {

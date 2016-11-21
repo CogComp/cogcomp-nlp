@@ -31,7 +31,7 @@ public class GazetteersFactory {
     /** this is a token whose only use it to ensure thread safety. */
     private static String GAZ_INIT_LOCK = "GAZ_INIT_LOCK";
 
-    /** keep the already initialized gazetteers, this is for multilingual NER */
+    /** keep the initialized gazetteers, this is added due to multilingual NER */
     private static Map<String, Gazetteers> gazetteers_map = new HashMap<>();
 
     /**

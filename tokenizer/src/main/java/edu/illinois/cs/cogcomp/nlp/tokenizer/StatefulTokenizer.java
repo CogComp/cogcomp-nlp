@@ -10,6 +10,9 @@ package edu.illinois.cs.cogcomp.nlp.tokenizer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.TokenizerStateMachine.State;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the entry point to the tokenizer state machine. This class is thread-safe, the
@@ -18,6 +21,8 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.TokenizerStateMachine.State;
  * @author redman
  */
 public class StatefulTokenizer implements Tokenizer {
+    private static Logger logger = LoggerFactory.getLogger(StatefulTokenizer.class);
+
     @Override
     public Pair<String[], IntPair[]> tokenizeSentence(String sentence) {
         // parse the test

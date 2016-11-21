@@ -19,8 +19,8 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.queryparser.classic.ParseException;
 
-public class LuceneExample {
 
+public class LuceneExample {
 	public static void main(String[] args) throws IOException, ParseException {
 
 		String pathToIndexDir = "testIndex";
