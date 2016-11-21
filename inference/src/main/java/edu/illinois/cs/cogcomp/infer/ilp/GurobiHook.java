@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.infer.ilp;
 
 import edu.illinois.cs.cogcomp.core.datastructures.vectors.DVector;
@@ -85,15 +92,15 @@ public class GurobiHook implements ILPSolver {
             environment.set(GRB.IntParam.OutputFlag, 0); // no output
 
             // how many threads can we use?
-            //environment.set(GRB.IntParam.Threads,
-            //        Math.min(8, Runtime.getRuntime().availableProcessors()));
+            // environment.set(GRB.IntParam.Threads,
+            // Math.min(8, Runtime.getRuntime().availableProcessors()));
 
             // dump big stuff to filespace
-            //environment.set(GRB.DoubleParam.NodefileStart, 0.5);
+            // environment.set(GRB.DoubleParam.NodefileStart, 0.5);
 
-            //environment.set(GRB.DoubleParam.MIPGap, 1e-10);
+            // environment.set(GRB.DoubleParam.MIPGap, 1e-10);
 
-            //environment.set(GRB.IntParam.Presolve, 0);
+            // environment.set(GRB.IntParam.Presolve, 0);
 
         } catch (GRBException e) {
             handleException(e);
@@ -441,7 +448,7 @@ public class GurobiHook implements ILPSolver {
             return 0;
         try {
             double x = ((GRBVar) variables.get(index)).get(GRB.DoubleAttr.X);
-            return (int)Math.round(x);
+            return (int) Math.round(x);
         } catch (GRBException e) {
             handleException(e);
         }

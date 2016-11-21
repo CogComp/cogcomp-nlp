@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.infer.ilp;
 
 import java.util.ArrayList;
@@ -15,494 +22,486 @@ import org.slf4j.LoggerFactory;
  */
 public class BeamSearch implements ILPSolver {
 
-	private static final double EPSILON = 0.00000001;
+    private static final double EPSILON = 0.00000001;
 
-	private static boolean DEBUG = false;
+    private static boolean DEBUG = false;
 
-	private static Logger log = LoggerFactory.getLogger(BeamSearch.class);
+    private static Logger log = LoggerFactory.getLogger(BeamSearch.class);
 
-	private final int beamSize;
+    private final int beamSize;
 
-	private List<int[]> variables;
-	private List<double[]> scores;
+    private List<int[]> variables;
+    private List<double[]> scores;
 
-	private List<ILPConstraint> constraints;
+    private List<ILPConstraint> constraints;
 
-	private int numVars;
+    private int numVars;
 
-	private boolean isSolved;
-	private boolean[] assignment;
-	private double objectiveValue;
-	private boolean maximize;
+    private boolean isSolved;
+    private boolean[] assignment;
+    private double objectiveValue;
+    private boolean maximize;
 
-	private final static Comparator<PartialAssignment> maxComparator = new Comparator<PartialAssignment>() {
+    private final static Comparator<PartialAssignment> maxComparator =
+            new Comparator<PartialAssignment>() {
 
-		public int compare(PartialAssignment o1, PartialAssignment o2) {
-			if (o1.score > o2.score)
-				return -1;
-			else if (o1.score == o2.score)
-				return 0;
-			else
-				return 1;
-		}
+                public int compare(PartialAssignment o1, PartialAssignment o2) {
+                    if (o1.score > o2.score)
+                        return -1;
+                    else if (o1.score == o2.score)
+                        return 0;
+                    else
+                        return 1;
+                }
 
-	};
+            };
 
-	private final static Comparator<PartialAssignment> minComparator = new Comparator<PartialAssignment>() {
+    private final static Comparator<PartialAssignment> minComparator =
+            new Comparator<PartialAssignment>() {
 
-		public int compare(PartialAssignment o1, PartialAssignment o2) {
-			if (o1.score < o2.score)
-				return -1;
-			else if (o1.score == o2.score)
-				return 0;
-			else
-				return 1;
+                public int compare(PartialAssignment o1, PartialAssignment o2) {
+                    if (o1.score < o2.score)
+                        return -1;
+                    else if (o1.score == o2.score)
+                        return 0;
+                    else
+                        return 1;
 
-		}
+                }
 
-	};
+            };
 
-	public BeamSearch(int beamSize) {
-		this.beamSize = beamSize;
-		this.maximize = false;
-		reset();
-	}
+    public BeamSearch(int beamSize) {
+        this.beamSize = beamSize;
+        this.maximize = false;
+        reset();
+    }
 
-	public int addBooleanVariable(double arg0) {
-		int id = numVars;
-		numVars++;
+    public int addBooleanVariable(double arg0) {
+        int id = numVars;
+        numVars++;
 
-		this.variables.add(new int[] { id });
-		this.scores.add(new double[] { arg0 });
+        this.variables.add(new int[] {id});
+        this.scores.add(new double[] {arg0});
 
-		this.isSolved = false;
+        this.isSolved = false;
 
-		return id;
-	}
-	
-	public int addRealVariable(double arg0) {
-		throw new RuntimeException("Not implemented");
-	}
+        return id;
+    }
 
-    	public int addIntegerVariable(double arg0) {
-		throw new RuntimeException("Not implemented");
-	}
+    public int addRealVariable(double arg0) {
+        throw new RuntimeException("Not implemented");
+    }
 
+    public int addIntegerVariable(double arg0) {
+        throw new RuntimeException("Not implemented");
+    }
 
-	public int[] addDiscreteVariable(double[] arg0) {
 
-		int[] vars = new int[arg0.length];
-		double[] scores = arg0.clone();
+    public int[] addDiscreteVariable(double[] arg0) {
 
-		for (int i = 0; i < arg0.length; i++)
-			vars[i] = numVars++;
+        int[] vars = new int[arg0.length];
+        double[] scores = arg0.clone();
 
-		this.variables.add(vars);
-		this.scores.add(scores);
+        for (int i = 0; i < arg0.length; i++)
+            vars[i] = numVars++;
 
-		this.isSolved = false;
+        this.variables.add(vars);
+        this.scores.add(scores);
 
-		return vars;
-	}
+        this.isSolved = false;
 
-	private void addConstraint(int[] ids, double[] coefs, double rhs, char type) {
-		constraints.add(new ILPConstraint(ids, coefs, rhs, type));
-		isSolved = false;
-	}
+        return vars;
+    }
 
-	public void addEqualityConstraint(int[] arg0, double[] arg1, double arg2) {
-		addConstraint(arg0, arg1, arg2, ILPConstraint.EQUAL);
-	}
+    private void addConstraint(int[] ids, double[] coefs, double rhs, char type) {
+        constraints.add(new ILPConstraint(ids, coefs, rhs, type));
+        isSolved = false;
+    }
 
-	public void addGreaterThanConstraint(int[] arg0, double[] arg1, double arg2) {
-		addConstraint(arg0, arg1, arg2, ILPConstraint.GREATER_THAN);
-	}
+    public void addEqualityConstraint(int[] arg0, double[] arg1, double arg2) {
+        addConstraint(arg0, arg1, arg2, ILPConstraint.EQUAL);
+    }
 
-	public void addLessThanConstraint(int[] arg0, double[] arg1, double arg2) {
-		addConstraint(arg0, arg1, arg2, ILPConstraint.LESS_THAN);
-	}
+    public void addGreaterThanConstraint(int[] arg0, double[] arg1, double arg2) {
+        addConstraint(arg0, arg1, arg2, ILPConstraint.GREATER_THAN);
+    }
 
-	public boolean getBooleanValue(int arg0) {
-		if (!isSolved)
-			return false;
-		else
-			return assignment[arg0];
-	}
-	
-	@Override
-	public double getRealValue(int arg0) {
-		throw new RuntimeException("Not implemented");
-	}
+    public void addLessThanConstraint(int[] arg0, double[] arg1, double arg2) {
+        addConstraint(arg0, arg1, arg2, ILPConstraint.LESS_THAN);
+    }
 
-    	@Override
-	public int getIntegerValue(int arg0) {
-		throw new RuntimeException("Not implemented");
-	}
+    public boolean getBooleanValue(int arg0) {
+        if (!isSolved)
+            return false;
+        else
+            return assignment[arg0];
+    }
 
+    @Override
+    public double getRealValue(int arg0) {
+        throw new RuntimeException("Not implemented");
+    }
 
-	public boolean isSolved() {
-		return isSolved;
-	}
+    @Override
+    public int getIntegerValue(int arg0) {
+        throw new RuntimeException("Not implemented");
+    }
 
-	public double objectiveValue() {
-		return this.objectiveValue;
-	}
 
-	@Override
-	public double objectiveCoeff(int index) {
-		return scores.get(index)[0];
-	}
+    public boolean isSolved() {
+        return isSolved;
+    }
 
-	public void reset() {
-		this.constraints = new ArrayList<ILPConstraint>();
-		this.scores = new ArrayList<double[]>();
-		this.variables = new ArrayList<int[]>();
-		this.numVars = 0;
-		this.isSolved = false;
-		this.objectiveValue = 0;
-		this.assignment = null;
-	}
+    public double objectiveValue() {
+        return this.objectiveValue;
+    }
 
-	public void setMaximize(boolean arg0) {
-		this.maximize = arg0;
+    @Override
+    public double objectiveCoeff(int index) {
+        return scores.get(index)[0];
+    }
 
-	}
+    public void reset() {
+        this.constraints = new ArrayList<ILPConstraint>();
+        this.scores = new ArrayList<double[]>();
+        this.variables = new ArrayList<int[]>();
+        this.numVars = 0;
+        this.isSolved = false;
+        this.objectiveValue = 0;
+        this.assignment = null;
+    }
 
-	public boolean solve() throws Exception {
+    public void setMaximize(boolean arg0) {
+        this.maximize = arg0;
 
-		if (DEBUG)
-			System.out.println("Starting inference");
-		long start = System.currentTimeMillis();
+    }
 
-		// We fix an ordering of the variables as the order in which they were
-		// added. This may or may not be good, without further information, this
-		// will do.
+    public boolean solve() throws Exception {
 
-		PartialAssignment initState = new PartialAssignment(
-				new boolean[this.numVars], new BitSet(), 0.0, -1, -1);
+        if (DEBUG)
+            System.out.println("Starting inference");
+        long start = System.currentTimeMillis();
 
-		if (DEBUG)
-			System.out.println("Initial state: " + initState);
+        // We fix an ordering of the variables as the order in which they were
+        // added. This may or may not be good, without further information, this
+        // will do.
 
-		List<PartialAssignment> beam = new ArrayList<PartialAssignment>();
-		List<PartialAssignment> nextQ = expandState(initState);
+        PartialAssignment initState =
+                new PartialAssignment(new boolean[this.numVars], new BitSet(), 0.0, -1, -1);
 
-		beam.addAll(nextQ);
+        if (DEBUG)
+            System.out.println("Initial state: " + initState);
 
-		while (true) {
+        List<PartialAssignment> beam = new ArrayList<PartialAssignment>();
+        List<PartialAssignment> nextQ = expandState(initState);
 
-			if (beam.size() == 0) {
-				isSolved = false;
-				long end = System.currentTimeMillis();
+        beam.addAll(nextQ);
 
-				log.debug("Beam size = 0.");
-				log.debug("Beam search took {} ms", (end - start));
+        while (true) {
 
-				return false;
-			}
+            if (beam.size() == 0) {
+                isSolved = false;
+                long end = System.currentTimeMillis();
 
-			nextQ.clear();
+                log.debug("Beam size = 0.");
+                log.debug("Beam search took {} ms", (end - start));
 
-			for (PartialAssignment a : beam) {
-				nextQ.addAll(expandState(a));
-			}
+                return false;
+            }
 
-			if (nextQ.size() == 0)
-				break;
+            nextQ.clear();
 
-			beam.clear();
-			beam.addAll(nextQ);
+            for (PartialAssignment a : beam) {
+                nextQ.addAll(expandState(a));
+            }
 
-			beam = sortAndResize(beam);
+            if (nextQ.size() == 0)
+                break;
 
-		}
+            beam.clear();
+            beam.addAll(nextQ);
 
-		if (beam.size() == 0) {
-			isSolved = false;
-			long end = System.currentTimeMillis();
+            beam = sortAndResize(beam);
 
-			log.debug("Beam size = 0. Exiting search after assigning "
-					+ "all variables");
-			log.debug("Beam search took {} ms", (end - start));
-			return false;
-		}
+        }
 
-		isSolved = true;
+        if (beam.size() == 0) {
+            isSolved = false;
+            long end = System.currentTimeMillis();
 
-		PartialAssignment top = beam.get(0);
-		this.assignment = top.assignment;
-		this.objectiveValue = top.score;
+            log.debug("Beam size = 0. Exiting search after assigning " + "all variables");
+            log.debug("Beam search took {} ms", (end - start));
+            return false;
+        }
 
-		long end = System.currentTimeMillis();
+        isSolved = true;
 
-		log.debug("Beam search took {} ms", (end - start));
+        PartialAssignment top = beam.get(0);
+        this.assignment = top.assignment;
+        this.objectiveValue = top.score;
 
-		if (top.maxVariableCollectionAssigned + 1 != this.variables.size()) {
-			log.warn("Beam search halted. Choosing unconstrained solution.");
-			runUnconstrainedSearch();
-		}
+        long end = System.currentTimeMillis();
 
-		return true;
+        log.debug("Beam search took {} ms", (end - start));
 
-	}
+        if (top.maxVariableCollectionAssigned + 1 != this.variables.size()) {
+            log.warn("Beam search halted. Choosing unconstrained solution.");
+            runUnconstrainedSearch();
+        }
 
-	private void runUnconstrainedSearch() {
+        return true;
 
-		assignment = new boolean[this.numVars];
-		this.objectiveValue = 0;
+    }
 
-		for (int variableCollectionId = 0; variableCollectionId < this.variables
-				.size(); variableCollectionId++) {
+    private void runUnconstrainedSearch() {
 
-			int[] vars = this.variables.get(variableCollectionId);
-			double[] scores = this.scores.get(variableCollectionId);
+        assignment = new boolean[this.numVars];
+        this.objectiveValue = 0;
 
-			double bestScore = Double.NEGATIVE_INFINITY;
-			int bestVariable = -1;
+        for (int variableCollectionId = 0; variableCollectionId < this.variables.size(); variableCollectionId++) {
 
-			for (int id = 0; id < vars.length; id++) {
-				int variableId = vars[id];
-				double score = scores[id];
+            int[] vars = this.variables.get(variableCollectionId);
+            double[] scores = this.scores.get(variableCollectionId);
 
-				if (score > bestScore) {
-					bestScore = score;
-					bestVariable = variableId;
-				}
-			}
+            double bestScore = Double.NEGATIVE_INFINITY;
+            int bestVariable = -1;
 
-			assert bestVariable >= 0;
-			for (int id = 0; id < vars.length; id++) {
-				int variableId = vars[id];
-				if (variableId == bestVariable)
-					assignment[variableId] = true;
-				else
-					assignment[variableId] = false;
+            for (int id = 0; id < vars.length; id++) {
+                int variableId = vars[id];
+                double score = scores[id];
 
-			}
-			this.objectiveValue += bestScore;
-		}
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestVariable = variableId;
+                }
+            }
 
-		isSolved = true;
-	}
+            assert bestVariable >= 0;
+            for (int id = 0; id < vars.length; id++) {
+                int variableId = vars[id];
+                if (variableId == bestVariable)
+                    assignment[variableId] = true;
+                else
+                    assignment[variableId] = false;
 
-	private List<PartialAssignment> expandState(PartialAssignment state) {
+            }
+            this.objectiveValue += bestScore;
+        }
 
-		if (DEBUG) {
-			System.out.println();
-			System.out.println("Expanding state: " + state);
-		}
+        isSolved = true;
+    }
 
-		List<PartialAssignment> output = new ArrayList<PartialAssignment>();
+    private List<PartialAssignment> expandState(PartialAssignment state) {
 
-		int variableCollection = state.maxVariableCollectionAssigned + 1;
+        if (DEBUG) {
+            System.out.println();
+            System.out.println("Expanding state: " + state);
+        }
 
-		if (DEBUG) {
-			System.out
-					.println("Trying to expand state by adding variable collection: "
-							+ variableCollection);
-		}
+        List<PartialAssignment> output = new ArrayList<PartialAssignment>();
 
-		if (variableCollection >= this.variables.size()) {
-			if (DEBUG)
-				System.out.println("All variables seen!");
-			return output;
-		}
+        int variableCollection = state.maxVariableCollectionAssigned + 1;
 
-		int[] vars = this.variables.get(variableCollection);
-		double[] scores = this.scores.get(variableCollection);
+        if (DEBUG) {
+            System.out.println("Trying to expand state by adding variable collection: "
+                    + variableCollection);
+        }
 
-		if (vars.length == 1) {
+        if (variableCollection >= this.variables.size()) {
+            if (DEBUG)
+                System.out.println("All variables seen!");
+            return output;
+        }
 
-			int variableId = vars[0];
-			int maxVariable = Math.max(variableId, state.maxVariableAssigned);
+        int[] vars = this.variables.get(variableCollection);
+        double[] scores = this.scores.get(variableCollection);
 
-			boolean[] assignTrue = state.assignment.clone();
-			assignTrue[variableId] = true;
-			double scoreTrue = state.score + scores[0];
+        if (vars.length == 1) {
 
-			PartialAssignment aTrue = new PartialAssignment(assignTrue,
-					state.constraintsSatisfied, scoreTrue, maxVariable,
-					variableCollection);
+            int variableId = vars[0];
+            int maxVariable = Math.max(variableId, state.maxVariableAssigned);
 
-			if (DEBUG)
-				System.out.println("Checking state: " + aTrue);
-			boolean constraintsSatisfied = checkConstraints(aTrue);
+            boolean[] assignTrue = state.assignment.clone();
+            assignTrue[variableId] = true;
+            double scoreTrue = state.score + scores[0];
 
-			if (DEBUG)
-				System.out.println("Constraints satisfied: "
-						+ constraintsSatisfied);
+            PartialAssignment aTrue =
+                    new PartialAssignment(assignTrue, state.constraintsSatisfied, scoreTrue,
+                            maxVariable, variableCollection);
 
-			if (constraintsSatisfied)
-				output.add(aTrue);
+            if (DEBUG)
+                System.out.println("Checking state: " + aTrue);
+            boolean constraintsSatisfied = checkConstraints(aTrue);
 
-			boolean[] assignFalse = state.assignment.clone();
-			assignFalse[variableId] = false;
-			double scoreFalse = state.score;
+            if (DEBUG)
+                System.out.println("Constraints satisfied: " + constraintsSatisfied);
 
-			PartialAssignment aFalse = new PartialAssignment(assignFalse,
-					state.constraintsSatisfied, scoreFalse, maxVariable,
-					variableCollection);
+            if (constraintsSatisfied)
+                output.add(aTrue);
 
-			if (DEBUG)
-				System.out.println("Checking state: " + aFalse);
+            boolean[] assignFalse = state.assignment.clone();
+            assignFalse[variableId] = false;
+            double scoreFalse = state.score;
 
-			constraintsSatisfied = checkConstraints(aFalse);
+            PartialAssignment aFalse =
+                    new PartialAssignment(assignFalse, state.constraintsSatisfied, scoreFalse,
+                            maxVariable, variableCollection);
 
-			if (DEBUG)
-				System.out.println("Constraints satisfied: "
-						+ constraintsSatisfied);
+            if (DEBUG)
+                System.out.println("Checking state: " + aFalse);
 
-			if (constraintsSatisfied)
-				output.add(aFalse);
+            constraintsSatisfied = checkConstraints(aFalse);
 
-		} else {
+            if (DEBUG)
+                System.out.println("Constraints satisfied: " + constraintsSatisfied);
 
-			int maxVariable = Math.max(vars[vars.length - 1],
-					state.maxVariableAssigned);
+            if (constraintsSatisfied)
+                output.add(aFalse);
 
-			if (DEBUG)
-				System.out.println("Max variable id = " + maxVariable);
+        } else {
 
-			for (int i = 0; i < vars.length; i++) {
+            int maxVariable = Math.max(vars[vars.length - 1], state.maxVariableAssigned);
 
-				int variableId = vars[i];
-				double score = scores[i] + state.score;
+            if (DEBUG)
+                System.out.println("Max variable id = " + maxVariable);
 
-				boolean[] assign = state.assignment.clone();
-				assign[variableId] = true;
+            for (int i = 0; i < vars.length; i++) {
 
-				PartialAssignment newState = new PartialAssignment(assign,
-						state.constraintsSatisfied, score, maxVariable,
-						variableCollection);
+                int variableId = vars[i];
+                double score = scores[i] + state.score;
 
-				if (DEBUG)
-					System.out.println("Checking state: " + newState);
+                boolean[] assign = state.assignment.clone();
+                assign[variableId] = true;
 
-				boolean constraintsSatisfied = checkConstraints(newState);
+                PartialAssignment newState =
+                        new PartialAssignment(assign, state.constraintsSatisfied, score,
+                                maxVariable, variableCollection);
 
-				if (DEBUG)
-					System.out.println("Constraints satisfied: "
-							+ constraintsSatisfied);
+                if (DEBUG)
+                    System.out.println("Checking state: " + newState);
 
-				if (constraintsSatisfied)
-					output.add(newState);
+                boolean constraintsSatisfied = checkConstraints(newState);
 
-			}
-		}
+                if (DEBUG)
+                    System.out.println("Constraints satisfied: " + constraintsSatisfied);
 
-		return output;
-	}
+                if (constraintsSatisfied)
+                    output.add(newState);
 
-	private boolean checkConstraints(PartialAssignment a) {
-		int numConstraints = this.constraints.size();
-		for (int constraintId = 0; constraintId < numConstraints; constraintId++) {
-			ILPConstraint constraint = this.constraints.get(constraintId);
+            }
+        }
 
-			if (a.maxVariableAssigned < constraint.maximumVariableId)
-				continue;
+        return output;
+    }
 
-			if (a.constraintsSatisfied.get(constraintId))
-				continue;
+    private boolean checkConstraints(PartialAssignment a) {
+        int numConstraints = this.constraints.size();
+        for (int constraintId = 0; constraintId < numConstraints; constraintId++) {
+            ILPConstraint constraint = this.constraints.get(constraintId);
 
-			double lhs = 0;
-			for (int i = 0; i < constraint.vars.length; i++) {
-				if (a.assignment[constraint.vars[i]])
-					lhs += constraint.coeffs[i];
-			}
+            if (a.maxVariableAssigned < constraint.maximumVariableId)
+                continue;
 
-			boolean satisfied = true;
-			if (constraint.sense == ILPConstraint.EQUAL)
-				if (Math.abs(lhs - constraint.rhs) > EPSILON)
-					satisfied = false;
-			if (constraint.sense == ILPConstraint.LESS_THAN)
-				if (lhs > constraint.rhs)
-					satisfied = false;
+            if (a.constraintsSatisfied.get(constraintId))
+                continue;
 
-			if (constraint.sense == ILPConstraint.GREATER_THAN)
-				if (lhs < constraint.rhs)
-					satisfied = false;
+            double lhs = 0;
+            for (int i = 0; i < constraint.vars.length; i++) {
+                if (a.assignment[constraint.vars[i]])
+                    lhs += constraint.coeffs[i];
+            }
 
-			if (!satisfied) {
-				if (DEBUG)
-					System.out.println(constraint + "\t" + lhs
-							+ constraint.sense + constraint.rhs);
-				return false;
-			}
+            boolean satisfied = true;
+            if (constraint.sense == ILPConstraint.EQUAL)
+                if (Math.abs(lhs - constraint.rhs) > EPSILON)
+                    satisfied = false;
+            if (constraint.sense == ILPConstraint.LESS_THAN)
+                if (lhs > constraint.rhs)
+                    satisfied = false;
 
-			a.constraintsSatisfied.set(constraintId);
-		}
+            if (constraint.sense == ILPConstraint.GREATER_THAN)
+                if (lhs < constraint.rhs)
+                    satisfied = false;
 
-		return true;
-	}
+            if (!satisfied) {
+                if (DEBUG)
+                    System.out.println(constraint + "\t" + lhs + constraint.sense + constraint.rhs);
+                return false;
+            }
 
-	public void write(StringBuffer arg0) {
-	}
+            a.constraintsSatisfied.set(constraintId);
+        }
 
-	private List<PartialAssignment> sortAndResize(List<PartialAssignment> pq) {
+        return true;
+    }
 
-		sortBeam(pq);
+    public void write(StringBuffer arg0) {}
 
-		if (beamSize < 0)
-			return pq;
+    private List<PartialAssignment> sortAndResize(List<PartialAssignment> pq) {
 
-		if (pq.size() <= beamSize)
-			return pq;
+        sortBeam(pq);
 
-		List<PartialAssignment> pq1 = new ArrayList<PartialAssignment>();
-		for (int i = 0; i < beamSize; i++) {
-			pq1.add(pq.get(i));
-		}
-		return pq1;
-	}
+        if (beamSize < 0)
+            return pq;
 
-	private void sortBeam(List<PartialAssignment> pq) {
-		if (this.maximize)
-			Collections.sort(pq, maxComparator);
-		else
-			Collections.sort(pq, minComparator);
-	}
+        if (pq.size() <= beamSize)
+            return pq;
 
-	private static class PartialAssignment {
+        List<PartialAssignment> pq1 = new ArrayList<PartialAssignment>();
+        for (int i = 0; i < beamSize; i++) {
+            pq1.add(pq.get(i));
+        }
+        return pq1;
+    }
 
-		final boolean[] assignment;
-		final BitSet constraintsSatisfied;
-		final double score;
-		final int maxVariableAssigned;
+    private void sortBeam(List<PartialAssignment> pq) {
+        if (this.maximize)
+            Collections.sort(pq, maxComparator);
+        else
+            Collections.sort(pq, minComparator);
+    }
 
-		final int maxVariableCollectionAssigned;
+    private static class PartialAssignment {
 
-		/**
-		 * @param assignment
-		 * @param constraintsSatisfied
-		 * @param score
-		 * @param maxVariableAssigned
-		 */
-		public PartialAssignment(boolean[] assignment,
-				BitSet constraintsSatisfied, double score,
-				int maxVariableAssigned, int maxVariableCollectionAssigned) {
-			this.maxVariableCollectionAssigned = maxVariableCollectionAssigned;
-			this.assignment = assignment;
-			this.constraintsSatisfied = (BitSet) constraintsSatisfied.clone();
-			this.score = score;
+        final boolean[] assignment;
+        final BitSet constraintsSatisfied;
+        final double score;
+        final int maxVariableAssigned;
 
-			this.maxVariableAssigned = maxVariableAssigned;
-		}
+        final int maxVariableCollectionAssigned;
 
-		@Override
-		public String toString() {
-			StringBuffer sb = new StringBuffer();
-			sb.append("[ ");
+        /**
+         * @param assignment
+         * @param constraintsSatisfied
+         * @param score
+         * @param maxVariableAssigned
+         */
+        public PartialAssignment(boolean[] assignment, BitSet constraintsSatisfied, double score,
+                int maxVariableAssigned, int maxVariableCollectionAssigned) {
+            this.maxVariableCollectionAssigned = maxVariableCollectionAssigned;
+            this.assignment = assignment;
+            this.constraintsSatisfied = (BitSet) constraintsSatisfied.clone();
+            this.score = score;
 
-			for (int i = 0; i < maxVariableAssigned + 1; i++) {
-				sb.append(assignment[i] ? i + " " : "");
-			}
-			// for (int i = maxVariableAssigned + 1; i < assignment.length; i++)
-			// {
-			// sb.append("* ");
-			// }
-			sb.append("],  Score=" + score);
+            this.maxVariableAssigned = maxVariableAssigned;
+        }
 
-			return sb.toString();
-		}
-	}
+        @Override
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("[ ");
+
+            for (int i = 0; i < maxVariableAssigned + 1; i++) {
+                sb.append(assignment[i] ? i + " " : "");
+            }
+            // for (int i = maxVariableAssigned + 1; i < assignment.length; i++)
+            // {
+            // sb.append("* ");
+            // }
+            sb.append("],  Score=" + score);
+
+            return sb.toString();
+        }
+    }
 }

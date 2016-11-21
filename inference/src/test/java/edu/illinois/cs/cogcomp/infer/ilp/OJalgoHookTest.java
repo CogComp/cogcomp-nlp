@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.infer.ilp;
 
 import org.junit.Test;
@@ -11,13 +18,13 @@ public class OJalgoHookTest {
         int[] varInds = new int[2];
 
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(-1.0);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
         ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
@@ -42,13 +49,13 @@ public class OJalgoHookTest {
         int[] varInds = new int[2];
 
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(-1.0);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
         ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
@@ -74,13 +81,13 @@ public class OJalgoHookTest {
         int[] varInds = new int[2];
 
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(1.5);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
         ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
@@ -105,13 +112,13 @@ public class OJalgoHookTest {
         int[] varInds = new int[2];
 
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(1.5);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, -3);
         ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
@@ -137,13 +144,13 @@ public class OJalgoHookTest {
 
         double[] objcoeffs = {1.5, 2.5};
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
         ojaHook.addLessThanConstraint(varInds, coeffs, 4);
 
@@ -169,13 +176,13 @@ public class OJalgoHookTest {
 
         double[] objcoeffs = {1.5, 2.5};
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
         ojaHook.addLessThanConstraint(varInds, coeffs, 2);
 
@@ -201,13 +208,13 @@ public class OJalgoHookTest {
 
         double[] objcoeffs = {1.5, 2.5};
         int i = 0;
-        while (i< 2) {
+        while (i < 2) {
             int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 2 };
+        double[] coeffs = {1, 2};
         ojaHook.addGreaterThanConstraint(varInds, coeffs, 1);
         ojaHook.addLessThanConstraint(varInds, coeffs, 2);
 
@@ -233,13 +240,13 @@ public class OJalgoHookTest {
 
         double[] objcoeffs = {-1, -1, -1};
         int i = 0;
-        while (i< 3) {
+        while (i < 3) {
             int x = ojaHook.addBooleanVariable(objcoeffs[i]);
             varInds[i] = x;
             i++;
         }
 
-        double[] coeffs = { 1, 1, 1};
+        double[] coeffs = {1, 1, 1};
         ojaHook.addEqualityConstraint(varInds, coeffs, 3);
         ojaHook.setMaximize(true);
 
@@ -266,7 +273,7 @@ public class OJalgoHookTest {
         ojaHook.addDiscreteVariable(objcoeffs);
         ojaHook.addDiscreteVariable(objcoeffs);
 
-        double[] coeffs = { 1, 1, 1};
+        double[] coeffs = {1, 1, 1};
         int[] varInds = {1, 3, 5};
         ojaHook.addEqualityConstraint(varInds, coeffs, 3);
         ojaHook.setMaximize(true);
