@@ -149,7 +149,6 @@ public class GurobiHook implements ILPSolver {
         needsUpdate = isSolved = false;
     }
 
-
     /**
      * Sets the direction of the objective function.
      *
@@ -162,7 +161,6 @@ public class GurobiHook implements ILPSolver {
             handleException(e);
         }
     }
-
 
     /**
      * Adds a new Boolean variable (an integer variable constrained to take either the value 0 or
