@@ -25,6 +25,12 @@ import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNorm
 import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.*;
+import org.xml.sax.InputSource;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.StringReader;
 import java.net.URL;
 
 import java.text.ParseException;
@@ -45,6 +51,8 @@ public class TemporalChunkerAnnotator extends Annotator{
     private HeidelTimeStandalone heidelTime;
     private Date dct;
     private TimexNormalizer timexNormalizer;
+    private DocumentBuilderFactory factory;
+    private DocumentBuilder builder;
 
     /**
      * default: don't use lazy initialization
@@ -110,6 +118,13 @@ public class TemporalChunkerAnnotator extends Annotator{
         this.dct = new Date();
         timexNormalizer.setTime(this.dct);
 
+        this.factory = DocumentBuilderFactory.newInstance();
+        try {
+            this.builder = this.factory.newDocumentBuilder();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -162,18 +177,18 @@ public class TemporalChunkerAnnotator extends Annotator{
                     Constituent temp_label =
                             new Constituent(clabel, ViewNames.TIMEX3, record,
                                     currentChunkStart, currentChunkEnd);
-//                    try {
-//                        clabel = heidelTimeNormalize(temp_label);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    Constituent label =
-//                            new Constituent(clabel, ViewNames.TIMEX3, record,
-//                                    currentChunkStart, currentChunkEnd);
-                    Interval normRes = timexNormalizer.normalize(temp_label.toString());
-                    Constituent label = new Constituent(normRes==null?"":normRes.toString(),
-                            ViewNames.TIMEX3, record,
-                            currentChunkStart, currentChunkEnd);
+                    try {
+                        clabel = heidelTimeNormalize(temp_label);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Constituent label =
+                            new Constituent(clabel, ViewNames.TIMEX3, record,
+                                    currentChunkStart, currentChunkEnd);
+//                    Interval normRes = timexNormalizer.normalize(temp_label.toString());
+//                    Constituent label = new Constituent(normRes==null?"":normRes.toString(),
+//                            ViewNames.TIMEX3, record,
+//                            currentChunkStart, currentChunkEnd);
 
                     chunkView.addConstituent(label);
                     clabel = null;
@@ -192,19 +207,19 @@ public class TemporalChunkerAnnotator extends Annotator{
             Constituent temp_label =
                     new Constituent(clabel, ViewNames.TIMEX3, record,
                             currentChunkStart, currentChunkEnd);
-//            try {
-//                clabel = heidelTimeNormalize(temp_label);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//
-//            Constituent label =
-//                    new Constituent(clabel, ViewNames.TIMEX3, record,
-//                            currentChunkStart, currentChunkEnd);
-            Interval normRes = timexNormalizer.normalize(temp_label.toString());
-            Constituent label = new Constituent(normRes==null?"":normRes.toString(),
-                    ViewNames.TIMEX3, record,
-                    currentChunkStart, currentChunkEnd);
+            try {
+                clabel = heidelTimeNormalize(temp_label);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Constituent label =
+                    new Constituent(clabel, ViewNames.TIMEX3, record,
+                            currentChunkStart, currentChunkEnd);
+//            Interval normRes = timexNormalizer.normalize(temp_label.toString());
+//            Constituent label = new Constituent(normRes==null?"":normRes.toString(),
+//                    ViewNames.TIMEX3, record,
+//                    currentChunkStart, currentChunkEnd);
             chunkView.addConstituent(label);
         }
         record.addView(ViewNames.TIMEX3, chunkView);
@@ -234,6 +249,53 @@ public class TemporalChunkerAnnotator extends Annotator{
      * @throws Exception
      */
     private String heidelTimeNormalize(Constituent temporal_phrase) throws Exception {
+        // If user didn't specify document creation date, use the current date
+        if (this.dct == null) {
+            this.dct = new Date();
+        }
+
+        String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
+
+        Document document = builder.parse(new InputSource(new StringReader(xml_res)));
+
+        Element rootElement = document.getDocumentElement();
+        String res = recurseNormalizedTimeML(rootElement);
+        return res;
+    }
+
+
+    private String recurseNormalizedTimeML(Node node) {
+        // Base case: return empty string
+        if (node == null) {
+            return "";
+        }
+
+        // Iterate over every node, if the node is a TIMEX3 node, then concatenate all its attributes, and recurse
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE && currentNode.getNodeName().indexOf("TIMEX3")!=-1) {
+                //calls this method for all the children which is Element
+                NamedNodeMap attrs = currentNode.getAttributes();
+                String attrPair = "";
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    attrPair += "["
+                            + attrs.item(j).getNodeName() + "="
+                            + attrs.item(j).getNodeValue() + "]" ;
+                }
+                return attrPair + recurseNormalizedTimeML(currentNode);
+            }
+        }
+        return "";
+    }
+
+    /**
+     * Normalize temporal phrase using Illini-time
+     * @param temporal_phrase
+     * @return
+     * @throws Exception
+     */
+    private String illiniNormalize(Constituent temporal_phrase) throws Exception {
         // If user didn't specify document creation date, use the current date
         if (this.dct == null) {
             this.dct = new Date();
