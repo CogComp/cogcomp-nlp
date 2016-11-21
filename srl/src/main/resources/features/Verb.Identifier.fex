@@ -1,0 +1,78 @@
+(define features
+
+  (define predicate-features
+    (list (attribute :name predicate)
+	  pos 
+	  (voice :parse-view *default-parser*)
+	  (subcat-frame :parse-view *default-parser*)
+	  has-modal-verb
+	  is-negated
+	  (parse-phrase-features :parse-view *default-parser*)
+
+	  (context :size 1
+		   :include-index true
+		   :ignore-center false
+		   (list word
+			 pos
+			 (conjoin word pos)))
+	  
+	  levin-verb-class))
+
+  (define word-pos
+    (list word pos))
+
+  (define parse-sibling-features
+    (list label
+	  (head-features :parse-view *default-parser*
+			 word-pos)))
+
+  (define arg-features
+    (list (transform-input constituent-parent
+			   predicate-features)
+	  (parse-phrase-features :parse-view *default-parser*)
+	  linear-position
+	  (parse-path :parse-view *default-parser*)
+	  (context :size 2
+		   :include-index true
+		   :ignore-center true
+		   word-pos)
+
+	  (transform-input first-word
+			   word-pos)
+	  
+	  (transform-input last-word
+			   word-pos)
+
+	  ;; The next three are from Surdeanu et al.
+	  (transform-input parse-left-sibling
+			   parse-sibling-features)
+
+	  (transform-input parse-right-sibling
+			   parse-sibling-features)
+
+	  pp-features
+
+	  projected-path ;; from Toutanova etal
+
+
+	  ne-embedding
+
+	  ;; Only specific conjunctions here
+	  (conjoin predicate-features
+		   (list (parse-path :parse-view *default-parser*)
+			 (parse-phrase-features :parse-view *default-parser*)
+			 linear-position
+			 pp-features))
+				     
+	  
+	  length
+	  chunk-embedding
+	  chunk-path
+	  (clauses :parse-view *default-parser*)
+
+	  (syntactic-frame :parse-view *default-parser*)
+
+	  (head-features :parse-view *default-parser*
+			 word-pos)))
+
+  arg-features)

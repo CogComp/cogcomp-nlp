@@ -1,0 +1,65 @@
+(define features
+  
+  (define word-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     word))
+
+  (define pos-context
+    (context :size 2
+	     :include-index true
+	     :ignore-center true
+	     pos))
+
+  ;; The predicate features are turned off for now. The question is
+  ;; whether they are actually needed at all if no feature
+  ;; conjunctions are used. 
+  
+  (define predicate-features
+    (transform-input constituent-parent
+		     (list word
+			   pos
+			   lemma
+			   capitalization
+
+			   (attribute :name predicate)
+			   
+			   (subcat-frame :parse-view *default-parser*)
+			   nom-lex-class)))
+
+  (define head-word-features
+    (head-features :parse-view *default-parser*
+		   (list word
+			 pos
+			 numbers
+			 gerunds
+			 
+			 nom
+			 days-of-week
+			 
+			 months
+			 date)))
+
+
+  (list head-word-features
+	linear-position
+	(parse-phrase-features :parse-view *default-parser*)
+	(parse-path :parse-view *default-parser*)
+	hyphen-argument-feature
+
+	(conjoin predicate-features
+		 (list head-word-features
+		       (parse-path :parse-view *default-parser*)
+		       linear-position
+		       (parse-phrase-features :parse-view *default-parser*)))
+	
+	
+	chunk-embedding
+	chunk-path
+	ne-embedding
+	currency
+
+	(parse-siblings :parse-view *default-parser*)
+	word-context
+	pos-context))

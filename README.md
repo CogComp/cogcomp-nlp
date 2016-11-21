@@ -32,7 +32,8 @@ An application that identifies the part of speech (e.g. verb + tense, noun + num
 in plain text.
   - [illinois-ner](ner/README.md)
 An application that identifies named entities in plain text according to two different sets of categories. 
-
+  - [illinois-srl](srl/README.md)
+An application to annotate natural language sentences with semantic roles. 
 
 ## Using each library programmatically 
 

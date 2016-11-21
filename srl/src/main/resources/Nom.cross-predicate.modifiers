@@ -1,0 +1,8 @@
+AM-DIR	climb,A1	flight,A3	probe,A2	
+AM-EXT	%,A1	creditor,A1	interest,A2	maximum,A2	percentage,A1	rate,A2	scale,A2	
+AM-LOC	%,A1	account,A0	agent,A2	attendance,A1	bond,A2	brokerage,A2	buying,A0	center,A1	chief,A2	commuter,A1	corruption,A1	cost,A1	dealing,A0	departure,A1	designer,A2	director,A2	discrimination,A0	distance,A2	drawing,A2	earning,A3	equity,A1	exploration,A0	flight,A1	government,A2	guest,A1	home,A1	increase,A0	index,A0	industry,A1	information,A1	intelligence,A1	introduction,A2	investment,A2	jury,A2	land,A1	library,A2	life,A0	linage,A3	loan,A0	manager,A2	market,A2	mercy,A1	news,A1	officer,A2	official,A2	operating,A1	operation,A0	output,A0	page,A1	partner,A2	peace,A1	percentage,A1	pipeline,A0	plunge,A1	president,A2	pressure,A1	price,A1	principal,A1	problem,A1	profitability,A1	program,A0	rate,A1	record,A1	resident,A1	resource,A2	revenue,A2	room,A1	sale,A0	security,A1	share,A1	site,A2	slowdown,A1	specialist,A2	staff,A2	stake,A0	start-up,A1	supply,A2	system,A0	tariff,A3	termination,A0	tourist,A1	trade,A0	trading,A1	union,A3	volume,A3	
+AM-MNR	average,A2	bitterness,A2	buddy,A0	business,A1	charge,A1	fraud,A1	index,A1	law,A3	level,A2	measure,A1	problem,A2	productivity,A2	program,A1	project,A1	rate,A2	saving,A1	statute,A1	style,A2	system,A1	team,A1	trader,A1	unemployment,A2	volume,A2	
+AM-NEG	creativity,SUP	
+AM-PNC	bill,A1	brokerage,A1	caution,A1	consent,A1	control,A1	development,A1	enforcement,A1	funding,A1	gain,A1	improvement,A1	investment,A2	sign,A1	thank,A2	trading,A4	
+AM-PRD	right,A1	
+AM-TMP	%,A1	cost,A1	era,A1	growth,A5	interest,A0	lifetime,A2	limit,A0	penalty,A3	season,A2	

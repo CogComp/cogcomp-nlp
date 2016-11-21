@@ -11,7 +11,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIter
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import org.jetbrains.annotations.NotNull;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
@@ -127,7 +126,6 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     }
 
     @SuppressWarnings("ConstantConditions")
-    @NotNull
     private Iterable<String> getAllDatasets() {
         ReentrantReadWriteLock.ReadLock lock = db.getLock$mapdb().readLock();
         lock.tryLock();

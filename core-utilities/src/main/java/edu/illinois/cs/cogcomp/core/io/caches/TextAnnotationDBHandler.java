@@ -276,4 +276,7 @@ public class TextAnnotationDBHandler implements TextAnnotationCache {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void close() {}
 }
