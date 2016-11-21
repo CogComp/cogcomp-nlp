@@ -1,0 +1,72 @@
+O	0	0	x	CD	220	x	x	0
+B-PER	0	1	x	NNP	Barry	x	x	0
+I-PER	0	2	x	NNP	Lane	x	x	0
+O	0	3	x	CD	73	x	x	0
+O	0	4	x	CD	77	x	x	0
+O	0	5	x	CD	70	x	x	0
+O	0	6	x	,	,	x	x	0
+B-PER	0	7	x	NNP	Wayne	x	x	0
+I-PER	0	8	x	NNP	Riley	x	x	0
+O	0	9	x	(	(	x	x	0
+B-LOC	0	10	x	NNP	Australia	x	x	0
+O	0	11	x	)	)	x	x	0
+O	0	12	x	CD	71	x	x	0
+O	0	13	x	CD	78	x	x	0
+O	0	14	x	CD	71	x	x	0
+O	0	15	x	,	,	x	x	0
+
+B-PER	0	0	x	NNP	Martin	x	x	0
+I-PER	0	1	x	NNP	Gates	x	x	0
+O	0	2	x	CD	71	x	x	0
+O	0	3	x	CD	77	x	x	0
+O	0	4	x	CD	72	x	x	0
+O	0	5	x	,	,	x	x	0
+B-PER	0	6	x	NNP	Bradley	x	x	0
+I-PER	0	7	x	NNP	Hughes	x	x	0
+O	0	8	x	(	(	x	x	0
+B-LOC	0	9	x	NNP	Brisbane	x	x	0
+B-LOC	0	9	x	NNP	Australia	x	x	0
+O	0	10	x	)	)	x	x	0
+O	0	11	x	CD	73	x	x	0
+O	0	12	x	CD	75	x	x	0
+O	0	13	x	CD	72	x	x	0
+O	0	14	x	,	,	x	x	0
+
+B-PER	0	0	x	NNP	Peter	x	x	0
+I-PER	0	1	x	NNP	Hedblom	x	x	0
+O	0	2	x	(	(	x	x	0
+B-LOC	0	3	x	NNP	Sweden	x	x	0
+O	0	4	x	)	)	x	x	0
+O	0	5	x	CD	70	x	x	0
+O	0	6	x	CD	75	x	x	0
+O	0	7	x	CD	75	x	x	0
+O	0	8	x	,	,	x	x	0
+B-PER	0	9	x	NNP	Retief	x	x	0
+I-PER	0	10	x	NNP	Goosen	x	x	0
+O	0	11	x	(	(	x	x	0
+B-LOC	0	12	x	NNP	South	x	x	0
+I-LOC	0	0	x	NNP	Africa	x	x	0
+O	0	1	x	)	)	x	x	0
+O	0	2	x	CD	71	x	x	0
+O	0	3	x	CD	74	x	x	0
+O	0	4	x	CD	75	x	x	0
+O	0	5	x	,	,	x	x	0
+B-PER	0	6	x	NNP	David	x	x	0
+I-PER	0	7	x	NNP	Gilford	x	x	0
+O	0	8	x	CD	69	x	x	0
+O	0	9	x	CD	74	x	x	0
+O	0	10	x	CD	77	x	x	0
+O	0	11	x	.	.	x	x	0
+
+O	0	0	x	-X-	-DOCSTART-	x	x	0
+
+O	0	0	x	NN	SOCCER	x	x	0
+O	0	1	x	:	-	x	x	0
+B-MISC	0	2	x	JJ	ENGLISH	x	x	0
+O	0	3	x	NNP	SOCCER	x	x	0
+O	0	4	x	NNS	RESULTS	x	x	0
+O	0	5	x	.	.	x	x	0
+O	0	5	x	.		x	x	0
+
+B-LOC	0	0	x	NNP	LONDON	x	x	0
+O	0	1	x	CD	1996-08-30	x	x	0
