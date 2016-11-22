@@ -13,6 +13,25 @@ import static org.junit.Assert.assertTrue;
 
 public class GurobiHookTest {
     @Test
+    public void testAll() throws Exception{
+        if(System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true") &&
+                System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")) {
+            System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
+        }
+        else {
+            testProgram1();
+            testProgram2();
+            testProgram3();
+            testProgram4();
+            testProgram5();
+            testProgram6();
+            testProgram7();
+            testProgram8();
+            testProgram9();
+            testProgram10();
+        }
+    }
+
     public void testProgram1() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -41,7 +60,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram2() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -70,8 +88,6 @@ public class GurobiHookTest {
         assertTrue(!ojaHook.getBooleanValue(1));
     }
 
-
-    @Test
     public void testProgram3() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -101,7 +117,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram4() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -130,7 +145,6 @@ public class GurobiHookTest {
         assertTrue(!ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram5() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -160,7 +174,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram6() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -190,7 +203,6 @@ public class GurobiHookTest {
         assertTrue(!ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram7() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[2];
@@ -220,7 +232,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(1));
     }
 
-    @Test
     public void testProgram8() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
         int[] varInds = new int[3];
@@ -249,7 +260,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(2));
     }
 
-    @Test
     public void testProgram9() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
 
@@ -278,7 +288,6 @@ public class GurobiHookTest {
         assertTrue(ojaHook.getBooleanValue(5));
     }
 
-    @Test
     public void testProgram10() throws Exception {
         GurobiHook ojaHook = new GurobiHook();
 
