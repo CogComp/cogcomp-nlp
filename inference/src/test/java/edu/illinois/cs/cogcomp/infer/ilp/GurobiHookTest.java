@@ -13,12 +13,13 @@ import static org.junit.Assert.assertTrue;
 
 public class GurobiHookTest {
     @Test
-    public void testAll() throws Exception{
-        if(System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true") &&
-                System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")) {
+    public void testAll() throws Exception {
+        // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
+        if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
+                && System.getenv().containsKey("SEMAPHORE")
+                && System.getenv().get("SEMAPHORE").equals("true")) {
             System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
-        }
-        else {
+        } else {
             testProgram1();
             testProgram2();
             testProgram3();
