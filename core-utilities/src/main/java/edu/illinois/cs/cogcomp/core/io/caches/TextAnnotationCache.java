@@ -26,4 +26,6 @@ public interface TextAnnotationCache {
     boolean contains(TextAnnotation ta);
 
     void removeTextAnnotation(TextAnnotation ta);
+
+    TextAnnotation getTextAnnotation(TextAnnotation ta);
 }

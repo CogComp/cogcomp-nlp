@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.core.io.caches;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -83,4 +84,28 @@ public class TextAnnotationMapDBHandlerTest {
         assertFalse(ta.hasView(viewName));
 
     }
+
+    @Test
+    public void testGetTextAnnotation()
+    {
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB}, false, 2);
+
+        assertTrue(ta.hasView(ViewNames.SRL_VERB));
+
+        mapDBHandler.addTextAnnotation("test", ta);
+
+        TextAnnotation queryTa =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS}, false, 2);
+
+        assertFalse(queryTa.hasView(ViewNames.SRL_VERB));
+
+        TextAnnotation dbTa = mapDBHandler.getTextAnnotation(queryTa);
+
+        assertNotNull(dbTa);
+
+        assertTrue(dbTa.hasView(ViewNames.SRL_VERB));
+
+        mapDBHandler.removeTextAnnotation(dbTa);
+    }
+
 }
