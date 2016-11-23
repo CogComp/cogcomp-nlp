@@ -64,6 +64,7 @@ public class TokenizerTextAnnotationBuilderTest {
         TokenizerTextAnnotationBuilder bldr =
                 new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
+        // making sure that the tokenization works fine when the input is differet forms of whitespaces
         final String sentA = "";
         final String sentB = "\n";
         final String sentC = " ";
