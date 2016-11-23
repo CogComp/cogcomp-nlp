@@ -271,8 +271,7 @@ public class StatefullTokenizerTest {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
-        int[] sentEndOffsets = tknzn.getSentenceEndTokenIndexes();
-        assertEquals(sentEndOffsets.length, 0);
+        assertEquals(tknzn.getTokens().length, 0);
     }
 
     @Test
@@ -280,8 +279,7 @@ public class StatefullTokenizerTest {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "this\nsentence";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
-        int[] sentEndOffsets = tknzn.getSentenceEndTokenIndexes();
-        assertEquals(sentEndOffsets.length, 1);
+        assertEquals(tknzn.getTokens().length, 2);
     }
 
 }
