@@ -90,8 +90,6 @@ public class IllinoisTokenizerTest {
         IntPair intolerantOffsets = new IntPair(77, 87);
 
         assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
-
-
     }
 
     private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens,
@@ -108,6 +106,21 @@ public class IllinoisTokenizerTest {
         }
     }
 
+    @Test
+    public void testIllinoisTokenizerEmptyString() {
+        Tokenizer tkr = new IllinoisTokenizer();
+        String text = "";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        int[] sentEndOffsets = tknzn.getSentenceEndTokenIndexes();
+        assertEquals(sentEndOffsets.length, 0);
+    }
 
-
+    @Test
+    public void testIllinoisTokenizerStringWithNewline() {
+        Tokenizer tkr = new IllinoisTokenizer();
+        String text = "this\nsentence";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        int[] sentEndOffsets = tknzn.getSentenceEndTokenIndexes();
+        assertEquals(sentEndOffsets.length, 1);
+    }
 }
