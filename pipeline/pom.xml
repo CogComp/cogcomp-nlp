@@ -36,11 +36,6 @@
             <artifactId>illinois-corpusreaders</artifactId>
             <version>3.0.84</version>
         </dependency>
-        <!--        <dependency>
-                    <groupId>edu.illinois.cs.cogcomp</groupId>
-                    <artifactId>illinois-edison</artifactId>
-                    <version>${cogcomp-nlp-version}</version>
-                </dependency> -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
@@ -64,26 +59,6 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
             <version>3.0.84</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner-model</artifactId>
-            <classifier>CoNLL</classifier>
-            <version>3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner-model</artifactId>
-            <version>3.0</version>
-            <classifier>OntoNotes</classifier>
-        </dependency>
-
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-common-resources</artifactId>
-            <version>1.1</version>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -119,11 +94,6 @@
             <artifactId>gurobi</artifactId>
             <version>6.5</version>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.84</version>
         </dependency>
     </dependencies>
 

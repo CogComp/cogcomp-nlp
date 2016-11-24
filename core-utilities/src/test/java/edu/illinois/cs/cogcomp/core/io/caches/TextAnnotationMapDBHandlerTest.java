@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 
 public class TextAnnotationMapDBHandlerTest {
     private final static String dbFile = "src/test/resources/mapDB-test.db";
-    private final static String trainDataset = "train";
     private final static String testDataset = "test";
     private TextAnnotationMapDBHandler mapDBHandler;
     private TextAnnotation testTa = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
@@ -42,11 +41,6 @@ public class TextAnnotationMapDBHandlerTest {
         IOUtils.rm(dbFile);
     }
 
-//    @Test
-//    public void isCached() throws Exception {
-//        // The DB should already contain a single TextAnnotation in the training dataset
-//        assertTrue(mapDBHandler.isCached(trainDataset, dbFile));
-//    }
     @Test
     public void addRemoveTextAnnotation() throws Exception {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
@@ -76,8 +70,8 @@ public class TextAnnotationMapDBHandlerTest {
     public void updateTextAnnotation() throws Exception {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
 
-        mapDBHandler.addTextAnnotation(trainDataset,ta);
-        ta = mapDBHandler.getDataset(trainDataset).next();
+        mapDBHandler.addTextAnnotation(testDataset,ta);
+        ta = mapDBHandler.getDataset(testDataset).next();
         // Add a new view to the TextAnnotation
         String viewName = "TEST_VIEW";
         View dummyView = new View(viewName, "TEST", ta, 0.0);
@@ -93,7 +87,8 @@ public class TextAnnotationMapDBHandlerTest {
         // Revert the changes and check if it's updated
         ta.removeView(viewName);
         mapDBHandler.updateTextAnnotation(ta);
-        ta = mapDBHandler.getDataset(testDataset).next();
+        ta = mapDBHandler.getTextAnnotation(ta);
+        
         assertFalse(ta.hasView(viewName));
 
     }
