@@ -10,6 +10,8 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 public class ReadACEAnnotation {
@@ -21,6 +23,7 @@ public class ReadACEAnnotation {
      * modality or relation tense.
      */
     public static boolean is2004mode = false;
+    private static Logger logger = LoggerFactory.getLogger(ReadACEAnnotation.class);
 
     public static ACEDocumentAnnotation readDocument(String FileStr) throws XMLException {
         ACEDocumentAnnotation docAnnotation = new ACEDocumentAnnotation();
@@ -37,8 +40,8 @@ public class ReadACEAnnotation {
 
             docAnnotation.id = nnMap.getNamedItem("DOCID").getNodeValue();
             if (isDebug) {
-                System.out.println(docAnnotation.id);
-                System.out.println();
+                logger.info(docAnnotation.id);
+                logger.info("\n");
             }
 
 
@@ -46,7 +49,7 @@ public class ReadACEAnnotation {
             for (int i = 0; i < entityNL.getLength(); ++i) {
                 ACEEntity entity = readEntity(entityNL.item(i));
                 if (isDebug) {
-                    System.out.println();
+                    logger.info("\n");
                 }
                 docAnnotation.entityList.add(entity);
             }
@@ -56,7 +59,7 @@ public class ReadACEAnnotation {
             for (int i = 0; i < valueNL.getLength(); ++i) {
                 ACEValue value = readValue(valueNL.item(i));
                 if (isDebug) {
-                    System.out.println();
+                    logger.info("\n");
                 }
                 docAnnotation.valueList.add(value);
             }
@@ -66,7 +69,7 @@ public class ReadACEAnnotation {
             for (int i = 0; i < timeNL.getLength(); ++i) {
                 ACETimeEx timeEx = readTimeEx(timeNL.item(i));
                 if (isDebug) {
-                    System.out.println();
+                    logger.info("\n");
                 }
                 docAnnotation.timeExList.add(timeEx);
             }
@@ -76,13 +79,13 @@ public class ReadACEAnnotation {
                 nnMap = relationNL.item(i).getAttributes();
 
                 if (isDebug) {
-                    System.err.println("relation " + i + "...");
+                    logger.error("relation " + i + "...");
                 }
 
                 ACERelation relation = readRelation(relationNL.item(i));
 
                 if (isDebug) {
-                    System.out.println();
+                    logger.info("\n");
                 }
 
                 docAnnotation.relationList.add(relation);
@@ -94,7 +97,7 @@ public class ReadACEAnnotation {
                 ACEEvent event = readEvent(eventNL.item(i));
 
                 if (isDebug) {
-                    System.out.println();
+                    logger.info("\n");
                 }
 
                 docAnnotation.eventList.add(event);
@@ -132,11 +135,11 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println("Relation:\t" + relation.id + "\t" + relation.type + "\t"
+            logger.info("Relation:\t" + relation.id + "\t" + relation.type + "\t"
                     + relation.subtype + "\t" + relation.modality + "\t" + relation.tense);
         }
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
 
         String relationEntityArgumentKey = is2004mode ? "rel_entity_arg" : "relation_argument";
@@ -174,9 +177,9 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println("  Relation argument:\t" + relationArgument.id + "\t"
+            logger.info("  Relation argument:\t" + relationArgument.id + "\t"
                     + relationArgument.role);
-            System.out.println();
+            logger.info("\n");
         }
 
         return relationArgument;
@@ -193,7 +196,7 @@ public class ReadACEAnnotation {
         relationMention.lexicalCondition = nnMap.getNamedItem(lcTag).getNodeValue();
 
         if (isDebug) {
-            System.out.println("  Relation mention:\t" + relationMention.id);
+            logger.info("  Relation mention:\t" + relationMention.id);
         }
 
         Element element1 = SimpleXMLParser.getElement(((Element) node), "extent");
@@ -204,7 +207,7 @@ public class ReadACEAnnotation {
         relationMention.extentEnd = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Relation mention extent:\t" + relationMention.extent + "\t"
+            logger.info("  Relation mention extent:\t" + relationMention.extent + "\t"
                     + relationMention.extentStart + "\t" + relationMention.extentEnd);
         }
 
@@ -219,7 +222,7 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
         return relationMention;
     }
@@ -241,7 +244,7 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println("    Relation argument mention:\t" + eventArgumentMention.id + "\t"
+            logger.info("    Relation argument mention:\t" + eventArgumentMention.id + "\t"
                     + eventArgumentMention.role);
         }
 
@@ -253,9 +256,9 @@ public class ReadACEAnnotation {
         eventArgumentMention.end = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("    Relation argument mention:\t" + eventArgumentMention.start
+            logger.info("    Relation argument mention:\t" + eventArgumentMention.start
                     + "\t" + eventArgumentMention.end + "\t" + eventArgumentMention.argStr);
-            System.out.println();
+            logger.info("\n");
         }
 
         return eventArgumentMention;
@@ -275,12 +278,12 @@ public class ReadACEAnnotation {
         event.tense = nnMap.getNamedItem("TENSE").getNodeValue();
 
         if (isDebug) {
-            System.out.println("Event:\t" + event.id + "\t" + event.type + "\t" + event.subtype
+            logger.info("Event:\t" + event.id + "\t" + event.type + "\t" + event.subtype
                     + "\t" + event.modality + "\t" + event.polarity + "\t" + event.genericity
                     + "\t" + event.tense);
         }
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
         NodeList nlArg = ((Element) node).getElementsByTagName("event_argument");
 
@@ -308,9 +311,8 @@ public class ReadACEAnnotation {
         eventArgument.role = nnMap.getNamedItem("ROLE").getNodeValue();
 
         if (isDebug) {
-            System.out
-                    .println("  Event argument:\t" + eventArgument.id + "\t" + eventArgument.role);
-            System.out.println();
+            logger.info("  Event argument:\t" + eventArgument.id + "\t" + eventArgument.role);
+            logger.info("\n");
         }
 
         return eventArgument;
@@ -324,7 +326,7 @@ public class ReadACEAnnotation {
         eventMention.id = nnMap.getNamedItem("ID").getNodeValue();
 
         if (isDebug) {
-            System.out.println("  Event mention:\t" + eventMention.id);
+            logger.info("  Event mention:\t" + eventMention.id);
         }
 
         Element element1 = SimpleXMLParser.getElement(((Element) node), "extent");
@@ -335,7 +337,7 @@ public class ReadACEAnnotation {
         eventMention.extentEnd = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Event mention extent:\t" + eventMention.extent + "\t"
+            logger.info("  Event mention extent:\t" + eventMention.extent + "\t"
                     + eventMention.extentStart + "\t" + eventMention.extentEnd);
         }
 
@@ -349,7 +351,7 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println("  Event mention scope:\t" + eventMention.scopeStart + "\t"
+            logger.info("  Event mention scope:\t" + eventMention.scopeStart + "\t"
                     + eventMention.scopeEnd + "\t" + eventMention.scope);
         }
 
@@ -361,9 +363,9 @@ public class ReadACEAnnotation {
         eventMention.anchorEnd = Integer.parseInt(element3Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Event mention anchor:\t" + eventMention.anchorStart + "\t"
+            logger.info("  Event mention anchor:\t" + eventMention.anchorStart + "\t"
                     + eventMention.anchorEnd + "\t" + eventMention.anchor);
-            System.out.println();
+            logger.info("\n");
         }
 
         NodeList nlMention = ((Element) node).getElementsByTagName("event_mention_argument");
@@ -375,7 +377,7 @@ public class ReadACEAnnotation {
         }
 
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
         return eventMention;
     }
@@ -389,7 +391,7 @@ public class ReadACEAnnotation {
         eventArgumentMention.role = nnMap.getNamedItem("ROLE").getNodeValue();
 
         if (isDebug) {
-            System.out.println("    Event argument mention:\t" + eventArgumentMention.id + "\t"
+            logger.info("    Event argument mention:\t" + eventArgumentMention.id + "\t"
                     + eventArgumentMention.role);
         }
 
@@ -401,9 +403,9 @@ public class ReadACEAnnotation {
         eventArgumentMention.end = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("    Event argument mention:\t" + eventArgumentMention.start + "\t"
+            logger.info("    Event argument mention:\t" + eventArgumentMention.start + "\t"
                     + eventArgumentMention.end + "\t" + eventArgumentMention.argStr);
-            System.out.println();
+            logger.info("\n");
         }
 
         return eventArgumentMention;
@@ -424,11 +426,11 @@ public class ReadACEAnnotation {
             entity.subtype = subtypenode.getNodeValue();
 
         if (isDebug) {
-            System.out.println("Entity:\t" + entity.id + "\t" + entity.classEntity + "\t"
+            logger.info("Entity:\t" + entity.id + "\t" + entity.classEntity + "\t"
                     + entity.type + "\t" + entity.subtype);
         }
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
 
         NodeList nl = ((Element) node).getElementsByTagName("entity_mention");
@@ -456,7 +458,7 @@ public class ReadACEAnnotation {
         // entityMention.ldcATR = nnMap.getNamedItem("LDCATR").getNodeValue();
 
         if (isDebug) {
-            System.out.println("  Entity mention:\t" + entityMention.id + "\t" + entityMention.type
+            logger.info("  Entity mention:\t" + entityMention.id + "\t" + entityMention.type
                     + "\t" + entityMention.ldcType);
         }
 
@@ -468,7 +470,7 @@ public class ReadACEAnnotation {
         entityMention.extentEnd = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Entity mention extent:\t" + entityMention.extentStart + "\t"
+            logger.info("  Entity mention extent:\t" + entityMention.extentStart + "\t"
                     + entityMention.extentEnd + "\t" + entityMention.extent);
         }
 
@@ -480,9 +482,9 @@ public class ReadACEAnnotation {
         entityMention.headEnd = Integer.parseInt(element2Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Entity mention head:\t" + entityMention.headStart + "\t"
+            logger.info("  Entity mention head:\t" + entityMention.headStart + "\t"
                     + entityMention.headEnd + "\t" + entityMention.head);
-            System.out.println();
+            logger.info("\n");
         }
 
         return entityMention;
@@ -497,10 +499,10 @@ public class ReadACEAnnotation {
         value.type = nnMap.getNamedItem("TYPE").getNodeValue();
 
         if (isDebug) {
-            System.out.println("Value:\t" + value.id + "\t" + value.type);
+            logger.info("Value:\t" + value.id + "\t" + value.type);
         }
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
 
         NodeList nl = ((Element) node).getElementsByTagName("value_mention");
@@ -523,7 +525,7 @@ public class ReadACEAnnotation {
         valueMention.id = nnMap.getNamedItem("ID").getNodeValue();
 
         if (isDebug) {
-            System.out.println("  Value mention:\t" + valueMention.id);
+            logger.info("  Value mention:\t" + valueMention.id);
         }
 
         Element element1 = SimpleXMLParser.getElement(((Element) node), "extent");
@@ -534,7 +536,7 @@ public class ReadACEAnnotation {
         valueMention.extentEnd = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  Value mention extent:\t" + valueMention.extentStart + "\t"
+            logger.info("  Value mention extent:\t" + valueMention.extentStart + "\t"
                     + valueMention.extentEnd + "\t" + valueMention.extent);
         }
 
@@ -549,10 +551,10 @@ public class ReadACEAnnotation {
         time.id = nnMap.getNamedItem("ID").getNodeValue();
 
         if (isDebug) {
-            System.out.println("TimeEx:\t" + time.id);
+            logger.info("TimeEx:\t" + time.id);
         }
         if (isDebug) {
-            System.out.println();
+            logger.info("\n");
         }
 
         NodeList nl = ((Element) node).getElementsByTagName("timex2_mention");
@@ -574,7 +576,7 @@ public class ReadACEAnnotation {
         timeExMention.id = nnMap.getNamedItem("ID").getNodeValue();
 
         if (isDebug) {
-            System.out.println("  TimeEx mention:\t" + timeExMention.id);
+            logger.info("  TimeEx mention:\t" + timeExMention.id);
         }
 
         Element element1 = SimpleXMLParser.getElement(((Element) node), "extent");
@@ -585,7 +587,7 @@ public class ReadACEAnnotation {
         timeExMention.extentEnd = Integer.parseInt(element1Char.getAttribute("END"));
 
         if (isDebug) {
-            System.out.println("  TimeEx mention extent:\t" + timeExMention.extentStart + "\t"
+            logger.info("  TimeEx mention extent:\t" + timeExMention.extentStart + "\t"
                     + timeExMention.extentEnd + "\t" + timeExMention.extent);
         }
 

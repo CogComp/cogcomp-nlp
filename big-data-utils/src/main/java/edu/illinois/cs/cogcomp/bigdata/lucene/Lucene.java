@@ -37,6 +37,8 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 
 import com.google.common.collect.Iterators;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Simplifed Lucene interface
@@ -87,6 +89,7 @@ public class Lucene {
 	
 	private static final IndexWriterConfig storeConfig = newConfig(new KeywordAnalyzer());
 
+	private static final Logger logger = LoggerFactory.getLogger(Lucene.class);
 	/**
 	 * creates a config for a writer using a specified analyzer
 	 * 
@@ -378,7 +381,7 @@ public class Lucene {
 
 		ScoreDoc[] docs = searcher.search(q, 1).scoreDocs;
 		if (docs.length == 0) {
-			System.err.println("Document with docId : " + docId + "  not found!");
+			logger.error("Document with docId : " + docId + "  not found!");
 			System.exit(0);
 			return -1;
 		} else {

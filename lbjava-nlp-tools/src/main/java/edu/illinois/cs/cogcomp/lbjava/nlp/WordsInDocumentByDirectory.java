@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.*;
  * @author Nick Rizzolo
  **/
 public class WordsInDocumentByDirectory implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(WordsInDocumentByDirectory.class);
     /**
      * The list of all files to be parsed.
      */

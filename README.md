@@ -32,7 +32,8 @@ An application that identifies the part of speech (e.g. verb + tense, noun + num
 in plain text.
   - [illinois-ner](ner/README.md)
 An application that identifies named entities in plain text according to two different sets of categories. 
-
+  - [illinois-inference](inference/README.md)
+A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. 
 
 ## Using each library programmatically 
 

@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.POSBracketToVector;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -38,6 +40,7 @@ import java.io.FileReader;
 public class POSTag {
     /** The name of the file containing testing data. */
     private static String testingFile;
+    private static Logger logger = LoggerFactory.getLogger(POSTag.class);
 
 
     /**
@@ -86,7 +89,7 @@ public class POSTag {
             }
 
             if (!quiet)
-                System.out.println();
+                System.out.print("");
         }
 
         System.out.println("Accuracy: " + (100 * correct / (double) (correct + incorrect)) + "%");

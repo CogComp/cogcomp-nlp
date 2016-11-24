@@ -12,6 +12,8 @@ import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test class for evaluating the accuracy of the chunker Expects data to be in COLUMN FORMAT
@@ -24,6 +26,7 @@ public class TestChunkerModels {
     private String labeledData;
 
     private Chunker tagger;
+    private static final Logger logger = LoggerFactory.getLogger(TestChunkerModels.class);
 
     /**
      * Constructor for the test class. User specifies models and data. If no args provided,
@@ -54,7 +57,7 @@ public class TestChunkerModels {
             numSeen++;
         }
 
-        System.out.println("Total accuracy over " + numSeen + " items: "
+        logger.info("Total accuracy over " + numSeen + " items: "
                 + String.format("%.2f", 100.0 * (double) numEqual / (double) numSeen) + "%");
 
     }

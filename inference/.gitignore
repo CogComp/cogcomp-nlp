@@ -1,0 +1,6 @@
+## Maven files
+/target
+
+## IntelliJ files
+../inference.iml
+/.idea

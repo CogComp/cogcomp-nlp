@@ -310,7 +310,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             // throw new
             // IllegalArgumentException("Invalid character offset. The character position "
             // + characterOffset + " does not correspond to any token.");
-            logger.debug("Invalid character offset. The character position " + characterOffset
+            logger.error("Invalid character offset. The character position " + characterOffset
                     + " does not correspond to any token.");
         }
 
@@ -319,6 +319,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // number of tokens + 1.
         if (characterOffset == characterOffsetsToTokens.length) {
             return this.size();
+        }
+
+        if(characterOffsetsToTokens[characterOffset] == -1) {
+            logger.warn("The required character offset is in between tokens, and that's why it is -1. ");
         }
 
         return characterOffsetsToTokens[characterOffset];

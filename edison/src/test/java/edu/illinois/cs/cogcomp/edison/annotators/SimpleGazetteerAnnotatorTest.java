@@ -35,6 +35,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test the SimpleGazetteerAnnotator class. There is really only one method to test that is the
@@ -43,6 +45,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class SimpleGazetteerAnnotatorTest {
+    private static Logger logger = LoggerFactory.getLogger(SimpleGazetteerAnnotatorTest.class);
+
     private static final boolean IS_LAZILY_INITIALIZED = false;
     /** this helper can create text annotations from text. */
     protected final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
@@ -148,7 +152,7 @@ public class SimpleGazetteerAnnotatorTest {
             threads[i] = new TestThread();
             threads[i].start();
         }
-        System.out.println("Begin multithreaded test.");
+        logger.info("Begin multithreaded test.");
         for (int i = 0; i < numthreads; i++) {
             while (true)
                 try {

@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -21,6 +23,8 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 public class PredicateArgumentEvaluator extends Evaluator {
+    private static Logger logger = LoggerFactory.getLogger(PredicateArgumentEvaluator.class);
+
     PredicateArgumentView gold, prediction;
     Map<Constituent, Constituent> goldToPredictionPredicateMapping;
 
@@ -184,7 +188,7 @@ public class PredicateArgumentEvaluator extends Evaluator {
             output.add(new Pair<>(r.getRelationName(), target));
 
             if (spans.contains(target.getSpan()))
-                System.out.println("Error! Overlapping spans in " + view.getViewName() + "\n"
+                logger.error("Error! Overlapping spans in " + view.getViewName() + "\n"
                         + view.getTextAnnotation() + "\n" + view);
 
             spans.add(target.getSpan());

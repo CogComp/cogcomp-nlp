@@ -92,13 +92,13 @@ public class FeatureMap {
             }
         }
         /*
-         * System.out.println("Building a feature map"); for(int i=0;i<docs.docs.size();i++) {
+         * logger.info("Building a feature map"); for(int i=0;i<docs.docs.size();i++) {
          * Vector<String> words=docs.docs.elementAt(i).words; for(int j=0;j<words.size();j++)
          * if((!wordToFid.containsKey(words.elementAt(j)))&&
          * (stat.wordCounts.get(words.elementAt(j))>=appearanceThres)) {
          * wordToFid.put(words.elementAt(j), dim); fidToWord.put(dim,words.elementAt(j)); dim++; } }
          */
-        System.out.println("Done building a feature map, the dimension is: " + dim);
+        logger.info("Done building a feature map, the dimension is: " + dim);
     }
 
     public void addMoreDocsIgnoreAppearanceThres(DocumentCollection docs) {

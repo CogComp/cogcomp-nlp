@@ -12,6 +12,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pos.lbjava.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +26,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  * @author James Chen
  */
 public class TestPOSModels {
+    private static Logger logger = LoggerFactory.getLogger(TestPOSModels.class);
+
     private static final String NAME = TestPOSModels.class.getCanonicalName();
     private String labeledTestFile;
 

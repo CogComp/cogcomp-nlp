@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.ner.ClassifiersAndUtils.*;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Vector;
@@ -20,6 +22,8 @@ import java.util.Vector;
  * to.
  */
 public class WordTopicAndLayoutFeatures {
+    private static Logger logger = LoggerFactory.getLogger(WordTopicAndLayoutFeatures.class);
+
     public static final String pathToStopWords = "../../Data/TrainByTopic/stopwords_big";
     private static HashMap<NEWord, Integer> wordToTopicIdMap = new HashMap<>();
     private static FeatureMap map = null; // new FeatureMap();
@@ -57,7 +61,7 @@ public class WordTopicAndLayoutFeatures {
                         new Document(InFile.tokenize(documentText,
                                 "\n\t -.,?<>;':\"[]{}\\|`~!@#$%^&*()_+=-0987654321`~"), -1);
                 int label = nb.classify(doc, confidenceThreshold);
-                System.out.println("*********************\n" + labelnames[label + 1]
+                logger.info("*********************\n" + labelnames[label + 1]
                         + "\n*********************\n"
                         + documentText.substring(0, Math.min(documentText.length(), 400)));
                 for (int i = 0; i < docWords.size(); i++)
