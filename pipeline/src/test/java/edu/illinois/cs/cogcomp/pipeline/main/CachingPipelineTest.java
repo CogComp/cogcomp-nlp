@@ -8,7 +8,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import org.junit.*;
@@ -20,14 +19,14 @@ import java.util.*;
 import static org.junit.Assert.*;
 
 /**
- * Tests for SimpleCachingPipeline
- * Created by mssammon on 9/21/15.
+ * Tests for NLP pipeline
+ *
+ * @author mssammon
  */
 public class CachingPipelineTest
 {
-    private static final String TEST_CACHE_DIR = "test-annotation-cache";
+    private static final String TEST_CACHE_FILE = "test-annotation-cache";
     private static BasicAnnotatorService processor;
-    private static HashSet<String> activeViews;
 
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
@@ -37,7 +36,7 @@ public class CachingPipelineTest
         props.setProperty( PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE );
 
         props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.TRUE );
-        props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR.key, TEST_CACHE_DIR );
+        props.setProperty( AnnotatorServiceConfigurator.CACHE_DIR.key, TEST_CACHE_FILE);
         props.setProperty( AnnotatorServiceConfigurator.THROW_EXCEPTION_IF_NOT_CACHED.key, Configurator.FALSE );
         props.setProperty( PipelineConfigurator.USE_JSON.key, Configurator.FALSE );
         props.setProperty( AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.FALSE );
@@ -49,24 +48,23 @@ public class CachingPipelineTest
     public static void cleanUp()
     {
         processor = null;
-    }
-
-
-    @Before
-    public void removeCacheFiles()
-    {
         try {
-            if (IOUtils.exists(TEST_CACHE_DIR))
-                IOUtils.rm(TEST_CACHE_DIR);
+            if (IOUtils.exists(TEST_CACHE_FILE))
+                IOUtils.rm(TEST_CACHE_FILE);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
+    @Before
+    public void testSetup()
+    {
+    }
+
     @After
     public void cleanUpAfterTest()
     {
-//        removeCacheFiles();
     }
 
     @Test
@@ -94,7 +92,7 @@ public class CachingPipelineTest
         }
         assertTrue(ta.hasView(ViewNames.SHALLOW_PARSE));
         assertTrue(ta.hasView(ViewNames.NER_CONLL));
-//        assertTrue(IOUtils.exists(TEST_CACHE_DIR));
+        assertTrue(IOUtils.exists(TEST_CACHE_FILE));
     }
 
     @Test
