@@ -13,7 +13,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
 
         <dependency>
@@ -24,7 +24,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
     </dependencies>
 

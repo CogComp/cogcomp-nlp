@@ -14,27 +14,27 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <!--        <dependency>
                     <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -63,7 +63,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -123,7 +123,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
     </dependencies>
 

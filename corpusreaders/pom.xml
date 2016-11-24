@@ -15,12 +15,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.0.84-pipeline</version>
+            <version>3.0.84</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
