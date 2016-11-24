@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.84</version>
+    <version>3.0.84-pipeline</version>
 
     <modules>
         <module>core-utilities</module>
@@ -23,6 +23,7 @@
         <module>big-data-utils</module>
         <module>similarity</module>
         <module>inference</module>
+        <module>pipeline</module>
     </modules>
 
     <properties>
