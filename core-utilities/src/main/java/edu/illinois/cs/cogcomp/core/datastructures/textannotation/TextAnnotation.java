@@ -72,7 +72,8 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             String[] tokens, int[] sentenceEndPositions) {
         super();
 
-        if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
+        // if the string is non-empty, the position of the last element should equal to the number of tokens
+        if (tokens.length > 0 && sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
             throw new IllegalArgumentException("Invalid sentence boundary. "
                     + "Last element should be the number of tokens");
 
