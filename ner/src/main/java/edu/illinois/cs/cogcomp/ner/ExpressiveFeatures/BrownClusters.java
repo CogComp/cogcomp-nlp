@@ -29,13 +29,18 @@ public class BrownClusters {
     /** the sole instance of this class. */
     private static BrownClusters brownclusters = null;
 
+    /** used to synchronize initialization. */
+    static private final String INIT_SYNC = "Brown Cluster Initialization Synchronization Token";
+    
     /**
      * This method should never be called before init, or the gazetteer will not be initialized.
      * 
      * @return the singleton instance of the Gazetteers class.
      */
     static public BrownClusters get() {
-        return brownclusters;
+        synchronized (INIT_SYNC) {
+            return brownclusters;
+        }
     }
 
     /** ensures singleton-ness. */
@@ -48,42 +53,51 @@ public class BrownClusters {
     private ArrayList<THashMap<String, String>> wordToPathByResource = null;
     private final int[] prefixLengths = {4, 6, 10, 20};
 
+    /**
+     * Initialze the brown cluster data. This is a singleton, so this process is sychronized and
+     * atomic with resprect to the <code>get()</code> method above.
+     * @param pathsToClusterFiles the files containing the data.
+     * @param thresholds
+     * @param isLowercaseBrownClusters
+     */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
-        if (brownclusters != null) {
-            return;
-        }
-        brownclusters = new BrownClusters();
-        brownclusters.isLowercaseBrownClustersByResource =
-                new boolean[isLowercaseBrownClusters.size()];
-        brownclusters.wordToPathByResource = new ArrayList<>();
-        brownclusters.resources = new ArrayList<>();
-        for (int i = 0; i < pathsToClusterFiles.size(); i++) {
-            THashMap<String, String> h = new THashMap<>();
-            InFile in =
-                    new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-            String line = in.readLine();
-            int wordsAdded = 0;
-            while (line != null) {
-                StringTokenizer st = new StringTokenizer(line);
-                String path = st.nextToken();
-                String word = st.nextToken();
-                int occ = Integer.parseInt(st.nextToken());
-                if (occ >= thresholds.elementAt(i)) {
-                    h.put(word, path);
-                    wordsAdded++;
+        synchronized (INIT_SYNC) {
+            if (brownclusters != null) {
+                return;
+            }
+            brownclusters = new BrownClusters();
+            brownclusters.isLowercaseBrownClustersByResource =
+                    new boolean[isLowercaseBrownClusters.size()];
+            brownclusters.wordToPathByResource = new ArrayList<>();
+            brownclusters.resources = new ArrayList<>();
+            for (int i = 0; i < pathsToClusterFiles.size(); i++) {
+                THashMap<String, String> h = new THashMap<>();
+                InFile in =
+                        new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
+                String line = in.readLine();
+                int wordsAdded = 0;
+                while (line != null) {
+                    StringTokenizer st = new StringTokenizer(line);
+                    String path = st.nextToken();
+                    String word = st.nextToken();
+                    int occ = Integer.parseInt(st.nextToken());
+                    if (occ >= thresholds.elementAt(i)) {
+                        h.put(word, path);
+                        wordsAdded++;
+                    }
+                    line = in.readLine();
                 }
-                line = in.readLine();
-            }
 
-            if (ParametersForLbjCode.currentParameters.debug) {
-                logger.info(wordsAdded + " words added");
+                if (ParametersForLbjCode.currentParameters.debug) {
+                    logger.info(wordsAdded + " words added");
+                }
+                brownclusters.wordToPathByResource.add(h);
+                brownclusters.isLowercaseBrownClustersByResource[i] =
+                        isLowercaseBrownClusters.elementAt(i);
+                brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
+                in.close();
             }
-            brownclusters.wordToPathByResource.add(h);
-            brownclusters.isLowercaseBrownClustersByResource[i] =
-                    isLowercaseBrownClusters.elementAt(i);
-            brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
-            in.close();
         }
     }
 
