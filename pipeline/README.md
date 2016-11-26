@@ -27,7 +27,9 @@ Illinois Cognitive Computation Group's web site:
 To process a set of plain text files in one directory and generate
 a corresponding set of annotated files in json format in a second
 directory, run the command: 
-```scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>```
+```
+scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>
+```
 The configuration file needs only to contain options to override defaults.
 
 
@@ -72,8 +74,7 @@ TokenizerTextAnnotationBuilder (also from illinois-core-utilities).
 The pipeline has the following annotators. To understand the annotations,
 please refer to the descriptions of the individual packages at the URLs
 provided. These annotations are stored as Views in a single TextAnnotation
-data structure -- see README_DEVELOPER and the illinois-cogcomp-nlp library
-(https://github.com/IllinoisCogComp/illinois-cogcomp-nlp).
+data structure -- see README_DEVELOPER and the [illinois-cogcomp-nlp](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) library.
 The memory is expected MAXIMUM run-time memory required for the component
 by itself. Note that the pipeline runs only one copy of each active component
 so that, for example, a single Chunker component fulfils the needs
@@ -82,10 +83,10 @@ of several other components for which it is a dependency.
 1. Lemmatizer: <1G memory, no dependencies.
 2. Part-of-Speech tagger: <1G, no dependencies.
 3. Chunker: <1G, requires Part-of-Speech tagger.
-4. Named Entity Recognizer (CoNLL): 2G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
-5. Named Entity Recognizer (OntoNotes) 4G, no dependencies. http://cogcomp.cs.illinois.edu/page/software_view/NETagger
-6. Constituency Parser (Stanford): 1G, no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
-5. Dependency Parser (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies. http://nlp.stanford.edu/software/lex-parser.shtml
+4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 2G, no dependencies. 
+5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 4G, no dependencies. 
+6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies. 
+5. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies. 
 7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
@@ -131,9 +132,7 @@ print a warning about the missing components.
 
 To run the Semantic Role Labeler you must have an instance of the
 Gurobi license on your machine, and set the relevant environment
-variables (see
-http://www.gurobi.com/products/licensing-pricing/licensing-overview
--- note that there is a free academic use license).
+variables (see [this page](http://www.gurobi.com/products/licensing-pricing/licensing-overview) -- note that there is a free academic use license).
 
 
 ## 3. DOWNLOAD CONTENTS
@@ -162,19 +161,14 @@ its components.
 
 The Illinois NLP Pipeline package sets default configuration options for 
 all its components.  If you want to experiment with different settings,
-we recommend checking out the project from github:
-https://github.com/IllinoisCogComp/illinois-cogcomp-nlp
--- see the section on Programmatic Use.
-
-
+we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
 
 
 ## 4. RUNNING THE ILLINOIS NLP PIPELINE
 
 This software has been developed to allow some of our more complex tools 
 to be run completely within a single JVM, either programmatically or 
-from the command line,  instead of in tandem with the CCG NLP Curator
-(http://cogcomp.cs.illinois.edu/page/software_view/Curator).
+from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator).
 
 These instructions assume you have downloaded the pipeline as a
 single package from the Cognitive Computation Group web site.
@@ -196,15 +190,13 @@ differences.
 
 Running the test:
 ```
-   scripts/testPreprocessor.sh
+scripts/testPreprocessor.sh
 ```
 
 Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
 ```
-   scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
 ```
-
-
 
 ## 5. PROGRAMMATIC USE
 
@@ -219,14 +211,14 @@ CachingPipelineTest class under src/test/resources/, in
 edu.illinois.cs.cogcomp.pipeline.main.
 
 To process text input, use the '()' method: 
-```
-        String docId = "APW-20140101.3018"; // arbitrary string identifier
-        String textId = "body"; // arbitrary string identifier
-        String text = ...; // contains plain text to be annotated
+```java 
+String docId = "APW-20140101.3018"; // arbitrary string identifier
+String textId = "body"; // arbitrary string identifier
+String text = ...; // contains plain text to be annotated
 
-        ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
-        AnnotatorService pipeline = IllinoisPipelineFactory.buildPipeline( rm );
-        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
+ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
+AnnotatorService pipeline = IllinoisPipelineFactory.buildPipeline( rm );
+TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
 This method takes as its argument a String variable containing the
 text you want to process. This String should not be too long --
@@ -239,16 +231,14 @@ illinois-core-utilities package for details), which contains
 a View corresponding to each annotation source. Each View contains
 a set of Constituents and Relations representing the annotator output.
 Access views and constituents via:
-```
-        String viewName = ViewNames.POS; // example using ViewNames class constants
-        View view = ta.getView( viewName );
-        List< Constituent > constituents = view.getConstituents();
+```java 
+String viewName = ViewNames.POS; // example using ViewNames class constants
+View view = ta.getView(viewName);
+List<Constituent> constituents = view.getConstituents();
 ```
 See the documentation for individual components (links in section 1 above) for
 more information about the annotations and their representation as Constituents and
 Relations.
-
-
 
 ### 5.1 Configuration Options
 
