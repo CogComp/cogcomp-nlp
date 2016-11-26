@@ -34,18 +34,17 @@ import org.slf4j.LoggerFactory;
 
 
 public class Chunker extends SparseNetworkLearner {
-    private static ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
-    private static String modelFile = rm.getString("modelPath");
-    private static String modelLexFile = rm.getString("modelLexPath");
-
-    public static boolean isTraining;
-
     private static final Logger logger = LoggerFactory.getLogger(Chunker.class);
+    public static boolean isTraining;
+    private static ResourceManager rm = new ChunkerConfigurator().getDefaultConfig();
 
-    public Chunker() {
-        this(new Parameters(), modelFile, modelLexFile);
+    public Chunker()  {
+        this(new ChunkerConfigurator().getDefaultConfig());
     }
 
+    public Chunker(ResourceManager config) {
+        this(config.getString(ChunkerConfigurator.MODEL_PATH.key), config.getString(ChunkerConfigurator.MODEL_LEX_PATH.key));
+    }
 
     public Chunker(String modelPath, String lexiconPath) {
         this(new Parameters(), modelPath, lexiconPath);
@@ -74,6 +73,8 @@ public class Chunker extends SparseNetworkLearner {
         setLabeler(new ChunkLabel());
         setExtractor(new Chunker$$1());
     }
+
+
 
     public String getInputType() {
         return "edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token";

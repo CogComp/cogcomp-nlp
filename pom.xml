@@ -23,6 +23,7 @@
         <module>big-data-utils</module>
         <module>similarity</module>
         <module>inference</module>
+        <module>pipeline</module>
     </modules>
 
     <properties>
