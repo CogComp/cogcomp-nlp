@@ -3,26 +3,32 @@
 This module contains code that allows you to run various NLP tools
 to annotate plain text input. 
 
-#CONTENTS
-0 Quickstart
-1 Purpose
+## CONTENTS
+0. Quickstart
+1. Purpose
 	1.1  Intended Use
 	1.2  Pipeline NLP Components
 	1.3  License
-2 Prerequisites
+2. Prerequisites
     2.1  General Requirements: System
     2.2  Specific Requirements: SRL
-3 Download contents 
-3 Dependencies
-4 Running the Illinois NLP Pipeline
+3. Download contents 
+3. Dependencies
+4. Running the Illinois NLP Pipeline
     4.1  Running a Simple Command-Line Test
-5 Programmatic use
+5. Programmatic use
     5.1 Configuration Options
     5.2 Changing the logging settings
     
 ## 0. Quickstart
 
-You can run the
+Assuming you downloaded the pipeline package as a zip from the
+Illinois Cognitive Computation Group's web site:
+To process a set of plain text files in one directory and generate
+a corresponding set of annotated files in json format in a second
+directory, run the command: 
+```scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>```
+The configuration file needs only to contain options to override defaults.
 
 
 ## 1. Purpose
@@ -88,10 +94,9 @@ of several other components for which it is a dependency.
 
 ### 1.3 LICENSE
 
-The Illinois NLP Pipeline is available under a Research and Academic use
-license. For more details, visit the CCG website and click the
-download link for this software.  Stanford Parser and its dependencies
-are released under their own licensing arrangements.
+## Licensing
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+and press 'Download'. The next screen displays the license. 
 
 
 ## 2 PREREQUISITES
@@ -139,14 +144,14 @@ want to use the Semantic Role Labelers, you will need to install a
 Gurobi license -- see the section 2.2.)
 
 The download package is organized thus:
-
+```
 config/ : configuration files
 dist/ : the Illinois Preprocessor jar
 lib/ : dependencies 
 scripts/ : scripts to allow command-line test of the Illinois NLP Pipeline
 src/ : source code for the Illinois NLP Pipeline
 test/ : test files used for the command line test of the Illinois NLP Pipeline
-
+```
 See the section "Running the Illinois NLP Pipeline" for details on running the pipeline.
 
 This distribution contains all the dependencies needed to run the

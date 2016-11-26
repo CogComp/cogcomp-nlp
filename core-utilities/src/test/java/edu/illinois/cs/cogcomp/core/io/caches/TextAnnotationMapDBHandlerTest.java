@@ -88,7 +88,7 @@ public class TextAnnotationMapDBHandlerTest {
         ta.removeView(viewName);
         mapDBHandler.updateTextAnnotation(ta);
         ta = mapDBHandler.getTextAnnotation(ta);
-        
+
         assertFalse(ta.hasView(viewName));
 
     }
