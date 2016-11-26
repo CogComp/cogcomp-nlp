@@ -6,19 +6,19 @@ to annotate plain text input.
 ## CONTENTS
 0. Quickstart
 1. Purpose
-	1.1  Intended Use
-	1.2  Pipeline NLP Components
-	1.3  License
+	1. Intended Use
+	2. Pipeline NLP Components
+	3. License
 2. Prerequisites
-    2.1  General Requirements: System
-    2.2  Specific Requirements: SRL
+	1.  General Requirements: System
+	2.  Specific Requirements: SRL
 3. Download contents 
 3. Dependencies
 4. Running the Illinois NLP Pipeline
-    4.1  Running a Simple Command-Line Test
+	1.  Running a Simple Command-Line Test
 5. Programmatic use
-    5.1 Configuration Options
-    5.2 Changing the logging settings
+	1. Configuration Options
+	2. Changing the logging settings
     
 ## 0. Quickstart
 
