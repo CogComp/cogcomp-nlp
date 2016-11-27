@@ -47,14 +47,12 @@ public class GazetteersFactory {
         if(gazetteers_map.containsKey(path)) {
             gazetteers = gazetteers_map.get(path);
         } else {
-
             synchronized (GAZ_INIT_LOCK) {
-//                if (gazetteers == null) {
-                    if (flatgazetteers) {
-                        gazetteers = new FlatGazetteers(path);
-                    } else {
-                        gazetteers = new TreeGazetteers(maxPhraseLength, path);
-                    }
+                if (flatgazetteers) {
+                    gazetteers = new FlatGazetteers(path);
+                } else {
+                    gazetteers = new TreeGazetteers(maxPhraseLength, path);
+                }
 //                } else {
 //                    if (flatgazetteers) {
 //                        if (gazetteers instanceof TreeGazetteers) {

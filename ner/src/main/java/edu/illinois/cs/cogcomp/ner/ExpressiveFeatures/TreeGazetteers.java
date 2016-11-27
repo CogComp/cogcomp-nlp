@@ -11,7 +11,6 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitt
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
@@ -60,21 +57,11 @@ public class TreeGazetteers implements Gazetteers {
     private void init(int phrase_length, String pathToDictionaries) throws IOException {
         ArrayList<String> filenames = new ArrayList<>();
 
-        // List the Gazetteers directory (either local or in the classpath)
-//        String[] allfiles =
-//                ResourceUtilities.lsDirectory(pathToDictionaries, "gazetteers-list.txt");
         InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(stream));
         String line;
         while((line = br.readLine()) != null)
             filenames.add(line);
-
-//        for (String file : allfiles) {
-//            if (!IOUtils.isDirectory(file)) {
-//                filenames.add(file);
-//            }
-//        }
-//        Arrays.sort(allfiles);
 
         // init the dictionaries.
         dictionaries = new ArrayList<>(filenames.size());
@@ -88,6 +75,8 @@ public class TreeGazetteers implements Gazetteers {
                         || tmp.equals("am"))
                     return new String[0];
                 else {
+
+                    // character tokenization for Chinese
                     if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
                         String[] chars = new String[line.length()];
                         for(int i = 0; i < line.length(); i++)

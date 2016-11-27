@@ -36,6 +36,8 @@ public class GazetteerTree {
     private StringSplitterInterface splitter = new StringSplitterInterface() {
         @Override
         public String[] split(String line) {
+
+            // character tokenization for Chinese
             if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
                 String[] chars = new String[line.length()];
                 for(int i = 0; i < line.length(); i++)
