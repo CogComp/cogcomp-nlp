@@ -266,4 +266,20 @@ public class StatefullTokenizerTest {
         assertNotNull(statefulTa);
     }
 
+    @Test
+    public void testStatefullTokenizerEmptyString() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 0);
+    }
+
+    @Test
+    public void testStatefullTokenizerStringWithNewline() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "this\nsentence";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 2);
+    }
+
 }

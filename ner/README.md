@@ -1,4 +1,4 @@
-Illinois NER Tagger
+# Illinois NER Tagger
 ====================
 
 This is a state of the art NER tagger that tags plain text with named entities. 

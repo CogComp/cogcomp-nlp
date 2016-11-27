@@ -29,13 +29,18 @@ public class BrownClusters {
     /** the sole instance of this class. */
     private static BrownClusters brownclusters = null;
 
+    /** used to synchronize initialization. */
+    static private final String INIT_SYNC = "Brown Cluster Initialization Synchronization Token";
+    
     /**
      * This method should never be called before init, or the gazetteer will not be initialized.
      * 
      * @return the singleton instance of the Gazetteers class.
      */
     static public BrownClusters get() {
-        return brownclusters;
+        synchronized (INIT_SYNC) {
+            return brownclusters;
+        }
     }
 
     static public void set(BrownClusters bc){
@@ -52,11 +57,16 @@ public class BrownClusters {
     private ArrayList<THashMap<String, String>> wordToPathByResource = null;
     private final int[] prefixLengths = {4, 6, 10, 20};
 
+    /**
+     * Initialze the brown cluster data. This is a singleton, so this process is sychronized and
+     * atomic with resprect to the <code>get()</code> method above.
+     * @param pathsToClusterFiles the files containing the data.
+     * @param thresholds
+     * @param isLowercaseBrownClusters
+     */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
-//        if (brownclusters != null) {
-//            return;
-//        }
+
         brownclusters = new BrownClusters();
         brownclusters.isLowercaseBrownClustersByResource =
                 new boolean[isLowercaseBrownClusters.size()];
