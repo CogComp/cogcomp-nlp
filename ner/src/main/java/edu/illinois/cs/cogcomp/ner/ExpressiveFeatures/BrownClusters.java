@@ -67,37 +67,39 @@ public class BrownClusters {
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
 
-        brownclusters = new BrownClusters();
-        brownclusters.isLowercaseBrownClustersByResource =
-                new boolean[isLowercaseBrownClusters.size()];
-        brownclusters.wordToPathByResource = new ArrayList<>();
-        brownclusters.resources = new ArrayList<>();
-        for (int i = 0; i < pathsToClusterFiles.size(); i++) {
-            THashMap<String, String> h = new THashMap<>();
-            InFile in =
-                    new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-            String line = in.readLine();
-            int wordsAdded = 0;
-            while (line != null) {
-                StringTokenizer st = new StringTokenizer(line);
-                String path = st.nextToken();
-                String word = st.nextToken();
-                int occ = Integer.parseInt(st.nextToken());
-                if (occ >= thresholds.elementAt(i)) {
-                    h.put(word, path);
-                    wordsAdded++;
+        synchronized (INIT_SYNC) {
+            brownclusters = new BrownClusters();
+            brownclusters.isLowercaseBrownClustersByResource =
+                    new boolean[isLowercaseBrownClusters.size()];
+            brownclusters.wordToPathByResource = new ArrayList<>();
+            brownclusters.resources = new ArrayList<>();
+            for (int i = 0; i < pathsToClusterFiles.size(); i++) {
+                THashMap<String, String> h = new THashMap<>();
+                InFile in =
+                        new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
+                String line = in.readLine();
+                int wordsAdded = 0;
+                while (line != null) {
+                    StringTokenizer st = new StringTokenizer(line);
+                    String path = st.nextToken();
+                    String word = st.nextToken();
+                    int occ = Integer.parseInt(st.nextToken());
+                    if (occ >= thresholds.elementAt(i)) {
+                        h.put(word, path);
+                        wordsAdded++;
+                    }
+                    line = in.readLine();
                 }
-                line = in.readLine();
-            }
 
-            if (ParametersForLbjCode.currentParameters.debug) {
-                logger.info(wordsAdded + " words added");
+                if (ParametersForLbjCode.currentParameters.debug) {
+                    logger.info(wordsAdded + " words added");
+                }
+                brownclusters.wordToPathByResource.add(h);
+                brownclusters.isLowercaseBrownClustersByResource[i] =
+                        isLowercaseBrownClusters.elementAt(i);
+                brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
+                in.close();
             }
-            brownclusters.wordToPathByResource.add(h);
-            brownclusters.isLowercaseBrownClustersByResource[i] =
-                    isLowercaseBrownClusters.elementAt(i);
-            brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
-            in.close();
         }
     }
 
