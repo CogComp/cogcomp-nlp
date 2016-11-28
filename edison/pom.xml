@@ -117,12 +117,6 @@
             <version>1.7.12</version>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner</artifactId>
-            <version>3.0.78</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <reporting>
