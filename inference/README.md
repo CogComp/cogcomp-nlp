@@ -7,7 +7,7 @@ This project is a suite of unified wrappers to a set optimization libraries, as 
  - Beam search: a heuristic search algorithm that explores a graph by expanding the most promising node in a limited set.  
 
 
-## Using Gurobi  
+## Setting up Gurobi  
 
 To download and install Gurobi visit [http://www.gurobi.com/](http://www.gurobi.com/)
 
@@ -17,3 +17,8 @@ Make sure to include Gurobi in your PATH and LD_LIBRARY variables
     export PATH="${PATH}:${GUROBI_HOME}/bin"
     export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"
 ```
+
+## Frequently Asked Questions 
+
+ - **Why the inference modules tests keep failing?** We have have a unit test for Gurobi which works only when the license is provided in environment. For this reason we skip on Semaphore. If you're running locally and seeing failures it must be that you don't have the license installed on your computer (whcih you can ignore, if you don't need it).  
+
