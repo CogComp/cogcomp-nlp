@@ -67,7 +67,7 @@ public enum Language {
     Latin("la"),
     Greek("el"),
     Belarusian("be"),
-    Volapük("vo"),
+    Volapuk("vo"),
     Hindi("hi"),
     Thai("th"),
     Azerbaijani("az"),
