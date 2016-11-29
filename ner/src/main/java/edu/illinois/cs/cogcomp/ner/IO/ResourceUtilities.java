@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.IO;
 
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,6 @@ import java.util.zip.GZIPInputStream;
 public class ResourceUtilities {
     private static Logger logger = LoggerFactory.getLogger(ResourceUtilities.class);
     // TODO Ideally this should be read from the config file
-//    private static final String localResourceDir = "data/";
     private static final String localResourceDir = "";
 
     /**
@@ -37,7 +37,14 @@ public class ResourceUtilities {
             // jar)
             if (!new File(file).exists()) {
                 logger.debug("Loading {} from classpath", resourceFile);
-                stream = ResourceUtilities.class.getResourceAsStream("/"+resourceFile);
+                List<URL> list = IOUtils.lsResources(ResourceUtilities.class, resourceFile);
+                if (list.isEmpty()) {
+                    logger.error("Could not load " + resourceFile);
+                    System.exit(-1);
+                }
+                URL fileURL = list.get(0);
+                URLConnection connection = fileURL.openConnection();
+                stream = connection.getInputStream();
             } else {
                 logger.debug("Loading {} from local directory", resourceFile);
                 stream = new FileInputStream(file);
