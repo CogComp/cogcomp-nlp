@@ -189,6 +189,8 @@
                         <exclude>**/PreviousTag2Level2.java</exclude>
                         <exclude>**/wordType.java</exclude>
                         <exclude>**/prevTagsForContextLevel2.java</exclude>
+                        <exclude>**/WikifierFeatures.java</exclude>
+                        <exclude>**/AffixesZH.java</exclude>
 
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>

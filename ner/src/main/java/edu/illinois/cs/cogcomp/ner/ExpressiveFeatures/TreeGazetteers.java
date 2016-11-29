@@ -7,17 +7,19 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitterInterface;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
@@ -56,15 +58,11 @@ public class TreeGazetteers implements Gazetteers {
     private void init(int phrase_length, String pathToDictionaries) throws IOException {
         ArrayList<String> filenames = new ArrayList<>();
 
-        // List the Gazetteers directory (either local or in the classpath)
-        String[] allfiles =
-                ResourceUtilities.lsDirectory(pathToDictionaries, "gazetteers-list.txt");
-        for (String file : allfiles) {
-            if (!IOUtils.isDirectory(file)) {
-                filenames.add(file);
-            }
-        }
-        Arrays.sort(allfiles);
+        InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+        String line;
+        while((line = br.readLine()) != null)
+            filenames.add(line);
 
         // init the dictionaries.
         dictionaries = new ArrayList<>(filenames.size());
@@ -77,8 +75,19 @@ public class TreeGazetteers implements Gazetteers {
                 if (tmp.equals("in") || tmp.equals("on") || tmp.equals("us") || tmp.equals("or")
                         || tmp.equals("am"))
                     return new String[0];
-                else
-                    return normalize(line).split("[\\s]+");
+                else {
+
+                    // character tokenization for Chinese
+                    if(ParametersForLbjCode.currentParameters.language == Language.Chinese) {
+                        String[] chars = new String[line.length()];
+                        for(int i = 0; i < line.length(); i++)
+                            chars[i] = String.valueOf(line.charAt(i));
+                        return chars;
+                    }
+                    else
+                        return normalize(line).split("[\\s]+");
+                }
+
 
             }
 
