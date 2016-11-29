@@ -37,6 +37,9 @@ An application that identifies named entities in plain text according to two dif
   - [illinois-inference](inference/README.md)
 A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. 
 
+
+ - **Questions?** Have a look at our [FAQs](faq.md). 
+
 ## Using each library programmatically 
 
 To include one of the modules in your Maven project, add the following snippet with the
@@ -63,6 +66,3 @@ To include one of the modules in your Maven project, add the following snippet w
         </repository>
     </repositories>
 ```
-
-## Questions? 
-Have a look at our [FAQs](faq.md). 
