@@ -1,4 +1,4 @@
-# illinois-cogcomp-nlp
+# CogcompNLP
 
 [![Build Status](https://semaphoreci.com/api/v1/cogcomp/illinois-cogcomp-nlp/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/illinois-cogcomp-nlp)
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
@@ -63,3 +63,6 @@ To include one of the modules in your Maven project, add the following snippet w
         </repository>
     </repositories>
 ```
+
+## Questions? 
+Have a look at our [FAQs](faq.md). 
