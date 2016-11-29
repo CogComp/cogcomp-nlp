@@ -20,4 +20,4 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${GUROBI_HOME}/lib"
 
 ## Frequently Asked Questions 
 
- - **Why the inference modules tests keep failing?** We have have a unit test for Gurobi which works only when the license is provided in environment. For this reason we skip on Semaphore. If you're running locally and seeing failures it must be that you don't have the license installed on your computer (whcih you can ignore, if you don't need it).  
+ - **Why the inference modules tests keep failing?** We have have a unit test for Gurobi which works only when the license is provided in environment. For this reason we skip on Semaphore. If you're running locally and seeing failures it must be that you don't have the license installed on your computer (which you can ignore, if you don't need it).  
