@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class ParametersForLbjCode {
     // this will selectively lowercase the text in the first sentence if it's all-capitalized
     public boolean normalizeTitleText = false;
 
-    public String language = null;
+    public Language language = null;
 
     // can be:
     // ".data/ner-ext/BrownHierarchicalWordClusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";

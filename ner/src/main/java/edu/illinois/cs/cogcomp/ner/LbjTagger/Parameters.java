@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
@@ -138,10 +139,11 @@ public class Parameters {
             param.configFilename = cFilename;
 
             if (rm.containsKey("language")) {
-                param.language = rm.getString("language");
+                Language lang = Language.getLanguageByCode(rm.getString("language"));
+                param.language = lang;
 
                 // becuase it is used in initializing tree gazetteers
-                ParametersForLbjCode.currentParameters.language = rm.getString("language");
+                ParametersForLbjCode.currentParameters.language = lang;
             }
 
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {

@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import gnu.trove.map.hash.THashMap;
@@ -38,7 +39,7 @@ public class GazetteerTree {
         public String[] split(String line) {
 
             // character tokenization for Chinese
-            if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
+            if(ParametersForLbjCode.currentParameters.language == Language.Chinese) {
                 String[] chars = new String[line.length()];
                 for(int i = 0; i < line.length(); i++)
                     chars[i] = String.valueOf(line.charAt(i));

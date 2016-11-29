@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitterInterface;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
@@ -77,7 +78,7 @@ public class TreeGazetteers implements Gazetteers {
                 else {
 
                     // character tokenization for Chinese
-                    if(ParametersForLbjCode.currentParameters.language.equals("zh")) {
+                    if(ParametersForLbjCode.currentParameters.language == Language.Chinese) {
                         String[] chars = new String[line.length()];
                         for(int i = 0; i < line.length(); i++)
                             chars[i] = String.valueOf(line.charAt(i));
