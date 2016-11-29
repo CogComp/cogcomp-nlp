@@ -9,6 +9,8 @@ package edu.illinois.cs.cogcomp.nlp.lemmatizer;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,6 +25,7 @@ public class WordnetLemmaReader {
 
     /** Surface-form -> lemma maps to be accessed directly */
     private static Map<String, String> nounLemmas, verbLemmas, adjectiveLemmas, adverbLemmas;
+    private static Logger logger = LoggerFactory.getLogger(WordnetLemmaReader.class);
 
     public WordnetLemmaReader(String wordnetPath) {
         try {

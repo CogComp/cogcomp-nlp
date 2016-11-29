@@ -30,13 +30,14 @@ import java.util.Random;
 import java.io.Writer;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 
 /**
  * Test class for SHALLOW PARSER POSWindow Feature Extractor
  *
  * @author Paul Vijayakumar, Mazin Bokhari
  */
-public class TestPOSWindowTwo extends TestCase {
+public class TestPOSWindowTwo {
     static Logger log = Logger.getLogger(TestPOSWindowTwo.class.getName());
 
     private static List<TextAnnotation> tas;
@@ -49,10 +50,7 @@ public class TestPOSWindowTwo extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws EdisonException {
 
         log.debug("POSWindowTwo Feature Extractor");

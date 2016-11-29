@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
  * @author Vivek Srikumar
  */
 public class TreeView extends View {
+    private static Logger logger = LoggerFactory.getLogger(TreeView.class);
 
     private static final String PARENT_OF_STRING = "ParentOf";
 
@@ -287,7 +290,7 @@ public class TreeView extends View {
         try {
             addDependencyTree(depTree, sentenceStart, root);
         } catch (IllegalStateException e) {
-            System.out.println(depTree);
+            System.err.println(depTree);
             throw e;
         }
     }
@@ -352,8 +355,8 @@ public class TreeView extends View {
         assert token.trim().length() > 0;
 
         if (!word.equals(token)) {
-            System.err.println(parent.getTextAnnotation().toString());
-            System.err.println(depTree);
+            logger.error(parent.getTextAnnotation().toString());
+            logger.error(depTree.toString());
 
             throw new IllegalStateException("Expecting " + token + ", found " + word
                     + " instead while constructing the dependency tree");
@@ -387,8 +390,8 @@ public class TreeView extends View {
         assert token.trim().length() > 0;
 
         if (!word.equals(token)) {
-            System.out.println(parent.getTextAnnotation().toString());
-            System.out.println(depTree);
+            logger.info(parent.getTextAnnotation().toString());
+            logger.info(depTree.toString());
 
             throw new IllegalStateException("Expecting " + token + ", found " + word
                     + " instead while constructing the dependency tree");

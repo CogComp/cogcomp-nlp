@@ -35,7 +35,7 @@ public class TextAnnotationTest {
         String postWaste = "   \n<ignoremetoo>aaaargh</ignoremetoo>";
         String other = leadingWaste + normal + postWaste;
 
-        TextAnnotationBuilder tabldr = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+        TextAnnotationBuilder tabldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
         TextAnnotation taNormal = tabldr.createTextAnnotation("test", "normal", normal);
         List<Constituent> normalToks = taNormal.getView(ViewNames.TOKENS).getConstituents();

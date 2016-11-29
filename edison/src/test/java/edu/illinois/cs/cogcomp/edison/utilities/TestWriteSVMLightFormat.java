@@ -10,10 +10,12 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,8 @@ import static org.junit.Assert.fail;
  * Created by mssammon on 5/13/16.
  */
 public class TestWriteSVMLightFormat {
+    private static Logger logger = LoggerFactory.getLogger(TestWriteSVMLightFormat.class);
+
     private static final String EXPECTED_BINARY_NEG =
             "-1 0:1 0:1 0:1 0:1 0:1 1:1 1:1 1:1 1:1 2:1 3:1 3:1 4:1 5:1 6:1 7:1 8:1 8:1 9:1 10:1 11:1 11:1 12:1 12:1 " +
                     "13:1 13:1 14:1 14:1 14:1 14:1 15:1 15:1 15:1 15:1 16:1 16:1 17:1 17:1 17:1 18:1 19:1 19:1 20:1 20:1" +
@@ -56,7 +60,7 @@ public class TestWriteSVMLightFormat {
     @BeforeClass
     public static void runBeforeAllTests() {
         bcfex = BrownClusterFeatureExtractor.instance1000; // "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt"
-        taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        taBldr = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
         ta =
                 taBldr.createTextAnnotation(
                         "test",
@@ -100,13 +104,13 @@ public class TestWriteSVMLightFormat {
         String negOutput =
                 writeSVMLightFormat.writeFeatureExample(WriteSVMLightFormat.FALSE_LAB, feats);
 
-        System.out.println(negOutput);
+        logger.info(negOutput);
         assertEquals(EXPECTED_BINARY_NEG, negOutput);
 
         String posOutput =
                 writeSVMLightFormat.writeFeatureExample(WriteSVMLightFormat.TRUE_LAB, feats2);
 
-        System.out.println(posOutput);
+        logger.info(posOutput);
         assertEquals(EXPECTED_BINARY_POS, posOutput);
 
         // test failure for non-binary label
@@ -115,7 +119,7 @@ public class TestWriteSVMLightFormat {
         try {
             String shouldFailOut = writeSVMLightFormat.writeFeatureExample("failDammit", feats);
         } catch (IllegalArgumentException e) {
-            System.err.println("Expected exception is caught: ");
+            logger.error("Expected exception is caught: ");
             e.printStackTrace();
             isExceptionThrown = true;
         }
@@ -130,12 +134,12 @@ public class TestWriteSVMLightFormat {
 
         String negOutput = writeSVMLightFormat.writeFeatureExample("2", feats);
 
-        System.out.println(negOutput);
+        logger.info(negOutput);
         assertEquals(EXPECTED_MULTI_FIRST, negOutput);
 
         String posOutput = writeSVMLightFormat.writeFeatureExample("whatever", feats2);
 
-        System.out.println(posOutput);
+        logger.info(posOutput);
         assertEquals(EXPECTED_MULTI_SECOND, posOutput);
     }
 

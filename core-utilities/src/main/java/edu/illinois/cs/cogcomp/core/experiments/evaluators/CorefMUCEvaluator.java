@@ -27,7 +27,6 @@ public class CorefMUCEvaluator extends Evaluator {
     CoreferenceView gold, prediction;
 
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
         this.gold = (CoreferenceView) goldView;
         this.prediction = (CoreferenceView) predictionView;
         // Recall = \sum_i [ |si| - |pOfsi| ] / \sum_i [ |si| - 1 ]
@@ -38,13 +37,16 @@ public class CorefMUCEvaluator extends Evaluator {
         int numerator1 = 0;
         int denominator1 = 0;
         for (Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
-            HashSet consInGoldCluster =
+            HashSet<Constituent> consInGoldCluster =
                     new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
             for (Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
-                HashSet consInPredCluster =
+                HashSet<Constituent> consInPredCluster =
                         new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
-                Set<String> intersection = new HashSet(consInGoldCluster);
-                intersection.retainAll(consInPredCluster);
+                Set<Constituent> intersection = new HashSet();
+                for(Constituent cGold : consInGoldCluster) {
+                    for(Constituent cPred: consInPredCluster)
+                        if(cPred.equalsWithoutAttributeEqualityCheck(cGold)) intersection.add(cGold);
+                }
                 if (!intersection.isEmpty())
                     numerator1 -= 1;
             }
@@ -61,13 +63,17 @@ public class CorefMUCEvaluator extends Evaluator {
         int numerator2 = 0;
         int denominator2 = 0;
         for (Constituent predCanonicalCons : prediction.getCanonicalEntitiesViaRelations()) {
-            HashSet consInPredCluster =
+            HashSet<Constituent> consInPredCluster =
                     new HashSet(prediction.getCoreferentMentionsViaRelations(predCanonicalCons));
             for (Constituent goldCanonicalCons : gold.getCanonicalEntitiesViaRelations()) {
-                HashSet consInGoldCluster =
+                HashSet<Constituent> consInGoldCluster =
                         new HashSet(gold.getCoreferentMentionsViaRelations(goldCanonicalCons));
-                Set<String> intersection = new HashSet(consInPredCluster);
-                intersection.retainAll(consInGoldCluster);
+                Set<Constituent> intersection = new HashSet();
+                for(Constituent cPred: consInPredCluster) {
+                    for(Constituent cGold: consInGoldCluster) {
+                        if(cGold.equalsWithoutAttributeEqualityCheck(cPred)) intersection.add(cGold);
+                    }
+                }
                 if (!intersection.isEmpty())
                     numerator2 -= 1;
             }

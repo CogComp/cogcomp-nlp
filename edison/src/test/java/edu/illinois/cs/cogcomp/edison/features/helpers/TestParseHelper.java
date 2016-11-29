@@ -11,12 +11,17 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestParseHelper extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class TestParseHelper {
 
     private TextAnnotation ta;
     private String parserView;
 
+    @Before
     public void setUp() {
         parserView = ViewNames.PARSE_STANFORD;
         ta = TextAnnotationUtilities.createFromTokenizedString("A man with a bag is walking .");
@@ -41,6 +46,7 @@ public class TestParseHelper extends TestCase {
         ta.addView(ViewNames.SRL_PREP, prepSRLView);
     }
 
+    @Test
     public void testGetPhraseFromHead() {
         PredicateArgumentView prepSRLView =
                 new PredicateArgumentView(ViewNames.SRL_PREP, "test", ta, 1.0);

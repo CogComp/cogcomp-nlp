@@ -19,6 +19,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -28,6 +30,7 @@ import java.util.*;
  *
  */
 public class ChunkWindowThreeBefore implements FeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(ChunkWindowThreeBefore.class);
 
     public static View SHALLOW_PARSE, TOKENS;
 
@@ -114,7 +117,7 @@ public class ChunkWindowThreeBefore implements FeatureExtractor {
                     SHALLOW_PARSE.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (Chunk_label.size() != 1) {
-                System.out.println("Error token has more than one POS tag or Chunk Label.");
+                logger.warn("Error token has more than one POS tag or Chunk Label.");
             }
 
             labels[i] = Chunk_label.get(0);

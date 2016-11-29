@@ -14,11 +14,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class
@@ -28,7 +31,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TestVerbClassFeatures extends TestCase {
+public class TestVerbClassFeatures {
 
     private static List<TextAnnotation> tas;
 
@@ -40,9 +43,9 @@ public class TestVerbClassFeatures extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
     Set<String> correctResponses = new HashSet<>(Arrays.asList(new String[]{
             "landed\t[9.10]",
@@ -60,6 +63,7 @@ public class TestVerbClassFeatures extends TestCase {
             "'s\t[*]"
     }));
 
+    @Test
     public final void test() throws Exception {
         TextAnnotation ta = tas.get(tas.size()-1);
         PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);

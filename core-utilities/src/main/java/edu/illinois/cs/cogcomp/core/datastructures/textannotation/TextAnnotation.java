@@ -72,7 +72,8 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             String[] tokens, int[] sentenceEndPositions) {
         super();
 
-        if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
+        // if the string is non-empty, the position of the last element should equal to the number of tokens
+        if (tokens.length > 0 && sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
             throw new IllegalArgumentException("Invalid sentence boundary. "
                     + "Last element should be the number of tokens");
 
@@ -310,7 +311,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             // throw new
             // IllegalArgumentException("Invalid character offset. The character position "
             // + characterOffset + " does not correspond to any token.");
-            logger.debug("Invalid character offset. The character position " + characterOffset
+            logger.error("Invalid character offset. The character position " + characterOffset
                     + " does not correspond to any token.");
         }
 
@@ -319,6 +320,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // number of tokens + 1.
         if (characterOffset == characterOffsetsToTokens.length) {
             return this.size();
+        }
+
+        if(characterOffsetsToTokens[characterOffset] == -1) {
+            logger.warn("The required character offset is in between tokens, and that's why it is -1. ");
         }
 
         return characterOffsetsToTokens[characterOffset];
@@ -412,7 +417,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     }
 
     public boolean hasAttribute(String key) {
-        return this.attributes == null ? false : this.attributes.containsKey(key);
+        return this.attributes != null && this.attributes.containsKey(key);
     }
 
     public void removeAllAttributes() {

@@ -7,34 +7,41 @@
  */
 package edu.illinois.cs.cogcomp.lbj.chunk.tests;
 
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerConfigurator;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * A sanity check, processing a sample text file and comparing the output to a reference file.
  * 
  * @author Christos Christodoulopoulos
  */
-public class TestDiff extends TestCase {
+public class TestDiff {
     private static final String testFileName = "testIn.txt";
     private static String testFile;
     private static final String refFileName = "testRefOutput.txt";
     private static List<String> refSentences;
 
-    public void setUp() throws IOException, URISyntaxException {
+    @Before
+    public void init() throws IOException, URISyntaxException {
         URL testFileURL = TestDiff.class.getClassLoader().getResource(testFileName);
         assertNotNull("Test file missing", testFileURL);
         testFile = testFileURL.getFile();
@@ -52,6 +59,7 @@ public class TestDiff extends TestCase {
         }
     }
 
+    @Test
     public void testDiff() {
         Chunker tagger = new Chunker();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));
@@ -84,5 +92,15 @@ public class TestDiff extends TestCase {
             }
             previous = prediction;
         }
+    }
+
+    @Test
+    public void testGetTagValues() {
+        ChunkerAnnotator annotator = new ChunkerAnnotator(true, new ChunkerConfigurator().getDefaultConfig());
+        String elements[] = { "B-ADJP", "B-ADVP", "B-CONJP", "B-INTJ", "B-LST", "B-NP", "B-PP", "B-PRT", "B-SBAR",
+                "B-UCP", "B-VP", "I-ADJP", "I-ADVP", "I-CONJP", "I-INTJ", "I-NP", "I-PP", "I-PRT", "I-SBAR", "I-UCP",
+                "I-VP", "O"};
+        Set<String> set = new HashSet(Arrays.asList(elements));
+        assertTrue(annotator.getTagValues().equals(set));
     }
 }

@@ -16,6 +16,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xeustechnologies.googleapi.spelling.SpellChecker;
 import org.xeustechnologies.googleapi.spelling.SpellCorrection;
 import org.xeustechnologies.googleapi.spelling.SpellResponse;
@@ -29,6 +31,7 @@ public class SurfaceFormSpellChecker {
 	private static Properties correctionCache = new Properties();
 	private static final boolean caching = false;
 	private static OutputStream output;
+	private static final Logger logger = LoggerFactory.getLogger(SurfaceFormSpellChecker.class);
 
 	static{
 		if(pathToSpellCheckCache != null &&
@@ -45,7 +48,7 @@ public class SurfaceFormSpellChecker {
 			try {
 				output= new FileOutputStream(pathToSpellCheckCache);
 			} catch (FileNotFoundException e) {
-				System.out.println("Error opening/creating the spell check cache for output");
+				logger.info("Error opening/creating the spell check cache for output");
 			}
 			Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){
 				@Override

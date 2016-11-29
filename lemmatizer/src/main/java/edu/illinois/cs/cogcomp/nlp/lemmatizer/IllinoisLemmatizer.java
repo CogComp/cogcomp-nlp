@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +46,7 @@ public class IllinoisLemmatizer extends Annotator {
     private Map<String, String> contractions;
     private Map<String, String> toStanford;
     private boolean useStanford;
+    private static Logger logger = LoggerFactory.getLogger(IllinoisLemmatizer.class);
 
     /**
      * default configuration, lazily initialized
@@ -184,7 +187,7 @@ public class IllinoisLemmatizer extends Annotator {
                     "ERROR: " + NAME + ".getLemma(): index '" + tokIndex
                             + "' is out of range of textAnnotation, " + "which has '"
                             + ta.getTokens().length + "' tokens.";
-            System.err.println(msg);
+            logger.error(msg);
             throw new IllegalArgumentException(msg);
         }
 

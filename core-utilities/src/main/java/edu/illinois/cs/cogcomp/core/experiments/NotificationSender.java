@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.experiments;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -31,6 +33,8 @@ import java.net.URLEncoder;
  * @see <a href="https://github.com/uskr/NMAClientLib">https://github.com/uskr/NMAClientLib</a>
  */
 public class NotificationSender {
+    private static Logger logger = LoggerFactory.getLogger(NotificationSender.class);
+
     private static String API_KEY;
     private static final String DEFAULT_URL = "https://www.notifymyandroid.com";
     private static String APP_NAME = "CogComp project";
@@ -71,14 +75,14 @@ public class NotificationSender {
 
     public void notify(String message) {
         if (API_KEY == null) {
-            System.err.println("API key not set");
+            logger.error("API key not set");
             return;
         }
         try {
             // Verify that the API key is correct
             sendRequest(null);
             // Sending a notification
-            System.out.println(sendRequest(message));
+            logger.info(sendRequest(message));
         } catch (IOException | SAXException | ParserConfigurationException e) {
             e.printStackTrace();
         }

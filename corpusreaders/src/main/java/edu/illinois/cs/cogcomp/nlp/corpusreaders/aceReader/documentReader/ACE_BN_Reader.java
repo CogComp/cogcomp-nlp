@@ -10,6 +10,8 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 import edu.illinois.cs.cogcomp.core.constants.DocumentMetadata;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class ACE_BN_Reader {
-
+    private static Logger logger = LoggerFactory.getLogger(ACE_BN_Reader.class);
     static boolean isDebug = false;
 
     public static Pair<List<Pair<String, Paragraph>>, Map<String, String>> parse(String content,
@@ -95,16 +97,16 @@ final class ACE_BN_Reader {
 
         if (isDebug) {
             for (int i = 0; i < paragraphs.size(); ++i) {
-                System.out.println(paragraphs.get(i).getFirst() + "--> "
+                logger.info(paragraphs.get(i).getFirst() + "--> "
                         + paragraphs.get(i).getSecond().content);
-                System.out.println(content.substring(paragraphs.get(i).getSecond().offset,
+                logger.info(content.substring(paragraphs.get(i).getSecond().offset,
                         paragraphs.get(i).getSecond().offset
                                 + paragraphs.get(i).getSecond().content.length()));
-                System.out.println(contentRemovingTags.substring(
+                logger.info(contentRemovingTags.substring(
                         paragraphs.get(i).getSecond().offsetFilterTags, paragraphs.get(i)
                                 .getSecond().offsetFilterTags
                                 + paragraphs.get(i).getSecond().content.length()));
-                System.out.println();
+                logger.info("\n");
             }
         }
 

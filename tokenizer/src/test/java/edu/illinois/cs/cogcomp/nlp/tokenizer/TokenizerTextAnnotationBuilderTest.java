@@ -23,10 +23,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class TokenizerTextAnnotationBuilderTest {
 
-
     @Test
     public void testBuilder() {
-
         TokenizerTextAnnotationBuilder bldr =
                 new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
 
@@ -61,4 +59,22 @@ public class TokenizerTextAnnotationBuilderTest {
         assertEquals(refTokEndOffset, tok.getEndCharOffset());
     }
 
+    @Test
+    public void testBuilderWithEmptyWhiteSpaces() {
+        TokenizerTextAnnotationBuilder bldr =
+                new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+
+        // making sure that the tokenization works fine when the input is differet forms of whitespaces
+        final String sentA = "";
+        final String sentB = "\n";
+        final String sentC = " ";
+
+        TextAnnotation taA = bldr.createTextAnnotation("test", "test", sentA);
+        TextAnnotation taB = bldr.createTextAnnotation("test", "test", sentB);
+        TextAnnotation taC = bldr.createTextAnnotation("test", "test", sentC);
+
+        assertEquals(taA.getView(ViewNames.TOKENS).getConstituents().size(), 0);
+        assertEquals(taB.getView(ViewNames.TOKENS).getConstituents().size(), 0);
+        assertEquals(taC.getView(ViewNames.TOKENS).getConstituents().size(), 0);
+    }
 }

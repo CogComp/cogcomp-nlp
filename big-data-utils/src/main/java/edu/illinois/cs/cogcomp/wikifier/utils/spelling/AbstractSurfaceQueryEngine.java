@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractSurfaceQueryEngine
 {
+	private final Logger logger = LoggerFactory.getLogger(AbstractSurfaceQueryEngine.class);
+
 	public boolean queryAndCheck(String q, String ans) throws IOException
 	{
 		
@@ -34,7 +36,7 @@ public abstract class AbstractSurfaceQueryEngine
 			{
 				return true; // correct
 			}
-			System.out.println(s);
+			logger.info(s);
 		}
 		return false;
 	}

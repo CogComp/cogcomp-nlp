@@ -11,7 +11,9 @@ by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.
 ## CogComp's main NLP libraries
 
 Each library contains detailed readme and instructions on how to use it. In addition the javadoc of the whole project is available [here](http://cogcomp.cs.illinois.edu/software/doc/apidocs/). 
-
+  - [illinois-nlp-pipeline](pipeline/README.md)
+Provides an end-to-end NLP processing application that runs a variety
+of NLP tools on input text. 
   - [illinois-core-utilities](core-utilities/README.md)
 Provides a set of NLP-friendly data structures and a number of 
 NLP-related utilities that support writing NLP applications, running experiments, etc.
@@ -32,7 +34,8 @@ An application that identifies the part of speech (e.g. verb + tense, noun + num
 in plain text.
   - [illinois-ner](ner/README.md)
 An application that identifies named entities in plain text according to two different sets of categories. 
-
+  - [illinois-inference](inference/README.md)
+A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. 
 
 ## Using each library programmatically 
 

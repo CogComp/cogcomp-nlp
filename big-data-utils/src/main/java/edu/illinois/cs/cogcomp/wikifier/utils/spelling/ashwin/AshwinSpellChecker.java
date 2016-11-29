@@ -323,7 +323,7 @@ public class AshwinSpellChecker extends AbstractSurfaceQueryEngine {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					System.in, "UTF-8"));
-			System.out.println("keep entering strings (enter END to stop)");
+			logger.info("keep entering strings (enter END to stop)");
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim().toLowerCase();
@@ -333,15 +333,15 @@ public class AshwinSpellChecker extends AbstractSurfaceQueryEngine {
 					break;
 				HashSet<String> can = correctSpelling(line);
 				if (can.size() == 0)
-					System.out.println("not found");
+					logger.info("not found");
 				else {
 					ArrayList<String> sortCan = new ArrayList<String>();
 					for (String str : can)
 						sortCan.add(str);
 					Collections.sort(sortCan);
 					for (int i = 0; i < sortCan.size(); i++)
-						System.out.print(sortCan.get(i) + "|");
-					System.out.println();
+						logger.info(sortCan.get(i) + "|");
+					logger.info("\n");
 				}
 			}
 		} catch (Exception e) {
@@ -364,7 +364,7 @@ public class AshwinSpellChecker extends AbstractSurfaceQueryEngine {
 		ans = sc.query("Engerland"); //
 
 		for (String a : ans) {
-			System.out.println(a);
+			logger.info(a);
 		}
 	}
 

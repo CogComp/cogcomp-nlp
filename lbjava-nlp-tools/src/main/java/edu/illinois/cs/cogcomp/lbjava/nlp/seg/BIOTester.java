@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.lbjava.util.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Vector;
 
@@ -56,6 +58,7 @@ import java.util.Vector;
  * @author Nick Rizzolo
  **/
 public class BIOTester {
+    private static Logger logger = LoggerFactory.getLogger(BIOTester.class);
     /**
      * A BIO classifier that classifies {@link Token}s.
      */
