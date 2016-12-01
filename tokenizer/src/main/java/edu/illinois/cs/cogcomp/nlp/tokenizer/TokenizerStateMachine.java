@@ -46,8 +46,6 @@ import java.util.regex.Pattern;
  * <li>contractions with abbr, like can't, won't and those. if no spaces surround the "'", we will
  * leave the word together including the "'" unless it is one of the common contractions like 's,
  * 'm, 're, et cetera.
- * <li>O'Malley, O'Brien and do on. FIXED.
- * <li>Abbreviation followed by punctuation is not caught. FIXED.
  * </ol>
  * 
  * @author redman
@@ -94,18 +92,17 @@ public class TokenizerStateMachine {
 
     /** the state we are in currently. */
     protected int state;
-
+    
     /**
      * Init the state machine decision matrix and the text annotation.
      */
-    public TokenizerStateMachine() {
+    public TokenizerStateMachine(final boolean splitOnDash) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
         // types (TokenType enum)
         StateProcessor[][] toopy = { {
 
                 // process tokens in sentence, we are only in a sentences while processing white
-                // space There
-                // is always a sentence on top of the stack.
+                // space. There is always a sentence on top of the stack.
 
                 /** get punctuation while in sentence. This starts a new word. */
                 new StateProcessor() {
@@ -202,7 +199,6 @@ public class TokenizerStateMachine {
                                                                                      // token.
                                 break;
                             case '-': {
-
                                 // If there is a character before and after, this is a word.
                                 char after = peek(1);
                                 char before = peek(-1);
@@ -210,13 +206,11 @@ public class TokenizerStateMachine {
                                     /*
                                          if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
                                                 .isAlphabetic(after) || Character.isDigit(after)))) {*/
-                                    pop(current); // the current word is finished.
-                                    push(new State(TokenizerState.IN_SPECIAL), current); // No
-                                                                                         // matter
-                                                                                         // what we
-                                                                                         // push a
-                                                                                         // new word
-                                                                                         // token.
+                                    
+                                    if (splitOnDash == true) {
+                                        pop(current); // the current word is finished.
+                                        push(new State(TokenizerState.IN_SPECIAL), current);
+                                    }
                                 }
                                 return;
                             }
@@ -286,10 +280,7 @@ public class TokenizerStateMachine {
                                     // it's a time, or bible passage.
                                     return;
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                             }
                             case '.': {
@@ -336,10 +327,7 @@ public class TokenizerStateMachine {
                             }
                             default:
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                         }
                     }
