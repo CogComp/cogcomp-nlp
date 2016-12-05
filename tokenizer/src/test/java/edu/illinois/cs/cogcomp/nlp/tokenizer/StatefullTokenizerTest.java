@@ -267,7 +267,7 @@ public class StatefullTokenizerTest {
     }
 
     @Test
-    public void testStatefullTokenizerEmptyString() {
+    public void testEmptyString() {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
@@ -275,11 +275,20 @@ public class StatefullTokenizerTest {
     }
 
     @Test
-    public void testStatefullTokenizerStringWithNewline() {
+    public void testStringWithNewline() {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "this\nsentence";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 2);
+    }
+    @Test
+    public void testSplitOnDash() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "IAEA Director-General Mohamed ElBaradei";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        for (String token : tknzn.getTokens())
+            System.out.println("token : "+token);
+        assertEquals(tknzn.getTokens().length, 6);
     }
 
 }
