@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.math;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -46,6 +48,36 @@ public class ArgMax<T, V extends Comparable<V>> {
     // Always starting with the same seed for replicability
     private Random random = new Random(42);
 
+    /**
+     * instantiate ArgMax with a collection of key/value pairs to simplify use
+     *
+     * @param values key/value pairs for which you want the ArgMax
+     */
+        public ArgMax(Map< T, V > values) {
+             Iterator<Map.Entry<T, V>> valIterator = values.entrySet().iterator();
+            if ( valIterator.hasNext() )
+            {
+                Map.Entry<T, V> e = valIterator.next();
+                this.object = e.getKey();
+                this.value = e.getValue();
+            }
+            while( valIterator.hasNext() )
+            {
+                Map.Entry<T, V> e = valIterator.next();
+                update(e.getKey(), e.getValue());
+            }
+        }
+
+    public ArgMax(T initialObject, V initialValue) {
+        this(initialObject, initialValue, false);
+    }
+
+    public ArgMax(T initialObject, V initialValue, boolean randomTieBreak) {
+        this.value = initialValue;
+        this.object = initialObject;
+        this.randomTieBreak = randomTieBreak;
+    }
+
     public void update(T object, V value) {
         if (randomTieBreak && this.value.compareTo(value) == 0) {
             if (random.nextBoolean()) {
@@ -64,16 +96,6 @@ public class ArgMax<T, V extends Comparable<V>> {
 
     public T getArgmax() {
         return object;
-    }
-
-    public ArgMax(T initialObject, V initialValue) {
-        this(initialObject, initialValue, false);
-    }
-
-    public ArgMax(T initialObject, V initialValue, boolean randomTieBreak) {
-        this.value = initialValue;
-        this.object = initialObject;
-        this.randomTieBreak = randomTieBreak;
     }
 
     @Override

@@ -12,11 +12,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import junit.framework.TestCase;
 import org.apache.commons.lang.ArrayUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 /**
  * This testcase is for ensuring that BasicTextAnnotationBuilder can create TextAnnotation from a
@@ -24,7 +27,7 @@ import java.util.List;
  *
  * @author Narender Gupta
  */
-public class TextAnnotationFromTokenizationTest extends TestCase {
+public class TextAnnotationFromTokenizationTest {
 
     String sentA = "A pre-tokenized sentence .";
     String sentB = "Separated by whitespaces .";
@@ -70,11 +73,12 @@ public class TextAnnotationFromTokenizationTest extends TestCase {
         return tokenization;
     }
 
-    public void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void init() throws Exception {
         this.tokenization = getTokenization(this.rawText);
     }
 
+    @Test
     public void testCreateTextAnnotationFromTokenization() throws Exception {
         TextAnnotationBuilder taBuilder = new BasicTextAnnotationBuilder();
         TextAnnotation ta = taBuilder.createTextAnnotation("", "", this.rawText, this.tokenization);

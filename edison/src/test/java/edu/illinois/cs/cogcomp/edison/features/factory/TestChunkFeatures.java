@@ -19,6 +19,9 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -30,7 +33,8 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class TestChunkFeatures extends TestCase {
+public class TestChunkFeatures {
+    private static Logger logger = LoggerFactory.getLogger(TestChunkFeatures.class);
 
     private static List<TextAnnotation> tas;
 
@@ -42,41 +46,45 @@ public class TestChunkFeatures extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
+    @Test
     public final void testChunkEmbedding() throws Exception {
 
-        System.out.println("\n\tTesting NER embedding");
+        logger.info("\n\tTesting NER embedding");
         testFex(ChunkEmbedding.NER, false, ViewNames.NER_CONLL);
-        System.out.println("\n\tTesting chunk embedding");
+        logger.info("\n\tTesting chunk embedding");
         testFex(ChunkEmbedding.SHALLOW_PARSE, false, ViewNames.SHALLOW_PARSE);
 
-        System.out.println("\n\tTesting conjoined features");
+        logger.info("\n\tTesting conjoined features");
         testFex(FeatureUtilities.conjoin(ChunkEmbedding.NER, ChunkEmbedding.SHALLOW_PARSE), false,
                 ViewNames.NER_CONLL, ViewNames.SHALLOW_PARSE);
 
-        System.out.println("\n\tTesting NER and chunks");
+        logger.info("\n\tTesting NER and chunks");
         testFex(new FeatureCollection("", ChunkEmbedding.NER, ChunkEmbedding.SHALLOW_PARSE), false,
                 "");
     }
 
+    @Test
     public final void testChunkPath() throws EdisonException {
-        System.out.println("\n\tTesting chunk path");
+        logger.info("\n\tTesting chunk path");
         testFex(ChunkPathPattern.SHALLOW_PARSE, true, ViewNames.SHALLOW_PARSE);
     }
 
+    @Test
     public final void testChunkProperties() throws Exception {
-        System.out.println("\n\tTesting hasModal");
+        logger.info("\n\tTesting hasModal");
         testFex(ChunkPropertyFeatureFactory.hasModalVerb, false, "");
 
-        System.out.println("\n\tTesting isNegated");
+        logger.info("\n\tTesting isNegated");
         testFex(ChunkPropertyFeatureFactory.isNegated, false, "");
     }
 
+    @Test
     public final void testLinearPosition() throws Exception {
-        System.out.println("\n\tTesting linear position");
+        logger.info("\n\tTesting linear position");
         testFex(LinearPosition.instance, true, "");
 
     }
@@ -86,7 +94,7 @@ public class TestChunkFeatures extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    System.out.println(ta.getView(viewName));
+                    logger.info(ta.getView(viewName).toString());
 
             if (!ta.hasView(ViewNames.SRL_VERB))
                 continue;
@@ -99,7 +107,7 @@ public class TestChunkFeatures extends TestCase {
                 for (Relation argument : pav.getArguments(predicate)) {
                     Constituent c = argument.getTarget().cloneForNewView("dummy");
                     Relation r = new Relation("", p, c, 1);
-                    System.out.println((printBoth ? r : c) + "\t" + fex.getFeatures(c));
+                    logger.info((printBoth ? r : c) + "\t" + fex.getFeatures(c));
                 }
             }
         }

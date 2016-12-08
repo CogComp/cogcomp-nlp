@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.pos.lbjava.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +25,8 @@ import java.io.IOException;
  * @author Christos Christodoulopoulos
  */
 public class POSTrain {
+    private static Logger logger = LoggerFactory.getLogger(POSTrain.class);
+
     private static final String NAME = POSTrain.class.getCanonicalName();
     private int iter; // Number of training iterations
     private POSTaggerKnown taggerKnown;
@@ -69,7 +73,7 @@ public class POSTrain {
      * Trains the taggers with the default training data found in POSConfigurator.java
      */
     public void trainModels() {
-        System.out.println("Using default training data: " + rm.getString("trainingAndDevData"));
+        logger.info("Using default training data: " + rm.getString("trainingAndDevData"));
         trainModels(rm.getString("trainingAndDevData"));
     }
 
@@ -128,7 +132,7 @@ public class POSTrain {
         mikheevTable.save();
         taggerKnown.save();
         taggerUnknown.save();
-        System.out.println("Done training, wrote models to disk.");
+        logger.info("Done training, wrote models to disk.");
     }
 
     public static void main(String[] args) throws Exception{

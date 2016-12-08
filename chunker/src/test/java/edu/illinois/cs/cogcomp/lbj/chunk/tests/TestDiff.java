@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import junit.framework.TestCase;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -26,19 +26,22 @@ import java.net.URL;
 import java.util.*;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * A sanity check, processing a sample text file and comparing the output to a reference file.
  * 
  * @author Christos Christodoulopoulos
  */
-public class TestDiff extends TestCase {
+public class TestDiff {
     private static final String testFileName = "testIn.txt";
     private static String testFile;
     private static final String refFileName = "testRefOutput.txt";
     private static List<String> refSentences;
 
-    public void setUp() throws IOException, URISyntaxException {
+    @Before
+    public void init() throws IOException, URISyntaxException {
         URL testFileURL = TestDiff.class.getClassLoader().getResource(testFileName);
         assertNotNull("Test file missing", testFileURL);
         testFile = testFileURL.getFile();
@@ -56,6 +59,7 @@ public class TestDiff extends TestCase {
         }
     }
 
+    @Test
     public void testDiff() {
         Chunker tagger = new Chunker();
         Parser parser = new PlainToTokenParser(new WordSplitter(new SentenceSplitter(testFile)));

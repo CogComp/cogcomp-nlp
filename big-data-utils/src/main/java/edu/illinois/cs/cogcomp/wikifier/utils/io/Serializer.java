@@ -11,6 +11,9 @@ package edu.illinois.cs.cogcomp.wikifier.utils.io;
  *
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Externalizable;
@@ -33,6 +36,8 @@ import java.io.Serializable;
  *
  */
 public class Serializer {
+
+    private static final Logger logger = LoggerFactory.getLogger(Serializer.class);
 
     private static ObjectInputStream getInput(String inputFile) throws IOException {
         // use buffering

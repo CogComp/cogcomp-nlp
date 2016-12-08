@@ -8,14 +8,19 @@
 package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 /**
  * Created by stephen on 9/23/15.
  */
-public class TestPairTriple extends TestCase {
+public class TestPairTriple {
 
+    @Test
     public void testPair() {
         Pair<String, String> p1 = new Pair<>("Hi", "Hello");
         Pair<String, String> p2 = new Pair<>("Hi", "Hello");
@@ -27,7 +32,7 @@ public class TestPairTriple extends TestCase {
 
     }
 
-
+    @Test
     public void testTriple() {
         Triple<String, String, Integer> t1 = new Triple<>("Fearlessness", "Rub", 45);
         Triple<String, String, Integer> t2 = new Triple<>("Fearlessness", "Rub", 45);

@@ -30,7 +30,7 @@ import static edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses
  */
 public class NomLexReader {
 
-    private final static Logger log = LoggerFactory.getLogger(NomLexReader.class);
+    private final static Logger logger = LoggerFactory.getLogger(NomLexReader.class);
     public static String nomLexFile = "NOMLEX-plus-clean.1.0";
     private static NomLexReader INSTANCE;
     private static boolean initialized = false;
@@ -40,15 +40,15 @@ public class NomLexReader {
     public NomLexReader(String nomLexFile) throws Exception {
         InputStream stream;
         if (!new File(nomLexFile).exists()) {
-            log.info("Loading {} from classpath", nomLexFile);
+            logger.info("Loading {} from classpath", nomLexFile);
             List<URL> list = IOUtils.lsResources(NomLexReader.class, nomLexFile);
             if (list.isEmpty()) {
-                System.err.println("Could not load " + nomLexFile);
+                logger.error("Could not load " + nomLexFile);
                 System.exit(-1);
             }
             stream = list.get(0).openStream();
         } else {
-            log.info("Loading {} from local directory", nomLexFile);
+            logger.info("Loading {} from local directory", nomLexFile);
             stream = new FileInputStream(nomLexFile);
         }
 
@@ -63,13 +63,13 @@ public class NomLexReader {
     public synchronized static NomLexReader getInstance() throws EdisonException {
         if (!initialized) {
             if (nomLexFile == null) {
-                log.error("Cannot initialize NomLex." + "Please set NomLexReader.nomLexFile "
+                logger.error("Cannot initialize NomLex." + "Please set NomLexReader.nomLexFile "
                         + "to the correct value.");
                 throw new EdisonException("NomLexReader.nomLexFile is not set");
 
             }
 
-            log.info("Loading NOMLEX. Looking for file {}", nomLexFile);
+            logger.info("Loading NOMLEX. Looking for file {}", nomLexFile);
             try {
                 INSTANCE = new NomLexReader(nomLexFile);
 
@@ -122,7 +122,7 @@ public class NomLexReader {
 
                 NomLexEntry entry = createNewRecord(current.toString());
 
-                // System.out.println(entry.nomClass + "\t" + entry.orth + "\t"
+                // logger.info(entry.nomClass + "\t" + entry.orth + "\t"
                 // + entry.plural + "\t" + entry.verb + "\t" + entry.adj);
 
                 if (!this.nomLex.containsKey(entry.orth))

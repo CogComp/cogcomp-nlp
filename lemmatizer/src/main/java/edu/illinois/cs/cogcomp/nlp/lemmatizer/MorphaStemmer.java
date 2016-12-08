@@ -30,12 +30,16 @@ package edu.illinois.cs.cogcomp.nlp.lemmatizer;
  * provides a nicer interface and handles exceptions.
  */
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.StringReader;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class MorphaStemmer {
     private static final Pattern whitespace = Pattern.compile("\\s+");
+    private static Logger logger = LoggerFactory.getLogger(MorphaStemmer.class);
 
     /***
      * Stem the supplied text, splitting on whitespace to break it into words.

@@ -13,24 +13,28 @@ package edu.illinois.cs.cogcomp.core.algorithms;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Vivek Srikumar Jun 24, 2009
  */
-public class TreeRuleTest extends TestCase {
+public class TreeRuleTest {
     TreeRule<String> rule;
     Tree<String> pattern;
 
     Tree<String> tree;
     private Set<String> afterRule;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void init() throws Exception {
         pattern = TreeParserFactory.getStringTreeParser().parse("(NP NP , NP)");
         rule = new TreeRule<>(pattern);
 
@@ -62,6 +66,7 @@ public class TreeRuleTest extends TestCase {
         afterRule.add("the builder stepped forward .");
     }
 
+    @Test
     public void testApplyRule() {
         List<List<String>> results = rule.applyRule(tree);
         for (List<String> result : results) {

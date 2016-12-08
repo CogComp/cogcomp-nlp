@@ -99,7 +99,7 @@ public class ResourceManager {
                 }
                 br.close();
             } catch (Exception e) {
-                System.out.println(e + " Line:" + line);
+                System.err.println(e + " Line:" + line);
             }
             is.close();
         } catch (IOException e) {

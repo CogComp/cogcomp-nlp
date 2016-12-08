@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,6 +20,7 @@ import static org.junit.Assert.assertEquals;
  * Created by mssammon on 8/17/15.
  */
 public class IllinoisTokenizerTest {
+    private static Logger logger = LoggerFactory.getLogger(IllinoisTokenizerTest.class);
 
     @Before
     public void setUp() throws Exception {}
@@ -87,13 +90,11 @@ public class IllinoisTokenizerTest {
         IntPair intolerantOffsets = new IntPair(77, 87);
 
         assertEquals(intolerantOffsets, tokenOffsets[intolerantIndex]);
-
-
     }
 
     private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens,
             IntPair[] offsets) {
-        System.out.println(sentence);
+        logger.info(sentence);
         Pair<String[], IntPair[]> tokenize = tokenizer.tokenizeSentence(sentence);
 
         assertEquals(tokens.length, tokenize.getFirst().length);
@@ -105,6 +106,19 @@ public class IllinoisTokenizerTest {
         }
     }
 
+    @Test
+    public void testIllinoisTokenizerEmptyString() {
+        Tokenizer tkr = new IllinoisTokenizer();
+        String text = "";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 0);
+    }
 
-
+    @Test
+    public void testIllinoisTokenizerStringWithNewline() {
+        Tokenizer tkr = new IllinoisTokenizer();
+        String text = "this\nsentence";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 2);
+    }
 }

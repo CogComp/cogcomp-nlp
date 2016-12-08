@@ -20,10 +20,9 @@ import java.sql.SQLException;
 
 
 public class TextAnnotationDBHandler implements TextAnnotationCache {
-    private Logger log = LoggerFactory.getLogger(TextAnnotationDBHandler.class);
-
     private final String dbFile;
     private final String[] datasetNames;
+    private Logger log = LoggerFactory.getLogger(TextAnnotationDBHandler.class);
 
     public TextAnnotationDBHandler(String dbFile, String[] datasetNames) {
         this.dbFile = dbFile;
@@ -275,5 +274,11 @@ public class TextAnnotationDBHandler implements TextAnnotationCache {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public TextAnnotation getTextAnnotation(TextAnnotation ta) {
+        log.error("Not implemented." );
+        return null;
     }
 }

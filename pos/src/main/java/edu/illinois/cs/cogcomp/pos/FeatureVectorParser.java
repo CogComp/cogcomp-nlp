@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.lbjava.parse.FoldSeparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -34,6 +36,8 @@ import edu.illinois.cs.cogcomp.lbjava.parse.FoldSeparator;
  * @author Nick Rizzolo
  **/
 public class FeatureVectorParser implements Parser {
+    private static Logger logger = LoggerFactory.getLogger(FeatureVectorParser.class);
+
     /** Reader for file currently being parsed. */
     protected DataInputStream in;
     /** The name of the file to parse. */
@@ -180,7 +184,7 @@ public class FeatureVectorParser implements Parser {
         for (FeatureVector v = (FeatureVector) parser.next(); v != null; v =
                 (FeatureVector) parser.next()) {
             v.sort();
-            System.out.println(v);
+            logger.info(v.toString());
         }
     }
 

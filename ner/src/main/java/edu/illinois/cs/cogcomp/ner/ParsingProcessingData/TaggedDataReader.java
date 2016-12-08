@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.Arrays;
 import java.util.Vector;
 
 public class TaggedDataReader {
+    private static Logger logger = LoggerFactory.getLogger(TaggedDataReader.class);
+
     public static NERDocument parseTextAnnotatedWithBrackets(String annotatedText,
             String documentName) throws Exception {
         return BracketFileReader.parseTextWithBrackets(annotatedText, documentName);
@@ -65,7 +69,7 @@ public class TaggedDataReader {
             if (format.equals("-r")) {
                 res = BracketFileReader.read(path, documentName);
             } else {
-                System.out.println("Fatal error: unrecognized file format: " + format);
+                System.err.println("Fatal error: unrecognized file format: " + format);
                 System.exit(0);
             }
         }

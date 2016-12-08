@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 
 import java.util.HashMap;
@@ -45,6 +46,18 @@ public class ParametersForLbjCode {
     // predictions with lower confidence will be pruned
     public double minConfidencePredictionsLevel2 = 0;
 
+    // predictions with lower confidence will be pruned
+    public double learningRatePredictionsLevel1 = 0.06;
+    
+    // predictions with lower confidence will be pruned
+    public double learningRatePredictionsLevel2 = 0.05;
+
+    // predictions with lower confidence will be pruned
+    public int thicknessPredictionsLevel1 = 50;
+    
+    // predictions with lower confidence will be pruned
+    public int thicknessPredictionsLevel2 = 30;
+
     // the predictions of these models will be the input to the classifier
     public Vector<ParametersForLbjCode> auxiliaryModels = new Vector<>();
 
@@ -55,6 +68,8 @@ public class ParametersForLbjCode {
     public boolean forceNewSentenceOnLineBreaks = false;
     // this will selectively lowercase the text in the first sentence if it's all-capitalized
     public boolean normalizeTitleText = false;
+
+    public Language language = null;
 
     // can be:
     // ".data/ner-ext/BrownHierarchicalWordClusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
