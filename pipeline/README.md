@@ -28,7 +28,7 @@ Illinois Cognitive Computation Group's web site:
 To process a set of plain text files in one directory and generate
 a corresponding set of annotated files in json format in a second
 directory, run the command:
-```
+```sh
 scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>
 ```
 The configuration file needs only to contain options to override defaults.
@@ -166,7 +166,7 @@ we recommend checking out the project from [github](https://github.com/IllinoisC
 
 ## 4. Dependencies
 If this package is used in maven, please add the following dependencies with proper reepositories.
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -218,12 +218,12 @@ differences.
 ### 5.1 Running a Simple Command-Line Test
 
 Running the test:
-```
+```sh
 scripts/testPreprocessor.sh
 ```
 
 Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
-```
+```sh
 scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
 ```
 
@@ -244,13 +244,14 @@ To process text input, use the '()' method:
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 String docId = "APW-20140101.3018"; // arbitrary string identifier
 String textId = "body"; // arbitrary string identifier
 String text = ...; // contains plain text to be annotated
 
-ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
+ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "config/pipeline-config.properties" ));
 AnnotatorService pipeline = PipelineFactory.buildPipeline( rm );
 TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
@@ -331,7 +332,7 @@ containing that file to the classpath.
 
 ### 6.3 Troubleshooting
 Please be noted that there should not be two active `PipelineFactory` in a single run. For example, the following code yields run-time errors:
-```
+```java
 public class testpipeline {
     public static TextAnnotation getTA(String id, String text) throws Exception{
         ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "pipeline-config.properties" ));
@@ -347,7 +348,7 @@ public class testpipeline {
     }
 }
 ```
-```
+```java
 Exception in thread "main" org.mapdb.DBException$FileLocked: File is already opened and is locked: annotation-cache
 	at org.mapdb.volume.Volume.lockFile(Volume.java:446)
 	at org.mapdb.volume.RandomAccessFileVol.<init>(RandomAccessFileVol.java:52)
@@ -360,7 +361,7 @@ Caused by: java.nio.channels.OverlappingFileLockException
 	...
 ```
 To fix this problem, consider changing it to:
-```
+```java
 public class testpipeline {
     public static TextAnnotation getTA(String id, String text, AnnotatorService prep) throws Exception{
         TextAnnotation rec = prep.createAnnotatedTextAnnotation(id, "", text);
