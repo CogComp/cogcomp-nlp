@@ -96,10 +96,8 @@ of several other components for which it is a dependency.
 
 ### 1.3 LICENSE
 
-## Licensing
 To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
 and press 'Download'. The next screen displays the license.
-
 
 ## 2 PREREQUISITES
 
@@ -172,11 +170,6 @@ If this package is used in maven, please add the following dependencies with pro
         <groupId>edu.illinois.cs.cogcomp</groupId>
         <artifactId>illinois-nlp-pipeline</artifactId>
         <version>3.0.86</version>
-    </dependency>
-    <dependency>
-        <groupId>edu.stanford.nlp</groupId>
-        <artifactId>stanford-corenlp</artifactId>
-        <version>3.3.1</version>
     </dependency>
 </dependencies>
 <repositories>
@@ -330,8 +323,16 @@ This project uses slf4j's log4j libraries.  You can change the
 settings by creating a log4j.properties file and adding the directory
 containing that file to the classpath.
 
-### 6.3 Troubleshooting
-Please be noted that there should not be two active `PipelineFactory` in a single run. For example, the following code yields run-time errors:
+### 6.3 Frequently Asked Questions (FAQs)
+
+- While running the Pipeline if you see an error regarding insufficient Java heap space, you will need to set the `JAVA_OPTIONS` or `MAVEN_OPTIONS` to include "-Xmx20g"
+
+- Between different runs of the Pipeline, if you see the following exception, you should remove the temporary cache folders created by MapDB.
+```java
+Caused by: org.mapdb.DBException$DataCorruption: Header checksum broken. Store was not closed correctly, or is corrupted
+```
+
+- Initializing multiple instances of `PipelineFactory` in a single run will lead to an exception in MapDB. For example, the code below:
 ```java
 public class testpipeline {
     public static TextAnnotation getTA(String id, String text) throws Exception{
@@ -348,6 +349,7 @@ public class testpipeline {
     }
 }
 ```
+would lead to the following exception:
 ```java
 Exception in thread "main" org.mapdb.DBException$FileLocked: File is already opened and is locked: annotation-cache
 	at org.mapdb.volume.Volume.lockFile(Volume.java:446)
@@ -360,6 +362,7 @@ Caused by: java.nio.channels.OverlappingFileLockException
 	at sun.nio.ch.FileChannelImpl.lock(FileChannelImpl.java:1030)
 	...
 ```
+
 To fix this problem, consider changing it to:
 ```java
 public class testpipeline {
