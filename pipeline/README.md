@@ -170,11 +170,6 @@ If this package is used in maven, please add the following dependencies with pro
 <dependencies>
     <dependency>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <artifactId>illinois-core-utilities</artifactId>
-        <version>3.0.86</version>
-    </dependency>
-    <dependency>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
         <artifactId>illinois-nlp-pipeline</artifactId>
         <version>3.0.86</version>
     </dependency>
@@ -182,12 +177,6 @@ If this package is used in maven, please add the following dependencies with pro
         <groupId>edu.stanford.nlp</groupId>
         <artifactId>stanford-corenlp</artifactId>
         <version>3.3.1</version>
-    </dependency>
-    <dependency>
-        <groupId>edu.stanford.nlp</groupId>
-        <artifactId>stanford-corenlp</artifactId>
-        <version>3.3.1</version>
-        <classifier>models</classifier>
     </dependency>
 </dependencies>
 <repositories>
@@ -252,12 +241,17 @@ edu.illinois.cs.cogcomp.pipeline.main.
 
 To process text input, use the '()' method:
 ```java
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
 String docId = "APW-20140101.3018"; // arbitrary string identifier
 String textId = "body"; // arbitrary string identifier
 String text = ...; // contains plain text to be annotated
 
 ResourceManager rm = new ResourceManager( "config/pipeline-config.properties" );
-AnnotatorService pipeline = IllinoisPipelineFactory.buildPipeline( rm );
+AnnotatorService pipeline = PipelineFactory.buildPipeline( rm );
 TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
 This method takes as its argument a String variable containing the
