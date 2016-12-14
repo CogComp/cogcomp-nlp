@@ -45,7 +45,7 @@ public class MainServer {
 
             ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
             pipeline = PipelineFactory.buildPipeline(rm);
-            System.out.println("Done with loadin gthe pipeline  . . .");
+            System.out.println("Done with loading the pipeline  . . .");
         } catch (IOException | AnnotatorException e) {
             e.printStackTrace();
         }
@@ -59,14 +59,18 @@ public class MainServer {
                 output = "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=\"pos,ner\"";
             }
             else {
+                System.out.println("Text: " + text);
+                System.out.println("Views to add: " + views);
                 String[] viewsInArray = views.split(",");
-                System.out.println("Doing the basic ");
-                TextAnnotation ta = finalPipeline.createBasicTextAnnotation( "", "", text);
-                System.out.println("done with the basic");
-                finalPipeline.addView(ta, ViewNames.NER_CONLL);
-                System.out.println("serializing");
+                System.out.println("Adding the basic annotations . . . ");
+                TextAnnotation ta = finalPipeline.createBasicTextAnnotation("", "", text);
+                for(String vuName : viewsInArray) {
+                    System.out.println("Adding the view" + vuName);
+                    finalPipeline.addView(ta, vuName);
+                }
+                System.out.println("Done adding the views. Deserializing the view now.");
                 output = SerializationHelper.serializeToJson(ta);
-                System.out.println("done with all");
+                System.out.println("Done. Sending the result back. ");
             }
             return output;
         });
