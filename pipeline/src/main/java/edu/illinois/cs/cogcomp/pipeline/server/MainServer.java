@@ -68,16 +68,16 @@ public class MainServer {
         Runtime runtime = Runtime.getRuntime();
 
         //Print used memory
-        System.out.println("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+        System.out.print("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
         //Print free memory
-        System.out.print(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
+        System.out.println(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
 
         //Print total available memory
-        System.out.println("##### Total Memory[MB]:" + runtime.totalMemory() / mb);
+        System.out.print("##### Total Memory[MB]:" + runtime.totalMemory() / mb);
 
         //Print Maximum available memory
-        System.out.print(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
+        System.out.println(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
     }
 
 }
