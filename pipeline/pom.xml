@@ -95,6 +95,14 @@
             <version>6.5</version>
             <optional>true</optional>
         </dependency>
+
+        <!--for pipeline web-server-->
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.5.3</version>
+        </dependency>
+
     </dependencies>
 
 
