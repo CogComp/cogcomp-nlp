@@ -16,6 +16,8 @@ import static spark.Spark.*;
 public class MainServer {
 
     public static void main(String[] args) {
+        port(8080);
+
         AnnotatorService pipeline = null;
         try {
             System.out.println("Starting to load the pipeline . . . ");
