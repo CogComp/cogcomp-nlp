@@ -21,31 +21,11 @@ public class MainServer {
         AnnotatorService pipeline = null;
         try {
             System.out.println("Starting to load the pipeline . . . ");
-
-            int mb = 1024*1024;
-
-            //Getting the runtime reference from system
-            Runtime runtime = Runtime.getRuntime();
-
-            System.out.println("##### Heap utilization statistics [MB] #####");
-
-            //Print used memory
-            System.out.println("Used Memory:"
-                    + (runtime.totalMemory() - runtime.freeMemory()) / mb);
-
-            //Print free memory
-            System.out.println("Free Memory:"
-                    + runtime.freeMemory() / mb);
-
-            //Print total available memory
-            System.out.println("Total Memory:" + runtime.totalMemory() / mb);
-
-            //Print Maximum available memory
-            System.out.println("Max Memory:" + runtime.maxMemory() / mb);
-
+            printMemoryDetails();
             ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
             pipeline = PipelineFactory.buildPipeline(rm);
             System.out.println("Done with loading the pipeline  . . .");
+            printMemoryDetails();
         } catch (IOException | AnnotatorException e) {
             e.printStackTrace();
         }
@@ -67,6 +47,7 @@ public class MainServer {
                 for(String vuName : viewsInArray) {
                     System.out.println("Adding the view" + vuName);
                     finalPipeline.addView(ta, vuName);
+                    printMemoryDetails();
                 }
                 System.out.println("Done adding the views. Deserializing the view now.");
                 output = SerializationHelper.serializeToJson(ta);
@@ -79,4 +60,24 @@ public class MainServer {
                 "Not implemented yet: " + request.body()
         );
     }
+
+    public static void printMemoryDetails() {
+        int mb = 1024*1024;
+
+        //Getting the runtime reference from system
+        Runtime runtime = Runtime.getRuntime();
+
+        //Print used memory
+        System.out.println("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+
+        //Print free memory
+        System.out.print(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
+
+        //Print total available memory
+        System.out.println("##### Total Memory[MB]:" + runtime.totalMemory() / mb);
+
+        //Print Maximum available memory
+        System.out.print(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
+    }
+
 }
