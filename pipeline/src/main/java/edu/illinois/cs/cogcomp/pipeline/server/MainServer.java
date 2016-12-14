@@ -34,32 +34,38 @@ public class MainServer {
         get("/annotate", "application/json", (request, response)->{
             String text = request.queryParams("text");
             String views = request.queryParams("views");
-            String output = "";
-            if(views == null || text == null) {
-                output = "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
-            }
-            else {
-                System.out.println("------------------------------");
-                System.out.println("Text: " + text);
-                System.out.println("Views to add: " + views);
-                String[] viewsInArray = views.split(",");
-                System.out.println("Adding the basic annotations . . . ");
-                TextAnnotation ta = finalPipeline.createBasicTextAnnotation("", "", text);
-                for(String vuName : viewsInArray) {
-                    System.out.println("Adding the view: ->" + vuName.trim()+ "<-");
-                    finalPipeline.addView(ta, vuName.trim());
-                    printMemoryDetails();
-                }
-                System.out.println("Done adding the views. Deserializing the view now.");
-                output = SerializationHelper.serializeToJson(ta);
-                System.out.println("Done. Sending the result back. ");
-            }
-            return output;
+            return annotateText(finalPipeline, text, views);
         });
 
-        post("/annotate", (request, response) ->
-                "Not implemented yet: " + request.body()
+        post("/annotate", (request, response) -> {
+                String text = request.queryParams("text");
+                String views = request.queryParams("views");
+                return annotateText(finalPipeline, text, views);
+            }
         );
+    }
+
+    private static String annotateText(AnnotatorService finalPipeline, String text, String views) throws AnnotatorException {
+        if(views == null || text == null) {
+            return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
+        }
+        else {
+            System.out.println("------------------------------");
+            System.out.println("Text: " + text);
+            System.out.println("Views to add: " + views);
+            String[] viewsInArray = views.split(",");
+            System.out.println("Adding the basic annotations . . . ");
+            TextAnnotation ta = finalPipeline.createBasicTextAnnotation("", "", text);
+            for (String vuName : viewsInArray) {
+                System.out.println("Adding the view: ->" + vuName.trim() + "<-");
+                finalPipeline.addView(ta, vuName.trim());
+                printMemoryDetails();
+            }
+            System.out.println("Done adding the views. Deserializing the view now.");
+            String output = SerializationHelper.serializeToJson(ta);
+            System.out.println("Done. Sending the result back. ");
+            return output;
+        }
     }
 
     public static void printMemoryDetails() {
