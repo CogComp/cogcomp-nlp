@@ -299,7 +299,7 @@ public class DVector implements Cloneable, java.io.Serializable {
     public void write(ExceptionlessOutputStream out) {
         out.writeInt(size);
         for (int i = 0; i < size; ++i)
-            out.writeDouble(vector[i]);
+            out.writeFloat(vector[i]);
     }
 
 
