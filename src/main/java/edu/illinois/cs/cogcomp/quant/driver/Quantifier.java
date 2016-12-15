@@ -107,8 +107,7 @@ public class Quantifier extends Annotator {
 
 		// if it does not include POS or NER_CONLL, add them
 		DataReader.preprocessor.annotate(annotation);
-		assert (annotation.getAvailableViews().contains(ViewNames.NER_CONLL) &&
-				annotation.getAvailableViews().contains(ViewNames.POS));
+		assert annotation.getAvailableViews().contains(ViewNames.POS);
 		String previous = "";
 	    String chunk="";
 	    boolean inChunk = false;

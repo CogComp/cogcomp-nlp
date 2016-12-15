@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 /**
@@ -27,7 +28,7 @@ public class Preprocessor {
     public Preprocessor(ResourceManager rm) {
     		Map<String, String> nonDefaultValues = new HashMap<String, String>();
     		nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
-        this.rm = Configurator.mergeProperties(rm, new CuratorConfigurator().getConfig(nonDefaultValues));
+        this.rm = Configurator.mergeProperties(rm, new PipelineConfigurator().getConfig(nonDefaultValues));
         if(rm.getBoolean(PreprocessorConfigurator.USE_PIPELINE_KEY)) {
             try {
                 annotator = PipelineFactory.buildPipeline(this.rm);
