@@ -89,7 +89,7 @@ discrete% PatternFeatures(Constituent word) <- {
 discrete QuantitiesClassifier(Constituent word) <-
     learn QuantitiesLabel
     using WordBigrams, WordContextBigrams, POSContextBigrams, PatternFeatures
-    
+
     with SparseNetworkLearner {
         SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
         p.learningRate = .1;

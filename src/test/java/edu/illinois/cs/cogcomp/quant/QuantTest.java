@@ -52,6 +52,16 @@ public class QuantTest extends TestCase {
 		assertTrue(isEqual("[= Date(02/07/XXXX)]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(2).getLabel()));
 		assertTrue(isEqual("[daterange[= Date(01/01/2016)][= Date(12/31/2016)]]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(3).getLabel()));
 		assertTrue(isEqual("[= 50.0   ]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(4).getLabel()));
+
+        //TODO for this paragraph it throws exception. We have to fix it.
+        // another long paragraph
+        paragraph = "The annual NFL Experience was held at the Moscone Center in San Francisco. In addition, " +
+                "\"Super Bowl City\" opened on January 30 at Justin Herman Plaza on The Embarcadero, featuring games " +
+                "and activities that will highlight the Bay Area's technology, culinary creations, and cultural diversity. " +
+                "More than 1 million people are expected to attend the festivities in San Francisco during Super Bowl Week. San Francisco mayor Ed Lee said of the highly visible homeless presence in this area \"they are going to have to leave\". San Francisco city supervisor Jane Kim unsuccessfully lobbied for the NFL to reimburse San Francisco for city services in the amount of $5 million.";
+        ta = Quantifier.taBuilder.createTextAnnotation(paragraph);
+        quantifier.addView(ta);
+        //assertTrue(ta.hasView(ViewNames.QUANTITIES));
 	}
 
 	@Test

@@ -12,11 +12,11 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 /**
  * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient}
- * or {@link IllinoisPipelineFactory}. The configurations parameters are set in {@link PreprocessorConfigurator} and
+ * or {@link PipelineFactory}. The configurations parameters are set in {@link PreprocessorConfigurator} and
  * should be merged with {@link ESRLConfigurator}.
  */
 public class Preprocessor {
@@ -30,7 +30,7 @@ public class Preprocessor {
         this.rm = Configurator.mergeProperties(rm, new CuratorConfigurator().getConfig(nonDefaultValues));
         if(rm.getBoolean(PreprocessorConfigurator.USE_PIPELINE_KEY)) {
             try {
-                annotator = IllinoisPipelineFactory.buildPipeline(this.rm);
+                annotator = PipelineFactory.buildPipeline(this.rm);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (AnnotatorException e) {
