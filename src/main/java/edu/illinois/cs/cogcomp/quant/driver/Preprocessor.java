@@ -28,6 +28,7 @@ public class Preprocessor {
     public Preprocessor(ResourceManager rm) {
     		Map<String, String> nonDefaultValues = new HashMap<String, String>();
     		nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
+            nonDefaultValues.put("cacheDirectory", "annotation-cache-quantifier");
         this.rm = Configurator.mergeProperties(rm, new PipelineConfigurator().getConfig(nonDefaultValues));
         if(rm.getBoolean(PreprocessorConfigurator.USE_PIPELINE_KEY)) {
             try {
