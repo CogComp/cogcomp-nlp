@@ -12,18 +12,18 @@ import java.util.Set;
 /**
  * A simple wrapper for {@code LBJava}-based feature extractors
  */
-public abstract class  LBJavaFeatureExtractor extends Classifier {
+public abstract class LBJavaFeatureExtractor extends Classifier {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     public String getOutputType() {
         return "discrete%";
     }
 
     @Override
     public FeatureVector classify(Object o) {
-        //Make sure the object is a Constituent
+        // Make sure the object is a Constituent
         if (!(o instanceof Constituent))
             throw new IllegalArgumentException("Instance must be of type Constituent");
         Constituent instance = (Constituent) o;

@@ -9,10 +9,10 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class POSBigrams extends LBJavaFeatureExtractor {
-    
-	private static final long serialVersionUID = 1L;
 
-	@Override
+    private static final long serialVersionUID = 1L;
+
+    @Override
     public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
         Set<Feature> features = new LinkedHashSet<Feature>();
         features.addAll(SpanFeaturesOrdered.POS_UNIGRAMS.getFeatures(instance));

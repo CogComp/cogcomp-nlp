@@ -8,11 +8,11 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.util.Set;
 
 public class ChunkEmbeddings extends LBJavaFeatureExtractor {
-	
-	private static final long serialVersionUID = 1L;
 
-	@Override
-	public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
         return ChunkEmbedding.SHALLOW_PARSE.getFeatures(instance);
-	}
+    }
 }

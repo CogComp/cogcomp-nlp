@@ -38,9 +38,11 @@ public class QuantitiesDataReader extends DataReader {
         int taId = 0;
         for (String line : lines) {
             if (line.trim().isEmpty()) {
-                List<String[]> tokenizedSentence = Collections.singletonList(tokens.toArray(new String[tokens.size()]));
-                TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-                        corpusId, String.valueOf(taId), tokenizedSentence);
+                List<String[]> tokenizedSentence =
+                        Collections.singletonList(tokens.toArray(new String[tokens.size()]));
+                TextAnnotation ta =
+                        BasicTextAnnotationBuilder.createTextAnnotationFromTokens(corpusId,
+                                String.valueOf(taId), tokenizedSentence);
                 addGoldView(ta, labels);
                 textAnnotations.add(ta);
                 tokens.clear();
@@ -57,7 +59,8 @@ public class QuantitiesDataReader extends DataReader {
 
     @Override
     public List<Constituent> candidateGenerator(TextAnnotation ta) {
-        return getFinalCandidates(ta.getView(viewName), ta.getView(ViewNames.TOKENS).getConstituents());
+        return getFinalCandidates(ta.getView(viewName), ta.getView(ViewNames.TOKENS)
+                .getConstituents());
     }
 
     protected void addGoldView(TextAnnotation ta, List<String> labels) {

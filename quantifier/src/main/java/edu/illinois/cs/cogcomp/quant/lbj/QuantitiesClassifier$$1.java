@@ -14,65 +14,71 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class QuantitiesClassifier$$1 extends Classifier
-{
-  private static final WordBigrams __WordBigrams = new WordBigrams();
-  private static final WordContextBigrams __WordContextBigrams = new WordContextBigrams();
-  private static final POSContextBigrams __POSContextBigrams = new POSContextBigrams();
-  private static final PatternFeatures __PatternFeatures = new PatternFeatures();
+public class QuantitiesClassifier$$1 extends Classifier {
+    private static final WordBigrams __WordBigrams = new WordBigrams();
+    private static final WordContextBigrams __WordContextBigrams = new WordContextBigrams();
+    private static final POSContextBigrams __POSContextBigrams = new POSContextBigrams();
+    private static final PatternFeatures __PatternFeatures = new PatternFeatures();
 
-  public QuantitiesClassifier$$1()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.quant.lbj";
-    name = "QuantitiesClassifier$$1";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent"; }
-  public String getOutputType() { return "discrete%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof Constituent))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'QuantitiesClassifier$$1(Constituent)' defined on line 91 of chunk.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public QuantitiesClassifier$$1() {
+        containingPackage = "edu.illinois.cs.cogcomp.quant.lbj";
+        name = "QuantitiesClassifier$$1";
     }
 
-    FeatureVector __result;
-    __result = new FeatureVector();
-    __result.addFeatures(__WordBigrams.classify(__example));
-    __result.addFeatures(__WordContextBigrams.classify(__example));
-    __result.addFeatures(__POSContextBigrams.classify(__example));
-    __result.addFeatures(__PatternFeatures.classify(__example));
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof Constituent[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'QuantitiesClassifier$$1(Constituent)' defined on line 91 of chunk.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-  public int hashCode() { return "QuantitiesClassifier$$1".hashCode(); }
-  public boolean equals(Object o) { return o instanceof QuantitiesClassifier$$1; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof Constituent)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'QuantitiesClassifier$$1(Constituent)' defined on line 91 of chunk.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
 
-  public java.util.LinkedList getCompositeChildren()
-  {
-    java.util.LinkedList result = new java.util.LinkedList();
-    result.add(__WordBigrams);
-    result.add(__WordContextBigrams);
-    result.add(__POSContextBigrams);
-    result.add(__PatternFeatures);
-    return result;
-  }
+        FeatureVector __result;
+        __result = new FeatureVector();
+        __result.addFeatures(__WordBigrams.classify(__example));
+        __result.addFeatures(__WordContextBigrams.classify(__example));
+        __result.addFeatures(__POSContextBigrams.classify(__example));
+        __result.addFeatures(__PatternFeatures.classify(__example));
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof Constituent[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'QuantitiesClassifier$$1(Constituent)' defined on line 91 of chunk.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "QuantitiesClassifier$$1".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof QuantitiesClassifier$$1;
+    }
+
+    public java.util.LinkedList getCompositeChildren() {
+        java.util.LinkedList result = new java.util.LinkedList();
+        result.add(__WordBigrams);
+        result.add(__WordContextBigrams);
+        result.add(__POSContextBigrams);
+        result.add(__PatternFeatures);
+        return result;
+    }
 }
-

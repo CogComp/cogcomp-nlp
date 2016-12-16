@@ -16,22 +16,24 @@ import java.util.Set;
 
 public class WordBigrams extends LBJavaFeatureExtractor {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
         Set<Feature> features = new LinkedHashSet<Feature>();
         View tokens = instance.getTextAnnotation().getView(ViewNames.TOKENS);
-        List<Constituent> list = tokens.getConstituentsCoveringSpan(instance.getStartSpan(), instance.getEndSpan());
+        List<Constituent> list =
+                tokens.getConstituentsCoveringSpan(instance.getStartSpan(), instance.getEndSpan());
 
         Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
-        ITransformer<Constituent, String> surfaceFormTransformer = new ITransformer<Constituent,String>() {
-			private static final long serialVersionUID = 1L;
+        ITransformer<Constituent, String> surfaceFormTransformer =
+                new ITransformer<Constituent, String>() {
+                    private static final long serialVersionUID = 1L;
 
-			public String transform(Constituent input) {
-                return input.getSurfaceForm();
-            }
-        };
+                    public String transform(Constituent input) {
+                        return input.getSurfaceForm();
+                    }
+                };
         features.addAll(FeatureNGramUtility.getNgramsOrdered(list, 1, surfaceFormTransformer));
         features.addAll(FeatureNGramUtility.getNgramsOrdered(list, 2, surfaceFormTransformer));
         return features;

@@ -61,9 +61,9 @@ abstract public class DataReader implements Parser {
     }
 
     /**
-     * A workaround for the unit tests in Maven that move the relative path of the root directory
-     * in {@link ESRLConfigurator} to the directory of each module. <b>NB:</b> This code assumes
-     * the default data directory to be <i>$ROOT_DIR/data/</i>.
+     * A workaround for the unit tests in Maven that move the relative path of the root directory in
+     * {@link ESRLConfigurator} to the directory of each module. <b>NB:</b> This code assumes the
+     * default data directory to be <i>$ROOT_DIR/data/</i>.
      *
      * @param file The file/directory to be used
      * @return The same file/directory moved to the root dir of the main project
@@ -72,8 +72,10 @@ abstract public class DataReader implements Parser {
         if (file.contains("data") && !IOUtils.exists(new File(file).getParent())) {
             int dataIndex = file.indexOf("data") - 1;
             int prevSlashIndex = file.lastIndexOf(File.separator, dataIndex - 1);
-            String fileWithParentDir = file.substring(0, prevSlashIndex) + file.substring(dataIndex, file.length());
-            logger.warn("{} doesn't exist, trying parent directory: {}.", IOUtils.getFileName(file), fileWithParentDir);
+            String fileWithParentDir =
+                    file.substring(0, prevSlashIndex) + file.substring(dataIndex, file.length());
+            logger.warn("{} doesn't exist, trying parent directory: {}.",
+                    IOUtils.getFileName(file), fileWithParentDir);
             file = fileWithParentDir;
         }
         return file;
@@ -119,7 +121,8 @@ abstract public class DataReader implements Parser {
             if (goldConst != null)
                 finalCandidates.add(goldConst);
             else
-                finalCandidates.add(new Constituent(CANDIDATE, viewName, c.getTextAnnotation(), c.getStartSpan(), c.getEndSpan()));
+                finalCandidates.add(new Constituent(CANDIDATE, viewName, c.getTextAnnotation(), c
+                        .getStartSpan(), c.getEndSpan()));
         }
         for (Constituent c : goldView.getConstituents()) {
             if (!finalCandidates.contains(c))
@@ -130,7 +133,8 @@ abstract public class DataReader implements Parser {
 
     protected Constituent getExactMatch(View view, Constituent c) {
         for (Constituent viewConst : view.getConstituents()) {
-            if (viewConst.getSpan().equals(c.getSpan())) return viewConst;
+            if (viewConst.getSpan().equals(c.getSpan()))
+                return viewConst;
         }
         return null;
     }
@@ -139,17 +143,19 @@ abstract public class DataReader implements Parser {
      * Fetches the next available data instance for training/testing. Also, pre-processes each new
      * {@link TextAnnotation} object before accessing its members.
      *
-     * @return A {@link Constituent} (which might be a part of a {@link Relation},
-     *         depending on the type of {@link View} )
+     * @return A {@link Constituent} (which might be a part of a {@link Relation}, depending on the
+     *         type of {@link View} )
      */
     @Override
     public Object next() {
         if (candidates.isEmpty() || candidates.size() == currentCandidate) {
-            if (currentTextAnnotation == textAnnotations.size()) return null;
+            if (currentTextAnnotation == textAnnotations.size())
+                return null;
             TextAnnotation ta = textAnnotations.get(currentTextAnnotation);
             currentTextAnnotation++;
             candidates = candidateGenerator(ta);
-            if (candidates.isEmpty()) return next();
+            if (candidates.isEmpty())
+                return next();
             currentCandidate = 0;
             if (currentTextAnnotation % 1000 == 0)
                 logger.info("Read {} TextAnnotations", currentTextAnnotation);

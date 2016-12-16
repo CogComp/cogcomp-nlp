@@ -14,123 +14,151 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class PatternFeatures extends Classifier
-{
-  public PatternFeatures()
-  {
-    containingPackage = "edu.illinois.cs.cogcomp.quant.lbj";
-    name = "PatternFeatures";
-  }
-
-  public String getInputType() { return "edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent"; }
-  public String getOutputType() { return "discrete%"; }
-
-  public FeatureVector classify(Object __example)
-  {
-    if (!(__example instanceof Constituent))
-    {
-      String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PatternFeatures(Constituent)' defined on line 11 of chunk.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+public class PatternFeatures extends Classifier {
+    public PatternFeatures() {
+        containingPackage = "edu.illinois.cs.cogcomp.quant.lbj";
+        name = "PatternFeatures";
     }
 
-    Constituent word = (Constituent) __example;
-
-    FeatureVector __result;
-    __result = new FeatureVector();
-    String __id;
-    String __value;
-
-    String ordinal = "(?:" + "\\d+(?:st|nd|rd|th)" + "|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth" + "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth" + "|seventeenth|eighteenth|nineteenth" + "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth" + "|eightieth|ninetieth" + "|hundredth|thousandth|millionth|billionth)";
-    String fraction_denom = "(?:" + "half|halve|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth" + "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth" + "|seventeenth|eighteenth|nineteenth" + "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth" + "|eightieth|ninetieth" + "|hundredth|thousandth|millionth|billionth)s";
-    String writtenNumber = "twelve|seven|trillion|ten|seventeen|two|four|sixty|" + "zero|eighteen|thirteen|dozen|one|fourty|fifty|twenty" + "six|three|eleven|hundred|thousand|million|eighty" + "fourteen|five|nineteen|sixteen|fifteen|seventy|billion" + "thirty|ninety|nine|eight";
-    String digits = "(\\d+)";
-    String four_digits = "(\\d\\d\\d\\d)";
-    String two_digits = "(\\d\\d)";
-    String two_letter = "[A-Z][A-Z]";
-    String initial = "[A-Z]\\.";
-    String abbrev = "([A-Z]?[a-z]+\\.)";
-    String roman = "(M?M?M?(?:CM|CD|D?C?C?C?)(?:XC|XL|L?X?X?X?)(?:IX|IV|V?II?|III))";
-    String numeric = "((?:\\d{1,3}(?:\\,\\d{3})*|\\d+)(?:\\.\\d+)?)";
-    String doftw = "(?:Mon|Tues?|Wed(?:nes)?|Thurs?|Fri|Satui?r?|Sun)(?:day|\\.)";
-    String month = "(?:jan(?:uary)?|febr?(?:uary)?|mar(?:ch)?|apr(?:il)?" + "|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|" + "dec(?:ember)?)\\.?";
-    String dayWords = "(?: today|tomorrow|yesterday|morning|afternoon|evening)";
-    String possibleYear = "(?:\\d\\d\\d\\d(?:\\s*s)?|\\'?\\d\\d(?:\\s*?s)?)";
-    String time = "(\\d\\d?)\\s*?(?:(\\:)?\\s*?(\\d\\d))?\\s*([ap]\\.m\\.?|[ap]m|[a" + "p])?\\s*(?:\\(?(GMT|EST|PST|CST)?\\)?)?(?:\\W|$)";
-    Pattern pattern = Pattern.compile(digits, Pattern.CASE_INSENSITIVE);
-    Matcher matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[digits]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[numeric]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.find())
-    {
-      __id = "[contains_numeric]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(writtenNumber, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[written_number]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(fraction_denom, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[fraction_denom]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(ordinal, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[ordinal]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    pattern = Pattern.compile(month, Pattern.CASE_INSENSITIVE);
-    matcher = pattern.matcher(word.getSurfaceForm());
-    if (matcher.matches())
-    {
-      __id = "[month]";
-      __value = "true";
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-    }
-    return __result;
-  }
-
-  public FeatureVector[] classify(Object[] examples)
-  {
-    if (!(examples instanceof Constituent[]))
-    {
-      String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PatternFeatures(Constituent)' defined on line 11 of chunk.lbj received '" + type + "' as input.");
-      new Exception().printStackTrace();
-      System.exit(1);
+    public String getInputType() {
+        return "edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent";
     }
 
-    return super.classify(examples);
-  }
+    public String getOutputType() {
+        return "discrete%";
+    }
 
-  public int hashCode() { return "PatternFeatures".hashCode(); }
-  public boolean equals(Object o) { return o instanceof PatternFeatures; }
+    public FeatureVector classify(Object __example) {
+        if (!(__example instanceof Constituent)) {
+            String type = __example == null ? "null" : __example.getClass().getName();
+            System.err
+                    .println("Classifier 'PatternFeatures(Constituent)' defined on line 11 of chunk.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        Constituent word = (Constituent) __example;
+
+        FeatureVector __result;
+        __result = new FeatureVector();
+        String __id;
+        String __value;
+
+        String ordinal =
+                "(?:" + "\\d+(?:st|nd|rd|th)"
+                        + "|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth"
+                        + "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth"
+                        + "|seventeenth|eighteenth|nineteenth"
+                        + "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth"
+                        + "|eightieth|ninetieth" + "|hundredth|thousandth|millionth|billionth)";
+        String fraction_denom =
+                "(?:" + "half|halve|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth"
+                        + "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth"
+                        + "|seventeenth|eighteenth|nineteenth"
+                        + "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth"
+                        + "|eightieth|ninetieth" + "|hundredth|thousandth|millionth|billionth)s";
+        String writtenNumber =
+                "twelve|seven|trillion|ten|seventeen|two|four|sixty|"
+                        + "zero|eighteen|thirteen|dozen|one|fourty|fifty|twenty"
+                        + "six|three|eleven|hundred|thousand|million|eighty"
+                        + "fourteen|five|nineteen|sixteen|fifteen|seventy|billion"
+                        + "thirty|ninety|nine|eight";
+        String digits = "(\\d+)";
+        String four_digits = "(\\d\\d\\d\\d)";
+        String two_digits = "(\\d\\d)";
+        String two_letter = "[A-Z][A-Z]";
+        String initial = "[A-Z]\\.";
+        String abbrev = "([A-Z]?[a-z]+\\.)";
+        String roman = "(M?M?M?(?:CM|CD|D?C?C?C?)(?:XC|XL|L?X?X?X?)(?:IX|IV|V?II?|III))";
+        String numeric = "((?:\\d{1,3}(?:\\,\\d{3})*|\\d+)(?:\\.\\d+)?)";
+        String doftw = "(?:Mon|Tues?|Wed(?:nes)?|Thurs?|Fri|Satui?r?|Sun)(?:day|\\.)";
+        String month =
+                "(?:jan(?:uary)?|febr?(?:uary)?|mar(?:ch)?|apr(?:il)?"
+                        + "|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|"
+                        + "dec(?:ember)?)\\.?";
+        String dayWords = "(?: today|tomorrow|yesterday|morning|afternoon|evening)";
+        String possibleYear = "(?:\\d\\d\\d\\d(?:\\s*s)?|\\'?\\d\\d(?:\\s*?s)?)";
+        String time =
+                "(\\d\\d?)\\s*?(?:(\\:)?\\s*?(\\d\\d))?\\s*([ap]\\.m\\.?|[ap]m|[a"
+                        + "p])?\\s*(?:\\(?(GMT|EST|PST|CST)?\\)?)?(?:\\W|$)";
+        Pattern pattern = Pattern.compile(digits, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[digits]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[numeric]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.find()) {
+            __id = "[contains_numeric]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(writtenNumber, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[written_number]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(fraction_denom, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[fraction_denom]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(ordinal, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[ordinal]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        pattern = Pattern.compile(month, Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(word.getSurfaceForm());
+        if (matcher.matches()) {
+            __id = "[month]";
+            __value = "true";
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage,
+                    this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
+        return __result;
+    }
+
+    public FeatureVector[] classify(Object[] examples) {
+        if (!(examples instanceof Constituent[])) {
+            String type = examples == null ? "null" : examples.getClass().getName();
+            System.err
+                    .println("Classifier 'PatternFeatures(Constituent)' defined on line 11 of chunk.lbj received '"
+                            + type + "' as input.");
+            new Exception().printStackTrace();
+            System.exit(1);
+        }
+
+        return super.classify(examples);
+    }
+
+    public int hashCode() {
+        return "PatternFeatures".hashCode();
+    }
+
+    public boolean equals(Object o) {
+        return o instanceof PatternFeatures;
+    }
 }
-

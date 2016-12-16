@@ -11,9 +11,9 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import java.util.*;
 
 public class Contains extends LBJavaFeatureExtractor {
-    
-	private static final long serialVersionUID = 1L;
-	private final static DiscreteFeature Y = DiscreteFeature.create("Y");
+
+    private static final long serialVersionUID = 1L;
+    private final static DiscreteFeature Y = DiscreteFeature.create("Y");
     public final static String YValue = "[] |B|:Y(true)";
     private final static DiscreteFeature N = DiscreteFeature.create("N");
     public final static String NValue = "[] |B|:N(true)";
@@ -21,10 +21,11 @@ public class Contains extends LBJavaFeatureExtractor {
     private final String viewName;
 
     /** Checks for prepositions (including "TO"), particles and adverbs */
-    public static final Contains containsPrepPartAdv = new Contains(ViewNames.POS, "IN", "TO", "RP", "RB");
+    public static final Contains containsPrepPartAdv = new Contains(ViewNames.POS, "IN", "TO",
+            "RP", "RB");
 
     public Contains() {
-        this("","");
+        this("", "");
     }
 
     public Contains(String viewName, String... contained) {
@@ -52,8 +53,10 @@ public class Contains extends LBJavaFeatureExtractor {
                 break;
             }
 
-        if (contains) features.add(Y);
-        else features.add(N);
+        if (contains)
+            features.add(Y);
+        else
+            features.add(N);
 
         return features;
     }

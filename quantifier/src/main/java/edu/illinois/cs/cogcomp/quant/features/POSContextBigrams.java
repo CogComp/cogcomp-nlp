@@ -10,9 +10,9 @@ import java.util.Set;
 
 public class POSContextBigrams extends LBJavaFeatureExtractor {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
+    @Override
     public Set<Feature> getFeatures(Constituent instance) throws EdisonException {
         ContextFeatureExtractor f = new ContextFeatureExtractor(2, true, true);
         f.addFeatureExtractor(WordFeatureExtractorFactory.pos);
