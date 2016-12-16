@@ -4,128 +4,88 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>edu.illinois.cs.cogcomp</groupId>
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.0.87</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
     <artifactId>illinois-quantifier</artifactId>
-    <version>2.0.10</version>
     <name>Illinois Quantifier</name>
     <description>Detects and normalizes quantities</description>
 
-    <repositories>
-      <repository>
-        <id>CogcompSoftware</id>
-        <name>CogcompSoftware</name>
-        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-      </repository>
-    </repositories>
+    <!--needed for lbj plugin-->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <dependencies>
-      <dependency>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
-        <artifactId>LBJava</artifactId>
-        <version>1.2.26</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.11</version>
-        <scope>test</scope>
-      </dependency>
-   	  <dependency>
-     	<groupId>edu.illinois.cs.cogcomp</groupId>
-     	<artifactId>illinois-core-utilities</artifactId>
-     	<version>3.0.87</version>
-     	<scope>compile</scope>
-   	  </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>LBJava</artifactId>
+            <version>1.2.26</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-core-utilities</artifactId>
+            <version>3.0.87</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
             <version>3.0.87</version>
             <scope>compile</scope>
         </dependency>
-   	  <dependency>
-     	<groupId>edu.illinois.cs.cogcomp</groupId>
-     	<artifactId>illinois-tokenizer</artifactId>
-     	<version>3.0.87</version>
-     	<scope>compile</scope>
-   	  </dependency>
-   	  <dependency>
-     	<groupId>edu.illinois.cs.cogcomp</groupId>
-     	<artifactId>illinois-edison</artifactId>
-     	<version>3.0.87</version>
-     	<scope>compile</scope>
-   	  </dependency>
-   	  <dependency>
-     	<groupId>edu.illinois.cs.cogcomp</groupId>
-     	<artifactId>illinois-curator</artifactId>
-     	<version>3.0.87</version>
-     	<scope>compile</scope>
-   	  </dependency>
         <dependency>
-           <groupId>edu.illinois.cs.cogcomp</groupId>
-           <artifactId>illinois-quantifier-models</artifactId>
-           <version>2.0.5</version>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-tokenizer</artifactId>
+            <version>3.0.87</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-edison</artifactId>
+            <version>3.0.87</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-curator</artifactId>
+            <version>3.0.87</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-quantifier-models</artifactId>
+            <version>2.0.5</version>
         </dependency>
     </dependencies>
 
-    <!-- needed for lbj plugin -->
-    <pluginRepositories>
-      <pluginRepository>
-        <id>CogcompSoftware</id>
-        <name>CogcompSoftware</name>
-        <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-      </pluginRepository>
-    </pluginRepositories>
-
     <build>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.0.2</version>
-          <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>2.2.1</version>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>edu.illinois.cs.cogcomp</groupId>
-          <artifactId>lbjava-maven-plugin</artifactId>
-          <version>1.2.26</version>
-          <configuration>
-            <lbjavaInputFileList>
-              <param>src/main/lbj/chunk.lbj</param>
-            </lbjavaInputFileList>
-          </configuration>
-        </plugin>
-      </plugins>
-      
-      <extensions>
-        <extension>
-          <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-ssh</artifactId>
-          <version>2.10</version>
-        </extension>
-      </extensions>
+        <plugins>
+            <plugin>
+                <groupId>edu.illinois.cs.cogcomp</groupId>
+                <artifactId>lbjava-maven-plugin</artifactId>
+                <version>1.2.26</version>
+                <configuration>
+                    <lbjavaInputFileList>
+                        <param>src/main/lbj/chunk.lbj</param>
+                    </lbjavaInputFileList>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
-    <distributionManagement>
-      <repository>
-        <id>CogcompSoftware</id>
-        <name>CogcompSoftware</name>
-        <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-      </repository>
-    </distributionManagement>
 </project>
