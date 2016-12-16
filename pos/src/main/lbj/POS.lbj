@@ -1,0 +1,38 @@
+package edu.illinois.cs.cogcomp.pos.lbjava;
+
+import edu.illinois.cs.cogcomp.pos.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.*;
+import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+
+
+/**
+  * After {@link POSTaggerKnown} and {@link POSTaggerUnknown} are trained,
+  * this classifier will return the prediction of {@link POSTaggerKnown} if
+  * the input word was observed during training or of {@link POSTaggerUnknown}
+  * if it wasn't.
+  *
+  * @author Nick Rizzolo
+ **/
+discrete POSTagger(Token w) <-
+{
+  if (baselineTarget.getInstance().observed(wordForm(w)))
+    return POSTaggerKnown(w);
+  return POSTaggerUnknown(w);
+}
+
+/**
+  * Feature generator that senses the parts of speech of the four context
+  * words immediately surrounding the target word (two before and two after).
+  *
+  * @author Nick Rizzolo
+ **/
+discrete% POSWindow(Token word) <-
+{
+  int i;
+  Token w = word, last = word;
+  for (i = 0; i <= 2 && last != null; ++i) last = (Token) last.next;
+  for (i = 0; i > -2 && w.previous != null; --i) w = (Token) w.previous;
+
+  for (; w != last; w = (Token) w.next) sense i++ : POSTagger(w);
+}
+
