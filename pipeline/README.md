@@ -325,7 +325,10 @@ containing that file to the classpath.
 
 ### 6.3 Frequently Asked Questions (FAQs)
 
-- While running the Pipeline if you see an error regarding insufficient Java heap space, you will need to set the `JAVA_OPTIONS` or `MAVEN_OPTIONS` to include "-Xmx20g"
+- While running the Pipeline if you see an error regarding insufficient Java heap space, you will need to set the `JAVA_OPTIONS` or `MAVEN_OPTIONS` to include "-Xmx20g": 
+```
+export MAVEN_OPTS="-Xmx10g"
+```
 
 - Between different runs of the Pipeline, if you see the following exception, you should remove the temporary cache folders created by MapDB.
 ```java
