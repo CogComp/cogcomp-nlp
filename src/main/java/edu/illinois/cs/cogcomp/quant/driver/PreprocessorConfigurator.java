@@ -17,13 +17,17 @@ public class PreprocessorConfigurator extends Configurator {
 
     public static Property DISABLE_CACHE = new Property(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
 
+	// whether to use Curator or Pipeline
+	public static String USE_PIPELINE_KEY = "USE_PIPELINE";
+	public static Property USE_PIPELINE = new Property(USE_PIPELINE_KEY, Configurator.TRUE);
+
 	// Curator properties
 	public static Property CURATOR_HOST = new Property(CoreConfigNames.CURATOR_HOST, "trollope.cs.illinois.edu");
 	public static Property CURATOR_PORT = new Property(CoreConfigNames.CURATOR_PORT, "9010");
 
 	@Override
 	public ResourceManager getDefaultConfig() {
-		Property[] props = {VIEWS_TO_ADD, DISABLE_CACHE, CURATOR_HOST, CURATOR_PORT};
+		Property[] props = {VIEWS_TO_ADD, DISABLE_CACHE, CURATOR_HOST, CURATOR_PORT, USE_PIPELINE};
 		return new ResourceManager(generateProperties(props));
 	}
 

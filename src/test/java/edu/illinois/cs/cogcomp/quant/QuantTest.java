@@ -17,12 +17,51 @@ public class QuantTest extends TestCase {
 
 	@Test
 	public void testQuantifierView() throws Exception {
-		Quantifier quantifier = new Quantifier();
-		TextAnnotation ta = Quantifier.taBuilder.createTextAnnotation("It was May 2008.");
+        Quantifier quantifier = new Quantifier();
+
+        // sentence 1
+        TextAnnotation ta = Quantifier.taBuilder.createTextAnnotation("It was May 2008.");
 		quantifier.addView(ta);
 		assertTrue(ta.hasView(ViewNames.QUANTITIES));
 		assertTrue(isEqual("[= Date(05/XX/2008)]", ta.getView(ViewNames.QUANTITIES).getConstituents()
 				.get(0).getLabel()));
+
+        // sentence 2
+		ta = Quantifier.taBuilder.createTextAnnotation("This month is the 20th of the year. Everything is above 20$.");
+		quantifier.addView(ta);
+		assertTrue(ta.hasView(ViewNames.QUANTITIES));
+		assertTrue(isEqual("[= 1.0 year]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(0).getLabel()));
+		assertTrue(isEqual("[= 20.0 US$]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(1).getLabel()));
+
+		// a long paragraph
+		String paragraph = "Super Bowl 50 was an American football game to determine the champion of the National " +
+				"Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver " +
+				"Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn " +
+				"their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in " +
+				"the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league " +
+				"emphasized the \"golden anniversary\" with various gold-themed initiatives, as well as temporarily " +
+				"suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game " +
+				"would have been known as \"Super Bowl L\"), so that the logo could prominently feature the Arabic " +
+				"numerals 50.";
+
+		ta = Quantifier.taBuilder.createTextAnnotation(paragraph);
+		quantifier.addView(ta);
+		assertTrue(ta.hasView(ViewNames.QUANTITIES));
+		assertTrue(isEqual("[= 2015.0  season  ]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(0).getLabel()));
+		assertTrue(isEqual("[= 24.0  – 10  ]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(1).getLabel()));
+		assertTrue(isEqual("[= Date(02/07/XXXX)]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(2).getLabel()));
+		assertTrue(isEqual("[daterange[= Date(01/01/2016)][= Date(12/31/2016)]]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(3).getLabel()));
+		assertTrue(isEqual("[= 50.0   ]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(4).getLabel()));
+
+        //TODO for this paragraph it throws exception. We have to fix it.
+        // another long paragraph
+        paragraph = "The annual NFL Experience was held at the Moscone Center in San Francisco. In addition, " +
+                "\"Super Bowl City\" opened on January 30 at Justin Herman Plaza on The Embarcadero, featuring games " +
+                "and activities that will highlight the Bay Area's technology, culinary creations, and cultural diversity. " +
+                "More than 1 million people are expected to attend the festivities in San Francisco during Super Bowl Week. San Francisco mayor Ed Lee said of the highly visible homeless presence in this area \"they are going to have to leave\". San Francisco city supervisor Jane Kim unsuccessfully lobbied for the NFL to reimburse San Francisco for city services in the amount of $5 million.";
+        ta = Quantifier.taBuilder.createTextAnnotation(paragraph);
+        quantifier.addView(ta);
+        //assertTrue(ta.hasView(ViewNames.QUANTITIES));
 	}
 
 	@Test
