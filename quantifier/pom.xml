@@ -77,7 +77,7 @@
                 <version>1.2.26</version>
                 <configuration>
                     <lbjavaInputFileList>
-                        <param>src/main/lbj/chunk.lbj</param>
+                        <param>${project.basedir}/src/main/lbj/chunk.lbj</param>
                     </lbjavaInputFileList>
                 </configuration>
             </plugin>
