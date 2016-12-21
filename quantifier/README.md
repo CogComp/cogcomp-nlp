@@ -12,7 +12,7 @@ quantifier and also allows for training the model using your own
 training data.
 
 ## Requirements
-Running the Illinois Quantifier *requires* Java 1.6 or higher.
+Compiling the Illinois Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
 
 ## Installation
 Illinois Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
