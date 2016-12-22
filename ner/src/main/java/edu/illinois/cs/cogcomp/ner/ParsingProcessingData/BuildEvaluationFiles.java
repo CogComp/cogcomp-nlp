@@ -9,6 +9,8 @@ package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.OccurrenceCounter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -16,6 +18,7 @@ import java.util.Vector;
 
 
 public class BuildEvaluationFiles {
+    private static Logger logger = LoggerFactory.getLogger(BuildEvaluationFiles.class);
 
     public static void main(String[] args) {
         buildEvaluationFile(args[0], args[1], args[2]);
@@ -85,9 +88,9 @@ public class BuildEvaluationFiles {
                     rw = resWords.elementAt(tWordId).toLowerCase();
                 }
                 if (gw.charAt(gCharId) != rw.charAt(tCharId)) {
-                    System.out.println("mismatched characters when building evaluation files");
-                    System.out.println("the words were '" + gw + "' and: '" + rw + "'  exiting");
-                    System.out.println("the characters were '" + gw.charAt(gCharId) + "' and: '"
+                    logger.warn("mismatched characters when building evaluation files");
+                    logger.warn("the words were '" + gw + "' and: '" + rw + "'  exiting");
+                    logger.warn("the characters were '" + gw.charAt(gCharId) + "' and: '"
                             + rw.charAt(tCharId) + "'  exiting");
                     outToken.close();
                     outPhrase.close();
@@ -98,7 +101,7 @@ public class BuildEvaluationFiles {
                     }
                     // String lastTag=resTags.elementAt(tWordId);
                     // resTagsForCurrentToken.addToken(lastTag);
-                    // System.out.println(gw.charAt(gCharId)+"-"+rw.charAt(tCharId));
+                    // logger.info(gw.charAt(gCharId)+"-"+rw.charAt(tCharId));
                 }
                 gCharId++;
                 tCharId++;

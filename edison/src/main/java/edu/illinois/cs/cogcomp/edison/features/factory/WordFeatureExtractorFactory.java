@@ -12,13 +12,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
+import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
 import edu.illinois.cs.cogcomp.edison.features.*;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URL;
 import java.text.DateFormat;
@@ -30,6 +32,7 @@ import java.util.*;
  */
 public class WordFeatureExtractorFactory {
 
+    private static Logger logger = LoggerFactory.getLogger(WordFeatureExtractorFactory.class);
     /**
      * An indicator for whether the word ends with an `-ing`.
      */
@@ -406,7 +409,7 @@ public class WordFeatureExtractorFactory {
     }
 
     public static WordFeatureExtractor getGazetteerFeatureExtractor(final String name,
-            final GazetteerViewGenerator gazetteerViewGenerator) {
+            final SimpleGazetteerAnnotator gazetteerViewGenerator) {
 
         if (!gazetteerFeatureExtractors.containsKey(name)) {
 

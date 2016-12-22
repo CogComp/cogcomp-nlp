@@ -92,3 +92,21 @@ keywordbody := (conjoin ??) | (list leaf*) | (conjoin-and-include) | (bigram) | 
 name := <string>
 leaf := must be in KnownFexes.fexes
 ```
+
+##Citation
+
+Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth, EDISON: Feature Extraction for NLP, Simplified. Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016) (2016) pp.
+
+Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/Edison
+
+```
+@inproceedings{SCKKSVBWR16,
+    author = {Mark Sammons, Christos Christodoulopoulos, Parisa Kordjamshidi, Daniel Khashabi, Vivek Srikumar, Paul Vijayakumar, Mazin Bokhari, Xinbo Wu, Dan Roth},
+    title = {EDISON: Feature Extraction for NLP, Simplified},
+    booktitle = {Proceedings of the Tenth International Conference on Language Resources and Evaluation (LREC 2016)},
+    year = {2016},
+    publisher = {European Language Resources Association (ELRA)},
+    editor = {Nicoletta Calzolari (Conference Chair) and Khalid Choukri and Thierry Declerck and Marko Grobelnik and Bente Maegaard and Joseph Mariani and Asuncion Moreno and Jan Odijk and Stelios Piperidis},
+    url = "http://cogcomp.cs.illinois.edu/papers/SCKKSVBWR16.pdf",
+}
+```

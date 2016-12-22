@@ -8,18 +8,15 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ACEDocument implements Serializable {
 
     public ACEDocumentAnnotation aceAnnotation;
-
-    public List<TextAnnotation> taList = new ArrayList<TextAnnotation>();
 
     public String orginalContent;
 
@@ -27,6 +24,7 @@ public class ACEDocument implements Serializable {
 
     public List<String> originalLines;
 
-    public List<Pair<String, Paragraph>> paragraphs;
+    public Map<String, String> metadata;
 
+    public List<Pair<String, Paragraph>> paragraphs;
 }

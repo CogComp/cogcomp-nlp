@@ -8,14 +8,19 @@
 package edu.illinois.cs.cogcomp.core.datastructures.trees;
 
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
-public class TestTreeParser extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class TestTreeParser {
     TreeParser<String> parser;
     String treeString = "(Root Leaf\n" + "      (Child1 Child1Leaf)\n"
             + "      (Child2 Child2Leaf1\n" + "              Child2Leaf2)\n" + "      Leaf)";
 
     String treeString1 = "a";
 
+    @Before
     public void setUp() throws Exception {
         parser = new TreeParser<>(new INodeReader<String>() {
             public String parseNode(String string) {
@@ -24,11 +29,13 @@ public class TestTreeParser extends TestCase {
         });
     }
 
+    @Test
     public final void testParse() {
         assertEquals(parser.parse(treeString).toString(), treeString);
         assertEquals(parser.parse(treeString1).toString(), "(" + treeString1 + ")");
     }
 
+    @Test
     public final void test1() {
 
         String treeStringNew =

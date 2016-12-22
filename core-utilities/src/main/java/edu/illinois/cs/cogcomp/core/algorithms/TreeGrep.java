@@ -10,6 +10,8 @@ package edu.illinois.cs.cogcomp.core.algorithms;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal;
 import edu.illinois.cs.cogcomp.core.math.Permutations;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,8 @@ import java.util.List;
  * @see TreeGrepMatch
  */
 public class TreeGrep<T> {
+    private static Logger logger = LoggerFactory.getLogger(TreeGrep.class);
+
     public static String endOfChildrenString = "$$$";
     public static String startOfChildrenString = "^^^";
 
@@ -82,8 +86,8 @@ public class TreeGrep<T> {
 
         for (Tree<T> node : TreeTraversal.breadthFirstTraversal(tree)) {
             if (verbose) {
-                System.out.println("Comparing  node: ");
-                System.out.println(node);
+                logger.info("Comparing  node: ");
+                logger.info(node.toString());
             }
 
             nodeTreeMatches = new ArrayList<>();
@@ -91,7 +95,7 @@ public class TreeGrep<T> {
             if (nodeTreeMatches.size() > 0) {
 
                 if (verbose) {
-                    System.out.println("Found...");
+                    logger.info("Found...");
                 }
 
                 matchesList.addAll(nodeTreeMatches);
@@ -115,7 +119,7 @@ public class TreeGrep<T> {
         if (nodeTreeMatches.size() > 0) {
 
             if (verbose) {
-                System.out.println("Found...");
+                logger.info("Found...");
             }
 
             matchesList.addAll(nodeTreeMatches);
@@ -143,34 +147,34 @@ public class TreeGrep<T> {
             List<TreeGrepMatch<T>> nodeMatches) {
 
         if (verbose) {
-            System.out.println("Tree:" + tree);
-            System.out.println("Current pattern: " + currentPattern);
+            logger.info("Tree:" + tree);
+            logger.info("Current pattern: " + currentPattern);
         }
 
         // if (tree.size() < currentPattern.size())
         // {
         // if (verbose)
-        // System.out.println(tree.size() + " less than "
+        // logger.info(tree.size() + " less than "
         // + currentPattern.size() + ". Returning false.");
         // return new ArrayList<TreeGrepMatch<T>>();
         // }
 
         if (!doesLabelMatchPatternLabel(tree.getLabel(), currentPattern.getLabel())) {
             if (verbose)
-                System.out.println("Labels don't match");
+                logger.info("Labels don't match");
             return new ArrayList<>();
 
         }
 
         if (currentPattern.isLeaf()) {
             if (verbose)
-                System.out.println("Pattern is leaf."
+                logger.info("Pattern is leaf."
                         + " No need to check children. Returning true.");
 
             if (nodeMatches.size() == 0) {
                 TreeGrepMatch<T> match = new TreeGrepMatch<>(currentPattern);
                 if (verbose)
-                    System.out.println("Adding match between "
+                    logger.info("Adding match between "
                             + match.getCurrentPatternNode().getLabel() + " and " + tree.getLabel());
 
                 match.addMatch(tree);
@@ -179,7 +183,7 @@ public class TreeGrep<T> {
             } else {
                 for (TreeGrepMatch<T> match : nodeMatches) {
                     if (verbose)
-                        System.out.println("Adding match between "
+                        logger.info("Adding match between "
                                 + match.getCurrentPatternNode().getLabel() + " and "
                                 + tree.getLabel());
 
@@ -188,9 +192,9 @@ public class TreeGrep<T> {
             }
 
             if (verbose) {
-                System.out.println("Current node match list after adding new match");
+                logger.info("Current node match list after adding new match");
 
-                System.out.println(nodeMatches);
+                logger.info(nodeMatches.toString());
             }
 
             return nodeMatches;
@@ -198,7 +202,7 @@ public class TreeGrep<T> {
 
         if (tree.isLeaf()) {
             if (verbose)
-                System.out.println("Tree is leaf, but pattern is not. Cannot match.");
+                logger.info("Tree is leaf, but pattern is not. Cannot match.");
             return new ArrayList<>();
         }
 
@@ -210,7 +214,7 @@ public class TreeGrep<T> {
         List<List<TreeGrepMatch<T>>> currentNodeMatchList = new ArrayList<>();
 
         if (verbose)
-            System.out.println("Matching children of " + currentPattern.getLabel());
+            logger.info("Matching children of " + currentPattern.getLabel());
 
         // first check the "endOfChildrenString" case
         T lastChild = currentPattern.getChild(currentPattern.getNumberOfChildren() - 1).getLabel();
@@ -244,10 +248,10 @@ public class TreeGrep<T> {
         List<TreeGrepMatch<T>> newNodeMatches = new ArrayList<>();
         for (List<TreeGrepMatch<T>> currentNodeChildrenMatches : currentNodeMatchList) {
             if (verbose) {
-                System.out.println("Merging match");
-                System.out.println(currentNodeChildrenMatches);
-                System.out.println(" with ");
-                System.out.println(nodeMatches);
+                logger.info("Merging match");
+                logger.info(currentNodeChildrenMatches.toString());
+                logger.info(" with ");
+                logger.info(nodeMatches.toString());
             }
             newNodeMatches.addAll(mergeMatches(nodeMatches, currentNodeChildrenMatches));
         }
@@ -277,16 +281,16 @@ public class TreeGrep<T> {
             childrenMatches.add(childMatches);
 
             if (verbose) {
-                System.out.println(treeChildNode + " matches " + patternChildNode);
-                System.out.println(childMatches);
+                logger.info(treeChildNode + " matches " + patternChildNode);
+                logger.info(childMatches.toString());
             }
 
         } // end for each pattern node
 
         if (foundMatch) {
             if (verbose) {
-                System.out.println("Found match for children of " + currentPattern);
-                System.out.println(childrenMatches);
+                logger.info("Found match for children of " + currentPattern);
+                logger.info(childrenMatches.toString());
 
             }
             // Add this new match to the existing one.
@@ -301,8 +305,8 @@ public class TreeGrep<T> {
             currentNodeMatches = mergeChildrenMatches(childrenMatches, currentNodeMatches);
 
             if (verbose) {
-                System.out.println("Matches for subtree at " + tree.getLabel());
-                System.out.println(currentNodeMatches);
+                logger.info("Matches for subtree at " + tree.getLabel());
+                logger.info(currentNodeMatches.toString());
             }
 
             currentNodeMatchList.add(currentNodeMatches);

@@ -13,3 +13,8 @@ provided by the `illinois-core-utilities` package.
   - PennTreebank POS Reader
   - Nombank Reader
   - [ACE Reader](doc/ACEReader.md) 
+
+## Citation
+
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.
+Thank you for citing us if you use us in your work! 

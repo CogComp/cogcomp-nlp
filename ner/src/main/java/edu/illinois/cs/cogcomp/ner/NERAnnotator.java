@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
@@ -28,7 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * Generate NER annotations using the Annotator API.
@@ -38,13 +41,13 @@ import java.util.Properties;
 public class NERAnnotator extends Annotator {
 
     /** POS, shallow parsing are NOT required. */
-    private static final String[] REQUIRED_VIEWS = {};
+//    private static final String[] REQUIRED_VIEWS = {};
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
     /** the level one tagger. */
-    private NETaggerLevel1 t1 = null;
+    private NETaggerLevel1 t1;
     /** the level two tagger. */
-    private NETaggerLevel2 t2 = null;
+    private NETaggerLevel2 t2;
 
 
     /**
@@ -77,7 +80,7 @@ public class NERAnnotator extends Annotator {
      * @param viewName name of the view to add to the TextAnnotation (and for client to request)
      */
     public NERAnnotator(ResourceManager nonDefaultRm, String viewName) {
-        super(viewName, REQUIRED_VIEWS, nonDefaultRm.getBoolean(
+        super(viewName, new String[]{}, nonDefaultRm.getBoolean(
                 AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, Configurator.TRUE), nonDefaultRm);
     }
 
@@ -92,9 +95,9 @@ public class NERAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager nerRm) {
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
-            nerRm = new NerOntonotesConfigurator().getConfig(nonDefaultRm);
+            nerRm = new NerOntonotesConfigurator().getConfig(nerRm);
         else
-            nerRm = new NerBaseConfigurator().getConfig(nonDefaultRm);
+            nerRm = new NerBaseConfigurator().getConfig(nerRm);
 
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
@@ -230,5 +233,23 @@ public class NERAnnotator extends Annotator {
             }
         }
         ta.addView(viewName, nerView);
+    }
+
+    /**
+     * Return possible tag values that the NERAnnotator can produce.
+     *
+     * @return the set of string representing the tag values
+     */
+    @Override
+    public Set<String> getTagValues() {
+        if (!isInitialized()) {
+            doInitialize();
+        }
+        Lexicon labelLexicon = t1.getLabelLexicon();
+        Set<String> tagSet = new HashSet();
+        for (int i =0; i < labelLexicon.size(); ++i) {
+            tagSet.add(labelLexicon.lookupKey(i).getStringValue());
+        }
+        return tagSet;
     }
 }

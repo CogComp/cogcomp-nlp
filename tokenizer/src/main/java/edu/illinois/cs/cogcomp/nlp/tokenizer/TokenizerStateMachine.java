@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,13 +46,13 @@ import java.util.regex.Pattern;
  * <li>contractions with abbr, like can't, won't and those. if no spaces surround the "'", we will
  * leave the word together including the "'" unless it is one of the common contractions like 's,
  * 'm, 're, et cetera.
- * <li>O'Malley, O'Brien and do on. FIXED.
- * <li>Abbreviation followed by punctuation is not caught. FIXED.
  * </ol>
  * 
  * @author redman
  */
 public class TokenizerStateMachine {
+    private static Logger logger = LoggerFactory.getLogger(TokenizerStateMachine.class);
+
 
     /** the state stack, since state can be nested. */
     protected ArrayList<State> stack;
@@ -89,18 +92,17 @@ public class TokenizerStateMachine {
 
     /** the state we are in currently. */
     protected int state;
-
+    
     /**
      * Init the state machine decision matrix and the text annotation.
      */
-    public TokenizerStateMachine() {
+    public TokenizerStateMachine(final boolean splitOnDash) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
         // types (TokenType enum)
         StateProcessor[][] toopy = { {
 
                 // process tokens in sentence, we are only in a sentences while processing white
-                // space There
-                // is always a sentence on top of the stack.
+                // space. There is always a sentence on top of the stack.
 
                 /** get punctuation while in sentence. This starts a new word. */
                 new StateProcessor() {
@@ -197,19 +199,18 @@ public class TokenizerStateMachine {
                                                                                      // token.
                                 break;
                             case '-': {
-
                                 // If there is a character before and after, this is a word.
                                 char after = peek(1);
                                 char before = peek(-1);
-                                if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
-                                        .isAlphabetic(after) || Character.isDigit(after)))) {
-                                    pop(current); // the current word is finished.
-                                    push(new State(TokenizerState.IN_SPECIAL), current); // No
-                                                                                         // matter
-                                                                                         // what we
-                                                                                         // push a
-                                                                                         // new word
-                                                                                         // token.
+                                if (!(Character.isDigit(before) && Character.isDigit(after))) {
+                                    /*
+                                         if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
+                                                .isAlphabetic(after) || Character.isDigit(after)))) {*/
+                                    
+                                    if (splitOnDash == true) {
+                                        pop(current); // the current word is finished.
+                                        push(new State(TokenizerState.IN_SPECIAL), current);
+                                    }
                                 }
                                 return;
                             }
@@ -279,19 +280,14 @@ public class TokenizerStateMachine {
                                     // it's a time, or bible passage.
                                     return;
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                             }
                             case '.': {
                                 // we have a period, this is often an end-of-sentence marker. There
-                                // are other
-                                // examples of areas where it is not, No.2, U.S., US., Hi., and Feb.
-                                // 4. Rule here is
-                                // that if it is followed by a printable character, it is just part
-                                // of the word.
+                                // are other examples of areas where it is not, No.2, U.S., US., 
+                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable 
+                                // character, it is just part of the word.
                                 // If it is followed by a space, but appears to be part of an
                                 // acronym(starts with a
                                 // period), it's part word, otherwise, it's punctuation.
@@ -313,7 +309,7 @@ public class TokenizerStateMachine {
                                             // punctuation then, pass through
                                         }
                                     } else {
-                                        if (Character.isAlphabetic(c) || Character.isDigit(c))
+                                        if ( (Character.isAlphabetic(c) && !Character.isUpperCase(c)) || Character.isDigit(c))
                                             // the next character is not white space, so the period
                                             // is part of the word
                                             return;
@@ -331,10 +327,7 @@ public class TokenizerStateMachine {
                             }
                             default:
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                         }
                     }
@@ -500,19 +493,19 @@ public class TokenizerStateMachine {
                     this.current = cs.start + (ss.length() - 1);
                     this.pop(this.current + 1);
                     if (debug)
-                        System.out.println("Good : " + ss);
+                        System.err.println("Good : " + ss);
                     return true;
                 }
             } catch (URISyntaxException e) {
                 if (debug)
-                    System.out.println("Invalid : " + ss);
+                    System.err.println("Invalid : " + ss);
                 return false;
             }
         } else {
             if (debug) {
                 int len = Math.min(100, text.length - cs.start);
                 String ss = new String(text, cs.start, len);
-                System.out.println("Not even close : " + ss);
+                System.err.println("Not even close : " + ss);
             }
 
         }

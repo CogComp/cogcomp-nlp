@@ -19,11 +19,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class TextAnnotationDBHandler {
-    private Logger log = LoggerFactory.getLogger(TextAnnotationDBHandler.class);
-
+public class TextAnnotationDBHandler implements TextAnnotationCache {
     private final String dbFile;
     private final String[] datasetNames;
+    private Logger log = LoggerFactory.getLogger(TextAnnotationDBHandler.class);
 
     public TextAnnotationDBHandler(String dbFile, String[] datasetNames) {
         this.dbFile = dbFile;
@@ -85,6 +84,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public void addTextAnnotation(String dataset, TextAnnotation ta) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);
@@ -139,6 +139,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public void updateTextAnnotation(TextAnnotation ta) {
 
         try {
@@ -173,6 +174,7 @@ public class TextAnnotationDBHandler {
         }
     }
 
+    @Override
     public IResetableIterator<TextAnnotation> getDataset(String dataset) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);
@@ -233,6 +235,7 @@ public class TextAnnotationDBHandler {
 
     }
 
+    @Override
     public boolean contains(TextAnnotation ta) {
         int id = ta.getTokenizedText().hashCode();
         Connection connection = DBHelper.getConnection(dbFile);
@@ -249,6 +252,7 @@ public class TextAnnotationDBHandler {
 
     }
 
+    @Override
     public void removeTextAnnotation(TextAnnotation ta) {
         try {
             Connection connection = DBHelper.getConnection(dbFile);
@@ -270,5 +274,11 @@ public class TextAnnotationDBHandler {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public TextAnnotation getTextAnnotation(TextAnnotation ta) {
+        log.error("Not implemented." );
+        return null;
     }
 }

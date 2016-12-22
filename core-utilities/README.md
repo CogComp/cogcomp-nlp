@@ -345,3 +345,51 @@ for (int i = 0; i < ta.size(); i++) {
     System.out.println(i + ":" + posView.getLabel(i));
 }
 ```
+
+###Creating Annotators
+
+The `AnnotatorService` class is based on stringing together classes that
+extend the `Annotator` abstract class. This class is used within the 
+project to wrap the Illinois POS, Chunker, Lemmatizer, and NER.
+
+In your extension of `Annotator` you need to define the following methods:
+
+`addView(TextAnnotation ta)`
+
+This method is invoked by `Annotator.getView(TextAnnotation ta)`, and
+does the actual work of creating a `View` object, populating it with
+`Contituent` and `Relation` objects as appropriate, and adding it
+to the `TextAnnotation` argument.  This method should first check that
+the argument contains all the necessary prerequisite views (the names
+of these views are also required by the `Annotator` constructor) and
+throw an exception if they are not.
+
+`initialize(ResourceManager rm)`
+
+This method should read configuration parameters (including paths
+from which to load resources) from the `ResourceManager` argument. 
+Your class constructor will provide a ResourceManager object as an
+argument to the `Annotator` constructor. This is used for lazy 
+initialization, if active, in which case the first call to `getView()`
+will call `initialize()` with this configuration. 
+
+
+###Configurators
+
+For ease of use of your own NLP software, especially classes that
+extend `Annotator` or `AnnotatorService`, you are encouraged to create 
+a `Configurator` class that specifies the relevant configuration flags 
+and their default values. 
+
+The POS, Chunker, Lemmatizer and NER modules all have their own 
+extension of the `Configurator` class for this purpose.  This makes
+it easy to specify a default constructor for your annotator, and
+to specify only non-default configuration options when you instantiate
+one or more classes that use `ResourceManager` and `Configurator`
+to manage configuration options.
+
+
+##Citation
+
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.  
+If you use any of the NLP modules, please check their README files to see if there are relevant publications to cite. 

@@ -22,7 +22,7 @@ public class TextChunkRepresentationManager {
             Data data, LabelToLookAt labelType) {
         // Translate to BIO
 
-        // System.err.println( "## Encoding scheme is '" + fromRep.toString() + "'." );
+        // logger.error( "## Encoding scheme is '" + fromRep.toString() + "'." );
 
         if (!fromRep.equals(EncodingScheme.BIO)) {
             if (fromRep.equals(EncodingScheme.BILOU))

@@ -7,7 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.core.algorithms;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +16,12 @@ import java.util.List;
 /**
  * @author Narender Gupta
  */
-public class BordaCountTest extends TestCase {
+public class BordaCountTest {
     private List<List<String>> rankings;
     private List<String> aggregate;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void init() throws Exception {
         this.rankings = new ArrayList<>();
         List<String> ranking1 = new ArrayList<>();
         ranking1.add("A");
@@ -55,6 +55,7 @@ public class BordaCountTest extends TestCase {
         this.aggregate.add("A");
     }
 
+    @Test
     public void testSimpleAggregateRanking() {
         List<String> aggregate = BordaCount.getAggregatedRanking(this.rankings);
         assert (aggregate != null);

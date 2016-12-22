@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * This class contains all annotation for a single piece of text (which could contain more than one
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  *
  * @author Vivek Srikumar
  */
-public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable {
+public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable, HasAttributes {
 
     private static final long serialVersionUID = -1308407121595094945L;
 
@@ -59,6 +59,11 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     protected TIntObjectMap<ArrayList<IntPair>> allSpans = null;
 
     /**
+     * Mop containing attributes/metadata information related to TextAnnotation.
+     */
+    protected Map<String, String> attributes;
+
+    /**
      * A symbol table.
      */
     final SymbolTable symtab;
@@ -67,7 +72,8 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             String[] tokens, int[] sentenceEndPositions) {
         super();
 
-        if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
+        // if the string is non-empty, the position of the last element should equal to the number of tokens
+        if (tokens.length > 0 && sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
             throw new IllegalArgumentException("Invalid sentence boundary. "
                     + "Last element should be the number of tokens");
 
@@ -174,9 +180,12 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
     @Override
     public int hashCode() {
-        return this.corpusId.hashCode() * 13 + this.id.hashCode() * 17 + this.text.hashCode() * 19
+        int hashCode = this.corpusId.hashCode() * 13 + this.id.hashCode() * 17 + this.text.hashCode() * 19
                 + (tokens == null ? 0 : Arrays.hashCode(tokens) * 43)
                 + (this.sentences().hashCode() * 31);
+        hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 13);
+
+        return hashCode;
     }
 
     @Override
@@ -191,6 +200,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
 
         if (!this.corpusId.equals(that.corpusId) || !this.id.equals(that.id)
                 || !this.text.equals(that.text))
+            return false;
+
+        if (this.attributes == null && that.attributes != null)
+            return false;
+        if (this.attributes != null && that.attributes == null)
+            return false;
+
+        if (this.attributes != null && !this.attributes.equals(that.attributes))
             return false;
 
         if (this.tokens == null && that.tokens == null)
@@ -229,8 +246,6 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         }
         return sentences;
     }
-
-
 
     /**
      * Get the position of token that corresponds to the character offset that is passed as a
@@ -296,7 +311,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             // throw new
             // IllegalArgumentException("Invalid character offset. The character position "
             // + characterOffset + " does not correspond to any token.");
-            logger.debug("Invalid character offset. The character position " + characterOffset
+            logger.error("Invalid character offset. The character position " + characterOffset
                     + " does not correspond to any token.");
         }
 
@@ -305,6 +320,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // number of tokens + 1.
         if (characterOffset == characterOffsetsToTokens.length) {
             return this.size();
+        }
+
+        if(characterOffsetsToTokens[characterOffset] == -1) {
+            logger.warn("The required character offset is in between tokens, and that's why it is -1. ");
         }
 
         return characterOffsetsToTokens[characterOffset];
@@ -379,5 +398,29 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // return newList;
 
         return list;
+    }
+
+    public void addAttribute(String key, String value)
+    {
+        if (attributes == null)
+            attributes = new HashMap<>();
+
+        attributes.put(key, value);
+    }
+
+    public String getAttribute(String key) {
+        return this.attributes == null ? null : this.attributes.getOrDefault(key, null);
+    }
+
+    public Set<String> getAttributeKeys() {
+        return this.attributes == null ? Collections.emptySet() : this.attributes.keySet();
+    }
+
+    public boolean hasAttribute(String key) {
+        return this.attributes != null && this.attributes.containsKey(key);
+    }
+
+    public void removeAllAttributes() {
+        this.attributes = null;
     }
 }

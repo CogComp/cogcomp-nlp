@@ -21,9 +21,8 @@ import java.util.Random;
  * @author Vivek Srikumar
  */
 public class ShufflingBasedStatisticalSignificance {
+    private static Logger logger = LoggerFactory.getLogger(ShufflingBasedStatisticalSignificance.class);
 
-    private final static Logger log = LoggerFactory
-            .getLogger(ShufflingBasedStatisticalSignificance.class);
     List<EvaluationRecord> output1, output2;
     private int numIterations;
     private Random random;
@@ -85,12 +84,12 @@ public class ShufflingBasedStatisticalSignificance {
     }
 
     public void runSignificanceTest() {
-        log.debug("Doing random shuffle test for " + numIterations + " iterations");
+        logger.debug("Doing random shuffle test for " + numIterations + " iterations");
 
         perf = evaluate(new Pair<>(output1, output2));
 
-        log.debug("System 1 performance: " + perf.getFirst().getSummary());
-        log.debug("System 2 performance: " + perf.getSecond().getSummary());
+        logger.debug("System 1 performance: " + perf.getFirst().getSummary());
+        logger.debug("System 2 performance: " + perf.getSecond().getSummary());
 
         double p = getPrecisionDiff(perf);
         double r = getRecallDiff(perf);

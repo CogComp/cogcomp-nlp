@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +33,7 @@ public class CreateTestTAResource {
     private AnnotatorService annotator;
     private List<String> testInputs;
     private List<TextAnnotation> tas;
+    private static Logger logger = LoggerFactory.getLogger(CreateTestTAResource.class);
 
     public CreateTestTAResource() {
         testInputs = new ArrayList<>();
@@ -255,7 +258,7 @@ public class CreateTestTAResource {
             tas.add(ta);
             count++;
             if (count % 10 == 0)
-                System.out.println("Finished " + count + "/" + total + " sentences");
+                logger.info("Finished " + count + "/" + total + " sentences");
         }
     }
 }

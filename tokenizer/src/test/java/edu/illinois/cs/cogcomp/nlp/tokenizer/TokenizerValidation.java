@@ -30,7 +30,6 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  *
  */
 public class TokenizerValidation {
-
     /** the account name. */
     static String account = null;
 
@@ -95,7 +94,7 @@ public class TokenizerValidation {
         int idx = 0;
         for (Constituent ntt : t)
             System.out.println(ntt.getSurfaceForm());
-        System.out.println();
+        System.err.println();
         for (Constituent ntt : t2)
             System.out.println(ntt.getSurfaceForm());
 
@@ -128,7 +127,7 @@ public class TokenizerValidation {
                 try {
                     stateful = statefulBuilder.createTextAnnotation("test1", "state", sentence);
                 } catch (ArrayIndexOutOfBoundsException aioobe) {
-                    System.out.println("Bad Sentence : " + sentence);
+                    System.err.println("Bad Sentence : " + sentence);
                     System.exit(1);;
                 }
                 TextAnnotation il = ilBuilder.createTextAnnotation("test2", "il", sentence);

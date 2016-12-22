@@ -119,3 +119,8 @@ evaluator.evaluateStanfordTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_ST
 * Developed by: Yiming Jiang
 * Advised by: Professor Dan Roth
 * Mentored by: Mark Sammons
+
+##Citation
+
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.
+Thank you for citing us if you use us in your work!

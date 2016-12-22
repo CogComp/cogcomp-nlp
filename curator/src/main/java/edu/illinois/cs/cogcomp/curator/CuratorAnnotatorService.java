@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
@@ -199,5 +200,48 @@ public class CuratorAnnotatorService implements AnnotatorService {
         // TODO Until a caching mechanism is available in illinois-core-utilities, this
         // AnnotatorService will not support caching
         return isUpdated;
+    }
+
+    /**
+     * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
+     * known to this {@link AnnotatorService}.
+     *
+     * @param annotator the {@link Annotator} to be added.
+     * @throws {@link AnnotatorException} if the annotator requires views that cannot be satisfied.
+     */
+    @Override
+    public void addAnnotator(Annotator annotator) throws AnnotatorException {
+        for ( String prereq : annotator.getRequiredViews() )
+            if ( !viewProviders.containsKey( prereq ) )
+                throw new AnnotatorException( "Prerequisite view '" + prereq +
+                        "' is not provided by other annotators." );
+    }
+
+    /**
+     * Return a set containing the names of all {@link View}s
+     * that this service can provide.
+     *
+     * @return a set of view names corresponding to annotators known to this AnnotatorService
+     */
+    @Override
+    public Set<String> getAvailableViews() {
+        return viewProviders.keySet();
+    }
+
+    /**
+     * Add the specified views to the TextAnnotation argument. This is useful when TextAnnotation objects are
+     * built independently of the service, perhaps by a different system component (e.g. a corpus reader).
+     * If so specified, overwrite existing views.
+     *
+     * @param ta                   The {@link TextAnnotation} to annotate
+     * @param replaceExistingViews ignored by this AnnotatorService
+     * @return a reference to the updated TextAnnotation
+     */
+    @Override
+    public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
+        for (String view : viewProviders.keySet())
+            addView(ta, view);
+
+        return ta;
     }
 }

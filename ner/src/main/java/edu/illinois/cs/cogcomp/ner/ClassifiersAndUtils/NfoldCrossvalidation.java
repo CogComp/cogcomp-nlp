@@ -8,7 +8,12 @@
 package edu.illinois.cs.cogcomp.ner.ClassifiersAndUtils;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class NfoldCrossvalidation {
+    private static Logger logger = LoggerFactory.getLogger(NfoldCrossvalidation.class);
+
     private DocumentCollection[] folds = null;
 
     public NfoldCrossvalidation(DocumentCollection docs, int foldsNum) {

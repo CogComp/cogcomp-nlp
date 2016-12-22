@@ -22,6 +22,8 @@ import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Classifier.SrlNomCla
 import edu.illinois.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.util.List;
@@ -32,13 +34,14 @@ import java.util.List;
  * @author Xinbo Wu
  */
 public class TestSrlNomClassifierPredicateFeatures extends TestCase {
+    private static Logger logger = LoggerFactory.getLogger(TestSrlNomClassifierPredicateFeatures.class);
 
     /**
      * Only in and out relations in the SRL_VERB view are used for the purpose of testing.
      *
      */
     public final void test() throws Exception {
-        System.out.println("PredicateFeatures Feature Extractor");
+        logger.info("PredicateFeatures Feature Extractor");
 
         String[] viewsToAdd =
                 {ViewNames.POS, ViewNames.LEMMA, ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD,
@@ -49,7 +52,7 @@ public class TestSrlNomClassifierPredicateFeatures extends TestCase {
         ta.addView(ClauseViewGenerator.STANFORD);
         ta.addView(PseudoParse.STANFORD);
 
-        System.out.println("This textannotation annotates the text: \n" + ta.getText());
+        logger.info("This textannotation annotates the text: \n" + ta.getText());
 
         View SRL_VERB = ta.getView("SRL_VERB");
 

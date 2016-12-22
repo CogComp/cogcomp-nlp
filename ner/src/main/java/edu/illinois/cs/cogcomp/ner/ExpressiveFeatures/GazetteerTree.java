@@ -7,7 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import gnu.trove.map.hash.THashMap;
 
 import java.io.BufferedReader;
@@ -35,7 +37,16 @@ public class GazetteerTree {
     private StringSplitterInterface splitter = new StringSplitterInterface() {
         @Override
         public String[] split(String line) {
-            return line.split("[\\s]+");
+
+            // character tokenization for Chinese
+            if(ParametersForLbjCode.currentParameters.language == Language.Chinese) {
+                String[] chars = new String[line.length()];
+                for(int i = 0; i < line.length(); i++)
+                    chars[i] = String.valueOf(line.charAt(i));
+                return chars;
+            }
+            else
+                return line.split("[\\s]+");
         }
 
         @Override
@@ -343,11 +354,16 @@ public class GazetteerTree {
         String line;
         while ((line = in.readLine()) != null) {
             String[] terms = splitter.split(line);
+            
+            // ignore any phrases more than maxPhraseLength words.
             if (terms.length > maxPhraseLength)
                 continue;
-
+            
+             // just ignore blank lines, or lines stripped by the splitter
             if (terms.length == 0)
-                continue; // just ignore blank lines, or lines stripped by the splitter
+                continue;
+            
+            // make the entry.
             GazEntry ge = gaz.get(terms[0]);
             if (ge == null) {
                 gaz.put(terms[0], new GazEntry(terms, 1, nms));

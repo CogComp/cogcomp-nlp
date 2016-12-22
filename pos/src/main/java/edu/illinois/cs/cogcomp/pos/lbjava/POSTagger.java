@@ -12,8 +12,12 @@ import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.POSConfigurator;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * After {@link POSTaggerKnown} and {@link POSTaggerUnknown} are trained, this classifier will
@@ -73,6 +77,15 @@ public class POSTagger extends Classifier {
             return taggerKnown.discreteValue(w);
         }
         return taggerUnknown.discreteValue(w);
+    }
+
+    public Set<String> getTagValues() {
+        Lexicon labelLexicon = taggerKnown.getLabelLexicon();
+        Set<String> tagSet = new HashSet();
+        for (int i =0; i < labelLexicon.size(); ++i) {
+            tagSet.add(labelLexicon.lookupKey(i).getStringValue());
+        }
+        return tagSet;
     }
 
     public int hashCode() {

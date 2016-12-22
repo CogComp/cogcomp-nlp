@@ -8,10 +8,14 @@
 package edu.illinois.cs.cogcomp.edison.utilities;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ConcretenessScorerTest extends TestCase {
+import static org.junit.Assert.assertEquals;
 
+public class ConcretenessScorerTest {
+
+    @Test
     public void testGetRating() throws Exception {
-        TestCase.assertEquals(4.93, ConcretenessScorer.getRating("human"));
+        assertEquals(4.93, ConcretenessScorer.getRating("human"), 0.0);
     }
 }
