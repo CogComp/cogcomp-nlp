@@ -11,40 +11,44 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorClient;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 
 /**
- * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient} or
- * {@link PipelineFactory}. The configurations parameters are set in
- * {@link PreprocessorConfigurator} and should be merged with {@link ESRLConfigurator}.
+ * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient} or other annotators directly.
+ * The configurations parameters are set in
+ * {@link PreprocessorConfigurator} and should be merged with {@link AnnotatorConfigurator}.
  */
-public class Preprocessor {
+class Preprocessor {
 
     private final ResourceManager rm;
     private AnnotatorService annotator;
 
-    public Preprocessor(ResourceManager rm) {
-        Map<String, String> nonDefaultValues = new HashMap<String, String>();
+    private static Map<String, Annotator> buildAnnotators() throws IOException {
+        Map<String, Annotator> viewGenerators = new HashMap<>();
+        POSAnnotator pos = new POSAnnotator();
+        viewGenerators.put(pos.getViewName(), pos);
+        return viewGenerators;
+    }
+
+    Preprocessor(ResourceManager rm) {
+        Map<String, String> nonDefaultValues = new HashMap<>();
         nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
         nonDefaultValues.put("cacheDirectory", "annotation-cache-quantifier");
-        this.rm =
-                Configurator.mergeProperties(rm,
-                        new PipelineConfigurator().getConfig(nonDefaultValues));
-        if (rm.getBoolean(PreprocessorConfigurator.USE_PIPELINE_KEY)) {
+        this.rm = Configurator.mergeProperties(rm,
+                        new AnnotatorServiceConfigurator().getConfig(nonDefaultValues));
+        if (!rm.getBoolean(PreprocessorConfigurator.USE_CURATOR)) {
             try {
-                annotator = PipelineFactory.buildPipeline(this.rm);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (AnnotatorException e) {
+                annotator = new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), buildAnnotators(), this.rm);
+            } catch (AnnotatorException | IOException e) {
                 e.printStackTrace();
             }
         } else {
@@ -63,7 +67,7 @@ public class Preprocessor {
      * @param ta The {@link TextAnnotation} to be annotated
      * @return Whether new views were added
      */
-    public boolean annotate(TextAnnotation ta) throws AnnotatorException {
+    boolean annotate(TextAnnotation ta) throws AnnotatorException {
         boolean addedViews = false;
         for (String view : rm.getCommaSeparatedValues(PreprocessorConfigurator.VIEWS_TO_ADD)) {
             if (ta.hasView(view))
