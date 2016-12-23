@@ -40,13 +40,13 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-nlp-pipeline</artifactId>
+            <artifactId>illinois-tokenizer</artifactId>
             <version>3.0.88</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-tokenizer</artifactId>
+            <artifactId>illinois-pos</artifactId>
             <version>3.0.88</version>
             <scope>compile</scope>
         </dependency>

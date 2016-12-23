@@ -92,6 +92,7 @@ of several other components for which it is a dependency.
    Constituency Parser.
 8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
+9. Quantifier: <2G, requires Part-of-Speech. 
 
 
 ### 1.3 LICENSE

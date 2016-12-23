@@ -9,8 +9,6 @@ package edu.illinois.cs.cogcomp.quant;
 
 import java.util.Calendar;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -20,7 +18,9 @@ import edu.illinois.cs.cogcomp.quant.standardize.Date;
 import edu.illinois.cs.cogcomp.quant.standardize.DateRange;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 
-public class QuantTest extends TestCase {
+import static org.junit.Assert.assertTrue;
+
+public class QuantTest {
 
     @Test
     public void testQuantifierView() throws Exception {
