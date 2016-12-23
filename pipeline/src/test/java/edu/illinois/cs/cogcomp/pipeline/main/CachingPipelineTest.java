@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
@@ -100,6 +101,14 @@ public class CachingPipelineTest
         assertTrue(ta.hasView(ViewNames.SHALLOW_PARSE));
         assertTrue(ta.hasView(ViewNames.NER_CONLL));
         assertTrue(IOUtils.exists(TEST_CACHE_FILE));
+
+        try {
+            processor.addView(ta, ViewNames.QUANTITIES);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+        }
+        assertTrue(ta.hasView(ViewNames.QUANTITIES));
+        System.out.println(ta.getView(ViewNames.QUANTITIES));
     }
 
     @Test

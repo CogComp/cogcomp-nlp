@@ -23,6 +23,7 @@ import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
@@ -145,6 +146,11 @@ public class PipelineFactory {
             } catch (Exception e) {
                 throw new IOException("SRL nom cannot init .."+e.getMessage());
             }
+        }
+
+        if(rm.getBoolean(PipelineConfigurator.USE_QUANTIFIER)) {
+            Quantifier quantifierAnnotator = new Quantifier();
+            viewGenerators.put(ViewNames.QUANTITIES, quantifierAnnotator);
         }
 
         return viewGenerators;
