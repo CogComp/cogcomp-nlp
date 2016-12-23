@@ -221,7 +221,7 @@ Running your own text to get a visual sense of what IllinoisPreprocessor is doin
 scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
 ```
 
-## 6. PROGRAMMATIC USE
+## 6. Programmatic Use
 
 You can check the javadoc for detailed information about the
 IllinoisPreprocessor API.
@@ -384,3 +384,24 @@ public class testpipeline {
     }
 }
 ```
+
+## 7. Using pipeline webserver 
+
+Our pipeline contains a webserver wich can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
+
+In order to run the webserver, do: 
+
+```shell
+./pipeline/scripts/runWebserver.sh
+```
+
+
+Here are the available APIs: 
+
+
+| API                    | Address      | Supported request type | Parameters                                                                   | Example                                                          |
+|------------------------|--------------|------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
+| Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
+| Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
+
+
