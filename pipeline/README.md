@@ -387,14 +387,13 @@ public class testpipeline {
 
 ## 7. Using pipeline webserver 
 
-Our pipeline contains a webserver wich can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
+Our pipeline contains a webserver which can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
 
 In order to run the webserver, do: 
 
 ```shell
 ./pipeline/scripts/runWebserver.sh
 ```
-
 
 Here are the available APIs: 
 
@@ -404,4 +403,4 @@ Here are the available APIs:
 | Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
 | Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
 
-
+Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
