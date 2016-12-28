@@ -11,11 +11,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasicTextAnnotationBuilderTest extends TestCase {
+import static org.junit.Assert.*;
+
+public class BasicTextAnnotationBuilderTest {
 
     String sentA = "This is a text that contains pre-tokenized sentences .";
     String sentB = "For the purposes of this test , tokens are separated by whitespace .";
@@ -24,8 +28,8 @@ public class BasicTextAnnotationBuilderTest extends TestCase {
 
     private List<String[]> tokenizedSentences;
 
-    public void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void init() throws Exception {
         String[] sentences = rawText.split("\\n");
         tokenizedSentences = new ArrayList<>(sentences.length);
         for (String sentTokens : sentences) {
@@ -33,6 +37,7 @@ public class BasicTextAnnotationBuilderTest extends TestCase {
         }
     }
 
+    @Test
     public void testCreateTextAnnotationFromTokens() throws Exception {
         TextAnnotation ta =
                 BasicTextAnnotationBuilder.createTextAnnotationFromTokens(tokenizedSentences);

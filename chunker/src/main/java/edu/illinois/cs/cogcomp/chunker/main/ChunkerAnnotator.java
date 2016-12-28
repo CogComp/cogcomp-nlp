@@ -58,16 +58,16 @@ public class ChunkerAnnotator extends Annotator {
      *        requiring Chunker annotation.
      */
     public ChunkerAnnotator(boolean lazilyInitialize) {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize);
+        this(lazilyInitialize, new ChunkerConfigurator().getDefaultConfig());
     }
 
     public ChunkerAnnotator(boolean lazilyInitialize, ResourceManager rm) {
-        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize, rm);
+        super(ViewNames.SHALLOW_PARSE, new String[] {ViewNames.POS}, lazilyInitialize, new ChunkerConfigurator().getConfig(rm));
     }
 
     @Override
     public void initialize(ResourceManager rm) {
-        tagger = new Chunker(rm.getString("modelPath"),rm.getString("modelLexPath"));
+        tagger = new Chunker(rm.getString(ChunkerConfigurator.MODEL_PATH.key),rm.getString(ChunkerConfigurator.MODEL_LEX_PATH.key));
     }
 
 
@@ -81,8 +81,6 @@ public class ChunkerAnnotator extends Annotator {
         }
 
         List<Constituent> tags = record.getView(posfield).getConstituents();
-        // String rawText = record.getText();
-
         List<Token> lbjTokens = LBJavaUtils.recordToLBJTokens(record);
 
         View chunkView = new SpanLabelView(ViewNames.SHALLOW_PARSE, this.NAME, record, 1.0);

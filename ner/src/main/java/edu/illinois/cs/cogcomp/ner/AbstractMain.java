@@ -54,8 +54,8 @@ abstract public class AbstractMain extends Thread {
      * @param message the error message to report before the command line syntax.
      */
     protected void errorProcessingArguments(String message) {
-        logger.error(message);
-        logger.error(this.getCommandSyntax());
+        System.err.println(message);
+        System.err.println(this.getCommandSyntax());
         System.exit(-1);
     }
 
@@ -93,7 +93,7 @@ abstract public class AbstractMain extends Thread {
                 line = bis.readLine();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                logger.info("Bye");
+                System.err.println("Bye");
                 System.exit(0);
                 return;
             }
@@ -104,7 +104,7 @@ abstract public class AbstractMain extends Thread {
                 System.exit(-1);
             }
             if (Thread.currentThread().isInterrupted()) {
-                logger.info("Bye");
+                System.err.println("Bye");
                 System.exit(0);
             }
         }

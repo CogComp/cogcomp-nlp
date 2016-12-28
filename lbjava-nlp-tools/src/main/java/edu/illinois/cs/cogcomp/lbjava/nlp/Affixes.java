@@ -47,7 +47,7 @@ public class Affixes extends Classifier {
     public FeatureVector classify(Object __example) {
         if (!(__example instanceof Word)) {
             String type = __example == null ? "null" : __example.getClass().getName();
-            logger.error("Classifier 'Affixes(Word)' defined on line 107 of CommonFeatures.lbj received '"
+            System.err.println("Classifier 'Affixes(Word)' defined on line 107 of CommonFeatures.lbj received '"
                     + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
@@ -83,7 +83,7 @@ public class Affixes extends Classifier {
     public FeatureVector[] classify(Object[] examples) {
         if (!(examples instanceof Word[])) {
             String type = examples == null ? "null" : examples.getClass().getName();
-            logger.error("Classifier 'Affixes(Word)' defined on line 107 of CommonFeatures.lbj received '"
+            System.err.println("Classifier 'Affixes(Word)' defined on line 107 of CommonFeatures.lbj received '"
                     + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);

@@ -126,7 +126,7 @@ public class MixedChunkWindowTwoBeforePOSWindowThreeBefore implements FeatureExt
                     SHALLOW_PARSE.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (POS_tag.size() != 1 || Chunk_label.size() != 1) {
-                logger.info("Error token has more than one POS tag or Chunk Label.");
+                logger.warn("Error token has more than one POS tag or Chunk Label.");
             }
 
             labels[i] = Chunk_label.get(0);

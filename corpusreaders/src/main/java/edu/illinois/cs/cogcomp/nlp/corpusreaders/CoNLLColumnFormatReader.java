@@ -343,7 +343,7 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
         for (TextAnnotation ta : reader) {
             counter.incrementCount("Sentences");
-            logger.info(ta.getTokenizedText());
+            System.out.println(ta.getTokenizedText());
 
             if (!ta.hasView(ViewNames.SRL_VERB))
                 continue;
@@ -357,8 +357,8 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
         }
 
-        logger.info((int) counter.getCount("Sentences") + " sentences");
-        logger.info((int) counter.getCount("Predicates") + " predicates");
+        System.out.println((int) counter.getCount("Sentences") + " sentences");
+        System.out.println((int) counter.getCount("Predicates") + " predicates");
     }
 
 }

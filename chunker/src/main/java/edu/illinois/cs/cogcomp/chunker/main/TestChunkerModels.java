@@ -70,8 +70,8 @@ public class TestChunkerModels {
             if (args.length == 1)
                 test = new TestChunkerModels(null, args[0], null);
             else {
-                logger.error("Usage: " + NAME + " testData modelDir modelName");
-                logger.error("OR " + NAME + " testData");
+                System.err.println("Usage: " + NAME + " testData modelDir modelName");
+                System.err.println("OR " + NAME + " testData");
                 System.exit(-1);
             }
         } else

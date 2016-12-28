@@ -108,7 +108,7 @@ about Part of Speech tagging, [see this link](http://cogcomp.cs.illinois.edu/pag
 
 ```java 
 String lemma = lem.getSingleLemma( "leaders", "NNS" );
-logger.info( lemma );
+System.out.println( lemma );
 // should return 'leader'
 ```
 
@@ -160,4 +160,6 @@ TODO
 
 ##Citation
 
-Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/illinois-lemmatizer
+If you use this code in your research, please provide the URL for this github repository in the relevant publications.
+Thank you for citing us if you use us in your work! 
+More info at http://cogcomp.cs.illinois.edu/page/software_view/illinois-lemmatizer

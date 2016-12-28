@@ -8,8 +8,14 @@
 package edu.illinois.cs.cogcomp.core.math;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestArgMax extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class TestArgMax {
+
+    @Test
     public void testArgMax() {
         ArgMax<Integer, Double> argmax = new ArgMax<>(-1, Double.NEGATIVE_INFINITY);
 
@@ -19,9 +25,10 @@ public class TestArgMax extends TestCase {
         }
 
         assertEquals(5, argmax.getArgmax().intValue());
-        assertEquals(94d, argmax.getMaxValue());
+        assertEquals(94d, argmax.getMaxValue(), 0.0);
     }
 
+    @Test
     public void testRandomTieBreak() {
         ArgMax<Integer, Double> argmax = new ArgMax<>(-1, Double.NEGATIVE_INFINITY, true);
 
@@ -46,6 +53,6 @@ public class TestArgMax extends TestCase {
         }
 
         assertTrue(changed);
-        assertEquals(94d, argmax.getMaxValue());
+        assertEquals(94d, argmax.getMaxValue(), 0.0);
     }
 }

@@ -45,7 +45,7 @@ public class WordSplitter implements Parser {
             filename = args[0];
             if (args.length > 1) throw new Exception();
         } catch (Exception e) {
-            logger.error("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter <file name>");
+            System.err.println("usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter <file name>");
             System.exit(1);
         }
 
@@ -55,12 +55,12 @@ public class WordSplitter implements Parser {
              s = (LinkedVector) splitter.next()) {
             if (s.size() > 0) {
                 Word w = (Word) s.get(0);
-                logger.info(w.form);
+                System.out.print(w.form);
                 for (w = (Word) w.next; w != null; w = (Word) w.next)
-                    logger.info(" " + w.form);
+                    System.out.print(" " + w.form);
             }
 
-            logger.info("\n");
+            System.out.println();
         }
     }
 

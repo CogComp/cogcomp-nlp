@@ -17,10 +17,12 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
-public class TestPOSBaseLineCounter extends TestCase {
+public class TestPOSBaseLineCounter {
     private static Logger logger = LoggerFactory.getLogger(TestPOSBaseLineCounter.class);
 
+    @Test
     public final void test() throws Exception {
 
         POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");

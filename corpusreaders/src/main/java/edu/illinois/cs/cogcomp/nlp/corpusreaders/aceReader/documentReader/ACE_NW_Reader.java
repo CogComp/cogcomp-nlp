@@ -22,6 +22,10 @@ import java.util.regex.Pattern;
 
 final class ACE_NW_Reader {
     private static Logger logger = LoggerFactory.getLogger(ACE_NW_Reader.class);
+
+    /**
+     * TODO: make the compiled patterns static fields.
+     */
     static boolean isDebug = false;
 
     public static Pair<List<Pair<String, Paragraph>>, Map<String, String>> parse(String content,

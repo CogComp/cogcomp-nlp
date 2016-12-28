@@ -106,7 +106,7 @@ public class WordsInDocumentByDirectory implements Parser {
                                       boolean shuffle, long seed) {
         File d = new File(directory);
         if (!d.exists() || !d.isDirectory()) {
-            logger.error(
+            System.err.println(
                     "Error: '" + directory + "' does not exist or is not a directory.");
             new Exception().printStackTrace();
             System.exit(1);
@@ -217,7 +217,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             in = new BufferedReader(new FileReader(inputFile));
         } catch (Exception e) {
-            logger.error("Can't open '" + inputFile + "' for input: " + e);
+            System.err.println("Can't open '" + inputFile + "' for input: " + e);
             System.exit(1);
         }
 
@@ -241,7 +241,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             line = in.readLine();
         } catch (Exception e) {
-            logger.error("Can't read from '" + inputFile + "': " + e);
+            System.err.println("Can't read from '" + inputFile + "': " + e);
             System.exit(1);
         }
 
@@ -261,7 +261,7 @@ public class WordsInDocumentByDirectory implements Parser {
         try {
             in.close();
         } catch (Exception e) {
-            logger.error("Can't close input file '" + inputFile + "': " + e);
+            System.err.println("Can't close input file '" + inputFile + "': " + e);
             System.exit(1);
         }
     }

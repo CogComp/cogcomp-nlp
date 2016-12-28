@@ -63,9 +63,9 @@ public class ShufflingBasedStatisticalSignificance {
         sig.addInstance(e1, e2);
         sig.runSignificanceTest();
 
-        logger.info(String.valueOf(sig.precisionSignificance()));
-        logger.info(String.valueOf(sig.recallSignificance()));
-        logger.info(String.valueOf(sig.f1Significance()));
+        System.out.println(sig.precisionSignificance());
+        System.out.println(sig.recallSignificance());
+        System.out.println(sig.f1Significance());
     }
 
     public void addInstance(EvaluationRecord system1, EvaluationRecord system2) {

@@ -124,9 +124,9 @@ public class Main extends AbstractMain {
             bracketedOutput = false;
         else {
             if (new File(args[current]).exists()) {
-                logger.info("Loading properties from " + args[current]);
+                System.out.println("Loading properties from " + args[current]);
                 this.resourceManager = new ResourceManager(args[current]);
-                logger.info("Completed loading properties.");
+                System.out.println("Completed loading properties.");
             } else
                 throw new RuntimeException("The configuration file \"" + args[current]
                         + "\" did not exist.");
@@ -153,7 +153,7 @@ public class Main extends AbstractMain {
         switch (inswitch) {
             case MENU:
                 if (line.length() == 0) {
-                    logger.error("There is nothing to process.");
+                    System.err.println("There is nothing to process.");
                     return;
                 }
                 switch (line.charAt(0)) {
@@ -166,7 +166,7 @@ public class Main extends AbstractMain {
                     case '3':
                         if (indirectory == null) {
                             inswitch = InputSwitch.ENTER_STRING;
-                            logger.info("Enter the text to process, or blank line to return to the menu.\n");
+                            System.out.println("Enter the text to process, or blank line to return to the menu.\n");
                         } else
                             execute();
                         break;
@@ -174,11 +174,11 @@ public class Main extends AbstractMain {
                         inswitch = InputSwitch.SHOW_CONFIG;
                         break;
                     case 'q':
-                        logger.info("Bye");
+                        System.out.println("Bye");
                         System.exit(0);
                         break;
                     default:
-                        logger.error("Bad menu selection : " + line.charAt(0));
+                        System.err.println("Bad menu selection : " + line.charAt(0));
                 }
                 break;
             case ENTER_IN:
@@ -187,7 +187,7 @@ public class Main extends AbstractMain {
                 else {
                     File tryin = new File(line);
                     if (!tryin.exists()) {
-                        logger.info("\"" + line
+                        System.out.println("\"" + line
                                 + "\" did not exist, as an input it must exist.");
                     } else {
                         indirectory = tryin;
@@ -229,13 +229,13 @@ public class Main extends AbstractMain {
                 } else {
                     int endkeyindex = line.indexOf(" ");
                     if (endkeyindex == -1) {
-                        logger.info("Invalid key value separator, expected a space.");
+                        System.err.println("Invalid key value separator, expected a space.");
                         return;
                     }
                     String key = line.substring(0, endkeyindex);
                     String value = line.substring(endkeyindex + 1);
                     this.resourceManager.getProperties().setProperty(key, value);
-                    logger.info(key + "=" + value);
+                    System.out.println(key + "=" + value);
                     changedproperty = true;
                 }
                 break;
@@ -248,17 +248,17 @@ public class Main extends AbstractMain {
     @Override
     protected void inputMenu() {
         if (this.nerAnnotator == null) {
-            logger.info("Loading resources...");
+            System.out.println("Loading resources...");
             if (resourceManager == null)
                 this.resourceManager = new NerBaseConfigurator().getDefaultConfig();
             this.nerAnnotator = new NERAnnotator(this.resourceManager, "CONLL_DEFAULT");
-            logger.info("Completed loading resources.");
+            System.out.println("Completed loading resources.");
         }
 
         // display the command prompt depending on the mode we are in.
         switch (inswitch) {
             case MENU:
-                logger.info("");
+                System.out.println();
                 String outdesc;
                 String indesc;
                 String in;
@@ -298,21 +298,21 @@ public class Main extends AbstractMain {
                         out = outdirectory.toString();
                     }
                 }
-                logger.info("1 - select input [" + in + "]\n" + "2 - change output [" + out
+                System.out.println("1 - select input [" + in + "]\n" + "2 - change output [" + out
                         + "]\n" + "3 - annotate " + indesc + ", " + outdesc + ".\n"
                         + "4 - show and modify configuration parameters.\n"
                         + "q - exit the application.\n" + "Choose from above options: ");
                 break;
             case ENTER_IN:
-                logger.info("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
+                System.out.println("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
                 break;
 
             case ENTER_OUT:
-                logger.info("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
+                System.out.println("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
                 break;
 
             case ENTER_STRING:
-                logger.info(": ");
+                System.out.println(": ");
                 break;
 
             case SHOW_CONFIG:
@@ -336,8 +336,8 @@ public class Main extends AbstractMain {
         if (indirectory.isDirectory()) {
             File[] files = indirectory.listFiles();
             if (outdirectory != null) {
-                logger.info("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
-                logger.info("Completed   : ");
+                System.out.println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
+                System.out.println("Completed   : ");
                 double ratio = 50.0 / (double) files.length;
                 int completed = 0;
                 int i = 0;
@@ -347,17 +347,17 @@ public class Main extends AbstractMain {
 
                     // present completion.
                     while ((i * ratio) > completed) {
-                        logger.info("•");
+                        System.out.println("•");
                         completed++;
                     }
                 }
                 this.getResultProcessor().done();
                 while ((i * ratio) > completed) {
-                    logger.info("•");
+                    System.out.println("•");
                     completed++;
                     i++;
                 }
-                logger.info("");
+                System.out.println("");
             } else {
                 int i = 0;
                 for (; i < files.length; i++) {
@@ -369,7 +369,7 @@ public class Main extends AbstractMain {
         } else {
             processInputFile(indirectory);
             this.getResultProcessor().done();
-            logger.info("Completed");
+            System.out.println("Completed");
         }
     }
 
@@ -408,15 +408,16 @@ public class Main extends AbstractMain {
                 else if (token.getEndCharOffset() <= entity.getEndCharOffset())
                     break; // we are inside of the entity.
             }
-            sb.append(token.getSurfaceForm());
+            String sf = token.getSurfaceForm();
+            sb.append(sf);
             sb.append(' ');
             if (entityindx < entities.size()) {
                 Constituent entity = entities.get(entityindx);
                 if (token.getStartCharOffset() == entity.getStartCharOffset()) {
                     if (token.getEndCharOffset() == entity.getEndCharOffset()) {
-                        sb.append("U-" + entity.getLabel());
+                        sb.append("B-" + entity.getLabel());
                     } else if (token.getEndCharOffset() > entity.getEndCharOffset()) {
-                        sb.append("U-" + entity.getLabel());
+                        sb.append("B-" + entity.getLabel());
                         System.err
                                 .println("Odd. There is an entity enclosed within a single token!");
                     } else {

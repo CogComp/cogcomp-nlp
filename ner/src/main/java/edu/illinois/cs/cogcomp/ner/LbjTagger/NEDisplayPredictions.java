@@ -67,19 +67,19 @@ public class NEDisplayPredictions {
     public static void reportPredictions(Data dataSet) {
         for (int docid = 0; docid < dataSet.documents.size(); docid++) {
             NERDocument doc = dataSet.documents.get(docid);
-            logger.info("\nGetting document " + doc.docname);
+            System.out.println("\nGetting document " + doc.docname);
             ArrayList<LinkedVector> sentences = doc.sentences;
             for (int k = 0; k < sentences.size(); k++) {
                 LinkedVector sentence = sentences.get(k);
                 int N = sentence.size();
                 for (int i = 0; i < N; ++i) {
                     NEWord word = (NEWord) sentence.get(i);
-                    logger.info(word.form + "\tL:" + word.neLabel + "\t1:"
+                    System.out.println(word.form + "\tL:" + word.neLabel + "\t1:"
                             + word.neTypeLevel1 + "\t2:" + word.neTypeLevel2 + "\t(" + doc.docname
                             + ")");
                     for (String h2 : word.gazetteers)
-                        logger.info(" " + h2);
-                    logger.info("");
+                        System.out.print(" " + h2);
+                    System.out.println();
                 }
             }
         }

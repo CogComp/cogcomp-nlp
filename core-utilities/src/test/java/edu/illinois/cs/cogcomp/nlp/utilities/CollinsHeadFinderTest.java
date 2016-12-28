@@ -15,13 +15,18 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Collections;
 
-public class CollinsHeadFinderTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class CollinsHeadFinderTest {
 
     private TextAnnotation ta;
 
+    @Before
     public void setUp() {
         String[] sentence =
                 "Central Asia , North east Europe and Africa are continents .".split(" ");
@@ -44,6 +49,7 @@ public class CollinsHeadFinderTest extends TestCase {
         ta.addView(ViewNames.PARSE_GOLD, view);
     }
 
+    @Test
     public void testGetHeadword() throws Exception {
         TreeView view = (TreeView) ta.getView(ViewNames.PARSE_GOLD);
 

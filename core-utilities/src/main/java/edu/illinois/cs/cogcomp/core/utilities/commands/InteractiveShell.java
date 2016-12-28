@@ -9,8 +9,6 @@ package edu.illinois.cs.cogcomp.core.utilities.commands;
 
 import edu.illinois.cs.cogcomp.core.algorithms.LevensteinDistance;
 import edu.illinois.cs.cogcomp.core.math.ArgMax;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -55,8 +53,6 @@ import java.lang.reflect.Modifier;
  * @author vivek
  */
 public class InteractiveShell<T> {
-    private static Logger logger = LoggerFactory.getLogger(InteractiveShell.class);
-
     Class<T> type;
 
     /**
@@ -74,7 +70,7 @@ public class InteractiveShell<T> {
      */
     public void showDocumentation() {
 
-        logger.info("\nAvailable Commands:\n\n");
+        System.out.println("\nAvailable Commands:\n\n");
         int i = 1;
         for (Method elem : type.getMethods()) {
             if (Modifier.isStatic(elem.getModifiers())) {
@@ -156,7 +152,7 @@ public class InteractiveShell<T> {
                         incorrectParams = false;
                         Object o = m.invoke(null, ss);
                         if (o != null) {
-                            logger.info(o.toString());
+                            System.out.println(o.toString());
                         }
                     }
                 }
@@ -166,13 +162,13 @@ public class InteractiveShell<T> {
         }
 
         if (!foundMethod) {
-            logger.info("Unable to find " + args[0]);
+            System.out.println("Unable to find " + args[0]);
             this.showDocumentation();
 
             String nearest = getNearestCommand(mList, args[0]);
-            logger.info("Did you mean: " + nearest);
+            System.out.println("Did you mean: " + nearest);
         } else if (incorrectParams) {
-            logger.info("Invalid usage of " + args[0]);
+            System.out.println("Invalid usage of " + args[0]);
 
             int i = 1;
             for (Method elem : type.getMethods()) {
@@ -191,26 +187,26 @@ public class InteractiveShell<T> {
     }
 
     private void printMethodSignature(int i, Method elem) {
-        logger.info(i + ". " + elem.getName() + " ");
-        logger.info(" [" + elem.getParameterTypes().length + " parameters]");
+        System.out.print(i + ". " + elem.getName() + " ");
+        System.out.println(" [" + elem.getParameterTypes().length + " parameters]");
 
         if (elem.isAnnotationPresent(CommandDescription.class)) {
             CommandDescription annotation = elem.getAnnotation(CommandDescription.class);
 
             String usage = annotation.usage();
 
-            logger.info("   " + usage);
+            System.out.println("   " + usage);
 
             String description = annotation.description();
 
             for (String s : splitBuffer(description, 75)) {
-                logger.info("     " + s);
+                System.out.println("     " + s);
             }
         } else {
-            logger.info("No documentation available");
+            System.out.println("No documentation available");
         }
 
-        logger.info("");
+        System.out.println();
     }
 
     /**

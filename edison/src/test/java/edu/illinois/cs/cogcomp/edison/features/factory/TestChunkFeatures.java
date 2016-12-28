@@ -19,6 +19,7 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ import java.util.List;
  *
  * @author Vivek Srikumar
  */
-public class TestChunkFeatures extends TestCase {
+public class TestChunkFeatures {
     private static Logger logger = LoggerFactory.getLogger(TestChunkFeatures.class);
 
     private static List<TextAnnotation> tas;
@@ -45,10 +46,11 @@ public class TestChunkFeatures extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
+    @Test
     public final void testChunkEmbedding() throws Exception {
 
         logger.info("\n\tTesting NER embedding");
@@ -65,11 +67,13 @@ public class TestChunkFeatures extends TestCase {
                 "");
     }
 
+    @Test
     public final void testChunkPath() throws EdisonException {
         logger.info("\n\tTesting chunk path");
         testFex(ChunkPathPattern.SHALLOW_PARSE, true, ViewNames.SHALLOW_PARSE);
     }
 
+    @Test
     public final void testChunkProperties() throws Exception {
         logger.info("\n\tTesting hasModal");
         testFex(ChunkPropertyFeatureFactory.hasModalVerb, false, "");
@@ -78,6 +82,7 @@ public class TestChunkFeatures extends TestCase {
         testFex(ChunkPropertyFeatureFactory.isNegated, false, "");
     }
 
+    @Test
     public final void testLinearPosition() throws Exception {
         logger.info("\n\tTesting linear position");
         testFex(LinearPosition.instance, true, "");

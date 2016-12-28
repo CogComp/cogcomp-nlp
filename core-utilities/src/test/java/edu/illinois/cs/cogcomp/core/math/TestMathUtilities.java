@@ -8,15 +8,18 @@
 package edu.illinois.cs.cogcomp.core.math;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static edu.illinois.cs.cogcomp.core.math.MathUtilities.*;
 import static edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities.asDoubleList;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-public class TestMathUtilities extends TestCase {
+public class TestMathUtilities {
 
     List<Double> doubleList1;
     double[] a1;
@@ -24,9 +27,8 @@ public class TestMathUtilities extends TestCase {
     List<Integer> intList1;
     List<Double> emptyDoubleList;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
 
         doubleList1 = new ArrayList<>();
         intList1 = new ArrayList<>();
@@ -42,6 +44,7 @@ public class TestMathUtilities extends TestCase {
 
     }
 
+    @Test
     public void testMin() {
         assertEquals(min(a1), new Pair<>(5, -1.0));
 
@@ -52,6 +55,7 @@ public class TestMathUtilities extends TestCase {
         assertEquals(min(emptyDoubleList), new Pair<Integer, Double>(-1, null));
     }
 
+    @Test
     public void testMax() {
 
         assertEquals(max(a1), new Pair<>(6, 51.0));
@@ -64,33 +68,35 @@ public class TestMathUtilities extends TestCase {
 
     }
 
+    @Test
     public void testSoftmax() {
 
         List<Double> l = new ArrayList<>();
         l.add(1.0);
 
         for (double d : softmax(l))
-            assertEquals(d, 1.0);
+            assertEquals(d, 1.0, 0.0);
 
         l.add(1.0);
 
         for (double d : softmax(l))
-            assertEquals(d, 0.5);
+            assertEquals(d, 0.5, 0.0);
 
         l.add(1.0);
         l.add(1.0);
 
         for (double d : softmax(l))
-            assertEquals(d, 0.25);
+            assertEquals(d, 0.25, 0.0);
 
         for (double d : softmax(new double[] {10, 100}, new double[] {100, 10}))
-            assertEquals(d, 0.5);
+            assertEquals(d, 0.5, 0.0);
 
     }
 
+    @Test
     public void testLogAdd() {
-        assertEquals(logAdd(Double.NEGATIVE_INFINITY, 1), 1.0);
-        assertEquals(logAdd(10, Double.NEGATIVE_INFINITY), 10.0);
+        assertEquals(logAdd(Double.NEGATIVE_INFINITY, 1), 1.0, 0.0);
+        assertEquals(logAdd(10, Double.NEGATIVE_INFINITY), 10.0, 0.0);
 
         double[] d = new double[] {-15, -1, 0, 1, 3};
         for (double x : d) {
@@ -103,9 +109,10 @@ public class TestMathUtilities extends TestCase {
         }
     }
 
+    @Test
     public void testLogAddCollection() {
-        assertEquals(logAdd(new double[] {Double.NEGATIVE_INFINITY, 1}), 1.0);
-        assertEquals(logAdd(new double[] {10, Double.NEGATIVE_INFINITY}), 10.0);
+        assertEquals(logAdd(new double[] {Double.NEGATIVE_INFINITY, 1}), 1.0, 0.0);
+        assertEquals(logAdd(new double[] {10, Double.NEGATIVE_INFINITY}), 10.0, 0.0);
 
         double[] d = new double[] {-15, -1, 0, 1, 3};
         for (double x : d) {
@@ -125,6 +132,7 @@ public class TestMathUtilities extends TestCase {
         }
     }
 
+    @Test
     public void testLogGamma() {
 
         assertTrue(epsilonEquals(lnGamma(6 + 1), Math.log(720)));
@@ -142,6 +150,7 @@ public class TestMathUtilities extends TestCase {
         assertTrue(epsilonEquals(lnGamma(Math.PI), 0.82769459232343));
     }
 
+    @Test
     public void testLogFactorial() {
         myAssertEpsilonEquals(lnFactorial(6), Math.log(720));
         myAssertEpsilonEquals(lnFactorial(3), Math.log(6));
@@ -152,6 +161,7 @@ public class TestMathUtilities extends TestCase {
         assertTrue(epsilonEquals(d1, d2));
     }
 
+    @Test
     public void testBinomialCoeffs() {
         int[] c = new int[] {1, 5, 10, 10, 5, 1};
         for (int i = 0; i <= 5; i++) {
@@ -159,6 +169,7 @@ public class TestMathUtilities extends TestCase {
         }
     }
 
+    @Test
     public void testBeta() {
 
         // beta is symmetric
@@ -170,6 +181,7 @@ public class TestMathUtilities extends TestCase {
         myAssertEpsilonEquals(beta(3, Math.PI), 2 / (Math.PI * (Math.PI + 1) * (Math.PI + 2)));
     }
 
+    @Test
     public void testIncompleteGamma() {
         // P(a,0) = 0, Q(a,0) =1
 
@@ -200,6 +212,7 @@ public class TestMathUtilities extends TestCase {
 
     }
 
+    @Test
     public void testErf() {
         // erf(0) = 0, erfc(0) = 1
         myAssertEpsilonEquals(erf(0), 0);

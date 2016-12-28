@@ -104,6 +104,12 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         };
     }
 
+    /**
+     * checks whether ta with corresponding TEXT is in database -- not whether the same
+     *    annotations are present
+     * @param ta
+     * @return
+     */
     @Override
     public boolean contains(TextAnnotation ta) {
         boolean isContained = false;
@@ -120,6 +126,19 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
             final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
             data.remove(ta.getTokenizedText().hashCode());
         }
+    }
+
+    @Override
+    public TextAnnotation getTextAnnotation(TextAnnotation ta) {
+        for (String dataset : getAllDatasets()) {
+            final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
+            if(data.containsKey(ta.getTokenizedText().hashCode()))
+            {
+                byte[] taData = data.get(ta.getTokenizedText().hashCode());
+                return SerializationHelper.deserializeTextAnnotationFromBytes(taData);
+            }
+        }
+        return null;
     }
 
     private ConcurrentMap<Integer, byte[]> getMap(String dataset) {

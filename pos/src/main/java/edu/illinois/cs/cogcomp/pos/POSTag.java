@@ -77,19 +77,19 @@ public class POSTag {
                 if (prediction.equals(label)) {
                     ++correct;
                     if (!quiet)
-                        System.out.println("+");
+                        System.out.print("+");
                 } else {
                     ++incorrect;
                     if (!quiet)
-                        System.out.println("-[" + label + "]");
+                        System.out.print("-[" + label + "]");
                 }
 
                 if (!quiet)
-                    System.out.println(word + " ");
+                    System.out.print(word + " ");
             }
 
             if (!quiet)
-                System.out.println("");
+                System.out.print("");
         }
 
         System.out.println("Accuracy: " + (100 * correct / (double) (correct + incorrect)) + "%");

@@ -114,7 +114,7 @@ public class POSandPositionWindowThree implements FeatureExtractor {
                     POS.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (POS_tag.size() != 1) {
-                logger.info("Error token has more than one POS tag.");
+                logger.warn("Error token has more than one POS tag.");
             }
 
             tags[i] = POS_tag.get(0);

@@ -68,7 +68,7 @@ public class NfoldCrossvalidation {
         System.out.println("\tConfusion matrix within confidence threshold:");
         for (int i = 0; i < classesNum; i++) {
             for (int j = 0; j < classesNum; j++)
-                logger.info(confusionMatrix[i][j] + "\t");
+                System.out.print(confusionMatrix[i][j] + "\t");
             System.out.println();
         }
     }

@@ -20,12 +20,15 @@ import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import junit.framework.TestCase;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class
@@ -35,7 +38,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TestWordFeatureFactory extends TestCase {
+public class TestWordFeatureFactory {
 
     private static List<TextAnnotation> tas;
 
@@ -52,11 +55,12 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
+//    @Override
+//    protected void setUp() throws Exception {
+//        super.setUp();
+//    }
 
+    @Test
     public final void testCapitalization() throws EdisonException {
         logger.info("\tTesting capitalization");
         for (TextAnnotation ta : tas) {
@@ -64,6 +68,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testConflatedPOS() throws EdisonException {
         logger.info("\tTesting conflated POS");
         for (TextAnnotation ta : tas) {
@@ -71,6 +76,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testDeAdjectivalAbstractNounsSuffixes() throws EdisonException {
         logger.info("\tTesting de-adjectival abstract noun suffixes");
         for (TextAnnotation ta : tas) {
@@ -78,6 +84,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testDeNominalNounProducingSuffixes() throws EdisonException {
         logger.info("\tTesting de-nominal noun producing suffixes");
         for (TextAnnotation ta : tas) {
@@ -85,6 +92,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testDeVerbalSuffixes() throws EdisonException {
         logger.info("\tTesting de-verbal suffixes");
         for (TextAnnotation ta : tas) {
@@ -92,6 +100,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testGerundMarker() throws EdisonException {
         logger.info("\tTesting gerund marker");
         for (TextAnnotation ta : tas) {
@@ -99,6 +108,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testKnownPrefixes() throws EdisonException {
         logger.info("\tTesting known prefixes");
         for (TextAnnotation ta : tas) {
@@ -106,6 +116,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testLemma() throws EdisonException {
         logger.info("\tTesting lemma");
         for (TextAnnotation ta : tas) {
@@ -113,6 +124,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testNominalizationMarker() throws EdisonException {
         logger.info("\tTesting nominalization marker");
         for (TextAnnotation ta : tas) {
@@ -120,6 +132,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testPOS() throws EdisonException {
         logger.info("\tTesting POS");
         for (TextAnnotation ta : tas) {
@@ -127,6 +140,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testPrefixSuffixes() throws EdisonException {
         logger.info("\tTesting prefix, suffixes");
         for (TextAnnotation ta : tas) {
@@ -134,6 +148,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testWord() throws EdisonException {
         logger.info("\tTesting word");
         for (TextAnnotation ta : tas) {
@@ -160,6 +175,7 @@ public class TestWordFeatureFactory extends TestCase {
     //
     // }
 
+    @Test
     public final void testWordNet() throws EdisonException {
         logger.info("\tTesting wordNet");
         WordNetManager.loadConfigAsClasspathResource(true);
@@ -170,6 +186,7 @@ public class TestWordFeatureFactory extends TestCase {
         }
     }
 
+    @Test
     public final void testFeatureCollection() throws Exception {
         FeatureCollection f = new FeatureCollection("features");
         f.addFeatureExtractor(WordFeatureExtractorFactory.conflatedPOS);

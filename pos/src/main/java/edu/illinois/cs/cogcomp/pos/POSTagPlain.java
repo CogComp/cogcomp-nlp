@@ -57,7 +57,7 @@ public class POSTagPlain {
             sentence += " (" + tag + " " + word.form + ")";
 
             if (word.next == null) {
-                logger.info(sentence.substring(1));
+                System.out.println(sentence.substring(1));
                 sentence = "";
             }
         }
