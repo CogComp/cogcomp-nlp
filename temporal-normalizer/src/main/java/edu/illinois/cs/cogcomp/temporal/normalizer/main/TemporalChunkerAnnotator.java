@@ -75,7 +75,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                 lazilyInitialize,
                 new TemporalChunkerConfigurator().getDefaultConfig()
         );
-        initialize(nonDefaultRm);
+       // initialize(nonDefaultRm);
     }
 
     /**
