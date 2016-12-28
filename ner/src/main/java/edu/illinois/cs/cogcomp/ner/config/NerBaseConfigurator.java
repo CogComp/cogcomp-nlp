@@ -40,6 +40,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String MIN_CONFIDENCE_PREDICTIONS_2 = "minConfidencePredictionsLevel2";
     public final static String TREAT_ALL_FILES_AS_ONE = "treatAllFilesInFolderAsOneBigDocument";
     public final static String DEBUG = "debug";
+    public final static String LANGUAGE = "language";
 
 
     public final static String FORMS = "Forms";
@@ -105,6 +106,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL";
+    private final static String DEFAULT_LANGUAGE = "en";
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";
     private static final String DEFAULT_OMISSION_RATE = "0.2";
@@ -155,6 +157,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(RANDOM_NOISE_LEVEL, DEFAULT_RANDOM_NOISE_LEVEL);
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
         props.setProperty(IS_LAZILY_INITIALIZED.key, TRUE);
+        props.setProperty(LANGUAGE, DEFAULT_LANGUAGE);
 
         return new ResourceManager(props);
     }

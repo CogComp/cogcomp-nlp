@@ -111,6 +111,7 @@ public class ViewNames {
     public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
     public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
     public static final String GAZETTEER_NE = "GAZETTEER_NE";
+    public static final String TIMEX3 = "TIMEX3";
 
     public static final String TIMEX3 = "TIMEX3";
 

@@ -15,9 +15,12 @@ import java.util.TreeMap;
 
 import edu.illinois.cs.cogcomp.edison.features.helpers.TestPosHelper;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 public class TestPOSBaseLineCounter {
+    private static Logger logger = LoggerFactory.getLogger(TestPOSBaseLineCounter.class);
 
     @Test
     public final void test() throws Exception {
@@ -37,7 +40,7 @@ public class TestPOSBaseLineCounter {
             }
         }
 
-        System.out.println(str);
+        logger.info(str);
 
         try {
             File file = new File("src/test/resources/outputFiles/TestBaseLineCounterOutput");

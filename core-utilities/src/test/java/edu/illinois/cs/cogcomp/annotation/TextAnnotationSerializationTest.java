@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class TextAnnotationSerializationTest {
+    private static Logger logger = LoggerFactory.getLogger(TextAnnotationSerializationTest.class);
 
     String sentA = "This is a text that contains pre-tokenized sentences .";
     String sentB = "For the purposes of this test , tokens are separated by whitespace .";

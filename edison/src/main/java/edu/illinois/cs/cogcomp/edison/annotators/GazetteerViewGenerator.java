@@ -288,9 +288,9 @@ public class GazetteerViewGenerator extends Annotator {
 
         ta.addView(gazetteersInstance);
 
-        logger.info(ta.toString());
+        System.out.println(ta.toString());
 
-        logger.info(ta.getView(gazetteersInstance.getViewName()).toString());
+        System.out.println(ta.getView(gazetteersInstance.getViewName()).toString());
     }
 
     private void lazyLoadGazetteers(String directory, boolean gzip) throws URISyntaxException,

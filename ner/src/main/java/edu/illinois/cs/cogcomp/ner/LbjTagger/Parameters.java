@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
+import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
@@ -42,7 +43,7 @@ public class Parameters {
             "Affixes", "PreviousTag1", "PreviousTag2", "PreviousTagPatternLevel1",
             "PreviousTagPatternLevel2", "AggregateContext", "AggregateGazetteerMatches",
             "PrevTagsForContext", "PredictionsLevel1", "GazetteersFeatures", "WordEmbeddings",
-            "BrownClusterPaths", "Linkability"};
+            "BrownClusterPaths", "Linkability", "WikifierFeatures"};
 
 
     /**
@@ -136,6 +137,14 @@ public class Parameters {
                                 + NerBaseConfigurator.MODEL_NAME + "'");
             }
             param.configFilename = cFilename;
+
+            if (rm.containsKey("language")) {
+                Language lang = Language.getLanguageByCode(rm.getString("language"));
+                param.language = lang;
+
+                // becuase it is used in initializing tree gazetteers
+                ParametersForLbjCode.currentParameters.language = lang;
+            }
 
             if (rm.containsKey("labelsToAnonymizeInEvaluation")) {
                 String labelsToAnonymizeInEvaluation =

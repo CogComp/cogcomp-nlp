@@ -88,9 +88,9 @@ public class BuildEvaluationFiles {
                     rw = resWords.elementAt(tWordId).toLowerCase();
                 }
                 if (gw.charAt(gCharId) != rw.charAt(tCharId)) {
-                    logger.info("mismatched characters when building evaluation files");
-                    logger.info("the words were '" + gw + "' and: '" + rw + "'  exiting");
-                    logger.info("the characters were '" + gw.charAt(gCharId) + "' and: '"
+                    logger.warn("mismatched characters when building evaluation files");
+                    logger.warn("the words were '" + gw + "' and: '" + rw + "'  exiting");
+                    logger.warn("the characters were '" + gw.charAt(gCharId) + "' and: '"
                             + rw.charAt(tCharId) + "'  exiting");
                     outToken.close();
                     outPhrase.close();

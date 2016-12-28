@@ -60,11 +60,11 @@ public class ChunkTester {
     }
     public static void main(String[] args){
         if(args.length>3){
-            System.out.println("Usage: ...ChunkTester testIn.txt [modelDir] [modelName]");
+            logger.info("Usage: ...ChunkTester testIn.txt [modelDir] [modelName]");
             return;
         }
         String testFileName = args[0];
-        System.out.println("Test file: "+testFileName);
+        logger.info("Test file: "+testFileName);
         if(args.length==1) {
             chunkTester(testFileName);
         }

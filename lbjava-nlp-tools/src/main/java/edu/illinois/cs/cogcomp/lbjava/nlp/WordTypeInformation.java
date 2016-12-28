@@ -104,7 +104,7 @@ public class WordTypeInformation extends Classifier {
     public FeatureVector[] classify(Object[] examples) {
         if (!(examples instanceof Word[])) {
             String type = examples == null ? "null" : examples.getClass().getName();
-            logger.error("Classifier 'WordTypeInformation(Word)' defined on line 71 of CommonFeatures.lbj received '" + type + "' as input.");
+            System.err.println("Classifier 'WordTypeInformation(Word)' defined on line 71 of CommonFeatures.lbj received '" + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
         }

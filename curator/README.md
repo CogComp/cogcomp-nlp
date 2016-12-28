@@ -1,4 +1,4 @@
-# illinois-curator
+# Illinois Curator
 
 The Curator acts as a central server that can annotate text using
 several annotators. With this package, we can connect to the Curator to
@@ -45,6 +45,11 @@ for (int i = 0; i < ta.size(); i++) {
     System.out.println(i + ":" + posView.getLabel(i));
 }
 ```
+
+## Frequently Asked Questions 
+
+ - **Why curator tests take so much time/fail?** We have some unit tests in this module which need connection to a remote curator system. Since it is often inaccessble to CIs, we skip them on Semaphore. If you're running locally and seeing failures (or unexpected long delays on its tests) it must be that you don't have connection to Curator (in which case you can just ignore it). 
+ 
 
 ##Citation
 

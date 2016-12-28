@@ -114,7 +114,7 @@ public class MorphaStemmer {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            logger.info(MorphaStemmer.stem(line));
+            System.out.println(MorphaStemmer.stem(line));
         }
     }
 }

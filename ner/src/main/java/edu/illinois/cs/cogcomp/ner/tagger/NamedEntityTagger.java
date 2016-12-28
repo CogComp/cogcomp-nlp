@@ -74,7 +74,7 @@ public class NamedEntityTagger {
      * @param message error message.
      */
     private void parsingError(String message) {
-        logger.error(message);
+        System.err.println(message);
         String o =
                 "Command Line Options:\n"
                         + "  -i <file or directory name> : the name of a directory or file containing the input.\n"
@@ -84,7 +84,7 @@ public class NamedEntityTagger {
                         + "  -c <file name> : the name of the configuration file.\n"
                         + "  -t <number of threads> : Allows users to specify the number of threads to use, by default there will be one"
                         + "     thread for every core on the machine.\n";
-        logger.error(o);
+        System.err.println(o);
         System.exit(-1);
     }
 

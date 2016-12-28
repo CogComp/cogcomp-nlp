@@ -1,4 +1,4 @@
-Illinois NER Tagger
+# Illinois NER Tagger
 ====================
 
 This is a state of the art NER tagger that tags plain text with named entities. 
@@ -37,7 +37,7 @@ for an output file or directory. Once these parameters have been set it is possi
 configuration parameters. If no input is specified, standard input is assumed. If output is not specified, it is delivered on 
 standard out. When the user selects option 3, all inputs will be processed and delivered as separate files if an output directory
 is selected, or in a single file, or if nothing is selected to standard out. If you want to change configuration parameters, enter
-"4" and follow the instructions on the following page.
+"4".
 
 To run this application run the runNER.sh bash script:
 
@@ -46,7 +46,7 @@ $ ./scripts/runNER.sh configFilename
 ```
 This script requires the configuration file name.
 
-### Simple COMMAND LINE
+### Java COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
 following commands (plain text files are included in `test/SampleInputs/`).
@@ -56,10 +56,43 @@ $ mkdir output
 $ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
-This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you change the `modelName` parameter
-of `config/ner.properties` to **NER_ONTONOTES**, your input text will be annotated with 18 labels. In both cases, 
-each input file will be annotated in bracket format and the result written to a file with the same name 
+This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you 
+change the `modelName` parameter of `config/ner.properties` to **NER_ONTONOTES**, your input text will be annotated with 18 
+labels. In both cases, each input file will be annotated in bracket format and the result written to a file with the same name 
 under the directory `output/`.
+
+### Additional commands
+
+Additional command scripts are provided to simplify the creation of models, testing of models and bulk annotation as well. 
+Each of these take a configuration file as their last parameter. The configuration file specifies potentially many parameters, 
+but most importantly, these files specify the location of the model.
+
+Use the annotation.sh script as follows:
+
+```bash
+scripts/annotate.sh INPUT_DIRECTORY OUTPUT_DIRECTORY CONFIG_FILE
+```
+
+The input directory must be a directory containing files to annotate. The output directory must exist, the labeled 
+data will be stored in this directory on completion. The last parameter (as is the case for all these scripts) is the 
+configuration file. This functionality is also implemented in the menu driven command line interface.
+
+The train.sh script is used to train a new model. The training directory, testing directory and config file are included 
+on the command line.
+
+```bash
+scripts/train.sh TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY CONFIGURATION_FILE
+```
+
+The test.sh script tests a model against the labeled data in a test directory provided on the command line:
+
+```bash
+scripts/train.sh TRAINING_DATA_DIRECTORY TESTING_DATA_DIRECTORY CONFIGURATION_FILE
+```
+
+The benchmark.sh script is used to do complex parameter tuning and to train multiple models for evaluation quickly
+and easily. This script relies on a directory structure to provide many datasets and configurations to train and 
+test against. See the script file for more details.
 
 ### PROGRAMMATIC USE
 
@@ -107,7 +140,7 @@ public class App
 
         co.addView(ta);
 
-        logger.info(ta.getView(ViewNames.NER_CONLL));
+        System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
 }
 ```
@@ -188,7 +221,7 @@ Complete, working example. Before running this, open [`config/ner.properties`](c
 something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.
 
 ```bash
-$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt -c config/ner.properties
+$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt config/ner.properties
 ```
 
 (This is is just dummy data, so it gives a score of about 12 F1).

@@ -29,7 +29,7 @@ import java.io.FilenameFilter;
  * - "benchmark"
  *   - <dataset name> there can be as many of these directories as you like, Reuters, Ontonotes, MUC7
  *    and Web are examples of datasets one might run.
- *     - "config" : this must contain one or more configuration files, there will be a run per config file, only files 
+ *     - "config" : this must contain one or more configuration files, there will be a run per config file, only files
  *     ending with ".config" are processed
  *     - "test" : the test directory. If training, and not test directory, the "train" directory will be used for both.
  *     - "train" : the directory with the training data, only needed if "-training" passed.
@@ -62,7 +62,7 @@ public class NerBenchmark {
     /** Report the input features for each level */
     static boolean reportFeatures = false;
 
-    /** build the final release model, using test and train to train on, dev as a hold out 
+    /** build the final release model, using test and train to train on, dev as a hold out
      * for auto convergence. */
     static boolean release = false;
 
@@ -74,7 +74,7 @@ public class NerBenchmark {
 
     /** -1 to converge automatically, positive number to do a fixed number of iterations. */
     static int iterations = -1;
-    
+
     /**
      * parse the arguments, only the directory.
      * 
@@ -144,7 +144,7 @@ public class NerBenchmark {
             throw new RuntimeException("There were no directories within \""+directory+"\". "
                 + "Expected directories for each dataset to evaluate.");
         }
-        
+
         // for each directory, run the benchmark test once for each config file within the config
         // directory.
         for (String benchmarkdir : configs) {
@@ -182,7 +182,7 @@ public class NerBenchmark {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             System.out.println("\n\n----- Training models for evaluation for "+confFile+" ------");
                             Parameters.readConfigAndLoadExternalData(confFile, !skiptraining);
-                            
+
                             // there is a training directory, with training enabled, so train. We use the same dataset
                             // for both training and evaluating.
                             LearningCurveMultiDataset.getLearningCurve(iterations, trainDirName, devDirName);
@@ -211,7 +211,7 @@ public class NerBenchmark {
                                             ParametersForLbjCode.currentParameters.labelsToIgnoreInEvaluation,
                                             ParametersForLbjCode.currentParameters.labelsToAnonymizeInEvaluation);
                     }
-                    
+
                     if (release) {
                         if (trainDir.exists() && testDir.exists() && devDir.exists()) {
                             Parameters.readConfigAndLoadExternalData(confFile, true);

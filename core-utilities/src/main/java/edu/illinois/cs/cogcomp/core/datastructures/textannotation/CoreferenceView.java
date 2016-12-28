@@ -176,7 +176,7 @@ public class CoreferenceView extends View {
         if (incomingRelations.isEmpty())
             return c;
         if (incomingRelations.size() > 1)
-            logger.info("Warning: constituent belongs to more than one cluster; we returned only one of them.\n"
+            logger.warn("Warning: constituent belongs to more than one cluster; we returned only one of them.\n"
                     + "If you are deadline with overlapping clusters, and want to get all of the canonical elements, "
                     + "\"getCanonicalEntitySetViaRelation\" function. ");
         return incomingRelations.get(0).source;

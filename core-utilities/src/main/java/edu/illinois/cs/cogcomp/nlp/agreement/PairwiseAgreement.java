@@ -50,9 +50,9 @@ public abstract class PairwiseAgreement extends AnnotatorAgreement {
 
         for (int i = 0; i < numLabels; i++) {
             for (int j = 0; j < numLabels; j++) {
-                logger.info(matrix[i][j] + "\t");
+                System.out.print(matrix[i][j] + "\t");
             }
-            logger.info("");
+            System.out.println();
         }
     }
 
@@ -82,10 +82,9 @@ public abstract class PairwiseAgreement extends AnnotatorAgreement {
             agreementCalculator.addAnnotation(1, i, 1);
 
         }
-        logger.info(String.valueOf(agreementCalculator.getObservedAgreement()));
-
-        logger.info(String.valueOf(agreementCalculator.getExpectedAgreement()));
-        logger.info(String.valueOf(agreementCalculator.getAgreementCoefficient()));
+        System.out.println(agreementCalculator.getObservedAgreement());
+        System.out.println(agreementCalculator.getExpectedAgreement());
+        System.out.println(agreementCalculator.getAgreementCoefficient());
 
     }
 

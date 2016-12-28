@@ -90,7 +90,7 @@ public class IllinoisLemmatizer extends Annotator {
                                 }
                             });
         } catch (IOException | URISyntaxException e) {
-            logger.error("Error while trying to read " + filename + ".");
+            System.err.println("Error while trying to read " + filename + ".");
             System.exit(-1);
         }
         return lines;
@@ -100,21 +100,21 @@ public class IllinoisLemmatizer extends Annotator {
     public static void main(String[] args) {
         IllinoisLemmatizer lem = new IllinoisLemmatizer();
 
-        logger.info("Getting lemma for 'media': ");
+        System.out.println("Getting lemma for 'media': ");
         String lemma = lem.getLemma("media", "NNS");
-        logger.info(lemma);
+        System.out.println(lemma);
 
-        logger.info("Getting lemma for 'men': ");
+        System.out.println("Getting lemma for 'men': ");
         lemma = lem.getLemma("men", "NNS");
-        logger.info(lemma);
+        System.out.println(lemma);
 
-        logger.info("Getting lemmas for 'retakes': ");
+        System.out.println("Getting lemmas for 'retakes': ");
         lemma = lem.getLemma("retakes", "VBZ");
-        logger.info(lemma);
+        System.out.println(lemma);
 
-        logger.info("Getting lemmas for 'putting': ");
+        System.out.println("Getting lemmas for 'putting': ");
         lemma = lem.getLemma("putting", "VBG");
-        logger.info(lemma);
+        System.out.println(lemma);
 
     }
 

@@ -69,7 +69,7 @@ public class TaggedDataReader {
             if (format.equals("-r")) {
                 res = BracketFileReader.read(path, documentName);
             } else {
-                logger.info("Fatal error: unrecognized file format: " + format);
+                System.err.println("Fatal error: unrecognized file format: " + format);
                 System.exit(0);
             }
         }

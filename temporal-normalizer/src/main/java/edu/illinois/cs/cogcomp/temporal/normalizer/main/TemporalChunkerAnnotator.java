@@ -28,8 +28,10 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.io.StringReader;
 import java.net.URL;
 
@@ -51,9 +53,6 @@ public class TemporalChunkerAnnotator extends Annotator{
     private HeidelTimeStandalone heidelTime;
     private Date dct;
     private TimexNormalizer timexNormalizer;
-    private DocumentBuilderFactory factory;
-    private DocumentBuilder builder;
-    private Boolean useHeidelTime = false;
 
     /**
      * default: don't use lazy initialization
@@ -76,7 +75,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                 lazilyInitialize,
                 new TemporalChunkerConfigurator().getDefaultConfig()
         );
-        //initialize(nonDefaultRm);
+        initialize(nonDefaultRm);
     }
 
     /**
@@ -106,33 +105,15 @@ public class TemporalChunkerAnnotator extends Annotator{
                 rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH));
         tagger.readModel(lcPath);
         tagger.readLexicon(lexPath);
-        this.useHeidelTime =
-                rm.getString(TemporalChunkerConfigurator.USE_HEIDELTIME) != "False";
-
-        this.dct = new Date();
-
-        if (this.useHeidelTime) {
-            this.heidelTime = new HeidelTimeStandalone(
-                    Language.ENGLISH,
-                    DocumentType.valueOf(rm.getString(TemporalChunkerConfigurator.DOCUMENT_TYPE)),
-                    OutputType.valueOf(rm.getString(TemporalChunkerConfigurator.OUTPUT_TYPE)),
-                    rm.getString(TemporalChunkerConfigurator.HEIDELTIME_CONFIG),
-                    POSTagger.valueOf(rm.getString(TemporalChunkerConfigurator.POSTAGGER_TYPE)),
-                    true
-            );
-        }
-        else {
-            timexNormalizer = new TimexNormalizer();
-            timexNormalizer.setTime(this.dct);
-        }
-
-        this.factory = DocumentBuilderFactory.newInstance();
-        try {
-            this.builder = this.factory.newDocumentBuilder();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        this.heidelTime = new HeidelTimeStandalone(
+                Language.ENGLISH,
+                DocumentType.valueOf(rm.getString(TemporalChunkerConfigurator.DOCUMENT_TYPE)),
+                OutputType.valueOf(rm.getString(TemporalChunkerConfigurator.OUTPUT_TYPE)),
+                rm.getString(TemporalChunkerConfigurator.HEIDELTIME_CONFIG),
+                POSTagger.valueOf(rm.getString(TemporalChunkerConfigurator.POSTAGGER_TYPE)),
+                true
+        );
+        timexNormalizer = new TimexNormalizer();
     }
 
     @Override
@@ -182,27 +163,17 @@ public class TemporalChunkerAnnotator extends Annotator{
 
                 if (previous != null) {
                     currentChunkEnd = previous.getEndSpan();
-                    Constituent label;
                     Constituent temp_label =
                             new Constituent(clabel, ViewNames.TIMEX3, record,
                                     currentChunkStart, currentChunkEnd);
-
-                    if (this.useHeidelTime) {
-                        try {
-                            clabel = heidelTimeNormalize(temp_label);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        label = new Constituent(clabel, ViewNames.TIMEX3, record,
-                                        currentChunkStart, currentChunkEnd);
+                    try {
+                        clabel = heidelTimeNormalize(temp_label);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        Interval normRes = timexNormalizer.normalize(temp_label.toString());
-                        label = new Constituent(normRes==null?"":normRes.toString(),
-                                ViewNames.TIMEX3, record,
-                                currentChunkStart, currentChunkEnd);
-                    }
+                    Constituent label =
+                            new Constituent(clabel, ViewNames.TIMEX3, record,
+                                    currentChunkStart, currentChunkEnd);
                     chunkView.addConstituent(label);
                     clabel = null;
                 } // else no chunk in progress (we are at the start of the doc)
@@ -217,25 +188,18 @@ public class TemporalChunkerAnnotator extends Annotator{
         }
         if (clabel != null && null != previous) {
             currentChunkEnd = previous.getEndSpan();
-            Constituent label;
             Constituent temp_label =
                     new Constituent(clabel, ViewNames.TIMEX3, record,
                             currentChunkStart, currentChunkEnd);
-            if (this.useHeidelTime) {
-                try {
-                    clabel = heidelTimeNormalize(temp_label);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                label = new Constituent(clabel, ViewNames.TIMEX3, record,
-                                currentChunkStart, currentChunkEnd);
+            try {
+                clabel = heidelTimeNormalize(temp_label);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            else {
-                Interval normRes = timexNormalizer.normalize(temp_label.toString());
-                label = new Constituent(normRes==null?"":normRes.toString(),
-                        ViewNames.TIMEX3, record,
-                        currentChunkStart, currentChunkEnd);
-            }
+
+            Constituent label =
+                    new Constituent(clabel, ViewNames.TIMEX3, record,
+                            currentChunkStart, currentChunkEnd);
             chunkView.addConstituent(label);
         }
         record.addView(ViewNames.TIMEX3, chunkView);
@@ -268,64 +232,13 @@ public class TemporalChunkerAnnotator extends Annotator{
         // If user didn't specify document creation date, use the current date
         if (this.dct == null) {
             this.dct = new Date();
-        }
-
-        String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
-
-        Document document = builder.parse(new InputSource(new StringReader(xml_res)));
-
-        Element rootElement = document.getDocumentElement();
-        String res = recurseNormalizedTimeML(rootElement);
-        return res;
-    }
-
-
-    private String recurseNormalizedTimeML(Node node) {
-        // Base case: return empty string
-        if (node == null) {
-            return "";
-        }
-
-        // Iterate over every node, if the node is a TIMEX3 node, then concatenate all its attributes, and recurse
-        NodeList nodeList = node.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node currentNode = nodeList.item(i);
-            if (currentNode.getNodeType() == Node.ELEMENT_NODE && currentNode.getNodeName().indexOf("TIMEX3")!=-1) {
-                //calls this method for all the children which is Element
-                NamedNodeMap attrs = currentNode.getAttributes();
-                String attrPair = "";
-                for (int j = 0; j < attrs.getLength(); j++) {
-                    attrPair += "["
-                            + attrs.item(j).getNodeName() + "="
-                            + attrs.item(j).getNodeValue() + "]" ;
-                }
-                return attrPair + recurseNormalizedTimeML(currentNode);
-            }
-        }
-        return "";
-    }
-
-    /**
-     * Normalize temporal phrase using Illini-time
-     * @param temporal_phrase
-     * @return
-     * @throws Exception
-     */
-    private String illiniNormalize(Constituent temporal_phrase) throws Exception {
-        // If user didn't specify document creation date, use the current date
-        if (this.dct == null) {
-            this.dct = new Date();
             timexNormalizer.setTime(this.dct);
         }
 
-        //String temp = this.heidelTime.process(text, this.dct);
-        //System.out.println(temp);
         String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
-        System.out.println(xml_res);
         int startIndex = xml_res.indexOf("<TimeML>");
         xml_res = xml_res.substring(startIndex);
         Interval interval_res = timexNormalizer.normalize(xml_res);
-
         String string_res = interval_res==null?"":interval_res.toString();
 
         return string_res;

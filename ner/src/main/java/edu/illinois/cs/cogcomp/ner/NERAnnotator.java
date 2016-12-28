@@ -95,9 +95,9 @@ public class NERAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager nerRm) {
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
-            nerRm = new NerOntonotesConfigurator().getConfig(config);
+            nerRm = new NerOntonotesConfigurator().getConfig(nerRm);
         else
-            nerRm = new NerBaseConfigurator().getConfig(config);
+            nerRm = new NerBaseConfigurator().getConfig(nerRm);
 
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);

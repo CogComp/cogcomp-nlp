@@ -165,7 +165,7 @@ public class BIOTester {
             inputFile = args[3];
             if (args.length > 4) throw new Exception();
         } catch (Exception e) {
-            logger.error(
+            System.err.println(
                     "usage: java edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester <classifier> <labeler> <parser> <test file>");
             System.exit(1);
         }

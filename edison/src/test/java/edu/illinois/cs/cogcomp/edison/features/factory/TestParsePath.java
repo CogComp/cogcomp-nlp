@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -30,6 +32,7 @@ public class TestParsePath {
     private static TextAnnotation tas = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 1);
     private List<Constituent> cons = tas.getView(ViewNames.PARSE_GOLD).getConstituents();
     public static ParsePath parsePath = new ParsePath(ViewNames.PARSE_GOLD);
+    private static Logger logger = LoggerFactory.getLogger(TestParsePath.class);
 
 //    protected void setUp() throws Exception {
 //        super.setUp();
@@ -71,8 +74,8 @@ public class TestParsePath {
 
     @Test
     public final void testParsePath() throws Exception {
-        System.out.println(cons.size());
-        System.out.println(tas.getView(ViewNames.PARSE_GOLD));
+        logger.info(String.valueOf(cons.size()));
+        logger.info(tas.getView(ViewNames.PARSE_GOLD).toString());
         for(int i = 0; i < cons.size(); i++) {
             String prediction = cons.get(i).toString() + "->" + parsePath.getFeatures(cons.get(i)).toString();
             assertTrue(correctResponses.contains(prediction));

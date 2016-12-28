@@ -56,9 +56,9 @@ public class HeadFinderDependencyViewGenerator extends Annotator {
                     depTreeView.setDependencyTree(i, labeledDependencyTree);
 
                 } catch (IllegalStateException e) {
-                    logger.info(parseTreeView.toString());
-                    logger.info("Unlabeled dependency tree (for debugging): ");
-                    logger.info(depParser.getDependencyTree(parseTreeRoot).toString());
+                    System.err.println(parseTreeView);
+                    System.err.println("Unlabeled dependency tree (for debugging): ");
+                    System.err.println(depParser.getDependencyTree(parseTreeRoot));
 
                     throw e;
                 }
