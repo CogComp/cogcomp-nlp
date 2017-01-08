@@ -44,7 +44,9 @@ public class Quantifier extends Annotator {
     }
 
     public Quantifier() {
-        super(ViewNames.QUANTITIES, new String[0]);
+        // lazily initialize by default.
+        this(true);
+
         normalizer = new Normalizer();
         wordSplitPat = new Pattern[25];
         // Dashes
@@ -58,6 +60,16 @@ public class Quantifier extends Annotator {
         wordSplitPat[5] = Pattern.compile("(\\d)\\$");
         // Percentages
         wordSplitPat[6] = Pattern.compile("(\\d)%");
+    }
+
+    /**
+     * Constructor allowing choice whether or not to lazily initialize.
+     *
+     * @param lazilyInitialize if 'true', load models only on first call to
+     *        {@link Annotator#getView(TextAnnotation)}
+     */
+    public Quantifier(boolean lazilyInitialize) {
+        super(ViewNames.QUANTITIES, new String[0], lazilyInitialize);
     }
 
     public static String wordsplitSentence(String sentence) {
@@ -188,7 +200,7 @@ public class Quantifier extends Annotator {
 
     @Override
     public void initialize(ResourceManager resourceManager) {
-        System.out.println("Initializing . . . ");
+        System.out.println("Initializing Quantifier . . . ");
         chunker =
                 new QuantitiesClassifier("models/QuantitiesClassifier.lc",
                         "models/QuantitiesClassifier.lex");
