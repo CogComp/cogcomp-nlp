@@ -25,6 +25,7 @@ public class QuantTest {
     @Test
     public void testQuantifierView() throws Exception {
         Quantifier quantifier = new Quantifier();
+        quantifier.doInitialize();
 
         // sentence 1
         TextAnnotation ta = Quantifier.taBuilder.createTextAnnotation("It was May 2008.");
