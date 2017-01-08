@@ -71,7 +71,6 @@ public class QuantTest {
         assertTrue(isEqual("[= 50.0   ]", ta.getView(ViewNames.QUANTITIES).getConstituents().get(4)
                 .getLabel()));
 
-        // TODO for this paragraph it throws exception. We have to fix it.
         // another long paragraph
         paragraph =
                 "The annual NFL Experience was held at the Moscone Center in San Francisco. In addition, "
@@ -80,7 +79,8 @@ public class QuantTest {
                         + "More than 1 million people are expected to attend the festivities in San Francisco during Super Bowl Week. San Francisco mayor Ed Lee said of the highly visible homeless presence in this area \"they are going to have to leave\". San Francisco city supervisor Jane Kim unsuccessfully lobbied for the NFL to reimburse San Francisco for city services in the amount of $5 million.";
         ta = Quantifier.taBuilder.createTextAnnotation(paragraph);
         quantifier.addView(ta);
-        // assertTrue(ta.hasView(ViewNames.QUANTITIES));
+        assertTrue(ta.hasView(ViewNames.QUANTITIES));
+        // TODO: make sure the extracted quantities are correct.
     }
 
     @Test
