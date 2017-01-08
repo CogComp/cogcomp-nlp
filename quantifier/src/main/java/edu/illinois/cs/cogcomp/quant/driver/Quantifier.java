@@ -149,9 +149,9 @@ public class Quantifier extends Annotator {
             if (!prediction.equals("O")
                     && tokenPos < annotation.size()
                     && (i == (tokens.size() - 1)
-                    || chunker.discreteValue(tokens.get(i + 1)).equals("O")
-                    || chunker.discreteValue(tokens.get(i + 1)).startsWith("B-") || !chunker
-                    .discreteValue(tokens.get(i + 1)).endsWith(prediction.substring(2)))) {
+                            || chunker.discreteValue(tokens.get(i + 1)).equals("O")
+                            || chunker.discreteValue(tokens.get(i + 1)).startsWith("B-") || !chunker
+                            .discreteValue(tokens.get(i + 1)).endsWith(prediction.substring(2)))) {
 
                 endPos = annotation.getTokenCharacterOffset(tokenPos).getSecond() - 1;
                 QuantSpan span = new QuantSpan(null, startPos, endPos);
@@ -172,7 +172,7 @@ public class Quantifier extends Annotator {
             previous = prediction;
             if (tokenPos < annotation.size()
                     && annotation.getToken(tokenPos).trim()
-                    .endsWith(tokens.get(i).getSurfaceForm().trim())) {
+                            .endsWith(tokens.get(i).getSurfaceForm().trim())) {
                 tokenPos++;
             }
         }
