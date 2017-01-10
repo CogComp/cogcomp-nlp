@@ -46,20 +46,6 @@ public class Quantifier extends Annotator {
     public Quantifier() {
         // lazily initialize by default.
         this(true);
-
-        normalizer = new Normalizer();
-        wordSplitPat = new Pattern[25];
-        // Dashes
-        wordSplitPat[0] = Pattern.compile("-(\\D)");
-        wordSplitPat[1] = Pattern.compile("(\\S)-");
-        wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)");
-        // Remove commas from within numbers
-        wordSplitPat[3] = Pattern.compile("(\\d),(\\d)");
-        // Remove dollar signs
-        wordSplitPat[4] = Pattern.compile("\\$(\\d)");
-        wordSplitPat[5] = Pattern.compile("(\\d)\\$");
-        // Percentages
-        wordSplitPat[6] = Pattern.compile("(\\d)%");
     }
 
     /**
@@ -204,6 +190,19 @@ public class Quantifier extends Annotator {
         chunker =
                 new QuantitiesClassifier("models/QuantitiesClassifier.lc",
                         "models/QuantitiesClassifier.lex");
+        normalizer = new Normalizer();
+        wordSplitPat = new Pattern[25];
+        // Dashes
+        wordSplitPat[0] = Pattern.compile("-(\\D)");
+        wordSplitPat[1] = Pattern.compile("(\\S)-");
+        wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)");
+        // Remove commas from within numbers
+        wordSplitPat[3] = Pattern.compile("(\\d),(\\d)");
+        // Remove dollar signs
+        wordSplitPat[4] = Pattern.compile("\\$(\\d)");
+        wordSplitPat[5] = Pattern.compile("(\\d)\\$");
+        // Percentages
+        wordSplitPat[6] = Pattern.compile("(\\d)%");
     }
 
     @Override
