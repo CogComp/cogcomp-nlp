@@ -24,12 +24,12 @@ import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ConvertEREToCo
 public class ERENerReader extends EREDocumentReader {
 
     private static final Logger logger = LoggerFactory.getLogger(ERENerReader.class);
-
+files with
     private int gold_counter;
     private int starts [];
     private int ends [];
 
-    /**
+    challenge: handle *multiple* directories/    /**
      * @param corpusName      the name of the corpus, this can be anything.
      * @param sourceDirectory the name of the directory containing the file.
      * @throws Exception
@@ -37,10 +37,10 @@ public class ERENerReader extends EREDocumentReader {
     public ERENerReader(String corpusName, String sourceDirectory) throws Exception {
         super(corpusName, sourceDirectory);
         gold_counter = 0;
-    }
-
+    } annotations
 
     @Override
+
     public TextAnnotation next() {
         TextAnnotation ta = super.next();
         SpanLabelView tokens = (SpanLabelView)ta.getView(ViewNames.TOKENS);
@@ -72,7 +72,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param tokens
      * @return
      */
-    private static void compileOffsets(SpanLabelView tokens) {
+    private void compileOffsets(SpanLabelView tokens) {
         List<Constituent> constituents = tokens.getConstituents();
         int n = constituents.size();
         starts = new int[n];
@@ -90,7 +90,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param startOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    static private int findStartIndex(int startOffset) {
+    private int findStartIndex(int startOffset) {
         for (int i = 0 ; i < starts.length; i++) {
             if (startOffset == starts[i])
                 return i;
@@ -106,7 +106,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param startOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    static private int findStartIndexIgnoreError(int startOffset) {
+    private int findStartIndexIgnoreError(int startOffset) {
         for (int i = 0 ; i < starts.length; i++) {
             if (startOffset <= starts[i])
                 return i;
@@ -119,7 +119,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param endOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    static private int findEndIndex(int endOffset) {
+    private int findEndIndex(int endOffset) {
         for (int i = 0 ; i < ends.length; i++) {
             if (endOffset == ends[i])
                 return i;
@@ -135,7 +135,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param endOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    static private int findEndIndexIgnoreError(int endOffset) {
+    private int findEndIndexIgnoreError(int endOffset) {
         for (int i = 0 ; i < ends.length; i++) {
             if (endOffset <= ends[i])
                 if (i > 0 && Math.abs(endOffset-ends[i]) > Math.abs(endOffset - ends[i-1]))
@@ -153,7 +153,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param view the span label view we will add the labels to.
      * @throws XMLException
      */
-    public static void readEntity (Node node, SpanLabelView view) throws XMLException {
+    public void readEntity (Node node, SpanLabelView view) throws XMLException {
         NamedNodeMap nnMap = node.getAttributes();
         String label = nnMap.getNamedItem("type").getNodeValue();
 
@@ -186,8 +186,8 @@ public class ERENerReader extends EREDocumentReader {
             } catch (RuntimeException re) {
                 boolean siwaszero = false;
                 if (si == 0) {siwaszero = true;}
-                si = ConvertEREToCoNLLFormat.findStartIndexIgnoreError(offset);
-                ei = ConvertEREToCoNLLFormat.findEndIndexIgnoreError(offset+length);
+                si = findStartIndexIgnoreError(offset);
+                ei = findEndIndexIgnoreError(offset+length);
                 if (siwaszero)
                     System.err.println("Could not find start token : text='"+text+"' at "+offset+" to "+ (offset + length));
                 else
