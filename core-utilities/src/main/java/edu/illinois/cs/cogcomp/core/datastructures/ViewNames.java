@@ -111,6 +111,7 @@ public class ViewNames {
     public static final String BROWN_CLUSTERS = "BROWN_CLUSTERS";
     public static final String DEPENDENCY_HEADFINDER = "DEPENDENCY_HEADFINDER";
     public static final String GAZETTEER_NE = "GAZETTEER_NE";
+    public static final String NER_ERE = "NER_ERE";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -123,6 +124,7 @@ public class ViewNames {
             case MENTION_ACE:
             case NER_CONLL:
             case NER_ONTONOTES:
+            case NER_ERE:
             case SHALLOW_PARSE:
             case QUANTITIES:
             case WIKIFIER:

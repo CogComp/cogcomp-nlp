@@ -9,7 +9,12 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
+import org.w3c.dom.Node;
 
+import javax.xml.soap.*;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ConvertEREToCoNLLFormat.readEntity;
@@ -18,18 +23,33 @@ import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ConvertEREToCo
  * Reads ERE data and instantiates TextAnnotations with the corresponding NER view.
  * Also provides functionality to support combination with readers of other ERE annotations from the same source.
  *
+ * ERE annotations are provided in stand-off form: each source file (in xml, and from which character offsets
+ *     are computed) has one or more corresponding annotation files (also in xml). Each annotation file corresponds
+ *     to a span of the source file, and contains all information about entities, relations, and events for that
+ *     span.  Entity and event identifiers presumably carry across spans from the same document.
+ *
  * This code is extracted from Tom Redman's code for generating CoNLL-format ERE NER data.
  * @author mssammon
  */
 public class ERENerReader extends EREDocumentReader {
 
+    private static final String NAME = EREDocumentReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(ERENerReader.class);
-files with
+    private static final String ENTITIES = "entities";
+    private static final String ENTITY = "entity";
+    private static final String OFFSET = "offset";
+    private static final String TYPE = "type";
+    private static final String ENTITY_MENTION = "entity_mention";
+    private static final String NOUN_TYPE = "noun_type";
+    private static final String PRO = "PRO";
+    private static final String LENGTH = "length";
+    private static final String MENTION_TEXT = "mention_text";
+
     private int gold_counter;
     private int starts [];
     private int ends [];
 
-    challenge: handle *multiple* directories/    /**
+    /**
      * @param corpusName      the name of the corpus, this can be anything.
      * @param sourceDirectory the name of the directory containing the file.
      * @throws Exception
@@ -37,33 +57,33 @@ files with
     public ERENerReader(String corpusName, String sourceDirectory) throws Exception {
         super(corpusName, sourceDirectory);
         gold_counter = 0;
-    } annotations
+    }
 
     @Override
+    public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry) throws Exception {
 
-    public TextAnnotation next() {
-        TextAnnotation ta = super.next();
-        SpanLabelView tokens = (SpanLabelView)ta.getView(ViewNames.TOKENS);
+        TextAnnotation sourceTa = super.getTextAnnotationsFromFile(corpusFileListEntry).get(0);
+        SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView("NER-ERE", "Tom", ta, 1.0, false);
+        SpanLabelView nerView = new SpanLabelView(ViewNames.NER_ERE, NAME, sourceTa, 1.0, false);
 
         // now pull all mentions we deal with
-        String filetoken = ta.getCorpusId();
-        filetoken = filetoken.substring (0, filetoken.length() - 4);
-        while (gold_counter < goldfiles.length && goldfiles[gold_counter].startsWith(filetoken)) {
-            System.out.println(ta.getCorpusId()+"="+goldfiles[gold_counter]);
-            Document doc = SimpleXMLParser.getDocument(golds+goldfiles[gold_counter]);
+        for (int i = 1; i < corpusFileListEntry.size(); ++i) {
+
+            Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
             Element element = doc.getDocumentElement();
-            Element entityElement = SimpleXMLParser.getElement(element, "entities");
-            NodeList entityNL = entityElement.getElementsByTagName("entity");
-            for (int i = 0; i < entityNL.getLength(); ++i) {
+            Element entityElement = SimpleXMLParser.getElement(element, ENTITIES);
+            NodeList entityNL = entityElement.getElementsByTagName(ENTITY);
+            for (int j = 0; i < entityNL.getLength(); ++i) {
 
                 // extract the entity mentions for each entity
                 readEntity(entityNL.item(i), nerView);
             }
             gold_counter++;
         }
+        sourceTa.addView(ViewNames.NER_ERE, nerView);
 
+        return Collections.singletonList(sourceTa);
     }
 
 
@@ -155,22 +175,22 @@ files with
      */
     public void readEntity (Node node, SpanLabelView view) throws XMLException {
         NamedNodeMap nnMap = node.getAttributes();
-        String label = nnMap.getNamedItem("type").getNodeValue();
+        String label = nnMap.getNamedItem(TYPE).getNodeValue();
 
         // now for specifics get the mentions.
-        NodeList nl = ((Element)node).getElementsByTagName("entity_mention");
+        NodeList nl = ((Element)node).getElementsByTagName(ENTITY_MENTION);
         for (int i = 0; i < nl.getLength(); ++i) {
             Node mentionNode = nl.item(i);
             nnMap = mentionNode.getAttributes();
-            String noun_type = nnMap.getNamedItem("noun_type").getNodeValue();
-            if (noun_type.equals("PRO"))
-                continue;
+            String noun_type = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
+            if (noun_type.equals(PRO))
+                continue; // TODO: add to different view
 
             // we have a valid mention(a "NAM" or a "NOM"), add it to out view.
-            int offset = Integer.parseInt(nnMap.getNamedItem("offset").getNodeValue());
-            int length = Integer.parseInt(nnMap.getNamedItem("length").getNodeValue());
+            int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
+            int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
 
-            NodeList mnl = ((Element)mentionNode).getElementsByTagName("mention_text");
+            NodeList mnl = ((Element)mentionNode).getElementsByTagName(MENTION_TEXT);
             String text = null;
             if (mnl.getLength() > 0) {
                 text = SimpleXMLParser.getContentString((Element) mnl.item(0));
