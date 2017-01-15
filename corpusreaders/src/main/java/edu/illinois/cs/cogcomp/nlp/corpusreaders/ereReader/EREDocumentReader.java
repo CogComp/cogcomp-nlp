@@ -15,6 +15,7 @@ import java.util.*;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlFragmentWhitespacingDocumentReader;
 
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
@@ -27,11 +28,15 @@ import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
  *
  */
 public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
-	
-	/** these tags contain attributes we want to keep. */
-    static private ArrayList<String> retainTags = new ArrayList<String>();
+
+    /** aim for consistent naming */
+    public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
+    public static final String PRONOM = "PRONOMINAL";
+    public static final String NAM = "NAME";
+    /** these tags contain attributes we want to keep. */
+    static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
-    static private ArrayList<String> retainAttributes = new ArrayList<String>();
+    static private ArrayList<String> retainAttributes = new ArrayList<>();
 
     static {
     	retainTags.add("quote");

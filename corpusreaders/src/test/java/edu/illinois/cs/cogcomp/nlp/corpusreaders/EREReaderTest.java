@@ -23,7 +23,8 @@ public class EREReaderTest {
 
         ERENerReader nerReader = null;
         try {
-            nerReader = new ERENerReader("ERE", corpusDir);
+            boolean addNominalMentions = false;
+            nerReader = new ERENerReader("ERE", corpusDir, addNominalMentions);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("ERROR: " + NAME + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir +
