@@ -113,6 +113,8 @@ public class ViewNames {
     public static final String GAZETTEER_NE = "GAZETTEER_NE";
     public static final String NER_ERE = "NER_ERE";
     public static final String MENTION_ERE = "MENTION_ERE";
+    public static final String COREF_ERE = "COREF_ERE";
+
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -159,6 +161,7 @@ public class ViewNames {
             case COREF:
             case COREF_HEAD:
             case COREF_EXTENT:
+            case COREF_ERE:
                 return ViewTypes.COREF_VIEW;
         }
         return null;

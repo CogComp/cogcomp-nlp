@@ -1,9 +1,15 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import org.slf4j.Logger;
@@ -13,6 +19,8 @@ import org.w3c.dom.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+
+import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader.RelationIDAttribute;
 
 /**
  * Reads ERE data and instantiates TextAnnotations with the corresponding Mention and Relation views, as well as
@@ -25,23 +33,11 @@ import java.util.List;
  *
  * @author mssammon
  */
-public class EREMentionRelationReader extends EREDocumentReader {
+public class EREMentionRelationReader extends ERENerReader {
 
-    private static final String NAME = EREDocumentReader.class.getCanonicalName();
+    private static final String NAME = ERENerReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(EREMentionRelationReader.class);
-    private static final String ENTITIES = "entities";
-    private static final String ENTITY = "entity";
-    private static final String OFFSET = "offset";
-    private static final String TYPE = "type";
-    private static final String ENTITY_MENTION = "entity_mention";
-    private static final String NOUN_TYPE = "noun_type";
-    private static final String PRO = "PRO";
-    private static final String LENGTH = "length";
-    private static final String MENTION_TEXT = "mention_text";
-
-    private int gold_counter;
-    private int starts [];
-    private int ends [];
+    private int numRelationsMissed;
 
     /**
      * @param corpusName      the name of the corpus, this can be anything.
@@ -49,185 +45,129 @@ public class EREMentionRelationReader extends EREDocumentReader {
      * @throws Exception
      */
     public EREMentionRelationReader(String corpusName, String sourceDirectory) throws Exception {
-        super(corpusName, sourceDirectory);
-        gold_counter = 0;
+        super(corpusName, sourceDirectory, true);
+        numRelationsMissed = 0;
     }
 
     @Override
     public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry) throws Exception {
 
         TextAnnotation sourceTa = super.getTextAnnotationsFromFile(corpusFileListEntry).get(0);
-        SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
-        compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView(ViewNames.NER_ERE, NAME, sourceTa, 1.0, false);
+//        SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
+        CoreferenceView mentionView = new CoreferenceView(getViewName(), NAME, sourceTa, 1.0);
 
         // now pull all mentions we deal with
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
-            Element element = doc.getDocumentElement();
-            Element entityElement = SimpleXMLParser.getElement(element, ENTITIES);
-            NodeList entityNL = entityElement.getElementsByTagName(ENTITY);
-            for (int j = 0; i < entityNL.getLength(); ++i) {
-
-                // extract the entity mentions for each entity
-                readEntity(entityNL.item(i), nerView);
-            }
-            gold_counter++;
+            super.getEntitiesFromFile(doc, mentionView);
+            /**
+             * previous call populates mentionID : Constituent map needed to build relations efficiently
+             */
+            getRelationsFromFile(doc, mentionView);
         }
-        sourceTa.addView(ViewNames.NER_ERE, nerView);
+        sourceTa.addView(getViewName(), mentionView);
 
         return Collections.singletonList(sourceTa);
     }
 
-
     /**
-     * get the start and end offsets of all constituents
-     * @param tokens
-     * @return
+     * given an xml document containing relation markup and a view populated with mentions,
+     *    generate relations in that view.
+     * @param doc XML document containing relation info
+     * @param mentionView View to populate with relations
      */
-    private void compileOffsets(SpanLabelView tokens) {
-        List<Constituent> constituents = tokens.getConstituents();
-        int n = constituents.size();
-        starts = new int[n];
-        ends = new int[n];
-        int i = 0;
-        for (Constituent cons : tokens.getConstituents()) {
-            starts[i] = cons.getStartCharOffset();
-            ends[i] = cons.getEndCharOffset();
-            i++;
+    private void getRelationsFromFile(Document doc, CoreferenceView mentionView) throws XMLException {
+        Element element = doc.getDocumentElement();
+        Element entityElement = SimpleXMLParser.getElement(element, RELATIONS);
+        NodeList entityNL = entityElement.getElementsByTagName(RELATION);
+        for (int j = 0; j < entityNL.getLength(); ++j) {
+            readRelation(entityNL.item(j), mentionView);
         }
+        logger.info("number of missed relations (missing argument): {}", numRelationsMissed );
     }
 
-    /**
-     * Find the index of the first constituent at startOffset.
-     * @param startOffset the character offset we want.
-     * @return the index of the first constituent.
-     */
-    private int findStartIndex(int startOffset) {
-        for (int i = 0 ; i < starts.length; i++) {
-            if (startOffset == starts[i])
-                return i;
-            if (startOffset < starts[i]) {
-                throw new RuntimeException("Index "+startOffset+" was not exact.");
-            }
-        }
-        throw new RuntimeException("Index "+startOffset+" was out of range.");
-    }
+
 
     /**
-     * Find the index of the first constituent *near* startOffset.
-     * @param startOffset the character offset we want.
-     * @return the index of the first constituent.
-     */
-    private int findStartIndexIgnoreError(int startOffset) {
-        for (int i = 0 ; i < starts.length; i++) {
-            if (startOffset <= starts[i])
-                return i;
-        }
-        throw new RuntimeException("Index "+startOffset+" was out of range.");
-    }
-
-    /**
-     * Find the index of the first constituent at startOffset.
-     * @param endOffset the character offset we want.
-     * @return the index of the first constituent.
-     */
-    private int findEndIndex(int endOffset) {
-        for (int i = 0 ; i < ends.length; i++) {
-            if (endOffset == ends[i])
-                return i;
-            if (endOffset < ends[i]) {
-                throw new RuntimeException("End Index "+endOffset+" was not exact.");
-            }
-        }
-        throw new RuntimeException("Index "+endOffset+" was out of range.");
-    }
-
-    /**
-     * Find the index of the first constituent at startOffset.
-     * @param endOffset the character offset we want.
-     * @return the index of the first constituent.
-     */
-    private int findEndIndexIgnoreError(int endOffset) {
-        for (int i = 0 ; i < ends.length; i++) {
-            if (endOffset <= ends[i])
-                if (i > 0 && Math.abs(endOffset-ends[i]) > Math.abs(endOffset - ends[i-1]))
-                    return i-1;
-                else
-                    return i;
-        }
-        throw new RuntimeException("Index "+endOffset+" was out of range.");
-    }
-
-    /**
-     * read the entities form the gold standard xml and produce appropriate constituents in the view.
-     * NOTE: the constituents will not be ordered when we are done.
+     * read the relations from the gold standard xml and produce appropriate Relations linking mention constituents in
+     * the view.
+     *
+     *   <relations>
+     *     <relation id="r-1952" type="generalaffiliation" subtype="opra">
+     *       <relation_mention id="relm-56bd16d7_2_837" realis="true">
+     *         <rel_arg1 entity_id="ent-m.07t31" entity_mention_id="m-56bd16d7_2_159" role="org">congress</rel_arg1>
+     *         <rel_arg2 entity_id="ent-m.07wbk" entity_mention_id="m-56bd16d7_2_153" role="entity">republican</rel_arg2>
+     *       </relation_mention>
+     *     </relation>
+     *
      * @param node the entity node, contains the more specific mentions of that entity.
      * @param view the span label view we will add the labels to.
      * @throws XMLException
      */
-    public void readEntity (Node node, SpanLabelView view) throws XMLException {
+    public void readRelation (Node node, View view) throws XMLException {
         NamedNodeMap nnMap = node.getAttributes();
-        String label = nnMap.getNamedItem(TYPE).getNodeValue();
+        String type = nnMap.getNamedItem(TYPE).getNodeValue();
+        String subtype = nnMap.getNamedItem(SUBTYPE).getNodeValue();
+        String relId = nnMap.getNamedItem(ID).getNodeValue();
 
         // now for specifics get the mentions.
-        NodeList nl = ((Element)node).getElementsByTagName(ENTITY_MENTION);
+        NodeList nl = ((Element)node).getElementsByTagName(RELATION_MENTION);
         for (int i = 0; i < nl.getLength(); ++i) {
             Node mentionNode = nl.item(i);
+            Pair<String, String> arg1Info = getArgumentId(mentionNode, ARG_ONE);
+            Pair<String, String> arg2Info = getArgumentId(mentionNode, ARG_TWO);
+            Constituent arg1c = super.getMentionConstituent(arg1Info.getFirst());
+            Constituent arg2c = super.getMentionConstituent(arg2Info.getFirst());
+
+            if (null == arg1c || null == arg2c) {
+                numRelationsMissed++;
+            }
             nnMap = mentionNode.getAttributes();
-            String noun_type = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
-            if (noun_type.equals(PRO))
-                continue; // TODO: add to different view
+            String realis = nnMap.getNamedItem(REALIS).getNodeValue();
+            String mentionId = nnMap.getNamedItem(ID).getNodeValue();
 
-            // we have a valid mention(a "NAM" or a "NOM"), add it to out view.
-            int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
-            int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
+            Relation entityRelation = new Relation(type, arg1c, arg2c, 1.0f);
 
-            NodeList mnl = ((Element)mentionNode).getElementsByTagName(MENTION_TEXT);
-            String text = null;
-            if (mnl.getLength() > 0) {
-                text = SimpleXMLParser.getContentString((Element) mnl.item(0));
-            }
-            int si=0, ei=0;
-            try {
-                si = findStartIndex(offset);
-                ei = findEndIndex(offset+length);
-            } catch (IllegalArgumentException iae) {
-                List<Constituent> foo = view.getConstituentsCoveringSpan(si, ei);
-                System.err.println("Constituents covered existing span : "+foo.get(0));
-                System.exit(1);;
-            } catch (RuntimeException re) {
-                boolean siwaszero = false;
-                if (si == 0) {siwaszero = true;}
-                si = findStartIndexIgnoreError(offset);
-                ei = findEndIndexIgnoreError(offset+length);
-                if (siwaszero)
-                    System.err.println("Could not find start token : text='"+text+"' at "+offset+" to "+ (offset + length));
-                else
-                    System.err.println("Could not find end token : text='"+text+"' at "+offset+" to "+ (offset + length));
-                TextAnnotation ta = view.getTextAnnotation();
-                int max = ta.getTokens().length;
-                int start = si >= 2 ? si - 2 : 0;
-                int end = (ei+2) < max ? ei+2 : max;
-                for (int jj = start; jj < end; jj++) {
-                    System.err.print(" ");
-                    if (jj == si)
-                        System.err.print(":");
-                    System.err.print(ta.getToken(jj));
-                    if (jj == ei)
-                        System.err.print(":");
-                    System.err.print(" ");
-                }
-                System.err.println();
-                System.err.flush();
-            }
-            try {
-                view.addSpanLabel(si, ei+1, label, 1.0);
-            } catch (IllegalArgumentException iae) {
-                // this just overlaps, nothing we can do about it.
-            }
+            // Add attributes to each of the relation.
+            entityRelation.addAttribute(RelationIdAttribute, relId);
+            entityRelation.addAttribute(RelationMentionIdAttribute, mentionId);
+            entityRelation.addAttribute(RelationTypeAttribute, type);
+            entityRelation.addAttribute(RelationSubtypeAttribute, subtype);
+            entityRelation.addAttribute(RelationRealisAttribute, realis);
+            entityRelation.addAttribute(RelationSourceRoleAttribute, arg1Info.getSecond());
+            entityRelation.addAttribute(RelationTargetRoleAttribute, arg1Info.getSecond());
+
+            view.addRelation(entityRelation);
         }
+    }
+
+    private Pair<String, String> getArgumentId(Node mentionNode, String argTag) {
+
+        String argId = null;
+        String role = null;
+        NodeList nodeList = ((Element) mentionNode).getElementsByTagName(argTag);
+        if (nodeList.getLength() == 0)
+            throw new IllegalStateException("relation mention node has no argument '" + argTag + "'.");
+
+        Node argNode = nodeList.item(0);
+        NamedNodeMap nnMap = argNode.getAttributes();
+        if (nnMap.getLength() == 2) //filler
+            argId = nnMap.getNamedItem(FILLER_ID).getNodeValue();
+        else
+            argId = nnMap.getNamedItem(ENTITY_MENTION_ID).getNodeValue();
+
+        role = nnMap.getNamedItem(ROLE).getNodeValue();
+
+        if (null == argId || null == role)
+            throw new IllegalStateException("No argument/role information for argument '" + argTag + "'.");
+
+        return new Pair(argId, role);
+    }
+
+    @Override
+    public String getViewName() {
+        return ViewNames.MENTION_ERE;
     }
 
 }

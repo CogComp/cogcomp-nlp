@@ -24,15 +24,66 @@ import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
 /**
  * Strips all useless XML markup from an ERE xml document leaving the original text and 
  * where needed, appropriate attribute values.
- * @author redman
+ * Base class for other ERE readers for Named Entities, Mentions/Relations, and Events.
  *
+ * @author redman
+ * @author msammon
  */
 public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
 
+    /**
+     * tags in ERE markup filess
+     */
+    public static final String ENTITIES = "entities";
+    public static final String ENTITY = "entity";
+    public static final String FILLERS = "fillers";
+    public static final String FILLER = "filler";
+    public static final String OFFSET = "offset";
+    public static final String TYPE = "type";
+    public static final String ENTITY_MENTION = "entity_mention";
+    public static final String NOUN_TYPE = "noun_type";
+    public static final String PRO = "PRO";
+    public static final String NOM = "NOM";
+    public static final String NAM = "NAM";
+    public static final String FILL = "FILL";
+    public static final String LENGTH = "length";
+    public static final String MENTION_TEXT = "mention_text";
+    public static final String MENTION_HEAD = "nom_head";
+    public static final String SPECIFICITY = "specificity";
+    public static final String REALIS = "realis";
+    public static final String ID = "id";
+    public static final String RELATIONS = "relations";
+    public static final String RELATION = "relation";
+    public static final String RELATION_MENTION = "relation_mention";
+    public static final String SUBTYPE = "subtype";
+    public static final String ARG_ONE = "rel_arg1";
+    public static final String ARG_TWO = "rel_arg2";
+    public static final String ENTITY_MENTION_ID = "entity_mention_id";
+    public static final String ENTITY_ID = "entity_id";
+    public static final String ROLE = "role";
+    public static final String FILLER_ID = "filler_id";
+
+
+
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
-    public static final String PRONOM = "PRONOMINAL";
-    public static final String NAM = "NAME";
+    public static final String EntityIdAttribute = ACEReader.EntityIDAttribute;
+    public static final String EntityMentionIdAttribute = ACEReader.EntityMentionIDAttribute;
+    public static final String EntityHeadStartCharOffset = ACEReader.EntityHeadStartCharOffset;
+    public static final String EntityHeadEndCharOffset = ACEReader.EntityHeadEndCharOffset;
+    public static final String EntitySpecificityAttribute = "EntitySpecificity";
+    public static final String RelationIdAttribute = ACEReader.RelationIDAttribute;
+    public static final String RelationMentionIdAttribute = ACEReader.RelationMentionIDAttribute;
+    public static final String RelationSubtypeAttribute = ACEReader.RelationSubtypeAttribute;
+    public static final String RelationTypeAttribute = ACEReader.RelationTypeAttribute;
+    public static final String RelationRealisAttribute = "REALIS";
+    public static final String RelationSourceRoleAttribute = "RelationSourceRole";
+    public static final String RelationTargetRoleAttribute = "RelationTargetRole";
+
+
+
+
+
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
