@@ -7,15 +7,12 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
-import java.util.Set;
 
 /**
  * Tests for ERE reader. NOT a unit test as it requires actual corpus files.
