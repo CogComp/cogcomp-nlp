@@ -6,3 +6,4 @@
 *.settings
 edison/wordnet/
 
+.gitignore
