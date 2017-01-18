@@ -377,7 +377,9 @@ public class View implements Serializable, IQueryable<Constituent> {
     }
 
     /**
-     * Given char-begin-offset and char-end-offset, it returns the constituents covering it
+     * Given char-begin-offset and char-end-offset, it returns the constituents covering it.
+     * @param charStart the begin char index
+     * @param charEnd the end char index (one-past-the-end indexing)
      */
     public List<Constituent> getConstituentsCoveringCharSpan(int charStart, int charEnd) {
 
