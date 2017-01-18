@@ -35,7 +35,7 @@ public class MainServer {
 
     static {
         // Setup Argument Parser with options.
-        argumentParser = ArgumentParsers.newArgumentParser("test")
+        argumentParser = ArgumentParsers.newArgumentParser("pipeline/scripts/runWebserver.sh")
                 .description("Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P")
                 .type(Integer.class)
