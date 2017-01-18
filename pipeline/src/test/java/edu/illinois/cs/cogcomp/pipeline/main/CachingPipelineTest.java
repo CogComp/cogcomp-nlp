@@ -168,7 +168,8 @@ public class CachingPipelineTest
                 "       :LABEL:aux has\n" +
                 "       (:LABEL:prep on (:LABEL:pobj significance :LABEL:det a))\n" +
                 "       (:LABEL:prep beyond (:LABEL:pobj that (:LABEL:prep in :LABEL:pobj Mexico))))";
-        assert predictedDepTree.trim().equals(goldDepTree);
+        assertEquals("DEPENDENCY_STANFORD - Dependency parse tree should match gold parse.",
+                predictedDepTree.trim(), goldDepTree);
 
         String predictedParseTree = basicTextAnnotation.getView(ViewNames.PARSE_STANFORD).toString();
         String goldParseTree = "(ROOT (S (PP (IN In)\n" +
@@ -189,6 +190,7 @@ public class CachingPipelineTest
                 "                   (PP (IN in)\n" +
                 "                       (NP (NNP Mexico)))))))\n" +
                 "   (. .)))";
-        assert predictedParseTree.trim().equals(goldParseTree);
+        assertEquals("PARSE_STANFORD - Constituency parse tree  generated should match gold parse.",
+                predictedParseTree.trim(), goldParseTree);
     }
 }

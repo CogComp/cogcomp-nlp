@@ -15,6 +15,11 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.internal.HelpScreenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,8 +31,32 @@ public class MainServer {
 
     private static Logger logger = LoggerFactory.getLogger(StanfordDepHandler.class);
 
+    private static ArgumentParser argumentParser;
+
+    static {
+        // Setup Argument Parser with options.
+        argumentParser = ArgumentParsers.newArgumentParser("pipeline/scripts/runWebserver.sh")
+                .description("Pipeline Webserver.");
+        argumentParser.addArgument("--port", "-P")
+                .type(Integer.class)
+                .setDefault(8080)
+                .dest("port")
+                .help("Port to run the webserver.");
+    }
+
     public static void main(String[] args) {
-        port(8080);
+        Namespace parseResults;
+
+        try {
+             parseResults = argumentParser.parseArgs(args);
+        } catch (HelpScreenException ex) {
+            return;
+        } catch (ArgumentParserException ex) {
+            logger.error("Exception while parsing arguments", ex);
+            return;
+        }
+
+        port(parseResults.getInt("port"));
 
         AnnotatorService pipeline = null;
         try {

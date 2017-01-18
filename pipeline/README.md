@@ -164,7 +164,7 @@ all its components.  If you want to experiment with different settings,
 we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
 
 ## 4. Dependencies
-If this package is used in maven, please add the following dependencies with proper reepositories.
+If this package is used in maven, please add the following dependencies with proper repositories.
 ```xml
 <dependencies>
     <dependency>
@@ -178,11 +178,6 @@ If this package is used in maven, please add the following dependencies with pro
         <id>CogcompSoftware</id>
         <name>CogcompSoftware</name>
         <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-    </repository>
-    <repository>
-        <id>StanfordNLP</id>
-        <name>StanfordNLP</name>
-        <url>http://central.maven.org/maven2/</url>
     </repository>
 </repositories>
 ```
@@ -389,10 +384,19 @@ public class testpipeline {
 
 Our pipeline contains a webserver which can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
 
-In order to run the webserver, do: 
+In order to run the webserver with default settings (port = 8080), do: 
 
 ```shell
-./pipeline/scripts/runWebserver.sh
+pipeline/scripts/runWebserver.sh
+```
+
+The following arguments are supported:
+```shell
+usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
+
+optional arguments:
+  -h, --help             show this help message and exit
+  --port PORT, -P PORT   Port to run the webserver.
 ```
 
 Here are the available APIs: 
