@@ -181,12 +181,11 @@ public class Constituent implements Serializable, HasAttributes {
 
     /**
      * Return map of labels to scores. If not explicitly created, returns null.
-     * The returned map is a copy, to avoid inadvertant changes to the label/score mapping.
+     * The returned map is a copy, to avoid inadvertent changes to the label/score mapping.
      *
      * @return map of labels to scores
      */
-    public Map<String, Double> getLabelsToScores()
-    {
+    public Map<String, Double> getLabelsToScores() {
         Map<String, Double> returnMap = null;
 
         if ( null != labelsToScores) {

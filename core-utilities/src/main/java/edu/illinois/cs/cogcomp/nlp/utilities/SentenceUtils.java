@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
 /**
+ * WARNING: These modifications change character offsets.
+ *
  * @author Vivek Srikumar
  *         <p>
  *         Jun 30, 2009
