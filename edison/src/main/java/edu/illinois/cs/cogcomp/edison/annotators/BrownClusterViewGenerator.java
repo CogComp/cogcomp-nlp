@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +68,22 @@ public class BrownClusterViewGenerator extends Annotator {
         this(name, file, false);
     }
 
+    public BrownClusterViewGenerator(String name, String file, ResourceManager nonDefaultRm) throws Exception {
+        this(name, file, false, nonDefaultRm);
+    }
+
     public BrownClusterViewGenerator(String name, String file, boolean gzip) throws Exception {
-        super(ViewNames.BROWN_CLUSTERS + "_" + name, new String[] {});
+        super(ViewNames.BROWN_CLUSTERS + "_" + name, new String[] {},
+                new BrownClusterViewGeneratorConfigurator().getDefaultConfig());
+        this.name = name;
+        this.file = file;
+        this.gzip = gzip;
+        clusterToStrings = new HashMap<>();
+    }
+
+    public BrownClusterViewGenerator(String name, String file, boolean gzip, ResourceManager nonDefaultRm) throws Exception {
+        super(ViewNames.BROWN_CLUSTERS + "_" + name, new String[] {},
+                new BrownClusterViewGeneratorConfigurator().getConfig(nonDefaultRm));
         this.name = name;
         this.file = file;
         this.gzip = gzip;
@@ -103,36 +118,35 @@ public class BrownClusterViewGenerator extends Annotator {
             String clusterId = parts[0];
             String s = parts[1];
 
-            s = StringUtils.normalizeUnicodeDiacritics(s);
-
-            s = s.replaceAll("&amp;", "&");
-
-            s = s.replaceAll("'", " '");
-            s = s.replaceAll(",", " ,");
-            s = s.replaceAll(";", " ;");
-            s = s.replaceAll("\\s+", " ");
-
-            s = s.trim();
-
-            // remove trailing slashes
-            if (s.endsWith("/"))
-                s = s.substring(0, s.length() - 1);
-
-            // remove leading and trailing hyphens
-            s = s.replaceFirst("\\-+", "");
-
-            // s = SEPARATOR + s.replaceAll("\\s+", SEPARATOR) + SEPARATOR;
-
             if (!clusterToStrings.containsKey(clusterId))
                 clusterToStrings.put(clusterId, new ArrayList<String>());
 
             List<String> list = clusterToStrings.get(clusterId);
-            list.add(s);
 
-            if (s.indexOf('-') >= 0) {
-                String s1 = s.replaceAll("-", " ").trim();
-                list.add(s1);
+            if(config.getBoolean(BrownClusterViewGeneratorConfigurator.NORMALIZE_TOKEN)) {
+                s = StringUtils.normalizeUnicodeDiacritics(s);
+                s = s.replaceAll("&amp;", "&");
+                s = s.replaceAll("'", " '");
+                s = s.replaceAll(",", " ,");
+                s = s.replaceAll(";", " ;");
+                s = s.replaceAll("\\s+", " ");
+
+                // remove trailing slashes
+                if (s.endsWith("/"))
+                    s = s.substring(0, s.length() - 1);
+
+                // remove leading and trailing hyphens
+                s = s.replaceFirst("\\-+", "");
+
+                if (s.indexOf('-') >= 0) {
+                    String s1 = s.replaceAll("-", " ").trim();
+                    list.add(s1);
+                }
             }
+
+            // s = SEPARATOR + s.replaceAll("\\s+", SEPARATOR) + SEPARATOR;
+
+            list.add(s.trim());
         }
 
         reader.close();
