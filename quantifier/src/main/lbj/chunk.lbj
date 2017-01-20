@@ -1,0 +1,99 @@
+package edu.illinois.cs.cogcomp.quant.lbj;
+
+import edu.illinois.cs.cogcomp.quant.features.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+discrete QuantitiesLabel(Constituent word) <- { return word.getLabel(); }
+
+discrete% PatternFeatures(Constituent word) <- {
+	String ordinal = "(?:"+
+	        "\\d+(?:st|nd|rd|th)"+
+	        "|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth"+
+	        "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth"+
+	        "|seventeenth|eighteenth|nineteenth"+
+	        "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth"+
+	        "|eightieth|ninetieth"+
+	        "|hundredth|thousandth|millionth|billionth)";
+
+	String fraction_denom = "(?:"+
+	        "half|halve|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth"+
+	        "|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth"+
+	        "|seventeenth|eighteenth|nineteenth"+
+	        "|twentieth|thirtieth|fou?rtieth|fiftieth|sixtieth|seventieth"+
+	        "|eightieth|ninetieth"+
+	        "|hundredth|thousandth|millionth|billionth)s";   // <-- NOTE the 's'
+
+	String writtenNumber =  "twelve|seven|trillion|ten|seventeen|two|four|sixty|"+
+			     "zero|eighteen|thirteen|dozen|one|fourty|fifty|twenty"+
+			     "six|three|eleven|hundred|thousand|million|eighty"+
+			     "fourteen|five|nineteen|sixteen|fifteen|seventy|billion"+
+			     "thirty|ninety|nine|eight";
+
+	String digits = "(\\d+)";
+	String four_digits = "(\\d\\d\\d\\d)";
+	String two_digits = "(\\d\\d)";
+	String two_letter = "[A-Z][A-Z]";
+	String initial = "[A-Z]\\.";
+	String abbrev = "([A-Z]?[a-z]+\\.)";
+	String roman = "(M?M?M?(?:CM|CD|D?C?C?C?)(?:XC|XL|L?X?X?X?)(?:IX|IV|V?II?|III))";
+	String numeric = "((?:\\d{1,3}(?:\\,\\d{3})*|\\d+)(?:\\.\\d+)?)";
+	String doftw = "(?:Mon|Tues?|Wed(?:nes)?|Thurs?|Fri|Satui?r?|Sun)(?:day|\\.)";
+	String month = "(?:jan(?:uary)?|febr?(?:uary)?|mar(?:ch)?|apr(?:il)?"+
+		       "|may|june?|july?|aug(?:ust)?|sept?(?:ember)?|oct(?:ober)?|nov(?:ember)?|"+
+		       "dec(?:ember)?)\\.?";
+	String dayWords = "(?: today|tomorrow|yesterday|morning|afternoon|evening)";
+	String possibleYear = "(?:\\d\\d\\d\\d(?:\\s*s)?|\\'?\\d\\d(?:\\s*?s)?)";
+	String time = "(\\d\\d?)\\s*?(?:(\\:)?\\s*?(\\d\\d))?\\s*([ap]\\.m\\.?|[ap]m|[a"+
+	       	      "p])?\\s*(?:\\(?(GMT|EST|PST|CST)?\\)?)?(?:\\W|$)";
+
+	Pattern pattern = Pattern.compile(digits, Pattern.CASE_INSENSITIVE);
+	Matcher matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[digits]";
+
+	pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[numeric]";
+
+	pattern = Pattern.compile(numeric, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.find() )
+		sense "[contains_numeric]";
+
+	pattern = Pattern.compile(writtenNumber, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[written_number]";
+
+	pattern = Pattern.compile(fraction_denom, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[fraction_denom]";
+
+	pattern = Pattern.compile(ordinal, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[ordinal]";
+
+	pattern = Pattern.compile(month, Pattern.CASE_INSENSITIVE);
+	matcher = pattern.matcher(word.getSurfaceForm());
+	if( matcher.matches() )
+		sense "[month]";
+}
+
+
+
+discrete QuantitiesClassifier(Constituent word) <-
+    learn QuantitiesLabel
+    using WordBigrams, WordContextBigrams, POSContextBigrams, PatternFeatures
+
+    with SparseNetworkLearner {
+        SparseAveragedPerceptron.Parameters p = new SparseAveragedPerceptron.Parameters();
+        p.learningRate = .1;
+        p.thickness = 2;
+        baseLTU = new SparseAveragedPerceptron(p);
+    }
+end

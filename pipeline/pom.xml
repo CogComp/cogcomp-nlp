@@ -2,39 +2,45 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.87</version>
+        <version>3.0.95</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>illinois-nlp-pipeline</artifactId>
-
+    <name>Illinois NLP Pipeline</name>
+    <description>Pre-processes text documents with different NLP annotations</description>
 
     <dependencies>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-quantifier</artifactId>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -58,7 +64,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.0.87</version>
+            <version>3.0.95</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -84,8 +90,8 @@
             <version>5.1.15</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>illinois-nlp-pipeline</artifactId>
                     <groupId>edu.illinois.cs.cogcomp</groupId>
+                    <artifactId>illinois-nlp-pipeline</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -94,6 +100,11 @@
             <artifactId>gurobi</artifactId>
             <version>6.5</version>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.argparse4j</groupId>
+            <artifactId>argparse4j</artifactId>
+            <version>0.7.0</version>
         </dependency>
 
         <!--for pipeline web-server-->

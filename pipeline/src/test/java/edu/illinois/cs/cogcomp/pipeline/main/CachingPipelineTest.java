@@ -12,6 +12,8 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
@@ -100,6 +102,14 @@ public class CachingPipelineTest
         assertTrue(ta.hasView(ViewNames.SHALLOW_PARSE));
         assertTrue(ta.hasView(ViewNames.NER_CONLL));
         assertTrue(IOUtils.exists(TEST_CACHE_FILE));
+
+        try {
+            processor.addView(ta, ViewNames.QUANTITIES);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+        }
+        assertTrue(ta.hasView(ViewNames.QUANTITIES));
+        System.out.println(ta.getView(ViewNames.QUANTITIES));
     }
 
     @Test
@@ -130,5 +140,57 @@ public class CachingPipelineTest
             System.out.println("Expected exception from stanford.");
         }
         System.out.println(basicTextAnnotation.toString());
+    }
+
+    @Test
+    public void stanfordParseHandler() {
+        String text = "In the United States, Cinco de Mayo has taken on a significance beyond that in Mexico. ";
+
+        TextAnnotation basicTextAnnotation = null;
+        try {
+            basicTextAnnotation = processor.createBasicTextAnnotation("test", "test", text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail( e.getMessage() );
+        }
+
+        try {
+            processor.addView(basicTextAnnotation, ViewNames.DEPENDENCY_STANFORD);
+            processor.addView(basicTextAnnotation, ViewNames.PARSE_STANFORD);
+        } catch (RuntimeException | AnnotatorException e) {
+            e.printStackTrace();
+            System.out.println("Expected exception from stanford.");
+        }
+        String predictedDepTree = basicTextAnnotation.getView(ViewNames.DEPENDENCY_STANFORD).toString();
+        String goldDepTree = "(taken (:LABEL:prep In (:LABEL:pobj States :LABEL:det the\n" +
+                "                    :LABEL:nn United))\n" +
+                "       (:LABEL:nsubj Cinco (:LABEL:prep de :LABEL:pobj Mayo))\n" +
+                "       :LABEL:aux has\n" +
+                "       (:LABEL:prep on (:LABEL:pobj significance :LABEL:det a))\n" +
+                "       (:LABEL:prep beyond (:LABEL:pobj that (:LABEL:prep in :LABEL:pobj Mexico))))";
+        assertEquals("DEPENDENCY_STANFORD - Dependency parse tree should match gold parse.",
+                predictedDepTree.trim(), goldDepTree);
+
+        String predictedParseTree = basicTextAnnotation.getView(ViewNames.PARSE_STANFORD).toString();
+        String goldParseTree = "(ROOT (S (PP (IN In)\n" +
+                "    (NP (DT the)\n" +
+                "        (NNP United)\n" +
+                "        (NNPS States)))\n" +
+                "   (, ,)\n" +
+                "   (NP (NP (NNP Cinco))\n" +
+                "       (PP (IN de)\n" +
+                "           (NP (NNP Mayo))))\n" +
+                "   (VP (VBZ has)\n" +
+                "       (VP (VBN taken)\n" +
+                "           (PP (IN on)\n" +
+                "               (NP (DT a)\n" +
+                "                   (NN significance)))\n" +
+                "           (PP (IN beyond)\n" +
+                "               (NP (NP (DT that))\n" +
+                "                   (PP (IN in)\n" +
+                "                       (NP (NNP Mexico)))))))\n" +
+                "   (. .)))";
+        assertEquals("PARSE_STANFORD - Constituency parse tree  generated should match gold parse.",
+                predictedParseTree.trim(), goldParseTree);
     }
 }

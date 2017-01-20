@@ -92,6 +92,7 @@ of several other components for which it is a dependency.
    Constituency Parser.
 8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
+9. Quantifier: <2G, requires Part-of-Speech. 
 
 
 ### 1.3 LICENSE
@@ -163,7 +164,7 @@ all its components.  If you want to experiment with different settings,
 we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
 
 ## 4. Dependencies
-If this package is used in maven, please add the following dependencies with proper reepositories.
+If this package is used in maven, please add the following dependencies with proper repositories.
 ```xml
 <dependencies>
     <dependency>
@@ -177,11 +178,6 @@ If this package is used in maven, please add the following dependencies with pro
         <id>CogcompSoftware</id>
         <name>CogcompSoftware</name>
         <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-    </repository>
-    <repository>
-        <id>StanfordNLP</id>
-        <name>StanfordNLP</name>
-        <url>http://central.maven.org/maven2/</url>
     </repository>
 </repositories>
 ```
@@ -220,7 +216,7 @@ Running your own text to get a visual sense of what IllinoisPreprocessor is doin
 scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
 ```
 
-## 6. PROGRAMMATIC USE
+## 6. Programmatic Use
 
 You can check the javadoc for detailed information about the
 IllinoisPreprocessor API.
@@ -383,3 +379,32 @@ public class testpipeline {
     }
 }
 ```
+
+## 7. Using pipeline webserver 
+
+Our pipeline contains a webserver which can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
+
+In order to run the webserver with default settings (port = 8080), do: 
+
+```shell
+pipeline/scripts/runWebserver.sh
+```
+
+The following arguments are supported:
+```shell
+usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
+
+optional arguments:
+  -h, --help             show this help message and exit
+  --port PORT, -P PORT   Port to run the webserver.
+```
+
+Here are the available APIs: 
+
+
+| API                    | Address      | Supported request type | Parameters                                                                   | Example                                                          |
+|------------------------|--------------|------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
+| Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
+| Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
+
+Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 

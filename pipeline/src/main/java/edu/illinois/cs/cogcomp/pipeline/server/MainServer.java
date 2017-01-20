@@ -13,7 +13,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import net.sourceforge.argparse4j.ArgumentParsers;
+import net.sourceforge.argparse4j.inf.ArgumentParser;
+import net.sourceforge.argparse4j.inf.ArgumentParserException;
+import net.sourceforge.argparse4j.inf.Namespace;
+import net.sourceforge.argparse4j.internal.HelpScreenException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -21,16 +29,42 @@ import static spark.Spark.*;
 
 public class MainServer {
 
+    private static Logger logger = LoggerFactory.getLogger(StanfordDepHandler.class);
+
+    private static ArgumentParser argumentParser;
+
+    static {
+        // Setup Argument Parser with options.
+        argumentParser = ArgumentParsers.newArgumentParser("pipeline/scripts/runWebserver.sh")
+                .description("Pipeline Webserver.");
+        argumentParser.addArgument("--port", "-P")
+                .type(Integer.class)
+                .setDefault(8080)
+                .dest("port")
+                .help("Port to run the webserver.");
+    }
+
     public static void main(String[] args) {
-        port(8080);
+        Namespace parseResults;
+
+        try {
+             parseResults = argumentParser.parseArgs(args);
+        } catch (HelpScreenException ex) {
+            return;
+        } catch (ArgumentParserException ex) {
+            logger.error("Exception while parsing arguments", ex);
+            return;
+        }
+
+        port(parseResults.getInt("port"));
 
         AnnotatorService pipeline = null;
         try {
-            System.out.println("Starting to load the pipeline . . . ");
+            logger.debug("Starting to load the pipeline . . . ");
             printMemoryDetails();
             ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
             pipeline = PipelineFactory.buildPipeline(rm);
-            System.out.println("Done with loading the pipeline  . . .");
+            logger.debug("Done with loading the pipeline  . . .");
             printMemoryDetails();
         } catch (IOException | AnnotatorException e) {
             e.printStackTrace();
@@ -49,6 +83,16 @@ public class MainServer {
                 return annotateText(finalPipeline, text, views);
             }
         );
+
+        // api to get name of the available views
+        String viewsString = "";
+        for(String view : pipeline.getAvailableViews()) {
+            viewsString += ", " + view;
+        }
+        String finalViewsString = viewsString;
+        get("/viewNames", (req, res) -> finalViewsString);
+
+        post("/viewNames", (req, res) -> finalViewsString);
     }
 
     private static String annotateText(AnnotatorService finalPipeline, String text, String views) throws AnnotatorException {
@@ -56,20 +100,20 @@ public class MainServer {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
         }
         else {
-            System.out.println("------------------------------");
-            System.out.println("Text: " + text);
-            System.out.println("Views to add: " + views);
+            logger.trace("------------------------------");
+            logger.trace("Text: " + text);
+            logger.trace("Views to add: " + views);
             String[] viewsInArray = views.split(",");
-            System.out.println("Adding the basic annotations . . . ");
+            logger.trace("Adding the basic annotations . . . ");
             TextAnnotation ta = finalPipeline.createBasicTextAnnotation("", "", text);
             for (String vuName : viewsInArray) {
-                System.out.println("Adding the view: ->" + vuName.trim() + "<-");
+                logger.debug("Adding the view: ->" + vuName.trim() + "<-");
                 finalPipeline.addView(ta, vuName.trim());
                 printMemoryDetails();
             }
-            System.out.println("Done adding the views. Deserializing the view now.");
+            logger.trace("Done adding the views. Deserializing the view now.");
             String output = SerializationHelper.serializeToJson(ta);
-            System.out.println("Done. Sending the result back. ");
+            logger.debug("Done. Sending the result back. ");
             return output;
         }
     }
@@ -81,16 +125,16 @@ public class MainServer {
         Runtime runtime = Runtime.getRuntime();
 
         //Print used memory
-        System.out.print("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
+        logger.debug("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
         //Print free memory
-        System.out.print(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
+        logger.debug(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
 
         //Print total available memory
-        System.out.print(" / Total Memory[MB]:" + runtime.totalMemory() / mb);
+        logger.debug(" / Total Memory[MB]:" + runtime.totalMemory() / mb);
 
         //Print Maximum available memory
-        System.out.println(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
+        logger.debug(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
     }
 
 }
