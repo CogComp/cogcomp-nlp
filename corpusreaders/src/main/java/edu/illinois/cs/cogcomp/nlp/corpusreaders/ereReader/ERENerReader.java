@@ -35,8 +35,6 @@ import java.util.*;
  *     mention view via its type attribute.
  *
  * TODO: ascertain whether NER mentions can overlap. Probably not.
- * TODO: add fillers (non-specific entity mentions)
- * TODO: add entity id and mention id
  * TODO: allow non-token-level annotations (i.e. subtokens)
  *
  * This code is based on Tom Redman's code for generating CoNLL-format ERE NER data.
@@ -164,11 +162,18 @@ public class ERENerReader extends EREDocumentReader {
             readFiller(fillerNl.item(i), nerView);
     }
 
-    private void readFiller(Node fillerNode, View view) {
+    /**
+     * WARNING: filler can have null value.
+     * @param fillerNode
+     * @param view
+     */
+    private void readFiller(Node fillerNode, View view) throws XMLException {
         NamedNodeMap nnMap = fillerNode.getAttributes();
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
         int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
-        String fillerForm = fillerNode.getNodeValue();
+        String fillerForm = SimpleXMLParser.getContentString((Element) fillerNode);
+        if ( null == fillerForm || "".equals(fillerForm))
+            throw new IllegalStateException("ERROR: did not find surface form for filler " + nnMap.getNamedItem(ID).getNodeValue());
         IntPair offsets = getOffsets(offset, length, fillerForm, view);
         if (null != offsets) {
             String fillerId = nnMap.getNamedItem(ID).getNodeValue();
