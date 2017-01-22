@@ -61,6 +61,9 @@ public class EREMentionRelationReader extends ERENerReader {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
             super.getEntitiesFromFile(doc, mentionView);
+            super.getFillersFromFile(doc, mentionView);
+
+
             /**
              * previous call populates mentionID : Constituent map needed to build relations efficiently
              */
@@ -79,10 +82,10 @@ public class EREMentionRelationReader extends ERENerReader {
      */
     private void getRelationsFromFile(Document doc, CoreferenceView mentionView) throws XMLException {
         Element element = doc.getDocumentElement();
-        Element entityElement = SimpleXMLParser.getElement(element, RELATIONS);
-        NodeList entityNL = entityElement.getElementsByTagName(RELATION);
-        for (int j = 0; j < entityNL.getLength(); ++j) {
-            readRelation(entityNL.item(j), mentionView);
+        Element relElement = SimpleXMLParser.getElement(element, RELATIONS);
+        NodeList relNL = relElement.getElementsByTagName(RELATION);
+        for (int j = 0; j < relNL.getLength(); ++j) {
+            readRelation(relNL.item(j), mentionView);
         }
         logger.info("number of missed relations (missing argument): {}", numRelationsMissed );
     }
@@ -114,16 +117,17 @@ public class EREMentionRelationReader extends ERENerReader {
         // now for specifics get the mentions.
         NodeList nl = ((Element)node).getElementsByTagName(RELATION_MENTION);
         for (int i = 0; i < nl.getLength(); ++i) {
-            Node mentionNode = nl.item(i);
-            Pair<String, String> arg1Info = getArgumentId(mentionNode, ARG_ONE);
-            Pair<String, String> arg2Info = getArgumentId(mentionNode, ARG_TWO);
+            Node relMentionNode = nl.item(i);
+            Pair<String, String> arg1Info = getArgumentId(relMentionNode, ARG_ONE);
+            Pair<String, String> arg2Info = getArgumentId(relMentionNode, ARG_TWO);
             Constituent arg1c = super.getMentionConstituent(arg1Info.getFirst());
             Constituent arg2c = super.getMentionConstituent(arg2Info.getFirst());
 
             if (null == arg1c || null == arg2c) {
                 numRelationsMissed++;
+                continue;
             }
-            nnMap = mentionNode.getAttributes();
+            nnMap = relMentionNode.getAttributes();
             String realis = nnMap.getNamedItem(REALIS).getNodeValue();
             String mentionId = nnMap.getNamedItem(ID).getNodeValue();
 

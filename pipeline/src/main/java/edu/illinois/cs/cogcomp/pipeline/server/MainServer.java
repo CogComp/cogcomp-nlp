@@ -29,7 +29,7 @@ import static spark.Spark.*;
 
 public class MainServer {
 
-    private static Logger logger = LoggerFactory.getLogger(StanfordDepHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(MainServer.class);
 
     private static ArgumentParser argumentParser;
 

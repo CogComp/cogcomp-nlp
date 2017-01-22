@@ -9,9 +9,16 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
+
+import java.io.IOException;
+import java.util.Collections;
+
+import static org.junit.Assert.fail;
 
 
 /**
@@ -22,7 +29,7 @@ import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 public class EREReaderTest {
     private static final String NAME = EREReaderTest.class.getCanonicalName();
 
-
+    private static boolean doSerialize = true;
 
 //    public void testNerReader() {
     public static void main(String[] args) {
@@ -87,6 +94,28 @@ public class EREReaderTest {
         assert(cView.getConstituents().size()>0);
 
         System.err.println(TextAnnotationPrintHelper.printCoreferenceView(cView));
+
+        if (doSerialize) {
+            String jsonStr = SerializationHelper.serializeToJson(output);
+            try {
+                LineIO.write("EREsample.json", Collections.singletonList(jsonStr));
+            } catch (IOException e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
+
+
+            TextAnnotation newTa = null;
+
+            try {
+                newTa = SerializationHelper.deserializeFromJson(jsonStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
+
+        }
+
 
     }
 }
