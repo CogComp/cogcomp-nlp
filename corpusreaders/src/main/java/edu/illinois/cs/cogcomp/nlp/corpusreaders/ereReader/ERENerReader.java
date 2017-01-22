@@ -10,7 +10,6 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import org.slf4j.Logger;
@@ -153,7 +152,7 @@ public class ERENerReader extends EREDocumentReader {
         ta.addView(cView.getViewName(), cView);
     }
 
-    private void getFillersFromFile(Document doc, View nerView) throws XMLException {
+    protected void getFillersFromFile(Document doc, View nerView) throws XMLException {
         Element element = doc.getDocumentElement();
         Element fillerElement = SimpleXMLParser.getElement(element, FILLERS);
         NodeList fillerNl = fillerElement.getElementsByTagName(FILLER);
@@ -169,21 +168,27 @@ public class ERENerReader extends EREDocumentReader {
      */
     private void readFiller(Node fillerNode, View view) throws XMLException {
         NamedNodeMap nnMap = fillerNode.getAttributes();
+        String fillerId = nnMap.getNamedItem(ID).getNodeValue();
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
         int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
         String fillerForm = SimpleXMLParser.getContentString((Element) fillerNode);
         if ( null == fillerForm || "".equals(fillerForm))
             throw new IllegalStateException("ERROR: did not find surface form for filler " + nnMap.getNamedItem(ID).getNodeValue());
-        IntPair offsets = getOffsets(offset, length, fillerForm, view);
+        IntPair offsets = getTokenOffsets(offset, length, fillerForm, view);
         if (null != offsets) {
-            String fillerId = nnMap.getNamedItem(ID).getNodeValue();
             String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();
-            Constituent fillerConstituent = new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(), offsets.getFirst(), offsets.getSecond());
+            if( offsets.getSecond() < offsets.getFirst()) {
+                logger.warn("for filler {}, second offset is less than first (first, second:{})", fillerId, "(" +
+                        offsets.getFirst() + "," + offsets.getSecond() );
+            }
+            Constituent fillerConstituent = new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(), offsets.getFirst(), offsets.getSecond() + 1);
             fillerConstituent.addAttribute(EntityMentionIdAttribute, fillerId);
             fillerConstituent.addAttribute(EntityMentionTypeAttribute, FILL);
             view.addConstituent(fillerConstituent);
-            mentionIdToConstituent.put( fillerId, fillerConstituent);
+            mentionIdToConstituent.put(fillerId, fillerConstituent);
         }
+        else
+            logger.warn("could not create filler with id '{}'", nnMap.getNamedItem(ID).getNodeValue());
     }
 
     /**
@@ -252,9 +257,10 @@ public class ERENerReader extends EREDocumentReader {
     }
 
     /**
-     * Find the index of the first constituent at startOffset.
-     * @param endOffset the character offset we want.
-     * @return the index of the first constituent.
+     * Find the index of the first token constituent that has end char offset "endOffset" and return the value one
+     *    higher than that index (to instantiate Constituents, which use one-past-the-end indexing).
+     * @param endOffset the character offset for which we want a corresponding token index.
+     * @return the index of the token.
      */
     private int findEndIndex(int endOffset, String rawText) {
         int prevOffset = 0;
@@ -265,7 +271,7 @@ public class ERENerReader extends EREDocumentReader {
                 if (allowSubwordOffsets && endOffset == ends[i]-1)
                     return i;
                 else if (allowOffsetSlack && endOffset == prevOffset + 1 && rawText.substring(prevOffset, prevOffset+1).matches("\\s+"))
-                    return i-1;
+                    return i-1 ;
                 throw new RuntimeException("End Index "+endOffset+" was not exact.");
             }
             prevOffset = ends[i];
@@ -274,17 +280,18 @@ public class ERENerReader extends EREDocumentReader {
     }
 
     /**
-     * Find the index of the first constituent at startOffset.
+     * Find the index of the first constituent at startOffset. Return that index + 1
+     *    (for past-the-end indexing used by Constituents)
      * @param endOffset the character offset we want.
-     * @return the index of the first constituent.
+     * @return one plus the index of the first token that has that end character offset.
      */
     private int findEndIndexIgnoreError(int endOffset) {
         for (int i = 0 ; i < ends.length; i++) {
             if (endOffset <= ends[i])
                 if (i > 0 && Math.abs(endOffset-ends[i]) > Math.abs(endOffset - ends[i-1]))
-                    return i-1;
-                else
                     return i;
+                else
+                    return i+1;
         }
         throw new RuntimeException("Index "+endOffset+" was out of range.");
     }
@@ -360,12 +367,12 @@ public class ERENerReader extends EREDocumentReader {
             logger.error("No surface form found for mention with id {}.", mId );
             return null;
         }
-        IntPair offsets = getOffsets(offset, length, mentionForm, view);
+        IntPair offsets = getTokenOffsets(offset, length, mentionForm, view);
         if (null == offsets)
             return null;
 
         String headForm = null;
-        IntPair headOffsets = null;
+        IntPair headTokenOffsets = null;
         mnl = ((Element)mentionNode).getElementsByTagName(MENTION_HEAD);
         if ( mnl.getLength() > 0 ) {
 
@@ -375,25 +382,50 @@ public class ERENerReader extends EREDocumentReader {
             int headStart = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
             int headLength = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
 
-            headOffsets = getOffsets(headStart, headLength, headForm, view);
+            headTokenOffsets = getTokenOffsets(headStart, headLength, headForm, view);
         }
-        if (null == headOffsets)
-            headOffsets = offsets;
+        if (null == headTokenOffsets)
+            headTokenOffsets = offsets;
+
+        IntPair headCharOffsets = getCharacterOffsets(headTokenOffsets.getFirst(), headTokenOffsets.getSecond());
 
         try {
             mentionConstituent = new Constituent(label, getViewName(), view.getTextAnnotation(), offsets.getFirst(), offsets.getSecond()+1);
             mentionConstituent.addAttribute(EntityMentionTypeAttribute, noun_type );
             mentionConstituent.addAttribute(EntityMentionIdAttribute, mId);
-            mentionConstituent.addAttribute(EntityHeadStartCharOffset, Integer.toString(headOffsets.getFirst()));
-            mentionConstituent.addAttribute(EntityHeadEndCharOffset, Integer.toString(headOffsets.getSecond()));
+            mentionConstituent.addAttribute(EntityHeadStartCharOffset, Integer.toString(headCharOffsets.getFirst()));
+            mentionConstituent.addAttribute(EntityHeadEndCharOffset, Integer.toString(headCharOffsets.getSecond()));
             mentionIdToConstituent.put(mId, mentionConstituent);
+            numConstituent++;
         } catch (IllegalArgumentException iae) {
             numOverlaps++;
         }
         return mentionConstituent;
     }
 
-    private IntPair getOffsets(int offset, int length, String mentionForm, View view) {
+
+    /**
+     * find the start and end character offsets for the corresponding token index.
+     * Expects the actual token index for the endTokOffset, NOT one-past-the-end.
+     *
+     * @param startTokOffset
+     * @param endTokOffset
+     * @return
+     */
+    private IntPair getCharacterOffsets(int startTokOffset, int endTokOffset) {
+
+        if (startTokOffset > starts.length)
+            throw new IllegalArgumentException("Start token offset '" + startTokOffset + "' exceeds size of stored token offset array.");
+        if (endTokOffset > ends.length)
+            throw new IllegalArgumentException("End token offset '" + endTokOffset + "' exceeds size of stored token offset array.");
+        int startChar = starts[startTokOffset];
+        int endChar = ends[endTokOffset];
+
+        return new IntPair(startChar, endChar);
+    }
+
+
+    private IntPair getTokenOffsets(int offset, int length, String mentionForm, View view) {
         IntPair returnOffset = null;
         int si=0, ei=0;
         TextAnnotation ta = view.getTextAnnotation();

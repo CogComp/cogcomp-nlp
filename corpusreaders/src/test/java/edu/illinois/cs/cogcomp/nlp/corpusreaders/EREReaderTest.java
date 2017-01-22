@@ -103,6 +103,19 @@ public class EREReaderTest {
                 e.printStackTrace();
                 fail(e.getMessage());
             }
+
+
+            TextAnnotation newTa = null;
+
+            try {
+                newTa = SerializationHelper.deserializeFromJson(jsonStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
+
         }
+
+
     }
 }

@@ -61,6 +61,9 @@ public class EREMentionRelationReader extends ERENerReader {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
             super.getEntitiesFromFile(doc, mentionView);
+            super.getFillersFromFile(doc, mentionView);
+
+
             /**
              * previous call populates mentionID : Constituent map needed to build relations efficiently
              */
@@ -122,6 +125,7 @@ public class EREMentionRelationReader extends ERENerReader {
 
             if (null == arg1c || null == arg2c) {
                 numRelationsMissed++;
+                continue;
             }
             nnMap = relMentionNode.getAttributes();
             String realis = nnMap.getNamedItem(REALIS).getNodeValue();

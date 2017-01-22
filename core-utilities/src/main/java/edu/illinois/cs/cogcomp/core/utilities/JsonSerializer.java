@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.core.utilities;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -22,6 +23,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,8 @@ public class JsonSerializer extends AbstractSerializer {
     public static final String TOKENOFFSETS = "tokenOffsets";
     public static final String LABEL_SCORE_MAP = "labelScoreMap";
     public static final String PROPERTIES = "properties";
-    private final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
+    private static final boolean DEBUG = true;
+    private static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     /**
      * Add an array of objects reporting View's Constituents' surface form and character offsets.
@@ -68,6 +71,13 @@ public class JsonSerializer extends AbstractSerializer {
 
         List<Constituent> constituents = view.getConstituents();
 
+        try {
+            logger.debug(TextAnnotationPrintHelper.printView(view));
+            if (DEBUG)
+                System.err.println(TextAnnotationPrintHelper.printView(view));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (constituents.size() > 0) {
             JsonArray cJson = new JsonArray();
             for (int i = 0; i < view.getNumberOfConstituents(); i++) {
@@ -94,6 +104,13 @@ public class JsonSerializer extends AbstractSerializer {
 
                 int srcId = constituents.indexOf(src);
                 int tgtId = constituents.indexOf(tgt);
+
+                if (srcId < 0)
+                    throw new IllegalStateException("ERROR: Couldn't find index in constituent list for argument constituent: " +
+                            TextAnnotationPrintHelper.printConstituent(src));
+                if (tgtId < 0)
+                    throw new IllegalStateException("ERROR: Couldn't find index in constituent list for argument constituent: " +
+                            TextAnnotationPrintHelper.printConstituent(tgt));
 
                 JsonObject rJ = new JsonObject();
 
