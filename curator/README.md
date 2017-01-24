@@ -9,9 +9,13 @@ application. This package contains code for interacting with Curator, using the 
 To use, first create a `CuratorAnnotatorService` to use the pipeline: 
 
 ```java 
+using edu.illinois.cs.cogcomp.curator.CuratorFactory;
+
 AnnotatorService annotator = CuratorFactory.buildCuratorClient();
+
 // Or alternatively to use the pipeline:
-// AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
+// using edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+// AnnotatorService annotator = PipelineFactory.buildPipeline();
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:

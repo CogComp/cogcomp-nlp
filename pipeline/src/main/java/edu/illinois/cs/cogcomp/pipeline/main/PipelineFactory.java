@@ -42,7 +42,18 @@ import java.util.Set;
  * @author mssammon
  */
 public class PipelineFactory {
-    
+
+    /**
+     * create an AnnotatorService with default configuration.
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipeline() throws IOException, AnnotatorException {
+        ResourceManager emptyConfig = new ResourceManager(new Properties());
+        return buildPipeline(emptyConfig);
+    }
+
     /**
      * create an AnnotatorService with components specified by the ResourceManager (to override defaults
      *    in {@link PipelineConfigurator}
@@ -52,8 +63,10 @@ public class PipelineFactory {
      * @throws AnnotatorException
      */
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException, AnnotatorException {
+        // Merges default configuration with the user-specified overrides.
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
         return new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer()),
-                buildAnnotators(rm), rm);
+                buildAnnotators(fullRm), fullRm);
     }
 
     /**
