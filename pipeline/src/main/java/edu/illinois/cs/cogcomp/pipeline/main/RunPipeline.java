@@ -47,10 +47,7 @@ public class RunPipeline
      */
     public RunPipeline(String config ) throws Exception {
         ResourceManager nonDefaultRm = new ResourceManager( config );
-
-        ResourceManager fullRm = ( new PipelineConfigurator() ).getConfig( nonDefaultRm );
-
-        pipeline = PipelineFactory.buildPipeline( fullRm ) ;
+        pipeline = PipelineFactory.buildPipeline( nonDefaultRm ) ;
     }
 
     public static void main( String[] args )

@@ -296,8 +296,8 @@ for (Constituent neConstituent : ne.getConstituents()) {
 `AnnotatorService` is our super-wrapper that provides access to different annotations and free caching. 
  Currently we have two classes implementing `AnnotatorService`: 
  
-  1. illinois-curator 
-  2. illinois-pipeline 
+  1. [illinois-curator](../curator/README.md)
+  2. [illinois-nlp-pipeline](../pipeline/README.md)
 
 
 The image below describes the different ways of creating 
@@ -305,11 +305,15 @@ The image below describes the different ways of creating
 
 ![schema 001](https://cloud.githubusercontent.com/assets/2441454/10808693/4132f746-7dbc-11e5-8d6a-b5fe1e8ed0b8.png)
 
-Below is an example of how to use `IllinoisPipelineFactory` to create new annotations. 
+Below is an example of how to use `PipelineFactory` to create new annotations. 
 
 ```java 
-AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
-// Or alternatively to use the curator: 
+using edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
+AnnotatorService annotator = PipelineFactory.buildPipeline();
+
+// Or alternatively to use the curator:
+// using edu.illinois.cs.cogcomp.curator.CuratorFactory;
 // AnnotatorService annotator = CuratorFactory.buildCuratorClient();
 ```
 

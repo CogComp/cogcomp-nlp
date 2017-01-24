@@ -232,16 +232,13 @@ To process text input, use the '()' method:
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 String docId = "APW-20140101.3018"; // arbitrary string identifier
 String textId = "body"; // arbitrary string identifier
 String text = ...; // contains plain text to be annotated
 
-ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "config/pipeline-config.properties" ));
-AnnotatorService pipeline = PipelineFactory.buildPipeline( rm );
+AnnotatorService pipeline = PipelineFactory.buildPipeline();
 TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
 This method takes as its argument a String variable containing the
@@ -273,6 +270,17 @@ such as activating or deactivating specific components, you can write non-defaul
 in a configuration file and use a ResourceManager (see illinois-core-utilities)
 to instantiate an instance of the pipeline (any entries
 that duplicate default values will have no effect and are not required).
+
+Code snippet to show how to override default configuration with user-specified properties.
+```java
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
+ResourceManager userConfig = new ResourceManager("config/pipeline-config.properties");
+AnnotatorService pipeline = PipelineFactory.buildPipeline(userConfig);
+```
+
 The default keys and values are specified below; comments provide more information where the
 values themselves are not self-explanatory.  Note that the key/value pairs each appear
 on a separate line and are themselves separated by a tab key. If you have limited memory or wish
