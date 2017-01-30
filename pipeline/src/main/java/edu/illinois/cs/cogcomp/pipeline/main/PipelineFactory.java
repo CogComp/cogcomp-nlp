@@ -10,14 +10,12 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
 import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
@@ -34,7 +32,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * builds an AnnotatorService with a set of NLP components.
@@ -65,7 +62,8 @@ public class PipelineFactory {
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException, AnnotatorException {
         // Merges default configuration with the user-specified overrides.
         ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
-        return new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer()),
+        Boolean splitOnDash = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH);
+        return new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash)),
                 buildAnnotators(fullRm), fullRm);
     }
 
