@@ -40,6 +40,8 @@ public class PipelineConfigurator extends AnnotatorConfigurator
     public static final Property USE_JSON = new Property("useJson", FALSE);
     public static final Property USE_LAZY_INITIALIZATION = new Property( AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE );
     public static final Property USE_SRL_INTERNAL_PREPROCESSOR = new Property(SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE );
+    public static final Property SPLIT_ON_DASH = new Property("splitOnDash", TRUE );
+
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
      * default SRL_TYPE is Verb.
@@ -51,7 +53,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator
                 STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA, USE_SHALLOW_PARSE,
                 USE_NER_CONLL, USE_NER_ONTONOTES, USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
                 USE_QUANTIFIER, THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON, USE_LAZY_INITIALIZATION,
-                USE_SRL_INTERNAL_PREPROCESSOR};
+                USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(generateProperties(properties))));
     }
 

@@ -30,7 +30,6 @@ public class StatefulTokenizer implements Tokenizer {
     /**
      * Takes a boolean indicating if we are to split on dash or not. The default
      * constructor assumes we do split on dash.
-     * @param splitOnDash if true, we will split words on a "-".
      */
     public StatefulTokenizer () {
         super();
