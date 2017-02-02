@@ -98,6 +98,7 @@ public class ERENerReader extends EREDocumentReader {
     public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry) throws Exception {
 
         mentionIdToConstituent.clear();
+        entityIdToMentionIds.clear();
 
         TextAnnotation sourceTa = super.getTextAnnotationsFromFile(corpusFileListEntry).get(0);
         SpanLabelView tokens = (SpanLabelView) sourceTa.getView(ViewNames.TOKENS);
