@@ -146,6 +146,6 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
      */
     @Override
     protected TextAnnotation makeTextAnnotation() throws Exception {
-        return taBuilder.createTextAnnotation(fileId, "1", newFileText.toString());
+        return taBuilder.createTextAnnotation(corpusName, fileId, newFileText.toString());
     }
 }
