@@ -38,6 +38,8 @@ public class EREMentionRelationReader extends ERENerReader {
     private static final String NAME = ERENerReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(EREMentionRelationReader.class);
     private int numRelationsMissed;
+    private int numRelations;
+    private int numRelationMentions;
 
     /**
      * @param corpusName      the name of the corpus, this can be anything.
@@ -47,6 +49,8 @@ public class EREMentionRelationReader extends ERENerReader {
     public EREMentionRelationReader(String corpusName, String sourceDirectory) throws Exception {
         super(corpusName, sourceDirectory, true);
         numRelationsMissed = 0;
+        numRelationMentions = 0;
+        numRelations = 0;
     }
 
     @Override
@@ -87,7 +91,8 @@ public class EREMentionRelationReader extends ERENerReader {
         for (int j = 0; j < relNL.getLength(); ++j) {
             readRelation(relNL.item(j), mentionView);
         }
-        logger.info("number of missed relations (missing argument): {}", numRelationsMissed );
+        logger.info("number of missed relations (missing argument): {}", numRelationsMissed);
+        logger.info("number of relations created: {}", numRelations);
     }
 
 
@@ -113,7 +118,7 @@ public class EREMentionRelationReader extends ERENerReader {
         String type = nnMap.getNamedItem(TYPE).getNodeValue();
         String subtype = nnMap.getNamedItem(SUBTYPE).getNodeValue();
         String relId = nnMap.getNamedItem(ID).getNodeValue();
-
+        numRelations++;
         // now for specifics get the mentions.
         NodeList nl = ((Element)node).getElementsByTagName(RELATION_MENTION);
         for (int i = 0; i < nl.getLength(); ++i) {
@@ -127,6 +132,7 @@ public class EREMentionRelationReader extends ERENerReader {
                 numRelationsMissed++;
                 continue;
             }
+            numRelationMentions++;
             nnMap = relMentionNode.getAttributes();
             String realis = nnMap.getNamedItem(REALIS).getNodeValue();
             String mentionId = nnMap.getNamedItem(ID).getNodeValue();
