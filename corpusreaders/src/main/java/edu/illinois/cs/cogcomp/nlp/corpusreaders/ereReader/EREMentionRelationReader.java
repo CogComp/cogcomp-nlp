@@ -89,7 +89,6 @@ public class EREMentionRelationReader extends ERENerReader {
     /**
      * given an xml document containing relation markup and a view populated with mentions, generate
      * relations in that view.
-     *
      * @param doc XML document containing relation info
      * @param mentionView View to populate with relations
      */
@@ -109,13 +108,11 @@ public class EREMentionRelationReader extends ERENerReader {
      * read the relations from the gold standard xml and produce appropriate Relations linking
      * mention constituents in the view.
      *
-     *   <relations>
-     *     <relation id="r-1952" type="generalaffiliation" subtype="opra">
-     *       <relation_mention id="relm-56bd16d7_2_837" realis="true">
-     *         <rel_arg1 entity_id="ent-m.07t31" entity_mention_id="m-56bd16d7_2_159" role="org">congress</rel_arg1>
-     *         <rel_arg2 entity_id="ent-m.07wbk" entity_mention_id="m-56bd16d7_2_153" role="entity">republican</rel_arg2>
-     *       </relation_mention>
-     *     </relation>
+     * <relations> <relation id="r-1952" type="generalaffiliation" subtype="opra"> <relation_mention
+     * id="relm-56bd16d7_2_837" realis="true"> <rel_arg1 entity_id="ent-m.07t31"
+     * entity_mention_id="m-56bd16d7_2_159" role="org">congress</rel_arg1> <rel_arg2
+     * entity_id="ent-m.07wbk" entity_mention_id="m-56bd16d7_2_153"
+     * role="entity">republican</rel_arg2> </relation_mention> </relation>
      *
      * @param node the entity node, contains the more specific mentions of that entity.
      * @param view the span label view we will add the labels to.
@@ -202,7 +199,6 @@ public class EREMentionRelationReader extends ERENerReader {
      * Reports number of relations and relation mentions read from source and generated. Note that
      * number read and number generated may disagree because an argument was not read correctly (see
      * {#ERENerReader.generateReport()})
-     *
      * @return a String representing a human-readable report on information read from corpus and
      *         generated as data structures.
      */
