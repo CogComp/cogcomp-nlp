@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
-        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <artifactId>cogcomp-nlp</artifactId>
         <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>illinois-inference</artifactId>
+    <artifactId>cogcomp-inference</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,12 +21,12 @@
     <dependencies>
         <dependency>
             <groupId>edu.cs.cogcomp</groupId>
-            <artifactId>illinois-core-utilities</artifactId>
+            <artifactId>cogcomp-core-utilities</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-sl-core</artifactId>
+            <artifactId>cogcomp-sl-core</artifactId>
             <version>1.0.2</version>
             <exclusions>
                 <exclusion>

@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.pipeline.main;
 
 import edu.illinois.cs.cogcomp.annotation.*;
-import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
