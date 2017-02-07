@@ -32,9 +32,9 @@ import java.util.Set;
  */
 public abstract class AbstractIncrementalCorpusReader extends TextAnnotationReader {
     /**
-     * contains pointers to files comprising corpus.  Each entry may consist of a source document (first element
-     *    of each list) plus zero or more files with related annotations needed to instantiate the
-     *    corresponding TextAnnotation objects.
+     * contains pointers to files comprising corpus. Each entry may consist of a source document
+     * (first element of each list) plus zero or more files with related annotations needed to
+     * instantiate the corresponding TextAnnotation objects.
      */
     private List<List<Path>> fileList;
 
@@ -124,10 +124,10 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * generate zero TextAnnotations if you are feeling picky. Note that the corpus directory is
      * specified as a constructor argument.
      *
-     * @return a list of lists of Path objects corresponding to files containing corpus documents to process.
-     *         each list entry contains a set of files consisting of a source file that contains the base text
-     *         that is decorated by annotations (plus possibly annotations as well) and zero or more files
-     *         that contain annotations for that base text.
+     * @return a list of lists of Path objects corresponding to files containing corpus documents to
+     *         process. each list entry contains a set of files consisting of a source file that
+     *         contains the base text that is decorated by annotations (plus possibly annotations as
+     *         well) and zero or more files that contain annotations for that base text.
      */
     abstract public List<List<Path>> getFileListing() throws IOException;
 
@@ -138,9 +138,15 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * @param corpusFileListEntry corpus file containing content to be processed
      * @return List of TextAnnotation objects extracted from the corpus file
      */
-    public abstract List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
+    abstract public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception;
 
 
+    /**
+     * generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    abstract public String generateReport();
 
 }

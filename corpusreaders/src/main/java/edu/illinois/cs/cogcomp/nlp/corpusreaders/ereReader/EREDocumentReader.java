@@ -22,9 +22,9 @@ import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
 
 /**
- * Strips all useless XML markup from an ERE xml document leaving the original text and 
- * where needed, appropriate attribute values.
- * Base class for other ERE readers for Named Entities, Mentions/Relations, and Events.
+ * Strips all useless XML markup from an ERE xml document leaving the original text and where
+ * needed, appropriate attribute values. Base class for other ERE readers for Named Entities,
+ * Mentions/Relations, and Events.
  *
  * @author redman
  * @author msammon
@@ -82,16 +82,14 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
 
 
 
-
-
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
     static private ArrayList<String> retainAttributes = new ArrayList<>();
 
     static {
-    	retainTags.add("quote");
-    	retainTags.add("post");
+        retainTags.add("quote");
+        retainTags.add("post");
     }
 
     static {
@@ -111,15 +109,16 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
 
 
     /**
-     * ERE corpus directory has two directories: source/ and ere/.  The source/ directory contains
-     *    original text in an xml format. The ere/ directory contains markup files corresponding
-     *    in a many-to-one relationship with the source/ files: related annotation files have the same
-     *    prefix as the corresponding source file (up to the .xml suffix).
+     * ERE corpus directory has two directories: source/ and ere/. The source/ directory contains
+     * original text in an xml format. The ere/ directory contains markup files corresponding in a
+     * many-to-one relationship with the source/ files: related annotation files have the same
+     * prefix as the corresponding source file (up to the .xml suffix).
      *
      * This method generates a List of List of Paths: each component List has the source file as its
-     *    first element, and markup files as its remaining elements.  It expects {@link super.getSourceDirectory()}
-     *    to return the root directory of the ERE corpus, under which should be data/source/ and data/ere/
-     *    directories containing source files and annotation files respectively.
+     * first element, and markup files as its remaining elements. It expects {@link
+     * super.getSourceDirectory()} to return the root directory of the ERE corpus, under which
+     * should be data/source/ and data/ere/ directories containing source files and annotation files
+     * respectively.
      *
      * @return a list of Path objects corresponding to files containing corpus documents to process.
      */
@@ -162,19 +161,20 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
     }
 
 
-
     /**
-     * Strip all XML markup, but leave all the text content, and possibly some attributes
-     * for certain tags, while retaining the same offset for all remaining text content.
+     * Strip all XML markup, but leave all the text content, and possibly some attributes for
+     * certain tags, while retaining the same offset for all remaining text content.
+     * 
      * @param original the original text string.
      * @return the striped text.
      */
     protected String stripText(String original) {
-    	return TextCleaner.removeXmlLeaveAttributes(original, retainTags, retainAttributes);
+        return TextCleaner.removeXmlLeaveAttributes(original, retainTags, retainAttributes);
     }
-    
+
     /**
      * Exclude any files not possessing this extension.
+     * 
      * @return the required file extension.
      */
     protected String getRequiredFileExtension() {
