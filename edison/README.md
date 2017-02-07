@@ -28,7 +28,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
 
 <dependencies>
     <dependency>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <groupId>edu.cs.cogcomp</groupId>
         <artifactId>illinois-edison</artifactId>
         <version>3.0.44</version>
     </dependency>

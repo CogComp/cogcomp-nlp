@@ -1,7 +1,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
 
@@ -33,31 +33,30 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.97</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
             <version>3.0.97</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
             <version>3.0.97</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-edison</artifactId>
             <version>3.0.97</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
             <version>3.0.97</version>
             <scope>compile</scope>

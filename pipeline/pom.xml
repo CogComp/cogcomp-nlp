@@ -1,7 +1,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
 
@@ -13,32 +13,32 @@
 
     <dependencies>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-quantifier</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -62,7 +62,7 @@
 
         <!-- NER and its dependencies -->
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -90,7 +90,7 @@
             <version>5.1.15</version>
             <exclusions>
                 <exclusion>
-                    <groupId>edu.illinois.cs.cogcomp</groupId>
+                    <groupId>edu.cs.cogcomp</groupId>
                     <artifactId>illinois-nlp-pipeline</artifactId>
                 </exclusion>
             </exclusions>

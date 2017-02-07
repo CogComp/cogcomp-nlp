@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -78,13 +78,13 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
             <version>3.0.97</version>
         </dependency>
         <!-- Used only in utilities.CreateTestTAResource -->
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
             <version>3.0.97</version>
             <scope>test</scope>
@@ -96,7 +96,7 @@
             <version>1.2.24</version>
         </dependency>
         <!--<dependency>-->
-             <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+             <!--<groupId>edu.cs.cogcomp</groupId>-->
             <!--<artifactId>jwnl-prime</artifactId>-->
             <!--<version>1.0.1</version>-->
         <!--</dependency>-->

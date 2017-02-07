@@ -1,7 +1,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
 
@@ -11,7 +11,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -22,12 +22,12 @@
             <version>1.2.24</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>3.0.97</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -42,7 +42,7 @@
             <version>3.0.77</version>
         </dependency>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -51,7 +51,7 @@
     <!--<build>-->
         <!--<plugins>-->
             <!--<plugin>-->
-                <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
+                <!--<groupId>edu.cs.cogcomp</groupId>-->
                 <!--<artifactId>lbjava-maven-plugin</artifactId>-->
                 <!--<version>2.1</version>-->
                 <!--<configuration>-->

@@ -39,7 +39,7 @@ To include one of the modules in your Maven project, add the following snippet w
     <dependencies>
          ...
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <groupId>edu.cs.cogcomp</groupId>
             <artifactId>#modulename#</artifactId>
             <version>#version#</version>
         </dependency>
