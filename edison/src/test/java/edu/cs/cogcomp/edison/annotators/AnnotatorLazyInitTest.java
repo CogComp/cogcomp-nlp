@@ -5,14 +5,14 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.annotators;
+package edu.cs.cogcomp.edison.annotators;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.config.SimpleGazetteerAnnotatorConfigurator;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.edison.config.SimpleGazetteerAnnotatorConfigurator;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;

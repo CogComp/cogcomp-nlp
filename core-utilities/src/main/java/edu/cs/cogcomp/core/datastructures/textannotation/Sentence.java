@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.ITransformer;
 
 import java.io.Serializable;
 import java.util.ArrayList;

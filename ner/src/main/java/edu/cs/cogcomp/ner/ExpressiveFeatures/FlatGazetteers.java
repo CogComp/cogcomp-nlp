@@ -11,7 +11,7 @@ import edu.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.cs.cogcomp.ner.StringStatisticsUtils.MyString;
 import edu.cs.cogcomp.ner.IO.ResourceUtilities;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.IOUtils;
 import gnu.trove.set.hash.THashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.io;
 
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.transformers.StringTransformer;
-import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.StringTransformer;
+import edu.cs.cogcomp.core.utilities.AvoidUsing;
 
 import java.io.*;
 import java.nio.charset.Charset;

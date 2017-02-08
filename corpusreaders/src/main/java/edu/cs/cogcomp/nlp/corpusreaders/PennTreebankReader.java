@@ -7,17 +7,17 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.nlp.utilities.POSFromParse;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.nlp.utilities.POSFromParse;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

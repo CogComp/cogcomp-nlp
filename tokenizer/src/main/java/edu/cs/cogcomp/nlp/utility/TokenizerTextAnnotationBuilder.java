@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.nlp.utility;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.TokenUtils;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.TokenUtils;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 /**
  * A set of convenience methods for constructing TextAnnotations. Replaces a morass of specialized

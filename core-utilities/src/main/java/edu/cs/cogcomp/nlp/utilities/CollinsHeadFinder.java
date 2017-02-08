@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.nlp.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.nlp.utilities.HeadFinderBase;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.nlp.utilities.HeadFinderBase;
 
 import java.util.ArrayList;
 import java.util.HashMap;

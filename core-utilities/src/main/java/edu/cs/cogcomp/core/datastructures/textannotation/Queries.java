@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.core.datastructures.IQueryable;
+import edu.cs.cogcomp.core.transformers.Predicate;
 
 import java.util.*;
 

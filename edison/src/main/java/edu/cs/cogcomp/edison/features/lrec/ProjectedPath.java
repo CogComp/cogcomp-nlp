@@ -5,17 +5,17 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec;
+package edu.cs.cogcomp.edison.features.lrec;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.cs.cogcomp.edison.features.DiscreteFeature;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.edison.features.helpers.PathFeatureHelper;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.HashSet;
 import java.util.List;

@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.quant.features;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.factory.ChunkEmbedding;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 

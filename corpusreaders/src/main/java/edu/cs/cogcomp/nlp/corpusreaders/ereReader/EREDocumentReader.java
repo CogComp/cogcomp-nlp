@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
+package edu.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -13,13 +13,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.utilities.TextCleaner;
 import edu.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.cs.cogcomp.nlp.corpusreaders.XmlFragmentWhitespacingDocumentReader;
 
-import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
-import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
+import static edu.cs.cogcomp.core.io.IOUtils.getFileName;
+import static edu.cs.cogcomp.core.io.IOUtils.getFileStem;
 
 /**
  * Strips all useless XML markup from an ERE xml document leaving the original text and 

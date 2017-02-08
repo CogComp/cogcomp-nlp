@@ -11,12 +11,12 @@ package edu.cs.cogcomp.chunker.main;
 import edu.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
 import edu.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

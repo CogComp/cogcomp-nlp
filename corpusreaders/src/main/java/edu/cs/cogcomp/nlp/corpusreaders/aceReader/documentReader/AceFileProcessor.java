@@ -5,15 +5,15 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
+package edu.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.io.LineIO;
 import edu.cs.cogcomp.nlp.corpusreaders.ACEReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
-import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.cs.cogcomp.nlp.utilities.StringCleanup;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

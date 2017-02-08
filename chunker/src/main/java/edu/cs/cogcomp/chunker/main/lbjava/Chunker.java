@@ -8,7 +8,7 @@
 package edu.cs.cogcomp.chunker.main.lbjava;
 
 import edu.cs.cogcomp.chunker.main.ChunkerConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;

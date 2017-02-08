@@ -7,12 +7,12 @@
  */
 package edu.cs.cogcomp.pos;
 
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 
 import edu.cs.cogcomp.pos.lbjava.POSTagger;

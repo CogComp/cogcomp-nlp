@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.chunker.main;
 
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.Property;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * Created by nitishgupta on 3/25/16.

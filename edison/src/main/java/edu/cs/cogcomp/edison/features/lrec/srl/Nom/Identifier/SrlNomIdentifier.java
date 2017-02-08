@@ -5,16 +5,16 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
+package edu.cs.cogcomp.edison.features.lrec.srl.Nom.Identifier;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.edison.features.*;
+import edu.cs.cogcomp.edison.features.factory.*;
+import edu.cs.cogcomp.edison.features.lrec.HyphenTagFeature;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.POSContextWindowTwo;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.WordContextWindowTwo;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.ArrayList;
 import java.util.Set;

@@ -9,7 +9,7 @@ package edu.cs.cogcomp.quant.driver;
 
 import java.io.*;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.IntPair;
 import edu.cs.cogcomp.quant.standardize.Date;
 import edu.cs.cogcomp.quant.standardize.DateRange;
 import edu.cs.cogcomp.quant.standardize.Quantity;

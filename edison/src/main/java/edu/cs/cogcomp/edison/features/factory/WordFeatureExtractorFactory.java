@@ -5,20 +5,20 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.cs.cogcomp.edison.features.factory;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
-import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
+import edu.cs.cogcomp.edison.features.*;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
+import edu.cs.cogcomp.edison.features.helpers.WordHelpers;
+import edu.cs.cogcomp.edison.features.helpers.WordLists;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.nlp.utilities.POSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.pipeline.common;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 import java.util.List;
 

@@ -7,14 +7,14 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
@@ -175,7 +175,7 @@ public class ACEReader extends TextAnnotationReader {
      * @return TextAnnotation instance.
      */
     private TextAnnotation parseSingleACEFile(String section, String fileName) {
-        edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocument doc;
+        ACEDocument doc;
 
         // TODO: Static field might cause issue if we try to parse both versions in parallel.
         ReadACEAnnotation.is2004mode = this.is2004mode;
@@ -224,7 +224,7 @@ public class ACEReader extends TextAnnotationReader {
      * @param docAnnotation Annotation for the current document.
      * @param file Link to the .apf.xml file for the current document.
      */
-    private void addEntityViews(TextAnnotation ta, edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocumentAnnotation docAnnotation, File file) {
+    private void addEntityViews(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
         SpanLabelView entityView =
                 new SpanLabelView(ViewNames.MENTION_ACE,
                         ACEReader.class.getCanonicalName(), ta, 1.0f, true);
@@ -235,11 +235,11 @@ public class ACEReader extends TextAnnotationReader {
                 new CoreferenceView(ViewNames.COREF_EXTENT, ACEReader.class.getCanonicalName(), ta,
                         1.0f);
 
-        for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntity entity : docAnnotation.entityList) {
+        for (ACEEntity entity : docAnnotation.entityList) {
             List<Constituent> corefMentions = new ArrayList<>(docAnnotation.entityList.size());
             List<Constituent> corefMentionHeads = new ArrayList<>(docAnnotation.entityList.size());
 
-            for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntityMention entityMention : entity.entityMentionList) {
+            for (ACEEntityMention entityMention : entity.entityMentionList) {
                 int extentStartTokenId =
                         ta.getTokenIdFromCharacterOffset(entityMention.extentStart);
                 int extentEndTokenId = ta.getTokenIdFromCharacterOffset(entityMention.extentEnd);
@@ -341,7 +341,7 @@ public class ACEReader extends TextAnnotationReader {
      * @param docAnnotation Annotation for the current document.
      * @param file Link to the .apf.xml file for the current document.
      */
-    private void addEntityRelations(TextAnnotation ta, edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocumentAnnotation docAnnotation, File file) {
+    private void addEntityRelations(TextAnnotation ta, ACEDocumentAnnotation docAnnotation, File file) {
         SpanLabelView entityView = (SpanLabelView) ta.getView(ViewNames.MENTION_ACE);
         Map<Pair<String, String>, Constituent> entityIdMap = new HashMap<>();
 
@@ -353,12 +353,12 @@ public class ACEReader extends TextAnnotationReader {
             entityIdMap.put(new Pair<>(entityId, entityMentionId), entityConstituent);
         }
 
-        for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelation relation : docAnnotation.relationList) {
+        for (ACERelation relation : docAnnotation.relationList) {
             // Check if the relation has "Arg-1" and "Arg-2"
             String firstArgumentEntityId = null;
             String secondArgumentEntityId = null;
 
-            for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelationArgument relArg : relation.relationArgumentList) {
+            for (ACERelationArgument relArg : relation.relationArgumentList) {
                 if (Objects.equals(relArg.role, RelationFirstArgumentTag)) {
                     firstArgumentEntityId = relArg.id;
                 } else if (Objects.equals(relArg.role, RelationSecondArgumentTag)) {
@@ -372,12 +372,12 @@ public class ACEReader extends TextAnnotationReader {
             }
 
             // Parse each relation mention individually
-            for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelationMention relationMention : relation.relationMentionList) {
+            for (ACERelationMention relationMention : relation.relationMentionList) {
                 // Find both mentions in the relation
-                edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelationArgumentMention firstArgumentMention = null;
-                edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelationArgumentMention secondArgumentMention = null;
+                ACERelationArgumentMention firstArgumentMention = null;
+                ACERelationArgumentMention secondArgumentMention = null;
 
-                for (edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelationArgumentMention relArgMention : relationMention.relationArgumentMentionList) {
+                for (ACERelationArgumentMention relArgMention : relationMention.relationArgumentMentionList) {
                     if (Objects.equals(relArgMention.role, RelationFirstArgumentTag)) {
                         firstArgumentMention = relArgMention;
                     } else if (Objects.equals(relArgMention.role, RelationSecondArgumentTag)) {

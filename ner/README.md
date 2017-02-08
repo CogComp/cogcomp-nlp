@@ -105,13 +105,13 @@ To annotate the text in the CoNLL/Ontonotes format, instantiate the NERAnnotator
 A complete example follows.
 
 ```java
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import java.io.IOException;
 

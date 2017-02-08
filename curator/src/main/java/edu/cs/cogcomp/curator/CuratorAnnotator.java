@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.ServiceUnavailableException;
 import org.apache.thrift.TException;

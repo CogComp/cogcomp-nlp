@@ -8,7 +8,7 @@
 package edu.cs.cogcomp.core.utilities;
 
 import com.google.gson.JsonArray;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import junit.framework.TestCase;
 import org.junit.Test;
 

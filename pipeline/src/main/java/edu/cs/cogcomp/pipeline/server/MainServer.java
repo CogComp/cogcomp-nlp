@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.pipeline.server;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.annotation.AnnotatorService;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.cs.cogcomp.pipeline.main.PipelineFactory;
 import net.sourceforge.argparse4j.ArgumentParsers;

@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
-import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
+import edu.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
+import edu.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
 import java.io.IOException;
 import java.util.Collections;

@@ -19,16 +19,16 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import org.junit.Test;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.LineIO;
 import edu.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.cs.cogcomp.lbjava.nlp.Word;

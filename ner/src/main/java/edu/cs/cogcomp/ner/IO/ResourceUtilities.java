@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.ner.IO;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

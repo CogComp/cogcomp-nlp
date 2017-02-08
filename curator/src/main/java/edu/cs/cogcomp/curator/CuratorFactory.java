@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorService;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * A simple factory for an {@link CuratorAnnotatorService} object.

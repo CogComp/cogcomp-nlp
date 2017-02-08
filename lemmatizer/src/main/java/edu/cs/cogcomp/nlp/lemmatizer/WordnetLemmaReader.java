@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.lemmatizer;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.LineIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

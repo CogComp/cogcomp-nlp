@@ -5,18 +5,18 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.manifest;
+package edu.cs.cogcomp.edison.features.manifest;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
-import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.algorithms.Mappers;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.edison.features.*;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

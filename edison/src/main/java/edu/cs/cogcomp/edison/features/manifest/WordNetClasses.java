@@ -5,13 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.manifest;
+package edu.cs.cogcomp.edison.features.manifest;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
 
 import java.util.*;
 
-import static edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass.*;
+import static edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass.*;
 
 class WordNetClasses {
 

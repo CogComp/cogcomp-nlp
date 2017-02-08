@@ -8,8 +8,8 @@
 package edu.cs.cogcomp.ner.reference;
 
 import edu.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.Sentence;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.cs.cogcomp.ner.LbjTagger.Data;
 import edu.cs.cogcomp.ner.LbjTagger.NERDocument;

@@ -5,17 +5,17 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.edison.annotators.SimpleGazetteerAnnotator;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureCollection;
+import edu.cs.cogcomp.edison.features.WordFeatureExtractor;
+import edu.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

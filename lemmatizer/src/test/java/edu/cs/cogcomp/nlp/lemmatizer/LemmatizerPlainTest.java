@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.nlp.lemmatizer;
 
-import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.io.LineIO;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -16,12 +16,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.AbstractIncrementalCorpusReader;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.utilities.TextCleaner;
+import edu.cs.cogcomp.nlp.corpusreaders.AbstractIncrementalCorpusReader;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 

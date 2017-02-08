@@ -5,11 +5,11 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package edu.cs.cogcomp.nlp.corpusreaders;
 
 import edu.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.io.IOException;
 import java.nio.file.Path;

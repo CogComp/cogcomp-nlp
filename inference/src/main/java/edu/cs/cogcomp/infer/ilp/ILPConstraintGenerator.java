@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.infer.ilp;
 
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 

@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.Property;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * The default {@link Configurator} for {@link BasicAnnotatorService}

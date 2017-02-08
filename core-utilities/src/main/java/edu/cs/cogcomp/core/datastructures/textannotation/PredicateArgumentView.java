@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.algorithms.Sorters;
+import edu.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
 
 import java.util.*;
 

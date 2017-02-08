@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.pos.lbjava;
 
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.cs.cogcomp.pos.POSConfigurator;
 

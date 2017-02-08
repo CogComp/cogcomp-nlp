@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.nlp.pmi;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.ShellInterface;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.utilities.ShellInterface;
 
 import java.util.*;
 

@@ -8,8 +8,8 @@
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
 import com.google.common.collect.Maps;
-import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
-import edu.illinois.cs.cogcomp.core.math.ArgMax;
+import edu.cs.cogcomp.core.datastructures.HasAttributes;
+import edu.cs.cogcomp.core.math.ArgMax;
 
 import java.io.Serializable;
 import java.util.HashMap;

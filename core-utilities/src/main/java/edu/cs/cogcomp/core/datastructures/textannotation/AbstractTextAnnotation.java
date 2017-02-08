@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.IQueryable;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.QueryableList;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
 
 import java.io.Serializable;
 import java.util.*;

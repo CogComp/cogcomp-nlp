@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import edu.illinois.cs.cogcomp.thrift.base.AnnotationFailedException;
 import edu.illinois.cs.cogcomp.thrift.base.ServiceUnavailableException;
 import org.apache.thrift.TException;
@@ -18,11 +18,11 @@ import org.apache.thrift.TException;
 import java.net.SocketException;
 
 /**
- * A simple {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
+ * A simple {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
  * builder, that uses {@link CuratorClient} to create a
  * TextAnnotation and populate it with
- * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
- * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
+ * {@link edu.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
+ * {@link edu.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
  *
  * @author Christos Christodoulopoulos
  * @author Narender Gupta

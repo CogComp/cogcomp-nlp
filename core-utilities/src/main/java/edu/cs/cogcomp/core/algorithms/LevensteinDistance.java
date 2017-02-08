@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.math.MathUtilities;
+import edu.cs.cogcomp.core.math.MathUtilities;
 
 import java.util.Arrays;
 import java.util.List;

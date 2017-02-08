@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.algorithms.ListMatch;
+import edu.cs.cogcomp.core.algorithms.ListMatch;
 import gnu.trove.map.hash.TObjectIntHashMap;
 
 import java.util.ArrayList;

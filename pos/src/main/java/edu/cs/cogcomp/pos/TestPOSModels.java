@@ -12,7 +12,7 @@ import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.cs.cogcomp.pos.lbjava.POSTagger;
 import edu.cs.cogcomp.pos.lbjava.WordForm;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

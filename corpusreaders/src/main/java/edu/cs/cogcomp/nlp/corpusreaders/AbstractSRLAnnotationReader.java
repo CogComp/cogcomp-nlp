@@ -7,16 +7,16 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.utilities.ArrayUtilities;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 
 import java.io.FileNotFoundException;
 import java.util.*;

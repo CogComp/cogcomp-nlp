@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.datastructures;
 
-import edu.illinois.cs.cogcomp.core.search.BeamSearch;
+import edu.cs.cogcomp.core.search.BeamSearch;
 
 import java.util.Collection;
 import java.util.Comparator;

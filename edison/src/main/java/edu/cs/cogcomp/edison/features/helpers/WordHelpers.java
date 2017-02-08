@@ -5,13 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.helpers;
+package edu.cs.cogcomp.edison.features.helpers;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
-import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.cs.cogcomp.nlp.utilities.POSUtils;
 import net.didion.jwnl.JWNLException;
 import net.didion.jwnl.data.POS;
 

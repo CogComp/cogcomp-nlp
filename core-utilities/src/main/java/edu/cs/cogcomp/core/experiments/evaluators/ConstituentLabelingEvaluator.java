@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.core.experiments.evaluators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
-import edu.illinois.cs.cogcomp.core.experiments.evaluators.Evaluator;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.experiments.ClassificationTester;
+import edu.cs.cogcomp.core.experiments.evaluators.Evaluator;
 
 import java.util.HashSet;
 import java.util.Set;

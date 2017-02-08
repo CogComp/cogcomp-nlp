@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.utilities;
 
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.ITransformer;
 
 import java.util.ArrayList;
 import java.util.List;

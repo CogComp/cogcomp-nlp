@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.core.experiments.evaluators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.experiments.ClassificationTester;
+import edu.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import org.junit.Before;
 import org.junit.Test;
 

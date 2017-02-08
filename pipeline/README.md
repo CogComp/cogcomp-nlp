@@ -230,8 +230,8 @@ edu.illinois.cs.cogcomp.pipeline.main.
 
 To process text input, use the '()' method:
 ```java
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.annotation.AnnotatorService;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 String docId = "APW-20140101.3018"; // arbitrary string identifier
@@ -273,8 +273,8 @@ that duplicate default values will have no effect and are not required).
 
 Code snippet to show how to override default configuration with user-specified properties.
 ```java
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorService;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 ResourceManager userConfig = new ResourceManager("config/pipeline-config.properties");

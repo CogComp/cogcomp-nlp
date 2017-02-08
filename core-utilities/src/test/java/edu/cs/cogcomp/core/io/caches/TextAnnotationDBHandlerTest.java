@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.core.io.caches;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

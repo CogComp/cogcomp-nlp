@@ -5,11 +5,11 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.BeforeClass;

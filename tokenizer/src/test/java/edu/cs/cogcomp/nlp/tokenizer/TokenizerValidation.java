@@ -16,10 +16,10 @@ import java.util.Properties;
 
 import edu.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 /**

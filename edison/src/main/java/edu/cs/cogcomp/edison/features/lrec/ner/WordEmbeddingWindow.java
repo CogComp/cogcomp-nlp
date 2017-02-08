@@ -5,19 +5,19 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
+package edu.cs.cogcomp.edison.features.lrec.ner;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.edison.features.DiscreteFeature;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.edison.features.helpers.FeatureCreatorUtil;
+import edu.cs.cogcomp.edison.features.helpers.WordEmbeddings;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.io.IOException;
 import java.util.HashSet;

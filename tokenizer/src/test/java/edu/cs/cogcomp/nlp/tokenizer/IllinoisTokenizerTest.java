@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.nlp.tokenizer;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;

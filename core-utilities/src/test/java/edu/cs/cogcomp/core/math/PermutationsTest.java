@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.math;
 
-import edu.illinois.cs.cogcomp.core.stats.Counter;
-import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
+import edu.cs.cogcomp.core.stats.Counter;
+import edu.cs.cogcomp.core.utilities.ArrayUtilities;
 import junit.framework.TestCase;
 import org.junit.Test;
 

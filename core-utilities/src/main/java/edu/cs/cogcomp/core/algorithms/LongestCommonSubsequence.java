@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.IntPair;
 
 import java.util.*;
 

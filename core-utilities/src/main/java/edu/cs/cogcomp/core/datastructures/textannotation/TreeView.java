@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.core.datastructures.IQueryable;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

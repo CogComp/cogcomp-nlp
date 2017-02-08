@@ -5,16 +5,16 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.stats.Counter;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.utilities.Table;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.core.algorithms.ProducerConsumer;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.stats.Counter;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.utilities.Table;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
 
 import java.util.Arrays;
 import java.util.Iterator;

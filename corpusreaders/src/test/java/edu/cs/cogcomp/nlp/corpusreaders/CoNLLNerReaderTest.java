@@ -8,9 +8,9 @@
 package edu.cs.cogcomp.nlp.corpusreaders;
 
 import edu.cs.cogcomp.nlp.corpusreaders.CoNLLNerReader;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import org.junit.Test;
 
 import java.util.ArrayList;

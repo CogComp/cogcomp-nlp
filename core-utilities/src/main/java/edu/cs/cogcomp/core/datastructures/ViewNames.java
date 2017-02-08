@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.datastructures;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
  * This class contains the canonical strings used for naming standard views. They are used both in

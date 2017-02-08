@@ -5,10 +5,10 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.cs.cogcomp.edison.features.factory;
 
-import edu.illinois.cs.cogcomp.edison.features.ListFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
+import edu.cs.cogcomp.edison.features.ListFeatureExtractor;
+import edu.cs.cogcomp.edison.features.helpers.WordLists;
 
 public abstract class ListFeatureFactory {
     public static final ListFeatureExtractor daysOfTheWeek = new ListFeatureExtractor("days",

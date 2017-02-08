@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader;
+package edu.cs.cogcomp.nlp.corpusreaders.aceReader;
 
 /**
  * @author Eric Bengtson Encapsulates various exceptions that may arise during XML processing.

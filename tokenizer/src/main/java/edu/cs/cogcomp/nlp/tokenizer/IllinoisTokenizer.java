@@ -7,14 +7,14 @@
  */
 package edu.cs.cogcomp.nlp.tokenizer;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 import edu.cs.cogcomp.lbjava.nlp.Sentence;
 import edu.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedChild;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.*;
+import edu.cs.cogcomp.nlp.tokenizer.*;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ import java.util.*;
  * Created by mssammon on 7/27/15.
  * @deprecated use StatefulTokenizer instead.
  */
-public class IllinoisTokenizer implements edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer {
+public class IllinoisTokenizer implements Tokenizer {
 
 
     /**

@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.agreement;
 
-import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
-import edu.illinois.cs.cogcomp.nlp.agreement.PairwiseCohensKappa;
+import edu.cs.cogcomp.core.utilities.AvoidUsing;
+import edu.cs.cogcomp.nlp.agreement.PairwiseCohensKappa;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

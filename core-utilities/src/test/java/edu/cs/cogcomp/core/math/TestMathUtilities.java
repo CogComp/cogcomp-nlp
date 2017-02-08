@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.math;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static edu.cs.cogcomp.core.math.MathUtilities.min;
-import static edu.illinois.cs.cogcomp.core.math.MathUtilities.*;
-import static edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities.asDoubleList;
+import static edu.cs.cogcomp.core.math.MathUtilities.*;
+import static edu.cs.cogcomp.core.utilities.ArrayUtilities.asDoubleList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

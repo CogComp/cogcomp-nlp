@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeTraversal;
 
 import java.util.ArrayList;
 import java.util.List;

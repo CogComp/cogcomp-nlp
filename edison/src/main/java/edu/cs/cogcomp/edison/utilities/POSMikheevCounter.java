@@ -5,14 +5,14 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
+import edu.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.cs.cogcomp.nlp.corpusreaders.PennTreebankPOSReader;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

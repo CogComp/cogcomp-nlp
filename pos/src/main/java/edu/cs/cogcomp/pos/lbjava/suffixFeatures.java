@@ -9,7 +9,7 @@ package edu.cs.cogcomp.pos.lbjava;
 
 import edu.cs.cogcomp.pos.POSConfigurator;
 import edu.cs.cogcomp.pos.POSLabeledUnknownWordParser;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.pos.*;

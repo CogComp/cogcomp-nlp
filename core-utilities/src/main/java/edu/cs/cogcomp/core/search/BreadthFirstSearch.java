@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.search;
 
-import edu.illinois.cs.cogcomp.core.search.GraphSearch;
+import edu.cs.cogcomp.core.search.GraphSearch;
 
 import java.util.LinkedList;
 import java.util.Queue;

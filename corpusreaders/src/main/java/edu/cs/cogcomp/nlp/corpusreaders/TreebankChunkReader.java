@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.nlp.utilities.SentenceUtils;
 
 import java.io.FileNotFoundException;
 import java.util.List;

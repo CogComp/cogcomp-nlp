@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.infer.ilp;
 
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.DVector;
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.OVector;
+import edu.cs.cogcomp.core.datastructures.vectors.DVector;
+import edu.cs.cogcomp.core.datastructures.vectors.OVector;
 import gurobi.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.utilities;
 
-import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
+import edu.cs.cogcomp.core.constants.CoreConfigNames;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.nlp.utilities.StringCleanup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;

@@ -5,17 +5,17 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.annotators;
+package edu.cs.cogcomp.edison.annotators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.cs.cogcomp.edison.features.helpers.ParseHelper;
+import edu.cs.cogcomp.nlp.utilities.CollinsHeadDependencyParser;
 import junit.framework.TestCase;
 import org.junit.Test;
 

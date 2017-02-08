@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.datastructures;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
 
 /**
  * This class forces each view name in {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}

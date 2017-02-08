@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.ner.config;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
 

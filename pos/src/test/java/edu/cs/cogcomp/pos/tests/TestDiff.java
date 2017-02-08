@@ -8,11 +8,11 @@
 package edu.cs.cogcomp.pos.tests;
 
 import edu.cs.cogcomp.pos.POSAnnotator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;

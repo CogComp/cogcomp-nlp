@@ -9,19 +9,19 @@ package edu.cs.cogcomp.ner;
 
 import java.util.*;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.annotation.AnnotatorException;
 import edu.cs.cogcomp.ner.LbjTagger.RandomLabelGenerator;
 import edu.cs.cogcomp.ner.LbjTagger.TextChunkRepresentationManager;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weka.core.Debug.Random;

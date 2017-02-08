@@ -13,7 +13,7 @@ package edu.cs.cogcomp.quant.lbj;
 import edu.cs.cogcomp.quant.features.POSContextBigrams;
 import edu.cs.cogcomp.quant.features.WordBigrams;
 import edu.cs.cogcomp.quant.features.WordContextBigrams;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;

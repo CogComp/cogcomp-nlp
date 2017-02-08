@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.Property;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class CuratorConfigurator extends Configurator {
     public static final Property CURATOR_HOST = new Property("curatorHost",

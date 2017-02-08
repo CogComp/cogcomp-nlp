@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
+package edu.cs.cogcomp.edison.features.lrec.srl.Verb.Predicate;
 
 
 import org.junit.Test;

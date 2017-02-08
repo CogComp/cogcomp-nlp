@@ -8,9 +8,9 @@
 package edu.cs.cogcomp.nlp.corpusreaders;
 
 import edu.cs.cogcomp.nlp.corpusreaders.PennTreebankPOSReader;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.LineIO;
 import org.junit.Before;
 import org.junit.Test;
 

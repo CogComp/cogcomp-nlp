@@ -5,20 +5,20 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier;
+package edu.cs.cogcomp.edison.features.lrec.srl.Verb.Classifier;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.*;
-import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
-import edu.illinois.cs.cogcomp.edison.features.lrec.GetParseRightSibling;
-import edu.illinois.cs.cogcomp.edison.features.lrec.PPFeatures;
-import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Verb.SrlVerbPredicateFeatures;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.WordAndPos;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.edison.features.*;
+import edu.cs.cogcomp.edison.features.factory.*;
+import edu.cs.cogcomp.edison.features.lrec.GetParseLeftSibling;
+import edu.cs.cogcomp.edison.features.lrec.GetParseRightSibling;
+import edu.cs.cogcomp.edison.features.lrec.PPFeatures;
+import edu.cs.cogcomp.edison.features.lrec.ProjectedPath;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
+import edu.cs.cogcomp.edison.features.lrec.srl.Verb.SrlVerbPredicateFeatures;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.WordAndPos;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 

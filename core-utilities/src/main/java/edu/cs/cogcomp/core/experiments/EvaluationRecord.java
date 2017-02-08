@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.experiments;
 
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.core.utilities.Table;
+import edu.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.core.utilities.Table;
 
 public class EvaluationRecord {
     private int goldCount;

@@ -7,15 +7,15 @@
  */
 package edu.cs.cogcomp.edison.annotators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

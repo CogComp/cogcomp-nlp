@@ -5,14 +5,14 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.factory;
+package edu.cs.cogcomp.edison.features.factory;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
-import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.Queries;
+import edu.cs.cogcomp.edison.features.DiscreteFeature;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

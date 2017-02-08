@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParser;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParser;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import org.junit.Before;
 import org.junit.Test;
 import junit.framework.TestCase;

@@ -5,11 +5,11 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.cs.cogcomp.core.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.ADJECTIVAL;
-import static edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses;
+import static edu.cs.cogcomp.edison.utilities.NomLexEntry.ADJECTIVAL;
+import static edu.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses;
 
 /**
  * Read NomLex from S-expressions

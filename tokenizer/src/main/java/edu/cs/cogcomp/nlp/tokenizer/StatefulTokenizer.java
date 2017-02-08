@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.tokenizer;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author redman
  */
-public class StatefulTokenizer implements edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer {
+public class StatefulTokenizer implements Tokenizer {
     
     /** the logger specific to this class. */
     private static Logger logger = LoggerFactory.getLogger(StatefulTokenizer.class);

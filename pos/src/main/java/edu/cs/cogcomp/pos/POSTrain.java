@@ -13,7 +13,7 @@ import edu.cs.cogcomp.pos.lbjava.MikheevTable;
 import edu.cs.cogcomp.pos.lbjava.POSTaggerKnown;
 import edu.cs.cogcomp.pos.lbjava.POSTaggerUnknown;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

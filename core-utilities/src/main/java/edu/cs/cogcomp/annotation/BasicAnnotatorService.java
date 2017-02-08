@@ -7,17 +7,17 @@
  */
 package edu.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
-import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.nlp.utilities.PrintUtils;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.caches.TextAnnotationCache;
+import edu.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.nlp.utilities.PrintUtils;
 import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

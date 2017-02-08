@@ -7,12 +7,12 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
-import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.algorithms.Mappers;
+import edu.cs.cogcomp.core.algorithms.ProducerConsumer;
+import edu.cs.cogcomp.core.algorithms.Sorters;
+import edu.cs.cogcomp.core.datastructures.textannotation.Relation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.transformers.ITransformer;
 import gnu.trove.map.hash.TIntIntHashMap;
 import gnu.trove.procedure.TIntProcedure;
 import org.slf4j.Logger;

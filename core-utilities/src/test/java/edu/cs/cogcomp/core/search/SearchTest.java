@@ -10,7 +10,7 @@
  */
 package edu.cs.cogcomp.core.search;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 import junit.framework.TestCase;
 import org.junit.Test;
 

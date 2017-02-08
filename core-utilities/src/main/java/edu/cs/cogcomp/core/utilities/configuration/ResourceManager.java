@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.utilities.configuration;
 
-import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
+import edu.cs.cogcomp.core.constants.CoreConfigNames;
 
 import java.io.*;
 import java.util.Enumeration;

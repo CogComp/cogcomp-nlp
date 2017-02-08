@@ -5,14 +5,14 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
+package edu.cs.cogcomp.edison.features.lrec.srl.generic;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.*;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkPropertyFeatureFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.SrlWordFeatures;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.edison.features.*;
+import edu.cs.cogcomp.edison.features.factory.ChunkPropertyFeatureFactory;
+import edu.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.SrlWordFeatures;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.ArrayList;
 import java.util.Set;

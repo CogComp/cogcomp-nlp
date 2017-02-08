@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.Nom.Predicate;
+package edu.cs.cogcomp.edison.features.lrec.srl.Nom.Predicate;
 
 import org.junit.Test;
 import org.slf4j.Logger;

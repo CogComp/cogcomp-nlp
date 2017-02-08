@@ -5,13 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features;
+package edu.cs.cogcomp.edison.features;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 import org.junit.Test;
 

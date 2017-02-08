@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.utilities.configuration;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
+import edu.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 
 import java.util.Enumeration;
 import java.util.List;

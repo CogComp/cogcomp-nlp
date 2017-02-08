@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.tokenizer;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 
 import java.util.ArrayList;
 import java.util.HashSet;

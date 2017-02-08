@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.pos;
 
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessInputStream;
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessOutputStream;
+import edu.cs.cogcomp.core.datastructures.vectors.ExceptionlessInputStream;
+import edu.cs.cogcomp.core.datastructures.vectors.ExceptionlessOutputStream;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.cs.cogcomp.lbjava.nlp.Word;
 

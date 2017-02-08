@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

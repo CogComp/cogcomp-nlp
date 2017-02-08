@@ -7,12 +7,12 @@
  */
 package edu.cs.cogcomp.edison.annotators;
 
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 
 /**
  * Generates a part-of-speech view using the pre-terminals from a parse tree.

@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.search;
 
-import edu.illinois.cs.cogcomp.core.search.IStateManager;
+import edu.cs.cogcomp.core.search.IStateManager;
 
 import java.util.Queue;
 

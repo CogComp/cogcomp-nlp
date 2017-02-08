@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import org.junit.Test;
 
 import java.util.List;

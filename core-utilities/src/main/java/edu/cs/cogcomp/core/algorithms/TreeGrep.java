@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeTraversal;
-import edu.illinois.cs.cogcomp.core.math.Permutations;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.datastructures.trees.TreeTraversal;
+import edu.cs.cogcomp.core.math.Permutations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

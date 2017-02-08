@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.datastructures;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.core.algorithms.Mappers;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.Predicate;
 
 import java.util.*;
 

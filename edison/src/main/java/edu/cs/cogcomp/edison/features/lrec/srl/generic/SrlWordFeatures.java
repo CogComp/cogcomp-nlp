@@ -5,18 +5,18 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
+package edu.cs.cogcomp.edison.features.lrec.srl.generic;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.ChunkEmbedding;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.FeatureCollection;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
+import edu.cs.cogcomp.edison.features.factory.ChunkEmbedding;
+import edu.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor;
+import edu.cs.cogcomp.edison.features.factory.WordNetFeatureExtractor.WordNetFeatureClass;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 

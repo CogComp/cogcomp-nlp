@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.core.utilities;
 
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

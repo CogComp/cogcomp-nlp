@@ -5,22 +5,22 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.helpers;
+package edu.cs.cogcomp.edison.features.helpers;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.nlp.utilities.HeadFinderBase;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.core.algorithms.Mappers;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.Sentence;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TreeView;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.nlp.utilities.HeadFinderBase;
+import edu.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

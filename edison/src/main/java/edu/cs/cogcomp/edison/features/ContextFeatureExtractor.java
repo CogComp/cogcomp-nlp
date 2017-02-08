@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.edison.features;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -19,7 +19,7 @@ import java.util.Set;
  * specified constituent. The constructor specifies the context size.
  * <p>
  * To use this class, after creating the object, add other feature extractors using the
- * {@link edu.illinois.cs.cogcomp.edison.features.ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
+ * {@link edu.cs.cogcomp.edison.features.ContextFeatureExtractor#addFeatureExtractor(FeatureExtractor)}
  * method. Then, for each neighboring word, the feature extractor will generate features using all
  * the extractors that have been added.
  * <p>

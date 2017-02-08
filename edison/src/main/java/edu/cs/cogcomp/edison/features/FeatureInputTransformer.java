@@ -5,17 +5,17 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features;
+package edu.cs.cogcomp.edison.features;
 
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
-import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.edison.annotators.HeadFinderDependencyViewGenerator;
+import edu.cs.cogcomp.edison.features.helpers.WordHelpers;
+import edu.cs.cogcomp.nlp.utilities.CollinsHeadFinder;
+import edu.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
-import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.core.datastructures.IQueryable;
+import edu.cs.cogcomp.core.datastructures.QueryableList;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.transformers.ITransformer;
+import edu.cs.cogcomp.core.transformers.Predicate;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;

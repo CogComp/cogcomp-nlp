@@ -5,13 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import static edu.illinois.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses.*;
+import static edu.cs.cogcomp.edison.utilities.NomLexEntry.NomLexClasses.*;
 
 /**
  * @author Vivek Srikumar

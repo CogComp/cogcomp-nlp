@@ -5,10 +5,10 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.utilities;
+package edu.cs.cogcomp.edison.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.core.datastructures.Lexicon;
+import edu.cs.cogcomp.edison.features.Feature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

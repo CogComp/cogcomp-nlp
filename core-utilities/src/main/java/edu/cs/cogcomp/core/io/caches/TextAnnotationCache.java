@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.io.caches;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 /**
  * An interface for caching {@link TextAnnotation}s. Can be implemented with different technologies:

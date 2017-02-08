@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.nlp.pmi;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

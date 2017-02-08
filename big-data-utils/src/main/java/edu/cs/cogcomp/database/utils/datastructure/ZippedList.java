@@ -9,7 +9,7 @@ package edu.illinois.cs.wikifier.utils.datastructure;
 
 import java.util.Iterator;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 
 public class ZippedList<K, V> implements Iterable<Pair<K,V>>{
 

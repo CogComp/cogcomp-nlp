@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;

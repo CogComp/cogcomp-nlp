@@ -5,9 +5,9 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.manifest;
+package edu.cs.cogcomp.edison.features.manifest;
 
-import edu.illinois.cs.cogcomp.edison.features.FeatureInputTransformer;
+import edu.cs.cogcomp.edison.features.FeatureInputTransformer;
 
 import java.util.HashMap;
 import java.util.Map;

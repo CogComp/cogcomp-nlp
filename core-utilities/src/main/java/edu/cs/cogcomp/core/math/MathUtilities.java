@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.math;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import static edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities.asDoubleList;
+import static edu.cs.cogcomp.core.utilities.ArrayUtilities.asDoubleList;
 import static java.lang.Math.*;
 import static java.util.Arrays.asList;
 

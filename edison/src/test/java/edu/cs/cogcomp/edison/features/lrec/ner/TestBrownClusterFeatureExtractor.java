@@ -6,14 +6,14 @@
  * http://cogcomp.cs.illinois.edu/
  */
 
-package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
+package edu.cs.cogcomp.edison.features.lrec.ner;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.edison.features.Feature;
+import edu.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.junit.Test;

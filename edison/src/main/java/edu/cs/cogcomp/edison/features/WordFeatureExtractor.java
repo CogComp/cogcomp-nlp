@@ -5,11 +5,11 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features;
+package edu.cs.cogcomp.edison.features;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;
 
@@ -40,10 +40,10 @@ public abstract class WordFeatureExtractor implements FeatureExtractor {
     }
 
     /**
-     * Creates a new {@link edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor}. This
+     * Creates a new {@link edu.cs.cogcomp.edison.features.WordFeatureExtractor}. This
      * constructor is equivalent to calling {@code new WordFeatureExtractor(true)}.
      *
-     * @see edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor#WordFeatureExtractor(boolean)
+     * @see edu.cs.cogcomp.edison.features.WordFeatureExtractor#WordFeatureExtractor(boolean)
      */
     public WordFeatureExtractor() {
         this(true);

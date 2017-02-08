@@ -8,10 +8,10 @@
 package edu.cs.cogcomp.core.experiments.evaluators;
 
 import edu.cs.cogcomp.core.datastructures.textannotation.CoreferenceView;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.experiments.ClassificationTester;
 import org.junit.Before;
 import org.junit.Test;
 

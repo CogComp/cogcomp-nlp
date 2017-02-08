@@ -5,10 +5,10 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure;
+package edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.Paragraph;
 
 import java.io.Serializable;
 import java.util.List;

@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 

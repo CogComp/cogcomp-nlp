@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer.Tokenization;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;

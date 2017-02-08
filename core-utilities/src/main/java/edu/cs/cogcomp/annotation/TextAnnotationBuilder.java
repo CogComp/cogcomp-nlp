@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.annotation;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
 /**
  * The interface that will be used by any TextAnnotation creation method that requires tokenization.

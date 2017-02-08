@@ -7,22 +7,22 @@
  */
 package edu.cs.cogcomp.edison.annotators;
 
-import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.Annotator;
+import edu.cs.cogcomp.annotation.AnnotatorException;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
-import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
+import edu.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.cs.cogcomp.nlp.utilities.ParseTreeProperties;
+import edu.cs.cogcomp.nlp.utilities.SentenceUtils;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import org.slf4j.Logger;

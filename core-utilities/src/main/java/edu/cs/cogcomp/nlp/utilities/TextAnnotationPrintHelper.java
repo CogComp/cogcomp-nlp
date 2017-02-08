@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.nlp.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
 
 import java.io.IOException;
 import java.util.Map;

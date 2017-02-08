@@ -7,12 +7,12 @@
  */
 package edu.cs.cogcomp.quant.driver;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
-import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
+import edu.cs.cogcomp.core.constants.CoreConfigNames;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.Property;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * The properties for the {@link Preprocessor}.

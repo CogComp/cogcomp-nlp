@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
+import edu.cs.cogcomp.core.utilities.AvoidUsing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

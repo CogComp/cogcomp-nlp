@@ -10,11 +10,11 @@ package edu.cs.cogcomp.ner.tagger;
 import edu.cs.cogcomp.ner.IO.InFile;
 import edu.cs.cogcomp.ner.NERAnnotator;
 import edu.cs.cogcomp.ner.IO.OutFile;
-import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
 
 import java.util.ArrayList;
 import java.util.Collections;

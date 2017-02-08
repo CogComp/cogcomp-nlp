@@ -8,7 +8,7 @@
 /**
  * 
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
+package edu.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +18,11 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
 
 /**
  * This utility will produce data in CoNLL 2002 or 2003 format. The provided

@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.utilities;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.utilities.StringUtils;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;

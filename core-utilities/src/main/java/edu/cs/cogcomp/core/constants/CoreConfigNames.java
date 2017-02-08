@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.constants;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
 public class CoreConfigNames {
     public static final String DEBUG = "debug";

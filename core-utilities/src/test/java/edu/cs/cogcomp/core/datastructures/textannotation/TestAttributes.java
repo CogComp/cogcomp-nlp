@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.datastructures.textannotation;
 
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
 import org.junit.Before;
 import org.junit.Test;
 

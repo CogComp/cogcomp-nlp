@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.pos;
 
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.pos.lbjava.BaselineTarget;
 import edu.cs.cogcomp.lbjava.nlp.seg.*;
 

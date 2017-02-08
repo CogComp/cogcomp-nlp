@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.nlp.lemmatizer;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.cs.cogcomp.core.utilities.configuration.Property;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * Lemmatizer constructor parameters Created by mssammon on 1/5/16.

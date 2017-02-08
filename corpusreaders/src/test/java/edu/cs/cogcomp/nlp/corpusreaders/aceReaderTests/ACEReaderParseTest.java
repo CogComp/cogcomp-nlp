@@ -7,15 +7,15 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders.aceReaderTests;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.cs.cogcomp.nlp.corpusreaders.ACEReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocumentAnnotation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntity;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntityMention;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelation;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEDocumentAnnotation;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntity;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACEEntityMention;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.ACERelation;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
 import org.junit.Test;
 
 import java.io.File;

@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader;
+package edu.cs.cogcomp.nlp.corpusreaders.aceReader;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -26,9 +26,9 @@ public class SimpleXMLParser {
     /**
      * @param filename The file to parse
      * @return The {@code Document} XML tag -- the root of the document.
-     * @throws edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException
+     * @throws edu.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException
      */
-    public static Document getDocument(String filename) throws XMLException {
+    public static Document getDocument(String filename) throws edu.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException {
         return getDocument(new File(filename));
     }
 

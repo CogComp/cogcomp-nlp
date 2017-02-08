@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.stats;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.math.ArgMax;
-import edu.illinois.cs.cogcomp.core.math.ArgMin;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.math.ArgMax;
+import edu.cs.cogcomp.core.math.ArgMin;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 
 import java.io.Serializable;

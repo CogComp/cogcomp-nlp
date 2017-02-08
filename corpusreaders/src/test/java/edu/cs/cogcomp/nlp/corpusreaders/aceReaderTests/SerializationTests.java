@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.nlp.corpusreaders.aceReaderTests;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import org.junit.Assert;
 import org.junit.Test;

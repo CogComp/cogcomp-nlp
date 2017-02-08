@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.infer.ilp;
 
-import edu.illinois.cs.cogcomp.core.math.MathUtilities;
+import edu.cs.cogcomp.core.math.MathUtilities;
 import gurobi.GRB;
 
 /**

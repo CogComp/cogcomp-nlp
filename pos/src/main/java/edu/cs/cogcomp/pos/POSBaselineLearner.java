@@ -10,8 +10,8 @@ package edu.cs.cogcomp.pos;
 import java.util.*;
 import java.io.*;
 
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessInputStream;
-import edu.illinois.cs.cogcomp.core.datastructures.vectors.ExceptionlessOutputStream;
+import edu.cs.cogcomp.core.datastructures.vectors.ExceptionlessInputStream;
+import edu.cs.cogcomp.core.datastructures.vectors.ExceptionlessOutputStream;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 

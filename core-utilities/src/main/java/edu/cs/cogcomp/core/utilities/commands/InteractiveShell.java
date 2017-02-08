@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.utilities.commands;
 
-import edu.illinois.cs.cogcomp.core.algorithms.LevensteinDistance;
-import edu.illinois.cs.cogcomp.core.math.ArgMax;
+import edu.cs.cogcomp.core.algorithms.LevensteinDistance;
+import edu.cs.cogcomp.core.math.ArgMax;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

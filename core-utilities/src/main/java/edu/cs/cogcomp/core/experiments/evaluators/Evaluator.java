@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.core.experiments.evaluators;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.experiments.ClassificationTester;
 
 public abstract class Evaluator {
     protected void cleanAttributes(View gold, View prediction) {

@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewTypes;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
-import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
-import edu.illinois.cs.cogcomp.core.utilities.Identifier;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.ViewTypes;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
+import edu.cs.cogcomp.core.utilities.AvoidUsing;
+import edu.cs.cogcomp.core.utilities.Identifier;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Curator;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
@@ -34,13 +34,13 @@ import java.util.TreeMap;
 
 /**
  * <b>UPDATE:</b> While {@link CuratorClient} will still be able to
- * provide {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}s and
- * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View}s, the <i>canonical</i>
+ * provide {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}s and
+ * {@link edu.cs.cogcomp.core.datastructures.textannotation.View}s, the <i>canonical</i>
  * way to access the {@code Curator} is now through the {@link CuratorAnnotatorService} (which
- * creates a {@link edu.illinois.cs.cogcomp.annotation.AnnotatorService} object).
+ * creates a {@link edu.cs.cogcomp.annotation.AnnotatorService} object).
  *
  * A client for using the Curator to get
- * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}s.
+ * {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}s.
  * <p>
  * The general use case involves the following:
  * <ol>
@@ -58,26 +58,26 @@ import java.util.TreeMap;
  * 
  * </li>
  * <li>
- * Create a new {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
- * 
+ * Create a new {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation}
+ *
  * <pre>
  * {
  *     &#064;code
  *     TextAnnotation ta = client.getTextAnnotation(text);
  * }
  * </pre>
- * 
+ *
  * </li>
  * <li>
  * Add views to the
- * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} using the
+ * {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} using the
  * required view's name (supported views can be found in
- * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames}.
+ * {@link edu.cs.cogcomp.core.datastructures.ViewNames}.
  *
  * <pre>
  *     {@code client.addTextAnnotationView(ta, ViewNames.POS);}
  * </pre>
- * 
+ *
  * </li>
  * </ol>
  *
@@ -97,7 +97,7 @@ public class CuratorClient {
     /**
      * Create a new curator client pointing to the specified host and port. The client that this
      * constructor creates will use the names in
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} for the various annotators when
+     * {@link edu.cs.cogcomp.core.datastructures.ViewNames} for the various annotators when
      * calling the curator.
      *
      * @param rm The {@link ResourceManager} containing the properties for Curator
@@ -124,8 +124,8 @@ public class CuratorClient {
      *
      * @param text The text (tokenized or not)
      * @return A {@link edu.illinois.cs.cogcomp.thrift.curator.Record} with
-     *         {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
-     *         {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
+     *         {@link edu.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
+     *         {@link edu.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
      */
     private Record getRecord(String text) throws ServiceUnavailableException,
             AnnotationFailedException, TException, SocketException {
@@ -161,7 +161,7 @@ public class CuratorClient {
 
     /**
      * Creates a new
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} for the
+     * {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} for the
      * specified {@code text} belonging to the {@code corpusId} with id {@code textId}. This method
      * calls the Curator to get the tokenization and the sentences unless the CuratorClient's
      * {@link #respectTokenization} field is set to {@code true}, in which case it generates
@@ -177,8 +177,8 @@ public class CuratorClient {
      * @param textId Identifier for the text
      * @param text The raw text
      * @return A {@code TextAnnotation} with
-     *         {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
-     *         {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
+     *         {@link edu.cs.cogcomp.core.datastructures.ViewNames#TOKENS} and
+     *         {@link edu.cs.cogcomp.core.datastructures.ViewNames#SENTENCE} views.
      */
     public TextAnnotation getTextAnnotation(String corpusId, String textId, String text)
             throws ServiceUnavailableException, AnnotationFailedException, TException,
@@ -218,10 +218,10 @@ public class CuratorClient {
         }
     }
 
-    public edu.illinois.cs.cogcomp.core.datastructures.textannotation.View getTextAnnotationView(
+    public edu.cs.cogcomp.core.datastructures.textannotation.View getTextAnnotationView(
             TextAnnotation ta, String viewName) throws TException, AnnotationFailedException,
             ServiceUnavailableException, SocketException {
-        edu.illinois.cs.cogcomp.core.datastructures.textannotation.View view;
+        edu.cs.cogcomp.core.datastructures.textannotation.View view;
         Record record =
                 addRecordViewFromCurator(ta.getText(), TextAnnotationUtilities.getSentenceList(ta),
                         viewName);
@@ -309,7 +309,7 @@ public class CuratorClient {
     /**
      * <b>NB:</b>Temporary fix until Curator gets the new ViewNames.
      * <p>
-     * Converts a view name from {@link edu.illinois.cs.cogcomp.core.datastructures.ViewNames} to
+     * Converts a view name from {@link edu.cs.cogcomp.core.datastructures.ViewNames} to
      * one compatible with the current instance of Curator.
      * 
      * @param viewName The view name to convert

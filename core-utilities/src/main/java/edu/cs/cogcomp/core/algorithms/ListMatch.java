@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.algorithms;
 
-import edu.illinois.cs.cogcomp.core.algorithms.RegexBasedMatch;
+import edu.cs.cogcomp.core.algorithms.RegexBasedMatch;
 
 import java.util.List;
 

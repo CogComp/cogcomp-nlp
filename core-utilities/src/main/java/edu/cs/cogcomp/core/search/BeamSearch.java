@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.search;
 
-import edu.illinois.cs.cogcomp.core.datastructures.BoundedPriorityQueue;
+import edu.cs.cogcomp.core.datastructures.BoundedPriorityQueue;
 
 import java.util.Comparator;
 import java.util.Queue;

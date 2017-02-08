@@ -7,9 +7,9 @@
  */
 package edu.cs.cogcomp.core.experiments;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.math.Permutations;
-import edu.illinois.cs.cogcomp.core.stats.OneVariableStats;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.math.Permutations;
+import edu.cs.cogcomp.core.stats.OneVariableStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

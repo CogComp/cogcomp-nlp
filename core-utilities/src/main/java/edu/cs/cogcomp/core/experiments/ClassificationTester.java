@@ -7,13 +7,13 @@
  */
 package edu.cs.cogcomp.core.experiments;
 
-import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.experiments.EvaluationRecord;
-import edu.illinois.cs.cogcomp.core.experiments.ShufflingBasedStatisticalSignificance;
-import edu.illinois.cs.cogcomp.core.stats.Counter;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
-import edu.illinois.cs.cogcomp.core.utilities.Table;
+import edu.cs.cogcomp.core.algorithms.Sorters;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.experiments.EvaluationRecord;
+import edu.cs.cogcomp.core.experiments.ShufflingBasedStatisticalSignificance;
+import edu.cs.cogcomp.core.stats.Counter;
+import edu.cs.cogcomp.core.utilities.StringUtils;
+import edu.cs.cogcomp.core.utilities.Table;
 
 import java.util.*;
 

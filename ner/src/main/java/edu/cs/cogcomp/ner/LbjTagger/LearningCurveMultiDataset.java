@@ -12,7 +12,7 @@ import edu.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatur
 import edu.cs.cogcomp.ner.InferenceMethods.PredictionsAndEntitiesConfidenceScores;
 import edu.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;

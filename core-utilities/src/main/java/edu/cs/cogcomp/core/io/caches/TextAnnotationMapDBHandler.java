@@ -7,10 +7,10 @@
  */
 package edu.cs.cogcomp.core.io.caches;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.utilities.SerializationHelper;
 import org.jetbrains.annotations.NotNull;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;

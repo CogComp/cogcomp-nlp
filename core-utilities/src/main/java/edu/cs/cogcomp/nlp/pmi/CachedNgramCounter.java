@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.nlp.pmi;
 
-import edu.illinois.cs.cogcomp.nlp.pmi.CountsCache;
+import edu.cs.cogcomp.nlp.pmi.CountsCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

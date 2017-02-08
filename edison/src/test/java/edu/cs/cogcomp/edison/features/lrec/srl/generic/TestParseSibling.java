@@ -5,22 +5,22 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic;
+package edu.cs.cogcomp.edison.features.lrec.srl.generic;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
-import edu.illinois.cs.cogcomp.edison.annotators.ClauseViewGenerator;
-import edu.illinois.cs.cogcomp.edison.annotators.PseudoParse;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.lrec.FeatureGenerators;
-import edu.illinois.cs.cogcomp.edison.features.lrec.ProjectedPath;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.Constant;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
-import edu.illinois.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
-import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.cs.cogcomp.edison.annotators.ClauseViewGenerator;
+import edu.cs.cogcomp.edison.annotators.PseudoParse;
+import edu.cs.cogcomp.edison.features.FeatureExtractor;
+import edu.cs.cogcomp.edison.features.lrec.FeatureGenerators;
+import edu.cs.cogcomp.edison.features.lrec.ProjectedPath;
+import edu.cs.cogcomp.edison.features.lrec.srl.Constant;
+import edu.cs.cogcomp.edison.features.lrec.srl.SRLFeaturesComparator;
+import edu.cs.cogcomp.edison.features.lrec.srl.generic.ParseSibling;
+import edu.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

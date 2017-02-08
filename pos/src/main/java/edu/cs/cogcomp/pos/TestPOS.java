@@ -9,7 +9,7 @@ package edu.cs.cogcomp.pos;
 
 import edu.cs.cogcomp.pos.lbjava.POSLabel;
 import edu.cs.cogcomp.pos.lbjava.POSTagger;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.cs.cogcomp.lbjava.nlp.seg.POSBracketToToken;
 

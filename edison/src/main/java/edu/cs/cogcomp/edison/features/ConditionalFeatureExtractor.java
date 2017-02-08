@@ -7,8 +7,8 @@
  */
 package edu.cs.cogcomp.edison.features;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.transformers.Predicate;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.transformers.Predicate;
 import edu.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.Set;

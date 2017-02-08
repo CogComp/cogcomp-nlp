@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.curator;
 
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
-import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import edu.cs.cogcomp.core.datastructures.IntPair;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.core.datastructures.trees.Tree;
+import edu.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Record;
 import org.slf4j.Logger;
@@ -342,8 +342,8 @@ public class CuratorDataStructureInterface {
 
     /**
      * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Clustering} to a
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to produce
-     * a {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.CoreferenceView}. Note:
+     * {@link edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation} to produce
+     * a {@link edu.cs.cogcomp.core.datastructures.textannotation.CoreferenceView}. Note:
      * This function assumes that the longest mention (in terms of the number of characters) is the
      * canonical mention.
      *
@@ -389,7 +389,7 @@ public class CuratorDataStructureInterface {
 
     /**
      * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView}.
+     * {@link edu.cs.cogcomp.core.datastructures.textannotation.SpanLabelView}.
      *
      * @return A SpanLabelView
      */
@@ -448,7 +448,7 @@ public class CuratorDataStructureInterface {
 
     /**
      * Aligns a {@link edu.illinois.cs.cogcomp.thrift.base.Labeling} to a
-     * {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
+     * {@link edu.cs.cogcomp.core.datastructures.textannotation.TokenLabelView}.
      *
      * <b>NOTE:</b> must correct for one-past-the-end labeling when calling
      * {@link TextAnnotation#getTokenIdFromCharacterOffset(int)}.

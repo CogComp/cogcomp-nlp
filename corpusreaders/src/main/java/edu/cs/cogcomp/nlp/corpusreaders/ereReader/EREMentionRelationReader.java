@@ -5,13 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
+package edu.cs.cogcomp.nlp.corpusreaders.ereReader;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.cs.cogcomp.core.datastructures.Pair;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
+import edu.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;

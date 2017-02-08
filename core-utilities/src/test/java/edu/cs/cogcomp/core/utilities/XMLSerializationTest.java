@@ -7,7 +7,7 @@
  */
 package edu.cs.cogcomp.core.utilities;
 
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.cs.cogcomp.core.io.IOUtils;
 import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Test;

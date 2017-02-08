@@ -12,8 +12,8 @@ import java.util.Calendar;
 import edu.cs.cogcomp.quant.driver.Quantifier;
 import org.junit.Test;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.cs.cogcomp.quant.driver.Quantifier;
 import edu.cs.cogcomp.quant.standardize.Date;
 import edu.cs.cogcomp.quant.standardize.DateRange;

@@ -7,11 +7,11 @@
  */
 package edu.cs.cogcomp.pipeline.main;
 
-import edu.illinois.cs.cogcomp.annotation.*;
+import edu.cs.cogcomp.annotation.*;
 import edu.cs.cogcomp.chunker.main.ChunkerAnnotator;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.cs.cogcomp.ner.NERAnnotator;
 import edu.cs.cogcomp.ner.NerAnnotatorManager;
 import edu.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
