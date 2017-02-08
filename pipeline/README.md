@@ -168,8 +168,8 @@ If this package is used in maven, please add the following dependencies with pro
 ```xml
 <dependencies>
     <dependency>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
-        <artifactId>illinois-nlp-pipeline</artifactId>
+        <groupId>edu.cs.cogcomp</groupId>
+        <artifactId>cogcomp-nlp-pipeline</artifactId>
         <version>3.0.86</version>
     </dependency>
 </dependencies>

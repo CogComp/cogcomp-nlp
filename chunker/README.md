@@ -38,8 +38,8 @@ Here is how you can add maven dependencies into your program:
     <dependencies>
     <!--Remove this dependency if you want to train your own model-->
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-chunker</artifactId>
+            <groupId>edu.cs.cogcomp</groupId>
+            <artifactId>cogcomp-chunker</artifactId>
             <version>VERSION</version>
         </dependency>
     </dependencies>
