@@ -5,7 +5,7 @@ This is a utility package containing easy to use interfaces for several librarie
 Maven Coordinates
 -----------------
 ```
-  <groupId>edu.cs.cogcomp</groupId>
+  <groupId>edu.illinois.cs.cogcomp</groupId>
   <artifactId>big-data-utils</artifactId>
   <version>1.0.1</version> 
 ```

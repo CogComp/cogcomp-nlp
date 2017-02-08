@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-pos-models</artifactId>
+            <artifactId>illinois-pos-models</artifactId>
             <version>3.0.13</version>
         </dependency>
     </dependencies>
@@ -44,7 +44,7 @@
     <build>
         <plugins>
             <!--<plugin>-->
-                <!--<groupId>edu.cs.cogcomp</groupId>-->
+                <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
                 <!--<artifactId>lbjava-maven-plugin</artifactId>-->
                 <!--<version>1.2.13</version>-->
                 <!--<configuration>-->

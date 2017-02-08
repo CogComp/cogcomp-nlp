@@ -75,7 +75,7 @@ TokenizerTextAnnotationBuilder (also from illinois-core-utilities).
 The pipeline has the following annotators. To understand the annotations,
 please refer to the descriptions of the individual packages at the URLs
 provided. These annotations are stored as Views in a single TextAnnotation
-data structure -- see README_DEVELOPER and the [cogcomp-nlp](https://github.com/IllinoisCogComp/cogcomp-nlp) library.
+data structure -- see README_DEVELOPER and the [illinois-cogcomp-nlp](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) library.
 The memory is expected MAXIMUM run-time memory required for the component
 by itself. Note that the pipeline runs only one copy of each active component
 so that, for example, a single Chunker component fulfils the needs
@@ -161,15 +161,15 @@ its components.
 
 The Illinois NLP Pipeline package sets default configuration options for
 all its components.  If you want to experiment with different settings,
-we recommend checking out the project from [github](https://github.com/IllinoisCogComp/cogcomp-nlp) -- see the section on Programmatic Use.
+we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
 
 ## 4. Dependencies
 If this package is used in maven, please add the following dependencies with proper repositories.
 ```xml
 <dependencies>
     <dependency>
-        <groupId>edu.cs.cogcomp</groupId>
-        <artifactId>cogcomp-nlp-pipeline</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <artifactId>illinois-nlp-pipeline</artifactId>
         <version>3.0.86</version>
     </dependency>
 </dependencies>
@@ -230,8 +230,8 @@ edu.illinois.cs.cogcomp.pipeline.main.
 
 To process text input, use the '()' method:
 ```java
-import edu.cs.cogcomp.annotation.AnnotatorService;
-import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 String docId = "APW-20140101.3018"; // arbitrary string identifier
@@ -273,8 +273,8 @@ that duplicate default values will have no effect and are not required).
 
 Code snippet to show how to override default configuration with user-specified properties.
 ```java
-import edu.cs.cogcomp.annotation.AnnotatorService;
-import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 ResourceManager userConfig = new ResourceManager("config/pipeline-config.properties");

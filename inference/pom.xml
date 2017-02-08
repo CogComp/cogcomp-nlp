@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-sl-core</artifactId>
+            <artifactId>illinois-sl-core</artifactId>
             <version>1.0.2</version>
             <exclusions>
                 <exclusion>

@@ -1,14 +1,14 @@
-package edu.cs.cogcomp.ner.LbjFeatures;
+package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
 import java.util.*;
 
-import edu.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.cs.cogcomp.ner.ExpressiveFeatures.WordTopicAndLayoutFeatures;
-import edu.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
-import edu.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
-import edu.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings;
-import edu.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
-import edu.cs.cogcomp.ner.StringStatisticsUtils.*;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordTopicAndLayoutFeatures;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
 
   
 //---------------- CLASSIFIER LEVEL 1 -------------------

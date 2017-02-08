@@ -66,13 +66,13 @@
         <!-- models: you need to use/specify a new path to avoid using these -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-ner-model</artifactId>
+            <artifactId>illinois-ner-model</artifactId>
             <version>3.0</version>
             <classifier>CoNLL</classifier>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-ner-model</artifactId>
+            <artifactId>illinois-ner-model</artifactId>
             <version>3.0</version>
             <classifier>OntoNotes</classifier>
         </dependency>

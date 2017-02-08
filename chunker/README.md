@@ -38,8 +38,8 @@ Here is how you can add maven dependencies into your program:
     <dependencies>
     <!--Remove this dependency if you want to train your own model-->
         <dependency>
-            <groupId>edu.cs.cogcomp</groupId>
-            <artifactId>chunker</artifactId>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-chunker</artifactId>
             <version>VERSION</version>
         </dependency>
     </dependencies>
@@ -74,7 +74,7 @@ mvn exec:java -Dexec.mainClass=edu.illinois.cs.cogcomp.chunker.main.ChunkerTrain
 Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for an example of usage.
 
 ## Off-the-shelf scripts
-There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., cogcomp-nlp/chunker/. For example,
+There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., illinois-cogcomp-nlp/chunker/. For example,
 ```
 cd illinois-cogcomp-nlp/chunker/
 sh scripts/mvn_demo.sh
@@ -101,6 +101,6 @@ sh scripts/mvn_test_conll.sh (model directory) (model name)
 ## Tips for IntelliJ users
 Command line use can be found in [scripts](scripts/). But if you want to use IDEs like IntelliJ, please check the following tips before running.
 ### Import project
-Please import the `cogcomp-nlp` project from `Existing Sources` using the external model `Maven`.
+Please import the `illinois-cogcomp-nlp` project from `Existing Sources` using the external model `Maven`.
 ### Setup
 Select the `Run` tab. From the drop-down menu, select `Edit Configurations`. In the `Configuration` tab therein, specify the `Working directory` to be `$MODULE_DIR$`. Also, don't forget to set up corresponding `Program arguments`.

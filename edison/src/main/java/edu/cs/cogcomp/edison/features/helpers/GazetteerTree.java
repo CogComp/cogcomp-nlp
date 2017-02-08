@@ -325,7 +325,7 @@ public class GazetteerTree {
     }
 
     /**
-     * @param word the token to match.
+     * @param words the token to match.
      * @param which the index of the token.
      */
     final public void match(List<Constituent> words, int which, SpanLabelView view) {

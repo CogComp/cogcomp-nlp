@@ -36,6 +36,7 @@
             <groupId>edu.cs.cogcomp</groupId>
             <artifactId>cogcomp-core-utilities</artifactId>
             <version>3.0.97</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>edu.cs.cogcomp</groupId>
@@ -63,7 +64,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-quantifier-models</artifactId>
+            <artifactId>illinois-quantifier-models</artifactId>
             <version>2.0.5</version>
         </dependency>
     </dependencies>

@@ -22,7 +22,7 @@
             <version>1.2.24</version>
         </dependency>
         <dependency>
-            <groupId>edu.cs.cogcomp</groupId>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>3.0.97</version>
         </dependency>
@@ -51,7 +51,7 @@
     <!--<build>-->
         <!--<plugins>-->
             <!--<plugin>-->
-                <!--<groupId>edu.cs.cogcomp</groupId>-->
+                <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
                 <!--<artifactId>lbjava-maven-plugin</artifactId>-->
                 <!--<version>2.1</version>-->
                 <!--<configuration>-->

@@ -47,8 +47,8 @@ declarations in your project's `pom.xml` file:
 <dependencies>
     ...
     <dependency>
-        <groupId>edu.cs.cogcomp</groupId>
-        <artifactId>cogcomp-quantifier</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <artifactId>illinois-quantifier</artifactId>
         <version>VERSION</version>
     </dependency>
     ...
