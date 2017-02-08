@@ -10,9 +10,9 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode.TokenizationScheme;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
-import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
-import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
+import edu.cs.cogcomp.lbjava.nlp.SentenceSplitter;
+import edu.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 

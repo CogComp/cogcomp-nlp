@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
-import edu.illinois.cs.cogcomp.core.constants.Language;
+import edu.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import gnu.trove.map.hash.THashMap;

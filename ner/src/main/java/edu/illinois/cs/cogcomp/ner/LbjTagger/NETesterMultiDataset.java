@@ -11,7 +11,7 @@ package edu.illinois.cs.cogcomp.ner.LbjTagger;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.ExpressiveFeaturesAnnotator;
 import edu.illinois.cs.cogcomp.ner.IO.OutFile;

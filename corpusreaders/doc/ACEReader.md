@@ -57,7 +57,7 @@ The reader should work for this directory structure too.
 ### Java Usage
 
 ```java
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.cs.cogcomp.nlp.corpusreaders.ACEReader;
 
 // Read all sections in ACE-2004
 ACEReader reader2004 = new ACEReader("data/ace2004/data/English", true);

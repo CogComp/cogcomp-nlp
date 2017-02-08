@@ -1,6 +1,6 @@
 package edu.illinois.cs.cogcomp.chunker.main.lbjava;
 
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.nlp.*;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
 import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;

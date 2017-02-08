@@ -7,11 +7,11 @@
  */
 package edu.illinois.cs.cogcomp.pos;
 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

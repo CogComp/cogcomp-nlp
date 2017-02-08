@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
-import edu.illinois.cs.cogcomp.core.constants.Language;
+import edu.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
 
 import java.util.HashMap;

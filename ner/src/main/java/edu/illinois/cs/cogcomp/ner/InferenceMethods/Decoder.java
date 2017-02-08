@@ -8,7 +8,7 @@
 package edu.illinois.cs.cogcomp.ner.InferenceMethods;
 
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TwoLayerPredictionAggregationFeatures;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;

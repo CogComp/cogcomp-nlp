@@ -10,8 +10,8 @@ package edu.illinois.cs.cogcomp.ner.ParsingProcessingData;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NERDocument;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
-import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.ColumnFormat;
+import edu.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 
 import java.util.ArrayList;

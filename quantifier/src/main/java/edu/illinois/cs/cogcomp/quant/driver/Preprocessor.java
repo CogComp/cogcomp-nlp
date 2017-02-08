@@ -11,15 +11,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.illinois.cs.cogcomp.annotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.curator.CuratorClient;
-import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
-import edu.illinois.cs.cogcomp.curator.CuratorFactory;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.cs.cogcomp.annotation.AnnotatorConfigurator;
+import edu.cs.cogcomp.annotation.*;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.curator.CuratorClient;
+import edu.cs.cogcomp.curator.CuratorConfigurator;
+import edu.cs.cogcomp.curator.CuratorFactory;
+import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 
 /**

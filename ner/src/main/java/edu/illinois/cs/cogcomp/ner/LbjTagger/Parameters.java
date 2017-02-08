@@ -7,8 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
-import edu.illinois.cs.cogcomp.core.constants.Language;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.cs.cogcomp.core.constants.Language;
+import edu.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.TitleTextNormalizer;
@@ -18,7 +18,7 @@ import edu.illinois.cs.cogcomp.ner.IO.OutFile;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.ner.config.NerOntonotesConfigurator;
 import org.slf4j.Logger;

@@ -11,7 +11,7 @@ package edu.illinois.cs.cogcomp.chunker.main;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
 import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;

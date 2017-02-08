@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.quant.driver;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.quant.standardize.Normalizer;
 import edu.illinois.cs.cogcomp.quant.standardize.Quantity;
 

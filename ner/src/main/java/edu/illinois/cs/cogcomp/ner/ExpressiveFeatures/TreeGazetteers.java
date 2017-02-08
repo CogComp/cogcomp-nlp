@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
-import edu.illinois.cs.cogcomp.core.constants.Language;
+import edu.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitterInterface;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
