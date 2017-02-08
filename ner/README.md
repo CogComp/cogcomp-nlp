@@ -157,8 +157,8 @@ your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
 <dependency>
-    <groupId>edu.illinois.cs.cogcomp</groupId>
-    <artifactId>illinois-ner</artifactId>
+    <groupId>edu.cs.cogcomp</groupId>
+    <artifactId>cogcomp-ner</artifactId>
     <version>VERSION</version>
 </dependency>
 ```

@@ -32,8 +32,8 @@ Here is how you can add maven dependencies into your program:
     
     <dependencies>
         <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-pos</artifactId>
+            <groupId>edu.cs.cogcomp</groupId>
+            <artifactId>cogcomp-pos</artifactId>
             <version>VERSION</version>
         </dependency>
     </dependencies>

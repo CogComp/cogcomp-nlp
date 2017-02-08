@@ -3,13 +3,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>illinois-cogcomp-nlp</artifactId>
-        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <artifactId>cogcomp-nlp</artifactId>
+        <groupId>edu.cs.cogcomp</groupId>
         <version>3.0.97</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>illinois-core-utilities</artifactId>
+    <artifactId>cogcomp-core-utilities</artifactId>
 
     <dependencies>
         <dependency>
