@@ -10,7 +10,7 @@ package edu.cs.cogcomp.chunker.main;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.cs.cogcomp.curator.CuratorFactory;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
