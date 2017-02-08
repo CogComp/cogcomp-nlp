@@ -15,8 +15,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseAveragedPerceptron;
 import edu.illinois.cs.cogcomp.lbjava.learn.SparseNetworkLearner;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.pos.lbjava.POSWindow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

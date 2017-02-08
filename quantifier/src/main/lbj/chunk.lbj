@@ -1,7 +1,7 @@
-package edu.illinois.cs.cogcomp.quant.lbj;
+package edu.cs.cogcomp.quant.lbj;
 
-import edu.illinois.cs.cogcomp.quant.features.*;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.cs.cogcomp.quant.features.*;
+import edu.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

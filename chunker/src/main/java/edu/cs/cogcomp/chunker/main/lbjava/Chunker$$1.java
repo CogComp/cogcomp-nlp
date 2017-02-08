@@ -9,11 +9,11 @@ package edu.cs.cogcomp.chunker.main.lbjava;
 
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Affixes;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Capitalization;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Forms;
-import edu.illinois.cs.cogcomp.lbjava.nlp.WordTypeInformation;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSWindow;
+import edu.cs.cogcomp.lbjava.nlp.Affixes;
+import edu.cs.cogcomp.lbjava.nlp.Capitalization;
+import edu.cs.cogcomp.lbjava.nlp.Forms;
+import edu.cs.cogcomp.lbjava.nlp.WordTypeInformation;
+import edu.cs.cogcomp.pos.lbjava.POSWindow;
 
 import java.util.LinkedList;
 

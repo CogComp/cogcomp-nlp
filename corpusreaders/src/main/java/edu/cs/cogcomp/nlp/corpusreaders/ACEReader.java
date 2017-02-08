@@ -15,8 +15,8 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -12,7 +12,7 @@ import edu.cs.cogcomp.chunker.main.lbjava.ChunkLabel;
 import edu.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
+import edu.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;

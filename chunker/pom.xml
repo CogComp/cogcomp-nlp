@@ -33,12 +33,12 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-pos-models</artifactId>
+            <artifactId>illinois-pos-models</artifactId>
             <version>3.0.13</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>cogcomp-chunker-model</artifactId>
+            <artifactId>illinois-chunker-model</artifactId>
             <version>3.0.77</version>
         </dependency>
         <dependency>

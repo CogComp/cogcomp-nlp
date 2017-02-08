@@ -7,9 +7,10 @@
  */
 package edu.cs.cogcomp.chunker.main;
 
-import edu.illinois.cs.cogcomp.lbjava.nlp.*;
+import edu.cs.cogcomp.lbjava.nlp.ColumnFormat;
+import edu.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 
 
 /**

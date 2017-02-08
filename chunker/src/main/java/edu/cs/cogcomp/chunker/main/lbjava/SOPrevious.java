@@ -12,8 +12,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
-import edu.illinois.cs.cogcomp.pos.lbjava.POSTagger;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.pos.lbjava.POSTagger;
 
 
 public class SOPrevious extends Classifier {

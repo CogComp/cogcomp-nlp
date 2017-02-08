@@ -8,10 +8,10 @@
 package edu.cs.cogcomp.chunker.main;
 
 import edu.cs.cogcomp.chunker.main.lbjava.Chunker;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
-import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
-import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
-import edu.illinois.cs.cogcomp.lbjava.nlp.WordSplitter;
+import edu.cs.cogcomp.lbjava.nlp.seg.PlainToTokenParser;
+import edu.cs.cogcomp.lbjava.nlp.SentenceSplitter;
+import edu.cs.cogcomp.lbjava.nlp.Word;
+import edu.cs.cogcomp.lbjava.nlp.WordSplitter;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

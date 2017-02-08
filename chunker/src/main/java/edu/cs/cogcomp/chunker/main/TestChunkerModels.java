@@ -9,7 +9,7 @@ package edu.cs.cogcomp.chunker.main;
 
 import edu.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.cs.cogcomp.chunker.utils.CoNLL2000Parser;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import org.slf4j.Logger;

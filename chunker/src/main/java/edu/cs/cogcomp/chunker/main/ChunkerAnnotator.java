@@ -23,10 +23,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
-import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
+import edu.cs.cogcomp.pos.LBJavaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
+import edu.cs.cogcomp.lbjava.nlp.seg.Token;
 
 /**
  * Wraps the Illinois Chunker (Shallow Parser) in an illinois-core-utilities Annotator

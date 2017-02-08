@@ -22,8 +22,8 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.AbstractIncrementalCorpusReader;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
-import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 /**
  * Generates a TextAnnotation object per file for a corpus consisting of files containing xml
