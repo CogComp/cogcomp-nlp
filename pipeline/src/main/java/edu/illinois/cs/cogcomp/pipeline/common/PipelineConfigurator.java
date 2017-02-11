@@ -27,6 +27,8 @@ public class PipelineConfigurator extends AnnotatorConfigurator
 
     // flags for individual components; default is TRUE for everything
     public static final Property USE_POS = new Property("usePos", TRUE);
+    // The default dependency parse is Stanford -- switch with USE_STANFORD_DEP
+    public static final Property USE_DEP = new Property("useDep", FALSE);
     public static final Property USE_LEMMA = new Property("useLemma", TRUE);
     public static final Property USE_SHALLOW_PARSE = new Property("useShallowParse", TRUE);
     public static final Property USE_NER_CONLL = new Property("useNerConll", TRUE);
@@ -50,7 +52,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] properties = {STFRD_TIME_PER_SENTENCE,
-                STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA, USE_SHALLOW_PARSE,
+                STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA, USE_SHALLOW_PARSE, USE_DEP,
                 USE_NER_CONLL, USE_NER_ONTONOTES, USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
                 USE_QUANTIFIER, THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON, USE_LAZY_INITIALIZATION,
                 USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH};

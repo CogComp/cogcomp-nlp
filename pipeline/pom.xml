@@ -107,6 +107,12 @@
             <version>0.7.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-depparse</artifactId>
+            <version>3.0.97</version>
+        </dependency>
+
         <!--for pipeline web-server-->
         <dependency>
             <groupId>com.sparkjava</groupId>
