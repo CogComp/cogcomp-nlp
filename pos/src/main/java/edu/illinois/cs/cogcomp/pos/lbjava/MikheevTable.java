@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.pos.MikheevLearner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Learned with {@link MikheevLearner}, this classifier records statistics on the POS tags that
@@ -21,6 +23,8 @@ import edu.illinois.cs.cogcomp.pos.MikheevLearner;
  * @author Nick Rizzolo
  **/
 public class MikheevTable extends MikheevLearner {
+    private static Logger logger = LoggerFactory.getLogger(MikheevTable.class);
+
     public static boolean isTraining;
 
     public MikheevTable(String modelPath, String lexiconPath) {

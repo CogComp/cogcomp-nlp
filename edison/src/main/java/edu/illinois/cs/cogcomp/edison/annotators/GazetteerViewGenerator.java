@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
+ * Use SimpleGazetteerAnnotator instead
  * Use this class to create a gazetteer view for your text.
  *
  * Use this in combination with cogcomp-common-resources, and pass in
@@ -47,9 +48,10 @@ import java.util.zip.GZIPInputStream;
  *
  * @author Vivek Srikumar
  */
+@Deprecated
 public class GazetteerViewGenerator extends Annotator {
     public static final GazetteerViewGenerator gazetteersInstance, cbcInstance;
-    private static final Logger log = LoggerFactory.getLogger(GazetteerViewGenerator.class);
+    private static final Logger logger = LoggerFactory.getLogger(GazetteerViewGenerator.class);
     private static final String PEOPLE_FAMOUS = "People.Famous";
     private static final String STATES = "Locations.States";
     private static final String MAN_MADE_OBJECT = "ManMadeObjects";
@@ -286,14 +288,14 @@ public class GazetteerViewGenerator extends Annotator {
 
         ta.addView(gazetteersInstance);
 
-        System.out.println(ta);
+        System.out.println(ta.toString());
 
-        System.out.println(ta.getView(gazetteersInstance.getViewName()));
+        System.out.println(ta.getView(gazetteersInstance.getViewName()).toString());
     }
 
     private void lazyLoadGazetteers(String directory, boolean gzip) throws URISyntaxException,
             IOException {
-        log.info("Loading all gazetteers from {}", directory);
+        logger.info("Loading all gazetteers from {}", directory);
 
         for (URL url : IOUtils.lsResources(GazetteerViewGenerator.class, directory)) {
             String file = IOUtils.getFileName(url.getPath());
@@ -312,7 +314,7 @@ public class GazetteerViewGenerator extends Annotator {
 
             this.names.add(file);
 
-            log.debug("Loading {} from {}", file, url.getPath());
+            logger.debug("Loading {} from {}", file, url.getPath());
 
             InputStream stream = url.openStream();
             if (gzip)
@@ -351,11 +353,11 @@ public class GazetteerViewGenerator extends Annotator {
 
             reader.close();
 
-            log.debug("Found {} elements of type {}", list.size(), file);
+            logger.debug("Found {} elements of type {}", list.size(), file);
         }
 
         this.loaded = true;
-        log.info("Finished loading  {} gazetteers from {}", names.size(), directory);
+        logger.info("Finished loading  {} gazetteers from {}", names.size(), directory);
     }
 
     /**
@@ -425,7 +427,7 @@ public class GazetteerViewGenerator extends Annotator {
             for (Predicate<Pair<Constituent, SpanLabelView>> filter : this.gazetteerFilters) {
                 if (!filter.transform(input)) {
                     allow = false;
-                    log.debug("Not labeling constituent {} as {} because it failed a filter", c,
+                    logger.debug("Not labeling constituent {} as {} because it failed a filter", c,
                             c.getLabel());
                     break;
                 }
@@ -476,7 +478,7 @@ public class GazetteerViewGenerator extends Annotator {
 
     private void addView(String label, int labelId, SpanLabelView view,
             TIntObjectHashMap<ArrayList<IntPair>> allSpans) {
-        log.debug("Adding gazetteer {}", label);
+        logger.debug("Adding gazetteer {}", label);
 
         List<IntPair> matches = new ArrayList<>();
 

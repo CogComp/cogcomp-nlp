@@ -16,9 +16,15 @@
 # extracts one file per section of the WSJ, with one sentence per line.
 #
 # PROBLEMS
-#   actually have to count parens because WSJ doesn't demarcate sentence
+# 1.  actually have to count parens because WSJ doesn't demarcate sentence
 #     boundaries consistently.
 #
+# 2.  Now the modified regex will remove all right parentheses in the word 
+#	  to extract the word. This works because the current version of WSJ 
+#	  (LDC2015T13) doesn't include right parathesis as a word. So it is 
+#	  easier to just remove all right parentheses. For further ptb releases, 
+#	  this script might need further modification (more possibly rewrite). 
+#	  
 
 use strict;
 use Carp;
@@ -113,6 +119,9 @@ sub generateParenFormat()
 	      {
 		$word = $1;
 #		    print STDERR "## word is '$word'...\n";
+
+		## Delete every right parenthesis in the word
+		$word =~ s/\)+//;
 
 		if ( $isOpened )
 		  {

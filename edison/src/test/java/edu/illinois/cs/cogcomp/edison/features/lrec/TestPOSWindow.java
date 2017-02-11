@@ -18,12 +18,16 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.POSBaseLineCounter;
 import edu.illinois.cs.cogcomp.edison.utilities.POSMikheevCounter;
 import junit.framework.TestCase;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class TestPOSWindow extends TestCase {
+public class TestPOSWindow {
+    private static Logger logger = LoggerFactory.getLogger(TestPOSWindow.class);
 
     private static List<TextAnnotation> tas;
 
@@ -35,25 +39,22 @@ public class TestPOSWindow extends TestCase {
         }
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public final void test() throws Exception {
-        System.out.println("POSWindow Feature Extractor");
+        logger.info("POSWindow Feature Extractor");
         // Using the first TA and a constituent between span of 30-40 as a test
         TextAnnotation ta = tas.get(2);
         View TOKENS = ta.getView("TOKENS");
 
-        System.out.println("GOT TOKENS FROM TEXTAnn");
+        logger.info("GOT TOKENS FROM TEXTAnn");
 
         List<Constituent> testlist = TOKENS.getConstituentsCoveringSpan(0, 20);
 
         for (Constituent c : testlist) {
-            System.out.println(c.getSurfaceForm());
+            logger.info(c.getSurfaceForm());
         }
 
-        System.out.println("Testlist size is " + testlist.size());
+        logger.info("Testlist size is " + testlist.size());
 
 
         POSBaseLineCounter posBaseLine = new POSBaseLineCounter("posBaseLine");
@@ -73,16 +74,16 @@ public class TestPOSWindow extends TestCase {
             featslist.add(posWindowPOS.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            System.out.println("Feats list is returning NULL.");
+            logger.info("Feats list is returning NULL.");
         }
 
-        System.out.println("\n" + "Test when using POS View");
-        System.out.println("Printing list of Feature set");
+        logger.info("\n" + "Test when using POS View");
+        logger.info("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
-            System.out.println("\n");
+            logger.info("\n");
             for (Feature f : feats)
-                System.out.println(f.getName());
+                logger.info(f.getName());
         }
 
         // Test when using POS baseline Counting
@@ -92,16 +93,16 @@ public class TestPOSWindow extends TestCase {
             featslist.add(posWindowPOSBaseLine.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            System.out.println("Feats list is returning NULL.");
+            logger.info("Feats list is returning NULL.");
         }
 
-        System.out.println("\n" + "Test when using POS baseline Counting");
-        System.out.println("Printing list of Feature set");
+        logger.info("\n" + "Test when using POS baseline Counting");
+        logger.info("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
-            System.out.println("\n");
+            logger.info("\n");
             for (Feature f : feats)
-                System.out.println(f.getName());
+                logger.info(f.getName());
         }
         // Test when using POS Mikheev Counting
         featslist.clear();
@@ -110,19 +111,19 @@ public class TestPOSWindow extends TestCase {
             featslist.add(posWindowPOSMikheev.getFeatures(test));
 
         if (featslist.isEmpty()) {
-            System.out.println("Feats list is returning NULL.");
+            logger.info("Feats list is returning NULL.");
         }
 
-        System.out.println("\n" + "Test when using POS Mikheev Counting");
-        System.out.println("Printing list of Feature set");
+        logger.info("\n" + "Test when using POS Mikheev Counting");
+        logger.info("Printing list of Feature set");
 
         for (Set<Feature> feats : featslist) {
-            System.out.println("\n");
+            logger.info("\n");
             for (Feature f : feats)
-                System.out.println(f.getName());
+                logger.info(f.getName());
         }
 
-        System.out.println("GOT FEATURES YES!");
+        logger.info("GOT FEATURES YES!");
     }
 
     private void testFex(FeatureExtractor fex, boolean printBoth, String... viewNames)
@@ -131,7 +132,7 @@ public class TestPOSWindow extends TestCase {
         for (TextAnnotation ta : tas) {
             for (String viewName : viewNames)
                 if (ta.hasView(viewName))
-                    System.out.println(ta.getView(viewName));
+                    logger.info(ta.getView(viewName).toString());
         }
     }
 }

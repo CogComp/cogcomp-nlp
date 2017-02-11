@@ -15,13 +15,21 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.junit.Test;
 
-public class ClauseViewGeneratorTest extends TestCase {
+import static org.junit.Assert.fail;
 
-    public void setUp() throws Exception {
-        super.setUp();
-    }
+public class ClauseViewGeneratorTest {
 
+    private static Logger logger = LoggerFactory.getLogger(ClauseViewGeneratorTest.class);
+
+//    public void setUp() throws Exception {
+//        super.setUp();
+//    }
+
+    @Test
     public final void testClauseViewGenerator() {
         String text =
                 "Freeport-McMoRan Inc. said it will convert its Freeport-McMoRan Energy Partners Ltd. "
@@ -66,6 +74,6 @@ public class ClauseViewGeneratorTest extends TestCase {
             fail(e.getMessage());
         }
 
-        System.out.println(ta.getView("clauses"));
+        logger.info(ta.getView("clauses").toString());
     }
 }

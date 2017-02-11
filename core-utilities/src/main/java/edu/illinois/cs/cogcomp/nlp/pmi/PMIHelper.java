@@ -8,10 +8,14 @@
 package edu.illinois.cs.cogcomp.nlp.pmi;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class PMIHelper {
+    private static Logger logger = LoggerFactory.getLogger(PMIHelper.class);
+
     private final static double EPSILON = 1e-15;
 
     private final CachedNgramCounter ngrams;

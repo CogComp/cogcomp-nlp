@@ -10,6 +10,9 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This class is solely used to validate URIs. You provide a String, and a starting positions, it
  * provides methods to determine if the URI is valid or not. Only syntax is checked by this class,
@@ -21,6 +24,7 @@ package edu.illinois.cs.cogcomp.nlp.tokenizer;
  * @author redman
  */
 public class UrlValidation {
+    private static Logger logger = LoggerFactory.getLogger(UrlValidation.class);
 
     /**
      * defines the part of the url we are looking at.
@@ -339,7 +343,7 @@ public class UrlValidation {
         int offset;
         String t = "This is a url called htt-ps://toopy.lang/";
         if ((offset = uv.isValid(t.toCharArray(), 21)) != -1) {
-            System.out.println(t.substring(21, offset));
+            logger.info(t.substring(21, offset));
         }
     }
 

@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -34,6 +36,7 @@ import java.io.IOException;
  *
  */
 public class MixedChunkWindowTwoBeforePOSWindowThreeBefore implements FeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(MixedChunkWindowTwoBeforePOSWindowThreeBefore.class);
 
     public static View SHALLOW_PARSE, POS, TOKENS;
 
@@ -123,7 +126,7 @@ public class MixedChunkWindowTwoBeforePOSWindowThreeBefore implements FeatureExt
                     SHALLOW_PARSE.getLabelsCoveringSpan(token.getStartSpan(), token.getEndSpan());
 
             if (POS_tag.size() != 1 || Chunk_label.size() != 1) {
-                System.out.println("Error token has more than one POS tag or Chunk Label.");
+                logger.warn("Error token has more than one POS tag or Chunk Label.");
             }
 
             labels[i] = Chunk_label.get(0);
@@ -148,17 +151,17 @@ public class MixedChunkWindowTwoBeforePOSWindowThreeBefore implements FeatureExt
          * //BufferedWriter writer give better performance BufferedWriter bw = new
          * BufferedWriter(fw);
          */
-        System.out.println(__id + __value);
+        logger.info(__id + __value);
         __result.add(new DiscreteFeature(__id + __value));
 
         __id = classifier + ":" + "lt1";
         __value = "(" + (labels[0] + "_" + tags[1]) + ")";
-        System.out.println(__id + __value);
+        logger.info(__id + __value);
         __result.add(new DiscreteFeature(__id + __value));
 
         __id = classifier + ":" + "lt2";
         __value = "" + (labels[1] + "_" + tags[2]);
-        System.out.println(__id + __value);
+        logger.info(__id + __value);
         __result.add(new DiscreteFeature(__id + __value));
 
         // Closing BufferedWriter Stream

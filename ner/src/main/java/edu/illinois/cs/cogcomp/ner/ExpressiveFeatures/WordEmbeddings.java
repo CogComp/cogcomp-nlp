@@ -134,10 +134,10 @@ public class WordEmbeddings {
                     tokensHashIC.put(form.toLowerCase(), true);
                 }
         }
-        // System.out.println("Data statistics:");
-        // System.out.println("\t\t- Total tokens with repetitions ="+ totalTokens);
-        // System.out.println("\t\t- Total unique tokens  ="+ tokensHash.size());
-        // System.out.println("\t\t- Total unique tokens ignore case ="+ tokensHashIC.size());
+        // logger.info("Data statistics:");
+        // logger.info("\t\t- Total tokens with repetitions ="+ totalTokens);
+        // logger.info("\t\t- Total unique tokens  ="+ tokensHash.size());
+        // logger.info("\t\t- Total unique tokens ignore case ="+ tokensHashIC.size());
         for (int resourceId = 0; resourceId < resources.size(); resourceId++) {
             HashMap<String, double[]> embedding = embeddingByResource.elementAt(resourceId);
             HashMap<String, Boolean> oovCaseSensitiveHash = new HashMap<>();
@@ -156,12 +156,12 @@ public class WordEmbeddings {
                         }
                     }
             }
-            // System.out.println("\t\t- Total OOV tokens, Case Sensitive ="+ oovCaseSensitive);
-            // System.out.println("\t\t- OOV tokens, no repetitions, Case Sensitive ="+
+            // logger.info("\t\t- Total OOV tokens, Case Sensitive ="+ oovCaseSensitive);
+            // logger.info("\t\t- OOV tokens, no repetitions, Case Sensitive ="+
             // oovCaseSensitiveHash.size());
-            // System.out.println("\t\t- Total OOV tokens even after lowercasing  ="+
+            // logger.info("\t\t- Total OOV tokens even after lowercasing  ="+
             // oovAfterLowercasing);
-            // System.out.println("\t\t- OOV tokens even after lowercasing, no repetition  ="+
+            // logger.info("\t\t- OOV tokens even after lowercasing, no repetition  ="+
             // oovAfterLowercasingHash.size());
         }
     }

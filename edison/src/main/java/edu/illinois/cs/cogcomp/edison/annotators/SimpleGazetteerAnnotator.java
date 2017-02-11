@@ -36,7 +36,7 @@ import edu.illinois.cs.cogcomp.edison.features.helpers.GazetteerTree;
  * @author redman
  */
 public class SimpleGazetteerAnnotator extends Annotator {
-
+    // ? should this not have a viewName?
     /** this hash tree contains the terms as exactly as they are. */
     ArrayList<GazetteerTree> dictionaries;
     /** this hash tree contains the terms in lowercase. */

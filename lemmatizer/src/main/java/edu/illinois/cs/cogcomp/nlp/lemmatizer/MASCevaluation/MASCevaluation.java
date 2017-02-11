@@ -13,6 +13,8 @@ import java.io.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 import org.w3c.dom.*;
 
@@ -20,6 +22,7 @@ public class MASCevaluation {
 
     private File[] pennFileList;
     private HashMap<String, ArrayList<String[]>> testData;
+    private static Logger logger = LoggerFactory.getLogger(MASCevaluation.class);
 
     /**
      * Constructor
@@ -36,7 +39,7 @@ public class MASCevaluation {
         }
         testData = new HashMap<String, ArrayList<String[]>>();
         this.constructTestingEnvironment();
-        System.out.println(testData.size());
+        logger.info(String.valueOf(testData.size()));
     }
 
     /**
@@ -79,7 +82,7 @@ public class MASCevaluation {
             ArrayList<String[]> dataLists = new ArrayList<String[]>();
             // Create data set for each file
             try {
-                System.out.println("Constructing testing data set for file " + file.getName());
+                logger.info("Constructing testing data set for file " + file.getName());
                 Document document = builder.parse(new FileInputStream(filename));
                 NodeList nodes = document.getElementsByTagName("fs");
                 for (int i = 0; i < nodes.getLength(); i++) {
@@ -132,11 +135,11 @@ public class MASCevaluation {
         for (String filename : keylist) {
             ArrayList<String[]> list = this.testData.get(filename);
             MASCevaluationResult result = new MASCevaluationResult(filename, list.hashCode());
-            // System.out.println(filename);
+            // logger.info(filename);
             for (int i = 0; i < list.size(); i++) {
                 String[] temp = (String[]) list.get(i);
                 result.addTestItem(temp, lemmatizer.getLemma(temp[0], temp[1]));
-                // System.out.println(lemmatizer.getLemma(temp[0], temp[1]));
+                // logger.info(lemmatizer.getLemma(temp[0], temp[1]));
             }
             results.add(result);
         }
@@ -157,7 +160,7 @@ public class MASCevaluation {
         } else if (type.equalsIgnoreCase("morpha")) {
             lem = new MorphaLemmatizerInterface();
         } else {
-            System.out.println("Invalid lemmatizer type. Exiting.");
+            logger.info("Invalid lemmatizer type. Exiting.");
             System.exit(-1);
         }
 

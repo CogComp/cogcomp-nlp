@@ -87,7 +87,7 @@ cp target/*jar $DIST
 
 cp target/dependency/* $LIB
 
-cp -r src/ $CPYDIR
+
 
 if [ -e doc ]; then
     cp -r doc/ $CPYDIR

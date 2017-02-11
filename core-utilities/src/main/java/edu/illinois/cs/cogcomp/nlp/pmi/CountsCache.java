@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 
 public class CountsCache {
-    private static final Logger log = LoggerFactory.getLogger(CountsCache.class);
-
+    private static Logger logger = LoggerFactory.getLogger(CountsCache.class); 
+    
     public static final String sqlDriver = "org.h2.Driver";
 
     private static Connection connection;
@@ -41,7 +41,7 @@ public class CountsCache {
         Statement statement = connection.createStatement();
         String sql = "create table " + tableName + " (" + tableDefinition + ")";
 
-        System.out.println(sql);
+        logger.info(sql);
         statement.executeUpdate(sql);
 
         statement.close();
@@ -85,11 +85,11 @@ public class CountsCache {
     public CountsCache(String dbFile) {
         this.dbFile = dbFile;
         boolean create = dbFileExists(dbFile);
-        log.info("Cache {}found", create ? "not " : "");
+        logger.info("Cache {}found", create ? "not " : "");
         initializeConnection(dbFile);
 
         if (create) {
-            log.info("Creating database cache at " + dbFile);
+            logger.info("Creating database cache at " + dbFile);
             try {
                 createTable(dbFile, "counts",
                         "item varchar not null, value bigint not null, primary key (item)");
@@ -112,8 +112,7 @@ public class CountsCache {
             stmt.setLong(2, count);
             stmt.executeUpdate();
         } catch (Exception ex) {
-
-            System.out.println("Cannot add (" + item + ", " + count + ")");
+            System.err.println("Cannot add (" + item + ", " + count + ")");
             throw new RuntimeException(ex);
         }
 

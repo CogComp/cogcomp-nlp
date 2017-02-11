@@ -7,7 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import com.google.common.collect.Maps;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
+import edu.illinois.cs.cogcomp.core.math.ArgMax;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -24,12 +26,57 @@ public class Relation implements Serializable, HasAttributes {
 
     private static final long serialVersionUID = -1005341815252250162L;
     protected final int relationName;
+    protected final Map<String, Double> labelsToScores;
     protected Constituent source;
     protected Constituent target;
     protected double score;
     protected Map<String, String> attributes;
 
+
+    /**
+     * Instantiates a Relation connecting two constituents with a set of labels and corresponding scores.
+     * The 'main' label and score that will be returned by {@link #getRelationName()} and {@link #getScore()} will
+     *    be the argmax and corresponding score from the labelsToScores argument.
+     * @param labelsToScores map from labels to scores.
+     * @param source constituent that is the source of the relation
+     * @param target constituent that is the target of the relation
+     */
+    public Relation( Map<String, Double> labelsToScores, Constituent source, Constituent target ) {
+        this(labelsToScores, new ArgMax<>(labelsToScores).getArgmax(), new ArgMax<>(labelsToScores).getMaxValue(),
+                source, target);
+    }
+
+
+    /**
+     * Instantiates a Relation connecting two Constituents with the name and score specified.
+     *
+     * @param relationName name of relation
+     * @param source constituent that is the source of the relation
+     * @param target constituent that is the target of the relation
+     * @param score confidence score for relation
+     */
     public Relation(String relationName, Constituent source, Constituent target, double score) {
+        this( null, relationName, score, source, target );
+    }
+
+
+    /**
+     * private constructor to enable immutable label to score map
+     *
+     * @param labelsToScores map from labels to scores.
+     * @param relationName name of relation
+     * @param source constituent that is the source of the relation
+     * @param target constituent that is the target of the relation
+     * @param score confidence score for relation
+     */
+    private Relation(Map<String, Double> labelsToScores, String relationName, double score, Constituent source, Constituent target) {
+
+        if ( null != labelsToScores) {
+            this.labelsToScores = Maps.newHashMap();
+            this.labelsToScores.putAll(labelsToScores);
+        }
+        else
+            this.labelsToScores = null;
 
         TextAnnotation ta = source.getTextAnnotation();
         assert ta == target.getTextAnnotation();
@@ -49,6 +96,25 @@ public class Relation implements Serializable, HasAttributes {
         this.target.registerRelationTarget(this);
     }
 
+
+    /**
+     * return map of labels to scores. If not explicitly created, generates a trivial distribution
+     *    using the label assigned at construction.
+     *
+     * @return map of labels to scores
+     */
+    public Map<String, Double> getLabelsToScores()
+    {
+        Map<String, Double> returnMap = null;
+        if ( null != labelsToScores) {
+            returnMap = new HashMap<>();
+            returnMap.putAll(labelsToScores);
+        }
+        return returnMap;
+    }
+
+
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -67,6 +133,14 @@ public class Relation implements Serializable, HasAttributes {
 
         if (this.attributes != null && r.attributes != null)
             if (!this.attributes.equals(r.attributes))
+                return false;
+
+        if (this.labelsToScores == null && r.labelsToScores != null)
+            return false;
+        if (this.labelsToScores != null && r.labelsToScores == null)
+            return false;
+        if (this.labelsToScores != null && r.labelsToScores != null)
+            if (!this.labelsToScores.equals(r.labelsToScores))
                 return false;
 
         return r.getRelationName().equals(this.relationName)
@@ -142,6 +216,7 @@ public class Relation implements Serializable, HasAttributes {
         int hashCode =  this.getRelationName().hashCode() * 79 + this.getSource().hashCode() * 7
                 + this.getTarget().hashCode() * 13 + (new Double(this.getScore())).hashCode() * 17;
         hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 13);
+        hashCode += (this.labelsToScores == null ? 0 : this.labelsToScores.hashCode() * 23);
 
         return hashCode;
     }
@@ -153,7 +228,5 @@ public class Relation implements Serializable, HasAttributes {
         bldr.append( target ).append("(").append( getScore() ).append( ")" );
         return bldr.toString();
     }
-
-
 
 }

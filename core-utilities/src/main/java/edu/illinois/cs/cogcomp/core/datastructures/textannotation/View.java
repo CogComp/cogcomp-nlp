@@ -376,6 +376,22 @@ public class View implements Serializable, IQueryable<Constituent> {
         return list;
     }
 
+    /**
+     * Given char-begin-offset and char-end-offset, it returns the constituents covering it.
+     * @param charStart the begin char index
+     * @param charEnd the end char index (one-past-the-end indexing)
+     */
+    public List<Constituent> getConstituentsCoveringCharSpan(int charStart, int charEnd) {
+
+        Set<Constituent> output = new HashSet<>();
+        for(Constituent c : this.constituents) {
+            if(c.startCharOffset >= charStart && c.endCharOffset <= charEnd) output.add(c);
+        }
+        List<Constituent> list = new ArrayList<>(output);
+        Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
+        return list;
+    }
+
     public List<Constituent> getConstituentsCoveringTokens(Collection<Integer> tokenIds) {
 
         Set<Constituent> output = new HashSet<>();
@@ -494,7 +510,7 @@ public class View implements Serializable, IQueryable<Constituent> {
 
         addRelatedConstituents(restriction, constituentsToConsider);
 
-        // System.out.println(restriction);
+        // logger.info(restriction);
 
         return restriction;
     }

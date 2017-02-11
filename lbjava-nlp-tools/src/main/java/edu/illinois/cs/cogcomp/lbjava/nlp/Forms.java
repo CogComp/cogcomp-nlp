@@ -13,6 +13,8 @@ package edu.illinois.cs.cogcomp.lbjava.nlp;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class implements a classifier that takes a {@link Word} as input and
@@ -29,6 +31,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
  * @author Nick Rizzolo
  **/
 public class Forms extends Classifier {
+    private static Logger logger = LoggerFactory.getLogger(Forms.class);
     public Forms() {
         containingPackage = "edu.illinois.cs.cogcomp.lbjava.edu.illinois.cs.cogcomp.lbjava.nlp";
         name = "Forms";

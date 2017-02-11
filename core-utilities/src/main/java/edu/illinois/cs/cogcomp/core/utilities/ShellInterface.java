@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.utilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +19,8 @@ import java.io.InputStreamReader;
  * @author Vivek Srikumar, Ming-Wei Chang
  */
 public class ShellInterface {
+    private static Logger logger = LoggerFactory.getLogger(ShellInterface.class);
+
     public static int executeCommand(String command) throws IOException, InterruptedException {
         Runtime runtime = Runtime.getRuntime();
         Process process = runtime.exec(command);
@@ -46,6 +51,8 @@ public class ShellInterface {
 
 
 class StreamGobbler extends Thread {
+    private static Logger logger = LoggerFactory.getLogger(StreamGobbler.class);
+
     InputStream is;
     String prefix;
     private StringBuilder sb;
@@ -62,7 +69,7 @@ class StreamGobbler extends Thread {
             BufferedReader br = new BufferedReader(isr);
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(prefix + " " + line);
+                logger.info(prefix + " " + line);
                 sb.append(line);
             }
         } catch (IOException ioe) {

@@ -50,7 +50,7 @@ public class TestPOS {
     public static void main(String[] args) {
         // Parse the command line
         // if (args.length != 1) {
-        // System.err.println("usage: java edu.illinois.cs.cogcomp.lbj.pos.TestPOS <text file>");
+        // logger.error("usage: java edu.illinois.cs.cogcomp.lbj.pos.TestPOS <text file>");
         // System.exit(1);
         // }
 

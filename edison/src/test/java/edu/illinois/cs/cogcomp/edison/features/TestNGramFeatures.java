@@ -13,9 +13,12 @@ import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFacto
 import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class
@@ -25,7 +28,7 @@ import java.util.Set;
  *
  * @author Vivek Srikumar
  */
-public class TestNGramFeatures extends TestCase {
+public class TestNGramFeatures {
     private static List<TextAnnotation> tas;
 
     static {
@@ -36,18 +39,22 @@ public class TestNGramFeatures extends TestCase {
         }
     }
 
+    @Test
     public final void testBigramsWord() throws Exception {
         testBigrams(WordFeatureExtractorFactory.word);
     }
 
+    @Test
     public final void testTrigramsWord() throws Exception {
         testTrigrams(WordFeatureExtractorFactory.word);
     }
 
+    @Test
     public final void testBigramsPOS() throws Exception {
         testBigrams(WordFeatureExtractorFactory.pos);
     }
 
+    @Test
     public final void testTrigramsPOS() throws Exception {
         testTrigrams(WordFeatureExtractorFactory.pos);
     }

@@ -7,8 +7,10 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import com.google.common.collect.Maps;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.math.ArgMax;
 
 import java.io.Serializable;
 import java.util.*;
@@ -44,6 +46,7 @@ public class Constituent implements Serializable, HasAttributes {
     // protected boolean useConstituentTokensAsSpan;
 
     protected final String viewName;
+    protected final Map<String, Double> labelsToScores;
     protected Map<String, String> attributes;
 
     /**
@@ -61,9 +64,30 @@ public class Constituent implements Serializable, HasAttributes {
      * @param end end token offset (one-past-the-end)
      */
     public Constituent(String label, String viewName, TextAnnotation text, int start, int end) {
-        this(label, 1.0, viewName, text, start, end);
+        this(null, label, 1.0, viewName, text, start, end);
     }
 
+    /**
+     * instantiate a constituent with a set of labels and corresponding scores: the 'main' label (returned by
+     *    #getLabel()) will be the label with the highest score, as decided by {@link ArgMax}.
+     *
+     * Start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
+     * constituent right at the beginning of a text has start/end (0,1) offsets are relative to the
+     * entire text span (i.e. NOT sentence-relative) This constructor assigns default score to
+     * the constituent.
+     *
+     * @param labelsToScores set of possible labels and corresponding scores.
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
+     * @param start start token offset
+     * @param end end token offset (one-past-the-end)
+     */
+    public Constituent(Map<String, Double> labelsToScores, String viewName, TextAnnotation text, int start, int end)
+    {
+        this( labelsToScores, new ArgMax<>(labelsToScores).getArgmax(), new ArgMax<>(labelsToScores).getMaxValue(), viewName, text, start, end );
+    }
 
     /**
      * start, end offsets are token indexes, and use one-past-the-end indexing -- so a one-token
@@ -81,14 +105,30 @@ public class Constituent implements Serializable, HasAttributes {
      */
     public Constituent(String label, double score, String viewName, TextAnnotation text, int start,
             int end) {
+        this(null, label, score, viewName, text, start, end);
+    }
 
-        if (label == null)
-            label = "";
-        int labelId = text.symtab.getId(label);
-        if (labelId == -1)
-            labelId = text.symtab.add(label);
+    /**
+     * private constructor to allow immutable labels to scores map
+     *
+     * @param label label of this Constituent
+     * @param score confidence in label
+     * @param viewName name of
+     *        {@link edu.illinois.cs.cogcomp.core.datastructures.textannotation.View} this
+     *        Constituent belongs to
+     * @param text TextAnnotation this Constituent belongs to
+     * @param start start token offset
+     * @param end end token offset (one-past-the-end)
+     */
+    private Constituent(Map<String, Double> labelsToScores, String label, double score, String viewName, TextAnnotation text, int start, int end) {
+        if (null != labelsToScores) {
+            this.labelsToScores = Maps.newHashMap();
+            this.labelsToScores.putAll(labelsToScores);
+        }
+        else
+            this.labelsToScores = null;
 
-        this.label = labelId;
+        this.label = getLabelId(label, text);
         this.constituentScore = score;
         this.viewName = viewName;
         textAnnotation = text;
@@ -139,6 +179,31 @@ public class Constituent implements Serializable, HasAttributes {
                 + ", " + endCharOffset + ")";
     }
 
+    /**
+     * Return map of labels to scores. If not explicitly created, returns null.
+     * The returned map is a copy, to avoid inadvertent changes to the label/score mapping.
+     *
+     * @return map of labels to scores
+     */
+    public Map<String, Double> getLabelsToScores() {
+        Map<String, Double> returnMap = null;
+
+        if ( null != labelsToScores) {
+            returnMap = new HashMap<>();
+            returnMap.putAll(labelsToScores);
+        }
+        return returnMap;
+    }
+
+    private int getLabelId(String label, TextAnnotation text) {
+        if (label == null)
+            label = "";
+        int labelId = text.symtab.getId(label);
+        if (labelId == -1)
+            labelId = text.symtab.add(label);
+        return labelId;
+    }
+
     public int getStartCharOffset() {
         return startCharOffset;
     }
@@ -179,29 +244,13 @@ public class Constituent implements Serializable, HasAttributes {
         return true;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-
-        if (!(obj instanceof Constituent))
-            return false;
-
-        Constituent that = (Constituent) obj;
-
-        if (this.getStartSpan() < 0) {
-            return false;
-        }
-
-        if (this.attributes == null && that.attributes != null)
-            return false;
-        if (this.attributes != null && that.attributes == null)
-            return false;
-
-        if (this.attributes != null && that.attributes != null)
-            if (!this.attributes.equals(that.attributes))
-                return false;
-
+    /**
+     * This function can be used in scenarios where there is a need for Constituent equality, ignoring the values
+     * of the attributes. Note that many equality functions in Java automatically call the `equals' function.
+     * @param that the input constituent you compare with
+     * @return whether the two constituents are the same or not.
+     */
+    public boolean equalsWithoutAttributeEqualityCheck(Constituent that) {
         if (this.getIncomingRelations().size() != that.getIncomingRelations().size())
             return false;
 
@@ -217,7 +266,6 @@ public class Constituent implements Serializable, HasAttributes {
 
             if (!myRelation.getSource().getSpan().equals(otherRelation.getSource().getSpan()))
                 return false;
-
         }
 
         if (this.getOutgoingRelations().size() != that.getOutgoingRelations().size())
@@ -244,7 +292,40 @@ public class Constituent implements Serializable, HasAttributes {
                 && this.getLabel().equals(that.getLabel())
                 && this.constituentScore == that.constituentScore
                 && this.getViewName().equals(that.getViewName());
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+
+        if (!(obj instanceof Constituent))
+            return false;
+
+        Constituent that = (Constituent) obj;
+
+        if (this.getStartSpan() < 0) {
+            return false;
+        }
+
+        if (this.attributes == null && that.attributes != null)
+            return false;
+        if (this.attributes != null && that.attributes == null)
+            return false;
+
+        if (this.attributes != null && that.attributes != null)
+            if (!this.attributes.equals(that.attributes))
+                return false;
+
+        if (null != this.labelsToScores && null == that.labelsToScores)
+            return false;
+        if (null == this.labelsToScores && null != that.labelsToScores)
+            return false;
+        if ( null != this.labelsToScores && null != that.labelsToScores)
+            if (!this.labelsToScores.equals(that.labelsToScores))
+                return false;
+
+        return equalsWithoutAttributeEqualityCheck(that);
     }
 
     public String getAttribute(String key) {
@@ -363,6 +444,7 @@ public class Constituent implements Serializable, HasAttributes {
 
         hashCode += this.getLabel().hashCode() * 91;
         hashCode += (this.attributes == null ? 0 : this.attributes.hashCode() * 7);
+        hashCode += (this.labelsToScores == null ? 0 : this.labelsToScores.hashCode() * 23);
         hashCode += (new Double(this.constituentScore)).hashCode() * 67;
         hashCode += this.getViewName().hashCode();
 
@@ -380,7 +462,6 @@ public class Constituent implements Serializable, HasAttributes {
             hashCode += relation.getTarget().getEndSpan() * 19;
 
         }
-
 
         return hashCode;
 
@@ -544,4 +625,5 @@ public class Constituent implements Serializable, HasAttributes {
     public void removeAllAttributes() {
         this.attributes = null;
     }
+
 }

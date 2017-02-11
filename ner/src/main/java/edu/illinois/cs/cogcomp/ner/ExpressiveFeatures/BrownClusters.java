@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,17 +24,27 @@ import java.util.Vector;
 
 
 public class BrownClusters {
+    private static Logger logger = LoggerFactory.getLogger(BrownClusters.class);
 
     /** the sole instance of this class. */
     private static BrownClusters brownclusters = null;
 
+    /** used to synchronize initialization. */
+    static private final String INIT_SYNC = "Brown Cluster Initialization Synchronization Token";
+    
     /**
      * This method should never be called before init, or the gazetteer will not be initialized.
      * 
      * @return the singleton instance of the Gazetteers class.
      */
     static public BrownClusters get() {
-        return brownclusters;
+        synchronized (INIT_SYNC) {
+            return brownclusters;
+        }
+    }
+
+    static public void set(BrownClusters bc){
+        brownclusters = bc;
     }
 
     /** ensures singleton-ness. */
@@ -45,42 +57,49 @@ public class BrownClusters {
     private ArrayList<THashMap<String, String>> wordToPathByResource = null;
     private final int[] prefixLengths = {4, 6, 10, 20};
 
+    /**
+     * Initialze the brown cluster data. This is a singleton, so this process is sychronized and
+     * atomic with resprect to the <code>get()</code> method above.
+     * @param pathsToClusterFiles the files containing the data.
+     * @param thresholds
+     * @param isLowercaseBrownClusters
+     */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
-        if (brownclusters != null) {
-            return;
-        }
-        brownclusters = new BrownClusters();
-        brownclusters.isLowercaseBrownClustersByResource =
-                new boolean[isLowercaseBrownClusters.size()];
-        brownclusters.wordToPathByResource = new ArrayList<>();
-        brownclusters.resources = new ArrayList<>();
-        for (int i = 0; i < pathsToClusterFiles.size(); i++) {
-            THashMap<String, String> h = new THashMap<>();
-            InFile in =
-                    new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-            String line = in.readLine();
-            int wordsAdded = 0;
-            while (line != null) {
-                StringTokenizer st = new StringTokenizer(line);
-                String path = st.nextToken();
-                String word = st.nextToken();
-                int occ = Integer.parseInt(st.nextToken());
-                if (occ >= thresholds.elementAt(i)) {
-                    h.put(word, path);
-                    wordsAdded++;
-                }
-                line = in.readLine();
-            }
 
-            if (ParametersForLbjCode.currentParameters.debug) {
-                System.out.println(wordsAdded + " words added");
+        synchronized (INIT_SYNC) {
+            brownclusters = new BrownClusters();
+            brownclusters.isLowercaseBrownClustersByResource =
+                    new boolean[isLowercaseBrownClusters.size()];
+            brownclusters.wordToPathByResource = new ArrayList<>();
+            brownclusters.resources = new ArrayList<>();
+            for (int i = 0; i < pathsToClusterFiles.size(); i++) {
+                THashMap<String, String> h = new THashMap<>();
+                InFile in =
+                        new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
+                String line = in.readLine();
+                int wordsAdded = 0;
+                while (line != null) {
+                    StringTokenizer st = new StringTokenizer(line);
+                    String path = st.nextToken();
+                    String word = st.nextToken();
+                    int occ = Integer.parseInt(st.nextToken());
+                    if (occ >= thresholds.elementAt(i)) {
+                        h.put(word, path);
+                        wordsAdded++;
+                    }
+                    line = in.readLine();
+                }
+
+                if (ParametersForLbjCode.currentParameters.debug) {
+                    logger.info(wordsAdded + " words added");
+                }
+                brownclusters.wordToPathByResource.add(h);
+                brownclusters.isLowercaseBrownClustersByResource[i] =
+                        isLowercaseBrownClusters.elementAt(i);
+                brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
+                in.close();
             }
-            brownclusters.wordToPathByResource.add(h);
-            brownclusters.isLowercaseBrownClustersByResource[i] =
-                    isLowercaseBrownClusters.elementAt(i);
-            brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
-            in.close();
         }
     }
 
@@ -119,8 +138,8 @@ public class BrownClusters {
 
     private static void printArr(String[] arr) {
         for (String anArr : arr)
-            System.out.print(" " + anArr);
-        System.out.println("");
+            logger.info(" " + anArr);
+        logger.info("");
     }
 
     final public void printOovData(Data data) {
@@ -167,13 +186,13 @@ public class BrownClusters {
          * resources.addElement("Data/BrownHierarchicalWordClusters/brownBllipClusters");
          * Vector<Integer> thres=new Vector<>(); thres.addElement(5); Vector<Boolean> lowercase=new
          * Vector<>(); lowercase.addElement(false); init(resources,thres,lowercase);
-         * System.out.println("finance "); printArr(getPrefixes(new NEWord(new
-         * Word("finance"),null,null))); System.out.println("help"); printArr(getPrefixes(new
-         * NEWord(new Word("help"),null,null))); System.out.println("resque ");
+         * logger.info("finance "); printArr(getPrefixes(new NEWord(new
+         * Word("finance"),null,null))); logger.info("help"); printArr(getPrefixes(new
+         * NEWord(new Word("help"),null,null))); logger.info("resque ");
          * printArr(getPrefixes(new NEWord(new Word("resque"),null,null)));
-         * System.out.println("assist "); printArr(getPrefixes(new NEWord(new
-         * Word("assist"),null,null))); System.out.println("assistance "); printArr(getPrefixes(new
-         * NEWord(new Word("assistance"),null,null))); System.out.println("guidance ");
+         * logger.info("assist "); printArr(getPrefixes(new NEWord(new
+         * Word("assist"),null,null))); logger.info("assistance "); printArr(getPrefixes(new
+         * NEWord(new Word("assistance"),null,null))); logger.info("guidance ");
          * printArr(getPrefixes(new NEWord(new Word("guidance"),null,null)));
          */
     }

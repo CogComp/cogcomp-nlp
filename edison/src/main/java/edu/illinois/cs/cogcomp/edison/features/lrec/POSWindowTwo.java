@@ -18,6 +18,8 @@ import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.RealFeature;
 import edu.illinois.cs.cogcomp.edison.features.helpers.SpanLabelsHelper;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -34,6 +36,7 @@ import java.io.IOException;
  *
  */
 public class POSWindowTwo implements FeatureExtractor {
+    private static Logger logger = LoggerFactory.getLogger(POSWindowTwo.class);
 
     private final String viewName;
 
@@ -104,7 +107,7 @@ public class POSWindowTwo implements FeatureExtractor {
             } else {
                 __id = classifier + ":" + i;
                 __value = "(" + tags[i] + ")";
-                System.out.println(__id + __value);
+                logger.info(__id + __value);
                 __result.add(new DiscreteFeature(__id + __value));
             }
         }

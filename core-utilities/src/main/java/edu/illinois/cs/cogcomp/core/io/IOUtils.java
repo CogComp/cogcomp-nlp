@@ -95,6 +95,11 @@ public abstract class IOUtils {
         return path;
     }
 
+
+    public static String getFileStem(String path) {
+        return stripFileExtension(getFileName(path));
+    }
+
     /**
      * List the contents of a directory.
      */

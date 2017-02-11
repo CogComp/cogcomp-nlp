@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.utilities;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 
@@ -14,6 +17,8 @@ import java.lang.management.MemoryMXBean;
  * @author cheng88
  */
 public class MemoryMonitor {
+    private static Logger logger = LoggerFactory.getLogger(MemoryMonitor.class);
+
     private static final MemoryMXBean bean = ManagementFactory.getMemoryMXBean();
     public static final long memLimit = Runtime.getRuntime().maxMemory();
 
@@ -48,11 +53,11 @@ public class MemoryMonitor {
     }
 
     public static void runGC(Runtime r, int loops) throws Exception {
-        System.out.println("running garbage collecting");
+        logger.info("running garbage collecting");
         for (int i = 0; i < loops; i++) {
             r.gc();
             Thread.sleep(1000);
         }
-        System.out.println("done running garbage collecting");
+        logger.info("done running garbage collecting");
     }
 }
