@@ -19,7 +19,7 @@ public class DepAnnotatorTest {
     }
 
     @Test
-    public void testDepParserSizeFail() throws Exception {
+    public void testDepParser() throws Exception {
         DepAnnotator depParser = new DepAnnotator();
 
         try {

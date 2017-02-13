@@ -11,8 +11,11 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.core.DepInst;
 import edu.illinois.cs.cogcomp.depparse.core.DepStruct;
+import edu.illinois.cs.cogcomp.depparse.core.LabeledChuLiuEdmondsDecoder;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,9 +23,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class DepAnnotator extends Annotator {
-    private SLModel model = null;
-    private String modelName = "struc-perceptron-ipm.model";
-    private String tempModelFileName = "tmp345673.model";
+    private static Logger logger = LoggerFactory.getLogger(DepAnnotator.class);
+    private static SLModel model = null;
+    private static final String MODEL_NAME = "struct-perceptron-auto-20iter.model";
+    private static final String TEMP_MODEL_FILE_NAME = "tmp345673.model";
 
     public DepAnnotator() {
         super(ViewNames.DEPENDENCY, new String[] {ViewNames.POS, ViewNames.SHALLOW_PARSE,
@@ -32,30 +36,32 @@ public class DepAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager rm) {
         try {
-            // TODO Ridiculously ugly hack since SL doesn't accept streams we can't create a file
-            // from inside a jar
-            File dest = new File(tempModelFileName);
-            URL fileURL = IOUtils.lsResources(DepAnnotator.class, modelName).get(0);
+            // TODO Ugly hack: SL doesn't accept streams and can't create a file from inside a jar
+            File dest = new File(TEMP_MODEL_FILE_NAME);
+            URL fileURL = IOUtils.lsResources(DepAnnotator.class, MODEL_NAME).get(0);
+            logger.info("Loading {} into temp file: {}", MODEL_NAME, TEMP_MODEL_FILE_NAME);
             FileUtils.copyURLToFile(fileURL, dest);
-            model = SLModel.loadModel(tempModelFileName);
+            model = SLModel.loadModel(TEMP_MODEL_FILE_NAME);
+            ((LabeledChuLiuEdmondsDecoder) model.infSolver).loadDepRelDict();
             if (!dest.delete())
-                throw new IOException("Could not delete temporary model file " + tempModelFileName);
+                throw new IOException("Could not delete temporary model file "
+                        + TEMP_MODEL_FILE_NAME);
         } catch (IOException | ClassNotFoundException | URISyntaxException e) {
             e.printStackTrace();
-            File dest = new File(tempModelFileName);
+            File dest = new File(TEMP_MODEL_FILE_NAME);
             if (!dest.delete())
                 throw new RuntimeException("Could not delete temporary model file "
-                        + tempModelFileName);
+                        + TEMP_MODEL_FILE_NAME);
         }
     }
 
     @Override
-    public void addView(TextAnnotation record) throws AnnotatorException {
+    public void addView(TextAnnotation ta) throws AnnotatorException {
         for (String reqView : requiredViews)
-            if (!record.hasView(reqView))
+            if (!ta.hasView(reqView))
                 throw new AnnotatorException("TextAnnotation must have view: " + reqView);
 
-        DepInst sent = new DepInst(record);
+        DepInst sent = new DepInst(ta);
         DepStruct deptree;
         try {
             deptree = (DepStruct) model.infSolver.getBestStructure(model.wv, sent);
@@ -63,21 +69,31 @@ public class DepAnnotator extends Annotator {
             throw new AnnotatorException("Sentence cannot be parsed");
         }
 
-        TreeView treeView = new TreeView(ViewNames.DEPENDENCY, record);
-        Pair<String, Integer> nodePair = new Pair<>(sent.forms[0], 0);
+        TreeView treeView = new TreeView(ViewNames.DEPENDENCY, ta);
+        int rootPos = findRoot(deptree);
+        // All the node positions are -1 to account for the extra <root> node added
+        Pair<String, Integer> nodePair = new Pair<>(sent.forms[rootPos], rootPos - 1);
         Tree<Pair<String, Integer>> tree = new Tree<>(nodePair);
-        populateChildren(tree, deptree, sent, 0);
+        populateChildren(tree, deptree, sent, rootPos);
         treeView.setDependencyTree(0, tree);
-        record.addView(ViewNames.DEPENDENCY, treeView);
+        ta.addView(ViewNames.DEPENDENCY, treeView);
     }
 
     private void populateChildren(Tree<Pair<String, Integer>> tree, DepStruct struct, DepInst sent,
             int pos) {
         for (int i : struct.deps.get(pos)) {
-            Pair<String, Integer> nodePair = new Pair<>(sent.forms[i], i);
+            // All the node positions are -1 to account for the extra <root> node added
+            Pair<String, Integer> nodePair = new Pair<>(sent.forms[i], i - 1);
             Tree<Pair<String, Integer>> childTree = new Tree<>(nodePair);
-            tree.addSubtree(childTree, new Pair<>(struct.deprels[i], -1));
+            tree.addSubtree(childTree, new Pair<>(struct.deprels[i], i - 1));
             populateChildren(childTree, struct, sent, i);
         }
+    }
+
+    private int findRoot(DepStruct struct) {
+        for (int i = 1; i < struct.heads.length; i++) {
+            if (struct.heads[i] == 0) return i;
+        }
+        return -1;
     }
 }

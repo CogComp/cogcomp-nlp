@@ -38,4 +38,10 @@ public class Preprocessor {
         ta.addView(chunk);
         return ta;
     }
+
+    public void annotate(TextAnnotation ta) throws AnnotatorException {
+        ta.addView(pos);
+        ta.addView(lemma);
+        ta.addView(chunk);
+    }
 }

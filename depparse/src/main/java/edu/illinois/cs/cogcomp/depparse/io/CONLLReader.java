@@ -5,8 +5,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.depparse.core.DepInst;
-import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.io.BufferedReader;
@@ -14,7 +12,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Set;
 
 public class CONLLReader {
     // The column indices of the various items
@@ -59,7 +56,6 @@ public class CONLLReader {
         String[] forms = new String[length + 1]; // +1 for the 0 root
         String[] lemmas = new String[length + 1];
         String[] pos = new String[length + 1];
-        String[] browns = new String[length + 1];
         String[] chunks = new String[length + 1];
         String[] deprels = new String[length + 1];
         int[] heads = new int[length + 1];
@@ -70,7 +66,6 @@ public class CONLLReader {
         heads[0] = -1;
         lemmas[0] = "<root>";
         pos[0] = "<root-POS>";
-        browns[0] = "<root-BROWN>";
         chunks[0] = "<root-CHUNK>";
 
         for (int i = 0; i < length; i++) {
@@ -87,26 +82,13 @@ public class CONLLReader {
         SpanLabelView posView = (SpanLabelView) annotation.getView(ViewNames.POS);
         SpanLabelView chunkView = (SpanLabelView) annotation.getView(ViewNames.SHALLOW_PARSE);
         for (int i = 0; i < chunks.length - 1; i++) {
-            browns[i + 1] =
-                    getBrownPrefix(BrownClusterFeatureExtractor.instance320.getWordFeatures(
-                            annotation, i));
             lemmas[i + 1] = lemmaView.getLabel(i);
             if (!useGoldPOS)
                 pos[i + 1] = posView.getLabel(i);
             chunks[i + 1] = chunkView.getLabel(i);
         }
 
-        return new DepInst(forms, lemmas, pos, browns, chunks, deprels, heads);
-    }
-
-    public static String getBrownPrefix(Set<Feature> feat) {
-        if (feat.isEmpty())
-            return "-1-1-1-1";
-        for (Feature f : feat) {
-            if (f.getName().split(":")[0].equals("prefix-4"))
-                return f.getName().split(":")[1];
-        }
-        throw new IllegalArgumentException("Input is not a Brown Clustering feature set");
+        return new DepInst(forms, lemmas, pos, chunks, deprels, heads);
     }
 
     private String normalize(String s) {

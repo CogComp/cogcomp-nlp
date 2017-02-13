@@ -11,12 +11,21 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVectorBuffer;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.*;
 import java.util.*;
 
 public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
-
+    private static Logger logger = LoggerFactory.getLogger(LabeledChuLiuEdmondsDecoder.class);
     private static final long serialVersionUID = -7033487235520156024L;
+    private final String deprelFile = "deprels.dict";
+    private static final List<String> ALL_RELS = Arrays.asList("COORD", "EXT", "GAP-PMOD", "PRD",
+            "ROOT", "DTV", "GAP-LOC", "PRN", "PRP", "MNR", "P", "EXTR", "PRT", "ADV", "OBJ", "SBJ",
+            "AMOD", "SUFFIX", "LOC", "SUB", "GAP-LGS", "IM", "GAP-PRD", "DIR", "VC", "PUT", "DEP",
+            "NAME", "PRD-PRP", "APPO", "NMOD", "OPRD", "TMP", "CONJ", "PMOD", "LGS", "DEP-GAP",
+            "TITLE", "LOC-PRD", "POSTHON");
 
     private static HashMap<String, HashSet<String>> deprelDict = new HashMap<>();
     private LabeledDepFeatureGenerator depfeat;
@@ -37,19 +46,27 @@ public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
 			String headPOS = inst.strPos[inst.heads[i]];
 			String depPOS = inst.strPos[i];
 			String keyPOS = headPOS + " " + depPOS;
-			String headBrown = inst.strBrown[inst.heads[i]];
-			String depBrown = inst.strBrown[i];
-			String keyBrown = headBrown + " " + depBrown;
 
 			deprelDict.computeIfAbsent(keyPOS, k -> new HashSet<>());
 			if (!deprelDict.get(keyPOS).contains(inst.deprels[i]))
 				deprelDict.get(keyPOS).add(inst.deprels[i]);
-
-			deprelDict.computeIfAbsent(keyBrown, k -> new HashSet<>());
-			if (!deprelDict.get(keyBrown).contains(inst.deprels[i]))
-				deprelDict.get(keyBrown).add(inst.deprels[i]);
 		}
 	}
+
+    public void saveDepRelDict() throws IOException {
+        logger.info("Caching PoS-to-dep dictionary to {}", deprelFile);
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(deprelFile));
+        out.writeObject(deprelDict);
+        out.close();
+    }
+
+    public void loadDepRelDict() throws IOException, ClassNotFoundException {
+        logger.info("Loading cached PoS-to-dep dictionary from {}", deprelFile);
+        ObjectInputStream in =
+                new ObjectInputStream(getClass().getClassLoader().getResourceAsStream(deprelFile));
+        deprelDict = (HashMap<String, HashSet<String>>) in.readObject();
+        in.close();
+    }
 
     private String predictLabel(int head, int node, DepInst ins, WeightVector weight) {
         if (head == -1)
@@ -58,31 +75,24 @@ public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
         String rel = null;
         float max = Float.NEGATIVE_INFINITY;
         String keyPOS = ins.strPos[head] + " " + ins.strPos[node];
-        String keyBrown = ins.strBrown[head] + " " + ins.strBrown[node];
-        if (deprelDict.get(keyPOS) == null && deprelDict.get(keyBrown) == null)
-            rel = "UNDEFINED";
-        else {
-            Set<String> candidates = new HashSet<>();
-            if (deprelDict.get(keyPOS) != null)
-                candidates.addAll(deprelDict.get(keyPOS));
-            if (deprelDict.get(keyBrown) != null)
-                candidates.addAll(deprelDict.get(keyBrown));
-            if (candidates.size() == 1)
-                rel = candidates.iterator().next();
-            else {
-                for (String candidate : candidates) {
-                    FeatureVectorBuffer edgefv =
-                            depfeat.getLabeledEdgeFeatures(head, node, ins, candidate);
-                    float decision = weight.dotProduct(edgefv.toFeatureVector(false));
-                    if (decision > max) {
-                        rel = candidate;
-                        max = decision;
-                    }
-                }
+        Set<String> candidates = new HashSet<>();
+        if (deprelDict.get(keyPOS) != null)
+            candidates.addAll(deprelDict.get(keyPOS));
+        if (candidates.size() == 1)
+            return candidates.iterator().next();
+        else if (candidates.isEmpty()) {
+            if (keyPOS.contains("."))
+                return "P";
+            candidates.addAll(ALL_RELS);
+        }
+        for (String candidate : candidates) {
+            FeatureVectorBuffer edgefv = depfeat.getLabeledEdgeFeatures(head, node, ins, candidate);
+            float decision = weight.dotProduct(edgefv.toFeatureVector(false));
+            if (decision > max) {
+                rel = candidate;
+                max = decision;
             }
         }
-
-        assert rel != null;
         return rel;
     }
 

@@ -1,13 +1,18 @@
 package edu.illinois.cs.cogcomp.depparse;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.depparse.core.DepInst;
 import edu.illinois.cs.cogcomp.depparse.core.DepStruct;
 import edu.illinois.cs.cogcomp.depparse.core.LabeledChuLiuEdmondsDecoder;
 import edu.illinois.cs.cogcomp.depparse.features.LabeledDepFeatureGenerator;
 import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
 import edu.illinois.cs.cogcomp.depparse.io.Preprocessor;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.sl.core.*;
 import edu.illinois.cs.cogcomp.sl.learner.Learner;
 import edu.illinois.cs.cogcomp.sl.learner.LearnerFactory;
@@ -18,6 +23,9 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.HashMap;
 
@@ -30,27 +38,55 @@ public class MainClass {
 
     public static void main(String args[]) throws Exception {
         ArgumentParser parser = ArgumentParsers.newArgumentParser("MainClass", true);
-        parser.addArgument("-t", "--train").type(String.class)
+        parser.addArgument("-r", "--train").type(String.class)
                 .help("The training file in CoNLL format").setDefault("");
-        parser.addArgument("test").help("The test file in CoNLL format");
+        parser.addArgument("-t", "--test").help("The test file in CoNLL format");
         parser.addArgument("-c", "--config").help("The SL configuration file")
-                .setDefault("config/StructuredPerceptronIPM.config");
+                .setDefault("config/StructuredPerceptron.config");
         parser.addArgument("-m", "--model").help("The model output file").setDefault("out.model");
         parser.addArgument("-p", "--pos").help("The type of PoS tags to use")
                 .choices("gold", "auto").setDefault("auto");
         parser.addArgument("-o", "--offset").type(Integer.class)
-                .help("The offset of the pos/head/dep index").setDefault(0);
+                .help("The offset of the pos/head/dep index for the CoNLL train/test files")
+                .setDefault(0);
+        parser.addArgument("-a", "--annotate")
+                .type(String.class)
+                .help("Annotate text file (one sentence per line) and print the output to the command line")
+                .setDefault("");
         Namespace ns = parser.parseArgs(args);
 
         useGoldPOS = ns.getString("pos").equals("gold");
+        logger.info("Using {} PoS tags", ns.getString("pos"));
         conllIndexOffset = ns.getInt("offset");
         if (!ns.getString("train").isEmpty()) {
+            logger.info("Using {} configuration", ns.getString("config"));
             train(ns.getString("train"), ns.getString("config"), ns.getString("model"));
             logger.info("Testing on Training Data");
             test(ns.getString("model"), ns.getString("train"), false);
         }
-        logger.info("Testing on Test Data");
-        test(ns.getString("model"), ns.getString("test"), true);
+        if (!ns.getString("test").isEmpty()) {
+            logger.info("Testing on Test Data");
+            test(ns.getString("model"), ns.getString("test"), true);
+        }
+        if (!ns.getString("annotate").isEmpty()) {
+            annotate(ns.getString("annotate"));
+        }
+    }
+
+    private static void annotate(String filepath) throws IOException {
+        DepAnnotator annotator = new DepAnnotator();
+        TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
+        Preprocessor preprocessor = new Preprocessor();
+        Files.lines(Paths.get(filepath)).forEach(line -> {
+            TextAnnotation ta = taBuilder.createTextAnnotation(line);
+            try {
+                preprocessor.annotate(ta);
+                annotator.addView(ta);
+                System.out.println(ta.getView(annotator.getViewName()).toString());
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private static SLProblem getStructuredData(String filepath,
@@ -58,20 +94,14 @@ public class MainClass {
         CONLLReader depReader = new CONLLReader(new Preprocessor(), useGoldPOS, conllIndexOffset);
         depReader.startReading(filepath);
         SLProblem problem = new SLProblem();
-        long totalTime = 0L;
-        long start = System.currentTimeMillis();
         DepInst instance = depReader.getNext();
-        totalTime += (System.currentTimeMillis() - start);
         while (instance != null) {
             infSolver.updateInferenceSolver(instance);
             Pair<IInstance, IStructure> pair = getSLPair(instance);
             problem.addExample(pair.getFirst(), pair.getSecond());
-            start = System.currentTimeMillis();
             instance = depReader.getNext();
-            totalTime += (System.currentTimeMillis() - start);
         }
-        logger.info("Training on {} of dependency instances.", problem.size());
-        logger.info("Average preprocessing time: {}s", totalTime * 1000 / problem.size());
+        logger.info("{} of dependency instances.", problem.size());
         return problem;
     }
 
@@ -85,6 +115,7 @@ public class MainClass {
 		model.featureGenerator = new LabeledDepFeatureGenerator(model.lm);
 		model.infSolver = new LabeledChuLiuEdmondsDecoder(model.featureGenerator);
 		SLProblem problem = getStructuredData(trainFile, (LabeledChuLiuEdmondsDecoder)model.infSolver);
+        ((LabeledChuLiuEdmondsDecoder) model.infSolver).saveDepRelDict();
 		Learner learner = LearnerFactory.getLearner(model.infSolver, model.featureGenerator, para);
 		learner.runWhenReportingProgress((w, inference) -> printMemoryUsage());
 		model.wv = learner.train(problem);
@@ -97,6 +128,7 @@ public class MainClass {
     private static void test(String modelPath, String testDataPath, boolean updateMatrix)
             throws Exception {
         SLModel model = SLModel.loadModel(modelPath);
+        ((LabeledChuLiuEdmondsDecoder) model.infSolver).loadDepRelDict();
         SLProblem sp =
                 getStructuredData(testDataPath, (LabeledChuLiuEdmondsDecoder) model.infSolver);
         double acc_undirected = 0.0;
@@ -175,7 +207,6 @@ public class MainClass {
 			else {
 				if (predHeads[goldHeads[i]] == i || predHeads[i] == goldHeads[i])
 					corr++;
-					
 			}
 			total++;
 		}

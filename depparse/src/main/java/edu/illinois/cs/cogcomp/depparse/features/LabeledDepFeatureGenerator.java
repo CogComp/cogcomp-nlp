@@ -41,12 +41,7 @@ public class LabeledDepFeatureGenerator extends AbstractFeatureGenerator impleme
 
     public void previewFeature(DepInst sent) {
         for (int i = 1; i <= sent.size(); i++) {
-            int j = sent.heads[i];
-            Set<Feature> feats = getLabeledEdgeFeatureSet(j, i, sent, sent.deprels[i]);
-            for (Feature f : feats)
-                lm.addFeature(f.getName());
-            Set<Feature> chunkfeats = getChunkFeatureSet(j, i, sent);
-            for (Feature f : chunkfeats)
+            for (Feature f : getLabeledEdgeFeatureSet(sent.heads[i], i, sent, sent.deprels[i]))
                 lm.addFeature(f.getName());
         }
     }
@@ -80,24 +75,6 @@ public class LabeledDepFeatureGenerator extends AbstractFeatureGenerator impleme
         feats.add(new DiscreteFeature(header + headcenter + depcenter + arclength + deprel));
         feats.add(new DiscreteFeature(header + headleft + headcenter + headright + depleft
                 + depcenter + depright + arcdir + deprel));
-        return feats;
-    }
-
-
-    private Set<Feature> POSBrownConj(int head, int dep, DepInst sent, String deprel) {
-        String header = "POSBrown: ";
-        String brownhead = sent.strBrown[head] + " ";
-        String poshead = sent.strPos[head] + " ";
-        String browndep = sent.strBrown[dep] + " ";
-        String posdep = sent.strPos[dep] + " ";
-        String arcdir = "Arc-dir: " + (head < dep) + " ";
-
-        Set<Feature> feats = new HashSet<>();
-        feats.add(new DiscreteFeature(header + brownhead + browndep + arcdir + deprel));
-        feats.add(new DiscreteFeature(header + poshead + browndep + arcdir + deprel));
-        feats.add(new DiscreteFeature(header + brownhead + posdep + arcdir + deprel));
-        feats.add(new DiscreteFeature(header + poshead + brownhead + posdep + browndep + arcdir
-                + deprel));
         return feats;
     }
 
@@ -157,7 +134,6 @@ public class LabeledDepFeatureGenerator extends AbstractFeatureGenerator impleme
 
     private Set<Feature> getLabeledEdgeFeatureSet(int head, int dep, DepInst sent, String deprel) {
         Set<Feature> feats = new HashSet<>();
-        feats.addAll(POSBrownConj(head, dep, sent, deprel));
         feats.addAll(PrefixConj(head, dep, sent, deprel));
         feats.addAll(SuffixConj(head, dep, sent, deprel));
         feats.addAll(POSwinConj(head, dep, sent, deprel));
@@ -174,50 +150,7 @@ public class LabeledDepFeatureGenerator extends AbstractFeatureGenerator impleme
 
     public FeatureVectorBuffer getCombineEdgeFeatures(int head, int dep, DepInst sent, String deprel) {
         FeatureVectorBuffer fb = new FeatureVectorBuffer();
-        // TODO Check if needed
-        // fb.addFeature(getEdgeFeatures(head, dep, sent));
         fb.addFeature(getLabeledEdgeFeatures(head, dep, sent, deprel));
         return fb;
     }
-
-    private Set<Feature> getChunkFeatureSet(int head, int dep, DepInst sent) {
-        String header = "POSChunk: ";
-        String chunkhead = sent.strChunk[head] + " ";
-        String poshead = sent.strPos[head] + " ";
-        String chunkdep = sent.strChunk[dep] + " ";
-        String posdep = sent.strPos[dep] + " ";
-        String arcdir = "Arc-dir: " + (head < dep) + " ";
-        String arclength = "Arc-length " + (head - dep) + " ";
-
-        Set<Feature> feats = new HashSet<>();
-        feats.add(new DiscreteFeature(header + chunkhead + chunkdep));
-        feats.add(new DiscreteFeature(header + chunkhead + chunkdep + arcdir));
-        feats.add(new DiscreteFeature(header + chunkhead + chunkdep + arclength));
-        feats.add(new DiscreteFeature(header + chunkhead + poshead + chunkdep + posdep));
-        feats.add(new DiscreteFeature(header + chunkhead + poshead + chunkdep + posdep + arcdir));
-        feats.add(new DiscreteFeature(header + chunkhead + poshead + chunkdep + posdep + arclength));
-        return feats;
-    }
-
-    // TODO Check if needed
-    // public FeatureVectorBuffer getEdgeFeatures(int head, int dep, DepInst sent) {
-    // List<Integer> fList = new ArrayList<>();
-    // List<Float> valList = new ArrayList<>();
-    // int dist = Math.abs(head-dep);
-    // dist = (dist > 10)? 10 : (dist>5)? 5: dist;
-    // dist *= (head > dep)? templateCode *191021: templateCode *350377;
-    // addSurroundingPOS(head, dep, dist, sent, fList);
-    // addInBetweenPOS(head, dep, dist, sent, fList);
-    // addLexFeats(head, dep, dist, sent, fList);
-    // addLexPrefixFeats(head, dep, dist, sent, fList);
-    //
-    // for(int t=0; t< fList.size();t++)
-    // valList.add(1.0f);
-    // FeatureVectorBuffer fvb = new FeatureVectorBuffer(fList, valList);
-    //
-    // fvb.addFeature(featureVectorBufferFromFeature(getChunkFeatureSet(head, dep, sent)), (int)
-    // Math.pow(2, 0));
-    //
-    // return fvb;
-    // }
 }
