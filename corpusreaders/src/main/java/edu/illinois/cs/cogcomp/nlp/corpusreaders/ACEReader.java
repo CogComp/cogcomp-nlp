@@ -478,4 +478,16 @@ public class ACEReader extends TextAnnotationReader {
 
         return textAnnotation != null;
     }
+
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
+
 }

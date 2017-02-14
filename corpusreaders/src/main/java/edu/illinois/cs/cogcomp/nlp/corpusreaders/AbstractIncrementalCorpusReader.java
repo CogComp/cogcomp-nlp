@@ -147,6 +147,8 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * other relevant statistics the user should know about).
      */
 
-    abstract public String generateReport();
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
 
 }

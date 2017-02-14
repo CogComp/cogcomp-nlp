@@ -32,10 +32,9 @@ import java.util.Map;
  * are ignored.
  */
 public class OntonotesReader extends TextAnnotationReader {
+    private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
-
-    private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
 
     public OntonotesReader(String ontonotesDirectory) {
         super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory));
@@ -361,4 +360,14 @@ public class OntonotesReader extends TextAnnotationReader {
         else
             return s;
     }
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
 }
