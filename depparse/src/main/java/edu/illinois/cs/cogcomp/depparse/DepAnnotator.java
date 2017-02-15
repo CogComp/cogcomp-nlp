@@ -99,7 +99,8 @@ public class DepAnnotator extends Annotator {
 
     private int findRoot(DepStruct struct) {
         for (int i = 1; i < struct.heads.length; i++) {
-            if (struct.heads[i] == 0) return i;
+            if (struct.heads[i] == 0)
+                return i;
         }
         return -1;
     }

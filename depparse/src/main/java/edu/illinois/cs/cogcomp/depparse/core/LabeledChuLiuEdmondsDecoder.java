@@ -69,8 +69,11 @@ public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
 
     public void loadDepRelDict() throws IOException, ClassNotFoundException {
         logger.info("Loading cached PoS-to-dep dictionary from {}", deprelFile);
-        ObjectInputStream in =
-                new ObjectInputStream(getClass().getClassLoader().getResourceAsStream(deprelFile));
+        InputStream stream = getClass().getClassLoader().getResourceAsStream(deprelFile);
+        if (stream == null) {
+            stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(deprelFile);
+        }
+        ObjectInputStream in = new ObjectInputStream(stream);
         deprelDict = (HashMap<String, HashSet<String>>) in.readObject();
         in.close();
     }
