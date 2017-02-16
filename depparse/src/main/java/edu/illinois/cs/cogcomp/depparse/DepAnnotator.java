@@ -32,12 +32,28 @@ import java.net.URL;
 public class DepAnnotator extends Annotator {
     private static Logger logger = LoggerFactory.getLogger(DepAnnotator.class);
     private static SLModel model = null;
-    private static final String MODEL_NAME = "struct-perceptron-auto-20iter.model";
     private static final String TEMP_MODEL_FILE_NAME = "tmp345673.model";
 
+    /**
+     * default: don't use lazy initialization
+     */
     public DepAnnotator() {
+        this(false);
+    }
+
+    /**
+     * Constructor parameter allows user to specify whether or not to lazily initialize.
+     *
+     * @param lazilyInitialize If set to 'true', models will not be loaded until first call
+     *        requiring Chunker annotation.
+     */
+    public DepAnnotator(boolean lazilyInitialize) {
+        this(lazilyInitialize, new DepConfigurator().getDefaultConfig());
+    }
+
+    public DepAnnotator(boolean lazilyInitialize, ResourceManager rm) {
         super(ViewNames.DEPENDENCY, new String[] {ViewNames.POS, ViewNames.SHALLOW_PARSE,
-                ViewNames.LEMMA});
+                ViewNames.LEMMA}, lazilyInitialize, new DepConfigurator().getConfig(rm));
     }
 
     @Override
@@ -45,8 +61,9 @@ public class DepAnnotator extends Annotator {
         try {
             // TODO Ugly hack: SL doesn't accept streams and can't create a file from inside a jar
             File dest = new File(TEMP_MODEL_FILE_NAME);
-            URL fileURL = IOUtils.lsResources(DepAnnotator.class, MODEL_NAME).get(0);
-            logger.info("Loading {} into temp file: {}", MODEL_NAME, TEMP_MODEL_FILE_NAME);
+            String modelName = rm.getString(DepConfigurator.MODEL_NAME.key);
+            URL fileURL = IOUtils.lsResources(DepAnnotator.class, modelName).get(0);
+            logger.info("Loading {} into temp file: {}", modelName, TEMP_MODEL_FILE_NAME);
             FileUtils.copyURLToFile(fileURL, dest);
             model = SLModel.loadModel(TEMP_MODEL_FILE_NAME);
             ((LabeledChuLiuEdmondsDecoder) model.infSolver).loadDepRelDict();
