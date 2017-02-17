@@ -87,12 +87,13 @@ of several other components for which it is a dependency.
 4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 2G, no dependencies.
 5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 4G, no dependencies.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
-5. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
-7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
+7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.
+8. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
-8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
-9. Quantifier: <2G, requires Part-of-Speech. 
+10. Quantifier: <2G, requires Part-of-Speech.
 
 
 ### 1.3 LICENSE
