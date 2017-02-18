@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.97</version>
+    <version>3.0.98</version>
 
     <modules>
         <module>core-utilities</module>
@@ -24,6 +24,7 @@
         <module>similarity</module>
         <module>inference</module>
         <module>quantifier</module>
+        <module>depparse</module>
         <!--pipeline should always be the last item to compile, since some of the previous dependencies have direct dependency on the pipeline-->
         <module>pipeline</module>
     </modules>
