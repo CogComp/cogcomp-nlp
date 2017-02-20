@@ -73,8 +73,8 @@ public class ERENerReader extends EREDocumentReader {
     private int numEntitiesGenerated;
     private int numMentionsInSource;
     private int numMentionsGenerated;
-    private int numFillersInSource;
-    private int numFillersGenerated;
+//    private int numFillersInSource;
+//    private int numFillersGenerated;
 
 
     /**
@@ -101,6 +101,20 @@ public class ERENerReader extends EREDocumentReader {
 
         mentionIdToConstituent = new HashMap<>();
         entityIdToMentionIds = new HashMap<>();
+
+        this.numMentionsInSource = 0;
+        this.numMentionsGenerated = 0;
+        this.numEntitiesInSource = 0;
+        this.numEntitiesGenerated = 0;
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.numMentionsInSource = 0;
+        this.numMentionsGenerated = 0;
+        this.numEntitiesInSource = 0;
+        this.numEntitiesGenerated = 0;
     }
 
     @Override
@@ -549,10 +563,10 @@ public class ERENerReader extends EREDocumentReader {
                 .append(System.lineSeparator());
         bldr.append("Number of entities generated: ").append(numEntitiesGenerated)
                 .append(System.lineSeparator());
-        bldr.append("Number of fillers in source: ").append(numFillersInSource)
-                .append(System.lineSeparator());
-        bldr.append("Number of fillers generated: ").append(numFillersGenerated)
-                .append(System.lineSeparator());
+//        bldr.append("Number of fillers in source: ").append(numFillersInSource)
+//                .append(System.lineSeparator());
+//        bldr.append("Number of fillers generated: ").append(numFillersGenerated)
+//                .append(System.lineSeparator());
         bldr.append("Number of mentions in source: ").append(numMentionsInSource)
                 .append(System.lineSeparator());
         bldr.append("Number of mentions generated: ").append(numMentionsGenerated)

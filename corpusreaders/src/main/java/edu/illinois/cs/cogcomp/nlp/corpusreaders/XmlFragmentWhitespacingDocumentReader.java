@@ -83,9 +83,16 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
         numTextAnnotations = 0;
     }
 
+    @Override
+    public void reset() {
+        super.reset();
+        numFiles = 0;
+        numTextAnnotations = 0;
+    }
+
     /**
      * Exclude any files not possessing this extension.
-     * 
+     * TODO: make this configurable
      * @return the required file extension.
      */
     protected String getRequiredFileExtension() {

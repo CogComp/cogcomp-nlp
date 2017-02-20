@@ -59,6 +59,18 @@ public class EREMentionRelationReader extends ERENerReader {
         numRelationMentionsGenerated = 0;
     }
 
+
+
+    @Override
+    public void reset() {
+        super.reset();
+        numRelationsInSource = 0;
+        numRelationsGenerated = 0;
+        numRelationMentionsInSource = 0;
+        numRelationMentionsGenerated = 0;
+    }
+
+    
     @Override
     public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception {
