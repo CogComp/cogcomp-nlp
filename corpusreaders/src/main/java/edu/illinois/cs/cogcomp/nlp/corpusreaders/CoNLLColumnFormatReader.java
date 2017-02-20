@@ -34,14 +34,13 @@ import java.util.Scanner;
  */
 public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
-    protected final String predicateArgumentViewName;
-    private final TextAnnotationBuilder textAnnotationBuilder;
-    protected int currentLine;
-    protected final ArrayList<String> lines;
-    protected final String section;
-
     private static org.slf4j.Logger logger =
             LoggerFactory.getLogger(CoNLLColumnFormatReader.class);
+    protected final String predicateArgumentViewName;
+    protected final ArrayList<String> lines;
+    protected final String section;
+    private final TextAnnotationBuilder textAnnotationBuilder;
+    protected int currentLine;
     /**
      * Initialize the reader.
      *
@@ -77,6 +76,36 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
         }
     }
 
+    public static void main(String[] args) throws Exception {
+        String columnFile = "02.feats";
+
+        CoNLLColumnFormatReader reader =
+                new CoNLLColumnFormatReader("PennTreebank-WSJ", "02", columnFile,
+                        ViewNames.SRL_VERB, new BasicTextAnnotationBuilder());
+
+        Counter<String> counter = new Counter<>();
+
+        List<String> predicates = new ArrayList<>();
+
+        for (TextAnnotation ta : reader) {
+            counter.incrementCount("Sentences");
+            System.out.println(ta.getTokenizedText());
+
+            if (!ta.hasView(ViewNames.SRL_VERB))
+                continue;
+
+            PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
+            List<Constituent> predicates2 = pav.getPredicates();
+            counter.incrementCount("Predicates", predicates2.size());
+            for (Constituent c : predicates2) {
+                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
+            }
+
+        }
+
+        System.out.println((int) counter.getCount("Sentences") + " sentences");
+        System.out.println((int) counter.getCount("Predicates") + " predicates");
+    }
 
     public boolean hasNext() {
         return currentLine < lines.size();
@@ -330,35 +359,13 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        String columnFile = "02.feats";
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
 
-        CoNLLColumnFormatReader reader =
-                new CoNLLColumnFormatReader("PennTreebank-WSJ", "02", columnFile,
-                        ViewNames.SRL_VERB, new BasicTextAnnotationBuilder());
-
-        Counter<String> counter = new Counter<>();
-
-        List<String> predicates = new ArrayList<>();
-
-        for (TextAnnotation ta : reader) {
-            counter.incrementCount("Sentences");
-            System.out.println(ta.getTokenizedText());
-
-            if (!ta.hasView(ViewNames.SRL_VERB))
-                continue;
-
-            PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
-            List<Constituent> predicates2 = pav.getPredicates();
-            counter.incrementCount("Predicates", predicates2.size());
-            for (Constituent c : predicates2) {
-                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
-            }
-
-        }
-
-        System.out.println((int) counter.getCount("Sentences") + " sentences");
-        System.out.println((int) counter.getCount("Predicates") + " predicates");
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
     }
 
 }

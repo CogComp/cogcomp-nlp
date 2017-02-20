@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 import java.io.IOException;
 import java.util.Collections;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 
@@ -31,9 +32,10 @@ public class EREReaderTest {
 
     private static boolean doSerialize = true;
 
-//    public void testNerReader() {
+    // public void testNerReader() {
     public static void main(String[] args) {
-        String corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
+        String corpusDir =
+                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
 
         ERENerReader nerReader = null;
         boolean addNominalMentions = true;
@@ -41,8 +43,9 @@ public class EREReaderTest {
             nerReader = new ERENerReader("ERE", corpusDir, addNominalMentions);
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("ERROR: " + NAME + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir +
-            ": " + e.getMessage() );
+            System.err.println("ERROR: " + NAME
+                    + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir + ": "
+                    + e.getMessage());
         }
 
         TextAnnotation output = nerReader.next();
@@ -50,20 +53,21 @@ public class EREReaderTest {
         if (addNominalMentions) {
             assert (output.hasView(ViewNames.MENTION_ERE));
             nerEre = output.getView(ViewNames.MENTION_ERE);
-        }
-        else {
+        } else {
             assert (output.hasView(ViewNames.NER_ERE));
             nerEre = output.getView(ViewNames.NER_ERE);
         }
 
-        assert(nerEre.getConstituents().size() > 0);
+        assert (nerEre.getConstituents().size() > 0);
 
-        System.err.println("ERENerReader found " + nerEre.getConstituents().size() + " NER constituents: ");
+        System.out.println("ERENerReader found " + nerEre.getConstituents().size()
+                + " NER constituents: ");
         for (Constituent c : nerEre.getConstituents())
-            System.err.println(TextAnnotationPrintHelper.printConstituent(c));
+            System.out.println(TextAnnotationPrintHelper.printConstituent(c));
 
+        System.out.println("Report: " + nerReader.generateReport());
 
-        System.err.println("Testing EREMentionRelationReader...");
+        System.out.println("Testing EREMentionRelationReader...");
 
         EREMentionRelationReader emr = null;
         try {
@@ -72,28 +76,31 @@ public class EREReaderTest {
             e.printStackTrace();
             System.exit(-1);
         }
-        assert(emr.hasNext());
+        assert (emr.hasNext());
 
         output = emr.next();
-        assert(output.hasView(ViewNames.MENTION_ERE));
+        assert (output.hasView(ViewNames.MENTION_ERE));
 
         View nerRelation = output.getView(ViewNames.MENTION_ERE);
-        assert(nerRelation.getConstituents().size() > 0);
+        assert (nerRelation.getConstituents().size() > 0);
 
-        System.err.println("EREMentionRelationReader found " + nerRelation.getRelations().size() + " relations: " );
+        System.out.println("EREMentionRelationReader found " + nerRelation.getRelations().size()
+                + " relations: ");
         for (Relation r : nerRelation.getRelations())
-            System.err.println(TextAnnotationPrintHelper.printRelation(r));
+            System.out.println(TextAnnotationPrintHelper.printRelation(r));
 
-        System.err.println(TextAnnotationPrintHelper.OUTPUT_SEPARATOR);
-        System.err.println("ERE Coreference chains:");
+        System.out.println(TextAnnotationPrintHelper.OUTPUT_SEPARATOR);
+        System.out.println("ERE Coreference chains:");
 
-        assert(output.hasView(ViewNames.COREF_ERE));
+        assert (output.hasView(ViewNames.COREF_ERE));
 
         CoreferenceView cView = (CoreferenceView) output.getView(ViewNames.COREF_ERE);
 
-        assert(cView.getConstituents().size()>0);
+        assert (cView.getConstituents().size() > 0);
 
-        System.err.println(TextAnnotationPrintHelper.printCoreferenceView(cView));
+        System.out.println(TextAnnotationPrintHelper.printCoreferenceView(cView));
+
+
 
         if (doSerialize) {
             String jsonStr = SerializationHelper.serializeToJson(output);
@@ -114,7 +121,9 @@ public class EREReaderTest {
                 fail(e.getMessage());
             }
 
+            assertNotNull(newTa);
         }
+        System.out.println("Report: " + emr.generateReport());
 
 
     }
