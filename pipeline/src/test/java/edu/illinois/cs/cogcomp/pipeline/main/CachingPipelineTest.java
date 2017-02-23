@@ -162,12 +162,17 @@ public class CachingPipelineTest
             System.out.println("Expected exception from stanford.");
         }
         String predictedDepTree = basicTextAnnotation.getView(ViewNames.DEPENDENCY_STANFORD).toString();
-        String goldDepTree = "(taken (:LABEL:prep In (:LABEL:pobj States :LABEL:det the\n" +
-                "                    :LABEL:nn United))\n" +
-                "       (:LABEL:nsubj Cinco (:LABEL:prep de :LABEL:pobj Mayo))\n" +
+        String goldDepTree = "(taken :LABEL:punct .\n" +
+                "       (:LABEL:nmod States :LABEL:case In\n" +
+                "                           :LABEL:det the\n" +
+                "                           :LABEL:compound United)\n" +
+                "       :LABEL:punct ,\n" +
+                "       (:LABEL:nsubj Cinco (:LABEL:nmod Mayo :LABEL:case de))\n" +
                 "       :LABEL:aux has\n" +
-                "       (:LABEL:prep on (:LABEL:pobj significance :LABEL:det a))\n" +
-                "       (:LABEL:prep beyond (:LABEL:pobj that (:LABEL:prep in :LABEL:pobj Mexico))))";
+                "       (:LABEL:nmod significance :LABEL:case on\n" +
+                "                                 :LABEL:det a)\n" +
+                "       (:LABEL:nmod that (:LABEL:nmod Mexico :LABEL:case in)\n" +
+                "                         :LABEL:case beyond))";
         assertEquals("DEPENDENCY_STANFORD - Dependency parse tree should match gold parse.",
                 predictedDepTree.trim(), goldDepTree);
 

@@ -96,14 +96,12 @@ public class StanfordDepHandler extends Annotator {
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
             boolean runtimeExceptionWasThrown = false;
             CoreMap sentence = sentences.get(sentenceId);
-            if ( maxParseSentenceLength > 0 && sentence.size() > maxParseSentenceLength )
-            {
+            if ( maxParseSentenceLength > 0 && sentence.size() > maxParseSentenceLength ) {
                 logger.warn(HandlerUtils.getSentenceLengthError( textAnnotation.getId(), sentence.toString(), maxParseSentenceLength ) );
             }
             else {
                 SemanticGraph depGraph = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
                 IndexedWord root = null;
-
                 try {
                     root = depGraph.getFirstRoot();
                 } catch (RuntimeException e) {
@@ -139,7 +137,7 @@ public class StanfordDepHandler extends Annotator {
             int childPosition = getNodePosition(ta, child, sentId);
             Pair<String, Integer> nodePair = new Pair<>(child.originalText(), childPosition);
             Tree<Pair<String, Integer>> childTree = new Tree<>(nodePair);
-            tree.addSubtree(childTree, new Pair<>(depGraph.getEdge(root, child).toString(), childPosition));
+            tree.addSubtree(childTree, new Pair<>(depGraph.getEdge(root, child).getRelation().toString(), childPosition));
             populateChildren(depGraph, child, childTree, ta, sentId);
         }
     }
@@ -157,6 +155,5 @@ public class StanfordDepHandler extends Annotator {
         int tokenStartSpan = ta.getTokenIdFromCharacterOffset(nodeCharacterOffset);
         return tokenStartSpan - sentenceStart;
     }
-
 
 }

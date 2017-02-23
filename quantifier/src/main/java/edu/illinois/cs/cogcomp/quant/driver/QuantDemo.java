@@ -41,6 +41,7 @@ public class QuantDemo {
 
     public static void main(String args[]) throws Exception {
         Quantifier quantifier = new Quantifier();
+        quantifier.doInitialize();
         System.out.println(quantifier.getSpans(
                 "March oil down 1.9%, to settle at $51.16/bbl on Nymex.", true, null));
     }
