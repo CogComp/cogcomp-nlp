@@ -31,6 +31,9 @@ public class TextAnnotationUtilitiesTest {
                 "               (PP (IN in)\n" +
                 "                   (NP (NNP June))))))\n" +
                 "   (. .)))";
-        assert Objects.equals(subTA.getView(ViewNames.PARSE_GOLD).toString().trim(), parse);
+
+        String subTaStr = subTA.getView(ViewNames.PARSE_GOLD).toString().trim();
+
+        assert Objects.equals(subTaStr, parse);
     }
 }
