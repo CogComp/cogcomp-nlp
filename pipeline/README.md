@@ -397,8 +397,11 @@ public class testpipeline {
 
 ## 7. Using pipeline webserver 
 
-Our pipeline contains a webserver which can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
-
+Often a convenient model of using the pipeline server is, running the server (which includes all the annotators) on a 
+big machine (=big memory) and sending calls to the server with clients. Here we first introduce the details of 
+the server and later we will delineate the clients.
+ 
+The server supports post and get requests to obtain  annotation for a requested text, with desired views. 
 In order to run the webserver with default settings (port = 8080), do: 
 
 ```shell
@@ -423,3 +426,27 @@ Here are the available APIs:
 | Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
 
 Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
+
+
+### 7.1 Server clients 
+
+#### Java Client 
+
+After setting up the server on a remote machine, we can create a java client to make calls to the server. 
+Here in the snnippet we show how it is done: 
+
+```java 
+import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator; 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+
+ServerClientAnnotator annotator = new ServerClientAnnotator();
+annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
+annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
+TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
+System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
+```
+
+#### Python Client
+
+Coming soon . . . 
