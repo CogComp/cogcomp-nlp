@@ -11,6 +11,7 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 
 import java.io.PrintStream;
 import java.util.*;
