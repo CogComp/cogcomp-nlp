@@ -37,7 +37,7 @@ public abstract class Annotator {
      * stores configuration for lazy initialization.
      */
     protected ResourceManager config;
-    private boolean isSentenceLevel;
+    private boolean isSentenceLevel;  // default is TRUE
 
 
     /**
@@ -99,7 +99,7 @@ public abstract class Annotator {
         this.viewName = viewName;
         this.requiredViews = requiredViews;
         this.config = config;
-        isSentenceLevel = false;
+        isSentenceLevel = true;
         isInitialized = false;
         if (!isLazilyInitialized)
             doInitialize();

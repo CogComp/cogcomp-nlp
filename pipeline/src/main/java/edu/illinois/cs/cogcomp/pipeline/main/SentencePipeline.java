@@ -2,11 +2,10 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,9 +13,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by mssammon on 2/22/17.
+ * Where possible, run {@link Annotator} members over one sentence at a time and splice their outputs together.
+ * Ignore failure of Annotators on individual sentences.
+ * Current implementation repeats the split/join process for each layer of annotation; a more efficient route
+ *    would process each sentence with all annotations, but requires some care as not all annotators
+ *    will support this mode (e.g. co-reference; and Wikification and NER benefit from more context.
+ * For components like NER, expect a performance drop if you use this mode due to the reduced context for
+ *    decisions.
+ * @author mssammon
  */
 public class SentencePipeline extends BasicAnnotatorService {
+
+    static private Logger logger = LoggerFactory.getLogger(SentencePipeline.class);
+
     /**
      * constructor with ResourceManager properties for caching behavior
      *
@@ -41,6 +50,7 @@ public class SentencePipeline extends BasicAnnotatorService {
     @Override
     public boolean addView(TextAnnotation textAnnotation, String viewName) throws AnnotatorException {
         boolean isUpdated = false;
+        logger.debug("in addView()...");
 
         if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
             return false;
@@ -60,13 +70,12 @@ public class SentencePipeline extends BasicAnnotatorService {
 
             View v = null;
 
-            if (!annotator.isSentenceLevel())
+            if (!annotator.isSentenceLevel()) {
                 v = annotator.getView(textAnnotation);
+                textAnnotation.addView(annotator.getViewName(), v);
+            }
             else
-                v = processBySentence(annotator, textAnnotation);
-
-
-            textAnnotation.addView(annotator.getViewName(), v);
+                processBySentence(annotator, textAnnotation);
         }
 
         if (isUpdated && throwExceptionIfNotCached)
@@ -77,31 +86,28 @@ public class SentencePipeline extends BasicAnnotatorService {
     /**
      * Process each sentence individually. This potentially allows for failure at an individual sentence level,
      *      without failing for the whole text.
-     * THIS REQUIRES THAT ALL RELATIONS ARE INTRA-SENTENCE.
+     * THIS REQUIRES THAT ALL RELATIONS ARE INTRA-SENTENCE. Any that are *not* will be omitted for the sentence-level
+     *      processing.
+     *
      * @param annotator Annotator to apply
      * @param textAnnotation  TextAnnotation to augment
      * @return
      */
-    private View processBySentence(Annotator annotator, TextAnnotation textAnnotation) {
-        View sentences = textAnnotation.getView(ViewNames.SENTENCE);
-        for (Constituent sentence : sentences) {
-            int startTokOffset = sentence.getStartSpan();
-            int endTokOffset = sentence.getEndSpan();
-
-            for (String viewName : textAnnotation.getAvailableViews()) {
-                View v = textAnnotation.getView(viewName);
-                Set<Constituent> constituents = new HashSet<>();
-                for (int i = startTokOffset; i < endTokOffset; ++i) {
-                    constituents.addAll(v.getConstituentsCoveringToken(i));
-                }
-                Set<Relation> relations = new HashSet<>();
-                for (Constituent c : constituents) {
-                    relations.addAll(c.getOutgoingRelations());
-                }
-
+    public void processBySentence(Annotator annotator, TextAnnotation textAnnotation) {
+        logger.debug("in processBySentence()...");
+        for (int sentenceId = 0; sentenceId < textAnnotation.sentences().size(); ++sentenceId) {
+            TextAnnotation sentTa = TextAnnotationUtilities.getSubTextAnnotation(textAnnotation, sentenceId);
+            try {
+                View sentView = annotator.getView(sentTa);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
             }
+            int start = textAnnotation.getSentence(sentenceId).getStartSpan();
+            int end = textAnnotation.getSentence(sentenceId).getEndSpan();
+
+            TextAnnotationUtilities.copyViewFromTo(annotator.getViewName(), sentTa, textAnnotation, start, end, start);
         }
-        return null;
+        return;
     }
 
 }

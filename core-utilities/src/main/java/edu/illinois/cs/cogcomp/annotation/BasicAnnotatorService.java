@@ -373,7 +373,6 @@ public class BasicAnnotatorService implements AnnotatorService {
     public TextAnnotation addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate, boolean clientForceUpdate) throws AnnotatorException {
         boolean isUpdated = false;
 
-
         if (!(forceUpdate || clientForceUpdate) && !disableCache)
             if (annotationCache.contains(ta))
                 ta = annotationCache.getTextAnnotation(ta);
@@ -383,7 +382,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         }
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
-            String outFile;
             try {
                 annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
             } catch (Exception e) {

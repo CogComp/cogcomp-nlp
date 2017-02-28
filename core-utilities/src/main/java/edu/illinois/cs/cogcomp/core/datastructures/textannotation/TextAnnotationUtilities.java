@@ -176,50 +176,77 @@ public class TextAnnotationUtilities {
         return newTA;
     }
 
-    private static void copyViewsFromTo(TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex,
+
+    /**
+     * copy views from the relevant span from ta to newTA.  If ta is smaller than newTA, map all constituents,
+     *    changing offsets according to the value 'offset'.
+     * Otherwise, only map those constituents within the span sourceStartTokenIndex, sourceEndTokenIndex to  newTA.
+     *
+     * @param ta
+     * @param newTA
+     * @param sourceStartTokenIndex
+     * @param sourceEndTokenIndex
+     * @param offset
+     */
+    public static void copyViewsFromTo(TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex,
                                         int sourceEndTokenIndex, int offset) {
-        for(String vuName : ta.getAvailableViews()) {
-
-            View vu = ta.getView(vuName);
-
-            View newVu = null;
-            if (newTA.hasView(vuName))
-                newVu = newTA.getView(vuName);
-            else {
-                if (vu instanceof TokenLabelView) {
-                    newVu = new TokenLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                } else if (vu instanceof SpanLabelView) {
-                    newVu = new SpanLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                } else if (vu instanceof CoreferenceView) {
-                    newVu = new CoreferenceView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                } else if (vu instanceof PredicateArgumentView) {
-                    newVu = new PredicateArgumentView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                } else if (vu instanceof TreeView) {
-                    newVu = new TreeView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                } else {
-                    newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
-                }
-                newTA.addView(vuName, newVu);
-            }
-
-            Map<Constituent, Constituent> consMap = new HashMap<>();
-            List<Constituent> constituentsToCopy = vu.getConstituentsCoveringSpan(sourceStartTokenIndex, sourceEndTokenIndex + 1);
-            for(Constituent c : constituentsToCopy) {
-                // replacing the constituents with a new ones, with token ids shifted
-                Constituent newC = copyConstituentWithNewOffsets(newTA, c, offset);
-                consMap.put(c, newC);
-                newVu.addConstituent(newC);
-            }
-            for(Relation r : vu.getRelations()) {
-                //don't include relations that cross into irrelevant span
-                if(!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
-                    continue;
-                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
-                Relation newR = copyRelation(r, consMap);
-                newVu.addRelation(newR);
-            }
+        for (String vuName : ta.getAvailableViews()) {
+            if (ViewNames.TOKENS.equals(vuName) || ViewNames.SENTENCE.equals(vuName))
+                continue;
+            copyViewFromTo(vuName, ta, newTA, sourceStartTokenIndex, sourceEndTokenIndex, offset);
         }
     }
+
+    public static void copyViewFromTo(String vuName, TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex, int sourceEndTokenIndex, int offset) {
+        View vu = ta.getView(vuName);
+
+        View newVu = null;
+        if (newTA.hasView(vuName))
+            newVu = newTA.getView(vuName);
+        else {
+            if (vu instanceof TokenLabelView) {
+                newVu = new TokenLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            } else if (vu instanceof SpanLabelView) {
+                newVu = new SpanLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            } else if (vu instanceof CoreferenceView) {
+                newVu = new CoreferenceView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            } else if (vu instanceof PredicateArgumentView) {
+                newVu = new PredicateArgumentView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            } else if (vu instanceof TreeView) {
+                newVu = new TreeView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            } else {
+                newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
+            }
+            newTA.addView(vuName, newVu);
+        }
+
+        Map<Constituent, Constituent> consMap = new HashMap<>();
+        List<Constituent> constituentsToCopy = null;
+
+        if (ta.size() <= newTA.size())
+            constituentsToCopy = vu.getConstituents();
+        else
+            constituentsToCopy = vu.getConstituentsCoveringSpan(sourceStartTokenIndex, sourceEndTokenIndex + 1);
+
+        for (Constituent c : constituentsToCopy) {
+            // replacing the constituents with a new ones, with token ids shifted
+            Constituent newC = copyConstituentWithNewOffsets(newTA, c, offset);
+            consMap.put(c, newC);
+            newVu.addConstituent(newC);
+        }
+        for (Relation r : vu.getRelations()) {
+            //don't include relations that cross into irrelevant span
+            if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
+                continue;
+            // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+            Relation newR = copyRelation(r, consMap);
+            newVu.addRelation(newR);
+        }
+        if (vu instanceof TreeView) {
+            ((TreeView) newVu).makeTrees();
+        }
+    }
+
 
     /**
      * required: consMap *must* contain the source and target constituents for r as keys, and their values
@@ -270,7 +297,5 @@ public class TextAnnotationUtilities {
 
         return newCon;
     }
-
-
 
 }
