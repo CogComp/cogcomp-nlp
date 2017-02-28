@@ -67,9 +67,17 @@ public class PipelineFactory {
         // Merges default configuration with the user-specified overrides.
         ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
         Boolean splitOnDash = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH);
-        return new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer(
-                splitOnDash)), buildAnnotators(fullRm), fullRm);
+        boolean isSentencePipeline = fullRm.getBoolean(PipelineConfigurator.USE_SENTENCE_PIPELINE.key);
+
+        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
+
+        Map<String, Annotator> annotators = buildAnnotators(fullRm);
+        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm) :
+                new SentencePipeline(taBldr, annotators, fullRm);
     }
+
+
+
 
     /**
      * instantiate a set of annotators for use in an AnnotatorService object by default, will use

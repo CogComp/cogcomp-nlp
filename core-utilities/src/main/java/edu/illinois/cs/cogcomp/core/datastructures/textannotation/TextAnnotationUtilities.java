@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 
 import java.io.PrintStream;
@@ -81,6 +82,7 @@ public class TextAnnotationUtilities {
                     return 0;
             };
 
+
     public static TextAnnotation createFromTokenizedString(String text) {
         return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections
                 .singletonList(text.split(" ")));
@@ -122,9 +124,28 @@ public class TextAnnotationUtilities {
         return "------------------------------------";
     }
 
+
+    /**
+     * given a {@link TextAnnotation} for a sentence with annotations, map its annotations into a
+     * TextAnnotation object for a longer text containing that sentence.
+     * @param sentenceTa annotated TextAnnotation for sentence
+     * @param textTa TextAnnotation for longer text containing sentence, without annotations for that sentence
+     * @param sentenceId index of the sentence in the longer text
+     */
+    static public void mapSentenceAnnotationsToText(TextAnnotation sentenceTa, TextAnnotation textTa, int sentenceId ) {
+        assert(sentenceId < textTa.getNumberOfSentences());
+        assert(sentenceTa.getText().equals(textTa.getSentence(sentenceId).getText()));
+
+        int start = textTa.getSentence(sentenceId).getStartSpan();
+        int end = textTa.getSentence(sentenceId).getEndSpan();
+
+        copyViewsFromTo(sentenceTa, textTa, start, end, start);
+    }
+
     /**
      * Given a {@link TextAnnotation} object, and a sentence id, it gives a smaller {@link TextAnnotation} which contains
-     * the annotations specific to the given sentence id.
+     * the annotations specific to the given sentence id. The underlying text is just the sentence text, and
+     * character offsets are modified to correspond to this new shorter text.
      */
     static public TextAnnotation getSubTextAnnotation(TextAnnotation ta, int sentenceId) {
         assert sentenceId < ta.getNumberOfSentences();
@@ -149,45 +170,131 @@ public class TextAnnotationUtilities {
         String text = ta.getText().substring(tokensPairs.get(0).getFirst() + firstCharOffset, tokensPairs.get(tokensPairs.size()-1).getSecond() + firstCharOffset);
         TextAnnotation newTA = new TextAnnotation(ta.corpusId, ta.id, text,
                 tokensPairs.toArray(new IntPair[tokenSize]), tokens.toArray(new String[tokenSize]), new int[]{tokenSize});
-        for(String vuName : ta.getAvailableViews()) {
-            View vu = ta.getView(vuName);
-            View newVu = null;
-            if(vu instanceof TokenLabelView) {
+
+        copyViewsFromTo(ta, newTA, start, end, -start);
+        return newTA;
+    }
+
+
+    /**
+     * copy views from the relevant span from ta to newTA.  If ta is smaller than newTA, map all constituents,
+     *    changing offsets according to the value 'offset'.
+     * Otherwise, only map those constituents within the span sourceStartTokenIndex, sourceEndTokenIndex to  newTA.
+     *
+     * @param ta
+     * @param newTA
+     * @param sourceStartTokenIndex
+     * @param sourceEndTokenIndex
+     * @param offset
+     */
+    public static void copyViewsFromTo(TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex,
+                                        int sourceEndTokenIndex, int offset) {
+        for (String vuName : ta.getAvailableViews()) {
+            if (ViewNames.TOKENS.equals(vuName) || ViewNames.SENTENCE.equals(vuName))
+                continue;
+            copyViewFromTo(vuName, ta, newTA, sourceStartTokenIndex, sourceEndTokenIndex, offset);
+        }
+    }
+
+    public static void copyViewFromTo(String vuName, TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex, int sourceEndTokenIndex, int offset) {
+        View vu = ta.getView(vuName);
+
+        View newVu = null;
+        if (newTA.hasView(vuName))
+            newVu = newTA.getView(vuName);
+        else {
+            if (vu instanceof TokenLabelView) {
                 newVu = new TokenLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            else if(vu instanceof SpanLabelView) {
+            } else if (vu instanceof SpanLabelView) {
                 newVu = new SpanLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            else if(vu instanceof CoreferenceView) {
+            } else if (vu instanceof CoreferenceView) {
                 newVu = new CoreferenceView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            else if(vu instanceof PredicateArgumentView) {
+            } else if (vu instanceof PredicateArgumentView) {
                 newVu = new PredicateArgumentView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            else if(vu instanceof TreeView) {
+            } else if (vu instanceof TreeView) {
                 newVu = new TreeView(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            else {
+            } else {
                 newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
-            }
-            Map<Constituent, Constituent> consMap = new HashMap<>();
-            for(Constituent c : vu.getConstituentsCoveringSpan(start, end + 1)) {
-                // replacing the constituents with a new ones, with token ids shifted
-                Constituent newC = new Constituent(c.getLabel(), c.viewName, newTA, c.getStartSpan() - start, c.getEndSpan() - start);
-                consMap.put(c, newC);
-                newVu.addConstituent(newC);
-            }
-            for(Relation r : vu.getRelations()) {
-                if( r.getSource().getSentenceId() != sentenceId || r.getTarget().getSentenceId() != sentenceId )
-                    continue;
-                assert consMap.containsKey(r.getSource());
-                assert consMap.containsKey(r.getTarget());
-                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
-                Relation newR = new Relation(r.getRelationName(), consMap.get(r.getSource()), consMap.get(r.getTarget()), r.getScore());
-                newVu.addRelation(newR);
             }
             newTA.addView(vuName, newVu);
         }
-        return newTA;
+
+        Map<Constituent, Constituent> consMap = new HashMap<>();
+        List<Constituent> constituentsToCopy = null;
+
+        if (ta.size() <= newTA.size())
+            constituentsToCopy = vu.getConstituents();
+        else
+            constituentsToCopy = vu.getConstituentsCoveringSpan(sourceStartTokenIndex, sourceEndTokenIndex + 1);
+
+        for (Constituent c : constituentsToCopy) {
+            // replacing the constituents with a new ones, with token ids shifted
+            Constituent newC = copyConstituentWithNewOffsets(newTA, c, offset);
+            consMap.put(c, newC);
+            newVu.addConstituent(newC);
+        }
+        for (Relation r : vu.getRelations()) {
+            //don't include relations that cross into irrelevant span
+            if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
+                continue;
+            // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+            Relation newR = copyRelation(r, consMap);
+            newVu.addRelation(newR);
+        }
+        if (vu instanceof TreeView) {
+            ((TreeView) newVu).makeTrees();
+        }
     }
+
+
+    /**
+     * required: consMap *must* contain the source and target constituents for r as keys, and their values
+     *    must be non-null
+     * @param r relation to copy
+     * @param consMap map from original constituents to new counterparts
+     * @return new relation with all info copied from original, but with new source and target constituents
+     */
+    private static Relation copyRelation(Relation r, Map<Constituent, Constituent> consMap) {
+        Relation newRel = null;
+
+        if ( null == r.getLabelsToScores() )
+            newRel = new Relation(r.getRelationName(), consMap.get(r.getSource()), consMap.get(r.getTarget()), r.getScore());
+        else
+            newRel = new Relation(r.getLabelsToScores(), consMap.get(r.getSource()), consMap.get(r.getTarget()));
+
+        copyAttributesFromTo(r, newRel);
+
+        return newRel;
+    }
+
+    private static void copyAttributesFromTo(HasAttributes origObj, HasAttributes newObj) {
+        for(String key : origObj.getAttributeKeys())
+            newObj.addAttribute(key, origObj.getAttribute(key));
+    }
+
+    /**
+     * create a new constituent with token offsets shifted by the specified amount
+     * @param newTA TextAnnotation which will contain the new Constituent
+     * @param c original Constituent to copy
+     * @param offset the offset to shift token indexes of new Constituent. Can be negative.
+     * @return the new Constituent
+     */
+    private static Constituent copyConstituentWithNewOffsets(TextAnnotation newTA, Constituent c, int offset) {
+        int newStart = c.getStartSpan() + offset;
+        int newEnd = c.getEndSpan() + offset;
+
+        assert(newStart >= 0 && newStart <= newTA.size());
+        assert(newEnd >= 0 && newEnd <= newTA.size());
+
+        Constituent newCon = null;
+        if (null != c.getLabelsToScores())
+            newCon = new Constituent(c.getLabelsToScores(), c.viewName, newTA, newStart, newEnd);
+        else
+            newCon = new Constituent(c.getLabel(), c.getConstituentScore(), c.viewName, newTA, newStart, newEnd);
+
+        copyAttributesFromTo(c, newCon);
+
+        return newCon;
+    }
+
 }

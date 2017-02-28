@@ -377,6 +377,7 @@ argument to the `Annotator` constructor. This is used for lazy
 initialization, if active, in which case the first call to `getView()`
 will call `initialize()` with this configuration. 
 
+One key configuration default, AnnotatorConfig.
 
 ###Configurators
 
