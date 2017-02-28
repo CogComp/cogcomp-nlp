@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 /**
  * Client to make calls to the remote pipeline server
+ * 
  * @author khashab2
  *
  */
@@ -23,18 +24,18 @@ public class ServerClientAnnotator extends Annotator {
     String url = "";
     String port = "";
 
-    String[] viewsToAdd = new String[]{ViewNames.LEMMA};
+    String[] viewsToAdd = new String[] {ViewNames.LEMMA};
 
     public ServerClientAnnotator() {
-        super("PipelineServerView", new String[]{});
+        super("PipelineServerView", new String[] {});
     }
 
     public ServerClientAnnotator(String viewName) {
-        super(viewName, new String[]{});
+        super(viewName, new String[] {});
     }
 
     public ServerClientAnnotator(String viewName, String url, String port, String[] viewsToAdd) {
-        super(viewName, new String[]{});
+        super(viewName, new String[] {});
         this.url = url;
         this.port = port;
         this.viewsToAdd = viewsToAdd;
@@ -62,7 +63,9 @@ public class ServerClientAnnotator extends Annotator {
     protected TextAnnotation annotate(String str) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
-        URL obj = new URL(url + ":" + port + "/annotate?text=\"" + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
+        URL obj =
+                new URL(url + ":" + port + "/annotate?text=\"" + URLEncoder.encode(str, "UTF-8")
+                        + "\"&views=" + views);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("charset", "utf-8");
@@ -90,7 +93,7 @@ public class ServerClientAnnotator extends Annotator {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for(String vu: viewsToAdd) {
+        for (String vu : viewsToAdd) {
             ta.addView(vu, newTA.getView(vu));
         }
     }
@@ -108,4 +111,3 @@ public class ServerClientAnnotator extends Annotator {
         }
     }
 }
-
