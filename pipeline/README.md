@@ -290,6 +290,11 @@ to save on processing time, you should set the values for unnecessary annotation
 and the parsers can take a relatively long time on long sentences.
 
 ```
+// Used by PipelineFactory. If 'true', instantiates a version of the pipeline --
+//    SentencePipeline -- that where possible, processes text 
+//    sentence-by-sentence to minimize failures at the document level
+isSentenceLevel false
+
 // in milliseconds
 stanfordMaxTimePerSentence  1000
 
@@ -320,6 +325,7 @@ useSrlNom   true
 
 Note that individuals have their own configuration options -- see the documentation
 for individual components for details.
+
 
 
 ### 6.2 Changing the logging settings

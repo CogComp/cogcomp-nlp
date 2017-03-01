@@ -49,9 +49,16 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     public static final Property SPLIT_ON_DASH = new Property("splitOnDash", TRUE);
 
     /**
-     * get a ResourceManager object with the default key/value pairs for this configurator default
-     * SRL_TYPE is Verb.
-     * 
+     * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable annotators in
+     *     a "per-sentence" way: it will split the text into sentences, process each individually, then splice the
+     *     annotations together. This allows for partial annotation of documents in cases where document text
+     *     causes local problems for individual annotators.
+     */
+    public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", FALSE);
+
+    /**
+     * get a ResourceManager object with the default key/value pairs for this configurator
+     * default SRL_TYPE is Verb.
      * @return a non-null ResourceManager with appropriate values set.
      */
     @Override
@@ -61,7 +68,8 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
                         USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
                         USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
                         USE_QUANTIFIER, THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON,
-                        USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH};
+                        USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
+                        USE_SENTENCE_PIPELINE};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(
                 generateProperties(properties))));
     }

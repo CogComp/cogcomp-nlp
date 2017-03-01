@@ -70,7 +70,7 @@ public class EREMentionRelationReader extends ERENerReader {
         numRelationMentionsGenerated = 0;
     }
 
-    
+
     @Override
     public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception {
