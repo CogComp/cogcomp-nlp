@@ -94,7 +94,7 @@ public class ServerClientAnnotator extends Annotator {
         // do nothing
     }
 
-    protected TextAnnotation annotate(String str) throws Exception {
+    public TextAnnotation annotate(String str) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
         ConcurrentMap<String, byte[]> concurrentMap = (db!=null)? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY).createOrOpen():null;
