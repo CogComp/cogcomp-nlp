@@ -377,7 +377,15 @@ argument to the `Annotator` constructor. This is used for lazy
 initialization, if active, in which case the first call to `getView()`
 will call `initialize()` with this configuration. 
 
-One key configuration default, AnnotatorConfig.
+One key configuration default, `AnnotatorConfigurator.IS_SENTENCE_LEVEL`
+indicates whether an annotator requires context beyond a single sentence.
+For example, when the POS tagger predicts a label for a word, it uses
+only information from the same sentence. This means that a document
+can be split up into sentences, which can then be processed one at a 
+time by the POS annotator, without degrading accuracy. NER,
+on the other hand, has features that depend on a context that may 
+extend into previous sentences: if the sentence-by-sentence approach
+is used for NER, some degradation is to be expected. 
 
 ###Configurators
 
