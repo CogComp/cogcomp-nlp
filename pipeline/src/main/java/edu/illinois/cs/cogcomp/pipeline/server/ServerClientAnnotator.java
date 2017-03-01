@@ -10,8 +10,13 @@ package edu.illinois.cs.cogcomp.pipeline.server;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.mapdb.DB;
+import org.mapdb.DBMaker;
+import org.mapdb.Serializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -19,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Client to make calls to the remote pipeline server
@@ -28,10 +34,10 @@ import java.util.Arrays;
  */
 public class ServerClientAnnotator extends Annotator {
 
-    String url = "";
-    String port = "";
-
-    String[] viewsToAdd = new String[] {ViewNames.LEMMA};
+    private String url = "";
+    private String port = "";
+    private DB db = null;
+    private String[] viewsToAdd = new String[] {ViewNames.LEMMA};
 
     public ServerClientAnnotator() {
         super("PipelineServerView", new String[] {});
@@ -53,6 +59,10 @@ public class ServerClientAnnotator extends Annotator {
         throw new Exception("Do not use this constructor.");
     }
 
+    public void setViewsAll(String[] viewsToAdd) {
+        this.viewsToAdd = viewsToAdd;
+    }
+
     public void setViews(String... viewsToAdd) {
         this.viewsToAdd = viewsToAdd;
     }
@@ -60,6 +70,23 @@ public class ServerClientAnnotator extends Annotator {
     public void setUrl(String url, String port) {
         this.url = url;
         this.port = port;
+    }
+
+    public void useCaching() {
+        useCaching("serverClientAnnotator.cache");
+    }
+
+    public void useCaching(String dbFile) {
+        this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+    }
+
+    /**
+     * MapDB requires the database to be closed at the end of operations. This is usually handled by the
+     * {@code closeOnJvmShutdown()} snippet in the initializer, but this method needs to be called if
+     * multiple instances of the {@link TextAnnotationMapDBHandler} are used.
+     */
+    public void close() {
+        db.close();
     }
 
     @Override
@@ -70,26 +97,34 @@ public class ServerClientAnnotator extends Annotator {
     protected TextAnnotation annotate(String str) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
-        URL obj =
-                new URL(url + ":" + port + "/annotate?text=\"" + URLEncoder.encode(str, "UTF-8")
-                        + "\"&views=" + views);
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("charset", "utf-8");
-        con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
-
-        int responseCode = con.getResponseCode();
-        System.out.println("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+        ConcurrentMap<String, byte[]> concurrentMap = (db!=null)? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY).createOrOpen():null;
+        String key = DigestUtils.sha1Hex(str + views);
+        if(concurrentMap != null && concurrentMap.containsKey(key)) {
+            byte[] taByte = concurrentMap.get(key);
+            return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
         }
-        in.close();
-        return SerializationHelper.deserializeFromJson(response.toString());
+        else {
+            URL obj = new URL(url + ":" + port + "/annotate?text=\"" + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("charset", "utf-8");
+            con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
+
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
+            System.out.println("Response Code : " + responseCode);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
+            if(concurrentMap != null ) concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
+            return ta;
+        }
     }
 
     @Override
@@ -110,6 +145,7 @@ public class ServerClientAnnotator extends Annotator {
         String sentA = "This is the best sentence ever.";
         annotator.setUrl("http://austen.cs.illinois.edu", "8080");
         annotator.setViews(ViewNames.POS, ViewNames.LEMMA);
+        annotator.useCaching();
         try {
             TextAnnotation ta = annotator.annotate(sentA);
             System.out.println(ta.getAvailableViews());
