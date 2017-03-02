@@ -163,6 +163,17 @@ your Maven project by adding the following dependencies to your pom.xml file:
 </dependency>
 ```
 
+### Configuration
+NER has numerous parameters that can be tuned during training and/or which 
+affect memory footprint and performance at runtime. These flags and default
+values can be found in the classes in package edu.illinois.cs.cogcomp.ner.config.
+
+By default, NER components use contextual features in a fairly large
+context window, and so its "isSentenceLevel" parameter is set to "false".
+If set to "true", this may potentially add some robustness if you add
+sophisticated features that depend on deeper levels of NLP processing
+(currently, very few are used/required). 
+
 ## How to compile the software
 
 ### PREREQUISITES

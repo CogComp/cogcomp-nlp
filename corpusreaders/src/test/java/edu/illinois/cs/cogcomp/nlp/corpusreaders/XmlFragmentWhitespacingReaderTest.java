@@ -45,8 +45,8 @@ public class XmlFragmentWhitespacingReaderTest {
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
     private static String REF_TEXT_ONE;
     private static String REF_TEXT_TWO;
-    private static org.slf4j.Logger logger =
-            LoggerFactory.getLogger(XmlFragmentWhitespacingReaderTest.class);
+    private static org.slf4j.Logger logger = LoggerFactory
+            .getLogger(XmlFragmentWhitespacingReaderTest.class);
 
     private static String readReferenceText(String dir, String referenceFile)
             throws FileNotFoundException {
@@ -130,8 +130,7 @@ public class XmlFragmentWhitespacingReaderTest {
             }
         }
         for (IntPair missedSpan : sunSpans)
-            logger.error("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan)
-                    + "'.");
+            logger.error("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan) + "'.");
         assertTrue(sunSpans.isEmpty());
 
     }

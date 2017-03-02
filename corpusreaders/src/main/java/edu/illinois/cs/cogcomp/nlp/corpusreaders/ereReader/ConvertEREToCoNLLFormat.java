@@ -29,8 +29,9 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 
 /**
- * Read the ERE data and produce, in CoNLL format, gold standard 
- * data including named and nominal named entities, but excluding pronouns.
+ * Read the ERE data and produce, in CoNLL format, gold standard data including named and nominal
+ * named entities, but excluding pronouns.
+ * 
  * @author redman
  * @author mssammon
  */
@@ -39,12 +40,13 @@ public class ConvertEREToCoNLLFormat {
     private static final String NAME = ConvertEREToCoNLLFormat.class.getCanonicalName();
 
     /**
-     * @param args command line arguments: corpus directory, include Nominals or not, and output directory.
-     * @throws Exception 
+     * @param args command line arguments: corpus directory, include Nominals or not, and output
+     *        directory.
+     * @throws Exception
      */
     public static void main(String[] args) throws Exception {
 
-        if ( args.length != 3 ) {
+        if (args.length != 3) {
             System.err.println("Usage: " + NAME + " corpusDir includeNominals<true|false> outDir");
             System.exit(-1);
         }
@@ -55,18 +57,19 @@ public class ConvertEREToCoNLLFormat {
 
         if (IOUtils.exists(conllDir))
             if (!IOUtils.isDirectory(conllDir)) {
-                System.err.println("Output directory '" + conllDir + "' exists and is not a directory.");
+                System.err.println("Output directory '" + conllDir
+                        + "' exists and is not a directory.");
                 System.exit(-1);
-            }
-        else
-            IOUtils.mkdir(conllDir);
+            } else
+                IOUtils.mkdir(conllDir);
 
         ERENerReader reader = new ERENerReader("ERE NER", corpusDir, includeNominals);
 
-        while( reader.hasNext() ) {
+        while (reader.hasNext()) {
             TextAnnotation ta = reader.next();
             View nerView = ta.getView(reader.getViewName());
-            CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta, conllDir + "/" + ta.getCorpusId() + ".txt");
+            CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta,
+                    conllDir + "/" + ta.getCorpusId() + ".txt");
         }
     }
 }

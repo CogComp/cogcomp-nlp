@@ -35,13 +35,11 @@ public class MainServer {
 
     static {
         // Setup Argument Parser with options.
-        argumentParser = ArgumentParsers.newArgumentParser("pipeline/scripts/runWebserver.sh")
-                .description("Pipeline Webserver.");
-        argumentParser.addArgument("--port", "-P")
-                .type(Integer.class)
-                .setDefault(8080)
-                .dest("port")
-                .help("Port to run the webserver.");
+        argumentParser =
+                ArgumentParsers.newArgumentParser("pipeline/scripts/runWebserver.sh").description(
+                        "Pipeline Webserver.");
+        argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
+                .dest("port").help("Port to run the webserver.");
     }
 
     public static void main(String[] args) {
@@ -95,11 +93,11 @@ public class MainServer {
         post("/viewNames", (req, res) -> finalViewsString);
     }
 
-    private static String annotateText(AnnotatorService finalPipeline, String text, String views) throws AnnotatorException {
-        if(views == null || text == null) {
+    private static String annotateText(AnnotatorService finalPipeline, String text, String views)
+            throws AnnotatorException {
+        if (views == null || text == null) {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
-        }
-        else {
+        } else {
             logger.trace("------------------------------");
             logger.trace("Text: " + text);
             logger.trace("Views to add: " + views);
@@ -119,21 +117,21 @@ public class MainServer {
     }
 
     public static void printMemoryDetails() {
-        int mb = 1024*1024;
+        int mb = 1024 * 1024;
 
-        //Getting the runtime reference from system
+        // Getting the runtime reference from system
         Runtime runtime = Runtime.getRuntime();
 
-        //Print used memory
+        // Print used memory
         logger.debug("##### Used Memory[MB]:" + (runtime.totalMemory() - runtime.freeMemory()) / mb);
 
-        //Print free memory
+        // Print free memory
         logger.debug(" / Free Memory[MB]:" + runtime.freeMemory() / mb);
 
-        //Print total available memory
+        // Print total available memory
         logger.debug(" / Total Memory[MB]:" + runtime.totalMemory() / mb);
 
-        //Print Maximum available memory
+        // Print Maximum available memory
         logger.debug(" / Max Memory[MB]:" + runtime.maxMemory() / mb);
     }
 

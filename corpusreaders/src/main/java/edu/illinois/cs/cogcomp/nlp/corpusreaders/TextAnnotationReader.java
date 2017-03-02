@@ -85,4 +85,12 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
         throw new UnsupportedOperationException();
     }
 
+
+    /**
+     * generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    abstract public String generateReport();
+
 }

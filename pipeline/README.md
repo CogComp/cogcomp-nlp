@@ -87,12 +87,13 @@ of several other components for which it is a dependency.
 4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 2G, no dependencies.
 5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 4G, no dependencies.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
-5. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
-7. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
+7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.
+8. Verb Semantic Role Labeler: 4G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
-8. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
+9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
-9. Quantifier: <2G, requires Part-of-Speech. 
+10. Quantifier: <2G, requires Part-of-Speech.
 
 
 ### 1.3 LICENSE
@@ -289,6 +290,11 @@ to save on processing time, you should set the values for unnecessary annotation
 and the parsers can take a relatively long time on long sentences.
 
 ```
+// Used by PipelineFactory. If 'true', instantiates a version of the pipeline --
+//    SentencePipeline -- that where possible, processes text 
+//    sentence-by-sentence to minimize failures at the document level
+isSentenceLevel false
+
 // in milliseconds
 stanfordMaxTimePerSentence  1000
 
@@ -319,6 +325,7 @@ useSrlNom   true
 
 Note that individuals have their own configuration options -- see the documentation
 for individual components for details.
+
 
 
 ### 6.2 Changing the logging settings
@@ -390,8 +397,11 @@ public class testpipeline {
 
 ## 7. Using pipeline webserver 
 
-Our pipeline contains a webserver which can be run on a remote server. The server supports post and get requests to obtain annotation for a requested text, with desired views. 
-
+Often a convenient model of using the pipeline server is, running the server (which includes all the annotators) on a 
+big machine (=big memory) and sending calls to the server with clients. Here we first introduce the details of 
+the server and later we will delineate the clients.
+ 
+The server supports post and get requests to obtain  annotation for a requested text, with desired views. 
 In order to run the webserver with default settings (port = 8080), do: 
 
 ```shell
@@ -416,3 +426,27 @@ Here are the available APIs:
 | Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
 
 Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
+
+
+### 7.1 Server clients 
+
+#### Java Client 
+
+After setting up the server on a remote machine, we can create a java client to make calls to the server. 
+Here in the snnippet we show how it is done: 
+
+```java 
+import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator; 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+
+ServerClientAnnotator annotator = new ServerClientAnnotator();
+annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
+annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
+TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
+System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
+```
+
+#### Python Client
+
+Coming soon . . . 

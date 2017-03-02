@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.97</version>
+        <version>3.0.100</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,32 +15,32 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-quantifier</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.0.97</version>
+            <version>3.0.100</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -105,6 +105,12 @@
             <groupId>net.sourceforge.argparse4j</groupId>
             <artifactId>argparse4j</artifactId>
             <version>0.7.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-depparse</artifactId>
+            <version>3.0.100</version>
         </dependency>
 
         <!--for pipeline web-server-->
