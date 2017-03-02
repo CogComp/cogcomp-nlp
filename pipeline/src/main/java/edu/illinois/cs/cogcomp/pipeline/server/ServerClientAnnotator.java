@@ -85,9 +85,9 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     /**
-     * MapDB requires the database to be closed at the end of operations. This is usually handled by the
-     * {@code closeOnJvmShutdown()} snippet in the initializer, but this method needs to be called if
-     * multiple instances of the {@link TextAnnotationMapDBHandler} are used.
+     * MapDB requires the database to be closed at the end of operations. This is usually handled by
+     * the {@code closeOnJvmShutdown()} snippet in the initializer, but this method needs to be
+     * called if multiple instances of the {@link TextAnnotationMapDBHandler} are used.
      */
     public void close() {
         db.close();
@@ -101,14 +101,17 @@ public class ServerClientAnnotator extends Annotator {
     public TextAnnotation annotate(String str) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
-        ConcurrentMap<String, byte[]> concurrentMap = (db!=null)? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY).createOrOpen():null;
+        ConcurrentMap<String, byte[]> concurrentMap =
+                (db != null) ? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY)
+                        .createOrOpen() : null;
         String key = DigestUtils.sha1Hex(str + views);
-        if(concurrentMap != null && concurrentMap.containsKey(key)) {
+        if (concurrentMap != null && concurrentMap.containsKey(key)) {
             byte[] taByte = concurrentMap.get(key);
             return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
-        }
-        else {
-            URL obj = new URL(url + ":" + port + "/annotate?text=\"" + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
+        } else {
+            URL obj =
+                    new URL(url + ":" + port + "/annotate?text=\""
+                            + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("charset", "utf-8");
@@ -126,7 +129,8 @@ public class ServerClientAnnotator extends Annotator {
             }
             in.close();
             TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
-            if(concurrentMap != null ) concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
+            if (concurrentMap != null)
+                concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
             return ta;
         }
     }
