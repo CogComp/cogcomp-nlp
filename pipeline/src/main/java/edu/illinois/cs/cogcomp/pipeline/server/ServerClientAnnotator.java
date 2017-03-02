@@ -17,6 +17,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,6 +40,8 @@ public class ServerClientAnnotator extends Annotator {
     private String port = "";
     private DB db = null;
     private String[] viewsToAdd = new String[] {ViewNames.LEMMA};
+
+    private static Logger logger = LoggerFactory.getLogger(ServerClientAnnotator.class);
 
     public ServerClientAnnotator() {
         super("PipelineServerView", new String[] {});
@@ -111,8 +115,8 @@ public class ServerClientAnnotator extends Annotator {
             con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
 
             int responseCode = con.getResponseCode();
-            System.out.println("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
-            System.out.println("Response Code : " + responseCode);
+            logger.debug("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
+            logger.debug("Response Code : " + responseCode);
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
@@ -128,7 +132,7 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     @Override
-    protected void addView(TextAnnotation ta) {
+    public void addView(TextAnnotation ta) {
         TextAnnotation newTA = null;
         try {
             newTA = annotate(ta.getText());
@@ -148,7 +152,7 @@ public class ServerClientAnnotator extends Annotator {
         annotator.useCaching();
         try {
             TextAnnotation ta = annotator.annotate(sentA);
-            System.out.println(ta.getAvailableViews());
+            logger.info(ta.getAvailableViews().toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
