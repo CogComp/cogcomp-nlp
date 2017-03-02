@@ -375,6 +375,7 @@ public class BasicAnnotatorService implements AnnotatorService {
                 isUpdated = addView(ta, viewName) || isUpdated;
             } catch (AnnotatorException e) {
                 // the exception is handled here, because one single view failure should not resutl in loss of all the annotations
+                logger.error("The annotator for view " + viewName + " failed. Skipping the view . . . ");
                 e.printStackTrace();
             }
         }
