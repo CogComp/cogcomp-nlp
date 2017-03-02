@@ -74,7 +74,7 @@ public class BasicAnnotatorService implements AnnotatorService {
      * {@link Annotator}.
      */
     protected Map<String, Annotator> viewProviders;
-    private boolean forceUpdate;
+    protected boolean forceUpdate;
 
 
     /**
@@ -346,7 +346,7 @@ public class BasicAnnotatorService implements AnnotatorService {
     }
 
 
-    private void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
+    protected void throwNotCachedException(String corpusId, String docId, String text) throws AnnotatorException {
         throw new AnnotatorException("text with corpusid '" + corpusId + "', docId '" + docId +
                 "', value '" + text + "' was not in cache, and the field 'throwExceptionIfNotCached' is 'true'.");
     }
@@ -373,7 +373,6 @@ public class BasicAnnotatorService implements AnnotatorService {
     public TextAnnotation addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate, boolean clientForceUpdate) throws AnnotatorException {
         boolean isUpdated = false;
 
-
         if (!(forceUpdate || clientForceUpdate) && !disableCache)
             if (annotationCache.contains(ta))
                 ta = annotationCache.getTextAnnotation(ta);
@@ -383,7 +382,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         }
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
-            String outFile;
             try {
                 annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
             } catch (Exception e) {

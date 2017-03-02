@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner.config;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
@@ -23,6 +24,12 @@ import java.util.Properties;
  * override only those values that conflict with defaults. Created by mssammon on 10/14/15.
  */
 public class NerBaseConfigurator extends AnnotatorConfigurator {
+
+    /**
+     * default: do NOT treat as sentence-level annotator as NER has some features that are based on a large context
+     *     window.
+     */
+    public final static Property IS_SENTENCE_LEVEL = new Property(AnnotatorConfigurator.IS_SENTENCE_LEVEL.key, FALSE);
 
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
@@ -158,6 +165,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
         props.setProperty(IS_LAZILY_INITIALIZED.key, TRUE);
         props.setProperty(LANGUAGE, DEFAULT_LANGUAGE);
+        props.setProperty(IS_SENTENCE_LEVEL.key, IS_SENTENCE_LEVEL.value);
 
         return new ResourceManager(props);
     }

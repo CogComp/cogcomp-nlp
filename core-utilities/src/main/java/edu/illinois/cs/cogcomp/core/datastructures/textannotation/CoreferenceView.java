@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import gnu.trove.map.hash.TIntIntHashMap;
