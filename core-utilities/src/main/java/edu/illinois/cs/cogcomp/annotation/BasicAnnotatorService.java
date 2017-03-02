@@ -371,7 +371,12 @@ public class BasicAnnotatorService implements AnnotatorService {
                 ta = annotationCache.getTextAnnotation(ta);
 
         for (String viewName : viewsToAnnotate) {
-            isUpdated = addView(ta, viewName) || isUpdated;
+            try {
+                isUpdated = addView(ta, viewName) || isUpdated;
+            } catch (AnnotatorException e) {
+                // the exception is handled here, because one single view failure should not resutl in loss of all the annotations
+                e.printStackTrace();
+            }
         }
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
