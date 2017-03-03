@@ -106,13 +106,13 @@ public class SentencePipeline extends BasicAnnotatorService {
             TextAnnotation sentTa = TextAnnotationUtilities.getSubTextAnnotation(textAnnotation, sentenceId);
             try {
                 View sentView = annotator.getView(sentTa);
+                
+                int start = textAnnotation.getSentence(sentenceId).getStartSpan();
+                int end = textAnnotation.getSentence(sentenceId).getEndSpan();
+                TextAnnotationUtilities.copyViewFromTo(annotator.getViewName(), sentTa, textAnnotation, start, end, start);
             } catch (AnnotatorException e) {
                 e.printStackTrace();
             }
-            int start = textAnnotation.getSentence(sentenceId).getStartSpan();
-            int end = textAnnotation.getSentence(sentenceId).getEndSpan();
-
-            TextAnnotationUtilities.copyViewFromTo(annotator.getViewName(), sentTa, textAnnotation, start, end, start);
         }
         return;
     }
