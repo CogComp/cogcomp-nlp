@@ -10,20 +10,13 @@ package edu.illinois.cs.cogcomp.annotation;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
 import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.nlp.utilities.PrintUtils;
-import org.apache.commons.lang.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -378,7 +371,13 @@ public class BasicAnnotatorService implements AnnotatorService {
                 ta = annotationCache.getTextAnnotation(ta);
 
         for (String viewName : viewsToAnnotate) {
-            isUpdated = addView(ta, viewName) || isUpdated;
+            try {
+                isUpdated = addView(ta, viewName) || isUpdated;
+            } catch (AnnotatorException e) {
+                // the exception is handled here, because one single view failure should not resutl in loss of all the annotations
+                logger.error("The annotator for view " + viewName + " failed. Skipping the view . . . ");
+                e.printStackTrace();
+            }
         }
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
