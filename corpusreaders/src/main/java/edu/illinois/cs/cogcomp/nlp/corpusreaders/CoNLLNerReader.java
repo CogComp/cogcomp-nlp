@@ -36,10 +36,9 @@ import java.util.List;
  */
 public class CoNLLNerReader extends TextAnnotationReader {
 
+    private static Logger logger = LoggerFactory.getLogger(CoNLLNerReader.class);
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
-
-    private static Logger logger = LoggerFactory.getLogger(CoNLLNerReader.class);
 
     /**
      * This expects a directory that contains conll format files.
@@ -49,6 +48,78 @@ public class CoNLLNerReader extends TextAnnotationReader {
     public CoNLLNerReader(String conlldirectory) {
         super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory));
         this.taCounter = 0;
+
+    }
+
+    /**
+     * Convenience function to avoid having to think about this format all the time...
+     *
+     * @param tag
+     * @param num
+     * @param word
+     * @return
+     */
+    public static String conllline(String tag, int num, String word) {
+        return String.format("%s\t0\t%s\tO\tO\t%s\tx\tx\t0", tag, num, word);
+    }
+
+    /**
+     * Converts a list of annotated TextAnnotation into CoNLL format. Must have NER_CONLL view. This
+     * writes each TextAnnotation to it's own file, using the sentence view as a guide for
+     * sentences. This will requires that each TextAnnotation have a non-null ID, which will be the
+     * name of the conll file for that TextAnnotation.
+     *
+     * @param tas
+     * @param outpath
+     * @throws IOException
+     */
+    public static void TaToConll(List<TextAnnotation> tas, String outpath) throws IOException {
+
+        for (TextAnnotation ta : tas) {
+            List<String> talines = new ArrayList<>();
+
+            View sentview = ta.getView(ViewNames.SENTENCE);
+            View nerview = ta.getView(ViewNames.NER_CONLL);
+            for (int i = 0; i < ta.getTokens().length; i++) {
+
+                // Default "outside" label in NER_CONLL
+                String label = "O";
+
+                List<Constituent> constituents = nerview.getConstituentsCoveringToken(i);
+
+                // should be just one constituent
+                if (constituents.size() > 0) {
+                    Constituent c = constituents.get(0);
+                    if (c.getStartSpan() == i) {
+                        label = "B-" + c.getLabel();
+                    } else {
+                        label = "I-" + c.getLabel();
+                    }
+
+                    if (constituents.size() > 1) {
+                        logger.error("More than one label -- selecting the first.");
+                        logger.error("Constituents: " + constituents);
+                    }
+                }
+                talines.add(conllline(label, i, ta.getToken(i)));
+                List<Constituent> sents = sentview.getConstituentsCoveringToken(i);
+                if (sents.size() > 0) {
+                    Constituent sent = sents.get(0);
+
+                    int end = sent.getEndSpan();
+                    if (i == end - 1) {
+                        talines.add("");
+                    }
+
+                    if (sents.size() > 1) {
+                        logger.error("More than one sentence constituent for this token -- selecting the first.");
+                        logger.error("Sentences: " + sents);
+                    }
+                }
+            }
+
+            FileUtils.writeLines(Paths.get(outpath, ta.getId()).toFile(), talines);
+        }
 
     }
 
@@ -86,7 +157,7 @@ public class CoNLLNerReader extends TextAnnotationReader {
 
     /**
      * This loads filename into a textannotation.
-     * 
+     *
      * @param filename
      * @return
      * @throws FileNotFoundException
@@ -204,78 +275,13 @@ public class CoNLLNerReader extends TextAnnotationReader {
         return textAnnotations.size() > taCounter;
     }
 
-
     /**
-     * Convenience function to avoid having to think about this format all the time...
-     * 
-     * @param tag
-     * @param num
-     * @param word
-     * @return
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
      */
-    public static String conllline(String tag, int num, String word) {
-        return String.format("%s\t0\t%s\tO\tO\t%s\tx\tx\t0", tag, num, word);
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
     }
-
-    /**
-     * Converts a list of annotated TextAnnotation into CoNLL format. Must have NER_CONLL view. This
-     * writes each TextAnnotation to it's own file, using the sentence view as a guide for
-     * sentences. This will requires that each TextAnnotation have a non-null ID, which will be the
-     * name of the conll file for that TextAnnotation.
-     * 
-     * @param tas
-     * @param outpath
-     * @throws IOException
-     */
-    public static void TaToConll(List<TextAnnotation> tas, String outpath) throws IOException {
-
-        for (TextAnnotation ta : tas) {
-            List<String> talines = new ArrayList<>();
-
-            View sentview = ta.getView(ViewNames.SENTENCE);
-            View nerview = ta.getView(ViewNames.NER_CONLL);
-            for (int i = 0; i < ta.getTokens().length; i++) {
-
-                // Default "outside" label in NER_CONLL
-                String label = "O";
-
-                List<Constituent> constituents = nerview.getConstituentsCoveringToken(i);
-
-                // should be just one constituent
-                if (constituents.size() > 0) {
-                    Constituent c = constituents.get(0);
-                    if (c.getStartSpan() == i) {
-                        label = "B-" + c.getLabel();
-                    } else {
-                        label = "I-" + c.getLabel();
-                    }
-
-                    if (constituents.size() > 1) {
-                        logger.error("More than one label -- selecting the first.");
-                        logger.error("Constituents: " + constituents);
-                    }
-                }
-                talines.add(conllline(label, i, ta.getToken(i)));
-                List<Constituent> sents = sentview.getConstituentsCoveringToken(i);
-                if (sents.size() > 0) {
-                    Constituent sent = sents.get(0);
-
-                    int end = sent.getEndSpan();
-                    if (i == end - 1) {
-                        talines.add("");
-                    }
-
-                    if (sents.size() > 1) {
-                        logger.error("More than one sentence constituent for this token -- selecting the first.");
-                        logger.error("Sentences: " + sents);
-                    }
-                }
-            }
-
-            FileUtils.writeLines(Paths.get(outpath, ta.getId()).toFile(), talines);
-        }
-
-    }
-
 
 }

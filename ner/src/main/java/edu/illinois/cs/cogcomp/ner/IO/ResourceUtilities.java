@@ -21,7 +21,7 @@ import java.util.zip.GZIPInputStream;
 public class ResourceUtilities {
     private static Logger logger = LoggerFactory.getLogger(ResourceUtilities.class);
     // TODO Ideally this should be read from the config file
-    private static final String localResourceDir = "data/";
+    private static final String localResourceDir = "";
 
     /**
      * Loads a resource either from the local resource directory or from the classpath

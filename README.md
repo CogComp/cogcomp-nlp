@@ -22,9 +22,10 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [illinois-lemmatizer](lemmatizer/README.md)  |  An application that uses [WordNet](https://wordnet.princeton.edu/) and simple rules to find the root forms of words in plain text. | 
 | [illinois-tokenizer](tokenizer/README.md) | An application that identifies sentence and word boundaries in plain text. | 
 | [illinois-pos](pos/README.md)  | An application that identifies the part of speech (e.g. verb + tense, noun + number) of each word in plain text.  |  
-| [illinois-ner](ner/README.md) | An application that identifies named entities in plain text according to two different sets of categories.  | 
-| [illinois-inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. | 
-
+| [illinois-ner](ner/README.md) | An application that identifies named entities in plain text according to two different sets of categories.  |
+| [illinois-quantifier](quantifier/README.md) | This tool detects mentions of quantities in the text, as well as normalizes it to a standard form. |
+| [illinois-inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. |
+| [illinois-depparse](depparse/README.md) | An application that identifies the dependency parse tree of a sentence. |
 
  - **Questions?** Have a look at our [FAQs](faq.md). 
 

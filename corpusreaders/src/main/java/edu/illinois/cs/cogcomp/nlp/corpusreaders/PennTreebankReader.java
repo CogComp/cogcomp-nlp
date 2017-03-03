@@ -36,18 +36,14 @@ public class PennTreebankReader extends TextAnnotationReader {
     protected final String[] sections;
 
     protected final String combinedWSJHome;
-
+    private final String parseViewName;
     protected int currentSectionId;
-
     String[] currentSectionFiles;
     int currentFileId;
-
-    private ArrayList<String> lines;
     int currentLineId;
 
     int treeInFile;
-
-    private final String parseViewName;
+    private ArrayList<String> lines;
 
     /**
      * Reads all the sections of the combined annotation from penn treebank
@@ -223,4 +219,15 @@ public class PennTreebankReader extends TextAnnotationReader {
     }
 
     public void remove() {}
+
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
 }

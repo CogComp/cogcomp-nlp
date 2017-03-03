@@ -25,9 +25,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 
 /**
- * This utility will produce data in CoNLL 2002 or 2003 format. The provided
- * TextAnnotation must contain a <code>View.NER</code> view, since 2002 has
- * only two columns, the token and the NER label.
+ * This utility will produce data in CoNLL 2002 or 2003 format. The provided TextAnnotation must
+ * contain a <code>View.NER</code> view, since 2002 has only two columns, the token and the NER
+ * label.
+ * 
  * @author redman
  */
 public class CoNLL2002Writer {
@@ -35,28 +36,33 @@ public class CoNLL2002Writer {
     /**
      * Pass in the view, text annotation and the filename, it will produce the labels in the view to
      * a file named filename in CoNLL2002 format.
+     * 
      * @param view the view with the labels to produce.
      * @param ta the text annotation.
      * @param filename the filename.
-     * @throws IOException 
+     * @throws IOException
      */
-    static public void writeViewInCoNLL2002Format(View view, TextAnnotation ta, String filename) throws IOException {
+    static public void writeViewInCoNLL2002Format(View view, TextAnnotation ta, String filename)
+            throws IOException {
         String text = produceCoNLL2002Annotations(view, ta);
         FileUtils.writeStringToFile(new File(filename), text);
     }
-    
-	/**
-	 * Pass in the view, text annotation and the filename, it will produce the labels in the view to
-	 * a file named filename in CoNLL2003 format.
-	 * @param view the view with the labels to produce.
-	 * @param ta the text annotation.
-	 * @param filename the filename.
-	 * @throws IOException 
-	 */
-	static public void writeViewInCoNLL2003Format(View view, TextAnnotation ta, String filename) throws IOException {
-		String text = produceCoNLL2003Annotations(view, ta);
-		FileUtils.writeStringToFile(new File(filename), text);
-	}
+
+    /**
+     * Pass in the view, text annotation and the filename, it will produce the labels in the view to
+     * a file named filename in CoNLL2003 format.
+     * 
+     * @param view the view with the labels to produce.
+     * @param ta the text annotation.
+     * @param filename the filename.
+     * @throws IOException
+     */
+    static public void writeViewInCoNLL2003Format(View view, TextAnnotation ta, String filename)
+            throws IOException {
+        String text = produceCoNLL2003Annotations(view, ta);
+        FileUtils.writeStringToFile(new File(filename), text);
+    }
+
     /**
      * Render a string representing the original data with embedded labels in the text.
      * 
@@ -128,6 +134,7 @@ public class CoNLL2002Writer {
         }
         return sb.toString();
     }
+
     /**
      * Render a string representing the original data with embedded labels in the text.
      * 
@@ -138,7 +145,7 @@ public class CoNLL2002Writer {
     static private String produceCoNLL2003Annotations(View view, TextAnnotation ta) {
         StringBuilder sb = new StringBuilder();
         sb.append("O\t0\t0\tO\t-X-\t-DOCSTART-\tx\tx\t0\n\n");
-        
+
         // get the tokens.;
         List<Constituent> tokens = new ArrayList<>(ta.getView(ViewNames.TOKENS).getConstituents());
         Collections.sort(tokens, TextAnnotationUtilities.constituentStartEndComparator);
@@ -190,20 +197,20 @@ public class CoNLL2002Writer {
             } else {
                 sb.append('O');
             }
-            
+
             // doc index I guess
             sb.append("\t0\t");
-            
+
             // entity offset
             sb.append(entityWithinSentence);
             entityWithinSentence++;
-            
-            //  part of speech stuff
+
+            // part of speech stuff
             sb.append("\tO\tO\t");
-            
+
             // the token value
             sb.append(token.getSurfaceForm());
-            
+
             // x, x and a zero.
             sb.append("\tx\tx\t0");
             sb.append('\n');

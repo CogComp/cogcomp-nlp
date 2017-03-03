@@ -43,6 +43,10 @@ public class BrownClusters {
         }
     }
 
+    static public void set(BrownClusters bc){
+        brownclusters = bc;
+    }
+
     /** ensures singleton-ness. */
     private BrownClusters() {
 
@@ -62,10 +66,8 @@ public class BrownClusters {
      */
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
+
         synchronized (INIT_SYNC) {
-            if (brownclusters != null) {
-                return;
-            }
             brownclusters = new BrownClusters();
             brownclusters.isLowercaseBrownClustersByResource =
                     new boolean[isLowercaseBrownClusters.size()];

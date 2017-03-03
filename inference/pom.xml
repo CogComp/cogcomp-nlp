@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.85</version>
+        <version>3.0.101</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.85</version>
+            <version>3.0.101</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.gurobi</groupId>
             <artifactId>gurobi</artifactId>
-            <version>6.5</version>
+            <version>7.0.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
