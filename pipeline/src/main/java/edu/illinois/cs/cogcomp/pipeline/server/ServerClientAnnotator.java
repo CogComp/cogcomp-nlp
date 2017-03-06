@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -110,12 +111,18 @@ public class ServerClientAnnotator extends Annotator {
             return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
         } else {
             URL obj =
-                    new URL(url + ":" + port + "/annotate?text=\""
-                            + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
+                    new URL(url + ":" + port + "/annotate");
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("charset", "utf-8");
             con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
+
+            con.setDoOutput(true);
+            con.setUseCaches(false);
+
+            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+            wr.write("text=" + URLEncoder.encode(str, "UTF-8") + "&views=" + views);
+            wr.flush();
 
             int responseCode = con.getResponseCode();
             logger.debug("\nSending '" + con.getRequestMethod() + "' request to URL : " + url);
