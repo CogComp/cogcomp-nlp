@@ -121,7 +121,7 @@ public class ServerClientAnnotator extends Annotator {
             con.setUseCaches(false);
 
             OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-            wr.write("text=\"" + URLEncoder.encode(str, "UTF-8") + "\"&views=" + views);
+            wr.write("text=" + URLEncoder.encode(str, "UTF-8") + "&views=" + views);
             wr.flush();
 
             int responseCode = con.getResponseCode();
