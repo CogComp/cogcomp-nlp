@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
-            <version>1.3</version>
+            <version>1.4</version>
         </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
         <dependency>

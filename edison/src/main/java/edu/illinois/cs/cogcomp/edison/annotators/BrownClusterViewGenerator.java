@@ -17,7 +17,6 @@ import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
-import io.minio.errors.*;
 import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +35,11 @@ import java.util.zip.GZIPInputStream;
  * @author Vivek Srikumar
  */
 public class BrownClusterViewGenerator extends Annotator {
-    public final static String file100 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt";
-    public final static String file320 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt";
-    public final static String file1000 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
-    public final static String file3200 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
-    private final Logger log = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
+    public final static String file100 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt";
+    public final static String file320 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt";
+    public final static String file1000 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
+    public final static String file3200 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
+    private final Logger logger = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
 
     // NER:
     // "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt"
@@ -92,7 +87,7 @@ public class BrownClusterViewGenerator extends Annotator {
     // not being used, becuse we don't load the files from claspath.
     @SuppressWarnings("resource")
     private void loadClustersFromClassPath() throws Exception {
-        log.debug("Loading brown clusters from {}", file);
+        logger.debug("Loading brown clusters from {}", file);
 
         List<URL> resources = IOUtils.lsResources(BrownClusterViewGenerator.class, file);
 
@@ -111,16 +106,10 @@ public class BrownClusterViewGenerator extends Annotator {
     }
 
     public void loadFromDataStore() throws Exception {
-        Datastore dsNoCredentials = null;
-        try {
-            dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File f = dsNoCredentials.getFile("edu.cogcomp", file, 1.3);
-            InputStream is = new FileInputStream(f);
-            loadFromInputStream(is);
-        } catch (InvalidPortException | InvalidEndpointException e) {
-            e.printStackTrace();
-            System.out.println("The BrownCluster did not load. This is probably because out datastore server is off. Try again later or ping us. ");
-        }
+        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File f = dsNoCredentials.getFile("edu.cogcomp.brown-clusters", file, 1.3);
+        InputStream is = new FileInputStream(f);
+        loadFromInputStream(is);
     }
 
     private void loadFromInputStream(InputStream stream) throws Exception {
@@ -168,7 +157,7 @@ public class BrownClusterViewGenerator extends Annotator {
 
         reader.close();
 
-        log.info("Finished loading {} brown clusters from {}", clusterToStrings.size(), file);
+        logger.info("Finished loading {} brown clusters from {}", clusterToStrings.size(), file);
     }
 
 
