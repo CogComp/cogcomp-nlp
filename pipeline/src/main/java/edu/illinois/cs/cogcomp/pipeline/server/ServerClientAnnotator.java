@@ -160,7 +160,7 @@ public class ServerClientAnnotator extends Annotator {
         String sentA = "This is the best sentence ever.";
         annotator.setUrl("http://austen.cs.illinois.edu", "8080");
         annotator.setViews(ViewNames.POS, ViewNames.LEMMA);
-//        annotator.useCaching();
+        annotator.useCaching();
         try {
             TextAnnotation ta = annotator.annotate(sentA);
             logger.info(ta.getAvailableViews().toString());
