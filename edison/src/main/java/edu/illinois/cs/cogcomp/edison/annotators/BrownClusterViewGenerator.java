@@ -12,18 +12,16 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
+import io.minio.errors.*;
+import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
@@ -90,8 +88,9 @@ public class BrownClusterViewGenerator extends Annotator {
         clusterToStrings = new HashMap<>();
     }
 
+    // not being used, becuse we don't load the files from claspath.
     @SuppressWarnings("resource")
-    private void loadClusters() throws Exception {
+    private void loadClustersFromClassPath() throws Exception {
         log.debug("Loading brown clusters from {}", file);
 
         List<URL> resources = IOUtils.lsResources(BrownClusterViewGenerator.class, file);
@@ -107,6 +106,24 @@ public class BrownClusterViewGenerator extends Annotator {
         if (gzip)
             stream = new GZIPInputStream(stream);
 
+        loadFromInputStream(stream);
+    }
+
+    public void loadFromDataStore() throws Exception {
+        Datastore dsNoCredentials = null;
+        try {
+            dsNoCredentials = new Datastore("http://smaug.cs.illinois.edu:8080");
+            System.out.println(file);
+            File f = dsNoCredentials.getFile("edu.cogcomp", file, 1.3);
+            InputStream is = new FileInputStream(f);
+            loadFromInputStream(is);
+        } catch (InvalidPortException | InvalidEndpointException e) {
+            e.printStackTrace();
+            System.out.println("The BrownCluster did not load. This is probably because out datastore server is off. Try again later or ping us. ");
+        }
+    }
+
+    private void loadFromInputStream(InputStream stream) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
         String line;
@@ -152,7 +169,6 @@ public class BrownClusterViewGenerator extends Annotator {
         reader.close();
 
         log.info("Finished loading {} brown clusters from {}", clusterToStrings.size(), file);
-
     }
 
 
@@ -213,7 +229,8 @@ public class BrownClusterViewGenerator extends Annotator {
             synchronized (BrownClusterViewGenerator.class) {
                 if (clusterToStrings.size() == 0) {
                     try {
-                        loadClusters();
+                        //loadClustersFromClassPath();
+                        loadFromDataStore();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
