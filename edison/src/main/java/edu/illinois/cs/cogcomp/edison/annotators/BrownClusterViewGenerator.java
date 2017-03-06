@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
@@ -112,8 +113,7 @@ public class BrownClusterViewGenerator extends Annotator {
     public void loadFromDataStore() throws Exception {
         Datastore dsNoCredentials = null;
         try {
-            dsNoCredentials = new Datastore("http://smaug.cs.illinois.edu:8080");
-            System.out.println(file);
+            dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File f = dsNoCredentials.getFile("edu.cogcomp", file, 1.3);
             InputStream is = new FileInputStream(f);
             loadFromInputStream(is);
