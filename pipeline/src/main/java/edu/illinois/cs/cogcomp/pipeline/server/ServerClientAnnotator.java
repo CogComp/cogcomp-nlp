@@ -82,7 +82,7 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     public void useCaching(String dbFile) {
-        this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+        this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().transactionEnable().make();
     }
 
     /**
