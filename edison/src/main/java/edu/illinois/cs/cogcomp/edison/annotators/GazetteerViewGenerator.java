@@ -73,6 +73,11 @@ public class GazetteerViewGenerator extends Annotator {
             gazetteersInstance = new GazetteerViewGenerator(gazetteersResource.getPath(), ViewNames.GAZETTEER + "Gazetteers", false);
             GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
 
+            /*
+             * This resources is a clustering algorithm which groups together words that belong to the same concept.
+             * More details in this paper:
+             * Pantel, Patrick, and Dekang Lin. "Discovering word senses from text." SIGKDD, 2002.
+             */
             File cbcResource = ds.getDirectory("org.cogcomp.cbc.clusters", "cbcData", 1.3, false);
             cbcInstance = new GazetteerViewGenerator(cbcResource.getPath() + File.separator + "lists", ViewNames.GAZETTEER + "CBC", false);
         } catch (Exception e) {

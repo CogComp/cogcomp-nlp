@@ -23,6 +23,10 @@ import java.io.File;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * A BIG dictionary of words (and multi-word phrases) and they synonyms.
+ * Probably useful for many applications, e.g. QA, paraphrase, etc.
+ */
 public class RogetThesaurusFeatures implements FeatureExtractor {
 
     public static final RogetThesaurusFeatures INSTANCE = new RogetThesaurusFeatures();

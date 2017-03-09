@@ -26,6 +26,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**
+ * This resource (~150MB) is a relatively big collection of nouns connected to their semantic categories
+ * More details can be found in this paper:
+ * Buitelaar, Paul. "CORELEX: An ontology of systematic polysemous classes." (1998): 221-235.
+ */
+
 public class CorelexFeatureExtractor extends WordFeatureExtractor {
     private static Logger logger = LoggerFactory.getLogger(CorelexFeatureExtractor.class);
 
