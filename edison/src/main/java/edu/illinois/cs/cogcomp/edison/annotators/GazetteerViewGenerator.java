@@ -70,7 +70,7 @@ public class GazetteerViewGenerator extends Annotator {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
 
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            gazetteersInstance = new GazetteerViewGenerator(gazetteersResource.getPath(), ViewNames.GAZETTEER + "Gazetteers", false);
+            gazetteersInstance = new GazetteerViewGenerator(gazetteersResource.getPath() + File.separator + "gazetteers", ViewNames.GAZETTEER + "Gazetteers", false);
             GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
 
             /*
@@ -79,7 +79,7 @@ public class GazetteerViewGenerator extends Annotator {
              * Pantel, Patrick, and Dekang Lin. "Discovering word senses from text." SIGKDD, 2002.
              */
             File cbcResource = ds.getDirectory("org.cogcomp.cbc.clusters", "cbcData", 1.3, false);
-            cbcInstance = new GazetteerViewGenerator(cbcResource.getPath() + File.separator + "lists", ViewNames.GAZETTEER + "CBC", false);
+            cbcInstance = new GazetteerViewGenerator(cbcResource.getPath() + File.separator + "cbcData"+ File.separator + "lists", ViewNames.GAZETTEER + "CBC", false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
