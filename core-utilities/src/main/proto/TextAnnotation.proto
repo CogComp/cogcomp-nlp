@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package textannotation;
+
+option java_outer_classname = "TextAnnotationImpl";
+option java_package = "edu.illinois.cs.cogcomp.core.utilities.protobuf";
+option java_multiple_files = false;
+
+message TextAnnotationProto {
+  required string corpusId = 1;
+  required string id = 2;
+  required string text = 3;
+  repeated string tokens = 4;
+  repeated TokenOffsetsProto tokenOffsets = 5;
+  required SentenceProto sentences = 6;
+  repeated ViewProto views = 7;
+  map<string, string> properties = 8;
+}
+
+message TokenOffsetsProto {
+  required string form = 1;
+  required int32 startCharOffset = 2;
+  required int32 endCharOffset = 3;
+}
+
+message SentenceProto {
+  required string generator = 1;
+  optional double score = 2 [ default = 0 ];
+  repeated int32 sentenceEndPositions = 3;
+}
+
+message ViewProto {
+  required string viewName = 1;
+  repeated ViewDataProto viewData = 2;
+}
+
+message ViewDataProto {
+  required string viewType = 1;
+  required string viewName = 2;
+  required string generator = 3;
+  optional double score = 4 [ default = 0 ];
+  repeated ConstituentProto constituents = 5;
+  repeated RelationProto relations = 6;
+}
+
+message ConstituentProto {
+  required string label = 1;
+  optional double score = 2 [ default = 0 ];
+  required int32 start = 3;
+  required int32 end = 4;
+  map<string, string> properties = 5;
+  map<string, double> labelScoreMap = 6;
+}
+
+message RelationProto {
+  required string relationName = 1;
+  optional double score = 2 [ default = 0 ];
+  required int32 srcConstituent = 3;
+  required int32 targetConstituent = 4;
+  map<string, string> properties = 5;
+  map<string, double> labelScoreMap = 6;
+}
