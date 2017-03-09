@@ -107,7 +107,7 @@ public class BrownClusterViewGenerator extends Annotator {
 
     public void loadFromDataStore() throws Exception {
         Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-        File f = dsNoCredentials.getFile("edu.cogcomp.brown-clusters", file, 1.3);
+        File f = dsNoCredentials.getFile("org.cogcomp.brown-clusters", file, 1.3);
         InputStream is = new FileInputStream(f);
         loadFromInputStream(is);
     }
