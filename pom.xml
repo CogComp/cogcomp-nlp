@@ -198,6 +198,7 @@
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
                         <exclude>**/*.config</exclude>
+                        <exclude>**/*.proto</exclude>
                     </excludes>
                 </configuration>
                 <executions>

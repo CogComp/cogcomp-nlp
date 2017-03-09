@@ -45,44 +45,8 @@ public class JsonSerializerTest {
     TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[] {
             ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB}, false, 3); // no noise
 
-    @Test
-    public void testSerializerWithCharOffsets() {
-
-        View rhymeView = new View("rhyme", "test", ta, 0.4 );
-
-        Map< String, Double > newLabelsToScores = new TreeMap< String, Double >();
-        String[] labels = { "eeny", "meeny", "miny", "mo" };
-        double[] scores = { 0.15, 0.15, 0.3, 0.4 };
-
-        for ( int i = 0; i < labels.length; ++i )
-            newLabelsToScores.put(labels[i], scores[i]);
-
-        Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
-        rhymeView.addConstituent(first);
-
-        /**
-         * no constraint on scores -- don't have to sum to 1.0
-         */
-        for ( int i = labels.length -1; i > 0; --i )
-            newLabelsToScores.put( labels[i], scores[3-i] );
-
-        Constituent second = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
-        rhymeView.addConstituent(second);
-
-        Map<String, Double> relLabelsToScores = new TreeMap<>();
-        relLabelsToScores.put( "Yes", 0.8 );
-        relLabelsToScores.put( "No", 0.2 );
-
-        Relation rel = new Relation( relLabelsToScores, first, second );
-        rhymeView.addRelation(rel);
-
-        ta.addView("rhyme", rhymeView);
-
-        String taJson = SerializationHelper.serializeToJson(ta, true);
-        logger.info(taJson);
-
-        JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
-
+    /** Behavior specific to unit tests only. Use with caution */
+    public static void verifySerializedJSONObject(JsonObject jobj, TextAnnotation ta) {
         assertNotNull(jobj);
 
         JsonArray jsonTokenOffsets = jobj.get(JsonSerializer.TOKENOFFSETS).getAsJsonArray();
@@ -125,21 +89,10 @@ public class JsonSerializerTest {
         Map<String, Double> cLabelScores = c.getLabelsToScores();
         assertNotNull(cLabelScores);
         assertEquals(4, cLabelScores.size());
-
     }
 
-    @Test
-    public void testJsonSerializabilityWithOffsets() throws Exception {
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-
-        // making sure serialization does not fail, when some views (possibly by mistake) are null
-        ta.addView("nullView", null);
-
-        // create (redundant) token offset info in output for non-CCG readers
-        String json = SerializationHelper.serializeToJson(ta, true);
-
-
-
+    /** Behavior specific to unit tests only. Use with caution */
+    public static void verifyDeserializedJsonString(String json, TextAnnotation ta) throws Exception {
         TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
         assertEquals(ta2.getCorpusId(), ta.getCorpusId());
         assertEquals(ta2.getId(), ta.getId());
@@ -165,9 +118,57 @@ public class JsonSerializerTest {
         String seventhTokenForm2 = seventhTokenCopy.getSurfaceForm();
         assertEquals(seventhTokenForm, seventhTokenForm2);
         assertEquals(tokCharOffsets, tokCharOffsets2);
-
     }
 
+    @Test
+    public void testSerializerWithCharOffsets() {
+        View rhymeView = new View("rhyme", "test", ta, 0.4 );
 
+        Map< String, Double > newLabelsToScores = new TreeMap< String, Double >();
+        String[] labels = { "eeny", "meeny", "miny", "mo" };
+        double[] scores = { 0.15, 0.15, 0.3, 0.4 };
 
+        for ( int i = 0; i < labels.length; ++i )
+            newLabelsToScores.put(labels[i], scores[i]);
+
+        Constituent first = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        rhymeView.addConstituent(first);
+
+        /**
+         * no constraint on scores -- don't have to sum to 1.0
+         */
+        for ( int i = labels.length -1; i > 0; --i )
+            newLabelsToScores.put( labels[i], scores[3-i] );
+
+        Constituent second = new Constituent( newLabelsToScores, "rhyme", ta, 2, 4 );
+        rhymeView.addConstituent(second);
+
+        Map<String, Double> relLabelsToScores = new TreeMap<>();
+        relLabelsToScores.put( "Yes", 0.8 );
+        relLabelsToScores.put( "No", 0.2 );
+
+        Relation rel = new Relation( relLabelsToScores, first, second );
+        rhymeView.addRelation(rel);
+
+        ta.addView("rhyme", rhymeView);
+
+        String taJson = SerializationHelper.serializeToJson(ta, true);
+        logger.info(taJson);
+
+        JsonObject jobj = (JsonObject) new JsonParser().parse(taJson);
+        JsonSerializerTest.verifySerializedJSONObject(jobj, ta);
+    }
+
+    @Test
+    public void testJsonSerializabilityWithOffsets() throws Exception {
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
+
+        // making sure serialization does not fail, when some views (possibly by mistake) are null
+        ta.addView("nullView", null);
+
+        // create (redundant) token offset info in output for non-CCG readers
+        String json = SerializationHelper.serializeToJson(ta, true);
+
+        JsonSerializerTest.verifyDeserializedJsonString(json, ta);
+    }
 }
