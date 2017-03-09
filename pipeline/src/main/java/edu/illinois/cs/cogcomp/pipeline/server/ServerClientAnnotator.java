@@ -82,7 +82,10 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     public void useCaching(String dbFile) {
-        this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().transactionEnable().make();
+        this.db = DBMaker.fileDB(dbFile).
+                closeOnJvmShutdown().
+                transactionEnable(). // with transaction enabled, the cache won't get corrupt if the program crashes (at the cost of losing a little speed)
+                make();
     }
 
     /**
@@ -136,8 +139,10 @@ public class ServerClientAnnotator extends Annotator {
             }
             in.close();
             TextAnnotation ta = SerializationHelper.deserializeFromJson(response.toString());
-            if (concurrentMap != null)
+            if (concurrentMap != null) {
                 concurrentMap.put(key, SerializationHelper.serializeTextAnnotationToBytes(ta));
+                this.db.commit();
+            }
             return ta;
         }
     }
