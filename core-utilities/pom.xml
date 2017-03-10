@@ -74,6 +74,7 @@
             <artifactId>wordnet-dict</artifactId>
             <version>3.1</version>
         </dependency>
+
         <!-- Database driver for storing TextAnnotations -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -84,6 +85,18 @@
             <groupId>org.mapdb</groupId>
             <artifactId>mapdb</artifactId>
             <version>3.0.0-M5</version>
+        </dependency>
+
+        <!--Google Protocol Buffer Support-->
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java-util</artifactId>
+            <version>3.2.0</version>
         </dependency>
     </dependencies>
 </project>

@@ -401,6 +401,59 @@ to specify only non-default configuration options when you instantiate
 one or more classes that use `ResourceManager` and `Configurator`
 to manage configuration options.
 
+###Serialization and Deserialization
+
+To store `TextAnnotation` objects on disk, serialization/deserialization is supported in the following formats:
+
+- Binary Serialization: Binary serialization using Apache Common's `SerializationUtils` to serialize the `TextAnnotation` class. 
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToFile(ta, "text_annotation.bin", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile("text_annotation.bin")
+```
+
+- JSON: Lightweight human-readable data-interchange format.
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+String jsonString = SerializationHelper.serializeToJson(ta);
+
+TextAnnotation ta = SerializationHelper.deserializeFromJson(jsonString);
+```
+
+- [Protocol Buffer (Version 2)](https://developers.google.com/protocol-buffers/): Protocol Buffers are Google' language-neutral, platform-neutral mechanism for serializing structured data. Structure definition for TextAnnotation is defined at [TextAnnotation.proto](src/main/proto/TextAnnotation.proto).
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToProtobuf(ta, "text_annotation.buf", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeFromProtobuf("text_annotation.buf");
+```
+
+More usage information in the `SerializationHelper` class.
+
+###Generating Protocol Buffer Java Code
+
+**Note:** If you make any change to TextAnnotation class which involves adding/removing data items, make sure to update the
+protocol buffer schema and the corresponding serialization code accordingly.
+
+Install the [Protocol Buffer compiler](https://github.com/google/protobuf#protocol-compiler-installation) locally.
+
+On macOS, you can install the compiler using Homebrew: `brew install protobuf`.
+
+Run the following commands from the repository root:
+
+```bash
+protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/TextAnnotation.proto
+
+mvn license:format
+```
 
 ##Citation
 

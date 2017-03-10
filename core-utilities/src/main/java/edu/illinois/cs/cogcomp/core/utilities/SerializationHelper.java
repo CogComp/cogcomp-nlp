@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.protobuf.ProtobufSerializer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
 
@@ -165,5 +166,35 @@ public class SerializationHelper {
 
         JsonSerializer serializer = new JsonSerializer();
         return serializer.readTextAnnotation(jsonString);
+    }
+
+    /**
+     * Serialize a text annotation into a protocol buffer encoded output file.
+     *
+     * @param ta Text Annotation to be serialized
+     * @param fileName Name of the file to write to
+     * @param forceOverwrite Boolean indicating if the output file should be overwritten if it already exists
+     * @throws Exception
+     */
+    public static void serializeTextAnnotationToProtobuf(TextAnnotation ta, String fileName, boolean forceOverwrite)
+            throws Exception{
+        File outFile = new File(fileName);
+        if (outFile.exists() && !forceOverwrite) {
+            throw new IOException("ERROR: " + NAME + ".serializeTextAnnotationToProtobuf(): file '"
+                    + fileName + "' already exists.");
+        }
+
+        ProtobufSerializer.writeToFile(ta, fileName);
+    }
+
+    /**
+     * Read a text annotation from a Protocol Buffer encoding of Text Annotation.
+     *
+     * @param fileName Input file name
+     * @return A text annotation
+     * @throws Exception
+     */
+    public static TextAnnotation deserializeFromProtobuf(String fileName) throws Exception {
+        return ProtobufSerializer.parseFrom(fileName);
     }
 }
