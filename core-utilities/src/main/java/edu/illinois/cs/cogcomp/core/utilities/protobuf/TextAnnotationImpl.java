@@ -26,132 +26,244 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     boolean hasCorpusId();
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     java.lang.String getCorpusId();
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     com.google.protobuf.ByteString
         getCorpusIdBytes();
 
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     boolean hasId();
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     java.lang.String getId();
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     com.google.protobuf.ByteString
         getIdBytes();
 
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     boolean hasText();
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     java.lang.String getText();
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     com.google.protobuf.ByteString
         getTextBytes();
 
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     java.util.List<java.lang.String>
         getTokensList();
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     int getTokensCount();
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     java.lang.String getTokens(int index);
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     com.google.protobuf.ByteString
         getTokensBytes(int index);
 
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto> 
         getTokenOffsetsList();
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto getTokenOffsets(int index);
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     int getTokenOffsetsCount();
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder> 
         getTokenOffsetsOrBuilderList();
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder getTokenOffsetsOrBuilder(
         int index);
 
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     boolean hasSentences();
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto getSentences();
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProtoOrBuilder getSentencesOrBuilder();
 
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto> 
         getViewsList();
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto getViews(int index);
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     int getViewsCount();
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder> 
         getViewsOrBuilderList();
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder getViewsOrBuilder(
         int index);
 
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
     int getPropertiesCount();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
     boolean containsProperties(
@@ -163,11 +275,19 @@ public final class TextAnnotationImpl {
     java.util.Map<java.lang.String, java.lang.String>
     getProperties();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
     java.util.Map<java.lang.String, java.lang.String>
     getPropertiesMap();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -175,6 +295,10 @@ public final class TextAnnotationImpl {
         java.lang.String key,
         java.lang.String defaultValue);
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -182,6 +306,10 @@ public final class TextAnnotationImpl {
         java.lang.String key);
   }
   /**
+   * <pre>
+   * Root TextAnnotation message
+   * </pre>
+   *
    * Protobuf type {@code textannotation.TextAnnotationProto}
    */
   public  static final class TextAnnotationProto extends
@@ -348,12 +476,20 @@ public final class TextAnnotationImpl {
     public static final int CORPUSID_FIELD_NUMBER = 1;
     private volatile java.lang.Object corpusId_;
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     public boolean hasCorpusId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     public java.lang.String getCorpusId() {
@@ -371,6 +507,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Corpus Identifier
+     * </pre>
+     *
      * <code>required string corpusId = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -390,12 +530,20 @@ public final class TextAnnotationImpl {
     public static final int ID_FIELD_NUMBER = 2;
     private volatile java.lang.Object id_;
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     public java.lang.String getId() {
@@ -413,6 +561,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Document Identifier
+     * </pre>
+     *
      * <code>required string id = 2;</code>
      */
     public com.google.protobuf.ByteString
@@ -432,12 +584,20 @@ public final class TextAnnotationImpl {
     public static final int TEXT_FIELD_NUMBER = 3;
     private volatile java.lang.Object text_;
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     public boolean hasText() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     public java.lang.String getText() {
@@ -455,6 +615,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Raw text corresponding to this annotation
+     * </pre>
+     *
      * <code>required string text = 3;</code>
      */
     public com.google.protobuf.ByteString
@@ -474,6 +638,10 @@ public final class TextAnnotationImpl {
     public static final int TOKENS_FIELD_NUMBER = 4;
     private com.google.protobuf.LazyStringList tokens_;
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     public com.google.protobuf.ProtocolStringList
@@ -481,18 +649,30 @@ public final class TextAnnotationImpl {
       return tokens_;
     }
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     public int getTokensCount() {
       return tokens_.size();
     }
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     public java.lang.String getTokens(int index) {
       return tokens_.get(index);
     }
     /**
+     * <pre>
+     * List of tokens
+     * </pre>
+     *
      * <code>repeated string tokens = 4;</code>
      */
     public com.google.protobuf.ByteString
@@ -503,12 +683,20 @@ public final class TextAnnotationImpl {
     public static final int TOKENOFFSETS_FIELD_NUMBER = 5;
     private java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto> tokenOffsets_;
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto> getTokenOffsetsList() {
       return tokenOffsets_;
     }
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder> 
@@ -516,18 +704,30 @@ public final class TextAnnotationImpl {
       return tokenOffsets_;
     }
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     public int getTokenOffsetsCount() {
       return tokenOffsets_.size();
     }
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto getTokenOffsets(int index) {
       return tokenOffsets_.get(index);
     }
     /**
+     * <pre>
+     * Token Offset information
+     * </pre>
+     *
      * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder getTokenOffsetsOrBuilder(
@@ -538,18 +738,30 @@ public final class TextAnnotationImpl {
     public static final int SENTENCES_FIELD_NUMBER = 6;
     private edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto sentences_;
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     public boolean hasSentences() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto getSentences() {
       return sentences_ == null ? edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto.getDefaultInstance() : sentences_;
     }
     /**
+     * <pre>
+     * List of Sentences
+     * </pre>
+     *
      * <code>required .textannotation.SentenceProto sentences = 6;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProtoOrBuilder getSentencesOrBuilder() {
@@ -559,12 +771,20 @@ public final class TextAnnotationImpl {
     public static final int VIEWS_FIELD_NUMBER = 7;
     private java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto> views_;
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto> getViewsList() {
       return views_;
     }
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder> 
@@ -572,18 +792,30 @@ public final class TextAnnotationImpl {
       return views_;
     }
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     public int getViewsCount() {
       return views_.size();
     }
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto getViews(int index) {
       return views_.get(index);
     }
     /**
+     * <pre>
+     * List of Views
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewProto views = 7;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder getViewsOrBuilder(
@@ -618,6 +850,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap().size();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -634,6 +870,10 @@ public final class TextAnnotationImpl {
       return getPropertiesMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -641,6 +881,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -653,6 +897,10 @@ public final class TextAnnotationImpl {
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 8;</code>
      */
 
@@ -956,6 +1204,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * Root TextAnnotation message
+     * </pre>
+     *
      * Protobuf type {@code textannotation.TextAnnotationProto}
      */
     public static final class Builder extends
@@ -1291,12 +1543,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object corpusId_ = "";
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public boolean hasCorpusId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public java.lang.String getCorpusId() {
@@ -1314,6 +1574,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -1330,6 +1594,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public Builder setCorpusId(
@@ -1343,6 +1611,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public Builder clearCorpusId() {
@@ -1352,6 +1624,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Corpus Identifier
+       * </pre>
+       *
        * <code>required string corpusId = 1;</code>
        */
       public Builder setCorpusIdBytes(
@@ -1367,12 +1643,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object id_ = "";
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public java.lang.String getId() {
@@ -1390,6 +1674,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public com.google.protobuf.ByteString
@@ -1406,6 +1694,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public Builder setId(
@@ -1419,6 +1711,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public Builder clearId() {
@@ -1428,6 +1724,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Document Identifier
+       * </pre>
+       *
        * <code>required string id = 2;</code>
        */
       public Builder setIdBytes(
@@ -1443,12 +1743,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object text_ = "";
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public boolean hasText() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public java.lang.String getText() {
@@ -1466,6 +1774,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public com.google.protobuf.ByteString
@@ -1482,6 +1794,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public Builder setText(
@@ -1495,6 +1811,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public Builder clearText() {
@@ -1504,6 +1824,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Raw text corresponding to this annotation
+       * </pre>
+       *
        * <code>required string text = 3;</code>
        */
       public Builder setTextBytes(
@@ -1525,6 +1849,10 @@ public final class TextAnnotationImpl {
          }
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public com.google.protobuf.ProtocolStringList
@@ -1532,18 +1860,30 @@ public final class TextAnnotationImpl {
         return tokens_.getUnmodifiableView();
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public int getTokensCount() {
         return tokens_.size();
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public java.lang.String getTokens(int index) {
         return tokens_.get(index);
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public com.google.protobuf.ByteString
@@ -1551,6 +1891,10 @@ public final class TextAnnotationImpl {
         return tokens_.getByteString(index);
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public Builder setTokens(
@@ -1564,6 +1908,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public Builder addTokens(
@@ -1577,6 +1925,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public Builder addAllTokens(
@@ -1588,6 +1940,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public Builder clearTokens() {
@@ -1597,6 +1953,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of tokens
+       * </pre>
+       *
        * <code>repeated string tokens = 4;</code>
        */
       public Builder addTokensBytes(
@@ -1623,6 +1983,10 @@ public final class TextAnnotationImpl {
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder> tokenOffsetsBuilder_;
 
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto> getTokenOffsetsList() {
@@ -1633,6 +1997,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public int getTokenOffsetsCount() {
@@ -1643,6 +2011,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto getTokenOffsets(int index) {
@@ -1653,6 +2025,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder setTokenOffsets(
@@ -1670,6 +2046,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder setTokenOffsets(
@@ -1684,6 +2064,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder addTokenOffsets(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto value) {
@@ -1700,6 +2084,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder addTokenOffsets(
@@ -1717,6 +2105,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder addTokenOffsets(
@@ -1731,6 +2123,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder addTokenOffsets(
@@ -1745,6 +2141,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder addAllTokenOffsets(
@@ -1760,6 +2160,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder clearTokenOffsets() {
@@ -1773,6 +2177,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public Builder removeTokenOffsets(int index) {
@@ -1786,6 +2194,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.Builder getTokenOffsetsBuilder(
@@ -1793,6 +2205,10 @@ public final class TextAnnotationImpl {
         return getTokenOffsetsFieldBuilder().getBuilder(index);
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder getTokenOffsetsOrBuilder(
@@ -1803,6 +2219,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProtoOrBuilder> 
@@ -1814,6 +2234,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.Builder addTokenOffsetsBuilder() {
@@ -1821,6 +2245,10 @@ public final class TextAnnotationImpl {
             edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.Builder addTokenOffsetsBuilder(
@@ -1829,6 +2257,10 @@ public final class TextAnnotationImpl {
             index, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * Token Offset information
+       * </pre>
+       *
        * <code>repeated .textannotation.TokenOffsetsProto tokenOffsets = 5;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.TokenOffsetsProto.Builder> 
@@ -1854,12 +2286,20 @@ public final class TextAnnotationImpl {
       private com.google.protobuf.SingleFieldBuilderV3<
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProtoOrBuilder> sentencesBuilder_;
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public boolean hasSentences() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto getSentences() {
@@ -1870,6 +2310,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public Builder setSentences(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto value) {
@@ -1886,6 +2330,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public Builder setSentences(
@@ -1900,6 +2348,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public Builder mergeSentences(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto value) {
@@ -1920,6 +2372,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public Builder clearSentences() {
@@ -1933,6 +2389,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProto.Builder getSentencesBuilder() {
@@ -1941,6 +2401,10 @@ public final class TextAnnotationImpl {
         return getSentencesFieldBuilder().getBuilder();
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.SentenceProtoOrBuilder getSentencesOrBuilder() {
@@ -1952,6 +2416,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Sentences
+       * </pre>
+       *
        * <code>required .textannotation.SentenceProto sentences = 6;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
@@ -1981,6 +2449,10 @@ public final class TextAnnotationImpl {
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder> viewsBuilder_;
 
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto> getViewsList() {
@@ -1991,6 +2463,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public int getViewsCount() {
@@ -2001,6 +2477,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto getViews(int index) {
@@ -2011,6 +2491,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder setViews(
@@ -2028,6 +2512,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder setViews(
@@ -2042,6 +2530,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder addViews(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto value) {
@@ -2058,6 +2550,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder addViews(
@@ -2075,6 +2571,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder addViews(
@@ -2089,6 +2589,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder addViews(
@@ -2103,6 +2607,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder addAllViews(
@@ -2118,6 +2626,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder clearViews() {
@@ -2131,6 +2643,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public Builder removeViews(int index) {
@@ -2144,6 +2660,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.Builder getViewsBuilder(
@@ -2151,6 +2671,10 @@ public final class TextAnnotationImpl {
         return getViewsFieldBuilder().getBuilder(index);
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder getViewsOrBuilder(
@@ -2161,6 +2685,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProtoOrBuilder> 
@@ -2172,6 +2700,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.Builder addViewsBuilder() {
@@ -2179,6 +2711,10 @@ public final class TextAnnotationImpl {
             edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.Builder addViewsBuilder(
@@ -2187,6 +2723,10 @@ public final class TextAnnotationImpl {
             index, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of Views
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewProto views = 7;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewProto.Builder> 
@@ -2235,6 +2775,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap().size();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2251,6 +2795,10 @@ public final class TextAnnotationImpl {
         return getPropertiesMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2258,6 +2806,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2270,6 +2822,10 @@ public final class TextAnnotationImpl {
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2290,6 +2846,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2309,6 +2869,10 @@ public final class TextAnnotationImpl {
         return internalGetMutableProperties().getMutableMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
       public Builder putProperties(
@@ -2321,6 +2885,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 8;</code>
        */
 
@@ -2384,38 +2952,72 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     boolean hasForm();
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     java.lang.String getForm();
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     com.google.protobuf.ByteString
         getFormBytes();
 
     /**
+     * <pre>
+     * Offset of the start character in source text
+     * </pre>
+     *
      * <code>required int32 startCharOffset = 2;</code>
      */
     boolean hasStartCharOffset();
     /**
+     * <pre>
+     * Offset of the start character in source text
+     * </pre>
+     *
      * <code>required int32 startCharOffset = 2;</code>
      */
     int getStartCharOffset();
 
     /**
+     * <pre>
+     * Offset of the last character in text + 1
+     * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+     * </pre>
+     *
      * <code>required int32 endCharOffset = 3;</code>
      */
     boolean hasEndCharOffset();
     /**
+     * <pre>
+     * Offset of the last character in text + 1
+     * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+     * </pre>
+     *
      * <code>required int32 endCharOffset = 3;</code>
      */
     int getEndCharOffset();
   }
   /**
+   * <pre>
+   * Token Offset message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.TokenOffsetsProto}
    */
   public  static final class TokenOffsetsProto extends
@@ -2504,12 +3106,20 @@ public final class TextAnnotationImpl {
     public static final int FORM_FIELD_NUMBER = 1;
     private volatile java.lang.Object form_;
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     public boolean hasForm() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     public java.lang.String getForm() {
@@ -2527,6 +3137,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Surface form of the token
+     * </pre>
+     *
      * <code>required string form = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -2546,12 +3160,20 @@ public final class TextAnnotationImpl {
     public static final int STARTCHAROFFSET_FIELD_NUMBER = 2;
     private int startCharOffset_;
     /**
+     * <pre>
+     * Offset of the start character in source text
+     * </pre>
+     *
      * <code>required int32 startCharOffset = 2;</code>
      */
     public boolean hasStartCharOffset() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Offset of the start character in source text
+     * </pre>
+     *
      * <code>required int32 startCharOffset = 2;</code>
      */
     public int getStartCharOffset() {
@@ -2561,12 +3183,22 @@ public final class TextAnnotationImpl {
     public static final int ENDCHAROFFSET_FIELD_NUMBER = 3;
     private int endCharOffset_;
     /**
+     * <pre>
+     * Offset of the last character in text + 1
+     * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+     * </pre>
+     *
      * <code>required int32 endCharOffset = 3;</code>
      */
     public boolean hasEndCharOffset() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
+     * <pre>
+     * Offset of the last character in text + 1
+     * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+     * </pre>
+     *
      * <code>required int32 endCharOffset = 3;</code>
      */
     public int getEndCharOffset() {
@@ -2763,6 +3395,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * Token Offset message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.TokenOffsetsProto}
      */
     public static final class Builder extends
@@ -2932,12 +3568,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object form_ = "";
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public boolean hasForm() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public java.lang.String getForm() {
@@ -2955,6 +3599,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -2971,6 +3619,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public Builder setForm(
@@ -2984,6 +3636,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public Builder clearForm() {
@@ -2993,6 +3649,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Surface form of the token
+       * </pre>
+       *
        * <code>required string form = 1;</code>
        */
       public Builder setFormBytes(
@@ -3008,18 +3668,30 @@ public final class TextAnnotationImpl {
 
       private int startCharOffset_ ;
       /**
+       * <pre>
+       * Offset of the start character in source text
+       * </pre>
+       *
        * <code>required int32 startCharOffset = 2;</code>
        */
       public boolean hasStartCharOffset() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Offset of the start character in source text
+       * </pre>
+       *
        * <code>required int32 startCharOffset = 2;</code>
        */
       public int getStartCharOffset() {
         return startCharOffset_;
       }
       /**
+       * <pre>
+       * Offset of the start character in source text
+       * </pre>
+       *
        * <code>required int32 startCharOffset = 2;</code>
        */
       public Builder setStartCharOffset(int value) {
@@ -3029,6 +3701,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Offset of the start character in source text
+       * </pre>
+       *
        * <code>required int32 startCharOffset = 2;</code>
        */
       public Builder clearStartCharOffset() {
@@ -3040,18 +3716,33 @@ public final class TextAnnotationImpl {
 
       private int endCharOffset_ ;
       /**
+       * <pre>
+       * Offset of the last character in text + 1
+       * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+       * </pre>
+       *
        * <code>required int32 endCharOffset = 3;</code>
        */
       public boolean hasEndCharOffset() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
+       * <pre>
+       * Offset of the last character in text + 1
+       * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+       * </pre>
+       *
        * <code>required int32 endCharOffset = 3;</code>
        */
       public int getEndCharOffset() {
         return endCharOffset_;
       }
       /**
+       * <pre>
+       * Offset of the last character in text + 1
+       * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+       * </pre>
+       *
        * <code>required int32 endCharOffset = 3;</code>
        */
       public Builder setEndCharOffset(int value) {
@@ -3061,6 +3752,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Offset of the last character in text + 1
+       * Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+       * </pre>
+       *
        * <code>required int32 endCharOffset = 3;</code>
        */
       public Builder clearEndCharOffset() {
@@ -3123,42 +3819,78 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     boolean hasGenerator();
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     java.lang.String getGenerator();
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     com.google.protobuf.ByteString
         getGeneratorBytes();
 
     /**
+     * <pre>
+     * Score of the sentence
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     boolean hasScore();
     /**
+     * <pre>
+     * Score of the sentence
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     double getScore();
 
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     java.util.List<java.lang.Integer> getSentenceEndPositionsList();
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     int getSentenceEndPositionsCount();
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     int getSentenceEndPositions(int index);
   }
   /**
+   * <pre>
+   * Sentence message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.SentenceProto}
    */
   public  static final class SentenceProto extends
@@ -3266,12 +3998,20 @@ public final class TextAnnotationImpl {
     public static final int GENERATOR_FIELD_NUMBER = 1;
     private volatile java.lang.Object generator_;
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     public boolean hasGenerator() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     public java.lang.String getGenerator() {
@@ -3289,6 +4029,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Class name for the generator
+     * </pre>
+     *
      * <code>required string generator = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -3308,12 +4052,20 @@ public final class TextAnnotationImpl {
     public static final int SCORE_FIELD_NUMBER = 2;
     private double score_;
     /**
+     * <pre>
+     * Score of the sentence
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public boolean hasScore() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Score of the sentence
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public double getScore() {
@@ -3323,6 +4075,10 @@ public final class TextAnnotationImpl {
     public static final int SENTENCEENDPOSITIONS_FIELD_NUMBER = 3;
     private java.util.List<java.lang.Integer> sentenceEndPositions_;
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     public java.util.List<java.lang.Integer>
@@ -3330,12 +4086,20 @@ public final class TextAnnotationImpl {
       return sentenceEndPositions_;
     }
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     public int getSentenceEndPositionsCount() {
       return sentenceEndPositions_.size();
     }
     /**
+     * <pre>
+     * List of sentence end positions
+     * </pre>
+     *
      * <code>repeated int32 sentenceEndPositions = 3;</code>
      */
     public int getSentenceEndPositions(int index) {
@@ -3529,6 +4293,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * Sentence message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.SentenceProto}
      */
     public static final class Builder extends
@@ -3700,12 +4468,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object generator_ = "";
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public boolean hasGenerator() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public java.lang.String getGenerator() {
@@ -3723,6 +4499,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -3739,6 +4519,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public Builder setGenerator(
@@ -3752,6 +4536,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public Builder clearGenerator() {
@@ -3761,6 +4549,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Class name for the generator
+       * </pre>
+       *
        * <code>required string generator = 1;</code>
        */
       public Builder setGeneratorBytes(
@@ -3776,18 +4568,30 @@ public final class TextAnnotationImpl {
 
       private double score_ ;
       /**
+       * <pre>
+       * Score of the sentence
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public boolean hasScore() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Score of the sentence
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public double getScore() {
         return score_;
       }
       /**
+       * <pre>
+       * Score of the sentence
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder setScore(double value) {
@@ -3797,6 +4601,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Score of the sentence
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder clearScore() {
@@ -3814,6 +4622,10 @@ public final class TextAnnotationImpl {
          }
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public java.util.List<java.lang.Integer>
@@ -3821,18 +4633,30 @@ public final class TextAnnotationImpl {
         return java.util.Collections.unmodifiableList(sentenceEndPositions_);
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public int getSentenceEndPositionsCount() {
         return sentenceEndPositions_.size();
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public int getSentenceEndPositions(int index) {
         return sentenceEndPositions_.get(index);
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public Builder setSentenceEndPositions(
@@ -3843,6 +4667,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public Builder addSentenceEndPositions(int value) {
@@ -3852,6 +4680,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public Builder addAllSentenceEndPositions(
@@ -3863,6 +4695,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of sentence end positions
+       * </pre>
+       *
        * <code>repeated int32 sentenceEndPositions = 3;</code>
        */
       public Builder clearSentenceEndPositions() {
@@ -3925,44 +4761,80 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     boolean hasViewName();
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     java.lang.String getViewName();
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     com.google.protobuf.ByteString
         getViewNameBytes();
 
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto> 
         getViewDataList();
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto getViewData(int index);
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     int getViewDataCount();
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder> 
         getViewDataOrBuilderList();
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder getViewDataOrBuilder(
         int index);
   }
   /**
+   * <pre>
+   * View message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.ViewProto}
    */
   public  static final class ViewProto extends
@@ -4052,12 +4924,20 @@ public final class TextAnnotationImpl {
     public static final int VIEWNAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object viewName_;
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     public boolean hasViewName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     public java.lang.String getViewName() {
@@ -4075,6 +4955,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -4094,12 +4978,20 @@ public final class TextAnnotationImpl {
     public static final int VIEWDATA_FIELD_NUMBER = 2;
     private java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto> viewData_;
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto> getViewDataList() {
       return viewData_;
     }
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder> 
@@ -4107,18 +4999,30 @@ public final class TextAnnotationImpl {
       return viewData_;
     }
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     public int getViewDataCount() {
       return viewData_.size();
     }
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto getViewData(int index) {
       return viewData_.get(index);
     }
     /**
+     * <pre>
+     * View Data information
+     * </pre>
+     *
      * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder getViewDataOrBuilder(
@@ -4295,6 +5199,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * View message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.ViewProto}
      */
     public static final class Builder extends
@@ -4487,12 +5395,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object viewName_ = "";
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public boolean hasViewName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public java.lang.String getViewName() {
@@ -4510,6 +5426,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -4526,6 +5446,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public Builder setViewName(
@@ -4539,6 +5463,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public Builder clearViewName() {
@@ -4548,6 +5476,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 1;</code>
        */
       public Builder setViewNameBytes(
@@ -4574,6 +5506,10 @@ public final class TextAnnotationImpl {
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder> viewDataBuilder_;
 
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto> getViewDataList() {
@@ -4584,6 +5520,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public int getViewDataCount() {
@@ -4594,6 +5534,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto getViewData(int index) {
@@ -4604,6 +5548,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder setViewData(
@@ -4621,6 +5569,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder setViewData(
@@ -4635,6 +5587,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder addViewData(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto value) {
@@ -4651,6 +5607,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder addViewData(
@@ -4668,6 +5628,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder addViewData(
@@ -4682,6 +5646,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder addViewData(
@@ -4696,6 +5664,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder addAllViewData(
@@ -4711,6 +5683,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder clearViewData() {
@@ -4724,6 +5700,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public Builder removeViewData(int index) {
@@ -4737,6 +5717,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.Builder getViewDataBuilder(
@@ -4744,6 +5728,10 @@ public final class TextAnnotationImpl {
         return getViewDataFieldBuilder().getBuilder(index);
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder getViewDataOrBuilder(
@@ -4754,6 +5742,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProtoOrBuilder> 
@@ -4765,6 +5757,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.Builder addViewDataBuilder() {
@@ -4772,6 +5768,10 @@ public final class TextAnnotationImpl {
             edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.Builder addViewDataBuilder(
@@ -4780,6 +5780,10 @@ public final class TextAnnotationImpl {
             index, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * View Data information
+       * </pre>
+       *
        * <code>repeated .textannotation.ViewDataProto viewData = 2;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ViewDataProto.Builder> 
@@ -4854,105 +5858,203 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     boolean hasViewType();
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     java.lang.String getViewType();
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     com.google.protobuf.ByteString
         getViewTypeBytes();
 
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     boolean hasViewName();
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     java.lang.String getViewName();
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     com.google.protobuf.ByteString
         getViewNameBytes();
 
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     boolean hasGenerator();
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     java.lang.String getGenerator();
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     com.google.protobuf.ByteString
         getGeneratorBytes();
 
     /**
+     * <pre>
+     * Score of the View
+     * </pre>
+     *
      * <code>optional double score = 4 [default = 0];</code>
      */
     boolean hasScore();
     /**
+     * <pre>
+     * Score of the View
+     * </pre>
+     *
      * <code>optional double score = 4 [default = 0];</code>
      */
     double getScore();
 
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto> 
         getConstituentsList();
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto getConstituents(int index);
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     int getConstituentsCount();
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder> 
         getConstituentsOrBuilderList();
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder getConstituentsOrBuilder(
         int index);
 
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto> 
         getRelationsList();
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto getRelations(int index);
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     int getRelationsCount();
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder> 
         getRelationsOrBuilderList();
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder getRelationsOrBuilder(
         int index);
   }
   /**
+   * <pre>
+   * ViewData message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.ViewDataProto}
    */
   public  static final class ViewDataProto extends
@@ -5075,12 +6177,20 @@ public final class TextAnnotationImpl {
     public static final int VIEWTYPE_FIELD_NUMBER = 1;
     private volatile java.lang.Object viewType_;
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     public boolean hasViewType() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     public java.lang.String getViewType() {
@@ -5098,6 +6208,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Type of the view. Corresponds to class name in core-utilities
+     * </pre>
+     *
      * <code>required string viewType = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -5117,12 +6231,20 @@ public final class TextAnnotationImpl {
     public static final int VIEWNAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object viewName_;
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     public boolean hasViewName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     public java.lang.String getViewName() {
@@ -5140,6 +6262,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Name of the view
+     * </pre>
+     *
      * <code>required string viewName = 2;</code>
      */
     public com.google.protobuf.ByteString
@@ -5159,12 +6285,20 @@ public final class TextAnnotationImpl {
     public static final int GENERATOR_FIELD_NUMBER = 3;
     private volatile java.lang.Object generator_;
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     public boolean hasGenerator() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     public java.lang.String getGenerator() {
@@ -5182,6 +6316,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Class name of the generator
+     * </pre>
+     *
      * <code>required string generator = 3;</code>
      */
     public com.google.protobuf.ByteString
@@ -5201,12 +6339,20 @@ public final class TextAnnotationImpl {
     public static final int SCORE_FIELD_NUMBER = 4;
     private double score_;
     /**
+     * <pre>
+     * Score of the View
+     * </pre>
+     *
      * <code>optional double score = 4 [default = 0];</code>
      */
     public boolean hasScore() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
+     * <pre>
+     * Score of the View
+     * </pre>
+     *
      * <code>optional double score = 4 [default = 0];</code>
      */
     public double getScore() {
@@ -5216,12 +6362,22 @@ public final class TextAnnotationImpl {
     public static final int CONSTITUENTS_FIELD_NUMBER = 5;
     private java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto> constituents_;
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto> getConstituentsList() {
       return constituents_;
     }
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder> 
@@ -5229,18 +6385,33 @@ public final class TextAnnotationImpl {
       return constituents_;
     }
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     public int getConstituentsCount() {
       return constituents_.size();
     }
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto getConstituents(int index) {
       return constituents_.get(index);
     }
     /**
+     * <pre>
+     * List of constituents in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder getConstituentsOrBuilder(
@@ -5251,12 +6422,22 @@ public final class TextAnnotationImpl {
     public static final int RELATIONS_FIELD_NUMBER = 6;
     private java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto> relations_;
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto> getRelationsList() {
       return relations_;
     }
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder> 
@@ -5264,18 +6445,33 @@ public final class TextAnnotationImpl {
       return relations_;
     }
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     public int getRelationsCount() {
       return relations_.size();
     }
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto getRelations(int index) {
       return relations_.get(index);
     }
     /**
+     * <pre>
+     * List of relations in the view
+     * Note: Order of constituents stored is important and should be preserved
+     * </pre>
+     *
      * <code>repeated .textannotation.RelationProto relations = 6;</code>
      */
     public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder getRelationsOrBuilder(
@@ -5528,6 +6724,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * ViewData message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.ViewDataProto}
      */
     public static final class Builder extends
@@ -5804,12 +7004,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object viewType_ = "";
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public boolean hasViewType() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public java.lang.String getViewType() {
@@ -5827,6 +7035,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -5843,6 +7055,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public Builder setViewType(
@@ -5856,6 +7072,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public Builder clearViewType() {
@@ -5865,6 +7085,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Type of the view. Corresponds to class name in core-utilities
+       * </pre>
+       *
        * <code>required string viewType = 1;</code>
        */
       public Builder setViewTypeBytes(
@@ -5880,12 +7104,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object viewName_ = "";
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public boolean hasViewName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public java.lang.String getViewName() {
@@ -5903,6 +7135,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public com.google.protobuf.ByteString
@@ -5919,6 +7155,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public Builder setViewName(
@@ -5932,6 +7172,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public Builder clearViewName() {
@@ -5941,6 +7185,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the view
+       * </pre>
+       *
        * <code>required string viewName = 2;</code>
        */
       public Builder setViewNameBytes(
@@ -5956,12 +7204,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object generator_ = "";
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public boolean hasGenerator() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public java.lang.String getGenerator() {
@@ -5979,6 +7235,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public com.google.protobuf.ByteString
@@ -5995,6 +7255,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public Builder setGenerator(
@@ -6008,6 +7272,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public Builder clearGenerator() {
@@ -6017,6 +7285,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Class name of the generator
+       * </pre>
+       *
        * <code>required string generator = 3;</code>
        */
       public Builder setGeneratorBytes(
@@ -6032,18 +7304,30 @@ public final class TextAnnotationImpl {
 
       private double score_ ;
       /**
+       * <pre>
+       * Score of the View
+       * </pre>
+       *
        * <code>optional double score = 4 [default = 0];</code>
        */
       public boolean hasScore() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
+       * <pre>
+       * Score of the View
+       * </pre>
+       *
        * <code>optional double score = 4 [default = 0];</code>
        */
       public double getScore() {
         return score_;
       }
       /**
+       * <pre>
+       * Score of the View
+       * </pre>
+       *
        * <code>optional double score = 4 [default = 0];</code>
        */
       public Builder setScore(double value) {
@@ -6053,6 +7337,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Score of the View
+       * </pre>
+       *
        * <code>optional double score = 4 [default = 0];</code>
        */
       public Builder clearScore() {
@@ -6075,6 +7363,11 @@ public final class TextAnnotationImpl {
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder> constituentsBuilder_;
 
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto> getConstituentsList() {
@@ -6085,6 +7378,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public int getConstituentsCount() {
@@ -6095,6 +7393,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto getConstituents(int index) {
@@ -6105,6 +7408,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder setConstituents(
@@ -6122,6 +7430,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder setConstituents(
@@ -6136,6 +7449,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder addConstituents(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto value) {
@@ -6152,6 +7470,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder addConstituents(
@@ -6169,6 +7492,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder addConstituents(
@@ -6183,6 +7511,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder addConstituents(
@@ -6197,6 +7530,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder addAllConstituents(
@@ -6212,6 +7550,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder clearConstituents() {
@@ -6225,6 +7568,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public Builder removeConstituents(int index) {
@@ -6238,6 +7586,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.Builder getConstituentsBuilder(
@@ -6245,6 +7598,11 @@ public final class TextAnnotationImpl {
         return getConstituentsFieldBuilder().getBuilder(index);
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder getConstituentsOrBuilder(
@@ -6255,6 +7613,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProtoOrBuilder> 
@@ -6266,6 +7629,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.Builder addConstituentsBuilder() {
@@ -6273,6 +7641,11 @@ public final class TextAnnotationImpl {
             edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.Builder addConstituentsBuilder(
@@ -6281,6 +7654,11 @@ public final class TextAnnotationImpl {
             index, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of constituents in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.ConstituentProto constituents = 5;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.ConstituentProto.Builder> 
@@ -6315,6 +7693,11 @@ public final class TextAnnotationImpl {
           edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.Builder, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder> relationsBuilder_;
 
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto> getRelationsList() {
@@ -6325,6 +7708,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public int getRelationsCount() {
@@ -6335,6 +7723,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto getRelations(int index) {
@@ -6345,6 +7738,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder setRelations(
@@ -6362,6 +7760,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder setRelations(
@@ -6376,6 +7779,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder addRelations(edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto value) {
@@ -6392,6 +7800,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder addRelations(
@@ -6409,6 +7822,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder addRelations(
@@ -6423,6 +7841,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder addRelations(
@@ -6437,6 +7860,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder addAllRelations(
@@ -6452,6 +7880,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder clearRelations() {
@@ -6465,6 +7898,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public Builder removeRelations(int index) {
@@ -6478,6 +7916,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.Builder getRelationsBuilder(
@@ -6485,6 +7928,11 @@ public final class TextAnnotationImpl {
         return getRelationsFieldBuilder().getBuilder(index);
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder getRelationsOrBuilder(
@@ -6495,6 +7943,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public java.util.List<? extends edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProtoOrBuilder> 
@@ -6506,6 +7959,11 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.Builder addRelationsBuilder() {
@@ -6513,6 +7971,11 @@ public final class TextAnnotationImpl {
             edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.Builder addRelationsBuilder(
@@ -6521,6 +7984,11 @@ public final class TextAnnotationImpl {
             index, edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.getDefaultInstance());
       }
       /**
+       * <pre>
+       * List of relations in the view
+       * Note: Order of constituents stored is important and should be preserved
+       * </pre>
+       *
        * <code>repeated .textannotation.RelationProto relations = 6;</code>
        */
       public java.util.List<edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.RelationProto.Builder> 
@@ -6595,51 +8063,101 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     boolean hasLabel();
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     java.lang.String getLabel();
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     com.google.protobuf.ByteString
         getLabelBytes();
 
     /**
+     * <pre>
+     * Score of the constituent
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     boolean hasScore();
     /**
+     * <pre>
+     * Score of the constituent
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     double getScore();
 
     /**
+     * <pre>
+     * Start index of the span
+     * Span indices correspond to indices in the tokens list.
+     * </pre>
+     *
      * <code>required int32 start = 3;</code>
      */
     boolean hasStart();
     /**
+     * <pre>
+     * Start index of the span
+     * Span indices correspond to indices in the tokens list.
+     * </pre>
+     *
      * <code>required int32 start = 3;</code>
      */
     int getStart();
 
     /**
+     * <pre>
+     * End index of the span + 1
+     * Span indices correspond to indices in the tokens list.
+     * Usage: a span corresponds to [start, end) - end is not inclusive.
+     * </pre>
+     *
      * <code>required int32 end = 4;</code>
      */
     boolean hasEnd();
     /**
+     * <pre>
+     * End index of the span + 1
+     * Span indices correspond to indices in the tokens list.
+     * Usage: a span corresponds to [start, end) - end is not inclusive.
+     * </pre>
+     *
      * <code>required int32 end = 4;</code>
      */
     int getEnd();
 
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     int getPropertiesCount();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     boolean containsProperties(
@@ -6651,11 +8169,19 @@ public final class TextAnnotationImpl {
     java.util.Map<java.lang.String, java.lang.String>
     getProperties();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     java.util.Map<java.lang.String, java.lang.String>
     getPropertiesMap();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -6663,6 +8189,10 @@ public final class TextAnnotationImpl {
         java.lang.String key,
         java.lang.String defaultValue);
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -6670,10 +8200,18 @@ public final class TextAnnotationImpl {
         java.lang.String key);
 
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     int getLabelScoreMapCount();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     boolean containsLabelScoreMap(
@@ -6685,11 +8223,19 @@ public final class TextAnnotationImpl {
     java.util.Map<java.lang.String, java.lang.Double>
     getLabelScoreMap();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     java.util.Map<java.lang.String, java.lang.Double>
     getLabelScoreMapMap();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -6697,6 +8243,10 @@ public final class TextAnnotationImpl {
         java.lang.String key,
         double defaultValue);
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -6704,6 +8254,10 @@ public final class TextAnnotationImpl {
         java.lang.String key);
   }
   /**
+   * <pre>
+   * Constituent message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.ConstituentProto}
    */
   public  static final class ConstituentProto extends
@@ -6837,12 +8391,20 @@ public final class TextAnnotationImpl {
     public static final int LABEL_FIELD_NUMBER = 1;
     private volatile java.lang.Object label_;
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     public boolean hasLabel() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     public java.lang.String getLabel() {
@@ -6860,6 +8422,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Label of the constituent
+     * </pre>
+     *
      * <code>required string label = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -6879,12 +8445,20 @@ public final class TextAnnotationImpl {
     public static final int SCORE_FIELD_NUMBER = 2;
     private double score_;
     /**
+     * <pre>
+     * Score of the constituent
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public boolean hasScore() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Score of the constituent
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public double getScore() {
@@ -6894,12 +8468,22 @@ public final class TextAnnotationImpl {
     public static final int START_FIELD_NUMBER = 3;
     private int start_;
     /**
+     * <pre>
+     * Start index of the span
+     * Span indices correspond to indices in the tokens list.
+     * </pre>
+     *
      * <code>required int32 start = 3;</code>
      */
     public boolean hasStart() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
+     * <pre>
+     * Start index of the span
+     * Span indices correspond to indices in the tokens list.
+     * </pre>
+     *
      * <code>required int32 start = 3;</code>
      */
     public int getStart() {
@@ -6909,12 +8493,24 @@ public final class TextAnnotationImpl {
     public static final int END_FIELD_NUMBER = 4;
     private int end_;
     /**
+     * <pre>
+     * End index of the span + 1
+     * Span indices correspond to indices in the tokens list.
+     * Usage: a span corresponds to [start, end) - end is not inclusive.
+     * </pre>
+     *
      * <code>required int32 end = 4;</code>
      */
     public boolean hasEnd() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
+     * <pre>
+     * End index of the span + 1
+     * Span indices correspond to indices in the tokens list.
+     * Usage: a span corresponds to [start, end) - end is not inclusive.
+     * </pre>
+     *
      * <code>required int32 end = 4;</code>
      */
     public int getEnd() {
@@ -6948,6 +8544,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap().size();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -6964,6 +8564,10 @@ public final class TextAnnotationImpl {
       return getPropertiesMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -6971,6 +8575,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -6983,6 +8591,10 @@ public final class TextAnnotationImpl {
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -7024,6 +8636,10 @@ public final class TextAnnotationImpl {
       return internalGetLabelScoreMap().getMap().size();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -7040,6 +8656,10 @@ public final class TextAnnotationImpl {
       return getLabelScoreMapMap();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -7047,6 +8667,10 @@ public final class TextAnnotationImpl {
       return internalGetLabelScoreMap().getMap();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -7059,6 +8683,10 @@ public final class TextAnnotationImpl {
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -7326,6 +8954,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * Constituent message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.ConstituentProto}
      */
     public static final class Builder extends
@@ -7540,12 +9172,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object label_ = "";
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public boolean hasLabel() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public java.lang.String getLabel() {
@@ -7563,6 +9203,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -7579,6 +9223,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public Builder setLabel(
@@ -7592,6 +9240,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public Builder clearLabel() {
@@ -7601,6 +9253,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Label of the constituent
+       * </pre>
+       *
        * <code>required string label = 1;</code>
        */
       public Builder setLabelBytes(
@@ -7616,18 +9272,30 @@ public final class TextAnnotationImpl {
 
       private double score_ ;
       /**
+       * <pre>
+       * Score of the constituent
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public boolean hasScore() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Score of the constituent
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public double getScore() {
         return score_;
       }
       /**
+       * <pre>
+       * Score of the constituent
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder setScore(double value) {
@@ -7637,6 +9305,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Score of the constituent
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder clearScore() {
@@ -7648,18 +9320,33 @@ public final class TextAnnotationImpl {
 
       private int start_ ;
       /**
+       * <pre>
+       * Start index of the span
+       * Span indices correspond to indices in the tokens list.
+       * </pre>
+       *
        * <code>required int32 start = 3;</code>
        */
       public boolean hasStart() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
+       * <pre>
+       * Start index of the span
+       * Span indices correspond to indices in the tokens list.
+       * </pre>
+       *
        * <code>required int32 start = 3;</code>
        */
       public int getStart() {
         return start_;
       }
       /**
+       * <pre>
+       * Start index of the span
+       * Span indices correspond to indices in the tokens list.
+       * </pre>
+       *
        * <code>required int32 start = 3;</code>
        */
       public Builder setStart(int value) {
@@ -7669,6 +9356,11 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Start index of the span
+       * Span indices correspond to indices in the tokens list.
+       * </pre>
+       *
        * <code>required int32 start = 3;</code>
        */
       public Builder clearStart() {
@@ -7680,18 +9372,36 @@ public final class TextAnnotationImpl {
 
       private int end_ ;
       /**
+       * <pre>
+       * End index of the span + 1
+       * Span indices correspond to indices in the tokens list.
+       * Usage: a span corresponds to [start, end) - end is not inclusive.
+       * </pre>
+       *
        * <code>required int32 end = 4;</code>
        */
       public boolean hasEnd() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
+       * <pre>
+       * End index of the span + 1
+       * Span indices correspond to indices in the tokens list.
+       * Usage: a span corresponds to [start, end) - end is not inclusive.
+       * </pre>
+       *
        * <code>required int32 end = 4;</code>
        */
       public int getEnd() {
         return end_;
       }
       /**
+       * <pre>
+       * End index of the span + 1
+       * Span indices correspond to indices in the tokens list.
+       * Usage: a span corresponds to [start, end) - end is not inclusive.
+       * </pre>
+       *
        * <code>required int32 end = 4;</code>
        */
       public Builder setEnd(int value) {
@@ -7701,6 +9411,12 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * End index of the span + 1
+       * Span indices correspond to indices in the tokens list.
+       * Usage: a span corresponds to [start, end) - end is not inclusive.
+       * </pre>
+       *
        * <code>required int32 end = 4;</code>
        */
       public Builder clearEnd() {
@@ -7737,6 +9453,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap().size();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7753,6 +9473,10 @@ public final class TextAnnotationImpl {
         return getPropertiesMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7760,6 +9484,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7772,6 +9500,10 @@ public final class TextAnnotationImpl {
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7792,6 +9524,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7811,6 +9547,10 @@ public final class TextAnnotationImpl {
         return internalGetMutableProperties().getMutableMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
       public Builder putProperties(
@@ -7823,6 +9563,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -7860,6 +9604,10 @@ public final class TextAnnotationImpl {
         return internalGetLabelScoreMap().getMap().size();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -7876,6 +9624,10 @@ public final class TextAnnotationImpl {
         return getLabelScoreMapMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -7883,6 +9635,10 @@ public final class TextAnnotationImpl {
         return internalGetLabelScoreMap().getMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -7895,6 +9651,10 @@ public final class TextAnnotationImpl {
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -7915,6 +9675,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -7934,6 +9698,10 @@ public final class TextAnnotationImpl {
         return internalGetMutableLabelScoreMap().getMutableMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
       public Builder putLabelScoreMap(
@@ -7946,6 +9714,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -8009,51 +9781,95 @@ public final class TextAnnotationImpl {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     boolean hasRelationName();
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     java.lang.String getRelationName();
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     com.google.protobuf.ByteString
         getRelationNameBytes();
 
     /**
+     * <pre>
+     * Score of the relation
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     boolean hasScore();
     /**
+     * <pre>
+     * Score of the relation
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     double getScore();
 
     /**
+     * <pre>
+     * Identifier for the source constituent
+     * </pre>
+     *
      * <code>required int32 srcConstituent = 3;</code>
      */
     boolean hasSrcConstituent();
     /**
+     * <pre>
+     * Identifier for the source constituent
+     * </pre>
+     *
      * <code>required int32 srcConstituent = 3;</code>
      */
     int getSrcConstituent();
 
     /**
+     * <pre>
+     * Identifier for the target constituent
+     * </pre>
+     *
      * <code>required int32 targetConstituent = 4;</code>
      */
     boolean hasTargetConstituent();
     /**
+     * <pre>
+     * Identifier for the target constituent
+     * </pre>
+     *
      * <code>required int32 targetConstituent = 4;</code>
      */
     int getTargetConstituent();
 
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     int getPropertiesCount();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     boolean containsProperties(
@@ -8065,11 +9881,19 @@ public final class TextAnnotationImpl {
     java.util.Map<java.lang.String, java.lang.String>
     getProperties();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
     java.util.Map<java.lang.String, java.lang.String>
     getPropertiesMap();
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8077,6 +9901,10 @@ public final class TextAnnotationImpl {
         java.lang.String key,
         java.lang.String defaultValue);
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8084,10 +9912,18 @@ public final class TextAnnotationImpl {
         java.lang.String key);
 
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     int getLabelScoreMapCount();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     boolean containsLabelScoreMap(
@@ -8099,11 +9935,19 @@ public final class TextAnnotationImpl {
     java.util.Map<java.lang.String, java.lang.Double>
     getLabelScoreMap();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
     java.util.Map<java.lang.String, java.lang.Double>
     getLabelScoreMapMap();
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8111,6 +9955,10 @@ public final class TextAnnotationImpl {
         java.lang.String key,
         double defaultValue);
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8118,6 +9966,10 @@ public final class TextAnnotationImpl {
         java.lang.String key);
   }
   /**
+   * <pre>
+   * Relation message structure
+   * </pre>
+   *
    * Protobuf type {@code textannotation.RelationProto}
    */
   public  static final class RelationProto extends
@@ -8251,12 +10103,20 @@ public final class TextAnnotationImpl {
     public static final int RELATIONNAME_FIELD_NUMBER = 1;
     private volatile java.lang.Object relationName_;
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     public boolean hasRelationName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     public java.lang.String getRelationName() {
@@ -8274,6 +10134,10 @@ public final class TextAnnotationImpl {
       }
     }
     /**
+     * <pre>
+     * Name of the relation
+     * </pre>
+     *
      * <code>required string relationName = 1;</code>
      */
     public com.google.protobuf.ByteString
@@ -8293,12 +10157,20 @@ public final class TextAnnotationImpl {
     public static final int SCORE_FIELD_NUMBER = 2;
     private double score_;
     /**
+     * <pre>
+     * Score of the relation
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public boolean hasScore() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
+     * <pre>
+     * Score of the relation
+     * </pre>
+     *
      * <code>optional double score = 2 [default = 0];</code>
      */
     public double getScore() {
@@ -8308,12 +10180,20 @@ public final class TextAnnotationImpl {
     public static final int SRCCONSTITUENT_FIELD_NUMBER = 3;
     private int srcConstituent_;
     /**
+     * <pre>
+     * Identifier for the source constituent
+     * </pre>
+     *
      * <code>required int32 srcConstituent = 3;</code>
      */
     public boolean hasSrcConstituent() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
+     * <pre>
+     * Identifier for the source constituent
+     * </pre>
+     *
      * <code>required int32 srcConstituent = 3;</code>
      */
     public int getSrcConstituent() {
@@ -8323,12 +10203,20 @@ public final class TextAnnotationImpl {
     public static final int TARGETCONSTITUENT_FIELD_NUMBER = 4;
     private int targetConstituent_;
     /**
+     * <pre>
+     * Identifier for the target constituent
+     * </pre>
+     *
      * <code>required int32 targetConstituent = 4;</code>
      */
     public boolean hasTargetConstituent() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
+     * <pre>
+     * Identifier for the target constituent
+     * </pre>
+     *
      * <code>required int32 targetConstituent = 4;</code>
      */
     public int getTargetConstituent() {
@@ -8362,6 +10250,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap().size();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8378,6 +10270,10 @@ public final class TextAnnotationImpl {
       return getPropertiesMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8385,6 +10281,10 @@ public final class TextAnnotationImpl {
       return internalGetProperties().getMap();
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8397,6 +10297,10 @@ public final class TextAnnotationImpl {
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     * <pre>
+     * Attribute information
+     * </pre>
+     *
      * <code>map&lt;string, string&gt; properties = 5;</code>
      */
 
@@ -8438,6 +10342,10 @@ public final class TextAnnotationImpl {
       return internalGetLabelScoreMap().getMap().size();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8454,6 +10362,10 @@ public final class TextAnnotationImpl {
       return getLabelScoreMapMap();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8461,6 +10373,10 @@ public final class TextAnnotationImpl {
       return internalGetLabelScoreMap().getMap();
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8473,6 +10389,10 @@ public final class TextAnnotationImpl {
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
+     * <pre>
+     * Map containing scores to each label
+     * </pre>
+     *
      * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
      */
 
@@ -8740,6 +10660,10 @@ public final class TextAnnotationImpl {
       return builder;
     }
     /**
+     * <pre>
+     * Relation message structure
+     * </pre>
+     *
      * Protobuf type {@code textannotation.RelationProto}
      */
     public static final class Builder extends
@@ -8954,12 +10878,20 @@ public final class TextAnnotationImpl {
 
       private java.lang.Object relationName_ = "";
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public boolean hasRelationName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public java.lang.String getRelationName() {
@@ -8977,6 +10909,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public com.google.protobuf.ByteString
@@ -8993,6 +10929,10 @@ public final class TextAnnotationImpl {
         }
       }
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public Builder setRelationName(
@@ -9006,6 +10946,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public Builder clearRelationName() {
@@ -9015,6 +10959,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Name of the relation
+       * </pre>
+       *
        * <code>required string relationName = 1;</code>
        */
       public Builder setRelationNameBytes(
@@ -9030,18 +10978,30 @@ public final class TextAnnotationImpl {
 
       private double score_ ;
       /**
+       * <pre>
+       * Score of the relation
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public boolean hasScore() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
+       * <pre>
+       * Score of the relation
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public double getScore() {
         return score_;
       }
       /**
+       * <pre>
+       * Score of the relation
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder setScore(double value) {
@@ -9051,6 +11011,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Score of the relation
+       * </pre>
+       *
        * <code>optional double score = 2 [default = 0];</code>
        */
       public Builder clearScore() {
@@ -9062,18 +11026,30 @@ public final class TextAnnotationImpl {
 
       private int srcConstituent_ ;
       /**
+       * <pre>
+       * Identifier for the source constituent
+       * </pre>
+       *
        * <code>required int32 srcConstituent = 3;</code>
        */
       public boolean hasSrcConstituent() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
+       * <pre>
+       * Identifier for the source constituent
+       * </pre>
+       *
        * <code>required int32 srcConstituent = 3;</code>
        */
       public int getSrcConstituent() {
         return srcConstituent_;
       }
       /**
+       * <pre>
+       * Identifier for the source constituent
+       * </pre>
+       *
        * <code>required int32 srcConstituent = 3;</code>
        */
       public Builder setSrcConstituent(int value) {
@@ -9083,6 +11059,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Identifier for the source constituent
+       * </pre>
+       *
        * <code>required int32 srcConstituent = 3;</code>
        */
       public Builder clearSrcConstituent() {
@@ -9094,18 +11074,30 @@ public final class TextAnnotationImpl {
 
       private int targetConstituent_ ;
       /**
+       * <pre>
+       * Identifier for the target constituent
+       * </pre>
+       *
        * <code>required int32 targetConstituent = 4;</code>
        */
       public boolean hasTargetConstituent() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
+       * <pre>
+       * Identifier for the target constituent
+       * </pre>
+       *
        * <code>required int32 targetConstituent = 4;</code>
        */
       public int getTargetConstituent() {
         return targetConstituent_;
       }
       /**
+       * <pre>
+       * Identifier for the target constituent
+       * </pre>
+       *
        * <code>required int32 targetConstituent = 4;</code>
        */
       public Builder setTargetConstituent(int value) {
@@ -9115,6 +11107,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Identifier for the target constituent
+       * </pre>
+       *
        * <code>required int32 targetConstituent = 4;</code>
        */
       public Builder clearTargetConstituent() {
@@ -9151,6 +11147,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap().size();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9167,6 +11167,10 @@ public final class TextAnnotationImpl {
         return getPropertiesMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9174,6 +11178,10 @@ public final class TextAnnotationImpl {
         return internalGetProperties().getMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9186,6 +11194,10 @@ public final class TextAnnotationImpl {
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9206,6 +11218,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9225,6 +11241,10 @@ public final class TextAnnotationImpl {
         return internalGetMutableProperties().getMutableMap();
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
       public Builder putProperties(
@@ -9237,6 +11257,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Attribute information
+       * </pre>
+       *
        * <code>map&lt;string, string&gt; properties = 5;</code>
        */
 
@@ -9274,6 +11298,10 @@ public final class TextAnnotationImpl {
         return internalGetLabelScoreMap().getMap().size();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -9290,6 +11318,10 @@ public final class TextAnnotationImpl {
         return getLabelScoreMapMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -9297,6 +11329,10 @@ public final class TextAnnotationImpl {
         return internalGetLabelScoreMap().getMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -9309,6 +11345,10 @@ public final class TextAnnotationImpl {
         return map.containsKey(key) ? map.get(key) : defaultValue;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -9329,6 +11369,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
@@ -9348,6 +11392,10 @@ public final class TextAnnotationImpl {
         return internalGetMutableLabelScoreMap().getMutableMap();
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
       public Builder putLabelScoreMap(
@@ -9360,6 +11408,10 @@ public final class TextAnnotationImpl {
         return this;
       }
       /**
+       * <pre>
+       * Map containing scores to each label
+       * </pre>
+       *
        * <code>map&lt;string, double&gt; labelScoreMap = 6;</code>
        */
 
