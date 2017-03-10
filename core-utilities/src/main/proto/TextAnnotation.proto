@@ -1,5 +1,11 @@
 syntax = "proto2";
 
+// Protocol Buffer definition for TextAnnotation structure
+// This file is used to generate Java files to write/read TA in
+// Protocol Buffer format.
+// Note: If you make changes to this file, make sure to generate Java
+// files and update the serialization code accordingly.
+
 package textannotation;
 
 option java_outer_classname = "TextAnnotationImpl";

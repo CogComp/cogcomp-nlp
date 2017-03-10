@@ -439,7 +439,15 @@ TextAnnotation ta = SerializationHelper.deserializeFromProtobuf("text_annotation
 More usage information in the `SerializationHelper` class.
 
 ###Generating Protocol Buffer Java Code
-Install the Protocol Buffer compiler locally. Run the following commands from the repository root:
+
+**Note:** If you make any change to TextAnnotation class which involves adding/removing data items, make sure to update the
+protocol buffer schema and the corresponding serialization code accordingly.
+
+Install the [Protocol Buffer compiler](https://github.com/google/protobuf#protocol-compiler-installation) locally.
+
+On macOS, you can install the compiler using Homebrew: `brew install protobuf`.
+
+Run the following commands from the repository root:
 
 ```bash
 protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/TextAnnotation.proto
