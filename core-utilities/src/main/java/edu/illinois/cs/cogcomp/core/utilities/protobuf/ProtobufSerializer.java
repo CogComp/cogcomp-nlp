@@ -19,10 +19,19 @@ import edu.illinois.cs.cogcomp.core.utilities.protobuf.TextAnnotationImpl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
+/**
+ * Class implementing methods to read/write TextAnnotation instance to/from Google's Protocol Buffers format.
+ */
 public class ProtobufSerializer extends AbstractSerializer {
     private static final Logger logger = LoggerFactory.getLogger(ProtobufSerializer.class);
+
+    /** Helper methods to handle Protobuf implementation */
 
     private static void writeTokenOffsets(TextAnnotation ta, TextAnnotationProto.Builder taBuilder) {
         for (Constituent c : ta.getView(ViewNames.TOKENS).getConstituents()) {
@@ -264,5 +273,37 @@ public class ProtobufSerializer extends AbstractSerializer {
         }
 
         return ta;
+    }
+
+    /** Public Methods to read/write Text Annotation */
+
+    public static TextAnnotation parseFrom(String fileName) throws Exception {
+        FileInputStream fileInputStream = new FileInputStream(fileName);
+        return parseFrom(fileInputStream);
+    }
+
+    public static TextAnnotation parseFrom(byte[] byteData) throws Exception {
+        TextAnnotationProto taProto = TextAnnotationProto.parseFrom(byteData);
+        return readTextAnnotation(taProto);
+    }
+
+    public static TextAnnotation parseFrom(InputStream inputStream) throws Exception {
+        TextAnnotationProto taProto = TextAnnotationProto.parseFrom(inputStream);
+        return readTextAnnotation(taProto);
+    }
+
+    public static void writeToFile(TextAnnotation ta, String fileName) throws Exception {
+        FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+        writeToOutputStream(ta, fileOutputStream);
+    }
+
+    public static void writeToOutputStream(TextAnnotation ta, OutputStream outputStream) throws Exception {
+        TextAnnotationProto taProto = writeTextAnnotation(ta);
+        taProto.writeTo(outputStream);
+    }
+
+    public static byte[] writeAsBytes(TextAnnotation ta) throws Exception {
+        TextAnnotationProto taProto = writeTextAnnotation(ta);
+        return taProto.toByteArray();
     }
 }
