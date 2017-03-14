@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -56,6 +57,7 @@ public class TextCleaner {
     private static Map<String, String> escXlmToChar;
 
     static {
+        escXlmToChar = new HashMap<>();
         escXlmToChar.put(xmlQuot, "\"");
         escXlmToChar.put(xmlAmp, "&");
         escXlmToChar.put(xmlApos, "'");
