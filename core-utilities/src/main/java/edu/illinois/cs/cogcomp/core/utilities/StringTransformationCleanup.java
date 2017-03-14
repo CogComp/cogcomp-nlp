@@ -5,10 +5,9 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nlp.utilities;
+package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
@@ -23,43 +22,44 @@ import java.nio.charset.CharsetEncoder;
  */
 
 
-public class StringCleanup {
+public class StringTransformationCleanup {
+    private static final String LATIN1 = "ISO-8859-1";
+
     /**
      * tries to normalize string to specified encoding. The number of characters returned should be
      * the same, and tokens should remain contiguous in the output; non-recognized characters will
      * be substituted for *something*.
      */
+    static public StringTransformation normalizeToEncoding(StringTransformation stringTransformation, Charset encoding_) {
 
-    static public String normalizeToEncoding(String origString_, Charset encoding_) {
-        String normString = origString_;
+        String startStr = stringTransformation.getTransformedText();
 
         CharsetEncoder encoder = encoding_.newEncoder();
 
-        if (!encoder.canEncode(origString_)) {
-            final int length = origString_.length();
-            char[] normSeq = new char[(origString_.length())];
+        if (!encoder.canEncode(startStr)) {
+            final int length = startStr.length();
 
             int charNum = 0;
 
             for (int offset = 0; offset < length;) {
                 // do something with the codepoint
-                Pair<Character, Integer> replacement =
-                        normalizeCodepoint(origString_, encoding_, offset);
+                Pair<Boolean, Integer> replacement =
+                        normalizeCharacter(startStr, encoding_, offset);
 
-                Character replacedChar = replacement.getFirst();
-                int codepoint = replacement.getSecond();
+                boolean isOk = replacement.getFirst();
+                Character replacedChar = (char) replacement.getSecond().intValue();
 
                 if (null != replacedChar) {
-                    normSeq[charNum] = replacedChar;
+
+                    stringTransformation.transformString(charNum, charNum+1, String.valueOf(replacedChar));
                     charNum++;
                 }
 
-                offset += Character.charCount(codepoint);
+                offset += Character.charCount(replacedChar);
             }
-            normString = new String(normSeq);
         }
 
-        return normString;
+        return stringTransformation;
     }
 
 
@@ -70,12 +70,14 @@ public class StringCleanup {
      * symbol with currency
      */
 
-    private static Pair<Character, Integer> normalizeCodepoint(String origString_,
+    private static Pair<Boolean, Integer> normalizeCharacter(String origString_,
             Charset encoding_, int offset_) {
-        char normalizedChar = '?';
-        boolean isOk = false;
+
+        char normalizedChar = ' ';
+
         final int codepoint = origString_.codePointAt(offset_);
 
+        boolean isOk = checkIsInEncoding(codepoint, encoding_);
         // char nextChar = ' ';
         // char nextNextChar = ' ';
         //
@@ -87,10 +89,37 @@ public class StringCleanup {
         // CharsetDecoder decoder = encoding_.newDecoder();
         // System.err.println( "## codepoint is '" + codepoint_ + "'..." );
 
+
+        if (isOk) {
+            normalizedChar = (char) codepoint;
+        } else {
+            Pair<Boolean, Character> charInfo = fixCharByType(codepoint);
+            normalizedChar = charInfo.getSecond();
+            isOk = charInfo.getFirst();
+        }
+
+        Character newChar = null;
+        if (isOk)
+            newChar = normalizedChar;
+
+        return new Pair(isOk, newChar);
+    }
+
+
+    private static boolean checkIsLatin(int codepoint) {
+        return checkIsInEncoding(codepoint, Charset.forName(LATIN1));
+    }
+
+
+
+    private static boolean checkIsInEncoding(int codepoint, Charset encoding_) {
+
+        boolean isOk = false;
+
         if (encoding_.equals(Charset.forName("US-ASCII"))) {
             if (codepoint < 128)
                 isOk = true;
-        } else if (encoding_.equals(Charset.forName("ISO-8859-1"))) // latin1
+        } else if (encoding_.equals(Charset.forName(LATIN1))) // latin1
         {
             if (codepoint < 256)
                 isOk = true;
@@ -99,13 +128,19 @@ public class StringCleanup {
                 isOk = true;
         }
 
-        if (isOk) {
-            normalizedChar = (char) codepoint;
-        } else {
-            isOk = true;
-            final int type = Character.getType(codepoint);
+        return isOk;
+    }
 
-            if (type == Character.CURRENCY_SYMBOL)
+
+    public static Pair<Boolean, Character> fixCharByType(int codepoint) {
+
+        final int type = Character.getType(codepoint);
+
+        char normalizedChar = ' ';
+
+        boolean isOk = true;
+
+        if (type == Character.CURRENCY_SYMBOL)
                 normalizedChar = '$';
             else if (type == Character.DASH_PUNCTUATION)
                 normalizedChar = '-';
@@ -127,46 +162,37 @@ public class StringCleanup {
                 normalizedChar = ' ';
             else
                 isOk = false;
+
+        return new Pair(isOk, normalizedChar);
+    }
+
+
+    static public StringTransformation removeDiacritics(StringTransformation origStringSt) {
+        char[] startChars = origStringSt.getTransformedText().toCharArray();
+        for (int i = 0; i < startChars.length; ++i) {
+            int c = Character.codePointAt(startChars, i);
+            if (checkIsLatin(c))
+                continue;
+            else {
+                String newC = StringUtils.normalizeUnicodeDiacriticChar(startChars[i]);
+                origStringSt.transformString(i, i+1, newC);
+            }
         }
+        origStringSt.getTransformedText(); // applies edits
+        return origStringSt;
+    }
 
-        Character newChar = null;
-        if (isOk)
-            newChar = normalizedChar;
 
-        return new Pair<>(newChar, codepoint);
+    static public StringTransformation normalizeToLatin1(StringTransformation origStringSt) {
+        return normalizeToEncoding(origStringSt, Charset.forName("ISO-8859-1"));
     }
 
 
 
-    static public String normalizeToUtf8(String origString_) {
-        String utf8Str = normalizeToEncoding(origString_, Charset.forName("UTF-8"));
-        return StringUtils.normalizeUnicodeDiacritics(utf8Str);
+    static public StringTransformation normalizeToAscii(StringTransformation origStringSt) {
+        StringTransformation latin1St = normalizeToLatin1(origStringSt);
+        return normalizeToEncoding(latin1St, Charset.forName("ascii"));
     }
 
-
-
-    static public String normalizeToLatin1(String origString_) {
-        String noDiacriticStr = normalizeToUtf8(origString_);
-        return normalizeToEncoding(noDiacriticStr, Charset.forName("ISO-8859-1"));
-    }
-
-
-
-    static public String normalizeToAscii(String origString_) {
-        String latin1Str = normalizeToLatin1(origString_);
-        return normalizeToEncoding(latin1Str, Charset.forName("ascii"));
-    }
-
-
-    /*
-     * Control Characters such as ^C, ^\, ^M etc. are a part of the C0 ASCII Control Character Set.
-     * These break our NER, COREF etc. (Eg. In John Smith Corpus) and are not needed in text
-     * documents. This function removes the control characters in input string, i.e. almost all of
-     * ASCII characters 0 - 31, except the \n, \r and \t characters (which it keeps intact in the
-     * text).
-     */
-    static public String removeControlCharacters(String origString_) {
-        return origString_.replaceAll("[\\p{Cntrl}&&[^\r\n\t]]", "");
-    }
 
 }
