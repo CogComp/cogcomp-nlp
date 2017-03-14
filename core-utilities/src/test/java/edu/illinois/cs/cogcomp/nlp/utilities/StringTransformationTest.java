@@ -14,16 +14,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class StringTransformationTest {
 
-    public static final String EXPAND= "The \"only\" way";
+    public static final String EXPAND= "The \"only} way";
+    public static final String MODEXPAND = "The ``only-RCB- way";
     public static final String REPLACE = "John\"s bad leg_and what a leg";
-    public static final String REDUCE = "http://org.edu.net/killit say it's a leg";
-    public static final String DELETE = "John's leg^@^@^@^@";
-    public static final String OVERLAP = "my_____ why not";
-    public static final String MODEXPAND = "The ``only'' way";
     public static final String MODREPLACE = "John's bad leg-and what a leg";
+    public static final String REDUCE = "http://org.edu.net/killit say it's a leg";
     public static final String MODREDUCE = "WWW say it's a leg";
+    public static final String DELETE = "John's leg^@^@^@^@";
     public static final String MODDELETE = "John's leg";
+    public static final String OVERLAP = "my_____ why not";
     public static final String MODOVERLAP = "my- why not";
+    public static final String SEQUENCE= "The http://theonlyway.org {only}^@^@^@ way___";
+    public static final String MODSEQUENCE= "The WWW -LCB-only-RCB- way-";
 
     StringTransformation st;
 
@@ -76,26 +78,26 @@ public class StringTransformationTest {
     public void testExpand() {
         StringTransformation st = new StringTransformation(EXPAND);
         st.transformString(4, 5, "``");
-        st.transformString(9, 10, "''");
+        st.transformString(9, 10, "-RCB-");
 
         String modifiedStr = st.getTransformedText();
 
         assertEquals(EXPAND, st.getOrigText());
-        assertEquals(EXPAND.length() + 2, modifiedStr.length());
+        assertEquals(EXPAND.length() + 5, modifiedStr.length());
         assertEquals(MODEXPAND, modifiedStr);
 
         IntPair origOffsets = st.getOriginalOffsets(4, 6);
         assertEquals(4, origOffsets.getFirst());
         assertEquals(5, origOffsets.getSecond());
 
-        origOffsets = st.getOriginalOffsets(10, 12);
+        origOffsets = st.getOriginalOffsets(10, 15);
         assertEquals(9, origOffsets.getFirst());
         assertEquals(10, origOffsets.getSecond());
 
         int modStart = st.computeModifiedOffsetFromOriginal(9);
         int modEnd = st.computeModifiedOffsetFromOriginal(10);
         assertEquals(10, modStart);
-        assertEquals(12, modEnd);
+        assertEquals(15, modEnd);
     }
 
 
@@ -109,25 +111,25 @@ public class StringTransformationTest {
         assertEquals(EXPAND.length() + 1, modifiedStr.length());
 
         // subsequent transformation must work w.r.t. modified string
-        st.transformString(10, 11, "''");
+        st.transformString(10, 11, "-RCB-");
 
         modifiedStr = st.getTransformedText();
 
         assertEquals(EXPAND, st.getOrigText());
-        assertEquals(EXPAND.length() + 2, modifiedStr.length());
+        assertEquals(EXPAND.length() + 5, modifiedStr.length());
         assertEquals(MODEXPAND, modifiedStr);
 
         int modStart = st.computeModifiedOffsetFromOriginal(9);
         int modEnd = st.computeModifiedOffsetFromOriginal(10);
         assertEquals(10, modStart);
-        assertEquals(12, modEnd);
+        assertEquals(15, modEnd);
 
 
         IntPair origOffsets = st.getOriginalOffsets(4, 6);
         assertEquals(4, origOffsets.getFirst());
         assertEquals(5, origOffsets.getSecond());
 
-        origOffsets = st.getOriginalOffsets(10, 12);
+        origOffsets = st.getOriginalOffsets(10, 15);
         assertEquals(9, origOffsets.getFirst());
         assertEquals(10, origOffsets.getSecond());
     }
@@ -164,7 +166,7 @@ public class StringTransformationTest {
     @Test
     public void testReduce() {
         StringTransformation st = new StringTransformation(REDUCE);
-        // http://org.edu.net/killit say it's a leg";
+        // "http://org.edu.net/killit say it's a leg";
         st.transformString(0, 25, "WWW");
 
         String modifiedStr = st.getTransformedText();
@@ -178,6 +180,13 @@ public class StringTransformationTest {
         assertEquals(0, modStart);
         assertEquals(3, modEnd);
 
+        /*
+         * what happens if we query a char in the middle of a deleted sequence?
+         * -- should map to beginning of that modification
+         */
+        int modMid = st.computeModifiedOffsetFromOriginal(20);
+        assertEquals(3, modMid);
+
         IntPair origOffsets = st.getOriginalOffsets(0,3);
         assertEquals(0, origOffsets.getFirst());
         assertEquals(25, origOffsets.getSecond());
@@ -189,8 +198,172 @@ public class StringTransformationTest {
 
         origOffsets = st.getOriginalOffsets(1, 4); // 1 past the end of the edit
         assertEquals(26, origOffsets.getSecond());
+    }
 
+    @Test
+    public void testSequence() {
+//        SEQUENCE= "The http://theonlyway.org {only}^@^@^@ way___";
+//        MODSEQUENCE= "The WWW -LCB-only-RCB- way-";
+        StringTransformation st = new StringTransformation(SEQUENCE);
+
+        st.transformString(4, 25, "WWW");
+        st.transformString(26, 27, "-LCB-");
+        st.transformString(31, 32, "-RCB-");
+        st.transformString(32, 38, "");
+        st.transformString(42, 45, "-");
+
+        String modifiedStr = st.getTransformedText();
+
+        assertEquals(SEQUENCE, st.getOrigText());
+        assertEquals(SEQUENCE.length() - 18, modifiedStr.length());
+        assertEquals(MODSEQUENCE, modifiedStr);
+
+        int modStart = st.computeModifiedOffsetFromOriginal(4);
+        int modEnd = st.computeModifiedOffsetFromOriginal(25);
+        assertEquals(4, modStart);
+        assertEquals(7, modEnd);
+
+        String transfSeq = modifiedStr.substring(4, 7);
+        String origSeq = st.getOrigText().substring(4, 25);
+
+        assertEquals(transfSeq, "WWW");
+        assertEquals(origSeq, "http://theonlyway.org");
+
+        /*
+         * what happens if we query a char in the middle of a deleted sequence?
+         * -- should map to beginning of that modification
+         */
+        int modMid = st.computeModifiedOffsetFromOriginal(20);
+        assertEquals(7, modMid);
+
+        IntPair origOffsets = st.getOriginalOffsets(4,7);
+        assertEquals(4, origOffsets.getFirst());
+        assertEquals(25, origOffsets.getSecond());
+
+        // intermediate edit chars map to same offsets, treated like replacements
+        origOffsets = st.getOriginalOffsets(1,2);
+        assertEquals(1, origOffsets.getFirst());
+        assertEquals(2, origOffsets.getSecond());
+
+        origOffsets = st.getOriginalOffsets(1, 6); // in the middle of the replaced
+        assertEquals(6, origOffsets.getSecond());
+
+
+        // check expand edit
+        origOffsets = st.getOriginalOffsets(17,22);
+        assertEquals(31, origOffsets.getFirst());
+        assertEquals(38, origOffsets.getSecond()); // expansion + deletion
+
+
+        transfSeq = modifiedStr.substring(17, 22);
+        origSeq = st.getOrigText().substring(31, 38);
+
+        assertEquals("-RCB-", transfSeq);
+        assertEquals("}^@^@^@", origSeq); // combines expand + delete for contiguous spans
+
+        // intermediate edit chars map to same offsets, treated like replacements.
+        // note that this could be weird in case of multiple edits at same index
+        //   (e.g. insertion, then deletion)
+        // Note that these don't really make sense as substrings, and nor are the mapped substrings likely to make sense
+        origOffsets = st.getOriginalOffsets(19,20);
+        assertEquals(35, origOffsets.getFirst());
+        assertEquals(36, origOffsets.getSecond());
+
+
+        modStart = st.computeModifiedOffsetFromOriginal(31); // in the middle of the replaced
+        modEnd = st.computeModifiedOffsetFromOriginal(32);
+        assertEquals(17, modStart);
+        assertEquals(18, modEnd);
 
     }
+
+
+    @Test
+    public void testSequentialSequence() {
+//        SEQUENCE= "The http://theonlyway.org {only}^@^@^@ way___";
+//        MODSEQUENCE= "The WWW -LCB-only-RCB- way-";
+        StringTransformation st = new StringTransformation(SEQUENCE);
+
+        st.transformString(4, 25, "WWW");
+        // force edits to be flushed
+        st.getTransformedText();
+
+        st.transformString(8, 9, "-LCB-");
+        st.getTransformedText();
+
+        st.transformString(17, 18, "-RCB-");
+        st.getTransformedText();
+
+        st.transformString(22, 28, "");
+        st.getTransformedText();
+
+        st.transformString(26, 29, "-");
+        st.getTransformedText();
+
+        String modifiedStr = st.getTransformedText();
+
+        assertEquals(SEQUENCE, st.getOrigText());
+        assertEquals(SEQUENCE.length() - 18, modifiedStr.length());
+        assertEquals(MODSEQUENCE, modifiedStr);
+
+        int modStart = st.computeModifiedOffsetFromOriginal(4);
+        int modEnd = st.computeModifiedOffsetFromOriginal(25);
+        assertEquals(4, modStart);
+        assertEquals(7, modEnd);
+
+        String transfSeq = modifiedStr.substring(4, 7);
+        String origSeq = st.getOrigText().substring(4, 25);
+
+        assertEquals(transfSeq, "WWW");
+        assertEquals(origSeq, "http://theonlyway.org");
+
+        /*
+         * what happens if we query a char in the middle of a deleted sequence?
+         * -- should map to beginning of that modification
+         */
+        int modMid = st.computeModifiedOffsetFromOriginal(20);
+        assertEquals(7, modMid);
+
+        IntPair origOffsets = st.getOriginalOffsets(4,7);
+        assertEquals(4, origOffsets.getFirst());
+        assertEquals(25, origOffsets.getSecond());
+
+        // intermediate edit chars map to same offsets, treated like replacements
+        origOffsets = st.getOriginalOffsets(1,2);
+        assertEquals(1, origOffsets.getFirst());
+        assertEquals(2, origOffsets.getSecond());
+
+        origOffsets = st.getOriginalOffsets(1, 6); // in the middle of the replaced
+        assertEquals(6, origOffsets.getSecond());
+
+
+        // check expand edit
+        origOffsets = st.getOriginalOffsets(17,22);
+        assertEquals(31, origOffsets.getFirst());
+        assertEquals(32, origOffsets.getSecond());
+
+
+        transfSeq = modifiedStr.substring(17, 22);
+        origSeq = st.getOrigText().substring(31, 32);
+
+        assertEquals("-RCB-", transfSeq);
+        assertEquals("}", origSeq); // combines expand + delete for contiguous spans
+
+        // intermediate edit chars map to same offsets, treated like replacements.
+        // note that this could be weird in case of multiple edits at same index
+        //   (e.g. insertion, then deletion)
+        // Note that these don't really make sense as substrings, and nor are the mapped substrings likely to make sense
+        origOffsets = st.getOriginalOffsets(19,20);
+        assertEquals(33, origOffsets.getFirst());
+        assertEquals(34, origOffsets.getSecond());
+
+
+        modStart = st.computeModifiedOffsetFromOriginal(31); // in the middle of the replaced
+        modEnd = st.computeModifiedOffsetFromOriginal(32);
+        assertEquals(17, modStart);
+        assertEquals(18, modEnd);
+
+    }
+
 
 }

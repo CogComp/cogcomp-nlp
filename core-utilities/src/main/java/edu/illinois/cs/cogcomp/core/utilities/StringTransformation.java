@@ -24,20 +24,19 @@ public class StringTransformation {
     // these are temporary, until getTransformedText() is called. Order is useful, so use TreeMap.
     private TreeMap<Integer, Integer> currentOffsetModifications;
     // store a change of length value at origText character offset for each operation performed on origText.
-    // these are permanent.
     private TreeMap<Integer, Integer> recordedOffsetModifications;
-    private HashMap<IntPair, Map<String, String>> markup;
+    // records changes to offsets to transformed string to retrieve corresponding character in original string
+    private TreeMap<Integer, Integer> recordedInverseModifications;
     // a list of edits, that respects the order in which they were specified. Client responsible for coherence.
     private List<Pair<IntPair, Pair<String, String>>> edits;
-    private TreeMap<Integer, Integer> recordedInverseModifications;
-
+    // stores deleted regions, for which no mappings can be generated
+    private TreeMap<Integer, IntPair> unmappedOffsets;
     public StringTransformation(String origText) {
         this.origText = origText;
         this.transformedText = origText;
         currentOffsetModifications = new TreeMap();
         recordedOffsetModifications = new TreeMap<>();
         recordedInverseModifications = new TreeMap<>();
-        markup = new HashMap<>();
         isModified = false;
         edits = new ArrayList<>();
     }
@@ -57,30 +56,13 @@ public class StringTransformation {
     }
 
 
-//    /**
-//     * Remove the specified span, store specified markup attributes.
-//     * Interprets offsets wrt current representation of transformed string -- i.e. multiple sequential calls to
-//     *    transformMarkup() without a call to getModifiedString() must all refer to the string in the state it was
-//     *    in when the first such call was made.  The goal here is to allow efficiency by avoiding repeated computation
-//     *    of many offset changes for every new transformation.
-//     *
-//     * @param origStart start offset in string used by client
-//     * @param origEnd end offset in string used by client (one-past-the-end)
-//     * @param attributes list of properties to store associated with removed markup
-//     */
-//    public void removeMarkup(int origStart, int origEnd, Map<String, String> attributes) {
-//
-//        IntPair transformOffsets = transformString(origStart, origEnd, "");
-//        markup.put(transformOffsets, attributes);
-//    }
-
 
     /**
      * Modify the current version of the transformed text (as returned by getTransformedText()) by replacing the
      *    string between character offsets textStart and textEnd with newStr.
-     * @param textStart
-     * @param textEnd
-     * @param newStr
+     * @param textStart character offset start of edit in transformed text
+     * @param textEnd character offset end of edit in transformed text
+     * @param newStr string to replace specified character span
      * @return the offsets in the current, internally transformed text corresponding to textStart and textEnd
      */
     public IntPair transformString(int textStart, int textEnd, String newStr) {
@@ -102,12 +84,17 @@ public class StringTransformation {
         int newLen = newStr.length();
         int origLen = textEnd - textStart;
         int netDiff = newLen - origLen;
-        if (netDiff < 0) // involves deleting chars: after new str, modify the offsets
-            currentOffsetModifications.put(textStart + newLen, netDiff );
-        else if (netDiff > 0) // involves insertion
-            currentOffsetModifications.put(textStart + origLen, netDiff);
-        // else just replaced, no offset changes needed.
+        if (netDiff != 0) { // else just replaced, no offset changes needed.
+            int putIndex = textStart + origLen; // for insertion, add the modifier at the end of the original span
+            if (netDiff < 0) // involves deleting chars: after new str, modify the offsets
+                putIndex = textStart + newLen;
 
+            // account for any previous modifications at this index
+            if (currentOffsetModifications.containsKey(putIndex))
+                netDiff += currentOffsetModifications.get(putIndex);
+
+            currentOffsetModifications.put(putIndex, netDiff);
+        }
         IntPair transformOffsets = new IntPair(start, end);
         String origStr = transformedText.substring(textStart, textEnd);
         // edit offsets encode affected substring allowing for previous edits in current pass
@@ -188,16 +175,19 @@ public class StringTransformation {
              *    at transform string indexes where changes occur, such that adding the offset modifier
              *    to the current transform index yields the corresponding offset in the original string.
              */
-            int runningMod = 0;
+
+            recordedInverseModifications.clear();
+            // recordedOffsetModifications: at char index X, modify running offset modifier by Y
             for (Integer transformModIndex : recordedOffsetModifications.keySet()) {
-                int baseOffset = transformModIndex + runningMod;
+                int baseOffset = transformModIndex;
                 int transformMod = recordedOffsetModifications.get(transformModIndex);
-                if (transformMod < 0) // deletion; transformMod is negative
-                    recordedInverseModifications.put(baseOffset, runningMod - transformMod);
-                else // for insertion, map all intermediate offsets to first character in orig string
-                    for (int i = 1; i <= transformMod; ++i) {
-                        recordedInverseModifications.put(baseOffset + i, --runningMod);
-                    }
+//                if (transformMod < 0) // deletion; transformMod is negative
+                    recordedInverseModifications.put(baseOffset,  -transformMod);
+//                else { // for insertion, map all intermediate offsets to first character in orig string
+//                    for (int i = 1; i <= transformMod; ++i) {
+//                        recordedInverseModifications.put(baseOffset + i, -1);
+//                    }
+//                }
             }
 
             /**
@@ -240,7 +230,10 @@ public class StringTransformation {
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
             if (changeIndex > origOffset) // + currentChange) // account for previous changes in computing current position
                 break;
-            currentChange += recordedOffsetModifications.get(changeIndex);
+            int change = recordedOffsetModifications.get(changeIndex);
+            if (origOffset + change < changeIndex) // change is deletion, orig offset in deleted window
+                change = changeIndex - origOffset; // set to index recorded for deletion, rather than prior index
+            currentChange += change;
         }
 
         return origOffset + currentChange;
@@ -254,14 +247,15 @@ public class StringTransformation {
      */
     public IntPair getOriginalOffsets(int transformStart, int transformEnd) {
 
+//        return new IntPair(computeOriginalOffset(transformStart), computeCurrentOffset(transformEnd));
         int origStart = transformStart;
         int origEnd = transformEnd;
 
         for (Integer changeIndex : this.recordedInverseModifications.keySet()) {
             if (changeIndex < origStart)
-                origStart = transformStart + recordedInverseModifications.get(changeIndex);
+                origStart += recordedInverseModifications.get(changeIndex);
             if (changeIndex <= origEnd)
-                origEnd = transformEnd + recordedInverseModifications.get(changeIndex);
+                origEnd += recordedInverseModifications.get(changeIndex);
         }
 
         return new IntPair(origStart, origEnd);
