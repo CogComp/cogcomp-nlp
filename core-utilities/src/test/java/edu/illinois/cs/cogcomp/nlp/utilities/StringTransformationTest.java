@@ -91,6 +91,11 @@ public class StringTransformationTest {
         origOffsets = st.getOriginalOffsets(10, 12);
         assertEquals(9, origOffsets.getFirst());
         assertEquals(10, origOffsets.getSecond());
+
+        int modStart = st.computeModifiedOffsetFromOriginal(9);
+        int modEnd = st.computeModifiedOffsetFromOriginal(10);
+        assertEquals(10, modStart);
+        assertEquals(12, modEnd);
     }
 
 
@@ -111,6 +116,12 @@ public class StringTransformationTest {
         assertEquals(EXPAND, st.getOrigText());
         assertEquals(EXPAND.length() + 2, modifiedStr.length());
         assertEquals(MODEXPAND, modifiedStr);
+
+        int modStart = st.computeModifiedOffsetFromOriginal(9);
+        int modEnd = st.computeModifiedOffsetFromOriginal(10);
+        assertEquals(10, modStart);
+        assertEquals(12, modEnd);
+
 
         IntPair origOffsets = st.getOriginalOffsets(4, 6);
         assertEquals(4, origOffsets.getFirst());
@@ -133,6 +144,11 @@ public class StringTransformationTest {
         assertEquals(REPLACE, st.getOrigText());
         assertEquals(REPLACE.length(), modifiedStr.length());
         assertEquals(MODREPLACE, modifiedStr);
+
+        int modStart = st.computeModifiedOffsetFromOriginal(14);
+        int modEnd = st.computeModifiedOffsetFromOriginal(15);
+        assertEquals(14, modStart);
+        assertEquals(15, modEnd);
 
         IntPair origOffsets = st.getOriginalOffsets(4, 5);
         assertEquals(4, origOffsets.getFirst());
@@ -157,14 +173,19 @@ public class StringTransformationTest {
         assertEquals(REDUCE.length() - 22, modifiedStr.length());
         assertEquals(MODREDUCE, modifiedStr);
 
+        int modStart = st.computeModifiedOffsetFromOriginal(0);
+        int modEnd = st.computeModifiedOffsetFromOriginal(25);
+        assertEquals(0, modStart);
+        assertEquals(3, modEnd);
+
         IntPair origOffsets = st.getOriginalOffsets(0,3);
         assertEquals(0, origOffsets.getFirst());
         assertEquals(25, origOffsets.getSecond());
 
         // intermediate edit chars map to same offsets, treated like replacements
         origOffsets = st.getOriginalOffsets(1,2);
-        assertEquals(23, origOffsets.getFirst());
-        assertEquals(24, origOffsets.getSecond());
+        assertEquals(1, origOffsets.getFirst());
+        assertEquals(2, origOffsets.getSecond());
 
         origOffsets = st.getOriginalOffsets(1, 4); // 1 past the end of the edit
         assertEquals(26, origOffsets.getSecond());
