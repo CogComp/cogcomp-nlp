@@ -38,6 +38,8 @@ public class StringTransformation {
     private List<Pair<IntPair, Pair<String, String>>> edits;
     // stores deleted regions, for which no mappings can be generated
     private TreeMap<Integer, IntPair> unmappedOffsets;
+
+
     public StringTransformation(String origText) {
         this.origText = origText;
         this.transformedText = origText;
@@ -119,7 +121,7 @@ public class StringTransformation {
      * @param modOffset offset in modified string
      * @return corresponding offset in original string
      */
-    public int computeOriginalOffset(int modOffset) {
+    private int computeOriginalOffset(int modOffset) {
 
         int currentChange = 0;
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
@@ -153,7 +155,7 @@ public class StringTransformation {
             /*
              * store pending recorded offsets while computing absolute offsets for all current edits
              */
-            Map<Integer, Integer> toAdd = new HashMap();
+            Map<Integer, Integer> toAdd = new TreeMap();
 
             for (Integer modOffset : currentOffsetModifications.keySet()) {
                 Integer currentMod = currentOffsetModifications.get(modOffset);
@@ -172,10 +174,57 @@ public class StringTransformation {
                 toAdd.put(absoluteModOffset, currentMod);
             }
 
-            for (int key : toAdd.keySet())
-                recordedOffsetModifications.put(key, toAdd.get(key));
+            // the entries in toAdd *cannot* conflict, because they come from a single pass
+            if (recordedOffsetModifications.isEmpty())
+                recordedOffsetModifications.putAll(toAdd);
+            else {
+                TreeMap<Integer, Integer> safeAdds = new TreeMap<>();
 
-            /**
+                int lastKeyPos = 0; // stores position of greatest of last key, or the last key's effective edit position
+                for (int key : toAdd.keySet()) {
+                    int mod = toAdd.get(key);
+
+                    if (key < lastKeyPos)
+                        key = lastKeyPos; // move to after last entry key + edit
+                    /*
+                     * it gets a bit tricky if a new deletion overlaps older edits: you need to split up the new edit.
+                     */
+                    for (int oldKey : recordedOffsetModifications.keySet()) {
+                        if (mod == 0)
+                            break;
+                        // am I at the same index?
+                        if (oldKey == key) {
+                            key = Math.max(key + 1, key - recordedOffsetModifications.get(oldKey)); //move on...
+                        }
+                        // am I within the window of a prior edit?
+                        else if (oldKey < key) {
+                            int oldMod = recordedOffsetModifications.get(oldKey);
+                            int diff = oldKey - key; // negative, to compare with negative mod
+                            if (diff > oldMod) { // edits interfere; can't happen if oldMod is positive (insertion)
+                                key = oldKey - oldMod; // modifier doesn't change: edit not applied yet; update edit
+                                // position to just past old edit
+                            }
+                        } else if (oldKey > key) { // Is next edit within window of my edit?
+                            int diff = key - oldKey; // negative, to compare with -ve mod
+                            if (diff > mod) { //if diff > mod, mod is negative and edits interfere.
+                                safeAdds.put(key, diff); // delete up to current edit
+                                mod = mod - diff; // part of modification not accounted for; again, recall both negative
+                                key = oldKey - recordedOffsetModifications.get(oldKey); // move to index after old edit
+                            } else { // either mod is positive, or next edit does not interfere
+                                safeAdds.put(key, mod);
+                                lastKeyPos = Math.max(key, key - mod); // update if -ve mod
+                                mod = 0; //break from the loop
+                            }
+                        }
+                    }
+
+                    if (mod != 0) // past all old edits, haven't added it yet...
+                        safeAdds.put(key, mod);
+                }
+                recordedOffsetModifications.putAll(safeAdds);
+            }
+
+            /*
              * compute inverse mapping (from transformed text offsets to original offsets)
              *    using the complete set of transformations to date: store as offset modifiers
              *    at transform string indexes where changes occur, such that adding the offset modifier
@@ -187,16 +236,10 @@ public class StringTransformation {
             for (Integer transformModIndex : recordedOffsetModifications.keySet()) {
                 int baseOffset = transformModIndex;
                 int transformMod = recordedOffsetModifications.get(transformModIndex);
-//                if (transformMod < 0) // deletion; transformMod is negative
-                    recordedInverseModifications.put(baseOffset,  -transformMod);
-//                else { // for insertion, map all intermediate offsets to first character in orig string
-//                    for (int i = 1; i <= transformMod; ++i) {
-//                        recordedInverseModifications.put(baseOffset + i, -1);
-//                    }
-//                }
+                recordedInverseModifications.put(baseOffset,  -transformMod);
             }
 
-            /**
+            /*
              * cleanup: remove temporary state that has now been resolved
              */
             currentOffsetModifications.clear();
