@@ -115,12 +115,11 @@ public class StringTransformation {
     /**
      * given an offset in the current transformedString stored by this object, return the corresponding
      *    offset in the original String.
+     * NOTE: this does NOT account for pending edits. If you wish this, first call applyPendingEdits.
      * @param modOffset offset in modified string
      * @return corresponding offset in original string
      */
     public int computeOriginalOffset(int modOffset) {
-        if (isModified)
-            applyPendingEdits();
 
         int currentChange = 0;
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
@@ -134,7 +133,7 @@ public class StringTransformation {
     /**
      * apply any pending edits, update the modified string
      */
-    private void applyPendingEdits() {
+    public void applyPendingEdits() {
 
         String currentStr = transformedText;
         if (isModified) {

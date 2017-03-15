@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransformation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 
 import java.util.Map;
 import java.util.Set;
@@ -32,23 +32,19 @@ import java.util.Set;
 
 public class XmlTextAnnotationMaker {
 
-    private final Set<String> tagsWithText;
-    private final Map<String, Set<String>> tagsWithAttributes;
     private final TextAnnotationBuilder taBuilder;
+    private final XmlDocumentProcessor xmlProcessor;
 
 
     /**
      * Specifies the behavior of the XmlTextAnnotationMaker: tokenization (via the TextAnnotationBuilder),
      *    which xml tags to use for body text and for retained attributes
      * @param taBuilder generates the sentence split and tokenized text for further processing
-     * @param tagsWithText xml tags that delimit text to be processed
-     * @param tagsWithAttributes xml tags with attributes that must be preserved
+     * @param xmlProcessor responsible for parsing xml, extracting processable text and relevant markup info
      */
-    public XmlTextAnnotationMaker(TextAnnotationBuilder taBuilder, Set<String> tagsWithText,
-                                  Map<String, Set<String>> tagsWithAttributes) {
+    public XmlTextAnnotationMaker(TextAnnotationBuilder taBuilder, XmlDocumentProcessor xmlProcessor) {
         this.taBuilder = taBuilder;
-        this.tagsWithText = tagsWithText;
-        this.tagsWithAttributes = tagsWithAttributes;
+        this.xmlProcessor = xmlProcessor;
     }
 
 
@@ -68,7 +64,7 @@ public class XmlTextAnnotationMaker {
 
         StringTransformation xmlSt = new StringTransformation(xmlText);
         Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanResults =
-                TextCleanerStringTransformation.cleanDiscussionForumXml(xmlSt, tagsWithText, tagsWithAttributes);
+                xmlProcessor.processXml(xmlSt);
 
         TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId, xmlSt.getTransformedText());
 

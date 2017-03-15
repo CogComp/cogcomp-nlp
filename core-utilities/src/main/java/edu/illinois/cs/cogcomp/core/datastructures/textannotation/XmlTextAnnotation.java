@@ -15,9 +15,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Represent a document that contains xml markup. This creates challenges representing annotations for information
- *    in xml attributes, and it may be useful to identify the source tag for different elements' text -- such
- *    as article headlines, bylines, date of publication, or sub-headers.
+ * Represent a document that contains xml markup. Another class -- {@link XmlTextAnnotationMaker}, extracts a subset
+ *    of the xml source text that will be processed by NLP components and creates a TextAnnotation from it.
+ *    It also extracts xml markup that contains relevant information for use by applications. Examples of possible
+ *    text fields are "<body>" and "<headline>"; possible supplementary info could be the "author" attribute
+ *    in a tag such as "<post author=\"marfa\">". Finally, it provides a StringTransformation that maps between
+ *    the xml source and the cleaned NLP-processable text. These elements comprise the information for a
+ *    {@link XmlTextAnnotation} object.
  *
  * @author mssammon
  */

@@ -26,9 +26,6 @@ import java.util.regex.Pattern;
  * These attempt to preserve character offsets, and to make intuitive replacements (see the
  * StringTransformationCleanup class from coreUtilities).
  * <p>
- * Other methods try to remove problem character sequences from text to avoid known problems with
- * NLP components for such sequences, but don't preserve character offsets.
- *
  * This class, which replicates functionality from {@link TextCleaner}, uses StringTransformations instead
  * of Strings, and so allows recovery of character offsets in the original string after cleanup has taken
  * place, even if character offsets are not preserved.
@@ -37,33 +34,33 @@ import java.util.regex.Pattern;
  */
 
 public class TextCleanerStringTransformation {
+    protected static final String xmlQuot = "&quot;";
+    protected static final String xmlAmp = "&amp;";
+    protected static final String xmlApos = "&apos;";
+    protected static final String xmlLt = "&lt;";
+    protected static final String xmlGt = "&gt;";
+    protected static final Pattern xmlEscapeCharPattern = Pattern.compile(xmlQuot + "|" +xmlAmp + "|" + xmlApos + "|" +
+        xmlLt + "|" + xmlGt);
+    protected static final Pattern underscorePattern = Pattern.compile("_");
+    protected static final Pattern controlSequencePattern = Pattern.compile("@\\\\^|\\\\^@|\\\\^");
+    protected static final Pattern atSymbolPattern = Pattern.compile("@ ");
+    protected static final Pattern badApostrophePattern = Pattern.compile("(\\S+)\"s(\\s+)");
     private static final String NAME = TextCleanerStringTransformation.class.getCanonicalName();
     private static final boolean DEBUG = false;
     private static final int REGEX_TEXT_LIMIT = 10000;
-    private static final String xmlQuot = "&quot;";
-    private static final String xmlAmp = "&amp;";
-    private static final String xmlApos = "&apos;";
-    private static final String xmlLt = "&lt;";
-    private static final String xmlGt = "&gt;";
-    private static final Pattern xmlEscapeCharPattern = Pattern.compile(xmlQuot + "|" +xmlAmp + "|" + xmlApos + "|" +
-        xmlLt + "|" + xmlGt);
-    private static final Pattern underscorePattern = Pattern.compile("_");
-    private static final Pattern controlSequencePattern = Pattern.compile("@\\\\^|\\\\^@|\\\\^");
-    private static final Pattern atSymbolPattern = Pattern.compile("@ ");
-    private static final Pattern badApostrophePattern = Pattern.compile("(\\S+)\"s(\\s+)");
-    private static Logger logger = LoggerFactory.getLogger(TextCleanerStringTransformation.class);
-    private static Pattern repeatPunctuationPattern = Pattern
+    protected static Logger logger = LoggerFactory.getLogger(TextCleanerStringTransformation.class);
+    protected static Pattern repeatPunctuationPattern = Pattern
             .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
-    private static Pattern xmlTagPattern = Pattern.compile("(<[^>\\r\\n]+>\\n?)"); // NEWLINES ARE IMPORTANT!!
+    protected static Pattern xmlTagPattern = Pattern.compile("(<[^>\\r\\n]+>)"); // handle newlines separately
     /** used to extract the name of the tag, so we can match tag and attribute name. */
-    private static Pattern xmlTagNamePattern = Pattern.compile("<([^\\s>]+)");
-    private static Pattern whitespacePattern = Pattern.compile("\\s+");
+    protected static Pattern xmlTagNamePattern = Pattern.compile("<([^\\s>]+)");
+    protected static Pattern whitespacePattern = Pattern.compile("\\s+");
     /** find attributes in an xml tag instance. Match whitespace then word. Group one is the
      * attribute name, group 2 is the quote mark used, three is the value. */
-    private static Pattern tagAttributePatter2 = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s\"']*([^\\s\"'>]+)");
-    private static Pattern tagAttributePattern = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s]*[\"']([^\"']+)");
-    private static Pattern adhocFormatPattern = Pattern.compile("[\\*~\\^]+");
-    private static Map<String, String> escXlmToChar = new HashMap<>();
+    protected static Pattern tagAttributePatter2 = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s\"']*([^\\s\"'>]+)");
+    protected static Pattern tagAttributePattern = Pattern.compile("[\\s]+([^\\s>=]+)[\\s]*=[\\s]*[\"']([^\"']+)");
+    protected static Pattern adhocFormatPattern = Pattern.compile("[\\*~\\^]+");
+    protected static Map<String, String> escXlmToChar = new HashMap<>();
 
     static {
         escXlmToChar.put(xmlQuot, "\"");
@@ -135,7 +132,7 @@ public class TextCleanerStringTransformation {
      * @param attrName the name of the current attrigute.
      * @return true if we keep the tag value.
      */
-	private static boolean keep(List<String> tagNames, List<String> attributeNames, String tagname,
+	protected static boolean keep(List<String> tagNames, List<String> attributeNames, String tagname,
 			String attrName) {
 		for (int i = 0; i < tagNames.size(); i++) {
 			if (tagNames.get(i).equals(tagname))
@@ -145,89 +142,6 @@ public class TextCleanerStringTransformation {
 		return false;
 	}
 
-    /**
-     * This class removes XML markup, for the most part. For specified tags that denote spans of text other than
-     *    body text (e.g. quotes, headlines), the text value and offsets are reported. For specified tags and attributes,
-     *    the attribute values and their offsets are reported. Content within <code>quote</code>
-     * tags is left in place (though quote tags are removed) and the offsets are reported with the
-     * other specified attributes.
-     * Pretty sure this doesn't handle nested tags.
-     * @param xmlText the original xml text.
-     * @param tagsWithText the names of tags containing text other than body text (e.g. headlines, quotes)
-     * @param tagsWithAtts the names of tags containing the attributes to retain, paired with sets of attribute names
-     *                     MUST BE LOWERCASE.
-     * @return String comprising text.
-     */
-    public static Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanDiscussionForumXml(
-            StringTransformation xmlText, Set<String> tagsWithText, Map<String, Set<String>>tagsWithAtts) {
-
-        StringTransformation normalizedTextSt = replaceXmlEscapedChars(xmlText);
-        String normalizedText = normalizedTextSt.getTransformedText();
-        Matcher xmlMatcher = xmlTagPattern.matcher(normalizedText);
-        Map<IntPair, Pair<String, String>> attributesRetained = new HashMap<>();
-
-        // match mark-up: open tag
-        while (xmlMatcher.find()) {
-            String substr = xmlMatcher.group(0);
-            if ( substr.charAt(1) == '/')
-                continue; //this is an end tag
-
-            int tagStart = xmlMatcher.start();
-            int tagEnd = xmlMatcher.end();
-
-            substr = substr.toLowerCase();
-            // get the tag name
-            Matcher tagMatcher = xmlTagNamePattern.matcher(substr);
-            if (tagMatcher.find()) {
-                // identify the tag and its corresponding close tag
-                String tagname = tagMatcher.group(1);
-                int endStart = normalizedText.indexOf("</" +tagname +">", tagEnd);
-                if (endStart == -1)
-                    throw new IllegalArgumentException("No matching end tag for '" + tagname + "'");
-                int endEnd = endStart + tagname.length() + 3;
-                //strip trailing whitespace
-                Matcher wsMatcher = whitespacePattern.matcher(normalizedText.substring(endEnd));
-                if (wsMatcher.find()) {
-                    if (wsMatcher.start() == 0)
-                        endEnd += wsMatcher.end();
-                }
-
-                // within an xml tag: identify any attribute values we need to retain.
-                if (tagsWithAtts.containsKey(tagname)) {
-                    Set<String> attributeNames = tagsWithAtts.get(tagname);
-                    // parse the substring beyond the tag name.
-                    substr = substr.substring(tagMatcher.end());
-                    Matcher attrMatcher = tagAttributePattern.matcher(substr);
-                    while (attrMatcher.find()) {
-                        String attrName = attrMatcher.group(1);
-                        String attrVal = attrMatcher.group(2);
-                        if (attributeNames.contains(attrName)) {
-                            // substring starts at index of start of (open) xml tag + length of tag name + left angle bracket
-                            int attrValOffset = tagMatcher.end() + xmlMatcher.start() + 1;
-                            int attrValStart = attrMatcher.start(2) + attrValOffset;
-                            int attrValEnd = attrMatcher.end(2) + attrValOffset;
-                            IntPair attrValOffsets = new IntPair(attrValStart, attrValEnd);
-                            attributesRetained.put(attrValOffsets, new Pair(attrName, attrVal));
-                        }
-                    }
-                }
-
-                // if we should retain text between open and close, do so
-                if (tagsWithText.contains(tagname)) {
-                    //delete the tags, leave the text
-                    normalizedTextSt.transformString(tagStart, tagEnd, "");
-                    normalizedTextSt.transformString(endStart, endEnd, "");
-                }
-                else { // just delete the whole span.
-                    normalizedTextSt.transformString(tagStart, endEnd, "");
-                }
-                if (DEBUG) {
-                    System.err.println("Current string:\n" + normalizedTextSt.getTransformedText());
-                }
-            }
-        }
-        return new Pair(normalizedTextSt, attributesRetained);
-    }
 
     /**
      * given an xml string, replace xml-escaped characters with their ascii equivalent, padded with whitespace.
@@ -251,7 +165,7 @@ public class TextCleanerStringTransformation {
         return xmlTextSt;
     }
 
-    private static String getSubstStr(String substr) {
+    protected static String getSubstStr(String substr) {
         return escXlmToChar.get(substr);
     }
 
@@ -292,44 +206,6 @@ public class TextCleanerStringTransformation {
         return origTextSt;
     }
 
-    /**
-     * Test here.
-     * @param args not used.
-     * @throws Exception
-     */
-    static public void main(String[] args) throws Exception {
-        String origText = "<headline>No way. Really?</headline>\n" +
-                "<distraction>don't print me. Don't save me.</distraction>\n<post author='John Marston' toop='1'>\n";
-        origText += "Hi, how do you do?</post>\n";
-
-        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-        Set<String> attributeNames = new HashSet<>();
-        attributeNames.add("author");
-        tagsWithAtts.put("post", attributeNames);
-        System.out.println(origText);
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add("headline");
-//        tagsWithText.add("post");
-        StringTransformation origTextSt = new StringTransformation(origText);
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt =
-                TextCleanerStringTransformation.cleanDiscussionForumXml(origTextSt, tagsWithText, tagsWithAtts);
-
-  // check that we retained the right attributes, cleaned up the text, generated a sensible cleaned text, and can
-        // recover the offsets of strings in the original text.
-        StringTransformation st = nt.getFirst();
-        Map<IntPair, Map<String, String>> retainedTagInfo = nt.getSecond();
-
-        System.out.println("Original String:\n'" + origText + "'");
-        System.out.println("Original String in StringTransformation:\n'" + origTextSt.getOrigText() + "'");
-        System.out.println("Cleaned String: '" + origTextSt.getTransformedText() + "'");
-
-        System.out.println("Retained tag info: ");
-        for (IntPair offsets : retainedTagInfo.keySet()) {
-            System.out.print("Offsets (" + offsets.getFirst() + "," + offsets.getSecond() + "): ");
-            for (String att : retainedTagInfo.get(offsets).keySet())
-                System.out.println(att + ": " + retainedTagInfo.get(offsets).get(att));
-        }
-    }
 
     /**
      * attempts to remove/replace characters likely to cause problems to NLP tools -- output should
