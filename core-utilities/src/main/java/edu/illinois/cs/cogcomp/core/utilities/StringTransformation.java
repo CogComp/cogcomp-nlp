@@ -23,20 +23,34 @@ import java.util.*;
  */
 public class StringTransformation {
 
+    /** source text: immutable record of the starting point for all transformations */
     private final String origText;
-    // tracks whether transformedText field is out of date
+
+    /** tracks whether transformedText field is out of date. */
     boolean isModified;
+
+    /**
+     * The state of the text after edits are applied (excluding pending edits).
+     * The client gets this String, computes a set of desired changes in a single pass, then applies the updates.
+     */
     private String transformedText;
-    // store a change of length value at transformedText character for each operation performed on transformedText
-    // these are temporary, until getTransformedText() is called. Order is useful, so use TreeMap.
+
+    /**
+     * store a change of length value at transformedText character for each operation performed on transformedText
+     *     These are temporary, until getTransformedText() is called. Order is useful, so use TreeMap.
+     */
     private TreeMap<Integer, Integer> currentOffsetModifications;
-    // store a change of length value at origText character offset for each operation performed on origText.
+
+    /** store a change of length value at origText character offset for each operation performed on origText. */
     private TreeMap<Integer, Integer> recordedOffsetModifications;
-    // records changes to offsets to transformed string to retrieve corresponding character in original string
+
+    /** records changes to offsets to transformed string to retrieve corresponding character in original string */
     private TreeMap<Integer, Integer> recordedInverseModifications;
-    // a list of edits, that respects the order in which they were specified. Client responsible for coherence.
+
+    /** a list of edits, that respects the order in which they were specified. Client responsible for coherence. */
     private List<Pair<IntPair, Pair<String, String>>> edits;
-    // stores deleted regions, for which no mappings can be generated
+
+    /** stores deleted regions, for which no mappings can be generated */
     private TreeMap<Integer, IntPair> unmappedOffsets;
 
 
@@ -50,21 +64,24 @@ public class StringTransformation {
         edits = new ArrayList<>();
     }
 
-
+    /**
+     * get the original text, before all edits were applied.
+     * @return the original text.
+     */
     public String getOrigText() {
         return origText;
     }
 
-
-
+    /**
+     * get the updated text, after edits are applied. Performs any pending edits first.
+     * @return the transformed text.
+     */
     public String getTransformedText() {
         if (isModified) {
             this.applyPendingEdits();
         }
         return transformedText;
     }
-
-
 
     /**
      * Modify the current version of the transformed text (as returned by getTransformedText()) by replacing the
@@ -140,7 +157,7 @@ public class StringTransformation {
         String currentStr = transformedText;
         if (isModified) {
             /*
-              immediately set flag, as we'll be calling other methods that check this condition, which could call this
+              immediately set flag, as we may call other methods that check this condition, which could call this
                  method
              */
             isModified = false;
@@ -230,9 +247,11 @@ public class StringTransformation {
              *    at transform string indexes where changes occur, such that adding the offset modifier
              *    to the current transform index yields the corresponding offset in the original string.
              */
-
             recordedInverseModifications.clear();
-            // recordedOffsetModifications: at char index X, modify running offset modifier by Y
+
+            /*
+             * recordedOffsetModifications: at char index X, modify running offset modifier by Y
+             */
             for (Integer transformModIndex : recordedOffsetModifications.keySet()) {
                 int baseOffset = transformModIndex;
                 int transformMod = recordedOffsetModifications.get(transformModIndex);
@@ -244,7 +263,6 @@ public class StringTransformation {
              */
             currentOffsetModifications.clear();
             edits.clear();
-
         }
     }
 

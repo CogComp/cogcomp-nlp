@@ -20,8 +20,6 @@ import java.nio.charset.CharsetEncoder;
  *
  * @author mssammon
  */
-
-
 public class StringTransformationCleanup {
     private static final String LATIN1 = "ISO-8859-1";
 
@@ -30,11 +28,11 @@ public class StringTransformationCleanup {
      * the same, and tokens should remain contiguous in the output; non-recognized characters will
      * be substituted for *something*.
      */
-    static public StringTransformation normalizeToEncoding(StringTransformation stringTransformation, Charset encoding_) {
+    static public StringTransformation normalizeToEncoding(StringTransformation stringTransformation, Charset encoding) {
 
         String startStr = stringTransformation.getTransformedText();
 
-        CharsetEncoder encoder = encoding_.newEncoder();
+        CharsetEncoder encoder = encoding.newEncoder();
 
         if (!encoder.canEncode(startStr)) {
             final int length = startStr.length();
@@ -44,9 +42,8 @@ public class StringTransformationCleanup {
             for (int offset = 0; offset < length;) {
                 // do something with the codepoint
                 Pair<Boolean, Integer> replacement =
-                        normalizeCharacter(startStr, encoding_, offset);
+                        normalizeCharacter(startStr, encoding, offset);
 
-                boolean isOk = replacement.getFirst();
                 Character replacedChar = (char) replacement.getSecond().intValue();
 
                 if (null != replacedChar) {
@@ -54,7 +51,6 @@ public class StringTransformationCleanup {
                     stringTransformation.transformString(charNum, charNum+1, String.valueOf(replacedChar));
                     charNum++;
                 }
-
                 offset += Character.charCount(replacedChar);
             }
         }
@@ -69,26 +65,14 @@ public class StringTransformationCleanup {
      * generic punctuation whitespace with whitespace letter with letter number with number currency
      * symbol with currency
      */
-
-    private static Pair<Boolean, Integer> normalizeCharacter(String origString_,
-            Charset encoding_, int offset_) {
+    private static Pair<Boolean, Integer> normalizeCharacter(String origString,
+            Charset encoding, int offset) {
 
         char normalizedChar = ' ';
 
-        final int codepoint = origString_.codePointAt(offset_);
+        final int codepoint = origString.codePointAt(offset);
 
-        boolean isOk = checkIsInEncoding(codepoint, encoding_);
-        // char nextChar = ' ';
-        // char nextNextChar = ' ';
-        //
-        // if ( offset_ + 1 < origString_.length() )
-        // nextChar = origString_.charAt( offset_ + 1 );
-        // if ( offset_ + 2 < origString_.length() )
-        // nextNextChar = origString_.charAt( offset_ + 2 );
-
-        // CharsetDecoder decoder = encoding_.newDecoder();
-        // System.err.println( "## codepoint is '" + codepoint_ + "'..." );
-
+        boolean isOk = checkIsInEncoding(codepoint, encoding);
 
         if (isOk) {
             normalizedChar = (char) codepoint;
@@ -112,18 +96,18 @@ public class StringTransformationCleanup {
 
 
 
-    private static boolean checkIsInEncoding(int codepoint, Charset encoding_) {
+    private static boolean checkIsInEncoding(int codepoint, Charset encoding) {
 
         boolean isOk = false;
 
-        if (encoding_.equals(Charset.forName("US-ASCII"))) {
+        if (encoding.equals(Charset.forName("US-ASCII"))) {
             if (codepoint < 128)
                 isOk = true;
-        } else if (encoding_.equals(Charset.forName(LATIN1))) // latin1
+        } else if (encoding.equals(Charset.forName(LATIN1))) // latin1
         {
             if (codepoint < 256)
                 isOk = true;
-        } else if (encoding_.equals(Charset.forName("UTF-8"))) {
+        } else if (encoding.equals(Charset.forName("UTF-8"))) {
             if (codepoint < 1114111)
                 isOk = true;
         }
@@ -132,6 +116,12 @@ public class StringTransformationCleanup {
     }
 
 
+    /**
+     * Attempt to replace an out-of-charset character with something appropriate, so that the resulting
+     *    string a) makes sense and b) resembles the original. Otherwise, use whitespace.
+     * @param codepoint codepoint of character to change
+     * @return flag indicating whether a substitution was found, and the substituted character.
+     */
     public static Pair<Boolean, Character> fixCharByType(int codepoint) {
 
         final int type = Character.getType(codepoint);
@@ -186,7 +176,6 @@ public class StringTransformationCleanup {
     static public StringTransformation normalizeToLatin1(StringTransformation origStringSt) {
         return normalizeToEncoding(origStringSt, Charset.forName("ISO-8859-1"));
     }
-
 
 
     static public StringTransformation normalizeToAscii(StringTransformation origStringSt) {

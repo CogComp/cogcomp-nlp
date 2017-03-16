@@ -8,8 +8,6 @@
 package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.constants.CoreConfigNames;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,11 +18,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 /**
  * This class has methods for conversion of non-UTF-8 characters to UTF-8, and from UTF-8 to Ascii.
- * These attempt to preserve character offsets, and to make intuitive replacements (see the
- * StringTransformationCleanup class from coreUtilities).
+ * These attempt to make intuitive replacements, and preserve a mapping to the original character offsets (see
+ * {@link StringTransformationCleanup}).
  * <p>
  * This class, which replicates functionality from {@link TextCleaner}, uses StringTransformations instead
  * of Strings, and so allows recovery of character offsets in the original string after cleanup has taken
@@ -32,7 +29,6 @@ import java.util.regex.Pattern;
  *
  * @author mssammon
  */
-
 public class TextCleanerStringTransformation {
     protected static final String xmlQuot = "&quot;";
     protected static final String xmlAmp = "&amp;";
@@ -46,8 +42,8 @@ public class TextCleanerStringTransformation {
     protected static final Pattern atSymbolPattern = Pattern.compile("@ ");
     protected static final Pattern badApostrophePattern = Pattern.compile("(\\S+)\"s(\\s+)");
     private static final String NAME = TextCleanerStringTransformation.class.getCanonicalName();
-    private static final boolean DEBUG = false;
-    private static final int REGEX_TEXT_LIMIT = 10000;
+//    private static final boolean DEBUG = false;
+//    private static final int REGEX_TEXT_LIMIT = 10000;
     protected static Logger logger = LoggerFactory.getLogger(TextCleanerStringTransformation.class);
     protected static Pattern repeatPunctuationPattern = Pattern
             .compile("[\\p{P}\\*@<>=\\+#~_&\\p{P}]+");
@@ -77,12 +73,12 @@ public class TextCleanerStringTransformation {
     private boolean replaceBogusApostrophe;
 
 
-    public TextCleanerStringTransformation(ResourceManager rm_) throws SAXException, IOException {
-        this.removeRepeatPunctuation = rm_.getBoolean(CoreConfigNames.REMOVE_REPEAT_PUNCTUATION);
-        this.replaceAdHocMarkup = rm_.getBoolean(CoreConfigNames.REPLACE_ADHOC_MARKUP);
-        this.replaceBogusApostrophe = rm_.getBoolean(CoreConfigNames.REPLACE_BAD_APOSTROPHE);
-        this.replaceControlSequence = rm_.getBoolean(CoreConfigNames.REPLACE_CONTROL_SEQUENCE);
-        this.replaceUnderscores = rm_.getBoolean(CoreConfigNames.REPLACE_UNDERSCORES);
+    public TextCleanerStringTransformation(ResourceManager rm) throws SAXException, IOException {
+        this.removeRepeatPunctuation = rm.getBoolean(CoreConfigNames.REMOVE_REPEAT_PUNCTUATION);
+        this.replaceAdHocMarkup = rm.getBoolean(CoreConfigNames.REPLACE_ADHOC_MARKUP);
+        this.replaceBogusApostrophe = rm.getBoolean(CoreConfigNames.REPLACE_BAD_APOSTROPHE);
+        this.replaceControlSequence = rm.getBoolean(CoreConfigNames.REPLACE_CONTROL_SEQUENCE);
+        this.replaceUnderscores = rm.getBoolean(CoreConfigNames.REPLACE_UNDERSCORES);
     }
 
     /**
@@ -106,6 +102,11 @@ public class TextCleanerStringTransformation {
         return origTextSt;
     }
 
+    /**
+     * identifies xml tags and replaces them with an equal amount of space characters.
+     * @param origText text to clean
+     * @return cleaned text, same length, same non-whitespace character offsets
+     */
     public static String replaceXmlTags(String origText) {
         Matcher xmlMatcher = xmlTagPattern.matcher(origText);
         StringBuilder cleanTextBldr = new StringBuilder();
@@ -159,13 +160,13 @@ public class TextCleanerStringTransformation {
             int start = xmlMatcher.start();
             int end = xmlMatcher.end();
 
-            xmlTextSt.transformString(start, end, getSubstStr(substr));
+            xmlTextSt.transformString(start, end, getSubstituteStr(substr));
         }
 
         return xmlTextSt;
     }
 
-    protected static String getSubstStr(String substr) {
+    protected static String getSubstituteStr(String substr) {
         return escXlmToChar.get(substr);
     }
 
@@ -220,14 +221,13 @@ public class TextCleanerStringTransformation {
         int end = 0;
         int textLen = text.length();
 
-        // regexp can die due to heap exhaustion (recursion problem) for long inputs,
-        // so the text is chunked
-
+        // warning: regexp can die due to heap exhaustion (recursion problem) for long inputs,
+        // so may need to chunk texts. This commented used to break up the input; needs more though
+        // to make it work with StringTransformation.
 //        while (end < textLen) {
 //            end = Math.min(start + REGEX_TEXT_LIMIT, textLen);
 //
 //            String chunk = text.substring(start, end);
-
 
         if (this.removeRepeatPunctuation)
             st = replaceDuplicatePunctuation(st);

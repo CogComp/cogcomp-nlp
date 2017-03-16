@@ -29,10 +29,15 @@ import java.util.Set;
  *
  * @author mssammon
  */
-
 public class XmlTextAnnotationMaker {
 
+    /**
+     * tokenizes/sentence splits the cleaned text for further processing
+     */
     private final TextAnnotationBuilder taBuilder;
+    /**
+     * parses the xml text into a cleaned text, records relevant xml markup
+     */
     private final XmlDocumentProcessor xmlProcessor;
 
 
