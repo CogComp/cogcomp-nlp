@@ -82,7 +82,14 @@ public class TextAnnotationUtilities {
                 else
                     return 0;
             };
+    public static final Comparator<IntPair> IntPairComparator = (arg0, arg1) -> {
 
+        int firstCompare = IntPair.comparatorFirst.compare(arg0, arg1);
+        if (0 == firstCompare)
+            return IntPair.comparatorSecond.compare(arg0, arg1);
+
+        return firstCompare;
+        };
 
     public static TextAnnotation createFromTokenizedString(String text) {
         return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections
@@ -124,7 +131,6 @@ public class TextAnnotationUtilities {
     private static String getLineFill() {
         return "------------------------------------";
     }
-
 
     /**
      * given a {@link TextAnnotation} for a sentence with annotations, map its annotations into a
@@ -175,7 +181,6 @@ public class TextAnnotationUtilities {
         copyViewsFromTo(ta, newTA, start, end, -start);
         return newTA;
     }
-
 
     /**
      * copy views from the relevant span from ta to newTA.  If ta is smaller than newTA, map all constituents,
@@ -246,7 +251,6 @@ public class TextAnnotationUtilities {
             ((TreeView) newVu).makeTrees();
         }
     }
-
 
     /**
      * required: consMap *must* contain the source and target constituents for r as keys, and their values
