@@ -592,10 +592,11 @@ public class phrase
                         Pattern subpattern1=Pattern.compile(subpatternStr1);
                         Matcher submatcher1=subpattern1.matcher(matcher.group(1));
                         boolean submatchFound1=submatcher1.find();
+                        String tempz = matcher.group(2);
                         if(submatchFound1){
                             day=(matcher.group(1)).split("[a-z]")[0];
                             //	System.out.println(monthnum);
-                            result="/XX/"+day+"/XXXX";
+                            result="XX/"+day+"/XXXX";
                             //		 System.out.println(result);
                             return result;
                         }
@@ -823,7 +824,14 @@ public class phrase
 
         return 0;
     }
-    public static int canonizecompare(String phrase1,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional){
+
+
+    public static int canonizecompare(String phrase1,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional) {
+        return canonizecompare(new TemporalPhrase(phrase1), phrase2, deyear, demonth, deday, dehour, deminute, desecond, dems, defaultyear, defaultcountry, conditional);
+    }
+
+    public static int canonizecompare(TemporalPhrase temporalPhrase,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional){
+        String phrase1 = temporalPhrase.getPhrase();
         referencemonth=demonth;
         referenceday=deday;
         referenceyear=deyear;
@@ -893,9 +901,9 @@ public class phrase
             one=RelativeDate.Relativerule(start, phrase1);
         }
 
-        else if(ModifiedDate.ModifiedRule(start, phrase1)!=null){
+        else if(ModifiedDate.ModifiedRule(start, temporalPhrase)!=null){
 
-            one=ModifiedDate.ModifiedRule(start, phrase1);
+            one=ModifiedDate.ModifiedRule(start, temporalPhrase);
         }
 
         else if(Ordinary.Ordinaryrule(start, phrase1)!=null){
@@ -1141,8 +1149,8 @@ public class phrase
         if(RelativeDate.Relativerule(start, phrase2)!=null){
             two=RelativeDate.Relativerule(start, phrase2);
         }
-        else if(ModifiedDate.ModifiedRule(start, phrase2)!=null){
-            two=ModifiedDate.ModifiedRule(start, phrase2);
+        else if(ModifiedDate.ModifiedRule(start, new TemporalPhrase(phrase2))!=null){
+            two=ModifiedDate.ModifiedRule(start, new TemporalPhrase(phrase2));
         }
 
         else if(Ordinary.Ordinaryrule(start, phrase2)!=null){
@@ -1531,10 +1539,16 @@ public class phrase
     }
 
     public static Interval canonize(String phrase1,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
+        TemporalPhrase temporalPhrase = new TemporalPhrase(phrase1);
+        return canonize(temporalPhrase, deyear, demonth, deday, dehour, deminute, desecond, dems, defaultyear, defaultcountry);
+    }
+
+    public static Interval canonize(TemporalPhrase temporalPhrase,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
         //String deyear,demonth,deday,dehour,deminute,desecond,dems are all default reference time
         //String defaultyear is the reference year of a holiday(in jollyday package)
         //String defaultcountry is the reference country of a holiday(in jollyday package)
 
+        String phrase1 = temporalPhrase.getPhrase();
         referencemonth=demonth;
         referenceday=deday;
         referenceyear=deyear;
@@ -1544,7 +1558,7 @@ public class phrase
         phrase1=phrase1.toLowerCase();
         phrase1=phrase1.trim();
         constantphrase1=phrase1;
-
+        temporalPhrase.setPhrase(phrase1);
         //	System.out.println(phrase1);
 
         if(phrase1.contains("a couple of")){
@@ -1578,9 +1592,9 @@ public class phrase
             one=RelativeDate.Relativerule(start, phrase1);
         }
 
-        else if(ModifiedDate.ModifiedRule(start, phrase1)!=null){
+        else if(ModifiedDate.ModifiedRule(start, temporalPhrase)!=null){
 
-            one=ModifiedDate.ModifiedRule(start, phrase1);
+            one=ModifiedDate.ModifiedRule(start, temporalPhrase);
         }
 
         else if(Ordinary.Ordinaryrule(start, phrase1)!=null){
@@ -1761,6 +1775,12 @@ public class phrase
                     flagnum=-1;
                     flagmonnum=-1;
                     flagdaynum=-1;
+
+                    Interval durationRes = Duration.DurationRule(start, phrase1);
+                    if (durationRes!=null) {
+                        return durationRes;
+                    }
+
                     result1=converter(phrase1);
                     if(result1==null){
                         flagnull=1;
@@ -1771,6 +1791,15 @@ public class phrase
                     //Do not know the year
                     if(token[2].equals("XXXX")){
                         token[2]=referenceyear;
+                        // Modified by Zhili: if the sentence is past tense, and the month mentioned is
+                        // after DCT, then subtract 1 from year
+                        String tense = temporalPhrase.getTense();
+                        if (tense.equals("past")) {
+                            if (!token[0].equals("XX") && start.getMonthOfYear()<Integer.parseInt(token[0])) {
+                                token[2]=String.valueOf(Integer.parseInt(referenceyear)-1);
+                            }
+                        }
+
                         if(token[0].equals("XX")){
                             token[0]=referencemonth;
                         }
@@ -1816,9 +1845,13 @@ public class phrase
                     }
 
                     else{
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
+                        try {
+                            DateTime tempstart = new DateTime(Integer.parseInt(token[2]), Integer.parseInt(token[0]), Integer.parseInt(token[1]), 0, 0, 0, 0);
+                            DateTime tempfinish = new DateTime(Integer.parseInt(token[2]), Integer.parseInt(token[0]), Integer.parseInt(token[1]), 23, 59, 59, 59);
+                            one = new Interval(tempstart, tempfinish);
+                        } catch (Exception e) {
+                            return null;
+                        }
                     }
                     result1=token[0]+"/"+token[1]+"/"+token[2];
                     //	System.out.println(">>>Date1:"+constantphrase1);

@@ -110,7 +110,7 @@ public class BIOTester {
                 predictions[i] = classifier.discreteValue(vector.get(i));
                 labels[i] = labeler.discreteValue(vector.get(i));
             }
-
+            System.out.println(vector);
             for (int i = 0; i < N; ++i) {
                 String p = "O", l = "O";
                 int pEnd = -1, lEnd = -1;

@@ -629,7 +629,7 @@ public class RelativeDate {
 		return null;
 	}
 
-	private static String converter(String phrase) {
+	public static String converter(String phrase) {
 		String temp1;
 		String temp2;
 		String tempresult;

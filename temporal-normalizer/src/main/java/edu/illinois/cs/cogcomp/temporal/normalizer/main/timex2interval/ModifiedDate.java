@@ -11,7 +11,8 @@ import org.joda.time.Interval;
 //Morning 7:00-11:00 Noon 11:00-2:00 Afternoon 2:00-6:00 Evening 6:00-9:00 Night 9:00-12:00
 public class ModifiedDate {
 
-	public static Interval ModifiedRule(DateTime start, String phrase) {
+	public static Interval ModifiedRule(DateTime start, TemporalPhrase temporalPhrase) {
+		String phrase = temporalPhrase.getPhrase();
 		phrase = phrase.trim();
 		// System.out.println(phrase);
 
@@ -41,10 +42,10 @@ public class ModifiedDate {
 				secondphrase = "this" + matcher11.group(1);
 			}
 
-			Interval keypoint = ModifiedDate.ModifiedRule(start, firstphrase);
+			Interval keypoint = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase));
 			DateTime starttime = keypoint.getStart();
 			Interval result = ModifiedDate
-					.ModifiedRule(starttime, secondphrase);
+					.ModifiedRule(starttime, new TemporalPhrase(secondphrase));
 			return result;
 
 		}
@@ -60,10 +61,10 @@ public class ModifiedDate {
 			// split the phrase into two parts
 			String firstphrase = "this" + matcher2.group(1);
 			String secondphrase = "this" + matcher2.group(2);
-			Interval keypoint = ModifiedDate.ModifiedRule(start, firstphrase);
+			Interval keypoint = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase));
 			DateTime starttime = keypoint.getStart();
 			Interval result = ModifiedDate
-					.ModifiedRule(starttime, secondphrase);
+					.ModifiedRule(starttime, new TemporalPhrase(secondphrase));
 			return result;
 
 		}
@@ -620,6 +621,10 @@ public class ModifiedDate {
 					}
 
 					else {
+						// This part only focus on "early" + "[month]"
+						// Modified by Zhili: if the sentence is past tense, and the month mentioned is
+						// after DCT, then subtract 1 from year
+						String tense = temporalPhrase.getTense();
 						String patternStr1 = monther;
 						Pattern pattern1 = Pattern.compile(patternStr1);
 						Matcher matcher1 = pattern1.matcher(temp2);
@@ -627,6 +632,11 @@ public class ModifiedDate {
 						if (matchFound1) {
 							month = Integer.parseInt(temp.hm.get(temp2));
 							year = start.getYear();
+							if (tense.equals("past")) {
+								if (start.getMonthOfYear()<month) {
+									year-=1;
+								}
+							}
 							finish = new DateTime(year, month, 10, 23, 59, 59,
 									59);
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
@@ -1390,6 +1400,6 @@ public class ModifiedDate {
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(2001, 3, 14, 3, 3, 3, 3);
 		String example = "early September";
-		Interval sample = ModifiedRule(startTime, example);
+		Interval sample = ModifiedRule(startTime, new TemporalPhrase(example));
 	}
 }
