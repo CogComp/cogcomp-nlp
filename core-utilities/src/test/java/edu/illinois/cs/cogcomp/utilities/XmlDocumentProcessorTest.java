@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +37,8 @@ public class XmlDocumentProcessorTest {
     private static final IntPair AUTHOR_OFFSETS = new IntPair(149, 161);
     private static final String AUTHOR = "author";
     private static final String NAME = "John Marston";
+    private static final IntPair DISTR_OFFSETS = new IntPair(68, 120);
+    private static final String DISTR_SUBSTR = "don&apos;t print me. Don&apos;t &quot;save&quot; me.";
 
 
     @Test
@@ -86,6 +89,12 @@ cuba
         assertEquals(NAME, attInfo.get(AUTHOR));
         String origAuthStr = st.getOrigText().substring(AUTHOR_OFFSETS.getFirst(), AUTHOR_OFFSETS.getSecond());
         assertEquals(NAME, origAuthStr);
+
+        assertTrue(retainedTagInfo.containsKey(DISTR_OFFSETS));
+        attInfo = retainedTagInfo.get(DISTR_OFFSETS);
+        assertTrue(attInfo.containsKey(SPAN_INFO));
+        assertEquals("distraction", attInfo.get(SPAN_INFO));
+        assertEquals(DISTR_SUBSTR, ORIG_TEXT.substring(DISTR_OFFSETS.getFirst(), DISTR_OFFSETS.getSecond()));
     }
 
 }

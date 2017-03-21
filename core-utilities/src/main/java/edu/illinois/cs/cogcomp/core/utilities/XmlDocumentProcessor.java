@@ -62,12 +62,21 @@ public class XmlDocumentProcessor {
      */
     public Pair<StringTransformation, Map<IntPair, Map<String, String>>> processXml(String xmlText) {
 
-
-        Matcher xmlMatcher = xmlTagPattern.matcher(xmlText);
         StringTransformation xmlTextSt = new StringTransformation(xmlText);
+
+        // there are embedded xml tags in body text. Unescape them so we can process them easily.
+        xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
+        xmlTextSt.applyPendingEdits();
+
+        String xmlCurrentStr = xmlTextSt.getTransformedText();
+
+        // don't call getTransformedText() or applyPendingEdits() in the body of the loop usinr xmlMatcher
+        Matcher xmlMatcher = xmlTagPattern.matcher(xmlCurrentStr);
+
         Map<IntPair, Map<String, String>> attributesRetained = new HashMap<>();
         // track open/close tags, to record spans for later use (e.g. quoted blocks that aren't annotated)
         Stack<Pair<String, Integer>> tagStack = new Stack<>();
+
         // match mark-up: xml open or close tag
         while (xmlMatcher.find()) {
             String substr = xmlMatcher.group(0);
@@ -100,7 +109,7 @@ public class XmlDocumentProcessor {
                     int end = xmlMatcher.start();
                     Map<String, String> tagInfo = new HashMap<>();
                     tagInfo.put(SPAN_INFO, tagName);
-                    attributesRetained.put(new IntPair(start, end), tagInfo);
+                    attributesRetained.put(xmlTextSt.getOriginalOffsets(start, end), tagInfo);
                     continue;
                 }
                 // tag must be open
@@ -124,7 +133,7 @@ public class XmlDocumentProcessor {
                             int attrValOffset = tagMatcher.end() + xmlMatcher.start();
                             int attrValStart = attrMatcher.start(2) + attrValOffset;
                             int attrValEnd = attrMatcher.end(2) + attrValOffset;
-                            IntPair attrValOffsets = new IntPair(attrValStart, attrValEnd);
+                            IntPair attrValOffsets = xmlTextSt.getOriginalOffsets(attrValStart, attrValEnd);
                             Map<String, String> atts = attributesRetained.get(attrValOffsets);
                             if (null == atts) {
                                 atts = new HashMap<>();
@@ -140,14 +149,14 @@ public class XmlDocumentProcessor {
 
                     // FIXME: this uses original string. If this method is called on a transformed string, it may introduce errors.
                     // FIXME: use getOriginalOffsets() from stringtransformation.
-                    int endStart = xmlText.indexOf("</" +tagName +">", tagEnd);
+                    int endStart = xmlCurrentStr.indexOf("</" +tagName +">", tagEnd);
                     if (endStart == -1)
                         throw new IllegalArgumentException("No matching end tag for '" + tagName + "'");
                     //delete the open tag, leave the text (main loop will catch and delete close tag
                     xmlTextSt.transformString(tagStart, tagEnd, "");
                 }
                 else if (tagsToIgnore.contains(tagName)) { // need to delete content, though span was recorded
-                    int endStart = xmlText.indexOf("</" +tagName +">", tagEnd);
+                    int endStart = xmlCurrentStr.indexOf("</" +tagName +">", tagEnd);
                     // an earlier check deletes close tags, so only delete up to close
                     xmlTextSt.transformString(tagStart, endStart, "");
                 }
@@ -174,10 +183,6 @@ public class XmlDocumentProcessor {
                 xmlTextSt.transformString(start, end, replacement);
             }
         }
-
-        // there are embedded xml tags in body text. Unescape them so we can process them easily.
-        xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
-        xmlTextSt.applyPendingEdits();
 
         return new Pair(xmlTextSt, attributesRetained);
     }
