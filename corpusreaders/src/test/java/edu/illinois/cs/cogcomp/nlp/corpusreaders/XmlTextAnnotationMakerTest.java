@@ -37,6 +37,18 @@ import java.util.Set;
 
 public class XmlTextAnnotationMakerTest {
 
+    /**
+     * tags and attributes reader needs to handle
+     */
+    public static final String QUOTE = "quote";
+    public static final String AUTHOR = "author";
+    public static final String ID = "id";
+    public static final String DATETIME = "datetime";
+    public static final String POST = "post";
+    public static final String DOC = "doc";
+    public static final String ORIG_AUTHOR = "orig_author";
+    public static final String HEADLINE = "headline";
+    public static final String IMG = "img";
     private static final String XML_FILE =
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
                 "data/source/ENG_DF_001241_20150407_F0000007T.xml";
@@ -53,17 +65,24 @@ public class XmlTextAnnotationMakerTest {
 
         Map<String, Set<String>> tagsWithAtts = new HashMap<>();
         Set<String> attributeNames = new HashSet<>();
-        attributeNames.add("author");
-        attributeNames.add("id");
-        attributeNames.add("datetime");
-        tagsWithAtts.put("post", attributeNames);
+        attributeNames.add(AUTHOR);
+        attributeNames.add(ID);
+        attributeNames.add(DATETIME);
+        tagsWithAtts.put(POST, attributeNames);
         attributeNames = new HashSet<>();
-        attributeNames.add("id");
-        tagsWithAtts.put("doc", attributeNames);
+        attributeNames.add(ID);
+        tagsWithAtts.put(DOC, attributeNames);
+        attributeNames = new HashSet<>();
+        attributeNames.add(ORIG_AUTHOR);
+        tagsWithAtts.put(QUOTE, attributeNames);
+
         Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add("headline");
-        tagsWithText.add("post");
+        tagsWithText.add(HEADLINE);
+        tagsWithText.add(POST);
+
         Set<String> tagsToIgnore = new HashSet<>();
+        tagsToIgnore.add(QUOTE);
+        tagsToIgnore.add(IMG);
 
         XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
         XmlTextAnnotationMaker maker = new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
@@ -100,5 +119,21 @@ public class XmlTextAnnotationMakerTest {
         String transformStr = st.getTransformedText().substring(thirdStartChar, thirdEndChar);
         System.out.println("corresponding substring from transformed text: " + transformStr);
         System.out.println("original text substring using mapped offsets: " + origWordForm);
+
+        if (!transformStr.equals(origWordForm))
+            System.err.println("ERROR: test failed: word '" + transformStr + "' not identical to original word '" +
+                origWordForm + "'. ");
+
+        Map<IntPair, Map<String, String>> atts = output.getXmlMarkup();
+
+        for (IntPair offsets : atts.keySet()) {
+            System.out.print(offsets.getFirst() + "-" + offsets.getSecond() + ": ");
+            Map<String, String> attVals = atts.get(offsets);
+            for (String attType : attVals.keySet())
+                System.out.println(attType + ": " + attVals.get(attType));
+            System.out.println();
+        }
+
     }
+
 }
