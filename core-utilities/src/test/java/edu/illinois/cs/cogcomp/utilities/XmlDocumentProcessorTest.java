@@ -64,11 +64,11 @@ cuba
         Set<String> tagsToIgnore = new HashSet<>();
         tagsToIgnore.add("distraction");
 
-        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
+//        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
 
         XmlDocumentProcessor proc = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
 
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(origTextSt);
+        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(ORIG_TEXT);
 
         // check that we retained the right attributes, cleaned up the text, generated a sensible cleaned text, and can
         // recover the offsets of strings in the original text.

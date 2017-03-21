@@ -10,9 +10,7 @@ package edu.illinois.cs.cogcomp.core.utilities;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import static edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransformation.*;
@@ -22,12 +20,18 @@ import static edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransforma
  *    and others as metadata.
  * Provides a mapping from clean text character offsets to character offsets in the source xml.
  * Metadata includes relevant character offsets.
+ * Some escaped xml elements are embedded in the document body text. These are made legible by substituting the
+ *    escaped characters in an initial step.
  *
  * TODO: add constructor field to allow additional text clean/transform ops
  */
 
 public class XmlDocumentProcessor {
 
+    /**
+     * tag to indicate that the associated information denotes a span in source xml with the associated label.
+     */
+    public static final String SPAN_INFO = "SPAN_INFO";
     private final Set<String> tagsWithText;
     private final Map<String, Set<String>> tagsWithAtts;
     private final Set<String> tagsToIgnore;
@@ -53,39 +57,58 @@ public class XmlDocumentProcessor {
      * tags is left in place (though quote tags are removed) and the offsets are reported with the
      * other specified attributes.
      * Pretty sure this doesn't handle nested tags.
-     * @param xmlTextSt StringTransformation whose basis is the original xml text.
+     * @param xmlText StringTransformation whose basis is the original xml text.
      * @return String comprising text.
      */
-    public Pair<StringTransformation, Map<IntPair, Map<String, String>>> processXml(StringTransformation xmlTextSt) {
+    public Pair<StringTransformation, Map<IntPair, Map<String, String>>> processXml(String xmlText) {
 
-//        StringTransformation normalizedTextSt = replaceXmlEscapedChars(xmlText);
-        String xmlText = xmlTextSt.getTransformedText();
+
         Matcher xmlMatcher = xmlTagPattern.matcher(xmlText);
+        StringTransformation xmlTextSt = new StringTransformation(xmlText);
         Map<IntPair, Map<String, String>> attributesRetained = new HashMap<>();
-
+        // track open/close tags, to record spans for later use (e.g. quoted blocks that aren't annotated)
+        Stack<Pair<String, Integer>> tagStack = new Stack<>();
         // match mark-up: xml open or close tag
         while (xmlMatcher.find()) {
             String substr = xmlMatcher.group(0);
-            if ( substr.charAt(1) == '/') {
+            boolean isClose = false;
+            if (substr.charAt(1) == '/') {
                 xmlTextSt.transformString(xmlMatcher.start(0), xmlMatcher.end(0), ""); //this is an end tag
-                continue;
+                isClose = true;
             }
+            else if (substr.endsWith("/>"))
+                continue; // empty tag
+
             int tagStart = xmlMatcher.start();
             int tagEnd = xmlMatcher.end();
-
             String lcsubstr = substr.toLowerCase();
+
             // get the tag name
             Matcher tagMatcher = xmlTagNamePattern.matcher(lcsubstr);
-
-//            // avoid too many sequential empty lines due to deleted tags
-//            boolean wasDeleted = false;
             if (tagMatcher.find()) {
                 // identify the tag and its corresponding close tag
-                String tagname = tagMatcher.group(1);
+                String tagName = tagMatcher.group(1);
 
-                // within an xml tag: identify any attribute values we need to retain.
-                if (tagsWithAtts.containsKey(tagname)) {
-                    Set<String> attributeNames = tagsWithAtts.get(tagname);
+                if (isClose) {
+                    Pair<String, Integer> openTag = tagStack.pop();
+                    tagName = tagName.substring(1); // strip leading "/"
+                    if (!openTag.getFirst().equals(tagName))
+                        throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
+                                "', found '" + tagName + "'");
+                    // now we have open tag and matching close tag; record span and label
+                    int start = openTag.getSecond();
+                    int end = xmlMatcher.start();
+                    Map<String, String> tagInfo = new HashMap<>();
+                    tagInfo.put(SPAN_INFO, tagName);
+                    attributesRetained.put(new IntPair(start, end), tagInfo);
+                    continue;
+                }
+                // tag must be open
+                int end = xmlMatcher.end();
+                tagStack.push(new Pair(tagName, end));
+                // within an xml open tag: identify any attribute values we need to retain.
+                if (tagsWithAtts.containsKey(tagName)) {
+                    Set<String> attributeNames = tagsWithAtts.get(tagName);
                     // parse the substring beyond the tag name.
                     lcsubstr = lcsubstr.substring(tagMatcher.end());
                     substr = substr.substring(tagMatcher.end());
@@ -113,15 +136,18 @@ public class XmlDocumentProcessor {
                 }
 
                 // if we should retain text between open and close, do so
-                if (tagsWithText.contains(tagname)) {
-                    int endStart = xmlText.indexOf("</" +tagname +">", tagEnd);
+                if (tagsWithText.contains(tagName)) {
+
+                    // FIXME: this uses original string. If this method is called on a transformed string, it may introduce errors.
+                    // FIXME: use getOriginalOffsets() from stringtransformation.
+                    int endStart = xmlText.indexOf("</" +tagName +">", tagEnd);
                     if (endStart == -1)
-                        throw new IllegalArgumentException("No matching end tag for '" + tagname + "'");
+                        throw new IllegalArgumentException("No matching end tag for '" + tagName + "'");
                     //delete the open tag, leave the text (main loop will catch and delete close tag
                     xmlTextSt.transformString(tagStart, tagEnd, "");
                 }
-                else if (tagsToIgnore.contains(tagname)) { // need to delete content
-                    int endStart = xmlText.indexOf("</" +tagname +">", tagEnd);
+                else if (tagsToIgnore.contains(tagName)) { // need to delete content, though span was recorded
+                    int endStart = xmlText.indexOf("</" +tagName +">", tagEnd);
                     // an earlier check deletes close tags, so only delete up to close
                     xmlTextSt.transformString(tagStart, endStart, "");
                 }
@@ -149,8 +175,8 @@ public class XmlDocumentProcessor {
             }
         }
 
+        // there are embedded xml tags in body text. Unescape them so we can process them easily.
         xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
-
         xmlTextSt.applyPendingEdits();
 
         return new Pair(xmlTextSt, attributesRetained);
