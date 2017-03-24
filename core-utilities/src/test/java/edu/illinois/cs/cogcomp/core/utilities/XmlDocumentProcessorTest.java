@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.utilities;
+package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -31,7 +31,8 @@ public class XmlDocumentProcessorTest {
 
     private static final String ORIG_TEXT = "<doc>\n<headline>&quot;No way. Really?&quot;</headline>\n" +
             "<distraction>don&apos;t print me. Don&apos;t &quot;save&quot; me.</distraction>\n<post author='John Marston' toop='1'>\n" +
-            "Hi, &amp; how do you do?</post>\n</doc>\n";
+            "<quote orig_author=\"him\">According to Garp:\n<quote orig_author=\"Garp\">Whassup?</quote>\nWhat's up with that?</quote>\n" +
+            "Hi, &amp; how do you <img href=\"www.madeup.org/picture\">do?</post>\n</doc>\n";
 
     private static final String CLEAN_TEXT = "\"No way. Really?\"\nHi, & how do you do?\n";
     private static final IntPair AUTHOR_OFFSETS = new IntPair(149, 161);
@@ -39,6 +40,8 @@ public class XmlDocumentProcessorTest {
     private static final String NAME = "John Marston";
     private static final IntPair DISTR_OFFSETS = new IntPair(68, 120);
     private static final String DISTR_SUBSTR = "don&apos;t print me. Don&apos;t &quot;save&quot; me.";
+    private static final String INNER_QUOT_STR = "Whassup?";
+    private static final IntPair IQ_OFFSETS = new IntPair(243, 251);
 
 
     @Test
@@ -66,6 +69,8 @@ cuba
         tagsWithText.add("post");
         Set<String> tagsToIgnore = new HashSet<>();
         tagsToIgnore.add("distraction");
+        tagsToIgnore.add("img");
+        tagsToIgnore.add("quote");
 
 //        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
 
@@ -95,6 +100,20 @@ cuba
         assertTrue(attInfo.containsKey(SPAN_INFO));
         assertEquals("distraction", attInfo.get(SPAN_INFO));
         assertEquals(DISTR_SUBSTR, ORIG_TEXT.substring(DISTR_OFFSETS.getFirst(), DISTR_OFFSETS.getSecond()));
+
+        assertTrue(retainedTagInfo.containsKey(IQ_OFFSETS));
+        int iqStart = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getFirst());
+        int iqEnd = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getSecond());
+
+        assertEquals("", cleanText.substring(iqStart, iqEnd)); // deleted
+        assertEquals(ORIG_TEXT.indexOf("Whassup"), IQ_OFFSETS.getFirst());
+
+
+        int doStart = cleanText.indexOf("do?");
+        int doEnd = doStart + 3;
+
+        IntPair origYouOffsets = st.getOriginalOffsets(doStart, doEnd);
+        assertEquals("do?", ORIG_TEXT.substring(origYouOffsets.getFirst(), origYouOffsets.getSecond()));
     }
 
 }

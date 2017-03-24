@@ -8,11 +8,16 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
@@ -26,11 +31,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Generates an {@link XmlTextAnnotation} object per file for a corpus consisting of files containing xml
- * fragments. Created for the DEFT ERE collection for Belief and Sentiment task (LDC2016E27). All
- * documents appear to be forum data, not full xml, but xml-ish. LDC README IN LDC2016E27 INDICATES
+ * fragments or full xml trees. This implementation has been created for the DEFT ERE collection, but should
+ * generalize to other tasks by substituting an appropriately parameterized XmlDocumentReader.
+ * The ERE documents appear to be forum data, not full xml, but xml-ish. LDC README IN LDC2016E27 INDICATES
  * THAT THESE DOCUMENTS ARE XML FRAGMENTS, NOT FULL XML. Therefore, they should be treated as raw
  * text, even though they contain xml-escaped character forms: character offsets for standoff
  * annotation will refer to these expanded forms. This reader generates a cleaned-up, text-only
@@ -42,59 +49,60 @@ import java.util.List;
  * The Xml document structure consists of one or more "post" elements, each possibly containing one or
  * more "quote" elements (which may be nested) and which may have other tags (image files and other url-like
  * stuff, possibly html formatting), though these will generally be escaped. This reader handles
- * these problems.
+ * these problems, internally normalizing these escaped tags and treating them like regular xml elements.
  *
- * This reader (initial implementation) tries to clean up text as much as possible while preserving
- * character offsets of the original text. This is achieved by whitespacing the xml/other tags; the
- * Illinois Tokenizer should be able to handle this in an offset-preserving way.
+ * The XmlTextAnnotations will be returned with TextID fields set to the name of the source file.
  *
- * The TextAnnotations will be returned with TextID fields set to the name of the source file.
+ * While no effort is made to represent the inter-post/quoted segment structure, the xml markup information
+ * allows it to be reconstructed (look for entries with key SPAN_INFO, whose value set will contain one entry
+ * naming the xml tag.
  *
- * WARNING! No effort is made to represent the inter-post/quoted segment structure.
- *
- * When trying to align annotations to the original file, beware the following annotation property
- * (explained in the README from the corpus:
- *
- * <quote>Because each CMP document is extracted verbatim from source XML files, certain characters
- * in its content (ampersands, angle brackets, etc.) are escaped according to the XML specification.
- * The offsets of text extents are based on treating this escaped text as-is (e.g. "&amp;" in a
- * cmp.txt file is counted as five characters).
- * 
- * Whenever any such string of "raw" text is included in a .rich_ere.xml file (as the text extent to
- * which an annotation is applied), a second level of escaping has been applied, so that XML parsing
- * of the ERE XML file will produce a string that exactly matches the source text. </quote>
+ * When accessing the TextAnnotation element of the XmlTextAnnotation, be aware that you must use the
+ * accompanying StringTransformation to recover the offsets from the source xml file.
  */
-public class XmlDocumentReader extends AbstractIncrementalCorpusReader {
+public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAnnotation> {
     private static Logger logger = LoggerFactory
             .getLogger(XmlDocumentReader.class);
+    private final XmlTextAnnotationMaker xmlTextAnnotationMaker;
 
-    protected TextAnnotationBuilder taBuilder;
     protected String fileId;
     protected String newFileText;
     private int numTextAnnotations;
     private int numFiles;
+    /**
+     * stores the representation for the most recently processed file.
+     */
+    private XmlTextAnnotation xmlTextAnnotation;
+
 
     /**
-     * assumes files are all from a single source directory.
+     * assumes files are all from a single source directory. The XmlDocumentProcessor should be configured to
+     *   process the xml markup in the files you want to process.
      *
-     * @param corpusName
-     * @param sourceDirectory
+     * @param corpusName used to set the corpusId field of all TextAnnotations created by this reader.
+     * @param sourceDirectory root directory of the corpus.
+     * @param xmlTextAnnotationMaker parses xml text and generates an XmlTextAnnotation.
      * @throws IOException
      */
-    public XmlDocumentReader(String corpusName, String sourceDirectory)
+    public XmlDocumentReader(String corpusName, String sourceDirectory, XmlTextAnnotationMaker xmlTextAnnotationMaker)
             throws Exception {
         super(CorpusReaderConfigurator.buildResourceManager(corpusName, sourceDirectory));
-        taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        this.xmlTextAnnotationMaker = xmlTextAnnotationMaker;
         numFiles = 0;
         numTextAnnotations = 0;
     }
 
+
+    /**
+     * set the reader to start from the beginning of the corpus.
+     */
     @Override
     public void reset() {
         super.reset();
         numFiles = 0;
         numTextAnnotations = 0;
     }
+
 
     /**
      * Exclude any files not possessing this extension.
@@ -104,6 +112,7 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader {
     protected String getRequiredFileExtension() {
         return ".cmp.txt";
     }
+
 
     /**
      * generate a list of files comprising the corpus. Each is expected to generate one or more
@@ -129,28 +138,14 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader {
     }
 
     /**
-     * This method can be overridden to do a more complex parsing.
-     * 
-     * @param original
-     * @return the striped text.
-     */
-    protected String stripText(String original) {
-        return TextCleaner.replaceXmlTags(original);
-    }
-
-    /**
-     * Given an entry from the corpus file list generated by {@link #getFileListing()} , parse its
+     * given an entry from the corpus file list generated by {@link #getFileListing()} , parse its
      * contents and get zero or more TextAnnotation objects.
-     *
-     * Base implementation assumes a single Path in each corpusFileListEntry, corresponding to a
-     * file with source text plus any needed annotations. It also assumes that the file has no
-     * markup.
      *
      * @param corpusFileListEntry corpus file containing content to be processed
      * @return List of TextAnnotation objects extracted from the corpus file
      */
-    public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
-            throws Exception {
+    @Override
+    public List<XmlTextAnnotation> getAnnotationsFromFile(List<Path> corpusFileListEntry) throws Exception {
         Path sourceTextAndAnnotationFile = corpusFileListEntry.get(0);
         fileId =
                 sourceTextAndAnnotationFile.getName(sourceTextAndAnnotationFile.getNameCount() - 1)
@@ -158,17 +153,16 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader {
         logger.debug("read source file {}", fileId);
         numFiles++;
         String fileText = LineIO.slurp(sourceTextAndAnnotationFile.toString());
-        newFileText = this.stripText(fileText);
-
-        List<TextAnnotation> taList = new ArrayList<>(1);
-        TextAnnotation ta = makeTextAnnotation();
-        if (null != ta) {
-            taList.add(ta);
+        List<XmlTextAnnotation> xmlTaList = new ArrayList<>(1);
+        XmlTextAnnotation xmlTa = xmlTextAnnotationMaker.createTextAnnotation(fileText, this.corpusName, fileId);
+        if (null != xmlTa) {
+            xmlTaList.add(xmlTa);
             numTextAnnotations++;
         }
 
-        return taList;
+        return xmlTaList;
     }
+
 
     /**
      * generate a human-readable report of annotations read from the source file (plus whatever
@@ -183,14 +177,4 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader {
         return bldr.toString();
     }
 
-    /**
-     * uses fields set by getTextAnnotationsFromFile()
-     * 
-     * @return
-     * @throws Exception
-     */
-    @Override
-    protected TextAnnotation makeTextAnnotation() throws Exception {
-        return taBuilder.createTextAnnotation(corpusName, fileId, newFileText.toString());
-    }
 }

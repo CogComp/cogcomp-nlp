@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.io.IOException;
@@ -29,7 +30,13 @@ import java.util.NoSuchElementException;
  * corpus list will generate at least one TextAnnotation. Can avoid by pre-loading next file's
  * annotations as soon as last TextAnnotation from current file is returned.
  */
-public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReader<T> {
+public abstract class AbstractIncrementalXmlCorpusReader {
+
+    /** stores configuration info */
+    private final ResourceManager resourceManager;
+
+    /** identifier for corpus */
+    private final String corpusName;
 
     /**
      * contains pointers to files comprising corpus. Each entry may consist of a source document
@@ -39,15 +46,10 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
     private List<List<Path>> fileList;
 
     /** holds TextAnnotations extracted from most recently accessed file */
-    private List<T> stack;
+    private List<XmlTextAnnotation> stack;
 
-    /** points to index of file corresponding to current non-exhausted stack */
-    private int fileIndex;
-
-    /** points to index of stack that will be returned by iterator next() */
-    private int stackIndex;
-
-    /** root directory of corpus */
+    private int fileIndex; // points to index of file corresponding to current non-exhausted stack
+    private int stackIndex; // points to index of stack that will be returned by iterator next()
     private String sourceDirectory;
 
     /**
@@ -57,8 +59,9 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      * @param rm ResourceManager
      * @throws Exception
      */
-    public AbstractIncrementalCorpusReader(ResourceManager rm) throws Exception {
-        super(rm);
+    public AbstractIncrementalXmlCorpusReader(ResourceManager rm) throws Exception {
+        this.resourceManager = rm;
+        corpusName = rm.getString(CorpusReaderConfigurator.CORPUS_NAME);
     }
 
     /**
@@ -82,17 +85,14 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
         stack = new ArrayList<>(fileList.size());
     }
 
-
     public String getSourceDirectory() {
         return sourceDirectory;
     }
 
 
-    @Override
     public boolean hasNext() {
         return stackIndex < stack.size() || fileIndex < fileList.size();
     }
-
 
     /**
      * Returns the next element in the iteration.
@@ -100,8 +100,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      * @return the next element in the iteration
      * @throws NoSuchElementException if the iteration has no more elements
      */
-    @Override
-    public T next() {
+    public XmlTextAnnotation next() {
         if (stack.isEmpty() && fileIndex >= fileList.size())
             throw new NoSuchElementException();
 
@@ -110,7 +109,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
 
             do {
                 try {
-                    stack = getAnnotationsFromFile(fileList.get(fileIndex++));
+                    stack = getXmlTextAnnotationsFromFile(fileList.get(fileIndex++));
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new NoSuchElementException(e.getMessage());
@@ -120,9 +119,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
             // because we didn't find any new TextAnnotations
         }
 
-        T returnTa = stack.get(stackIndex++);
-
-        return returnTa;
+        return stack.get(stackIndex++);
     }
 
 
@@ -146,7 +143,7 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      * @param corpusFileListEntry corpus file containing content to be processed
      * @return List of TextAnnotation objects extracted from the corpus file
      */
-    abstract public List<T> getAnnotationsFromFile(List<Path> corpusFileListEntry)
+    abstract public List<XmlTextAnnotation> getXmlTextAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception;
 
 

@@ -361,14 +361,14 @@ public class StringTransformationTest {
         //   (e.g. insertion, then deletion)
         // Note that these don't really make sense as substrings, and nor are the mapped substrings likely to make sense
         origOffsets = st.getOriginalOffsets(19,20);
-        assertEquals(33, origOffsets.getFirst());
-        assertEquals(34, origOffsets.getSecond());
+        assertEquals(29, origOffsets.getFirst());
+        assertEquals(30, origOffsets.getSecond());
 
 
         modStart = st.computeModifiedOffsetFromOriginal(31); // in the middle of the replaced
         modEnd = st.computeModifiedOffsetFromOriginal(32);
         assertEquals(17, modStart);
-        assertEquals(18, modEnd);
+        assertEquals(22, modEnd);
 
     }
 
