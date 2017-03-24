@@ -56,7 +56,9 @@ public class XmlDocumentProcessor {
      *    the attribute values and their offsets are reported. Content within <code>quote</code>
      * tags is left in place (though quote tags are removed) and the offsets are reported with the
      * other specified attributes.
-     * Pretty sure this doesn't handle nested tags.
+     * This class has some facility for handling nested tags.  Opens without closes are checked against
+     *    tags to ignore (provided at construction) and if found are ignored (deleted). Otherwise, an exception
+     *    is thrown.
      * @param xmlText StringTransformation whose basis is the original xml text.
      * @return String comprising text.
      */
@@ -68,6 +70,9 @@ public class XmlDocumentProcessor {
         xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
         xmlTextSt.applyPendingEdits();
 
+//        // there are some nested tags. If the nesting is simple, fix it. Otherwise, throw an exception.
+//        xmlTextSt.flattenNestedTags(xmlTextSt);
+//
         String xmlCurrentStr = xmlTextSt.getTransformedText();
 
         // don't call getTransformedText() or applyPendingEdits() in the body of the loop usinr xmlMatcher
@@ -75,93 +80,122 @@ public class XmlDocumentProcessor {
 
         Map<IntPair, Map<String, String>> attributesRetained = new HashMap<>();
         // track open/close tags, to record spans for later use (e.g. quoted blocks that aren't annotated)
-        Stack<Pair<String, Integer>> tagStack = new Stack<>();
+        Stack<Pair<String, IntPair>> tagStack = new Stack<>();
+
+        Map<String, Integer> nestingLevels = new HashMap<>();
 
         // match mark-up: xml open or close tag
         while (xmlMatcher.find()) {
             String substr = xmlMatcher.group(0);
             boolean isClose = false;
             if (substr.charAt(1) == '/') {
-                xmlTextSt.transformString(xmlMatcher.start(0), xmlMatcher.end(0), ""); //this is an end tag
                 isClose = true;
             }
-            else if (substr.endsWith("/>"))
-                continue; // empty tag
+            else if (substr.endsWith("/>") || substr.startsWith("<?xml")) {
+                xmlTextSt.transformString(xmlMatcher.start(0), xmlMatcher.end(0), ""); //this is an empty tag
+                continue;
+            }
 
-            int tagStart = xmlMatcher.start();
-            int tagEnd = xmlMatcher.end();
             String lcsubstr = substr.toLowerCase();
 
             // get the tag name
             Matcher tagMatcher = xmlTagNamePattern.matcher(lcsubstr);
+
             if (tagMatcher.find()) {
-                // identify the tag and its corresponding close tag
+                // identify the tag
                 String tagName = tagMatcher.group(1);
 
                 if (isClose) {
-                    Pair<String, Integer> openTag = tagStack.pop();
+                    Pair<String, IntPair> openTag = tagStack.pop();
                     tagName = tagName.substring(1); // strip leading "/"
-                    if (!openTag.getFirst().equals(tagName))
-                        throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
-                                "', found '" + tagName + "'");
+
+                    String openTagName = openTag.getFirst();
+
+                    // check for lone tags (open without close)
+                    while (!openTagName.equals(tagName)) {
+                        if (tagsToIgnore.contains(openTagName)) {
+                            // just delete the span.
+                            int startStart = openTag.getSecond().getFirst();
+                            int startEnd = openTag.getSecond().getSecond();
+
+                            xmlTextSt.transformString(startStart, startEnd, "");
+                            openTag = tagStack.pop();
+                            openTagName = openTag.getFirst();
+                        }
+                        else
+                            throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
+                                    "', found '" + tagName + "'");
+                    }
+
                     // now we have open tag and matching close tag; record span and label
-                    int start = openTag.getSecond();
-                    int end = xmlMatcher.start();
+                    IntPair startTagOffsets = openTag.getSecond();
+                    int startTagStart = startTagOffsets.getFirst();
+                    int startTagEnd = startTagOffsets.getSecond();
+                    int endTagStart = xmlMatcher.start();
+                    int endTagEnd = xmlMatcher.end();
+
                     Map<String, String> tagInfo = new HashMap<>();
                     tagInfo.put(SPAN_INFO, tagName);
-                    attributesRetained.put(xmlTextSt.getOriginalOffsets(start, end), tagInfo);
-                    continue;
-                }
-                // tag must be open
-                int end = xmlMatcher.end();
-                tagStack.push(new Pair(tagName, end));
-                // within an xml open tag: identify any attribute values we need to retain.
-                if (tagsWithAtts.containsKey(tagName)) {
-                    Set<String> attributeNames = tagsWithAtts.get(tagName);
-                    // parse the substring beyond the tag name.
-                    lcsubstr = lcsubstr.substring(tagMatcher.end());
-                    substr = substr.substring(tagMatcher.end());
+                    attributesRetained.put(xmlTextSt.getOriginalOffsets(startTagEnd, endTagStart), tagInfo);
 
-                    Matcher attrMatcher = tagAttributePattern.matcher(lcsubstr);
-                    while (attrMatcher.find()) {
-                        String attrName = attrMatcher.group(1);
-                        // avoid lowercasing attribute values
-                        String attrVal = substr.substring(attrMatcher.start(2), attrMatcher.end(2)); //attrMatcher.group(2);
-                        if (attributeNames.contains(attrName)) {
-                            // substring starts at index of start of (open) xml tag + length of tag name + left angle bracket
-                            // note that we are using a transformed text, so need original offsets
-                            int attrValOffset = tagMatcher.end() + xmlMatcher.start();
-                            int attrValStart = attrMatcher.start(2) + attrValOffset;
-                            int attrValEnd = attrMatcher.end(2) + attrValOffset;
-                            IntPair attrValOffsets = xmlTextSt.getOriginalOffsets(attrValStart, attrValEnd);
-                            Map<String, String> atts = attributesRetained.get(attrValOffsets);
-                            if (null == atts) {
-                                atts = new HashMap<>();
-                                attributesRetained.put(attrValOffsets, atts);
-                            }
-                            atts.put(attrName, attrVal);
+                    int nestingLevel = nestingLevels.get(tagName) - 1;
+                    nestingLevels.put(tagName, nestingLevel);
+
+                    /*
+                     * if we are nested:
+                     *    if tag is a 'delete text' tag,
+                     *        DON'T DELETE or it will create problems.
+                     *    else
+                     *        delete open and close tags
+                     * else we are NOT nested:
+                     *    if tag is a 'delete text' tag, delete from start to finish.
+                     *    else delete open and close tags.
+                     */
+                    if (tagsToIgnore.contains(tagName)) { // deletable span
+                        if (nestingLevel == 0) {
+                            xmlTextSt.transformString(startTagStart, endTagEnd, "");
                         }
                     }
+                    else { // we should retain text between open and close, but delete the tags
+                        xmlTextSt.transformString(startTagStart, startTagEnd, "");
+                        xmlTextSt.transformString(endTagStart, endTagEnd, "");
+                    }
                 }
+                else  { // tag must be open
+                    tagStack.push(new Pair(tagName, new IntPair(xmlMatcher.start(), xmlMatcher.end())));
+                    if (nestingLevels.containsKey(tagName))
+                        nestingLevels.put(tagName, nestingLevels.get(tagName) + 1);
+                    else
+                        nestingLevels.put(tagName, 1);
 
-                // if we should retain text between open and close, do so
-                if (tagsWithText.contains(tagName)) {
+                    // within an xml open tag: identify any attribute values we need to retain.
+                    if (tagsWithAtts.containsKey(tagName)) {
+                        Set<String> attributeNames = tagsWithAtts.get(tagName);
+                        // parse the substring beyond the tag name.
+                        lcsubstr = lcsubstr.substring(tagMatcher.end());
+                        substr = substr.substring(tagMatcher.end());
 
-                    // FIXME: this uses original string. If this method is called on a transformed string, it may introduce errors.
-                    // FIXME: use getOriginalOffsets() from stringtransformation.
-                    int endStart = xmlCurrentStr.indexOf("</" +tagName +">", tagEnd);
-                    if (endStart == -1)
-                        throw new IllegalArgumentException("No matching end tag for '" + tagName + "'");
-                    //delete the open tag, leave the text (main loop will catch and delete close tag
-                    xmlTextSt.transformString(tagStart, tagEnd, "");
-                }
-                else if (tagsToIgnore.contains(tagName)) { // need to delete content, though span was recorded
-                    int endStart = xmlCurrentStr.indexOf("</" +tagName +">", tagEnd);
-                    // an earlier check deletes close tags, so only delete up to close
-                    xmlTextSt.transformString(tagStart, endStart, "");
-                }
-                else { // just delete the tag.
-                    xmlTextSt.transformString(xmlMatcher.start(0), xmlMatcher.end(0), ""); //this is an end tag
+                        Matcher attrMatcher = tagAttributePattern.matcher(lcsubstr);
+                        while (attrMatcher.find()) {
+                            String attrName = attrMatcher.group(1);
+                            // avoid lowercasing attribute values
+                            String attrVal = substr.substring(attrMatcher.start(2), attrMatcher.end(2)); //attrMatcher.group(2);
+                            if (attributeNames.contains(attrName)) {
+                                // substring starts at index of start of (open) xml tag + length of tag name + left angle bracket
+                                // note that we are using a transformed text, so need original offsets
+                                int attrValOffset = tagMatcher.end() + xmlMatcher.start();
+                                int attrValStart = attrMatcher.start(2) + attrValOffset;
+                                int attrValEnd = attrMatcher.end(2) + attrValOffset;
+                                IntPair attrValOffsets = xmlTextSt.getOriginalOffsets(attrValStart, attrValEnd);
+                                Map<String, String> atts = attributesRetained.get(attrValOffsets);
+                                if (null == atts) {
+                                    atts = new HashMap<>();
+                                    attributesRetained.put(attrValOffsets, atts);
+                                }
+                                atts.put(attrName, attrVal);
+                            }
+                        }
+                    }
                 }
             }
         }

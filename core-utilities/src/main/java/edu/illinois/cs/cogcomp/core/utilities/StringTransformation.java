@@ -142,7 +142,7 @@ public class StringTransformation {
 
         int currentChange = 0;
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
-            if (changeIndex > modOffset)
+            if (changeIndex > modOffset - currentChange)
                 break;
             currentChange += recordedOffsetModifications.get(changeIndex);
         }
@@ -161,6 +161,10 @@ public class StringTransformation {
                  method
              */
             isModified = false;
+            /*
+             * it's OK for edits to be unsorted: all edit offsets are computed relative to the previous edits
+             *    in the sequence
+             */
             for ( Pair<IntPair, Pair<String, String>> edit : edits ) {
                 IntPair editOffsets = edit.getFirst();
                 String before = currentStr.substring(0, editOffsets.getFirst());
@@ -182,8 +186,8 @@ public class StringTransformation {
                  */
                 Integer absoluteModOffset = computeOriginalOffset(modOffset);
 
-                if (recordedOffsetModifications.containsKey(absoluteModOffset))
-                    currentMod += recordedOffsetModifications.get(absoluteModOffset);
+//                if (recordedOffsetModifications.containsKey(absoluteModOffset))
+//                    currentMod += recordedOffsetModifications.get(absoluteModOffset);
 
                 if (toAdd.containsKey(absoluteModOffset))
                     currentMod += toAdd.get(absoluteModOffset);
@@ -205,12 +209,13 @@ public class StringTransformation {
                         key = lastKeyPos; // move to after last entry key + edit
                     /*
                      * it gets a bit tricky if a new deletion overlaps older edits: you need to split up the new edit.
+                     * TODO: merge edits instead
                      */
                     for (int oldKey : recordedOffsetModifications.keySet()) {
                         if (mod == 0)
                             break;
                         // am I at the same index?
-                        if (oldKey == key) {
+                        if (oldKey == key) { //if edit is an expansion, still advance one position
                             key = Math.max(key + 1, key - recordedOffsetModifications.get(oldKey)); //move on...
                         }
                         // am I within the window of a prior edit?
@@ -252,10 +257,26 @@ public class StringTransformation {
             /*
              * recordedOffsetModifications: at char index X, modify running offset modifier by Y
              */
+            int cumulativeOffset = 0;
             for (Integer transformModIndex : recordedOffsetModifications.keySet()) {
-                int baseOffset = transformModIndex;
+                int baseIndex = transformModIndex;
                 int transformMod = recordedOffsetModifications.get(transformModIndex);
-                recordedInverseModifications.put(baseOffset,  -transformMod);
+                /*
+                 * suppose tranform offset is 33, and modifier is -33 (delete the first 33 chars of the orig string).
+                 * Therefore we want index 0 of the transformed string to map to offset 33 of the orig string.
+                 * So we update the cumulative offset *after* adding the current mod.
+                 * Subsequent edits to orig string increase the total difference between the transformed string
+                 *    base index and the corresponding orig string index, hence the need for cumulative offset to
+                 *    be subtracted from the orig index. (mod is -ve, therefore subtraction even though it's added
+                 *    to the offset from the perspective of the original string
+                 */
+                int effectiveIndex = baseIndex - cumulativeOffset;
+                int effectiveMod = transformMod;
+                if (recordedInverseModifications.containsKey(effectiveIndex))
+                    effectiveMod -= recordedInverseModifications.get(effectiveIndex);
+
+                recordedInverseModifications.put(effectiveIndex,  -effectiveMod);
+                cumulativeOffset -= transformMod;
             }
 
             /*
@@ -308,20 +329,20 @@ public class StringTransformation {
 
     /**
      * given a pair of offsets into the transformed text, retrieve the corresponding offsets in the original text.
+     * This behavior treats the end offset differently from the start offset (accounts for changes after the end)
      * @param transformStart start of transformed text substring
      * @param transformEnd end of transformed text substring
      * @return offsets in original text corresponding to the specified span in the transformed string
      */
     public IntPair getOriginalOffsets(int transformStart, int transformEnd) {
 
-//        return new IntPair(computeOriginalOffset(transformStart), computeCurrentOffset(transformEnd));
         int origStart = transformStart;
         int origEnd = transformEnd;
 
         for (Integer changeIndex : this.recordedInverseModifications.keySet()) {
-            if (changeIndex < origStart)
+            if (changeIndex < transformStart)
                 origStart += recordedInverseModifications.get(changeIndex);
-            if (changeIndex <= origEnd)
+            if (changeIndex <= transformEnd)
                 origEnd += recordedInverseModifications.get(changeIndex);
         }
 

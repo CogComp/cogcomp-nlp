@@ -48,7 +48,8 @@ public class EREReaderTest {
                     + e.getMessage());
         }
 
-        TextAnnotation output = nerReader.next();
+        XmlTextAnnotation outputXmlTa = nerReader.next();
+        TextAnnotation output = outputXmlTa.getTextAnnotation();
         View nerEre = null;
         if (addNominalMentions) {
             assert (output.hasView(ViewNames.MENTION_ERE));
@@ -78,7 +79,9 @@ public class EREReaderTest {
         }
         assert (emr.hasNext());
 
-        output = emr.next();
+        outputXmlTa = emr.next();
+        output = outputXmlTa.getTextAnnotation();
+
         assert (output.hasView(ViewNames.MENTION_ERE));
 
         View nerRelation = output.getView(ViewNames.MENTION_ERE);

@@ -13,10 +13,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlFragmentWhitespacingDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
@@ -29,7 +35,20 @@ import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
  * @author redman
  * @author msammon
  */
-public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
+public class EREDocumentReader extends XmlDocumentReader {
+
+    /**
+     * tags in document files
+     */
+    public static final String QUOTE = "quote";
+    public static final String AUTHOR = "author";
+    public static final String ID = "id";
+    public static final String DATETIME = "datetime";
+    public static final String POST = "post";
+    public static final String DOC = "doc";
+    public static final String ORIG_AUTHOR = "orig_author";
+    public static final String HEADLINE = "headline";
+    public static final String IMG = "img";
 
     /**
      * tags in ERE markup filess
@@ -51,7 +70,6 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
     public static final String MENTION_HEAD = "nom_head";
     public static final String SPECIFICITY = "specificity";
     public static final String REALIS = "realis";
-    public static final String ID = "id";
     public static final String RELATIONS = "relations";
     public static final String RELATION = "relation";
     public static final String RELATION_MENTION = "relation_mention";
@@ -103,9 +121,36 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
      * @throws Exception
      */
     public EREDocumentReader(String corpusName, String sourceDirectory) throws Exception {
-        super(corpusName, sourceDirectory);
+        super(corpusName, sourceDirectory, buildXmlProcessor());
     }
 
+    private static XmlTextAnnotationMaker buildXmlProcessor() {
+        TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+
+        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
+        Set<String> attributeNames = new HashSet<>();
+        attributeNames.add(AUTHOR);
+        attributeNames.add(ID);
+        attributeNames.add(DATETIME);
+        tagsWithAtts.put(POST, attributeNames);
+        attributeNames = new HashSet<>();
+        attributeNames.add(ID);
+        tagsWithAtts.put(DOC, attributeNames);
+        attributeNames = new HashSet<>();
+        attributeNames.add(ORIG_AUTHOR);
+        tagsWithAtts.put(QUOTE, attributeNames);
+
+        Set<String> tagsWithText = new HashSet<>();
+        tagsWithText.add(HEADLINE);
+        tagsWithText.add(POST);
+
+        Set<String> tagsToIgnore = new HashSet<>(); // implies "delete spans enclosed by these tags"
+        tagsToIgnore.add(QUOTE);
+        tagsToIgnore.add(IMG);
+
+        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
+        return new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
+    }
 
 
     /**
@@ -128,7 +173,7 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
         String sourceFileDir = super.getSourceDirectory() + "data/source/";
         String annotationDir = super.getSourceDirectory() + "data/ere/";
         FilenameFilter filter = (dir, name) -> name.endsWith(getRequiredFileExtension());
-        /**
+        /*
          * returns the FULL PATH of each file
          */
         List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceFileDir, filter));
@@ -139,7 +184,7 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
 
         List<List<Path>> pathList = new ArrayList<>();
 
-        /**
+        /*
          * fileList has multiple entries per single annotation: a source file plus one or more
          *    annotation files. These files share a prefix -- the stem of the file containing
          *    the source text.
@@ -161,16 +206,6 @@ public class EREDocumentReader extends XmlFragmentWhitespacingDocumentReader {
     }
 
 
-    /**
-     * Strip all XML markup, but leave all the text content, and possibly some attributes for
-     * certain tags, while retaining the same offset for all remaining text content.
-     * 
-     * @param original the original text string.
-     * @return the striped text.
-     */
-    protected String stripText(String original) {
-        return TextCleaner.removeXmlLeaveAttributes(original, retainTags, retainAttributes);
-    }
 
     /**
      * Exclude any files not possessing this extension.

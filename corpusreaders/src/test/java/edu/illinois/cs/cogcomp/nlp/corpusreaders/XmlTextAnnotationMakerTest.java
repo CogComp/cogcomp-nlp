@@ -7,7 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -30,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Test XmlTextAnnotationMaker functionality.
+ * Test XmlTextAnnotationMaker functionality. Non-unit test, as it requires access to ERE corpus.
  *
  * @author mssammon
  */
@@ -39,6 +38,7 @@ public class XmlTextAnnotationMakerTest {
 
     /**
      * tags and attributes reader needs to handle
+     * copied from EREDocumentReader
      */
     public static final String QUOTE = "quote";
     public static final String AUTHOR = "author";
@@ -49,6 +49,7 @@ public class XmlTextAnnotationMakerTest {
     public static final String ORIG_AUTHOR = "orig_author";
     public static final String HEADLINE = "headline";
     public static final String IMG = "img";
+
     private static final String XML_FILE =
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
                 "data/source/ENG_DF_001241_20150407_F0000007T.xml";
@@ -81,7 +82,6 @@ public class XmlTextAnnotationMakerTest {
         tagsWithText.add(POST);
 
         Set<String> tagsToIgnore = new HashSet<>();
-        tagsToIgnore.add(QUOTE);
         tagsToIgnore.add(IMG);
 
         XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);

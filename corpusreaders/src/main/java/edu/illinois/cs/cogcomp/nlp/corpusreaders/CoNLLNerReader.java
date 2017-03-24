@@ -17,7 +17,6 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -34,7 +33,7 @@ import java.util.List;
  *
  * Created by mayhew2 on 7/20/16.
  */
-public class CoNLLNerReader extends TextAnnotationReader {
+public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
 
     private static Logger logger = LoggerFactory.getLogger(CoNLLNerReader.class);
     private List<TextAnnotation> textAnnotations;
@@ -48,7 +47,6 @@ public class CoNLLNerReader extends TextAnnotationReader {
     public CoNLLNerReader(String conlldirectory) {
         super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory));
         this.taCounter = 0;
-
     }
 
     /**
@@ -263,16 +261,20 @@ public class CoNLLNerReader extends TextAnnotationReader {
         return ta;
     }
 
-    @Override
-    protected TextAnnotation makeTextAnnotation() throws Exception {
-        if (!hasNext())
-            return null;
-        return textAnnotations.get(taCounter++);
-    }
 
     @Override
     public boolean hasNext() {
         return textAnnotations.size() > taCounter;
+    }
+
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
+    @Override
+    public TextAnnotation next() {
+        return textAnnotations.get(taCounter++);
     }
 
     /**
