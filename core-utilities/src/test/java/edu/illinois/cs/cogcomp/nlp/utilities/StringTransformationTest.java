@@ -33,6 +33,17 @@ public class StringTransformationTest {
     public static final String MODOVERLAP = "my- why not";
     public static final String SEQUENCE= "The http://theonlyway.org {only}^@^@^@ way___";
     public static final String MODSEQUENCE= "The WWW -LCB-only-RCB- way-";
+    public static final String ABUT = "The <emph>only</emph> lonely@^@^man</doc>";
+    public static final String MODABUT = "The only lonely man";
+
+    public static final IntPair ONLYORIGOFFSETS = new IntPair(10,14);
+    public static final IntPair ONLYNEWOFFSETS = new IntPair(4,8);
+    public static final IntPair LONELYORIGOFFSETS = new IntPair(22,28);
+    public static final IntPair LONELYNEWOFFSETS = new IntPair(9,15);
+    public static final IntPair CTRLORIGOFFSETS = new IntPair(28,32);
+    public static final IntPair CTRLNEWOFFSETS = new IntPair(15,16);
+    public static final IntPair MANORIGOFFSETS = new IntPair(32,35);
+    public static final IntPair MANNEWOFFSETS = new IntPair(16,19);
 
     StringTransformation st;
 
@@ -285,6 +296,10 @@ public class StringTransformationTest {
     }
 
 
+    /**
+     * runs the same set of ops as testSequence, but applies edits after each transformation.
+     * Ensures that the behavior is the same whether edits are done in a single pass, or over multiple passes.
+     */
     @Test
     public void testSequentialSequence() {
 //        SEQUENCE= "The http://theonlyway.org {only}^@^@^@ way___";
@@ -372,5 +387,54 @@ public class StringTransformationTest {
 
     }
 
+
+    /**
+     * when you delete a span next to a retained span and later try to retrieve original offsets for the retained
+     *    span, StringTransformation must return the span offsets without the deleted span. However, if the edit
+     *    reduced a span, the original offsets must include the deleted content -- i.e. the edit type matters.
+     * This test assesses this difference in behavior, both before and after a span.
+     */
+    @Test
+    public void testAbuttingEdits(){
+
+        // "The <emph>only</emph> lonely@^@^man</doc>"
+        // "The only man";
+
+        StringTransformation st = new StringTransformation(ABUT);
+
+        st.transformString(4, 10, "");
+        st.transformString(14, 21, "");
+        st.transformString(CTRLORIGOFFSETS.getFirst(), CTRLORIGOFFSETS.getSecond(), " ");
+        st.transformString(35, 41, "");
+
+        String transformedStr = st.getTransformedText();
+        assertEquals(MODABUT, transformedStr);
+
+        IntPair onlyOrig = st.getOriginalOffsets(ONLYNEWOFFSETS.getFirst(), ONLYNEWOFFSETS.getSecond());
+        assertEquals(ONLYORIGOFFSETS, onlyOrig);
+
+        IntPair lonelyOrig = st.getOriginalOffsets(LONELYNEWOFFSETS.getFirst(), LONELYNEWOFFSETS.getSecond());
+        String origStr = ABUT.substring(LONELYORIGOFFSETS.getFirst(), LONELYORIGOFFSETS.getSecond());
+        String newStr = transformedStr.substring(LONELYNEWOFFSETS.getFirst(), LONELYNEWOFFSETS.getSecond());
+        assertEquals(origStr, newStr);
+        assertEquals(LONELYORIGOFFSETS, lonelyOrig);
+
+        int onlyNewStart = st.computeModifiedOffsetFromOriginal(ONLYORIGOFFSETS.getFirst());
+        int onlyNewEnd = st.computeModifiedOffsetFromOriginal(ONLYORIGOFFSETS.getSecond());
+
+        assertEquals(ONLYNEWOFFSETS.getFirst(), onlyNewStart);
+        assertEquals(ONLYNEWOFFSETS.getSecond(), onlyNewEnd);
+
+        IntPair ctrlOrig = st.getOriginalOffsets(CTRLNEWOFFSETS.getFirst(), CTRLNEWOFFSETS.getSecond());
+        assertEquals(CTRLORIGOFFSETS.getFirst(), ctrlOrig.getFirst());
+        assertEquals(CTRLORIGOFFSETS.getSecond(), ctrlOrig.getSecond());
+
+        IntPair manOrig = st.getOriginalOffsets(MANNEWOFFSETS.getFirst(), MANNEWOFFSETS.getSecond());
+        String manNewStr = MODABUT.substring(MANNEWOFFSETS.getFirst(), MANNEWOFFSETS.getSecond());
+        String manOrigStr = ABUT.substring(MANORIGOFFSETS.getFirst(), MANORIGOFFSETS.getSecond());
+
+        assertEquals(manNewStr, manOrigStr);
+        assertEquals(MANORIGOFFSETS, manOrig);
+    }
 
 }
