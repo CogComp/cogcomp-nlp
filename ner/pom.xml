@@ -31,26 +31,32 @@
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.0.106</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+
+        <!--Daniel: the resources commented out because we load them programmatically now. -->
         <!-- Contains the gazetteers and Brown clusters -->
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>brown-clusters</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>gazetteers</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>wordEmbedding</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>brown-clusters</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>gazetteers</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>wordEmbedding</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
         <!--  LBJava stuff.  -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -62,6 +68,7 @@
             <artifactId>LBJava-NLP-tools</artifactId>
             <version>3.0.106</version>
         </dependency>
+
 
         <!-- models: you need to use/specify a new path to avoid using these -->
         <dependency>
