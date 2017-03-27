@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.103</version>
+    <version>3.0.106</version>
 
     <modules>
         <module>core-utilities</module>
@@ -198,6 +198,7 @@
                         <exclude>**/*.lex</exclude>
                         <exclude>**/*.lc</exclude>
                         <exclude>**/*.config</exclude>
+                        <exclude>**/*.proto</exclude>
                     </excludes>
                 </configuration>
                 <executions>

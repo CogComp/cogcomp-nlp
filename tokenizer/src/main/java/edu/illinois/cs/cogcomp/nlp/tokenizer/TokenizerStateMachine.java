@@ -51,18 +51,16 @@ import java.util.regex.Pattern;
  * @author redman
  */
 public class TokenizerStateMachine {
-    private static Logger logger = LoggerFactory.getLogger(TokenizerStateMachine.class);
-
-
-    /** the state stack, since state can be nested. */
-    protected ArrayList<State> stack;
-
-    /** the state stack, since state can be nested. */
-    protected ArrayList<State> completed;
-
     /** valid URI schemes. */
     final static String[] schemes = {"http", "https", "ftp", "svn", "email"};
-
+    private static Logger logger = LoggerFactory.getLogger(TokenizerStateMachine.class);
+    /** matches up to the end of the url. */
+    final Pattern urlpat = Pattern
+            .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    /** the state stack, since state can be nested. */
+    protected ArrayList<State> stack;
+    /** the state stack, since state can be nested. */
+    protected ArrayList<State> completed;
     /**
      * <p>
      * This is the state machine. Cardinality of 1st dim indexed by tokenizer
@@ -71,7 +69,7 @@ public class TokenizerStateMachine {
      * individually processing a character at a time, but they call also look ahead and back, as
      * they have full access to the contents of this class.
      * </p>
-     * 
+     *
      * <p>
      * This class is initialized using Java's new lambda expressions, solely for the brevity, and
      * considering the number of entries here, the expressiveness of a verbose interface
@@ -80,19 +78,15 @@ public class TokenizerStateMachine {
      * </p>
      */
     protected StateProcessor[][] statemachine;
-
     /** the text to process. */
     protected char[] text;
-
     /** the text to process. */
     protected String textstring;
-
     /** the character offset. */
     protected int current;
-
     /** the state we are in currently. */
     protected int state;
-    
+
     /**
      * Init the state machine decision matrix and the text annotation.
      */
@@ -206,7 +200,7 @@ public class TokenizerStateMachine {
                                     /*
                                          if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
                                                 .isAlphabetic(after) || Character.isDigit(after)))) {*/
-                                    
+
                                     if (splitOnDash == true) {
                                         pop(current); // the current word is finished.
                                         push(new State(TokenizerState.IN_SPECIAL), current);
@@ -285,8 +279,8 @@ public class TokenizerStateMachine {
                             }
                             case '.': {
                                 // we have a period, this is often an end-of-sentence marker. There
-                                // are other examples of areas where it is not, No.2, U.S., US., 
-                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable 
+                                // are other examples of areas where it is not, No.2, U.S., US.,
+                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable
                                 // character, it is just part of the word.
                                 // If it is followed by a space, but appears to be part of an
                                 // acronym(starts with a
@@ -441,10 +435,6 @@ public class TokenizerStateMachine {
                 }}};
         this.statemachine = toopy;
     }
-
-    /** matches up to the end of the url. */
-    final Pattern urlpat = Pattern
-            .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
 
     /**
      * Any number of periods beyond two will continue the sentence rather than ending it..
@@ -601,25 +591,15 @@ public class TokenizerStateMachine {
      * @param intext the text to parse.
      */
     protected void parseText(String intext) {
-        // CHANGE (MS): preserve trailing whitespace (disabled find index of last non whitespace)
+        // preserve trailing whitespace (disabled find index of last non whitespace)
         int i = intext.length();
-        // int i = intext.length()-1;
-        // for (; i >=0 ; i--) {
-        // if (!Character.isWhitespace(intext.charAt(i)))
-        // break; // found the first non-whitepsace.
-        // }
-        // i++; // length is one beyond the last whitespace char.
-        stack = new ArrayList<State>();
-        completed = new ArrayList<State>();
+        stack = new ArrayList<>();
+        completed = new ArrayList<>();
         if (i == 0)
             return;
         this.text = new char[i];
         intext.getChars(0, i, this.text, 0);
 
-        // MS CHANGED IN CONFLICTING UPDATE
-        // this.textstring = intext.trim();
-        // this.textstring = intext.trim();
-        // CHANGE (MS): no trim of input text
         this.textstring = intext;
         this.text = this.textstring.toCharArray();
         current = 0;
