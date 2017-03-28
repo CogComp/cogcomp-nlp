@@ -218,6 +218,8 @@ public class XmlDocumentProcessor {
             }
         }
 
+        xmlTextSt.applyPendingEdits();
+
         return new Pair(xmlTextSt, attributesRetained);
     }
 
