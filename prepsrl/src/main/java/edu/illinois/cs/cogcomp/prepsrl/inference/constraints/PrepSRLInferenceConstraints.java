@@ -10,7 +10,12 @@ package edu.illinois.cs.cogcomp.prepsrl.inference.constraints;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.lbjava.infer.FirstOrderConstraint;
 import edu.illinois.cs.cogcomp.lbjava.infer.ParameterizedConstraint;
+import edu.illinois.cs.cogcomp.prepsrl.inference.PrepSRLInference;
 
+/**
+ * A definition of the collection of constraints used for {@link PrepSRLInference}. Here only using
+ * {@link LegalRoles}.
+ */
 public class PrepSRLInferenceConstraints extends ParameterizedConstraint {
     private static final LegalRoles legalRoles = new LegalRoles();
 

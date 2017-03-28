@@ -16,9 +16,15 @@ import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.infer.InferenceManager;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLClassifier;
+import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.LegalRoles;
+import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.PrepSRLInferenceConstraints;
 
 import java.io.File;
 
+/**
+ * An LBJava {@link Classifier} that creates an ILP inference using the constraints defined in
+ * {@link PrepSRLInferenceConstraints} (right now only the {@link LegalRoles} constraint).
+ */
 public class ConstrainedPrepSRLClassifier extends Classifier {
     private static PrepSRLClassifier prepSRLClassifier;
 

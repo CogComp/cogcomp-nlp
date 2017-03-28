@@ -13,7 +13,7 @@ import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.prepsrl.data.DataReader;
+import edu.illinois.cs.cogcomp.lbjava.nlp.DataReader;
 import edu.illinois.cs.cogcomp.prepsrl.data.PrepSRLDataReader;
 import edu.illinois.cs.cogcomp.prepsrl.inference.ConstrainedPrepSRLClassifier;
 

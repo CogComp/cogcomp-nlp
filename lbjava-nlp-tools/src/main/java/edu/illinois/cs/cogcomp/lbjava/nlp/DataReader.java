@@ -5,15 +5,13 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.prepsrl.data;
+package edu.illinois.cs.cogcomp.lbjava.nlp;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,22 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The base data reader class containing the `LBJava` {@link Parser} code used by all applications.
+ * A generic data reader class that can be used to interface with the `LBJava` {@link Parser} code.
+ * It also provides a simple caching mechanism based on {@link TextAnnotationMapDBHandler}.
+ * The main assumption is that an LBJava-based classifier is going to be using a collection
+ * of {@link Constituent}s as the set of training/testing examples.
+ * Subclasses need to implement specific methods for candidate generation and input format reading.
  */
 abstract public class DataReader implements Parser {
     protected static Logger logger = LoggerFactory.getLogger(DataReader.class);
 
-    protected ResourceManager rm = PrepSRLConfigurator.defaults();
-
     public static final String CANDIDATE = "candidate";
 
     protected IResetableIterator<TextAnnotation> dataset;
-    protected List<Constituent> candidates;
+    private List<Constituent> candidates;
     private int currentCandidate, currentTextAnnotation;
     protected String viewName, corpusName;
     protected final String file;
 
-    private static Preprocessor preprocessor;
     private final TextAnnotationMapDBHandler dbHandler;
 
     public DataReader(String file, String corpusName, String viewName) {
@@ -59,7 +58,7 @@ abstract public class DataReader implements Parser {
             logger.info("Finished reading from {}.", this.file);
             for (TextAnnotation ta : textAnnotations) {
                 try {
-                    getPreprocessor().annotate(ta);
+                    preprocess(ta);
                 } catch (AnnotatorException | RuntimeException e) {
                     logger.error("Unable to preprocess TextAnnotation {}. Skipping", ta.getId());
                     continue;
@@ -75,21 +74,7 @@ abstract public class DataReader implements Parser {
         dataset = dbHandler.getDataset(corpusName);
     }
 
-    /**
-     * Set the {@code dataset} source to a different part of the cached MapDB. To be used only after
-     * the {@code dataset} has been cached (by constructing the {@link DataReader} object.
-     *
-     * @param corpusName The new part of the MapDB (usually either "train" or "test")
-     */
-    public void setDataset(String corpusName) {
-        dataset = dbHandler.getDataset(corpusName);
-    }
-
-    private Preprocessor getPreprocessor() {
-        if (preprocessor == null)
-            preprocessor = new Preprocessor(rm);
-        return preprocessor;
-    }
+    public abstract void preprocess(TextAnnotation ta) throws AnnotatorException;
 
     public abstract List<TextAnnotation> readData();
 

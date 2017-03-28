@@ -16,13 +16,21 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepConfigurator;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
-import edu.illinois.cs.cogcomp.prepsrl.data.DataReader;
+import edu.illinois.cs.cogcomp.lbjava.nlp.DataReader;
 import edu.illinois.cs.cogcomp.prepsrl.data.PrepSRLDataReader;
 import edu.illinois.cs.cogcomp.prepsrl.inference.ConstrainedPrepSRLClassifier;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An {@link Annotator} that adds a {@link TokenLabelView} for Prepositional SRL.
+ * This consists of role information for each preposition (e.g. Location, Instrument, etc)
+ * and (syntactic) argument information (governor, object) to the syntactic heads of the
+ * governing and object phrases of the preposition respectively.
+ *
+ * @author Christos Christodoulopoulos
+ */
 public class PrepSRLAnnotator extends Annotator {
 
     Classifier classifier;

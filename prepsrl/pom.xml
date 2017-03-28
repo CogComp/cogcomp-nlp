@@ -24,6 +24,11 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>LBJava-NLP-tools</artifactId>
+            <version>3.0.106</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-depparse</artifactId>
             <version>3.0.106</version>
         </dependency>

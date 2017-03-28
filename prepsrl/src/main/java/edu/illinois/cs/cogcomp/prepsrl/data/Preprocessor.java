@@ -19,18 +19,14 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
-import edu.illinois.cs.cogcomp.prepsrl.handlers.StanfordDepHandler;
-import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
-import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
- * An annotation preprocessor used by all the modules, an instance of. The configurations parameters
+ * An annotation preprocessor for {@link PrepSRLDataReader}. The configurations parameters
  * are set in {@link PrepSRLConfigurator}.
  */
 public class Preprocessor {
@@ -50,19 +46,6 @@ public class Preprocessor {
             annotators.put(ViewNames.LEMMA, new IllinoisLemmatizer());
             annotators.put(ViewNames.SHALLOW_PARSE, new ChunkerAnnotator());
             annotators.put(ViewNames.DEPENDENCY, new DepAnnotator());
-//            Properties stanfordProps = new Properties();
-//            stanfordProps.put("annotators", "pos, parse");
-//            stanfordProps.put("parse.originalDependencies", true);
-//            int maxParseSentenceLength = 80;
-//            String timePerSentence = "100000";
-//            stanfordProps.put("parse.maxlen", maxParseSentenceLength);
-//            stanfordProps.put("parse.maxtime", timePerSentence);
-//            POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
-//            ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
-//            StanfordDepHandler depParser =
-//                    new StanfordDepHandler(posAnnotator, parseAnnotator, maxParseSentenceLength,
-//                            false);
-//            annotators.put(ViewNames.DEPENDENCY_STANFORD, depParser);
             annotator = new BasicAnnotatorService(taBldr, annotators, fullRm);
         } catch (Exception e) {
             logger.error("Unable to create preprocessor. \n{}", e.getMessage());

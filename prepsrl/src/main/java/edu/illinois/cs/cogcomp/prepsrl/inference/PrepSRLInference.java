@@ -13,8 +13,14 @@ import edu.illinois.cs.cogcomp.lbjava.infer.ILPInference;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Normalizer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Softmax;
+import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.LegalRoles;
 import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.PrepSRLInferenceConstraints;
 
+/**
+ * A wrapper for creating an ILP inference problem in LBJava, defining the constraints used
+ * (here {@link PrepSRLInferenceConstraints} only specifies {@link LegalRoles}),
+ * and the type of normalization (here {@link Softmax}).
+ */
 public class PrepSRLInference extends ILPInference {
     public PrepSRLInference() {}
 

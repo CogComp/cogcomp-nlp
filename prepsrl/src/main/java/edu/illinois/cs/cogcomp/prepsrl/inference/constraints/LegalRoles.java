@@ -14,9 +14,11 @@ import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLClassifier;
 import edu.illinois.cs.cogcomp.prepsrl.data.PrepSRLDataReader;
 
-import java.io.File;
-
-class LegalRoles extends ParameterizedConstraint {
+/**
+ * An ILP constraint that enforces a specific set allowed roles to each preposition.
+ * The list of allowed roles is read on the fly from `sense2role.csv` (in the resources folder).
+ */
+public class LegalRoles extends ParameterizedConstraint {
     private static ResourceManager rm = PrepSRLConfigurator.defaults();
     private static String modelsDir = rm.getString(PrepSRLConfigurator.MODELS_DIR);
     private static String modelName = modelsDir + "/" + PrepSRLClassifier.CLASS_NAME;

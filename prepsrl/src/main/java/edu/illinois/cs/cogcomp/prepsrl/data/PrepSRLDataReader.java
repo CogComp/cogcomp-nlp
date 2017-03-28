@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.prepsrl.data;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -16,8 +17,11 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.utilities.XMLUtils;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
+import edu.illinois.cs.cogcomp.lbjava.nlp.DataReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -38,6 +42,8 @@ import java.util.*;
  * @author Christos Christodoulopoulos
  */
 public class PrepSRLDataReader extends DataReader {
+    private ResourceManager rm = PrepSRLConfigurator.defaults();
+    private static Preprocessor preprocessor;
     private static Logger log = LoggerFactory.getLogger(PrepSRLDataReader.class);
 
     private static final String semevalTrainDataDirectory = "train/xml";
@@ -68,6 +74,17 @@ public class PrepSRLDataReader extends DataReader {
 
     public PrepSRLDataReader(String dataDir, String corpusName) {
         super(dataDir, corpusName, ViewNames.SRL_PREP);
+    }
+
+    @Override
+    public void preprocess(TextAnnotation ta) throws AnnotatorException {
+        getPreprocessor().annotate(ta);
+    }
+
+    private Preprocessor getPreprocessor() {
+        if (preprocessor == null)
+            preprocessor = new Preprocessor(rm);
+        return preprocessor;
     }
 
     @Override
