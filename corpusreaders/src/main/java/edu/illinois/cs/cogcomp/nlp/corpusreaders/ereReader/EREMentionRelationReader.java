@@ -84,8 +84,8 @@ public class EREMentionRelationReader extends ERENerReader {
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
-            super.getEntitiesFromFile(doc, mentionView, xmlTa.getXmlSt());
-            super.getFillersFromFile(doc, mentionView, xmlTa.getXmlSt());
+            super.getEntitiesFromFile(doc, mentionView, xmlTa);
+            super.getFillersFromFile(doc, mentionView, xmlTa);
 
 
             /**
