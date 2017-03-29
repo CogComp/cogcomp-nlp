@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.core.utilities.AnnotationFixer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -251,7 +252,9 @@ public class ERENerReader extends EREDocumentReader {
         for (int j = 0; j < entityNL.getLength(); ++j) {
             readEntity(entityNL.item(j), nerView, xmlTa);
         }
+        AnnotationFixer.rationalizeBoundaryAnnotations(xmlTa.getTextAnnotation(), getViewName());
     }
+
 
 
     /**

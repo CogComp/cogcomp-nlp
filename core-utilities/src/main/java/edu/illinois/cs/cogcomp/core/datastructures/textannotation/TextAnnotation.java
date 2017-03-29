@@ -31,9 +31,10 @@ import java.util.*;
 public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable, HasAttributes {
 
     private static final long serialVersionUID = -1308407121595094945L;
-
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(TextAnnotation.class);
-
+    /**
+     * A symbol table.
+     */
+    final SymbolTable symtab;
     /**
      * An identifier for the corpus
      */
@@ -62,11 +63,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * Mop containing attributes/metadata information related to TextAnnotation.
      */
     protected Map<String, String> attributes;
-
-    /**
-     * A symbol table.
-     */
-    final SymbolTable symtab;
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(TextAnnotation.class);
 
     public TextAnnotation(String corpusId, String id, String text, IntPair[] characterOffsets,
             String[] tokens, int[] sentenceEndPositions) {
@@ -231,20 +228,31 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         if (sentences == null) {
             synchronized (this) {
                 if (sentences == null) {
-                    View sentenceView = getView(ViewNames.SENTENCE);
-
-                    sentences = new ArrayList<>();
-
-                    for (Constituent c : sentenceView.getConstituents()) {
-                        Sentence sentence = new Sentence(c);
-
-                        sentences.add(sentence);
-                    }
-                    Collections.sort(sentences, TextAnnotationUtilities.sentenceStartComparator);
+                    setSentences();
                 }
             }
         }
         return sentences;
+    }
+
+    /**
+     * allows user to force sentences field to be (re-)populated, possibly after modifying sentence View.
+     * WARNING: if you
+     */
+    public void setSentences() {
+
+        synchronized (this) {
+
+            View sentenceView = getView(ViewNames.SENTENCE);
+            sentences = new ArrayList<>();
+
+            for (Constituent c : sentenceView.getConstituents()) {
+                Sentence sentence = new Sentence(c);
+
+                sentences.add(sentence);
+            }
+            Collections.sort(sentences, TextAnnotationUtilities.sentenceStartComparator);
+        }
     }
 
     /**
