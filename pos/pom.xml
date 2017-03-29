@@ -31,6 +31,12 @@
             <artifactId>illinois-pos-models</artifactId>
             <version>3.0.13</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <repositories>

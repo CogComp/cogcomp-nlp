@@ -80,9 +80,6 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String ENTITY_ID = "entity_id";
     public static final String ROLE = "role";
     public static final String FILLER_ID = "filler_id";
-
-
-
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
     public static final String EntityIdAttribute = ACEReader.EntityIDAttribute;
@@ -97,23 +94,21 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationRealisAttribute = "REALIS";
     public static final String RelationSourceRoleAttribute = "RelationSourceRole";
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
-
-
-
+    private static final String SNIP = "snip";
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
     static private ArrayList<String> retainAttributes = new ArrayList<>();
 
-    static {
-        retainTags.add("quote");
-        retainTags.add("post");
-    }
-
-    static {
-        retainAttributes.add("orig_author");
-        retainAttributes.add("author");
-    }
+//    static {
+//        retainTags.add("quote");
+//        retainTags.add("post");
+//    }
+//
+//    static {
+//        retainAttributes.add("orig_author");
+//        retainAttributes.add("author");
+//    }
 
     /**
      * @param corpusName the name of the corpus, this can be anything.
@@ -147,6 +142,7 @@ public class EREDocumentReader extends XmlDocumentReader {
         Set<String> tagsToIgnore = new HashSet<>(); // implies "delete spans enclosed by these tags"
         tagsToIgnore.add(QUOTE);
         tagsToIgnore.add(IMG);
+        tagsToIgnore.add(SNIP);
 
         XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
         return new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);

@@ -76,7 +76,13 @@
             <version>3.0</version>
             <classifier>OntoNotes</classifier>
         </dependency>
-        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Non-Illinois packages -->
         <dependency>
             <groupId>org.apache.commons</groupId>
