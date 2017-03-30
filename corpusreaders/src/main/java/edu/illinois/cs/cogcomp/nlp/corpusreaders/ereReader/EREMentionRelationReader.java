@@ -51,8 +51,8 @@ public class EREMentionRelationReader extends ERENerReader {
      * @param sourceDirectory the name of the directory containing the file.
      * @throws Exception
      */
-    public EREMentionRelationReader(String corpusName, String sourceDirectory) throws Exception {
-        super(corpusName, sourceDirectory, true);
+    public EREMentionRelationReader(String corpusName, String sourceDirectory, boolean throwExceptionOnXmlTagMismatch) throws Exception {
+        super(corpusName, sourceDirectory, true, throwExceptionOnXmlTagMismatch); //addNominalMentions is 'true'
         numRelationsInSource = 0;
         numRelationsGenerated = 0;
         numRelationMentionsInSource = 0;

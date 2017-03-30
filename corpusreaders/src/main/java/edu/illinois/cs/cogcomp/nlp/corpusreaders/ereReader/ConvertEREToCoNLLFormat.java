@@ -60,7 +60,8 @@ public class ConvertEREToCoNLLFormat {
             } else
                 IOUtils.mkdir(conllDir);
 
-        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, includeNominals);
+        boolean throwExceptionOnXmlTagMismatch = true;
+        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, includeNominals, throwExceptionOnXmlTagMismatch);
 
         while (reader.hasNext()) {
             XmlTextAnnotation xmlTa = reader.next();

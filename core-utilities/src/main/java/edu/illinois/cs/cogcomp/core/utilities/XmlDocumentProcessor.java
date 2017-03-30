@@ -32,22 +32,29 @@ public class XmlDocumentProcessor {
      * tag to indicate that the associated information denotes a span in source xml with the associated label.
      */
     public static final String SPAN_INFO = "SPAN_INFO";
-    private final Set<String> tagsWithText;
+    /** list of tags marking 'body text' */
+    private final Set<String> deletableSpanTags;
+    /** list of tags containing attributes whose values' offsets we need */
     private final Map<String, Set<String>> tagsWithAtts;
-    private final Set<String> tagsToIgnore;
+    /** list of tags that might appear as singletons -- e.g. just an open tag, such as <img ...> */
+    private final Set<String> singletonTags;
+    /** what to do if there's some markup-like span outside the things we already listed */
+    private final boolean throwExceptionOnUnrecognizedTag;
+
 
     /**
      * specify tags that determine processor behavior.
-     * @param tagsWithText the names of tags containing text other than body text (e.g. headlines, quotes)
+     * @param deletableSpanTags the names of tags containing text to be excluded from clean text (e.g. quotes)
      * @param tagsWithAtts the names of tags containing the attributes to retain, paired with sets of attribute names
      *                     MUST BE LOWERCASE.
-     * @param tagsToIgnore the names of tags whose contents must be skipped entirely
+     * @param singletonTags the names of one-off tags (i.e. no close tag) whose contents must be skipped entirely
      */
-    public XmlDocumentProcessor(Set<String> tagsWithText, Map<String, Set<String>> tagsWithAtts,
-                                Set<String> tagsToIgnore) {
-        this.tagsWithText = tagsWithText;
+    public XmlDocumentProcessor(Set<String> deletableSpanTags, Map<String, Set<String>> tagsWithAtts,
+                                Set<String> singletonTags, boolean throwExceptionOnUnrecognizedTag) {
+        this.deletableSpanTags = deletableSpanTags;
         this.tagsWithAtts = tagsWithAtts;
-        this.tagsToIgnore = tagsToIgnore;
+        this.singletonTags = singletonTags;
+        this.throwExceptionOnUnrecognizedTag = throwExceptionOnUnrecognizedTag;
     }
 
     /**
@@ -70,6 +77,9 @@ public class XmlDocumentProcessor {
         xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
         xmlTextSt.applyPendingEdits();
 
+        // singletons can be nested in deletable spans, creating major headaches.
+        xmlTextSt = deleteSingletons(xmlTextSt);
+
 //        // there are some nested tags. If the nesting is simple, fix it. Otherwise, throw an exception.
 //        xmlTextSt.flattenNestedTags(xmlTextSt);
 //
@@ -82,7 +92,11 @@ public class XmlDocumentProcessor {
         // track open/close tags, to record spans for later use (e.g. quoted blocks that aren't annotated)
         Stack<Pair<String, IntPair>> tagStack = new Stack<>();
 
-        Map<String, Integer> nestingLevels = new HashMap<>();
+//        // right now, this is just useful for debugging
+//        Map<String, Integer> nestingLevels = new HashMap<>();
+
+        // track whether or not a tag is nested within something marked for deletion
+        int deletableNestingLevel = 0;
 
         // match mark-up: xml open or close tag
         while (xmlMatcher.find()) {
@@ -113,18 +127,16 @@ public class XmlDocumentProcessor {
 
                     // check for lone tags (open without close)
                     while (!openTagName.equals(tagName)) {
-                        if (tagsToIgnore.contains(openTagName)) {
-                            // just delete the span.
-                            int startStart = openTag.getSecond().getFirst();
-                            int startEnd = openTag.getSecond().getSecond();
 
-                            xmlTextSt.transformString(startStart, startEnd, "");
-                            openTag = tagStack.pop();
-                            openTagName = openTag.getFirst();
-                        }
-                        else
+                        if (throwExceptionOnUnrecognizedTag)
                             throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
                                     "', found '" + tagName + "'");
+                        else {//someone used xml special chars in body text
+                            logger.warn("WARNING: found close tag '{}' after open tag '{}', and (obviously) they don't match.",
+                                    tagName, openTagName);
+                            openTag = tagStack.pop(); // leave the angle brackets
+                            openTagName = openTag.getFirst();
+                        }
                     }
 
                     // now we have open tag and matching close tag; record span and label
@@ -138,35 +150,35 @@ public class XmlDocumentProcessor {
                     tagInfo.put(SPAN_INFO, tagName);
                     attributesRetained.put(xmlTextSt.getOriginalOffsets(startTagEnd, endTagStart), tagInfo);
 
-                    int nestingLevel = nestingLevels.get(tagName) - 1;
-                    nestingLevels.put(tagName, nestingLevel);
+//                    int nestingLevel = nestingLevels.get(tagName) - 1;
+//                    nestingLevels.put(tagName, nestingLevel);
 
-                    /*
-                     * if we are nested:
-                     *    if tag is a 'delete text' tag,
-                     *        DON'T DELETE or it will create problems.
-                     *    else
-                     *        delete open and close tags
-                     * else we are NOT nested:
-                     *    if tag is a 'delete text' tag, delete from start to finish.
-                     *    else delete open and close tags.
-                     */
-                    if (tagsToIgnore.contains(tagName)) { // deletable span
-                        if (nestingLevel == 0) {
-                            xmlTextSt.transformString(startTagStart, endTagEnd, "");
-                        }
+                    boolean isDeletable = false;
+                    if (deletableSpanTags.contains(tagName)) { // deletable span
+                        isDeletable = true;
+                        deletableNestingLevel--;
                     }
-                    else { // we should retain text between open and close, but delete the tags
-                        xmlTextSt.transformString(startTagStart, startTagEnd, "");
-                        xmlTextSt.transformString(endTagStart, endTagEnd, "");
+                    /*
+                     * if we are within another deletable tag
+                     *    DON'T DELETE or it will create problems.
+                     * else
+                     *    delete
+                     * else we are NOT in deletable and NOT nested:
+                     *    delete open and close tags.
+                     */
+                    if (deletableNestingLevel == 0) {
+                        if (isDeletable)
+                            xmlTextSt.transformString(startTagStart, endTagEnd, "");
+                        else { // we should retain text between open and close, but delete the tags
+                            xmlTextSt.transformString(startTagStart, startTagEnd, "");
+                            xmlTextSt.transformString(endTagStart, endTagEnd, "");
+                        }
                     }
                 }
                 else  { // tag must be open
                     tagStack.push(new Pair(tagName, new IntPair(xmlMatcher.start(), xmlMatcher.end())));
-                    if (nestingLevels.containsKey(tagName))
-                        nestingLevels.put(tagName, nestingLevels.get(tagName) + 1);
-                    else
-                        nestingLevels.put(tagName, 1);
+                    if (deletableSpanTags.contains(tagName))
+                        deletableNestingLevel++;
 
                     // within an xml open tag: identify any attribute values we need to retain.
                     if (tagsWithAtts.containsKey(tagName)) {
@@ -221,6 +233,44 @@ public class XmlDocumentProcessor {
         xmlTextSt.applyPendingEdits();
 
         return new Pair(xmlTextSt, attributesRetained);
+    }
+
+    /**
+     * delete all spans that correspond to singleton tags (i.e. self-contained span presented as open tag with
+     *    attributes, but no corresponding close). Relies on user specifying these ahead of time.
+     * @param xmlTextSt StringTransformation containing text to be searched.
+     * @return StringTransformation with appropriate edits.
+     */
+    private StringTransformation deleteSingletons(StringTransformation xmlTextSt) {
+        // don't call getTransformedText() or applyPendingEdits() in the body of the loop usinr xmlMatcher
+        Matcher xmlMatcher = xmlTagPattern.matcher(xmlTextSt.getTransformedText());
+
+        Map<IntPair, Map<String, String>> attributesRetained = new HashMap<>();
+
+        // match mark-up: xml open or close tag
+        while (xmlMatcher.find()) {
+
+            String substr = xmlMatcher.group(0);
+
+            if (substr.charAt(1) == '/') {
+                continue; //irrelevant to singletons by definition
+            }
+
+            String lcsubstr = substr.toLowerCase();
+            // get the tag name
+            Matcher tagMatcher = xmlTagNamePattern.matcher(lcsubstr);
+
+            if (tagMatcher.find()) {
+                // identify the tag
+                String tagName = tagMatcher.group(1);
+
+                if (singletonTags.contains(tagName)) {
+                    xmlTextSt.transformString(xmlMatcher.start(), xmlMatcher.end(), "");
+                }
+            }
+        }
+        xmlTextSt.applyPendingEdits();
+        return xmlTextSt;
     }
 
 }
