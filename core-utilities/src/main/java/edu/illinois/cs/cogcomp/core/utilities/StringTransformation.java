@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import gnu.trove.map.hash.TIntIntHashMap;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -21,7 +22,9 @@ import java.util.*;
  *
  * @author mssammon
  */
-public class StringTransformation {
+public class StringTransformation implements Serializable {
+
+    private static final long serialVersionUID = 1526472295622723447L;
 
         /** source text: immutable record of the starting point for all transformations */
     private final String origText; ;

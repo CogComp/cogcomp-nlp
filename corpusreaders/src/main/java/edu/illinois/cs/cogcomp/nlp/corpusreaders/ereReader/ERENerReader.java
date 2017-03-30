@@ -85,9 +85,9 @@ public class ERENerReader extends EREDocumentReader {
      *        named entities (proper nouns/personal names) are read.
      * @throws Exception
      */
-    public ERENerReader(String corpusName, String sourceDirectory, boolean addNominalMentions)
+    public ERENerReader(String corpusName, String sourceDirectory, boolean addNominalMentions, boolean throwExceptionOnXmlTagMismatch)
             throws Exception {
-        super(corpusName, sourceDirectory);
+        super(corpusName, sourceDirectory, throwExceptionOnXmlTagMismatch);
         this.addNominalMentions = addNominalMentions;
         this.viewName = addNominalMentions ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
         allowOffsetSlack = true;
@@ -143,9 +143,12 @@ public class ERENerReader extends EREDocumentReader {
 
         sourceTa.getTextAnnotation().addView(getViewName(), nerView);
 
-        if (addNominalMentions)
+        if (addNominalMentions) {
             addCorefView(sourceTa);
-
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), ViewNames.COREF_ERE);
+        }
+        else
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getViewName());
 
         // logger.info("number of constituents created: {}", numConstituent );
         logger.debug("number of overlaps preventing creation: {}", numOverlaps);
@@ -178,8 +181,6 @@ public class ERENerReader extends EREDocumentReader {
                     otherMents.remove(canonical);
                 } else
                     otherMents.add(corefMent);
-
-                cView.addConstituent(corefMent);
             }
             cView.addCorefEdges(canonical, otherMents);
         }
@@ -252,7 +253,6 @@ public class ERENerReader extends EREDocumentReader {
         for (int j = 0; j < entityNL.getLength(); ++j) {
             readEntity(entityNL.item(j), nerView, xmlTa);
         }
-        AnnotationFixer.rationalizeBoundaryAnnotations(xmlTa.getTextAnnotation(), getViewName());
     }
 
 
@@ -591,7 +591,7 @@ public class ERENerReader extends EREDocumentReader {
         String rawText = ta.getText();
         String rawStr = rawText.substring(adjStart, adjEnd);
         String origStr = st.getOrigText().substring(origStartOffset, origEndOffset);
-        System.out.println("source xml str: '" + origStr + "' (" + origStartOffset + "," + origEndOffset + ")");
+        logger.debug("source xml str: '" + origStr + "' (" + origStartOffset + "," + origEndOffset + ")");
         try {
             si = findStartIndex(adjStart);
             ei = findEndIndex(adjEnd, rawText);
@@ -602,7 +602,7 @@ public class ERENerReader extends EREDocumentReader {
             System.exit(1);
         } catch (RuntimeException re) {
             numOffsetErrors++;
-            logger.error("Error finding text for '{}':", rawStr);
+            logger.error("Error finding text for '{}' at offsets {}:", rawStr, (adjStart + "-" + adjEnd));
             boolean siwaszero = false;
             if (si == 0) {
                 siwaszero = true;

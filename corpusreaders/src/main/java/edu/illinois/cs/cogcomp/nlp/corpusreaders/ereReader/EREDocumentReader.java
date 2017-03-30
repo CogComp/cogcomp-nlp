@@ -16,13 +16,13 @@ import java.util.*;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlDocumentReader;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlFragmentWhitespacingDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
@@ -49,7 +49,6 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String ORIG_AUTHOR = "orig_author";
     public static final String HEADLINE = "headline";
     public static final String IMG = "img";
-
     /**
      * tags in ERE markup filess
      */
@@ -94,32 +93,47 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationRealisAttribute = "REALIS";
     public static final String RelationSourceRoleAttribute = "RelationSourceRole";
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
+    /** tag sets for xml processor for ERE documents  */
+    public static final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
+    public static final Set<String> deletableSpanTags = new HashSet<>();
+    public static final Set<String> tagsToIgnore = new HashSet<>();
     private static final String SNIP = "snip";
+    private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
     static private ArrayList<String> retainAttributes = new ArrayList<>();
 
-//    static {
-//        retainTags.add("quote");
-//        retainTags.add("post");
-//    }
-//
-//    static {
-//        retainAttributes.add("orig_author");
-//        retainAttributes.add("author");
-//    }
+    static {
+        Set<String> attributeNames = new HashSet<>();
+        attributeNames.add(AUTHOR);
+        attributeNames.add(ID);
+        attributeNames.add(DATETIME);
+        tagsWithAtts.put(POST, attributeNames);
+        attributeNames = new HashSet<>();
+        attributeNames.add(ID);
+        tagsWithAtts.put(DOC, attributeNames);
+        attributeNames = new HashSet<>();
+        attributeNames.add(ORIG_AUTHOR);
+        tagsWithAtts.put(QUOTE, attributeNames);
+
+        deletableSpanTags.add(QUOTE);
+
+        tagsToIgnore.add(IMG);
+        tagsToIgnore.add(SNIP);
+    }
+
 
     /**
      * @param corpusName the name of the corpus, this can be anything.
      * @param sourceDirectory the name of the directory containing the file.
      * @throws Exception
      */
-    public EREDocumentReader(String corpusName, String sourceDirectory) throws Exception {
-        super(corpusName, sourceDirectory, buildXmlProcessor());
+    public EREDocumentReader(String corpusName, String sourceDirectory, boolean throwExceptionOnXmlParseFail) throws Exception {
+        super(corpusName, sourceDirectory, buildXmlProcessor(throwExceptionOnXmlParseFail));
     }
 
-    private static XmlTextAnnotationMaker buildXmlProcessor() {
+    private static XmlTextAnnotationMaker buildXmlProcessor(boolean throwExceptionOnXmlParseFail) {
         TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
         Map<String, Set<String>> tagsWithAtts = new HashMap<>();
@@ -135,16 +149,15 @@ public class EREDocumentReader extends XmlDocumentReader {
         attributeNames.add(ORIG_AUTHOR);
         tagsWithAtts.put(QUOTE, attributeNames);
 
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add(HEADLINE);
-        tagsWithText.add(POST);
+        Set<String> deletableSpanTags = new HashSet<>();
+        deletableSpanTags.add(QUOTE);
 
         Set<String> tagsToIgnore = new HashSet<>(); // implies "delete spans enclosed by these tags"
-        tagsToIgnore.add(QUOTE);
         tagsToIgnore.add(IMG);
         tagsToIgnore.add(SNIP);
 
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
+        XmlDocumentProcessor xmlProcessor =
+                new XmlDocumentProcessor(deletableSpanTags, tagsWithAtts, tagsToIgnore, throwExceptionOnXmlParseFail);
         return new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
     }
 
@@ -192,6 +205,7 @@ public class EREDocumentReader extends XmlDocumentReader {
 
             for (String annFile : annotationFileList) {
                 if (annFile.startsWith(stem)) {
+                    logger.debug("Processing file '{}'", annFile);
                     sourceAndAnnotations.add(Paths.get(annotationDir + annFile));
                     sourceAndAnnotations.remove(annFile);
                 }

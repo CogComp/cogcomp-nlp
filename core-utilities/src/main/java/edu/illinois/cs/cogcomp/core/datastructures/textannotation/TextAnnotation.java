@@ -236,7 +236,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
     }
 
     /**
-     * allows user to force sentences field to be (re-)populated, possibly after modifying sentence View.
+     * allows user to force sentences field to be (re-)populated based on Sentence {@link View}, possibly after modifying sentence View.
      * WARNING: if you
      */
     public void setSentences() {

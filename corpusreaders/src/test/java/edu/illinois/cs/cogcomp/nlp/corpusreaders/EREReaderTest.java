@@ -19,13 +19,13 @@ import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 
 /**
@@ -52,43 +52,27 @@ public class EREReaderTest {
             "the talk of the town. \"Only death will save you from yourselves.\"\n";
     private static boolean doSerialize = true;
 
+//
+//            "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
+//                    "data/source/ENG_DF_001241_20150407_F0000007T.xml";
+
     // public void testNerReader() {
     public static void main(String[] args) {
+
+
         String corpusDir =
+                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample-2/";
+
+        XmlTextAnnotation outputXmlTa = runTest(corpusDir);
+
+
+        corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
 
-        ERENerReader nerReader = null;
-        boolean addNominalMentions = true;
-        try {
-            nerReader = new ERENerReader("ERE", corpusDir, addNominalMentions);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("ERROR: " + NAME
-                    + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir + ": "
-                    + e.getMessage());
-        }
-
-        XmlTextAnnotation outputXmlTa = nerReader.next();
-        TextAnnotation output = outputXmlTa.getTextAnnotation();
-        View nerEre = null;
-        if (addNominalMentions) {
-            assert (output.hasView(ViewNames.MENTION_ERE));
-            nerEre = output.getView(ViewNames.MENTION_ERE);
-        } else {
-            assert (output.hasView(ViewNames.NER_ERE));
-            nerEre = output.getView(ViewNames.NER_ERE);
-        }
-
-        assert (nerEre.getConstituents().size() > 0);
-
-        System.out.println("ERENerReader found " + nerEre.getConstituents().size()
-                + " NER constituents: ");
-        for (Constituent c : nerEre.getConstituents())
-            System.out.println(TextAnnotationPrintHelper.printConstituent(c));
-
-        System.out.println("Report: " + nerReader.generateReport());
+        outputXmlTa = runTest(corpusDir);
 
         System.out.println("Testing EREMentionRelationReader...");
+
 
         StringTransformation xmlSt = outputXmlTa.getXmlSt();
         String origXml = xmlSt.getOrigText();
@@ -131,7 +115,8 @@ public class EREReaderTest {
 
         EREMentionRelationReader emr = null;
         try {
-            emr = new EREMentionRelationReader("ERE", corpusDir);
+            boolean throwExceptionOnXmlTagMismatch = true;
+            emr = new EREMentionRelationReader("ERE", corpusDir, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -147,7 +132,7 @@ public class EREReaderTest {
         if ( !outputXmlTa.getTextAnnotation().getId().equals(wantedId))
             fail("ERROR: didn't find corpus entry with id '" + wantedId + "'." );
 
-        output = outputXmlTa.getTextAnnotation();
+        TextAnnotation output = outputXmlTa.getTextAnnotation();
 
         assert (output.hasView(ViewNames.MENTION_ERE));
 
@@ -170,6 +155,14 @@ public class EREReaderTest {
         CoreferenceView cView = (CoreferenceView) output.getView(ViewNames.COREF_ERE);
 
         assert (cView.getConstituents().size() > 0);
+
+        // check no duplicate mentions are added.
+        Set<IntPair> mentionSpans = new HashSet<>();
+        for (Constituent c : cView.getConstituents()) {
+            IntPair cSpan = c.getSpan();
+            assertFalse(mentionSpans.contains(cSpan));
+            mentionSpans.add(cSpan);
+        }
 
         System.out.println(TextAnnotationPrintHelper.printCoreferenceView(cView));
 
@@ -200,4 +193,52 @@ public class EREReaderTest {
 
 
     }
+
+
+    private static XmlTextAnnotation runTest(String corpusDir) {
+
+        ERENerReader nerReader = null;
+        boolean addNominalMentions = true;
+        boolean throwExceptionOnXmlTagMismatch = true;
+        try {
+            nerReader = new ERENerReader("ERE", corpusDir, addNominalMentions, throwExceptionOnXmlTagMismatch);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("ERROR: " + NAME
+                    + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir + ": "
+                    + e.getMessage());
+        }
+
+        XmlTextAnnotation outputXmlTa = nerReader.next();
+        TextAnnotation output = outputXmlTa.getTextAnnotation();
+        View nerEre = null;
+        if (addNominalMentions) {
+            assert (output.hasView(ViewNames.MENTION_ERE));
+            nerEre = output.getView(ViewNames.MENTION_ERE);
+        } else {
+            assert (output.hasView(ViewNames.NER_ERE));
+            nerEre = output.getView(ViewNames.NER_ERE);
+        }
+
+        assert (nerEre.getConstituents().size() > 0);
+
+        StringTransformation xmlSt = outputXmlTa.getXmlSt();
+        String origXmlStr = xmlSt.getOrigText();
+        System.out.println("ERENerReader found " + nerEre.getConstituents().size()
+                + " NER constituents: ");
+
+        for (Constituent c : nerEre.getConstituents()) {
+            System.out.println(TextAnnotationPrintHelper.printConstituent(c));
+            int start = c.getStartCharOffset();
+            int end = c.getEndCharOffset();
+            IntPair origOffsets = xmlSt.getOriginalOffsets(start, end);
+            String origStr = origXmlStr.substring(origOffsets.getFirst(), origOffsets.getSecond());
+            System.out.println("Constituent (clean) text: '" + c.getSurfaceForm() + "'");
+            System.out.println("Original text: '" + origStr + "'\n---------\n" );
+        }
+        System.out.println("Report: " + nerReader.generateReport());
+
+        return outputXmlTa;
+    }
+
 }

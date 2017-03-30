@@ -40,7 +40,7 @@ public class AnnotationFixer {
         for (Constituent s : sentences)
             sentenceStarts.put(s.getStartSpan(), s);
 
-        List<Pair<Constituent, Constituent>> sentencesToMerge = new ArrayList<>();
+        Set<Pair<Constituent, Constituent>> sentencesToMerge = new HashSet<>();
 
         View nerMention = ta.getView(viewName);
 

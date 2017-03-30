@@ -11,22 +11,16 @@ import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Test XmlTextAnnotationMaker functionality. Non-unit test, as it requires access to ERE corpus.
@@ -54,6 +48,10 @@ public class XmlTextAnnotationMakerTest {
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
                 "data/source/ENG_DF_001241_20150407_F0000007T.xml";
 
+
+    private static final String XML_FILE2 =
+            "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
+                    "data/source/ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
     // public void testNerReader() {
 
     /**
@@ -64,32 +62,21 @@ public class XmlTextAnnotationMakerTest {
 
         TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
-        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-        Set<String> attributeNames = new HashSet<>();
-        attributeNames.add(AUTHOR);
-        attributeNames.add(ID);
-        attributeNames.add(DATETIME);
-        tagsWithAtts.put(POST, attributeNames);
-        attributeNames = new HashSet<>();
-        attributeNames.add(ID);
-        tagsWithAtts.put(DOC, attributeNames);
-        attributeNames = new HashSet<>();
-        attributeNames.add(ORIG_AUTHOR);
-        tagsWithAtts.put(QUOTE, attributeNames);
+        boolean throwExceptionOnXmlTagMiss = true;
+        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(EREDocumentReader.deletableSpanTags,
+                EREDocumentReader.tagsWithAtts, EREDocumentReader.tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add(HEADLINE);
-        tagsWithText.add(POST);
-
-        Set<String> tagsToIgnore = new HashSet<>();
-        tagsToIgnore.add(IMG);
-
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
         XmlTextAnnotationMaker maker = new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
 
+        testWithFile(maker, XML_FILE2);
+
+        testWithFile(maker, XML_FILE);
+    }
+
+    private static void testWithFile(XmlTextAnnotationMaker maker, String xmlFile) {
         String xmlStr = null;
         try {
-            xmlStr = LineIO.slurp(XML_FILE);
+            xmlStr = LineIO.slurp(xmlFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -124,6 +111,17 @@ public class XmlTextAnnotationMakerTest {
             System.err.println("ERROR: test failed: word '" + transformStr + "' not identical to original word '" +
                 origWordForm + "'. ");
 
+        View mentionView = output.getTextAnnotation().getView(ViewNames.SENTENCE);
+
+        for (Constituent c : mentionView.getConstituents()) {
+            int start = c.getStartCharOffset();
+            int end = c.getEndCharOffset();
+            String cleanForm = c.getSurfaceForm();
+            IntPair sourceSpan = st.getOriginalOffsets(start, end);
+            System.out.println("------\nclean: " + cleanForm  + ", (" + start + ", " + end + ")");
+            System.out.println("------\nsource: " + st.getOrigText().substring(sourceSpan.getFirst(), sourceSpan.getSecond()) +
+                ", (" + sourceSpan.getFirst() + ", " + sourceSpan.getSecond() + ")\n");
+        }
         Map<IntPair, Map<String, String>> atts = output.getXmlMarkup();
 
         for (IntPair offsets : atts.keySet()) {

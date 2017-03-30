@@ -64,17 +64,16 @@ cuba
         attributeNames = new HashSet<>();
         attributeNames.add("id");
         tagsWithAtts.put("doc", attributeNames);
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add("headline");
-        tagsWithText.add("post");
+        Set<String> deletableSpanTags = new HashSet<>();
+        deletableSpanTags.add("quote");
+        deletableSpanTags.add("distraction");
         Set<String> tagsToIgnore = new HashSet<>();
-        tagsToIgnore.add("distraction");
         tagsToIgnore.add("img");
-        tagsToIgnore.add("quote");
+        tagsToIgnore.add("snip");
 
 //        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
-
-        XmlDocumentProcessor proc = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
+        boolean throwExceptionOnXmlTagMiss = true;
+        XmlDocumentProcessor proc = new XmlDocumentProcessor(deletableSpanTags, tagsWithAtts, tagsToIgnore, throwExceptionOnXmlTagMiss);
 
         Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(ORIG_TEXT);
 
