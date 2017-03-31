@@ -9,6 +9,11 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class contains the canonical strings used for naming standard views. They are used both in
  * Curator's views as well as {@link TextAnnotation} views
@@ -172,5 +177,20 @@ public class ViewNames {
         return viewName.equals(ViewNames.PARSE_BERKELEY) || viewName.equals(ViewNames.PARSE_CHARNIAK) ||
                 viewName.equals(ViewNames.PARSE_CHARNIAK_KBEST) || viewName.equals(ViewNames.PARSE_GOLD) ||
                 viewName.equals(ViewNames.PARSE_STANFORD);
+    }
+
+
+    /**
+     * @return the view names: TOKENS, SENTENCE, PARAGRAPH, LEMMA, POS, TREE_GAZETTEER, ...
+     */
+    public static List<String> getAllViewNames(){
+        List<String> viewNames = new ArrayList<>();
+        Field[] fields = ViewNames.class.getDeclaredFields();
+        for (Field f : fields) {
+            if (Modifier.isStatic(f.getModifiers())) {
+                viewNames.add(f.getName());
+            }
+        }
+        return viewNames;
     }
 }

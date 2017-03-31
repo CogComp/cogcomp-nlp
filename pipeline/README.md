@@ -3,24 +3,6 @@
 This module contains code that allows you to run various NLP tools
 to annotate plain text input. 
 
-## CONTENTS
-0. Quickstart
-1. Purpose
-	1. Intended Use
-	2. Pipeline NLP Components
-	3. License
-2. Prerequisites
-	1.  General Requirements: System
-	2.  Specific Requirements: SRL
-3. Download contents 
-4. Dependencies
-5. Running the Illinois NLP Pipeline
-	1.  Running a Simple Command-Line Test
-6. Programmatic use
-	1. Configuration Options
-	2. Changing the logging settings
-	3. Troubleshooting
-
 ## 0. Quickstart
 
 Assuming you downloaded the pipeline package as a zip from the
@@ -34,7 +16,7 @@ scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>
 The configuration file needs only to contain options to override defaults.
 
 
-## 1. Purpose
+## Purpose
 
 This software bundles some basic preprocessing steps that a lot of NLP
 applications need, with the goal of making them run locally. Some
@@ -52,7 +34,7 @@ the same data set multiple times), it will use a cached copy of the
 system outputs and run much faster.
 
 
-### 1.1 Intended use
+### Intended use
 
 The illinois-nlp-pipeline package was designed to be used either
 programmatically -- inline in your Java code -- or from the command line,
@@ -70,7 +52,7 @@ illinois-core-utilities, and use it as an argument to a
 TokenizerTextAnnotationBuilder (also from illinois-core-utilities).
 
 
-## 1.2 Pipeline NLP Components
+### Pipeline NLP Components
 
 The pipeline has the following annotators. To understand the annotations,
 please refer to the descriptions of the individual packages at the URLs
@@ -96,19 +78,14 @@ of several other components for which it is a dependency.
 10. Quantifier: <2G, requires Part-of-Speech.
 
 
-### 1.3 LICENSE
-
-To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
-and press 'Download'. The next screen displays the license.
-
-## 2 PREREQUISITES
+## PREREQUISITES
 
 The Illinois NLP Pipeline provides a suite of state-of-the-art
 Natural Language Processing tools of varying complexity.  Some have
 specific prerequisites that must be present if you want to run them.
 
 
-### 2.1 GENERAL REQUIREMENTS: SYSTEM
+### GENERAL REQUIREMENTS: SYSTEM
 
 This software was developed on the following platform:
 
@@ -129,14 +106,14 @@ If you try to run the system with an invalid configuration, it will
 print a warning about the missing components.
 
 
-### 2.2 SPECIFIC REQUIREMENTS: SRL
+### SPECIFIC REQUIREMENTS: SRL
 
 To run the Semantic Role Labeler you must have an instance of the
 Gurobi license on your machine, and set the relevant environment
 variables (see [this page](http://www.gurobi.com/products/licensing-pricing/licensing-overview) -- note that there is a free academic use license).
 
 
-## 3. DOWNLOAD CONTENTS
+## DOWNLOAD CONTENTS
 
 If you have downloaded the Illinois NLP Pipeline as a stand-alone package,
 it will come with all the libraries and other files it requires. (If you
@@ -164,7 +141,7 @@ The Illinois NLP Pipeline package sets default configuration options for
 all its components.  If you want to experiment with different settings,
 we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
 
-## 4. Dependencies
+## Dependencies
 If this package is used in maven, please add the following dependencies with proper repositories.
 ```xml
 <dependencies>
@@ -185,7 +162,7 @@ If this package is used in maven, please add the following dependencies with pro
 
 where `#VERSION` is the version included in the `pom.xml` file. 
 
-## 5. RUNNING THE ILLINOIS NLP PIPELINE
+## RUNNING THE ILLINOIS NLP PIPELINE
 
 This software has been developed to allow some of our more complex tools
 to be run completely within a single JVM, either programmatically or
@@ -207,7 +184,7 @@ some reference output. If the new output and reference output are
 different, the script prints an error message and indicates the
 differences.
 
-### 5.1 Running a Simple Command-Line Test
+### Running a Simple Command-Line Test
 
 Running the test:
 ```sh
@@ -219,7 +196,7 @@ Running your own text to get a visual sense of what IllinoisPreprocessor is doin
 scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
 ```
 
-## 6. Programmatic Use
+## Programmatic Use
 
 You can check the javadoc for detailed information about the
 IllinoisPreprocessor API.
@@ -231,7 +208,7 @@ class it instantiates, which is the pipeline itself) can be used, look at
 CachingPipelineTest class under src/test/resources/, in
 edu.illinois.cs.cogcomp.pipeline.main.
 
-To process text input, use the '()' method:
+To process text input, use the 'createAnnotatedTextAnnotation()' method:
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -245,15 +222,15 @@ AnnotatorService pipeline = PipelineFactory.buildPipeline();
 TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
 This method takes as its argument a String variable containing the
-text you want to process. This String should not be too long --
+text you want to process. This `String` should not be too long --
 depending on the annotators you plan to use, a reasonable upper limit
 is 1,000 words (fewer if you use resource-intensive annotators like
 Verb or Noun SRL).
 
-The method returns a TextAnnotation data structure (see the
+The method returns a `TextAnnotation` data structure (see the
 illinois-core-utilities package for details), which contains
 a View corresponding to each annotation source. Each View contains
-a set of Constituents and Relations representing the annotator output.
+a set of `Constituents` and `Relations` representing the annotator output.
 Access views and constituents via:
 ```java
 String viewName = ViewNames.POS; // example using ViewNames class constants
@@ -264,10 +241,32 @@ See the documentation for individual components (links in section 1 above) for
 more information about the annotations and their representation as Constituents and
 Relations.
 
-### 6.1 Configuration Options
+### Setting the view names programmatically 
+
+The previous usage will add only the basic annotations (e.g. tokenization, sentences, etc). 
+To add more high-level annotations you have to specify them in the definition of the `buildPipeline` funtion: 
+
+```java
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
+String docId = "APW-20140101.3018"; // arbitrary string identifier
+String textId = "body"; // arbitrary string identifier
+String text = ...; // contains plain text to be annotated
+
+AnnotatorService pipeline = PipelineFactory.buildPipeline(ViewNames.POS, ViewNames.SRL_VERB);
+TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
+```
+
+This will include the two views `ViewNames.POS` and `ViewNames.SRL_VERB` in the output, in addition to the default views. 
+
+
+### Configuration Options
 
 The default configuration options are specified in the class
-edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator.
+`edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator`.
 Each property has a String as a key and a value.  If you want to change specific behaviors,
 such as activating or deactivating specific components, you can write non-default entries
 in a configuration file and use a ResourceManager (see illinois-core-utilities)
@@ -330,13 +329,13 @@ for individual components for details.
 
 
 
-### 6.2 Changing the logging settings
+### Changing the logging settings
 
 This project uses slf4j's log4j libraries.  You can change the
 settings by creating a log4j.properties file and adding the directory
 containing that file to the classpath.
 
-### 6.3 Frequently Asked Questions (FAQs)
+### Frequently Asked Questions (FAQs)
 
 - While running the Pipeline if you see an error regarding insufficient Java heap space, you will need to set the `JAVA_OPTIONS` or `MAVEN_OPTIONS` to include "-Xmx20g": 
 ```
@@ -397,7 +396,7 @@ public class testpipeline {
 }
 ```
 
-## 7. Using pipeline webserver 
+## Using pipeline webserver 
 
 Often a convenient model of using the pipeline server is, running the server (which includes all the annotators) on a 
 big machine (=big memory) and sending calls to the server with clients. Here we first introduce the details of 
@@ -430,7 +429,7 @@ Here are the available APIs:
 Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
 
 
-### 7.1 Server clients 
+### Server clients 
 
 #### Java Client 
 
@@ -452,3 +451,9 @@ System.out.println(ta.getAvailableViews()); // here you should see that the requ
 #### Python Client
 
 Coming soon . . . 
+
+
+## LICENSE
+
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+and press 'Download'. The next screen displays the license.
