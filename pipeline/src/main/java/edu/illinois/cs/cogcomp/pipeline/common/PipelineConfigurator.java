@@ -27,18 +27,18 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
             "stanfordParseMaxSentenceLength", "80");
 
     // flags for individual components; default is TRUE for everything
-    public static final Property USE_POS = new Property("usePos", TRUE);
+    public static final Property USE_POS = new Property("usePos", FALSE);
     // The default dependency parse is Stanford -- switch with USE_STANFORD_DEP
     public static final Property USE_DEP = new Property("useDep", FALSE);
-    public static final Property USE_LEMMA = new Property("useLemma", TRUE);
-    public static final Property USE_SHALLOW_PARSE = new Property("useShallowParse", TRUE);
-    public static final Property USE_NER_CONLL = new Property("useNerConll", TRUE);
-    public static final Property USE_NER_ONTONOTES = new Property("useNerOntonotes", TRUE);
-    public static final Property USE_STANFORD_PARSE = new Property("useStanfordParse", TRUE);
-    public static final Property USE_STANFORD_DEP = new Property("useStanfordDep", TRUE);
-    public static final Property USE_SRL_VERB = new Property("useSrlVerb", TRUE);
-    public static final Property USE_SRL_NOM = new Property("useSrlNom", TRUE);
-    public static final Property USE_QUANTIFIER = new Property("useQuantifier", TRUE);
+    public static final Property USE_LEMMA = new Property("useLemma", FALSE);
+    public static final Property USE_SHALLOW_PARSE = new Property("useShallowParse", FALSE);
+    public static final Property USE_NER_CONLL = new Property("useNerConll", FALSE);
+    public static final Property USE_NER_ONTONOTES = new Property("useNerOntonotes", FALSE);
+    public static final Property USE_STANFORD_PARSE = new Property("useStanfordParse", FALSE);
+    public static final Property USE_STANFORD_DEP = new Property("useStanfordDep", FALSE);
+    public static final Property USE_SRL_VERB = new Property("useSrlVerb", FALSE);
+    public static final Property USE_SRL_NOM = new Property("useSrlNom", FALSE);
+    public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
     public static final Property THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK = new Property(
             "throwExceptionOnFailedLengthCheck", TRUE);
     public static final Property USE_JSON = new Property("useJson", FALSE);
