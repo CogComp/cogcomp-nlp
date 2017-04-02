@@ -201,12 +201,12 @@ scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutp
 You can check the javadoc for detailed information about the
 IllinoisPreprocessor API.
 
-The main class is PipelineFactory, in the package
-edu.illinois.cs.cogcomp.pipeline.main under src/main/java. For an
-example showing how the PipelineFactory and BasicAnnotatorService (the
+The main class is `PipelineFactory`, in the package
+`edu.illinois.cs.cogcomp.pipeline.main` under `src/main/java`. For an
+example showing how the `PipelineFactory` and `BasicAnnotatorService` (the
 class it instantiates, which is the pipeline itself) can be used, look at
-CachingPipelineTest class under src/test/resources/, in
-edu.illinois.cs.cogcomp.pipeline.main.
+`CachingPipelineTest` class under `src/test/resources/`, in
+`edu.illinois.cs.cogcomp.pipeline.main`.
 
 To process text input, use the 'createAnnotatedTextAnnotation()' method:
 ```java
@@ -221,6 +221,12 @@ String text = ...; // contains plain text to be annotated
 AnnotatorService pipeline = PipelineFactory.buildPipeline();
 TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( docId, textId, text );
 ```
+
+The output of this will be a tokenized document. If you want to add more views, 
+you have to specify them either as arguments of `buildPipeline`, or 
+in a configurator. (both explained in the next sub-sections)
+
+
 This method takes as its argument a String variable containing the
 text you want to process. This `String` should not be too long --
 depending on the annotators you plan to use, a reasonable upper limit
