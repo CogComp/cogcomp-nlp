@@ -42,6 +42,8 @@ public class CachingPipelineTest {
         props.setProperty(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
         props.setProperty(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
 
         props.setProperty(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.TRUE);
         props.setProperty(AnnotatorServiceConfigurator.CACHE_DIR.key, TEST_CACHE_FILE);
