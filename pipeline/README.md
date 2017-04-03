@@ -312,7 +312,6 @@ optional arguments:
 
 Here are the available APIs: 
 
-
 | API                    | Address      | Supported request type | Parameters                                                                   | Example                                                          |
 |------------------------|--------------|------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
 | Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
@@ -359,7 +358,7 @@ Caused by: org.mapdb.DBException$DataCorruption: Header checksum broken. Store w
 
 - Initializing multiple instances of `PipelineFactory` in a single run will lead to an exception in MapDB. For example, the code below:
 ```java
-public class testpipeline {
+public class TestPipeline {
     public static TextAnnotation getTA(String id, String text) throws Exception{
         ResourceManager rm = new PipelineConfigurator().getConfig(new ResourceManager( "pipeline-config.properties" ));
         AnnotatorService prep = PipelineFactory.buildPipeline(rm);//pipeline is instantiated everytime this function is called.
@@ -390,7 +389,7 @@ Caused by: java.nio.channels.OverlappingFileLockException
 
 To fix this problem, consider changing it to:
 ```java
-public class testpipeline {
+public class TestPipeline {
     public static TextAnnotation getTA(String id, String text, AnnotatorService prep) throws Exception{
         TextAnnotation rec = prep.createAnnotatedTextAnnotation(id, "", text);
         return rec;

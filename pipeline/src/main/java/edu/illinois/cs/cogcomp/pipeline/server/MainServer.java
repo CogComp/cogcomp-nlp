@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.pipeline.server;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -22,6 +23,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.internal.HelpScreenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.Filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -64,8 +66,7 @@ public class MainServer {
         try {
             logger.info("Starting to load the pipeline . . . ");
             printMemoryDetails();
-            ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
-            pipeline = PipelineFactory.buildPipeline(rm);
+            pipeline = PipelineFactory.buildPipelineWithAllViews();
             logger.info("Done with loading the pipeline  . . .");
             printMemoryDetails();
         } catch (IOException | AnnotatorException e) {
@@ -98,6 +99,9 @@ public class MainServer {
             viewsString += ", " + view;
         }
         String finalViewsString = viewsString;
+
+        enableCORS("*", "*", "*");
+
         get("/viewNames", (req, res) -> finalViewsString);
 
         post("/viewNames", (req, res) -> finalViewsString);
@@ -129,6 +133,14 @@ public class MainServer {
             logger.info("Done. Sending the result back. ");
             return output;
         }
+    }
+
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        before((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+        });
     }
 
     public static void printMemoryDetails() {

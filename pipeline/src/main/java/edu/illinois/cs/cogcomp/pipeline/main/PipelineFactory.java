@@ -95,7 +95,7 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_PREP.key, Configurator.TRUE);
                         break;
                     default:
-                        logger.warn("View name is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
+                        logger.warn("View name " + vu + " is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
                 }
             }
             else {
@@ -123,6 +123,17 @@ public class PipelineFactory {
     }
 
     /**
+     * create an AnnotatorService with all the possible views in the pipeline.
+     * Be careful if you use this; you will requires lots of memory 
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipelineWithAllViews() throws IOException, AnnotatorException {
+        return buildPipeline(ViewNames.getAllViewNames().toArray(new String[ViewNames.getAllViewNames().size()]));
+    }
+
+    /**
      * create an AnnotatorService with components specified by the ResourceManager (to override
      * defaults in {@link PipelineConfigurator}
      * 
@@ -144,9 +155,6 @@ public class PipelineFactory {
         return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm) :
                 new SentencePipeline(taBldr, annotators, fullRm);
     }
-
-
-
 
     /**
      * instantiate a set of annotators for use in an AnnotatorService object by default, will use
