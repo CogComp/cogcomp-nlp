@@ -3,7 +3,7 @@
 This software bundles some basic preprocessing steps that a lot of NLP
 applications need, with the goal of making them run locally. Some
 components have significant memory requirements, but given a machine
-with sufficient memory, you can instantiate a `AnnotatorService`
+with sufficient memory, you can instantiate an `AnnotatorService`
 object that provides plain text tokenization, Part-of-Speech tagging,
 chunking, Named Entity tagging, lemmatization, dependency and
 constituency parsing, and (verb) semantic role labeling.  You can also
@@ -279,7 +279,7 @@ useSrlVerb  true
 useSrlNom   true
 ```
 
-Note that individuals have their own configuration options -- see the documentation
+Note that individual annotators have their own configuration options -- see the documentation
 for individual components for details.
 
 ### Changing the logging settings
@@ -318,8 +318,8 @@ Here are the available APIs:
 | Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
 | Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
 
-Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
 
+Note that the current web server is very basic. It does not support parallel processing within a single request, nor across multiple requests.
 
 ### Server clients 
 
