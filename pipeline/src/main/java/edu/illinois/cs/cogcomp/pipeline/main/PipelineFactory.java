@@ -123,6 +123,17 @@ public class PipelineFactory {
     }
 
     /**
+     * create an AnnotatorService with all the possible views in the pipeline.
+     * Be careful if you use this; you will requires lots of memory 
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipelineWithAllViews() throws IOException, AnnotatorException {
+        return buildPipeline(ViewNames.getAllViewNames().toArray(new String[ViewNames.getAllViewNames().size()]));
+    }
+
+    /**
      * create an AnnotatorService with components specified by the ResourceManager (to override
      * defaults in {@link PipelineConfigurator}
      * 

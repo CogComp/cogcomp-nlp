@@ -66,7 +66,7 @@ public class MainServer {
         try {
             logger.info("Starting to load the pipeline . . . ");
             printMemoryDetails();
-            pipeline = PipelineFactory.buildPipeline(ViewNames.getAllViewNames().toArray(new String[ViewNames.getAllViewNames().size()]));
+            pipeline = PipelineFactory.buildPipelineWithAllViews();
             logger.info("Done with loading the pipeline  . . .");
             printMemoryDetails();
         } catch (IOException | AnnotatorException e) {
