@@ -22,6 +22,7 @@ import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.illinois.cs.cogcomp.prepsrl.PrepSRLAnnotator;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
@@ -82,10 +83,16 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.TRUE);
                         break;
                     case ViewNames.DEPENDENCY_STANFORD:
+                        nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.DEPENDENCY:
                         nonDefaultValues.put(PipelineConfigurator.USE_DEP.key, Configurator.TRUE);
                         break;
                     case ViewNames.PARSE_STANFORD:
                         nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.SRL_PREP:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_PREP.key, Configurator.TRUE);
                         break;
                     default:
                         logger.warn("View name is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
@@ -250,6 +257,11 @@ public class PipelineFactory {
         if (rm.getBoolean(PipelineConfigurator.USE_QUANTIFIER)) {
             Quantifier quantifierAnnotator = new Quantifier();
             viewGenerators.put(ViewNames.QUANTITIES, quantifierAnnotator);
+        }
+
+        if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
+            PrepSRLAnnotator prepSRLAnnotator = new PrepSRLAnnotator();
+            viewGenerators.put(ViewNames.SRL_PREP, prepSRLAnnotator);
         }
 
         return viewGenerators;

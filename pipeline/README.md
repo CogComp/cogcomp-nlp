@@ -44,7 +44,7 @@ of several other components for which it is a dependency.
 9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 10. Quantifier: <2G, requires Part-of-Speech.
-11. Proposition SRL: <2GB  
+11. Preposition SRL: <2GB  
 
 Note that individual Illinois NLP tools may depend on other tools
 for inputs, and will not work unless those components are also active.
