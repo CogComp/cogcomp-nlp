@@ -215,11 +215,23 @@ public class ERENerReader extends EREDocumentReader {
                     + nnMap.getNamedItem(ID).getNodeValue());
         IntPair offsets = getTokenOffsets(offset, offset + length, fillerForm, xmlTa);
         if (null != offsets) {
+
             if (-1 == offsets.getFirst() || -1 == offsets.getSecond()) {
+
+                String xmlStr = xmlTa.getXmlSt().getOrigText();
+                int fillerWindowMin = Math.max(offset - 100, 0);
+                int fillerWindowMax = Math.min(offset + 100, xmlStr.length() );
+
+                String fillerInfo = "filler form: " + fillerForm + "; orig xml offsets: " + offset + ", " +
+                    (offset + length) + "; context: '" + xmlStr.substring(fillerWindowMin, fillerWindowMax) + "'\n";
+
+                logger.error("Couldn't find filler mention in clean text: {}", fillerInfo);
+
                 throw new IllegalStateException("ERROR: got an indication of deleted span for filler." +
                 "Since filler should not be an entity, EITHER it was in a quoted span, and therefore " +
                 "should not have been annotated, or it's in a deleted span that should not have been deleted (check" +
-                " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?)");
+                " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?)\n" +
+                "filler info: " + fillerInfo);
             }
 
             String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();

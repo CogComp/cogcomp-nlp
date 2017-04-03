@@ -42,12 +42,9 @@ import org.slf4j.LoggerFactory;
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
-    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
-
-
-
     private static final String INFILE =
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
+    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
 
     /**
      * test whether the mapping between character offset and token index is correct.
@@ -284,7 +281,7 @@ public class StatefullTokenizerTest {
     @Test
     public void testSplitOnDash() {
         Tokenizer tkr = new StatefulTokenizer();
-        String text = "IAEA Director-General Mohamed ElBaradei";
+        String text = "IAEA Director-General Mohamed ElBaradei ";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         for (String token : tknzn.getTokens())
             System.out.println("token : "+token);

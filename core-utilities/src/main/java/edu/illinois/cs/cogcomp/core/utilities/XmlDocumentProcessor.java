@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.core.utilities;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -72,6 +73,8 @@ public class XmlDocumentProcessor {
     public Pair<StringTransformation, Map<IntPair, Map<String, String>>> processXml(String xmlText) {
 
         StringTransformation xmlTextSt = new StringTransformation(xmlText);
+
+        xmlTextSt = StringTransformationCleanup.normalizeToEncoding(xmlTextSt, Charset.forName("UTF-8"));
 
         // there are embedded xml tags in body text. Unescape them so we can process them easily.
         xmlTextSt = replaceXmlEscapedChars(xmlTextSt);
