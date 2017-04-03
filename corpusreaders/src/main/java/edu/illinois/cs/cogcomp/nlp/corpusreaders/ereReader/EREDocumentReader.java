@@ -49,8 +49,13 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String ORIG_AUTHOR = "orig_author";
     public static final String HEADLINE = "headline";
     public static final String IMG = "img";
+    public static final String SNIP = "snip";
+    public static final String SQUISH = "squish";
+    public static final String STUFF = "stuff";
+    public static final String SARCASM = "sarcasm";
+
     /**
-     * tags in ERE markup filess
+     * tags in ERE markup files
      */
     public static final String ENTITIES = "entities";
     public static final String ENTITY = "entity";
@@ -97,7 +102,8 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
     public static final Set<String> deletableSpanTags = new HashSet<>();
     public static final Set<String> tagsToIgnore = new HashSet<>();
-    private static final String SNIP = "snip";
+
+
     private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
@@ -121,6 +127,8 @@ public class EREDocumentReader extends XmlDocumentReader {
 
         tagsToIgnore.add(IMG);
         tagsToIgnore.add(SNIP);
+        tagsToIgnore.add(STUFF);
+        tagsToIgnore.add(SARCASM);
     }
 
 
@@ -155,6 +163,7 @@ public class EREDocumentReader extends XmlDocumentReader {
         Set<String> tagsToIgnore = new HashSet<>(); // implies "delete spans enclosed by these tags"
         tagsToIgnore.add(IMG);
         tagsToIgnore.add(SNIP);
+        tagsToIgnore.add(SQUISH);
 
         XmlDocumentProcessor xmlProcessor =
                 new XmlDocumentProcessor(deletableSpanTags, tagsWithAtts, tagsToIgnore, throwExceptionOnXmlParseFail);
