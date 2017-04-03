@@ -20,8 +20,3 @@ If you use this in your work, include us in your work:
   year={2013}
 }
 ```
-
-
-
-
-
