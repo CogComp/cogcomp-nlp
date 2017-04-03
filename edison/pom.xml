@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.1</version>
+        <version>3.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp.resources</groupId>
@@ -80,13 +80,13 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
         </dependency>
         <!-- Used only in utilities.CreateTestTAResource -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.1.1</version>
+            <version>3.1.2</version>
             <scope>test</scope>
         </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
