@@ -1,4 +1,4 @@
-# illinoisPrepSRL: Preposition Semantic Role Labeler 
+# PrepSRL: Preposition Semantic Role Labeler 
 
 This software identifies semantic relations expressed by prepositions and develops statistical learning models for 
 predicting the relations, their arguments and the semantic types of the arguments. 
