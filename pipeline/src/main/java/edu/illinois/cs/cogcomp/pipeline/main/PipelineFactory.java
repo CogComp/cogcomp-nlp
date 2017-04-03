@@ -95,7 +95,7 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_PREP.key, Configurator.TRUE);
                         break;
                     default:
-                        logger.warn("View name is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
+                        logger.warn("View name " + vu + " is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
                 }
             }
             else {
@@ -144,9 +144,6 @@ public class PipelineFactory {
         return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm) :
                 new SentencePipeline(taBldr, annotators, fullRm);
     }
-
-
-
 
     /**
      * instantiate a set of annotators for use in an AnnotatorService object by default, will use
