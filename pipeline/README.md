@@ -1,27 +1,9 @@
 # Illinois NLP Pipeline
 
-This module contains code that allows you to run various NLP tools
-to annotate plain text input. 
-
-## 0. Quickstart
-
-Assuming you downloaded the pipeline package as a zip from the
-Illinois Cognitive Computation Group's web site:
-To process a set of plain text files in one directory and generate
-a corresponding set of annotated files in json format in a second
-directory, run the command:
-```sh
-scripts/runPipelineOnDataset.sh  <configFile> <inputDirectory> <outputDirectory>
-```
-The configuration file needs only to contain options to override defaults.
-
-
-## Purpose
-
 This software bundles some basic preprocessing steps that a lot of NLP
 applications need, with the goal of making them run locally. Some
 components have significant memory requirements, but given a machine
-with sufficient memory, you can instantiate a AnnotatorService
+with sufficient memory, you can instantiate an `AnnotatorService`
 object that provides plain text tokenization, Part-of-Speech tagging,
 chunking, Named Entity tagging, lemmatization, dependency and
 constituency parsing, and (verb) semantic role labeling.  You can also
@@ -33,35 +15,21 @@ directory, so that if you process overlapping data sets (or process
 the same data set multiple times), it will use a cached copy of the
 system outputs and run much faster.
 
-
-### Intended use
-
-The illinois-nlp-pipeline package was designed to be used either
-programmatically -- inline in your Java code -- or from the command line,
-using only those components you need to use for a given task.
-
-Currently, the pipeline works only for English plain text. You will need
-to remove XML/HTML mark-up, as well as formatting like bulleted lists
-if you want well-formed output. (The pipeline may generate
-output for such texts, but it is not guaranteed that the different
-tools will succeed in producing mutually consistent output.)
-
-One important note: if you wish to use your own tokenization, you should
-implement a class that follows the Tokenizer interface from
-illinois-core-utilities, and use it as an argument to a
-TokenizerTextAnnotationBuilder (also from illinois-core-utilities).
-
-
-### Pipeline NLP Components
+### Components and requirements 
 
 The pipeline has the following annotators. To understand the annotations,
 please refer to the descriptions of the individual packages at the URLs
-provided. These annotations are stored as Views in a single TextAnnotation
-data structure -- see README_DEVELOPER and the [illinois-cogcomp-nlp](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) library.
+provided. These annotations are stored as `View`s in a single `TextAnnotation`
+data structure.
+
+The Illinois NLP Pipeline provides a suite of state-of-the-art
+Natural Language Processing tools of varying complexity.  Some have
+specific prerequisites that must be present if you want to run them.
 The memory is expected MAXIMUM run-time memory required for the component
 by itself. Note that the pipeline runs only one copy of each active component
 so that, for example, a single Chunker component fulfils the needs
 of several other components for which it is a dependency.
+
 
 1. Lemmatizer: <1G memory, no dependencies.
 2. Part-of-Speech tagger: <1G, no dependencies.
@@ -76,49 +44,17 @@ of several other components for which it is a dependency.
 9. Noun Semantic Role Labeler: 1G, requires Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL),
    Constituency Parser.
 10. Quantifier: <2G, requires Part-of-Speech.
-
-
-## PREREQUISITES
-
-The Illinois NLP Pipeline provides a suite of state-of-the-art
-Natural Language Processing tools of varying complexity.  Some have
-specific prerequisites that must be present if you want to run them.
-
-
-### GENERAL REQUIREMENTS: SYSTEM
-
-This software was developed on the following platform:
-
-Ubuntu Linux (2.6.32-279.5.2.el6.x86_64)
-Java 1.8
-
-The memory required depends on the options you set in the config
-file. 2G should be plenty to run the Tokenizer, POS tagger,
-lemmatizer, and Shallow Parser (a.k.a. Chunker).  NER will require
-an additional 2G (CoNLL model) or 4G (OntoNotes model). The Stanford
-Syntactic and Dependency Parsers require approximately 2G. The
-Ilinois Verb Semantic Role Labeler (SRL) requires 4G, and the Noun SRL
-also requires 4G.
+11. Preposition SRL: <2GB  
 
 Note that individual Illinois NLP tools may depend on other tools
 for inputs, and will not work unless those components are also active.
 If you try to run the system with an invalid configuration, it will
 print a warning about the missing components.
 
-
-### SPECIFIC REQUIREMENTS: SRL
-
-To run the Semantic Role Labeler you must have an instance of the
-Gurobi license on your machine, and set the relevant environment
-variables (see [this page](http://www.gurobi.com/products/licensing-pricing/licensing-overview) -- note that there is a free academic use license).
-
-
-## DOWNLOAD CONTENTS
+## Contents 
 
 If you have downloaded the Illinois NLP Pipeline as a stand-alone package,
-it will come with all the libraries and other files it requires. (If you
-want to use the Semantic Role Labelers, you will need to install a
-Gurobi license -- see the section 2.2.)
+it will come with all the libraries and other files it requires. 
 
 The download package is organized thus:
 ```
@@ -137,11 +73,63 @@ individual components; scripts to process plain text files from the
 command line; and .jar files for the libraries used by the pipeline and
 its components.
 
-The Illinois NLP Pipeline package sets default configuration options for
-all its components.  If you want to experiment with different settings,
-we recommend checking out the project from [github](https://github.com/IllinoisCogComp/illinois-cogcomp-nlp) -- see the section on Programmatic Use.
+ 
+## Usage 
 
-## Dependencies
+This software has been developed to allow some of our more complex tools
+to be run completely within a single JVM, either programmatically or
+from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator).
+
+The illinois-nlp-pipeline package was designed to be used either
+programmatically -- inline in your Java code -- or from the command line,
+using only those components you need to use for a given task.
+
+Currently, the pipeline works only for English plain text. You will need
+to remove XML/HTML mark-up, as well as formatting like bulleted lists
+if you want well-formed output. (The pipeline may generate
+output for such texts, but it is not guaranteed that the different
+tools will succeed in producing mutually consistent output.)
+
+One important note: if you wish to use your own tokenization, you should
+implement a class that follows the `Tokenizer` interface from
+`illinois-core-utilities`, and use it as an argument to a
+`TokenizerTextAnnotationBuilder` (also from illinois-core-utilities).
+
+
+### Running a Simple Command-Line Test
+Assuming you downloaded the pipeline package as a zip from the
+Illinois Cognitive Computation Group's web site. 
+
+The standard distribution for this package puts dependencies in `lib/`;
+the parser model in `data/`; and the config file in `config/`. There are
+two sample scripts that are provided to test that the
+pipeline works after you have downloaded
+it. `scripts/runPreprocessor.sh` takes as arguments a configuration file
+and a text file; it processes the text file according to the
+properties set in the config file, and writes output to STDOUT.
+scripts/testPreprocessor.sh is a self-contained script that calls
+`runPreprocessor.sh` with fixed arguments and compares the output to
+some reference output. If the new output and reference output are
+different, the script prints an error message and indicates the
+differences.
+
+To process a set of plain text files in one directory and generate
+a corresponding set of annotated files in json format in a second
+directory, run the command:
+Running the test:
+
+```sh
+scripts/testPreprocessor.sh
+```
+
+Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
+```sh
+scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+```
+
+### Programmatic Use
+
+First you have to add it as a dependency to your project. 
 If this package is used in maven, please add the following dependencies with proper repositories.
 ```xml
 <dependencies>
@@ -160,46 +148,7 @@ If this package is used in maven, please add the following dependencies with pro
 </repositories>
 ```
 
-where `#VERSION` is the version included in the `pom.xml` file. 
-
-## RUNNING THE ILLINOIS NLP PIPELINE
-
-This software has been developed to allow some of our more complex tools
-to be run completely within a single JVM, either programmatically or
-from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator).
-
-These instructions assume you have downloaded the pipeline as a
-single package from the Cognitive Computation Group web site.
-
-The standard distribution for this package puts dependencies in lib/;
-the parser model in data/; and the config file in config/. There are
-two sample scripts that are provided to test that the
-pipeline works after you have downloaded
-it. scripts/runPreprocessor.sh takes as arguments a configuration file
-and a text file; it processes the text file according to the
-properties set in the config file, and writes output to STDOUT.
-scripts/testPreprocessor.sh is a self-contained script that calls
-runPreprocessor.sh with fixed arguments and compares the output to
-some reference output. If the new output and reference output are
-different, the script prints an error message and indicates the
-differences.
-
-### Running a Simple Command-Line Test
-
-Running the test:
-```sh
-scripts/testPreprocessor.sh
-```
-
-Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
-```sh
-scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
-```
-
-## Programmatic Use
-
-You can check the javadoc for detailed information about the
-IllinoisPreprocessor API.
+where `#VERSION` is the version included in the `pom.xml` file.
 
 The main class is `PipelineFactory`, in the package
 `edu.illinois.cs.cogcomp.pipeline.main` under `src/main/java`. For an
@@ -330,10 +279,8 @@ useSrlVerb  true
 useSrlNom   true
 ```
 
-Note that individuals have their own configuration options -- see the documentation
+Note that individual annotators have their own configuration options -- see the documentation
 for individual components for details.
-
-
 
 ### Changing the logging settings
 
@@ -341,7 +288,64 @@ This project uses slf4j's log4j libraries.  You can change the
 settings by creating a log4j.properties file and adding the directory
 containing that file to the classpath.
 
-### Frequently Asked Questions (FAQs)
+## Using pipeline webserver 
+
+Often a convenient model of using the pipeline server is, running the server (which includes all the annotators) on a 
+big machine (=big memory) and sending calls to the server with clients. Here we first introduce the details of 
+the server and later we will delineate the clients.
+ 
+The server supports post and get requests to obtain  annotation for a requested text, with desired views. 
+In order to run the webserver with default settings (port = 8080), do: 
+
+```shell
+pipeline/scripts/runWebserver.sh
+```
+
+The following arguments are supported:
+```shell
+usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
+
+optional arguments:
+  -h, --help             show this help message and exit
+  --port PORT, -P PORT   Port to run the webserver.
+```
+
+Here are the available APIs: 
+
+
+| API                    | Address      | Supported request type | Parameters                                                                   | Example                                                          |
+|------------------------|--------------|------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
+| Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
+| Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
+
+
+Note that the current web server is very basic. It does not support parallel processing within a single request, nor across multiple requests.
+
+### Server clients 
+
+#### Java Client 
+
+After setting up the server on a remote machine, we can create a java client to make calls to the server. 
+Here in the snnippet we show how it is done: 
+
+```java 
+import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator; 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+
+ServerClientAnnotator annotator = new ServerClientAnnotator();
+annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
+annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
+TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
+System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
+```
+
+#### Python Client
+
+Coming soon . . . 
+
+
+## Frequently Asked Questions (FAQs)
 
 - While running the Pipeline if you see an error regarding insufficient Java heap space, you will need to set the `JAVA_OPTIONS` or `MAVEN_OPTIONS` to include "-Xmx20g": 
 ```
@@ -401,63 +405,6 @@ public class testpipeline {
     }
 }
 ```
-
-## Using pipeline webserver 
-
-Often a convenient model of using the pipeline server is, running the server (which includes all the annotators) on a 
-big machine (=big memory) and sending calls to the server with clients. Here we first introduce the details of 
-the server and later we will delineate the clients.
- 
-The server supports post and get requests to obtain  annotation for a requested text, with desired views. 
-In order to run the webserver with default settings (port = 8080), do: 
-
-```shell
-pipeline/scripts/runWebserver.sh
-```
-
-The following arguments are supported:
-```shell
-usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
-
-optional arguments:
-  -h, --help             show this help message and exit
-  --port PORT, -P PORT   Port to run the webserver.
-```
-
-Here are the available APIs: 
-
-
-| API                    | Address      | Supported request type | Parameters                                                                   | Example                                                          |
-|------------------------|--------------|------------------------|------------------------------------------------------------------------------|------------------------------------------------------------------|
-| Annotating text        | `/annotate`  | POST/GET               | `text`: the target raw text ; `views`: views to be added, separated by comma | `/annotate?text="This is sample text"&views=POS,NER_CONLL` |
-| Getting existing views | `/viewNames` | POST/GET               | N/A                                                                          | `/viewNames`                                                     |
-
-Note that the current webserver is a very basic one and very small sophistications. It does not support any parallel  annotations of single request, or parallel processing of multiple requests. Such extensions are in our TODO-list for future. 
-
-
-### Server clients 
-
-#### Java Client 
-
-After setting up the server on a remote machine, we can create a java client to make calls to the server. 
-Here in the snnippet we show how it is done: 
-
-```java 
-import edu.illinois.cs.cogcomp.pipeline.server.ServerClientAnnotator; 
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-
-ServerClientAnnotator annotator = new ServerClientAnnotator();
-annotator.setUrl("localhost", "8080"); // set the url and port name of your server here 
-annotator.setViews(ViewNames.POS, ViewNames.LEMMA); // specify the views that you want 
-TextAnnotation ta = annotator.annotate("This is the best sentence ever."); 
-System.out.println(ta.getAvailableViews()); // here you should see that the required views are added  
-```
-
-#### Python Client
-
-Coming soon . . . 
-
 
 ## LICENSE
 

@@ -38,6 +38,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     public static final Property USE_STANFORD_DEP = new Property("useStanfordDep", FALSE);
     public static final Property USE_SRL_VERB = new Property("useSrlVerb", FALSE);
     public static final Property USE_SRL_NOM = new Property("useSrlNom", FALSE);
+    public static final Property USE_SRL_PREP = new Property("usePrepSRL", FALSE);
     public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
     public static final Property THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK = new Property(
             "throwExceptionOnFailedLengthCheck", TRUE);
@@ -66,7 +67,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
         Property[] properties =
                 {STFRD_TIME_PER_SENTENCE, STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA,
                         USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
-                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
+                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM, USE_SRL_PREP,
                         USE_QUANTIFIER, THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON,
                         USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
                         USE_SENTENCE_PIPELINE};
