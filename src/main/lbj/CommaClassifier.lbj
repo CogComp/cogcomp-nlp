@@ -6,6 +6,7 @@ import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
 import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -87,7 +88,7 @@ discrete ParseTreeFeature(Comma c) <- {
       commaLevelPhrases =  phrase + commaLevelPhrases;
       distance++;
     }while(!phrase.equals("NULL"));
-    
+
 	distance = 1;
     do{
       phrase = c.getNotation(c.getPhraseToRightOfComma(distance));
@@ -102,7 +103,7 @@ discrete ParseTreeFeature(Comma c) <- {
       tree = tree + phrase;
       distance++;
     }while(!phrase.equals("NULL"));
-    
+
     return tree;
     //return commaLevelPhrases;
 }
@@ -124,7 +125,7 @@ discrete StrippedParseTreeFeature(Comma c) <- {
       commaLevelPhrases =  phrase + commaLevelPhrases;
       distance++;
     }while(!phrase.equals("NULL"));
-    
+
 	distance = 1;
     do{
       phrase = c.getStrippedNotation(c.getPhraseToRightOfComma(distance));
@@ -139,7 +140,7 @@ discrete StrippedParseTreeFeature(Comma c) <- {
       tree = tree + phrase;
       distance++;
     }while(!phrase.equals("NULL"));
-    
+
     return tree;
     //return commaLevelPhrases;
 }
@@ -153,7 +154,7 @@ discrete CommaSiblingsFeature(Comma c) <- {
       commaLevelPhrases =  phrase + commaLevelPhrases;
       distance++;
     }while(!phrase.equals("NULL"));
-    
+
 	distance = 1;
     do{
       phrase = c.getNotation(c.getPhraseToRightOfComma(distance));
@@ -176,7 +177,7 @@ discrete% DependencyFeatures(Comma c) <- RightToLeftDependencies , LeftToRightDe
 
 discrete% ParseFeatures(Comma c) <- SiblingPhraseFeatures , ParentSiblingPhraseFeatures
 
-discrete CommaLabel(Comma c) <- { 
+discrete CommaLabel(Comma c) <- {
 	return c.getLabel();
 }
 
@@ -199,7 +200,7 @@ constraint substitutePairFirstComma (Sentence s)
 constraint substitutePairMiddleCommas (Sentence s)
 {
 	forall (Comma c in s.getMiddleSiblingCommas())
-		((LocalCommaClassifier(c) :: "Substitute") => 
+		((LocalCommaClassifier(c) :: "Substitute") =>
 												((LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Substitute")
 												\/(LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "Substitute")));
 }
@@ -219,7 +220,7 @@ constraint locativePairFirstComma (Sentence s)
 constraint locativePairMiddleCommas (Sentence s)
 {
 	forall (Comma c in s.getMiddleSiblingCommas())
-		((LocalCommaClassifier(c) :: "Locative") => 
+		((LocalCommaClassifier(c) :: "Locative") =>
 												((LocalCommaClassifier(s.getNextSiblingComma(c)) :: "Locative")
 												\/(LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "Locative")));
 }
@@ -235,7 +236,7 @@ constraint locativePair (Sentence s)
 constraint oxfordComma (Sentence s)
 {
 	forall (Comma c in s.getCommas())
-		((UnigramRightFeature(c) :: "and") => 
+		((UnigramRightFeature(c) :: "and") =>
 											(LocalCommaClassifier(c) :: "List"));
 }
 
@@ -243,7 +244,7 @@ constraint oxfordComma (Sentence s)
 constraint listCommas (Sentence s)
 {
 	forall (Comma c in s.getMiddleSiblingCommas())
-		(((LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "List") 
+		(((LocalCommaClassifier(s.getPreviousSiblingComma(c)) :: "List")
 		 /\(LocalCommaClassifier(s.getNextSiblingComma(c)) :: "List")) =>
 																	(LocalCommaClassifier(c) :: "List"));
 }
@@ -255,7 +256,7 @@ inference OxfordCommaConstrainedInference head Sentence s {
 	subjectto {@oxfordComma(s);}
 	with new ILPInference(new OJalgoHook())
 }
-discrete OxfordCommaConstrainedCommaClassifier (Comma c) <- 
+discrete OxfordCommaConstrainedCommaClassifier (Comma c) <-
 	OxfordCommaConstrainedInference(LocalCommaClassifier)
 
 inference SubstitutePairConstrainedInference head Sentence s {
@@ -263,21 +264,21 @@ inference SubstitutePairConstrainedInference head Sentence s {
 	subjectto {@substitutePair(s);}
 	with new ILPInference(new OJalgoHook())
 }
-discrete SubstitutePairConstrainedCommaClassifier (Comma c) <- 
-	SubstitutePairConstrainedInference(LocalCommaClassifier)	
+discrete SubstitutePairConstrainedCommaClassifier (Comma c) <-
+	SubstitutePairConstrainedInference(LocalCommaClassifier)
 
 inference LocativePairConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@locativePair(s);}
 	with new ILPInference(new OJalgoHook())
 }
-discrete LocativePairConstrainedCommaClassifier (Comma c) <- 
+discrete LocativePairConstrainedCommaClassifier (Comma c) <-
 	LocativePairConstrainedInference(LocalCommaClassifier)
-	
+
 inference ListCommasConstrainedInference head Sentence s {
 	Comma c {return c.getSentence();}
 	subjectto {@listCommas(s);}
 	with new ILPInference(new OJalgoHook())
 }
-discrete ListCommasConstrainedCommaClassifier (Comma c) <- 
+discrete ListCommasConstrainedCommaClassifier (Comma c) <-
 	ListCommasConstrainedInference(LocalCommaClassifier)

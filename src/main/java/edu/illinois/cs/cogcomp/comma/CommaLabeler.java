@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 /**
@@ -30,6 +31,11 @@ public class CommaLabeler extends Annotator{
     	super(viewName, new String[]{CommaProperties.getInstance().useGold() ? ViewNames.PARSE_GOLD : ViewNames.PARSE_STANFORD,
                 ViewNames.POS, ViewNames.SHALLOW_PARSE});
     	classifier = new LocalCommaClassifier();
+    }
+
+    @Override
+    public void initialize(ResourceManager resourceManager) {
+        // do nothing
     }
 
     @Override
@@ -50,7 +56,7 @@ public class CommaLabeler extends Annotator{
             String label = classifier.discreteValue(comma);
             int position = comma.getPosition();
             Constituent predicate = new Constituent(label, viewName, ta, position, position+1);
-            predicate.addAttribute(CoNLLColumnFormatReader.SenseIdentifer, label);
+            predicate.addAttribute(PredicateArgumentView.SenseIdentifer, label);
             srlView.addConstituent(predicate);
             Constituent leftArg = comma.getPhraseToLeftOfComma(1);
             if (leftArg != null) {

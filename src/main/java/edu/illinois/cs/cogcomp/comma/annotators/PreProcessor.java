@@ -11,10 +11,10 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
-import edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPipelineFactory;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
+import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class PreProcessor{
             nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
             ResourceManager pipelineConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
-            annotatorService = IllinoisPipelineFactory.buildPipeline(pipelineConfig);
+            annotatorService = PipelineFactory.buildPipeline(pipelineConfig);
         }
     }
 
