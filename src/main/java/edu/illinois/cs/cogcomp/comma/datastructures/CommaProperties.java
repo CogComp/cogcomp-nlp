@@ -6,7 +6,7 @@ import java.io.IOException;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
- * A property manager for the CommaSRL.
+ * A property manager for the CommaSRL to read the configurations from disk.
  */
 public class CommaProperties extends ResourceManager {
 
@@ -16,10 +16,21 @@ public class CommaProperties extends ResourceManager {
         super(configFile);
     }
 
+    public CommaProperties() throws IOException {
+        super(new CommaSRLConfigurator().getDefaultConfig().getProperties());
+    }
+
     public static CommaProperties getInstance() {
         if (instance == null)
             try {
-                instance = new CommaProperties("config/comma.properties");
+                // reading the properties programmatically.
+                // change this if you want to read from the local config file
+                if(false) {
+                    instance = new CommaProperties("config/comma.properties");
+                }
+                else {
+                    instance = new CommaProperties();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 System.err.println("Unable to read the configuration file");
@@ -74,5 +85,9 @@ public class CommaProperties extends ResourceManager {
 
     public boolean useCurator() {
         return getBoolean("USE_CURATOR");
+    }
+
+    public boolean useDatastoreToReadData() {
+        return getBoolean("READ_DATA_FROM_DATASTORE");
     }
 }
