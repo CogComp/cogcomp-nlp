@@ -1,9 +1,12 @@
 package edu.illinois.cs.cogcomp.comma.bayraktar;
 
+import cogcomp.Datastore;
+import cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +22,17 @@ public class BayraktarPatternLabeler {
     	CommaProperties properties = CommaProperties.getInstance();
     	String[] labels = {"Attribute", "Complementary", "Interrupter", "Introductory", "List", "Quotation", "Substitute", "Locative"};
     	BAYRAKTAR_PATTERN_TO_COMMA_LABEL = new HashMap<>();
-    	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir() + "/";
+    	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir() + File.separator;
+    	if(properties.useDatastoreToReadData()) {
+			try {
+				Datastore ds = new Datastore();
+				File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-data", 2.2,false);
+				ANNOTATION_SOURCE_DIR = f.getAbsolutePath() + File.separator + "comma-srl-data" + File.separator +
+						"Bayraktar-SyntaxToLabel" + File.separator + "modified" + File.separator;
+			} catch (DatastoreException e) {
+				e.printStackTrace();
+			}
+		}
 		for(String label : labels){
 			String file = ANNOTATION_SOURCE_DIR + label;
 			List<String> lines;
