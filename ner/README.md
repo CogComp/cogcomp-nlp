@@ -1,16 +1,10 @@
 # Illinois NER Tagger
-====================
 
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
 (people / organizations / locations / miscellaneous), while the most recent can also tag entities with a larger 
 18-label type set (based on the OntoNotes corpus). It uses gazetteers extracted from Wikipedia, word class models 
 derived from unlabeled text, and expressive non-local features.
-
-## Licensing
-To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
-and press 'Download'. The next screen displays the license. 
-
 
 ## Quickstart
 
@@ -277,7 +271,11 @@ marked with an empty line, which is not the case for "brackets format".
 
 See the files in [test/Test/](test/Test/) for sample column format.
 
-##Citation
+## Licensing
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+and press 'Download'. The next screen displays the license. 
+
+## Citation
 
 L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
 
