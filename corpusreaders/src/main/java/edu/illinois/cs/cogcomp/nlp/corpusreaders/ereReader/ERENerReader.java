@@ -22,6 +22,8 @@ import org.w3c.dom.Node;
 import java.nio.file.Path;
 import java.util.*;
 
+import static org.ojalgo.netio.CharacterRing.length;
+
 
 /**
  * Reads ERE data and instantiates TextAnnotations with the corresponding NER view. Also provides
@@ -71,8 +73,10 @@ public class ERENerReader extends EREDocumentReader {
     private Map<String, Set<String>> entityIdToMentionIds;
     private int numEntitiesInSource;
     private int numEntitiesGenerated;
+    private int numXmlMarkupEntitiesGenerated;
     private int numMentionsInSource;
     private int numMentionsGenerated;
+    private int numXmlMarkupMentionsGenerated;
 //    private int numFillersInSource;
 //    private int numFillersGenerated;
 
@@ -102,19 +106,22 @@ public class ERENerReader extends EREDocumentReader {
         mentionIdToConstituent = new HashMap<>();
         entityIdToMentionIds = new HashMap<>();
 
+        resetEntityMentionCounters();
+    }
+
+    private void resetEntityMentionCounters() {
         this.numMentionsInSource = 0;
         this.numMentionsGenerated = 0;
+        this.numXmlMarkupMentionsGenerated = 0;
         this.numEntitiesInSource = 0;
         this.numEntitiesGenerated = 0;
+        this.numXmlMarkupEntitiesGenerated = 0;
     }
 
     @Override
     public void reset() {
         super.reset();
-        this.numMentionsInSource = 0;
-        this.numMentionsGenerated = 0;
-        this.numEntitiesInSource = 0;
-        this.numEntitiesGenerated = 0;
+        resetEntityMentionCounters();
     }
 
 
@@ -341,7 +348,7 @@ public class ERENerReader extends EREDocumentReader {
             if (endOffset < ends[i]) {
                 if (allowSubwordOffsets && endOffset == ends[i] - 1)
                     return i;
-                else if (allowOffsetSlack && endOffset == prevOffset + 1
+                else if (allowOffsetSlack && (endOffset == prevOffset + 1 || endOffset == prevOffset + 2)
                         && rawText.substring(prevOffset, prevOffset + 1).matches("\\s+"))
                     return i - 1;
                 throw new RuntimeException("End Index " + endOffset + " was not exact.");
@@ -395,11 +402,12 @@ public class ERENerReader extends EREDocumentReader {
         NodeList nl = ((Element) eNode).getElementsByTagName(ENTITY_MENTION);
 
         boolean isMentionAdded = false;
+        boolean isEntityFound = false;
         for (int i = 0; i < nl.getLength(); ++i) {
             Node mentionNode = nl.item(i);
             Constituent mentionConstituent = getMention(mentionNode, label, view, xmlTa);
             if (null == mentionConstituent) { // mention may reference xml markup
-                recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa);
+                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa) || isEntityFound;
             }
             else {
                 mentionConstituent.addAttribute(EntityIdAttribute, eId);
@@ -416,7 +424,7 @@ public class ERENerReader extends EREDocumentReader {
                 mentionIds.add(mentionConstituent.getAttribute(EntityMentionIdAttribute));
             }
         }
-        if (isMentionAdded)
+        if (isMentionAdded || isEntityFound)
             numEntitiesGenerated++;
     }
 
@@ -430,7 +438,7 @@ public class ERENerReader extends EREDocumentReader {
      * @param mentionNode
      * @param xmlTa
      */
-    private void recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa) throws XMLException {
+    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa) throws XMLException {
 
         NamedNodeMap nnMap = mentionNode.getAttributes();
         String mId = nnMap.getNamedItem(ID).getNodeValue();
@@ -440,7 +448,6 @@ public class ERENerReader extends EREDocumentReader {
          * expect one child
          */
         NodeList mnl = ((Element) mentionNode).getElementsByTagName(MENTION_TEXT);
-        boolean notFound = false;
         String mentionForm = null;
 
         if (mnl.getLength() > 0) {
@@ -456,21 +463,53 @@ public class ERENerReader extends EREDocumentReader {
 
         Map<IntPair, Map<String, String>> spanInfo = xmlTa.getXmlMarkup();
 
-        boolean isFound = true;
-        Map<String, String> mentionInfo = spanInfo.get(origOffsets);
+        boolean isFound = spanInfo.containsKey(origOffsets);
 
-        if (!spanInfo.containsKey(origOffsets)) {
-            logger.warn("could not find offset pair (" + offset + "," + (offset + length) + ") in xml markup info " +
-                "in XmlTextAnnotation. Entity id, label, form are: " + eId + "," + label + "," + mentionForm + ".");
+        if (!isFound)
+            logger.warn("could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
+                ") in xml markup info " + "in XmlTextAnnotation. Entity id, label, form are: " + eId + "," + label +
+                "," + mentionForm + ". Trying shifted indexes.");
+
+        Map<String, String> mentionInfo = findMentionInfo(spanInfo, origOffsets);
+
+        isFound = true;
+        if (mentionInfo.isEmpty()) {
             isFound = false;
-            mentionInfo = new HashMap<>();
-            spanInfo.put(origOffsets, mentionInfo);
+            logger.warn("even with shifted indexes, could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
+                    ") in xml markup info " + "in XmlTextAnnotation.");
         }
+        if (isFound)
+            numXmlMarkupMentionsGenerated++; // ...and so excluded from cleaned-up text.
+        spanInfo.put(origOffsets, mentionInfo);
         mentionInfo.put(ENTITY_ID, eId);
         mentionInfo.put(ENTITY_MENTION_ID, mId);
         mentionInfo.put(SPECIFICITY, specificity);
         mentionInfo.put(NOUN_TYPE, nounType);
         mentionInfo.put(IS_FOUND, Boolean.toString(isFound));
+
+        return isFound;
+    }
+
+    /**
+     * mention length should be the same, but in at least one file many offsets are shifted by +1
+     * allow also -1 shift
+     */
+    private Map<String, String> findMentionInfo(Map<IntPair, Map<String, String>> spanInfo, IntPair origOffsets) {
+
+        Map<String, String> mentionInfo = spanInfo.get(origOffsets);
+
+        if (null == mentionInfo)
+            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() - 1, origOffsets.getSecond() - 1));
+
+        if (null == mentionInfo)
+            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() + 1, origOffsets.getSecond() + 1));
+
+        if (null == mentionInfo) {
+            mentionInfo = new HashMap<>();
+            spanInfo.put(origOffsets, mentionInfo);
+        }
+
+        return mentionInfo;
     }
 
 
@@ -590,6 +629,12 @@ public class ERENerReader extends EREDocumentReader {
     private IntPair getTokenOffsets(int origStartOffset, int origEndOffset, String mentionForm, XmlTextAnnotation xmlTa) {
 
         StringTransformation st = xmlTa.getXmlSt();
+
+        String origStr = st.getOrigText().substring(origStartOffset, origEndOffset);
+        if (origStr.startsWith(" ") || origStr.startsWith("\n")) {
+            origStartOffset += 1;
+            origEndOffset += 1;
+        }
         int adjStart = st.computeModifiedOffsetFromOriginal(origStartOffset);
         int adjEnd = st.computeModifiedOffsetFromOriginal(origEndOffset);
 
@@ -602,8 +647,8 @@ public class ERENerReader extends EREDocumentReader {
         TextAnnotation ta = xmlTa.getTextAnnotation();
         String rawText = ta.getText();
         String rawStr = rawText.substring(adjStart, adjEnd);
-        String origStr = st.getOrigText().substring(origStartOffset, origEndOffset);
         logger.debug("source xml str: '" + origStr + "' (" + origStartOffset + "," + origEndOffset + ")");
+
         try {
             si = findStartIndex(adjStart);
             ei = findEndIndex(adjEnd, rawText);
@@ -686,6 +731,8 @@ public class ERENerReader extends EREDocumentReader {
         bldr.append("Number of mentions in source: ").append(numMentionsInSource)
                 .append(System.lineSeparator());
         bldr.append("Number of mentions generated: ").append(numMentionsGenerated)
+                .append(System.lineSeparator());
+        bldr.append("Number of mentions in xml markup generated: ").append(numXmlMarkupMentionsGenerated)
                 .append(System.lineSeparator());
 
         return bldr.toString();

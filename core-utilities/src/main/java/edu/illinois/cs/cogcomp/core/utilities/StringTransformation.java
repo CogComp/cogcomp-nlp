@@ -26,6 +26,8 @@ public class StringTransformation implements Serializable {
 
     private static final long serialVersionUID = 1526472295622723447L;
 
+    private static final boolean DEBUG = false;
+
         /** source text: immutable record of the starting point for all transformations */
     private final String origText; ;
     /** tracks whether transformedText field is out of date. */
@@ -294,6 +296,17 @@ public class StringTransformation implements Serializable {
                 cumulativeOffset -= transformMod;
             }
 
+            if (DEBUG) {
+                int lastIndex = 0;
+                int lastOrigOffset = 0;
+                for (int revInd : recordedInverseModifications.keySet()) {
+                    int diff = revInd - lastIndex;
+                    String origSub = origText.substring(lastOrigOffset, lastOrigOffset + diff);
+                    System.err.println(lastIndex + "-" + revInd + ": " + origSub);
+                    lastOrigOffset = lastOrigOffset + diff + recordedInverseModifications.get(revInd).getFirst();
+                    lastIndex = revInd;
+                }
+            }
             /*
              * cleanup: remove temporary state that has now been resolved
              */

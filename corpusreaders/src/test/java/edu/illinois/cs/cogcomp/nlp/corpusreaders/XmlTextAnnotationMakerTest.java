@@ -51,7 +51,7 @@ public class XmlTextAnnotationMakerTest {
 
     private static final String XML_FILE2 =
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
-                    "data/source/ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
+                    "data/source/ENG_DF_001237_20150411_F0000008Ew.xml"; //ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
     // public void testNerReader() {
 
     /**
