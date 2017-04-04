@@ -38,12 +38,15 @@ public class PreProcessor{
             annotatorService = CuratorFactory.buildCuratorClient(curatorConfig);
         }
         else {
-            nonDefaultValues.put(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
             nonDefaultValues.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
-            ResourceManager pipelineConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
+            nonDefaultValues.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+            nonDefaultValues.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
+            nonDefaultValues.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+            nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
+            ResourceManager pipelineConfig = (new PipelineConfigurator()).getConfig(nonDefaultValues);
             annotatorService = PipelineFactory.buildPipeline(pipelineConfig);
         }
     }

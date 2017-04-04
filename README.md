@@ -1,4 +1,10 @@
-# illinois-comma-srl: Comma Role Labeler
+# Comma-SRL: Comma Role Labeler
+
+This software extracts relations commas participate in, expanding on previous work in this area. 
+Commas and the surrounding sentence structure often express relations that are essential to understanding the
+meaning of the sentence. 
+
+## Structure 
 
 There are 2 models:
 
@@ -25,3 +31,16 @@ Run `ClassifierComparison` to get the performance of different models as evaluat
 
 Use `CommaLabeler` to obtain a comma `View` for a sentence represented as a `TextAnnotation`
 (must have the views required to extract features for the classifier).
+
+
+
+If you use this software please cite our work: 
+```
+@inproceedings{arivazhagan2016labeling,
+  title={Labeling the Semantic Roles of Commas.},
+  author={Arivazhagan, Naveen and Christodoulopoulos, Christos and Roth, Dan},
+  booktitle={AAAI},
+  pages={2885--2891},
+  year={2016}
+}
+```

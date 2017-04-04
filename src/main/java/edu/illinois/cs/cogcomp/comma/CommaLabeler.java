@@ -1,9 +1,12 @@
 package edu.illinois.cs.cogcomp.comma;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
+import cogcomp.Datastore;
+import cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
@@ -17,7 +20,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgum
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.CoNLLColumnFormatReader;
 
 /**
  * An interface for providing a comma {@link PredicateArgumentView}
@@ -27,15 +29,29 @@ public class CommaLabeler extends Annotator{
 
     public static final String viewName = "SRL_COMMA";
 
-    public CommaLabeler () {
+    public CommaLabeler() {
+        this(true);
+    }
+
+    public CommaLabeler (boolean lazilyInitialize) {
     	super(viewName, new String[]{CommaProperties.getInstance().useGold() ? ViewNames.PARSE_GOLD : ViewNames.PARSE_STANFORD,
-                ViewNames.POS, ViewNames.SHALLOW_PARSE});
-    	classifier = new LocalCommaClassifier();
+                ViewNames.POS, ViewNames.SHALLOW_PARSE}, true);
     }
 
     @Override
     public void initialize(ResourceManager resourceManager) {
-        // do nothing
+        try {
+            classifier = new LocalCommaClassifier();
+            Datastore ds = new Datastore();
+            File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-models", 2.2,false);
+            String folder = f.toString() + File.separator + "comma-srl-models" + File.separator;
+            classifier.readLexicon(folder + "LocalCommaClassifier.lex" );
+            classifier.readModel(folder + "LocalCommaClassifier.lc" );
+        } catch (DatastoreException e) {
+            e.printStackTrace();
+        }
+        assert classifier.getPrunedLexiconSize() > 1000;
+        assert classifier.getLabelLexicon().size() > 5;
     }
 
     @Override
