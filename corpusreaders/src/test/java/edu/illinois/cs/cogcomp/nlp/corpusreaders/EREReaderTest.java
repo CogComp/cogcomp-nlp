@@ -61,7 +61,7 @@ public class EREReaderTest {
 
 
         String corpusDir =
-                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample-2/";
+                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
 
         XmlTextAnnotation outputXmlTa = runTest(corpusDir);
 
@@ -72,6 +72,7 @@ public class EREReaderTest {
         outputXmlTa = runTest(corpusDir);
 
         System.out.println("Testing EREMentionRelationReader...");
+
 
 
         StringTransformation xmlSt = outputXmlTa.getXmlSt();
