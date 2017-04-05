@@ -273,7 +273,7 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.SRL_PREP, prepSRLAnnotator);
         }
 
-        if(rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
+        if(rm.getBoolean(PipelineConfigurator.USE_SRL_COMMA)) {
             CommaLabeler commaLabeler = new CommaLabeler();
             viewGenerators.put(ViewNames.SRL_COMMA, commaLabeler);
         }
