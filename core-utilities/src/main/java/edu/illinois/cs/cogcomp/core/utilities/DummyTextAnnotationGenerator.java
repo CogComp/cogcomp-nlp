@@ -28,9 +28,9 @@ public class DummyTextAnnotationGenerator {
     static Logger logger = LoggerFactory.getLogger(DummyTextAnnotationGenerator.class);
 
     static String annotatedString1 =
-            "The construction of the John Smith library finished on time .";
-    static String annotatedString2 = "The $10M building was designed in 2016 .";
-    static String annotatedString3 = "The paving commenced Monday and will finish in June .";
+            "The construction of the John Smith library, finished on time .";
+    static String annotatedString2 = "The $10M building, was designed in 2016 .";
+    static String annotatedString3 = "The paving, commenced Monday and will finish in June .";
 
     static List<String[]> annotatedTokenizedStringArray1 = new ArrayList<>();
     static List<String[]> annotatedTokenizedStringArray2 = new ArrayList<>();
