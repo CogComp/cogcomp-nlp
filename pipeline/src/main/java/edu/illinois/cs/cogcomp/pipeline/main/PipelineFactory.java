@@ -95,6 +95,9 @@ public class PipelineFactory {
                     case ViewNames.SRL_PREP:
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_PREP.key, Configurator.TRUE);
                         break;
+                    case ViewNames.SRL_COMMA:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_COMMA.key, Configurator.TRUE);
+                        break;
                     default:
                         logger.warn("View name " + vu + " is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
                 }
