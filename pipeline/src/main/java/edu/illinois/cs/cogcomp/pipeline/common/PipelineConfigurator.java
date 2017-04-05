@@ -39,6 +39,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     public static final Property USE_SRL_VERB = new Property("useSrlVerb", FALSE);
     public static final Property USE_SRL_NOM = new Property("useSrlNom", FALSE);
     public static final Property USE_SRL_PREP = new Property("usePrepSRL", FALSE);
+        public static final Property USE_SRL_COMMA = new Property("useCommaSRL", FALSE);
     public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
     public static final Property THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK = new Property(
             "throwExceptionOnFailedLengthCheck", TRUE);
