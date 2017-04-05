@@ -68,6 +68,7 @@ public class ViewNames {
     public static final String SRL_VERB = "SRL_VERB";
     public static final String SRL_NOM = "SRL_NOM";
     public static final String SRL_PREP = "SRL_PREP";
+    public static final String SRL_COMMA = "SRL_COMMA";
 
     public static final String COREF = "COREF";
     // Constituents in this view contains heads of mentions only
@@ -120,7 +121,6 @@ public class ViewNames {
     public static final String MENTION_ERE = "MENTION_ERE";
     public static final String COREF_ERE = "COREF_ERE";
 
-
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
             case TOKENS:
@@ -162,6 +162,7 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
+            case SRL_COMMA:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
             case COREF_HEAD:
