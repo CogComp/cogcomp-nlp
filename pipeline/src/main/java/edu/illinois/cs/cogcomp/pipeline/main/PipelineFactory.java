@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
@@ -282,6 +284,16 @@ public class PipelineFactory {
         }
 
         return viewGenerators;
+    }
+
+    public static void main(String[] args) throws AnnotatorException {
+        System.out.println("Starting to run the dummy . . . ");
+        CommaLabeler commaLabeler = new CommaLabeler();
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
+        ta.addView(ViewNames.PARSE_STANFORD, ta.getView(ViewNames.PARSE_GOLD));
+        System.out.println(ta.getAvailableViews());
+        commaLabeler.addView(ta);
+        System.out.println(ta.getAvailableViews());
     }
 
 }
