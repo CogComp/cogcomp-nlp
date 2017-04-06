@@ -56,7 +56,6 @@ public class PredicateArgumentEvaluator extends Evaluator {
      * @param tester The multi-class {@link ClassificationTester} for the argument labels
      */
     public void evaluate(ClassificationTester tester, View goldView, View predictionView) {
-        super.cleanAttributes(goldView, predictionView);
         gold = (PredicateArgumentView) goldView;
         prediction = (PredicateArgumentView) predictionView;
         goldToPredictionPredicateMapping = getGoldToPredictionPredicateMapping();
