@@ -1,4 +1,4 @@
-# illinois-core-utilities
+# Illinois Core-Utilities
 
    illinois-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
@@ -78,8 +78,8 @@ single piece of text is called a `TextAnnotation`.
 A `TextAnnotation` can be thought of as a container that stores different layers 
 of annotations over some text.
 
-  1. Using the LBJ sentence splitter and tokenizer
- 
+ 1. Using the LBJ sentence splitter and tokenizer: 
+    
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
@@ -101,8 +101,8 @@ of annotations over some text.
     TextAnnotation ta1 = tab.createTextAnnotation(corpus, textId, text1); 
     ```
 
-  2. Using pre-tokenized text
-
+ 2. Using pre-tokenized text:  
+    
     Quite often, our data source could specify the tokenization for
     text. We can use this to create a `TextAnnotation` by specifying
     the sentences and tokens manually. In this case, the input to the
@@ -120,7 +120,7 @@ of annotations over some text.
     
 	List<String[]> tokenizedSentences = Arrays.asList(sentence1, sentence2);
     TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-    											corpus, textId2, tokenizedSentences);
+    		corpus, textId2, tokenizedSentences);
     ```
       
 ### Views 
