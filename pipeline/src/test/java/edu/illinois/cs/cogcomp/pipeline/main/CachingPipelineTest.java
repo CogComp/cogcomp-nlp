@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
 import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -52,7 +53,6 @@ public class CachingPipelineTest {
                 Configurator.FALSE);
         props.setProperty(PipelineConfigurator.USE_JSON.key, Configurator.FALSE);
         props.setProperty(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.FALSE);
-
         processor = PipelineFactory.buildPipeline(new ResourceManager(props));
     }
 
@@ -185,5 +185,27 @@ public class CachingPipelineTest {
         assertEquals(
                 "PARSE_STANFORD - Constituency parse tree  generated should match gold parse.",
                 predictedParseTree.trim(), goldParseTree);
+    }
+
+
+    @Test
+    public void testHyphenSplit() {
+        String source = "The man said that Jean-Pierre Thibault was only present from 2002-2003.  Jean-Pierre (" +
+                "also known as John-Paul) saw fit to share this only last Tuesday- who knows why.";
+
+        TextAnnotation basicTextAnnotation = null;
+        try {
+            basicTextAnnotation = processor.createBasicTextAnnotation("test", "test", source);
+            processor.addView(basicTextAnnotation, ViewNames.NER_CONLL);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        assertTrue(basicTextAnnotation.hasView(ViewNames.NER_CONLL));
+        List<Constituent> nes = basicTextAnnotation.getView(ViewNames.NER_CONLL).getConstituents();
+        assertEquals(3, nes.size());
+        String tokForm = nes.get(0).getTokenizedSurfaceForm();
+        assertEquals("Jean-Pierre Thibault", tokForm);
     }
 }

@@ -109,7 +109,9 @@ public class PipelineFactory {
         }
         // using the default settings and changing the views
         ResourceManager fullRm = (new PipelineConfigurator()).getConfig(nonDefaultValues);
-        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+        boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
+
+        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen));
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return new SentencePipeline(taBldr, annotators, fullRm);
     }
