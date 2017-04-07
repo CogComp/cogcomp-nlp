@@ -60,16 +60,34 @@ public class EREReaderTest {
     public static void main(String[] args) {
 
 
-        String corpusDir =
+        /**
+         * ERE documents in release 2015E29: mainly newswire, some discussion format.
+         * This test uses the Event Argument Extraction version of the data, as this includes xml markup that makes
+         * the source files well-formed, and we are likely to need this reader for TAC EAE tasks. Moreover, the later
+         * ERE release uses this format.
+         */
+        String corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E29_DEFT_Rich_ERE_English_Training_Annotation_V2/data/";
+
+        String sourceDir = corpusDir + "source/mpdfxml/";
+        String annotationDir = corpusDir + "ere/mpdfxml/";
+        XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir);
+
+
+        corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
 
-        XmlTextAnnotation outputXmlTa = runTest(corpusDir);
+        sourceDir = corpusDir + "/data/source/";
+        annotationDir = corpusDir + "data/ere/";
 
+        outputXmlTa = runTest(sourceDir, annotationDir);
 
         corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
 
-        outputXmlTa = runTest(corpusDir);
+        sourceDir = corpusDir + "/data/source/";
+        annotationDir = corpusDir + "data/ere/";
+
+        outputXmlTa = runTest(sourceDir, annotationDir);
 
         System.out.println("Testing EREMentionRelationReader...");
 
@@ -117,7 +135,7 @@ public class EREReaderTest {
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
-            emr = new EREMentionRelationReader("ERE", corpusDir, throwExceptionOnXmlTagMismatch);
+            emr = new EREMentionRelationReader("ERE", sourceDir, annotationDir, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -196,17 +214,17 @@ public class EREReaderTest {
     }
 
 
-    private static XmlTextAnnotation runTest(String corpusDir) {
+    private static XmlTextAnnotation runTest(String sourceDir, String annotationDir) {
 
         ERENerReader nerReader = null;
         boolean addNominalMentions = true;
         boolean throwExceptionOnXmlTagMismatch = true;
         try {
-            nerReader = new ERENerReader("ERE", corpusDir, addNominalMentions, throwExceptionOnXmlTagMismatch);
+            nerReader = new ERENerReader("ERE", sourceDir, annotationDir, addNominalMentions, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("ERROR: " + NAME
-                    + ": couldn't instantiate ERENerReader with corpus dir '" + corpusDir + ": "
+                    + ": couldn't instantiate ERENerReader with corpus dirs '" + sourceDir + ", " + annotationDir + ": "
                     + e.getMessage());
         }
 

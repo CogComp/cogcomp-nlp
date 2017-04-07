@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
@@ -102,8 +103,7 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
     public static final Set<String> deletableSpanTags = new HashSet<>();
     public static final Set<String> tagsToIgnore = new HashSet<>();
-
-
+    private static final String DATELINE = "dateline";
     private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
     /** these tags contain attributes we want to keep. */
     static private ArrayList<String> retainTags = new ArrayList<>();
@@ -124,6 +124,7 @@ public class EREDocumentReader extends XmlDocumentReader {
         tagsWithAtts.put(QUOTE, attributeNames);
 
         deletableSpanTags.add(QUOTE);
+        deletableSpanTags.add(DATELINE);
 
         tagsToIgnore.add(IMG);
         tagsToIgnore.add(SNIP);
@@ -134,11 +135,12 @@ public class EREDocumentReader extends XmlDocumentReader {
 
     /**
      * @param corpusName the name of the corpus, this can be anything.
-     * @param sourceDirectory the name of the directory containing the file.
+     * @param corpusSourceDir the path to the directory containing the source documents.
+     * @param corpusAnnotationDir the path to the directory containing the offset annotation documents.
      * @throws Exception
      */
-    public EREDocumentReader(String corpusName, String sourceDirectory, boolean throwExceptionOnXmlParseFail) throws Exception {
-        super(corpusName, sourceDirectory, buildXmlProcessor(throwExceptionOnXmlParseFail));
+    public EREDocumentReader(String corpusName, String corpusSourceDir, String corpusAnnotationDir, boolean throwExceptionOnXmlParseFail) throws Exception {
+        super(corpusName, corpusSourceDir, corpusAnnotationDir, buildXmlProcessor(throwExceptionOnXmlParseFail));
     }
 
     private static XmlTextAnnotationMaker buildXmlProcessor(boolean throwExceptionOnXmlParseFail) {
@@ -187,16 +189,16 @@ public class EREDocumentReader extends XmlDocumentReader {
      */
     @Override
     public List<List<Path>> getFileListing() throws IOException {
-
-        String sourceFileDir = super.getSourceDirectory() + "data/source/";
-        String annotationDir = super.getSourceDirectory() + "data/ere/";
         FilenameFilter filter = (dir, name) -> name.endsWith(getRequiredFileExtension());
         /*
          * returns the FULL PATH of each file
          */
-        List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceFileDir, filter));
+        String sourceDir = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
+        List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceDir, filter));
         LinkedList<String> annotationFileList = new LinkedList<>();
-        for ( String f : Arrays.asList(IOUtils.lsFilesRecursive(annotationDir, filter))) {
+
+        String annotationDir = resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key);
+        for (String f : Arrays.asList(IOUtils.lsFilesRecursive(annotationDir, filter))) {
             annotationFileList.add(getFileName(f));
         }
 
@@ -215,7 +217,7 @@ public class EREDocumentReader extends XmlDocumentReader {
             for (String annFile : annotationFileList) {
                 if (annFile.startsWith(stem)) {
                     logger.debug("Processing file '{}'", annFile);
-                    sourceAndAnnotations.add(Paths.get(annotationDir + annFile));
+                    sourceAndAnnotations.add(Paths.get(resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key) + annFile));
                     sourceAndAnnotations.remove(annFile);
                 }
             }

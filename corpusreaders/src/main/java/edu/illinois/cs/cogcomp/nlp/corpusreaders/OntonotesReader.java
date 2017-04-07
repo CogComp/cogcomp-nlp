@@ -37,7 +37,7 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
     private int taCounter;
 
     public OntonotesReader(String ontonotesDirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory));
+        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory, ontonotesDirectory));
         this.taCounter = 0;
 
     }

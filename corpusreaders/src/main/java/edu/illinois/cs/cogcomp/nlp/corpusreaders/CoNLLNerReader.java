@@ -45,7 +45,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
      * @param conlldirectory
      */
     public CoNLLNerReader(String conlldirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory));
+        super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory, conlldirectory));
         this.taCounter = 0;
     }
 
@@ -127,7 +127,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
         this.textAnnotations = new ArrayList<>();
 
         String corpusdirectory =
-                this.resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY.key);
+                this.resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
 
         // In case the input argument is a single file
         if (!IOUtils.isDirectory(corpusdirectory)) {

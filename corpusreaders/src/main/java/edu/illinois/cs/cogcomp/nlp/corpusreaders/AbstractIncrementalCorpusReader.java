@@ -64,9 +64,11 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
     /**
      * this method is called by the base class constructor, so all subclass-specific object
      * initialization must be done here.
+     *
+     * This default implementation assumes that annotation and source are both provided in the same file.
      */
     protected void initializeReader() {
-        this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY);
+        this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY);
         try {
             fileList = getFileListing();
         } catch (IOException e) {
