@@ -79,7 +79,7 @@ public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
      */
     public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome));
+        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome, treebankHome));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 

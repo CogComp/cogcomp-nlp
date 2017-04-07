@@ -22,8 +22,6 @@ import org.w3c.dom.Node;
 import java.nio.file.Path;
 import java.util.*;
 
-import static org.ojalgo.netio.CharacterRing.length;
-
 
 /**
  * Reads ERE data and instantiates TextAnnotations with the corresponding NER view. Also provides
@@ -89,9 +87,9 @@ public class ERENerReader extends EREDocumentReader {
      *        named entities (proper nouns/personal names) are read.
      * @throws Exception
      */
-    public ERENerReader(String corpusName, String sourceDirectory, boolean addNominalMentions, boolean throwExceptionOnXmlTagMismatch)
+    public ERENerReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean addNominalMentions, boolean throwExceptionOnXmlTagMismatch)
             throws Exception {
-        super(corpusName, sourceDirectory, throwExceptionOnXmlTagMismatch);
+        super(corpusName, sourceDirectory, annotationDirectory, throwExceptionOnXmlTagMismatch);
         this.addNominalMentions = addNominalMentions;
         this.viewName = addNominalMentions ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
         allowOffsetSlack = true;

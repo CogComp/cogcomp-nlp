@@ -87,6 +87,9 @@ public class AnnotationFixer {
             for (String k : first.getAttributeKeys()) {
                 combinedSent.addAttribute(k, first.getAttribute(k));
             }
+            for (String k : second.getAttributeKeys()) {
+                combinedSent.addAttribute(k, first.getAttribute(k));
+            }
 
             sentences.removeConstituent(first);
             sentences.removeConstituent(second);
