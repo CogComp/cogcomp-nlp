@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.pipeline.common;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
@@ -48,7 +49,6 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
             AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
     public static final Property USE_SRL_INTERNAL_PREPROCESSOR = new Property(
             SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE);
-    public static final Property SPLIT_ON_DASH = new Property("splitOnDash", TRUE);
 
     /**
      * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable annotators in
@@ -57,6 +57,14 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
      *     causes local problems for individual annotators.
      */
     public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", FALSE);
+
+    /**
+     * if 'true', set tokenizer to split on hyphen.  Default is 'false' until CCG NLP annotator modules are updated
+     *     to account for hyphen-split training data.
+     */
+    public static final Property SPLIT_ON_DASH = new Property(TextAnnotationBuilder.SPLIT_ON_DASH, FALSE);
+
+
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
