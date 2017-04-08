@@ -7,40 +7,51 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.junit.Test;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
- * Test XmlTextAnnotationMaker functionality.
+ * Test XmlTextAnnotationMaker functionality. Non-unit test, as it requires access to ERE corpus.
  *
  * @author mssammon
  */
 
 public class XmlTextAnnotationMakerTest {
 
+    /**
+     * tags and attributes reader needs to handle
+     * copied from EREDocumentReader
+     */
+    public static final String QUOTE = "quote";
+    public static final String AUTHOR = "author";
+    public static final String ID = "id";
+    public static final String DATETIME = "datetime";
+    public static final String POST = "post";
+    public static final String DOC = "doc";
+    public static final String ORIG_AUTHOR = "orig_author";
+    public static final String HEADLINE = "headline";
+    public static final String IMG = "img";
+
     private static final String XML_FILE =
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
                 "data/source/ENG_DF_001241_20150407_F0000007T.xml";
 
+
+    private static final String XML_FILE2 =
+            "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
+                    "data/source/ENG_DF_001237_20150411_F0000008Ew.xml"; //ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
     // public void testNerReader() {
 
     /**
@@ -51,26 +62,21 @@ public class XmlTextAnnotationMakerTest {
 
         TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
-        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-        Set<String> attributeNames = new HashSet<>();
-        attributeNames.add("author");
-        attributeNames.add("id");
-        attributeNames.add("datetime");
-        tagsWithAtts.put("post", attributeNames);
-        attributeNames = new HashSet<>();
-        attributeNames.add("id");
-        tagsWithAtts.put("doc", attributeNames);
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add("headline");
-        tagsWithText.add("post");
-        Set<String> tagsToIgnore = new HashSet<>();
+        boolean throwExceptionOnXmlTagMiss = true;
+        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(EREDocumentReader.deletableSpanTags,
+                EREDocumentReader.tagsWithAtts, EREDocumentReader.tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
         XmlTextAnnotationMaker maker = new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
 
+        testWithFile(maker, XML_FILE2);
+
+        testWithFile(maker, XML_FILE);
+    }
+
+    private static void testWithFile(XmlTextAnnotationMaker maker, String xmlFile) {
         String xmlStr = null;
         try {
-            xmlStr = LineIO.slurp(XML_FILE);
+            xmlStr = LineIO.slurp(xmlFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.exit(-1);
@@ -100,5 +106,32 @@ public class XmlTextAnnotationMakerTest {
         String transformStr = st.getTransformedText().substring(thirdStartChar, thirdEndChar);
         System.out.println("corresponding substring from transformed text: " + transformStr);
         System.out.println("original text substring using mapped offsets: " + origWordForm);
+
+        if (!transformStr.equals(origWordForm))
+            System.err.println("ERROR: test failed: word '" + transformStr + "' not identical to original word '" +
+                origWordForm + "'. ");
+
+        View mentionView = output.getTextAnnotation().getView(ViewNames.SENTENCE);
+
+        for (Constituent c : mentionView.getConstituents()) {
+            int start = c.getStartCharOffset();
+            int end = c.getEndCharOffset();
+            String cleanForm = c.getSurfaceForm();
+            IntPair sourceSpan = st.getOriginalOffsets(start, end);
+            System.out.println("------\nclean: " + cleanForm  + ", (" + start + ", " + end + ")");
+            System.out.println("------\nsource: " + st.getOrigText().substring(sourceSpan.getFirst(), sourceSpan.getSecond()) +
+                ", (" + sourceSpan.getFirst() + ", " + sourceSpan.getSecond() + ")\n");
+        }
+        Map<IntPair, Map<String, String>> atts = output.getXmlMarkup();
+
+        for (IntPair offsets : atts.keySet()) {
+            System.out.print(offsets.getFirst() + "-" + offsets.getSecond() + ": ");
+            Map<String, String> attVals = atts.get(offsets);
+            for (String attType : attVals.keySet())
+                System.out.println(attType + ": " + attVals.get(attType));
+            System.out.println();
+        }
+
     }
+
 }

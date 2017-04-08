@@ -67,6 +67,12 @@
             <artifactId>illinois-quantifier-models</artifactId>
             <version>2.0.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <build>
