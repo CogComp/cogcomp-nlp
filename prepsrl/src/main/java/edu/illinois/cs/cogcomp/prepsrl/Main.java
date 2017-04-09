@@ -40,7 +40,6 @@ public class Main {
         ConstrainedPrepSRLClassifier classifier = new ConstrainedPrepSRLClassifier();
         Parser testDataReader = new PrepSRLDataReader(dataDir, "test");
         TestDiscrete tester = new TestDiscrete();
-        tester.addNull(DataReader.CANDIDATE);
         TestDiscrete.testDiscrete(tester, classifier, new PrepSRLClassifier.Label(),
                 testDataReader, true, 100);
         testDataReader.close();

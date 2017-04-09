@@ -13,11 +13,11 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import edu.illinois.cs.cogcomp.core.utilities.XMLUtils;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
 import edu.illinois.cs.cogcomp.lbjava.nlp.DataReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
@@ -42,7 +42,6 @@ import java.util.*;
  * @author Christos Christodoulopoulos
  */
 public class PrepSRLDataReader extends DataReader {
-    private ResourceManager rm = PrepSRLConfigurator.defaults();
     private static Preprocessor preprocessor;
     private static Logger log = LoggerFactory.getLogger(PrepSRLDataReader.class);
 
@@ -83,7 +82,7 @@ public class PrepSRLDataReader extends DataReader {
 
     private Preprocessor getPreprocessor() {
         if (preprocessor == null)
-            preprocessor = new Preprocessor(rm);
+            preprocessor = new Preprocessor(PrepSRLConfigurator.defaults());
         return preprocessor;
     }
 
@@ -144,7 +143,38 @@ public class PrepSRLDataReader extends DataReader {
                 currentNodeId++;
             }
         }
-        return textAnnotations;
+        return consolidate(textAnnotations);
+    }
+
+    /**
+     * Consolidate {@link TextAnnotation}s that have the same text but separate gold views. This is
+     * required because of the nature of the Semeval annotations (one annotation per example).
+     *
+     * @param tas The list of {@link TextAnnotation}s with the Semeval annotations
+     * @return The consolidated list of {@link TextAnnotation}s
+     */
+    private List<TextAnnotation> consolidate(List<TextAnnotation> tas) {
+        List<TextAnnotation> consolidatedTAs = new ArrayList<>();
+        Map<Integer, List<TextAnnotation>> taMap = new HashMap<>();
+        for (TextAnnotation ta : tas) {
+            int key = ta.getText().hashCode();
+            List<TextAnnotation> annotations = taMap.getOrDefault(key, new ArrayList<>());
+            annotations.add(ta);
+            taMap.put(key, annotations);
+        }
+        for (int key : taMap.keySet()) {
+            List<TextAnnotation> annotations = taMap.get(key);
+            TextAnnotation ta1 = annotations.get(0);
+            View view1 = ta1.getView(viewName);
+            for (int i = 1; i < annotations.size(); i++) {
+                TextAnnotation taI = annotations.get(i);
+                View viewI = taI.getView(viewName);
+                for (Constituent c : viewI.getConstituents())
+                    view1.addConstituent(c);
+            }
+            consolidatedTAs.add(ta1);
+        }
+        return consolidatedTAs;
     }
 
     private static void lazyReadMaps() {
@@ -188,19 +218,10 @@ public class PrepSRLDataReader extends DataReader {
     @Override
     public List<Constituent> candidateGenerator(TextAnnotation ta) {
         List<Constituent> candidates = new ArrayList<>();
-        for (Constituent c : ta.getView(ViewNames.TOKENS).getConstituents()) {
-            int tokenId = c.getStartSpan();
-            if (isPrep(ta, tokenId))
-                candidates.add(c
-                        .cloneForNewViewWithDestinationLabel(viewName, DataReader.CANDIDATE));
-            // Now check bigrams & trigrams
-            Constituent multiWordPrep = isBigramPrep(ta, tokenId, viewName);
-            if (multiWordPrep != null)
-                candidates.add(multiWordPrep);
-            multiWordPrep = isTrigramPrep(ta, tokenId, viewName);
-            if (multiWordPrep != null)
-                candidates.add(multiWordPrep);
-        }
+        // The Semeval data is annotated with only one preposition per example sentence.
+        // Thus, every other preposition in the same sentence will not have a gold annotation,
+        // and will be mistakenly considered as a CANDIDATE. To fix this, only add prepositions
+        // from the gold annotations.
         return getFinalCandidates(ta.getView(viewName), candidates);
     }
 

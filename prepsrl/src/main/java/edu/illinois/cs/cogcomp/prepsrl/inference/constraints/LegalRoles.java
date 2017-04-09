@@ -15,8 +15,8 @@ import edu.illinois.cs.cogcomp.prepsrl.PrepSRLClassifier;
 import edu.illinois.cs.cogcomp.prepsrl.data.PrepSRLDataReader;
 
 /**
- * An ILP constraint that enforces a specific set allowed roles to each preposition.
- * The list of allowed roles is read on the fly from `sense2role.csv` (in the resources folder).
+ * An ILP constraint that enforces a specific set allowed roles to each preposition. The list of
+ * allowed roles is read on the fly from `sense2role.csv` (in the resources folder).
  */
 public class LegalRoles extends ParameterizedConstraint {
     private static ResourceManager rm = PrepSRLConfigurator.defaults();
