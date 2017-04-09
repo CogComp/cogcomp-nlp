@@ -51,7 +51,7 @@ abstract public class DataReader implements Parser {
         dbHandler = new TextAnnotationMapDBHandler(cacheDB);
 
         if (!dbHandler.isCached(corpusName, cacheDB)) {
-            logger.info("Dataset not cached.");
+            logger.info("Dataset " + viewName + "(" + corpusName + ")" + " not cached.");
             List<TextAnnotation> textAnnotations = readData();
             int processed = 0;
             int total = textAnnotations.size();
@@ -70,7 +70,7 @@ abstract public class DataReader implements Parser {
             }
             logger.info("Finished pre-processing {} TextAnnotations.", processed);
         }
-        logger.info("Dataset cached.");
+        logger.info("Dataset " + viewName + "(" + corpusName + ")" + " cached.");
         dataset = dbHandler.getDataset(corpusName);
     }
 

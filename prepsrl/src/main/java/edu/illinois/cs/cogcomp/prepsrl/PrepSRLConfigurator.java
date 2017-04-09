@@ -14,8 +14,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class PrepSRLConfigurator extends Configurator {
     public static Property MODELS_DIR = new Property("ModelsDir", "models");
-    public static Property PREP_DATA_DIR =
-            new Property("Prepositions", "data/srl-prep");
+    public static Property PREP_DATA_DIR = new Property("Prepositions", "data/srl-prep");
     public static Property DISABLE_CACHE = new Property(
             AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
 

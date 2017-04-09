@@ -70,6 +70,7 @@ public class PrepSRLClassifier extends SparseNetworkLearner {
 
     public static class FeatureExtractor extends Classifier {
         protected Classifier[] featureSet;
+
         public FeatureExtractor() {
             containingPackage = PACKAGE_NAME;
             name = CLASS_NAME + "$FeatureExtractor";
@@ -78,6 +79,7 @@ public class PrepSRLClassifier extends SparseNetworkLearner {
                             new WordBigrams(), new POSBigrams(), govFeatures, objFeatures,
                             prevWordFeatures, prevVerbFeatures};
         }
+
         public FeatureVector classify(Object example) {
             FeatureVector result = new FeatureVector();
             for (Classifier featExtractor : featureSet)

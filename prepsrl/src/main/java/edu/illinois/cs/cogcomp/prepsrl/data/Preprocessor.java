@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An annotation preprocessor for {@link PrepSRLDataReader}. The configurations parameters
- * are set in {@link PrepSRLConfigurator}.
+ * An annotation preprocessor for {@link PrepSRLDataReader}. The configurations parameters are set
+ * in {@link PrepSRLConfigurator}.
  */
 public class Preprocessor {
     private static Logger logger = LoggerFactory.getLogger(Preprocessor.class);
