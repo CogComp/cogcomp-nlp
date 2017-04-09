@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * An {@link Annotator} that adds a {@link TokenLabelView} for Prepositional SRL.
- * This consists of role information for each preposition (e.g. Location, Instrument, etc)
- * and (syntactic) argument information (governor, object) to the syntactic heads of the
- * governing and object phrases of the preposition respectively.
+ * An {@link Annotator} that adds a {@link TokenLabelView} for Prepositional SRL. This consists of
+ * role information for each preposition (e.g. Location, Instrument, etc) and (syntactic) argument
+ * information (governor, object) to the syntactic heads of the governing and object phrases of the
+ * preposition respectively.
  *
  * @author Christos Christodoulopoulos
  */
@@ -38,7 +38,7 @@ public class PrepSRLAnnotator extends Annotator {
     /**
      * default: don't use lazy initialization
      */
-    public PrepSRLAnnotator(){
+    public PrepSRLAnnotator() {
         this(true);
     }
 
@@ -54,8 +54,8 @@ public class PrepSRLAnnotator extends Annotator {
 
     public PrepSRLAnnotator(boolean lazilyInitialize, ResourceManager rm) {
         super(ViewNames.SRL_PREP, new String[] {ViewNames.POS, ViewNames.SHALLOW_PARSE,
-                ViewNames.LEMMA, ViewNames.DEPENDENCY}, lazilyInitialize,
-                new DepConfigurator().getConfig(rm));
+                ViewNames.LEMMA, ViewNames.DEPENDENCY}, lazilyInitialize, new DepConfigurator()
+                .getConfig(rm));
     }
 
     @Override
