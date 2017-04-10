@@ -11,6 +11,8 @@ import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepAnnotator;
@@ -285,5 +287,5 @@ public class PipelineFactory {
 
         return viewGenerators;
     }
-
+   
 }

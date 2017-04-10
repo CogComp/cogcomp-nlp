@@ -7,8 +7,8 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tagore</artifactId>
-    <name>Tagore: A suite of external annotators</name>
+    <artifactId>illinois-external-annotators</artifactId>
+    <name>A suite of external annotators</name>
     <description>Pre-processes text documents with different NLP annotations</description>
 
     <dependencies>
