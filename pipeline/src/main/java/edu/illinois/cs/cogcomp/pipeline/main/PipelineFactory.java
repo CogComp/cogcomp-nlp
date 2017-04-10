@@ -172,7 +172,7 @@ public class PipelineFactory {
      * @param nonDefaultRm ResourceManager with all non-default values for Annotators
      * @return a Map from annotator view name to annotator
      */
-    public static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
+    private static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
             throws IOException {
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
         String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE);

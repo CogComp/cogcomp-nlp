@@ -25,8 +25,8 @@
         <module>quantifier</module>
         <module>depparse</module>
         <module>prepsrl</module>
-        <!--pipeline should always be the last item to compile, since some of the previous dependencies have direct dependency on the pipeline-->
         <module>pipeline</module>
+        <module>tagore</module>
     </modules>
 
     <properties>
