@@ -31,23 +31,25 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class PathLSTMAnnotator2 extends Annotator {
+public class PathLSTMHandler extends Annotator {
     private CompletePipeline SRLpipeline;
 
-    public PathLSTMAnnotator2(String viewName, String[] requiredViews) {
-        super(ViewNames.SRL_VERB, TextPreProcessor.requiredViews);
+    public PathLSTMHandler(boolean lazilyInitialize) {
+        super(ViewNames.SRL_VERB,
+                new String[]{}, // empty, because the required views are provided internally
+                lazilyInitialize);
     }
 
-    private final static Logger log = LoggerFactory.getLogger(PathLSTMAnnotator2.class);
+    private final static Logger log = LoggerFactory.getLogger(PathLSTMHandler.class);
 
     @Override
     public void initialize( ResourceManager rm ) {
         try {
             Datastore ds = new Datastore();
-            File lemmaModel = ds.getDirectory("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
-            File parserModel = ds.getDirectory("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.parser.model", 3.3, false);
-            File posModel = ds.getDirectory("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.postagger.model", 3.3, false);
-            File pathLSTM = ds.getDirectory("uk.ac.ed.inf", "pathLSTM.model", 1.0, false);
+            File lemmaModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
+            File parserModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.parser.model", 3.3, false);
+            File posModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.postagger.model", 3.3, false);
+            File pathLSTM = ds.getFile("uk.ac.ed.inf", "pathLSTM.model", 1.0, false);
             // SRL pipeline options (currently hard-coded)
             String[] args = new String[]{
                     "eng",

@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.pipeline.main;
 
+import cogcomp.Datastore;
+import cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -14,9 +16,10 @@ import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMAnnotator2;
+import edu.illinois.cs.cogcomp.pipeline.common.ExternalToolsConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +44,7 @@ public class ExternalAnnotatorServiceFactory {
 
     /**
      * create an AnnotatorService with components specified by the ResourceManager (to override
-     * defaults in {@link PipelineConfigurator}
+     * defaults in {@link ExternalToolsConfigurator}
      *
      * @param rm non-default config options
      * @return AnnotatorService with specified NLP components
@@ -51,9 +54,9 @@ public class ExternalAnnotatorServiceFactory {
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException,
             AnnotatorException {
         // Merges default configuration with the user-specified overrides.
-        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
-        Boolean splitOnDash = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH);
-        boolean isSentencePipeline = fullRm.getBoolean(PipelineConfigurator.USE_SENTENCE_PIPELINE.key);
+        ResourceManager fullRm = (new ExternalToolsConfigurator()).getConfig(rm);
+        Boolean splitOnDash = fullRm.getBoolean(ExternalToolsConfigurator.SPLIT_ON_DASH);
+        boolean isSentencePipeline = fullRm.getBoolean(ExternalToolsConfigurator.USE_SENTENCE_PIPELINE.key);
 
         TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
 
@@ -65,31 +68,34 @@ public class ExternalAnnotatorServiceFactory {
     /**
      * instantiate a set of annotators for use in an AnnotatorService object by default, will use
      * lazy initialization where possible -- change this behavior with the
-     * {@link PipelineConfigurator#USE_LAZY_INITIALIZATION} property.
+     * {@link ExternalToolsConfigurator#USE_LAZY_INITIALIZATION} property.
      *
      * @return a Map from annotator view name to annotator
      */
     private static Map<String, Annotator> buildAnnotators()
             throws IOException {
         Map<String, Annotator> viewGenerators = new HashMap<>();
-        PathLSTMAnnotator2 pathSRL = new PathLSTMAnnotator2(ViewNames.SRL_VERB, new String[]{});
+        PathLSTMHandler pathSRL = new PathLSTMHandler(true);
         viewGenerators.put(pathSRL.getViewName(), pathSRL);
 
         return viewGenerators;
     }
 
-    public static void main(String[] args) throws AnnotatorException, IOException {
-        System.out.println("Starting to run the dummy . . . ");
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-        System.out.println(ta.getAvailableViews());
-        ta.addView(ViewNames.SRL_VERB, ta.getView(ViewNames.PARSE_GOLD));
-        System.out.println(ta.getAvailableViews());
-        System.out.println("Building ExternalAnnotatorServiceFactory . . . ");
-        AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();
-        System.out.println("Done building ExternalAnnotatorServiceFactory . . . ");
-        service.addView(ta, ViewNames.SRL_VERB);
-        System.out.println("After ExternalAnnotatorServiceFactory  addView . . . ");
-        System.out.println(ta.getAvailableViews());
+    public static void main(String[] args) throws AnnotatorException, IOException, DatastoreException {
+//        System.out.println("Starting to run the dummy . . . ");
+//        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
+//        System.out.println(ta.getAvailableViews());
+//        ta.addView(ViewNames.SRL_VERB, ta.getView(ViewNames.PARSE_GOLD));
+//        System.out.println(ta.getAvailableViews());
+//        System.out.println("Building ExternalAnnotatorServiceFactory . . . ");
+//        AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();
+//        System.out.println("Done building ExternalAnnotatorServiceFactory . . . ");
+//        service.addView(ta, ViewNames.SRL_VERB);
+//        System.out.println("After ExternalAnnotatorServiceFactory  addView . . . ");
+//        System.out.println(ta.getAvailableViews());
+        Datastore ds = new Datastore();
+        File lemmaModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
+
     }
 
 }
