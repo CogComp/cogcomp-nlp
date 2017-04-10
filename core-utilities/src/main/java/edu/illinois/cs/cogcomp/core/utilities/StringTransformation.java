@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import gnu.trove.map.hash.TIntIntHashMap;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -21,39 +22,39 @@ import java.util.*;
  *
  * @author mssammon
  */
-public class StringTransformation {
+public class StringTransformation implements Serializable {
 
-    /** source text: immutable record of the starting point for all transformations */
-    private final String origText;
+    private static final long serialVersionUID = 1526472295622723447L;
 
+    private static final boolean DEBUG = false;
+
+        /** source text: immutable record of the starting point for all transformations */
+    private final String origText; ;
     /** tracks whether transformedText field is out of date. */
     boolean isModified;
-
     /**
      * The state of the text after edits are applied (excluding pending edits).
      * The client gets this String, computes a set of desired changes in a single pass, then applies the updates.
      */
     private String transformedText;
-
     /**
      * store a change of length value at transformedText character for each operation performed on transformedText
      *     These are temporary, until getTransformedText() is called. Order is useful, so use TreeMap.
      */
-    private TreeMap<Integer, Integer> currentOffsetModifications;
-
+    private TreeMap<Integer, Pair<Integer, EditType>> currentOffsetModifications;
     /** store a change of length value at origText character offset for each operation performed on origText. */
-    private TreeMap<Integer, Integer> recordedOffsetModifications;
-
+    private TreeMap<Integer, Pair<Integer, EditType>> recordedOffsetModifications;
     /** records changes to offsets to transformed string to retrieve corresponding character in original string */
-    private TreeMap<Integer, Integer> recordedInverseModifications;
-
+    private TreeMap<Integer, Pair<Integer, EditType>> recordedInverseModifications;
     /** a list of edits, that respects the order in which they were specified. Client responsible for coherence. */
-    private List<Pair<IntPair, Pair<String, String>>> edits;
-
+    private List<Edit> edits;
     /** stores deleted regions, for which no mappings can be generated */
     private TreeMap<Integer, IntPair> unmappedOffsets;
 
-
+    /**
+     * Constructor.
+     * @param origText the original form of the string whose modifications you want to track.
+     */
     public StringTransformation(String origText) {
         this.origText = origText;
         this.transformedText = origText;
@@ -110,26 +111,32 @@ public class StringTransformation {
         int newLen = newStr.length();
         int origLen = textEnd - textStart;
         int netDiff = newLen - origLen;
+        EditType editType = EditType.SUBST;
+
         if (netDiff != 0) { // else just replaced, no offset changes needed.
             int putIndex = textStart + origLen; // for insertion, add the modifier at the end of the original span
-            if (netDiff < 0) // involves deleting chars: after new str, modify the offsets
+
+            if (netDiff < 0) { // involves deleting chars: after new str, modify the offsets
                 putIndex = textStart + newLen;
+                editType = (newLen == 0) ? EditType.DELETE : EditType.REDUCE;
+            }
+            else  // expanding or inserting
+                editType = (origLen == 0) ? EditType.INSERT : EditType.EXPAND;
 
             // account for any previous modifications at this index
             if (currentOffsetModifications.containsKey(putIndex))
-                netDiff += currentOffsetModifications.get(putIndex);
+                netDiff += currentOffsetModifications.get(putIndex).getFirst();
 
-            currentOffsetModifications.put(putIndex, netDiff);
+            currentOffsetModifications.put(putIndex, new Pair(new Integer(netDiff), editType));
         }
         IntPair transformOffsets = new IntPair(start, end);
         String origStr = transformedText.substring(textStart, textEnd);
+
         // edit offsets encode affected substring allowing for previous edits in current pass
-        edits.add(new Pair(transformOffsets, new Pair(origStr, newStr)));
+        edits.add(new Edit(transformOffsets, origStr, newStr, editType));
         isModified = true;
         return transformOffsets;
     }
-
-
 
     /**
      * given an offset in the current transformedString stored by this object, return the corresponding
@@ -141,10 +148,14 @@ public class StringTransformation {
     private int computeOriginalOffset(int modOffset) {
 
         int currentChange = 0;
+        EditType editType = EditType.DELETE;
+
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
-            if (changeIndex > modOffset)
+            if (changeIndex > modOffset - currentChange)
                 break;
-            currentChange += recordedOffsetModifications.get(changeIndex);
+            currentChange += recordedOffsetModifications.get(changeIndex).getFirst();
+            editType = recordedOffsetModifications.get(changeIndex).getSecond();
+
         }
         return modOffset - currentChange; //inverse of edit effect
     }
@@ -161,61 +172,70 @@ public class StringTransformation {
                  method
              */
             isModified = false;
-            for ( Pair<IntPair, Pair<String, String>> edit : edits ) {
-                IntPair editOffsets = edit.getFirst();
+            /*
+             * it's OK for edits to be unsorted: all edit offsets are computed relative to the previous edits
+             *    in the sequence
+             */
+            for ( Edit edit : edits ) {
+                IntPair editOffsets = edit.offsets;
                 String before = currentStr.substring(0, editOffsets.getFirst());
                 String after = currentStr.substring(editOffsets.getSecond());
-                currentStr = before + edit.getSecond().getSecond() + after;
+                currentStr = before + edit.newString + after;
             }
             transformedText = currentStr;
 
             /*
              * store pending recorded offsets while computing absolute offsets for all current edits
              */
-            Map<Integer, Integer> toAdd = new TreeMap();
+            Map<Integer, Pair<Integer, EditType>> toAdd = new TreeMap();
 
             for (Integer modOffset : currentOffsetModifications.keySet()) {
-                Integer currentMod = currentOffsetModifications.get(modOffset);
+
+                Integer currentMod = currentOffsetModifications.get(modOffset).getFirst();
+                EditType currentEditType = currentOffsetModifications.get(modOffset).getSecond();
                 /*
                  * recorded offset mods MUST be made with respect to ORIGINAL offsets -- not the current transformed
                  *     string.
                  */
                 Integer absoluteModOffset = computeOriginalOffset(modOffset);
 
-                if (recordedOffsetModifications.containsKey(absoluteModOffset))
-                    currentMod += recordedOffsetModifications.get(absoluteModOffset);
-
+                // TODO: verify that it's OK to just keep the original edit type
                 if (toAdd.containsKey(absoluteModOffset))
-                    currentMod += toAdd.get(absoluteModOffset);
+                    currentMod += toAdd.get(absoluteModOffset).getFirst();
 
-                toAdd.put(absoluteModOffset, currentMod);
+                toAdd.put(absoluteModOffset, new Pair<>(currentMod, currentEditType));
             }
 
-            // the entries in toAdd *cannot* conflict, because they come from a single pass
+            /**
+             * The entries in toAdd *cannot* conflict, because they come from a single pass
+             * Now we need to merge them with previously recorded offset mods
+             */
             if (recordedOffsetModifications.isEmpty())
                 recordedOffsetModifications.putAll(toAdd);
             else {
-                TreeMap<Integer, Integer> safeAdds = new TreeMap<>();
+                TreeMap<Integer, Pair<Integer,EditType>> safeAdds = new TreeMap<>();
 
                 int lastKeyPos = 0; // stores position of greatest of last key, or the last key's effective edit position
                 for (int key : toAdd.keySet()) {
-                    int mod = toAdd.get(key);
+                    int mod = toAdd.get(key).getFirst();
+                    EditType editType = toAdd.get(key).getSecond();
 
                     if (key < lastKeyPos)
                         key = lastKeyPos; // move to after last entry key + edit
                     /*
                      * it gets a bit tricky if a new deletion overlaps older edits: you need to split up the new edit.
+                     * TODO: merge edits instead
                      */
                     for (int oldKey : recordedOffsetModifications.keySet()) {
                         if (mod == 0)
                             break;
                         // am I at the same index?
-                        if (oldKey == key) {
-                            key = Math.max(key + 1, key - recordedOffsetModifications.get(oldKey)); //move on...
+                        if (oldKey == key) { //if edit is an expansion, still advance one position
+                            key = Math.max(key + 1, key - recordedOffsetModifications.get(oldKey).getFirst()); //move on...
                         }
                         // am I within the window of a prior edit?
                         else if (oldKey < key) {
-                            int oldMod = recordedOffsetModifications.get(oldKey);
+                            int oldMod = recordedOffsetModifications.get(oldKey).getFirst();
                             int diff = oldKey - key; // negative, to compare with negative mod
                             if (diff > oldMod) { // edits interfere; can't happen if oldMod is positive (insertion)
                                 key = oldKey - oldMod; // modifier doesn't change: edit not applied yet; update edit
@@ -224,11 +244,11 @@ public class StringTransformation {
                         } else if (oldKey > key) { // Is next edit within window of my edit?
                             int diff = key - oldKey; // negative, to compare with -ve mod
                             if (diff > mod) { //if diff > mod, mod is negative and edits interfere.
-                                safeAdds.put(key, diff); // delete up to current edit
+                                safeAdds.put(key, new Pair<>(diff, editType)); // delete up to current edit
                                 mod = mod - diff; // part of modification not accounted for; again, recall both negative
-                                key = oldKey - recordedOffsetModifications.get(oldKey); // move to index after old edit
+                                key = oldKey - recordedOffsetModifications.get(oldKey).getFirst(); // move to index after old edit
                             } else { // either mod is positive, or next edit does not interfere
-                                safeAdds.put(key, mod);
+                                safeAdds.put(key, new Pair<>(mod, editType));
                                 lastKeyPos = Math.max(key, key - mod); // update if -ve mod
                                 mod = 0; //break from the loop
                             }
@@ -236,7 +256,7 @@ public class StringTransformation {
                     }
 
                     if (mod != 0) // past all old edits, haven't added it yet...
-                        safeAdds.put(key, mod);
+                        safeAdds.put(key, new Pair<>(mod, editType));
                 }
                 recordedOffsetModifications.putAll(safeAdds);
             }
@@ -252,12 +272,41 @@ public class StringTransformation {
             /*
              * recordedOffsetModifications: at char index X, modify running offset modifier by Y
              */
+            int cumulativeOffset = 0;
             for (Integer transformModIndex : recordedOffsetModifications.keySet()) {
-                int baseOffset = transformModIndex;
-                int transformMod = recordedOffsetModifications.get(transformModIndex);
-                recordedInverseModifications.put(baseOffset,  -transformMod);
+                int baseIndex = transformModIndex;
+                int transformMod = recordedOffsetModifications.get(transformModIndex).getFirst();
+                EditType editType = recordedOffsetModifications.get(transformModIndex).getSecond();
+                /*
+                 * suppose tranform offset is 33, and modifier is -33 (delete the first 33 chars of the orig string).
+                 * Therefore we want index 0 of the transformed string to map to offset 33 of the orig string.
+                 * So we update the cumulative offset *after* adding the current mod.
+                 * Subsequent edits to orig string increase the total difference between the transformed string
+                 *    base index and the corresponding orig string index, hence the need for cumulative offset to
+                 *    be subtracted from the orig index. (mod is -ve, therefore subtraction even though it's added
+                 *    to the offset from the perspective of the original string
+                 */
+                int effectiveIndex = baseIndex - cumulativeOffset;
+                int effectiveMod = transformMod;
+                if (recordedInverseModifications.containsKey(effectiveIndex))
+                    effectiveMod -= recordedInverseModifications.get(effectiveIndex).getFirst();
+
+                // TODO: verify that using most recent transform type is correct if there was already an edit in RIM
+                recordedInverseModifications.put(effectiveIndex,  new Pair<>(-effectiveMod, editType));
+                cumulativeOffset -= transformMod;
             }
 
+            if (DEBUG) {
+                int lastIndex = 0;
+                int lastOrigOffset = 0;
+                for (int revInd : recordedInverseModifications.keySet()) {
+                    int diff = revInd - lastIndex;
+                    String origSub = origText.substring(lastOrigOffset, lastOrigOffset + diff);
+                    System.err.println(lastIndex + "-" + revInd + ": " + origSub);
+                    lastOrigOffset = lastOrigOffset + diff + recordedInverseModifications.get(revInd).getFirst();
+                    lastIndex = revInd;
+                }
+            }
             /*
              * cleanup: remove temporary state that has now been resolved
              */
@@ -265,7 +314,6 @@ public class StringTransformation {
             edits.clear();
         }
     }
-
 
     /**
      * given an offset in the current transformedString stored by this offset, return the corresponding
@@ -278,11 +326,10 @@ public class StringTransformation {
         for (Integer changeIndex : currentOffsetModifications.keySet()) {
             if (changeIndex > modOffset)
                 break;
-            currentChange += currentOffsetModifications.get(changeIndex);
+            currentChange += currentOffsetModifications.get(changeIndex).getFirst();
         }
         return modOffset + currentChange;
     }
-
 
     /**
      * given a character offset in the original string, find the corresponding offset in the
@@ -297,9 +344,14 @@ public class StringTransformation {
         for (Integer changeIndex : recordedOffsetModifications.keySet()) {
             if (changeIndex > origOffset) // + currentChange) // account for previous changes in computing current position
                 break;
-            int change = recordedOffsetModifications.get(changeIndex);
+            int change = recordedOffsetModifications.get(changeIndex).getFirst();
+            EditType editType = recordedOffsetModifications.get(changeIndex).getSecond();
+
             if (origOffset + change < changeIndex) // change is deletion, orig offset in deleted window
                 change = changeIndex - origOffset; // set to index recorded for deletion, rather than prior index
+
+            //TODO: logic for behavior based on edit type; only when edit boundary touches origOffset
+
             currentChange += change;
         }
 
@@ -308,23 +360,57 @@ public class StringTransformation {
 
     /**
      * given a pair of offsets into the transformed text, retrieve the corresponding offsets in the original text.
+     * This behavior treats the end offset differently from the start offset (accounts for changes after the end)
      * @param transformStart start of transformed text substring
      * @param transformEnd end of transformed text substring
      * @return offsets in original text corresponding to the specified span in the transformed string
      */
     public IntPair getOriginalOffsets(int transformStart, int transformEnd) {
 
-//        return new IntPair(computeOriginalOffset(transformStart), computeCurrentOffset(transformEnd));
         int origStart = transformStart;
         int origEnd = transformEnd;
 
         for (Integer changeIndex : this.recordedInverseModifications.keySet()) {
-            if (changeIndex < origStart)
-                origStart += recordedInverseModifications.get(changeIndex);
-            if (changeIndex <= origEnd)
-                origEnd += recordedInverseModifications.get(changeIndex);
+
+            EditType editType = recordedInverseModifications.get(changeIndex).getSecond();
+            int offsetMod = recordedInverseModifications.get(changeIndex).getFirst();
+
+            if (changeIndex <= transformStart) {
+                // earlier -- always apply edit
+                origStart += offsetMod;
+            }
+//            else if (changeIndex == transformStart) {
+//                if (EditType.DELETE.equals(editType)) {
+//                    origStart += offsetMod;
+//                }
+//            }
+            if (changeIndex < transformEnd) {
+                origEnd += offsetMod;
+            }
+            else if (changeIndex == transformEnd) {
+                if (!EditType.DELETE.equals(editType))
+                    origEnd += offsetMod;
+            }
         }
 
         return new IntPair(origStart, origEnd);
+    }
+
+
+public enum  EditType { INSERT, DELETE, REDUCE, SUBST, EXPAND }
+
+    private class Edit {
+
+        public final IntPair offsets;
+        public final String origString;
+        public final String newString;
+        public final EditType type;
+
+        public Edit( IntPair offsets, String origStr, String newStr, EditType type) {
+            this.offsets = offsets;
+            this.origString = origStr;
+            this.newString = newStr;
+            this.type = type;
+        }
     }
 }

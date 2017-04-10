@@ -51,8 +51,8 @@ public class EREMentionRelationReader extends ERENerReader {
      * @param sourceDirectory the name of the directory containing the file.
      * @throws Exception
      */
-    public EREMentionRelationReader(String corpusName, String sourceDirectory) throws Exception {
-        super(corpusName, sourceDirectory, true);
+    public EREMentionRelationReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean throwExceptionOnXmlTagMismatch) throws Exception {
+        super(corpusName, sourceDirectory, annotationDirectory, true, throwExceptionOnXmlTagMismatch); //addNominalMentions is 'true'
         numRelationsInSource = 0;
         numRelationsGenerated = 0;
         numRelationMentionsInSource = 0;
@@ -72,10 +72,11 @@ public class EREMentionRelationReader extends ERENerReader {
 
 
     @Override
-    public List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
+    public List<XmlTextAnnotation> getAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception {
 
-        TextAnnotation sourceTa = super.getTextAnnotationsFromFile(corpusFileListEntry).get(0);
+        XmlTextAnnotation xmlTa = super.getAnnotationsFromFile(corpusFileListEntry).get(0);
+        TextAnnotation sourceTa = xmlTa.getTextAnnotation();
         // SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
         CoreferenceView mentionView = new CoreferenceView(getViewName(), NAME, sourceTa, 1.0);
 
@@ -83,8 +84,8 @@ public class EREMentionRelationReader extends ERENerReader {
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
-            super.getEntitiesFromFile(doc, mentionView);
-            super.getFillersFromFile(doc, mentionView);
+            super.getEntitiesFromFile(doc, mentionView, xmlTa);
+            super.getFillersFromFile(doc, mentionView, xmlTa);
 
 
             /**
@@ -95,7 +96,7 @@ public class EREMentionRelationReader extends ERENerReader {
         }
         sourceTa.addView(getViewName(), mentionView);
 
-        return Collections.singletonList(sourceTa);
+        return Collections.singletonList(xmlTa);
     }
 
     /**

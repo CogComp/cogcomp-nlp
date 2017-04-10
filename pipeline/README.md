@@ -34,8 +34,8 @@ of several other components for which it is a dependency.
 1. Lemmatizer: <1G memory, no dependencies.
 2. Part-of-Speech tagger: <1G, no dependencies.
 3. Chunker: <1G, requires Part-of-Speech tagger.
-4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 2G, no dependencies.
-5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 4G, no dependencies.
+4. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (CoNLL): 4G, no dependencies.
+5. [Named Entity Recognizer](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) (OntoNotes) 6G, no dependencies.
 6. [Constituency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): 1G, no dependencies.
 6. [Dependency Parser](http://nlp.stanford.edu/software/lex-parser.shtml) (Stanford): shares resources of Constituency parser so no individual footprint; no dependencies.
 7. Dependency Parser (CogComp): <1G requires Part-of-Speech tagger, Chunker.

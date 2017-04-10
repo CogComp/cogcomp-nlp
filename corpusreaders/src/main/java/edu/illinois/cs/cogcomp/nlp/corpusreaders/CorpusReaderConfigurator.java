@@ -20,7 +20,22 @@ public class CorpusReaderConfigurator extends Configurator {
     public static final Property CORPUS_NAME = new Property("corpusName", "dummyCorpusName");
     public static final Property CORPUS_DIRECTORY = new Property("corpusDirectory",
             "dummyCorpusDirectory");
+    public static final Property SOURCE_DIRECTORY = new Property("sourceDirectory", "dummySourceDir");
+    public static final Property ANNOTATION_DIRECTORY = new Property("annotationDirectory", "dummyAnnotationDir");
 
+    public static ResourceManager buildResourceManager(String corpus) {
+        Properties props = new Properties();
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpus);
+        return new ResourceManager(props);
+    }
+
+    public static ResourceManager buildResourceManager(String corpusName, String sourceDir, String annotationDir) {
+        Properties props = new Properties();
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, sourceDir);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key, annotationDir);
+        return new ResourceManager(props);
+    }
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -31,19 +46,6 @@ public class CorpusReaderConfigurator extends Configurator {
     public ResourceManager getDefaultConfig() {
         Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY};
         return new ResourceManager(generateProperties(props));
-    }
-
-    public static ResourceManager buildResourceManager(String corpus) {
-        Properties props = new Properties();
-        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpus);
-        return new ResourceManager(props);
-    }
-
-    public static ResourceManager buildResourceManager(String corpusName, String corpusDirectory) {
-        Properties props = new Properties();
-        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
-        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, corpusDirectory);
-        return new ResourceManager(props);
     }
 
 }

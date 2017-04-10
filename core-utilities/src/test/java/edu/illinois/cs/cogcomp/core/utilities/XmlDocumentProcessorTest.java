@@ -5,7 +5,7 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.utilities;
+package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -30,12 +31,17 @@ public class XmlDocumentProcessorTest {
 
     private static final String ORIG_TEXT = "<doc>\n<headline>&quot;No way. Really?&quot;</headline>\n" +
             "<distraction>don&apos;t print me. Don&apos;t &quot;save&quot; me.</distraction>\n<post author='John Marston' toop='1'>\n" +
-            "Hi, &amp; how do you do?</post>\n</doc>\n";
+            "<quote orig_author=\"him\">According to Garp:\n<quote orig_author=\"Garp\">Whassup?</quote>\nWhat's up with that?</quote>\n" +
+            "Hi, &amp; how do you <img href=\"www.madeup.org/picture\">do?</post>\n</doc>\n";
 
     private static final String CLEAN_TEXT = "\"No way. Really?\"\nHi, & how do you do?\n";
     private static final IntPair AUTHOR_OFFSETS = new IntPair(149, 161);
     private static final String AUTHOR = "author";
     private static final String NAME = "John Marston";
+    private static final IntPair DISTR_OFFSETS = new IntPair(68, 120);
+    private static final String DISTR_SUBSTR = "don&apos;t print me. Don&apos;t &quot;save&quot; me.";
+    private static final String INNER_QUOT_STR = "Whassup?";
+    private static final IntPair IQ_OFFSETS = new IntPair(243, 251);
 
 
     @Test
@@ -58,17 +64,18 @@ cuba
         attributeNames = new HashSet<>();
         attributeNames.add("id");
         tagsWithAtts.put("doc", attributeNames);
-        Set<String> tagsWithText = new HashSet<>();
-        tagsWithText.add("headline");
-        tagsWithText.add("post");
+        Set<String> deletableSpanTags = new HashSet<>();
+        deletableSpanTags.add("quote");
+        deletableSpanTags.add("distraction");
         Set<String> tagsToIgnore = new HashSet<>();
-        tagsToIgnore.add("distraction");
+        tagsToIgnore.add("img");
+        tagsToIgnore.add("snip");
 
-        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
+//        StringTransformation origTextSt = new StringTransformation(ORIG_TEXT);
+        boolean throwExceptionOnXmlTagMiss = true;
+        XmlDocumentProcessor proc = new XmlDocumentProcessor(deletableSpanTags, tagsWithAtts, tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        XmlDocumentProcessor proc = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, tagsToIgnore);
-
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(origTextSt);
+        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(ORIG_TEXT);
 
         // check that we retained the right attributes, cleaned up the text, generated a sensible cleaned text, and can
         // recover the offsets of strings in the original text.
@@ -86,6 +93,26 @@ cuba
         assertEquals(NAME, attInfo.get(AUTHOR));
         String origAuthStr = st.getOrigText().substring(AUTHOR_OFFSETS.getFirst(), AUTHOR_OFFSETS.getSecond());
         assertEquals(NAME, origAuthStr);
+
+        assertTrue(retainedTagInfo.containsKey(DISTR_OFFSETS));
+        attInfo = retainedTagInfo.get(DISTR_OFFSETS);
+        assertTrue(attInfo.containsKey(SPAN_INFO));
+        assertEquals("distraction", attInfo.get(SPAN_INFO));
+        assertEquals(DISTR_SUBSTR, ORIG_TEXT.substring(DISTR_OFFSETS.getFirst(), DISTR_OFFSETS.getSecond()));
+
+        assertTrue(retainedTagInfo.containsKey(IQ_OFFSETS));
+        int iqStart = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getFirst());
+        int iqEnd = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getSecond());
+
+        assertEquals("", cleanText.substring(iqStart, iqEnd)); // deleted
+        assertEquals(ORIG_TEXT.indexOf("Whassup"), IQ_OFFSETS.getFirst());
+
+
+        int doStart = cleanText.indexOf("do?");
+        int doEnd = doStart + 3;
+
+        IntPair origYouOffsets = st.getOriginalOffsets(doStart, doEnd);
+        assertEquals("do?", ORIG_TEXT.substring(origYouOffsets.getFirst(), origYouOffsets.getSecond()));
     }
 
 }
