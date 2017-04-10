@@ -56,13 +56,15 @@ public class ExternalAnnotatorServiceFactory {
         // Merges default configuration with the user-specified overrides.
         ResourceManager fullRm = (new ExternalToolsConfigurator()).getConfig(rm);
         Boolean splitOnDash = fullRm.getBoolean(ExternalToolsConfigurator.SPLIT_ON_DASH);
-        boolean isSentencePipeline = fullRm.getBoolean(ExternalToolsConfigurator.USE_SENTENCE_PIPELINE.key);
+        boolean isSentencePipeline =
+                fullRm.getBoolean(ExternalToolsConfigurator.USE_SENTENCE_PIPELINE.key);
 
-        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
+        TextAnnotationBuilder taBldr =
+                new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
 
         Map<String, Annotator> annotators = buildAnnotators();
-        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm) :
-                new SentencePipeline(taBldr, annotators, fullRm);
+        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm)
+                : new SentencePipeline(taBldr, annotators, fullRm);
     }
 
     /**
@@ -72,30 +74,11 @@ public class ExternalAnnotatorServiceFactory {
      *
      * @return a Map from annotator view name to annotator
      */
-    private static Map<String, Annotator> buildAnnotators()
-            throws IOException {
+    private static Map<String, Annotator> buildAnnotators() throws IOException {
         Map<String, Annotator> viewGenerators = new HashMap<>();
         PathLSTMHandler pathSRL = new PathLSTMHandler(true);
         viewGenerators.put(pathSRL.getViewName(), pathSRL);
 
         return viewGenerators;
     }
-
-    public static void main(String[] args) throws AnnotatorException, IOException, DatastoreException {
-//        System.out.println("Starting to run the dummy . . . ");
-//        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-//        System.out.println(ta.getAvailableViews());
-//        ta.addView(ViewNames.SRL_VERB, ta.getView(ViewNames.PARSE_GOLD));
-//        System.out.println(ta.getAvailableViews());
-//        System.out.println("Building ExternalAnnotatorServiceFactory . . . ");
-//        AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();
-//        System.out.println("Done building ExternalAnnotatorServiceFactory . . . ");
-//        service.addView(ta, ViewNames.SRL_VERB);
-//        System.out.println("After ExternalAnnotatorServiceFactory  addView . . . ");
-//        System.out.println(ta.getAvailableViews());
-        Datastore ds = new Datastore();
-        File lemmaModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
-
-    }
-
 }
