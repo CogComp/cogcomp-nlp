@@ -39,6 +39,8 @@ public class MainServer {
 
     private static ArgumentParser argumentParser;
 
+    private static AnnotatorService pipeline = null;
+
     static {
         // Setup Argument Parser with options.
         argumentParser =
@@ -46,6 +48,10 @@ public class MainServer {
                         "Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
                 .dest("port").help("Port to run the webserver.");
+    }
+
+    public static void setAnnotatorSetvice(AnnotatorService service) {
+        pipeline = service;
     }
 
     public static void main(String[] args) {
@@ -62,7 +68,6 @@ public class MainServer {
 
         port(parseResults.getInt("port"));
 
-        AnnotatorService pipeline = null;
         try {
             logger.info("Starting to load the pipeline . . . ");
             printMemoryDetails();
