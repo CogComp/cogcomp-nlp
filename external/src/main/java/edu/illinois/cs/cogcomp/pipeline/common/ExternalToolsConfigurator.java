@@ -27,24 +27,26 @@ public class ExternalToolsConfigurator extends AnnotatorConfigurator {
             SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE);
 
     /**
-     * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable annotators in
-     *     a "per-sentence" way: it will split the text into sentences, process each individually, then splice the
-     *     annotations together. This allows for partial annotation of documents in cases where document text
-     *     causes local problems for individual annotators.
+     * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable
+     * annotators in a "per-sentence" way: it will split the text into sentences, process each
+     * individually, then splice the annotations together. This allows for partial annotation of
+     * documents in cases where document text causes local problems for individual annotators.
      */
     public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", FALSE);
 
     /**
-     * if 'true', set tokenizer to split on hyphen.  Default is 'false' until CCG NLP annotator modules are updated
-     *     to account for hyphen-split training data.
+     * if 'true', set tokenizer to split on hyphen. Default is 'false' until CCG NLP annotator
+     * modules are updated to account for hyphen-split training data.
      */
-    public static final Property SPLIT_ON_DASH = new Property(TextAnnotationBuilder.SPLIT_ON_DASH, FALSE);
+    public static final Property SPLIT_ON_DASH = new Property(TextAnnotationBuilder.SPLIT_ON_DASH,
+            FALSE);
 
 
 
     /**
-     * get a ResourceManager object with the default key/value pairs for this configurator
-     * default SRL_TYPE is Verb.
+     * get a ResourceManager object with the default key/value pairs for this configurator default
+     * SRL_TYPE is Verb.
+     * 
      * @return a non-null ResourceManager with appropriate values set.
      */
     @Override

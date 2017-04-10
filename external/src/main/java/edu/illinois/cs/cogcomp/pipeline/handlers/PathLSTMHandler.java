@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.pipeline.handlers;
 
 import cogcomp.Datastore;
@@ -35,30 +42,32 @@ public class PathLSTMHandler extends Annotator {
     private CompletePipeline SRLpipeline;
 
     public PathLSTMHandler(boolean lazilyInitialize) {
-        super(ViewNames.SRL_VERB,
-                new String[]{}, // empty, because the required views are provided internally
+        super(ViewNames.SRL_VERB, new String[] {}, // empty, because the required views are provided
+                                                   // internally
                 lazilyInitialize);
     }
 
     private final static Logger log = LoggerFactory.getLogger(PathLSTMHandler.class);
 
     @Override
-    public void initialize( ResourceManager rm ) {
+    public void initialize(ResourceManager rm) {
         try {
             Datastore ds = new Datastore();
-            File lemmaModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
-            File parserModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.parser.model", 3.3, false);
-            File posModel = ds.getFile("org.cogcomp.mate-tools", "CoNLL2009-ST-English-ALL.anna.postagger.model", 3.3, false);
+            File lemmaModel =
+                    ds.getFile("org.cogcomp.mate-tools",
+                            "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
+            File parserModel =
+                    ds.getFile("org.cogcomp.mate-tools",
+                            "CoNLL2009-ST-English-ALL.anna.parser.model", 3.3, false);
+            File posModel =
+                    ds.getFile("org.cogcomp.mate-tools",
+                            "CoNLL2009-ST-English-ALL.anna.postagger.model", 3.3, false);
             File pathLSTM = ds.getFile("uk.ac.ed.inf", "pathLSTM.model", 1.0, false);
             // SRL pipeline options (currently hard-coded)
-            String[] args = new String[]{
-                    "eng",
-                    "-lemma", lemmaModel.getAbsolutePath(),
-                    "-parser", parserModel.getAbsolutePath(),
-                    "-tagger", posModel.getAbsolutePath(),
-                    "-srl", pathLSTM.getAbsolutePath(),
-                    "-reranker", "-externalNNs",
-            };
+            String[] args =
+                    new String[] {"eng", "-lemma", lemmaModel.getAbsolutePath(), "-parser",
+                            parserModel.getAbsolutePath(), "-tagger", posModel.getAbsolutePath(),
+                            "-srl", pathLSTM.getAbsolutePath(), "-reranker", "-externalNNs",};
             CompletePipelineCMDLineOptions options = new CompletePipelineCMDLineOptions();
             options.parseCmdLineArgs(args);
             try {
@@ -76,8 +85,8 @@ public class PathLSTMHandler extends Annotator {
         log.debug("Input: {}", ta.getText());
 
         String viewName = ViewNames.SRL_VERB;
-        PredicateArgumentView pav = new PredicateArgumentView(viewName,
-                "PathLSTMGenerator", ta, 1.0);
+        PredicateArgumentView pav =
+                new PredicateArgumentView(viewName, "PathLSTMGenerator", ta, 1.0);
 
         List<String> words = new LinkedList<String>();
         words.add("<ROOT>"); // dummy ROOT token
@@ -88,13 +97,15 @@ public class PathLSTMHandler extends Annotator {
 
         for (Predicate p : parsed.getPredicates()) {
             // skip nominal predicates
-            if(p.getPOS().startsWith("N")) continue;
+            if (p.getPOS().startsWith("N"))
+                continue;
 
-            IntPair predicateSpan = new IntPair(p.getIdx()-1, p.getIdx());
+            IntPair predicateSpan = new IntPair(p.getIdx() - 1, p.getIdx());
             String predicateLemma = p.getLemma();
 
-            Constituent predicate = new Constituent("Predicate", viewName, ta,
-                    predicateSpan.getFirst(), predicateSpan.getSecond());
+            Constituent predicate =
+                    new Constituent("Predicate", viewName, ta, predicateSpan.getFirst(),
+                            predicateSpan.getSecond());
             predicate.addAttribute(PredicateArgumentView.LemmaIdentifier, predicateLemma);
 
             String sense = p.getSense();
@@ -108,7 +119,7 @@ public class PathLSTMHandler extends Annotator {
                 Set<Word> singleton = new TreeSet<Word>();
                 String label = p.getArgumentTag(a);
                 Yield y = a.getYield(p, label, singleton);
-                IntPair span = new IntPair(y.first().getIdx()-1, y.last().getIdx());
+                IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
 
                 assert span.getFirst() <= span.getSecond() : ta;
                 args.add(new Constituent(label, viewName, ta, span.getFirst(), span.getSecond()));
@@ -116,8 +127,7 @@ public class PathLSTMHandler extends Annotator {
             }
 
             pav.addPredicateArguments(predicate, args,
-                    relations.toArray(new String[relations.size()]),
-                    new double[relations.size()]);
+                    relations.toArray(new String[relations.size()]), new double[relations.size()]);
 
         }
 
@@ -129,7 +139,7 @@ public class PathLSTMHandler extends Annotator {
         // Check if all required views are present
         try {
             View srlView = getSRL(ta);
-            ta.addView( getViewName(), srlView);
+            ta.addView(getViewName(), srlView);
         } catch (Exception e) {
             e.printStackTrace();
             throw new AnnotatorException(e.getMessage());
