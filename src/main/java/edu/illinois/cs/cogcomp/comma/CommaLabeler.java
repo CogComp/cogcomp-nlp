@@ -35,7 +35,7 @@ public class CommaLabeler extends Annotator{
 
     public CommaLabeler (boolean lazilyInitialize) {
     	super(viewName, new String[]{CommaProperties.getInstance().useGold() ? ViewNames.PARSE_GOLD : ViewNames.PARSE_STANFORD,
-                ViewNames.POS, ViewNames.SHALLOW_PARSE}, true);
+                ViewNames.POS, ViewNames.SHALLOW_PARSE, ViewNames.NER_CONLL}, true);
     }
 
     @Override
