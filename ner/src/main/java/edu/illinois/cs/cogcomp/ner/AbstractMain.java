@@ -10,9 +10,6 @@
  */
 package edu.illinois.cs.cogcomp.ner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,7 +34,6 @@ import java.io.InputStreamReader;
  * @author redman
  */
 abstract public class AbstractMain extends Thread {
-    private static Logger logger = LoggerFactory.getLogger(AbstractMain.class);
 
     /**
      * This class takes a list of command line arguments. Typically a configuration file will be
