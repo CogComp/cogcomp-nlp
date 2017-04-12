@@ -19,15 +19,16 @@ public class ResourcesConfig {
 	public static String truncated;
 	public static String phrase2vec;
 	public static String memorybasedESA; 
-	public static int dimension;
+	public static int paragram_dimension;
 	public static String pageIDMapping;
+	public static int embedding_dimension;
 	
 	public ResourcesConfig(){
 		initialization();
 	}
 	
 	public static void initialization () {
-		initialization("conf/configurations.properties");
+		initialization("config/configurations.properties");
 	}
 	
 	public static void initialization (String configFile) {
@@ -38,14 +39,14 @@ public class ResourcesConfig {
 		} catch (ConfigurationException e1) {
 			e1.printStackTrace();
 		}
-		word2vec = config.getString("cogcomp.word2vec", "data/MemoryBasedESA.txt");
-		paragram = config.getString("cogcomp.paragram", "data/MemoryBasedESA.txt");
-		truncated = config.getString("cogcomp.truncated", "data/MemoryBasedESA.txt");
-		phrase2vec = config.getString("cogcomp.phrase2vec", "data/MemoryBasedESA.txt");
-		pageIDMapping = config.getString("cogcomp.esa.complex.pageIDMapping", "data/wikipedia/wiki_structured/wikiPageIDMapping.txt");
-		memorybasedESA = config.getString("cogcomp.esa.memory.wordIndex", "data/MemoryBasedESA.txt");
-		dimension = config.getInt("cogcomp.esa.memory.wordIndex", 200);
-
+		word2vec = config.getString("cogcomp.word2vec");
+		paragram = config.getString("cogcomp.paragram");
+		truncated = config.getString("cogcomp.truncated");
+		phrase2vec = config.getString("cogcomp.phrase2vec");
+		pageIDMapping = config.getString("cogcomp.esa.complex.pageIDMapping");
+		memorybasedESA = config.getString("cogcomp.esa.memory.wordIndex");
+		paragram_dimension = config.getInt("cogcomp.paragram.dimension", 25);
+		embedding_dimension = config.getInt("cogcomp.embedding.dimension", 200);
 		
 		System.out.println("Configuration Done.");
 	}

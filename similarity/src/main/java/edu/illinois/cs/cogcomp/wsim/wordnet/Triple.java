@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wsim.wn;
+package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 
 public class Triple<L,M,R> {

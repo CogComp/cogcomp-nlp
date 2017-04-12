@@ -7,8 +7,11 @@ import edu.illinois.cs.cogcomp.llm.common.LlmConstants;
 import edu.illinois.cs.cogcomp.llm.config.LlmConfigurator;
 import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import edu.illinois.cs.cogcomp.sim.Metric;
+import edu.illinois.cs.cogcomp.sim.MetricResponse;
 import edu.illinois.cs.cogcomp.sim.PhraseSim;
 import edu.illinois.cs.cogcomp.sim.WNSimSimple;
+import edu.illinois.cs.cogcomp.sim.WordSim;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +31,7 @@ public class WordComparator implements Comparator< String, EntailmentResult >
 	protected boolean defaultUpwardMonotone = true;
 	
 	private Metric wordSim;
-    private Metric phraseSim;
+  
 	
 	private Logger logger = LoggerFactory.getLogger( WordComparator.class );
     private LlmConstants.WordMetric metric;
@@ -61,12 +64,8 @@ public class WordComparator implements Comparator< String, EntailmentResult >
             this.metric = LlmConstants.WordMetric.valueOf( wordComparator );
 
 
-			if( LlmConstants.WordMetric.WNSIM.name().equals( wordComparator ) )
-    			wordSim = new WNSimSimple();
-            else if ( LlmConstants.WordMetric.PARAGRAM.name().equals( wordComparator ) )
-            {
-                phraseSim = PhraseSim.getInstance( rm_ );
-            }
+            wordSim = new WordSim(wordComparator);
+
 
 		}
 
@@ -87,25 +86,9 @@ public class WordComparator implements Comparator< String, EntailmentResult >
 			score = 1.0;
 			reason = "Identity";
 		}else{
-            edu.illinois.cs.cogcomp.sim.MetricResponse result = null;
-            if ( metric.equals( LlmConstants.WordMetric.WNSIM ) )
-            {
-                result = wordSim.compare(specific_, general_);
-            }
-            else if ( metric.equals(LlmConstants.WordMetric.PARAGRAM))
-            {
-                String[] first = { specific_ };
-                String[] second = { general_ };
-
-                result = phraseSim.compare( first, second );
-            }
-            else
-            {
-                throw new IllegalArgumentException( "metric type was not recognized. Instantiate WordComparator with " +
-                "value from Constants.WordMetric (" + StringUtils.join( LlmConstants.WordMetric.values(), "; " ) + ")." );
-            }
-
-			score = result.score;
+            MetricResponse result = wordSim.compare(specific_, general_);
+            
+            score = result.score;
 			reason = result.reason;
 
 			isEntailed = (Math.abs(score) > entailmentThreshold);

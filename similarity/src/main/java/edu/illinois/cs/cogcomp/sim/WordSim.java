@@ -7,8 +7,8 @@ import edu.illinois.cs.cogcomp.wsim.embedding.EmbeddingConstant;
 import edu.illinois.cs.cogcomp.wsim.embedding.TruncatedWord2vec;
 import edu.illinois.cs.cogcomp.wsim.esa.MemoryBasedESA;
 import edu.illinois.cs.cogcomp.wsim.esa.ResourcesConfig;
+import edu.illinois.cs.cogcomp.wsim.wordnet.WNSim;
 import edu.illinois.cs.cogcomp.wsim.embedding.Embedding;
-import edu.illinois.cs.cogcomp.wsim.wn.WNSim;
 
 
 public class WordSim implements Metric<String> {
@@ -27,11 +27,11 @@ public class WordSim implements Metric<String> {
 	
 	public WordSim(){
 		ResourcesConfig config=new ResourcesConfig();
-		Embedding paragram = new Embedding(config.paragram, config.dimension);
-		Embedding word2vec = new Embedding(config.word2vec, config.dimension);
-		Embedding truncated =new Embedding(config.truncated, config.dimension);
-		Embedding phrase2vec=new Embedding(config.phrase2vec, config.dimension);
-		MemoryBasedESA esa=new MemoryBasedESA(config);
+		paragram = new Embedding(config.paragram, config.paragram_dimension);
+		//word2vec = new Embedding(config.word2vec, config.embedding_dimension);
+		//truncated = new TruncatedWord2vec(config.word2vec, config.embedding_dimension,8);
+		//phrase2vec=new Embedding(config.phrase2vec, config.embedding_dimension);
+		//esa=new MemoryBasedESA(config);
 		try {
 			wnsim = new WNSim();
 		} catch (IOException e) {
@@ -65,5 +65,36 @@ public class WordSim implements Metric<String> {
 
 		return new MetricResponse(score,  method);
 	}
+	
+	
+	public WordSim(String method) {
+		this.method=method;
+		ResourcesConfig config=new ResourcesConfig();
+
+		if(method.equals(EmbeddingConstant.word2vec)) {
+			word2vec = new Embedding(config.word2vec, config.embedding_dimension);
+		}
+		else if(method.equals(EmbeddingConstant.paragram)) {
+			paragram = new Embedding(config.paragram, config.paragram_dimension);
+		}
+		else if(method.equals(EmbeddingConstant.truncated)) {
+			truncated = new TruncatedWord2vec(config.word2vec, config.embedding_dimension,8);
+		}
+		else if(method.equals(EmbeddingConstant.phrase2vec)) {
+			phrase2vec=new Embedding(config.phrase2vec, config.embedding_dimension);
+		}
+		else if(method.equals(EmbeddingConstant.esa)) {
+			esa=new MemoryBasedESA(config);
+		}
+		else if(method.equals(EmbeddingConstant.wordnet)) {
+			try {
+				wnsim = new WNSim();
+			} catch (IOException e) {
+			}
+		} else
+			throw new IllegalArgumentException("Requires an legal word comparison metric");
+ 
+	}
+	
 
 }

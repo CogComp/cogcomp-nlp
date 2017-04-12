@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wsim.wn;
+package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.sim.Metric;

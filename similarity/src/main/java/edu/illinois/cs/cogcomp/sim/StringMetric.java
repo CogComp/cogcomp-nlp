@@ -3,7 +3,7 @@ package edu.illinois.cs.cogcomp.sim;
 import java.util.HashMap;
 import java.util.Map;
 
-import edu.illinois.cs.cogcomp.wsim.wn.WnsimConstants;
+import edu.illinois.cs.cogcomp.wsim.wordnet.WnsimConstants;
 
 /**
  * Basic functionality for Metric classes that can operate on a pair of String inputs, in addition to whatever

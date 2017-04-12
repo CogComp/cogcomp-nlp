@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wsim.wn;
+package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 /**
  * constant values used in wnsim

@@ -14,7 +14,7 @@ public class LlmConfigurator extends Configurator
 
     public static final Property USE_SIMPLE_SCORE = new Property( "useSimpleScore", Configurator.FALSE);
     public static final Property STOPWORD_FILE = new Property( "stopwordFile", "llmStopwords.txt");
-    public static final Property WORD_METRIC = new Property( "wordMetric", LlmConstants.WordMetric.WNSIM.name() ) ;
+    public static final Property WORD_METRIC = new Property( "wordMetric", "word2vec" ) ;
     public static final Property WORD_ENTAILMENT_THRESHOLD = new Property( "wordEntailmentThreshold", "0.001" );
     public static final Property LLM_ENTAILMENT_THRESHOLD = new Property( "llmThreshold", "0.5" );
     /**

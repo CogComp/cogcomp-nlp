@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wsim.wn;
+package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 import java.io.IOException;
 import java.util.ArrayList;

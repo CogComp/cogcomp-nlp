@@ -23,6 +23,15 @@ public class TruncatedWord2vec {
     private int dimension;
     private int bit;
 	
+    public TruncatedWord2vec ( String mapPath, int dimension, int bit ){
+    	try {
+    		loadTruncated(mapPath,dimension,bit);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    
     private void loadTruncated( String vectorFilename, int dimension, int bit ) throws FileNotFoundException {
         
         DB db = DBMaker.memoryDB().make();
