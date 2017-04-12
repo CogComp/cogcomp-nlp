@@ -1,0 +1,9 @@
+debug	false
+useStopwords	true
+useLemmas	true
+useMetric	true
+stopwordFile	llmStopwords.txt
+useSimpleScore	false
+wordEntailmentThreshold	0.00001
+llmThreshold	0.5
+

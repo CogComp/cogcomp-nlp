@@ -1,0 +1,10 @@
+debug	true
+useStopwords	true
+useLemmas	true
+useMetric	false
+stopwordFile	llmStopwords.txt
+useSimpleScore	true
+wordEntailmentThreshold	0.00001
+llmThreshold	0.5
+wnPath		data/WordNet_3-0/dict
+

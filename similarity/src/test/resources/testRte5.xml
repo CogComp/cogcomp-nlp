@@ -1,0 +1,14 @@
+<testset>
+	<pair id="329" entailment="CONTRADICTION" task="IE">
+		<t>The pilot who stole a light aircraft yesterday from Canada and landed in the central United States is now in custody. Adam Dylan Leon, a 31-year-old Canadian citizen, stole a Cessna 172 Skyhawk light aircraft from an airfield in Thunder Bay, Ontario, Canada. After taking off, the airplane went off course toward the United States. The State Capitol in Madison, Wisconsin was briefly evacuated, but the aircraft went southwest of the city and personnel were allowed back in. Two F-16 fighters have been dispatched to follow the Cessna which later landed near US 60 in Ellsinore, Missouri, but NORAD spokesman Mike Kucharek said that the aircraft was not thought to be a terrorist threat.</t>
+		<h>Adam Dylan Leon is the owner of a Cessna 172 Skyhawk light aircraft.</h>
+	</pair>
+	<pair id="330" entailment="ENTAILMENT" task="IE">
+		<t>Scuderia Toro Rosso is part of the Red Bull stable, and is considered the &#145;junior team' to Red Bull Sports Drink billionaire owner Dietrich Mateschitz' primary Red Bull Racing F1 team. They recently picked up an option on Bourdais for 2008, an encouraging sign that the Frenchman may finally achieve his life-long goal of driving in F1. Toro Rosso is based on the former Minardi F1 team, a perennial back-marker but fan favorite. Minardi ex-owner Paul Stoddard now commandeers the new Team Minardi USA in Champ Car.</t>
+		<h>Red Bull Sports Drink belongs to Dietrich Mateschitz.</h>
+	</pair>
+	<pair id="331" entailment="ENTAILMENT" task="IE">
+		<t>Managers at Central Wisconsin Airport in Mosinee, Wisconsin earlier said the facility was preparing for a forced landing of the aircraft, but the attempt to force it to land was scrubbed. The aircraft later crossed the border out of Wisconsin and passed over Illinois north of the city of St. Louis, Missouri. It flew further south before landing in Ellsinore on Route 60, at which point the pilot fled on foot. Attempts to establish contact with or discern the intentions of the pilot were unsuccessful. The distance from Thunder Bay to Ellsinore is 795.1 miles (1279.6 kilometers), near the reported maximum range of a Cessna 172, but authorities say the aircraft had two hours of fuel left. Only Leon is believed to have been on board the aircraft.</t>
+		<h>Illinois borders on Wisconsin.</h>
+	</pair>
+</testset>
