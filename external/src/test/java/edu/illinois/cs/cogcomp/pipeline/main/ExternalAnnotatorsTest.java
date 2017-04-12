@@ -19,11 +19,11 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 
 /**
- * Tests for NLP pipeline
+ * Tests for external annotators
  *
- * @author khashabi
+ * @author khashab2
  */
-public class CachingPipelineTest {
+public class ExternalAnnotatorsTest {
 
     private AnnotatorService service = null;
 
@@ -35,9 +35,8 @@ public class CachingPipelineTest {
     @Test
     public void testExternalAnnotations() throws AnnotatorException {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-        String vuName = ViewNames.SRL_VERB + "_PathLSTM";
-        service.addView(ta,vuName);
-        assertTrue(ta.hasView(vuName));
-        assertTrue(ta.getView(vuName).getConstituents().size() > 5);
+        service.addView(ta,ViewNames.SRL_VERB_PATH_LSTM);
+        assertTrue(ta.hasView(ViewNames.SRL_VERB_PATH_LSTM));
+        assertTrue(ta.getView(ViewNames.SRL_VERB_PATH_LSTM).getConstituents().size() > 5);
     }
 }

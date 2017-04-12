@@ -42,7 +42,7 @@ public class PathLSTMHandler extends Annotator {
     private CompletePipeline SRLpipeline;
 
     public PathLSTMHandler(boolean lazilyInitialize) {
-        super(ViewNames.SRL_VERB + "_PathLSTM", new String[] {}, /* empty, because the required views are provided internally */
+        super(ViewNames.SRL_VERB_PATH_LSTM, new String[] {}, /* empty, because the required views are provided internally */
                 lazilyInitialize);
     }
 
