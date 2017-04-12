@@ -42,7 +42,7 @@ public class CommaLabeler extends Annotator{
     public void initialize(ResourceManager resourceManager) {
         try {
             classifier = new LocalCommaClassifier();
-            Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
+            Datastore ds = new Datastore();
             File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-models", 2.2,false);
             String folder = f.toString() + File.separator;
             classifier.readLexicon(folder + "LocalCommaClassifier.lex" );
