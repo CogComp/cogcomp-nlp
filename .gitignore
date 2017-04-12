@@ -24,4 +24,4 @@ data/output
 
 
 ### LBJ-generated files
-src/main/java/edu/illinois/cs/cogcomp/comma/lbj
+# src/main/java/edu/illinois/cs/cogcomp/comma/lbj
