@@ -44,7 +44,7 @@ public class CommaLabeler extends Annotator{
             classifier = new LocalCommaClassifier();
             Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
             File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-models", 2.2,false);
-            String folder = f.toString() + File.separator + "comma-srl-models" + File.separator;
+            String folder = f.toString() + File.separator;
             classifier.readLexicon(folder + "LocalCommaClassifier.lex" );
             classifier.readModel(folder + "LocalCommaClassifier.lc" );
         } catch (DatastoreException e) {
