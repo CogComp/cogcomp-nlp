@@ -1,0 +1,2 @@
+wnPath  src/main/resources/WordNet_3-0/dict
+paraPath  src/main/resources/paraphrase.txt
