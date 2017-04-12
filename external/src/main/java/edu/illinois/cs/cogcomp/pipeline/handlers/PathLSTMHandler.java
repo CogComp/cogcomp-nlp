@@ -42,8 +42,7 @@ public class PathLSTMHandler extends Annotator {
     private CompletePipeline SRLpipeline;
 
     public PathLSTMHandler(boolean lazilyInitialize) {
-        super(ViewNames.SRL_VERB + "_PathLSTM", new String[] {}, // empty, because the required views are provided
-                                                   // internally
+        super(ViewNames.SRL_VERB + "_PathLSTM", new String[] {}, /* empty, because the required views are provided internally */
                 lazilyInitialize);
     }
 
@@ -84,7 +83,6 @@ public class PathLSTMHandler extends Annotator {
     private PredicateArgumentView getSRL(TextAnnotation ta) throws Exception {
         log.debug("Input: {}", ta.getText());
 
-        String viewName = ViewNames.SRL_VERB;
         PredicateArgumentView pav =
                 new PredicateArgumentView(viewName, "PathLSTMGenerator", ta, 1.0);
 
@@ -145,10 +143,4 @@ public class PathLSTMHandler extends Annotator {
             throw new AnnotatorException(e.getMessage());
         }
     }
-
-    @Override
-    public String getViewName() {
-        return ViewNames.SRL_VERB;
-    }
-
 }
