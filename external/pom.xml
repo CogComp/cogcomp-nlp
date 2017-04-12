@@ -27,6 +27,12 @@
             <artifactId>joda-time</artifactId>
             <version>2.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
