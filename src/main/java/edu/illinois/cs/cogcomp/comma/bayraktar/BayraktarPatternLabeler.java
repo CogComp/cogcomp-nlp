@@ -25,7 +25,7 @@ public class BayraktarPatternLabeler {
     	String ANNOTATION_SOURCE_DIR = properties.getBayraktarAnnotationsDir() + File.separator;
     	if(properties.useDatastoreToReadData()) {
 			try {
-				Datastore ds = new Datastore();
+				Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
 				File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-data", 2.2,false);
 				ANNOTATION_SOURCE_DIR = f.getAbsolutePath() + File.separator + "comma-srl-data" + File.separator +
 						"Bayraktar-SyntaxToLabel" + File.separator + "modified" + File.separator;
