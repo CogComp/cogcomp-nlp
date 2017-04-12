@@ -51,7 +51,8 @@ public class PathLSTMHandler extends Annotator {
     @Override
     public void initialize(ResourceManager rm) {
         try {
-            Datastore ds = new Datastore();
+            // TODO: move the end-point url to the resource configurator
+            Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
             File lemmaModel =
                     ds.getFile("org.cogcomp.mate-tools",
                             "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
