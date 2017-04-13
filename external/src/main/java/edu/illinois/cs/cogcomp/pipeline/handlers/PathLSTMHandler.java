@@ -39,11 +39,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class PathLSTMHandler extends Annotator {
+
+    public static final String SRL_VERB_PATH_LSTM = "SRL_VERB_PATH_LSTM";
+
     private CompletePipeline SRLpipeline;
 
     public PathLSTMHandler(boolean lazilyInitialize) {
-        super(ViewNames.SRL_VERB + "_PathLSTM", new String[] {}, // empty, because the required views are provided
-                                                   // internally
+        super(SRL_VERB_PATH_LSTM, new String[] {}, /* empty, because the required views are provided internally */
                 lazilyInitialize);
     }
 
@@ -52,7 +54,8 @@ public class PathLSTMHandler extends Annotator {
     @Override
     public void initialize(ResourceManager rm) {
         try {
-            Datastore ds = new Datastore();
+            // TODO: move the end-point url to the resource configurator
+            Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
             File lemmaModel =
                     ds.getFile("org.cogcomp.mate-tools",
                             "CoNLL2009-ST-English-ALL.anna.lemmatizer.model", 3.3, false);
@@ -84,7 +87,6 @@ public class PathLSTMHandler extends Annotator {
     private PredicateArgumentView getSRL(TextAnnotation ta) throws Exception {
         log.debug("Input: {}", ta.getText());
 
-        String viewName = ViewNames.SRL_VERB;
         PredicateArgumentView pav =
                 new PredicateArgumentView(viewName, "PathLSTMGenerator", ta, 1.0);
 
@@ -145,10 +147,4 @@ public class PathLSTMHandler extends Annotator {
             throw new AnnotatorException(e.getMessage());
         }
     }
-
-    @Override
-    public String getViewName() {
-        return ViewNames.SRL_VERB;
-    }
-
 }
