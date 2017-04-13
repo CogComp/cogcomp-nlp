@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.pipeline.server;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -22,6 +23,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.internal.HelpScreenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.Filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -37,6 +39,8 @@ public class MainServer {
 
     private static ArgumentParser argumentParser;
 
+    private static AnnotatorService pipeline = null;
+
     static {
         // Setup Argument Parser with options.
         argumentParser =
@@ -46,11 +50,27 @@ public class MainServer {
                 .dest("port").help("Port to run the webserver.");
     }
 
-    public static void main(String[] args) {
+    public static void setAnnotatorSetvice(AnnotatorService service, Logger logger) {
+        pipeline = service;
+    }
+
+    public static void setPipeline(Logger logger) {
+        try {
+            logger.info("Starting to load the pipeline . . . ");
+            printMemoryDetails(logger);
+            pipeline = PipelineFactory.buildPipelineWithAllViews();
+            logger.info("Done with loading the pipeline  . . .");
+            printMemoryDetails(logger);
+        } catch (IOException | AnnotatorException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void startServer(String[] args, Logger logger) {
         Namespace parseResults;
 
         try {
-             parseResults = argumentParser.parseArgs(args);
+            parseResults = argumentParser.parseArgs(args);
         } catch (HelpScreenException ex) {
             return;
         } catch (ArgumentParserException ex) {
@@ -60,36 +80,24 @@ public class MainServer {
 
         port(parseResults.getInt("port"));
 
-        AnnotatorService pipeline = null;
-        try {
-            logger.info("Starting to load the pipeline . . . ");
-            printMemoryDetails();
-            ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
-            pipeline = PipelineFactory.buildPipeline(rm);
-            logger.info("Done with loading the pipeline  . . .");
-            printMemoryDetails();
-        } catch (IOException | AnnotatorException e) {
-            e.printStackTrace();
-        }
-
         AnnotatorService finalPipeline = pipeline;
         get("/annotate", "application/json", (request, response)->{
             logger.info("GET request . . . ");
             logger.info( "request.body(): " + request.body());
             String text = request.queryParams("text");
             String views = request.queryParams("views");
-            return annotateText(finalPipeline, text, views);
+            return annotateText(finalPipeline, text, views, logger);
         });
 
         post("/annotate", (request, response) -> {
-                logger.info("POST request . . . ");
-                logger.info( "request.body(): " + request.body());
-                Map<String, String> map = splitQuery(request.body());
-                System.out.println("POST body parameters parsed: " + map);
-                String text = map.get("text");
-                String views = map.get("views");
-                return annotateText(finalPipeline, text, views);
-            }
+                    logger.info("POST request . . . ");
+                    logger.info( "request.body(): " + request.body());
+                    Map<String, String> map = splitQuery(request.body());
+                    System.out.println("POST body parameters parsed: " + map);
+                    String text = map.get("text");
+                    String views = map.get("views");
+                    return annotateText(finalPipeline, text, views, logger);
+                }
         );
 
         // api to get name of the available views
@@ -98,12 +106,20 @@ public class MainServer {
             viewsString += ", " + view;
         }
         String finalViewsString = viewsString;
+
+        enableCORS("*", "*", "*");
+
         get("/viewNames", (req, res) -> finalViewsString);
 
         post("/viewNames", (req, res) -> finalViewsString);
     }
 
-    private static String annotateText(AnnotatorService finalPipeline, String text, String views)
+    public static void main(String[] args) {
+        setPipeline(logger);
+        startServer(args, logger);
+    }
+
+    private static String annotateText(AnnotatorService finalPipeline, String text, String views, Logger logger)
             throws AnnotatorException {
         if (views == null || text == null) {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
@@ -122,7 +138,7 @@ public class MainServer {
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                printMemoryDetails();
+                printMemoryDetails(logger);
             }
             logger.info("Done adding the views. Deserializing the view now.");
             String output = SerializationHelper.serializeToJson(ta);
@@ -131,7 +147,15 @@ public class MainServer {
         }
     }
 
-    public static void printMemoryDetails() {
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        before((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+        });
+    }
+
+    public static void printMemoryDetails(Logger logger) {
         int mb = 1024 * 1024;
 
         // Getting the runtime reference from system

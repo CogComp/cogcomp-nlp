@@ -35,8 +35,6 @@ import edu.illinois.cs.cogcomp.ner.IO.InFile;
 import edu.illinois.cs.cogcomp.ner.config.NerBaseConfigurator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Process command line NER request in the simplest most untuitive possible ways.
@@ -44,7 +42,6 @@ import org.slf4j.LoggerFactory;
  * @author redman
  */
 public class Main extends AbstractMain {
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
 
     /** set to true to produce bracketed output, otherwise CoNLL output. */
     boolean bracketedOutput = true;

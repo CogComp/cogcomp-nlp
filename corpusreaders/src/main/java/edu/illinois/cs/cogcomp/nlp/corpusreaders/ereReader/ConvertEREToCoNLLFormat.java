@@ -13,7 +13,7 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 import java.io.File;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -22,9 +22,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 
@@ -63,10 +60,12 @@ public class ConvertEREToCoNLLFormat {
             } else
                 IOUtils.mkdir(conllDir);
 
-        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, includeNominals);
+        boolean throwExceptionOnXmlTagMismatch = true;
+        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, corpusDir, includeNominals, throwExceptionOnXmlTagMismatch);
 
         while (reader.hasNext()) {
-            TextAnnotation ta = reader.next();
+            XmlTextAnnotation xmlTa = reader.next();
+            TextAnnotation ta = xmlTa.getTextAnnotation();
             View nerView = ta.getView(reader.getViewName());
             CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta,
                     conllDir + "/" + ta.getCorpusId() + ".txt");
