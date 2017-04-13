@@ -16,7 +16,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSFromParse;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
@@ -27,7 +26,7 @@ import java.util.Collections;
 /**
  * @author Vivek Srikumar
  */
-public class PennTreebankReader extends TextAnnotationReader {
+public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
 
     public static final String PENN_TREEBANK_WSJ = "PennTreebank-WSJ";
 
@@ -80,7 +79,7 @@ public class PennTreebankReader extends TextAnnotationReader {
      */
     public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome));
+        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome, treebankHome));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 
@@ -111,6 +110,7 @@ public class PennTreebankReader extends TextAnnotationReader {
         currentSectionId++;
     }
 
+    @Override
     public boolean hasNext() {
         if (lines == null)
             return true;
@@ -125,7 +125,13 @@ public class PennTreebankReader extends TextAnnotationReader {
 
     }
 
-    protected TextAnnotation makeTextAnnotation() throws AnnotatorException {
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
+    @Override
+    public TextAnnotation next() {
         // first check if we don't have any more lines
         if (lines == null || currentLineId == lines.size()) {
             // check if the current section has no more files
@@ -157,8 +163,18 @@ public class PennTreebankReader extends TextAnnotationReader {
 
         }
 
-        return findNextTree();
+        TextAnnotation ta = null;
+
+        try {
+            ta = findNextTree();
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+
+        return ta;
     }
+
 
     private TextAnnotation findNextTree() throws AnnotatorException {
 
@@ -218,6 +234,7 @@ public class PennTreebankReader extends TextAnnotationReader {
         return ta;
     }
 
+
     public void remove() {}
 
 
@@ -225,7 +242,6 @@ public class PennTreebankReader extends TextAnnotationReader {
      * TODO: generate a human-readable report of annotations read from the source file (plus whatever
      * other relevant statistics the user should know about).
      */
-
     public String generateReport() {
         throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
     }

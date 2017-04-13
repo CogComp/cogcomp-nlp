@@ -68,7 +68,7 @@ For example,
 
     mvn exec:java -Dexec.mainClass="edu.illinois.cs.cogcomp.pos.POSTrain" -Dexec.args="./config/default.properties"
 
-##Citation
+## Citation
 
 D. Roth and D. Zelenko, Part of Speech Tagging Using a Network of Linear Separators. Coling-Acl, The 17th International Conference on Computational Linguistics (1998) pp.1136--1142
 

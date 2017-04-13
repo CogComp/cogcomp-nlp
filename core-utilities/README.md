@@ -1,4 +1,4 @@
-# illinois-core-utilities
+# Illinois Core-Utilities
 
    illinois-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
@@ -78,8 +78,8 @@ single piece of text is called a `TextAnnotation`.
 A `TextAnnotation` can be thought of as a container that stores different layers 
 of annotations over some text.
 
-  1. Using the LBJ sentence splitter and tokenizer
- 
+ 1. Using the LBJ sentence splitter and tokenizer: 
+    
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
@@ -101,8 +101,8 @@ of annotations over some text.
     TextAnnotation ta1 = tab.createTextAnnotation(corpus, textId, text1); 
     ```
 
-  2. Using pre-tokenized text
-
+ 2. Using pre-tokenized text:  
+    
     Quite often, our data source could specify the tokenization for
     text. We can use this to create a `TextAnnotation` by specifying
     the sentences and tokens manually. In this case, the input to the
@@ -120,7 +120,7 @@ of annotations over some text.
     
 	List<String[]> tokenizedSentences = Arrays.asList(sentence1, sentence2);
     TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-    											corpus, textId2, tokenizedSentences);
+    		corpus, textId2, tokenizedSentences);
     ```
       
 ### Views 
@@ -401,6 +401,59 @@ to specify only non-default configuration options when you instantiate
 one or more classes that use `ResourceManager` and `Configurator`
 to manage configuration options.
 
+###Serialization and Deserialization
+
+To store `TextAnnotation` objects on disk, serialization/deserialization is supported in the following formats:
+
+- Binary Serialization: Binary serialization using Apache Common's `SerializationUtils` to serialize the `TextAnnotation` class. 
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToFile(ta, "text_annotation.bin", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile("text_annotation.bin")
+```
+
+- JSON: Lightweight human-readable data-interchange format.
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+String jsonString = SerializationHelper.serializeToJson(ta);
+
+TextAnnotation ta = SerializationHelper.deserializeFromJson(jsonString);
+```
+
+- [Protocol Buffer (Version 2)](https://developers.google.com/protocol-buffers/): Protocol Buffers are Google' language-neutral, platform-neutral mechanism for serializing structured data. Structure definition for TextAnnotation is defined at [TextAnnotation.proto](src/main/proto/TextAnnotation.proto).
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToProtobuf(ta, "text_annotation.buf", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeFromProtobuf("text_annotation.buf");
+```
+
+More usage information in the `SerializationHelper` class.
+
+###Generating Protocol Buffer Java Code
+
+**Note:** If you make any change to TextAnnotation class which involves adding/removing data items, make sure to update the
+protocol buffer schema and the corresponding serialization code accordingly.
+
+Install the [Protocol Buffer compiler](https://github.com/google/protobuf#protocol-compiler-installation) locally.
+
+On macOS, you can install the compiler using Homebrew: `brew install protobuf`.
+
+Run the following commands from the repository root:
+
+```bash
+protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/TextAnnotation.proto
+
+mvn license:format
+```
 
 ##Citation
 
