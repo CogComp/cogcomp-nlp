@@ -39,10 +39,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class PathLSTMHandler extends Annotator {
+
+    public static final String SRL_VERB_PATH_LSTM = "SRL_VERB_PATH_LSTM";
+
     private CompletePipeline SRLpipeline;
 
     public PathLSTMHandler(boolean lazilyInitialize) {
-        super(ViewNames.SRL_VERB_PATH_LSTM, new String[] {}, /* empty, because the required views are provided internally */
+        super(SRL_VERB_PATH_LSTM, new String[] {}, /* empty, because the required views are provided internally */
                 lazilyInitialize);
     }
 

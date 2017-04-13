@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
+import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMHandler;
 import org.junit.*;
 
 import java.io.IOException;
@@ -35,8 +36,8 @@ public class ExternalAnnotatorsTest {
     @Test
     public void testExternalAnnotations() throws AnnotatorException {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
-        service.addView(ta,ViewNames.SRL_VERB_PATH_LSTM);
-        assertTrue(ta.hasView(ViewNames.SRL_VERB_PATH_LSTM));
-        assertTrue(ta.getView(ViewNames.SRL_VERB_PATH_LSTM).getConstituents().size() > 5);
+        service.addView(ta, PathLSTMHandler.SRL_VERB_PATH_LSTM);
+        assertTrue(ta.hasView(PathLSTMHandler.SRL_VERB_PATH_LSTM));
+        assertTrue(ta.getView(PathLSTMHandler.SRL_VERB_PATH_LSTM).getConstituents().size() > 5);
     }
 }
