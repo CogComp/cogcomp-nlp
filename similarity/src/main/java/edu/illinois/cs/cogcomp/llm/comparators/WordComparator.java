@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.sim.PhraseSim;
 import edu.illinois.cs.cogcomp.sim.WNSimSimple;
 import edu.illinois.cs.cogcomp.sim.WordSim;
 
+import edu.illinois.cs.cogcomp.wsim.embedding.EmbeddingConstant;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +35,7 @@ public class WordComparator implements Comparator< String, EntailmentResult >
   
 	
 	private Logger logger = LoggerFactory.getLogger( WordComparator.class );
-    private LlmConstants.WordMetric metric;
+    //private LlmConstants.WordMetric metric;
 
 
     public WordComparator( String configFile_ ) throws IOException
@@ -60,8 +61,8 @@ public class WordComparator implements Comparator< String, EntailmentResult >
 			entailmentThreshold = rm_.getDouble( LlmConfigurator.WORD_ENTAILMENT_THRESHOLD.key );
 			computeSimpleScore = rm_.getBoolean( LlmConfigurator.USE_SIMPLE_SCORE.key );
 
-            String wordComparator = rm_.getString( LlmConfigurator.WORD_METRIC.key );
-            this.metric = LlmConstants.WordMetric.valueOf( wordComparator );
+            String wordComparator = "word2vec";
+            //this.metric = wordComparator;
 
 
             wordSim = new WordSim(wordComparator);

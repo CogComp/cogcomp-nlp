@@ -16,7 +16,7 @@ import edu.illinois.cs.cogcomp.classification.hierarchy.datastructure.StopWords;
 public class ResourcesConfig {
 	public static String word2vec;
 	public static String paragram;
-	public static String truncated;
+	public static String glove;
 	public static String phrase2vec;
 	public static String memorybasedESA; 
 	public static int paragram_dimension;
@@ -41,7 +41,7 @@ public class ResourcesConfig {
 		}
 		word2vec = config.getString("cogcomp.word2vec");
 		paragram = config.getString("cogcomp.paragram");
-		truncated = config.getString("cogcomp.truncated");
+		glove = config.getString("cogcomp.glove");
 		phrase2vec = config.getString("cogcomp.phrase2vec");
 		pageIDMapping = config.getString("cogcomp.esa.complex.pageIDMapping");
 		memorybasedESA = config.getString("cogcomp.esa.memory.wordIndex");

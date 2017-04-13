@@ -1,6 +1,8 @@
 package edu.illinois.cs.cogcomp.wsim.embedding;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,9 +44,16 @@ public class Embedding {
                 .create();
         this.dimension = dimension;
 
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(mapPath));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         int count =0;
         try {
-            for (String line : LineIO.readFromClasspath(mapPath)) {
+            String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if(line.length() > 0) {
                     String[] arr = line.split("\\s");
@@ -55,11 +64,11 @@ public class Embedding {
                     }
                     vectors.put(word, vec);
                     count++;
+                    if (count % 50000==0) System.out.println("load word "+count);
                 }
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            throw e;
         }
         logger.info( "loaded " + count + " vectors with " + dimension + " dimensions." );
     }

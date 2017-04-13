@@ -4,7 +4,7 @@ public class EmbeddingConstant {
 	public static String word2vec="word2vec";
 	public static String paragram="paragram";
 	public static String esa="esa";
-	public static String truncated="truncated";
+	public static String glove="glove";
 	public static String wordnet="wordnet";
 	public static String phrase2vec="phrase2vec";
 	
