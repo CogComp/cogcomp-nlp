@@ -9,17 +9,24 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.ArrayUtilities;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
+import cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * A BIG dictionary of words (and multi-word phrases) and they synonyms.
+ * Probably useful for many applications, e.g. QA, paraphrase, etc.
+ */
 public class RogetThesaurusFeatures implements FeatureExtractor {
 
     public static final RogetThesaurusFeatures INSTANCE = new RogetThesaurusFeatures();
@@ -37,20 +44,34 @@ public class RogetThesaurusFeatures implements FeatureExtractor {
 
     public RogetThesaurusFeatures() {
         loaded = false;
+        loaded = false;
     }
 
-    private synchronized void load() throws Exception {
+    // old way: loading the resourcres from classpath
+    private synchronized void loadFromClassPath() throws Exception {
         if (loaded)
             return;
-
-        id2ClassName = new ArrayList<>();
-        classNamesToIds = new HashMap<>();
-        map = new HashMap<>();
 
         List<URL> urls = IOUtils.lsResources(RogetThesaurusFeatures.class, fileName);
         if (urls.size() == 0)
             throw new EdisonException("Cannot find " + fileName + " in the classpath");
-        URL url = urls.get(0);
+
+        loadWithURL(urls.get(0));
+    }
+
+
+    private synchronized void loadFromDatastore() throws Exception {
+        if (loaded)
+            return;
+        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File f = dsNoCredentials.getFile("org.cogcomp.roget.thesaurus", "rogetThesaurus", 1.3);
+        loadWithURL(f.toURI().toURL());
+    }
+
+    private synchronized void loadWithURL(URL url) throws Exception {
+        id2ClassName = new ArrayList<>();
+        classNamesToIds = new HashMap<>();
+        map = new HashMap<>();
 
         log.info("Loading Roget's thesaurus from {}", fileName);
         Scanner scanner = new Scanner(url.openStream());
@@ -85,11 +106,9 @@ public class RogetThesaurusFeatures implements FeatureExtractor {
 
             if (list.size() > 0) {
                 word = word.trim();
-
                 map.put(word, ArrayUtilities.asIntArray(list));
             }
             word = type;
-
         }
 
         log.info("Loaded {} words", map.size());
@@ -102,7 +121,9 @@ public class RogetThesaurusFeatures implements FeatureExtractor {
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         if (!loaded) {
             try {
-                load();
+                // not load the data from classpath; instead using the datastore
+                // loadFromClassPath();
+                loadFromDatastore();
             } catch (Exception e) {
                 throw new EdisonException(e);
             }
