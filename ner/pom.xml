@@ -89,11 +89,6 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-ner</artifactId>
-            <version>3.0.58</version>
-        </dependency>
     </dependencies>
 
     <build>
