@@ -406,6 +406,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
+// TODO: comment out this next two lines as part of addressing issue #406
             if (viewName.equals(ViewNames.SENTENCE))
                 continue;
 
@@ -430,6 +431,9 @@ public class JsonSerializer extends AbstractSerializer {
 
         writeAttributes(ta, json);
 
+        // TODO: uncomment to generate Sentences fix (part of addressing issue #406)
+//        if (ta.hasView(ViewNames.SENTENCE))
+//            ta.setSentences();
 
         return json;
     }

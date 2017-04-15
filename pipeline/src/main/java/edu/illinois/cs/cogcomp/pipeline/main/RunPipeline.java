@@ -12,11 +12,9 @@ import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.utilities.JsonSerializer;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.AnnotationReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,7 +107,7 @@ public class RunPipeline {
         return pipeline.createAnnotatedTextAnnotation("", "", text);
     }
 
-    public void RunPipelineWithCorpusReader(TextAnnotationReader reader) {
+    public void RunPipelineWithCorpusReader(AnnotationReader reader) {
         Iterator<TextAnnotation> iter = reader.iterator();
 
         boolean replaceExistingViews = false;

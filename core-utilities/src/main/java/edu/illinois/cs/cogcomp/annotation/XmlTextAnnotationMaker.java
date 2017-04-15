@@ -67,11 +67,11 @@ public class XmlTextAnnotationMaker {
      */
     public XmlTextAnnotation createTextAnnotation(String xmlText, String corpusId, String docId)  {
 
-        StringTransformation xmlSt = new StringTransformation(xmlText);
         Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanResults =
-                xmlProcessor.processXml(xmlSt);
+                xmlProcessor.processXml(xmlText);
 
-        TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId, xmlSt.getTransformedText());
+        TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId,
+                cleanResults.getFirst().getTransformedText());
 
         return new XmlTextAnnotation(cleanResults.getFirst(), ta, cleanResults.getSecond());
     }

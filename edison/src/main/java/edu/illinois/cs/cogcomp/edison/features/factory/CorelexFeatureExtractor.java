@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.edison.features.factory;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.WordFeatureExtractor;
@@ -27,6 +26,8 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
+ * Returns a set of features that are CoreLex's basic types of lemmas. This feature extractor generates features by
+ * looking up the lemma in the corlex file, and using the type as the feature.
  * This resource (~150MB) is a relatively big collection of nouns connected to their semantic categories
  * More details can be found in this paper:
  * Buitelaar, Paul. "CORELEX: An ontology of systematic polysemous classes." (1998): 221-235.
@@ -107,9 +108,10 @@ public class CorelexFeatureExtractor extends WordFeatureExtractor {
         String lemma = WordHelpers.getLemma(ta, wordPosition);
 
         Set<Feature> features = new LinkedHashSet<>();
-        if (data.containsKey(lemma))
-            features.add(DiscreteFeature.create(data.get(lemma)));
 
+        if (data.containsKey(lemma)) {
+            features.add(DiscreteFeature.create(data.get(lemma)));
+        }
         return features;
     }
 

@@ -26,6 +26,8 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [illinois-quantifier](quantifier/README.md) | This tool detects mentions of quantities in the text, as well as normalizes it to a standard form. |
 | [illinois-inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. |
 | [illinois-depparse](depparse/README.md) | An application that identifies the dependency parse tree of a sentence. |
+| [illinois-prepsrl](prepsrl/README.md) | An application that identifies semantic relations expressed by prepositions and develops statistical learning models for predicting the relations. |
+| [external-annotators](external/README.md) | A collection useful external annotators.  |
 
  - **Questions?** Have a look at our [FAQs](faq.md). 
 

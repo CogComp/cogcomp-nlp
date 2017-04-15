@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 
 import edu.illinois.cs.cogcomp.annotation.*;
 import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.comma.CommaLabeler;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -22,15 +23,19 @@ import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.illinois.cs.cogcomp.prepsrl.PrepSRLAnnotator;
 import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -40,6 +45,76 @@ import java.util.Properties;
  * @author mssammon
  */
 public class PipelineFactory {
+    private static Logger logger = LoggerFactory.getLogger(PipelineFactory.class);
+
+    /**
+     * create an AnnotatorService with the given view names in the argument. The names are supposed be strings,
+     * separated by space.
+     *
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipeline(String... views) throws IOException,
+            AnnotatorException {
+        List<String> allViewNames = ViewNames.getAllViewNames();
+        Map<String, String> nonDefaultValues = new HashMap<>();
+        for(String vu : views) {
+            if( allViewNames.contains(vu) ) {
+                switch (vu) {
+                    case ViewNames.POS:
+                        nonDefaultValues.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.LEMMA:
+                        nonDefaultValues.put(PipelineConfigurator.USE_LEMMA.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.NER_CONLL:
+                        nonDefaultValues.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.NER_ONTONOTES:
+                        nonDefaultValues.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.QUANTITIES:
+                        nonDefaultValues.put(PipelineConfigurator.USE_QUANTIFIER.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.SHALLOW_PARSE:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.SRL_VERB:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.DEPENDENCY_STANFORD:
+                        nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.DEPENDENCY:
+                        nonDefaultValues.put(PipelineConfigurator.USE_DEP.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.PARSE_STANFORD:
+                        nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.SRL_PREP:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_PREP.key, Configurator.TRUE);
+                        break;
+                    case ViewNames.SRL_COMMA:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_COMMA.key, Configurator.TRUE);
+                        break;
+                    default:
+                        logger.warn("View name " + vu + " is not supported yet. Look into the readme of the pipeline to see the list of valid annotators. ");
+                }
+            }
+            else {
+                throw new IllegalArgumentException("The view name " + vu + " is not a valid view name. " +
+                        "The possible view names are static members of the class `ViewName`. ");
+            }
+        }
+        // using the default settings and changing the views
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(nonDefaultValues);
+        boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
+
+        TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen));
+        Map<String, Annotator> annotators = buildAnnotators(fullRm);
+        return new SentencePipeline(taBldr, annotators, fullRm);
+    }
 
     /**
      * create an AnnotatorService with default configuration.
@@ -51,6 +126,17 @@ public class PipelineFactory {
     public static BasicAnnotatorService buildPipeline() throws IOException, AnnotatorException {
         ResourceManager emptyConfig = new ResourceManager(new Properties());
         return buildPipeline(emptyConfig);
+    }
+
+    /**
+     * create an AnnotatorService with all the possible views in the pipeline.
+     * Be careful if you use this; you will requires lots of memory
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipelineWithAllViews() throws IOException, AnnotatorException {
+        return buildPipeline(ViewNames.getAllViewNames().toArray(new String[ViewNames.getAllViewNames().size()]));
     }
 
     /**
@@ -76,9 +162,6 @@ public class PipelineFactory {
                 new SentencePipeline(taBldr, annotators, fullRm);
     }
 
-
-
-
     /**
      * instantiate a set of annotators for use in an AnnotatorService object by default, will use
      * lazy initialization where possible -- change this behavior with the
@@ -87,7 +170,7 @@ public class PipelineFactory {
      * @param nonDefaultRm ResourceManager with all non-default values for Annotators
      * @return a Map from annotator view name to annotator
      */
-    public static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
+    private static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
             throws IOException {
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
         String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE);
@@ -190,7 +273,17 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.QUANTITIES, quantifierAnnotator);
         }
 
+        if (rm.getBoolean(PipelineConfigurator.USE_SRL_PREP)) {
+            PrepSRLAnnotator prepSRLAnnotator = new PrepSRLAnnotator();
+            viewGenerators.put(ViewNames.SRL_PREP, prepSRLAnnotator);
+        }
+
+        if(rm.getBoolean(PipelineConfigurator.USE_SRL_COMMA)) {
+            CommaLabeler commaLabeler = new CommaLabeler();
+            viewGenerators.put(ViewNames.SRL_COMMA, commaLabeler);
+        }
+
         return viewGenerators;
     }
-
+   
 }
