@@ -75,7 +75,7 @@ public class TestCorlex extends TestCase {
         log.debug("Printing Set of Features");
         for (Feature f : feats) {
             log.debug(f.getName());
-            assert (ArrayUtils.contains(expected_outputs, f.getName()));
+            assertTrue(ArrayUtils.contains(expected_outputs, f.getName()));
         }
 
 
