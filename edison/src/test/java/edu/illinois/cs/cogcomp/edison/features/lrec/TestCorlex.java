@@ -7,28 +7,17 @@
  */
 package edu.illinois.cs.cogcomp.edison.features.lrec;
 
-import edu.illinois.cs.cogcomp.edison.features.factory.CorlexFeatureExtractor;
+import edu.illinois.cs.cogcomp.edison.features.factory.CorelexFeatureExtractor;
 import org.apache.commons.lang.ArrayUtils;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
-import edu.illinois.cs.cogcomp.edison.features.FeatureCollection;
-import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.features.FeatureUtilities;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestFeaturesResource;
-import edu.illinois.cs.cogcomp.edison.utilities.CreateTestTAResource;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import junit.framework.TestCase;
 
 import java.util.List;
 import java.util.Set;
-import java.util.Random;
-import java.io.Writer;
 
 import org.apache.log4j.Logger;
 
@@ -62,7 +51,7 @@ public class TestCorlex extends TestCase {
 
         log.debug("Got tokens FROM TextAnnotation");
 
-        CorlexFeatureExtractor testInstance = new CorlexFeatureExtractor(true);
+        CorelexFeatureExtractor testInstance = new CorelexFeatureExtractor(true);
 
         Set<Feature> feats = testInstance.getWordFeatures(ta,1);
         String[] expected_outputs =
