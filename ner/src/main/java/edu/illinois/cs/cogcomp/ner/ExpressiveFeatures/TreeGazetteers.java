@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
@@ -64,7 +65,7 @@ public class TreeGazetteers implements Gazetteers {
             File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.5, false);
             // We are not loading the resources from classpath anymore. Instead we are calling them programmatically
             // InputStream stream = ResourceUtilities.loadResource(pathToDictionaries + "/gazetteers-list.txt");
-            InputStream stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" +  File.separator + "gazetteers-list.txt");
+            InputStream stream = new FileInputStream(gazDirectory.getPath() + File.separator + "gazetteers" + File.separator + "gazetteers-list.txt");
             BufferedReader br = new BufferedReader(new InputStreamReader(stream));
             String line;
             while ((line = br.readLine()) != null)
@@ -82,7 +83,6 @@ public class TreeGazetteers implements Gazetteers {
                             || tmp.equals("am"))
                         return new String[0];
                     else {
-
                         // character tokenization for Chinese
                         if (ParametersForLbjCode.currentParameters.language == Language.Chinese) {
                             String[] chars = new String[line.length()];
@@ -102,11 +102,9 @@ public class TreeGazetteers implements Gazetteers {
 
             // for each dictionary, compile each of the gaz trees for each phrase permutation.
             for (String file : filenames) {
-                // loading files from disk datastore now, rather than loading them from classpath
-                // gaz.readDictionary(file, "", ResourceUtilities.loadResource(file));
-                // gazIC.readDictionary(file, "(IC)", ResourceUtilities.loadResource(file));
-                gaz.readDictionary(file, "", new FileInputStream(gazDirectory.getAbsolutePath() +  File.separator + file));
-                gazIC.readDictionary(file, "(IC)", new FileInputStream(gazDirectory.getAbsolutePath() +  File.separator + file));
+                String fileName = gazDirectory.getAbsolutePath() + File.separator + file;
+                gaz.readDictionary(file, "", ResourceUtilities.loadResource(fileName));
+                gazIC.readDictionary(file, "(IC)", ResourceUtilities.loadResource(fileName));
             }
             gaz.trimToSize();
             gazIC.trimToSize();
@@ -115,7 +113,9 @@ public class TreeGazetteers implements Gazetteers {
             if (ParametersForLbjCode.currentParameters.debug) {
                 logger.info("found " + dictionaries.size() + " gazetteers");
             }
-        } catch (InvalidPortException | InvalidEndpointException | DatastoreException e) {
+        } catch (InvalidPortException | InvalidEndpointException e) {
+            e.printStackTrace();
+        } catch (DatastoreException e) {
             e.printStackTrace();
         }
     }
