@@ -20,6 +20,15 @@ import org.slf4j.LoggerFactory;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+
+
+/**
+ *
+ * Returns a set of features that are CoreLex's basic types of lemmas. This feature extractor generates features by
+ * looking up the lemma in the corlex file, and using the type as the feature.
+ *
+ */
+
 public class CorlexFeatureExtractor extends WordFeatureExtractor {
     private static Logger logger = LoggerFactory.getLogger(CorlexFeatureExtractor.class);
 
@@ -80,9 +89,10 @@ public class CorlexFeatureExtractor extends WordFeatureExtractor {
         String lemma = WordHelpers.getLemma(ta, wordPosition);
 
         Set<Feature> features = new LinkedHashSet<>();
-        if (data.containsKey(lemma))
-            features.add(DiscreteFeature.create(data.get(lemma)));
 
+        if (data.containsKey(lemma)) {
+            features.add(DiscreteFeature.create(data.get(lemma)));
+        }
         return features;
 
     }
