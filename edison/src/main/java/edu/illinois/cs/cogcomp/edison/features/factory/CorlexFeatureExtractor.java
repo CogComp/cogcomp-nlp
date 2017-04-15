@@ -89,8 +89,8 @@ public class CorlexFeatureExtractor extends WordFeatureExtractor {
         String lemma = WordHelpers.getLemma(ta, wordPosition);
 
         Set<Feature> features = new LinkedHashSet<>();
+
         if (data.containsKey(lemma)) {
-            String tmp = data.get("give");
             features.add(DiscreteFeature.create(data.get(lemma)));
         }
         return features;
