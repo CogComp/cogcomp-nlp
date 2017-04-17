@@ -39,7 +39,7 @@ public class LevinVerbClassFeature implements FeatureExtractor {
     private static final DiscreteFeature UNKNOWN = DiscreteFeature.create("*");
     public static LevinVerbClassFeature instance = new LevinVerbClassFeature();
 
-    VerbClassDictionary dictionary = VerbClassDictionary.getDictionary();
+    VerbClassDictionary dictionary = VerbClassDictionary.getDictionaryFromDatastore();
 
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {

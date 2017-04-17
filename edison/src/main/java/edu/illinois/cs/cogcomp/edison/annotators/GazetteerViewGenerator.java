@@ -14,6 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -25,13 +26,11 @@ import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.SentenceUtils;
 import gnu.trove.list.array.TIntArrayList;
 import gnu.trove.map.hash.TIntObjectHashMap;
+import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
@@ -68,16 +67,19 @@ public class GazetteerViewGenerator extends Annotator {
                             "People.Politicians.US.Presidents",
                             "People.Politicians.US.VicePresidents");
 
-            gazetteersInstance =
-                    new GazetteerViewGenerator("resources/gazetteers/gazetteers",
-                            ViewNames.GAZETTEER + "Gazetteers");
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
 
+            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+            gazetteersInstance = new GazetteerViewGenerator(gazetteersResource.getPath() + File.separator + "gazetteers", ViewNames.GAZETTEER + "Gazetteers", false);
             GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
 
-            cbcInstance =
-                    new GazetteerViewGenerator("resources/cbcData/lists", ViewNames.GAZETTEER
-                            + "CBC");
-
+            /*
+             * This resource is a clustering algorithm which groups together words that belong to the same concept.
+             * More details in this paper:
+             * Pantel, Patrick, and Dekang Lin. "Discovering word senses from text." SIGKDD, 2002.
+             */
+            File cbcResource = ds.getDirectory("org.cogcomp.cbc.clusters", "cbcData", 1.3, false);
+            cbcInstance = new GazetteerViewGenerator(cbcResource.getPath() + File.separator + "cbcData"+ File.separator + "lists", ViewNames.GAZETTEER + "CBC", false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -97,11 +99,13 @@ public class GazetteerViewGenerator extends Annotator {
 
     private Set<String> ignore;
 
-    public GazetteerViewGenerator(String directory, String viewName) throws Exception {
-        this(directory, true, viewName);
+    private boolean loadFromClasspath = false;
+
+    public GazetteerViewGenerator(String directory, String viewName, boolean loadFromClasspath) throws Exception {
+        this(directory, true, viewName, loadFromClasspath);
     }
 
-    public GazetteerViewGenerator(String directory, boolean gzip, String viewName) throws Exception {
+    public GazetteerViewGenerator(String directory, boolean gzip, String viewName, boolean loadFromClasspath) throws Exception {
         super(viewName, new String[] {});
         this.directory = directory;
         this.gzip = gzip;
@@ -111,13 +115,10 @@ public class GazetteerViewGenerator extends Annotator {
         this.names = new ArrayList<>();
         this.patterns = new ArrayList<>();
         this.lengths = new ArrayList<>();
-
         this.gazetteerFilters = new ArrayList<>();
-
         this.loaded = false;
-
         this.ignore = new LinkedHashSet<>();
-
+        this.loadFromClasspath = loadFromClasspath;
     }
 
     @SuppressWarnings("serial")
@@ -286,19 +287,27 @@ public class GazetteerViewGenerator extends Annotator {
                         "I met George Bush .".split("\\s+"));
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(sentences);
 
-        ta.addView(gazetteersInstance);
+        gazetteersInstance.addView(ta);
 
         System.out.println(ta.toString());
 
         System.out.println(ta.getView(gazetteersInstance.getViewName()).toString());
     }
 
-    private void lazyLoadGazetteers(String directory, boolean gzip) throws URISyntaxException,
+    private void lazyLoadGazetteers(String directory, boolean gzip, boolean fromClasspath) throws URISyntaxException,
             IOException {
         logger.info("Loading all gazetteers from {}", directory);
 
-        for (URL url : IOUtils.lsResources(GazetteerViewGenerator.class, directory)) {
+        List<URL> files = null;
+        if(fromClasspath)
+            files = IOUtils.lsResources(GazetteerViewGenerator.class, directory);
+        else
+            files = IOUtils.getListOfFilesInDir(directory);
+
+        for (URL url : files) {
             String file = IOUtils.getFileName(url.getPath());
+
+            if(gzip && file.contains(".txt")) continue;
 
             // ignore any dot files
             if (file.startsWith("."))
@@ -307,58 +316,57 @@ public class GazetteerViewGenerator extends Annotator {
             if (ignore.contains(file))
                 continue;
 
-            int max = -1;
-
-            TIntArrayList list = new TIntArrayList();
-            TIntArrayList lenList = new TIntArrayList();
-
             this.names.add(file);
 
             logger.debug("Loading {} from {}", file, url.getPath());
 
             InputStream stream = url.openStream();
+
             if (gzip)
                 stream = new GZIPInputStream(stream);
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                line = StringUtils.normalizeUnicodeDiacritics(line);
-
-                line = line.replaceAll("&amp;", "&");
-
-                line = line.replaceAll("'", " '");
-                line = line.replaceAll(",", " ,");
-                line = line.replaceAll(";", " ;");
-                line = line.replaceAll("\\s+", " ");
-
-                line = line.trim();
-
-                list.add(line.hashCode());
-
-                int len = line.split("\\s+").length;
-
-                lenList.add(len);
-
-                if (len > max)
-                    max = len;
-            }
-
-            this.patterns.add(list.toArray());
-            this.lengths.add(lenList.toArray());
-
-            this.maxLength = Math.max(max, this.maxLength);
-
+            int listSize = readGazzGivenInputStream(reader);
             reader.close();
 
-            logger.debug("Found {} elements of type {}", list.size(), file);
+            logger.debug("Found {} elements of type {}", listSize, file);
         }
 
         this.loaded = true;
+        // if this is zero it means nothing has been loaded
+        assert names.size() != 0;
         logger.info("Finished loading  {} gazetteers from {}", names.size(), directory);
     }
+
+    private int readGazzGivenInputStream(BufferedReader reader) throws IOException {
+        TIntArrayList list = new TIntArrayList();
+        TIntArrayList lenList = new TIntArrayList();
+        int max = -1;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            line = StringUtils.normalizeUnicodeDiacritics(line);
+            line = line.replaceAll("&amp;", "&");
+            line = line.replaceAll("'", " '");
+            line = line.replaceAll(",", " ,");
+            line = line.replaceAll(";", " ;");
+            line = line.replaceAll("\\s+", " ");
+            line = line.trim();
+            list.add(line.hashCode());
+            int len = line.split("\\s+").length;
+            lenList.add(len);
+
+            if (len > max)
+                max = len;
+        }
+
+        this.patterns.add(list.toArray());
+        this.lengths.add(lenList.toArray());
+        this.maxLength = Math.max(max, this.maxLength);
+
+        return list.size();
+    }
+
 
     /**
      * Add a filter for the labels. Only constituents that pass *ALL* filters will be added to the
@@ -399,7 +407,7 @@ public class GazetteerViewGenerator extends Annotator {
             synchronized (this) {
                 if (!this.loaded) {
                     try {
-                        lazyLoadGazetteers(directory, gzip);
+                        lazyLoadGazetteers(directory, gzip, loadFromClasspath);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -467,7 +475,7 @@ public class GazetteerViewGenerator extends Annotator {
                 int hash = sb.toString().trim().hashCode();
 
                 if (!allSpans.containsKey(hash))
-                    allSpans.put(hash, new ArrayList<IntPair>());
+                    allSpans.put(hash, new ArrayList<>());
                 List<IntPair> object = allSpans.get(hash);
                 object.add(new IntPair(start, end + 1));
             }
