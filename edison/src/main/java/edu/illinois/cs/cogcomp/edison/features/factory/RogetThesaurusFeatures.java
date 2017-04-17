@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.*;
 
 /**
- * A BIG dictionary of words (and multi-word phrases) and they synonyms.
+ * A BIG dictionary of words (and multi-word phrases) and their synonyms.
  * Probably useful for many applications, e.g. QA, paraphrase, etc.
  */
 public class RogetThesaurusFeatures implements FeatureExtractor {

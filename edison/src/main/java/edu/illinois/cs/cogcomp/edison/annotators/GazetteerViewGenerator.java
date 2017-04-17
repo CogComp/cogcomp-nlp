@@ -74,7 +74,7 @@ public class GazetteerViewGenerator extends Annotator {
             GazetteerViewGenerator.addGazetteerFilters(gazetteersInstance);
 
             /*
-             * This resources is a clustering algorithm which groups together words that belong to the same concept.
+             * This resource is a clustering algorithm which groups together words that belong to the same concept.
              * More details in this paper:
              * Pantel, Patrick, and Dekang Lin. "Discovering word senses from text." SIGKDD, 2002.
              */
@@ -99,13 +99,13 @@ public class GazetteerViewGenerator extends Annotator {
 
     private Set<String> ignore;
 
-    private boolean loadFromFromClasspath = false;
+    private boolean loadFromClasspath = false;
 
-    public GazetteerViewGenerator(String directory, String viewName, boolean loadFromFromClasspath) throws Exception {
-        this(directory, true, viewName, loadFromFromClasspath);
+    public GazetteerViewGenerator(String directory, String viewName, boolean loadFromClasspath) throws Exception {
+        this(directory, true, viewName, loadFromClasspath);
     }
 
-    public GazetteerViewGenerator(String directory, boolean gzip, String viewName, boolean loadFromFromClasspath) throws Exception {
+    public GazetteerViewGenerator(String directory, boolean gzip, String viewName, boolean loadFromClasspath) throws Exception {
         super(viewName, new String[] {});
         this.directory = directory;
         this.gzip = gzip;
@@ -118,7 +118,7 @@ public class GazetteerViewGenerator extends Annotator {
         this.gazetteerFilters = new ArrayList<>();
         this.loaded = false;
         this.ignore = new LinkedHashSet<>();
-        this.loadFromFromClasspath = loadFromFromClasspath;
+        this.loadFromClasspath = loadFromClasspath;
     }
 
     @SuppressWarnings("serial")
@@ -407,7 +407,7 @@ public class GazetteerViewGenerator extends Annotator {
             synchronized (this) {
                 if (!this.loaded) {
                     try {
-                        lazyLoadGazetteers(directory, gzip, loadFromFromClasspath);
+                        lazyLoadGazetteers(directory, gzip, loadFromClasspath);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
