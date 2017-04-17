@@ -7,7 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.edison.features;
 
-import cogcomp.Datastore;
+import org.cogcomp.Datastore;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;

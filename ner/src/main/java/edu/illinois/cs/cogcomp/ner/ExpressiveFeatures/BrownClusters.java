@@ -7,11 +7,10 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
-import cogcomp.Datastore;
-import cogcomp.DatastoreException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
-import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;

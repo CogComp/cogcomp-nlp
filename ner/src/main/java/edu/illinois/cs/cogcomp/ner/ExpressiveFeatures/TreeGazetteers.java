@@ -7,8 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
-import cogcomp.Datastore;
-import cogcomp.DatastoreException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.core.constants.Language;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteerTree.StringSplitterInterface;
@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
