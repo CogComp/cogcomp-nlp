@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.1.11</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-comma</artifactId>
-    <version>2.3.3</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <cogcomp-nlp-version>3.1.3</cogcomp-nlp-version>
         <lbjava-version>1.2.26</lbjava-version>
     </properties>
 
@@ -40,33 +42,33 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-inference</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
-            <version>${cogcomp-nlp-version}</version>
+            <version>3.1.11</version>
             <!--if you see java-cup issues, its because of its clashes with Stanford. Uncomment this to exclude it-->
             <!--<exclusions>-->
                 <!--<exclusion>-->
@@ -88,7 +90,7 @@
         <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.4</version>
+            <version>1.9.7</version>
         </dependency>
         <!--used inside datastore but somehow being overridden by some dependency here. -->
         <dependency>

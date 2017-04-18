@@ -24,6 +24,7 @@
         <module>inference</module>
         <module>quantifier</module>
         <module>depparse</module>
+        <module>commasrl</module>
         <module>prepsrl</module>
         <module>pipeline</module>
         <module>external</module>
