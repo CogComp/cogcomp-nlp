@@ -50,7 +50,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-comma</artifactId>
-            <version>2.3.3</version>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
