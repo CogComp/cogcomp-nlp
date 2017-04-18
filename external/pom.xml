@@ -1,0 +1,58 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>illinois-cogcomp-nlp</artifactId>
+        <groupId>edu.illinois.cs.cogcomp</groupId>
+        <version>3.1.11</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>illinois-external-annotators</artifactId>
+    <name>ExternalAnnotators: A suite of external annotators</name>
+    <description>Pre-processes text documents with different NLP annotations</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>3.1.11</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.ac.ed.inf</groupId>
+            <artifactId>PathLSTM</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.19.1</version>
+                    <configuration>
+                        <!--increase the memory requirements if you need more space-->
+                        <argLine>-Xmx12g</argLine>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
