@@ -39,33 +39,20 @@ public class ExternalAnnotatorsTest {
     }
 
     @Test
-    public void testPathLSTM() throws AnnotatorException {
+    public void testExternalAnnotators() throws AnnotatorException {
         service.addView(ta, PathLSTMHandler.SRL_VERB_PATH_LSTM);
         assertTrue(ta.hasView(PathLSTMHandler.SRL_VERB_PATH_LSTM));
         assertTrue(ta.getView(PathLSTMHandler.SRL_VERB_PATH_LSTM).getConstituents().size() > 5);
 
         service.addView(ta, StanfordOpenIEHandler.viewName);
         assertTrue(ta.hasView(StanfordOpenIEHandler.viewName));
-        assertTrue(ta.getView(StanfordOpenIEHandler.viewName).getConstituents().size() > 5);
+        assertTrue(ta.getView(StanfordOpenIEHandler.viewName).getConstituents().size() >= 5);
+
+        service.addView(ta, StanfordRelationsHandler.viewName);
+        assertTrue(ta.hasView(StanfordRelationsHandler.viewName));
+        assertTrue(ta.getView(StanfordRelationsHandler.viewName).getConstituents().size() >= 5);
+
+        service.addView(ta, StanfordCorefHandler.viewName);
+        assertTrue(ta.hasView(StanfordCorefHandler.viewName));
     }
-
-//    @Test
-//    public void testStanfordOpenIE() throws AnnotatorException {
-//    }
-
-//
-//    @Test
-//    public void testStanfordRelations() throws AnnotatorException {
-//        service.addView(ta, StanfordRelationsHandler.viewName);
-//        assertTrue(ta.hasView(StanfordRelationsHandler.viewName));
-//        assertTrue(ta.getView(StanfordRelationsHandler.viewName).getConstituents().size() > 5);
-//    }
-//
-//
-//    @Test
-//    public void testStanfordCoref() throws AnnotatorException {
-//        service.addView(ta, StanfordCorefHandler.viewName);
-//        assertTrue(ta.hasView(StanfordCorefHandler.viewName));
-//        assertTrue(ta.getView(StanfordCorefHandler.viewName).getConstituents().size() > 5);
-//    }
 }
