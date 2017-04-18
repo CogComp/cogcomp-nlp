@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.comma.datastructures;
 
 
@@ -25,10 +32,9 @@ public class CommaProperties extends ResourceManager {
             try {
                 // reading the properties programmatically.
                 // change this if you want to read from the local config file
-                if(false) {
+                if (false) {
                     instance = new CommaProperties("config/comma.properties");
-                }
-                else {
+                } else {
                     instance = new CommaProperties();
                 }
             } catch (IOException e) {
@@ -42,27 +48,27 @@ public class CommaProperties extends ResourceManager {
     public boolean useGold() {
         return getBoolean("USE_GOLD");
     }
-    
+
     public boolean allowMultiLabelCommas() {
         return getBoolean("ALLOW_MULTI_LABEL_COMMAS");
     }
-    
+
     public boolean includeNullLabelCommas() {
         return getBoolean("INCLUDE_NULL_LABEL_COMMAS");
     }
-    
+
     public boolean isCommaStructureFullSentence() {
-    	return getBoolean("IS_COMMA_STRUCTURE_FULL_SENTENCE");
+        return getBoolean("IS_COMMA_STRUCTURE_FULL_SENTENCE");
     }
-    
-    public String getCommaLabeledDataFile(){
-    	return getString("COMMASRL_DIR").trim() + "/corpus/comma-labeled-data.txt";
+
+    public String getCommaLabeledDataFile() {
+        return getString("COMMASRL_DIR").trim() + "/corpus/comma-labeled-data.txt";
     }
-    
-    public String getBayraktarAnnotationsDir(){
-    	return getString("COMMASRL_DIR").trim() + "/Bayraktar-SyntaxToLabel/modified";
+
+    public String getBayraktarAnnotationsDir() {
+        return getString("COMMASRL_DIR").trim() + "/Bayraktar-SyntaxToLabel/modified";
     }
-    
+
     public String getPTBHDir() {
         return getString("PTB_DIR");
     }

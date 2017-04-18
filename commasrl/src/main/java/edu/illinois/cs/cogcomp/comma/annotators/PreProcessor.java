@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.comma.annotators;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -24,20 +31,19 @@ import java.util.Map;
 /**
  * A class that contains all the necessary pre-processing for each sentence.
  */
-public class PreProcessor{
+public class PreProcessor {
     private final AnnotatorService annotatorService;
     Tokenizer tokenizer = new IllinoisTokenizer();
 
-    public PreProcessor() throws Exception  {
+    public PreProcessor() throws Exception {
         // Initialise AnnotatorServices with default configurations
         Map<String, String> nonDefaultValues = new HashMap<>();
-        if (CommaProperties.getInstance().useCurator()){
-        	nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
-        	nonDefaultValues.put(CuratorConfigurator.CURATOR_FORCE_UPDATE.key, Configurator.FALSE);
-        	ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
+        if (CommaProperties.getInstance().useCurator()) {
+            nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
+            nonDefaultValues.put(CuratorConfigurator.CURATOR_FORCE_UPDATE.key, Configurator.FALSE);
+            ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
             annotatorService = CuratorFactory.buildCuratorClient(curatorConfig);
-        }
-        else {
+        } else {
             nonDefaultValues.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
             nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
@@ -46,20 +52,21 @@ public class PreProcessor{
             nonDefaultValues.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
             nonDefaultValues.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
             nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
-            ResourceManager pipelineConfig = (new PipelineConfigurator()).getConfig(nonDefaultValues);
+            ResourceManager pipelineConfig =
+                    (new PipelineConfigurator()).getConfig(nonDefaultValues);
             annotatorService = PipelineFactory.buildPipeline(pipelineConfig);
         }
     }
 
-    public TextAnnotation preProcess(List<String[]> text) throws AnnotatorException{
+    public TextAnnotation preProcess(List<String[]> text) throws AnnotatorException {
         TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(text);
         addViewsFromAnnotatorService(ta);
         return ta;
     }
-    
-    public TextAnnotation preProcess(String text) throws AnnotatorException{
-    	String[] tokens = tokenizer.tokenizeSentence(text).getFirst();
-    	return preProcess(Collections.singletonList(tokens));
+
+    public TextAnnotation preProcess(String text) throws AnnotatorException {
+        String[] tokens = tokenizer.tokenizeSentence(text).getFirst();
+        return preProcess(Collections.singletonList(tokens));
     }
 
     private void addViewsFromAnnotatorService(TextAnnotation ta) throws AnnotatorException {

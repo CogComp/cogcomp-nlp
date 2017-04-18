@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.comma.readers;
 
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
@@ -17,70 +24,70 @@ import java.util.*;
 
 public class PrettyCorpusReader implements IResetableIterator<Sentence>, Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	private List<Comma> commas;
-	private List<Sentence> sentences;
-	int sentenceIdx;
-	private static String treebankHome, propbankHome, nombankHome;
+    private static final long serialVersionUID = 1L;
 
-	public PrettyCorpusReader(String annotationFileName) {
-		CommaProperties properties = CommaProperties.getInstance();
-		treebankHome = properties.getPTBHDir();
-		propbankHome = properties.getPropbankDir();
-		nombankHome = properties.getNombankDir();
+    private List<Comma> commas;
+    private List<Sentence> sentences;
+    int sentenceIdx;
+    private static String treebankHome, propbankHome, nombankHome;
 
-		try {
-			readData(annotationFileName);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
-		reset();
-	}
+    public PrettyCorpusReader(String annotationFileName) {
+        CommaProperties properties = CommaProperties.getInstance();
+        treebankHome = properties.getPTBHDir();
+        propbankHome = properties.getPropbankDir();
+        nombankHome = properties.getNombankDir();
 
-	private void readData(String annotationFileName)
-			throws Exception {
-		PreProcessor preProcessor = new PreProcessor();
-		sentences = new ArrayList<>();
+        try {
+            readData(annotationFileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        reset();
+    }
 
-		Map<String, TextAnnotation> taMap = getTAMap();
-		Scanner scanner;
-		scanner = new Scanner(new File(annotationFileName));
+    private void readData(String annotationFileName) throws Exception {
+        PreProcessor preProcessor = new PreProcessor();
+        sentences = new ArrayList<>();
 
-		int count = 0;
-		int failures = 0, skipped = 0;
-		while (scanner.hasNext()) {
-			count++;
+        Map<String, TextAnnotation> taMap = getTAMap();
+        Scanner scanner;
+        scanner = new Scanner(new File(annotationFileName));
 
-			// wsj pentreebank sentence id
-			String textId = scanner.nextLine().trim();
-			assert textId.startsWith("wsj") : textId;
+        int count = 0;
+        int failures = 0, skipped = 0;
+        while (scanner.hasNext()) {
+            count++;
 
-			String[] tokens = scanner.nextLine().trim().split("\\s+");
-			String[] cleanedTokens = cleanTokens(tokens);
-			String blankLine = scanner.nextLine(); 
-			assert blankLine.trim().length() == 0: String.format("line is not blank:%s", blankLine);
-			
-			boolean skip = false;// should we skip this sentence due to some error?
-			TextAnnotation goldTa = null, ta = null;
-			if (taMap.containsKey(textId)) {
-				goldTa = taMap.get(textId);
-				try {
-					ta = preProcessor.preProcess(Collections.singletonList(cleanedTokens));
-				} catch (Exception e) {
-					e.printStackTrace();
-					skip = true;
-					failures++;
-				}
-			} else {
-				System.out.println("No gold standard annotation available for:" + textId);
-				skip = true;
-				skipped++;
-			}
+            // wsj pentreebank sentence id
+            String textId = scanner.nextLine().trim();
+            assert textId.startsWith("wsj") : textId;
 
-			if (!skip) {
-				List<List<String>> commaLabels = new ArrayList<>();
+            String[] tokens = scanner.nextLine().trim().split("\\s+");
+            String[] cleanedTokens = cleanTokens(tokens);
+            String blankLine = scanner.nextLine();
+            assert blankLine.trim().length() == 0 : String
+                    .format("line is not blank:%s", blankLine);
+
+            boolean skip = false;// should we skip this sentence due to some error?
+            TextAnnotation goldTa = null, ta = null;
+            if (taMap.containsKey(textId)) {
+                goldTa = taMap.get(textId);
+                try {
+                    ta = preProcessor.preProcess(Collections.singletonList(cleanedTokens));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    skip = true;
+                    failures++;
+                }
+            } else {
+                System.out.println("No gold standard annotation available for:" + textId);
+                skip = true;
+                skipped++;
+            }
+
+            if (!skip) {
+                List<List<String>> commaLabels = new ArrayList<>();
                 for (String token : tokens) {
                     if (token.matches(",\\[.*\\]")) {
                         String labels = token.substring(2, token.length() - 1);
@@ -95,124 +102,127 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
                     }
                 }
 
-				try {
-					Sentence sentence = new Sentence(ta, goldTa, commaLabels);
-					sentences.add(sentence);
-				} catch (Exception e) {
-					e.printStackTrace();
-					failures++;
-				}
-			}
+                try {
+                    Sentence sentence = new Sentence(ta, goldTa, commaLabels);
+                    sentences.add(sentence);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    failures++;
+                }
+            }
 
-			System.out.print(count);
-			if (skipped > 0)
-				System.out.print(" SKIPPED(" + skipped + ")");
-			if (failures > 0)
-				System.out.print(" ANNOTATION FAILED(" + failures + ")");
+            System.out.print(count);
+            if (skipped > 0)
+                System.out.print(" SKIPPED(" + skipped + ")");
+            if (failures > 0)
+                System.out.print(" ANNOTATION FAILED(" + failures + ")");
 
-		}
-		scanner.close();
-	}
-	
-	/** 
-	 * the tokens read by this reader may contain extra data such as the comma labels.
-	 * This function will remove this and return a cleaned list of tokens
-	 * @param tokens list of tokens to be cleaned
-	 * @return cleaned list of tokens
-	 */
-	private String[] cleanTokens(String[] tokens){
-		String[] cleanedTokens = new String[tokens.length];
-		for(int i = 0; i<tokens.length; i++){
-			if(tokens[i].startsWith(",") && tokens[i].length()>1)
-				cleanedTokens[i] = ",";
-			else
-				cleanedTokens[i] = tokens[i];
-		}
-		return cleanedTokens;
-	}
-
-	/**
-	 * Returns the map of gold-standard annotations (SRLs, parses) for the comma
-	 * data (found in section 00 of PTB).
-	 *
-	 * @return A map of 'gold' {@link TextAnnotation} indexed by their IDs
-	 */
-	private Map<String, TextAnnotation> getTAMap() {
-		Map<String, TextAnnotation> taMap = new HashMap<>();
-		Iterator<TextAnnotation> ptbReader, propbankReader, nombankReader;
-
-		String[] sections = { "00" };
-		String goldVerbView = ViewNames.SRL_VERB + "_GOLD";
-		String goldNomView = ViewNames.SRL_NOM + "_GOLD";
-
-		try {
-			ptbReader = new PennTreebankReader(treebankHome, sections);
-			propbankReader = new PropbankReader(treebankHome, propbankHome, sections, goldVerbView, true);
-			nombankReader = new NombankReader(treebankHome, nombankHome, sections, goldNomView, true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		// Add the gold parses for each sentence in the corpus
-		while (ptbReader.hasNext()) {
-			TextAnnotation ta = ptbReader.next();
-			taMap.put(ta.getId(), ta);
-		}
-		// Add the new SRL_VERB view (if it exists)
-		while (propbankReader.hasNext()) {
-			TextAnnotation verbTA = propbankReader.next();
-			if (!verbTA.hasView(goldVerbView))
-				continue;
-
-			TextAnnotation ta = taMap.get(verbTA.getId());
-			ta.addView(ViewNames.SRL_VERB, verbTA.getView(goldVerbView));
-			taMap.put(ta.getId(), ta);
-		}
-		// Add the new SRL_NOM view (if it exists)
-		while (nombankReader.hasNext()) {
-			TextAnnotation nomTA = nombankReader.next();
-			if (!nomTA.hasView(goldNomView))
-				continue;
-
-			TextAnnotation ta = taMap.get(nomTA.getId());
-			ta.addView(ViewNames.SRL_NOM, nomTA.getView(goldNomView));
-			taMap.put(ta.getId(), ta);
-		}
-		return taMap;
-	}
-
-	public List<Sentence> getSentences(){
-    	return sentences;
+        }
+        scanner.close();
     }
-    
-    public List<Comma> getCommas(){
-    	if(commas==null){
-    		commas = new ArrayList<>();
-    		for(Sentence s : sentences)
-    			commas.addAll(s.getCommas());
-    	}
-    	return commas;
+
+    /**
+     * the tokens read by this reader may contain extra data such as the comma labels. This function
+     * will remove this and return a cleaned list of tokens
+     * 
+     * @param tokens list of tokens to be cleaned
+     * @return cleaned list of tokens
+     */
+    private String[] cleanTokens(String[] tokens) {
+        String[] cleanedTokens = new String[tokens.length];
+        for (int i = 0; i < tokens.length; i++) {
+            if (tokens[i].startsWith(",") && tokens[i].length() > 1)
+                cleanedTokens[i] = ",";
+            else
+                cleanedTokens[i] = tokens[i];
+        }
+        return cleanedTokens;
     }
-	
-	@Override
-	public boolean hasNext() {
-		return sentenceIdx >= sentences.size();
-	}
 
-	@Override
-	public Sentence next() {
-		return sentences.get(sentenceIdx);
-	}
+    /**
+     * Returns the map of gold-standard annotations (SRLs, parses) for the comma data (found in
+     * section 00 of PTB).
+     *
+     * @return A map of 'gold' {@link TextAnnotation} indexed by their IDs
+     */
+    private Map<String, TextAnnotation> getTAMap() {
+        Map<String, TextAnnotation> taMap = new HashMap<>();
+        Iterator<TextAnnotation> ptbReader, propbankReader, nombankReader;
 
-	@Override
-	public void remove() {
-		sentences.remove(sentenceIdx - 1);
-		sentenceIdx--;
-	}
+        String[] sections = {"00"};
+        String goldVerbView = ViewNames.SRL_VERB + "_GOLD";
+        String goldNomView = ViewNames.SRL_NOM + "_GOLD";
 
-	@Override
-	public void reset() {
-		sentenceIdx = 0;
-	}
+        try {
+            ptbReader = new PennTreebankReader(treebankHome, sections);
+            propbankReader =
+                    new PropbankReader(treebankHome, propbankHome, sections, goldVerbView, true);
+            nombankReader =
+                    new NombankReader(treebankHome, nombankHome, sections, goldNomView, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // Add the gold parses for each sentence in the corpus
+        while (ptbReader.hasNext()) {
+            TextAnnotation ta = ptbReader.next();
+            taMap.put(ta.getId(), ta);
+        }
+        // Add the new SRL_VERB view (if it exists)
+        while (propbankReader.hasNext()) {
+            TextAnnotation verbTA = propbankReader.next();
+            if (!verbTA.hasView(goldVerbView))
+                continue;
+
+            TextAnnotation ta = taMap.get(verbTA.getId());
+            ta.addView(ViewNames.SRL_VERB, verbTA.getView(goldVerbView));
+            taMap.put(ta.getId(), ta);
+        }
+        // Add the new SRL_NOM view (if it exists)
+        while (nombankReader.hasNext()) {
+            TextAnnotation nomTA = nombankReader.next();
+            if (!nomTA.hasView(goldNomView))
+                continue;
+
+            TextAnnotation ta = taMap.get(nomTA.getId());
+            ta.addView(ViewNames.SRL_NOM, nomTA.getView(goldNomView));
+            taMap.put(ta.getId(), ta);
+        }
+        return taMap;
+    }
+
+    public List<Sentence> getSentences() {
+        return sentences;
+    }
+
+    public List<Comma> getCommas() {
+        if (commas == null) {
+            commas = new ArrayList<>();
+            for (Sentence s : sentences)
+                commas.addAll(s.getCommas());
+        }
+        return commas;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return sentenceIdx >= sentences.size();
+    }
+
+    @Override
+    public Sentence next() {
+        return sentences.get(sentenceIdx);
+    }
+
+    @Override
+    public void remove() {
+        sentences.remove(sentenceIdx - 1);
+        sentenceIdx--;
+    }
+
+    @Override
+    public void reset() {
+        sentenceIdx = 0;
+    }
 
 }
