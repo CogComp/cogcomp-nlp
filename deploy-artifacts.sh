@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 function setPermissions() {
   echo "We are about the set the permissions on bilbo ... "
   ssh bilbo.cs.illinois.edu
