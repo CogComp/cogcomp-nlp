@@ -28,6 +28,7 @@ import java.util.*;
 
 /**
  * Do openIE with Stanford CoreNLP
+ * @author khashab2
  */
 public class StanfordOpenIEHandler extends Annotator {
 

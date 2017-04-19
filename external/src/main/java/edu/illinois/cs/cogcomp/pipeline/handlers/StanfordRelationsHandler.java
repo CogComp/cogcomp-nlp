@@ -77,6 +77,10 @@ public class StanfordRelationsHandler extends Annotator {
         ta.addView(viewName, vu);
     }
 
+    /**
+     * It gets the Stanford EntityMEntion and finds its equivalent CogComp Consittuent.
+     * This mapping is done by comparing char offsets.
+     */
     private static Constituent createConstituentGivenMention(EntityMention rm, TextAnnotation ta) {
         List<CoreLabel> tokens = rm.getSentence().get(CoreAnnotations.TokensAnnotation.class);
         int extentCharStart = tokens.get(rm.getExtentTokenStart()).beginPosition();
