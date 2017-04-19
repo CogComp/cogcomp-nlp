@@ -8,10 +8,7 @@
 package edu.illinois.cs.cogcomp.core.io;
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.net.URLDecoder;
+import java.net.*;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -416,6 +413,23 @@ public abstract class IOUtils {
                 if (pattern.matcher(fileName).matches()) {
                     urls.add(file.getCanonicalFile().toURI().toURL());
                 }
+            }
+        }
+        return urls;
+    }
+
+    public static List<URL> getListOfFilesInDir(String path){
+        File[] listOfFiles = new File(path).listFiles();
+        ArrayList<URL> urls = new ArrayList<>();
+        for (File listOfFile : listOfFiles) {
+            if (listOfFile.isFile()) {
+                try {
+                    urls.add(listOfFile.toURI().toURL());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            } else if (listOfFile.isDirectory()) {
+                // do nothing
             }
         }
         return urls;

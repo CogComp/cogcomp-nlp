@@ -7,19 +7,13 @@
  */
 package edu.illinois.cs.cogcomp.pipeline.main;
 
-import cogcomp.Datastore;
-import cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.*;
-import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.ExternalToolsConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMHandler;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

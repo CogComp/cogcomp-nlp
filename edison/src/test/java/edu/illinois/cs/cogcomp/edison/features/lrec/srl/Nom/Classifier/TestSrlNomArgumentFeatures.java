@@ -36,7 +36,6 @@ public class TestSrlNomArgumentFeatures extends TestCase {
 
     /**
      * Only in and out relations in the SRL_VERB view are used for the purpose of testing.
-     *
      */
     public final void test() throws Exception {
         logger.info("ArgumentFeatures Feature Extractor");
@@ -46,7 +45,6 @@ public class TestSrlNomArgumentFeatures extends TestCase {
                         ViewNames.SRL_VERB, ViewNames.PARSE_STANFORD, ViewNames.NER_CONLL};
         TextAnnotation ta =
                 DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, true, 3);
-        int i = 0;
         ta.addView(ClauseViewGenerator.STANFORD);
         ta.addView(PseudoParse.STANFORD);
 
@@ -78,9 +76,7 @@ public class TestSrlNomArgumentFeatures extends TestCase {
 
         fex = featureManifest.createFex();
 
-
         SrlNomArgumentFeatures af = new SrlNomArgumentFeatures();
-
 
         for (Constituent test : testlist) {
             assertTrue(SRLFeaturesComparator.isEqual(test, fex, af));

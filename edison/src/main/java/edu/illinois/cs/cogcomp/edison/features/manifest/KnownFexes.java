@@ -107,7 +107,7 @@ class KnownFexes {
 //        fexes.put("cbc", WordFeatureExtractorFactory.getGazetteerFeatureExtractor("cbc",
 //                GazetteerViewGenerator.gazetteersInstance));
 
-        fexes.put("CORLEX", CorlexFeatureExtractor.instance);
+        fexes.put("CORLEX", CorelexFeatureExtractor.instance);
         fexes.put("roget-thesaurus", RogetThesaurusFeatures.INSTANCE);
 
     }
