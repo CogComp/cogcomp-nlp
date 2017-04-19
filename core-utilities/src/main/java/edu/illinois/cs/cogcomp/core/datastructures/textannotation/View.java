@@ -398,11 +398,11 @@ public class View implements Serializable, IQueryable<Constituent> {
      * @param charEnd the end char index (one-past-the-end indexing)
      */
     public List<Constituent> getConstituentsOverlappingCharSpan(int charStart, int charEnd) {
-
+        assert charStart <= charEnd: "The start offset should be smaller than the end offset";
         Set<Constituent> output = new HashSet<>();
         for(Constituent c : this.constituents) {
             if((c.startCharOffset <= charStart && c.endCharOffset >= charStart) ||
-                    (c.startCharOffset >= charEnd && c.endCharOffset <= charEnd) ||
+                    (c.startCharOffset <= charEnd && c.endCharOffset >= charEnd) ||
                     (c.startCharOffset >= charStart && c.endCharOffset <= charEnd) ||
                     (c.startCharOffset <= charStart && c.endCharOffset >= charEnd)) output.add(c);
         }
