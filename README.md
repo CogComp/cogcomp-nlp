@@ -5,6 +5,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
 
 
+[![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=illinois-cogcomp-nlp-pipeline)](http://morgoth.cs.illinois.edu:8080/job/illinois-cogcomp-nlp-pipeline/)
+
 This project collects a number of core libraries for Natural Language Processing (NLP) developed 
 by the University of Illinois' [Cognitive Computation Group](https://cogcomp.cs.illinois.edu).  
 
