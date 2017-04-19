@@ -1,9 +1,10 @@
 #!/bin/bash
  
+ 
 #################################################################################
 # This script, run from the root of a Maven single or multi-module project, will
 # update the pom files to increment the build number on the version.
-# If a newer version of a parent pom exists, that will also be updated to the
+# If a newsdsdfsdfer version of a parent pom exists, that will also be updated to the
 # current latest version.
 # If desired, dependencies (all or a subset) can also be updated. This is
 # generally useful for internal libraries where you'd probably want to switch to
@@ -16,6 +17,7 @@
 # 1.0.0.1 --> 1.0.0.2
 # 8 --> 9
 #
+
 # Nonstandard versions (e.g. with alphabetic characters) have NOT been tested
 # thoroughly with this! Test with -d (dry run) to make sure this doesn't hose
 # things.
