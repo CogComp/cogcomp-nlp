@@ -18,6 +18,11 @@
             <version>3.1.11</version>
         </dependency>
         <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+        <dependency>
             <groupId>uk.ac.ed.inf</groupId>
             <artifactId>PathLSTM</artifactId>
             <version>1.0.0</version>
@@ -28,14 +33,25 @@
             <version>2.7</version>
         </dependency>
         <dependency>
-            <groupId>org.cogcomp</groupId>
-            <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.7</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.7.0</version>
+            <classifier>models</classifier>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 
@@ -48,7 +64,7 @@
                     <version>2.19.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx12g</argLine>
+                        <argLine>-Xmx20g</argLine>
                     </configuration>
                 </plugin>
             </plugins>
