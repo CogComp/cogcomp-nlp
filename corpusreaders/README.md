@@ -1,9 +1,9 @@
-# illinois-corpusreaders
+# Cogcomp Corpusreaders
 
 ## Overview
 
 This module includes NLP Corpus readers that reads into datastructures
-provided by the `illinois-core-utilities` package.
+provided by the `cogcomp-core-utilities` package.
 
 ## List of Corpus Readers
   - PennTreebank Reader
