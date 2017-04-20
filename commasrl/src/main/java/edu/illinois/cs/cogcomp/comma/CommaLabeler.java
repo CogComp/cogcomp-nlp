@@ -81,7 +81,7 @@ public class CommaLabeler extends Annotator {
         for (Comma comma : sentence.getCommas()) {
             String label = classifier.discreteValue(comma);
             int position = comma.getPosition();
-            Constituent predicate = new Constituent(label, viewName, ta, position, position + 1);
+            Constituent predicate = new Constituent("Predicate:" + label, viewName, ta, position, position + 1);
             predicate.addAttribute(PredicateArgumentView.SenseIdentifer, label);
             srlView.addConstituent(predicate);
             Constituent leftArg = comma.getPhraseToLeftOfComma(1);
