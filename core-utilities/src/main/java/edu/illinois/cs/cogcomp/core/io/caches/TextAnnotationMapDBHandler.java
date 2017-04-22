@@ -40,8 +40,8 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
             db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
         }
         catch (DBException e) {
-            logger.warn("mapdb couldn't instantiate db using file '{}': check error and either remove lock, " +
-                    "repair file, or delete file.", dbFile);
+//            logger.warn("mapdb couldn't instantiate db using file '{}': check error and either remove lock, " +
+//                    "repair file, or delete file.", dbFile);
             e.printStackTrace();
             System.err.println("mapdb couldn't instantiate db using file '" + dbFile +
                     "': check error and either remove lock, repair file, or delete file.");
