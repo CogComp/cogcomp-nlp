@@ -3,10 +3,11 @@ package edu.illinois.cs.cogcomp.mrcs;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import edu.illinois.cs.cogcomp.config.EmbeddingConstant;
+import edu.illinois.cs.cogcomp.config.SimConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.llm.align.WordListFilter;
-import edu.illinois.cs.cogcomp.llm.common.LlmConstants;
-import edu.illinois.cs.cogcomp.llm.config.LlmConfigurator;
+
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.BeforeClass;
@@ -91,7 +92,7 @@ public class LlmComparatorTest
     public void testParagramLlm()
     {
         Properties props = new Properties();
-        props.setProperty( LlmConfigurator.WORD_METRIC.key, LlmConstants.WordMetric.PARAGRAM.name() );
+        props.setProperty( SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet );
         try {
             llm = new LlmStringComparator( new ResourceManager( props ) );
         } catch (IOException e) {
@@ -120,7 +121,7 @@ public class LlmComparatorTest
     {
         WordListFilter filter = null;
         try {
-            filter = new WordListFilter( new LlmConfigurator().getDefaultConfig() );
+            filter = new WordListFilter( new SimConfigurator().getDefaultConfig() );
         } catch (IOException e) {
             e.printStackTrace();
             fail( e.getMessage() );

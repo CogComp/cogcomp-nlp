@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.wsim.embedding;
+package edu.illinois.cs.cogcomp.config;
 
 public class EmbeddingConstant {
 	public static String word2vec="word2vec";

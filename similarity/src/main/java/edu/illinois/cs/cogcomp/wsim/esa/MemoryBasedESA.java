@@ -12,6 +12,8 @@ import java.util.List;
 
 import edu.illinois.cs.cogcomp.classification.hierarchy.datastructure.ConceptData;
 import edu.illinois.cs.cogcomp.classification.hierarchy.datastructure.TermData;
+import edu.illinois.cs.cogcomp.config.SimConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class MemoryBasedESA {
 
@@ -24,13 +26,13 @@ public class MemoryBasedESA {
 	private HashMap<String, String> pageIdTitleMapping;
 	
  
-	public MemoryBasedESA (ResourcesConfig config) {
+	public MemoryBasedESA (ResourceManager rm_) {
 		
-		System.out.println("[Read Memory ESA Data] " + config.memorybasedESA);
+		System.out.println("[Read Memory ESA Data] " + rm_.getString( SimConfigurator.MEMORYBASEDESA.key ));
 		
 		File inputFile = null;
 		
-		inputFile = new File(config.memorybasedESA);
+		inputFile = new File(rm_.getString( SimConfigurator.MEMORYBASEDESA.key ));
 		
 		wordVectors = new HashMap<String, HashMap<Integer, Double>>();
 		wordIDF = new HashMap<String, Double>();
@@ -72,7 +74,7 @@ public class MemoryBasedESA {
 		pageIdTitleMapping = new HashMap<String, String>();
 		
 		try {
-			File mappingFile = new File (config.pageIDMapping);
+			File mappingFile = new File (rm_.getString( SimConfigurator.PAGE_ID_MAPPING.key ));
 			System.out.println("Read mapping file: " + mappingFile.getAbsolutePath());
 			FileReader mappReader = new FileReader(mappingFile);
 			BufferedReader bf = new BufferedReader(mappReader);

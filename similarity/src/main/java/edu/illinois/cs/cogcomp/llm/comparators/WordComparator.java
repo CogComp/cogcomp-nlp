@@ -2,18 +2,14 @@ package edu.illinois.cs.cogcomp.llm.comparators;
 
 import java.io.IOException;
 
+import edu.illinois.cs.cogcomp.config.SimConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.llm.common.LlmConstants;
-import edu.illinois.cs.cogcomp.llm.config.LlmConfigurator;
 import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import edu.illinois.cs.cogcomp.sim.Metric;
 import edu.illinois.cs.cogcomp.sim.MetricResponse;
-import edu.illinois.cs.cogcomp.sim.PhraseSim;
-import edu.illinois.cs.cogcomp.sim.WNSimSimple;
+
 import edu.illinois.cs.cogcomp.sim.WordSim;
 
-import edu.illinois.cs.cogcomp.wsim.embedding.EmbeddingConstant;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,14 +54,12 @@ public class WordComparator implements Comparator< String, EntailmentResult >
 		protected void configure( ResourceManager rm_ ) throws IllegalArgumentException, IOException 
 		{
 //			boolean useWordSim = rm_.getBoolean(Constants.USE_WORDSIM);  // if false, use WNSim (older package)
-			entailmentThreshold = rm_.getDouble( LlmConfigurator.WORD_ENTAILMENT_THRESHOLD.key );
-			computeSimpleScore = rm_.getBoolean( LlmConfigurator.USE_SIMPLE_SCORE.key );
+			entailmentThreshold = rm_.getDouble( SimConfigurator.WORD_ENTAILMENT_THRESHOLD.key );
+			computeSimpleScore = rm_.getBoolean( SimConfigurator.USE_SIMPLE_SCORE.key );
 
-            String wordComparator = "word2vec";
-            //this.metric = wordComparator;
+            String wordComparator = rm_.getString(SimConfigurator.WORD_METRIC);
 
-
-            wordSim = new WordSim(wordComparator);
+            wordSim = new WordSim(rm_,wordComparator);
 
 
 		}

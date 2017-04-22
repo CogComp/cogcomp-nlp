@@ -3,11 +3,11 @@ package edu.illinois.cs.cogcomp.llm.comparators;
 import java.io.IOException;
 import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.config.SimConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.llm.align.WordListFilter;
-import edu.illinois.cs.cogcomp.llm.config.LlmConfigurator;
 import edu.illinois.cs.cogcomp.mrcs.align.Aligner;
 import edu.illinois.cs.cogcomp.mrcs.align.GreedyAlignmentScorer;
 import edu.illinois.cs.cogcomp.mrcs.comparators.Comparator;
@@ -34,7 +34,7 @@ public class LlmStringComparator
 
 	private void initialize(ResourceManager nonDefaultConfig) throws IOException {
 
-		WordComparator wc = new WordComparator( new LlmConfigurator().getConfig( nonDefaultConfig ) );
+		WordComparator wc = new WordComparator( new SimConfigurator().getConfig( nonDefaultConfig ) );
 	    initialize( nonDefaultConfig, wc );
     }
 
@@ -45,8 +45,8 @@ public class LlmStringComparator
     }
 
     private void initialize( ResourceManager rm_, Comparator< String, EntailmentResult > comparator ) throws IOException {
-        ResourceManager fullRm = new LlmConfigurator().getConfig( rm_ );
-        double threshold = fullRm.getDouble( LlmConfigurator.LLM_ENTAILMENT_THRESHOLD.key );
+        ResourceManager fullRm = new SimConfigurator().getConfig( rm_ );
+        double threshold = fullRm.getDouble( SimConfigurator.LLM_ENTAILMENT_THRESHOLD.key );
         tokenizer = new IllinoisTokenizer();
         this.comparator = comparator;
         filter = new WordListFilter( fullRm );

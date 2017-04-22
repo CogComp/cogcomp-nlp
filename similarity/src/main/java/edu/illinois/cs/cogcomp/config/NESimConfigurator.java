@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nesim.config;
+package edu.illinois.cs.cogcomp.config;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.*;
 

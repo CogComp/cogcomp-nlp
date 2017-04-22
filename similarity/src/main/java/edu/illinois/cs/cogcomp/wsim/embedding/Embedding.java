@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentMap;
+
 
 import org.apache.commons.lang.StringUtils;
 import org.mapdb.DB;
@@ -15,9 +13,8 @@ import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.sim.PhraseSim;
-import edu.illinois.cs.cogcomp.wsim.esa.ResourcesConfig;
+
 
 public class Embedding {
 	
