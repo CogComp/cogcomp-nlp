@@ -11,6 +11,8 @@ import java.util.regex.Pattern;
 
 import org.joda.time.Interval;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class phrase
 {
@@ -31,7 +33,7 @@ public class phrase
     static String monthnum=null;
     static String year=null;
     static String day=null;
-    static String month="(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
+    static String month="(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)";
     static String holiday1="(foundation day|new year|christmas|coming of age day|epiphany|martyrs Day|Martin Luther King's Day|Timkat|Husbands Day|National Day|The Three Holy Hierarchs|Air Force Day|Candlemas|Fiesta de la Candelaria|Constitution Day|Pre Eren Day|St. Paul's shipwreck|Unification Day|International Woman's Day|Army Day|Clean Monday|Shrove Monday|Washington's Birthday|Carnival|Ash Wednesday|Defender of the Fatherland|Independence Day|National Flag Day|Beer Day|Heroes' Day|Victory at Adwa Day|Liberation Day|The Spring Day|Saint Patrick's Day|Benito Juárez's birthday|St. Josephs day|Human Rights Day|Day of Remembrance for Truth and Justice|Annunciation|Freedom and Democracy Day|Mawlid an-Nabi|Malvinas Day|Maundy Thursday|Good Friday|Easter Saturday|Easter Monday|Easter|Juan Santamaria's day|First Day of Summer|Patriots' Day|Republic Day|Tiradentes' Day|St.George Day|ANZAC day|Freedom and Democracy Day|Liberation Day|Freedom Day|Showa DayQueen's birthday|Labour day|May Day|Bridging Holiday|General prayer day|Greenery Day|Children's Day|Victory Day|St.George Day|Bank Holiday|Victory Day|Mothers' Day|Ascension Day|Battle of Las Piedras|Navy day|Battle of Pichincha|Education, Culture and Literature Day|Saints Cyril and Methodius Day|May Revolution|Pentecost|Memorial Day|Pentecost Monday|Whit Monday|Freedom and Democracy Day|Republic Day|Corpus Christi|Sette Giugno|Chaco Armistice|Sacred Heart|Youth Day|Artigas' Birthday|Anti-Fascist Struggle Day|Midsummer Day|Victory Day|Battle of Carabobo|Johannis day|Jónsmessa|Statehood day|St. Peter and Paul day|St.Vitus' Day|St. Peter and Paul day|Saints Cyril and Methodius Day|Jan Hus Day|Republic Day|Statehood day|St.Peter's Day|Navy day|Virgin Carmen day|Birthday of Simón Bolivar|Guanacaste Day|St.Elijah's Day|Victory Day|Commerce Day|Battle of Boyacá|Independence of Quito|Assumption day|Assumption of Mary|Founding of Asunción|Day of Restoration of Independence|José de San Martín Day|St.Stephen's Day|National Uprising|Holy Rosa of Lima|National Language Day|Unification Day|Nativity of Mary|Nativity of our Lady|Enkutatash|Ramadan|Battle of San Jacinto|Respect-for-the-Aged Day|Heritage day|Meskel|St. Wenceslas Day|Battle of Angamos|Day of the Race|Health and Sports Day|Columbus Day|Revolution day|Day of the Indigenous Resistance|Our Lady of Aparecida|Eid ul-Fitr|Beatification of Mother Teresa|Ochi Day|Reformation day|All Saints|All Souls|Culture Day|Independence of Cuenca|Separation Day|Consolidation Day|October Revolution Day|St.Demetrius' Day|Armistice Day|Independence of Cartagena|Remembrance day|St. Martin's Day|Veterans Day|King's Feast|Thanksgiving Day|Self-governance Day|Foundation of Quito|St. Nicholas Day|Immaculate Conception Day|Saint Clement of Ohrid day|Day of Reconciliation|Eid ul-Adha|Emperors Birthday|Boxing Day|Day of Goodwill|St.Stephen's Day)";
     static String holiday=holiday1.toLowerCase();
     static String delims = "[(|)]";
@@ -646,6 +648,7 @@ public class phrase
         return null;
     }
 
+    /**
     public HashMap<String,String> comparetest(HashMap<String,String>mapNames){
         flagnull=0;
         int result;
@@ -719,7 +722,7 @@ public class phrase
 
     }
 
-
+*/
 
     public static int compareinterval(Interval one,Interval two, String condition){
 
@@ -825,7 +828,7 @@ public class phrase
         return 0;
     }
 
-
+/**
     public static int canonizecompare(String phrase1,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional) {
         return canonizecompare(new TemporalPhrase(phrase1), phrase2, deyear, demonth, deday, dehour, deminute, desecond, dems, defaultyear, defaultcountry, conditional);
     }
@@ -1406,7 +1409,7 @@ public class phrase
         secondphrase=two.toString();
         return compareinterval(one,two,conditional);
 
-    }
+    }*/
 
     public static int getLevenshteinDistance (String s, String t) {
         if (s == null || t == null) {
@@ -1538,12 +1541,12 @@ public class phrase
 
     }
 
-    public static Interval canonize(String phrase1,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
+    public static TimexChunk canonize(String phrase1,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
         TemporalPhrase temporalPhrase = new TemporalPhrase(phrase1);
         return canonize(temporalPhrase, deyear, demonth, deday, dehour, deminute, desecond, dems, defaultyear, defaultcountry);
     }
 
-    public static Interval canonize(TemporalPhrase temporalPhrase,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
+    public static TimexChunk canonize(TemporalPhrase temporalPhrase,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry){
         //String deyear,demonth,deday,dehour,deminute,desecond,dems are all default reference time
         //String defaultyear is the reference year of a holiday(in jollyday package)
         //String defaultcountry is the reference country of a holiday(in jollyday package)
@@ -1559,6 +1562,8 @@ public class phrase
         phrase1=phrase1.trim();
         constantphrase1=phrase1;
         temporalPhrase.setPhrase(phrase1);
+        TimexChunk tc = new TimexChunk();
+        tc.setContent(phrase1);
         //	System.out.println(phrase1);
 
         if(phrase1.contains("a couple of")){
@@ -1575,7 +1580,7 @@ public class phrase
         }
 
         if(phrase1.contains("of")){
-            phrase1=phrase1.replaceAll("of", "");
+            phrase1=phrase1.replaceAll("of", "this");
 
         }
 
@@ -1583,30 +1588,51 @@ public class phrase
         if(phrase1.equals("may")){
             phrase1="this "+phrase1;
         }
+
+        phrase1 = phrase1.trim().replaceAll(" +", " ");
+        temporalPhrase.setPhrase(phrase1);
         //System.out.println(phrase1);
+
+        if (phrase1.contains("mid") || phrase1.contains("middle") || phrase1.contains("mid-")) {
+            tc.addAttribute(TimexNames.mod, TimexNames.MID);
+        }
+
         DateTime start = new DateTime(Integer.parseInt(deyear),Integer.parseInt(demonth),Integer.parseInt(deday),Integer.parseInt(dehour),Integer.parseInt(deminute),Integer.parseInt(desecond),Integer.parseInt(dems));
         Interval one=new Interval(start,start);
-
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+        DateTimeFormatter ymFmt = DateTimeFormat.forPattern("yyyy-MM");
+        DateTimeFormatter yFmt = DateTimeFormat.forPattern("yyyy");
         //Get the interval of phrase1
         if(RelativeDate.Relativerule(start, phrase1)!=null){
-            one=RelativeDate.Relativerule(start, phrase1);
+            tc=RelativeDate.Relativerule(start, phrase1);
+        }
+
+        else if(TimeOfDay.timeRule(start, temporalPhrase)!=null){
+            tc=TimeOfDay.timeRule(start, temporalPhrase);
         }
 
         else if(ModifiedDate.ModifiedRule(start, temporalPhrase)!=null){
 
-            one=ModifiedDate.ModifiedRule(start, temporalPhrase);
+            tc=ModifiedDate.ModifiedRule(start, temporalPhrase);
         }
 
         else if(Ordinary.Ordinaryrule(start, phrase1)!=null){
 
-            one=Ordinary.Ordinaryrule(start, phrase1);
+            tc=Ordinary.Ordinaryrule(start, phrase1);
 
         }
 
         else if(Period.Periodrule(start, phrase1)!=null){
-            one=Period.Periodrule(start, phrase1);
+            tc=Period.Periodrule(start, phrase1);
         }
 
+        else if(SetRule.SetRule(temporalPhrase)!=null){
+            tc=SetRule.SetRule(temporalPhrase);
+        }
+
+        else if(Duration.DurationRule(start, phrase1)!=null){
+            tc=Duration.DurationRule(start, phrase1);
+        }
 
         else{
 
@@ -1642,7 +1668,7 @@ public class phrase
             if(prefound){
 
                 //	System.out.println(phrase1);
-                one=Jollyday.test(phrase1,defaultcountry,Integer.parseInt(defaultyear));
+                tc=Jollyday.test(phrase1,defaultcountry,Integer.parseInt(defaultyear));
 
 
             }
@@ -1653,7 +1679,7 @@ public class phrase
                     phrase1=phrase1.replaceAll("year", "");
                     flagonlyyear=1;
                 }
-                String patternStr="(before|after|in|during|since|from|prior to|on)\\s*((?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?)\\s*";
+                String patternStr="(before|after|in|during|since|from|prior to|on|early|earlier|late|later)\\s*((?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?)\\s*";
                 Pattern pattern = Pattern.compile(patternStr);
                 Matcher matcher = pattern.matcher(phrase1);
                 boolean matchFound = matcher.find();
@@ -1670,9 +1696,55 @@ public class phrase
 
                     String delims = "[/]";
                     String[] token=result1.split(delims);
+                    tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                    if (token[0].length()<2) {
+                        token[0] = "0" + token[0];
+                    }
+                    if (token[1].length()<2) {
+                        token[1] = "0" + token[1];
+                    }
+
+                    if(token[2].equals("XXXX")) {
+                        token[2] = referenceyear;
+                        // Modified by Zhili: if the sentence is past tense, and the month mentioned is
+                        // after DCT, then subtract 1 from year
+                        String tense = temporalPhrase.getTense();
+                        if (tense.equals("past")) {
+                            if (start.getMonthOfYear() < Integer.parseInt(token[0])) {
+                                token[2] = String.valueOf(Integer.parseInt(referenceyear) - 1);
+                            }
+                        }
+                    }
+
+                    if (!token[1].equals("XX")) {
+                        tc.addAttribute(TimexNames.value, token[2] + "-" + token[0] + "-" + token[1]);
+                    }
+                    else if (!token[0].equals("XX")) {
+                        tc.addAttribute(TimexNames.value, token[2] + "-" + token[0]);
+                    }
+                    else {
+                        tc.addAttribute(TimexNames.value, token[2]);
+                    }
+
+                    if (preword.matches("early|earlier")) {
+                        tc.addAttribute(TimexNames.mod, TimexNames.START);
+                    }
+                    else if (preword.matches("late|later")) {
+                        tc.addAttribute(TimexNames.mod, TimexNames.END);
+                    }
+
+                    return tc;
+
+                    /** Zhili: directly return the splitted value
                     //Do not know the year
                     if(token[2].equals("XXXX")){
                         token[2]=referenceyear;
+                        String tense = temporalPhrase.getTense();
+                        if (tense.equals("past")) {
+                            if (start.getMonthOfYear() < Integer.parseInt(token[0])) {
+                                token[2] = String.valueOf(Integer.parseInt(referenceyear) - 1);
+                            }
+                        }
                         if(token[0].equals("XX")){
                             token[0]=referencemonth;
                         }
@@ -1705,6 +1777,8 @@ public class phrase
                             DateTime tempfinish=tempstart.minusDays(1);
                             tempstart=new DateTime(0,1,1,0,0,0,0);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
 
                         }
 
@@ -1712,6 +1786,8 @@ public class phrase
                             DateTime tempfinish=new DateTime(Integer.parseInt(token[2])-1,12,31,23,59,59,59);
                             DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
                         }
 
                         else{
@@ -1719,6 +1795,8 @@ public class phrase
                             DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
                             tempfinish=tempfinish.minusDays(1);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
                         }
                     }
                     else if(preword.equals("after")||preword.equals("from")){
@@ -1727,6 +1805,8 @@ public class phrase
                             tempstart=tempstart.minusMonths(-1);
                             DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
                         }
 
                         else if((onlyyear==1)||(flagonlyyear==1)){
@@ -1734,6 +1814,8 @@ public class phrase
                             tempstart=tempstart.minusYears(-1);
                             DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
                         }
 
                         else{
@@ -1741,6 +1823,8 @@ public class phrase
                             tempstart=tempstart.minusDays(-1);
                             DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
                         }
                     }
 
@@ -1751,6 +1835,8 @@ public class phrase
                             tempfinish=tempfinish.minusDays(1);
                             tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
                         }
 
                         else if((onlyyear==1)||(flagonlyyear==1)){
@@ -1759,15 +1845,20 @@ public class phrase
                             tempfinish=tempfinish.minusDays(1);
                             tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
                             one=new Interval(tempstart,tempfinish);
+                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
                         }
                     }
                     else{
                         DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
                         DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
                         one=new Interval(tempstart,tempfinish);
-                    }
+                    }*/
                     //System.out.println(matcher.group(2));
+
+
                 }
+
 
                 else{
                     onlyyear=-1;
@@ -1775,11 +1866,11 @@ public class phrase
                     flagnum=-1;
                     flagmonnum=-1;
                     flagdaynum=-1;
-
-                    Interval durationRes = Duration.DurationRule(start, phrase1);
-                    if (durationRes!=null) {
-                        return durationRes;
-                    }
+//
+//                    TimexChunk durationRes = Duration.DurationRule(start, phrase1);
+//                    if (durationRes!=null) {
+//                        return durationRes;
+//                    }
 
                     result1=converter(phrase1);
                     if(result1==null){
@@ -1788,6 +1879,37 @@ public class phrase
                     }
                     String delims = "[/]";
                     String[] token=result1.split(delims);
+                    tc.addAttribute(TimexNames.type, TimexNames.DATE);
+                    if (token[0].length()<2) {
+                        token[0] = "0" + token[0];
+                    }
+                    if (token[1].length()<2) {
+                        token[1] = "0" + token[1];
+                    }
+                    if(token[2].equals("XXXX")) {
+                        token[2] = referenceyear;
+                        // Modified by Zhili: if the sentence is past tense, and the month mentioned is
+                        // after DCT, then subtract 1 from year
+                        String tense = temporalPhrase.getTense();
+                        if (tense.equals("past")) {
+                            if (start.getMonthOfYear() < Integer.parseInt(token[0])) {
+                                token[2] = String.valueOf(Integer.parseInt(referenceyear) - 1);
+                            }
+                        }
+                    }
+
+                    if (!token[1].equals("XX")) {
+                        tc.addAttribute(TimexNames.value, token[2] + "-" + token[0] + "-" + token[1]);
+                    }
+                    else if (!token[0].equals("XX")) {
+                        tc.addAttribute(TimexNames.value, token[2] + "-" + token[0]);
+                    }
+                    else {
+                        tc.addAttribute(TimexNames.value, token[2]);
+                    }
+                    return tc;
+
+                    /** Zhili: directly return splitted value above
                     //Do not know the year
                     if(token[2].equals("XXXX")){
                         token[2]=referenceyear;
@@ -1856,11 +1978,14 @@ public class phrase
                     result1=token[0]+"/"+token[1]+"/"+token[2];
                     //	System.out.println(">>>Date1:"+constantphrase1);
                     //	System.out.println("[Date1("+one+")]");
+
+                */
                 }
+
             }
         }
 
-        return one;
+        return tc;
     }
 
 

@@ -85,6 +85,12 @@
             <artifactId>jollyday</artifactId>
             <version>0.4.7</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>3.0.89</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 

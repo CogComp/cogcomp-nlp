@@ -21,6 +21,7 @@ import edu.illinois.cs.cogcomp.pos.LBJavaUtils;
 
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TemporalPhrase;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexChunk;
+import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNames;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.TimexNormalizer;
 import javafx.geometry.Pos;
 import org.joda.time.Interval;
@@ -31,15 +32,17 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.StringReader;
+import java.io.*;
 import java.net.URL;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by zhilifeng on 10/2/16.
@@ -57,12 +60,14 @@ public class TemporalChunkerAnnotator extends Annotator{
     private DocumentBuilderFactory factory;
     private DocumentBuilder builder;
     private Boolean useHeidelTime;
+    private List<TimexChunk> timex;
 
     public List<TimexChunk> getTimex() {
         return timex;
     }
-
-    private List<TimexChunk> timex;
+    public void setTimex(List<TimexChunk> timex) {
+        this.timex = timex;
+    }
 
     /**
      * default: don't use lazy initialization
@@ -116,8 +121,8 @@ public class TemporalChunkerAnnotator extends Annotator{
 //        tagger.readModel(lcPath);
 //        tagger.readLexicon(lexPath);
         tagger = new Chunker(
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr50.lc",
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr50.lex"
+                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr_iter50.lc",
+                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr_iter50.lex"
                 );
         this.useHeidelTime =
                 rm.getString(TemporalChunkerConfigurator.USE_HEIDELTIME) != "False";
@@ -206,7 +211,6 @@ public class TemporalChunkerAnnotator extends Annotator{
                     Constituent temp_label =
                             new Constituent(clabel, ViewNames.TIMEX3, record,
                                     currentChunkStart, currentChunkEnd);
-                    System.out.println(temp_label);
                     if (this.useHeidelTime) {
                         try {
                             clabel = heidelTimeNormalize(temp_label);
@@ -218,10 +222,21 @@ public class TemporalChunkerAnnotator extends Annotator{
                                 currentChunkStart, currentChunkEnd);
                     }
                     else {
-                        String tense = "past";
+                        String tense = this.getSentenceTense(record, temp_label.getSpan());
                         TemporalPhrase temporalPhrase = new TemporalPhrase(temp_label.toString(), tense);
-                        Interval normRes = timexNormalizer.normalize(temporalPhrase);
-                        label = new Constituent(normRes==null?"":normRes.toString(),
+                        TimexChunk normRes = timexNormalizer.normalize(temporalPhrase);
+                        if (normRes != null) {
+                            normRes.setCharStart(temp_label.getStartCharOffset());
+                            normRes.setCharEnd(temp_label.getEndCharOffset());
+                            this.timex.add(normRes);
+                        }
+                        else {
+                            TimexChunk dummy = new TimexChunk();
+                            dummy.setCharStart(temp_label.getStartCharOffset());
+                            dummy.setCharEnd(temp_label.getEndCharOffset());
+                            this.timex.add(dummy);
+                        }
+                        label = new Constituent(normRes==null?"":normRes.toTIMEXString(),
                                 ViewNames.TIMEX3, record,
                                 currentChunkStart, currentChunkEnd);
                     }
@@ -243,7 +258,7 @@ public class TemporalChunkerAnnotator extends Annotator{
             Constituent temp_label =
                     new Constituent(clabel, ViewNames.TIMEX3, record,
                             currentChunkStart, currentChunkEnd);
-            System.out.println(temp_label);
+
             if (this.useHeidelTime) {
                 try {
                     clabel = heidelTimeNormalize(temp_label);
@@ -254,12 +269,24 @@ public class TemporalChunkerAnnotator extends Annotator{
                         currentChunkStart, currentChunkEnd);
             }
             else {
-                String tense = "past";
+                String tense = this.getSentenceTense(record, temp_label.getSpan());
                 TemporalPhrase temporalPhrase = new TemporalPhrase(temp_label.toString(), tense);
-                Interval normRes = timexNormalizer.normalize(temporalPhrase);
-                label = new Constituent(normRes==null?"":normRes.toString(),
+                TimexChunk normRes = timexNormalizer.normalize(temporalPhrase);
+
+                label = new Constituent(normRes==null?"":normRes.toTIMEXString(),
                         ViewNames.TIMEX3, record,
                         currentChunkStart, currentChunkEnd);
+                if (normRes != null){
+                    normRes.setCharStart(temp_label.getStartCharOffset());
+                    normRes.setCharEnd(temp_label.getEndCharOffset());
+                    this.timex.add(normRes);
+                }
+                else {
+                    TimexChunk dummy = new TimexChunk();
+                    dummy.setCharStart(temp_label.getStartCharOffset());
+                    dummy.setCharEnd(temp_label.getEndCharOffset());
+                    this.timex.add(dummy);
+                }
             }
             chunkView.addConstituent(label);
         }
@@ -318,6 +345,51 @@ public class TemporalChunkerAnnotator extends Annotator{
         return res;
     }
 
+    private String heidelTimeNormalize(String temporal_phrase, List<TimexChunk> tc) throws Exception {
+        // If user didn't specify document creation date, use the current date
+        if (this.dct == null) {
+            this.dct = new Date();
+        }
+
+        String xml_res = this.heidelTime.process(temporal_phrase, this.dct);
+
+        Document document = builder.parse(new InputSource(new StringReader(xml_res)));
+
+        Element rootElement = document.getDocumentElement();
+        String res = recurseNormalizedTimeML(rootElement, temporal_phrase, tc);
+        return res;
+    }
+    private String recurseNormalizedTimeML(Node node, String temporal_phrase, List<TimexChunk> timex) {
+        // Base case: return empty string
+        if (node == null) {
+            return "";
+        }
+        // Iterate over every node, if the node is a TIMEX3 node, then concatenate all its attributes, and recurse
+        NodeList nodeList = node.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            Node currentNode = nodeList.item(i);
+            if (currentNode.getNodeType() == Node.ELEMENT_NODE && currentNode.getNodeName().indexOf("TIMEX3")!=-1) {
+                //calls this method for all the children which is Element
+                NamedNodeMap attrs = currentNode.getAttributes();
+                String attrPair = "";
+                TimexChunk tc = new TimexChunk();
+                tc.setContent(temporal_phrase);
+                for (int j = 0; j < attrs.getLength(); j++) {
+                    String key = attrs.item(j).getNodeName();
+                    String value = attrs.item(j).getNodeValue();
+                    attrPair += "[" + key + "=" + value + "]" ;
+                    if ((tc != null) && (key != null) && (value != null)) {
+                        tc.addAttribute(key, value);
+                    }
+                }
+                if (tc.getAttributes().size() != 0) {
+                    timex.add(tc);
+                }
+                return attrPair + recurseNormalizedTimeML(currentNode, temporal_phrase, timex);
+            }
+        }
+        return "";
+    }
     /**
      * Recursively read each XML tag of HeidelTime's result.
      * Notice: HeidelTime gives nested TIMEML tags, which TempEval 3 doesn't require.
@@ -360,46 +432,122 @@ public class TemporalChunkerAnnotator extends Annotator{
         return "";
     }
 
-    public List<TimexChunk> extractTimexFromFile(String text, TextAnnotation ta) throws Exception{
+
+    public TimexChunk getTimexChunkFromHeidelTime(
+            String phrase, HeidelTimeStandalone htTime, Date dct, TextAnnotation ta
+    ) throws Exception {
+        // This is to compare our normalization and heideltime
+        String xml_res = htTime.process(phrase, dct);
+        Document document = builder.parse(new InputSource(new StringReader(xml_res)));
+        Element rootElement = document.getDocumentElement();
+        Constituent dummy = new Constituent(phrase, "", ta, 0, 1);
+        List<TimexChunk> tcList = new ArrayList<>();
+        String res = recurseNormalizedTimeML(rootElement, dummy, tcList);
+        if (tcList.size()>0)
+            return tcList.get(0);
+        else
+            return null;
+    }
+
+    public String getSentenceTense(TextAnnotation ta, IntPair currSpan) {
+        Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
+        IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
+        View PosView = ta.getView("POS");
+        List<Constituent> sentenceConstituents = PosView.getConstituents();
+        String posStr = PosView.toString();
+        String[] posList = posStr.split("\\)");
+        String tense = "present";
+        for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
+            Constituent currConstituent = sentenceConstituents.get(t);
+            //System.out.println(currConstituent.getView());
+            if (posList[t].indexOf("VBD")!=-1 || posList[t].indexOf("VBN")!=-1){
+                tense = "past";
+            }
+        }
+        return tense;
+    }
+
+    public List<TimexChunk> extractTimexFromFile(String text, String content, TextAnnotation ta) throws Exception{
         Document document = builder.parse(new InputSource(new StringReader(text)));
         Element rootElement = document.getDocumentElement();
         List<TimexChunk> timex = new ArrayList<>();
+        List<TimexChunk> trueTimexs = new ArrayList<>();
         NodeList nodeList=document.getElementsByTagName("*");
         boolean isDct = true;
         HashMap<String, Integer> stringSpanMap = new HashMap<>();
+        HashMap<IntPair, TimexChunk> res = new HashMap<>();
+        int currPos = 0;
+//        HeidelTimeStandalone htTime = new HeidelTimeStandalone(
+//                Language.ENGLISH,
+//                DocumentType.NEWS,
+//                OutputType.TIMEML,
+//                "src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/conf/heideltime_config.props",
+//                POSTagger.NO,
+//                false
+//        );
+//        java.util.logging.Logger.getLogger("HeidelTimeStandalone").setLevel(Level.OFF);
 
+        String docId = "";
         for (int i=0; i<nodeList.getLength(); i++)
         {
             // Get element
             Node currentNode = nodeList.item(i);
 
-            if (currentNode.getNodeName().indexOf("DCT")!=-1) {
-                Node dctNode = currentNode.getChildNodes().item(0);
-                NamedNodeMap dctAttrs = dctNode.getAttributes();
-                for (int j = 0; j < dctAttrs.getLength(); j++) {
-                    if (dctAttrs.item(j).getNodeName().equals("value")) {
-                        //DCTs.add(dctAttrs.item(j).getNodeValue());
-                        System.out.println(dctAttrs.item(j).getNodeValue());
+            if (currentNode.getNodeName().indexOf("DOCID")!=-1) {
+                docId = currentNode.getTextContent();
+            }
+
+//            if (currentNode.getNodeName().indexOf("DCT")!=-1) {
+//                Node dctNode = currentNode.getChildNodes().item(0);
+//                NamedNodeMap dctAttrs = dctNode.getAttributes();
+//                for (int j = 0; j < dctAttrs.getLength(); j++) {
+//                    if (dctAttrs.item(j).getNodeName().equals("value")) {
+//                        //DCTs.add(dctAttrs.item(j).getNodeValue());
+//                        System.out.println(dctAttrs.item(j).getNodeValue());
+//                    }
+//                }
+//            }
+
+            if (currentNode.getNodeName().indexOf("EXTRAINFO")!=-1) {
+                String info = currentNode.getTextContent();
+                String docName = info.split(" ")[0];
+                if (!docName.equals(docId)) {
+                    Pattern dctPattern = Pattern.compile("(\\d{4}\\-\\d{2}\\-\\d{2})|(\\d{2}/\\d{2}/\\d{4})");
+                    Matcher dctMatcher = dctPattern.matcher(info);
+                    if (dctMatcher.find()) {
+                        if (dctMatcher.group(1)!=null) {
+                            this.addDocumentCreationTime(dctMatcher.group(1));
+                        }
+                        else if (dctMatcher.group(2)!=null) {
+                            String []date = dctMatcher.group(2).split("/");
+                            String formattedDate = date[2]+"-"+date[0]+"-"+date[1];
+                            this.addDocumentCreationTime(formattedDate);
+                        }
+                        else {
+                            System.err.println("CANNOT EXTRACT CORRECT DCT");
+                        }
                     }
                 }
             }
+
             if (currentNode.getNodeName().indexOf("TIMEX3")!=-1) {
                 // The first TIMEX3 is always DCT, ignore
                 if (isDct) {
                     isDct = false;
                     continue;
                 }
-                TimexChunk tc = new TimexChunk();
+                TimexChunk trueTc = new TimexChunk();
                 NamedNodeMap attrs = currentNode.getAttributes();
                 String attrPair = "";
                 for (int j = 0; j < attrs.getLength(); j++) {
                     String key = attrs.item(j).getNodeName();
                     String value = attrs.item(j).getNodeValue();
                     attrPair += "[" + key + "=" + value + "]" ;
-                    if ((tc != null) && (key != null) && (value != null)) {
-                        tc.addAttribute(key, value);
+                    if ((trueTc != null) && (key != null) && (value != null)) {
+                        trueTc.addAttribute(key, value);
                     }
                 }
+                trueTc.setContent(currentNode.getTextContent());
 
                 String currStr = currentNode.getTextContent();
                 List<IntPair> startEndPos = ta.getSpansMatching(currStr);
@@ -416,15 +564,28 @@ public class TemporalChunkerAnnotator extends Annotator{
                 if (currStr.equals("2009") && startEndPos.size()==0) {
                     currSpan = ta.getSpansMatching("2009-2010").get(0);
                     charStart = ta.getTokenCharacterOffset(currSpan.getFirst()).getFirst();
+                    charEnd = ta.getTokenCharacterOffset(currSpan.getFirst()).getSecond()-5;
+                }
+
+                if (currStr.equals("2010") && startEndPos.size()==0) {
+                    currSpan = ta.getSpansMatching("2009-2010").get(0);
+                    charStart = ta.getTokenCharacterOffset(currSpan.getFirst()).getFirst()+5;
                     charEnd = ta.getTokenCharacterOffset(currSpan.getFirst()).getSecond();
                 }
 
-                if (stringSpanMap.containsKey(currStr) && startEndPos.size()!=0) {
-                    currSpan = startEndPos.get(stringSpanMap.get(currStr));
-                    charStart = ta.getTokenCharacterOffset(currSpan.getFirst()).getFirst();
-                    charEnd = ta.getTokenCharacterOffset(currSpan.getSecond()-1).getSecond();
+                for (IntPair match: startEndPos) {
+                    int searchStart = ta.getTokenCharacterOffset(match.getFirst()).getFirst();
+                    if (searchStart>currPos) {
+                        currSpan = match;
+                        break;
+                    }
                 }
 
+
+                currPos = content.indexOf(currStr, currPos);
+                charStart = currPos;
+                charEnd = currPos + currStr.length();
+                currPos = charEnd + 1;
 
                 Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
                 IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
@@ -436,33 +597,161 @@ public class TemporalChunkerAnnotator extends Annotator{
                 for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
                     Constituent currConstituent = sentenceConstituents.get(t);
                     //System.out.println(currConstituent.getView());
-                    if (posList[t].indexOf("VBD")!=-1 || posList[t].indexOf("VBN")!=-1){
-                        tense = "past";
+                    String prevWord = null;
+                    String prev2Word = null;
+                    if (t-1>=0) {
+                        prevWord = sentenceConstituents.get(t-1).toString().toLowerCase();
+                    }
+                    if (t-2>=0) {
+                        prev2Word = sentenceConstituents.get(t-2).toString().toLowerCase();
                     }
 
+                    boolean isPerfect = false;
+                    if ( (prevWord != null && prevWord.matches("have|has|had")) ||
+                            (prev2Word != null && prev2Word.matches("have|has|had"))
+                            ) {
+                        if (posList[t].indexOf("VBN")!=-1 ) {
+                            isPerfect = true;
+                        }
+                    }
+                    if (posList[t].indexOf("VBD")!=-1 || isPerfect){
+                        tense = "past";
+                    }
                 }
+                //System.out.println(trueTc.toTIMEXString());
+
+                TimexChunk tc = null;
+                try {
+                    if (useHeidelTime) {
+                        List<TimexChunk> htTcs = new ArrayList<>();
+                        String htRes = heidelTimeNormalize(
+                                currStr,
+                                htTcs
+                        );
+                        if (htTcs.size()==0) {
+                            continue;
+                        }
+                        else {
+                            if (htTcs.size()>1)
+                                System.out.println(docId + " " + currStr);
+                            int htStart = charStart;
+                            int htEnd = charStart;
+                            for (TimexChunk htTc : htTcs) {
+                                int subIndex = currStr.indexOf(htTc.getContent());
+                                htStart = charStart + subIndex;
+                                htEnd = htStart + htTc.getContent().length();
+                                htTc.setCharStart(htStart);
+                                htTc.setCharEnd(htEnd);
+                                timex.add(htTc);
+                            }
+                        }
+
+                    }
+                    else
+                        tc = timexNormalizer.normalize(new TemporalPhrase(currStr, tense));
+                } catch (Exception e) {
+                    System.err.println("CANNOT NORMALIZE: " + currStr);
+                }
+                if (tc!=null) {
+                    tc.setContent(currStr);
+                    tc.setCharStart(charStart);
+                    tc.setCharEnd(charEnd);
+
+                    //                tc.setInterval(normInterval);
+                    timex.add(tc);
+                    res.put(new IntPair(charStart, charEnd), tc);
+                }
+                //System.out.println(currStr + " " + normInterval);
+                trueTc.setCharStart(charStart);
+                trueTc.setCharEnd(charEnd);
 
 
-
-                tc.setContent(currStr);
-                tc.setCharStart(charStart);
-                tc.setCharEnd(charEnd);
-                Interval normInterval = timexNormalizer.normalize(new TemporalPhrase(currStr, tense));
-                tc.setInterval(normInterval);
-                timex.add(tc);
-                System.out.println(currStr + " " + normInterval);
+                trueTimexs.add(trueTc);
             }
 
         }
-        return timex;
+        /*
+        System.out.println("MISS");
+        for (TimexChunk tc:trueTimexs) {
+            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+            if (!res.containsKey(key)) {
+                System.out.println(tc.toTIMEXString());
+                //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                TimexChunk htRes = null;
+                if (htRes!=null) {
+                    htRes.setContent(tc.getContent());
+                    System.out.println("HT:    " + htRes.toTIMEXString());
+                }
+            }
+        }
+        System.out.println();
+        System.out.println("WRONG TYPE");
+        for (TimexChunk tc:trueTimexs) {
+            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+            if (res.containsKey(key)) {
+                TimexChunk ourTc = res.get(key);
+                if (ourTc.getAttribute(TimexNames.type)==null) {
+                    System.out.println("OUR:   " + ourTc.toTIMEXString());
+                    System.out.println("TRUE:  " + tc.toTIMEXString());
+                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                    TimexChunk htRes = null;
+                    if (htRes!=null) {
+                        htRes.setContent(tc.getContent());
+                        System.out.println("HT:    " + htRes.toTIMEXString());
+                    }
+                }
+                else if (!ourTc.getAttribute(TimexNames.type).equals(tc.getAttribute(TimexNames.type))) {
+                    System.out.println("OUR:   " + ourTc.toTIMEXString());
+                    System.out.println("TRUE:  " + tc.toTIMEXString());
+                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                    TimexChunk htRes = null;
+                    if (htRes!=null) {
+                        htRes.setContent(tc.getContent());
+                        System.out.println("HT:    " + htRes.toTIMEXString());
+                    }
+                }
+            }
+        }
+        System.out.println();
+        System.out.println("WRONG VALUE");
+        for (TimexChunk tc:trueTimexs) {
+            IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
+            if (res.containsKey(key)) {
+                TimexChunk ourTc = res.get(key);
+                if (ourTc.getAttribute(TimexNames.value)==null) {
+                    System.out.println("OUR:   " + ourTc.toTIMEXString());
+                    System.out.println("TRUE:  " + tc.toTIMEXString());
+                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                    TimexChunk htRes = null;
+                    if (htRes!=null) {
+                        htRes.setContent(tc.getContent());
+                        System.out.println("HT:    " + htRes.toTIMEXString());
+                    }
+                }
+                else if (!ourTc.getAttribute(TimexNames.value).equals(tc.getAttribute(TimexNames.value))) {
+                    System.out.println("OUR:   " + ourTc.toTIMEXString());
+                    System.out.println("TRUE:  " + tc.toTIMEXString());
+                    //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
+                    TimexChunk htRes = null;
+                    if (htRes!=null) {
+                        htRes.setContent(tc.getContent());
+                        System.out.println("HT:    " + htRes.toTIMEXString());
+                    }
+                }
+            }
+        }
+        */
+        //System.out.println();
+
+        return trueTimexs;
     }
 
-    /**
-     * Normalize temporal phrase using Illini-time
-     * @param temporal_phrase
-     * @return
-     * @throws Exception
-     */
+//    /**
+//     * Normalize temporal phrase using Illini-time
+//     * @param temporal_phrase
+//     * @return
+//     * @throws Exception
+//     */
 //    private String illiniNormalize(Constituent temporal_phrase) throws Exception {
 //        // If user didn't specify document creation date, use the current date
 //        if (this.dct == null) {
@@ -476,7 +765,7 @@ public class TemporalChunkerAnnotator extends Annotator{
 //        System.out.println(xml_res);
 //        int startIndex = xml_res.indexOf("<TimeML>");
 //        xml_res = xml_res.substring(startIndex);
-//        Interval interval_res = timexNormalizer.normalize(xml_res);
+//        Interval interval_res = timexNormalizer.normalize(temporal_phrase.toString());
 //
 //        String string_res = interval_res==null?"":interval_res.toString();
 //
@@ -520,7 +809,10 @@ public class TemporalChunkerAnnotator extends Annotator{
                 text.replace("&", "&amp;"));
     }
 
-    public void write2Text(String outputFilename, String docID, String text) {
+    public void write2Text(String outputFilename, String docID, String text) throws IOException {
+//        File f = new File(System.getProperty("user.dir"), outputFilename);
+//        if(!f.exists())
+//            f.createNewFile();
         char[] originalDocumentText = text.toCharArray();
         Map<Integer, String> timexInsertionMap = new HashMap<Integer, String>();
         int tidCount = 1;

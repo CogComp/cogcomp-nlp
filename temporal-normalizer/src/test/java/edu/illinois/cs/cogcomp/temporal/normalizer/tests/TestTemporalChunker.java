@@ -9,8 +9,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.Parameters;
-import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerConfigurator;
 
@@ -34,10 +33,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -53,17 +52,23 @@ public class TestTemporalChunker {
     //private String testText;
     private List<String> DCTs;
     private List<String> testText;
-    private String folderName = "TE3-platinum-test";
+    //private String folderName = "TimeBank";
+    private String folderName = "AQUAINT";
+    //private String folderName = "te3-platinum";
+    //private String folderName = "ht2.1_res";
+    //private String folderName = "AQUAINT_ht";
+    //private String folderName = "TimeBank_ht";
+
     private static String fullFolderName;
     private List<String> docIDs;
     private List<String> te3inputText;
-    private String te3ForderName = "te3-platinum";
 
     @Before
     public void setUp() throws IOException, ParserConfigurationException, SAXException {
         testText = new ArrayList<>();
         DCTs = new ArrayList<>();
         docIDs = new ArrayList<>();
+        te3inputText = new ArrayList<>();
 
         Properties rmProps = new TemporalChunkerConfigurator().getDefaultConfig().getProperties();
         rmProps.setProperty("useHeidelTime", "False");
@@ -82,12 +87,13 @@ public class TestTemporalChunker {
                 String testFile = fullFolderName + "/" + file.getName();
                 byte[] encoded = Files.readAllBytes(Paths.get(testFile));
                 String fileContent = new String(encoded, StandardCharsets.UTF_8);
+                te3inputText.add(fileContent);
                 Document document = builder.parse(new InputSource(new StringReader(fileContent)));
                 Element rootElement = document.getDocumentElement();
                 NodeList nodeList = rootElement.getChildNodes();
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     Node currentNode = nodeList.item(i);
-                    if (currentNode.getNodeName().indexOf("TEXT")!=-1) {
+                    if (currentNode.getNodeName().equals("TEXT")) {
                         testText.add(currentNode.getTextContent());
                     }
                     if (currentNode.getNodeName().indexOf("DOCID")!=-1) {
@@ -106,20 +112,22 @@ public class TestTemporalChunker {
             }
         }
 
-        te3inputText = new ArrayList<>();
-        URL te3URL = TestTemporalChunker.class.getClassLoader().getResource(te3ForderName);
-        File te3Folder = new File(te3URL.getFile());
-        File[] te3Inputs = te3Folder.listFiles();
-        for (File file : te3Inputs) {
-            String testFile = te3URL.getFile() + "/" + file.getName();
-            byte[] encoded = Files.readAllBytes(Paths.get(testFile));
-            String fileContent = new String(encoded, StandardCharsets.UTF_8);
-            te3inputText.add(fileContent);
-        }
+//        te3inputText = new ArrayList<>();
+//        URL te3URL = TestTemporalChunker.class.getClassLoader().getResource(te3ForderName);
+//        File te3Folder = new File(te3URL.getFile());
+//        File[] te3Inputs = te3Folder.listFiles();
+//        for (File file : te3Inputs) {
+//            String testFile = te3URL.getFile() + "/" + file.getName();
+//            byte[] encoded = Files.readAllBytes(Paths.get(testFile));
+//            String fileContent = new String(encoded, StandardCharsets.UTF_8);
+//            te3inputText.add(fileContent);
+//        }
 
     }
 
     @Test public void testNormalizationWithTrueExtraction() throws Exception {
+        AnnotatorService pipeline = PipelineFactory.buildPipeline();
+
         AnnotatorService annotator = null;
         try {
             annotator = CuratorFactory.buildCuratorClient();
@@ -132,14 +140,12 @@ public class TestTemporalChunker {
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));
 
-        for (int j = 0; j < te3inputText.size(); j ++) {
-            if(!docIDs.get(j).contains("WSJ_20130321_1145")) {
-                continue;
-            }
+        java.util.logging.Logger.getLogger("HeidelTimeStandalone").setLevel(Level.OFF);
 
-            tca.addDocumentCreationTime(DCTs.get(j));
+        long preprocessTime = System.currentTimeMillis();
+        List <TextAnnotation> taList = new ArrayList<>();
+        for (int j = 0; j < te3inputText.size(); j ++) {
             TextAnnotation ta = null;
-            System.out.println(docIDs.get(j));
             try {
                 ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
             } catch (AnnotatorException e) {
@@ -150,20 +156,47 @@ public class TestTemporalChunker {
             } catch (AnnotatorException e) {
                 fail("Exception while adding POS VIEW " + e.getStackTrace());
             }
+            taList.add(ta);
+        }
+
+        long startTime = System.currentTimeMillis();
+
+        int numTimex = 0;
+        for (int j = 0; j < te3inputText.size(); j ++) {
+//            if(!docIDs.get(j).contains("NYT19990505.0443")) {
+//                continue;
+//            }
+
+            TextAnnotation ta = taList.get(j);
+            tca.addDocumentCreationTime(DCTs.get(j));
+
+            //System.out.println(docIDs.get(j));
+
 
 
             try {
-                List<TimexChunk> timex = tca.extractTimexFromFile(te3inputText.get(j), ta);
-//                for (TimexChunk tc: timex) {
+                List<TimexChunk> timex = tca.extractTimexFromFile(te3inputText.get(j), testText.get(j), ta);
+//                for (TimexChunk tc:timex)
 //                    System.out.println(tc.toTIMEXString());
-//                }
+                tca.setTimex(timex);
+                //String outputFileName = "TB_htext_illininorm/" +docIDs.get(j) + ".tml";
+                String outputFileName = "AQ_goldext_htnorm/" +docIDs.get(j) + ".tml";
+
+                //tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
+                numTimex += timex.size();
+                tca.deleteTimex();
             } catch (AnnotatorException e) {
                 fail("Exception while adding TIMEX3 VIEW " + e.getStackTrace());
             }
-            System.out.println("\n");
+
 
 
         }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Process time: " + totalTime);
+        System.out.println("Preprocess + process time: " + (endTime-preprocessTime) );
+        System.out.println("Total timex3: " + numTimex );
 
     }
 
@@ -180,11 +213,12 @@ public class TestTemporalChunker {
         // System.out.println(tca.normalizeSinglePhrase("Feb 28", "2013-03-22"));
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));
+        java.util.logging.Logger.getLogger("HeidelTimeStandalone").setLevel(Level.OFF);
 
+        List <TextAnnotation>taList = new ArrayList<>();
+        long preprocessTime = System.currentTimeMillis();
         for (int j = 0; j < testText.size(); j ++) {
-            tca.addDocumentCreationTime(DCTs.get(j));
             TextAnnotation ta = null;
-            System.out.println(docIDs.get(j));
             try {
                 ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
             } catch (AnnotatorException e) {
@@ -195,6 +229,17 @@ public class TestTemporalChunker {
             } catch (AnnotatorException e) {
                 fail("Exception while adding POS VIEW " + e.getStackTrace());
             }
+            taList.add(ta);
+        }
+        System.out.println("Start");
+        long startTime = System.currentTimeMillis();
+        for (int j = 0; j < testText.size(); j ++) {
+//            if (!docIDs.get(j).contains("XIE19981203.0008")){
+//                continue;
+//            }
+            tca.addDocumentCreationTime(DCTs.get(j));
+            TextAnnotation ta = taList.get(j);
+            //System.out.println(docIDs.get(j));
 
             try {
                 tca.addView(ta);
@@ -202,13 +247,16 @@ public class TestTemporalChunker {
                 fail("Exception while adding TIMEX3 VIEW " + e.getStackTrace());
             }
 
-            View timexView = ta.getView(ViewNames.TIMEX3);
+//            View timexView = ta.getView(ViewNames.TIMEX3);
 
-            String corpId = "IllinoisTimeAnnotator";
-            List<Constituent> timeCons = timexView.getConstituents();
+//            String corpId = "IllinoisTimeAnnotator";
+//            List<Constituent> timeCons = timexView.getConstituents();
 
+//            for(Constituent c: timeCons) {
+//                System.out.println(c);
+//            }
             // Keep track of the compressed index of each constituent.
-            Span[] compressedSpans = new Span[timeCons.size()];
+/*            Span[] compressedSpans = new Span[timeCons.size()];
             int spanStart;
 
             // Builds a string of the concatenated constituents from a labeled view.
@@ -224,10 +272,19 @@ public class TestTemporalChunker {
             }
             String compressedText = builder.toString();
             assertNotNull(compressedText);
-            String outputFileName = "./ht_chunker_res/"+docIDs.get(j) + ".tml";
+*/
+            String outputFileName = "./AQ_chunker_illininorm/"+docIDs.get(j) + ".tml";
+//            for(TimexChunk tc: tca.getTimex()) {
+//                System.out.println(tc.toTIMEXString());
+//            }
+//            System.out.println("\n");
             tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
             tca.deleteTimex();
         }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Process time: " + totalTime);
+        System.out.println("Preprocess + process time: " + (endTime-preprocessTime) );
     }
 
 }

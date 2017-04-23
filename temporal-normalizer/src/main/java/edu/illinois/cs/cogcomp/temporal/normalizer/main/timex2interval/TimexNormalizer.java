@@ -12,11 +12,12 @@ import java.util.Date;
  * @author dxquang Nov 19, 2011
  */
 public class TimexNormalizer {
+	//1999-02-10
 	protected static String defaultcountry = "UNITED_STATES";
-	protected static String defaultyear = "2011";
-	protected static String deyear = "2011";
-	protected static String demonth = "11";
-	protected static String deday = "16";
+	protected static String defaultyear = "1998";
+	protected static String deyear = "1998";
+	protected static String demonth = "02";
+	protected static String deday = "13";
 	protected static String dehour = "12";
 	protected static String deminute = "30";
 	protected static String desecond = "00";
@@ -39,7 +40,7 @@ public class TimexNormalizer {
 		this.dems = String.valueOf(cal.get(Calendar.MILLISECOND));
 	}
 
-	public static Interval normalize(String timex, Date dct) {
+	public static TimexChunk normalize(String timex, Date dct) {
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dct);
@@ -59,13 +60,15 @@ public class TimexNormalizer {
 			e.printStackTrace();
 		}
 		p = p.toLowerCase();
-		Interval canonicalTime = phrase.canonize(p, deyear,
+		TimexChunk canonicalTime = phrase.canonize(p, deyear,
 				demonth, deday, dehour, deminute, desecond, dems,
 				defaultyear, defaultcountry);
+		canonicalTime.setContent(timex);
 		return canonicalTime;
 	}
 
-	public static Interval normalize(TemporalPhrase timex) {
+	public static TimexChunk normalize(TemporalPhrase timex) {
+		String origPhrase = timex.getPhrase();
 		String p = timex.getPhrase();
 		try {
 			p = ConvertWordToNumber.ConvertWTN(timex.getPhrase());
@@ -75,11 +78,25 @@ public class TimexNormalizer {
 		//TODO: remember update timex using p
 		p = p.toLowerCase();
 		timex.setPhrase(p);
-		Interval canonicalTime = phrase.canonize(timex, TimexNormalizer.deyear,
+		TimexChunk canonicalTime = phrase.canonize(timex, TimexNormalizer.deyear,
 				TimexNormalizer.demonth, TimexNormalizer.deday,
 				TimexNormalizer.dehour, TimexNormalizer.deminute,
 				TimexNormalizer.desecond, TimexNormalizer.dems,
 				TimexNormalizer.defaultyear, TimexNormalizer.defaultcountry);
+		if (canonicalTime==null) {
+			return null;
+		}
+		canonicalTime.setContent(origPhrase);
 		return canonicalTime;
+	}
+
+	public static void main(String [] args) {
+//		CANNOT NORMALIZE: Several days
+//		CANNOT NORMALIZE: The day
+//		CANNOT NORMALIZE: the day
+//		CANNOT NORMALIZE: recent weeks
+		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("august", "past"));
+		System.out.println(temp.toTIMEXString());
+
 	}
 }

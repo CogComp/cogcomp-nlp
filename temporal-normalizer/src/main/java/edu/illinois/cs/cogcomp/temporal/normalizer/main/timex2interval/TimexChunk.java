@@ -5,6 +5,7 @@ import org.joda.time.Interval;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhilifeng on 1/4/17.
@@ -29,6 +30,10 @@ public class TimexChunk {
         this.content = content;
     }
 
+    public String getContent() {
+        return this.content;
+    }
+
     public Interval getInterval() {
         return interval;
     }
@@ -39,6 +44,14 @@ public class TimexChunk {
 
     public HashMap<String, String> getAttributes() {
         return attributes;
+    }
+    public String getAttribute(String key) {
+        if (!attributes.containsKey(key)) {
+            System.err.println("No key value pair found");
+            return null;
+        }
+        return attributes.get(key);
+
     }
 
     public String beginAnnotation(int tid) {
@@ -70,10 +83,17 @@ public class TimexChunk {
     }
 
     public String toTIMEXString() {
-        return String.format("%s <TIMEX3 %s %s%s>",
-                content,
-                "type=\"" + (attributes.get("type") == null ? "DATE" : attributes.get("type") ) + "\"",
-                "value=\"" + attributes.get("value") + "\"",
-                attributes.get("mod") == null ? "" : " mod=\"" + attributes.get("mod") + "\"");
+        String res = content + " <TIMEX3";
+        for(Map.Entry<String, String> entry: attributes.entrySet()) {
+            res += " " + entry.getKey() + "=\"" + entry.getValue() + "\"";
+        }
+        res+=">";
+        return res;
+//
+//        return String.format("%s <TIMEX3 %s %s%s>",
+//                content,
+//                "type=\"" + (attributes.get("type") == null ? "DATE" : attributes.get("type") ) + "\"",
+//                "value=\"" + attributes.get("value") + "\"",
+//                attributes.get("mod") == null ? "" : " mod=\"" + attributes.get("mod") + "\"");
     }
 }

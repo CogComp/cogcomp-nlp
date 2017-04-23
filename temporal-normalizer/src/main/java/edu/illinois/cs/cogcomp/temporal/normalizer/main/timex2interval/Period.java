@@ -2,10 +2,13 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.util.regex.*;
 
 public class Period {
-	public static Interval Periodrule(DateTime start, String phrase) {
+	public static TimexChunk Periodrule(DateTime start, String phrase) {
 
 		int year;
 		DateTime finish;
@@ -14,10 +17,14 @@ public class Period {
 		Interval interval;
 		interval = new Interval(start, start);
 		phrase = phrase.toLowerCase();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+
 		int modiword = 0;// 0 :no modified words 1:early,ealier 2:late,later
 		// Handle some special cases
+		TimexChunk tc = new TimexChunk();
+		tc.addAttribute(TimexNames.type, TimexNames.DATE);
 		if (phrase.contains("now") || phrase.contains("currently")
-				|| phrase.contains("current")) {
+				|| phrase.contains("current") || phrase.contains("today")) {
 			DateTime virtualStart = interval.getStart();
 			virtualStart = new DateTime(virtualStart.getYear(),
 					virtualStart.getMonthOfYear(),
@@ -25,8 +32,9 @@ public class Period {
 					virtualStart.getMinuteOfHour(),
 					virtualStart.getSecondOfMinute(),
 					virtualStart.getMillisOfSecond() + 1);
-			interval = new Interval(virtualStart, virtualStart);
-			return interval;
+			//interval = new Interval(virtualStart, virtualStart);
+			tc.addAttribute(TimexNames.value, TimexNames.PRESENT_REF);
+			return tc;
 		}
 		if (phrase.contains("early") || phrase.contains("earlier")) {
 			modiword = 1;
@@ -47,8 +55,9 @@ public class Period {
 				year = (Integer.parseInt(temp1) - 1) * 100;
 				start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 				finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-				interval = new Interval(start, finish);
-				return interval;
+				//interval = new Interval(start, finish);
+				tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+				return tc;
 			}
 
 			else if (temp2.equals("s")) {
@@ -60,22 +69,27 @@ public class Period {
 
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
 					}
 
 					else if (modiword == 1) {
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 3, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
+						tc.addAttribute(TimexNames.mod, TimexNames.START);
 					}
 
 					else if (modiword == 2) {
 						start = new DateTime(year + 7, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
+						tc.addAttribute(TimexNames.mod, TimexNames.END);
 					}
 
-					return interval;
+					return tc;
 				}
 
 				else {
@@ -84,7 +98,8 @@ public class Period {
 								0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 9, 12,
 								31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
 					}
 
 					else if (modiword == 1) {
@@ -92,7 +107,9 @@ public class Period {
 								0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 3, 12,
 								31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
+						tc.addAttribute(TimexNames.mod, TimexNames.START);
 					}
 
 					else if (modiword == 2) {
@@ -100,9 +117,11 @@ public class Period {
 								0, 0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 9, 12,
 								31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
+						tc.addAttribute(TimexNames.mod, TimexNames.END);
 					}
-					return interval;
+					return tc;
 
 				}
 			}
@@ -114,7 +133,7 @@ public class Period {
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(1900, 3, 14, 3, 3, 3, 3);
 		String example = "now";
-		Interval sample = Periodrule(startTime, example);
+		TimexChunk sample = Periodrule(startTime, example);
 	}
 
 }
