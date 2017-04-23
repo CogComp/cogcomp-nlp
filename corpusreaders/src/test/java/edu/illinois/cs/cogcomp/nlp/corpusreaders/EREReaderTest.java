@@ -70,8 +70,16 @@ public class EREReaderTest {
 
         String sourceDir = corpusDir + "source/mpdfxml/";
         String annotationDir = corpusDir + "ere/mpdfxml/";
+
         XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir);
 
+
+        corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data";
+
+        sourceDir = corpusDir + "/data/source/";
+        annotationDir = corpusDir + "data/ere/";
+
+        outputXmlTa = runTest(sourceDir, annotationDir);
 
         corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
