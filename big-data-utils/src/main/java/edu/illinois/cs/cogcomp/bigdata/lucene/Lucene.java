@@ -25,7 +25,7 @@ import org.apache.lucene.index.*;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
-import org.apache.lucene.search.similarities.DefaultSimilarity;
+import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.TFIDFSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.IOContext;
@@ -55,7 +55,7 @@ public class Lucene {
 	public static FieldType FULL_INDEX = new FieldType();
 
 	static {
-		FULL_INDEX.setIndexed(true);
+		FULL_INDEX.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
 		FULL_INDEX.setTokenized(true);
 		FULL_INDEX.setStored(true);
 		FULL_INDEX.setStoreTermVectors(true);
@@ -68,23 +68,22 @@ public class Lucene {
 
 	static {
 
-		JUST_INDEX.setIndexed(true);
+		JUST_INDEX.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
 		JUST_INDEX.setStored(true);
 		JUST_INDEX.freeze();
 
 	}
 
-	public static final Version version = Version.LUCENE_43; // change this when
+	public static final Version version = Version.LUCENE_6_0_0; // change this when
 																// using a
 																// different
 																// version
-	public static final Analyzer ENGLISH = new EnglishAnalyzer(version);
-	public static final Analyzer STANDARD = new StandardAnalyzer(version);
-	public static final Analyzer SIMPLE = new SimpleAnalyzer(version);
+	public static final Analyzer ENGLISH = new EnglishAnalyzer();
+	public static final Analyzer STANDARD = new StandardAnalyzer();
+	public static final Analyzer SIMPLE = new SimpleAnalyzer();
 	public static final Analyzer KEYWORD = new KeywordAnalyzer();
-	public static final Analyzer WHITESPACE = new WhitespaceAnalyzer(version);
-	public static final Analyzer AGGRESSIVE_TRANSFORM = new ASCIIEnglishAnalyzer(
-			version);
+	public static final Analyzer WHITESPACE = new WhitespaceAnalyzer();
+	public static final Analyzer AGGRESSIVE_TRANSFORM = new ASCIIEnglishAnalyzer();
 	public static final Analyzer MINIMAL = new MinimalAnalyzer(version);
 	
 	private static final IndexWriterConfig storeConfig = newConfig(new KeywordAnalyzer());
@@ -97,7 +96,7 @@ public class Lucene {
 	 * @return
 	 */
 	public static IndexWriterConfig newConfig(Analyzer analyzer) {
-		return new IndexWriterConfig(version, analyzer);
+		return new IndexWriterConfig(analyzer);
 	}
 
 	/**
@@ -110,7 +109,7 @@ public class Lucene {
 	 */
 	public static IndexWriter writer(String pathToIndexDir,
 			IndexWriterConfig config) throws IOException{
-		return new IndexWriter(new MMapDirectory(new File(pathToIndexDir)),
+		return new IndexWriter(new MMapDirectory(Paths.get(pathToIndexDir)),
 				config);
 	}
 
@@ -150,13 +149,13 @@ public class Lucene {
 
 	public static IndexWriter storeOnlyWriter(String pathToIndexDir)
 			throws IOException {
-		return new IndexWriter(new MMapDirectory(new File(pathToIndexDir)),
+		return new IndexWriter(new MMapDirectory(Paths.get(pathToIndexDir)),
 				storeConfig);
 	}
 
 	public static IndexReader ramReader(String pathToIndex) throws IOException {
 		return DirectoryReader.open(new RAMDirectory(new MMapDirectory(
-				new File(pathToIndex)), IOContext.READ));
+				Paths.get(pathToIndex)), IOContext.READ));
 	}
 
 	public static IndexReader reader(String dir, String... children)
@@ -165,7 +164,7 @@ public class Lucene {
 	}
 
 	public static IndexReader reader(String pathToIndex) throws IOException {
-		return DirectoryReader.open(new MMapDirectory(new File(pathToIndex)));
+		return DirectoryReader.open(new MMapDirectory(Paths.get(pathToIndex)));
 	}
 
 	public static IndexSearcher searcher(IndexReader reader) throws IOException {
@@ -243,7 +242,7 @@ public class Lucene {
 	 */
 	public static TermsEnum safeEnum(Terms terms) {
 		try {
-			return terms.iterator(TermsEnum.EMPTY);
+			return terms.iterator();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -257,7 +256,7 @@ public class Lucene {
 	 * @return
 	 */
 	public static QueryParser newQueryParser(String string) {
-		return new QueryParser(version, string, ENGLISH);
+		return new QueryParser(string, ENGLISH);
 	}
 
 	/**
@@ -267,9 +266,9 @@ public class Lucene {
 	 * @param id
 	 * @return
 	 */
-	public static Query intQuery(String field, int id) {
-		return NumericRangeQuery.newIntRange(field, id, id, true, true);
-	}
+//	public static Query intQuery(String field, int id) {
+//		return NumericRangeQuery.newIntRange(field, id, id, true, true);
+//	}
 
 	/**
 	 * Uses default query parser
@@ -286,7 +285,7 @@ public class Lucene {
 
 	public static boolean indexExists(String pageIndex) {
 		try {
-			return DirectoryReader.indexExists(new NIOFSDirectory(new File(
+			return DirectoryReader.indexExists(new NIOFSDirectory(Paths.get(
 					pageIndex)));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -295,7 +294,7 @@ public class Lucene {
 	}
 
 	public static QueryParser newQueryParser(String field, Analyzer analyzer) {
-		return new QueryParser(version, field, analyzer);
+		return new QueryParser(field, analyzer);
 	}
 
 	/**
@@ -310,7 +309,7 @@ public class Lucene {
 	public static Map<String, Float> getIdfs(IndexReader reader, String field)
 			throws IOException {
 		// DefaultSimilarity computes idf as 1 + log (numDocs/ docFreq + 1)
-		return getIdfs(reader, field, new DefaultSimilarity());
+		return getIdfs(reader, field, new ClassicSimilarity());
 	}
 
 	/**
@@ -327,10 +326,10 @@ public class Lucene {
 			TFIDFSimilarity tfidfSIM) throws IOException {
 		Map<String, Float> docFrequencies = new HashMap<>();
 
-		TermsEnum termEnum = MultiFields.getTerms(reader, field).iterator(null);
+		TermsEnum termEnum = MultiFields.getTerms(reader, field).iterator();
 		BytesRef bytesRef;
 		while ((bytesRef = termEnum.next()) != null) {
-			if (termEnum.seekExact(bytesRef, true)) {
+			if (termEnum.seekExact(bytesRef)) {
 				String term = bytesRef.utf8ToString();
 
 				float idf = tfidfSIM.idf(termEnum.docFreq(), reader.numDocs());
@@ -353,7 +352,7 @@ public class Lucene {
 			int docID) throws IOException {
 		Map<String, Float> termFrequencies = new HashMap<>();
 		Terms terms = reader.getTermVector(docID, field);
-		TermsEnum itr = terms.iterator(null);
+		TermsEnum itr = terms.iterator();
 		BytesRef term = null;
 		while ((term = itr.next()) != null) {
 			String termText = term.utf8ToString();
@@ -376,7 +375,7 @@ public class Lucene {
 	public static int getLuceneDocId(IndexReader reader, String docIdField, String docId) throws IOException {
 		int luceneDocId = -1;
 		IndexSearcher searcher = new IndexSearcher(reader);
-		QueryParser parser = new QueryParser(version, docIdField, KEYWORD);
+		QueryParser parser = new QueryParser(docIdField, KEYWORD);
 		Query q = new TermQuery(new Term(docIdField, docId));
 
 		ScoreDoc[] docs = searcher.search(q, 1).scoreDocs;

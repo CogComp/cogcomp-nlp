@@ -30,7 +30,7 @@ public abstract class TermIterator implements Runnable {
     public void run() {
         TermsEnum te;
         try {
-            te = terms.iterator(TermsEnum.EMPTY);
+            te = terms.iterator();
             int i = 0;
             while (te.next() != null) {
                 int freq = te.docFreq();
