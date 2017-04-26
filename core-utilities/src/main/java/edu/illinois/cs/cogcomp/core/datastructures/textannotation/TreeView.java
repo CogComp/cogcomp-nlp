@@ -14,11 +14,13 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.transformers.Predicate;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseTreeProperties;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This view represents a tree structure. Use this for parse trees and dependency trees. It extends
@@ -28,19 +30,16 @@ import java.util.List;
  * @author Vivek Srikumar
  */
 public class TreeView extends View {
-    private static Logger logger = LoggerFactory.getLogger(TreeView.class);
-
     private static final String PARENT_OF_STRING = "ParentOf";
-
     private static final long serialVersionUID = 7902172271434061397L;
-
+    private static Logger logger = LoggerFactory.getLogger(TreeView.class);
     protected List<Tree<String>> trees;
 
     protected boolean isDependencyTree;
 
     protected boolean firstTree;
 
-    private List<Constituent> roots;
+    private TIntObjectHashMap<Constituent> roots;
 
     /**
      * Create a new TreeView with default {@link #viewGenerator} and {@link #score}.
@@ -52,6 +51,30 @@ public class TreeView extends View {
     public TreeView(String viewName, String viewGenerator, TextAnnotation text, double score) {
         super(viewName, viewGenerator, text, score);
         firstTree = true;
+    }
+
+    /**
+     * Checks if a constituent is a root node of a tree. It is assumed that the input constituent is
+     * a member of a TreeView.
+     */
+    public static boolean isRoot(Constituent c) {
+        return c.getIncomingRelations().size() == 0;
+    }
+
+    /**
+     * Checks if a constituent is a leaf of a tree. It is assumed that the input constituent is a
+     * member of a TreeView.
+     */
+    public static boolean isLeaf(Constituent c) {
+        return c.getOutgoingRelations().size() == 0;
+    }
+
+    /**
+     * Gets the parent of a constituent. It is assumed that the input constiutent is a member of a
+     * TreeView.
+     */
+    public static Constituent getParent(Constituent constituent) {
+        return constituent.getIncomingRelations().get(0).getSource();
     }
 
     protected Tree<String> buildTree(Constituent root) {
@@ -75,9 +98,7 @@ public class TreeView extends View {
      * Gets the root constituent of the tree for the given sentence
      */
     public Constituent getRootConstituent(int sentenceId) {
-        if (this.roots == null) {
-            findRoots();
-        }
+        findRoots();
 
         return this.roots.get(sentenceId);
     }
@@ -122,11 +143,11 @@ public class TreeView extends View {
     }
 
     private void findRoots() {
-        roots = new ArrayList<>();
-        for (Sentence s : this.textAnnotation.sentences()) {
-            roots.add(getTreeRoot(s));
-        }
-
+        if (roots == null)
+            roots = new TIntObjectHashMap<>();
+        for (int i = 0; i < this.textAnnotation.sentences().size(); ++i)
+            if(null == roots.get(i))
+                roots.put(i, getTreeRoot(this.textAnnotation.getSentence(i)));
     }
 
     /**
@@ -308,7 +329,6 @@ public class TreeView extends View {
         return createNewConstituent(start, end, constituentLabel, treeScore);
     }
 
-
     private Constituent getConstituentRelativeToSentenceStart(Tree<Pair<String, Integer>> depTree,
             double treeScore, int sentenceStart, String constituentLabel) {
         // HACK AHEAD: Sometimes, the integer in the dependency tree label is
@@ -468,21 +488,20 @@ public class TreeView extends View {
             String constituentLabel = child.getLabel().getFirst();
 
             Constituent childConstituent;
-            if (start == end) {
-                childConstituent =
-                        new Constituent(constituentLabel, constituentScore, this.getViewName(),
-                                this.getTextAnnotation(), -1, 0);
+            if (start >= end) {
+                // Ignore constituents with incorrect span bounds
+                logger.debug("Constituent with incorrect span found in " + root.getViewName());
             } else {
                 childConstituent =
                         createNewConstituent(start, end, constituentLabel, constituentScore);
+
+                this.addConstituent(childConstituent);
+
+                this.addRelation(new Relation(edgeLabel, root, childConstituent, edgeScore));
+
+                Tree<Double> scoresChild = scores.getChild(childId);
+                this.addScoredParseTree(child, scoresChild, childConstituent, sentenceStartPosition);
             }
-
-            this.addConstituent(childConstituent);
-
-            this.addRelation(new Relation(edgeLabel, root, childConstituent, edgeScore));
-
-            Tree<Double> scoresChild = scores.getChild(childId);
-            this.addScoredParseTree(child, scoresChild, childConstituent, sentenceStartPosition);
         }
     }
 
@@ -506,10 +525,9 @@ public class TreeView extends View {
 
             String constituentLabel = childLabel.getFirst();
             Constituent childConstituent;
-            if (start == end) {
-                childConstituent =
-                        new Constituent(constituentLabel, 1.0, this.getViewName(),
-                                this.getTextAnnotation(), -1, 0);
+            if (start >= end) {
+                // Ignore constituents with incorrect span bounds
+                logger.debug("Constituent with incorrect span found in " + root.getViewName());
             } else {
                 childConstituent = createNewConstituent(start, end, constituentLabel, 1.0);
 
@@ -525,10 +543,11 @@ public class TreeView extends View {
                         assert false : "Expecting token: " + token + ", found " + s + " instead.";
                     }
                 }
+
+                this.addConstituent(childConstituent);
+                this.addRelation(new Relation(edgeLabel, root, childConstituent, 1.0));
+                this.addParseTree(child, childConstituent, sentenceStartPosition);
             }
-            this.addConstituent(childConstituent);
-            this.addRelation(new Relation(edgeLabel, root, childConstituent, 1.0));
-            this.addParseTree(child, childConstituent, sentenceStartPosition);
         }
     }
 
@@ -694,30 +713,6 @@ public class TreeView extends View {
             }
         }
         return spans;
-    }
-
-    /**
-     * Checks if a constituent is a root node of a tree. It is assumed that the input constituent is
-     * a member of a TreeView.
-     */
-    public static boolean isRoot(Constituent c) {
-        return c.getIncomingRelations().size() == 0;
-    }
-
-    /**
-     * Checks if a constituent is a leaf of a tree. It is assumed that the input constituent is a
-     * member of a TreeView.
-     */
-    public static boolean isLeaf(Constituent c) {
-        return c.getOutgoingRelations().size() == 0;
-    }
-
-    /**
-     * Gets the parent of a constituent. It is assumed that the input constiutent is a member of a
-     * TreeView.
-     */
-    public static Constituent getParent(Constituent constituent) {
-        return constituent.getIncomingRelations().get(0).getSource();
     }
 
 }

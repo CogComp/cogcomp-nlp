@@ -7,21 +7,28 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.ner.IO.InFile;
-import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.Data;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import gnu.trove.map.hash.THashMap;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 
 public class BrownClusters {
     private static Logger logger = LoggerFactory.getLogger(BrownClusters.class);
@@ -67,6 +74,10 @@ public class BrownClusters {
     public static void init(Vector<String> pathsToClusterFiles, Vector<Integer> thresholds,
             Vector<Boolean> isLowercaseBrownClusters) {
 
+        try {
+        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.brown-clusters", "brown-clusters", 1.5, false);
+
         synchronized (INIT_SYNC) {
             brownclusters = new BrownClusters();
             brownclusters.isLowercaseBrownClustersByResource =
@@ -75,8 +86,10 @@ public class BrownClusters {
             brownclusters.resources = new ArrayList<>();
             for (int i = 0; i < pathsToClusterFiles.size(); i++) {
                 THashMap<String, String> h = new THashMap<>();
-                InFile in =
-                        new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
+                // We used to access the files as resources. Now we are accessing them programmatically.
+                // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
+                InputStream is = new FileInputStream(gazDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i));
+                InFile in = new InFile(is);
                 String line = in.readLine();
                 int wordsAdded = 0;
                 while (line != null) {
@@ -100,6 +113,9 @@ public class BrownClusters {
                 brownclusters.resources.add(pathsToClusterFiles.elementAt(i));
                 in.close();
             }
+        }
+        } catch (InvalidPortException | InvalidEndpointException | DatastoreException | FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

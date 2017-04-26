@@ -23,8 +23,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 
 /**
- * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient} or other annotators directly.
- * The configurations parameters are set in
+ * An annotation preprocessor used by all the modules. Can use either the {@link CuratorClient} or
+ * other annotators directly. The configurations parameters are set in
  * {@link PreprocessorConfigurator} and should be merged with {@link AnnotatorConfigurator}.
  */
 class Preprocessor {
@@ -43,11 +43,14 @@ class Preprocessor {
         Map<String, String> nonDefaultValues = new HashMap<>();
         nonDefaultValues.put(CuratorConfigurator.RESPECT_TOKENIZATION.key, Configurator.TRUE);
         nonDefaultValues.put("cacheDirectory", "annotation-cache-quantifier");
-        this.rm = Configurator.mergeProperties(rm,
+        this.rm =
+                Configurator.mergeProperties(rm,
                         new AnnotatorServiceConfigurator().getConfig(nonDefaultValues));
         if (!rm.getBoolean(PreprocessorConfigurator.USE_CURATOR)) {
             try {
-                annotator = new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), buildAnnotators(), this.rm);
+                annotator =
+                        new BasicAnnotatorService(new TokenizerTextAnnotationBuilder(
+                                new StatefulTokenizer()), buildAnnotators(), this.rm);
             } catch (AnnotatorException | IOException e) {
                 e.printStackTrace();
             }

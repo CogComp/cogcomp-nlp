@@ -2,9 +2,13 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,11 +16,31 @@ import java.util.regex.Pattern;
  * Created by zhilifeng on 3/22/17.
  */
 public class TimeOfDay {
+    // Here we get rid of timezone phrases, currently didn't deal with the offset
+    // TODO: add support to offset
+    public static String converter(String phrase) {
+        Set<String> zoneIds = DateTimeZone.getAvailableIDs();
+
+        for(String zoneId:zoneIds) {
+            String longName = TimeZone.getTimeZone(zoneId).getDisplayName();
+            phrase = phrase.replace(longName.toLowerCase(), "");
+            String[] zoneList = zoneId.split("/");
+            // Because we have zone like UTC/GMT+1
+            for (String zone: zoneList) {
+                phrase = phrase.replace(zone.toLowerCase(), "");
+            }
+        }
+        // EST wasn't in the canonical ID list in Joda time
+        phrase = phrase.replace("est", "");
+        phrase = phrase.trim().replaceAll(" +", " ");
+        return phrase;
+    }
+
     public static String timePatternStr = "\\s*(\\d+)\\s*(:\\d+)?\\s*(:\\d+)?\\s*(am|a.m.|a.m|pm|p.m.|p.m)?";
     public static TimexChunk timeRule(DateTime start, TemporalPhrase temporalPhrase) {
         String phrase = temporalPhrase.getPhrase();
         phrase = phrase.trim().toLowerCase().replace(" +", " ");
-
+        phrase = converter(phrase);
 
         TimexChunk tc = new TimexChunk();
         tc.addAttribute(TimexNames.type, TimexNames.TIME);
@@ -115,7 +139,7 @@ public class TimeOfDay {
     }
 
     public static void main(String[] args) {
-        TemporalPhrase temporalPhrase = new TemporalPhrase("10 p.m. ", "past");
+        TemporalPhrase temporalPhrase = new TemporalPhrase(" 4 a.m. eastern standard time saturday", "past");
         TimexChunk tc = TimeOfDay.timeRule(new DateTime(), temporalPhrase);
         System.out.println(tc.toTIMEXString());
     }

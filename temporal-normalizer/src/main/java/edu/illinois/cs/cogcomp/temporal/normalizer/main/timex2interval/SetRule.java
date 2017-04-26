@@ -25,7 +25,7 @@ public class SetRule {
     public static String weekday = "mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?" +
             "|sat(?:urday)?|sun(?:day)?";
     public static String unit = "\\s*(day(?:s)?|month(?:s)?|week(?:s)?|year(?:s)?|decade(?:s)?|century|centuries" +
-            "|morning|noon|afternoon|evening|night|" + monther + "|" + weekday + ")\\s*";
+            "|morning|noon|afternoon|evening|night|quarter|" + monther + "|" + weekday + ")\\s*";
     public static String adverb = "\\s*(?:everyday|weekly|biweekly|yearly|daily|annually|monthly)\\s*";
 
     public static String timeofDay = "(morning|noon|afternoon|evening|night)";
@@ -57,6 +57,8 @@ public class SetRule {
             put("months", "M");
             put("year", "Y");
             put("years", "Y");
+            put("quarter", "Q");
+            put("quarters", "Q");
             put("century", "00Y");
             put("centuries", "00Y");
             put("decade", "0Y");
@@ -308,7 +310,7 @@ public class SetRule {
     }
 
     public static void main (String[] args){
-        String test = "everyday";
+        String test = "each quarter";
         TimexChunk tc = SetRule.SetRule(new TemporalPhrase(test)) ;
         System.out.println(tc.toTIMEXString());
     }

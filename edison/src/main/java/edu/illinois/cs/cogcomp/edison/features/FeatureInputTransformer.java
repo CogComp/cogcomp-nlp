@@ -42,6 +42,21 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
             return "";
         }
     };
+    public static final FeatureInputTransformer dependencyModifiers =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent c) {
+                    TextAnnotation ta = c.getTextAnnotation();
+                    TreeView dependency = (TreeView) ta.getView(ViewNames.DEPENDENCY);
+                    return getModifiers(c, dependency);
+                }
+
+                @Override
+                public String name() {
+                    return "dep-mod";
+                }
+            };
     public static final FeatureInputTransformer easyFirstDependencyModifiers =
             new FeatureInputTransformer() {
 
@@ -120,6 +135,21 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
             return "be-hd";
         }
     };
+    public static final FeatureInputTransformer dependencyHead =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent c) {
+                    TextAnnotation ta = c.getTextAnnotation();
+                    TreeView dependency = (TreeView) ta.getView(ViewNames.DEPENDENCY);
+                    return Collections.singletonList(getHead(c, dependency));
+                }
+
+                @Override
+                public String name() {
+                    return "dep-hd";
+                }
+            };
     public static final FeatureInputTransformer easyFirstDependencyHead =
             new FeatureInputTransformer() {
 
@@ -150,6 +180,22 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
                     return "st-dep-hd";
                 }
 
+            };
+    public static final FeatureInputTransformer dependencyGovernor =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent input) {
+
+                    TreeView dependency =
+                            (TreeView) input.getTextAnnotation().getView(ViewNames.DEPENDENCY);
+                    return getGovernor(input, dependency);
+                }
+
+                @Override
+                public String name() {
+                    return "dep-gov";
+                }
             };
     public static final FeatureInputTransformer easyFirstDependencyGovernor =
             new FeatureInputTransformer() {
@@ -183,6 +229,24 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
                 @Override
                 public String name() {
                     return "st-dep-gov";
+                }
+
+            };
+    public static final FeatureInputTransformer dependencyObject =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent input) {
+
+                    TreeView dependency =
+                            (TreeView) input.getTextAnnotation().getView(ViewNames.DEPENDENCY);
+
+                    return getObject(input, dependency, "obj");
+                }
+
+                @Override
+                public String name() {
+                    return "dep-obj";
                 }
 
             };
@@ -220,6 +284,59 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
                 @Override
                 public String name() {
                     return "st-dep-obj";
+                }
+            };
+    public static final FeatureInputTransformer dependencyNeighboringPP =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent c) {
+                    TextAnnotation ta = c.getTextAnnotation();
+                    int tokenPosition = c.getStartSpan();
+                    TreeView dependency = (TreeView) ta.getView(ViewNames.DEPENDENCY);
+
+                    Constituent prepositionDepConstituent =
+                            dependency.getConstituentsCoveringToken(tokenPosition).get(0);
+
+                    List<Relation> incomingRelations =
+                            prepositionDepConstituent.getIncomingRelations();
+
+                    List<Constituent> list = new ArrayList<>();
+                    if (incomingRelations != null && incomingRelations.size() > 0) {
+
+                        Constituent parent = incomingRelations.get(0).getSource();
+
+                        for (Relation out : parent.getOutgoingRelations()) {
+                            if (out == incomingRelations.get(0))
+                                continue;
+
+                            String label = out.getRelationName();
+
+                            if (label.contains("prep")) {
+                                Constituent ppNode = out.getTarget();
+
+                                list.add(addPointerToSource(c, ppNode));
+
+                                // get the first child of the pp and add this
+                                List<Relation> ppOut = ppNode.getOutgoingRelations();
+
+                                if (ppOut != null && ppOut.size() != 0) {
+
+                                    Constituent child = ppOut.get(0).getTarget();
+                                    list.add(addPointerToSource(c, child));
+
+                                }
+                            }
+                        }
+                    }
+
+                    return list;
+
+                }
+
+                @Override
+                public String name() {
+                    return "dep-pp-N";
                 }
             };
     public static final FeatureInputTransformer easyFirstNeighboringPP =
@@ -273,6 +390,42 @@ public abstract class FeatureInputTransformer extends ITransformer<Constituent, 
                 @Override
                 public String name() {
                     return "pp-N";
+                }
+            };
+    public final static FeatureInputTransformer dependencySubjectOfDominatingVerb =
+            new FeatureInputTransformer() {
+
+                @Override
+                public List<Constituent> transform(Constituent input) {
+
+                    TextAnnotation ta = input.getTextAnnotation();
+                    int tokenPosition = input.getStartSpan();
+                    TreeView dependency = (TreeView) ta.getView(ViewNames.DEPENDENCY);
+
+                    Constituent verbNode =
+                            dependency.getConstituentsCoveringToken(tokenPosition).get(0);
+                    boolean done = false;
+
+                    while (!done) {
+                        String pos = WordHelpers.getPOS(ta, verbNode.getStartSpan());
+
+                        if (POSUtils.isPOSVerb(pos)) {
+                            done = true;
+                        } else {
+                            List<Relation> incoming = verbNode.getIncomingRelations();
+                            if (incoming == null || incoming.size() == 0) {
+                                return new ArrayList<>();
+                            } else
+                                verbNode = incoming.get(0).getSource();
+                        }
+                    }
+
+                    return Collections.singletonList(addPointerToSource(input, verbNode));
+                }
+
+                @Override
+                public String name() {
+                    return "dep-sbj-dom-v";
                 }
             };
     public final static FeatureInputTransformer easyFirstSubjectOfDominatingVerb =

@@ -46,8 +46,7 @@ import java.io.FilenameFilter;
  * }
  */
 public class NerBenchmark {
-
-    /** default directory containing benchmark runs. */
+	/** default directory containing benchmark runs. */
     static String directory = "benchmark";
 
     /** if true, skip all training. */

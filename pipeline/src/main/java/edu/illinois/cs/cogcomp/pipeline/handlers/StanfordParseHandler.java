@@ -34,26 +34,27 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a pipeline
- *    component.
+ * A wrapper for Stanford dependency parser in an illinois-core-utilities Annotator, for use as a
+ * pipeline component.
  *
  * Created by James Clarke and Christos Christodoulopoulos.
  */
 
 public class StanfordParseHandler extends Annotator {
 
-    private final static Logger logger = LoggerFactory.getLogger( StanfordParseHandler.class );
+    private final static Logger logger = LoggerFactory.getLogger(StanfordParseHandler.class);
     private final boolean throwExceptionOnSentenceLengthCheck;
     private POSTaggerAnnotator posAnnotator;
     private ParserAnnotator parseAnnotator;
     private int maxParseSentenceLength;
 
     public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator) {
-        this(posAnnotator, parseAnnotator, -1, false );
+        this(posAnnotator, parseAnnotator, -1, false);
     }
 
-    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator, int maxSentenceLength, boolean throwExceptionOnSentenceLengthCheck) {
-        super(ViewNames.PARSE_STANFORD, new String[]{}, false);
+    public StanfordParseHandler(POSTaggerAnnotator posAnnotator, ParserAnnotator parseAnnotator,
+            int maxSentenceLength, boolean throwExceptionOnSentenceLengthCheck) {
+        super(ViewNames.PARSE_STANFORD, new String[] {}, false);
         this.posAnnotator = posAnnotator;
         this.parseAnnotator = parseAnnotator;
         this.maxParseSentenceLength = maxSentenceLength;
@@ -61,14 +62,20 @@ public class StanfordParseHandler extends Annotator {
 
     }
 
-    static void checkLength(TextAnnotation textAnnotation, boolean throwExceptionOnSentenceLengthCheck, int maxParseSentenceLength) throws AnnotatorException {
+    static void checkLength(TextAnnotation textAnnotation,
+            boolean throwExceptionOnSentenceLengthCheck, int maxParseSentenceLength)
+            throws AnnotatorException {
         if (throwExceptionOnSentenceLengthCheck) {
-            Constituent c = HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation, maxParseSentenceLength);
+            Constituent c =
+                    HandlerUtils.checkTextAnnotationRespectsSentenceLengthLimit(textAnnotation,
+                            maxParseSentenceLength);
 
-            if ( null != c ) {
-                String msg = HandlerUtils.getSentenceLengthError( textAnnotation.getId(), c.getSurfaceForm(), maxParseSentenceLength);
-                logger.error( msg );
-                throw new AnnotatorException( msg );
+            if (null != c) {
+                String msg =
+                        HandlerUtils.getSentenceLengthError(textAnnotation.getId(),
+                                c.getSurfaceForm(), maxParseSentenceLength);
+                logger.error(msg);
+                throw new AnnotatorException(msg);
             }
         }
     }
@@ -83,17 +90,23 @@ public class StanfordParseHandler extends Annotator {
         int tokIndex = 0;
         int sentIndex = 0;
         Constituent currentSentence = sentences.getConstituents().get(0);
-        String sentText = rawText.substring(currentSentence.getStartCharOffset(), currentSentence.getEndCharOffset());
+        String sentText =
+                rawText.substring(currentSentence.getStartCharOffset(),
+                        currentSentence.getEndCharOffset());
 
         CoreLabelTokenFactory tf = new CoreLabelTokenFactory();
 
         for (Constituent tok : tokens.getConstituents()) {
             if (tok.getStartSpan() >= currentSentence.getEndSpan()) {
-                CoreMap stanfordSentence = buildStanfordSentence(currentSentence, sentText, sentIndex++, stanfordTokens);
+                CoreMap stanfordSentence =
+                        buildStanfordSentence(currentSentence, sentText, sentIndex++,
+                                stanfordTokens);
                 stanfordSentences.add(stanfordSentence);
                 stanfordTokens = new LinkedList<>();
                 currentSentence = sentences.getConstituents().get(sentIndex);
-                sentText = rawText.substring(currentSentence.getStartCharOffset(), currentSentence.getEndCharOffset());
+                sentText =
+                        rawText.substring(currentSentence.getStartCharOffset(),
+                                currentSentence.getEndCharOffset());
             }
             int tokStart = tok.getStartCharOffset();
             int tokLength = tok.getEndCharOffset() - tokStart;
@@ -106,21 +119,25 @@ public class StanfordParseHandler extends Annotator {
 
         }
         // should be one last sentence
-        CoreMap stanfordSentence = buildStanfordSentence(currentSentence, sentText, sentIndex, stanfordTokens);
+        CoreMap stanfordSentence =
+                buildStanfordSentence(currentSentence, sentText, sentIndex, stanfordTokens);
         stanfordSentences.add(stanfordSentence);
         return stanfordSentences;
     }
 
-    private static CoreMap buildStanfordSentence(Constituent sentence, String rawText, int sentIndex,
-                                                 List<CoreLabel> stanfordTokens) {
+    private static CoreMap buildStanfordSentence(Constituent sentence, String rawText,
+            int sentIndex, List<CoreLabel> stanfordTokens) {
         CoreMap stanfordSentence = new ArrayCoreMap();
         CoreLabel firstTok = stanfordTokens.get(0);
         CoreLabel lastTok = stanfordTokens.get(stanfordTokens.size() - 1);
 
-        stanfordSentence.set(CoreAnnotations.CharacterOffsetBeginAnnotation.class, sentence.getStartSpan());
-        stanfordSentence.set(CoreAnnotations.CharacterOffsetEndAnnotation.class, sentence.getEndSpan());
+        stanfordSentence.set(CoreAnnotations.CharacterOffsetBeginAnnotation.class,
+                sentence.getStartSpan());
+        stanfordSentence.set(CoreAnnotations.CharacterOffsetEndAnnotation.class,
+                sentence.getEndSpan());
         stanfordSentence.set(CoreAnnotations.TokenBeginAnnotation.class, firstTok.index());
-        stanfordSentence.set(CoreAnnotations.TokenEndAnnotation.class, lastTok.index() + 1); // at-the-end indexing?
+        stanfordSentence.set(CoreAnnotations.TokenEndAnnotation.class, lastTok.index() + 1); // at-the-end
+                                                                                             // indexing?
         stanfordSentence.set(CoreAnnotations.TextAnnotation.class, rawText);
         stanfordSentence.set(CoreAnnotations.SentenceIndexAnnotation.class, sentIndex);
         stanfordSentence.set(CoreAnnotations.TokensAnnotation.class, stanfordTokens);
@@ -128,11 +145,10 @@ public class StanfordParseHandler extends Annotator {
     }
 
     /**
-     * Takes a Stanford Tree and Curator Tree and recursively populates the Curator
-     * Tree to match the Stanford Tree.
-     * Returns the top Node of the tree.
+     * Takes a Stanford Tree and Curator Tree and recursively populates the Curator Tree to match
+     * the Stanford Tree. Returns the top Node of the tree.
      *
-     * @param parse  Stanford Tree
+     * @param parse Stanford Tree
      * @return top Node of the Tree
      */
     private static Tree<String> generateNode(edu.stanford.nlp.trees.Tree parse) {
@@ -142,7 +158,7 @@ public class StanfordParseHandler extends Annotator {
             if (pt.isLeaf()) {
                 node.addLeaf(pt.nodeString());
             } else {
-                //generate child of parse, the current node in tree
+                // generate child of parse, the current node in tree
                 node.addSubtree(generateNode(pt));
             }
         }
@@ -151,6 +167,7 @@ public class StanfordParseHandler extends Annotator {
 
     /**
      * noop
+     * 
      * @param resourceManager
      */
     @Override
@@ -160,10 +177,12 @@ public class StanfordParseHandler extends Annotator {
 
     @Override
     public void addView(TextAnnotation textAnnotation) throws AnnotatorException {
-        // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to parse
+        // If the sentence is longer than STFRD_MAX_SENTENCE_LENGTH there is no point in trying to
+        // parse
         checkLength(textAnnotation, throwExceptionOnSentenceLengthCheck, maxParseSentenceLength);
 
-        TreeView treeView = new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
+        TreeView treeView =
+                new TreeView(ViewNames.PARSE_STANFORD, "StanfordParseHandler", textAnnotation, 1d);
         // The (tokenized) sentence offset in case we have more than one sentences in the record
         List<CoreMap> sentences = buildStanfordSentences(textAnnotation);
         Annotation document = new Annotation(sentences);
@@ -172,8 +191,8 @@ public class StanfordParseHandler extends Annotator {
         sentences = document.get(CoreAnnotations.SentencesAnnotation.class);
         if (sentences.get(0).get(TreeCoreAnnotations.TreeAnnotation.class).nodeString().equals("X")) {
             // This is most like because we ran out of time
-            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId() + ". " +
-                    "This is most likely due to a timeout.");
+            throw new AnnotatorException("Unable to parse TextAnnotation " + textAnnotation.getId()
+                    + ". " + "This is most likely due to a timeout.");
         }
 
         for (int sentenceId = 0; sentenceId < sentences.size(); sentenceId++) {
@@ -181,13 +200,14 @@ public class StanfordParseHandler extends Annotator {
 
             if (maxParseSentenceLength > 0 && sentence.size() > maxParseSentenceLength) {
 
-                logger.warn("Unable to parse TextAnnotation " + textAnnotation.getId() +
-                        " since it is larger than the maximum sentence length of the parser (" +
-                        maxParseSentenceLength + ").");
+                logger.warn("Unable to parse TextAnnotation " + textAnnotation.getId()
+                        + " since it is larger than the maximum sentence length of the parser ("
+                        + maxParseSentenceLength + ").");
 
             } else {
 
-                edu.stanford.nlp.trees.Tree stanfordTree = sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+                edu.stanford.nlp.trees.Tree stanfordTree =
+                        sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
                 Tree<String> tree = new Tree<>(stanfordTree.value());
                 for (edu.stanford.nlp.trees.Tree pt : stanfordTree.getChildrenAsList()) {
                     tree.addSubtree(generateNode(pt));
@@ -195,6 +215,6 @@ public class StanfordParseHandler extends Annotator {
                 treeView.setParseTree(sentenceId, tree);
             }
         }
-        textAnnotation.addView( getViewName(), treeView );
+        textAnnotation.addView(getViewName(), treeView);
     }
 }

@@ -53,6 +53,8 @@
 /chunker/zfeng_model3.lc
 /chunker/zfeng_model4.lc
 /chunker/tempeval_platinum_full_1label_corr.txt
+/temporal-normalizer/uw_TB_goldext_illininorm
+/temporal-normalizer/uw_AQ_goldext_illininorm
 /chunker/zfeng_model3.lex
 /chunker/TBAQ_full_1label_corr50.lex
 /chunker/TBAQ_full_1label_corr_iter50.lc
@@ -65,4 +67,5 @@
 *.DS_Store
 *.settings
 edison/wordnet/
+/temporal-normalizer/tools
 

@@ -450,6 +450,22 @@ public class TemporalChunkerAnnotator extends Annotator{
     }
 
     public String getSentenceTense(TextAnnotation ta, IntPair currSpan) {
+//        Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
+//        IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
+//        View PosView = ta.getView("POS");
+//        List<Constituent> sentenceConstituents = PosView.getConstituents();
+//        String posStr = PosView.toString();
+//        String[] posList = posStr.split("\\)");
+//        String tense = "present";
+//        for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
+//            Constituent currConstituent = sentenceConstituents.get(t);
+//            //System.out.println(currConstituent.getView());
+//            if (posList[t].indexOf("VBD")!=-1 || posList[t].indexOf("VBN")!=-1){
+//                tense = "past";
+//            }
+//        }
+//        return tense;
+
         Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
         IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
         View PosView = ta.getView("POS");
@@ -460,7 +476,24 @@ public class TemporalChunkerAnnotator extends Annotator{
         for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
             Constituent currConstituent = sentenceConstituents.get(t);
             //System.out.println(currConstituent.getView());
-            if (posList[t].indexOf("VBD")!=-1 || posList[t].indexOf("VBN")!=-1){
+            String prevWord = null;
+            String prev2Word = null;
+            if (t-1>=0) {
+                prevWord = sentenceConstituents.get(t-1).toString().toLowerCase();
+            }
+            if (t-2>=0) {
+                prev2Word = sentenceConstituents.get(t-2).toString().toLowerCase();
+            }
+
+            boolean isPerfect = false;
+            if ( (prevWord != null && prevWord.matches("have|has|had|was|were|been")) ||
+                    (prev2Word != null && prev2Word.matches("have|has|had|was|were|been"))
+                    ) {
+                if (posList[t].indexOf("VBN")!=-1 ) {
+                    isPerfect = true;
+                }
+            }
+            if (posList[t].indexOf("VBD")!=-1 || isPerfect){
                 tense = "past";
             }
         }
@@ -587,37 +620,39 @@ public class TemporalChunkerAnnotator extends Annotator{
                 charEnd = currPos + currStr.length();
                 currPos = charEnd + 1;
 
-                Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
-                IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
-                View PosView = ta.getView("POS");
-                List<Constituent> sentenceConstituents = PosView.getConstituents();
-                String posStr = PosView.toString();
-                String[] posList = posStr.split("\\)");
-                String tense = "present";
-                for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
-                    Constituent currConstituent = sentenceConstituents.get(t);
-                    //System.out.println(currConstituent.getView());
-                    String prevWord = null;
-                    String prev2Word = null;
-                    if (t-1>=0) {
-                        prevWord = sentenceConstituents.get(t-1).toString().toLowerCase();
-                    }
-                    if (t-2>=0) {
-                        prev2Word = sentenceConstituents.get(t-2).toString().toLowerCase();
-                    }
+//                Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
+//                IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
+//                View PosView = ta.getView("POS");
+//                List<Constituent> sentenceConstituents = PosView.getConstituents();
+//                String posStr = PosView.toString();
+//                String[] posList = posStr.split("\\)");
+//                String tense = "present";
+//                for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
+//                    Constituent currConstituent = sentenceConstituents.get(t);
+//                    //System.out.println(currConstituent.getView());
+//                    String prevWord = null;
+//                    String prev2Word = null;
+//                    if (t-1>=0) {
+//                        prevWord = sentenceConstituents.get(t-1).toString().toLowerCase();
+//                    }
+//                    if (t-2>=0) {
+//                        prev2Word = sentenceConstituents.get(t-2).toString().toLowerCase();
+//                    }
+//
+//                    boolean isPerfect = false;
+//                    if ( (prevWord != null && prevWord.matches("have|has|had")) ||
+//                            (prev2Word != null && prev2Word.matches("have|has|had"))
+//                            ) {
+//                        if (posList[t].indexOf("VBN")!=-1 ) {
+//                            isPerfect = true;
+//                        }
+//                    }
+//                    if (posList[t].indexOf("VBD")!=-1 || isPerfect){
+//                        tense = "past";
+//                    }
+//                }
 
-                    boolean isPerfect = false;
-                    if ( (prevWord != null && prevWord.matches("have|has|had")) ||
-                            (prev2Word != null && prev2Word.matches("have|has|had"))
-                            ) {
-                        if (posList[t].indexOf("VBN")!=-1 ) {
-                            isPerfect = true;
-                        }
-                    }
-                    if (posList[t].indexOf("VBD")!=-1 || isPerfect){
-                        tense = "past";
-                    }
-                }
+                String tense = getSentenceTense(ta, currSpan);
                 //System.out.println(trueTc.toTIMEXString());
 
                 TimexChunk tc = null;
@@ -670,7 +705,7 @@ public class TemporalChunkerAnnotator extends Annotator{
             }
 
         }
-        /*
+
         System.out.println("MISS");
         for (TimexChunk tc:trueTimexs) {
             IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
@@ -740,10 +775,10 @@ public class TemporalChunkerAnnotator extends Annotator{
                 }
             }
         }
-        */
-        //System.out.println();
 
-        return trueTimexs;
+        System.out.println();
+
+        return timex;
     }
 
 //    /**

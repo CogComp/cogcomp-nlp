@@ -25,7 +25,7 @@ public class Numbers implements Serializable {
     static Map<String, Integer> str2num = new HashMap<String, Integer>();
     static Map<String, Integer> fractions = new HashMap<String, Integer>();
     // Orders of magnitude
-    static List<String> Orders = new ArrayList<String>();
+    static List<String> Orders = new ArrayList<>();
     static Map<String, Integer> ordinals = new HashMap<String, Integer>();
     public static Pattern decimalPat, negDecimalPat, removeScientificPat, commaPat,
             anyNumberLikeThingPat, prefixUsdPat;
@@ -205,9 +205,9 @@ public class Numbers implements Serializable {
             numberForOrder.clear();
             for (int i = indexOfLastOrder + 1; i < tokens.size(); i++) {
                 if (tokens.get(i).equals(order)) {
-                    num +=
-                            extractNumberFromTokenizedWords(numberForOrder, false).value
-                                    * str2num.get(order);
+                    Quantity q = extractNumberFromTokenizedWords(numberForOrder, false);
+                    if(q == null || q.value == null) continue;
+                    num += q.value * str2num.get(order);
                     // System.out.println("Token : "+tokens.get(i)+" Num : "+num);
                     indexOfLastOrder = i;
                     indexOfLastNumber = i;

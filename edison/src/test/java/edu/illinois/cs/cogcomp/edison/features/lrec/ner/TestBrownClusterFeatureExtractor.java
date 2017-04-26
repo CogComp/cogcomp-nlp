@@ -9,9 +9,7 @@
 package edu.illinois.cs.cogcomp.edison.features.lrec.ner;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.factory.BrownClusterFeatureExtractor;
@@ -23,7 +21,6 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -59,14 +56,12 @@ public class TestBrownClusterFeatureExtractor {
 
     @Test
     public final void test() {
-        String name = "BrownClusterTest";
-        String path = "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt";
         int[] prefixLengths = new int[] {4, 6, 10, 20};
-        BrownClusterFeatureExtractor bcfex1 = BrownClusterFeatureExtractor.instance1000; // "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt"
+        BrownClusterFeatureExtractor bcfex1 = BrownClusterFeatureExtractor.instance1000;
         BrownClusterFeatureExtractor bcfex2 = null;
         try {
             bcfex2 =
-                    new BrownClusterFeatureExtractor("bllip", "brown-clusters/brownBllipClusters",
+                    new BrownClusterFeatureExtractor("bllip", "brownBllipClusters",
                             prefixLengths);
         } catch (EdisonException e) {
             e.printStackTrace();
@@ -77,16 +72,12 @@ public class TestBrownClusterFeatureExtractor {
             bcfex3 =
                     new BrownClusterFeatureExtractor(
                             "wiki",
-                            "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt",
+                            "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt",
                             prefixLengths);
         } catch (EdisonException e) {
             e.printStackTrace();
             fail(e.getMessage());
         }
-
-        boolean withNoise = false;
-        // TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(
-        // withNoise );
 
         TokenizerTextAnnotationBuilder taBldr =
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer());

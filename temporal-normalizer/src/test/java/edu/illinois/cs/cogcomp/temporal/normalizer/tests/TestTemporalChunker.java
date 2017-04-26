@@ -52,8 +52,10 @@ public class TestTemporalChunker {
     //private String testText;
     private List<String> DCTs;
     private List<String> testText;
+    private String folderName = "uw_TimeBank";
+    //private String folderName = "uw_AQUAINT";
     //private String folderName = "TimeBank";
-    private String folderName = "AQUAINT";
+    //private String folderName = "AQUAINT";
     //private String folderName = "te3-platinum";
     //private String folderName = "ht2.1_res";
     //private String folderName = "AQUAINT_ht";
@@ -126,7 +128,7 @@ public class TestTemporalChunker {
     }
 
     @Test public void testNormalizationWithTrueExtraction() throws Exception {
-        AnnotatorService pipeline = PipelineFactory.buildPipeline();
+        //AnnotatorService pipeline = PipelineFactory.buildPipeline();
 
         AnnotatorService annotator = null;
         try {
@@ -163,15 +165,14 @@ public class TestTemporalChunker {
 
         int numTimex = 0;
         for (int j = 0; j < te3inputText.size(); j ++) {
-//            if(!docIDs.get(j).contains("NYT19990505.0443")) {
+//            if(!docIDs.get(j).contains("CNN_20130322_1003")) {
 //                continue;
 //            }
 
             TextAnnotation ta = taList.get(j);
             tca.addDocumentCreationTime(DCTs.get(j));
 
-            //System.out.println(docIDs.get(j));
-
+            System.out.println(docIDs.get(j));
 
 
             try {
@@ -179,10 +180,10 @@ public class TestTemporalChunker {
 //                for (TimexChunk tc:timex)
 //                    System.out.println(tc.toTIMEXString());
                 tca.setTimex(timex);
-                //String outputFileName = "TB_htext_illininorm/" +docIDs.get(j) + ".tml";
-                String outputFileName = "AQ_goldext_htnorm/" +docIDs.get(j) + ".tml";
+                String outputFileName = "uw_TB_goldext_illininorm/" +docIDs.get(j) + ".tml";
+                //String outputFileName = "AQ_goldext_htnorm/" +docIDs.get(j) + ".tml";
 
-                //tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
+                tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
                 numTimex += timex.size();
                 tca.deleteTimex();
             } catch (AnnotatorException e) {
@@ -273,7 +274,7 @@ public class TestTemporalChunker {
             String compressedText = builder.toString();
             assertNotNull(compressedText);
 */
-            String outputFileName = "./AQ_chunker_illininorm/"+docIDs.get(j) + ".tml";
+            String outputFileName = "./TE3_chunker_illininorm/"+docIDs.get(j) + ".tml";
 //            for(TimexChunk tc: tca.getTimex()) {
 //                System.out.println(tc.toTIMEXString());
 //            }

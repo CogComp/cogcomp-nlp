@@ -99,7 +99,7 @@ public class ModifiedDate {
 //			else {
 //				phrase = "this " + phrase;
 //			}
-			phrase = "this " + phrase;
+			phrase = "this " + onematcher.group(0);
 		}
 
 		int numterm;

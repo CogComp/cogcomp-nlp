@@ -44,20 +44,18 @@ public class Quantifier extends Annotator {
     }
 
     public Quantifier() {
-        super(ViewNames.QUANTITIES, new String[0]);
-        normalizer = new Normalizer();
-        wordSplitPat = new Pattern[25];
-        // Dashes
-        wordSplitPat[0] = Pattern.compile("-(\\D)");
-        wordSplitPat[1] = Pattern.compile("(\\S)-");
-        wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)");
-        // Remove commas from within numbers
-        wordSplitPat[3] = Pattern.compile("(\\d),(\\d)");
-        // Remove dollar signs
-        wordSplitPat[4] = Pattern.compile("\\$(\\d)");
-        wordSplitPat[5] = Pattern.compile("(\\d)\\$");
-        // Percentages
-        wordSplitPat[6] = Pattern.compile("(\\d)%");
+        // lazily initialize by default.
+        this(true);
+    }
+
+    /**
+     * Constructor allowing choice whether or not to lazily initialize.
+     *
+     * @param lazilyInitialize if 'true', load models only on first call to
+     *        {@link Annotator#getView(TextAnnotation)}
+     */
+    public Quantifier(boolean lazilyInitialize) {
+        super(ViewNames.QUANTITIES, new String[0], lazilyInitialize);
     }
 
     public static String wordsplitSentence(String sentence) {
@@ -188,10 +186,23 @@ public class Quantifier extends Annotator {
 
     @Override
     public void initialize(ResourceManager resourceManager) {
-        System.out.println("Initializing . . . ");
+        System.out.println("Initializing Quantifier . . . ");
         chunker =
                 new QuantitiesClassifier("models/QuantitiesClassifier.lc",
                         "models/QuantitiesClassifier.lex");
+        normalizer = new Normalizer();
+        wordSplitPat = new Pattern[25];
+        // Dashes
+        wordSplitPat[0] = Pattern.compile("-(\\D)");
+        wordSplitPat[1] = Pattern.compile("(\\S)-");
+        wordSplitPat[2] = Pattern.compile("(\\d)-(\\d|\\.\\d)");
+        // Remove commas from within numbers
+        wordSplitPat[3] = Pattern.compile("(\\d),(\\d)");
+        // Remove dollar signs
+        wordSplitPat[4] = Pattern.compile("\\$(\\d)");
+        wordSplitPat[5] = Pattern.compile("(\\d)\\$");
+        // Percentages
+        wordSplitPat[6] = Pattern.compile("(\\d)%");
     }
 
     @Override

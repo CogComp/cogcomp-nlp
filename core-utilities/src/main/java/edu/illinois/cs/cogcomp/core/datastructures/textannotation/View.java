@@ -376,6 +376,41 @@ public class View implements Serializable, IQueryable<Constituent> {
         return list;
     }
 
+    /**
+     * Given char-begin-offset and char-end-offset, it returns the constituents covering it.
+     * @param charStart the begin char index
+     * @param charEnd the end char index (one-past-the-end indexing)
+     */
+    public List<Constituent> getConstituentsCoveringCharSpan(int charStart, int charEnd) {
+
+        Set<Constituent> output = new HashSet<>();
+        for(Constituent c : this.constituents) {
+            if(c.startCharOffset >= charStart && c.endCharOffset <= charEnd) output.add(c);
+        }
+        List<Constituent> list = new ArrayList<>(output);
+        Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
+        return list;
+    }
+
+    /**
+     * Given char-begin-offset and char-end-offset, it returns the constituents with some overlap with the input char offsets.
+     * @param charStart the begin char index
+     * @param charEnd the end char index (one-past-the-end indexing)
+     */
+    public List<Constituent> getConstituentsOverlappingCharSpan(int charStart, int charEnd) {
+        assert charStart <= charEnd: "The start offset should be smaller than the end offset";
+        Set<Constituent> output = new HashSet<>();
+        for(Constituent c : this.constituents) {
+            if((c.startCharOffset <= charStart && c.endCharOffset >= charStart) ||
+                    (c.startCharOffset <= charEnd && c.endCharOffset >= charEnd) ||
+                    (c.startCharOffset >= charStart && c.endCharOffset <= charEnd) ||
+                    (c.startCharOffset <= charStart && c.endCharOffset >= charEnd)) output.add(c);
+        }
+        List<Constituent> list = new ArrayList<>(output);
+        Collections.sort(list, TextAnnotationUtilities.constituentStartComparator);
+        return list;
+    }
+
     public List<Constituent> getConstituentsCoveringTokens(Collection<Integer> tokenIds) {
 
         Set<Constituent> output = new HashSet<>();

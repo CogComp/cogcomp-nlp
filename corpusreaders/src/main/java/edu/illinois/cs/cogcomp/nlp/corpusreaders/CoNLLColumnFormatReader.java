@@ -32,16 +32,16 @@ import java.util.Scanner;
  *
  * @author Vivek Srikumar
  */
-public class CoNLLColumnFormatReader extends TextAnnotationReader {
-
-    protected final String predicateArgumentViewName;
-    private final TextAnnotationBuilder textAnnotationBuilder;
-    protected int currentLine;
-    protected final ArrayList<String> lines;
-    protected final String section;
+public class CoNLLColumnFormatReader extends AnnotationReader<TextAnnotation> {
 
     private static org.slf4j.Logger logger =
             LoggerFactory.getLogger(CoNLLColumnFormatReader.class);
+    protected final String predicateArgumentViewName;
+    protected final ArrayList<String> lines;
+    protected final String section;
+    private final TextAnnotationBuilder textAnnotationBuilder;
+    protected int currentLine;
+
     /**
      * Initialize the reader.
      *
@@ -77,10 +77,41 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
         }
     }
 
+    public static void main(String[] args) throws Exception {
+        String columnFile = "02.feats";
 
+        CoNLLColumnFormatReader reader =
+                new CoNLLColumnFormatReader("PennTreebank-WSJ", "02", columnFile,
+                        ViewNames.SRL_VERB, new BasicTextAnnotationBuilder());
+
+        Counter<String> counter = new Counter<>();
+
+        List<String> predicates = new ArrayList<>();
+
+        for (TextAnnotation ta : reader) {
+            counter.incrementCount("Sentences");
+            System.out.println(ta.getTokenizedText());
+
+            if (!ta.hasView(ViewNames.SRL_VERB))
+                continue;
+
+            PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
+            List<Constituent> predicates2 = pav.getPredicates();
+            counter.incrementCount("Predicates", predicates2.size());
+            for (Constituent c : predicates2) {
+                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
+            }
+        }
+
+        System.out.println((int) counter.getCount("Sentences") + " sentences");
+        System.out.println((int) counter.getCount("Predicates") + " predicates");
+    }
+
+    @Override
     public boolean hasNext() {
         return currentLine < lines.size();
     }
+
 
     @Override
     public void reset() {
@@ -88,7 +119,15 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
         currentLine = 0;
     }
 
-    protected TextAnnotation makeTextAnnotation() throws Exception {
+
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
+    @Override
+    public TextAnnotation next() {
+
         // first read all the lines. Track the sentence.
         StringBuilder sentence = new StringBuilder();
 
@@ -210,18 +249,18 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
         }
 
         if (!validate(chunkLabels, chunkStart, chunkEnd))
-            throw new Exception("Invalid chunk data. Check line " + currentLine);
+            throw new IllegalStateException("Invalid chunk data. Check line " + currentLine);
 
         if (!validate(neLabels, neStart, neEnd))
-            throw new Exception("Invalid NE data. Check line " + currentLine);
+            throw new IllegalStateException("Invalid NE data. Check line " + currentLine);
 
         if (baseForms.size() != numPredicates)
-            throw new Exception("Number of predicates incorrect. Check line " + currentLine
+            throw new IllegalStateException("Number of predicates incorrect. Check line " + currentLine
                     + ". Expected: " + numPredicates + ", found: " + baseForms.size());
 
         for (int i = 0; i < numPredicates; i++) {
             if (!validate(argumentLabels.get(i), argumentStart.get(i), argumentEnd.get(i)))
-                throw new Exception("Invalid argument data. Check line " + currentLine
+                throw new IllegalStateException("Invalid argument data. Check line " + currentLine
                         + ", argument #" + (i + 1));
         }
 
@@ -261,8 +300,11 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
             ta.addView(predicateArgumentViewName, pav);
         }
 
+        currentAnnotationId++;
         return ta;
     }
+
+
 
     protected PredicateArgumentView getPredicateArgumentView(List<List<String>> argumentLabels,
             List<List<Integer>> argumentStart, List<List<Integer>> argumentEnd, TextAnnotation ta,
@@ -330,35 +372,13 @@ public class CoNLLColumnFormatReader extends TextAnnotationReader {
 
     }
 
-    public static void main(String[] args) throws Exception {
-        String columnFile = "02.feats";
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
 
-        CoNLLColumnFormatReader reader =
-                new CoNLLColumnFormatReader("PennTreebank-WSJ", "02", columnFile,
-                        ViewNames.SRL_VERB, new BasicTextAnnotationBuilder());
-
-        Counter<String> counter = new Counter<>();
-
-        List<String> predicates = new ArrayList<>();
-
-        for (TextAnnotation ta : reader) {
-            counter.incrementCount("Sentences");
-            System.out.println(ta.getTokenizedText());
-
-            if (!ta.hasView(ViewNames.SRL_VERB))
-                continue;
-
-            PredicateArgumentView pav = (PredicateArgumentView) ta.getView(ViewNames.SRL_VERB);
-            List<Constituent> predicates2 = pav.getPredicates();
-            counter.incrementCount("Predicates", predicates2.size());
-            for (Constituent c : predicates2) {
-                predicates.add(c.getAttribute(PredicateArgumentView.LemmaIdentifier));
-            }
-
-        }
-
-        System.out.println((int) counter.getCount("Sentences") + " sentences");
-        System.out.println((int) counter.getCount("Predicates") + " predicates");
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
     }
 
 }

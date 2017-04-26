@@ -16,8 +16,8 @@ public class TimexNormalizer {
 	protected static String defaultcountry = "UNITED_STATES";
 	protected static String defaultyear = "1998";
 	protected static String deyear = "1998";
-	protected static String demonth = "02";
-	protected static String deday = "13";
+	protected static String demonth = "08";
+	protected static String deday = "07";
 	protected static String dehour = "12";
 	protected static String deminute = "30";
 	protected static String desecond = "00";
@@ -70,8 +70,9 @@ public class TimexNormalizer {
 	public static TimexChunk normalize(TemporalPhrase timex) {
 		String origPhrase = timex.getPhrase();
 		String p = timex.getPhrase();
+		p = p.replaceAll("\\-", " ");
 		try {
-			p = ConvertWordToNumber.ConvertWTN(timex.getPhrase());
+			p = ConvertWordToNumber.ConvertWTN(p);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -95,7 +96,7 @@ public class TimexNormalizer {
 //		CANNOT NORMALIZE: The day
 //		CANNOT NORMALIZE: the day
 //		CANNOT NORMALIZE: recent weeks
-		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("august", "past"));
+		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("90 days", "past"));
 		System.out.println(temp.toTIMEXString());
 
 	}

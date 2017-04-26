@@ -39,7 +39,11 @@ public class LineIO {
      * Read the contents of a file and return as a single string
      */
     public static String slurp(String fileName, String charsetName) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File(fileName), charsetName);
+        /* use FileInputStream to handle characters outside some "standard" range -- or scanner
+         * may read nothing
+         * http://stackoverflow.com/questions/13881861/weird-behavior-with-java-scanner-reading-files
+         */
+        Scanner scanner = new Scanner(new FileInputStream(new File(fileName)), charsetName);
 
         StringBuilder sb = new StringBuilder();
 
@@ -229,8 +233,9 @@ public class LineIO {
      */
     public static <T> void write(String fileName, Iterable<T> list,
             ITransformer<T, String> transformer) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-
+        BufferedOutputStream stream =
+                new BufferedOutputStream(new FileOutputStream(fileName));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(stream));
         for (T object : list) {
             writer.write(transformer.transform(object));
             writer.newLine();

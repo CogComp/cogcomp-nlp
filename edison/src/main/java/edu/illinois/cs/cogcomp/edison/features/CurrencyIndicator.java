@@ -7,20 +7,19 @@
  */
 package edu.illinois.cs.cogcomp.edison.features;
 
+import org.cogcomp.Datastore;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Queries;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.factory.WordFeatureExtractorFactory;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordLists;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
@@ -46,7 +45,9 @@ public class CurrencyIndicator implements FeatureExtractor {
 
     static {
         try {
-            instance = new CurrencyIndicator("gazetteers/Currency.gz", true);
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File f = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+            instance = new CurrencyIndicator(f.getAbsolutePath() + File.separator + "gazetteers" + File.separator + "Currency.gz", true);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -63,23 +64,20 @@ public class CurrencyIndicator implements FeatureExtractor {
         this.file = file;
         this.gzip = gzip;
         this.currencyListFile = null;
-
     }
 
-    public CurrencyIndicator(URL currencyListFile, boolean gzip) throws IOException {
-        this.currencyListFile = currencyListFile;
-        this.gzip = gzip;
-        this.file = null;
-    }
-
-    private void loadCurrency(URL currencyListFile, boolean gzip) throws Exception {
+    private void loadCurrency(boolean gzip, boolean loadFromDatastore) throws Exception {
+        InputStream stream = null;
 
         if (currencyListFile == null) {
             assert file != null;
-            currencyListFile = IOUtils.lsResources(CurrencyIndicator.class, file).get(0);
+            if (!loadFromDatastore) {
+                currencyListFile = IOUtils.lsResources(CurrencyIndicator.class, file).get(0);
+                stream = currencyListFile.openStream();
+            } else {
+                stream = new FileInputStream(file);
+            }
         }
-
-        InputStream stream = currencyListFile.openStream();
 
         if (gzip) {
             stream = new GZIPInputStream(stream);
@@ -110,8 +108,10 @@ public class CurrencyIndicator implements FeatureExtractor {
         try {
             if (!loaded)
                 synchronized (this) {
+                    // danielk: we used to load the resource from classpath.
+                    // now its changed to be loaded from datastore.
                     if (!loaded)
-                        loadCurrency(currencyListFile, gzip);
+                        loadCurrency(gzip, true);
                 }
         } catch (Exception ex) {
             throw new EdisonException(ex);
@@ -120,7 +120,11 @@ public class CurrencyIndicator implements FeatureExtractor {
         TextAnnotation ta = c.getTextAnnotation();
 
         if (!ta.hasView(VIEW_NAME)) {
-            addCurrencyView(ta);
+            try {
+                addCurrencyView(ta);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         SpanLabelView view = (SpanLabelView) ta.getView(VIEW_NAME);
@@ -146,7 +150,16 @@ public class CurrencyIndicator implements FeatureExtractor {
         return features;
     }
 
-    private void addCurrencyView(TextAnnotation ta) {
+    private void addCurrencyView(TextAnnotation ta) throws Exception {
+
+        if (!loaded)
+            synchronized (this) {
+                // danielk: we used to load the resource from classpath.
+                // now its changed to be loaded from datastore.
+                if (!loaded)
+                    loadCurrency(gzip, true);
+            }
+
         synchronized (ta) {
 
             if (ta.hasView(VIEW_NAME))
