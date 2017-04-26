@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.ner.LbjTagger;
 
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode.TokenizationScheme;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.CharacteristicWords;
 import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;

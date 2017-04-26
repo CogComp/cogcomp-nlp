@@ -25,15 +25,14 @@ public class StatefulTokenizer implements Tokenizer {
     private static Logger logger = LoggerFactory.getLogger(StatefulTokenizer.class);
 
     /** this is set to split tokens where dashes are found within words. */
-    private boolean splitOnDash = true;
+    private boolean splitOnDash;
     
     /**
      * Takes a boolean indicating if we are to split on dash or not. The default
      * constructor assumes we do split on dash.
-     * @param splitOnDash if true, we will split words on a "-".
      */
     public StatefulTokenizer () {
-        super();
+        this(true);
     }
     
     /**

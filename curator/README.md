@@ -1,17 +1,21 @@
-# Illinois Curator
+# Cogcomp Curator
 
 The Curator acts as a central server that can annotate text using
 several annotators. With this package, we can connect to the Curator to
 get those annotations and build our own NLP-driven
-application. This package contains code for interacting with Curator, using the data structures from illinois-core-utilities.
+application. This package contains code for interacting with Curator, using the data structures from `cogcomo-core-utilities`.
 
 
 To use, first create a `CuratorAnnotatorService` to use the pipeline: 
 
 ```java 
+using edu.illinois.cs.cogcomp.curator.CuratorFactory;
+
 AnnotatorService annotator = CuratorFactory.buildCuratorClient();
+
 // Or alternatively to use the pipeline:
-// AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
+// using edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+// AnnotatorService annotator = PipelineFactory.buildPipeline();
 ```
 
 and then create a `TextAnnotation` component and add the `View`s you need:
@@ -51,7 +55,7 @@ for (int i = 0; i < ta.size(); i++) {
  - **Why curator tests take so much time/fail?** We have some unit tests in this module which need connection to a remote curator system. Since it is often inaccessble to CIs, we skip them on Semaphore. If you're running locally and seeing failures (or unexpected long delays on its tests) it must be that you don't have connection to Curator (in which case you can just ignore it). 
  
 
-##Citation
+## Citation
 
 J. Clarke and V. Srikumar and M. Sammons and D. Roth, An NLP Curator (or: How I Learned to Stop Worrying and Love NLP Pipelines). LREC (2012) pp.
 

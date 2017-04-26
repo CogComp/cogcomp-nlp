@@ -1,18 +1,18 @@
-# Illinois Tokenizer
+# Cogcomp Tokenizer
 
 This project is based on work by Yiming Jiang, who wrote the initial
 version and evaluated CCG and Stanford tokenizers against a corpus
 drawn from OntoNotes.
 
 It has been modified in the following way: additional classes were
-written to use illinois-core-utilities data structures. The underlying
+written to use `cogcomp-core-utilities` data structures. The underlying
 tokenizer is still the LBJava `SentenceSplitter`. The evaluation code
 has not been updated to use the new `IllinoisTokenizer` class (TODO).
 
 ## HOW TO USE IT
         
 The class `edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder` 
-interface from illinois-core-utilities to create a `TextAnnotation` 
+interface from cogcomp-core-utilities to create a `TextAnnotation` 
 object with `SENTENCE` and `TOKEN` views, other builder can be provided 
 as a constructor argument to a `CachingAnnotatorService` that uses other 
 annotators in pipeline fashion.
@@ -114,7 +114,7 @@ evaluator.evaluateIllinoisTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_ST
 evaluator.evaluateStanfordTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_STANDARD);
 ```
 
-## About Illinois Tokenizer
+## About Cogcomp Tokenizer
 
 * Developed by: Yiming Jiang
 * Advised by: Professor Dan Roth

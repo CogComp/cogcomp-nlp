@@ -1,3 +1,6 @@
+/temporal-normalizer/tools
+/temporal-normalizer/uw_TB_goldext_illininorm
+/temporal-normalizer/uw_AQ_goldext_illininorm
 .idea
 *.log
 **/target

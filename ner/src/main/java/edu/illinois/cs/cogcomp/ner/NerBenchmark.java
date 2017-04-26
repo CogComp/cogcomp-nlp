@@ -8,8 +8,6 @@
 package edu.illinois.cs.cogcomp.ner;
 
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -48,9 +46,7 @@ import java.io.FilenameFilter;
  * }
  */
 public class NerBenchmark {
-    private static Logger logger = LoggerFactory.getLogger(NerBenchmark.class);
-
-    /** default directory containing benchmark runs. */
+	/** default directory containing benchmark runs. */
     static String directory = "benchmark";
 
     /** if true, skip all training. */

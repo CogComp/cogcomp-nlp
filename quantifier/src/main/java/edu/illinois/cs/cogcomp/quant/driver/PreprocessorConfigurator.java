@@ -18,7 +18,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  * The properties for the {@link Preprocessor}.
  */
 public class PreprocessorConfigurator extends Configurator {
-    public static String[] views = { ViewNames.POS };
+    public static String[] views = {ViewNames.POS};
     public static Property VIEWS_TO_ADD = new Property(CoreConfigNames.VIEWS_TO_ADD,
             getViewsString());
 
@@ -26,7 +26,8 @@ public class PreprocessorConfigurator extends Configurator {
             AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
 
     // whether to use Curator or Pipeline
-    public static String USE_CURATOR = "USE_CURATOR"; // when this is false, the system makes direct calls to the necessary annotators.
+    public static String USE_CURATOR = "USE_CURATOR"; // when this is false, the system makes direct
+                                                      // calls to the necessary annotators.
     public static Property USE_PIPELINE = new Property(USE_CURATOR, Configurator.FALSE);
 
     // Curator properties

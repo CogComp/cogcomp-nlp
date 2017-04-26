@@ -1,4 +1,4 @@
-# Illinois Quantifier
+# Cogcomp Quantifier
 
 This tool takes plain, unannotated text as input and detects mentions
 of quantities in the text, as well as normalizes it to a standard
@@ -12,17 +12,17 @@ quantifier and also allows for training the model using your own
 training data.
 
 ## Requirements
-Compiling the Illinois Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
+Compiling the Cogcomp Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
 
 ## Installation
-Illinois Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
+Cogcomp Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
 
 
-## Running the Illinois Quantifier
+## Running the Cogcomp Quantifier
 
 ### Generating Quantities for plain text file
 
-The Illinois Quantifier comes bundled with a program that takes a
+The Cogcomp Quantifier comes bundled with a program that takes a
 plain, unannotated text file as input and produces that same text with
 standardized quantity annotations as output. To invoke this program,
 type:

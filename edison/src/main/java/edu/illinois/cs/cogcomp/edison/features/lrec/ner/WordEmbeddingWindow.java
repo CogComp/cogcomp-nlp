@@ -47,7 +47,6 @@ public class WordEmbeddingWindow implements FeatureExtractor {
     }
 
 
-
     @Override
     public Set<Feature> getFeatures(Constituent c) throws EdisonException {
         Set<Feature> features = new HashSet<>();

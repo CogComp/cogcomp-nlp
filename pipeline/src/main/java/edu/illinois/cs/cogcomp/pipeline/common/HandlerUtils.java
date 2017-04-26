@@ -16,26 +16,22 @@ import java.util.List;
 /**
  * Created by mssammon on 2/1/16.
  */
-public class HandlerUtils
-{
+public class HandlerUtils {
     /**
-     * check whether sentences in TextAnnotation respect a sentence length limit. If not, return
-     *    the constituent corresponding to the first such sentence, otherwise return null.
-     * @param ta  TextAnnotation to check
+     * check whether sentences in TextAnnotation respect a sentence length limit. If not, return the
+     * constituent corresponding to the first such sentence, otherwise return null.
+     * 
+     * @param ta TextAnnotation to check
      * @return Constituent corresponding to first illegal sentence, null if none found.
      */
-    public static Constituent checkTextAnnotationRespectsSentenceLengthLimit(TextAnnotation ta, int maxSentenceLength)
-    {
-        List<Constituent> sentences= ta.getView( ViewNames.SENTENCE ).getConstituents();
+    public static Constituent checkTextAnnotationRespectsSentenceLengthLimit(TextAnnotation ta,
+            int maxSentenceLength) {
+        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
 
         Constituent illegalSentence = null;
 
-        for ( Constituent c : sentences )
-        {
-            if ( ( maxSentenceLength > 0 ) &&
-                    ( c.getEndSpan() - c.getStartSpan() > maxSentenceLength )
-                    )
-            {
+        for (Constituent c : sentences) {
+            if ((maxSentenceLength > 0) && (c.getEndSpan() - c.getStartSpan() > maxSentenceLength)) {
                 illegalSentence = c;
                 break;
             }
@@ -47,16 +43,17 @@ public class HandlerUtils
 
     /**
      * generate an error message for sentence length error.
+     * 
      * @param taId Id of text from which sentence came
-     * @param sentence  sentence text
-     * @param maxSentenceLength  length limit
+     * @param sentence sentence text
+     * @param maxSentenceLength length limit
      * @return
      */
-    public static String getSentenceLengthError(String taId, String sentence, int maxSentenceLength )
-    {
-        String msg = "Unable to parse TextAnnotation " + taId +
-                " since it is larger than the maximum sentence length of the parser (" +
-                maxSentenceLength + "). Sentence is: '" + sentence + "'.";
+    public static String getSentenceLengthError(String taId, String sentence, int maxSentenceLength) {
+        String msg =
+                "Unable to parse TextAnnotation " + taId
+                        + " since it is larger than the maximum sentence length of the parser ("
+                        + maxSentenceLength + "). Sentence is: '" + sentence + "'.";
 
         return msg;
     }

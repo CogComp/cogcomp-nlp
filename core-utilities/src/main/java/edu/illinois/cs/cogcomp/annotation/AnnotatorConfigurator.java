@@ -15,7 +15,17 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
  * Annotator configuration options.
  */
 public class AnnotatorConfigurator extends Configurator {
+
+    /**
+     * if 'true', the annotator will only be initialized on the first call to its getView() method.
+     */
     public static Property IS_LAZILY_INITIALIZED = new Property("isLazilyInitialized", FALSE);
+
+    /**
+     * if 'true', this Annotator has no inter-sentence dependencies during processing, so each
+     *    sentence can be processed individually.
+     */
+    public static Property IS_SENTENCE_LEVEL = new Property("isSentenceLevel", FALSE);
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -24,7 +34,7 @@ public class AnnotatorConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[] {IS_LAZILY_INITIALIZED};
+        Property[] props = new Property[] {IS_LAZILY_INITIALIZED, IS_SENTENCE_LEVEL};
         return new ResourceManager(generateProperties(props));
     }
 }
