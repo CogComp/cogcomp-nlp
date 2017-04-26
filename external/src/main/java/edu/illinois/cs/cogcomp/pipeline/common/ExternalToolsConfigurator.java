@@ -32,7 +32,7 @@ public class ExternalToolsConfigurator extends AnnotatorConfigurator {
      * individually, then splice the annotations together. This allows for partial annotation of
      * documents in cases where document text causes local problems for individual annotators.
      */
-    public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", FALSE);
+    public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", TRUE);
 
     /**
      * if 'true', set tokenizer to split on hyphen. Default is 'false' until CCG NLP annotator
