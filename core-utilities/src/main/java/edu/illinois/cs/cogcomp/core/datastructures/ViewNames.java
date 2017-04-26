@@ -122,6 +122,7 @@ public class ViewNames {
     public static final String MENTION_ERE = "MENTION_ERE";
     public static final String COREF_ERE = "COREF_ERE";
 
+
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
             case TOKENS:

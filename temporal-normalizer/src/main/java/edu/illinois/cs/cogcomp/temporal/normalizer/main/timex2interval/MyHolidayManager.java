@@ -11,6 +11,8 @@ import org.joda.time.Interval;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  * @author dxquang Jun 3, 2012
@@ -40,7 +42,7 @@ public class MyHolidayManager {
 		return "";
 	}
 
-	public Interval getHolidayInterval(int year, String timexStr) {
+	public TimexChunk getHolidayInterval(int year, String timexStr) {
 		String date = getHolidays(year, timexStr);
 		String delims = "[-]";
 		String[] tokens = date.split(delims);
@@ -50,13 +52,18 @@ public class MyHolidayManager {
 		DateTime finish = new DateTime(Integer.parseInt(tokens[0]),
 				Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), 23,
 				59, 59, 59);
-		Interval result = new Interval(start, finish);
-		return result;
+		//Interval result = new Interval(start, finish);
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+		TimexChunk tc = new TimexChunk();
+		tc.setContent(timexStr);
+		tc.addAttribute(TimexNames.type, TimexNames.DATE);
+		tc.addAttribute(TimexNames.value, fmt.print(finish));
+		return tc;
 	}
 
 	public static void main(String[] args) {
 		String timexStr = "Christmas";
 		MyHolidayManager holyMan = new MyHolidayManager();
-		Interval interval = holyMan.getHolidayInterval(2000, timexStr);
+		TimexChunk interval = holyMan.getHolidayInterval(2000, timexStr);
 	}
 }

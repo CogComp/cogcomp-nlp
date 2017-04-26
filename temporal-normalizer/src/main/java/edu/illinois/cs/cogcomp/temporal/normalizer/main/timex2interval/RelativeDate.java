@@ -2,14 +2,17 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.regex.*;
 
 public class RelativeDate {
 	public static String number = "(?:twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|fourty|fifth|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|an|a|one|two|three|four|five|six|seven|eight|nine|ten|eleven|this)";
+	public static String quantifier = "(?:several|few|a few|bunch|a bunch|set|a set)";
 	public static DateMapping temp = new DateMapping();
 
-	public static Interval Relativerule(DateTime start, String phrase) {
+	public static TimexChunk Relativerule(DateTime start, String phrase) {
 		int numterm;
 		int flag_ago = 0;
 		int i;
@@ -24,9 +27,22 @@ public class RelativeDate {
 		Interval interval;
 		interval = new Interval(start, start);
 		phrase = phrase.toLowerCase();
-		if (phrase.equals("recently") || phrase.equals("recent")) {
-			phrase = "one month ago";
+		phrase = phrase.trim();
+		TimexChunk tc = new TimexChunk();
+
+		if (phrase.equals("recently") || phrase.equals("recent") || phrase.equals("past") || phrase.equals("at time")
+				|| phrase.equals("previously")) {
+			tc.addAttribute(TimexNames.type, TimexNames.DATE);
+			tc.addAttribute(TimexNames.value, TimexNames.PAST_REF);
+			return tc;
 		}
+
+		if (phrase.contains("future")) {
+			tc.addAttribute(TimexNames.type, TimexNames.DATE);
+			tc.addAttribute(TimexNames.value, TimexNames.FUTURE_REF);
+			return tc;
+		}
+
 		// Handle some special cases
 		if (phrase.endsWith("earlier")) {
 			phrase = phrase.replace("earlier", "ago");
@@ -79,6 +95,9 @@ public class RelativeDate {
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(phrase);
 		boolean matchFound = matcher.find();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+		DateTimeFormatter ymFmt = DateTimeFormat.forPattern("yyyy-MM");
+		DateTimeFormatter yFmt = DateTimeFormat.forPattern("yyyy");
 		if (matchFound) {
 			for (i = 1; i <= 3; i++) {
 				if (matcher.group(i) == null) {
@@ -111,8 +130,10 @@ public class RelativeDate {
 									start.getMonthOfYear(),
 									start.getDayOfMonth(), 0, 0, 0, 0);
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+							return tc;
 						}
 
 						else if (temp3.equals("day") || temp3.equals("days")) {
@@ -124,8 +145,10 @@ public class RelativeDate {
 									start.getMonthOfYear(),
 									start.getDayOfMonth(), 0, 0, 0, 0);
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "D");
+							return tc;
 
 						}
 
@@ -139,8 +162,10 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(), 0, 0, 0, 0);
 							finish = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "M");
+							return tc;
 						}
 
 						else if (temp3.equals("week") || temp3.equals("weeks")) {
@@ -152,8 +177,10 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(), 0, 0, 0, 0);
 							finish = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "W");
+							return tc;
 						}
 
 						else if (temp3.equals("decade")
@@ -167,8 +194,10 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(), 0, 0, 0, 0);
 							finish = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "DE");
+							return tc;
 						}
 
 						else if (temp3.equals("century")
@@ -181,28 +210,36 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(), 0, 0, 0, 0);
 							finish = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "P" + amount + "CE");
+							return tc;
 						}
 
 						else if (temp3.equals("hour") || temp3.equals("hours")) {
 							finish = start.minusHours(amount);
-							interval = new Interval(finish, start);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "PT" + amount + "H");
+							return tc;
 						}
 
 						else if (temp3.equals("minute")
 								|| temp3.equals("minutes")) {
 							finish = start.minusMinutes(amount);
-							interval = new Interval(finish, start);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "PT" + amount + "M");
+							return tc;
 						}
 
 						else if (temp3.equals("second")
 								|| temp3.equals("seconds")) {
 							finish = start.minusSeconds(amount);
-							interval = new Interval(finish, start);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "PT" + amount + "S");
+							return tc;
 						}
 
 					}
@@ -216,8 +253,10 @@ public class RelativeDate {
 							day = finish.getDayOfMonth();
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, yFmt.print(finish));
+							return tc;
 						}
 
 						else if (temp3.equals("day") || temp3.equals("days")) {
@@ -228,8 +267,10 @@ public class RelativeDate {
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+							return tc;
 
 						}
 
@@ -242,8 +283,10 @@ public class RelativeDate {
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							return tc;
 						}
 
 						else if (temp3.equals("week") || temp3.equals("weeks")) {
@@ -256,8 +299,10 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(), 23, 59, 59, 59);
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, yFmt.print(finish)+"-W"+String.valueOf(finish.getWeekOfWeekyear()));
+							return tc;
 						}
 
 						else if (temp3.equals("decade")
@@ -269,8 +314,10 @@ public class RelativeDate {
 							day = finish.getDayOfMonth();
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10)+"X");
+							return tc;
 						}
 
 						else if (temp3.equals("century")
@@ -281,8 +328,10 @@ public class RelativeDate {
 							day = start.getDayOfMonth();
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+							return tc;
 						}
 
 						else if (temp3.equals("hour") || temp3.equals("hours")) {
@@ -295,8 +344,10 @@ public class RelativeDate {
 									finish.getMonthOfYear(),
 									finish.getDayOfMonth(),
 									finish.getHourOfDay(), 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "PT" + amount + "H");
+							return tc;
 						}
 
 						else if (temp3.equals("minute")
@@ -313,8 +364,10 @@ public class RelativeDate {
 									finish.getDayOfMonth(),
 									finish.getHourOfDay(), finish
 											.minuteOfHour().get(), 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							//interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+							tc.addAttribute(TimexNames.value, "PT" + amount + "M");
+							return tc;
 						}
 
 					}
@@ -335,7 +388,10 @@ public class RelativeDate {
 								23, 59, 59, 59);
 						start = new DateTime(year, month, day, 23, 59, 59, 59);
 						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("day") || temp3.equals("days")) {
@@ -347,8 +403,10 @@ public class RelativeDate {
 								start.getMonthOfYear(), start.getDayOfMonth(),
 								23, 59, 59, 59);
 						start = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "D");
+						return tc;
 
 					}
 
@@ -361,8 +419,10 @@ public class RelativeDate {
 								finish.getMonthOfYear(),
 								finish.getDayOfMonth(), 23, 59, 59, 59);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("week") || temp3.equals("weeks")) {
@@ -374,8 +434,10 @@ public class RelativeDate {
 								finish.getMonthOfYear(),
 								finish.getDayOfMonth(), 23, 59, 59, 59);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "W");
+						return tc;
 					}
 
 					else if (temp3.equals("decade") || temp3.equals("decades")) {
@@ -387,8 +449,11 @@ public class RelativeDate {
 								finish.getMonthOfYear(),
 								finish.getDayOfMonth(), 23, 59, 59, 59);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						amount = amount*10;
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("century")
@@ -401,26 +466,35 @@ public class RelativeDate {
 								finish.getMonthOfYear(),
 								finish.getDayOfMonth(), 23, 59, 59, 59);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						amount*=100;
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("hour") || temp3.equals("hours")) {
 						finish = start.minusHours((-1) * amount);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "H");
+						return tc;
 					}
 
 					else if (temp3.equals("minute") || temp3.equals("minutes")) {
 						finish = start.minusMinutes((-1) * amount);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("second") || temp3.equals("seconds")) {
 						finish = start.minusSeconds((-1) * amount);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "S");
+						return tc;
 					}
 
 				}
@@ -436,8 +510,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("day") || temp3.equals("days")) {
@@ -449,9 +525,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "D");
+						return tc;
 
 					}
 
@@ -463,8 +540,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("week") || temp3.equals("weeks")) {
@@ -475,8 +554,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "W");
+						return tc;
 					}
 
 					else if (temp3.equals("decade") || temp3.equals("decades")) {
@@ -487,8 +568,11 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						amount*=10;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("century")
@@ -500,29 +584,38 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						amount*=100;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("hour") || temp3.equals("hours")) {
 						finish = start.minusHours(amount);
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "H");
+						return tc;
 					}
 
 					else if (temp3.equals("minute") || temp3.equals("minutes")) {
 						finish = start.minusMinutes(amount);
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("second") || temp3.equals("seconds")) {
 						finish = start.minusSeconds(amount);
 						start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "S");
+						return tc;
 					}
 
 				}
@@ -536,8 +629,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("day") || temp3.equals("days")) {
@@ -548,8 +643,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "D");
+						return tc;
 
 					}
 
@@ -561,8 +658,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("week") || temp3.equals("weeks")) {
@@ -573,8 +672,10 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "W");
+						return tc;
 					}
 
 					else if (temp3.equals("decade") || temp3.equals("decades")) {
@@ -585,8 +686,11 @@ public class RelativeDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(finish, start);
-						return interval;
+						//interval = new Interval(start, finish);
+						amount*=10;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("century")
@@ -599,28 +703,37 @@ public class RelativeDate {
 						finish = new DateTime(year, month, day, 0, 0, 0, 0);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
 						interval = new Interval(finish, start);
-						return interval;
+						amount*=100;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "P" + amount + "Y");
+						return tc;
 					}
 
 					else if (temp3.equals("hour") || temp3.equals("hours")) {
 						finish = start.minusHours((-1) * amount);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
 						interval = new Interval(finish, start);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "H");
+						return tc;
 					}
 
 					else if (temp3.equals("minute") || temp3.equals("minutes")) {
 						finish = start.minusMinutes((-1) * amount);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
 						interval = new Interval(finish, start);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "M");
+						return tc;
 					}
 
 					else if (temp3.equals("second") || temp3.equals("seconds")) {
 						finish = start.minusSeconds((-1) * amount);
 						start = new DateTime(9999, 12, 31, 23, 59, 59, 59);
 						interval = new Interval(finish, start);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DURATION);
+						tc.addAttribute(TimexNames.value, "PT" + amount + "S");
+						return tc;
 					}
 
 				}
@@ -629,7 +742,7 @@ public class RelativeDate {
 		return null;
 	}
 
-	private static String converter(String phrase) {
+	public static String converter(String phrase) {
 		String temp1;
 		String temp2;
 		String tempresult;
@@ -646,6 +759,14 @@ public class RelativeDate {
 		}
 
 		else {
+			patternStr = quantifier;
+			pattern = Pattern.compile(patternStr);
+			matcher = pattern.matcher(phrase);
+			matchFound = matcher.find();
+			if (matchFound) {
+				return "X";
+			}
+
 			patternStr = "(\\d{1,4})\\s*(" + number + ")";
 			pattern = Pattern.compile(patternStr);
 			matcher = pattern.matcher(phrase);
@@ -698,6 +819,8 @@ public class RelativeDate {
 						temp1 = matcher.group(1);
 						temp1 = temp.hm.get(temp1);
 						return temp1;
+
+
 					}
 				}
 
@@ -709,6 +832,8 @@ public class RelativeDate {
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(2001, 3, 14, 3, 3, 3, 3);
 		String example = "one day ag";
-		Interval sample = Relativerule(startTime, example);
+		TimexChunk sample = Relativerule(startTime, example);
+
+		System.out.println(RelativeDate.converter("one hundred days"));
 	}
 }

@@ -33,15 +33,18 @@ public class TemporalChunkerConfigurator extends Configurator {
     public static final Property OUTPUT_TYPE = new Property("outputType", "TIMEML");
 
     public static final Property HEIDELTIME_CONFIG =
-            new Property("heideltimeConfig", "edu/illinois/cs/cogcomp/temporal/normalizer/main/conf/heideltime_config.props");
+            new Property("heideltimeConfig", "src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/conf/heideltime_config.props");
 
     public static final Property POSTAGGER_TYPE = new Property("posTagger", "NO");
+
+    public static final Property USE_HEIDELTIME = new Property("useHeidelTime", "False");
 
     @Override
     public ResourceManager getDefaultConfig() {
         Property[] props =
                 {MODEL_NAME, MODEL_DIR_PATH, MODEL_PATH, MODEL_LEX_PATH,
-                        DOCUMENT_TYPE, OUTPUT_TYPE, HEIDELTIME_CONFIG, POSTAGGER_TYPE};
+                        DOCUMENT_TYPE, OUTPUT_TYPE, HEIDELTIME_CONFIG, POSTAGGER_TYPE,
+                        USE_HEIDELTIME};
         return new ResourceManager(generateProperties(props));
     }
 

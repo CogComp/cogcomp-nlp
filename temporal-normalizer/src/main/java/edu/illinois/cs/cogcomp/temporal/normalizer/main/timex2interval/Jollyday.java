@@ -4,6 +4,7 @@ import de.jollyday.HolidayCalendar;
 import de.jollyday.HolidayManager;
 import de.jollyday.Holiday;
 
+import java.sql.Time;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class Jollyday {
 	static int[] list = new int[100];
 	static int j = 0;
 
-	public static Interval test(String aim, String temp, int year) {
+	public static TimexChunk test(String aim, String temp, int year) {
 		Jollyday oTest = new Jollyday();
 		ArrayList<String> lHolidays = new ArrayList<>();
 		// Print out all holiday dates of each year.
@@ -38,7 +39,12 @@ public class Jollyday {
 		DateTime finish = new DateTime(Integer.parseInt(tokens[0]),
 				Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), 23,
 				59, 59, 59);
-		return new Interval(start, finish);
+		TimexChunk tc = new TimexChunk();
+		//TODO: remember to check the purpose of tempone and temptwo
+		tc.setContent(aim);
+		tc.addAttribute(TimexNames.type, TimexNames.DATE);
+		tc.addAttribute(TimexNames.value, tempone);
+		return tc;
 
 	}
 
@@ -106,8 +112,9 @@ public class Jollyday {
 		String temp2 = "UNITED_STATES";
 		int time = 2007;
 		phrase1 = phrase1.toLowerCase();
-		Interval usually = Jollyday.test(phrase1, temp2, time);
-
+		TimexChunk usually = Jollyday.test(phrase1, temp2, time);
+		System.out.println(usually);
+		System.out.println(usually.toTIMEXString());
 	}
 
 }

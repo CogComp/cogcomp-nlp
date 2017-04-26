@@ -4,6 +4,12 @@ import java.util.*;
 
 public class ConvertWordToNumber {
 
+	private static String[] ordinals = { "first", "second", "third", "fourth", "fifth",
+			"sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth",
+			"fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth",
+			"twentieth", "thirtieth", "fortieth", "fiftieth", "sixtieth", "seventieth", "eightieth",
+			"ninetieth"};
+
 	private static String[] numerals = { "zero", "one", "first", "two",
 			"second", "three", "third", "four", "fourth", "fifth", "five",
 			"sixth", "six", "seven", "seventh", "eighth", "eight", "ninth",
@@ -87,6 +93,15 @@ public class ConvertWordToNumber {
 
 	public static String ConvertWTN(String phrase) throws Exception {
 		// System.out.println("The current phrase is "+phrase);
+
+		for (String ordinal: ordinals) {
+			phrase = phrase.replaceAll(ordinal, ordinal+" th");
+		}
+		phrase = phrase.replaceAll("(\\d+)st", "$1 th");
+		phrase = phrase.replaceAll("(\\d+)nd", "$1 th");
+		phrase = phrase.replaceAll("(\\d+)rd", "$1 th");
+		phrase = phrase.replaceAll("(\\d+)th", "$1 th");
+
 		int startflag = -1;
 		String delims = " ";
 		String newphrase = new String();
@@ -160,6 +175,13 @@ public class ConvertWordToNumber {
 		}
 
 		// System.out.println("Phrase : "+ tophrase);
+
+		tophrase = tophrase.replaceAll(" th ", "th ");
 		return tophrase;
 	}
+
+	public static void main(String []args) throws Exception {
+		System.out.println(ConvertWordToNumber.ConvertWTN("first day"));
+	}
+
 }

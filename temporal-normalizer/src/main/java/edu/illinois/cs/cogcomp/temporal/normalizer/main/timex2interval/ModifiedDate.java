@@ -1,17 +1,21 @@
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
+import java.sql.Time;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 
 //Define the time line
 //Morning 7:00-11:00 Noon 11:00-2:00 Afternoon 2:00-6:00 Evening 6:00-9:00 Night 9:00-12:00
 public class ModifiedDate {
 
-	public static Interval ModifiedRule(DateTime start, String phrase) {
+	public static TimexChunk ModifiedRule(DateTime start, TemporalPhrase temporalPhrase) {
+		String phrase = temporalPhrase.getPhrase();
 		phrase = phrase.trim();
 		// System.out.println(phrase);
 
@@ -23,29 +27,37 @@ public class ModifiedDate {
 		boolean matcher11Found = matcher11.find();
 
 		if (matcher11Found) {
+			TimexChunk tc = new TimexChunk();
+			tc.addAttribute(TimexNames.type, TimexNames.DATE);
 			String secondphrase = new String();
 			// split the phrase into two parts
+			// TODO: write converter to convert TIMEX3 to datepoint
 			String firstphrase = "this" + matcher11.group(2);
+			tc = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase, temporalPhrase.getTense()));
 			if (matcher11.group(1).contains("early")
 					|| matcher11.group(1).contains("earlier")) {
 
-				secondphrase = "this morning";
+				tc.addAttribute(TimexNames.mod, TimexNames.START);
 			}
 
 			else if (matcher11.group(1).contains("late")
 					|| matcher11.group(1).contains("later")) {
-				secondphrase = "this afternoon";
+				tc.addAttribute(TimexNames.mod, TimexNames.END);
 			}
 
 			else {
-				secondphrase = "this" + matcher11.group(1);
+				//secondphrase = "this" + matcher11.group(1);
+				secondphrase = matcher11.group(1);
+				String revertStr = firstphrase + " " + secondphrase;
+				temporalPhrase.setPhrase(revertStr);
+				return ModifiedDate.ModifiedRule(start, temporalPhrase);
 			}
 
-			Interval keypoint = ModifiedDate.ModifiedRule(start, firstphrase);
-			DateTime starttime = keypoint.getStart();
-			Interval result = ModifiedDate
-					.ModifiedRule(starttime, secondphrase);
-			return result;
+
+//			DateTime starttime = keypoint.getInterval().getStart();
+//			TimexChunk result = ModifiedDate
+//					.ModifiedRule(starttime, new TemporalPhrase(secondphrase));
+			return tc;
 
 		}
 
@@ -60,10 +72,12 @@ public class ModifiedDate {
 			// split the phrase into two parts
 			String firstphrase = "this" + matcher2.group(1);
 			String secondphrase = "this" + matcher2.group(2);
-			Interval keypoint = ModifiedDate.ModifiedRule(start, firstphrase);
-			DateTime starttime = keypoint.getStart();
-			Interval result = ModifiedDate
-					.ModifiedRule(starttime, secondphrase);
+			TimexChunk keypoint = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase, temporalPhrase.getTense()));
+			String normVal = keypoint.getAttributes().get(TimexNames.value);
+			DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+			DateTime starttime = fmt.parseDateTime(normVal);
+			TimexChunk result = ModifiedDate
+					.ModifiedRule(starttime, new TemporalPhrase(secondphrase, temporalPhrase.getTense()));
 			return result;
 
 		}
@@ -75,7 +89,17 @@ public class ModifiedDate {
 		Matcher onematcher = onepattern.matcher(phrase);
 		boolean onematchFound = onematcher.find();
 		if (onematchFound) {
-			phrase = "this " + phrase;
+//			String tense = temporalPhrase.getTense();
+//			if (tense.equals("past")) {
+//				phrase = "last " + phrase;
+//			}
+//			else if (tense.equals("future")) {
+//				phrase = "next " + phrase;
+//			}
+//			else {
+//				phrase = "this " + phrase;
+//			}
+			phrase = "this " + onematcher.group(0);
 		}
 
 		int numterm;
@@ -87,6 +111,8 @@ public class ModifiedDate {
 		int day;
 		int flagbefore = -1;
 		int flagafter = -1;
+		String timeOfDay="";
+		int prematchDay=-1;
 		DateTime finish;
 		String temp1;
 		String temp2;
@@ -120,11 +146,15 @@ public class ModifiedDate {
 			phrase = group2 + " " + group1;
 
 		}
-		String patternStr = "\\s*(last|past|next|upcoming|this|following|previous|yesterday|tomorrow|today|early|late|earlier|later)\\s*(morning|afternoon|noon|evening|night|month|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekend|week|century|year|day|hour|minute|second|spring|fall|summer|winter|"
+		String patternStr = "\\s*(end|begin(?:ing)?|start|last|past|next|upcoming|this|following|previous|yesterday|tomorrow|today|early|late|earlier|later)\\s*(morning|afternoon|noon|evening|night|month|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekend|week|century|decade|year|day|hour|minute|second|spring|fall|summer|winter|"
 				+ monther + ")";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(phrase);
 		boolean matchFound = matcher.find();
+		TimexChunk tc = new TimexChunk();
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
+		DateTimeFormatter ymFmt = DateTimeFormat.forPattern("yyyy-MM");
+		DateTimeFormatter yFmt = DateTimeFormat.forPattern("yyyy");
 		if (matchFound) {
 			// System.out.println(matcher.group(1));
 			for (i = 1; i <= 2; i++) {
@@ -141,21 +171,60 @@ public class ModifiedDate {
 				// System.out.println(matcher.group(0));
 				// group(0) returns the whole detected string which matches the
 				// pattern
+				String origPhrase = phrase;
 				phrase = phrase.replaceAll(matcher.group(0), "");
 				phrase = phrase.trim();
 				// System.out.println("lalal"+phrase);
-				String prepatternStr = monther;
+				String prepatternStr = "(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|year)";
 				Pattern prepattern = Pattern.compile(prepatternStr);
 				Matcher prematcher = prepattern.matcher(phrase);
 				boolean prematchFound = prematcher.find();
 				if (prematchFound) {
-					month = Integer.parseInt(temp.hm.get(phrase));
+					if (temp.hm.containsKey(prematcher.group(1))) {
+						month = Integer.parseInt(temp.hm.get(prematcher.group(1)));
 
-					preflag = 1;
+						preflag = 1;
+					}
+				}
+
+				prepatternStr = "(\\d+)";
+				prepattern = Pattern.compile(prepatternStr);
+				prematcher = prepattern.matcher(phrase);
+				prematchFound = prematcher.find();
+				if (prematchFound) {
+					int dayInt = Integer.parseInt(prematcher.group(1));
+					if (dayInt > 0 && dayInt < 32) {
+						prematchDay = dayInt;
+						preflag = 1;
+					}
+				}
+
+				prepatternStr = "(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)";
+				prepattern = Pattern.compile(prepatternStr);
+				prematcher = prepattern.matcher(phrase);
+				prematchFound = prematcher.find();
+				if (prematchFound) {
+					if (temp.hm.containsKey(prematcher.group(1))) {
+						prematchDay = Integer.parseInt(temp.hm.get(prematcher.group(1)));
+						preflag = 1;
+					}
+				}
+//
+//				morning|afternoon|noon|evening|night|spring|fall|summer|winter|
+
+				prepatternStr = "(morning|afternoon|noon|evening|night)";
+				prepattern = Pattern.compile(prepatternStr);
+				prematcher = prepattern.matcher(phrase);
+				prematchFound = prematcher.find();
+				if (prematchFound) {
+					if (SetRule.unitMap.containsKey(prematcher.group(1))) {
+						timeOfDay = SetRule.unitMap.get(prematcher.group(1));
+						preflag = 1;
+					}
 				}
 
 				else {
-					String backPatt = "(early|earlier)";
+					String backPatt = "(early|earlier|begin(?:ing)?|start)";
 
 					Pattern backPa = Pattern.compile(backPatt);
 					Matcher backmatcher = backPa.matcher(phrase);
@@ -168,7 +237,7 @@ public class ModifiedDate {
 
 					else {
 						// System.out.print("hello" + phrase);
-						String backPatter = "(late|later)";
+						String backPatter = "(late|later|end)";
 						Pattern backPater = Pattern.compile(backPatter);
 						Matcher backmatch = backPater.matcher(phrase);
 						boolean backFounder = backmatch.find();
@@ -201,9 +270,14 @@ public class ModifiedDate {
 								finish = new DateTime(year, month, 1, 23, 59,
 										59, 59);
 								finish = finish.minusDays(1);
-								start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
-								interval = new Interval(start, finish);
-								return interval;
+								String normVal = fmt.print(finish);
+								tc.addAttribute(TimexNames.type, TimexNames.DATE);
+								tc.addAttribute(TimexNames.value, normVal);
+								tc.addAttribute(TimexNames.mod, TimexNames.BEFORE);
+//								start = new DateTime(0000, 1, 1, 0, 0, 0, 0);
+//								interval = new Interval(start, finish);
+
+								return tc;
 							}
 
 							else if (flagafter == 1) {
@@ -211,40 +285,58 @@ public class ModifiedDate {
 										0);
 								finish = finish.dayOfMonth().withMaximumValue();
 								finish = finish.minusDays(-1);
-								start = new DateTime(9999, 12, 31, 23, 59, 59,
-										59);
-								interval = new Interval(finish, start);
-								return interval;
+								String normVal = fmt.print(finish);
+								tc.addAttribute(TimexNames.type, TimexNames.DATE);
+								tc.addAttribute(TimexNames.value, normVal);
+								tc.addAttribute(TimexNames.mod, TimexNames.AFTER);
+//								start = new DateTime(9999, 12, 31, 23, 59, 59,
+//										59);
+//								interval = new Interval(finish, start);
+								return tc;
 							}
 							finish = new DateTime(year, month, 1, 23, 59, 59,
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
-							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							//start = new DateTime(year, month, 1, 0, 0, 0, 0);
+							//interval = new Interval(start, finish);
+
+							String normVal = ymFmt.print(finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, normVal);
+							return tc;
 						}
 
 						else if (preflag == 2) {
-							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
-							finish = new DateTime(year, 3, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, String.valueOf(year));
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
+//							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+//							finish = new DateTime(year, 3, 31, 23, 59, 59, 59);
+//							interval = new Interval(start, finish);
+							return tc;
 						}
 
 						else if (preflag == 3) {
-							start = new DateTime(year, 10, 1, 0, 0, 0, 0);
-							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+//							start = new DateTime(year, 10, 1, 0, 0, 0, 0);
+//							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
+//							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, String.valueOf(year));
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
+							return tc;
 						}
 
 						else {
-							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
-							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+//							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+//							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
+//							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, String.valueOf(year));
+							return tc;
 						}
 					}
+
 
 					else if (temp2.equals("month")) {
 
@@ -256,11 +348,19 @@ public class ModifiedDate {
 						start = new DateTime(year, month, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
 						interval = new Interval(start, finish);
-						if (preflag == 2) {
-							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							finish = new DateTime(year, month, 10, 23, 59, 59,
-									59);
-							interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+						if (preflag == 1) {
+							finish = new DateTime(year, month, prematchDay, 23, 59, 59, 59);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+						}
+						else if (preflag == 2) {
+//							start = new DateTime(year, month, 1, 0, 0, 0, 0);
+//							finish = new DateTime(year, month, 10, 23, 59, 59,
+//									59);
+//							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
 						}
 
 						else if (preflag == 3) {
@@ -269,8 +369,10 @@ public class ModifiedDate {
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
 							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
 						}
-						return interval;
+						return tc;
 					}
 
 					else if (temp2.equals("week")) {
@@ -287,6 +389,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
 						interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						if (preflag == 1) {
+							String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+							weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+							tc.addAttribute(TimexNames.value,
+									String.valueOf(year)+"-W"+weekIdx + "-" + String.valueOf(prematchDay));
+						}
 						if (preflag == 2) {
 							finish = start.minusDays(-2);
 							year = finish.getYear();
@@ -294,7 +403,11 @@ public class ModifiedDate {
 							day = finish.getDayOfMonth();
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							//interval = new Interval(start, finish);
+							String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+							weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+							tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"+weekIdx);
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
 						}
 
 						else if (preflag == 3) {
@@ -304,10 +417,20 @@ public class ModifiedDate {
 							month = start.getMonthOfYear();
 							day = start.getDayOfMonth();
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							//interval = new Interval(start, finish);
+
+							String weekIdx = String.valueOf(start.getWeekOfWeekyear());
+							weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+							tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"+weekIdx);
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
 
 						}
-						return interval;
+						else
+						{
+							String weekIdx = String.valueOf(start.getWeekOfWeekyear());
+							tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"+weekIdx);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("weekend")) {
@@ -320,25 +443,33 @@ public class ModifiedDate {
 						finish = start.minusDays(-1);
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
-					} else if (temp2.equals("hour")) {
-						finish = start.minusHours(1);
-						interval = new Interval(finish, start);
-						return interval;
-					}
+						//interval = new Interval(start, finish);
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.value, String.valueOf(year) + "-W" + weekIdx + "-WE");
+						return tc;
 
-					else if (temp2.equals("minute")) {
-						finish = start.minusMinutes(1);
-						interval = new Interval(finish, start);
-						return interval;
+						/* TODO: I commented out these three cases for now because they don't make sense
+						 using TIMEX3 standard
+						 */
 					}
-
-					else if (temp2.equals("second")) {
-						finish = start.minusSeconds(1);
-						interval = new Interval(finish, start);
-						return interval;
-					}
+//					 else if (temp2.equals("hour")) {
+//						finish = start.minusHours(1);
+//						interval = new Interval(finish, start);
+//						return interval;
+//					}
+//
+//					else if (temp2.equals("minute")) {
+//						finish = start.minusMinutes(1);
+//						interval = new Interval(finish, start);
+//						return interval;
+//					}
+//
+//					else if (temp2.equals("second")) {
+//						finish = start.minusSeconds(1);
+//						interval = new Interval(finish, start);
+//						return interval;
+//					}
 
 					else if (temp2.equals("century")) {
 						finish = start.minusYears(100);
@@ -346,8 +477,22 @@ public class ModifiedDate {
 						year = year * 100;
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+						return tc;
+					}
+
+					else if (temp2.equals("decade")) {
+						finish = start.minusYears(10);
+						year = finish.getCenturyOfEra();
+						year = year * 100;
+						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()*10));
+						return tc;
 					}
 
 					else if (temp2.equals("mon") || temp2.equals("monday")) {
@@ -358,8 +503,14 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("tues") || temp2.equals("tuesday")) {
@@ -370,8 +521,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("wed") || temp2.equals("wednesday")) {
@@ -382,8 +538,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("thur") || temp2.equals("thursday")) {
@@ -394,8 +555,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("fri") || temp2.equals("friday")) {
@@ -406,8 +572,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sat") || temp2.equals("saturday")) {
@@ -418,8 +589,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sun") || temp2.equals("sunday")) {
@@ -430,8 +606,13 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("morning")) {
@@ -441,8 +622,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 7, 0, 0, 0);
 						finish = new DateTime(year, month, day, 10, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.MORNING);
+						return tc;
 					}
 
 					else if (temp2.equals("noon")) {
@@ -452,8 +634,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 11, 0, 0, 0);
 						finish = new DateTime(year, month, day, 13, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.NOON);
+						return tc;
 					}
 
 					else if (temp2.equals("afternoon")) {
@@ -463,8 +646,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 14, 0, 0, 0);
 						finish = new DateTime(year, month, day, 17, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.AFTERNOON);
+						return tc;
 					}
 
 					else if (temp2.equals("evening")) {
@@ -474,8 +658,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 18, 0, 0, 0);
 						finish = new DateTime(year, month, day, 20, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.EVENING);
+						return tc;
 					}
 
 					else if (temp2.equals("night")) {
@@ -485,8 +670,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 21, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.NIGHT);
+						return tc;
 					}
 
 					else if (temp2.equals("day")) {
@@ -496,8 +682,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						return tc;
 					}
 
 					else if (temp2.equals("spring")) {
@@ -505,8 +692,9 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 3, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 5, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.SPRING);
+						return tc;
 					}
 
 					else if (temp2.equals("summer")) {
@@ -514,17 +702,19 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 6, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 8, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.SUMMER);
+						return tc;
 					}
 
-					else if (temp2.equals("fall")) {
+					else if (temp2.equals("fall") || temp2.equals("autumn")) {
 						finish = start.minusYears(1);
 						year = finish.getYear();
 						start = new DateTime(year, 9, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 11, 30, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.FALL);
+						return tc;
 					}
 
 					else if (temp2.equals("winter")) {
@@ -532,10 +722,12 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 12, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 1, 2, 28, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.WINTER);
+						return tc;
 					}
 
+					// If we have (last|previous|...)(month)
 					else {
 						String patternStr1 = monther;
 						Pattern pattern1 = Pattern.compile(patternStr1);
@@ -549,20 +741,21 @@ public class ModifiedDate {
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
 							if (preflag == 2) {
 								finish = new DateTime(year, month, 10, 23, 59,
 										59, 59);
 								start = new DateTime(year, month, 1, 0, 0, 0, 0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.START);
 							}
 
 							else if (preflag == 3) {
 								start = new DateTime(year, month, 20, 0, 0, 0,
 										0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.END);
 							}
-							return interval;
+							return tc;
 						} else {
 							return null;
 						}
@@ -571,15 +764,26 @@ public class ModifiedDate {
 				}
 
 				else if (temp1.equals("early") || temp1.equals("earlier")) {
-
+					tc.addAttribute(TimexNames.mod, TimexNames.START);
 					if (temp2.equals("century")) {
 
 						year = start.getCenturyOfEra();
 						year = year * 100;
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 20, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+						return tc;
+					}
+					else if (temp2.equals("decade")) {
+						year = start.getCenturyOfEra();
+						year = year * 100;
+						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+						finish = new DateTime(year + 2, 12, 31, 23, 59, 59, 59);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()*10));
+						return tc;
 					}
 
 					else if (temp2.equals("year")) {
@@ -587,8 +791,9 @@ public class ModifiedDate {
 
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 3, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, yFmt.print(finish));
+						return tc;
 
 					}
 
@@ -599,8 +804,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, 10, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+						return tc;
 					}
 
 					else if (temp2.equals("week")) {
@@ -615,11 +821,18 @@ public class ModifiedDate {
 						month = finish.getMonthOfYear();
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"+weekIdx);
+						return tc;
 					}
 
 					else {
+						// This part only focus on "early" + "[month]"
+						// Modified by Zhili: if the sentence is past tense, and the month mentioned is
+						// after DCT, then subtract 1 from year
+						String tense = temporalPhrase.getTense();
 						String patternStr1 = monther;
 						Pattern pattern1 = Pattern.compile(patternStr1);
 						Matcher matcher1 = pattern1.matcher(temp2);
@@ -627,11 +840,18 @@ public class ModifiedDate {
 						if (matchFound1) {
 							month = Integer.parseInt(temp.hm.get(temp2));
 							year = start.getYear();
+							if (tense.equals("past") && start.getMonthOfYear()<month) {
+									year-=1;
+							}
+							else if (!tense.equals("past") && start.getMonthOfYear()>month) {
+								year+=1;
+							}
 							finish = new DateTime(year, month, 10, 23, 59, 59,
 									59);
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.type, TimexNames.DATE);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							return tc;
 						} else {
 							return null;
 						}
@@ -641,14 +861,27 @@ public class ModifiedDate {
 				}
 
 				else if (temp1.equals("late") || temp1.equals("later")) {
+					tc.addAttribute(TimexNames.mod, TimexNames.END);
+					tc.addAttribute(TimexNames.type, TimexNames.DATE);
 					if (temp2.equals("century")) {
 
 						year = start.getCenturyOfEra();
 						year = year * 100;
 						start = new DateTime(year + 80, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+						return tc;
+					}
+
+					else if (temp2.equals("decade")) {
+						year = start.getCenturyOfEra();
+						year = year * 100;
+						start = new DateTime(year+8, 1, 1, 0, 0, 0, 0);
+						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()*10));
+						return tc;
 					}
 
 					else if (temp2.equals("year")) {
@@ -657,7 +890,8 @@ public class ModifiedDate {
 						start = new DateTime(year, 10, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
 						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish));
+						return tc;
 
 					}
 
@@ -668,8 +902,8 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day - 10, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+						return tc;
 					}
 
 					else {
@@ -680,13 +914,20 @@ public class ModifiedDate {
 						if (matchFound1) {
 							month = Integer.parseInt(temp.hm.get(temp2));
 							year = start.getYear();
+							String tense = temporalPhrase.getTense();
+							if (tense.equals("past") && start.getMonthOfYear()<month) {
+								year-=1;
+							}
+							else if (!tense.equals("past") && start.getMonthOfYear()>month) {
+								year+=1;
+							}
 							finish = new DateTime(year, month, 1, 23, 59, 59,
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month,
 									finish.getDayOfMonth() - 10, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							return tc;
 						} else {
 							return null;
 						}
@@ -695,15 +936,26 @@ public class ModifiedDate {
 				}
 
 				else if (temp1.equals("this") || temp1.equals("today")) {
-
+					tc.addAttribute(TimexNames.type, TimexNames.DATE);
 					if (temp2.equals("century")) {
 
 						year = start.getCenturyOfEra();
 						year = year * 100;
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+						return tc;
+					}
+
+					else if (temp2.equals("decade")) {
+						year = start.getCenturyOfEra();
+						year = year * 100;
+						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()*10));
+						return tc;
 					}
 
 					else if (temp2.equals("year")) {
@@ -713,27 +965,29 @@ public class ModifiedDate {
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							return tc;
 						}
 
 						else if (preflag == 2) {
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 3, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, yFmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
+							return tc;
 						}
 
 						else if (preflag == 3) {
 							start = new DateTime(year, 10, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, yFmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
+							return tc;
 						} else {
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, yFmt.print(finish));
+							return tc;
 						}
 					}
 
@@ -744,13 +998,17 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-
-						if (preflag == 2) {
+						tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+						if (preflag == 1) {
+							finish = new DateTime(year, month, prematchDay, 23, 59, 59, 59);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+						}
+						else if (preflag == 2) {
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, month, 10, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
 						}
 
 						else if (preflag == 3) {
@@ -758,9 +1016,11 @@ public class ModifiedDate {
 									0, 0);
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+
 						}
-						return interval;
+						return tc;
 					}
 
 					else if (temp2.equals("week")) {
@@ -775,15 +1035,23 @@ public class ModifiedDate {
 						month = finish.getMonthOfYear();
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						if (preflag == 2) {
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-W" + weekIdx);
+						if (preflag == 1) {
+							weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+							weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+							tc.addAttribute(TimexNames.value,
+									String.valueOf(year)+"-W"+weekIdx + "-" + String.valueOf(prematchDay));
+						}
+						else if (preflag == 2) {
 							finish = start.minusDays(-2);
 							year = finish.getYear();
 							month = finish.getMonthOfYear();
 							day = finish.getDayOfMonth();
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
 						}
 
 						else if (preflag == 3) {
@@ -793,10 +1061,10 @@ public class ModifiedDate {
 							month = start.getMonthOfYear();
 							day = start.getDayOfMonth();
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
 
 						}
-						return interval;
+						return tc;
 					}
 
 					else if (temp2.equals("weekend")) {
@@ -809,8 +1077,10 @@ public class ModifiedDate {
 						finish = start.minusDays(-1);
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.value, String.valueOf(year) + "-W" + weekIdx + "-WE");
+						return tc;
 
 					} else if (temp2.equals("mon") || temp2.equals("monday")) {
 
@@ -821,8 +1091,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<1) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>1) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("tues") || temp2.equals("tuesday")) {
@@ -833,8 +1114,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<2) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>2) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("wed") || temp2.equals("wednesday")) {
@@ -845,8 +1137,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<3) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>3) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("thur") || temp2.equals("thursday")) {
@@ -857,8 +1160,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<4) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>4) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("fri") || temp2.equals("friday")) {
@@ -869,8 +1183,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<5) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>5) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sat") || temp2.equals("saturday")) {
@@ -881,8 +1206,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<6) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>6) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sun") || temp2.equals("sunday")) {
@@ -893,8 +1229,19 @@ public class ModifiedDate {
 						month = start.getMonthOfYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String tense = temporalPhrase.getTense();
+						if (tense.equals("past") && dayweek<7) {
+							finish = finish.minusDays(7);
+						}
+						else if (!tense.equals("past") && dayweek>7) {
+							finish = finish.minusDays(-7);
+						}
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("morning")) {
@@ -903,8 +1250,9 @@ public class ModifiedDate {
 						day = start.getDayOfMonth();
 						start = new DateTime(year, month, day, 7, 0, 0, 0);
 						finish = new DateTime(year, month, day, 10, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.MORNING);
+						return tc;
 					}
 
 					else if (temp2.equals("noon")) {
@@ -914,8 +1262,9 @@ public class ModifiedDate {
 						day = start.getDayOfMonth();
 						start = new DateTime(year, month, day, 11, 0, 0, 0);
 						finish = new DateTime(year, month, day, 13, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.NOON);
+						return tc;
 					}
 
 					else if (temp2.equals("afternoon")) {
@@ -925,8 +1274,9 @@ public class ModifiedDate {
 						day = start.getDayOfMonth();
 						start = new DateTime(year, month, day, 14, 0, 0, 0);
 						finish = new DateTime(year, month, day, 17, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.AFTERNOON);
+						return tc;
 					}
 
 					else if (temp2.equals("evening")) {
@@ -935,8 +1285,9 @@ public class ModifiedDate {
 						day = start.getDayOfMonth();
 						start = new DateTime(year, month, day, 18, 0, 0, 0);
 						finish = new DateTime(year, month, day, 20, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.EVENING);
+						return tc;
 					}
 
 					else if (temp2.equals("night")) {
@@ -945,32 +1296,33 @@ public class ModifiedDate {
 						day = start.getDayOfMonth();
 						start = new DateTime(year, month, day, 21, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish) + TimexNames.NIGHT);
+						return tc;
 					}
 
 					else if (temp2.equals("spring")) {
 						year = start.getYear();
 						start = new DateTime(year, 3, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 5, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.SPRING);
+						return tc;
 					}
 
 					else if (temp2.equals("summer")) {
 						year = start.getYear();
 						start = new DateTime(year, 6, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 8, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.SUMMER);
+						return tc;
 					}
 
 					else if (temp2.equals("fall")) {
 						year = start.getYear();
 						start = new DateTime(year, 9, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 11, 30, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.FALL);
+						return tc;
 					}
 
 					else if (temp2.equals("winter")) {
@@ -978,8 +1330,8 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 12, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 1, 2, 28, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, yFmt.print(finish) + "-" + TimexNames.WINTER);
+						return tc;
 					}
 
 					else {
@@ -990,24 +1342,33 @@ public class ModifiedDate {
 						if (matchFound1) {
 							month = Integer.parseInt(temp.hm.get(temp2));
 							year = start.getYear();
+							int referenceMonth = start.getMonthOfYear();
 							finish = new DateTime(year, month, 1, 23, 59, 59,
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							String tense = temporalPhrase.getTense();
+							if (tense.equals("past") && referenceMonth<month) {
+								finish = finish.minusYears(1);
+							}
+							else if (!tense.equals("past") && referenceMonth>month) {
+								finish = finish.minusYears(-1);
+							}
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+
 							if (preflag == 2) {
 								finish = new DateTime(year, month, 10, 23, 59,
 										59, 59);
 								start = new DateTime(year, month, 1, 0, 0, 0, 0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.START);
 							}
 
 							else if (preflag == 3) {
 								start = new DateTime(year, month, 20, 0, 0, 0,
 										0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.END);
 							}
-							return interval;
+							return tc;
 						}
 
 						else {
@@ -1020,6 +1381,7 @@ public class ModifiedDate {
 				else if (temp1.equals("next") || temp1.equals("upcoming")
 						|| temp1.equals("following")
 						|| temp1.equals("tomorrow")) {
+					tc.addAttribute(TimexNames.type, TimexNames.DATE);
 					if (temp2.equals("year")) {
 						finish = start.minusYears(-1);
 						year = finish.getYear();
@@ -1028,28 +1390,30 @@ public class ModifiedDate {
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							return tc;
 						}
 
 						else if (preflag == 2) {
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 3, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
+							return tc;
 
 						}
 
 						else if (preflag == 3) {
 							start = new DateTime(year, 10, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
+							return tc;
 						} else {
 							start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, 12, 31, 23, 59, 59, 59);
-							interval = new Interval(start, finish);
-							return interval;
+							tc.addAttribute(TimexNames.value, yFmt.print(finish));
+							return tc;
 						}
 					}
 
@@ -1061,12 +1425,16 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						if (preflag == 2) {
+						tc.addAttribute(TimexNames.value, ymFmt.print(finish));
+						if (preflag == 1) {
+							finish = new DateTime(year, month, prematchDay, 23, 59, 59, 59);
+							tc.addAttribute(TimexNames.value, fmt.print(finish));
+						}
+						else if (preflag == 2) {
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
 							finish = new DateTime(year, month, 10, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
 						}
 
 						else if (preflag == 3) {
@@ -1074,9 +1442,9 @@ public class ModifiedDate {
 									0, 0);
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
 						}
-						return interval;
+						return tc;
 					}
 
 					else if (temp2.equals("week")) {
@@ -1092,15 +1460,23 @@ public class ModifiedDate {
 						month = finish.getMonthOfYear();
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						if (preflag == 2) {
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"+weekIdx);
+						if (preflag == 1) {
+							weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+							weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+							tc.addAttribute(TimexNames.value,
+									String.valueOf(year)+"-W"+weekIdx + "-" + String.valueOf(prematchDay));
+						}
+						else if (preflag == 2) {
 							finish = start.minusDays(-2);
 							year = finish.getYear();
 							month = finish.getMonthOfYear();
 							day = finish.getDayOfMonth();
 							finish = new DateTime(year, month, day, 23, 59, 59,
 									59);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.START);
 						}
 
 						else if (preflag == 3) {
@@ -1110,11 +1486,11 @@ public class ModifiedDate {
 							month = start.getMonthOfYear();
 							day = start.getDayOfMonth();
 							start = new DateTime(year, month, day, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.mod, TimexNames.END);
 
 						}
 
-						return interval;
+						return tc;
 					}
 
 					else if (temp2.equals("weekend")) {
@@ -1127,24 +1503,27 @@ public class ModifiedDate {
 						finish = start.minusDays(-1);
 						day = finish.getDayOfMonth();
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						String weekIdx = String.valueOf(finish.getWeekOfWeekyear());
+						weekIdx = weekIdx.length()==1?"0"+weekIdx:weekIdx;
+						tc.addAttribute(TimexNames.value, String.valueOf(year)+"-W"
+								+weekIdx+"-WE");
+						return tc;
 					} else if (temp2.equals("hour")) {
 						finish = start.minusHours(-1);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, TimexNames.FUTURE_REF);
+						return tc;
 					}
 
 					else if (temp2.equals("minute")) {
 						finish = start.minusMinutes(-1);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, TimexNames.FUTURE_REF);
+						return tc;
 					}
 
 					else if (temp2.equals("second")) {
 						finish = start.minusSeconds(-1);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, TimexNames.FUTURE_REF);
+						return tc;
 					}
 
 					else if (temp2.equals("century")) {
@@ -1153,10 +1532,20 @@ public class ModifiedDate {
 						year = year * 100;
 						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
+						return tc;
 					}
-
+					else if (temp2.equals("decade")) {
+						finish = start.minusYears(-10);
+						year = finish.getCenturyOfEra();
+						year = year * 100;
+						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
+						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
+						//interval = new Interval(start, finish);
+						tc.addAttribute(TimexNames.type, TimexNames.DATE);
+						tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()*10));
+						return tc;
+					}
 					else if (temp2.equals("day")) {
 						finish = start.minusDays(-1);
 						year = finish.getYear();
@@ -1164,8 +1553,8 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						return tc;
 					}
 
 					else if (temp2.equals("mon") || temp2.equals("monday")) {
@@ -1176,8 +1565,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("tues") || temp2.equals("tuesday")) {
@@ -1188,8 +1581,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("wed") || temp2.equals("wednesday")) {
@@ -1200,8 +1597,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("thur") || temp2.equals("thursday")) {
@@ -1212,8 +1613,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("fri") || temp2.equals("friday")) {
@@ -1224,8 +1629,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sat") || temp2.equals("saturday")) {
@@ -1236,8 +1645,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("sun") || temp2.equals("sunday")) {
@@ -1248,8 +1661,12 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish));
+						if (preflag == 1) {
+							tc.addAttribute(TimexNames.value,
+									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+						}
+						return tc;
 					}
 
 					else if (temp2.equals("morning")) {
@@ -1259,8 +1676,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 7, 0, 0, 0);
 						finish = new DateTime(year, month, day, 10, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ TimexNames.MORNING);
+						return tc;
 					}
 
 					else if (temp2.equals("noon")) {
@@ -1270,8 +1688,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 11, 0, 0, 0);
 						finish = new DateTime(year, month, day, 13, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ TimexNames.NOON);
+						return tc;
 					}
 
 					else if (temp2.equals("afternoon")) {
@@ -1281,8 +1700,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 14, 0, 0, 0);
 						finish = new DateTime(year, month, day, 17, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ TimexNames.AFTERNOON);
+						return tc;
 					}
 
 					else if (temp2.equals("evening")) {
@@ -1292,8 +1712,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 18, 0, 0, 0);
 						finish = new DateTime(year, month, day, 20, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ TimexNames.EVENING);
+						return tc;
 					}
 
 					else if (temp2.equals("night")) {
@@ -1303,8 +1724,9 @@ public class ModifiedDate {
 						day = finish.getDayOfMonth();
 						start = new DateTime(year, month, day, 21, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.type, TimexNames.TIME);
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ TimexNames.NIGHT);
+						return tc;
 					}
 
 					else if (temp2.equals("spring")) {
@@ -1312,8 +1734,8 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 3, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 5, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ "-" + TimexNames.SPRING);
+						return tc;
 					}
 
 					else if (temp2.equals("summer")) {
@@ -1321,8 +1743,8 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 6, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 8, 31, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ "-" + TimexNames.MORNING);
+						return tc;
 					}
 
 					else if (temp2.equals("fall")) {
@@ -1330,16 +1752,16 @@ public class ModifiedDate {
 						year = finish.getYear();
 						start = new DateTime(year, 9, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, 11, 30, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ "-" + TimexNames.FALL);
+						return tc;
 					}
 
 					else if (temp2.equals("winter")) {
 						year = start.getYear();
 						start = new DateTime(year, 12, 1, 0, 0, 0, 0);
 						finish = new DateTime(year + 1, 2, 28, 23, 59, 59, 59);
-						interval = new Interval(start, finish);
-						return interval;
+						tc.addAttribute(TimexNames.value, fmt.print(finish)+ "-" + TimexNames.WINTER);
+						return tc;
 					}
 
 					else {
@@ -1355,21 +1777,21 @@ public class ModifiedDate {
 									59);
 							finish = finish.dayOfMonth().withMaximumValue();
 							start = new DateTime(year, month, 1, 0, 0, 0, 0);
-							interval = new Interval(start, finish);
+							tc.addAttribute(TimexNames.value, ymFmt.print(finish));
 
 							if (preflag == 2) {
 								finish = new DateTime(year, month, 10, 23, 59,
 										59, 59);
 								start = new DateTime(year, month, 1, 0, 0, 0, 0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.START);
 							}
 
 							else if (preflag == 3) {
 								start = new DateTime(year, month, 20, 0, 0, 0,
 										0);
-								interval = new Interval(start, finish);
+								tc.addAttribute(TimexNames.mod, TimexNames.END);
 							}
-							return interval;
+							return tc;
 						}
 
 						else {
@@ -1388,8 +1810,9 @@ public class ModifiedDate {
 	}
 
 	public static void main(String args[]) {
-		DateTime startTime = new DateTime(2001, 3, 14, 3, 3, 3, 3);
-		String example = "early September";
-		Interval sample = ModifiedRule(startTime, example);
+		DateTime startTime = new DateTime(2001, 1, 14, 3, 3, 3, 3);
+		String example = "this week";
+		TimexChunk sample = ModifiedRule(startTime, new TemporalPhrase(example));
+		System.out.println(sample.toTIMEXString());
 	}
 }
