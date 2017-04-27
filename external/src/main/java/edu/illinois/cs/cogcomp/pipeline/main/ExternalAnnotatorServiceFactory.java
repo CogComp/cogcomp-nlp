@@ -60,8 +60,8 @@ public class ExternalAnnotatorServiceFactory {
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
 
         Map<String, Annotator> annotators = buildAnnotators();
-        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm)
-                : new SentencePipeline(taBldr, annotators, fullRm);
+        return isSentencePipeline ? new SentencePipeline(taBldr, annotators, fullRm) : 
+                new BasicAnnotatorService(taBldr, annotators, fullRm);
     }
 
     /**
