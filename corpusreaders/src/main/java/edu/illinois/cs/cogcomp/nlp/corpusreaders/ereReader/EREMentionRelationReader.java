@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -47,12 +48,16 @@ public class EREMentionRelationReader extends ERENerReader {
     private int numRelationMentionsGenerated;
 
     /**
+     * Read mention-relation annotations -- including coreference -- from ERE corpus.
+     *
      * @param corpusName the name of the corpus, this can be anything.
      * @param sourceDirectory the name of the directory containing the file.
+     * @param xmlTextAnnotationMaker an {@link XmlTextAnnotationMaker} configured for the ERE corpus language.
      * @throws Exception
      */
-    public EREMentionRelationReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean throwExceptionOnXmlTagMismatch) throws Exception {
-        super(corpusName, sourceDirectory, annotationDirectory, true, throwExceptionOnXmlTagMismatch); //addNominalMentions is 'true'
+    public EREMentionRelationReader(String corpusName, String sourceDirectory, String annotationDirectory,
+                                    XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension) throws Exception {
+        super(corpusName, sourceDirectory, annotationDirectory, true, xmlTextAnnotationMaker, sourceFileExtension, annotationFileExtension); //addNominalMentions is 'true'
         numRelationsInSource = 0;
         numRelationsGenerated = 0;
         numRelationMentionsInSource = 0;

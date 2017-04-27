@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
@@ -50,6 +51,8 @@ public class EREReaderTest {
     private static final String QUOTE_VAL = "\n\"Drink cyanide, bloody Neanderthals. You won,\" award-winning Israeli " +
             "author and actress Alona Kimhi wrote on her Facebook page, before erasing it as her comments became " +
             "the talk of the town. \"Only death will save you from yourselves.\"\n";
+
+
     private static boolean doSerialize = true;
 
 //
@@ -70,24 +73,29 @@ public class EREReaderTest {
 
         String sourceDir = corpusDir + "source/mpdfxml/";
         String annotationDir = corpusDir + "ere/mpdfxml/";
+        String sourceExtension = ".xml";
+        String annotationExtension = ".xml";
 
-        XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir);
+        XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
 
 
-        corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data";
+        corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
 
-        sourceDir = corpusDir + "/data/source/";
-        annotationDir = corpusDir + "data/ere/";
+        sourceDir = corpusDir + "source/";
+        annotationDir = corpusDir + "ere/";
 
-        outputXmlTa = runTest(sourceDir, annotationDir);
+        sourceExtension = ".cmp.txt";
+
+        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
 
         corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
 
+        sourceExtension = ".xml";
         sourceDir = corpusDir + "/data/source/";
         annotationDir = corpusDir + "data/ere/";
 
-        outputXmlTa = runTest(sourceDir, annotationDir);
+        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
 
         corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
@@ -95,7 +103,7 @@ public class EREReaderTest {
         sourceDir = corpusDir + "/data/source/";
         annotationDir = corpusDir + "data/ere/";
 
-        outputXmlTa = runTest(sourceDir, annotationDir);
+        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
 
         System.out.println("Testing EREMentionRelationReader...");
 
@@ -143,7 +151,9 @@ public class EREReaderTest {
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
-            emr = new EREMentionRelationReader("ERE", sourceDir, annotationDir, throwExceptionOnXmlTagMismatch);
+            emr = new EREMentionRelationReader("ERE", sourceDir, annotationDir,
+                    EREDocumentReader.buildXmlTextAnnotationMaker(throwExceptionOnXmlTagMismatch),
+                    sourceExtension, annotationExtension);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -222,13 +232,15 @@ public class EREReaderTest {
     }
 
 
-    private static XmlTextAnnotation runTest(String sourceDir, String annotationDir) {
+    private static XmlTextAnnotation runTest(String sourceDir, String annotationDir, String sourceFileExtension, String annotationFileExtension) {
 
         ERENerReader nerReader = null;
         boolean addNominalMentions = true;
         boolean throwExceptionOnXmlTagMismatch = true;
         try {
-            nerReader = new ERENerReader("ERE", sourceDir, annotationDir, addNominalMentions, throwExceptionOnXmlTagMismatch);
+            nerReader = new EREMentionRelationReader("ERE", sourceDir, annotationDir,
+                    EREDocumentReader.buildXmlTextAnnotationMaker(throwExceptionOnXmlTagMismatch),
+                            sourceFileExtension, annotationFileExtension);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("ERROR: " + NAME

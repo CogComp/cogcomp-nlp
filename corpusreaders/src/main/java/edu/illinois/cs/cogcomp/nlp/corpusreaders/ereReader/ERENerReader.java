@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotationFixer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -80,16 +81,20 @@ public class ERENerReader extends EREDocumentReader {
 
 
     /**
+     * Reads Named Entity -- and possibly nominal mention -- annotation from an ERE-format corpus.
+     *
      * @param corpusName the name of the corpus, this can be anything.
      * @param sourceDirectory the name of the directory containing the file.
      * @param addNominalMentions a flag that if true, indicates that all mentions should be read,
      *        and that the view created should be named {#ViewNames.MENTION_ERE}. Otherwise, only
      *        named entities (proper nouns/personal names) are read.
+     * @param xmlTextAnnotationMaker an {@link XmlTextAnnotationMaker} configured for the ERE corpus/language.
      * @throws Exception
      */
-    public ERENerReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean addNominalMentions, boolean throwExceptionOnXmlTagMismatch)
+    public ERENerReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean addNominalMentions,
+                        XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension)
             throws Exception {
-        super(corpusName, sourceDirectory, annotationDirectory, throwExceptionOnXmlTagMismatch);
+        super(corpusName, sourceDirectory, annotationDirectory, xmlTextAnnotationMaker, sourceFileExtension, annotationFileExtension);
         this.addNominalMentions = addNominalMentions;
         this.viewName = addNominalMentions ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
         allowOffsetSlack = true;
@@ -115,6 +120,7 @@ public class ERENerReader extends EREDocumentReader {
         this.numEntitiesGenerated = 0;
         this.numXmlMarkupEntitiesGenerated = 0;
     }
+
 
     @Override
     public void reset() {

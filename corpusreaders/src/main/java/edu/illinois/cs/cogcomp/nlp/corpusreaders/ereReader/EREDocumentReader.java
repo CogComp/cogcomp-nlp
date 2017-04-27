@@ -133,18 +133,42 @@ public class EREDocumentReader extends XmlDocumentReader {
     }
 
 
+
     /**
      * @param corpusName the name of the corpus, this can be anything.
      * @param corpusSourceDir the path to the directory containing the source documents.
      * @param corpusAnnotationDir the path to the directory containing the offset annotation documents.
      * @throws Exception
      */
-    public EREDocumentReader(String corpusName, String corpusSourceDir, String corpusAnnotationDir, boolean throwExceptionOnXmlParseFail) throws Exception {
-        super(corpusName, corpusSourceDir, corpusAnnotationDir, buildXmlProcessor(throwExceptionOnXmlParseFail));
+    public EREDocumentReader(String corpusName, String corpusSourceDir, String corpusAnnotationDir, XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension) throws Exception {
+        super(corpusName, corpusSourceDir, corpusAnnotationDir, xmlTextAnnotationMaker, sourceFileExtension, annotationFileExtension);
     }
 
-    private static XmlTextAnnotationMaker buildXmlProcessor(boolean throwExceptionOnXmlParseFail) {
+
+    /**
+     * builds an {@link XmlTextAnnotationMaker} for reading ERE format English corpus.
+     *
+     * @param throwExceptionOnXmlParseFail if 'true', throw an exception if xml parser fails
+     * @return an XmlTextAnnotationMaker configured for English ERE.
+     */
+    public static XmlTextAnnotationMaker buildXmlTextAnnotationMaker(boolean throwExceptionOnXmlParseFail) {
         TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
+
+        return buildXmlTextAnnotationMaker(textAnnotationBuilder, throwExceptionOnXmlParseFail);
+    }
+
+
+    /**
+     * builds an {@link XmlTextAnnotationMaker} expecting ERE annotation.  {@link TextAnnotationBuilder} must be
+     * configured for the target language.
+     *
+     * @param textAnnotationBuilder a TextAnnotationBuilder with tokenizer suited to target language.
+     * @param throwExceptionOnXmlParseFail if 'true', the XmlTextAnnotationMaker will throw an exception if any
+     *                                     errors are found in the source xml.
+     * @return an XmlTextAnnotationMaker configured to parse an ERE corpus.
+     */
+    public static XmlTextAnnotationMaker buildXmlTextAnnotationMaker(TextAnnotationBuilder textAnnotationBuilder,
+                                                                     boolean throwExceptionOnXmlParseFail) {
 
         Map<String, Set<String>> tagsWithAtts = new HashMap<>();
         Set<String> attributeNames = new HashSet<>();
@@ -189,16 +213,18 @@ public class EREDocumentReader extends XmlDocumentReader {
      */
     @Override
     public List<List<Path>> getFileListing() throws IOException {
-        FilenameFilter filter = (dir, name) -> name.endsWith(getRequiredFileExtension());
+        FilenameFilter sourceFilter = (dir, name) -> name.endsWith(getRequiredSourceFileExtension());
         /*
          * returns the FULL PATH of each file
          */
         String sourceDir = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
-        List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceDir, filter));
+        List<String> sourceFileList= Arrays.asList(IOUtils.lsFilesRecursive(sourceDir, sourceFilter));
         LinkedList<String> annotationFileList = new LinkedList<>();
 
+        FilenameFilter annotationFilter = (dir, name) -> name.endsWith(getRequiredAnnotationFileExtension());
+
         String annotationDir = resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key);
-        for (String f : Arrays.asList(IOUtils.lsFilesRecursive(annotationDir, filter))) {
+        for (String f : Arrays.asList(IOUtils.lsFilesRecursive(annotationDir, annotationFilter))) {
             annotationFileList.add(getFileName(f));
         }
 
@@ -224,16 +250,5 @@ public class EREDocumentReader extends XmlDocumentReader {
             pathList.add(sourceAndAnnotations);
         }
         return pathList;
-    }
-
-
-
-    /**
-     * Exclude any files not possessing this extension.
-     * 
-     * @return the required file extension.
-     */
-    protected String getRequiredFileExtension() {
-        return ".xml";
     }
 }

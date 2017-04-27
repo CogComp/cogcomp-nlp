@@ -36,19 +36,15 @@ public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReade
      * (first element of each list) plus zero or more files with related annotations needed to
      * instantiate the corresponding TextAnnotation objects.
      */
-    private List<List<Path>> fileList;
-
+    protected List<List<Path>> fileList;
+    /** root directory of corpus */
+    protected String sourceDirectory;
     /** holds TextAnnotations extracted from most recently accessed file */
     private List<T> stack;
-
     /** points to index of file corresponding to current non-exhausted stack */
     private int fileIndex;
-
     /** points to index of stack that will be returned by iterator next() */
     private int stackIndex;
-
-    /** root directory of corpus */
-    private String sourceDirectory;
 
     /**
      * ResourceManager must specify the fields {@link CorpusReaderConfigurator}.CORPUS_NAME and
