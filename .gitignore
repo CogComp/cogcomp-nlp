@@ -66,6 +66,7 @@
 *.iml
 *.DS_Store
 *.settings
+/temporal-normalizer/text
 edison/wordnet/
 /temporal-normalizer/tools
 

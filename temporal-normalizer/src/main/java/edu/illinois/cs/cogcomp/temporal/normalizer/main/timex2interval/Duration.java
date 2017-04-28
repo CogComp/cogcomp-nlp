@@ -130,6 +130,7 @@ public class Duration {
         fracMap.put("third", "1/3");
         fracMap.put("quarter", "1/4");
         fracMap.put("fifth", "1/5");
+        fracMap.put("a", "1");
 
 
         input = input.replace(" and ", " ");
@@ -197,6 +198,7 @@ public class Duration {
                 tc.addAttribute(TimexNames.mod, mod);
             }
         }
+
 
 
         String fracPatternStr = "(\\s*(\\d+(?:[./]\\d+)*)\\s*(?:(year(?:s)?|month(?:s)?|day(?:s)?|" +
@@ -439,7 +441,7 @@ public class Duration {
     }
 
     public static void main(String[] args) {
-        String temp = "two decades";
+        String temp = "a minute and 1/2";
         TimexChunk interval = DurationRule(new DateTime(), temp);
         System.out.println(interval.toTIMEXString());
     }

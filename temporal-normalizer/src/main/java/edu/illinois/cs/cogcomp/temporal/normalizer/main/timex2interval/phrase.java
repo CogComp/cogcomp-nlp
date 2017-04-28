@@ -1603,35 +1603,37 @@ public class phrase
         DateTimeFormatter ymFmt = DateTimeFormat.forPattern("yyyy-MM");
         DateTimeFormatter yFmt = DateTimeFormat.forPattern("yyyy");
         //Get the interval of phrase1
-        if(RelativeDate.Relativerule(start, phrase1)!=null){
-            tc=RelativeDate.Relativerule(start, phrase1);
+
+        TimexChunk trialTc = new TimexChunk();
+        if((trialTc = RelativeDate.Relativerule(start, phrase1))!=null){
+            tc=trialTc;
         }
 
-        else if(TimeOfDay.timeRule(start, temporalPhrase)!=null){
-            tc=TimeOfDay.timeRule(start, temporalPhrase);
+        else if((trialTc=TimeOfDay.timeRule(start, temporalPhrase))!=null){
+            tc=trialTc;
         }
 
-        else if(ModifiedDate.ModifiedRule(start, temporalPhrase)!=null){
+        else if((trialTc=ModifiedDate.ModifiedRule(start, temporalPhrase))!=null){
 
-            tc=ModifiedDate.ModifiedRule(start, temporalPhrase);
+            tc=trialTc;
         }
 
-        else if(Ordinary.Ordinaryrule(start, phrase1)!=null){
+        else if((trialTc=Ordinary.Ordinaryrule(start, phrase1))!=null){
 
-            tc=Ordinary.Ordinaryrule(start, phrase1);
+            tc=trialTc;
 
         }
 
-        else if(Period.Periodrule(start, phrase1)!=null){
-            tc=Period.Periodrule(start, phrase1);
+        else if((trialTc=Period.Periodrule(start, temporalPhrase))!=null){
+            tc=trialTc;
         }
 
-        else if(SetRule.SetRule(temporalPhrase)!=null){
-            tc=SetRule.SetRule(temporalPhrase);
+        else if((trialTc=SetRule.SetRule(temporalPhrase))!=null){
+            tc=trialTc;
         }
 
-        else if(Duration.DurationRule(start, phrase1)!=null){
-            tc=Duration.DurationRule(start, phrase1);
+        else if((trialTc=Duration.DurationRule(start, phrase1))!=null){
+            tc=trialTc;
         }
 
         else{

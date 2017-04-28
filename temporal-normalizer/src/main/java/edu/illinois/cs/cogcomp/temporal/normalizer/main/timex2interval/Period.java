@@ -1,13 +1,12 @@
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.*;
 
 public class Period {
@@ -52,7 +51,43 @@ public class Period {
 		}
 	};
 
-	public static TimexChunk Periodrule(DateTime start, String phrase) {
+	public static List<String> normTimexToList(String timex) {
+		String []list = timex.split("\\-");
+		int year = 0;
+		int month = 1;
+		int day = 1;
+		ArrayList<String> res = new ArrayList<String>();
+
+		if (!StringUtils.isNumeric(list[0])) {
+			return null;
+		}
+
+		String yearStr = list[0];
+		// This the case where we have century
+		if (yearStr.length()<=2) {
+			//int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour
+			year = Integer.parseInt(yearStr)*100;
+		}
+		//decades, 1960s==>196
+		else if (yearStr.length()==3) {
+			year = Integer.parseInt(yearStr)*10;
+		}
+		else if (yearStr.length()==4) {
+			year = Integer.parseInt(yearStr);
+		}
+
+		res.add(String.valueOf(year));
+		if (list.length==1) {
+			return res;
+		}
+
+		// either 1994-W12, or 1994-04
+		res.add(list[1]);
+		return res;
+
+	}
+
+	public static TimexChunk Periodrule(DateTime start, TemporalPhrase temporalPhrase) {
 
 		int year;
 		DateTime finish;
@@ -60,6 +95,7 @@ public class Period {
 		String temp2;
 		Interval interval;
 		interval = new Interval(start, start);
+		String phrase = temporalPhrase.getPhrase();
 		phrase = phrase.toLowerCase();
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
@@ -102,6 +138,16 @@ public class Period {
 			temp1 = matcher.group(1);
 			temp2 = matcher.group(2);
 
+			String residual = StringUtils.difference(matcher.group(0), phrase);
+			String anchorStr = "";
+			if (residual.length()>0) {
+				TemporalPhrase anchorPhrase = new TemporalPhrase(residual, temporalPhrase.getTense());
+				TimexChunk anchorTimex = ModifiedDate.ModifiedRule(start, anchorPhrase);
+				if (anchorTimex!=null) {
+					anchorStr = anchorTimex.getAttribute(TimexNames.value);
+				}
+			}
+
 			if (temp2.equals("century")) {
 				year = (Integer.parseInt(temp1) - 1) * 100;
 				start = new DateTime(year, 1, 1, 0, 0, 0, 0);
@@ -143,11 +189,29 @@ public class Period {
 			}
 
 			else if (temp2.equals("day")) {
-				int anchorYear = start.getYear();
-				int anchorMonth = start.getMonthOfYear();
-				String monthStr = anchorMonth<10?"0"+anchorMonth:String.valueOf(anchorMonth);
-				String dayStr = Integer.parseInt(temp1)<10?"0"+temp1:temp1;
-				String val = String.valueOf(anchorYear)+"-"+monthStr+"-"+dayStr;
+				String val = "";
+				if (anchorStr.length()>0) {
+					List<String> normTimexList = Period.normTimexToList(anchorStr);
+					if (normTimexList.size()==1) {
+						String anchorYear = normTimexList.get(0);
+						String anchorMonth = "01";
+						String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
+						val = anchorYear + "-" + anchorMonth + "-" + dayStr;
+					}
+					else {
+						String anchorYear = normTimexList.get(0);
+						String anchorMonth = normTimexList.get(1);
+						String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
+						val = anchorYear + "-" + anchorMonth + "-" + dayStr;
+					}
+				}
+				else {
+					int anchorYear = start.getYear();
+					int anchorMonth = start.getMonthOfYear();
+					String monthStr = anchorMonth < 10 ? "0" + anchorMonth : String.valueOf(anchorMonth);
+					String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
+					val = String.valueOf(anchorYear) + "-" + monthStr + "-" + dayStr;
+				}
 				tc.addAttribute(TimexNames.value, String.valueOf(val));
 				return tc;
 			}
@@ -224,8 +288,8 @@ public class Period {
 
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(1900, 3, 14, 3, 3, 3, 3);
-		String example = "90 days";
-		TimexChunk sample = Periodrule(startTime, example);
+		String example = "1st day of this week";
+		TimexChunk sample = Periodrule(startTime, new TemporalPhrase(example, "past"));
 		System.out.println(sample.toTIMEXString());
 	}
 

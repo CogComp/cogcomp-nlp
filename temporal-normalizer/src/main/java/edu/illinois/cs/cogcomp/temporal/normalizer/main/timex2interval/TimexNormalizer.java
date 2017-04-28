@@ -96,7 +96,7 @@ public class TimexNormalizer {
 //		CANNOT NORMALIZE: The day
 //		CANNOT NORMALIZE: the day
 //		CANNOT NORMALIZE: recent weeks
-		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("90 days", "past"));
+		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("a minute and half", "past"));
 		System.out.println(temp.toTIMEXString());
 
 	}
