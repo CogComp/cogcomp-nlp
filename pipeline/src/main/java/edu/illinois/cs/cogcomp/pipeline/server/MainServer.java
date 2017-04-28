@@ -25,6 +25,7 @@ import spark.Filter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -38,6 +39,8 @@ public class MainServer {
 
     private static AnnotatorService pipeline = null;
 
+    private static Map clients = null;
+
     static {
         // Setup Argument Parser with options.
         argumentParser =
@@ -45,9 +48,11 @@ public class MainServer {
                         "Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
                 .dest("port").help("Port to run the webserver.");
+        argumentParser.addArgument("--limited", "-L").type(Integer.class).setDefault(100)
+                .help("Limits the number of queries per day.");
     }
 
-    public static void setAnnotatorSetvice(AnnotatorService service, Logger logger) {
+    public static void setAnnotatorService(AnnotatorService service) {
         pipeline = service;
     }
 
@@ -77,13 +82,20 @@ public class MainServer {
 
         port(parseResults.getInt("port"));
 
+        // create a hashmap to keep track of client ip addresses and their
+        if(true) {
+            clients = new HashMap<String, Integer>();
+
+        }
+
         AnnotatorService finalPipeline = pipeline;
         get("/annotate", "application/json", (request, response)->{
             logger.info("GET request . . . ");
-            logger.info( "request.body(): " + request.body());
-            String text = request.queryParams("text");
-            String views = request.queryParams("views");
-            return annotateText(finalPipeline, text, views, logger);
+//            logger.info( "request.body(): " + request.body());
+//            String text = request.queryParams("text");
+//            String views = request.queryParams("views");
+            //return annotateText(finalPipeline, text, views, logger);
+            return "";
         });
 
         post("/annotate", (request, response) -> {
