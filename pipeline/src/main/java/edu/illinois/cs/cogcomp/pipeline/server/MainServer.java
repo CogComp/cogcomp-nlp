@@ -41,6 +41,8 @@ public class MainServer {
 
     private static Map clients = null;
 
+    private static double lastTimeWeReset = 0.0;
+
     static {
         // Setup Argument Parser with options.
         argumentParser =
@@ -48,8 +50,8 @@ public class MainServer {
                         "Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
                 .dest("port").help("Port to run the webserver.");
-        argumentParser.addArgument("--limited", "-L").type(Integer.class).setDefault(100)
-                .help("Limits the number of queries per day.");
+        argumentParser.addArgument("--rate", "-L").type(Integer.class).setDefault(-1)
+                .dest("rate").help("Limits the number of queries per day.");
     }
 
     public static void setAnnotatorService(AnnotatorService service) {
@@ -68,6 +70,18 @@ public class MainServer {
         }
     }
 
+    /**
+     * It will reset the hashmap of IPs every 24 hours.
+     */
+    public static void resetServer() {
+        // we reset the IP-map every 24 hours.
+        if( getHour() - lastTimeWeReset >=  24 ) {
+            // reset
+            lastTimeWeReset = getHour();
+            clients.clear();
+        }
+    }
+
     public static void startServer(String[] args, Logger logger) {
         Namespace parseResults;
 
@@ -83,29 +97,57 @@ public class MainServer {
         port(parseResults.getInt("port"));
 
         // create a hashmap to keep track of client ip addresses and their
-        if(true) {
+        int rate = parseResults.getInt("rate");
+        if( rate > 0) {
             clients = new HashMap<String, Integer>();
-
         }
 
         AnnotatorService finalPipeline = pipeline;
         get("/annotate", "application/json", (request, response)->{
             logger.info("GET request . . . ");
-//            logger.info( "request.body(): " + request.body());
-//            String text = request.queryParams("text");
-//            String views = request.queryParams("views");
-            //return annotateText(finalPipeline, text, views, logger);
-            return "";
+            resetServer();
+            boolean canServer = true;
+            if(rate > 0) {
+                String ip = request.ip();
+                int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                if( callsSofar > rate ) canServer = false;
+                clients.put(ip, callsSofar + 1);
+            }
+            if(canServer) {
+                logger.info("request.body(): " + request.body());
+                String text = request.queryParams("text");
+                String views = request.queryParams("views");
+                return annotateText(finalPipeline, text, views, logger);
+            }
+            else {
+                response.status(429);
+                return "You have reached your maximum daily query limit :-/ ";
+            }
         });
 
-        post("/annotate", (request, response) -> {
+        post("/annotate", (request, response) ->
+                {
                     logger.info("POST request . . . ");
-                    logger.info( "request.body(): " + request.body());
-                    Map<String, String> map = splitQuery(request.body());
-                    System.out.println("POST body parameters parsed: " + map);
-                    String text = map.get("text");
-                    String views = map.get("views");
-                    return annotateText(finalPipeline, text, views, logger);
+                    resetServer();
+                    boolean canServer = true;
+                    if(rate > 0) {
+                        String ip = request.ip();
+                        int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                        if( callsSofar > rate ) canServer = false;
+                        clients.put(ip, callsSofar + 1);
+                    }
+                    if(canServer) {
+                        logger.info( "request.body(): " + request.body());
+                        Map<String, String> map = splitQuery(request.body());
+                        System.out.println("POST body parameters parsed: " + map);
+                        String text = map.get("text");
+                        String views = map.get("views");
+                        return annotateText(finalPipeline, text, views, logger);
+                    }
+                    else {
+                        response.status(429);
+                        return "You have reached your maximum daily query limit :-/ ";
+                    }
                 }
         );
 
@@ -123,10 +165,14 @@ public class MainServer {
         post("/viewNames", (req, res) -> finalViewsString);
     }
 
+    public static double getHour() {
+        return System.currentTimeMillis() / ( 1000.0 * 3600 );
+    }
+
     public static void main(String[] args) {
         setPipeline(logger);
         startServer(args, logger);
-    }
+     }
 
     private static String annotateText(AnnotatorService finalPipeline, String text, String views, Logger logger)
             throws AnnotatorException {
