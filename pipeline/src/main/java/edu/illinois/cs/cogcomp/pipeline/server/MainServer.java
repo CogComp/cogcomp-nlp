@@ -50,8 +50,8 @@ public class MainServer {
                         "Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
                 .dest("port").help("Port to run the webserver.");
-        argumentParser.addArgument("--rate", "-L").type(Integer.class).setDefault(-1)
-                .dest("rate").help("Limits the number of queries per day.");
+        argumentParser.addArgument("--rate", "-L").type(Integer.class).setDefault(-1).dest("rate")
+                .help("Limits the number of queries per day.");
     }
 
     public static void setAnnotatorService(AnnotatorService service) {
@@ -75,7 +75,7 @@ public class MainServer {
      */
     public static void resetServer() {
         // we reset the IP-map every 24 hours.
-        if( getHour() - lastTimeWeReset >=  24 ) {
+        if (getHour() - lastTimeWeReset >= 24) {
             // reset
             lastTimeWeReset = getHour();
             clients.clear();
@@ -166,16 +166,16 @@ public class MainServer {
     }
 
     public static double getHour() {
-        return System.currentTimeMillis() / ( 1000.0 * 3600 );
+        return System.currentTimeMillis() / (1000.0 * 3600);
     }
 
     public static void main(String[] args) {
         setPipeline(logger);
         startServer(args, logger);
-     }
+    }
 
-    private static String annotateText(AnnotatorService finalPipeline, String text, String views, Logger logger)
-            throws AnnotatorException {
+    private static String annotateText(AnnotatorService finalPipeline, String text, String views,
+            Logger logger) throws AnnotatorException {
         if (views == null || text == null) {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
         } else {
@@ -189,8 +189,7 @@ public class MainServer {
                 logger.info("Adding the view: ->" + vuName.trim() + "<-");
                 try {
                     finalPipeline.addView(ta, vuName.trim());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 printMemoryDetails(logger);
@@ -234,7 +233,8 @@ public class MainServer {
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
-            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                    URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
         }
         return query_pairs;
     }
