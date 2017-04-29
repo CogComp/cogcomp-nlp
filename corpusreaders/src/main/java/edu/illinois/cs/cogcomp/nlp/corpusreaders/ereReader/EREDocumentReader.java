@@ -237,8 +237,9 @@ public class EREDocumentReader extends XmlDocumentReader {
          */
         for (String fileName : sourceFileList) {
             List<Path> sourceAndAnnotations = new ArrayList<>();
-            sourceAndAnnotations.add(Paths.get(fileName));
-            String stem = getFileStem(fileName);
+            Path fPath = Paths.get(fileName);
+            sourceAndAnnotations.add(fPath);
+            String stem = this.getFileStem(fPath, getRequiredAnnotationFileExtension());
 
             for (String annFile : annotationFileList) {
                 if (annFile.startsWith(stem)) {
@@ -250,5 +251,11 @@ public class EREDocumentReader extends XmlDocumentReader {
             pathList.add(sourceAndAnnotations);
         }
         return pathList;
+    }
+
+    private String getFileStem(Path filePath, String extension) {
+        String fileName = filePath.getName(filePath.getNameCount() - 1).toString();
+        int lastIndex = fileName.lastIndexOf(extension);
+        return fileName.substring(0,lastIndex);
     }
 }

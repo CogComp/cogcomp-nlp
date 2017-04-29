@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.pipeline.main;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import org.junit.Test;
 
@@ -26,6 +27,36 @@ import static org.junit.Assert.fail;
  */
 public class ViewConstructorPipelineTest {
     private static final String textFile = "src/test/resources/pipelinePosText.txt";
+
+    public static void main(String args[]) {
+        String input = null;
+        try {
+            input = LineIO.slurp(textFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        System.out.println("input from " + textFile + " is " + input.length() + " characters long.");
+
+        AnnotatorService as = null;
+        try {
+            as = PipelineFactory.buildPipeline(ViewNames.POS);
+        } catch (IOException | AnnotatorException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        TextAnnotation ta = null;
+        try {
+            ta = as.createAnnotatedTextAnnotation("test", "test", input);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        System.out.println("found " + ta.getView(ViewNames.POS).getConstituents() + " POS constituents." );
+    }
 
     @Test
     public void testPosPipeline() {
@@ -54,4 +85,5 @@ public class ViewConstructorPipelineTest {
             fail(e.getMessage());
         }
     }
+
 }
