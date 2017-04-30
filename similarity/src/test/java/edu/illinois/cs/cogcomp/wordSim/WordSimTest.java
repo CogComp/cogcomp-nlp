@@ -1,14 +1,13 @@
 package edu.illinois.cs.cogcomp.wordSim;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.IOException;
-
-import org.junit.Test;
-
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.sim.MetricResponse;
 import edu.illinois.cs.cogcomp.sim.WordSim;
+import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.junit.Assert.assertTrue;
 
 
 public class WordSimTest {
@@ -16,7 +15,7 @@ public class WordSimTest {
 
 	@Test
 	public void test() throws IOException {
-		String CONFIG="config/configurations.poperties";
+		String CONFIG="config/configurations.properties";
 		ResourceManager rm_=new ResourceManager(CONFIG);
 		WordSim ws=new WordSim(rm_);
 		System.out.println("paragram similarity :"+ws.compare("word","sentence","paragram"));

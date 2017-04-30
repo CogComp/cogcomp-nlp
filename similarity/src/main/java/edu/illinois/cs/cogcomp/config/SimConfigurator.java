@@ -26,4 +26,11 @@ public class SimConfigurator extends Configurator{
 		return new ResourceManager( generateProperties( props ) );
 	}
 
+	public ResourceManager metricsConfig(String metrics, String file ) throws Exception {
+		Property metric= new Property( "wordMetric", metrics);
+		Property[] props = {metric};
+		ResourceManager rm_= new ResourceManager( generateProperties( props ) );
+		return super.mergeProperties(new ResourceManager(file),rm_);
+	}
+
 }
