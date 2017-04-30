@@ -105,15 +105,15 @@ public class MainServer {
         AnnotatorService finalPipeline = pipeline;
         get("/annotate", "application/json", (request, response)->{
             logger.info("GET request . . . ");
-            resetServer();
-            boolean canServer = true;
+            boolean canServe = true;
             if(rate > 0) {
+                resetServer();
                 String ip = request.ip();
                 int callsSofar = (Integer) clients.getOrDefault(ip, 0);
-                if( callsSofar > rate ) canServer = false;
+                if( callsSofar > rate ) canServe = false;
                 clients.put(ip, callsSofar + 1);
             }
-            if(canServer) {
+            if(canServe) {
                 logger.info("request.body(): " + request.body());
                 String text = request.queryParams("text");
                 String views = request.queryParams("views");
@@ -128,15 +128,15 @@ public class MainServer {
         post("/annotate", (request, response) ->
                 {
                     logger.info("POST request . . . ");
-                    resetServer();
-                    boolean canServer = true;
+                    boolean canServe = true;
                     if(rate > 0) {
+                        resetServer();
                         String ip = request.ip();
                         int callsSofar = (Integer) clients.getOrDefault(ip, 0);
-                        if( callsSofar > rate ) canServer = false;
+                        if( callsSofar > rate ) canServe = false;
                         clients.put(ip, callsSofar + 1);
                     }
-                    if(canServer) {
+                    if(canServe) {
                         logger.info( "request.body(): " + request.body());
                         Map<String, String> map = splitQuery(request.body());
                         System.out.println("POST body parameters parsed: " + map);
