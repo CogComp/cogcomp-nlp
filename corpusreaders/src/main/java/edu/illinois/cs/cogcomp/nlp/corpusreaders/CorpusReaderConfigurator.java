@@ -49,7 +49,9 @@ public class CorpusReaderConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY};
+        // for now, omit source and annotation directories because they must be set to path on User host machine
+        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY, // SOURCE_DIRECTORY, ANNOTATION_DIRECTORY,
+            SOURCE_EXTENSION, ANNOTATION_EXTENSION};
         return new ResourceManager(generateProperties(props));
     }
 

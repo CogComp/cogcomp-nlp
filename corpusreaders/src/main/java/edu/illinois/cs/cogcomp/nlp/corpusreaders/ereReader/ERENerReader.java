@@ -83,28 +83,26 @@ public class ERENerReader extends EREDocumentReader {
     /**
      * Reads Named Entity -- and possibly nominal mention -- annotation from an ERE-format corpus.
      *
-     * @param corpusName the name of the corpus, this can be anything.
-     * @param sourceDirectory the name of the directory containing the file.
-     * @param addNominalMentions a flag that if true, indicates that all mentions should be read,
-     *        and that the view created should be named {#ViewNames.MENTION_ERE}. Otherwise, only
-     *        named entities (proper nouns/personal names) are read.
-     * @param xmlTextAnnotationMaker an {@link XmlTextAnnotationMaker} configured for the ERE corpus/language.
+     * @param ereCorpus
+     * @param corpusRoot
+     * @param throwExceptionOnXmlParseFailure
+     * @param addNominalMentions a flag that if true, indicates that nominal mentions should be read,
+     *        and that the view created should be named {#ViewNames.MENTION_ERE}.
+     * @param addFillers if 'true', indicates that non-coreferable mentions should be added.
      * @throws Exception
      */
-    public ERENerReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean addNominalMentions,
-                        XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension)
-            throws Exception {
-        super(corpusName, sourceDirectory, annotationDirectory, xmlTextAnnotationMaker, sourceFileExtension, annotationFileExtension);
+    public ERENerReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure, boolean addNominalMentions, boolean addFillers) throws Exception {
+        super(ereCorpus, corpusRoot, throwExceptionOnXmlParseFailure);
         this.addNominalMentions = addNominalMentions;
-        this.viewName = addNominalMentions ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
-        allowOffsetSlack = true;
-        allowSubwordOffsets = true;
         /*
          * fillers are arguments of relations/events that don't have a referent entity -- they are
          * too general and cannot be determined to co-refer with any other mentions. e.g. position
          * titles
          */
-        addFillers = true;
+        this.addFillers = addFillers;
+        this.viewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
+        allowOffsetSlack = true;
+        allowSubwordOffsets = true;
 
         mentionIdToConstituent = new HashMap<>();
         entityIdToMentionIds = new HashMap<>();

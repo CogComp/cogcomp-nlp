@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
@@ -78,18 +79,19 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
 
 
     /**
-     * assumes files are all from a single source directory. The XmlDocumentProcessor should be configured to
+     * Instantiate a reader for an xml corpus.  Default implementation assumes a single source corpus from which
+     *    user wants to strip xml markup, but record relevant xml markup info.
+     *
+     * The {@link XmlTextAnnotationMaker} should be configured to
      *   process the xml markup in the files you want to process.
      *
-     * @param corpusName used to set the corpusId field of all TextAnnotations created by this reader.
-     * @param sourceDirectory directory containing the source document files
-     * @param annotationDirectory directory containing separate standoff annotation files (if needed)
+     * @param rm resourceManager with configuration specs (source and annotation directories, file extensions, etc.)
      * @param xmlTextAnnotationMaker parses xml text and generates an XmlTextAnnotation.
      * @throws IOException
      */
-    public XmlDocumentReader(String corpusName, String sourceDirectory, String annotationDirectory, XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension)
+    public XmlDocumentReader(ResourceManager rm, XmlTextAnnotationMaker xmlTextAnnotationMaker)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(corpusName, sourceDirectory, annotationDirectory, sourceFileExtension, annotationFileExtension));
+        super(rm);
         this.xmlTextAnnotationMaker = xmlTextAnnotationMaker;
     }
 

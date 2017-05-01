@@ -14,6 +14,8 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 
+import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.*;
+
 /**
  * Read the ERE data and produce, in CoNLL format, gold standard data including named and nominal
  * named entities, but excluding pronouns.
@@ -33,15 +35,17 @@ public class ConvertEREToCoNLLFormat {
     public static void main(String[] args) throws Exception {
 
         if (args.length != 5) {
-            System.err.println("Usage: " + NAME + " corpusDir sourceFileExtension annotationFileExtension includeNominals<true|false> outDir");
+            System.err.println("Usage: " + NAME + " ERECorpusVal corpusRoot includeNominals<true|false> outDir\n\nSee " +
+            "module README or ERECorpusReader.EreCorpus enumeration for possible values.");
             System.exit(-1);
         }
 
-        final String corpusDir = args[0];
-        final boolean includeNominals = Boolean.parseBoolean(args[1]);
-        final String sourceFileExtension = args[2];
-        final String annotationFileExtension = args[3];
-        final String conllDir = args[4];
+        final String ereCorpusVal = args[0];
+        final String corpusRoot = args[1];
+
+        final boolean includeNominals = Boolean.parseBoolean(args[2]);
+
+        final String conllDir = args[3];
 
 
         if (IOUtils.exists(conllDir))
@@ -53,9 +57,8 @@ public class ConvertEREToCoNLLFormat {
                 IOUtils.mkdir(conllDir);
 
         boolean throwExceptionOnXmlTagMismatch = true;
-        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, corpusDir, includeNominals,
-                EREDocumentReader.buildXmlTextAnnotationMaker(throwExceptionOnXmlTagMismatch),
-                sourceFileExtension, annotationFileExtension);
+        ERENerReader reader =
+                new ERENerReader(EreCorpus.valueOf(ereCorpusVal), corpusRoot, throwExceptionOnXmlTagMismatch, includeNominals, includeNominals);
 
         while (reader.hasNext()) {
             XmlTextAnnotation xmlTa = reader.next();

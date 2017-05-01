@@ -15,8 +15,10 @@ import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.XmlDocumentReader;
@@ -26,22 +28,34 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileName;
-import static edu.illinois.cs.cogcomp.core.io.IOUtils.getFileStem;
 
 /**
  * Strips all useless XML markup from an ERE xml document leaving the original text and where
  * needed, appropriate attribute values. Base class for other ERE readers for Named Entities,
  * Mentions/Relations, and Events.
  *
+ * There are THREE ERE English releases.
+ * Regrettably, they do not follow consistent standards for organization or for annotation.
+ *
+ * LDC2015E29_DEFT_Rich_ERE English V2 has two sets of annotation files: one, used for the Event Argument Extraction
+ *    task in TAC that year, includes a small amount of additional markup to make each xml document well-formed.
+ *    This changes the annotation offsets. Taggable entities within quoted blocks are annotated.
+ *
+ * LDC2015E68_DEFT_Rich_ERE_English R2_V2 has as source files excerpts from multi-post discussion forum documents.
+ * Taggable entities within quoted blocks are annotated.
+ *
+ * LDC2016E31_DEFT_Rich_ERE_English ENR3 has -- I believe -- complete threads, where annotation files may be
+ *    broken into several chunks. Taggable entities within quoted blocks are NOT marked.
+ *
  * @author redman
  * @author msammon
  */
 public class EREDocumentReader extends XmlDocumentReader {
 
-    /**
+        /**
      * tags in document files
      */
-    public static final String QUOTE = "quote";
+    public static final String QUOTE = "quote";;
     public static final String AUTHOR = "author";
     public static final String ID = "id";
     public static final String DATETIME = "datetime";
@@ -54,7 +68,6 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String SQUISH = "squish";
     public static final String STUFF = "stuff";
     public static final String SARCASM = "sarcasm";
-
     /**
      * tags in ERE markup files
      */
@@ -109,54 +122,113 @@ public class EREDocumentReader extends XmlDocumentReader {
     static private ArrayList<String> retainTags = new ArrayList<>();
     /** the attributes to keep for the above tags. */
     static private ArrayList<String> retainAttributes = new ArrayList<>();
-
-    static {
-        Set<String> attributeNames = new HashSet<>();
-        attributeNames.add(AUTHOR);
-        attributeNames.add(ID);
-        attributeNames.add(DATETIME);
-        tagsWithAtts.put(POST, attributeNames);
-        attributeNames = new HashSet<>();
-        attributeNames.add(ID);
-        tagsWithAtts.put(DOC, attributeNames);
-        attributeNames = new HashSet<>();
-        attributeNames.add(ORIG_AUTHOR);
-        tagsWithAtts.put(QUOTE, attributeNames);
-
-        deletableSpanTags.add(QUOTE);
-        deletableSpanTags.add(DATELINE);
-
-        tagsToIgnore.add(IMG);
-        tagsToIgnore.add(SNIP);
-        tagsToIgnore.add(STUFF);
-        tagsToIgnore.add(SARCASM);
-    }
-
-
-
     /**
-     * @param corpusName the name of the corpus, this can be anything.
-     * @param corpusSourceDir the path to the directory containing the source documents.
-     * @param corpusAnnotationDir the path to the directory containing the offset annotation documents.
+     * build an EREDocumentReader configured for the specified ERE release.
+     * @param ereCorpus a value from enum EreCorpus (e.g. 'ENR1', 'ENR2', or 'ENR3')
+     * @param throwExceptionOnXmlParseFailure
      * @throws Exception
      */
-    public EREDocumentReader(String corpusName, String corpusSourceDir, String corpusAnnotationDir, XmlTextAnnotationMaker xmlTextAnnotationMaker, String sourceFileExtension, String annotationFileExtension) throws Exception {
-        super(corpusName, corpusSourceDir, corpusAnnotationDir, xmlTextAnnotationMaker, sourceFileExtension, annotationFileExtension);
+    public EREDocumentReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        this(EREDocumentReader.buildEreConfig(ereCorpus.name(), corpusRoot),
+                buildXmlTextAnnotationMaker(ereCorpus, throwExceptionOnXmlParseFailure));
     }
 
+//    static {
+//        Set<String> attributeNames = new HashSet<>();
+//        attributeNames.add(AUTHOR);
+//        attributeNames.add(ID);
+//        attributeNames.add(DATETIME);
+//        tagsWithAtts.put(POST, attributeNames);
+//        attributeNames = new HashSet<>();
+//        attributeNames.add(ID);
+//        tagsWithAtts.put(DOC, attributeNames);
+//        attributeNames = new HashSet<>();
+//        attributeNames.add(ORIG_AUTHOR);
+//        tagsWithAtts.put(QUOTE, attributeNames);
+//
+//        deletableSpanTags.add(QUOTE);
+//        deletableSpanTags.add(DATELINE);
+//
+//        tagsToIgnore.add(IMG);
+//        tagsToIgnore.add(SNIP);
+//        tagsToIgnore.add(STUFF);
+//        tagsToIgnore.add(SARCASM);
+//    }
+
+
+    public EREDocumentReader(ResourceManager rm, XmlTextAnnotationMaker xmlTextAnnotationMaker) throws Exception {
+        super(rm, xmlTextAnnotationMaker);
+    }
+
+    /**
+     * builds an XmlTextAnnotationMaker that handles the source files from the specified ERE release
+     *
+     * @param ereCorpusVal a value corresponding to enum EreCorpus (e.g. 'ENR1', 'ENR2', or 'ENR3')
+     * @param throwExceptionOnXmlParseFailure if 'true', xml reader will throw an exception if it finds e.g.
+     *                                        mismatched xml tag open/close
+     * @return an XmlTextAnnotationMaker configured for the specified ERE corpus
+     * @throws Exception
+     */
+    public static XmlTextAnnotationMaker buildEreXmlTextAnnotationMaker(String ereCorpusVal, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        return buildXmlTextAnnotationMaker(EreCorpus.valueOf(ereCorpusVal), throwExceptionOnXmlParseFailure);
+    }
+
+    /**
+     * This method sets a range of configuration parameters based on which ERE release user specifies
+     *
+     * @param ereCorpusVal a value corresponding to enum EreCorpus ('ENR1', 'ENR2', or 'ENR3')
+     * @param corpusRoot the root directory of the corpus on your file system
+     * @return a ResourceManager with the appropriate configuration,
+     * @throws Exception
+     */
+    public static ResourceManager buildEreConfig(String ereCorpusVal, String corpusRoot) throws Exception {
+
+        // defaults: ENR3
+        String sourceDir = "source/";
+        String annotationDir = "ere/";
+        String sourceExtension = ".xml";
+        String annotationExtension = ".xml";
+        String corpusNameVal = new StringBuilder().append("ERE_").append(ereCorpusVal).toString();
+
+        switch(EreCorpus.valueOf(ereCorpusVal)) {
+            case ENR1:
+                sourceDir = "source/mpdfxml/";
+                annotationDir = "ere/mpdfxml/";
+                break;
+            case ENR2:
+                sourceExtension = ".cmp.txt";
+                break;
+            case ENR3:
+                break;
+            default:
+                String errMsg = "Illegal value for ereCorpus: " + ereCorpusVal;
+                logger.error(errMsg);
+                throw new IllegalArgumentException(ereCorpusVal);
+        }
+
+        Properties props = new Properties();
+        //set source, annotation directories relative to specified corpus root dir
+        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, corpusRoot + "/" + sourceDir);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key, corpusRoot + "/" + annotationDir);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_EXTENSION.key, sourceExtension);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_EXTENSION.key, annotationExtension);
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusNameVal);
+
+        return new ResourceManager(props);
+    }
 
     /**
      * builds an {@link XmlTextAnnotationMaker} for reading ERE format English corpus.
      *
+     * @param ereCorpus which ERE release is being processed -- affects which tag blocks are marked
      * @param throwExceptionOnXmlParseFail if 'true', throw an exception if xml parser fails
      * @return an XmlTextAnnotationMaker configured for English ERE.
      */
-    public static XmlTextAnnotationMaker buildXmlTextAnnotationMaker(boolean throwExceptionOnXmlParseFail) {
+    public static XmlTextAnnotationMaker buildXmlTextAnnotationMaker(EreCorpus ereCorpus, boolean throwExceptionOnXmlParseFail) {
         TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
 
-        return buildXmlTextAnnotationMaker(textAnnotationBuilder, throwExceptionOnXmlParseFail);
+        return buildXmlTextAnnotationMaker(textAnnotationBuilder, ereCorpus, throwExceptionOnXmlParseFail);
     }
-
 
     /**
      * builds an {@link XmlTextAnnotationMaker} expecting ERE annotation.  {@link TextAnnotationBuilder} must be
@@ -168,6 +240,7 @@ public class EREDocumentReader extends XmlDocumentReader {
      * @return an XmlTextAnnotationMaker configured to parse an ERE corpus.
      */
     public static XmlTextAnnotationMaker buildXmlTextAnnotationMaker(TextAnnotationBuilder textAnnotationBuilder,
+                                                                     EreCorpus ereCorpus,
                                                                      boolean throwExceptionOnXmlParseFail) {
 
         Map<String, Set<String>> tagsWithAtts = new HashMap<>();
@@ -184,7 +257,9 @@ public class EREDocumentReader extends XmlDocumentReader {
         tagsWithAtts.put(QUOTE, attributeNames);
 
         Set<String> deletableSpanTags = new HashSet<>();
-        deletableSpanTags.add(QUOTE);
+        // for release 3 only, quoted blocks are NOT annotated
+        if (EreCorpus.ENR3.equals(ereCorpus))
+            deletableSpanTags.add(QUOTE);
 
         Set<String> tagsToIgnore = new HashSet<>(); // implies "delete spans enclosed by these tags"
         tagsToIgnore.add(IMG);
@@ -196,12 +271,13 @@ public class EREDocumentReader extends XmlDocumentReader {
         return new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
     }
 
-
     /**
      * ERE corpus directory has two directories: source/ and ere/. The source/ directory contains
      * original text in an xml format. The ere/ directory contains markup files corresponding in a
      * many-to-one relationship with the source/ files: related annotation files have the same
      * prefix as the corresponding source file (up to the .xml suffix).
+     * (NOTE: release 1 (LDC2015E29) has two subdirectories for both source and annotation: one version is slightly
+     *    modified by adding xml markup to make the source documents well-formed, which changes the annotation offsets.
      *
      * This method generates a List of List of Paths: each component List has the source file as its
      * first element, and markup files as its remaining elements. It expects {@link
@@ -237,9 +313,9 @@ public class EREDocumentReader extends XmlDocumentReader {
          */
         for (String fileName : sourceFileList) {
             List<Path> sourceAndAnnotations = new ArrayList<>();
-            Path fPath = Paths.get(fileName);
+            Path fPath = Paths.get(fileName); // source file
             sourceAndAnnotations.add(fPath);
-            String stem = this.getFileStem(fPath, getRequiredAnnotationFileExtension());
+            String stem = this.getFileStem(fPath, getRequiredSourceFileExtension()); // strip *source* extension
 
             for (String annFile : annotationFileList) {
                 if (annFile.startsWith(stem)) {
@@ -257,5 +333,12 @@ public class EREDocumentReader extends XmlDocumentReader {
         String fileName = filePath.getName(filePath.getNameCount() - 1).toString();
         int lastIndex = fileName.lastIndexOf(extension);
         return fileName.substring(0,lastIndex);
+    }
+
+/**
+     * prefix indicates language; suffix indicates release
+     */
+    public static enum EreCorpus {
+        ENR1, ENR2, ENR3
     }
 }

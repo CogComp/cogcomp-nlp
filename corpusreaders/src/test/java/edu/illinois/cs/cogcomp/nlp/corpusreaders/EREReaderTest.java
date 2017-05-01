@@ -60,6 +60,25 @@ public class EREReaderTest {
 //                    "data/source/ENG_DF_001241_20150407_F0000007T.xml";
 
     // public void testNerReader() {
+
+    /**
+     * there are THREE ERE English releases.
+     * Regrettably, they do not follow consistent standards for organization or for annotation.
+     *
+     * LDC2015E29_DEFT_Rich_ERE English V2 has two sets of annotation files: one, used for the Event Argument Extraction
+     *    task in TAC that year, includes a small amount of additional markup to make each xml document well-formed.
+     *    This changes the annotation offsets. Taggable entities within quoted blocks are annotated.
+     *
+     * LDC2015E68_DEFT_Rich_ERE_English R2_V2 has as source files excerpts from multi-post discussion forum documents.
+     * Taggable entities within quoted blocks are annotated.
+     *
+     * LDC2016E31_DEFT_Rich_ERE_English ENR3 has -- I believe -- complete threads, where annotation files may be
+     *    broken into several chunks. Taggable entities within quoted blocks are NOT marked.
+     *
+     *
+     *
+     * @param args
+     */
     public static void main(String[] args) {
 
 
@@ -71,39 +90,39 @@ public class EREReaderTest {
          */
         String corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E29_DEFT_Rich_ERE_English_Training_Annotation_V2/data/";
 
-        String sourceDir = corpusDir + "source/mpdfxml/";
-        String annotationDir = corpusDir + "ere/mpdfxml/";
-        String sourceExtension = ".xml";
-        String annotationExtension = ".xml";
+//        String sourceDir = corpusDir + "source/mpdfxml/";
+//        String annotationDir = corpusDir + "ere/mpdfxml/";
+//        String sourceExtension = ".xml";
+//        String annotationExtension = ".xml";
 
-        XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
+        XmlTextAnnotation outputXmlTa = runTest(EreCorpus.ENR1, corpusDir);
 
 
         corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
 
-        sourceDir = corpusDir + "source/";
-        annotationDir = corpusDir + "ere/";
+//        sourceDir = corpusDir + "source/";
+//        annotationDir = corpusDir + "ere/";
+//
+//        sourceExtension = ".cmp.txt";
 
-        sourceExtension = ".cmp.txt";
+        outputXmlTa = runTest(EreCorpus.ENR2, corpusDir);
 
-        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
+//        corpusDir =
+//                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
+//
+//        sourceExtension = ".xml";
+//        sourceDir = corpusDir + "/data/source/";
+//        annotationDir = corpusDir + "data/ere/";
+//
+//        outputXmlTa = runTest(EreCorpus.ENR3);
 
         corpusDir =
-                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
+                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/";
 
-        sourceExtension = ".xml";
-        sourceDir = corpusDir + "/data/source/";
-        annotationDir = corpusDir + "data/ere/";
+//        sourceDir = corpusDir + "source/";
+//        annotationDir = corpusDir + "ere/";
 
-        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
-
-        corpusDir =
-                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
-
-        sourceDir = corpusDir + "/data/source/";
-        annotationDir = corpusDir + "data/ere/";
-
-        outputXmlTa = runTest(sourceDir, annotationDir, sourceExtension, annotationExtension);
+        outputXmlTa = runTest(EreCorpus.ENR3, corpusDir);
 
         System.out.println("Testing EREMentionRelationReader...");
 
@@ -151,9 +170,7 @@ public class EREReaderTest {
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
-            emr = new EREMentionRelationReader("ERE", sourceDir, annotationDir,
-                    EREDocumentReader.buildXmlTextAnnotationMaker(throwExceptionOnXmlTagMismatch),
-                    sourceExtension, annotationExtension);
+            emr = new EREMentionRelationReader(EreCorpus.ENR3, corpusDir, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -232,20 +249,18 @@ public class EREReaderTest {
     }
 
 
-    private static XmlTextAnnotation runTest(String sourceDir, String annotationDir, String sourceFileExtension, String annotationFileExtension) {
+    private static XmlTextAnnotation runTest(EreCorpus ereCorpus, String corpusRoot) {
 
         ERENerReader nerReader = null;
         boolean addNominalMentions = true;
         boolean throwExceptionOnXmlTagMismatch = true;
         try {
-            nerReader = new EREMentionRelationReader("ERE", sourceDir, annotationDir,
-                    EREDocumentReader.buildXmlTextAnnotationMaker(throwExceptionOnXmlTagMismatch),
-                            sourceFileExtension, annotationFileExtension);
+            nerReader = new EREMentionRelationReader(ereCorpus, corpusRoot, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("ERROR: " + NAME
-                    + ": couldn't instantiate ERENerReader with corpus dirs '" + sourceDir + ", " + annotationDir + ": "
-                    + e.getMessage());
+                    + ": couldn't instantiate ERENerReader for ERE release " + ereCorpus.name()
+                    + ": " + e.getMessage());
         }
 
         XmlTextAnnotation outputXmlTa = nerReader.next();
