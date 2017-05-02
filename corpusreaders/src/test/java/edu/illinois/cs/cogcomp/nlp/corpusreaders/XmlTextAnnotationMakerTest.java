@@ -22,6 +22,8 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
+import static org.junit.Assert.fail;
+
 /**
  * Test XmlTextAnnotationMaker functionality. Non-unit test, as it requires access to ERE corpus.
  *
@@ -60,13 +62,15 @@ public class XmlTextAnnotationMakerTest {
      */
     public static void main(String[] args) {
 
-        TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
-
         boolean throwExceptionOnXmlTagMiss = true;
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(EREDocumentReader.deletableSpanTags,
-                EREDocumentReader.tagsWithAtts, EREDocumentReader.tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        XmlTextAnnotationMaker maker = new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
+        XmlTextAnnotationMaker maker = null;
+        try {
+            maker = EREDocumentReader.buildEreXmlTextAnnotationMaker(EREDocumentReader.EreCorpus.ENR3.name(), throwExceptionOnXmlTagMiss);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
 
         testWithFile(maker, XML_FILE2);
 

@@ -112,16 +112,31 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationRealisAttribute = "REALIS";
     public static final String RelationSourceRoleAttribute = "RelationSourceRole";
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
-    /** tag sets for xml processor for ERE documents  */
-    public static final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-    public static final Set<String> deletableSpanTags = new HashSet<>();
-    public static final Set<String> tagsToIgnore = new HashSet<>();
-    private static final String DATELINE = "dateline";
+    public static final String DATELINE = "dateline";
     private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
-    /** these tags contain attributes we want to keep. */
-    static private ArrayList<String> retainTags = new ArrayList<>();
-    /** the attributes to keep for the above tags. */
-    static private ArrayList<String> retainAttributes = new ArrayList<>();
+    /** tag sets for xml processor for ERE documents  */
+    public final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
+    public final Set<String> deletableSpanTags = new HashSet<>();
+    public final Set<String> tagsToIgnore = new HashSet<>();
+//    /** these tags contain attributes we want to keep. */
+//    private ArrayList<String> retainTags = new ArrayList<>();
+//    /** the attributes to keep for the above tags. */
+//    private ArrayList<String> retainAttributes = new ArrayList<>();
+
+
+    /**
+     * build an EREDocumentReader configured for the specified ERE release, using provided TextAnnotationBuilder
+     *   (allows for non-English, non-UIUC tokenizer)
+     * @param ereCorpus a value from enum EreCorpus (e.g. 'ENR1', 'ENR2', or 'ENR3')
+     * @param taBuilder TextAnnotationBuilder for target/language of choice
+     * @param throwExceptionOnXmlParseFailure
+     * @throws Exception
+     */
+    public EREDocumentReader(EreCorpus ereCorpus, TextAnnotationBuilder taBuilder, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        this(EREDocumentReader.buildEreConfig(ereCorpus.name(), corpusRoot),
+                buildXmlTextAnnotationMaker(taBuilder, ereCorpus, throwExceptionOnXmlParseFailure));
+    }
+
     /**
      * build an EREDocumentReader configured for the specified ERE release.
      * @param ereCorpus a value from enum EreCorpus (e.g. 'ENR1', 'ENR2', or 'ENR3')

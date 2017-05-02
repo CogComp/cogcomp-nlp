@@ -7,6 +7,7 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotationFixer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
@@ -15,6 +16,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -50,7 +53,8 @@ public class ERENerReader extends EREDocumentReader {
     private static final String NAME = EREDocumentReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(ERENerReader.class);
     private final boolean addNominalMentions;
-    private final String viewName;
+    private final String nerViewName;
+    private final String corefViewName;
     private final boolean addFillers;
 
     private int numOverlaps = 0;
@@ -81,7 +85,7 @@ public class ERENerReader extends EREDocumentReader {
 
 
     /**
-     * Reads Named Entity -- and possibly nominal mention -- annotation from an ERE-format corpus.
+     * Reads Named Entity -- and possibly nominal mention -- annotation from an English ERE-format corpus.
      *
      * @param ereCorpus
      * @param corpusRoot
@@ -92,7 +96,24 @@ public class ERENerReader extends EREDocumentReader {
      * @throws Exception
      */
     public ERENerReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure, boolean addNominalMentions, boolean addFillers) throws Exception {
-        super(ereCorpus, corpusRoot, throwExceptionOnXmlParseFailure);
+        this(ereCorpus, new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), corpusRoot,
+                throwExceptionOnXmlParseFailure, addNominalMentions, addFillers);
+    }
+
+        /**
+         * Reads Named Entity -- and possibly nominal mention -- annotation from an ERE-format corpus.
+         *
+         * @param ereCorpus specifies ERE release -- and therefore, corpus directory structure and xml tag set
+         * @param textAnnotationBuilder TextAnnotationBuilder for target language
+         * @param corpusRoot data root of corpus directory
+         * @param throwExceptionOnXmlParseFailure
+         * @param addNominalMentions a flag that if true, indicates that nominal mentions should be read,
+         *        and that the view created should be named {#ViewNames.MENTION_ERE}.
+         * @param addFillers if 'true', indicates that non-coreferable mentions should be added.
+         * @throws Exception
+         */
+    public ERENerReader(EreCorpus ereCorpus, TextAnnotationBuilder textAnnotationBuilder, String corpusRoot, boolean throwExceptionOnXmlParseFailure, boolean addNominalMentions, boolean addFillers) throws Exception {
+        super(ereCorpus, textAnnotationBuilder, corpusRoot, throwExceptionOnXmlParseFailure);
         this.addNominalMentions = addNominalMentions;
         /*
          * fillers are arguments of relations/events that don't have a referent entity -- they are
@@ -100,7 +121,9 @@ public class ERENerReader extends EREDocumentReader {
          * titles
          */
         this.addFillers = addFillers;
-        this.viewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
+        this.nerViewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
+        this.corefViewName = ViewNames.COREF_ERE;
+
         allowOffsetSlack = true;
         allowSubwordOffsets = true;
 
@@ -138,7 +161,7 @@ public class ERENerReader extends EREDocumentReader {
         TextAnnotation ta = sourceTa.getTextAnnotation();
         SpanLabelView tokens = (SpanLabelView) ta.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView(getViewName(), NAME, ta, 1.0, false);
+        SpanLabelView nerView = new SpanLabelView(getNerViewName(), NAME, ta, 1.0, false);
 
         // now pull all mentions we deal with. Start from file list index 1, as index 0 was source
         // text
@@ -150,14 +173,14 @@ public class ERENerReader extends EREDocumentReader {
                 getFillersFromFile(doc, nerView, sourceTa);
         }
 
-        sourceTa.getTextAnnotation().addView(getViewName(), nerView);
+        sourceTa.getTextAnnotation().addView(getNerViewName(), nerView);
 
         if (addNominalMentions) {
             addCorefView(sourceTa);
-            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), ViewNames.COREF_ERE);
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getCorefViewName());
         }
         else
-            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getViewName());
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getCorefViewName());
 
         // logger.info("number of constituents created: {}", numConstituent );
         logger.debug("number of overlaps preventing creation: {}", numOverlaps);
@@ -170,7 +193,7 @@ public class ERENerReader extends EREDocumentReader {
     private void addCorefView(XmlTextAnnotation xmlTa) {
 
         TextAnnotation ta = xmlTa.getTextAnnotation();
-        CoreferenceView cView = new CoreferenceView(ViewNames.COREF_ERE, ta);
+        CoreferenceView cView = new CoreferenceView(getCorefViewName(), ta);
         for (String eId : entityIdToMentionIds.keySet()) {
             Set<String> mentionIds = entityIdToMentionIds.get(eId);
             Constituent canonical = null;
@@ -178,7 +201,7 @@ public class ERENerReader extends EREDocumentReader {
             for (String mId : mentionIds) {
                 Constituent ment = mentionIdToConstituent.get(mId);
                 Constituent corefMent =
-                        new Constituent(ment.getLabel(), ViewNames.COREF_ERE, ta,
+                        new Constituent(ment.getLabel(), getCorefViewName(), ta,
                                 ment.getStartSpan(), ment.getEndSpan());
                 for (String att : ment.getAttributeKeys())
                     corefMent.addAttribute(att, ment.getAttribute(att));
@@ -576,7 +599,7 @@ public class ERENerReader extends EREDocumentReader {
 
         try {
             mentionConstituent =
-                    new Constituent(label, getViewName(), view.getTextAnnotation(),
+                    new Constituent(label, view.getViewName(), view.getTextAnnotation(),
                             offsets.getFirst(), offsets.getSecond() + 1);
             mentionConstituent.addAttribute(EntityMentionTypeAttribute, noun_type);
             mentionConstituent.addAttribute(EntityMentionIdAttribute, mId);
@@ -693,9 +716,15 @@ public class ERENerReader extends EREDocumentReader {
         return returnOffset;
     }
 
-    public String getViewName() {
-        return viewName;
+    public String getNerViewName() {
+        return nerViewName;
     }
+
+
+    public String getCorefViewName() {
+        return corefViewName;
+    }
+
 
     /**
      * after reading a file's entity information, allows the client to find a Constituent
