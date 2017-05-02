@@ -12,12 +12,14 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
@@ -113,15 +115,12 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationSourceRoleAttribute = "RelationSourceRole";
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
     public static final String DATELINE = "dateline";
+    public static final String CORPUS_TYPE = "corpusType";
     private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
     /** tag sets for xml processor for ERE documents  */
     public final Map<String, Set<String>> tagsWithAtts = new HashMap<>();
     public final Set<String> deletableSpanTags = new HashSet<>();
     public final Set<String> tagsToIgnore = new HashSet<>();
-//    /** these tags contain attributes we want to keep. */
-//    private ArrayList<String> retainTags = new ArrayList<>();
-//    /** the attributes to keep for the above tags. */
-//    private ArrayList<String> retainAttributes = new ArrayList<>();
 
 
     /**
@@ -147,28 +146,6 @@ public class EREDocumentReader extends XmlDocumentReader {
         this(EREDocumentReader.buildEreConfig(ereCorpus.name(), corpusRoot),
                 buildXmlTextAnnotationMaker(ereCorpus, throwExceptionOnXmlParseFailure));
     }
-
-//    static {
-//        Set<String> attributeNames = new HashSet<>();
-//        attributeNames.add(AUTHOR);
-//        attributeNames.add(ID);
-//        attributeNames.add(DATETIME);
-//        tagsWithAtts.put(POST, attributeNames);
-//        attributeNames = new HashSet<>();
-//        attributeNames.add(ID);
-//        tagsWithAtts.put(DOC, attributeNames);
-//        attributeNames = new HashSet<>();
-//        attributeNames.add(ORIG_AUTHOR);
-//        tagsWithAtts.put(QUOTE, attributeNames);
-//
-//        deletableSpanTags.add(QUOTE);
-//        deletableSpanTags.add(DATELINE);
-//
-//        tagsToIgnore.add(IMG);
-//        tagsToIgnore.add(SNIP);
-//        tagsToIgnore.add(STUFF);
-//        tagsToIgnore.add(SARCASM);
-//    }
 
 
     public EREDocumentReader(ResourceManager rm, XmlTextAnnotationMaker xmlTextAnnotationMaker) throws Exception {
@@ -203,7 +180,7 @@ public class EREDocumentReader extends XmlDocumentReader {
         String annotationDir = "ere/";
         String sourceExtension = ".xml";
         String annotationExtension = ".xml";
-        String corpusNameVal = new StringBuilder().append("ERE_").append(ereCorpusVal).toString();
+        String corpusNameVal = "ERE_" + ereCorpusVal;
 
         switch(EreCorpus.valueOf(ereCorpusVal)) {
             case ENR1:
@@ -211,9 +188,13 @@ public class EREDocumentReader extends XmlDocumentReader {
                 annotationDir = "ere/mpdfxml/";
                 break;
             case ENR2:
+            case ESR1:
+            case ZHR1:
                 sourceExtension = ".cmp.txt";
                 break;
             case ENR3:
+            case ESR2:
+            case ZHR2:
                 break;
             default:
                 String errMsg = "Illegal value for ereCorpus: " + ereCorpusVal;
@@ -315,9 +296,7 @@ public class EREDocumentReader extends XmlDocumentReader {
         FilenameFilter annotationFilter = (dir, name) -> name.endsWith(getRequiredAnnotationFileExtension());
 
         String annotationDir = resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key);
-        for (String f : Arrays.asList(IOUtils.lsFilesRecursive(annotationDir, annotationFilter))) {
-            annotationFileList.add(getFileName(f));
-        }
+        annotationFileList.addAll(Arrays.stream(IOUtils.lsFilesRecursive(annotationDir, annotationFilter)).map(IOUtils::getFileName).collect(Collectors.toList()));
 
         List<List<Path>> pathList = new ArrayList<>();
 
@@ -336,7 +315,6 @@ public class EREDocumentReader extends XmlDocumentReader {
                 if (annFile.startsWith(stem)) {
                     logger.debug("Processing file '{}'", annFile);
                     sourceAndAnnotations.add(Paths.get(resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key) + annFile));
-                    sourceAndAnnotations.remove(annFile);
                 }
             }
             pathList.add(sourceAndAnnotations);
@@ -354,6 +332,6 @@ public class EREDocumentReader extends XmlDocumentReader {
      * prefix indicates language; suffix indicates release
      */
     public static enum EreCorpus {
-        ENR1, ENR2, ENR3
+        ENR1, ENR2, ENR3, ESR1, ESR2, ZHR1, ZHR2
     }
 }

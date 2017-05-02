@@ -25,6 +25,8 @@ import static edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransforma
  *    escaped characters in an initial step.
  *
  * TODO: add constructor field to allow additional text clean/transform ops
+ * TODO: handle lone open/close tags: ideally, delete them, but at least transform them to avoid angle bracket
+ *       parse problems in NLP components
  */
 
 public class XmlDocumentProcessor {
@@ -128,8 +130,9 @@ public class XmlDocumentProcessor {
 
                     String openTagName = openTag.getFirst();
 
-                    // check for lone tags (open without close)
-                    while (!openTagName.equals(tagName)) {
+                    // check for lone tags (open without close or vice versa )
+                    boolean isLoneClose = false;
+                    while (!openTagName.equals(tagName) && !isLoneClose) {
 
                         if (throwExceptionOnUnrecognizedTag)
                             throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
@@ -137,30 +140,42 @@ public class XmlDocumentProcessor {
                         else {//someone used xml special chars in body text
                             logger.warn("WARNING: found close tag '{}' after open tag '{}', and (obviously) they don't match.",
                                     tagName, openTagName);
-                            openTag = tagStack.pop(); // leave the angle brackets
-                            openTagName = openTag.getFirst();
+                            if (!tagStack.isEmpty()) { // if lone tag is a close tag, hope that the open stack is empty
+                                openTag = tagStack.peek();
+                                openTagName = openTag.getFirst();
+                                if (!openTag.equals(tagName))
+                                    isLoneClose = true;
+                                else
+                                    openTag = tagStack.pop(); //it matched, so we're good now
+                            }
+                            else { //unmatched lone close
+                                isLoneClose = true;
+                            }
                         }
                     }
 
-                    // now we have open tag and matching close tag; record span and label
-                    IntPair startTagOffsets = openTag.getSecond();
-                    int startTagStart = startTagOffsets.getFirst();
-                    int startTagEnd = startTagOffsets.getSecond();
-                    int endTagStart = xmlMatcher.start();
-                    int endTagEnd = xmlMatcher.end();
+                    if (isLoneClose) { //revert to previous state, and resume parsing
+                        tagStack.push(openTag);
+                    }
+                    else {// now we have open tag and matching close tag; record span and label
+                        IntPair startTagOffsets = openTag.getSecond();
+                        int startTagStart = startTagOffsets.getFirst();
+                        int startTagEnd = startTagOffsets.getSecond();
+                        int endTagStart = xmlMatcher.start();
+                        int endTagEnd = xmlMatcher.end();
 
-                    Map<String, String> tagInfo = new HashMap<>();
-                    tagInfo.put(SPAN_INFO, tagName);
-                    attributesRetained.put(xmlTextSt.getOriginalOffsets(startTagEnd, endTagStart), tagInfo);
+                        Map<String, String> tagInfo = new HashMap<>();
+                        tagInfo.put(SPAN_INFO, tagName);
+                        attributesRetained.put(xmlTextSt.getOriginalOffsets(startTagEnd, endTagStart), tagInfo);
 
 //                    int nestingLevel = nestingLevels.get(tagName) - 1;
 //                    nestingLevels.put(tagName, nestingLevel);
 
-                    boolean isDeletable = false;
-                    if (deletableSpanTags.contains(tagName)) { // deletable span
-                        isDeletable = true;
-                        deletableNestingLevel--;
-                    }
+                        boolean isDeletable = false;
+                        if (deletableSpanTags.contains(tagName)) { // deletable span
+                            isDeletable = true;
+                            deletableNestingLevel--;
+                        }
                     /*
                      * if we are within another deletable tag
                      *    DON'T DELETE or it will create problems.
@@ -169,12 +184,13 @@ public class XmlDocumentProcessor {
                      * else we are NOT in deletable and NOT nested:
                      *    delete open and close tags.
                      */
-                    if (deletableNestingLevel == 0) {
-                        if (isDeletable)
-                            xmlTextSt.transformString(startTagStart, endTagEnd, "");
-                        else { // we should retain text between open and close, but delete the tags
-                            xmlTextSt.transformString(startTagStart, startTagEnd, "");
-                            xmlTextSt.transformString(endTagStart, endTagEnd, "");
+                        if (deletableNestingLevel == 0) {
+                            if (isDeletable)
+                                xmlTextSt.transformString(startTagStart, endTagEnd, "");
+                            else { // we should retain text between open and close, but delete the tags
+                                xmlTextSt.transformString(startTagStart, startTagEnd, "");
+                                xmlTextSt.transformString(endTagStart, endTagEnd, "");
+                            }
                         }
                     }
                 }

@@ -242,46 +242,57 @@ public class ERENerReader extends EREDocumentReader {
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
         int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
         String fillerForm = SimpleXMLParser.getContentString((Element) fillerNode);
+        String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();
+
         if (null == fillerForm || "".equals(fillerForm))
             throw new IllegalStateException("ERROR: did not find surface form for filler "
                     + nnMap.getNamedItem(ID).getNodeValue());
+
         IntPair offsets = getTokenOffsets(offset, offset + length, fillerForm, xmlTa);
+
         if (null != offsets) {
 
             if (-1 == offsets.getFirst() || -1 == offsets.getSecond()) {
 
                 String xmlStr = xmlTa.getXmlSt().getOrigText();
                 int fillerWindowMin = Math.max(offset - 100, 0);
-                int fillerWindowMax = Math.min(offset + 100, xmlStr.length() );
+                int fillerWindowMax = Math.min(offset + 100, xmlStr.length());
 
                 String fillerInfo = "filler form: " + fillerForm + "; orig xml offsets: " + offset + ", " +
-                    (offset + length) + "; context: '" + xmlStr.substring(fillerWindowMin, fillerWindowMax) + "'\n";
+                        (offset + length) + "; context: '" + xmlStr.substring(fillerWindowMin, fillerWindowMax) + "'\n";
 
-                logger.error("Couldn't find filler mention in clean text: {}", fillerInfo);
+                logger.warn("Couldn't find filler mention in clean text: {}", fillerInfo);
 
-                throw new IllegalStateException("ERROR: got an indication of deleted span for filler." +
-                "Since filler should not be an entity, EITHER it was in a quoted span, and therefore " +
-                "should not have been annotated, or it's in a deleted span that should not have been deleted (check" +
-                " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?)\n" +
-                "filler info: " + fillerInfo);
+                // look in markup...
+
+                boolean isFillerFound = recordNullMentionInfo(fillerId, fillerId, "FILLER", fillerNode, xmlTa, true);
+
+                if (!isFillerFound)
+                    logger.warn("ERROR: could not find text/xml markup corresponding to filler." +
+                            "Since filler should not be an entity, EITHER it was in a quoted span, and therefore " +
+                            "should not have been annotated, or it's in a deleted span that should not have been deleted (check" +
+                            " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?), " +
+                            "OR it is from xml markup and the offsets are incorrect (attempted retrieval allowed for +/- 1 char)\n" +
+                            "filler info: " + fillerInfo);
+//                logger.warn("could not create filler with id '{}'", nnMap.getNamedItem(ID)
+//                        .getNodeValue());
             }
+            else { //filler found...
+                if (offsets.getSecond() < offsets.getFirst())
+                    throw new IllegalStateException("for filler " + fillerId + ", second offset is less than first " +
+                            "(first, second:" + offsets.getFirst() + "," + offsets.getSecond() + ").");
 
-            String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();
-            if (offsets.getSecond() < offsets.getFirst()) {
-                logger.warn("for filler {}, second offset is less than first (first, second:{})",
-                        fillerId, "(" + offsets.getFirst() + "," + offsets.getSecond());
+                Constituent fillerConstituent =
+                        new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(),
+                                offsets.getFirst(), offsets.getSecond() + 1);
+                fillerConstituent.addAttribute(EntityMentionIdAttribute, fillerId);
+                fillerConstituent.addAttribute(EntityMentionTypeAttribute, FILL);
+                view.addConstituent(fillerConstituent);
+                mentionIdToConstituent.put(fillerId, fillerConstituent);
             }
-            Constituent fillerConstituent =
-                    new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(),
-                            offsets.getFirst(), offsets.getSecond() + 1);
-            fillerConstituent.addAttribute(EntityMentionIdAttribute, fillerId);
-            fillerConstituent.addAttribute(EntityMentionTypeAttribute, FILL);
-            view.addConstituent(fillerConstituent);
-            mentionIdToConstituent.put(fillerId, fillerConstituent);
-        } else
-            logger.warn("could not create filler with id '{}'", nnMap.getNamedItem(ID)
-                    .getNodeValue());
+        }
     }
+
 
     /**
      * Read entity mentions and populate the view provided.
@@ -432,7 +443,7 @@ public class ERENerReader extends EREDocumentReader {
             Node mentionNode = nl.item(i);
             Constituent mentionConstituent = getMention(mentionNode, label, view, xmlTa);
             if (null == mentionConstituent) { // mention may reference xml markup
-                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa) || isEntityFound;
+                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa, false) || isEntityFound;
             }
             else {
                 mentionConstituent.addAttribute(EntityIdAttribute, eId);
@@ -463,22 +474,29 @@ public class ERENerReader extends EREDocumentReader {
      * @param mentionNode
      * @param xmlTa
      */
-    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa) throws XMLException {
+    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa, boolean isFiller) throws XMLException {
 
         NamedNodeMap nnMap = mentionNode.getAttributes();
         String mId = nnMap.getNamedItem(ID).getNodeValue();
-        String nounType = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
+        String nounType = "NONE";
+
+        if (!isFiller)
+            nounType = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
 
         /*
          * expect one child
          */
-        NodeList mnl = ((Element) mentionNode).getElementsByTagName(MENTION_TEXT);
         String mentionForm = null;
+        if (isFiller)
+            mentionForm = mentionNode.getTextContent();
+        else {
+            NodeList mnl = ((Element) mentionNode).getElementsByTagName(MENTION_TEXT);
 
-        if (mnl.getLength() > 0) {
-            mentionForm = SimpleXMLParser.getContentString((Element) mnl.item(0));
-        } else {
-            logger.error("No surface form found for mention with id {}.", mId);
+            if (mnl.getLength() > 0) {
+                mentionForm = SimpleXMLParser.getContentString((Element) mnl.item(0));
+            } else {
+                logger.error("No surface form found for mention with id {}.", mId);
+            }
         }
 
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
@@ -505,6 +523,7 @@ public class ERENerReader extends EREDocumentReader {
         }
         if (isFound)
             numXmlMarkupMentionsGenerated++; // ...and so excluded from cleaned-up text.
+
         spanInfo.put(origOffsets, mentionInfo);
         mentionInfo.put(ENTITY_ID, eId);
         mentionInfo.put(ENTITY_MENTION_ID, mId);

@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotat
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +33,7 @@ import java.util.Set;
  */
 public class XmlTextAnnotationMaker {
 
+    private static final Logger logger = LoggerFactory.getLogger(XmlTextAnnotationMaker.class);
     /**
      * tokenizes/sentence splits the cleaned text for further processing
      */
@@ -67,6 +70,7 @@ public class XmlTextAnnotationMaker {
      */
     public XmlTextAnnotation createTextAnnotation(String xmlText, String corpusId, String docId)  {
 
+        logger.info("processing text from document {}", docId);
         Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanResults =
                 xmlProcessor.processXml(xmlText);
 

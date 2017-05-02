@@ -75,14 +75,14 @@ public class EREReaderTest {
      * LDC2016E31_DEFT_Rich_ERE_English ENR3 has -- I believe -- complete threads, where annotation files may be
      *    broken into several chunks. Taggable entities within quoted blocks are NOT marked.
      *
-     *
-     *
+     * There are two Spanish and two Chinese ERE releases (aside from a parallel English-Chinese release).
+     * Spanish/Chinese release 1 have the same characteristics as English release 2.
+     * Spanish/Chinese release 2 have the same characteristics as English release 3.
      * @param args
      */
     public static void main(String[] args) {
 
-
-        /**
+        /*
          * ERE documents in release 2015E29: mainly newswire, some discussion format.
          * This test uses the Event Argument Extraction version of the data, as this includes xml markup that makes
          * the source files well-formed, and we are likely to need this reader for TAC EAE tasks. Moreover, the later
@@ -90,37 +90,16 @@ public class EREReaderTest {
          */
         String corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E29_DEFT_Rich_ERE_English_Training_Annotation_V2/data/";
 
-//        String sourceDir = corpusDir + "source/mpdfxml/";
-//        String annotationDir = corpusDir + "ere/mpdfxml/";
-//        String sourceExtension = ".xml";
-//        String annotationExtension = ".xml";
-
         XmlTextAnnotation outputXmlTa = runTest(EreCorpus.ENR1, corpusDir);
 
 
         corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
 
-//        sourceDir = corpusDir + "source/";
-//        annotationDir = corpusDir + "ere/";
-//
-//        sourceExtension = ".cmp.txt";
-
         outputXmlTa = runTest(EreCorpus.ENR2, corpusDir);
 
-//        corpusDir =
-//                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
-//
-//        sourceExtension = ".xml";
-//        sourceDir = corpusDir + "/data/source/";
-//        annotationDir = corpusDir + "data/ere/";
-//
-//        outputXmlTa = runTest(EreCorpus.ENR3);
 
         corpusDir =
                 "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/";
-
-//        sourceDir = corpusDir + "source/";
-//        annotationDir = corpusDir + "ere/";
 
         outputXmlTa = runTest(EreCorpus.ENR3, corpusDir);
 
