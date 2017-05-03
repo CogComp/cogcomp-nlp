@@ -163,8 +163,7 @@ public class PipelineFactory {
      */
     public static BasicAnnotatorService buildPipelineWithAllViews() throws IOException,
             AnnotatorException {
-        return buildPipeline(ViewNames.getAllViewNames().toArray(
-                new String[ViewNames.getAllViewNames().size()]));
+        return buildPipelineWithAllViews(false);
     }
 
     /**
