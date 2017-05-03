@@ -51,24 +51,26 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
             SrlConfigurator.INSTANTIATE_PREPROCESSOR.key, FALSE);
 
     /**
-     * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable annotators in
-     *     a "per-sentence" way: it will split the text into sentences, process each individually, then splice the
-     *     annotations together. This allows for partial annotation of documents in cases where document text
-     *     causes local problems for individual annotators.
+     * if 'true', the PipelineFactory will return a sentence-level pipeline that will use all viable
+     * annotators in a "per-sentence" way: it will split the text into sentences, process each
+     * individually, then splice the annotations together. This allows for partial annotation of
+     * documents in cases where document text causes local problems for individual annotators.
      */
     public static final Property USE_SENTENCE_PIPELINE = new Property("useSentencePipeline", FALSE);
 
     /**
-     * if 'true', set tokenizer to split on hyphen.  Default is 'false' until CCG NLP annotator modules are updated
-     *     to account for hyphen-split training data.
+     * if 'true', set tokenizer to split on hyphen. Default is 'false' until CCG NLP annotator
+     * modules are updated to account for hyphen-split training data.
      */
-    public static final Property SPLIT_ON_DASH = new Property(TextAnnotationBuilder.SPLIT_ON_DASH, FALSE);
+    public static final Property SPLIT_ON_DASH = new Property(TextAnnotationBuilder.SPLIT_ON_DASH,
+            FALSE);
 
 
 
     /**
-     * get a ResourceManager object with the default key/value pairs for this configurator
-     * default SRL_TYPE is Verb.
+     * get a ResourceManager object with the default key/value pairs for this configurator default
+     * SRL_TYPE is Verb.
+     * 
      * @return a non-null ResourceManager with appropriate values set.
      */
     @Override
@@ -76,10 +78,10 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
         Property[] properties =
                 {STFRD_TIME_PER_SENTENCE, STFRD_MAX_SENTENCE_LENGTH, USE_POS, USE_LEMMA,
                         USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
-                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM, USE_SRL_PREP, USE_SRL_COMMA,
-                        USE_QUANTIFIER, THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON,
-                        USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
-                        USE_SENTENCE_PIPELINE};
+                        USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM,
+                        USE_SRL_PREP, USE_SRL_COMMA, USE_QUANTIFIER,
+                        THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK, USE_JSON, USE_LAZY_INITIALIZATION,
+                        USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH, USE_SENTENCE_PIPELINE};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(
                 generateProperties(properties))));
     }

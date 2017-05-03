@@ -22,7 +22,7 @@ public class ExternalAnnotatorsServer {
         logger.info("Starting create the externals annotators pipeline . . . ");
         AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();
         logger.info("Setting the service . . . ");
-        MainServer.setAnnotatorSetvice(service, logger);
+        MainServer.setAnnotatorService(service);
         logger.info("Start the server . . . ");
         MainServer.startServer(args, logger);
     }

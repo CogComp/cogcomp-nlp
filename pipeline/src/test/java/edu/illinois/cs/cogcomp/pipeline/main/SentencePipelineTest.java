@@ -39,26 +39,26 @@ public class SentencePipelineTest {
     public static void init() throws IOException, AnnotatorException {
 
         Properties props = new Properties();
-        props.setProperty( PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_QUANTIFIER.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_DEP.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_LEMMA.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE );
-        props.setProperty( PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
-        props.setProperty( PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE );
+        props.setProperty(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_QUANTIFIER.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_DEP.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_LEMMA.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
+        props.setProperty(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
+        props.setProperty(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
 
 
-        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
+        props.setProperty(PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE);
 
-        props.setProperty( AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.FALSE );
-        props.setProperty( AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE );
+        props.setProperty(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.FALSE);
+        props.setProperty(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
 
         sentenceProcessor = PipelineFactory.buildPipeline(new ResourceManager(props));
 
-        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.FALSE );
+        props.setProperty(PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.FALSE);
 
         normalProcessor = PipelineFactory.buildPipeline(new ResourceManager(props));
     }
@@ -66,8 +66,9 @@ public class SentencePipelineTest {
 
     @Test
     public void testSentencePipeline() {
-        String[] viewsToAdd = new String[]{};
-        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
+        String[] viewsToAdd = new String[] {};
+        TextAnnotation ta =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
 
         String[] viewsToAnnotate = {ViewNames.POS, ViewNames.NER_CONLL, ViewNames.PARSE_STANFORD};
         Set<String> viewSet = new HashSet<>();
@@ -88,7 +89,8 @@ public class SentencePipelineTest {
         assertTrue(ta.hasView(ViewNames.PARSE_STANFORD));
         assertEquals(84, ta.getView(ViewNames.PARSE_STANFORD).getConstituents().size());
 
-        TextAnnotation normalTa = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
+        TextAnnotation normalTa =
+                DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(viewsToAdd, false, 3);
 
         try {
             normalProcessor.addViewsAndCache(normalTa, viewSet, false);

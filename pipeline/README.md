@@ -304,11 +304,12 @@ pipeline/scripts/runWebserver.sh
 
 The following arguments are supported:
 ```shell
-usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
+usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT] [--rate HOURS]
 
 optional arguments:
   -h, --help             show this help message and exit
   --port PORT, -P PORT   Port to run the webserver.
+  --rate HOUR, -L HOUR   Max number of queries per day. If empty, there won't be any limit. 
 ```
 
 Here are the available APIs: 
@@ -342,7 +343,7 @@ System.out.println(ta.getAvailableViews()); // here you should see that the requ
 
 #### Python Client
 
-Coming soon . . . 
+[Sioux](https://github.com/CogComp/sioux) is our library for accessing our pipeline from Java.   
 
 
 ## Frequently Asked Questions (FAQs)

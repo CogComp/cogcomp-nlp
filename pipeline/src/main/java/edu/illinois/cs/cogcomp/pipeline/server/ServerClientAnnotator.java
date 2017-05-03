@@ -82,10 +82,8 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     public void useCaching(String dbFile) {
-        this.db = DBMaker.fileDB(dbFile).
-                closeOnJvmShutdown().
-                transactionEnable(). // with transaction enabled, the cache won't get corrupt if the program crashes (at the cost of losing a little speed)
-                make();
+        // with transaction enabled, the cache won't get corrupt if the program crashes (at the cost of losing a little speed)
+        this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().transactionEnable().make();
     }
 
     /**
@@ -113,8 +111,7 @@ public class ServerClientAnnotator extends Annotator {
             byte[] taByte = concurrentMap.get(key);
             return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
         } else {
-            URL obj =
-                    new URL(url + ":" + port + "/annotate");
+            URL obj = new URL(url + ":" + port + "/annotate");
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("charset", "utf-8");

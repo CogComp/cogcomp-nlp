@@ -51,11 +51,13 @@ public class StanfordCorefHandler extends Annotator {
         pipeline.annotate(document);
         CoreferenceView vu = new CoreferenceView(viewName, ta);
 
-        for (CorefChain chain : document.get(CorefCoreAnnotations.CorefChainAnnotation.class).values()) {
+        Map corefChain = document.get(CorefCoreAnnotations.CorefChainAnnotation.class);
+        for (Object key : corefChain.keySet()) {
+            CorefChain chain = (CorefChain) corefChain.get(key);
             Constituent representative = createConstituentGivenMention(document,chain,chain.getRepresentativeMention(), ta);
             List<Constituent> consList = new ArrayList<>();
             for(CorefChain.CorefMention m : chain.getMentionsInTextualOrder()) {
-                consList.add(createConstituentGivenMention(document,chain,m, ta));
+                consList.add(createConstituentGivenMention(document, chain, m, ta));
             }
             consList.remove(representative); // remove the representative itself
             vu.addCorefEdges(representative, consList);
