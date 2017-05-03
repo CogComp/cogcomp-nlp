@@ -55,7 +55,7 @@ public class PipelineFactory {
      * @throws IOException
      * @throws AnnotatorException
      */
-    public static BasicAnnotatorService buildPipeline(String... views) throws IOException,
+    public static BasicAnnotatorService buildPipeline(Boolean disableCache, String... views) throws IOException,
             AnnotatorException {
         List<String> allViewNames = ViewNames.getAllViewNames();
         Map<String, String> nonDefaultValues = new HashMap<>();
@@ -118,6 +118,14 @@ public class PipelineFactory {
                         + "The possible view names are static members of the class `ViewName`. ");
             }
         }
+
+        if(disableCache) {
+            nonDefaultValues.put(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
+        }
+        else {
+            nonDefaultValues.put(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.FALSE);
+        }
+
         // using the default settings and changing the views
         ResourceManager fullRm = (new PipelineConfigurator()).getConfig(nonDefaultValues);
         boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
@@ -126,6 +134,11 @@ public class PipelineFactory {
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHypen));
         Map<String, Annotator> annotators = buildAnnotators(fullRm);
         return new SentencePipeline(taBldr, annotators, fullRm);
+    }
+
+    public static BasicAnnotatorService buildPipeline(String... views) throws IOException,
+            AnnotatorException {
+        return buildPipeline(views);
     }
 
     /**
@@ -142,7 +155,7 @@ public class PipelineFactory {
 
     /**
      * create an AnnotatorService with all the possible views in the pipeline. Be careful if you use
-     * this; you will requires lots of memory
+     * this, potentially you will requires lots of memory.
      * 
      * @return AnnotatorService with specified NLP components
      * @throws IOException
@@ -151,6 +164,20 @@ public class PipelineFactory {
     public static BasicAnnotatorService buildPipelineWithAllViews() throws IOException,
             AnnotatorException {
         return buildPipeline(ViewNames.getAllViewNames().toArray(
+                new String[ViewNames.getAllViewNames().size()]));
+    }
+
+    /**
+     * create an AnnotatorService with all the possible views in the pipeline. Be careful if you use
+     * this, potentially you will requires lots of memory.
+     *
+     * @return AnnotatorService with specified NLP components
+     * @throws IOException
+     * @throws AnnotatorException
+     */
+    public static BasicAnnotatorService buildPipelineWithAllViews(Boolean disableCache) throws IOException,
+            AnnotatorException {
+        return buildPipeline(disableCache, ViewNames.getAllViewNames().toArray(
                 new String[ViewNames.getAllViewNames().size()]));
     }
 
