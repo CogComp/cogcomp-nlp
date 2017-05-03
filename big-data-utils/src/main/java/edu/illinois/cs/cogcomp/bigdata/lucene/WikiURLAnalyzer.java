@@ -24,7 +24,7 @@ import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.util.Version;
 
 /**
@@ -35,7 +35,7 @@ import org.apache.lucene.util.Version;
  */
 public class WikiURLAnalyzer extends Analyzer {
 
-    private static Version matchVersion = Version.LUCENE_43;
+    private static Version matchVersion = Version.LUCENE_6_0_0;
     public static final String normalizeChars = "- ";
     public static final String replacement = "_";
 
@@ -46,9 +46,8 @@ public class WikiURLAnalyzer extends Analyzer {
         public static final FieldType TYPE_STORED = new FieldType();
 
         static {
-          TYPE_STORED.setIndexed(true);
           TYPE_STORED.setOmitNorms(true);
-          TYPE_STORED.setIndexOptions(IndexOptions.DOCS_ONLY);
+          TYPE_STORED.setIndexOptions(IndexOptions.DOCS);
           TYPE_STORED.setStored(true);
           TYPE_STORED.setTokenized(true);
           TYPE_STORED.freeze();
@@ -67,13 +66,13 @@ public class WikiURLAnalyzer extends Analyzer {
 
 
     @Override
-    protected TokenStreamComponents createComponents(final String fieldName, final Reader reader) {
+    protected TokenStreamComponents createComponents(final String fieldName) {
 
-        final Tokenizer source = new KeywordTokenizer(reader);
-        TokenStream result = new StandardFilter(matchVersion, source);
+        final Tokenizer source = new KeywordTokenizer();
+        TokenStream result = new StandardFilter(source);
         result = new CharacterFilter(result);
         result = new ASCIIFoldingFilter(result);
-        result = new LowerCaseFilter(matchVersion, result);
+        result = new LowerCaseFilter(result);
 
 //        result = new WordDelimiterFilter(result, WordDelimiterFilter.DIGIT, null);
 
@@ -106,8 +105,6 @@ public class WikiURLAnalyzer extends Analyzer {
         /**
          * Filters certain characters
          *
-         * @param matchVersion
-         *            See <a href="#version">above</a>
          * @param in
          *            TokenStream to filter
          */
