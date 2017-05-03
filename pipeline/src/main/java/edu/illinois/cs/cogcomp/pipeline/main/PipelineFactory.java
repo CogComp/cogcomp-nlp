@@ -138,7 +138,7 @@ public class PipelineFactory {
 
     public static BasicAnnotatorService buildPipeline(String... views) throws IOException,
             AnnotatorException {
-        return buildPipeline(views);
+        return buildPipeline(false, views);
     }
 
     /**
