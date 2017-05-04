@@ -13,10 +13,17 @@ import java.util.ArrayList;
 
 public class NERDocument {
     public String docname;
+    public String domainName;
 
     public NERDocument(ArrayList<LinkedVector> vector, String documentName) {
         docname = documentName;
         sentences = vector;
+    }
+
+    public NERDocument(ArrayList<LinkedVector> vector, String documentName, String domainName) {
+        docname = documentName;
+        sentences = vector;
+        this.domainName = domainName;
     }
 
     public ArrayList<LinkedVector> sentences;
