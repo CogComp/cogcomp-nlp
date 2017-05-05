@@ -14,7 +14,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
-import edu.illinois.cs.cogcomp.tokenizers.MultiLingualTokenizer;
+import edu.illinois.cs.cogcomp.tokenizer.MultiLingualTokenizer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
