@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -23,8 +22,6 @@ import org.w3c.dom.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-
-import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader.RelationIDAttribute;
 
 /**
  * Reads ERE data and instantiates TextAnnotations with the corresponding Mention and Relation
@@ -110,8 +107,8 @@ public class EREMentionRelationReader extends ERENerReader {
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
-            super.getEntitiesFromFile(doc, mentionView, xmlTa);
-            super.getFillersFromFile(doc, mentionView, xmlTa);
+//            super.getEntitiesFromFile(doc, mentionView, xmlTa);
+//            super.getFillersFromFile(doc, mentionView, xmlTa);
 
             /*
              * previous call populates mentionID : Constituent map needed to build relations

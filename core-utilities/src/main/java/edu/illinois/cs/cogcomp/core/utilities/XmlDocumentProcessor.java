@@ -26,10 +26,12 @@ import static edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransforma
  *
  * TODO: add constructor field to allow additional text clean/transform ops
  * TODO: handle lone open/close tags: ideally, delete them, but at least transform them to avoid angle bracket
- *       parse problems in NLP components
+ *       parse problems in NLP components; retain relevant info like URL target etc.
  */
 
 public class XmlDocumentProcessor {
+
+
 
     /**
      * tag to indicate that the associated information denotes a span in source xml with the associated label.
@@ -43,8 +45,6 @@ public class XmlDocumentProcessor {
     private final Set<String> singletonTags;
     /** what to do if there's some markup-like span outside the things we already listed */
     private final boolean throwExceptionOnUnrecognizedTag;
-
-
     /**
      * specify tags that determine processor behavior.
      * @param deletableSpanTags the names of tags containing text to be excluded from clean text (e.g. quotes)
@@ -61,6 +61,50 @@ public class XmlDocumentProcessor {
     }
 
     /**
+     * builds a map of attribute value offsets to attribute value to support search for metadata matching
+     *    entity mentions
+     *
+     * @param xmlMarkup xml span information collected from source document
+     * @return a map from attribute value character offsets in source text to attribute value
+     */
+    public static Map<IntPair, Set<String>> compileAttributeValues(List<SpanInfo> xmlMarkup) {
+
+        Map<IntPair, Set<String>> attrVals = new HashMap<>();
+
+        for (XmlDocumentProcessor.SpanInfo si : xmlMarkup) {
+            for (Map.Entry<String, Pair<String, IntPair>> e : si.attributes.entrySet()) {
+
+                IntPair offset = e.getValue().getSecond();
+                Set<String> vals = attrVals.get(offset);
+
+                if (null == vals) {
+                    vals = new HashSet<>();
+                    attrVals.put(offset, vals);
+                }
+                vals.add(e.getValue().getFirst());
+            }
+        }
+
+        return attrVals;
+    }
+
+    /**
+     * generate a mapping from span offset to span info
+     * @param retainedTagInfo span information produced by XmlDocumentProcessor
+     * @return map from IntPair to SpanInfo
+     */
+    public static Map<IntPair, SpanInfo> compileOffsetSpanMapping(List<SpanInfo> retainedTagInfo) {
+        Map<IntPair, SpanInfo> offsetToSpanInfo = new HashMap<>();
+        for (SpanInfo s : retainedTagInfo) {
+            offsetToSpanInfo.put(s.spanOffsets, s);
+
+            for (Map.Entry<String, Pair<String, IntPair>> e : s.attributes.entrySet())
+                offsetToSpanInfo.put(e.getValue().getSecond(), s);
+        }
+        return offsetToSpanInfo;
+    }
+
+    /**
      * This class removes XML markup, for the most part. For specified tags that denote spans of text other than
      *    body text (e.g. quotes, headlines), the text value and offsets are reported. For specified tags and attributes,
      *    the attribute values and their offsets are reported. Content within <code>quote</code>
@@ -72,7 +116,7 @@ public class XmlDocumentProcessor {
      * @param xmlText StringTransformation whose basis is the original xml text.
      * @return String comprising text.
      */
-    public Pair<StringTransformation, Map<IntPair, Map<String, String>>> processXml(String xmlText) {
+    public Pair<StringTransformation, List<SpanInfo>> processXml(String xmlText) {
 
         StringTransformation xmlTextSt = new StringTransformation(xmlText);
 
@@ -93,9 +137,14 @@ public class XmlDocumentProcessor {
         // don't call getTransformedText() or applyPendingEdits() in the body of the loop usinr xmlMatcher
         Matcher xmlMatcher = xmlTagPattern.matcher(xmlCurrentStr);
 
-        Map<IntPair, Map<String, String>> attributesRetained = new HashMap<>();
+        // span offsets, label, attName, attVal, attOffsets
+        List<SpanInfo> attributesRetained = new ArrayList<>();
         // track open/close tags, to record spans for later use (e.g. quoted blocks that aren't annotated)
-        Stack<Pair<String, IntPair>> tagStack = new Stack<>();
+        // each entry retains tagname, open tag offsets, attributes
+        // note that open tag offsets are NOT the same as the (complete span) offsets returned by this method
+        // IMPORTANT: offsets are computed from modified xml string (initial normalization steps clean up original)
+        //    so code must adjust them for storing offsets for return.
+        Stack<SpanInfo> tagStack = new Stack<>();
 
 //        // right now, this is just useful for debugging
 //        Map<String, Integer> nestingLevels = new HashMap<>();
@@ -125,28 +174,28 @@ public class XmlDocumentProcessor {
                 String tagName = tagMatcher.group(1);
 
                 if (isClose) {
-                    Pair<String, IntPair> openTag = tagStack.pop();
+                    SpanInfo openTagAndAtts = tagStack.pop();
                     tagName = tagName.substring(1); // strip leading "/"
 
-                    String openTagName = openTag.getFirst();
+                    String openTagName = openTagAndAtts.label;
 
                     // check for lone tags (open without close or vice versa )
                     boolean isLoneClose = false;
                     while (!openTagName.equals(tagName) && !isLoneClose) {
 
                         if (throwExceptionOnUnrecognizedTag)
-                            throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTag +
+                            throw new IllegalStateException("Mismatched open and close tags. Expected '" + openTagAndAtts +
                                     "', found '" + tagName + "'");
                         else {//someone used xml special chars in body text
                             logger.warn("WARNING: found close tag '{}' after open tag '{}', and (obviously) they don't match.",
                                     tagName, openTagName);
                             if (!tagStack.isEmpty()) { // if lone tag is a close tag, hope that the open stack is empty
-                                openTag = tagStack.peek();
-                                openTagName = openTag.getFirst();
-                                if (!openTag.equals(tagName))
+                                openTagAndAtts = tagStack.peek();
+                                openTagName = openTagAndAtts.label;
+                                if (!openTagAndAtts.equals(tagName))
                                     isLoneClose = true;
                                 else
-                                    openTag = tagStack.pop(); //it matched, so we're good now
+                                    openTagAndAtts = tagStack.pop(); //it matched, so we're good now
                             }
                             else { //unmatched lone close
                                 isLoneClose = true;
@@ -155,18 +204,19 @@ public class XmlDocumentProcessor {
                     }
 
                     if (isLoneClose) { //revert to previous state, and resume parsing
-                        tagStack.push(openTag);
+                        tagStack.push(openTagAndAtts);
                     }
                     else {// now we have open tag and matching close tag; record span and label
-                        IntPair startTagOffsets = openTag.getSecond();
+                        IntPair startTagOffsets = openTagAndAtts.spanOffsets;
+                        Map<String, Pair<String, IntPair>> spanAtts = openTagAndAtts.attributes;
+
                         int startTagStart = startTagOffsets.getFirst();
                         int startTagEnd = startTagOffsets.getSecond();
                         int endTagStart = xmlMatcher.start();
                         int endTagEnd = xmlMatcher.end();
 
-                        Map<String, String> tagInfo = new HashMap<>();
-                        tagInfo.put(SPAN_INFO, tagName);
-                        attributesRetained.put(xmlTextSt.getOriginalOffsets(startTagEnd, endTagStart), tagInfo);
+                        updateAttributeInfo(attributesRetained, tagName, startTagEnd, endTagStart, spanAtts, xmlTextSt);
+
 
 //                    int nestingLevel = nestingLevels.get(tagName) - 1;
 //                    nestingLevels.put(tagName, nestingLevel);
@@ -195,12 +245,17 @@ public class XmlDocumentProcessor {
                     }
                 }
                 else  { // tag must be open
-                    tagStack.push(new Pair(tagName, new IntPair(xmlMatcher.start(), xmlMatcher.end())));
+                    IntPair tagSpan = new IntPair(xmlMatcher.start(), xmlMatcher.end());
+                    Map<String, Pair<String, IntPair>> spanAtts = new HashMap<>();
+
+                    tagStack.push(new SpanInfo(tagName, tagSpan, spanAtts));
+
                     if (deletableSpanTags.contains(tagName))
                         deletableNestingLevel++;
 
                     // within an xml open tag: identify any attribute values we need to retain.
                     if (tagsWithAtts.containsKey(tagName)) {
+
                         Set<String> attributeNames = tagsWithAtts.get(tagName);
                         // parse the substring beyond the tag name.
                         lcsubstr = lcsubstr.substring(tagMatcher.end());
@@ -217,20 +272,30 @@ public class XmlDocumentProcessor {
                                 int attrValOffset = tagMatcher.end() + xmlMatcher.start();
                                 int attrValStart = attrMatcher.start(2) + attrValOffset;
                                 int attrValEnd = attrMatcher.end(2) + attrValOffset;
-                                IntPair attrValOffsets = xmlTextSt.getOriginalOffsets(attrValStart, attrValEnd);
-                                Map<String, String> atts = attributesRetained.get(attrValOffsets);
-                                if (null == atts) {
-                                    atts = new HashMap<>();
-                                    attributesRetained.put(attrValOffsets, atts);
-                                }
-                                atts.put(attrName, attrVal);
+                                // use adjusted offsets to get char offsets in original xml source text
+                                IntPair attrValSpan = xmlTextSt.getOriginalOffsets(attrValStart, attrValEnd);
+                                spanAtts.put(attrName, new Pair(attrVal, attrValSpan));
                             }
                         }
+                        // we now have an open tag name, its offsets, and any retained attributes on the tag stack
                     }
                 }
             }
         }
-        // cleanup double newlines/spaces
+
+        xmlTextSt = cleanupWhitespace(xmlTextSt);
+
+
+        return new Pair(xmlTextSt, attributesRetained);
+    }
+
+    /**
+     * clean up double newlines/spaces
+     *
+     * @param xmlTextSt
+     * @return
+     */
+    private StringTransformation cleanupWhitespace(StringTransformation xmlTextSt) {
         String postProcessedText = xmlTextSt.getTransformedText(); // updates StringTransformation current str
         Matcher wsMatcher = TextCleanerStringTransformation.whitespacePattern.matcher(postProcessedText);
 
@@ -251,7 +316,24 @@ public class XmlDocumentProcessor {
 
         xmlTextSt.applyPendingEdits();
 
-        return new Pair(xmlTextSt, attributesRetained);
+        return xmlTextSt;
+    }
+
+    /**
+     * store attribute info with correct offsets into original xml source text
+     * @param attributesRetained
+     * @param tagName
+     * @param startOffset
+     * @param endOffset
+     * @param spanAtts
+     * @param xmlTextSt
+     */
+    private void updateAttributeInfo(List<SpanInfo> attributesRetained, String tagName, int startOffset, int endOffset,
+                                     Map<String, Pair<String, IntPair>> spanAtts, StringTransformation xmlTextSt) {
+
+        IntPair origOffsets = xmlTextSt.getOriginalOffsets(startOffset, endOffset);
+        attributesRetained.add(new SpanInfo(tagName, origOffsets, spanAtts));
+
     }
 
     /**
@@ -291,5 +373,22 @@ public class XmlDocumentProcessor {
         xmlTextSt.applyPendingEdits();
         return xmlTextSt;
     }
+
+    /**
+     * a structure to store span information: label, offsets, attributes (including value offsets)
+     */
+    public class SpanInfo {
+
+        public final String label;
+        public final IntPair spanOffsets;
+        public final Map<String, Pair<String, IntPair>> attributes;
+
+        public SpanInfo(String label, IntPair spanOffsets, Map<String, Pair<String, IntPair>> attributes ) {
+            this.label = label;
+            this.spanOffsets = spanOffsets;
+            this.attributes = attributes;
+        }
+    }
+
 
 }

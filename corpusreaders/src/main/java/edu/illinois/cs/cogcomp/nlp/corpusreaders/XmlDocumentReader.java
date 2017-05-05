@@ -67,13 +67,8 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
     private final XmlTextAnnotationMaker xmlTextAnnotationMaker;
 
     protected String fileId;
-    protected String newFileText;
     private int numTextAnnotations;
     private int numFiles;
-    /**
-     * stores the representation for the most recently processed file.
-     */
-    private XmlTextAnnotation xmlTextAnnotation;
     private String sourceFileExtension;
     private String annotationFileExtension;
 

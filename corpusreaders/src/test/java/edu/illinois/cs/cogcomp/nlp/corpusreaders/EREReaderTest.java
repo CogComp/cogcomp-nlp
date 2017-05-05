@@ -13,16 +13,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.*;
@@ -43,11 +41,13 @@ public class EREReaderTest {
     private static final IntPair ORIGAUTHOFFSETS = new IntPair(2943, 2953);
     private static final String AUTHORVAL = "tinydancer";
     private static final IntPair AUTHOROFFSETS = new IntPair(1947, 1957);
-    private static final String MENTION_ID_VAL = "m-568eb23c_1_797";
+    private static final String MENTION_ID_VAL = "m-568eb23c_1_108";
     private static final String NOUN_TYPE_VAL = "NAM";
     private static final String ENTITY_ID_VAL = "ent-NIL00380";
     private static final String SPECIFICITY_VAL = "specific";
+    private static final IntPair POSTOFFSETS = new IntPair(2155, 2500);
     private static final IntPair QUOTEOFFSETS = new IntPair(1148, 1384);
+
     private static final String QUOTE_VAL = "\n\"Drink cyanide, bloody Neanderthals. You won,\" award-winning Israeli " +
             "author and actress Alona Kimhi wrote on her Facebook page, before erasing it as her comments became " +
             "the talk of the town. \"Only death will save you from yourselves.\"\n";
@@ -110,39 +110,42 @@ public class EREReaderTest {
         StringTransformation xmlSt = outputXmlTa.getXmlSt();
         String origXml = xmlSt.getOrigText();
 
-        Map<IntPair, Map<String, String>> markupInfo = outputXmlTa.getXmlMarkup();
+        List<XmlDocumentProcessor.SpanInfo> markup = outputXmlTa.getXmlMarkup();
+        Map<IntPair, XmlDocumentProcessor.SpanInfo> markupInfo = XmlDocumentProcessor.compileOffsetSpanMapping(markup);
+        Map<IntPair, Set<String>> markupAttributes = XmlDocumentProcessor.compileAttributeValues(markup);
 
-        String dateTimeReported = markupInfo.get(DATETIMEOFFSETS).get(DATETIME);
-        assertEquals(DATETIMEVAL, dateTimeReported);
+        Set<String> dateTimeReported = markupAttributes.get(DATETIMEOFFSETS);
+        assert(dateTimeReported.contains(DATETIMEVAL));
         assertEquals(DATETIMEVAL, origXml.substring(DATETIMEOFFSETS.getFirst(), DATETIMEOFFSETS.getSecond()));
 
 //        private static final String ORIGAUTHVAL = "tinydancer";
 //        private static final IntPair ORIGAUTHOFFSETS = new IntPair(2943, 2953);
-        String origAuth = markupInfo.get(ORIGAUTHOFFSETS).get(ORIG_AUTHOR);
-        assertEquals(ORIGAUTHVAL, origAuth);
+        Set<String> origAuth = markupAttributes.get(ORIGAUTHOFFSETS);
+        assert(origAuth.contains(ORIGAUTHVAL));
         assertEquals(ORIGAUTHVAL, origXml.substring(ORIGAUTHOFFSETS.getFirst(), ORIGAUTHOFFSETS.getSecond()));
 
-        String auth = markupInfo.get(AUTHOROFFSETS).get(AUTHOR);
-        assertEquals(AUTHORVAL, auth);
+        Set<String> auth = markupAttributes.get(AUTHOROFFSETS);
+        assert(auth.contains(AUTHORVAL));
         assertEquals(AUTHORVAL, origXml.substring(AUTHOROFFSETS.getFirst(), AUTHOROFFSETS.getSecond()));
 
         /*
          * other values recorded at same offsets are not required to be mapped to xml document char offsets.
          * Since this value is not retained in the cleaned text, there is NO CORRESPONDING CONSTITUENT.
          */
-        String mid = markupInfo.get(AUTHOROFFSETS).get(ENTITY_MENTION_ID);
+        XmlDocumentProcessor.SpanInfo postSpan = markupInfo.get(POSTOFFSETS);
+        String mid = postSpan.attributes.get(ENTITY_MENTION_ID).getFirst();
         assertEquals(MENTION_ID_VAL, mid);
 
-        String nt = markupInfo.get(AUTHOROFFSETS).get(NOUN_TYPE);
+        String nt = markupInfo.get(POSTOFFSETS).attributes.get(NOUN_TYPE).getFirst();
         assertEquals(NOUN_TYPE_VAL, nt);
 
-        String eid = markupInfo.get(AUTHOROFFSETS).get(ENTITY_ID);
+        String eid = markupInfo.get(POSTOFFSETS).attributes.get(ENTITY_ID).getFirst();
         assertEquals(ENTITY_ID_VAL, eid);
 
-        String spec = markupInfo.get(AUTHOROFFSETS).get(SPECIFICITY);
+        String spec = markupInfo.get(POSTOFFSETS).attributes.get(SPECIFICITY).getFirst();
         assertEquals(SPECIFICITY_VAL, spec);
 
-        assertEquals(QUOTE, markupInfo.get(QUOTEOFFSETS).get(SPAN_INFO));
+        assertEquals(QUOTE, markupInfo.get(QUOTEOFFSETS).label);
         String quoteStr = origXml.substring(QUOTEOFFSETS.getFirst(), QUOTEOFFSETS.getSecond());
         assertEquals(QUOTE_VAL, quoteStr);
 

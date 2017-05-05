@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
@@ -20,6 +21,7 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.fail;
@@ -126,13 +128,13 @@ public class XmlTextAnnotationMakerTest {
             System.out.println("------\nsource: " + st.getOrigText().substring(sourceSpan.getFirst(), sourceSpan.getSecond()) +
                 ", (" + sourceSpan.getFirst() + ", " + sourceSpan.getSecond() + ")\n");
         }
-        Map<IntPair, Map<String, String>> atts = output.getXmlMarkup();
-
-        for (IntPair offsets : atts.keySet()) {
+        List<XmlDocumentProcessor.SpanInfo> markup = output.getXmlMarkup();
+        Map<IntPair, XmlDocumentProcessor.SpanInfo> markupMap = XmlDocumentProcessor.compileOffsetSpanMapping(markup);
+        for (IntPair offsets : markupMap.keySet()) {
             System.out.print(offsets.getFirst() + "-" + offsets.getSecond() + ": ");
-            Map<String, String> attVals = atts.get(offsets);
+            Map<String, Pair<String, IntPair>> attVals = markupMap.get(offsets).attributes;
             for (String attType : attVals.keySet())
-                System.out.println(attType + ": " + attVals.get(attType));
+                System.out.println(attType + ": " + attVals.get(attType).getFirst());
             System.out.println();
         }
 

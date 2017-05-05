@@ -17,6 +17,7 @@ import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -71,7 +72,7 @@ public class XmlTextAnnotationMaker {
     public XmlTextAnnotation createTextAnnotation(String xmlText, String corpusId, String docId)  {
 
         logger.info("processing text from document {}", docId);
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanResults =
+        Pair<StringTransformation, List<XmlDocumentProcessor.SpanInfo>> cleanResults =
                 xmlProcessor.processXml(xmlText);
 
         TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId,

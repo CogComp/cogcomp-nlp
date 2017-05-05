@@ -8,12 +8,13 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotationFixer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
@@ -74,6 +75,8 @@ public class ERENerReader extends EREDocumentReader {
     private boolean allowSubwordOffsets;
     private Map<String, Constituent> mentionIdToConstituent;
     private Map<String, Set<String>> entityIdToMentionIds;
+    /** tracks anything in source xml markup that could be annotated */
+    private Map<IntPair, XmlDocumentProcessor.SpanInfo> offsetToSpanInfo;
     private int numEntitiesInSource;
     private int numEntitiesGenerated;
     private int numXmlMarkupEntitiesGenerated;
@@ -158,6 +161,12 @@ public class ERENerReader extends EREDocumentReader {
         entityIdToMentionIds.clear();
 
         XmlTextAnnotation sourceTa = super.getAnnotationsFromFile(corpusFileListEntry).get(0);
+
+        if (null != this.offsetToSpanInfo)
+            this.offsetToSpanInfo.clear();
+        this.offsetToSpanInfo =
+                XmlDocumentProcessor.compileOffsetSpanMapping(sourceTa.getXmlMarkup());
+
         TextAnnotation ta = sourceTa.getTextAnnotation();
         SpanLabelView tokens = (SpanLabelView) ta.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
@@ -196,6 +205,11 @@ public class ERENerReader extends EREDocumentReader {
         CoreferenceView cView = new CoreferenceView(getCorefViewName(), ta);
         for (String eId : entityIdToMentionIds.keySet()) {
             Set<String> mentionIds = entityIdToMentionIds.get(eId);
+            if (mentionIds.isEmpty()) {
+                logger.error("No mention ids found for entity id '" + eId + "'.");
+                continue;
+            }
+
             Constituent canonical = null;
             List<Constituent> otherMents = new LinkedList<>();
             for (String mId : mentionIds) {
@@ -232,7 +246,6 @@ public class ERENerReader extends EREDocumentReader {
 
     /**
      * WARNING: filler can have null value.
-     * 
      * @param fillerNode
      * @param view
      */
@@ -265,7 +278,7 @@ public class ERENerReader extends EREDocumentReader {
 
                 // look in markup...
 
-                boolean isFillerFound = recordNullMentionInfo(fillerId, fillerId, "FILLER", fillerNode, xmlTa, true);
+                boolean isFillerFound = recordNullMentionInfo(fillerId, fillerId, "FILLER", fillerNode, true);
 
                 if (!isFillerFound)
                     logger.warn("ERROR: could not find text/xml markup corresponding to filler." +
@@ -441,23 +454,27 @@ public class ERENerReader extends EREDocumentReader {
         boolean isEntityFound = false;
         for (int i = 0; i < nl.getLength(); ++i) {
             Node mentionNode = nl.item(i);
+            Set<String> mentionIds = entityIdToMentionIds.get(eId);
+            if (null == mentionIds) {
+                mentionIds = new HashSet<>();
+                entityIdToMentionIds.put(eId, mentionIds);
+            }
             Constituent mentionConstituent = getMention(mentionNode, label, view, xmlTa);
             if (null == mentionConstituent) { // mention may reference xml markup
-                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa, false) || isEntityFound;
+                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, false) || isEntityFound;
             }
             else {
+                String mentionId = mentionConstituent.getAttribute(EntityMentionIdAttribute);
+//                if (mentionIds.contains(mentionId))
+//                    continue;
+
                 mentionConstituent.addAttribute(EntityIdAttribute, eId);
                 mentionConstituent.addAttribute(EntitySpecificityAttribute, specificity);
                 view.addConstituent(mentionConstituent);
                 isMentionAdded = true;
                 numMentionsGenerated++;
 
-                Set<String> mentionIds = entityIdToMentionIds.get(eId);
-                if (null == mentionIds) {
-                    mentionIds = new HashSet<>();
-                    entityIdToMentionIds.put(eId, mentionIds);
-                }
-                mentionIds.add(mentionConstituent.getAttribute(EntityMentionIdAttribute));
+                mentionIds.add(mentionId);
             }
         }
         if (isMentionAdded || isEntityFound)
@@ -467,14 +484,15 @@ public class ERENerReader extends EREDocumentReader {
     /**
      * for a mention that could not be mapped to a set of tokens in the cleaned text, record the information
      *    to allow use of information by downstream systems in the XmlTextAnnotation object associated with the
-     *    source xml.
-     * @param label
-     * @param eId
-     * @param specificity
-     * @param mentionNode
-     * @param xmlTa
+     *    source xml.  This means finding the original span that contains the mention (expected to be an attribute)
+     *    and updating its attributes with additional mention information.
+     * @param label label for entity
+     * @param eId entity id
+     * @param specificity entity specificity
+     * @param mentionNode mention markup
      */
-    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa, boolean isFiller) throws XMLException {
+    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode,
+                                          boolean isFiller) throws XMLException {
 
         NamedNodeMap nnMap = mentionNode.getAttributes();
         String mId = nnMap.getNamedItem(ID).getNodeValue();
@@ -504,32 +522,25 @@ public class ERENerReader extends EREDocumentReader {
 
         IntPair origOffsets = new IntPair(offset, offset + length);
 
-        Map<IntPair, Map<String, String>> spanInfo = xmlTa.getXmlMarkup();
 
-        boolean isFound = spanInfo.containsKey(origOffsets);
+//        boolean isFound = spanInfo.containsKey(origOffsets);
 
-        if (!isFound)
-            logger.warn("could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
-                ") in xml markup info " + "in XmlTextAnnotation. Entity id, label, form are: " + eId + "," + label +
-                "," + mentionForm + ". Trying shifted indexes.");
+        XmlDocumentProcessor.SpanInfo mentionInfo = findAndUpdateMentionInfo(origOffsets, nounType, label, eId, mId, specificity);
 
-        Map<String, String> mentionInfo = findMentionInfo(spanInfo, origOffsets);
+        boolean isFound = true;
 
-        isFound = true;
-        if (mentionInfo.isEmpty()) {
+        if (null == mentionInfo) {
             isFound = false;
             logger.warn("even with shifted indexes, could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
-                    ") in xml markup info " + "in XmlTextAnnotation.");
+                    ") in xml markup info " + "in XmlTextAnnotation. Entity id, mention id, label, form are: " + eId +
+                    "," + mId + ", " + label + "," + mentionForm + ".");
         }
         if (isFound)
             numXmlMarkupMentionsGenerated++; // ...and so excluded from cleaned-up text.
 
-        spanInfo.put(origOffsets, mentionInfo);
-        mentionInfo.put(ENTITY_ID, eId);
-        mentionInfo.put(ENTITY_MENTION_ID, mId);
-        mentionInfo.put(SPECIFICITY, specificity);
-        mentionInfo.put(NOUN_TYPE, nounType);
-        mentionInfo.put(IS_FOUND, Boolean.toString(isFound));
+        if (!isFound)
+            logger.warn("could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
+                    ") in xml markup info " + "in XmlTextAnnotation.  Trying shifted indexes.");
 
         return isFound;
     }
@@ -538,19 +549,27 @@ public class ERENerReader extends EREDocumentReader {
      * mention length should be the same, but in at least one file many offsets are shifted by +1
      * allow also -1 shift
      */
-    private Map<String, String> findMentionInfo(Map<IntPair, Map<String, String>> spanInfo, IntPair origOffsets) {
+    private XmlDocumentProcessor.SpanInfo findAndUpdateMentionInfo(IntPair origOffsets, String nounType, String label,
+                                                                   String eId, String mId, String specificity) {
 
-        Map<String, String> mentionInfo = spanInfo.get(origOffsets);
-
-        if (null == mentionInfo)
-            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() - 1, origOffsets.getSecond() - 1));
+        XmlDocumentProcessor.SpanInfo mentionInfo = offsetToSpanInfo.get(origOffsets);
 
         if (null == mentionInfo)
-            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() + 1, origOffsets.getSecond() + 1));
+            mentionInfo = offsetToSpanInfo.get(new IntPair(origOffsets.getFirst() - 1, origOffsets.getSecond() - 1));
 
-        if (null == mentionInfo) {
-            mentionInfo = new HashMap<>();
-            spanInfo.put(origOffsets, mentionInfo);
+        if (null == mentionInfo)
+            mentionInfo = offsetToSpanInfo .get(new IntPair(origOffsets.getFirst() + 1, origOffsets.getSecond() + 1));
+
+        if (null != mentionInfo) {
+
+            mentionInfo.attributes.put(ENTITY_ID, new Pair(eId, origOffsets));
+            mentionInfo.attributes.put(ENTITY_MENTION_ID, new Pair(mId, origOffsets));
+            mentionInfo.attributes.put(SPECIFICITY, new Pair(specificity, origOffsets));
+            mentionInfo.attributes.put(NOUN_TYPE, new Pair(nounType, origOffsets));
+            mentionInfo.attributes.put(IS_FOUND, new Pair(Boolean.toString(null != mentionInfo), origOffsets));
+
+            if (null != label)
+                mentionInfo.attributes.put(TYPE, new Pair(label, origOffsets));
         }
 
         return mentionInfo;
@@ -655,7 +674,6 @@ public class ERENerReader extends EREDocumentReader {
         return new IntPair(startChar, endChar);
     }
 
-// TODO: need to handle poster names, which are no longer kept in the cleaned text
 
     /**
      * find the token offsets in the TextAnnotation that correspond to the source character offsets for the given
