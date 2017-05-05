@@ -98,10 +98,10 @@ public class EREMentionRelationReader extends ERENerReader {
         XmlTextAnnotation xmlTa = super.getAnnotationsFromFile(corpusFileListEntry).get(0);
         TextAnnotation sourceTa = xmlTa.getTextAnnotation();
         // SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
-        View mentionView = sourceTa.getView(getNerViewName());
+        View mentionView = sourceTa.getView(getMentionViewName());
 
         if (null == mentionView)
-            throw new IllegalStateException("View '" + getNerViewName() + "' (mention view) not found.");
+            throw new IllegalStateException("View '" + getMentionViewName() + "' (mention view) not found.");
 
         // now pull all mentions we deal with
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
@@ -116,7 +116,7 @@ public class EREMentionRelationReader extends ERENerReader {
              */
             getRelationsFromFile(doc, mentionView);
         }
-        sourceTa.addView(getNerViewName(), mentionView);
+        sourceTa.addView(getMentionViewName(), mentionView);
 
         return Collections.singletonList(xmlTa);
     }
@@ -225,7 +225,7 @@ public class EREMentionRelationReader extends ERENerReader {
     }
 
     @Override
-    public String getNerViewName() {
+    public String getMentionViewName() {
         return ViewNames.MENTION_ERE;
     }
 

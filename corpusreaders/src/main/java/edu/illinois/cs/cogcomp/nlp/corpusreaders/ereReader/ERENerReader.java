@@ -54,7 +54,7 @@ public class ERENerReader extends EREDocumentReader {
     private static final String NAME = EREDocumentReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(ERENerReader.class);
     private final boolean addNominalMentions;
-    private final String nerViewName;
+    private final String mentionViewName;
     private final String corefViewName;
     private final boolean addFillers;
 
@@ -124,7 +124,7 @@ public class ERENerReader extends EREDocumentReader {
          * titles
          */
         this.addFillers = addFillers;
-        this.nerViewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
+        this.mentionViewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
         this.corefViewName = ViewNames.COREF_ERE;
 
         allowOffsetSlack = true;
@@ -170,7 +170,7 @@ public class ERENerReader extends EREDocumentReader {
         TextAnnotation ta = sourceTa.getTextAnnotation();
         SpanLabelView tokens = (SpanLabelView) ta.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView(getNerViewName(), NAME, ta, 1.0, false);
+        SpanLabelView nerView = new SpanLabelView(getMentionViewName(), NAME, ta, 1.0, false);
 
         // now pull all mentions we deal with. Start from file list index 1, as index 0 was source
         // text
@@ -182,7 +182,7 @@ public class ERENerReader extends EREDocumentReader {
                 getFillersFromFile(doc, nerView, sourceTa);
         }
 
-        sourceTa.getTextAnnotation().addView(getNerViewName(), nerView);
+        sourceTa.getTextAnnotation().addView(getMentionViewName(), nerView);
 
         if (addNominalMentions) {
             addCorefView(sourceTa);
@@ -753,8 +753,8 @@ public class ERENerReader extends EREDocumentReader {
         return returnOffset;
     }
 
-    public String getNerViewName() {
-        return nerViewName;
+    public String getMentionViewName() {
+        return mentionViewName;
     }
 
 

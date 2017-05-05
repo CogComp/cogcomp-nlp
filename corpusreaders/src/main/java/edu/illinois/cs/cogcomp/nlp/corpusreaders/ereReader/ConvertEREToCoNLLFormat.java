@@ -63,7 +63,7 @@ public class ConvertEREToCoNLLFormat {
         while (reader.hasNext()) {
             XmlTextAnnotation xmlTa = reader.next();
             TextAnnotation ta = xmlTa.getTextAnnotation();
-            View nerView = ta.getView(reader.getNerViewName());
+            View nerView = ta.getView(reader.getMentionViewName());
             CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta,
                     conllDir + "/" + ta.getCorpusId() + ".txt");
         }
