@@ -63,7 +63,7 @@ public class EREDocumentReader extends XmlDocumentReader {
      */
     public static final String QUOTE = "quote";
     public static final String AUTHOR = "author";
-    public static final String ID = "id";;
+    public static final String ID = "id";
     public static final String DATETIME = "datetime";
     public static final String POST = "post";
     public static final String DOC = "doc";

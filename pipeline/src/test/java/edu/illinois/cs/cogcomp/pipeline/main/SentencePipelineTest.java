@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -20,6 +21,7 @@ import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,6 +34,7 @@ import static org.junit.Assert.fail;
  */
 public class SentencePipelineTest {
 
+    private static final java.lang.String POS_FILE = "src/test/resources/pipelinePosText.txt";
     private static BasicAnnotatorService sentenceProcessor;
     private static BasicAnnotatorService normalProcessor;
 
@@ -111,5 +114,31 @@ public class SentencePipelineTest {
         List<Constituent> normalPos = normalTa.getView(ViewNames.POS).getConstituents();
         for (int i = 0; i < sentPos.size(); ++i)
             assertEquals(normalPos.get(i), sentPos.get(i));
+    }
+
+    @Test
+    public void testFailingPosFile() {
+        String text = null;
+        try {
+            text = LineIO.slurp(POS_FILE);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        TextAnnotation ta = null;
+        try {
+            ta = sentenceProcessor.createAnnotatedTextAnnotation("testPos", "tesPos", text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+
+        Constituent s = ta.getView(ViewNames.SENTENCE).getConstituents().get(3);
+        List<Constituent> posConstituentsInThirdSent =
+                ta.getView(ViewNames.POS).getConstituentsOverlappingCharSpan(s.getStartCharOffset(), s.getEndCharOffset());
+        List<Constituent> toksInThirdSent = ta.getView(ViewNames.TOKENS).getConstituentsOverlappingCharSpan(s.getStartCharOffset(), s.getEndCharOffset());
+        assertTrue(posConstituentsInThirdSent.size() > 0);
+        assertEquals(toksInThirdSent.size(), posConstituentsInThirdSent.size());
     }
 }
