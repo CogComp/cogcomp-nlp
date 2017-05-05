@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.mrcs;
 
 import static org.junit.Assert.assertTrue;
@@ -20,12 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-public class LlmComparatorTest
-{
-//    private final static String CONFIG = "llmTestConfig.txt";
-    
-    private static LlmStringComparator llm;
-    
+public class LlmComparatorTest {
+	// private final static String CONFIG = "llmTestConfig.txt";
+
+	private static LlmStringComparator llm;
+
 	private final String text = "The world's largest cruise ship cleared a crucial obstacle Sunday, lowering its smokestacks to "
 			+ "squeeze under a bridge in Denmark. The Oasis of the Seas -- which rises about 20 stories high -- passed below the Great "
 			+ "Belt Fixed Link with a slim margin as it left the Baltic Sea on its maiden voyage to Florida. Bridge operators said that "
@@ -52,131 +58,119 @@ public class LlmComparatorTest
 			+ "less visible, obstacles to duck: a sagging U.S. economy, questions about the consumer appetite for luxury cruises and criticism "
 			+ "that such sailing behemoths are damaging to the environment and diminish the experience of traveling. It is due to make its U.S. "
 			+ "debut on Nov. 20 at its home port, Port Everglades in Florida.";
-	//private final String hyp = "Toivo Ilvonen is the president of STX Finland .";
+	// private final String hyp = "Toivo Ilvonen is the president of STX Finland
+	// .";
 	private final String hyp = "weapons of mass destruction head towards Congo";
-	private final double expectedSimpleScoreNoStopwords = 0.1; // not using WNSim
-	private final double expectedSimpleScoreWithStopwords = 0.2; // not using WNSim
-    
-    private static boolean isSetup = false;
-    
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception
-    {
-   		llm = new LlmStringComparator( );
-    }
+	private final double expectedSimpleScoreNoStopwords = 0.1; // not using
+																// WNSim
+	private final double expectedSimpleScoreWithStopwords = 0.2; // not using
+																	// WNSim
 
-    @After
-    public void tearDown() throws Exception
-    {
-    }
+	private static boolean isSetup = false;
 
-    @Test
-    public void testCompareStrings()
-    {
-        double score = 0.0;
-        try
-        {
-            score = llm.compareStrings( text, hyp );
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
-        System.out.println( "score is: " + score );
-        
-        assertTrue( ( Math.abs( score - this.expectedSimpleScoreWithStopwords ) ) > 0.0 );
-    }
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		llm = new LlmStringComparator();
+	}
 
+	@After
+	public void tearDown() throws Exception {
+	}
 
-    @Test
-    public void testParagramLlm()
-    {
-        Properties props = new Properties();
-        props.setProperty( SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet );
-        try {
-            llm = new LlmStringComparator( new ResourceManager( props ) );
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
+	@Test
+	public void testCompareStrings() {
+		double score = 0.0;
+		try {
+			score = llm.compareStrings_(text, hyp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("score is: " + score);
 
-        double score = 0.0;
-        try
-        {
-            score = llm.compareStrings( text, hyp );
-        }
-        catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
-        System.out.println( "score is: " + score );
+		assertTrue((Math.abs(score - this.expectedSimpleScoreWithStopwords)) > 0.0);
+	}
 
-        assertTrue( ( Math.abs( score - this.expectedSimpleScoreWithStopwords ) ) > 0.0 );
-    }
+	@Test
+	public void testParagramLlm() {
+		Properties props = new Properties();
+		props.setProperty(SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet);
+		try {
+			llm = new LlmStringComparator(new ResourceManager(props));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 
+		double score = 0.0;
+		try {
+			score = llm.compareStrings_(text, hyp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("score is: " + score);
 
+		assertTrue((Math.abs(score - this.expectedSimpleScoreWithStopwords)) > 0.0);
+	}
 
-    @Test
-    public void testRemoveStopwords()
-    {
-        WordListFilter filter = null;
-        try {
-            filter = new WordListFilter( new SimConfigurator().getDefaultConfig() );
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail( e.getMessage() );
-        }
+	@Test
+	public void testRemoveStopwords() {
+		WordListFilter filter = null;
+		try {
+			filter = new WordListFilter(new SimConfigurator().getDefaultConfig());
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 
-        String sent = "This sentence is filled with unnecessary filler like their pronouns , punctuation and function " +
-                "words such as for , by , from , him , her , and to .";
+		String sent = "This sentence is filled with unnecessary filler like their pronouns , punctuation and function "
+				+ "words such as for , by , from , him , her , and to .";
 
-        String[] tokens = sent.split( "\\s+" );
-        String[] filteredTokens = filter.filter(tokens );
+		String[] tokens = sent.split("\\s+");
+		String[] filteredTokens = filter.filter(tokens);
 
-        int numSkipped = 0;
-        List< String > filteredToks = new LinkedList<>();
+		int numSkipped = 0;
+		List<String> filteredToks = new LinkedList<>();
 
-        for ( int i = 0; i < tokens.length; ++i ) {
-            String tok = filteredTokens[i];
+		for (int i = 0; i < tokens.length; ++i) {
+			String tok = filteredTokens[i];
 
-            if (null == tok) {
-                numSkipped++;
-                filteredToks.add(tokens[i]);
-            }
-        }
-        assert( numSkipped > 0 );
-        assert( filteredToks.contains( "is" ) );
+			if (null == tok) {
+				numSkipped++;
+				filteredToks.add(tokens[i]);
+			}
+		}
+		assert (numSkipped > 0);
+		assert (filteredToks.contains("is"));
 
-        System.out.println( "Original text: " + sent );
-        System.out.println( "Filtered tokens: " );
-        System.out.println( StringUtils.join( filteredToks, "; " ) );
+		System.out.println("Original text: " + sent);
+		System.out.println("Filtered tokens: ");
+		System.out.println(StringUtils.join(filteredToks, "; "));
 
-    }
+	}
 
-
-//    @Test
-//    public void testAlignStringArrays()
-//    {
-//        assertTrue( true );
-//    }
-//
-//    @Test
-//    public void testScoreAlignment()
-//    {
-//        assertTrue( true );
-//    }
-//
-//    @Test
-//    public void testCompareStringArrays()
-//    {
-//        assertTrue( true );
-//    }
-//
-//    @Test
-//    public void testCompareTokens()
-//    {
-//        assertTrue( true );
-//    }
-//
+	// @Test
+	// public void testAlignStringArrays()
+	// {
+	// assertTrue( true );
+	// }
+	//
+	// @Test
+	// public void testScoreAlignment()
+	// {
+	// assertTrue( true );
+	// }
+	//
+	// @Test
+	// public void testCompareStringArrays()
+	// {
+	// assertTrue( true );
+	// }
+	//
+	// @Test
+	// public void testCompareTokens()
+	// {
+	// assertTrue( true );
+	// }
+	//
 
 }

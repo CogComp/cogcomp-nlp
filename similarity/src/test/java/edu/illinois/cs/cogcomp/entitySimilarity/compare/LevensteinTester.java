@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.entitySimilarity.compare;
 
 import java.io.BufferedReader;
@@ -13,21 +20,20 @@ import edu.illinois.cs.cogcomp.nesim.utils.*;
  */
 
 public class LevensteinTester {
-	
-//	private static long time = 0;
+
+	// private static long time = 0;
 	private static DameraoLevenstein leven = new DameraoLevenstein();
-	
-	public static void main (String[] args) {
+
+	public static void main(String[] args) {
 		String queryFile = "test/NESimData.txt";
 		String outputFile = "test/NESimData_levensteinOutput.txt";
 		doComparison(queryFile, outputFile);
-//		for (int i = 0; i < 100; i++) {
-//			doComparison(queryFile, outputFile);
-//		}
-//		System.out.println(time/100.0);
+		// for (int i = 0; i < 100; i++) {
+		// doComparison(queryFile, outputFile);
+		// }
+		// System.out.println(time/100.0);
 	}
-	
-	
+
 	private static void doComparison(String queryFile, String outputFile) {
 		long startTime = System.currentTimeMillis();
 		try {
@@ -35,13 +41,18 @@ public class LevensteinTester {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			PrintWriter outputWriter = new PrintWriter(outputFile);
 			String strLine;
-			int totalRight = 0, total = 0; // gives total cases correctly identified
-			int positiveCases = 0, negativeCases = 0; // count total number of positive and negative tests
-			int positiveRight = 0, negativeRight = 0; // cases correctly identified of each (+/-)
+			int totalRight = 0, total = 0; // gives total cases correctly
+											// identified
+			int positiveCases = 0, negativeCases = 0; // count total number of
+														// positive and negative
+														// tests
+			int positiveRight = 0, negativeRight = 0; // cases correctly
+														// identified of each
+														// (+/-)
 			while ((strLine = reader.readLine()) != null) {
 				total++;
-				String [] itemList = strLine.split("\\t+");
-				String [] tokens = itemList[2].split("----", 2);
+				String[] itemList = strLine.split("\\t+");
+				String[] tokens = itemList[2].split("----", 2);
 				int similar = Integer.parseInt(itemList[0]);
 				if (similar == 1)
 					positiveCases++;
@@ -53,7 +64,7 @@ public class LevensteinTester {
 				String str1;
 				str1 = String.format("%.4f", f1);
 				outputWriter.println(str1);
-				if (f1 >= 0.5f && similar == 1){ // total positive right
+				if (f1 >= 0.5f && similar == 1) { // total positive right
 					totalRight++;
 					positiveRight++;
 				} else if (f1 < 0.5f && similar == 0) { // total negative right
@@ -72,6 +83,6 @@ public class LevensteinTester {
 		}
 		System.out.println("done");
 		System.out.println(System.currentTimeMillis() - startTime);
-//		time += System.currentTimeMillis() - startTime;
+		// time += System.currentTimeMillis() - startTime;
 	}
 }

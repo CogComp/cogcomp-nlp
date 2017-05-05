@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nesim.data;
 
 import java.io.BufferedReader;
@@ -8,21 +15,22 @@ import java.util.Set;
 import edu.illinois.cs.cogcomp.nesim.io.MappingReader;
 
 public class LocationManager {
-	
+
 	Set<String> setValidLocation = new HashSet<String>();
 	Set<String> setValidLocation2 = new HashSet<String>();
-	
+
 	/**
-	 * Constructor to initialize a LocationManager object, which is used to determine if
-	 * a string or a pair of strings should be assigned type LOC.
+	 * Constructor to initialize a LocationManager object, which is used to
+	 * determine if a string or a pair of strings should be assigned type LOC.
 	 * 
-	 * @param fileName	File name to obtain list of location strings
+	 * @param fileName
+	 *            File name to obtain list of location strings
 	 * @throws IOException
 	 */
 	public LocationManager(String fileName) throws IOException {
-		BufferedReader reader = MappingReader.getReader( fileName );
+		BufferedReader reader = MappingReader.getReader(fileName);
 		String line = null;
-		
+
 		while ((line = reader.readLine()) != null) {
 			line = line.toLowerCase();
 			String tokens[] = line.split("\\s+");
@@ -33,12 +41,15 @@ public class LocationManager {
 		}
 		reader.close();
 	}
-	
+
 	/**
-	 * Returns true if the string parameter is a location and will be assigned type LOC in EntityComparison.
+	 * Returns true if the string parameter is a location and will be assigned
+	 * type LOC in EntityComparison.
 	 * 
-	 * @param token	One of the entire strings to be compared
-	 * @return	A boolean value (true/false) determining whether the string should be scored as type LOC
+	 * @param token
+	 *            One of the entire strings to be compared
+	 * @return A boolean value (true/false) determining whether the string
+	 *         should be scored as type LOC
 	 */
 	public boolean isValidLocation(String token) {
 		HashSet<String> keyWords = new HashSet<String>();
@@ -49,7 +60,7 @@ public class LocationManager {
 		keyWords.add("isle");
 		keyWords.add("republic");
 		int keyWordIndex = -1;
-		String [] tokens = token.split("\\s+");
+		String[] tokens = token.split("\\s+");
 		for (int i = 0; i < tokens.length; i++) {
 			if (keyWords.contains(tokens[i])) {
 				keyWordIndex = i;
@@ -62,7 +73,7 @@ public class LocationManager {
 			for (String word : tokens) {
 				if (setValidLocation.contains(word) || setValidLocation2.contains(word))
 					return true;
-				
+
 			}
 			return false;
 		}

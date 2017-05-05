@@ -1,20 +1,66 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.sim;
 
 import java.io.IOException;
 
+import edu.illinois.cs.cogcomp.config.SimConfigurator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.llm.common.PhraseList;
+import edu.illinois.cs.cogcomp.llm.common.Preprocess;
 import edu.illinois.cs.cogcomp.llm.comparators.LlmStringComparator;
 
-public class LLMStringSim implements Metric<String>{
-	private  LlmStringComparator llm;
+/**
+ * 
+ * Lexical Level Matching Metric
+ * @author shaoshi
+ *
+ */
+public class LLMStringSim implements Metric<String> {
+	private LlmStringComparator llm;
+	ResourceManager rm_;
+	Preprocess preprocess;
 	private static final String config = "config/LlmConfig.txt";
+	PhraseList list;
+
+	public LLMStringSim() {
+		try {
+
+			rm_ = new ResourceManager(config);
+			llm = new LlmStringComparator(rm_);
+		} catch (IllegalArgumentException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
+		list = new PhraseList(fullRm.getString(SimConfigurator.PHRASE_DICT.key));
+	}
+
 	@Override
 	public MetricResponse compare(String arg1, String arg2) throws IllegalArgumentException {
 		String reason = "";
 		try {
-			llm = new LlmStringComparator( new ResourceManager( config ) );
-			double score = llm.compareStrings( arg1, arg2 );
-			return new MetricResponse(score,  reason);
+			ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
+			double score;
+			if (fullRm.getBoolean(SimConfigurator.USE_PHRASE_COMPARISON.key)) {
+
+				arg1 = preprocess.getPhrase(arg1, list);
+				arg2 = preprocess.getPhrase(arg2, list);
+			}
+			if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
+				TextAnnotation ta1 = preprocess.runNER(arg1);
+				TextAnnotation ta2 = preprocess.runNER(arg2);
+				score = llm.compareStrings(ta1, ta2);
+			} else
+				score = llm.compareStrings_(arg1, arg2);
+			return new MetricResponse(score, reason);
 		} catch (Exception e) {
 
 		}

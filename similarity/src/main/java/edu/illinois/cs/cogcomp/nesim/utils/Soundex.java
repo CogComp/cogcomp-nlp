@@ -1,26 +1,33 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nesim.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/** 
+/**
  * Soundex algorithm for phonetic correction.
  */
 public class Soundex {
-	
+
 	private String ERROR = "A000";
-	
+
 	Soundex() {
 	}
 
 	/**
-	 * Returns the soundex code of @str.
-	 * For details about the soundex algorithm and its utility, read:
-	 * 			{1} http://en.wikipedia.org/wiki/Soundex
-	 * 			{2} http://nlp.stanford.edu/IR-book/html/htmledition/phonetic-correction-1.html
-	 * This function handles all kinds of bad inputs i.e. strings with special characters.
-	 * It treats all special characters as vowels. Modify this appropriately if you don't want that.
-	 * Returns ERROR in case of empty strings (or strings with just spaces).
+	 * Returns the soundex code of @str. For details about the soundex algorithm
+	 * and its utility, read: {1} http://en.wikipedia.org/wiki/Soundex {2}
+	 * http://nlp.stanford.edu/IR-book/html/htmledition/phonetic-correction-1.html
+	 * This function handles all kinds of bad inputs i.e. strings with special
+	 * characters. It treats all special characters as vowels. Modify this
+	 * appropriately if you don't want that. Returns ERROR in case of empty
+	 * strings (or strings with just spaces).
 	 */
 	public String getCode(String str) {
 		try {
@@ -37,13 +44,10 @@ public class Soundex {
 			int size = str.length();
 			int arr[] = new int[size];
 			for (int i = 0; i < size; i++) {
-				if (str.charAt(i) == 'B' || str.charAt(i) == 'F' ||
-						 str.charAt(i) == 'P' || str.charAt(i) == 'V')
+				if (str.charAt(i) == 'B' || str.charAt(i) == 'F' || str.charAt(i) == 'P' || str.charAt(i) == 'V')
 					arr[i] = 1;
-				else if (str.charAt(i) == 'C' || str.charAt(i) == 'G' ||
-						 str.charAt(i) == 'J' || str.charAt(i) == 'K' ||
-						 str.charAt(i) == 'Q' || str.charAt(i) == 'S' ||
-						 str.charAt(i) == 'X' || str.charAt(i) == 'Z')
+				else if (str.charAt(i) == 'C' || str.charAt(i) == 'G' || str.charAt(i) == 'J' || str.charAt(i) == 'K'
+						|| str.charAt(i) == 'Q' || str.charAt(i) == 'S' || str.charAt(i) == 'X' || str.charAt(i) == 'Z')
 					arr[i] = 2;
 				else if (str.charAt(i) == 'D' || str.charAt(i) == 'T')
 					arr[i] = 3;
@@ -64,7 +68,7 @@ public class Soundex {
 					if (arr[i] != curr) {
 						curr = arr[i];
 						if (curr > 0)
-							code.append((char)('0'+curr));
+							code.append((char) ('0' + curr));
 					}
 					i++;
 				}
@@ -72,13 +76,12 @@ public class Soundex {
 			while (code.length() < 4)
 				code.append('0');
 			return code.toString().substring(0, 4);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ERROR;
 		}
 	}
-	
+
 	private void play() {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
@@ -92,18 +95,16 @@ public class Soundex {
 				String code = getCode(line);
 				System.out.println(code);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			Soundex sound = new Soundex();
 			sound.play();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

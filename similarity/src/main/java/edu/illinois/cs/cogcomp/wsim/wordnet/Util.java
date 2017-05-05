@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 import java.io.BufferedReader;
@@ -14,9 +21,9 @@ public class Util {
 		try {
 			reader = openReader(fileName);
 		} catch (IOException e1) {
-			System.out.println("Couldn't read file "+fileName);
+			System.out.println("Couldn't read file " + fileName);
 			return null;
-			//e1.printStackTrace();
+			// e1.printStackTrace();
 		}
 		String line;
 		ArrayList<String> content = new ArrayList<String>();
@@ -37,21 +44,20 @@ public class Util {
 	public static BufferedReader openReader(String fname) throws IOException {
 		BufferedReader reader;
 
-
-		InputStream is = ClassLoader.getSystemResourceAsStream( fname );
+		InputStream is = ClassLoader.getSystemResourceAsStream(fname);
 
 		if (is == null) {
 			// try with a leading slash
-			is = ClassLoader.getSystemResourceAsStream("/" + fname );
+			is = ClassLoader.getSystemResourceAsStream("/" + fname);
 
 			if (is == null)
 				is = new FileInputStream(fname);
 
 		}
 
-		reader = new BufferedReader(new InputStreamReader( is, "UTF-8" ));
+		reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 		return reader;
 
 	}
-	
+
 }

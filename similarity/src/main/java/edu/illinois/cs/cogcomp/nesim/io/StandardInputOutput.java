@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nesim.io;
 
 import java.io.BufferedReader;
@@ -10,29 +17,27 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
-
 public class StandardInputOutput {
-	//====================
+	// ====================
 	public static String[] listDirectory(String dirPath) {
 		try {
 			File dir = new File(dirPath);
 			String[] children = dir.list();
 			return children;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	//====================
+	// ====================
 	public static boolean deleteDirectory(String dirPath) {
 		File dir = new File(dirPath);
-		if (dir.exists() ) {
+		if (dir.exists()) {
 			File[] files = dir.listFiles();
-			for(int i=0; i<files.length; i++) {
-				if(files[i].isDirectory()) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].isDirectory()) {
 					deleteDirectory(files[i].getAbsolutePath());
-				}
-				else {
+				} else {
 					files[i].delete();
 				}
 			}
@@ -40,16 +45,16 @@ public class StandardInputOutput {
 		return (dir.delete());
 	}
 
-	//====================
+	// ====================
 	public static BufferedReader openResourceReader(Class c, String fname) {
-		BufferedReader reader ;
+		BufferedReader reader;
 		try {
-			InputStream istream = c.getResourceAsStream(fname) ;
+			InputStream istream = c.getResourceAsStream(fname);
 			if (istream != null)
-				reader = new BufferedReader( new InputStreamReader( istream, "UTF-8" ) );
+				reader = new BufferedReader(new InputStreamReader(istream, "UTF-8"));
 			else
-				throw new IllegalArgumentException( "ERROR: couldn't find resource " + fname );
-			return reader ;
+				throw new IllegalArgumentException("ERROR: couldn't find resource " + fname);
+			return reader;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -59,18 +64,15 @@ public class StandardInputOutput {
 	public static BufferedReader openReader(String fname) {
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(
-					new InputStreamReader(
-							new FileInputStream(fname),"UTF-8"));
+			reader = new BufferedReader(new InputStreamReader(new FileInputStream(fname), "UTF-8"));
 			return reader;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	//====================
+	// ====================
 	public static boolean closeReader(BufferedReader reader) {
 		try {
 			reader.close();
@@ -81,13 +83,11 @@ public class StandardInputOutput {
 		}
 	}
 
-	//====================
+	// ====================
 	public static BufferedWriter openWriter(String fname) {
 		BufferedWriter writer;
 		try {
-			writer = new BufferedWriter(
-					new OutputStreamWriter(
-							new FileOutputStream(fname),"UTF-8"));
+			writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname), "UTF-8"));
 			return writer;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class StandardInputOutput {
 		}
 	}
 
-	//====================
+	// ====================
 	public static boolean closeWriter(BufferedWriter writer) {
 		try {
 			writer.close();
@@ -106,13 +106,11 @@ public class StandardInputOutput {
 		}
 	}
 
-	//====================
+	// ====================
 	public static BufferedWriter openAppender(String fname) {
 		BufferedWriter appender;
 		try {
-			appender = new BufferedWriter(
-					new OutputStreamWriter(
-							new FileOutputStream(fname,true),"UTF-8"));
+			appender = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fname, true), "UTF-8"));
 			return appender;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,7 +118,7 @@ public class StandardInputOutput {
 		}
 	}
 
-	//====================
+	// ====================
 	public static boolean closeAppender(BufferedWriter appender) {
 		try {
 			appender.close();
@@ -130,8 +128,9 @@ public class StandardInputOutput {
 			return false;
 		}
 	}
-	//====================
-	public static boolean  moveFile(String fileName, String directoryName) {
+
+	// ====================
+	public static boolean moveFile(String fileName, String directoryName) {
 		File file = new File(fileName);
 		File dir = new File(directoryName);
 		File newFile = new File(dir, file.getName());
@@ -140,14 +139,14 @@ public class StandardInputOutput {
 		boolean success = file.renameTo(new File(dir, file.getName()));
 		return success;
 	}
-	
-	//====================
+
+	// ====================
 	public static String readContent(String contentFileName) {
 		BufferedReader reader = openReader(contentFileName);
 		String line;
 		String content = "";
 		try {
-			while ( (line = reader.readLine()) != null) {
+			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				content += line + " ";
 			}
@@ -158,23 +157,23 @@ public class StandardInputOutput {
 			return null;
 		}
 	}
-	
-	//=====================
+
+	// =====================
 	public static void sleepingChild(int numSeconds) {
 		try {
-			Thread.sleep(numSeconds*1000);
+			Thread.sleep(numSeconds * 1000);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}		
+		}
 	}
-	
-	//=====================
+
+	// =====================
 	public static boolean isFileExist(String filePath) {
 		File file = new File(filePath);
 		return file.exists();
 	}
 
-	//=====================
+	// =====================
 	public static boolean deleteFile(String filePath) {
 		boolean success = true;
 		if (isFileExist(filePath)) {
@@ -183,17 +182,14 @@ public class StandardInputOutput {
 		}
 		return success;
 	}
-	
+
 	// =====================
-	public static ArrayList<String> readLines(String fileName)
-	{
+	public static ArrayList<String> readLines(String fileName) {
 		BufferedReader reader = openReader(fileName);
 		String line;
 		ArrayList<String> content = new ArrayList<String>();
-		try
-		{
-			while ((line = reader.readLine()) != null)
-			{
+		try {
+			while ((line = reader.readLine()) != null) {
 				line = line.trim();
 				content.add(line);
 			}
@@ -201,9 +197,7 @@ public class StandardInputOutput {
 			reader.close();
 
 			return content;
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Unable to read from file " + fileName);
 			System.exit(1);

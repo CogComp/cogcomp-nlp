@@ -5,15 +5,15 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.nesim.utils;
+package edu.illinois.cs.cogcomp.llm.common;
 
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+public class PhraseList {
 
-@SuppressWarnings({ "serial", "rawtypes" })
-public class NESimPair<A, B> extends Pair {
+	public PhraseList(String dictionary) {
 
-	@SuppressWarnings("unchecked")
-	public NESimPair(Object obj, Object obj2) {
-		super(obj, obj2);
+	}
+
+	public boolean contains(String phrase) {
+		return true;
 	}
 }

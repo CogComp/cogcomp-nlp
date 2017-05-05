@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.wsim.wordnet;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -19,17 +26,18 @@ import java.util.Map;
  * @author sgupta96
  *
  */
-public class WNSim extends StringMetric< String > {
+public class WNSim extends StringMetric<String> {
 
 	public static final String NAME = WNSim.class.getCanonicalName();
 
-
-
-    private PathFinder pf;
+	private PathFinder pf;
 
 	/**
 	 * Contains sample invocation
-	 * @param args optional: config file containing path to the wordnet resource, as in config/sampleConfig.txt
+	 * 
+	 * @param args
+	 *            optional: config file containing path to the wordnet resource,
+	 *            as in config/sampleConfig.txt
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
@@ -47,8 +55,8 @@ public class WNSim extends StringMetric< String > {
 	}
 
 	/**
-	 * default constructor: expects all resources to be defaults, and will look for
-	 *    them on classpath
+	 * default constructor: expects all resources to be defaults, and will look
+	 * for them on classpath
 	 *
 	 * @throws IOException
 	 */
@@ -59,7 +67,9 @@ public class WNSim extends StringMetric< String > {
 	/**
 	 * Constructor
 	 *
-	 * @param rm ResourceManager containing non-default config options, including path to the local Wordnet resource
+	 * @param rm
+	 *            ResourceManager containing non-default config options,
+	 *            including path to the local Wordnet resource
 	 * @throws IOException
 	 */
 	public WNSim(ResourceManager rm) throws IOException {
@@ -75,8 +85,10 @@ public class WNSim extends StringMetric< String > {
 	/**
 	 * Calculates similarity between word1 and word2
 	 *
-	 * @param firstWord 1st word
-	 * @param secondWord 2nd word
+	 * @param firstWord
+	 *            1st word
+	 * @param secondWord
+	 *            2nd word
 	 * @return similarity score between word1 and word2 plus a "reason"
 	 */
 	public MetricResponse compare(String firstWord, String secondWord) {
@@ -85,42 +97,44 @@ public class WNSim extends StringMetric< String > {
 		return new MetricResponse(score, NAME);
 	}
 
-    /**
-     * returns the name of this metric. Used as the reason by the default {@link #compareStringValues } method.
-     *
-     * @return the name of this metric.
-     */
-    @Override
-    public String getName() {
-        return NAME;
-    }
+	/**
+	 * returns the name of this metric. Used as the reason by the default
+	 * {@link #compareStringValues } method.
+	 *
+	 * @return the name of this metric.
+	 */
+	@Override
+	public String getName() {
+		return NAME;
+	}
 
-    /**
-     * construct a T instance from just a String to allow the {@link #compareStringValues(Map)} to interact
-     * with {@link Metric <T>.compare }
-     *
-     * @param word the word to wrap
-     * @return the corresponding object of type T specified by the implementor
-     */
-    @Override
-    protected String wrapStringArgument(String word) {
-        return word;
-    }
+	/**
+	 * construct a T instance from just a String to allow the
+	 * {@link #compareStringValues(Map)} to interact with {@link Metric
+	 * <T>.compare }
+	 *
+	 * @param word
+	 *            the word to wrap
+	 * @return the corresponding object of type T specified by the implementor
+	 */
+	@Override
+	protected String wrapStringArgument(String word) {
+		return word;
+	}
 
-
-    /**
+	/**
 	 * Calculates similarity between two words, using POS tags if provided.
 	 * Currently ignores POS.
 	 *
-	 * @param arg1 1st word
-	 * @param arg2 2nd word
+	 * @param arg1
+	 *            1st word
+	 * @param arg2
+	 *            2nd word
 	 * @return similarity score between arg1 and arg2 plus a "reason"
 	 * @throws IllegalArgumentException
 	 */
 	public MetricResponse compare(MetricWord arg1, MetricWord arg2) throws IllegalArgumentException {
 		return compare(arg1.word, arg2.word);
 	}
-
-
 
 }

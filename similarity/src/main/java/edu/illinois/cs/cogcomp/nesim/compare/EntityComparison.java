@@ -1,3 +1,10 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nesim.compare;
 
 import edu.illinois.cs.cogcomp.nesim.data.*;
@@ -12,9 +19,9 @@ import java.util.List;
 
 public class EntityComparison {
 	// Constants
-    public static final String SCORE = "SCORE";
-    public static final String REASON = "REASON";
-    public static final String TERMINATION = "_----_";
+	public static final String SCORE = "SCORE";
+	public static final String REASON = "REASON";
+	public static final String TERMINATION = "_----_";
 	public static final float NICKNAMES_THRES = 0.4f;
 	public static final float RATIO_THRES = 0.f;
 	public static final String NICKNAMES_LIST = "nicknames.txt";
@@ -38,10 +45,10 @@ public class EntityComparison {
 	private LocationManager locMan;
 	private OrganizationManager orgMan;
 	private DameraoLevenstein ed = new DameraoLevenstein();
-	
+
 	/**
-	 * No-arg constructor that initializes all helper classes with appropriate files and
-	 * sets the default values for score and reason.
+	 * No-arg constructor that initializes all helper classes with appropriate
+	 * files and sets the default values for score and reason.
 	 * 
 	 * @throws IOException
 	 */
@@ -60,19 +67,22 @@ public class EntityComparison {
 		scoreShingle = 0.0f;
 		reason = "";
 	}
-	
-	
+
 	/**
-	 * Helper function invoked by HashMap<String, String> compare. It maps the score (0-1) to "SCORE"
-	 * and the reason to "REASON". Scoring based on the shingling method is mapped to "SHINGLE," although
-	 * this has been merged to limited extent into the original scoring methods.
+	 * Helper function invoked by HashMap<String, String> compare. It maps the
+	 * score (0-1) to "SCORE" and the reason to "REASON". Scoring based on the
+	 * shingling method is mapped to "SHINGLE," although this has been merged to
+	 * limited extent into the original scoring methods.
 	 * 
-	 * @param name1	First of the two names being compared
-	 * @param name2	Second of the two names being compared
-	 * @return	HashMap<String, String> with corresponding scores and reasons mapped
+	 * @param name1
+	 *            First of the two names being compared
+	 * @param name2
+	 *            Second of the two names being compared
+	 * @return HashMap<String, String> with corresponding scores and reasons
+	 *         mapped
 	 */
 	public HashMap<String, String> compareNames(String name1, String name2) {
-		compare(name1, name2) ;        
+		compare(name1, name2);
 		HashMap<String, String> result = new HashMap<String, String>();
 		result.put("SCORE", Float.toString(score));
 		result.put("SHINGLE", Float.toString(scoreShingle));
@@ -80,26 +90,28 @@ public class EntityComparison {
 		return result;
 	}
 
-		
 	/**
-	 * Primary helper compare function that converts the comparable strings into NameInfo objects. If
-	 * no type if given by the user, the type (LOC/PER/ORG/GEN) is inferred without context and scored
-	 * based on the inferred type. Types that are not GEN and are different are not considered
-	 * comparable and given a score of 0.
+	 * Primary helper compare function that converts the comparable strings into
+	 * NameInfo objects. If no type if given by the user, the type
+	 * (LOC/PER/ORG/GEN) is inferred without context and scored based on the
+	 * inferred type. Types that are not GEN and are different are not
+	 * considered comparable and given a score of 0.
 	 * 
-	 * @param name1	First of the two names being compared
-	 * @param name2	Second of the two names being compared
+	 * @param name1
+	 *            First of the two names being compared
+	 * @param name2
+	 *            Second of the two names being compared
 	 */
 	public void compare(String name1, String name2) {
 		score = 0.0f;
 		reason = "";
-		
+
 		NameInfo name1Info = new NameInfo(name1);
 		NameInfo name2Info = new NameInfo(name2);
-		
+
 		String type1 = name1Info.getType();
 		String type2 = name2Info.getType();
-		
+
 		// If enforced types are different and neither is generic
 		if (!type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE) && !type2.equals(type1)) {
 			score = 0.0f;
@@ -107,21 +119,21 @@ public class EntityComparison {
 			reason = "Types " + type1 + " and " + type2 + " cannot be compared";
 			return;
 		}
-		
+
 		fixType(name1Info, name2Info);
-		
+
 		type1 = name1Info.getType();
 		type2 = name2Info.getType();
-		
+
 		if (!type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE) && !type2.equals(type1)) {
 			score = 0.0f;
 			scoreShingle = 0.0f;
 			reason = "Types " + type1 + " and " + type2 + " cannot be compared";
 			return;
 		}
-		
+
 		int flag = 0;
-		
+
 		if (type1.equals("PER") && type1.equals(type2))
 			flag = 1;
 		else if (type1.equals("LOC") && type1.equals(type2))
@@ -132,37 +144,41 @@ public class EntityComparison {
 			flag = 4;
 		else
 			flag = 5;
-		
+
 		scoring(name1Info, name2Info, flag);
 	}
 
 	/**
-	 * Primary method invoked by the user to initiate comparison of two strings. Invokes
-	 * other helper functions for comparison task.
+	 * Primary method invoked by the user to initiate comparison of two strings.
+	 * Invokes other helper functions for comparison task.
 	 * 
-	 * @param mapNames	HashMap passed in by the wrapper to access the strings
-	 * @return	HashMap<String, String> containing score and reason for the strings being compared
+	 * @param mapNames
+	 *            HashMap passed in by the wrapper to access the strings
+	 * @return HashMap<String, String> containing score and reason for the
+	 *         strings being compared
 	 */
 	public HashMap<String, String> compare(HashMap<String, String> mapNames) {
 		HashMap<String, String> mapResults = compareNames(mapNames.get("FIRST_STRING"), mapNames.get("SECOND_STRING"));
 		return mapResults;
 	}
-	
-	
+
 	/**
-	 * The strings converted to NameInfo objects are assumed to have been not given explicit types
-	 * by the user. This function is responsible for deducing the appropriate type for the strings
-	 * being compared so that the best and most appropriate scoring can be used.
+	 * The strings converted to NameInfo objects are assumed to have been not
+	 * given explicit types by the user. This function is responsible for
+	 * deducing the appropriate type for the strings being compared so that the
+	 * best and most appropriate scoring can be used.
 	 * 
-	 * @param name1Info	NameInfo object containing information on the first string
-	 * @param name2Info	NameInfo object containing information on the second string
+	 * @param name1Info
+	 *            NameInfo object containing information on the first string
+	 * @param name2Info
+	 *            NameInfo object containing information on the second string
 	 */
 	private void fixType(NameInfo name1Info, NameInfo name2Info) {
 		String type1 = name1Info.getType();
 		String type2 = name2Info.getType();
-//		String name1 = name1Info.getName();
-//		String name2 = name2Info.getName();
-		
+		// String name1 = name1Info.getName();
+		// String name2 = name2Info.getName();
+
 		if (!name1Info.isEnforced() && !name2Info.isEnforced()) {
 			fixLoc(name1Info);
 			fixLoc(name2Info);
@@ -184,17 +200,17 @@ public class EntityComparison {
 				name2Info.setType("ORG");
 			}
 		}
-		
+
 		type1 = name1Info.getType();
 		type2 = name2Info.getType();
-		
-		if (!type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE) && !type1.equals(type2)){
+
+		if (!type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE) && !type1.equals(type2)) {
 			scoreShingle = 0.0f;
 			score = 0.0f;
 			reason = "Types " + type1 + " and " + type2 + " cannot be compared";
 			return;
 		}
-		
+
 		if (type1.equals(NameInfo.GENERIC_TYPE) && !type2.equals(NameInfo.GENERIC_TYPE)) {
 			type1 = type2;
 			name1Info.setType(type1);
@@ -203,12 +219,14 @@ public class EntityComparison {
 			name2Info.setType(type2);
 		}
 	}
-	
-	
+
 	/**
-	 * This function checks NameInfo object to determine if the string should be designated as type PER.
+	 * This function checks NameInfo object to determine if the string should be
+	 * designated as type PER.
 	 * 
-	 * @param nameInfo	NameInfo object that requires a type (LOC/ORG/PER) to be assigned
+	 * @param nameInfo
+	 *            NameInfo object that requires a type (LOC/ORG/PER) to be
+	 *            assigned
 	 */
 	private void fixPeople(NameInfo nameInfo) {
 		String type = nameInfo.getType();
@@ -226,13 +244,16 @@ public class EntityComparison {
 				nameInfo.setType("PER");
 		}
 	}
-	
+
 	/**
-	 * This function checks NameInfo object to determine if the string should be designated as type LOC.
+	 * This function checks NameInfo object to determine if the string should be
+	 * designated as type LOC.
 	 * 
-	 * @param nameInfo	NameInfo object that requires a type (LOC/ORG/PER) to be assigned
+	 * @param nameInfo
+	 *            NameInfo object that requires a type (LOC/ORG/PER) to be
+	 *            assigned
 	 */
-	private void fixLoc(NameInfo nameInfo){
+	private void fixLoc(NameInfo nameInfo) {
 		String type = nameInfo.getType();
 		if (type.equals(NameInfo.GENERIC_TYPE)) {
 			String name = nameInfo.getName();
@@ -240,13 +261,16 @@ public class EntityComparison {
 				nameInfo.setType("LOC");
 		}
 	}
-	
+
 	/**
-	 * This function checks NameInfo object to determine if the string should be designated as type ORG.
+	 * This function checks NameInfo object to determine if the string should be
+	 * designated as type ORG.
 	 * 
-	 * @param nameInfo	NameInfo object that requires a type (LOC/ORG/PER) to be assigned
+	 * @param nameInfo
+	 *            NameInfo object that requires a type (LOC/ORG/PER) to be
+	 *            assigned
 	 */
-	private void fixOrg(NameInfo nameInfo){
+	private void fixOrg(NameInfo nameInfo) {
 		String type = nameInfo.getType();
 		if (type.equals(NameInfo.GENERIC_TYPE)) {
 			String name = nameInfo.getName();
@@ -256,15 +280,20 @@ public class EntityComparison {
 	}
 
 	/**
-	 * This is the primary function used in determining which type of scoring to use based on the
-	 * types of the strings. If no type was assigned to the strings being compared, then the highest
-	 * score is used among all the scoring methods, shingling being a viable option as well. 
+	 * This is the primary function used in determining which type of scoring to
+	 * use based on the types of the strings. If no type was assigned to the
+	 * strings being compared, then the highest score is used among all the
+	 * scoring methods, shingling being a viable option as well.
 	 * 
-	 * @param name1Info	First NameInfo object to be compared
-	 * @param name2Info	Second NameInfo object to be compared
-	 * @param flag	Determines which type-specific scoring to use (LOC/ORG/PER). If none of the types are
-	 * appropriate then it uses all the scoring types, shingling included, and the highest score is
-	 * considered the actual score
+	 * @param name1Info
+	 *            First NameInfo object to be compared
+	 * @param name2Info
+	 *            Second NameInfo object to be compared
+	 * @param flag
+	 *            Determines which type-specific scoring to use (LOC/ORG/PER).
+	 *            If none of the types are appropriate then it uses all the
+	 *            scoring types, shingling included, and the highest score is
+	 *            considered the actual score
 	 */
 	private void scoring(NameInfo name1Info, NameInfo name2Info, int flag) {
 		String name1 = name1Info.getName();
@@ -278,33 +307,34 @@ public class EntityComparison {
 			return;
 		}
 		switch (flag) {
-		
+
 		case 1: // PER
-			scoreShingle = (float)LSHUtils.dice(name1, name2);
+			scoreShingle = (float) LSHUtils.dice(name1, name2);
 			float scorePER = getPERScore(name1Info, name2Info);
 			reason = "Type: " + name1Info.getType() + ". metric";
 			if (score < scorePER) {
 				score = scorePER;
 			}
 			break;
-			
+
 		case 2: // LOC
-			scoreShingle = (float)LSHUtils.dice(name1, name2);
+			scoreShingle = (float) LSHUtils.dice(name1, name2);
 			score = shortMan.scoring(name1, name2);
 			reason = "Type: " + name1Info.getType() + ". metric; Scored by JaroWinkler metric with Shortcut.";
 			float countryLangScore = countryMan.scoring(name1, name2);
 			if (score < countryLangScore) {
 				score = countryLangScore;
-				reason = "Type: " + name1Info.getType() + ". metric; Scored by JaroWinkler metric with Country-Language list.";
+				reason = "Type: " + name1Info.getType()
+						+ ". metric; Scored by JaroWinkler metric with Country-Language list.";
 				if (score < scoreShingle) {
 					score = scoreShingle;
 					reason = "Type: " + name1Info.getType() + ". metric; Scored by Shingling";
 				}
 			}
 			break;
-			
+
 		case 3: // ORG
-			scoreShingle = (float)LSHUtils.dice(name1, name2);
+			scoreShingle = (float) LSHUtils.dice(name1, name2);
 			score = acroMan.scoring(name1Info, name2Info);
 			reason = "Type: " + name1Info.getType() + ". metric; Scored by JaroWinkler metric with Acronym.";
 			if (scoreShingle > score) {
@@ -312,9 +342,9 @@ public class EntityComparison {
 				reason = "Type: " + name1Info.getType() + ". metric; Scored by Shingling";
 			}
 			break;
-			
+
 		case 4: // GEN
-			scoreShingle = (float)LSHUtils.dice(name1, name2);
+			scoreShingle = (float) LSHUtils.dice(name1, name2);
 			float scorePer = getPERScore(name1Info, name2Info);
 			float scoreShort = shortMan.scoring(name1, name2);
 			float scoreCL = countryMan.scoring(name1, name2);
@@ -325,7 +355,8 @@ public class EntityComparison {
 			}
 			if (scoreCL > score) {
 				score = scoreCL;
-				reason = "Type: " + name1Info.getType() + ". metric; Scored by JaroWinkler metric with Country-Language list.";
+				reason = "Type: " + name1Info.getType()
+						+ ". metric; Scored by JaroWinkler metric with Country-Language list.";
 			}
 			if (scoreShort > score) {
 				score = scoreShort;
@@ -344,7 +375,7 @@ public class EntityComparison {
 				reason = "Type: " + name1Info.getType() + ". metric; Scored by JaroWinkler metric with Acronym.";
 			}
 			break;
-			
+
 		case 5: // Two different types
 			if (type1.equals("PER") || type2.equals("PER")) {
 				score = 0.0f;
@@ -363,7 +394,7 @@ public class EntityComparison {
 				reason = "Type: " + type1 + ". and " + type2 + ". cannot be compared";
 			}
 			break;
-			
+
 		default:
 			score = 0.0f;
 			reason = "#######SHOULD NOT HAPPEN#######";
@@ -375,12 +406,15 @@ public class EntityComparison {
 	}
 
 	/**
-	 * This function is only invoked if the type is not designated PER. If the strings being compared
-	 * have a very significant difference in length, as determined by the ration threshold, then a
-	 * score of 0 is assigned as they are too different in length to be comparable. 
+	 * This function is only invoked if the type is not designated PER. If the
+	 * strings being compared have a very significant difference in length, as
+	 * determined by the ratio threshold, then a score of 0 is assigned as they
+	 * are too different in length to be comparable.
 	 * 
-	 * @param name1 First of the names being compared
-	 * @param name2	Second of the names being compared
+	 * @param name1
+	 *            First of the names being compared
+	 * @param name2
+	 *            Second of the names being compared
 	 */
 	private void handleLargeRatio(String name1, String name2) {
 		int n1 = name1.length();
@@ -397,22 +431,28 @@ public class EntityComparison {
 	}
 
 	/**
-	 * Helper function invoked by the scoring method to score strings designated as type PER only.
+	 * Helper function invoked by the scoring method to score strings designated
+	 * as type PER only.
 	 * 
-	 * @param name1Info	First NameInfo object to be compared
-	 * @param name2Info	Second NameInfo object to be compared
-	 * @return	A floating point value between 0 and 1 inclusive
+	 * @param name1Info
+	 *            First NameInfo object to be compared
+	 * @param name2Info
+	 *            Second NameInfo object to be compared
+	 * @return A floating point value between 0 and 1 inclusive
 	 */
 	private float getPERScore(NameInfo name1Info, NameInfo name2Info) {
 		// initials compared with full name
 		String acroName1 = name1Info.getName();
 		String acroName2 = name2Info.getName();
-		if (acroName1.length() == acroName2.length()) { // similar names, perhaps with misspelling or apostrophe
+		if (acroName1.length() == acroName2.length()) { // similar names,
+														// perhaps with
+														// misspelling
+														// or apostrophe
 			if (ed.score(acroName1, acroName2) <= 1.0f)
 				return 1.0f;
 		}
 		String shortName = "";
-		if (acroName1.length() > acroName2.length()){
+		if (acroName1.length() > acroName2.length()) {
 			shortName = acroMan.findAcronym(acroName1);
 			if (shortName.equalsIgnoreCase(acroName2))
 				return 1.0f;
@@ -421,7 +461,7 @@ public class EntityComparison {
 			if (shortName.equalsIgnoreCase(acroName1))
 				return 1.0f;
 		}
-		
+
 		// last name compared with full name
 		String longName = "";
 		shortName = "";
@@ -432,31 +472,31 @@ public class EntityComparison {
 			longName = name2Info.getName();
 			shortName = name1Info.getName();
 		}
-		String [] tokensLong = longName.split("\\s+");
+		String[] tokensLong = longName.split("\\s+");
 		for (String word : tokensLong) {
 			if (shortName.equalsIgnoreCase(word))
 				return 1.0f;
 		}
-		
+
 		// first and last names are too similar for NameParser to distinguish
 		String Name1 = name1Info.getName(), Name2 = name2Info.getName();
-		String [] tokens1 = (Name1.trim()).split("\\s+");
-		String [] tokens2 = (Name2.trim()).split("\\s+");
+		String[] tokens1 = (Name1.trim()).split("\\s+");
+		String[] tokens2 = (Name2.trim()).split("\\s+");
 		if (tokens1.length == tokens2.length && tokens1.length == 2) {
-			String [] shortened = removeSameWords(Name1, Name2);
+			String[] shortened = removeSameWords(Name1, Name2);
 			String shortName1 = shortened[0], shortName2 = shortened[1];
-			float preciseScore = (float)LSHUtils.dice(shortName1, shortName2);
+			float preciseScore = (float) LSHUtils.dice(shortName1, shortName2);
 			if (preciseScore < 0.5f)
 				return 0.0f;
 			else
 				return 1.0f;
 		}
-		
-		// score using NameParser 
+
+		// score using NameParser
 		float maxScore = 0.0f;
-		float maxExtraScore = 0.0f ;
-		String name1Extra, name2Extra ;
-		float perScore ;
+		float maxExtraScore = 0.0f;
+		String name1Extra, name2Extra;
+		float perScore;
 
 		ArrayList<String> candidate1 = name1Info.getCandidates();
 		ArrayList<String> candidate2 = name2Info.getCandidates();
@@ -467,55 +507,55 @@ public class EntityComparison {
 			String name1 = candidate1.get(i);
 			name1Parser.parsing(name1);
 
-			name1Extra = name1Parser.getExtraName() ;
-			if(! name1Extra.isEmpty())
-				extraName1Parser.parsing(name1Extra) ;
+			name1Extra = name1Parser.getExtraName();
+			if (!name1Extra.isEmpty())
+				extraName1Parser.parsing(name1Extra);
 
 			for (int j = 0; j < m; j++) {
 				String name2 = candidate2.get(j);
 				name2Parser.parsing(name2);
 
-				name2Extra = name2Parser.getExtraName() ;
-				if(! name2Extra.isEmpty())
-					extraName2Parser.parsing(name2Extra) ;
+				name2Extra = name2Parser.getExtraName();
+				if (!name2Extra.isEmpty())
+					extraName2Parser.parsing(name2Extra);
 
 				if (name1.equals(name2))
 					perScore = 1.0f;
 				else {
 					perScore = name1Parser.compare(name2Parser);
-					float extraPerScore ;
-					if( name1Extra.isEmpty() || name2Extra.isEmpty() )
-						extraPerScore = (name1Extra.isEmpty() && name2Extra.isEmpty()) ? perScore : 0.9f ;
+					float extraPerScore;
+					if (name1Extra.isEmpty() || name2Extra.isEmpty())
+						extraPerScore = (name1Extra.isEmpty() && name2Extra.isEmpty()) ? perScore : 0.9f;
 					else
-						extraPerScore = (name1Extra.equals(name2Extra)) ? 1.0f : extraName1Parser.compare(extraName2Parser) ;
+						extraPerScore = (name1Extra.equals(name2Extra)) ? 1.0f
+								: extraName1Parser.compare(extraName2Parser);
 
-					perScore = (perScore + extraPerScore) / 2.0f ;
+					perScore = (perScore + extraPerScore) / 2.0f;
 				}
 				if (perScore > maxScore)
 					maxScore = perScore;
 
-				if( ! name1Extra.isEmpty() ) {
-					perScore = extraName1Parser.compare(name2Parser) ;
+				if (!name1Extra.isEmpty()) {
+					perScore = extraName1Parser.compare(name2Parser);
 					if (perScore > maxExtraScore)
 						maxExtraScore = perScore;
 				}
-				if( ! name2Extra.isEmpty() ) {
-					perScore = name1Parser.compare(extraName2Parser) ;
+				if (!name2Extra.isEmpty()) {
+					perScore = name1Parser.compare(extraName2Parser);
 					if (perScore > maxExtraScore)
 						maxExtraScore = perScore;
 				}
 			}
 		}
-		return (maxExtraScore > maxScore) ? maxExtraScore : maxScore ;
+		return (maxExtraScore > maxScore) ? maxExtraScore : maxScore;
 	}
-	
-	
-	private String [] removeSameWords (String name1, String name2) {
-		ArrayList<String> tmp1 = new ArrayList<String> ();
-		ArrayList<String> tmp2 = new ArrayList<String> ();
-		ArrayList<String> sameWords = new ArrayList<String> ();
-		String [] tokens1 = name1.split("\\s+");
-		String [] tokens2 = name2.split("\\s+");
+
+	private String[] removeSameWords(String name1, String name2) {
+		ArrayList<String> tmp1 = new ArrayList<String>();
+		ArrayList<String> tmp2 = new ArrayList<String>();
+		ArrayList<String> sameWords = new ArrayList<String>();
+		String[] tokens1 = name1.split("\\s+");
+		String[] tokens2 = name2.split("\\s+");
 		for (String a : tokens1)
 			tmp1.add(a);
 		for (String b : tokens2)
@@ -556,11 +596,10 @@ public class EntityComparison {
 		}
 		name1 = (sb1.toString()).trim();
 		name2 = (sb2.toString()).trim();
-		String [] shortened = {name1, name2};
+		String[] shortened = { name1, name2 };
 		return shortened;
 	}
 
-	
 	/**
 	 * Gets score of the two strings currently being compared.
 	 * 
@@ -579,7 +618,6 @@ public class EntityComparison {
 		return reason;
 	}
 
-	
 	public static void main(String[] args) {
 		try {
 			EntityComparison entityComp = new EntityComparison();
@@ -599,8 +637,7 @@ public class EntityComparison {
 				String[] names = parseInput(str);
 				if (names == null) {
 					System.out.println("0");
-					System.out
-							.println("ERROR (incorrect input format): Please input names: TYPE#name1----TYPE#name2");
+					System.out.println("ERROR (incorrect input format): Please input names: TYPE#name1----TYPE#name2");
 					System.out.println();
 					System.out.println();
 					continue;
@@ -616,7 +653,7 @@ public class EntityComparison {
 		} catch (IOException e) {
 		}
 	}
-	
+
 	// ============
 	public static String[] parseInput(String str) {
 		String[] names = str.split("----");
@@ -633,32 +670,32 @@ public class EntityComparison {
 
 	// ============
 	public List<String> getLongForms(String acronym) {
-		List<String> longForms = acroMan.getLongForm(acronym) ;
-		List<String> longForms2 = shortMan.getLongForm(acronym) ;
-		for(int i = 0; i < longForms2.size(); i++)
-			longForms.add(longForms2.get(i)) ;
-		return longForms ;
+		List<String> longForms = acroMan.getLongForm(acronym);
+		List<String> longForms2 = shortMan.getLongForm(acronym);
+		for (int i = 0; i < longForms2.size(); i++)
+			longForms.add(longForms2.get(i));
+		return longForms;
 	}
 
 	// ============
 	public List<String> getAbbreviations(String longName) {
-		List<String> shortForms = acroMan.getShortForm(longName) ;
-		List<String> shortForms2 = shortMan.getShortForm(longName) ;
-		for(int i = 0; i < shortForms2.size(); i++)
-			shortForms.add(shortForms2.get(i)) ;
-		
-		String acronym = acroMan.findAcronym(longName) ;
-		if(! acronym.equals("")) {
-			boolean exists = false ;
-			for(int i = 0; i < shortForms.size(); i++) {
-				if( shortForms.get(i).equals(acronym) ) {
-					exists = true ;
-					break ;
+		List<String> shortForms = acroMan.getShortForm(longName);
+		List<String> shortForms2 = shortMan.getShortForm(longName);
+		for (int i = 0; i < shortForms2.size(); i++)
+			shortForms.add(shortForms2.get(i));
+
+		String acronym = acroMan.findAcronym(longName);
+		if (!acronym.equals("")) {
+			boolean exists = false;
+			for (int i = 0; i < shortForms.size(); i++) {
+				if (shortForms.get(i).equals(acronym)) {
+					exists = true;
+					break;
 				}
 			}
-			if( ! exists)
-				shortForms.add(acronym) ;
+			if (!exists)
+				shortForms.add(acronym);
 		}
-		return shortForms ;
+		return shortForms;
 	}
 }
