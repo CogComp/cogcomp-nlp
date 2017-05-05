@@ -9,6 +9,8 @@ package edu.illinois.cs.cogcomp.wordSim;
 
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.wsim.esa.MemoryBasedESA;
+
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import static org.junit.Assert.assertTrue;
 
 public class ESASimTest {
-
+	@Ignore
 	@Test
 	public void test() throws IOException {
 		String CONFIG = "config/configurations.properties";
