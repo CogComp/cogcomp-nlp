@@ -171,6 +171,14 @@ public class PipelineFactory {
         boolean isSentencePipeline =
                 fullRm.getBoolean(PipelineConfigurator.USE_SENTENCE_PIPELINE.key);
 
+        if (isSentencePipeline) { // update cache directory to be distinct from regular pipeline
+            String cacheDir = fullRm.getString(AnnotatorServiceConfigurator.CACHE_DIR.key);
+            cacheDir += "_sentence";
+            Properties props = fullRm.getProperties();
+            props.setProperty(AnnotatorServiceConfigurator.CACHE_DIR.key, cacheDir);
+            fullRm = new ResourceManager(props);
+        }
+
         TextAnnotationBuilder taBldr =
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
 

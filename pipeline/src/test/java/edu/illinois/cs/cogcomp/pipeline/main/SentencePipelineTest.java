@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
@@ -35,13 +36,19 @@ import static org.junit.Assert.fail;
 public class SentencePipelineTest {
 
     private static final java.lang.String POS_FILE = "src/test/resources/pipelinePosText.txt";
+    private static final String CACHE_DIR = "pipeline-cache";
+    private static final String CACHE_DIR_SENTENCE = "pipeline-cache_sentence";
     private static BasicAnnotatorService sentenceProcessor;
     private static BasicAnnotatorService normalProcessor;
 
     @BeforeClass
     public static void init() throws IOException, AnnotatorException {
 
+        IOUtils.rm(CACHE_DIR);
+        IOUtils.rm(CACHE_DIR_SENTENCE);
+
         Properties props = new Properties();
+        props.setProperty(AnnotatorServiceConfigurator.CACHE_DIR.key, CACHE_DIR);
         props.setProperty(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
         props.setProperty(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
         props.setProperty(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
@@ -57,7 +64,7 @@ public class SentencePipelineTest {
         props.setProperty(PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE);
 
         props.setProperty(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key, Configurator.FALSE);
-        props.setProperty(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.TRUE);
+        props.setProperty(AnnotatorServiceConfigurator.DISABLE_CACHE.key, Configurator.FALSE);
 
         sentenceProcessor = PipelineFactory.buildPipeline(new ResourceManager(props));
 
@@ -114,6 +121,8 @@ public class SentencePipelineTest {
         List<Constituent> normalPos = normalTa.getView(ViewNames.POS).getConstituents();
         for (int i = 0; i < sentPos.size(); ++i)
             assertEquals(normalPos.get(i), sentPos.get(i));
+
+        assertTrue(IOUtils.exists(CACHE_DIR_SENTENCE));
     }
 
     @Test
@@ -140,5 +149,6 @@ public class SentencePipelineTest {
         List<Constituent> toksInThirdSent = ta.getView(ViewNames.TOKENS).getConstituentsOverlappingCharSpan(s.getStartCharOffset(), s.getEndCharOffset());
         assertTrue(posConstituentsInThirdSent.size() > 0);
         assertEquals(toksInThirdSent.size(), posConstituentsInThirdSent.size());
+
     }
 }
