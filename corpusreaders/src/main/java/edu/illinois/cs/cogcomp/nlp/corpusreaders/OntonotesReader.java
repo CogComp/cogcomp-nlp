@@ -36,8 +36,13 @@ public class OntonotesReader extends AnnotationReader<TextAnnotation> {
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
 
+    /**
+     * TODO: handle file extensions in OntoNotes. This is complicated because it has many different types of annotation file
+     * and is not well organized.
+     * @param ontonotesDirectory
+     */
     public OntonotesReader(String ontonotesDirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory, ontonotesDirectory));
+        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory, ontonotesDirectory, "", ""));
         this.taCounter = 0;
 
     }

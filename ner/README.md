@@ -132,9 +132,7 @@ public class App
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.doInitialize();
-
-        co.addView(ta);
+        co.getView(ta);
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
