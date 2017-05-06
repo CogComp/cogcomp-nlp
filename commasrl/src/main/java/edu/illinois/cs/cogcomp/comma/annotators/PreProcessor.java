@@ -40,6 +40,7 @@ public class PreProcessor {
     StanfordParseHandler parser;
 
     public PreProcessor() throws Exception {
+        System.out.println("initializing 1 ");
         // Initialise AnnotatorServices with default configurations
         Map<String, String> nonDefaultValues = new HashMap<>();
         if (CommaProperties.getInstance().useCurator()) {
@@ -53,6 +54,8 @@ public class PreProcessor {
             String maxParseSentenceLength = Stanford311Configurtor.STFRD_MAX_SENTENCE_LENGTH.value;
             boolean throwExceptionOnSentenceLengthCheck =
                     rm.getBoolean(Stanford311Configurtor.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
+
+            System.out.println("initializing 2 ");
 
             this.pos = new POSAnnotator();
             this.nerConll = NerAnnotatorManager.buildNerAnnotator(rm, ViewNames.NER_CONLL);
@@ -95,10 +98,10 @@ public class PreProcessor {
             annotatorService.addView(ta, ViewNames.SRL_PREP);
         }
         else {
-            pos.addView(ta);
-            nerConll.addView(ta);
-            shallowParser.addView(ta);
-            parser.addView(ta);
+            ta.addView(pos);
+            ta.addView(nerConll);
+            ta.addView(shallowParser);
+            ta.addView(parser);
         }
     }
 }
