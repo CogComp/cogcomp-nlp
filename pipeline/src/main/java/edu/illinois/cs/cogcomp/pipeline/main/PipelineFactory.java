@@ -128,7 +128,7 @@ public class PipelineFactory {
         }
 
         // using the default settings and changing the views
-        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(nonDefaultValues);
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(new Stanford311Configurtor().getConfig(nonDefaultValues));
         boolean splitOnHypen = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH.key);
 
         TextAnnotationBuilder taBldr =
@@ -193,7 +193,7 @@ public class PipelineFactory {
     public static BasicAnnotatorService buildPipeline(ResourceManager rm) throws IOException,
             AnnotatorException {
         // Merges default configuration with the user-specified overrides.
-        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(rm);
+        ResourceManager fullRm = (new PipelineConfigurator()).getConfig(new Stanford311Configurtor().getConfig(rm));
         Boolean splitOnDash = fullRm.getBoolean(PipelineConfigurator.SPLIT_ON_DASH);
         boolean isSentencePipeline =
                 fullRm.getBoolean(PipelineConfigurator.USE_SENTENCE_PIPELINE.key);
@@ -224,7 +224,7 @@ public class PipelineFactory {
      */
     private static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
             throws IOException {
-        ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
+        ResourceManager rm = new PipelineConfigurator().getConfig(new Stanford311Configurtor().getConfig(nonDefaultRm));
         String timePerSentence = rm.getString(Stanford311Configurtor.STFRD_TIME_PER_SENTENCE);
         String maxParseSentenceLength =
                 rm.getString(Stanford311Configurtor.STFRD_MAX_SENTENCE_LENGTH);
