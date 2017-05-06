@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
+import edu.illinois.cs.cogcomp.pipeline.common.Stanford311Configurtor;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordDepHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
@@ -173,9 +174,9 @@ public class PipelineFactory {
     private static Map<String, Annotator> buildAnnotators(ResourceManager nonDefaultRm)
             throws IOException {
         ResourceManager rm = new PipelineConfigurator().getConfig(nonDefaultRm);
-        String timePerSentence = rm.getString(PipelineConfigurator.STFRD_TIME_PER_SENTENCE);
+        String timePerSentence = rm.getString(Stanford311Configurtor.STFRD_TIME_PER_SENTENCE);
         String maxParseSentenceLength =
-                rm.getString(PipelineConfigurator.STFRD_MAX_SENTENCE_LENGTH);
+                rm.getString(Stanford311Configurtor.STFRD_MAX_SENTENCE_LENGTH);
         boolean useLazyInitialization =
                 rm.getBoolean(PipelineConfigurator.USE_LAZY_INITIALIZATION.key,
                         PipelineConfigurator.TRUE);
@@ -219,7 +220,7 @@ public class PipelineFactory {
             ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
             int maxLength = Integer.parseInt(maxParseSentenceLength);
             boolean throwExceptionOnSentenceLengthCheck =
-                    rm.getBoolean(PipelineConfigurator.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
+                    rm.getBoolean(Stanford311Configurtor.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
 
             if (rm.getBoolean(PipelineConfigurator.USE_STANFORD_DEP)) {
                 StanfordDepHandler depParser =

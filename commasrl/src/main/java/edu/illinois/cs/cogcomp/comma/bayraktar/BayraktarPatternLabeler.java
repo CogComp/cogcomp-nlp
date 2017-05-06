@@ -7,8 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.comma.bayraktar;
 
-import cogcomp.Datastore;
-import cogcomp.DatastoreException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.io.LineIO;

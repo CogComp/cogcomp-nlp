@@ -53,6 +53,11 @@
             <version>3.1.11</version>
         </dependency>
         <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>stanford_3.1.1</artifactId>
+            <version>3.1.11</version>
+        </dependency>
+        <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
             <version>1.9.7</version>
@@ -73,18 +78,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
-        </dependency>
-        <!-- Stanford Core NLP, used for its parser (for SRL) -->
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.3.1</version>
-            <classifier>models</classifier>
         </dependency>
 
         <dependency>

@@ -67,15 +67,23 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-nlp-pipeline</artifactId>
+            <artifactId>stanford_3.1.1</artifactId>
             <version>3.1.11</version>
-            <!--if you see java-cup issues, its because of its clashes with Stanford. Uncomment this to exclude it-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>edu.stanford.nlp</groupId>-->
-                    <!--<artifactId>stanford-corenlp</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-pos</artifactId>
+            <version>3.1.11</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-ner</artifactId>
+            <version>3.1.11</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-chunker</artifactId>
+            <version>3.1.11</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>

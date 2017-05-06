@@ -12,8 +12,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
-import cogcomp.Datastore;
-import cogcomp.DatastoreException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;

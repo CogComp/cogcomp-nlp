@@ -7,10 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.comma.annotators;
 
-import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
-import edu.illinois.cs.cogcomp.annotation.AnnotatorServiceConfigurator;
-import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.*;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -18,22 +16,28 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorConfigurator;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.ner.NERAnnotator;
+import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
-import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+import edu.illinois.cs.cogcomp.pipeline.common.Stanford311Configurtor;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
+import edu.stanford.nlp.pipeline.ParserAnnotator;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A class that contains all the necessary pre-processing for each sentence.
  */
 public class PreProcessor {
-    private final AnnotatorService annotatorService;
+    private AnnotatorService annotatorService = null;
     Tokenizer tokenizer = new IllinoisTokenizer();
+    POSAnnotator pos;
+    NERAnnotator nerConll;
+    ChunkerAnnotator shallowParser;
+    StanfordParseHandler parser;
 
     public PreProcessor() throws Exception {
         // Initialise AnnotatorServices with default configurations
@@ -44,17 +48,28 @@ public class PreProcessor {
             ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
             annotatorService = CuratorFactory.buildCuratorClient(curatorConfig);
         } else {
-            nonDefaultValues.put(PipelineConfigurator.USE_NER_ONTONOTES.key, Configurator.FALSE);
-            nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key, Configurator.FALSE);
-            nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key, Configurator.FALSE);
-            nonDefaultValues.put(PipelineConfigurator.USE_SRL_NOM.key, Configurator.FALSE);
-            nonDefaultValues.put(PipelineConfigurator.USE_POS.key, Configurator.TRUE);
-            nonDefaultValues.put(PipelineConfigurator.USE_NER_CONLL.key, Configurator.TRUE);
-            nonDefaultValues.put(PipelineConfigurator.USE_SHALLOW_PARSE.key, Configurator.TRUE);
-            nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_PARSE.key, Configurator.TRUE);
-            ResourceManager pipelineConfig =
-                    (new PipelineConfigurator()).getConfig(nonDefaultValues);
-            annotatorService = PipelineFactory.buildPipeline(pipelineConfig);
+            ResourceManager rm = new Stanford311Configurtor().getDefaultConfig();
+            String timePerSentence = Stanford311Configurtor.STFRD_TIME_PER_SENTENCE.value;
+            String maxParseSentenceLength = Stanford311Configurtor.STFRD_MAX_SENTENCE_LENGTH.value;
+            boolean throwExceptionOnSentenceLengthCheck =
+                    rm.getBoolean(Stanford311Configurtor.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
+
+            this.pos = new POSAnnotator();
+            this.nerConll = NerAnnotatorManager.buildNerAnnotator(rm, ViewNames.NER_CONLL);
+            this.shallowParser = new ChunkerAnnotator();
+
+            Properties stanfordProps = new Properties();
+            stanfordProps.put("annotators", "pos, parse");
+            stanfordProps.put("parse.originalDependencies", true);
+            stanfordProps.put("parse.maxlen", maxParseSentenceLength);
+            stanfordProps.put("parse.maxtime", timePerSentence);
+            // per sentence? could be per
+            // document but no idea from
+            // stanford javadoc
+            POSTaggerAnnotator posAnnotator = new POSTaggerAnnotator("pos", stanfordProps);
+            ParserAnnotator parseAnnotator = new ParserAnnotator("parse", stanfordProps);
+            int maxLength = Integer.parseInt(maxParseSentenceLength);
+            this.parser = new StanfordParseHandler(posAnnotator, parseAnnotator, maxLength, throwExceptionOnSentenceLengthCheck);
         }
     }
 
@@ -70,14 +85,20 @@ public class PreProcessor {
     }
 
     private void addViewsFromAnnotatorService(TextAnnotation ta) throws AnnotatorException {
-        annotatorService.addView(ta, ViewNames.POS);
-        annotatorService.addView(ta, ViewNames.NER_CONLL);
-        annotatorService.addView(ta, ViewNames.SHALLOW_PARSE);
-        annotatorService.addView(ta, ViewNames.PARSE_STANFORD);
         if (CommaProperties.getInstance().useCurator()) {
+            annotatorService.addView(ta, ViewNames.POS);
+            annotatorService.addView(ta, ViewNames.NER_CONLL);
+            annotatorService.addView(ta, ViewNames.SHALLOW_PARSE);
+            annotatorService.addView(ta, ViewNames.PARSE_STANFORD);
             annotatorService.addView(ta, ViewNames.SRL_VERB);
             annotatorService.addView(ta, ViewNames.SRL_NOM);
             annotatorService.addView(ta, ViewNames.SRL_PREP);
+        }
+        else {
+            pos.addView(ta);
+            nerConll.addView(ta);
+            shallowParser.addView(ta);
+            parser.addView(ta);
         }
     }
 }
