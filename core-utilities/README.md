@@ -1,6 +1,6 @@
-# Illinois Core-Utilities
+# Cogcomp Core-Utilities
 
-   illinois-core-utilities is a Java library that is designed to help programming NLP
+   cogcomp-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
    annotations of text (like parse trees, parts of speech, semantic
    roles, coreference, etc.) 
@@ -83,7 +83,7 @@ of annotations over some text.
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
-    use the sentence slitter defined in the [Learning Based Java](https://github.com/IllinoisCogComp/lbjava) (LBJava)
+    use the sentence slitter defined in the [Learning Based Java](https://github.com/CogComp/lbjava) (LBJava)
     library to split the text into sentences and further apply the
     LBJ tokenizer to tokenize the sentence.
     
@@ -296,8 +296,8 @@ for (Constituent neConstituent : ne.getConstituents()) {
 `AnnotatorService` is our super-wrapper that provides access to different annotations and free caching. 
  Currently we have two classes implementing `AnnotatorService`: 
  
-  1. [illinois-curator](../curator/README.md)
-  2. [illinois-nlp-pipeline](../pipeline/README.md)
+  1. [cogcomp-curator](../curator/README.md)
+  2. [nlp-pipeline](../pipeline/README.md)
 
 
 The image below describes the different ways of creating 

@@ -45,7 +45,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
      * @param conlldirectory
      */
     public CoNLLNerReader(String conlldirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory, conlldirectory));
+        super(CorpusReaderConfigurator.buildResourceManager("NER_CONLL", conlldirectory, conlldirectory, ".conll", ".conll"));
         this.taCounter = 0;
     }
 

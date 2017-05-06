@@ -13,15 +13,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.*;
@@ -42,14 +41,18 @@ public class EREReaderTest {
     private static final IntPair ORIGAUTHOFFSETS = new IntPair(2943, 2953);
     private static final String AUTHORVAL = "tinydancer";
     private static final IntPair AUTHOROFFSETS = new IntPair(1947, 1957);
-    private static final String MENTION_ID_VAL = "m-568eb23c_1_797";
+    private static final String MENTION_ID_VAL = "m-568eb23c_1_108";
     private static final String NOUN_TYPE_VAL = "NAM";
     private static final String ENTITY_ID_VAL = "ent-NIL00380";
     private static final String SPECIFICITY_VAL = "specific";
+    private static final IntPair POSTOFFSETS = new IntPair(2155, 2500);
     private static final IntPair QUOTEOFFSETS = new IntPair(1148, 1384);
+
     private static final String QUOTE_VAL = "\n\"Drink cyanide, bloody Neanderthals. You won,\" award-winning Israeli " +
             "author and actress Alona Kimhi wrote on her Facebook page, before erasing it as her comments became " +
             "the talk of the town. \"Only death will save you from yourselves.\"\n";
+
+
     private static boolean doSerialize = true;
 
 //
@@ -57,10 +60,29 @@ public class EREReaderTest {
 //                    "data/source/ENG_DF_001241_20150407_F0000007T.xml";
 
     // public void testNerReader() {
+
+    /**
+     * there are THREE ERE English releases.
+     * Regrettably, they do not follow consistent standards for organization or for annotation.
+     *
+     * LDC2015E29_DEFT_Rich_ERE English V2 has two sets of annotation files: one, used for the Event Argument Extraction
+     *    task in TAC that year, includes a small amount of additional markup to make each xml document well-formed.
+     *    This changes the annotation offsets. Taggable entities within quoted blocks are annotated.
+     *
+     * LDC2015E68_DEFT_Rich_ERE_English R2_V2 has as source files excerpts from multi-post discussion forum documents.
+     * Taggable entities within quoted blocks are annotated.
+     *
+     * LDC2016E31_DEFT_Rich_ERE_English ENR3 has -- I believe -- complete threads, where annotation files may be
+     *    broken into several chunks. Taggable entities within quoted blocks are NOT marked.
+     *
+     * There are two Spanish and two Chinese ERE releases (aside from a parallel English-Chinese release).
+     * Spanish/Chinese release 1 have the same characteristics as English release 2.
+     * Spanish/Chinese release 2 have the same characteristics as English release 3.
+     * @param args
+     */
     public static void main(String[] args) {
 
-
-        /**
+        /*
          * ERE documents in release 2015E29: mainly newswire, some discussion format.
          * This test uses the Event Argument Extraction version of the data, as this includes xml markup that makes
          * the source files well-formed, and we are likely to need this reader for TAC EAE tasks. Moreover, the later
@@ -68,26 +90,18 @@ public class EREReaderTest {
          */
         String corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E29_DEFT_Rich_ERE_English_Training_Annotation_V2/data/";
 
-        String sourceDir = corpusDir + "source/mpdfxml/";
-        String annotationDir = corpusDir + "ere/mpdfxml/";
-        XmlTextAnnotation outputXmlTa = runTest(sourceDir, annotationDir);
+        XmlTextAnnotation outputXmlTa = runTest(EreCorpus.ENR1, corpusDir);
+
+
+        corpusDir = "/shared/corpora/corporaWeb/deft/eng/LDC2015E68_DEFT_Rich_ERE_English_Training_Annotation_R2_V2/data/";
+
+        outputXmlTa = runTest(EreCorpus.ENR2, corpusDir);
 
 
         corpusDir =
-                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data-sample/";
+                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/data/";
 
-        sourceDir = corpusDir + "/data/source/";
-        annotationDir = corpusDir + "data/ere/";
-
-        outputXmlTa = runTest(sourceDir, annotationDir);
-
-        corpusDir =
-                "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/";
-
-        sourceDir = corpusDir + "/data/source/";
-        annotationDir = corpusDir + "data/ere/";
-
-        outputXmlTa = runTest(sourceDir, annotationDir);
+        outputXmlTa = runTest(EreCorpus.ENR3, corpusDir);
 
         System.out.println("Testing EREMentionRelationReader...");
 
@@ -96,46 +110,49 @@ public class EREReaderTest {
         StringTransformation xmlSt = outputXmlTa.getXmlSt();
         String origXml = xmlSt.getOrigText();
 
-        Map<IntPair, Map<String, String>> markupInfo = outputXmlTa.getXmlMarkup();
+        List<XmlDocumentProcessor.SpanInfo> markup = outputXmlTa.getXmlMarkup();
+        Map<IntPair, XmlDocumentProcessor.SpanInfo> markupInfo = XmlDocumentProcessor.compileOffsetSpanMapping(markup);
+        Map<IntPair, Set<String>> markupAttributes = XmlDocumentProcessor.compileAttributeValues(markup);
 
-        String dateTimeReported = markupInfo.get(DATETIMEOFFSETS).get(DATETIME);
-        assertEquals(DATETIMEVAL, dateTimeReported);
+        Set<String> dateTimeReported = markupAttributes.get(DATETIMEOFFSETS);
+        assert(dateTimeReported.contains(DATETIMEVAL));
         assertEquals(DATETIMEVAL, origXml.substring(DATETIMEOFFSETS.getFirst(), DATETIMEOFFSETS.getSecond()));
 
 //        private static final String ORIGAUTHVAL = "tinydancer";
 //        private static final IntPair ORIGAUTHOFFSETS = new IntPair(2943, 2953);
-        String origAuth = markupInfo.get(ORIGAUTHOFFSETS).get(ORIG_AUTHOR);
-        assertEquals(ORIGAUTHVAL, origAuth);
+        Set<String> origAuth = markupAttributes.get(ORIGAUTHOFFSETS);
+        assert(origAuth.contains(ORIGAUTHVAL));
         assertEquals(ORIGAUTHVAL, origXml.substring(ORIGAUTHOFFSETS.getFirst(), ORIGAUTHOFFSETS.getSecond()));
 
-        String auth = markupInfo.get(AUTHOROFFSETS).get(AUTHOR);
-        assertEquals(AUTHORVAL, auth);
+        Set<String> auth = markupAttributes.get(AUTHOROFFSETS);
+        assert(auth.contains(AUTHORVAL));
         assertEquals(AUTHORVAL, origXml.substring(AUTHOROFFSETS.getFirst(), AUTHOROFFSETS.getSecond()));
 
         /*
          * other values recorded at same offsets are not required to be mapped to xml document char offsets.
          * Since this value is not retained in the cleaned text, there is NO CORRESPONDING CONSTITUENT.
          */
-        String mid = markupInfo.get(AUTHOROFFSETS).get(ENTITY_MENTION_ID);
+        XmlDocumentProcessor.SpanInfo postSpan = markupInfo.get(POSTOFFSETS);
+        String mid = postSpan.attributes.get(ENTITY_MENTION_ID).getFirst();
         assertEquals(MENTION_ID_VAL, mid);
 
-        String nt = markupInfo.get(AUTHOROFFSETS).get(NOUN_TYPE);
+        String nt = markupInfo.get(POSTOFFSETS).attributes.get(NOUN_TYPE).getFirst();
         assertEquals(NOUN_TYPE_VAL, nt);
 
-        String eid = markupInfo.get(AUTHOROFFSETS).get(ENTITY_ID);
+        String eid = markupInfo.get(POSTOFFSETS).attributes.get(ENTITY_ID).getFirst();
         assertEquals(ENTITY_ID_VAL, eid);
 
-        String spec = markupInfo.get(AUTHOROFFSETS).get(SPECIFICITY);
+        String spec = markupInfo.get(POSTOFFSETS).attributes.get(SPECIFICITY).getFirst();
         assertEquals(SPECIFICITY_VAL, spec);
 
-        assertEquals(QUOTE, markupInfo.get(QUOTEOFFSETS).get(SPAN_INFO));
+        assertEquals(QUOTE, markupInfo.get(QUOTEOFFSETS).label);
         String quoteStr = origXml.substring(QUOTEOFFSETS.getFirst(), QUOTEOFFSETS.getSecond());
         assertEquals(QUOTE_VAL, quoteStr);
 
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
-            emr = new EREMentionRelationReader("ERE", sourceDir, annotationDir, throwExceptionOnXmlTagMismatch);
+            emr = new EREMentionRelationReader(EreCorpus.ENR3, corpusDir, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(-1);
@@ -214,18 +231,18 @@ public class EREReaderTest {
     }
 
 
-    private static XmlTextAnnotation runTest(String sourceDir, String annotationDir) {
+    private static XmlTextAnnotation runTest(EreCorpus ereCorpus, String corpusRoot) {
 
         ERENerReader nerReader = null;
         boolean addNominalMentions = true;
         boolean throwExceptionOnXmlTagMismatch = true;
         try {
-            nerReader = new ERENerReader("ERE", sourceDir, annotationDir, addNominalMentions, throwExceptionOnXmlTagMismatch);
+            nerReader = new EREMentionRelationReader(ereCorpus, corpusRoot, throwExceptionOnXmlTagMismatch);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("ERROR: " + NAME
-                    + ": couldn't instantiate ERENerReader with corpus dirs '" + sourceDir + ", " + annotationDir + ": "
-                    + e.getMessage());
+                    + ": couldn't instantiate ERENerReader for ERE release " + ereCorpus.name()
+                    + ": " + e.getMessage());
         }
 
         XmlTextAnnotation outputXmlTa = nerReader.next();
