@@ -9,9 +9,10 @@ package edu.illinois.cs.cogcomp.pipeline.handlers;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
@@ -51,18 +52,19 @@ public class StanfordTrueCaseHandler extends Annotator {
     protected void addView(TextAnnotation ta) throws AnnotatorException {
         Annotation document = new Annotation(ta.text);
         pipeline.annotate(document);
-        SpanLabelView vu = new SpanLabelView(viewName, ta);
-
-        String outputString = "";
+        TokenLabelView vu = new TokenLabelView(viewName, ta);
 
         for (CoreMap sentence : document.get(CoreAnnotations.SentencesAnnotation.class)) {
             for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-                String truecase = token.get(CoreAnnotations.TrueCaseTextAnnotation.class);
-                outputString += " " + truecase;
+                String trueCase = token.get(CoreAnnotations.TrueCaseTextAnnotation.class);
+                int beginCharOffsetS = token.beginPosition();
+                int endCharOffset = token.endPosition() - 1;
+                List<Constituent> overlappingCons = ta.getView(ViewNames.TOKENS).getConstituentsOverlappingCharSpan(beginCharOffsetS, endCharOffset);
+                int endIndex = overlappingCons.stream().max(Comparator.comparing(Constituent::getEndSpan)).get().getEndSpan();
+                Constituent c = new Constituent(trueCase, viewName, ta, endIndex - 1, endIndex);
+                vu.addConstituent(c);
             }
         }
-        Constituent c = new Constituent(outputString, viewName, ta,0, ta.getTokens().length);
-        vu.addConstituent(c);
         ta.addView(viewName, vu);
     }
 }
