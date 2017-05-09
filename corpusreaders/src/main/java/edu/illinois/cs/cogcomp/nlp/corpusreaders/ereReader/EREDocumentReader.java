@@ -97,6 +97,11 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RELATIONS = "relations";
     public static final String RELATION = "relation";
     public static final String RELATION_MENTION = "relation_mention";
+    public static final String HOPPERS = "hoppers";
+    public static final String HOPPER = "hopper";
+    public static final String EVENT_MENTION = "event_mention";
+    public static final String EVENT_ARGUMENT = "em_arg";
+    public static final String WAYS = "ways";
     public static final String SUBTYPE = "subtype";
     public static final String ARG_ONE = "rel_arg1";
     public static final String ARG_TWO = "rel_arg2";
@@ -104,6 +109,11 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String ENTITY_ID = "entity_id";
     public static final String ROLE = "role";
     public static final String FILLER_ID = "filler_id";
+    public static final String DATELINE = "dateline";
+    public static final String CORPUS_TYPE = "corpusType";
+    public static final String SOURCE = "source";
+    public static final String TRIGGER = "trigger";
+
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
     public static final String EntityIdAttribute = ACEReader.EntityIDAttribute;
@@ -118,10 +128,16 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationRealisAttribute = "REALIS";
     public static final String RelationSourceRoleAttribute = "RelationSourceRole";
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
-    public static final String DATELINE = "dateline";
-    public static final String CORPUS_TYPE = "corpusType";
+    public static final String EventIdAttribute = "event_id";
+    public static final String EventMentionIdAttribute = "event_mention_id";
+
+
     public static final String NAME_START = "nameStartOffset";
     public static final String NAME_END = "nameEndOffset";
+    public static final String UNSPECIFIED = "unspecified";
+
+
+
     private static final String NAME = XmlDocumentReader.class.getCanonicalName();
     private static Logger logger = LoggerFactory.getLogger(EREDocumentReader.class);
     /** tag sets for xml processor for ERE documents  */

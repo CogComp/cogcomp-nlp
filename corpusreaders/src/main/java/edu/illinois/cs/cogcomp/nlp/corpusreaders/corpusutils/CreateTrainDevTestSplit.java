@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREEventReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,92 +47,16 @@ public class CreateTrainDevTestSplit {
     private static final String NAME = CreateTrainDevTestSplit.class.getCanonicalName();
 
     private static final int BEAM_SIZE = 100; //keep this number of candidates for best split
-
-    private Logger logger = LoggerFactory.getLogger(CreateTrainDevTestSplit.class);
-
     private final double LARGE_DIFF = 1000000000.0;
-
-
     private final Set<String> labelsToConsider;
+    private Logger logger = LoggerFactory.getLogger(CreateTrainDevTestSplit.class);
     private Map<Split, Counter<String>> bestRelSplitCounts;
     private boolean useAllLabels;
     private boolean stopEarly;
-
-    private class QueueElement implements Comparable<QueueElement> {
-        final double score;
-        final Set<String> docIdSet;
-        final Counter<String> labelCounter;
-
-        public QueueElement(double score, Set<String> ids, Counter<String> counts) {
-            this.score = score;
-            this.docIdSet = ids;
-            this.labelCounter = counts;
-        }
-
-        /**
-         * Compares this object with the specified object for order.  Returns a
-         * negative integer, zero, or a positive integer as this object is less
-         * than, equal to, or greater than the specified object.
-         * <p>
-         * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
-         * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
-         * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
-         * <tt>y.compareTo(x)</tt> throws an exception.)
-         * <p>
-         * <p>The implementor must also ensure that the relation is transitive:
-         * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
-         * <tt>x.compareTo(z)&gt;0</tt>.
-         * <p>
-         * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
-         * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
-         * all <tt>z</tt>.
-         * <p>
-         * <p>It is strongly recommended, but <i>not</i> strictly required that
-         * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
-         * class that implements the <tt>Comparable</tt> interface and violates
-         * this condition should clearly indicate this fact.  The recommended
-         * language is "Note: this class has a natural ordering that is
-         * inconsistent with equals."
-         * <p>
-         * <p>In the foregoing description, the notation
-         * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
-         * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
-         * <tt>0</tt>, or <tt>1</tt> according to whether the value of
-         * <i>expression</i> is negative, zero or positive.
-         *
-         * @param o the object to be compared.
-         * @return a negative integer, zero, or a positive integer as this object
-         * is less than, equal to, or greater than the specified object.
-         * @throws NullPointerException if the specified object is null
-         * @throws ClassCastException   if the specified object's type prevents it
-         *                              from being compared to this object.
-         */
-        @Override
-        public int compareTo(QueueElement o) {
-            return Double.compare(this.score, o.score);
-        }
-    }
+    private Map<String, Counter<String>> labelCounts;
 
 //    private EvictingQueue<QueueElement> bestCandidateSplits;
-
-
-    public Map<String,Counter<String>> getLabelCounts() {
-        return labelCounts;
-    }
-
-    public Counter<String> getLabelTotals() {
-        return labelTotals;
-    }
-
-    public Map<Split,Counter<String>> getBestRelSplitCounts() {
-        return bestRelSplitCounts;
-    }
-
-    public enum Split {TRAIN, DEV, TEST};
-
-    private Map<String, Counter<String>> labelCounts;
     private Counter<String> labelTotals;
-
 
     /**
      * given views identified by source document, and a list of labels to consider, and a train/dev/test ratio,
@@ -156,6 +81,119 @@ public class CreateTrainDevTestSplit {
 
     }
 
+    /**
+     * read from the cache.
+     * @param args
+     */
+    public static void main(String[] args) {
+
+        if (args.length != 3) {
+            System.err.println("Usage: " + NAME + " EreCorpusType corpusDir splitDir");
+            System.exit(-1);
+        }
+
+        EREDocumentReader.EreCorpus ereCorpus = EREDocumentReader.EreCorpus.valueOf(args[0]);
+        String corpusRoot = args[1];
+        String outDir = args[2];
+
+        ResourceManager fullRm = new CorpusSplitConfigurator().getDefaultConfig();
+
+        boolean throwExceptionOnXmlParserFail = false;
+
+        double trainFrac = fullRm.getDouble(CorpusSplitConfigurator.TRAIN_FRACTION.key);
+        double devFrac = fullRm.getDouble(CorpusSplitConfigurator.DEV_FRACTION.key);
+        double testFrac = fullRm.getDouble(CorpusSplitConfigurator.TEST_FRACTION.key);
+
+//        Path corpusPath = Paths.get(corpusRoot);
+//        String corpusName = corpusPath.getName(corpusPath.getNameCount() - 2).toString();
+
+        IOUtils.mkdir(outDir);
+
+        String outFileStem = outDir + "/";
+        String[] viewNames = fullRm.getCommaSeparatedValues(CorpusSplitConfigurator.VIEWS_TO_CONSIDER.key);//{ViewNames.EVENT_ERE};
+        String[] labelsToCount = {};
+
+
+        EREMentionRelationReader reader = null;
+        try {
+            reader = new EREEventReader(ereCorpus, corpusRoot, throwExceptionOnXmlParserFail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        Map<String, XmlTextAnnotation> ereTas = new HashMap<>();
+        Map<String, Set<View>> ereViews = new HashMap<>();
+
+        while (reader.hasNext()) {
+            XmlTextAnnotation xmlTextAnnotation = reader.next();
+            ereTas.put(xmlTextAnnotation.getTextAnnotation().getId(), xmlTextAnnotation);
+            Set<View> views = new HashSet<>();
+            TextAnnotation ta = xmlTextAnnotation.getTextAnnotation();
+
+            for (String viewName : viewNames)
+                if (ta.hasView(viewName))
+                    views.add(ta.getView(viewName));
+
+            ereViews.put(ta.getId(), views);
+        }
+
+        CreateTrainDevTestSplit creator = new CreateTrainDevTestSplit(ereViews, labelsToCount);
+
+        Map<Split, Set<String>> splits = creator.getSplits(trainFrac, devFrac, testFrac);
+        Map<Split, Counter<String>> splitCounts = creator.getBestRelSplitCounts();
+
+        Map<String, Counter<String>> counts = creator.getLabelCounts();
+
+        List<String> outLines = new ArrayList<>(splitCounts.size() + 2);
+        for (String docId : counts.keySet()) {
+            outLines.add(docId + ": " + printCounts(counts.get(docId)));
+        }
+
+        for (Split s : splitCounts.keySet()) {
+            outLines.add(s.name() + ": " + printCounts(splitCounts.get(s)));
+        }
+
+        Counter<String> totalLabelCounts = creator.getLabelTotals();
+        outLines.add("TOTALS: " + printCounts(totalLabelCounts));
+
+        try {
+            LineIO.write(outFileStem + "countInfo.txt", outLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+
+        for (Split s : splits.keySet()) {
+            List<String> ids = new ArrayList<>(splits.get(s));
+            try {
+                LineIO.write(outFileStem + s.name() + ".txt", ids);
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.exit(-1);
+            }
+        }
+    }
+
+        private static String printCounts(Counter<String> counter) {
+        StringBuilder bldr = new StringBuilder();
+        for (String key : counter.keySet()) {
+            bldr.append(key).append(": ").append(counter.getCount(key)).append("; ");
+        }
+        return bldr.toString();
+    };
+
+    public Map<String,Counter<String>> getLabelCounts() {
+        return labelCounts;
+    }
+
+    public Counter<String> getLabelTotals() {
+        return labelTotals;
+    }
+
+    public Map<Split,Counter<String>> getBestRelSplitCounts() {
+        return bestRelSplitCounts;
+    }
 
     /**
      * build a matrix from docId to label to count.
@@ -404,105 +442,60 @@ public class CreateTrainDevTestSplit {
     }
 
 
-    /**
-     * read from the cache.
-     * @param args
-     */
-    public static void main(String[] args) {
+public enum Split {TRAIN, DEV, TEST}
 
-        if (args.length != 3) {
-            System.err.println("Usage: " + NAME + " EreCorpusType corpusDir splitDir");
-            System.exit(-1);
+    private class QueueElement implements Comparable<QueueElement> {
+        final double score;
+        final Set<String> docIdSet;
+        final Counter<String> labelCounter;
+
+        public QueueElement(double score, Set<String> ids, Counter<String> counts) {
+            this.score = score;
+            this.docIdSet = ids;
+            this.labelCounter = counts;
         }
 
-        EREDocumentReader.EreCorpus ereCorpus = EREDocumentReader.EreCorpus.valueOf(args[0]);
-        String corpusRoot = args[1];
-        String outDir = args[2];
-
-        ResourceManager fullRm = new CorpusSplitConfigurator().getDefaultConfig();
-
-        boolean throwExceptionOnXmlParserFail = false;
-
-        double trainFrac = fullRm.getDouble(CorpusSplitConfigurator.TRAIN_FRACTION);
-        double devFrac = fullRm.getDouble(CorpusSplitConfigurator.DEV_FRACTION);
-        double testFrac = fullRm.getDouble(CorpusSplitConfigurator.TEST_FRACTION);
-
-//        Path corpusPath = Paths.get(corpusRoot);
-//        String corpusName = corpusPath.getName(corpusPath.getNameCount() - 2).toString();
-
-        IOUtils.mkdir(outDir);
-
-        String outFileStem = outDir + "/";
-        String[] viewNames = {ViewNames.MENTION_ERE};
-        String[] labelsToCount = {};
-
-
-        EREMentionRelationReader reader = null;
-        try {
-            reader = new EREMentionRelationReader(ereCorpus, corpusRoot, throwExceptionOnXmlParserFail);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.exit(-1);
+        /**
+         * Compares this object with the specified object for order.  Returns a
+         * negative integer, zero, or a positive integer as this object is less
+         * than, equal to, or greater than the specified object.
+         * <p>
+         * <p>The implementor must ensure <tt>sgn(x.compareTo(y)) ==
+         * -sgn(y.compareTo(x))</tt> for all <tt>x</tt> and <tt>y</tt>.  (This
+         * implies that <tt>x.compareTo(y)</tt> must throw an exception iff
+         * <tt>y.compareTo(x)</tt> throws an exception.)
+         * <p>
+         * <p>The implementor must also ensure that the relation is transitive:
+         * <tt>(x.compareTo(y)&gt;0 &amp;&amp; y.compareTo(z)&gt;0)</tt> implies
+         * <tt>x.compareTo(z)&gt;0</tt>.
+         * <p>
+         * <p>Finally, the implementor must ensure that <tt>x.compareTo(y)==0</tt>
+         * implies that <tt>sgn(x.compareTo(z)) == sgn(y.compareTo(z))</tt>, for
+         * all <tt>z</tt>.
+         * <p>
+         * <p>It is strongly recommended, but <i>not</i> strictly required that
+         * <tt>(x.compareTo(y)==0) == (x.equals(y))</tt>.  Generally speaking, any
+         * class that implements the <tt>Comparable</tt> interface and violates
+         * this condition should clearly indicate this fact.  The recommended
+         * language is "Note: this class has a natural ordering that is
+         * inconsistent with equals."
+         * <p>
+         * <p>In the foregoing description, the notation
+         * <tt>sgn(</tt><i>expression</i><tt>)</tt> designates the mathematical
+         * <i>signum</i> function, which is defined to return one of <tt>-1</tt>,
+         * <tt>0</tt>, or <tt>1</tt> according to whether the value of
+         * <i>expression</i> is negative, zero or positive.
+         *
+         * @param o the object to be compared.
+         * @return a negative integer, zero, or a positive integer as this object
+         * is less than, equal to, or greater than the specified object.
+         * @throws NullPointerException if the specified object is null
+         * @throws ClassCastException   if the specified object's type prevents it
+         *                              from being compared to this object.
+         */
+        @Override
+        public int compareTo(QueueElement o) {
+            return Double.compare(this.score, o.score);
         }
-
-        Map<String, XmlTextAnnotation> ereTas = new HashMap<>();
-        Map<String, Set<View>> ereViews = new HashMap<>();
-
-        while (reader.hasNext()) {
-            XmlTextAnnotation xmlTextAnnotation = reader.next();
-            ereTas.put(xmlTextAnnotation.getTextAnnotation().getId(), xmlTextAnnotation);
-            Set<View> views = new HashSet<>();
-            TextAnnotation ta = xmlTextAnnotation.getTextAnnotation();
-
-            for (String viewName : viewNames)
-                if (ta.hasView(viewName))
-                    views.add(ta.getView(viewName));
-
-            ereViews.put(ta.getId(), views);
-        }
-
-        CreateTrainDevTestSplit creator = new CreateTrainDevTestSplit(ereViews, labelsToCount);
-
-        Map<Split, Set<String>> splits = creator.getSplits(trainFrac, devFrac, testFrac);
-        Map<Split, Counter<String>> splitCounts = creator.getBestRelSplitCounts();
-
-        Map<String, Counter<String>> counts = creator.getLabelCounts();
-
-        List<String> outLines = new ArrayList<>(splitCounts.size() + 2);
-        for (String docId : counts.keySet()) {
-            outLines.add(docId + ": " + printCounts(counts.get(docId)));
-        }
-
-        for (Split s : splitCounts.keySet()) {
-            outLines.add(s.name() + ": " + printCounts(splitCounts.get(s)));
-        }
-
-        Counter<String> totalLabelCounts = creator.getLabelTotals();
-        outLines.add("TOTALS: " + printCounts(totalLabelCounts));
-
-        try {
-            LineIO.write(outFileStem + "countInfo.txt", outLines);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
-        for (Split s : splits.keySet()) {
-            List<String> ids = new ArrayList<>(splits.get(s));
-            try {
-                LineIO.write(outFileStem + s.name() + ".txt", ids);
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.exit(-1);
-            }
-        }
-    }
-
-    private static String printCounts(Counter<String> counter) {
-        StringBuilder bldr = new StringBuilder();
-        for (String key : counter.keySet()) {
-            bldr.append(key).append(": ").append(counter.getCount(key)).append("; ");
-        }
-        return bldr.toString();
     }
 }

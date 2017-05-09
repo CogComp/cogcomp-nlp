@@ -15,8 +15,10 @@ import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREEventReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.ERENerReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.PrintUtils;
 import edu.illinois.cs.cogcomp.nlp.utilities.TextAnnotationPrintHelper;
 
 import java.io.IOException;
@@ -149,6 +151,14 @@ public class EREReaderTest {
         String quoteStr = origXml.substring(QUOTEOFFSETS.getFirst(), QUOTEOFFSETS.getSecond());
         assertEquals(QUOTE_VAL, quoteStr);
 
+
+        runRelationReader(corpusDir);
+        runEventReader(corpusDir);
+
+    }
+
+
+    private static void runRelationReader(String corpusDir) {
         EREMentionRelationReader emr = null;
         try {
             boolean throwExceptionOnXmlTagMismatch = true;
@@ -161,6 +171,7 @@ public class EREReaderTest {
 
         String wantedId = "ENG_DF_000170_20150322_F00000082.xml";
         String posterId = "TheOldSchool";
+        XmlTextAnnotation outputXmlTa = null;
         do {
             outputXmlTa = emr.next();
         } while (!outputXmlTa.getTextAnnotation().getId().equals(wantedId) && emr.hasNext());
@@ -226,7 +237,47 @@ public class EREReaderTest {
             assertNotNull(newTa);
         }
         System.out.println("Report: " + emr.generateReport());
+    }
 
+
+    private static void runEventReader(String corpusDir) {
+        EREEventReader emr = null;
+        try {
+            boolean throwExceptionOnXmlTagMismatch = true;
+            emr = new EREEventReader(EreCorpus.ENR3, corpusDir, throwExceptionOnXmlTagMismatch);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+        assert (emr.hasNext());
+
+        String wantedId = "ENG_DF_000170_20150322_F00000082.xml";
+        String posterId = "TheOldSchool";
+        XmlTextAnnotation outputXmlTa = null;
+
+        do {
+            outputXmlTa = emr.next();
+        } while (!outputXmlTa.getTextAnnotation().getId().equals(wantedId) && emr.hasNext());
+
+        if (!outputXmlTa.getTextAnnotation().getId().equals(wantedId))
+            fail("ERROR: didn't find corpus entry with id '" + wantedId + "'." );
+
+        TextAnnotation output = outputXmlTa.getTextAnnotation();
+
+        assert (output.hasView(ViewNames.MENTION_ERE));
+
+        View nerRelation = output.getView(ViewNames.MENTION_ERE);
+        assert (nerRelation.getConstituents().size() > 0);
+
+        assert (output.hasView(ViewNames.EVENT_ERE));
+        PredicateArgumentView eventView = (PredicateArgumentView) output.getView(emr.getEventViewName());
+
+        assert (eventView.getConstituents().size() > 0);
+
+        System.out.println(eventView.toString());
+        String report = emr.generateReport();
+
+        System.out.println("Event Reader report:\n\n" + report);
 
     }
 
