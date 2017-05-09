@@ -87,7 +87,7 @@ public class ExternalAnnotatorServiceFactory {
         viewGenerators.put(openIEHandler.getViewName(), openIEHandler);
 
         StanfordTrueCaseHandler trueCaseHandler = new StanfordTrueCaseHandler();
-        viewGenerators.put(StanfordTrueCaseHandler.getViewName(), trueCaseHandler);
+        viewGenerators.put(trueCaseHandler.getViewName(), trueCaseHandler);
 
         return viewGenerators;
     }
