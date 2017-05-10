@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREEventReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.tokenizer.MultiLingualTokenizer;
 import org.junit.Test;
@@ -43,11 +44,11 @@ public class MultilingualEreReaderTest {
 //        String lang = "es"; //spanish
 //        TextAnnotationBuilder taBldr = MultiLingualTokenizer.getTokenizer(lang);
 
-        EREMentionRelationReader reader = null;
+        EREEventReader reader = null;
         try {
             boolean throwExceptionOnXmlParseFail = true;
             TextAnnotationBuilder spanishTaBldr = MultiLingualTokenizer.getTokenizer(Language.Spanish.getCode());
-            reader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR2, spanishTaBldr, spanishPathA, throwExceptionOnXmlParseFail);
+            reader = new EREEventReader(EREDocumentReader.EreCorpus.ENR2, spanishTaBldr, spanishPathA, throwExceptionOnXmlParseFail);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -60,11 +61,11 @@ public class MultilingualEreReaderTest {
 
     public static void testChinese() {
 
-        EREMentionRelationReader reader = null;
+        EREEventReader reader = null;
         try {
             boolean throwExceptionOnXmlParseFail = true;
             TextAnnotationBuilder chineseTaBldr = MultiLingualTokenizer.getTokenizer(Language.Chinese.getCode());
-            reader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3,  chineseTaBldr, chinesePathB, throwExceptionOnXmlParseFail);
+            reader = new EREEventReader(EREDocumentReader.EreCorpus.ENR3,  chineseTaBldr, chinesePathB, throwExceptionOnXmlParseFail);
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -75,7 +76,7 @@ public class MultilingualEreReaderTest {
     }
 
 
-    private static void testReader(EREMentionRelationReader reader) {
+    private static void testReader(EREEventReader reader) {
         assertTrue(reader.hasNext());
 
         XmlTextAnnotation xmlTa = reader.next();
@@ -84,6 +85,10 @@ public class MultilingualEreReaderTest {
         assertTrue(ta.hasView(ViewNames.MENTION_ERE));
         assertTrue(ta.getView(ViewNames.MENTION_ERE).getConstituents().size() > 5 );
         assertTrue(ta.getView(ViewNames.MENTION_ERE).getRelations().size() > 0 );
+
+        assertTrue(ta.hasView(ViewNames.EVENT_ERE));
+        assertTrue(ta.getView(ViewNames.EVENT_ERE).getConstituents().size() > 1 );
+        assertTrue(ta.getView(ViewNames.EVENT_ERE).getRelations().size() > 2 );
     }
 
 }

@@ -49,6 +49,12 @@
             <classifier>models</classifier>
         </dependency>
         <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.7.0</version>
+            <classifier>models-spanish</classifier>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>

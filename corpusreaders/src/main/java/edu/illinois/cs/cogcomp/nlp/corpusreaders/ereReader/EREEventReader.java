@@ -1,11 +1,21 @@
+/**
+ * This software is released under the University of Illinois/Research and Academic Use License. See
+ * the LICENSE file in the root folder for details. Copyright (c) 2016
+ *
+ * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
+ * http://cogcomp.cs.illinois.edu/
+ */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -37,17 +47,31 @@ public class EREEventReader extends EREMentionRelationReader {
     private int numEventRolesGenerated;
 
     /**
-     * Read mention-relation annotations -- including coreference -- from ERE corpus.
+     * Read mention-relation annotations -- including coreference -- from ERE English corpus.
      *
      * @param ereCorpus                       the ERE corpus release (values from {@link EreCorpus}
-     * @param corpusRoot
+     * @param corpusRoot the data root directory for the ERE corpus to be processed
      * @param throwExceptionOnXmlParseFailure if 'true', throws exception if xml parser encounters e.g. mismatched
      *                                        open/close tags  @throws Exception
      */
     public EREEventReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
-        super(ereCorpus, corpusRoot, throwExceptionOnXmlParseFailure);
-        reset();
+        this(ereCorpus, new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), corpusRoot, throwExceptionOnXmlParseFailure);
     }
+
+    /**
+     * constructor to allow arbitrary language/tokenization behavior via explicit TextAnnotationBuilder
+     * @param ereCorpus the ERE corpus release (values from {@link EreCorpus} -- specifies source/markup directories,
+     *                  source xml tag behavior
+     * @param taBldr a {@link TextAnnotationBuilder} for the desired language/tokenization behavior.
+     * @param corpusRoot the data root directory for the ERE corpus to be processed
+     * @param throwExceptionOnXmlParseFailure if 'true', throws exception if xml parser encounters e.g. mismatched
+     *                                        open/close tags  @throws Exception
+     * @throws Exception
+     */
+    public EREEventReader(EreCorpus ereCorpus, TextAnnotationBuilder taBldr, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        super(ereCorpus, taBldr, corpusRoot, throwExceptionOnXmlParseFailure);
+    }
+
 
     public static String getEventViewName() {
         return ViewNames.EVENT_ERE;
