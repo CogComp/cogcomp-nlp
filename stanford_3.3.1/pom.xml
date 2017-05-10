@@ -10,7 +10,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>stanford_3.1.1</artifactId>
+    <artifactId>stanford_3.3.1</artifactId>
     <name>Stanford CoreNLP 3.1.1</name>
     <description>Handers to take care of Stanford CoreNLP 3.1.1</description>
 

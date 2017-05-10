@@ -54,7 +54,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>stanford_3.1.1</artifactId>
+            <artifactId>stanford_3.3.1</artifactId>
             <version>3.1.16</version>
         </dependency>
         <dependency>

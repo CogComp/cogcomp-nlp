@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 /**
  * Default configuration
  */
-public class Stanford311Configurtor extends AnnotatorConfigurator {
+public class Stanford331Configurtor extends AnnotatorConfigurator {
     public static final Property STFRD_TIME_PER_SENTENCE = new Property(
             "stanfordMaxTimePerSentence", "100000");
     public static final Property STFRD_MAX_SENTENCE_LENGTH = new Property(

@@ -20,7 +20,7 @@ import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.ner.NerAnnotatorManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
-import edu.illinois.cs.cogcomp.pipeline.common.Stanford311Configurtor;
+import edu.illinois.cs.cogcomp.pipeline.common.Stanford331Configurtor;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordParseHandler;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
@@ -49,11 +49,11 @@ public class PreProcessor {
             ResourceManager curatorConfig = (new CuratorConfigurator()).getConfig(nonDefaultValues);
             annotatorService = CuratorFactory.buildCuratorClient(curatorConfig);
         } else {
-            ResourceManager rm = new Stanford311Configurtor().getDefaultConfig();
-            String timePerSentence = Stanford311Configurtor.STFRD_TIME_PER_SENTENCE.value;
-            String maxParseSentenceLength = Stanford311Configurtor.STFRD_MAX_SENTENCE_LENGTH.value;
+            ResourceManager rm = new Stanford331Configurtor().getDefaultConfig();
+            String timePerSentence = Stanford331Configurtor.STFRD_TIME_PER_SENTENCE.value;
+            String maxParseSentenceLength = Stanford331Configurtor.STFRD_MAX_SENTENCE_LENGTH.value;
             boolean throwExceptionOnSentenceLengthCheck =
-                    rm.getBoolean(Stanford311Configurtor.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
+                    rm.getBoolean(Stanford331Configurtor.THROW_EXCEPTION_ON_FAILED_LENGTH_CHECK.key);
 
             System.out.println("initializing 2 ");
 
