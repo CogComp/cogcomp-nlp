@@ -35,20 +35,18 @@ import java.util.Set;
 
 /**
  * Generate NER annotations using the Annotator API.
- * 
  * @author redman
  */
 public class NERAnnotator extends Annotator {
 
-    /** POS, shallow parsing are NOT required. */
-//    private static final String[] REQUIRED_VIEWS = {};
     /** our specific logger. */
     private final Logger logger = LoggerFactory.getLogger(NERAnnotator.class);
+    
     /** the level one tagger. */
     private NETaggerLevel1 t1;
+    
     /** the level two tagger. */
     private NETaggerLevel2 t2;
-
 
     /**
      * @param nonDefaultConfigValues a configuration file specifying non-default parameters for the
@@ -102,17 +100,13 @@ public class NERAnnotator extends Annotator {
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
 
-        // logger.info("Reading model file: {}",
-        // ParametersForLbjCode.currentParameters.pathToModelFile + ".level1");
-        NETaggerLevel1 tagger1 =
+         NETaggerLevel1 tagger1 =
                 new NETaggerLevel1(ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1", ParametersForLbjCode.currentParameters.pathToModelFile
                         + ".level1.lex");
 
         NETaggerLevel2 tagger2 = null;
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")) {
-            // logger.info("Reading model file: {}",
-            // ParametersForLbjCode.currentParameters.pathToModelFile + ".level2");
             tagger2 =
                     new NETaggerLevel2(ParametersForLbjCode.currentParameters.pathToModelFile
                             + ".level2", ParametersForLbjCode.currentParameters.pathToModelFile
@@ -214,13 +208,12 @@ public class NERAnnotator extends Annotator {
                     if (close) {
                         int s = tokenindices[startIndex];
 
-                        /**
+                        /*
                          * MS: fixed bug. Originally, e was set using tokenindices[tokenoffset], but
                          * tokenoffset can reach tokens.length) and this exceeds array length.
                          * Constituent constructor requires one-past-the-end token indexing,
                          * requiring e > s. Hence the complicated setting of endIndex/e below.
                          */
-
                         int endIndex = Math.min(tokenoffset + 1, tokens.length - 1);
                         int e = tokenindices[endIndex];
                         if (e <= s)

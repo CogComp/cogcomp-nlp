@@ -673,6 +673,8 @@ public class TokenizerStateMachine {
             int lastdash = term.lastIndexOf("-");
             if (lastdash != -1)
                 term = term.substring(lastdash + 1);
+            if (term.length() == 0)
+                return false;
             ArrayList<String> abbrs = Acronyms.get(term.charAt(0));
             if (abbrs != null && abbrs.contains(term))
                 return true;

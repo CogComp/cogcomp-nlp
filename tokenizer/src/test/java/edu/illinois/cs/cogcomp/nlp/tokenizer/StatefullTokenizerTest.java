@@ -33,8 +33,6 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by mssammon on 8/17/15.
@@ -42,10 +40,8 @@ import org.slf4j.LoggerFactory;
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
-    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
-
-
-
+    
+    /** input test file. */
     private static final String INFILE =
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
 
@@ -170,7 +166,6 @@ public class StatefullTokenizerTest {
      */
     private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens,
             IntPair[] offsets) {
-        logger.info(sentence);
         Pair<String[], IntPair[]> tokenize = tokenizer.tokenizeSentence(sentence);
 
         assertEquals(tokens.length, tokenize.getFirst().length);
@@ -266,6 +261,9 @@ public class StatefullTokenizerTest {
         assertNotNull(statefulTa);
     }
 
+    /**
+     * Parse an empty string.
+     */
     @Test
     public void testEmptyString() {
         Tokenizer tkr = new StatefulTokenizer();
@@ -274,6 +272,9 @@ public class StatefullTokenizerTest {
         assertEquals(tknzn.getTokens().length, 0);
     }
 
+    /**
+     * Make sure newline is recognized.
+     */
     @Test
     public void testStringWithNewline() {
         Tokenizer tkr = new StatefulTokenizer();
@@ -281,6 +282,10 @@ public class StatefullTokenizerTest {
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 2);
     }
+    
+    /**
+     * Test that splitting on dash works correctly.
+     */
     @Test
     public void testSplitOnDash() {
         Tokenizer tkr = new StatefulTokenizer();
@@ -289,6 +294,30 @@ public class StatefullTokenizerTest {
         for (String token : tknzn.getTokens())
             System.out.println("token : "+token);
         assertEquals(tknzn.getTokens().length, 6);
+    }
+    
+    /**
+     * This can be used to just quickly debug when a sentence produces an error.
+     * @param args
+     */
+    public static void main(String [] args) {
+        Tokenizer tkr = new StatefulTokenizer(false);
+        String text = "We going to--. ";
+        tkr.tokenizeTextSpan(text);
+        
+        
+        /*TextAnnotationBuilder taBldr = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(true));
+        Map<String, Annotator> annotators = buildAnnotators(fullRm);
+        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm)
+        TextAnnotation basicTextAnnotation = null;
+        BasicAnnotatorService bas = new BasicAnnotatorService();
+        try {
+            basicTextAnnotation = processor.createBasicTextAnnotation("test", "test", text);
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }*/
+
     }
 
 }
