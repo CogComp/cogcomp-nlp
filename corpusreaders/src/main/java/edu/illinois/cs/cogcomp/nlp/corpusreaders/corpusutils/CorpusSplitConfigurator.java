@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
@@ -21,6 +23,8 @@ public class CorpusSplitConfigurator extends Configurator {
     public static final Property TRAIN_FRACTION = new Property("trainFraction", "0.7");
     public static final Property DEV_FRACTION = new Property("devFraction", "0.1");
     public static final Property TEST_FRACTION = new Property("testFraction", "0.2");
+    public static final Property VIEWS_TO_CONSIDER = new Property("viewsToConsider",
+            StringUtils.join(",", new String[]{ViewNames.EVENT_ERE,ViewNames.MENTION_ERE}));
 
 
     /**
@@ -30,7 +34,7 @@ public class CorpusSplitConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = { TRAIN_FRACTION, DEV_FRACTION, TEST_FRACTION };
+        Property[] props = { TRAIN_FRACTION, DEV_FRACTION, TEST_FRACTION, VIEWS_TO_CONSIDER };
         return new ResourceManager(generateProperties(props));
     }
 }
