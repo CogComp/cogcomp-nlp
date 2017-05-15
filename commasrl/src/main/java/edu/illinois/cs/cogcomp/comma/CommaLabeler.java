@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import org.cogcomp.Datastore;
 import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
@@ -19,7 +21,6 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
@@ -51,12 +52,12 @@ public class CommaLabeler extends Annotator {
     public void initialize(ResourceManager resourceManager) {
         try {
             classifier = new LocalCommaClassifier();
-            Datastore ds = new Datastore("http://smaug.cs.illinois.edu:8080");
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File f = ds.getDirectory("org.cogcomp.comma-srl", "comma-srl-models", 2.2, false);
             String folder = f.toString() + File.separator + "comma-srl-models" + File.separator;
             classifier.readLexicon(folder + "LocalCommaClassifier.lex");
             classifier.readModel(folder + "LocalCommaClassifier.lc");
-        } catch (DatastoreException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         assert classifier.getPrunedLexiconSize() > 1000;
@@ -74,7 +75,7 @@ public class CommaLabeler extends Annotator {
                 throw new AnnotatorException("Missing required view " + requiredView);
         }
         // Create the Comma structure
-        Sentence sentence = new Sentence(ta, ta);
+        CommaSRLSentence sentence = new CommaSRLSentence(ta, ta);
 
         PredicateArgumentView srlView =
                 new PredicateArgumentView(viewName, "illinois-comma", ta, 1.0d);
@@ -121,7 +122,7 @@ public class CommaLabeler extends Annotator {
     }
 
     public static String commaViewToString(TextAnnotation ta) {
-        Sentence sentence = new Sentence(ta);
+        CommaSRLSentence sentence = new CommaSRLSentence(ta);
         return sentence.getAnnotatedText();
     }
 

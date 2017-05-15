@@ -10,7 +10,7 @@ package edu.illinois.cs.cogcomp.comma.readers;
 import edu.illinois.cs.cogcomp.comma.annotators.PreProcessor;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -22,12 +22,12 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
-public class PrettyCorpusReader implements IResetableIterator<Sentence>, Serializable {
+public class PrettyCorpusReader implements IResetableIterator<CommaSRLSentence>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private List<Comma> commas;
-    private List<Sentence> sentences;
+    private List<CommaSRLSentence> sentences;
     int sentenceIdx;
     private static String treebankHome, propbankHome, nombankHome;
 
@@ -103,7 +103,7 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
                 }
 
                 try {
-                    Sentence sentence = new Sentence(ta, goldTa, commaLabels);
+                    CommaSRLSentence sentence = new CommaSRLSentence(ta, goldTa, commaLabels);
                     sentences.add(sentence);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -191,14 +191,14 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
         return taMap;
     }
 
-    public List<Sentence> getSentences() {
+    public List<CommaSRLSentence> getSentences() {
         return sentences;
     }
 
     public List<Comma> getCommas() {
         if (commas == null) {
             commas = new ArrayList<>();
-            for (Sentence s : sentences)
+            for (CommaSRLSentence s : sentences)
                 commas.addAll(s.getCommas());
         }
         return commas;
@@ -210,7 +210,7 @@ public class PrettyCorpusReader implements IResetableIterator<Sentence>, Seriali
     }
 
     @Override
-    public Sentence next() {
+    public CommaSRLSentence next() {
         return sentences.get(sentenceIdx);
     }
 

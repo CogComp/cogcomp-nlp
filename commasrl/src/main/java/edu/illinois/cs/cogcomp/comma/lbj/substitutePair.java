@@ -10,20 +10,9 @@
 
 package edu.illinois.cs.cogcomp.comma.lbj;
 
-import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
-import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
-import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
-import edu.illinois.cs.cogcomp.lbjava.learn.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class substitutePair extends ParameterizedConstraint {
@@ -37,20 +26,20 @@ public class substitutePair extends ParameterizedConstraint {
     }
 
     public String getInputType() {
-        return "edu.illinois.cs.cogcomp.comma.datastructures.Sentence";
+        return "edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence";
     }
 
     public String discreteValue(Object __example) {
-        if (!(__example instanceof Sentence)) {
+        if (!(__example instanceof CommaSRLSentence)) {
             String type = __example == null ? "null" : __example.getClass().getName();
             System.err
-                    .println("Constraint 'substitutePair(Sentence)' defined on line 209 of CommaClassifier.lbj received '"
+                    .println("Constraint 'substitutePair(CommaSRLSentence)' defined on line 209 of CommaClassifier.lbj received '"
                             + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
         }
 
-        Sentence s = (Sentence) __example;
+        CommaSRLSentence s = (CommaSRLSentence) __example;
 
         {
             boolean LBJava$constraint$result$0;
@@ -72,10 +61,10 @@ public class substitutePair extends ParameterizedConstraint {
     }
 
     public FeatureVector[] classify(Object[] examples) {
-        if (!(examples instanceof Sentence[])) {
+        if (!(examples instanceof CommaSRLSentence[])) {
             String type = examples == null ? "null" : examples.getClass().getName();
             System.err
-                    .println("Classifier 'substitutePair(Sentence)' defined on line 209 of CommaClassifier.lbj received '"
+                    .println("Classifier 'substitutePair(CommaSRLSentence)' defined on line 209 of CommaClassifier.lbj received '"
                             + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
@@ -93,16 +82,16 @@ public class substitutePair extends ParameterizedConstraint {
     }
 
     public FirstOrderConstraint makeConstraint(Object __example) {
-        if (!(__example instanceof Sentence)) {
+        if (!(__example instanceof CommaSRLSentence)) {
             String type = __example == null ? "null" : __example.getClass().getName();
             System.err
-                    .println("Constraint 'substitutePair(Sentence)' defined on line 209 of CommaClassifier.lbj received '"
+                    .println("Constraint 'substitutePair(CommaSRLSentence)' defined on line 209 of CommaClassifier.lbj received '"
                             + type + "' as input.");
             new Exception().printStackTrace();
             System.exit(1);
         }
 
-        Sentence s = (Sentence) __example;
+        CommaSRLSentence s = (CommaSRLSentence) __example;
         FirstOrderConstraint __result = new FirstOrderConstant(true);
 
         {

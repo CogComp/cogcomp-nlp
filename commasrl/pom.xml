@@ -4,7 +4,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.17</version>
+        <version>3.1.18</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,48 +42,48 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-inference</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.1.17</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -94,11 +94,6 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-sl</artifactId>
             <version>1.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.cogcomp</groupId>
-            <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.7</version>
         </dependency>
         <!--used inside datastore but somehow being overridden by some dependency here. -->
         <dependency>

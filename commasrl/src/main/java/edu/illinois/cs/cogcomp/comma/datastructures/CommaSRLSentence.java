@@ -27,7 +27,7 @@ import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
  * @author navari
  *
  */
-public class Sentence implements Serializable {
+public class CommaSRLSentence implements Serializable {
     protected final TextAnnotation ta;// automatic annotations
     protected final TextAnnotation goldTa;// gold standard annotations
     private final List<Comma> commas;// commas in sentence ordered by position
@@ -36,8 +36,8 @@ public class Sentence implements Serializable {
     /**
      * helper for constructing sentences in which all commas have a single label
      */
-    public static Sentence makeSentence(TextAnnotation ta, TextAnnotation goldTa,
-            List<String> singleLabels) throws Exception {
+    public static CommaSRLSentence makeSentence(TextAnnotation ta, TextAnnotation goldTa,
+                                                List<String> singleLabels) throws Exception {
         List<List<String>> commaLabels = new ArrayList<>();
         for (int i = 0; i < singleLabels.size(); i++) {
             if (commaLabels.get(i) == null)
@@ -45,14 +45,14 @@ public class Sentence implements Serializable {
             else
                 commaLabels.add(Collections.singletonList(singleLabels.get(i)));
         }
-        return new Sentence(ta, goldTa, commaLabels);
+        return new CommaSRLSentence(ta, goldTa, commaLabels);
     }
 
     /**
      * If labels are not given construct commas and assign the labels according to the
      * bayraktar-syntax-pattern to comma label mappings
      */
-    public Sentence(TextAnnotation ta, TextAnnotation goldTa) {
+    public CommaSRLSentence(TextAnnotation ta, TextAnnotation goldTa) {
         this.ta = ta;
         this.goldTa = goldTa;
         commas = new ArrayList<>();
@@ -75,7 +75,7 @@ public class Sentence implements Serializable {
      * @throws Exception throws exception if number of comma-label-lists provided is not equal to
      *         number of commas in the sentence
      */
-    public Sentence(TextAnnotation ta, TextAnnotation goldTa, List<List<String>> labels)
+    public CommaSRLSentence(TextAnnotation ta, TextAnnotation goldTa, List<List<String>> labels)
             throws Exception {
         this.ta = ta;
         this.goldTa = goldTa;
@@ -109,7 +109,7 @@ public class Sentence implements Serializable {
             throw new Exception("must provide labels for all commas in sentence");
     }
 
-    public Sentence(TextAnnotation ta) {
+    public CommaSRLSentence(TextAnnotation ta) {
         this.ta = ta;
         this.goldTa = ta;
         commas = new ArrayList<>();

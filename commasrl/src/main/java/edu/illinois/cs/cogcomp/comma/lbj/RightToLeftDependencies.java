@@ -11,19 +11,7 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
-import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
 import edu.illinois.cs.cogcomp.lbjava.classify.*;
-import edu.illinois.cs.cogcomp.lbjava.infer.*;
-import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
-import edu.illinois.cs.cogcomp.lbjava.learn.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class RightToLeftDependencies extends Classifier {

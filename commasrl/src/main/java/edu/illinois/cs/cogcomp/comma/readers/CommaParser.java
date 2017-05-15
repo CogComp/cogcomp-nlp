@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
@@ -43,7 +43,7 @@ public class CommaParser implements Parser {
      * @param orderCommasBySentence set to true if the all the commas of a sentence should be
      *        present before a comma from another sentence can be presented
      */
-    public CommaParser(List<Sentence> sentences, Ordering ordering, boolean orderCommasBySentence) {
+    public CommaParser(List<CommaSRLSentence> sentences, Ordering ordering, boolean orderCommasBySentence) {
         commas = new ArrayList<>();
         if (orderCommasBySentence) {
             switch (ordering) {
@@ -57,7 +57,7 @@ public class CommaParser implements Parser {
                     break;
             }
         }
-        for (Sentence s : sentences)
+        for (CommaSRLSentence s : sentences)
             commas.addAll(s.getCommas());
 
         if (!orderCommasBySentence) {

@@ -9,7 +9,6 @@ package edu.illinois.cs.cogcomp.comma.datastructures;
 
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
 import edu.illinois.cs.cogcomp.comma.utils.NgramUtils;
-import edu.illinois.cs.cogcomp.comma.utils.PrettyPrintParseTree;
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
@@ -29,7 +28,7 @@ import java.util.*;
 public class Comma implements Serializable {
     private final List<String> labels;
     public final int commaPosition;
-    private Sentence s;
+    private CommaSRLSentence s;
 
     private static final long serialVersionUID = 715976951486905422L;
 
@@ -54,7 +53,7 @@ public class Comma implements Serializable {
      * @param commaPosition The token index of the comma
      * @param s The tokenized string of the sentence
      */
-    protected Comma(int commaPosition, Sentence s, List<String> labels) {
+    protected Comma(int commaPosition, CommaSRLSentence s, List<String> labels) {
         this.commaPosition = commaPosition;
         this.s = s;
         this.labels = labels;
@@ -67,7 +66,7 @@ public class Comma implements Serializable {
      * @param commaPosition The token index of the comma
      * @param s The tokenized string of the sentence
      */
-    protected Comma(int commaPosition, Sentence s) {
+    protected Comma(int commaPosition, CommaSRLSentence s) {
         this(commaPosition, s, null);
     }
 
@@ -87,7 +86,7 @@ public class Comma implements Serializable {
         return commaPosition;
     }
 
-    public Sentence getSentence() {
+    public CommaSRLSentence getSentence() {
         return s;
     }
 

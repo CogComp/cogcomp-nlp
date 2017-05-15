@@ -11,7 +11,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.List;
 
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.comma.utils.EvaluateDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.sl.core.SLModel;
@@ -50,7 +50,7 @@ public class StructuredCommaClassifier extends SLModel {
      * @param modelPath the location to save the learnt model. If it is null, it is not saved
      * @throws Exception
      */
-    public void train(List<Sentence> sentences, String modelPath) throws Exception {
+    public void train(List<CommaSRLSentence> sentences, String modelPath) throws Exception {
         lm.setAllowNewFeatures(true);
         SLProblem sp = CommaIOManager.readProblem(sentences, lm, lbjExtractors, lbjLabeler);
 
@@ -77,7 +77,7 @@ public class StructuredCommaClassifier extends SLModel {
      * @return and EvaluateDiscrete object which can provide the performance statistics
      * @throws Exception
      */
-    public EvaluateDiscrete test(List<Sentence> sentences, String predictionFileName)
+    public EvaluateDiscrete test(List<CommaSRLSentence> sentences, String predictionFileName)
             throws Exception {
         lm.setAllowNewFeatures(false);
         SLProblem sp = CommaIOManager.readProblem(sentences, lm, lbjExtractors, lbjLabeler);

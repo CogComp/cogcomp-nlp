@@ -11,37 +11,27 @@
 package edu.illinois.cs.cogcomp.comma.lbj;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
-import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
-import edu.illinois.cs.cogcomp.comma.readers.CommaParser;
-import edu.illinois.cs.cogcomp.comma.readers.PrettyCorpusReader;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
-import edu.illinois.cs.cogcomp.lbjava.classify.*;
 import edu.illinois.cs.cogcomp.lbjava.infer.*;
-import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.learn.*;
-import edu.illinois.cs.cogcomp.lbjava.parse.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.*;
 
 
 public class LocativePairConstrainedInference extends ILPInference {
-    public static Sentence findHead(Comma c) {
+    public static CommaSRLSentence findHead(Comma c) {
         return c.getSentence();
     }
 
 
     public LocativePairConstrainedInference() {}
 
-    public LocativePairConstrainedInference(Sentence head) {
+    public LocativePairConstrainedInference(CommaSRLSentence head) {
         super(head, new OJalgoHook());
         constraint = new LocativePairConstrainedInference$subjectto().makeConstraint(head);
     }
 
     public String getHeadType() {
-        return "edu.illinois.cs.cogcomp.comma.datastructures.Sentence";
+        return "edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence";
     }
 
     public String[] getHeadFinderTypes() {

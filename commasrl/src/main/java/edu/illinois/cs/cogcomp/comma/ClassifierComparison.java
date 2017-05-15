@@ -14,7 +14,7 @@ import java.util.List;
 import edu.illinois.cs.cogcomp.comma.bayraktar.BayraktarPatternLabeler;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.comma.lbj.ListCommasConstrainedCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocalCommaClassifier;
 import edu.illinois.cs.cogcomp.comma.lbj.LocativePairConstrainedCommaClassifier;
@@ -130,7 +130,7 @@ public class ClassifierComparison {
         for (int i = 0; i < k; foldParser.setPivot(++i)) {
             foldParser.setFromPivot(false);
             foldParser.reset();
-            LinkedHashSet<Sentence> trainSentences = new LinkedHashSet<>();
+            LinkedHashSet<CommaSRLSentence> trainSentences = new LinkedHashSet<>();
             for (Object comma = foldParser.next(); comma != null; comma = foldParser.next()) {
                 trainSentences.add(((Comma) comma).getSentence());
             }
@@ -138,7 +138,7 @@ public class ClassifierComparison {
             if (!testOnTrain)
                 foldParser.setFromPivot(true);
             foldParser.reset();
-            LinkedHashSet<Sentence> testSentences = new LinkedHashSet<>();
+            LinkedHashSet<CommaSRLSentence> testSentences = new LinkedHashSet<>();
             for (Object comma = foldParser.next(); comma != null; comma = foldParser.next()) {
                 testSentences.add(((Comma) comma).getSentence());
             }

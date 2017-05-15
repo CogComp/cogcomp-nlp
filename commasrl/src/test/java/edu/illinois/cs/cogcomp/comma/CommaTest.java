@@ -11,11 +11,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import junit.framework.TestCase;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -79,8 +79,8 @@ public class CommaTest extends TestCase {
         List<String> firstCommasRefinedLabels = Collections.singletonList("Substitute");
         List<String> secondCommasRefinedLabels = Arrays.asList("Substitute", "Quotation");
 
-        Sentence sentence =
-                new Sentence(ta, null, Arrays.asList(firstCommasRefinedLabels,
+        CommaSRLSentence sentence =
+                new CommaSRLSentence(ta, null, Arrays.asList(firstCommasRefinedLabels,
                         secondCommasRefinedLabels));
         List<Comma> sentenceCommas = sentence.getCommas();
         commas = sentenceCommas.toArray(new Comma[sentenceCommas.size()]);

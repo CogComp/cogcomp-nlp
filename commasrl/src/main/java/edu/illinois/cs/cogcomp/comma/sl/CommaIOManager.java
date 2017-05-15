@@ -14,7 +14,7 @@ import java.util.List;
 
 import edu.illinois.cs.cogcomp.comma.datastructures.Comma;
 import edu.illinois.cs.cogcomp.comma.datastructures.CommaProperties;
-import edu.illinois.cs.cogcomp.comma.datastructures.Sentence;
+import edu.illinois.cs.cogcomp.comma.datastructures.CommaSRLSentence;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
 import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
@@ -22,8 +22,8 @@ import edu.illinois.cs.cogcomp.sl.util.Lexiconer;
 public class CommaIOManager {
     public static final String unknownFeature = "unknwonfeature";
 
-    public static SLProblem readProblem(List<Sentence> sentences, Lexiconer lexicon,
-            List<Classifier> lbjExtractors, Classifier lbjLabeler) {
+    public static SLProblem readProblem(List<CommaSRLSentence> sentences, Lexiconer lexicon,
+                                        List<Classifier> lbjExtractors, Classifier lbjLabeler) {
         if (lexicon.isAllowNewFeatures())
             lexicon.addFeature(unknownFeature);
         // lexicon.addLabel("occupy-zero-label-for-some-reason");
@@ -31,7 +31,7 @@ public class CommaIOManager {
         SLProblem sp = new SLProblem();
 
         // READ PROBLEM
-        for (Sentence sentence : sentences) {
+        for (CommaSRLSentence sentence : sentences) {
             List<CommaSequence> commaSequences =
                     getCommaSequences(sentence, lexicon, lbjExtractors);
             for (CommaSequence commaSequence : commaSequences) {
@@ -44,8 +44,8 @@ public class CommaIOManager {
         return sp;
     }
 
-    public static List<CommaSequence> getCommaSequences(Sentence sentence, Lexiconer lexicon,
-            List<Classifier> lbjExtractors) {
+    public static List<CommaSequence> getCommaSequences(CommaSRLSentence sentence, Lexiconer lexicon,
+                                                        List<Classifier> lbjExtractors) {
         LinkedList<Comma> allCommasInSentence = new LinkedList<>(sentence.getCommas());
         List<CommaSequence> commaSequences = new ArrayList<>();
         boolean isCommaStructureFullSentence =
