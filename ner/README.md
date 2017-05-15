@@ -140,10 +140,12 @@ public class App
 ```
 
 Note that you will need to include all the included jars on the classpath, as before.
+The following commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
-$ javac -cp "dist/*:lib/*:models/*" App.java
-$ java -cp "dist/*:lib/*:models/*:." App
+$ javac -cp "target/*.jar:target/dependency/*" App.java
+$ java -cp "target/*.jar:target/dependency/*:." App
 ```
 
 If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
