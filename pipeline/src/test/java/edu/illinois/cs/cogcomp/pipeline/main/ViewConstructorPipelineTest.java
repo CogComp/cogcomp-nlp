@@ -58,7 +58,13 @@ public class ViewConstructorPipelineTest {
         System.out.println("found " + ta.getView(ViewNames.POS).getConstituents() + " POS constituents." );
     }
 
-    @Test
+    /**
+     * NOTE: this test cannot be run as part of test suite as it tries to
+     *   open a default cache already used elsewhere by other tests, which will
+     *   not be closed properly. This test is useful to verify that the particular
+     *   factory method works, but must be run separately.
+     */
+//    @Test
     public void testPosPipeline() {
         String input = null;
         try {
