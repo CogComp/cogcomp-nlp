@@ -54,14 +54,9 @@ print a warning about the missing components.
 
 ## Contents 
 
-If you have downloaded the Cogcomp NLP Pipeline as a stand-alone package,
-it will come with all the libraries and other files it requires. 
-
-The download package is organized thus:
+The pipeline module is organized thus:
 ```
 config/ : configuration files
-dist/ : the Cogcomp Preprocessor jar
-lib/ : dependencies
 scripts/ : scripts to allow command-line test of the Cogcomp NLP Pipeline
 src/ : source code for the Cogcomp NLP Pipeline
 test/ : test files used for the command line test of the Cogcomp NLP Pipeline
@@ -98,13 +93,10 @@ implement a class that follows the `Tokenizer` interface from
 
 
 ### Running a Simple Command-Line Test
-Assuming you downloaded the pipeline package as a zip from the
-Cogcomp Cognitive Computation Group's web site. 
-
-The standard distribution for this package puts dependencies in `lib/`;
-the parser model in `data/`; and the config file in `config/`. There are
-two sample scripts that are provided to test that the
-pipeline works after you have downloaded
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the pipeline binary in `target/` and copies all dependency jars into 
+`target/dependency`.  
+Two sample scripts are provided to test that the pipeline works after you have downloaded
 it. `scripts/runPipelineOnDataset.sh` takes as arguments a configuration file
 and a text file; it processes the text file according to the
 properties set in the config file, and writes output to STDOUT.
