@@ -4,7 +4,7 @@
 # PURPOSE: test the Illinois Temporal Extractor using a fixed
 #   input file and reference output. 
 # executor must have read/write/execute privileges in test dir. 
-#
+# must first run 'mvn install' and 'mvn dependency:copy-dependencies"
 
 CONFIG="config"
 TEST="test"

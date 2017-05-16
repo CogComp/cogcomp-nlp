@@ -105,11 +105,11 @@ The standard distribution for this package puts dependencies in `lib/`;
 the parser model in `data/`; and the config file in `config/`. There are
 two sample scripts that are provided to test that the
 pipeline works after you have downloaded
-it. `scripts/runPreprocessor.sh` takes as arguments a configuration file
+it. `scripts/runPipelineOnDataset.sh` takes as arguments a configuration file
 and a text file; it processes the text file according to the
 properties set in the config file, and writes output to STDOUT.
 scripts/testPreprocessor.sh is a self-contained script that calls
-`runPreprocessor.sh` with fixed arguments and compares the output to
+`runPipelineOnDataset.sh` with fixed arguments and compares the output to
 some reference output. If the new output and reference output are
 different, the script prints an error message and indicates the
 differences.
@@ -120,12 +120,12 @@ directory, run the command:
 Running the test:
 
 ```sh
-scripts/testPreprocessor.sh
+scripts/testPipeline.sh
 ```
 
 Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
 ```sh
-scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+scripts/runPipelineOnDataset.sh  config/pipelineConfig.txt [yourInputFile] [yourOutputFile]
 ```
 
 ### Programmatic Use
