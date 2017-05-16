@@ -160,7 +160,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
      * @return
      * @throws FileNotFoundException
      */
-    private TextAnnotation loadCoNLLfile(String filename) throws FileNotFoundException {
+    public static TextAnnotation loadCoNLLfile(String filename) throws FileNotFoundException {
         logger.info("Reading: " + filename);
         List<String> lines = LineIO.read(filename);
 
