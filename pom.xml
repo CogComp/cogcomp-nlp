@@ -24,7 +24,9 @@
         <module>inference</module>
         <module>quantifier</module>
         <module>depparse</module>
+        <module>commasrl</module>
         <module>prepsrl</module>
+        <module>stanford_3.3.1</module>
         <module>pipeline</module>
         <module>external</module>
     </modules>
@@ -154,6 +156,7 @@
                         <exclude>**/*.md</exclude>
                         <exclude>**/*.py</exclude>
                         <exclude>**/*.yml</exclude>
+                        <exclude>**/*.html</exclude>
                         <exclude>src/test/resources/**</exclude>
                         <exclude>src/main/resources/**</exclude>
 
