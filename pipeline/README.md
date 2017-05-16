@@ -100,7 +100,7 @@ Two sample scripts are provided to test that the pipeline works after you have d
 it. `scripts/runPipelineOnDataset.sh` takes as arguments a configuration file
 and a text file; it processes the text file according to the
 properties set in the config file, and writes output to STDOUT.
-scripts/testPreprocessor.sh is a self-contained script that calls
+`scripts/testPreprocessor.sh` is a self-contained script that calls
 `runPipelineOnDataset.sh` with fixed arguments and compares the output to
 some reference output. If the new output and reference output are
 different, the script prints an error message and indicates the
