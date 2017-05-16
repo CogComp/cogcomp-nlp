@@ -28,10 +28,10 @@ public class RandomSubset {
     }
 
     public DocumentCollection getRandomSubset(int setSize) {
-        // System.out.println("Building random sample");
+        // logger.info("Building random sample");
         DocumentCollection res = new DocumentCollection();
         if (setSize > remainingCapacity) {
-            System.out
+            System.err
                     .println("Error-requested random subset size exceeds the available set capacity");
             System.exit(0);
         }
@@ -45,20 +45,19 @@ public class RandomSubset {
                 res.docs.add(docs.elementAt(i));
             }
         }
-        // System.out.println("Done building random sample");
+        // logger.info("Done building random sample");
         return res;
     }
 
     public DocumentCollection getBalancedRandomSubset(int classesNum, int numSamplesPerClass) {
-        System.out.println("Building random sample");
+        logger.info("Building random sample");
         int[] availableCounts = new int[classesNum];
         for (int i = 0; i < this.docs.size(); i++)
             if (isAvailable(i))
                 availableCounts[docs.elementAt(i).classID]++;
         for (int i = 0; i < classesNum; i++) {
             if (availableCounts[i] < numSamplesPerClass) {
-                System.out
-                        .println("Cannot build a balances sample- missing enough elements for one of the classes");
+                System.err.println("Cannot build a balances sample- missing enough elements for one of the classes");
                 System.exit(0);
             }
             availableCounts[i] = numSamplesPerClass;

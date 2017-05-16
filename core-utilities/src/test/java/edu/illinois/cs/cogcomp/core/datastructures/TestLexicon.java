@@ -9,12 +9,15 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 
 import junit.framework.TestCase;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
 public class TestLexicon {
+    private static Logger logger = LoggerFactory.getLogger(TestLexicon.class);
 
     private final Random random = new Random();
     private final String alphabet =
@@ -31,7 +34,7 @@ public class TestLexicon {
         // populate lexicon with features.
 
         List<String> set = populateLexicon(lexicon, maxLen, N);
-        System.out.println(set.size() + " unique features");
+        logger.info(set.size() + " unique features");
 
         Lexicon prunedLexicon = lexicon.getPrunedLexicon(threshold);
 
@@ -65,15 +68,15 @@ public class TestLexicon {
 
         int[] f2 = prunedLexicon.getFeatureVector(features).getFirst();
 
-        System.out.println(Arrays.toString(feats.getFirst()));
+        logger.info(Arrays.toString(feats.getFirst()));
 
         for (int id : feats.getFirst()) {
-            System.out.println(id + "\t" + lexicon.lookupName(id) + "\t"
+            logger.info(id + "\t" + lexicon.lookupName(id) + "\t"
                     + lexicon.featureCounts.get(id));
         }
 
-        System.out.println(Arrays.toString(f1));
-        System.out.println(Arrays.toString(f2));
+        logger.info(Arrays.toString(f1));
+        logger.info(Arrays.toString(f2));
         assertEquals(true, Arrays.equals(f1, f2));
     }
 

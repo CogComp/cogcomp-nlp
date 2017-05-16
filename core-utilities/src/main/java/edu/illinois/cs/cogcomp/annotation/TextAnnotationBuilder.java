@@ -24,6 +24,11 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
  */
 public interface TextAnnotationBuilder {
 
+    /**
+     * define a configuration flag to specify behavior w.r.t. hyphens
+     */
+    public static final String SPLIT_ON_DASH = "splitOnDash";
+
     String getName();
 
     /**

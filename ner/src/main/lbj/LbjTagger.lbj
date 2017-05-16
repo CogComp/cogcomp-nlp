@@ -61,6 +61,18 @@ real% WordEmbeddingFeatures(NEWord word) <-
 	}
 }
 
+discrete% WikifierFeatures(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WikifierFeatures")){
+
+        if(word.wikifierFeatures != null){
+            for(int i = 0; i < word.wikifierFeatures.length; i++){
+                sense "" : "WIKI-"+word.wikifierFeatures[i];
+            }
+        }
+    }
+}
+
 
 discrete% IsSentenceStart(NEWord word) <-
 {
@@ -207,6 +219,19 @@ discrete% Affixes(NEWord word) <-
 	}
 }
 
+discrete% AffixesZH(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Affixes")
+	&& ParametersForLbjCode.currentParameters.language.equals("zh"))
+	{
+  		int N = word.form.length();
+	  	for (int i = 1; i <= 2; ++i)
+    		if (word.form.length() > i) sense "ZH-p|" : word.form.substring(0, i);
+  		for (int i = 1; i <= 2; ++i)
+    		if (word.form.length() > i) sense "ZH-s|" : word.form.substring(N - i);
+	}
+}
+
 
 discrete NELabel(NEWord word) <- { return word.neLabel; }
 
@@ -338,7 +363,7 @@ discrete% PreviousTagPatternLevel1(NEWord word) <-
 	}
 }
 
-mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures
+mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, WikifierFeatures, AffixesZH
 
 mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp /*,  IsWordCaseNormalized&&FeaturesSharedTemp*/
 

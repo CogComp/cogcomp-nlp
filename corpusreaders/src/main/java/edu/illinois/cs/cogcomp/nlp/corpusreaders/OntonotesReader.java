@@ -31,14 +31,18 @@ import java.util.Map;
  * package. This reader just processes {@link TextAnnotation}s; Coreference mentions and gold labels
  * are ignored.
  */
-public class OntonotesReader extends TextAnnotationReader {
+public class OntonotesReader extends AnnotationReader<TextAnnotation> {
+    private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
     private List<TextAnnotation> textAnnotations;
     private int taCounter;
 
-    private static Logger logger = LoggerFactory.getLogger(OntonotesReader.class);
-
+    /**
+     * TODO: handle file extensions in OntoNotes. This is complicated because it has many different types of annotation file
+     * and is not well organized.
+     * @param ontonotesDirectory
+     */
     public OntonotesReader(String ontonotesDirectory) {
-        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory));
+        super(CorpusReaderConfigurator.buildResourceManager("Ontonotes", ontonotesDirectory, ontonotesDirectory, "", ""));
         this.taCounter = 0;
 
     }
@@ -47,6 +51,7 @@ public class OntonotesReader extends TextAnnotationReader {
     public boolean hasNext() {
         return textAnnotations.size() > taCounter;
     }
+
 
     @Override
     protected void initializeReader() {
@@ -82,12 +87,19 @@ public class OntonotesReader extends TextAnnotationReader {
         }
     }
 
+
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
     @Override
-    protected TextAnnotation makeTextAnnotation() throws Exception {
+    public TextAnnotation next() {
         if (!hasNext())
             return null;
         return textAnnotations.get(taCounter++);
     }
+
 
     private TextAnnotation loadCoNLLfile(String filename, int part) throws FileNotFoundException {
         String m_docID = null;
@@ -361,4 +373,14 @@ public class OntonotesReader extends TextAnnotationReader {
         else
             return s;
     }
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
 }

@@ -8,6 +8,8 @@
 package edu.illinois.cs.cogcomp.core.io.caches;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DBHelper {
+    private static Logger logger = LoggerFactory.getLogger(DBHelper.class);
 
     private static final String sqlDriver = "org.h2.Driver";
 
@@ -40,7 +43,7 @@ public class DBHelper {
         Statement statement = connection.createStatement();
         String sql = "create table " + tableName + " (" + tableDefinition + ")";
 
-        System.out.println(sql);
+        logger.info(sql);
         statement.executeUpdate(sql);
 
         statement.close();

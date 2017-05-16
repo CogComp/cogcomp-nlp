@@ -13,8 +13,11 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import org.jetbrains.annotations.NotNull;
 import org.mapdb.DB;
+import org.mapdb.DBException;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -30,17 +33,28 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     private DB db;
+    private Logger logger = LoggerFactory.getLogger(TextAnnotationMapDBHandler.class);
 
     public TextAnnotationMapDBHandler(String dbFile) {
-        db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+        try {
+            db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+        }
+        catch (DBException e) {
+//            logger.warn("mapdb couldn't instantiate db using file '{}': check error and either remove lock, " +
+//                    "repair file, or delete file.", dbFile);
+            e.printStackTrace();
+            System.err.println("mapdb couldn't instantiate db using file '" + dbFile +
+                    "': check error and either remove lock, repair file, or delete file.");
+            throw e;
+        }
     }
-
     /**
      * MapDB requires the database to be closed at the end of operations. This is usually handled by the
      * {@code closeOnJvmShutdown()} snippet in the initializer, but this method needs to be called if
      * multiple instances of the {@link TextAnnotationMapDBHandler} are used.
      */
     public void close() {
+        db.commit();
         db.close();
     }
 
@@ -104,6 +118,12 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         };
     }
 
+    /**
+     * checks whether ta with corresponding TEXT is in database -- not whether the same
+     *    annotations are present
+     * @param ta
+     * @return
+     */
     @Override
     public boolean contains(TextAnnotation ta) {
         boolean isContained = false;
@@ -120,6 +140,19 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
             final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
             data.remove(ta.getTokenizedText().hashCode());
         }
+    }
+
+    @Override
+    public TextAnnotation getTextAnnotation(TextAnnotation ta) {
+        for (String dataset : getAllDatasets()) {
+            final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
+            if(data.containsKey(ta.getTokenizedText().hashCode()))
+            {
+                byte[] taData = data.get(ta.getTokenizedText().hashCode());
+                return SerializationHelper.deserializeTextAnnotationFromBytes(taData);
+            }
+        }
+        return null;
     }
 
     private ConcurrentMap<Integer, byte[]> getMap(String dataset) {

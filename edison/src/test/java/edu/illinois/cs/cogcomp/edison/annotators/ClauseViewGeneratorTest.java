@@ -15,11 +15,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TreeView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import junit.framework.TestCase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
 
 public class ClauseViewGeneratorTest {
+
+    private static Logger logger = LoggerFactory.getLogger(ClauseViewGeneratorTest.class);
 
 //    public void setUp() throws Exception {
 //        super.setUp();
@@ -70,6 +74,6 @@ public class ClauseViewGeneratorTest {
             fail(e.getMessage());
         }
 
-        System.out.println(ta.getView("clauses"));
+        logger.info(ta.getView("clauses").toString());
     }
 }

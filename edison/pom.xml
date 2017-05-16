@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.83</version>
+        <version>3.1.19</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,79 +15,83 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.83</version>
+            <version>3.1.19</version>
         </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>brown-clusters</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>cbc-clusters</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>corlex</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>gazetteers</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>levin-verbClass</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>lin-clusters</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>lin-similarity</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>rogetThesaurus</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>verb-lemDict</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-            <artifactId>wordEmbedding</artifactId>
-            <version>1.3</version>
-            <scope>runtime</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+        <!--<artifactId>brown-clusters</artifactId>-->
+        <!--<version>1.3</version>-->
+        <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>cbc-clusters</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>corlex</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>gazetteers</artifactId>-->
+            <!--<version>1.3</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>levin-verbClass</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>lin-clusters</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>lin-similarity</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>rogetThesaurus</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>verb-lemDict</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+            <!--<artifactId>wordEmbedding</artifactId>-->
+            <!--<version>1.3</version>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.0.83</version>
+            <version>3.1.19</version>
         </dependency>
         <!-- Used only in utilities.CreateTestTAResource -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.83</version>
+            <version>3.1.19</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.7</version>
         </dependency>
         <!-- Used only in features.FeatureUtilities to convert to LBJava-based feature vectors -->
         <dependency>
@@ -104,12 +108,6 @@
             <groupId>org.tartarus</groupId>
             <artifactId>snowball</artifactId>
             <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

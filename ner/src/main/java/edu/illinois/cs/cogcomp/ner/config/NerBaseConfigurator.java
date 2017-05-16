@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.ner.config;
 
 import edu.illinois.cs.cogcomp.annotation.AnnotatorConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 import java.util.Properties;
@@ -23,6 +24,12 @@ import java.util.Properties;
  * override only those values that conflict with defaults. Created by mssammon on 10/14/15.
  */
 public class NerBaseConfigurator extends AnnotatorConfigurator {
+
+    /**
+     * default: do NOT treat as sentence-level annotator as NER has some features that are based on a large context
+     *     window.
+     */
+    public final static Property IS_SENTENCE_LEVEL = new Property(AnnotatorConfigurator.IS_SENTENCE_LEVEL.key, FALSE);
 
     public final static String PATH_TO_MODEL = "pathToModelFile";
     public final static String VIEW_NAME = "viewName";
@@ -40,6 +47,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     public final static String MIN_CONFIDENCE_PREDICTIONS_2 = "minConfidencePredictionsLevel2";
     public final static String TREAT_ALL_FILES_AS_ONE = "treatAllFilesInFolderAsOneBigDocument";
     public final static String DEBUG = "debug";
+    public final static String LANGUAGE = "language";
 
 
     public final static String FORMS = "Forms";
@@ -105,6 +113,7 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
     private final static String DEFAULT_TREAT_ALL_FILES_AS_ONE = TRUE;
     private final static String DEFAULT_DEBUG = FALSE;
     private final static String DEFAULT_MODEL_NAME = "CoNLL";
+    private final static String DEFAULT_LANGUAGE = "en";
 
     private static final String DEFAULT_RANDOM_NOISE_LEVEL = "0.1";
     private static final String DEFAULT_OMISSION_RATE = "0.2";
@@ -155,6 +164,8 @@ public class NerBaseConfigurator extends AnnotatorConfigurator {
         props.setProperty(RANDOM_NOISE_LEVEL, DEFAULT_RANDOM_NOISE_LEVEL);
         props.setProperty(OMISSION_RATE, DEFAULT_OMISSION_RATE);
         props.setProperty(IS_LAZILY_INITIALIZED.key, TRUE);
+        props.setProperty(LANGUAGE, DEFAULT_LANGUAGE);
+        props.setProperty(IS_SENTENCE_LEVEL.key, IS_SENTENCE_LEVEL.value);
 
         return new ResourceManager(props);
     }

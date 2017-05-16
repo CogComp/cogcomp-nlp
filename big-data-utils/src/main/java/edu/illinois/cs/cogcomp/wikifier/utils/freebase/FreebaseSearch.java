@@ -78,11 +78,11 @@ public class FreebaseSearch {
 		// First, try the cache.
 		String checksum = QueryMQL.getMD5Checksum(query);
 		if (IOUtils.exists(cacheLocation + "/" + checksum + ".cached")) {
-//			System.out.println("Found!");
+//			logger.info("Found!");
 			return parseJson(FileUtils.readFileToString(new File(cacheLocation
 					+ "/" + checksum + ".cached"), "UTF-8"));
 		} else {
-			System.out.println("Caching");
+			logger.info("Caching");
 			String tmp = getQueryResponse(query);
 			FileUtils.writeStringToFile(new File(cacheLocation + "/" + checksum
 					+ ".cached"), tmp, "UTF-8");
@@ -102,14 +102,14 @@ public class FreebaseSearch {
 		String checksum = QueryMQL.getMD5Checksum(query);
 		String filename = rdfCacheLocation + "/" + checksum + ".cached";
 		if (IOUtils.exists(filename)) {
-//			System.out.println("Found!");
+//			logger.info("Found!");
 			try {
 				return LineIO.read(filename);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Caching");
+			logger.info("Caching");
 			List<String> tmp = queryByID(query);
 			try {
 				FileUtils.writeStringToFile(new File(filename), tmp.stream().collect(joining("\n")), "UTF-8");
@@ -143,7 +143,7 @@ public class FreebaseSearch {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		System.out.println("QUERY URL: " + url);
+		logger.info("QUERY URL: " + url);
 		URLConnection conn = null;
 		InputStream in;
 		try {
@@ -173,7 +173,7 @@ public class FreebaseSearch {
 		String url = String.format(
 				"https://www.googleapis.com/freebase/v1/search?query=%s&key="
 						+ apikey, URLEncoder.encode(query, "UTF-8"));
-		System.out.println("QUERY URL: " + url);
+		logger.info("QUERY URL: " + url);
 		URLConnection conn = new URL(url).openConnection();
 		InputStream in = conn.getInputStream();
 
@@ -196,7 +196,7 @@ public class FreebaseSearch {
 	}
 
 	public String[] query(String q) throws IOException {
-		System.out.println("in query:" + q);
+		logger.info("in query:" + q);
 		List<String> ans = new ArrayList<String>();
 		try {
 			List<FreebaseAnswer> tmp = lookup(q);
@@ -218,22 +218,22 @@ public class FreebaseSearch {
 		FreebaseSearch fb = new FreebaseSearch();
 		List<FreebaseAnswer> answers = fb.lookup("Barack_Obama");
 		String mid = answers.get(0).getMid().substring(1);
-//		Arrays.asList(answers).forEach(x -> System.out.println(x));
+//		Arrays.asList(answers).forEach(x -> logger.info(x));
 
 		// for(FreebaseAnswer term:fb.lookup("Obama"))
 		// {
-		// System.out.println(term.getName()+" ");
+		// logger.info(term.getName()+" ");
 		// }
 		// Map<String, String> map = MapDB
 		// .newDefaultDb("data/freebaseRawResponseCache/",
 		// "freebase_cache").make().getHashMap("freebase_cache");
-		// System.out.println(map.size());
+		// logger.info(map.size());
 		// int i = 0;
 		// for (String key : map.keySet()) {
-		// // System.out.println(map.get(key));
+		// // logger.info(map.get(key));
 		// fb.lookup(key);
 		// if (i++ % 1000 == 0) {
-		// System.out.println("Done " + i);
+		// logger.info("Done " + i);
 		// }
 		// }
 		// query = "Obomber"; //
@@ -270,21 +270,21 @@ public class FreebaseSearch {
 		// FreebaseSearch search = new FreebaseSearch(
 		// "/shared/bronte/tac2014/data/freebaseCache");
 		// FreebaseSearch search = new FreebaseSearch();
-		// System.out.println(search.lookup("Popolo Delle Liberta'"));
+		// logger.info(search.lookup("Popolo Delle Liberta'"));
 		// FreebaseSearch search = new FreebaseSearch("freebase_cache");
-		// System.out.println(search.cache.size());
+		// logger.info(search.cache.size());
 		// populate(search);
-		// System.out.println(search.cache.size());
+		// logger.info(search.cache.size());
 
 		// for(String key:search.cache.keySet())
 		// {
-		// System.out.println(key+" : "+search.cache.get(key));
-		// System.out.println(search.cache.get(key).size());
+		// logger.info(key+" : "+search.cache.get(key));
+		// logger.info(search.cache.get(key).size());
 		//
-		// // System.out.println(remove_duplicates(search.cache.get(key)));
+		// // logger.info(remove_duplicates(search.cache.get(key)));
 		// // search.cache.put(key, remove_duplicates(search.cache.get(key)));
 		// //
-		// System.out.println(remove_duplicates(search.cache.get(key)).size());
+		// logger.info(remove_duplicates(search.cache.get(key)).size());
 		// }
 		// int c=0;
 		// while(true)
@@ -296,11 +296,11 @@ public class FreebaseSearch {
 		// e.printStackTrace();
 		// }
 		// c++;
-		// System.out.println(c);
+		// logger.info(c);
 		// }
 		// for (String query : querys)
 		// for (String ans : search.lookup(query)) {
-		// System.out.println(ans);
+		// logger.info(ans);
 		// }
 	}
 }

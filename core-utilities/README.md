@@ -1,6 +1,6 @@
-# illinois-core-utilities
+# Cogcomp Core-Utilities
 
-   illinois-core-utilities is a Java library that is designed to help programming NLP
+   cogcomp-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP
    annotations of text (like parse trees, parts of speech, semantic
    roles, coreference, etc.) 
@@ -78,12 +78,12 @@ single piece of text is called a `TextAnnotation`.
 A `TextAnnotation` can be thought of as a container that stores different layers 
 of annotations over some text.
 
-  1. Using the LBJ sentence splitter and tokenizer
- 
+ 1. Using the LBJ sentence splitter and tokenizer: 
+    
     The simplest way to define a `TextAnnotation` is to just give the
     text to the constructor. Note that in the following example,
     `text1` consists of three sentences. The corresponding `ta1` will
-    use the sentence slitter defined in the [Learning Based Java](https://github.com/IllinoisCogComp/lbjava) (LBJava)
+    use the sentence slitter defined in the [Learning Based Java](https://github.com/CogComp/lbjava) (LBJava)
     library to split the text into sentences and further apply the
     LBJ tokenizer to tokenize the sentence.
     
@@ -101,8 +101,8 @@ of annotations over some text.
     TextAnnotation ta1 = tab.createTextAnnotation(corpus, textId, text1); 
     ```
 
-  2. Using pre-tokenized text
-
+ 2. Using pre-tokenized text:  
+    
     Quite often, our data source could specify the tokenization for
     text. We can use this to create a `TextAnnotation` by specifying
     the sentences and tokens manually. In this case, the input to the
@@ -120,7 +120,7 @@ of annotations over some text.
     
 	List<String[]> tokenizedSentences = Arrays.asList(sentence1, sentence2);
     TextAnnotation ta2 = BasicTextAnnotationBuilder.createTextAnnotationFromTokens(
-    											corpus, textId2, tokenizedSentences);
+    		corpus, textId2, tokenizedSentences);
     ```
       
 ### Views 
@@ -296,8 +296,8 @@ for (Constituent neConstituent : ne.getConstituents()) {
 `AnnotatorService` is our super-wrapper that provides access to different annotations and free caching. 
  Currently we have two classes implementing `AnnotatorService`: 
  
-  1. illinois-curator 
-  2. illinois-pipeline 
+  1. [cogcomp-curator](../curator/README.md)
+  2. [nlp-pipeline](../pipeline/README.md)
 
 
 The image below describes the different ways of creating 
@@ -305,11 +305,15 @@ The image below describes the different ways of creating
 
 ![schema 001](https://cloud.githubusercontent.com/assets/2441454/10808693/4132f746-7dbc-11e5-8d6a-b5fe1e8ed0b8.png)
 
-Below is an example of how to use `IllinoisPipelineFactory` to create new annotations. 
+Below is an example of how to use `PipelineFactory` to create new annotations. 
 
 ```java 
-AnnotatorService annotator = IllinoisPipelineFactory.buildPipeline();
-// Or alternatively to use the curator: 
+using edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
+
+AnnotatorService annotator = PipelineFactory.buildPipeline();
+
+// Or alternatively to use the curator:
+// using edu.illinois.cs.cogcomp.curator.CuratorFactory;
 // AnnotatorService annotator = CuratorFactory.buildCuratorClient();
 ```
 
@@ -346,7 +350,7 @@ for (int i = 0; i < ta.size(); i++) {
 }
 ```
 
-###Creating Annotators
+### Creating Annotators
 
 The `AnnotatorService` class is based on stringing together classes that
 extend the `Annotator` abstract class. This class is used within the 
@@ -373,8 +377,17 @@ argument to the `Annotator` constructor. This is used for lazy
 initialization, if active, in which case the first call to `getView()`
 will call `initialize()` with this configuration. 
 
+One key configuration default, `AnnotatorConfigurator.IS_SENTENCE_LEVEL`
+indicates whether an annotator requires context beyond a single sentence.
+For example, when the POS tagger predicts a label for a word, it uses
+only information from the same sentence. This means that a document
+can be split up into sentences, which can then be processed one at a 
+time by the POS annotator, without degrading accuracy. NER,
+on the other hand, has features that depend on a context that may 
+extend into previous sentences: if the sentence-by-sentence approach
+is used for NER, some degradation is to be expected. 
 
-###Configurators
+### Configurators
 
 For ease of use of your own NLP software, especially classes that
 extend `Annotator` or `AnnotatorService`, you are encouraged to create 
@@ -388,9 +401,61 @@ to specify only non-default configuration options when you instantiate
 one or more classes that use `ResourceManager` and `Configurator`
 to manage configuration options.
 
+### Serialization and Deserialization
 
-##Citation
+To store `TextAnnotation` objects on disk, serialization/deserialization is supported in the following formats:
+
+- Binary Serialization: Binary serialization using Apache Common's `SerializationUtils` to serialize the `TextAnnotation` class. 
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToFile(ta, "text_annotation.bin", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeTextAnnotationFromFile("text_annotation.bin")
+```
+
+- JSON: Lightweight human-readable data-interchange format.
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+String jsonString = SerializationHelper.serializeToJson(ta);
+
+TextAnnotation ta = SerializationHelper.deserializeFromJson(jsonString);
+```
+
+- [Protocol Buffer (Version 2)](https://developers.google.com/protocol-buffers/): Protocol Buffers are Google' language-neutral, platform-neutral mechanism for serializing structured data. Structure definition for TextAnnotation is defined at [TextAnnotation.proto](src/main/proto/TextAnnotation.proto).
+```java
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+
+// Serialize and save to file
+SerializationHelper.serializeTextAnnotationToProtobuf(ta, "text_annotation.buf", true);
+
+// Read file from disk and deserialize
+TextAnnotation ta = SerializationHelper.deserializeFromProtobuf("text_annotation.buf");
+```
+
+More usage information in the `SerializationHelper` class.
+
+### Generating Protocol Buffer Java Code
+
+**Note:** If you make any change to TextAnnotation class which involves adding/removing data items, make sure to update the
+protocol buffer schema and the corresponding serialization code accordingly.
+
+Install the [Protocol Buffer compiler](https://github.com/google/protobuf#protocol-compiler-installation) locally.
+
+On macOS, you can install the compiler using Homebrew: `brew install protobuf`.
+
+Run the following commands from the repository root:
+
+```bash
+protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/TextAnnotation.proto
+
+mvn license:format
+```
+
+## Citation
 
 If you use this code in your research, please provide the URL for this github repository in the relevant publications.  
 If you use any of the NLP modules, please check their README files to see if there are relevant publications to cite. 
-Thank you for citing us if you use us in your work! 

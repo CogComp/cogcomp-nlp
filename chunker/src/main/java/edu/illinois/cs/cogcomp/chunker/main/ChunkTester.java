@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.chunker.utils.CoNLL2000Parser;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.BIOTester;
 import edu.illinois.cs.cogcomp.lbjava.parse.ChildrenFromVectors;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
@@ -42,6 +44,8 @@ import java.io.File;
  * @author Updated: Qiang Ning. Oct 2016.
  **/
 public class ChunkTester {
+    private static final Logger logger = LoggerFactory.getLogger(ChunkTester.class);
+
     public static void chunkTester(String testFile){
         Parser parser;
         parser = new CoNLL2000Parser(testFile);
@@ -60,11 +64,11 @@ public class ChunkTester {
     }
     public static void main(String[] args){
         if(args.length>3){
-            System.out.println("Usage: ...ChunkTester testIn.txt [modelDir] [modelName]");
+            logger.info("Usage: ...ChunkTester testIn.txt [modelDir] [modelName]");
             return;
         }
         String testFileName = args[0];
-        System.out.println("Test file: "+testFileName);
+        logger.info("Test file: "+testFileName);
         if(args.length==1) {
             chunkTester(testFileName);
         }

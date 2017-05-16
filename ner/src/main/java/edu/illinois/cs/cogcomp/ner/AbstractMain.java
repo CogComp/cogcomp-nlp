@@ -89,7 +89,7 @@ abstract public class AbstractMain extends Thread {
                 line = bis.readLine();
             } catch (IOException e1) {
                 e1.printStackTrace();
-                System.out.println("Bye");
+                System.err.println("Bye");
                 System.exit(0);
                 return;
             }
@@ -100,7 +100,7 @@ abstract public class AbstractMain extends Thread {
                 System.exit(-1);
             }
             if (Thread.currentThread().isInterrupted()) {
-                System.out.println("Bye");
+                System.err.println("Bye");
                 System.exit(0);
             }
         }

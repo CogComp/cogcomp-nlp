@@ -31,9 +31,10 @@ import java.util.*;
 public class TextAnnotation extends AbstractTextAnnotation implements Serializable, Cloneable, HasAttributes {
 
     private static final long serialVersionUID = -1308407121595094945L;
-
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(TextAnnotation.class);
-
+    /**
+     * A symbol table.
+     */
+    final SymbolTable symtab;
     /**
      * An identifier for the corpus
      */
@@ -62,17 +63,14 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
      * Mop containing attributes/metadata information related to TextAnnotation.
      */
     protected Map<String, String> attributes;
-
-    /**
-     * A symbol table.
-     */
-    final SymbolTable symtab;
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(TextAnnotation.class);
 
     public TextAnnotation(String corpusId, String id, String text, IntPair[] characterOffsets,
             String[] tokens, int[] sentenceEndPositions) {
         super();
 
-        if (sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
+        // if the string is non-empty, the position of the last element should equal to the number of tokens
+        if (tokens.length > 0 && sentenceEndPositions[sentenceEndPositions.length - 1] != tokens.length)
             throw new IllegalArgumentException("Invalid sentence boundary. "
                     + "Last element should be the number of tokens");
 
@@ -230,20 +228,31 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         if (sentences == null) {
             synchronized (this) {
                 if (sentences == null) {
-                    View sentenceView = getView(ViewNames.SENTENCE);
-
-                    sentences = new ArrayList<>();
-
-                    for (Constituent c : sentenceView.getConstituents()) {
-                        Sentence sentence = new Sentence(c);
-
-                        sentences.add(sentence);
-                    }
-                    Collections.sort(sentences, TextAnnotationUtilities.sentenceStartComparator);
+                    setSentences();
                 }
             }
         }
         return sentences;
+    }
+
+    /**
+     * allows user to force sentences field to be (re-)populated based on Sentence {@link View}, possibly after modifying sentence View.
+     * WARNING: if you
+     */
+    public void setSentences() {
+
+        synchronized (this) {
+
+            View sentenceView = getView(ViewNames.SENTENCE);
+            sentences = new ArrayList<>();
+
+            for (Constituent c : sentenceView.getConstituents()) {
+                Sentence sentence = new Sentence(c);
+
+                sentences.add(sentence);
+            }
+            Collections.sort(sentences, TextAnnotationUtilities.sentenceStartComparator);
+        }
     }
 
     /**
@@ -310,7 +319,7 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
             // throw new
             // IllegalArgumentException("Invalid character offset. The character position "
             // + characterOffset + " does not correspond to any token.");
-            logger.debug("Invalid character offset. The character position " + characterOffset
+            logger.error("Invalid character offset. The character position " + characterOffset
                     + " does not correspond to any token.");
         }
 
@@ -319,6 +328,10 @@ public class TextAnnotation extends AbstractTextAnnotation implements Serializab
         // number of tokens + 1.
         if (characterOffset == characterOffsetsToTokens.length) {
             return this.size();
+        }
+
+        if(characterOffsetsToTokens[characterOffset] == -1) {
+            logger.warn("The required character offset is in between tokens, and that's why it is -1. ");
         }
 
         return characterOffsetsToTokens[characterOffset];

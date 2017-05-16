@@ -33,6 +33,8 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.SentenceSplitter;
 import edu.illinois.cs.cogcomp.lbjava.nlp.Word;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by mssammon on 8/17/15.
@@ -40,10 +42,9 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
-
-
     private static final String INFILE =
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
+    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
 
     /**
      * test whether the mapping between character offset and token index is correct.
@@ -166,7 +167,7 @@ public class StatefullTokenizerTest {
      */
     private void doTokenizerTest(Tokenizer tokenizer, String sentence, String[] tokens,
             IntPair[] offsets) {
-        System.out.println(sentence);
+        logger.info(sentence);
         Pair<String[], IntPair[]> tokenize = tokenizer.tokenizeSentence(sentence);
 
         assertEquals(tokens.length, tokenize.getFirst().length);
@@ -262,4 +263,38 @@ public class StatefullTokenizerTest {
         assertNotNull(statefulTa);
     }
 
+    @Test
+    public void testEmptyString() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 0);
+    }
+
+    @Test
+    public void testStringWithNewline() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "this\nsentence";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 2);
+    }
+    
+    @Test
+    public void testSplitOnDash() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "IAEA Director-General Mohamed ElBaradei ";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 6);
+    }
+    
+    @Test
+    public void testSplitPeriodEnd() {
+        Tokenizer tkr = new StatefulTokenizer(false);
+        String text = "You see always, oh we're going to do this, we're going to--. ";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 17);
+        tkr = new StatefulTokenizer(true);
+        tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 18);
+    }
 }

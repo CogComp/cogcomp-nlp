@@ -95,9 +95,9 @@ public class NERAnnotator extends Annotator {
     @Override
     public void initialize(ResourceManager nerRm) {
         if (ViewNames.NER_ONTONOTES.equals(getViewName()))
-            nerRm = new NerOntonotesConfigurator().getConfig(config);
+            nerRm = new NerOntonotesConfigurator().getConfig(nerRm);
         else
-            nerRm = new NerBaseConfigurator().getConfig(config);
+            nerRm = new NerBaseConfigurator().getConfig(nerRm);
 
         ParametersForLbjCode.currentParameters.forceNewSentenceOnLineBreaks = false;
         Parameters.readConfigAndLoadExternalData(nerRm);
@@ -246,7 +246,7 @@ public class NERAnnotator extends Annotator {
             doInitialize();
         }
         Lexicon labelLexicon = t1.getLabelLexicon();
-        Set<String> tagSet = new HashSet();
+        Set<String> tagSet = new HashSet<String>();
         for (int i =0; i < labelLexicon.size(); ++i) {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());
         }

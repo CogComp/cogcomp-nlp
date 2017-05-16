@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;

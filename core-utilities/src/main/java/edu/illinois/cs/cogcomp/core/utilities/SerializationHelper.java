@@ -11,15 +11,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.protobuf.ProtobufSerializer;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SerializationUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * This class is useful for serializing {@link TextAnnotation} objects to byte arrays.
@@ -28,21 +28,45 @@ public class SerializationHelper {
     private static final String NAME = SerializationHelper.class.getCanonicalName();
 
     /**
-     * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set to false and
-     * file already exists, this method throws an exception.
+     * Serialize a {@link TextAnnotation} and then write to file. If forceOverwrite_ is set to false and
+     * file already exists, this method throws an exception. Uses binary serialization for TextAnnotation.
      *
      * @param ta The text annotation to be serialized
      * @param fileName Name of file to write to
      * @param forceOverwrite Whether or not to overwrite existing file.
      */
     public static void serializeTextAnnotationToFile(TextAnnotation ta, String fileName,
-            boolean forceOverwrite) throws IOException {
+                                                     boolean forceOverwrite) throws IOException {
+        serializeTextAnnotationToFile(ta, fileName, forceOverwrite, false);
+    }
+
+        /**
+         * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set to false and
+         * file already exists, this method throws an exception.
+         *
+         * @param ta The text annotation to be serialized
+         * @param fileName Name of file to write to
+         * @param forceOverwrite Whether or not to overwrite existing file.
+         */
+    public static void serializeTextAnnotationToFile(TextAnnotation ta, String fileName,
+            boolean forceOverwrite, boolean useJson) throws IOException {
         File outFile = new File(fileName);
         if (outFile.exists() && !forceOverwrite)
             throw new IOException("ERROR: " + NAME + ".serializeTextAnnotationToFile(): file '"
                     + fileName + "' already exists.");
-        FileUtils.writeByteArrayToFile(outFile, serializeTextAnnotationToBytes(ta));
+        if (!useJson)
+            FileUtils.writeByteArrayToFile(outFile, serializeTextAnnotationToBytes(ta));
+        else {
+            String jsonTaStr = SerializationHelper.serializeToJson(ta, true);
+            if (!forceOverwrite) {
+                if (IOUtils.exists(fileName))
+                    throw new IOException("ERROR: file '" + fileName + "' already exists, and " +
+                            "forceOverwrite flag is set to 'false'.");
+            }
+            LineIO.write(fileName, Collections.singletonList(jsonTaStr));
+        }
     }
+
 
     /**
      * Serialize a text annotation into a byte array. This can be useful for writing into a file or
@@ -55,6 +79,7 @@ public class SerializationHelper {
         return SerializationUtils.serialize(ta);
     }
 
+
     /**
      * Read serialized record from file and deserialize it. Expects Thrift serialization format, one
      * record in a single file.
@@ -63,13 +88,29 @@ public class SerializationHelper {
      * @return A text annotation
      */
     public static TextAnnotation deserializeTextAnnotationFromFile(String fileName)
-            throws IOException {
+            throws Exception {
+        return deserializeTextAnnotationFromFile(fileName, false);
+    }
+
+
+
+    /**
+         * Read serialized record from file and deserialize it. Expects Thrift serialization format, one
+         * record in a single file.
+         *
+         * @param fileName Name of file to read from
+         * @return A text annotation
+         */
+    public static TextAnnotation deserializeTextAnnotationFromFile(String fileName, boolean isJson)
+            throws Exception {
         File file = new File(fileName);
         if (!file.exists())
             throw new IOException("ERROR: " + NAME + ".deserializeTextAnnotationFromFile(): file '"
                     + fileName + "' does not exist.");
-
-        return deserializeTextAnnotationFromBytes(FileUtils.readFileToByteArray(file));
+        if (!isJson)
+            return deserializeTextAnnotationFromBytes(FileUtils.readFileToByteArray(file));
+        else
+            return SerializationHelper.deserializeFromJson(LineIO.slurp(fileName));
     }
 
     /**
@@ -125,5 +166,35 @@ public class SerializationHelper {
 
         JsonSerializer serializer = new JsonSerializer();
         return serializer.readTextAnnotation(jsonString);
+    }
+
+    /**
+     * Serialize a text annotation into a protocol buffer encoded output file.
+     *
+     * @param ta Text Annotation to be serialized
+     * @param fileName Name of the file to write to
+     * @param forceOverwrite Boolean indicating if the output file should be overwritten if it already exists
+     * @throws Exception
+     */
+    public static void serializeTextAnnotationToProtobuf(TextAnnotation ta, String fileName, boolean forceOverwrite)
+            throws Exception{
+        File outFile = new File(fileName);
+        if (outFile.exists() && !forceOverwrite) {
+            throw new IOException("ERROR: " + NAME + ".serializeTextAnnotationToProtobuf(): file '"
+                    + fileName + "' already exists.");
+        }
+
+        ProtobufSerializer.writeToFile(ta, fileName);
+    }
+
+    /**
+     * Read a text annotation from a Protocol Buffer encoding of Text Annotation.
+     *
+     * @param fileName Input file name
+     * @return A text annotation
+     * @throws Exception
+     */
+    public static TextAnnotation deserializeFromProtobuf(String fileName) throws Exception {
+        return ProtobufSerializer.parseFrom(fileName);
     }
 }

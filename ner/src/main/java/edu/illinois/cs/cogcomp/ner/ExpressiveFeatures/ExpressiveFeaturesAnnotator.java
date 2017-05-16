@@ -58,22 +58,22 @@ public class ExpressiveFeaturesAnnotator {
      */
     public static void annotate(Data data) throws Exception {
 
-        // System.out.println("Annotating the data with expressive features...");
+        // logger.info("Annotating the data with expressive features...");
 
         /*
          * must be after the linkability has been initialized!!!
          */
         if (ParametersForLbjCode.currentParameters.normalizeTitleText) {
-            // System.out.println("Normalizing text case ...");
+            // logger.info("Normalizing text case ...");
             TitleTextNormalizer.normalizeCase(data);
         }
 
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("BrownClusterPaths")) {
-            // System.out.println("Brown clusters OOV statistics:");
+            // logger.info("Brown clusters OOV statistics:");
             BrownClusters.get().printOovData(data);
         }
         if (ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordEmbeddings")) {
-            // System.out.println("Word Embeddings OOV statistics:");
+            // logger.info("Word Embeddings OOV statistics:");
             WordEmbeddings.printOovData(data);
         }
         // annotating with Gazetteers;

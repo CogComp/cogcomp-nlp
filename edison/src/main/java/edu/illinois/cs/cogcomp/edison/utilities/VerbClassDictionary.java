@@ -9,7 +9,9 @@ package edu.illinois.cs.cogcomp.edison.utilities;
 
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.factory.LevinVerbClassFeature;
+import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,8 @@ public class VerbClassDictionary {
      * .
      * </pre>
      *
+     * For more details, refer to <a href="www-personal.umich.edu/~jlawler/levin.verbs">this page</a>
+     *
      * @throws java.io.FileNotFoundException
      */
     public VerbClassDictionary(String verbClassFile) throws FileNotFoundException {
@@ -66,11 +70,37 @@ public class VerbClassDictionary {
         String line;
         while ((line = in.readLine()) != null)
             verbClass = readVerbClasses(verbClass, line);
-
         in.close();
+        log.info("Done reading the verb-classes. Size: " + verbClasses.size());
     }
 
-    public static VerbClassDictionary getDictionary() {
+    public static VerbClassDictionary getDictionaryFromDatastore() {
+        if (verbClassDictionary == null) {
+            synchronized (LevinVerbClassFeature.class) {
+
+                if (verbClassDictionary == null) {
+                    log.info("Reading verb class dictionary. Looking for " + verbClassFile + " in the datastore");
+                    try {
+                        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+                        File f = dsNoCredentials.getFile("org.cogcomp.levin.verb.class", "levin-verbClass", 1.6);
+                        InputStream resource = new FileInputStream(f);
+                        verbClassDictionary = new VerbClassDictionary(resource);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        log.error("Unable to read the verb class dictionary", e);
+                        System.exit(-1);
+                    }
+
+                    List<String> strings = verbClassDictionary.getClass("give");
+                    log.info("Loaded verb class dictionary. Test: classes for 'give' are {}", strings);
+                }
+            }
+        }
+        return verbClassDictionary;
+    }
+
+    @Deprecated
+    public static VerbClassDictionary getDictionaryFromClassPath() {
         if (verbClassDictionary == null) {
             synchronized (LevinVerbClassFeature.class) {
 
@@ -79,12 +109,8 @@ public class VerbClassDictionary {
                     log.info("Reading verb class dictionary. Looking for " + verbClassFile
                             + " in the classpath");
                     try {
-                        URL url =
-                                IOUtils.lsResources(LevinVerbClassFeature.class, verbClassFile)
-                                        .get(0);
-
+                        URL url = IOUtils.lsResources(LevinVerbClassFeature.class, verbClassFile).get(0);
                         InputStream resource = url.openStream();
-
                         verbClassDictionary = new VerbClassDictionary(resource);
                     } catch (Exception e) {
                         log.error("Unable to read the verb class dictionary", e);
@@ -92,8 +118,7 @@ public class VerbClassDictionary {
                     }
 
                     List<String> strings = verbClassDictionary.getClass("give");
-                    log.info("Loaded verb class dictionary. Test: classes for 'give' are {}",
-                            strings);
+                    log.info("Loaded verb class dictionary. Test: classes for 'give' are {}", strings);
                 }
             }
         }
@@ -107,10 +132,9 @@ public class VerbClassDictionary {
             for (String verb : line.split(" +")) {
 
                 if (!verbClasses.containsKey(verb))
-                    verbClasses.put(verb, new ArrayList<String>());
+                    verbClasses.put(verb, new ArrayList<>());
 
                 verbClasses.get(verb.trim()).add(verbClass.trim());
-
             }
         }
         return verbClass;

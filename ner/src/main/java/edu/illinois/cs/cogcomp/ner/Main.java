@@ -163,8 +163,7 @@ public class Main extends AbstractMain {
                     case '3':
                         if (indirectory == null) {
                             inswitch = InputSwitch.ENTER_STRING;
-                            System.out
-                                    .println("Enter the text to process, or blank line to return to the menu.\n");
+                            System.out.println("Enter the text to process, or blank line to return to the menu.\n");
                         } else
                             execute();
                         break;
@@ -185,7 +184,7 @@ public class Main extends AbstractMain {
                 else {
                     File tryin = new File(line);
                     if (!tryin.exists()) {
-                        System.out.print("\"" + line
+                        System.out.println("\"" + line
                                 + "\" did not exist, as an input it must exist.");
                     } else {
                         indirectory = tryin;
@@ -227,7 +226,7 @@ public class Main extends AbstractMain {
                 } else {
                     int endkeyindex = line.indexOf(" ");
                     if (endkeyindex == -1) {
-                        System.out.println("Invalid key value separator, expected a space.");
+                        System.err.println("Invalid key value separator, expected a space.");
                         return;
                     }
                     String key = line.substring(0, endkeyindex);
@@ -296,23 +295,21 @@ public class Main extends AbstractMain {
                         out = outdirectory.toString();
                     }
                 }
-                System.out.print("1 - select input [" + in + "]\n" + "2 - change output [" + out
+                System.out.println("1 - select input [" + in + "]\n" + "2 - change output [" + out
                         + "]\n" + "3 - annotate " + indesc + ", " + outdesc + ".\n"
                         + "4 - show and modify configuration parameters.\n"
                         + "q - exit the application.\n" + "Choose from above options: ");
                 break;
             case ENTER_IN:
-                System.out
-                        .print("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
+                System.out.println("Enter input filename, directory terminated by file separator, or blank for standard input \n: ");
                 break;
 
             case ENTER_OUT:
-                System.out
-                        .print("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
+                System.out.println("Enter output filename, directory terminated by file separator or blank for standard output \n: ");
                 break;
 
             case ENTER_STRING:
-                System.out.print(": ");
+                System.out.println(": ");
                 break;
 
             case SHOW_CONFIG:
@@ -336,9 +333,8 @@ public class Main extends AbstractMain {
         if (indirectory.isDirectory()) {
             File[] files = indirectory.listFiles();
             if (outdirectory != null) {
-                System.out
-                        .println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
-                System.out.print("Completed   : ");
+                System.out.println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
+                System.out.println("Completed   : ");
                 double ratio = 50.0 / (double) files.length;
                 int completed = 0;
                 int i = 0;
@@ -348,17 +344,17 @@ public class Main extends AbstractMain {
 
                     // present completion.
                     while ((i * ratio) > completed) {
-                        System.out.print("•");
+                        System.out.println("•");
                         completed++;
                     }
                 }
                 this.getResultProcessor().done();
                 while ((i * ratio) > completed) {
-                    System.out.print("•");
+                    System.out.println("•");
                     completed++;
                     i++;
                 }
-                System.out.println();
+                System.out.println("");
             } else {
                 int i = 0;
                 for (; i < files.length; i++) {

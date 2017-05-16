@@ -12,6 +12,8 @@ import edu.illinois.cs.cogcomp.ner.InferenceMethods.Decoder;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel1;
 import edu.illinois.cs.cogcomp.ner.LbjFeatures.NETaggerLevel2;
 import edu.illinois.cs.cogcomp.lbjava.parse.LinkedVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -23,6 +25,7 @@ import java.util.Vector;
  *
  */
 public class NEDisplayPredictions {
+    private static Logger logger = LoggerFactory.getLogger(NEDisplayPredictions.class);
 
     /**
      * Display the predictions, the gazetteer matches and the labels.

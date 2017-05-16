@@ -34,28 +34,28 @@ public final class MinimalAnalyzer extends StopwordAnalyzerBase {
      * Uses current lucene version
      */
     public MinimalAnalyzer(){
-        super(Lucene.version);
+        super();
     }
     
     public MinimalAnalyzer(Version version) {
-        super(version);
+        super();
     }
     
     /**
      * Creates an analyzer using custom stop words
      */
     public MinimalAnalyzer(CharArraySet stopwords){
-        super(Lucene.version,stopwords);
+        super();
     }
 
     @Override
-    protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-        final Tokenizer source = new StandardTokenizer(matchVersion, reader);
-        TokenStream result = new StandardFilter(matchVersion, source);
+    protected TokenStreamComponents createComponents(String fieldName) {
+        final Tokenizer source = new StandardTokenizer();
+        TokenStream result = new StandardFilter(source);
         result = new ASCIIFoldingFilter(result);
-        result = new LowerCaseFilter(matchVersion, result);
-        result = new EnglishPossessiveFilter(matchVersion, result);
-        result = new StopFilter(matchVersion, result, stopwords);
+        result = new LowerCaseFilter(result);
+        result = new EnglishPossessiveFilter(result);
+        result = new StopFilter(result, stopwords);
         result = new WordDelimiterFilter(result,WordDelimiterFilter.ALPHA,null);
         result = new PorterStemFilter(result);
         return new TokenStreamComponents(source, result);

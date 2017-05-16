@@ -7,6 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.vectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.URL;
 import java.util.zip.ZipFile;
@@ -20,6 +23,8 @@ import java.util.zip.ZipInputStream;
  * @author Nick Rizzolo
  **/
 public class ExceptionlessInputStream extends FilterInputStream {
+    private static Logger logger = LoggerFactory.getLogger(ExceptionlessInputStream.class);
+
     /** The entry inside any compressed file has this name. */
     public static final String zipEntryName = "LBJFile";
 

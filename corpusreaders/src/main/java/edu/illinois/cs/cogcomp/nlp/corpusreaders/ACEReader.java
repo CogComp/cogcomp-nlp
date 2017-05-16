@@ -15,7 +15,7 @@ import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.annotationStructure.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.AceFileProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.documentReader.ReadACEAnnotation;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author Bhargav Mangipudi
  */
-public class ACEReader extends TextAnnotationReader {
+public class ACEReader extends AnnotationReader<TextAnnotation> {
     // Entity Constants
     public static final String EntityIDAttribute = "EntityID";
     public static final String EntityTypeAttribute = "EntityType";
@@ -56,7 +56,7 @@ public class ACEReader extends TextAnnotationReader {
     private static final String RelationSecondArgumentTag = "Arg-2";
     private static final Logger logger = LoggerFactory.getLogger(ACEReader.class);
     private static final AceFileProcessor fileProcessor = new AceFileProcessor();
-    private static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+    private static final TextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
     private final String aceCorpusHome;
     private final boolean is2004mode;
     private final String corpusId;
@@ -329,7 +329,6 @@ public class ACEReader extends TextAnnotationReader {
         }
 
         ta.addView(ViewNames.MENTION_ACE, entityView);
-
         ta.addView(ViewNames.COREF_HEAD, corefHeadView);
         ta.addView(ViewNames.COREF_EXTENT, corefExtentView);
     }
@@ -436,8 +435,13 @@ public class ACEReader extends TextAnnotationReader {
         }
     }
 
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
     @Override
-    protected TextAnnotation makeTextAnnotation() throws Exception {
+    public TextAnnotation next() {
         return this.currentTextAnnotation.getAndSet(null);
     }
 
@@ -477,4 +481,17 @@ public class ACEReader extends TextAnnotationReader {
 
         return textAnnotation != null;
     }
+
+
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
+
 }

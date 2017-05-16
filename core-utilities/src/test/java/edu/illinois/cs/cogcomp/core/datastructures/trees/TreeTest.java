@@ -10,6 +10,8 @@ package edu.illinois.cs.cogcomp.core.datastructures.trees;
 import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -19,6 +21,7 @@ import static org.junit.Assert.assertEquals;
  * @author vivek
  */
 public class TreeTest {
+    private static Logger logger = LoggerFactory.getLogger(TreeTest.class);
 
     class Node {
         int nodeId;
@@ -118,12 +121,12 @@ public class TreeTest {
 
         assertEquals(4, tree.size());
 
-        // System.out.println(tree);
+        // logger.info(tree);
         tree.getChild(0).addLeaf("B1");
 
         assertEquals(5, tree.size());
 
-        // System.out.println(tree);
+        // logger.info(tree);
 
         tree.getChild(0).addSubtreeAt(expectedTree, 1);
 
@@ -183,7 +186,7 @@ public class TreeTest {
 
         tree.getChild(2).getChild(1).addLeaf("GrandChild");
 
-        System.out.println();
+        logger.info("");
 
         assertEquals(tree.size(), 9);
 
@@ -195,7 +198,7 @@ public class TreeTest {
 
         int i = 0;
         for (Tree<String> s : tree.getYield()) {
-            // System.out.println(leaves[i] + "\t" + s.getLabel());
+            // logger.info(leaves[i] + "\t" + s.getLabel());
             assertEquals(leaves[i++], s.getLabel());
         }
 

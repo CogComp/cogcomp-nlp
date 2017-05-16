@@ -43,23 +43,20 @@ import java.util.regex.Pattern;
  * <li>contractions with abbr, like can't, won't and those. if no spaces surround the "'", we will
  * leave the word together including the "'" unless it is one of the common contractions like 's,
  * 'm, 're, et cetera.
- * <li>O'Malley, O'Brien and do on. FIXED.
- * <li>Abbreviation followed by punctuation is not caught. FIXED.
  * </ol>
  * 
  * @author redman
  */
 public class TokenizerStateMachine {
-
-    /** the state stack, since state can be nested. */
-    protected ArrayList<State> stack;
-
-    /** the state stack, since state can be nested. */
-    protected ArrayList<State> completed;
-
     /** valid URI schemes. */
     final static String[] schemes = {"http", "https", "ftp", "svn", "email"};
-
+    /** matches up to the end of the url. */
+    final Pattern urlpat = Pattern
+            .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
+    /** the state stack, since state can be nested. */
+    protected ArrayList<State> stack;
+    /** the state stack, since state can be nested. */
+    protected ArrayList<State> completed;
     /**
      * <p>
      * This is the state machine. Cardinality of 1st dim indexed by tokenizer
@@ -68,7 +65,7 @@ public class TokenizerStateMachine {
      * individually processing a character at a time, but they call also look ahead and back, as
      * they have full access to the contents of this class.
      * </p>
-     * 
+     *
      * <p>
      * This class is initialized using Java's new lambda expressions, solely for the brevity, and
      * considering the number of entries here, the expressiveness of a verbose interface
@@ -77,30 +74,25 @@ public class TokenizerStateMachine {
      * </p>
      */
     protected StateProcessor[][] statemachine;
-
     /** the text to process. */
     protected char[] text;
-
     /** the text to process. */
     protected String textstring;
-
     /** the character offset. */
     protected int current;
-
     /** the state we are in currently. */
     protected int state;
 
     /**
      * Init the state machine decision matrix and the text annotation.
      */
-    public TokenizerStateMachine() {
+    public TokenizerStateMachine(final boolean splitOnDash) {
         // cardinality of 1st dim the number of states(TokenizerState), 2nd is the number of token
         // types (TokenType enum)
         StateProcessor[][] toopy = { {
 
                 // process tokens in sentence, we are only in a sentences while processing white
-                // space There
-                // is always a sentence on top of the stack.
+                // space. There is always a sentence on top of the stack.
 
                 /** get punctuation while in sentence. This starts a new word. */
                 new StateProcessor() {
@@ -197,7 +189,6 @@ public class TokenizerStateMachine {
                                                                                      // token.
                                 break;
                             case '-': {
-
                                 // If there is a character before and after, this is a word.
                                 char after = peek(1);
                                 char before = peek(-1);
@@ -205,13 +196,11 @@ public class TokenizerStateMachine {
                                     /*
                                          if (!((Character.isAlphabetic(before) || Character.isDigit(before)) && (Character
                                                 .isAlphabetic(after) || Character.isDigit(after)))) {*/
-                                    pop(current); // the current word is finished.
-                                    push(new State(TokenizerState.IN_SPECIAL), current); // No
-                                                                                         // matter
-                                                                                         // what we
-                                                                                         // push a
-                                                                                         // new word
-                                                                                         // token.
+
+                                    if (splitOnDash == true) {
+                                        pop(current); // the current word is finished.
+                                        push(new State(TokenizerState.IN_SPECIAL), current);
+                                    }
                                 }
                                 return;
                             }
@@ -281,16 +270,13 @@ public class TokenizerStateMachine {
                                     // it's a time, or bible passage.
                                     return;
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                             }
                             case '.': {
                                 // we have a period, this is often an end-of-sentence marker. There
-                                // are other examples of areas where it is not, No.2, U.S., US., 
-                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable 
+                                // are other examples of areas where it is not, No.2, U.S., US.,
+                                // Hi., and Feb. 4. Rule here is that if it is followed by a printable
                                 // character, it is just part of the word.
                                 // If it is followed by a space, but appears to be part of an
                                 // acronym(starts with a
@@ -331,10 +317,7 @@ public class TokenizerStateMachine {
                             }
                             default:
                                 pop(current); // the current word is finished.
-                                push(new State(TokenizerState.IN_SPECIAL), current); // No matter
-                                                                                     // what we push
-                                                                                     // a new word
-                                                                                     // token.
+                                push(new State(TokenizerState.IN_SPECIAL), current);
                                 break;
                         }
                     }
@@ -449,10 +432,6 @@ public class TokenizerStateMachine {
         this.statemachine = toopy;
     }
 
-    /** matches up to the end of the url. */
-    final Pattern urlpat = Pattern
-            .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
-
     /**
      * Any number of periods beyond two will continue the sentence rather than ending it..
      * 
@@ -500,19 +479,19 @@ public class TokenizerStateMachine {
                     this.current = cs.start + (ss.length() - 1);
                     this.pop(this.current + 1);
                     if (debug)
-                        System.out.println("Good : " + ss);
+                        System.err.println("Good : " + ss);
                     return true;
                 }
             } catch (URISyntaxException e) {
                 if (debug)
-                    System.out.println("Invalid : " + ss);
+                    System.err.println("Invalid : " + ss);
                 return false;
             }
         } else {
             if (debug) {
                 int len = Math.min(100, text.length - cs.start);
                 String ss = new String(text, cs.start, len);
-                System.out.println("Not even close : " + ss);
+                System.err.println("Not even close : " + ss);
             }
 
         }
@@ -608,25 +587,15 @@ public class TokenizerStateMachine {
      * @param intext the text to parse.
      */
     protected void parseText(String intext) {
-        // CHANGE (MS): preserve trailing whitespace (disabled find index of last non whitespace)
+        // preserve trailing whitespace (disabled find index of last non whitespace)
         int i = intext.length();
-        // int i = intext.length()-1;
-        // for (; i >=0 ; i--) {
-        // if (!Character.isWhitespace(intext.charAt(i)))
-        // break; // found the first non-whitepsace.
-        // }
-        // i++; // length is one beyond the last whitespace char.
-        stack = new ArrayList<State>();
-        completed = new ArrayList<State>();
+        stack = new ArrayList<>();
+        completed = new ArrayList<>();
         if (i == 0)
             return;
         this.text = new char[i];
         intext.getChars(0, i, this.text, 0);
 
-        // MS CHANGED IN CONFLICTING UPDATE
-        // this.textstring = intext.trim();
-        // this.textstring = intext.trim();
-        // CHANGE (MS): no trim of input text
         this.textstring = intext;
         this.text = this.textstring.toCharArray();
         current = 0;
@@ -700,6 +669,8 @@ public class TokenizerStateMachine {
             int lastdash = term.lastIndexOf("-");
             if (lastdash != -1)
                 term = term.substring(lastdash + 1);
+            if (term.length() == 0)
+                return false;
             ArrayList<String> abbrs = Acronyms.get(term.charAt(0));
             if (abbrs != null && abbrs.contains(term))
                 return true;

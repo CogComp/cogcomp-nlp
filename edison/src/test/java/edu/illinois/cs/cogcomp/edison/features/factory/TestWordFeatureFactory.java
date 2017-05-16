@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import junit.framework.TestCase;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class TestWordFeatureFactory {
     private static List<TextAnnotation> tas;
 
     private static Map<Integer, String> feats;
+    private static Logger logger = LoggerFactory.getLogger(TestWordFeatureFactory.class);
 
     static {
         try {
@@ -59,7 +62,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testCapitalization() throws EdisonException {
-        System.out.println("\tTesting capitalization");
+        logger.info("\tTesting capitalization");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.capitalization);
         }
@@ -67,7 +70,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testConflatedPOS() throws EdisonException {
-        System.out.println("\tTesting conflated POS");
+        logger.info("\tTesting conflated POS");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.conflatedPOS);
         }
@@ -75,7 +78,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testDeAdjectivalAbstractNounsSuffixes() throws EdisonException {
-        System.out.println("\tTesting de-adjectival abstract noun suffixes");
+        logger.info("\tTesting de-adjectival abstract noun suffixes");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.deAdjectivalAbstractNounsSuffixes);
         }
@@ -83,7 +86,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testDeNominalNounProducingSuffixes() throws EdisonException {
-        System.out.println("\tTesting de-nominal noun producing suffixes");
+        logger.info("\tTesting de-nominal noun producing suffixes");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.deNominalNounProducingSuffixes);
         }
@@ -91,7 +94,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testDeVerbalSuffixes() throws EdisonException {
-        System.out.println("\tTesting de-verbal suffixes");
+        logger.info("\tTesting de-verbal suffixes");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.deVerbalSuffix);
         }
@@ -99,7 +102,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testGerundMarker() throws EdisonException {
-        System.out.println("\tTesting gerund marker");
+        logger.info("\tTesting gerund marker");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.gerundMarker);
         }
@@ -107,7 +110,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testKnownPrefixes() throws EdisonException {
-        System.out.println("\tTesting known prefixes");
+        logger.info("\tTesting known prefixes");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.knownPrefixes);
         }
@@ -115,7 +118,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testLemma() throws EdisonException {
-        System.out.println("\tTesting lemma");
+        logger.info("\tTesting lemma");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.lemma);
         }
@@ -123,7 +126,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testNominalizationMarker() throws EdisonException {
-        System.out.println("\tTesting nominalization marker");
+        logger.info("\tTesting nominalization marker");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.nominalizationMarker);
         }
@@ -131,7 +134,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testPOS() throws EdisonException {
-        System.out.println("\tTesting POS");
+        logger.info("\tTesting POS");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.pos);
         }
@@ -139,7 +142,7 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testPrefixSuffixes() throws EdisonException {
-        System.out.println("\tTesting prefix, suffixes");
+        logger.info("\tTesting prefix, suffixes");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.prefixSuffixes);
         }
@@ -147,34 +150,26 @@ public class TestWordFeatureFactory {
 
     @Test
     public final void testWord() throws EdisonException {
-        System.out.println("\tTesting word");
+        logger.info("\tTesting word");
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.word);
         }
     }
 
-    /**
-     * MS: this next test stored null values for features because the code was buggy. I've commented
-     * it for now because regenerating a serialized feature output file is a pain; there is anyway a
-     * new TestBrownClusterFeatureExtractor class to assess the BrownClusterFeatureExtractor.
-     * 
-     * @throws EdisonException
-     */
-
-    // public final void testBrownFeatures() throws EdisonException {
-    // System.out.println("\tTesting Brown cluster features");
-    // WordFeatureExtractor brownFeatureGenerator =
-    // WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
-    // new int[] {4, 5});
-    // for (TextAnnotation ta : tas) {
-    // runTest(ta, brownFeatureGenerator);
-    // }
-    //
-    // }
+    @Test
+    public final void testBrownFeatures() throws EdisonException {
+        logger.info("\tTesting Brown cluster features");
+        WordFeatureExtractor brownFeatureGenerator =
+                WordFeatureExtractorFactory.getBrownFeatureGenerator("", "brownBllipClusters",
+                        new int[] {4, 5});
+        for (TextAnnotation ta : tas) {
+            runTest(ta, brownFeatureGenerator);
+        }
+    }
 
     @Test
     public final void testWordNet() throws EdisonException {
-        System.out.println("\tTesting wordNet");
+        logger.info("\tTesting wordNet");
         WordNetManager.loadConfigAsClasspathResource(true);
         for (TextAnnotation ta : tas) {
             runTest(ta, WordFeatureExtractorFactory.getWordNetFeatureExtractor(
@@ -190,7 +185,7 @@ public class TestWordFeatureFactory {
         f.addFeatureExtractor(WordFeatureExtractorFactory.gerundMarker);
         f.addFeatureExtractor(WordFeatureExtractorFactory.nominalizationMarker);
 
-        System.out.println("\tTesting feature collection");
+        logger.info("\tTesting feature collection");
 
         Map<Integer, String> map =
                 IOUtils.readObjectAsResource(TestWordFeatureFactory.class,
