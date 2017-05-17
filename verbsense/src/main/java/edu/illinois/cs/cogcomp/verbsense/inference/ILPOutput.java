@@ -12,50 +12,53 @@ import java.util.List;
 import java.util.Set;
 
 public class ILPOutput implements ILPOutputGenerator {
-	private SenseManager manager;
+    private SenseManager manager;
 
-	public ILPOutput(SenseManager manager) {
-		this.manager = manager;
-	}
+    public ILPOutput(SenseManager manager) {
+        this.manager = manager;
+    }
 
-	public SentenceStructure getOutput(ILPSolver xmp, InferenceVariableLexManager variableManager, IInstance ins) {
-		SentenceInstance instance = (SentenceInstance) ins;
+    public SentenceStructure getOutput(ILPSolver xmp, InferenceVariableLexManager variableManager,
+            IInstance ins) {
+        SentenceInstance instance = (SentenceInstance) ins;
 
-		int numPredicates = instance.numPredicates();
-		List<SenseStructure> output = new ArrayList<>();
+        int numPredicates = instance.numPredicates();
+        List<SenseStructure> output = new ArrayList<>();
 
-		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
-			SenseInstance senseInstance = instance.predicates.get(predicateId);
-			String lemma = senseInstance.getPredicateLemma();
+        for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
+            SenseInstance senseInstance = instance.predicates.get(predicateId);
+            String lemma = senseInstance.getPredicateLemma();
 
-			int senseLabel = getSenseLabelFromPrediction(xmp, variableManager, manager, predicateId, lemma);
-			output.add(new SenseStructure(senseInstance, senseLabel, manager));
-		}
+            int senseLabel =
+                    getSenseLabelFromPrediction(xmp, variableManager, manager, predicateId, lemma);
+            output.add(new SenseStructure(senseInstance, senseLabel, manager));
+        }
 
-		return new SentenceStructure(instance, output);
-	}
+        return new SentenceStructure(instance, output);
+    }
 
-	private int getSenseLabelFromPrediction(ILPSolver xmp,
-			InferenceVariableLexManager variableManager, SenseManager manager,
-			int predicateId, String lemma) {
-		String sense = null;
-		Set<String> validSenseLabels = manager.getLegalSenses(lemma);
-		for (String label : validSenseLabels) {
-			String varName = ILPInference.getSenseVariableIdentifier(
-					SenseManager.getPredictedViewName(), predicateId, label);
+    private int getSenseLabelFromPrediction(ILPSolver xmp,
+            InferenceVariableLexManager variableManager, SenseManager manager, int predicateId,
+            String lemma) {
+        String sense = null;
+        Set<String> validSenseLabels = manager.getLegalSenses(lemma);
+        for (String label : validSenseLabels) {
+            String varName =
+                    ILPInference.getSenseVariableIdentifier(SenseManager.getPredictedViewName(),
+                            predicateId, label);
 
-			int var = variableManager.getVariable(varName);
+            int var = variableManager.getVariable(varName);
 
-			if (var < 0)
-				continue;
+            if (var < 0)
+                continue;
 
-			if (xmp.getBooleanValue(var)) {
-				sense = label;
-				break;
-			}
-		}
+            if (xmp.getBooleanValue(var)) {
+                sense = label;
+                break;
+            }
+        }
 
-		assert sense != null;
-		return manager.getSenseId(sense);
-	}
+        assert sense != null;
+        return manager.getSenseId(sense);
+    }
 }

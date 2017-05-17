@@ -12,30 +12,31 @@ import java.util.List;
 
 public class SentenceStructure implements IStructure {
 
-	public final SentenceInstance x;
-	public final List<SenseStructure> ys;
+    public final SentenceInstance x;
+    public final List<SenseStructure> ys;
 
-	public SentenceStructure(SentenceInstance instance, List<SenseStructure> ys) {
-		this.x = instance;
-		this.ys = ys;
-	}
+    public SentenceStructure(SentenceInstance instance, List<SenseStructure> ys) {
+        this.x = instance;
+        this.ys = ys;
+    }
 
-	@Override
-	public FeatureVector getFeatureVector() {
-		throw new RuntimeException("Not yet implemented!");
-	}
+    @Override
+    public FeatureVector getFeatureVector() {
+        throw new RuntimeException("Not yet implemented!");
+    }
 
-	public TokenLabelView getView(SenseManager manager, TextAnnotation ta) {
-		String viewName = SenseManager.getPredictedViewName();
-		TokenLabelView view = new TokenLabelView(viewName, VerbSenseConstants.systemIdentifier, ta, 1.0);
+    public TokenLabelView getView(SenseManager manager, TextAnnotation ta) {
+        String viewName = SenseManager.getPredictedViewName();
+        TokenLabelView view =
+                new TokenLabelView(viewName, VerbSenseConstants.systemIdentifier, ta, 1.0);
 
-		for (SenseStructure y : this.ys) {
-			SenseInstance senseInstance = y.getInstance();
-			IntPair predicateSpan = senseInstance.getConstituent().getSpan();
+        for (SenseStructure y : this.ys) {
+            SenseInstance senseInstance = y.getInstance();
+            IntPair predicateSpan = senseInstance.getConstituent().getSpan();
 
-			String sense = manager.getSense(y.getLabel());
-			view.addTokenLabel(predicateSpan.getFirst(), sense, 1.0);
-		}
-		return view;
-	}
+            String sense = manager.getSense(y.getLabel());
+            view.addTokenLabel(predicateSpan.getFirst(), sense, 1.0);
+        }
+        return view;
+    }
 }

@@ -12,46 +12,46 @@ import java.util.Set;
 
 @SuppressWarnings("serial")
 public class FeatureGenerators {
-	public static FeatureExtractor hyphenTagFeature = new FeatureExtractor() {
+    public static FeatureExtractor hyphenTagFeature = new FeatureExtractor() {
 
-		@Override
-		public String getName() {
-			return "#nom-hyp";
-		}
+        @Override
+        public String getName() {
+            return "#nom-hyp";
+        }
 
-		@Override
-		public Set<Feature> getFeatures(Constituent c) throws EdisonException {
+        @Override
+        public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
-			Set<Feature> features = new HashSet<>();
-			String surfaceString = c.getSurfaceForm();
+            Set<Feature> features = new HashSet<>();
+            String surfaceString = c.getSurfaceForm();
 
-			if (surfaceString.contains("-") && c.length() == 1) {
-				Constituent predicate = c.getIncomingRelations().get(0).getSource();
+            if (surfaceString.contains("-") && c.length() == 1) {
+                Constituent predicate = c.getIncomingRelations().get(0).getSource();
 
-				String lemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
+                String lemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
-				assert lemma != null;
+                assert lemma != null;
 
-				if (predicate.getSpan().equals(c.getSpan())) {
-					features.add(DiscreteFeature.create("pred-token"));
-				}
+                if (predicate.getSpan().equals(c.getSpan())) {
+                    features.add(DiscreteFeature.create("pred-token"));
+                }
 
-				String[] parts = surfaceString.split("-");
+                String[] parts = surfaceString.split("-");
 
-				for (int i = 0; i < parts.length; i++) {
-					String part = parts[i];
+                for (int i = 0; i < parts.length; i++) {
+                    String part = parts[i];
 
-					if (part.contains(lemma)) {
-						features.add(DiscreteFeature.create(i + ":pred"));
-					} else {
-						String lowerCase = part.toLowerCase();
-						features.add(DiscreteFeature.create(lowerCase));
-						features.add(DiscreteFeature.create(i + ":" + lowerCase));
-					}
-				}
-			}
+                    if (part.contains(lemma)) {
+                        features.add(DiscreteFeature.create(i + ":pred"));
+                    } else {
+                        String lowerCase = part.toLowerCase();
+                        features.add(DiscreteFeature.create(lowerCase));
+                        features.add(DiscreteFeature.create(i + ":" + lowerCase));
+                    }
+                }
+            }
 
-			return features;
-		}
-	};
+            return features;
+        }
+    };
 }

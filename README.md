@@ -26,6 +26,7 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [quantifier](quantifier/README.md) | This tool detects mentions of quantities in the text, as well as normalizes it to a standard form. |
 | [inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. |
 | [depparse](depparse/README.md) | An application that identifies the dependency parse tree of a sentence. |
+| [verbsense](verbsense/README.md) | This system addresses the verb sense disambiguation (VSD) problem for English. |
 | [prepsrl](prepsrl/README.md) | An application that identifies semantic relations expressed by prepositions and develops statistical learning models for predicting the relations. |
 | [commasrl](commasrl/README.md) | This software extracts relations that commas participate in. |
 | [external-annotators](external/README.md) | A collection useful external annotators.  |

@@ -20,176 +20,170 @@ import java.util.List;
 
 public class JLISCVHelper {
 
-	private final static Logger log = LoggerFactory
-			.getLogger(JLISCVHelper.class);
+    private final static Logger log = LoggerFactory.getLogger(JLISCVHelper.class);
 
-	public static class RealMeasure implements PerformanceMeasure {
-		public final Double d;
+    public static class RealMeasure implements PerformanceMeasure {
+        public final Double d;
 
-		public RealMeasure(Double d) {
-			this.d = d;
+        public RealMeasure(Double d) {
+            this.d = d;
 
-		}
+        }
 
-		@Override
-		public int compareTo(PerformanceMeasure o) {
+        @Override
+        public int compareTo(PerformanceMeasure o) {
 
-			if (o == null)
-				return 1;
+            if (o == null)
+                return 1;
 
-			return d.compareTo(((RealMeasure) o).d);
-		}
+            return d.compareTo(((RealMeasure) o).d);
+        }
 
-		@Override
-		public String summarize() {
-			return d.toString();
-		}
+        @Override
+        public String summarize() {
+            return d.toString();
+        }
 
-		@Override
-		public String toString() {
-			return summarize();
-		}
+        @Override
+        public String toString() {
+            return summarize();
+        }
 
-	}
+    }
 
-	private static int[] getSplitLocations(int numFolds, int numExamples) {
-		int foldSize = numExamples / numFolds;
+    private static int[] getSplitLocations(int numFolds, int numExamples) {
+        int foldSize = numExamples / numFolds;
 
-		int[] splitIdStarts = new int[numFolds + 1];
-		splitIdStarts[0] = 0;
-		for (int i = 1; i < numFolds; i++) {
-			splitIdStarts[i] = splitIdStarts[i - 1] + foldSize;
-		}
-		splitIdStarts[numFolds] = numExamples;
-		return splitIdStarts;
-	}
+        int[] splitIdStarts = new int[numFolds + 1];
+        splitIdStarts[0] = 0;
+        for (int i = 1; i < numFolds; i++) {
+            splitIdStarts[i] = splitIdStarts[i - 1] + foldSize;
+        }
+        splitIdStarts[numFolds] = numExamples;
+        return splitIdStarts;
+    }
 
-	public static LearnerParameters cvSSVMSerial(
-			AbstractInferenceSolver[] inference,
-			StructuredProblem sp, Tester<StructuredProblem> evaluator,
-			int nFolds) throws Exception {
+    public static LearnerParameters cvSSVMSerial(AbstractInferenceSolver[] inference,
+            StructuredProblem sp, Tester<StructuredProblem> evaluator, int nFolds) throws Exception {
 
-		log.info("Cross validation for struct SVM");
-		int[] structSplits = getSplitLocations(nFolds, sp.size());
+        log.info("Cross validation for struct SVM");
+        int[] structSplits = getSplitLocations(nFolds, sp.size());
 
-		StructureProblemSplitter splitter = new StructureProblemSplitter(
-				structSplits);
+        StructureProblemSplitter splitter = new StructureProblemSplitter(structSplits);
 
-		CrossValidationHelper<StructuredProblem> cvHelper = new CrossValidationHelper<StructuredProblem>(
-				nFolds, inference, new RealMeasureAverager(), splitter,
-				new SSVMTrainer(), evaluator);
+        CrossValidationHelper<StructuredProblem> cvHelper =
+                new CrossValidationHelper<StructuredProblem>(nFolds, inference,
+                        new RealMeasureAverager(), splitter, new SSVMTrainer(), evaluator);
 
-		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
+        List<LearnerParameters> params = new ArrayList<LearnerParameters>();
 
-		for (int i = -8; i < 0; i++) {
-			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
-		}
+        for (int i = -8; i < 0; i++) {
+            params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
+        }
 
-		LearnerParameters learnerParameters = cvHelper.doCV(sp, params, false);
+        LearnerParameters learnerParameters = cvHelper.doCV(sp, params, false);
 
-		return learnerParameters;
-	}
+        return learnerParameters;
+    }
 
-	public static LearnerParameters cvSSVM(
-			AbstractInferenceSolver[] inference,
-			StructuredProblem sp, Tester<StructuredProblem> evaluator,
-			int nThreads, int nFolds) throws Exception {
+    public static LearnerParameters cvSSVM(AbstractInferenceSolver[] inference,
+            StructuredProblem sp, Tester<StructuredProblem> evaluator, int nThreads, int nFolds)
+            throws Exception {
 
-		log.info("Cross validation for struct SVM");
-		int[] structSplits = getSplitLocations(nFolds, sp.size());
+        log.info("Cross validation for struct SVM");
+        int[] structSplits = getSplitLocations(nFolds, sp.size());
 
-		StructureProblemSplitter splitter = new StructureProblemSplitter(
-				structSplits);
+        StructureProblemSplitter splitter = new StructureProblemSplitter(structSplits);
 
-		CrossValidationHelper<StructuredProblem> cvHelper = new CrossValidationHelper<StructuredProblem>(
-				nFolds, inference, new RealMeasureAverager(), splitter,
-				new SSVMTrainer(), evaluator);
+        CrossValidationHelper<StructuredProblem> cvHelper =
+                new CrossValidationHelper<StructuredProblem>(nFolds, inference,
+                        new RealMeasureAverager(), splitter, new SSVMTrainer(), evaluator);
 
-		List<LearnerParameters> params = new ArrayList<LearnerParameters>();
+        List<LearnerParameters> params = new ArrayList<LearnerParameters>();
 
-		for (int i = -8; i < 0; i++) {
-			params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
-		}
+        for (int i = -8; i < 0; i++) {
+            params.add(LearnerParameters.getSSVMParams(Math.pow(2d, i)));
+        }
 
-		LearnerParameters learnerParameters = cvHelper.doCV(sp, params);
+        LearnerParameters learnerParameters = cvHelper.doCV(sp, params);
 
-		return learnerParameters;
-	}
+        return learnerParameters;
+    }
 
 }
+
 
 class SSVMTrainer implements Trainer<StructuredProblem> {
 
-	@Override
-	public WeightVector train(StructuredProblem dataset,
-			LearnerParameters params,
-			AbstractInferenceSolver[] inference) throws Exception {
-		return JLISLearner.trainStructSVM(inference, dataset,
-				params.getcStruct());
-	}
+    @Override
+    public WeightVector train(StructuredProblem dataset, LearnerParameters params,
+            AbstractInferenceSolver[] inference) throws Exception {
+        return JLISLearner.trainStructSVM(inference, dataset, params.getcStruct());
+    }
 
 }
 
-abstract class SingleListDatasetSplitter<DatasetType> implements
-		DatasetSplitter<DatasetType> {
-	protected final int[] splitIds;
 
-	public SingleListDatasetSplitter(int[] splitIds) {
-		this.splitIds = splitIds;
-	}
+abstract class SingleListDatasetSplitter<DatasetType> implements DatasetSplitter<DatasetType> {
+    protected final int[] splitIds;
+
+    public SingleListDatasetSplitter(int[] splitIds) {
+        this.splitIds = splitIds;
+    }
 }
 
-class StructureProblemSplitter extends
-		SingleListDatasetSplitter<StructuredProblem> {
 
-	public StructureProblemSplitter(int[] splitIds) {
-		super(splitIds);
-	}
+class StructureProblemSplitter extends SingleListDatasetSplitter<StructuredProblem> {
 
-	public Pair<StructuredProblem, StructuredProblem> getFoldData(
-			StructuredProblem problem, int foldId) {
+    public StructureProblemSplitter(int[] splitIds) {
+        super(splitIds);
+    }
 
-		int testStart = splitIds[foldId];
-		int testEnd = splitIds[foldId + 1];
+    public Pair<StructuredProblem, StructuredProblem> getFoldData(StructuredProblem problem,
+            int foldId) {
 
-		StructuredProblem train = new StructuredProblem();
-		StructuredProblem test = new StructuredProblem();
+        int testStart = splitIds[foldId];
+        int testEnd = splitIds[foldId + 1];
 
-		train.input_list = new ArrayList<IInstance>();
-		test.input_list = new ArrayList<IInstance>();
+        StructuredProblem train = new StructuredProblem();
+        StructuredProblem test = new StructuredProblem();
 
-		train.output_list = new ArrayList<IStructure>();
-		test.output_list = new ArrayList<IStructure>();
+        train.input_list = new ArrayList<IInstance>();
+        test.input_list = new ArrayList<IInstance>();
 
-		for (int i = 0; i < problem.input_list.size(); i++) {
+        train.output_list = new ArrayList<IStructure>();
+        test.output_list = new ArrayList<IStructure>();
 
-			IInstance x = problem.input_list.get(i);
-			IStructure y = problem.output_list.get(i);
+        for (int i = 0; i < problem.input_list.size(); i++) {
 
-			if (i < testStart || i >= testEnd) {
-				train.input_list.add(x);
-				train.output_list.add(y);
-			} else {
-				test.input_list.add(x);
-				test.output_list.add(y);
-			}
+            IInstance x = problem.input_list.get(i);
+            IStructure y = problem.output_list.get(i);
 
-		}
+            if (i < testStart || i >= testEnd) {
+                train.input_list.add(x);
+                train.output_list.add(y);
+            } else {
+                test.input_list.add(x);
+                test.output_list.add(y);
+            }
 
-		return new Pair<StructuredProblem, StructuredProblem>(train, test);
-	}
+        }
+
+        return new Pair<StructuredProblem, StructuredProblem>(train, test);
+    }
 
 }
+
 
 class RealMeasureAverager implements PerformanceMeasureAverager<RealMeasure> {
 
-	@Override
-	public RealMeasure average(List<? extends PerformanceMeasure> m) {
-		double sum = 0;
-		for (PerformanceMeasure r : m) {
-			sum += ((RealMeasure) r).d;
-		}
+    @Override
+    public RealMeasure average(List<? extends PerformanceMeasure> m) {
+        double sum = 0;
+        for (PerformanceMeasure r : m) {
+            sum += ((RealMeasure) r).d;
+        }
 
-		return new RealMeasure(sum / m.size());
-	}
+        return new RealMeasure(sum / m.size());
+    }
 }

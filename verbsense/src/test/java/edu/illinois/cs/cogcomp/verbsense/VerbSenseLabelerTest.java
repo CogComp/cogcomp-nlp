@@ -29,7 +29,9 @@ public class VerbSenseLabelerTest extends TestCase {
         taNoVerb = preProcessor.preProcessText("Events from the year 1872.");
         annotator.addView(ta);
         annotator.addView(taNoVerb);
-        assertEquals("John Smith (01 wrote) a book . ", ta.getView(annotator.getViewName()).toString());
-        assertEquals("Events from the year 1872 . ", taNoVerb.getView(annotator.getViewName()).toString());
+        assertEquals("John Smith (01 wrote) a book . ", ta.getView(annotator.getViewName())
+                .toString());
+        assertEquals("Events from the year 1872 . ", taNoVerb.getView(annotator.getViewName())
+                .toString());
     }
 }

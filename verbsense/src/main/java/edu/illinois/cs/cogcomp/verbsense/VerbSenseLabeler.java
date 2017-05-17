@@ -18,99 +18,102 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VerbSenseLabeler {
-	private final static Logger log = LoggerFactory.getLogger(VerbSenseLabeler.class);
-	public final SenseManager manager;
+    private final static Logger log = LoggerFactory.getLogger(VerbSenseLabeler.class);
+    public final SenseManager manager;
 
-	public static void main(String[] arguments) throws Exception {
-		if (arguments.length < 1) {
-			System.err.println("Usage: <config-file>");
-			System.exit(-1);
-		}
-		String configFile = arguments[0];
+    public static void main(String[] arguments) throws Exception {
+        if (arguments.length < 1) {
+            System.err.println("Usage: <config-file>");
+            System.exit(-1);
+        }
+        String configFile = arguments[0];
 
-		String input;
-		VerbSenseLabeler labeler = new VerbSenseLabeler();
+        String input;
+        VerbSenseLabeler labeler = new VerbSenseLabeler();
 
-		System.out.print("Enter text (underscore to quit): ");
-		input = System.console().readLine().trim();
-		if (input.equals("_"))
-			return;
+        System.out.print("Enter text (underscore to quit): ");
+        input = System.console().readLine().trim();
+        if (input.equals("_"))
+            return;
 
-		do {
-			if (!input.isEmpty()) {
-				TextAnnotation ta = TextPreProcessor.getInstance().preProcessText(input);
+        do {
+            if (!input.isEmpty()) {
+                TextAnnotation ta = TextPreProcessor.getInstance().preProcessText(input);
 
-				TokenLabelView p = labeler.getPrediction(ta);
-				System.out.println(p);
-				System.out.println();
-			}
+                TokenLabelView p = labeler.getPrediction(ta);
+                System.out.println(p);
+                System.out.println();
+            }
 
-			System.out.print("Enter text (underscore to quit): ");
-			input = System.console().readLine().trim();
+            System.out.print("Enter text (underscore to quit): ");
+            input = System.console().readLine().trim();
 
-		} while (!input.equals("_"));
-	}
+        } while (!input.equals("_"));
+    }
 
-	public VerbSenseLabeler() throws Exception {
-		WordNetManager.loadConfigAsClasspathResource(true);
+    public VerbSenseLabeler() throws Exception {
+        WordNetManager.loadConfigAsClasspathResource(true);
 
-		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize();
+        log.info("Initializing pre-processor");
+        TextPreProcessor.initialize();
 
-		log.info("Creating manager");
-		manager = VerbSenseClassifierMain.getManager(false);
+        log.info("Creating manager");
+        manager = VerbSenseClassifierMain.getManager(false);
 
-		log.info("Loading models");
-		loadModel();
+        log.info("Loading models");
+        loadModel();
 
-		TextAnnotation ta = initializeDummySentenceVerb();
+        TextAnnotation ta = initializeDummySentenceVerb();
 
-		log.info("Testing on sentence {}", ta.getText());
-		TokenLabelView prediction = getPrediction(ta);
+        log.info("Testing on sentence {}", ta.getText());
+        TokenLabelView prediction = getPrediction(ta);
 
-		log.info("Output: {}", prediction.toString());
-	}
+        log.info("Output: {}", prediction.toString());
+    }
 
-	protected TextAnnotation initializeDummySentenceVerb() {
-		List<String[]> listOfTokens = new ArrayList<>();
-		listOfTokens.add(new String[]{"I", "do", "."});
-		TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", listOfTokens);
+    protected TextAnnotation initializeDummySentenceVerb() {
+        List<String[]> listOfTokens = new ArrayList<>();
+        listOfTokens.add(new String[] {"I", "do", "."});
+        TextAnnotation ta =
+                BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", listOfTokens);
 
-		TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
-		tlv.addTokenLabel(0, "PRP", 1d);
-		tlv.addTokenLabel(1, "VBP", 1d);
-		tlv.addTokenLabel(2, ".", 1d);
-		ta.addView(ViewNames.POS, tlv);
+        TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
+        tlv.addTokenLabel(0, "PRP", 1d);
+        tlv.addTokenLabel(1, "VBP", 1d);
+        tlv.addTokenLabel(2, ".", 1d);
+        ta.addView(ViewNames.POS, tlv);
 
-		ta.addView(ViewNames.NER, new SpanLabelView(ViewNames.NER, "test", ta, 1d));
+        ta.addView(ViewNames.NER, new SpanLabelView(ViewNames.NER, "test", ta, 1d));
 
-		SpanLabelView chunks = new SpanLabelView(ViewNames.SHALLOW_PARSE, "test", ta, 1d);
-		chunks.addSpanLabel(0, 1, "NP", 1d);
-		chunks.addSpanLabel(1, 2, "VP", 1d);
-		ta.addView(ViewNames.SHALLOW_PARSE, chunks);
+        SpanLabelView chunks = new SpanLabelView(ViewNames.SHALLOW_PARSE, "test", ta, 1d);
+        chunks.addSpanLabel(0, 1, "NP", 1d);
+        chunks.addSpanLabel(1, 2, "VP", 1d);
+        ta.addView(ViewNames.SHALLOW_PARSE, chunks);
 
-		TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "test", ta, 1d);
-		view.addTokenLabel(0, "i", 1d);
-		view.addTokenLabel(1, "do", 1d);
-		view.addTokenLabel(2, ".", 1d);
-		ta.addView(ViewNames.LEMMA, view);
-		return ta;
-	}
+        TokenLabelView view = new TokenLabelView(ViewNames.LEMMA, "test", ta, 1d);
+        view.addTokenLabel(0, "i", 1d);
+        view.addTokenLabel(1, "do", 1d);
+        view.addTokenLabel(2, ".", 1d);
+        ta.addView(ViewNames.LEMMA, view);
+        return ta;
+    }
 
-	private void loadModel() throws Exception {
-		manager.getModelInfo().loadWeightVector();
-		log.info("Finished loading model");
-	}
+    private void loadModel() throws Exception {
+        manager.getModelInfo().loadWeightVector();
+        log.info("Finished loading model");
+    }
 
-	public TokenLabelView getPrediction(TextAnnotation ta) throws Exception {
-		log.debug("Input: {}", ta.getText());
-		List<Constituent> predicates = manager.getPredicateDetector().getPredicates(ta);
-		// If there are no verb identified, return an empty TokenLabelView
-		if (predicates.isEmpty())
-			return new TokenLabelView(SenseManager.getPredictedViewName(), VerbSenseConstants.systemIdentifier, ta, 1.0);
+    public TokenLabelView getPrediction(TextAnnotation ta) throws Exception {
+        log.debug("Input: {}", ta.getText());
+        List<Constituent> predicates = manager.getPredicateDetector().getPredicates(ta);
+        // If there are no verb identified, return an empty TokenLabelView
+        if (predicates.isEmpty())
+            return new TokenLabelView(SenseManager.getPredictedViewName(),
+                    VerbSenseConstants.systemIdentifier, ta, 1.0);
 
-		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
-		ILPInference inference = manager.getInference(solver, predicates);
-		return inference.getOutputView();
-	}
+        ILPSolverFactory solver =
+                new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
+        ILPInference inference = manager.getInference(solver, predicates);
+        return inference.getOutputView();
+    }
 }

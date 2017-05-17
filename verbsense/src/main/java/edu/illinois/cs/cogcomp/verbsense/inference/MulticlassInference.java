@@ -11,57 +11,57 @@ import edu.illinois.cs.cogcomp.verbsense.jlis.SenseStructure;
 
 @SuppressWarnings("serial")
 public class MulticlassInference extends AbstractInferenceSolver {
-	private final SenseManager manager;
+    private final SenseManager manager;
 
-	public MulticlassInference(SenseManager manager) {
-		this.manager = manager;
-	}
+    public MulticlassInference(SenseManager manager) {
+        this.manager = manager;
+    }
 
-	@Override
-	public Pair<IStructure, Double> getLossAugmentedBestStructure(
-			WeightVector weight, IInstance ins, IStructure goldStructure)
-			throws Exception {
-		SenseInstance x = (SenseInstance) ins;
-		SenseStructure yGold = null;
-		if (goldStructure != null)
-			yGold = (SenseStructure) goldStructure;
+    @Override
+    public Pair<IStructure, Double> getLossAugmentedBestStructure(WeightVector weight,
+            IInstance ins, IStructure goldStructure) throws Exception {
+        SenseInstance x = (SenseInstance) ins;
+        SenseStructure yGold = null;
+        if (goldStructure != null)
+            yGold = (SenseStructure) goldStructure;
 
-		int numLabels = manager.getNumLabels();
-		assert numLabels > 0;
+        int numLabels = manager.getNumLabels();
+        assert numLabels > 0;
 
-		double max = Double.NEGATIVE_INFINITY;
-		SenseStructure best = null;
-		double loss = 0;
+        double max = Double.NEGATIVE_INFINITY;
+        SenseStructure best = null;
+        double loss = 0;
 
 
-		for (int label = 0; label < numLabels; label++) {
-			if (!manager.isValidLabel(x, label)) continue;
+        for (int label = 0; label < numLabels; label++) {
+            if (!manager.isValidLabel(x, label))
+                continue;
 
-			SenseStructure y = new SenseStructure(x, label, manager);
+            SenseStructure y = new SenseStructure(x, label, manager);
 
-			double score = weight.dotProduct(y.getFeatureVector());
+            double score = weight.dotProduct(y.getFeatureVector());
 
-			double l = 0;
-			if (goldStructure != null) {
-				if (yGold.getLabel() != label)
-					l++;
-			}
+            double l = 0;
+            if (goldStructure != null) {
+                if (yGold.getLabel() != label)
+                    l++;
+            }
 
-			if (score + l > max + loss) {
-				max = score;
-				loss = l;
-				best = y;
-			}
-		}
-		if (best == null) {
-			System.out.println(ins);
-			System.out.println(manager.getLegalSenses(x.getPredicateLemma()));
-		}
-		return new Pair<IStructure, Double>(best, loss);
-	}
+            if (score + l > max + loss) {
+                max = score;
+                loss = l;
+                best = y;
+            }
+        }
+        if (best == null) {
+            System.out.println(ins);
+            System.out.println(manager.getLegalSenses(x.getPredicateLemma()));
+        }
+        return new Pair<IStructure, Double>(best, loss);
+    }
 
-	@Override
-	public IStructure getBestStructure(WeightVector weight, IInstance ins) throws Exception {
-		return getLossAugmentedBestStructure(weight, ins, null).getFirst();
-	}
+    @Override
+    public IStructure getBestStructure(WeightVector weight, IInstance ins) throws Exception {
+        return getLossAugmentedBestStructure(weight, ins, null).getFirst();
+    }
 }

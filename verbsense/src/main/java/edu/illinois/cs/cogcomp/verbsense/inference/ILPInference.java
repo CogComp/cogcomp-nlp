@@ -20,118 +20,120 @@ import java.util.Set;
 
 public class ILPInference extends AbstractILPInference<SentenceStructure> {
 
-	private final static Logger log = LoggerFactory.getLogger(ILPInference.class);
+    private final static Logger log = LoggerFactory.getLogger(ILPInference.class);
 
-	public final SentenceInstance instance;
-	protected TextAnnotation ta;
-	protected final SenseManager manager;
-	private String viewName;
-	private final int numPredicates;
-	private ILPOutput outputGenerator;
+    public final SentenceInstance instance;
+    protected TextAnnotation ta;
+    protected final SenseManager manager;
+    private String viewName;
+    private final int numPredicates;
+    private ILPOutput outputGenerator;
 
-	public ILPInference(ILPSolverFactory solverFactory, SenseManager manager,
-						List<Constituent> predicates) throws Exception {
-		super(solverFactory, false);
-		this.manager = manager;
+    public ILPInference(ILPSolverFactory solverFactory, SenseManager manager,
+            List<Constituent> predicates) throws Exception {
+        super(solverFactory, false);
+        this.manager = manager;
 
-		this.outputGenerator = new ILPOutput(manager);
+        this.outputGenerator = new ILPOutput(manager);
 
-		List<SenseInstance> instances = new ArrayList<>();
-		for (Constituent predicate : predicates) {
-			Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
-			SenseInstance x;
+        List<SenseInstance> instances = new ArrayList<>();
+        for (Constituent predicate : predicates) {
+            Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
+            SenseInstance x;
 
-			assert predicateClone.hasAttribute(PredicateArgumentView.LemmaIdentifier);
+            assert predicateClone.hasAttribute(PredicateArgumentView.LemmaIdentifier);
 
-			x = new SenseInstance(predicateClone, manager);
+            x = new SenseInstance(predicateClone, manager);
 
-			x.cacheAllFeatureVectors();
+            x.cacheAllFeatureVectors();
 
-			instances.add(x);
-		}
+            instances.add(x);
+        }
 
-		ta = predicates.get(0).getTextAnnotation();
+        ta = predicates.get(0).getTextAnnotation();
 
-		viewName = SenseManager.getPredictedViewName();
+        viewName = SenseManager.getPredictedViewName();
 
-		instance = new SentenceInstance(instances);
-		numPredicates = instance.numPredicates();
-	}
+        instance = new SentenceInstance(instances);
+        numPredicates = instance.numPredicates();
+    }
 
-	@Override
-	protected void initializeSolver(ILPSolver xmp, InferenceVariableLexManager variableManager) {
-		if (this.solverFactory.type == SolverType.JLISCuttingPlaneGurobi) {
-			JLISCuttingPlaneILPSolverGurobi s = (JLISCuttingPlaneILPSolverGurobi) xmp;
-			s.setInput(instance);
-			s.setVariableManager(variableManager);
-			s.setOutputGenerator(outputGenerator);
-		}
-	}
+    @Override
+    protected void initializeSolver(ILPSolver xmp, InferenceVariableLexManager variableManager) {
+        if (this.solverFactory.type == SolverType.JLISCuttingPlaneGurobi) {
+            JLISCuttingPlaneILPSolverGurobi s = (JLISCuttingPlaneILPSolverGurobi) xmp;
+            s.setInput(instance);
+            s.setVariableManager(variableManager);
+            s.setOutputGenerator(outputGenerator);
+        }
+    }
 
-	@Override
-	protected SentenceStructure getOutput(ILPSolver xmp, InferenceVariableLexManager variableManager)
-			throws Exception {
-		return outputGenerator.getOutput(xmp, variableManager, this.instance);
-	}
+    @Override
+    protected SentenceStructure getOutput(ILPSolver xmp, InferenceVariableLexManager variableManager)
+            throws Exception {
+        return outputGenerator.getOutput(xmp, variableManager, this.instance);
+    }
 
-	@Override
-	protected void addConstraints(ILPSolver xmp, InferenceVariableLexManager variableManager) {
-		//XXX Add constraints for sense classifier?
-	}
+    @Override
+    protected void addConstraints(ILPSolver xmp, InferenceVariableLexManager variableManager) {
+        // XXX Add constraints for sense classifier?
+    }
 
-	@Override
-	protected void addVariables(ILPSolver xmp, InferenceVariableLexManager variableManager) {
-		assert xmp != null;
+    @Override
+    protected void addVariables(ILPSolver xmp, InferenceVariableLexManager variableManager) {
+        assert xmp != null;
 
-		for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
-			SenseInstance senseX = instance.predicates.get(predicateId);
+        for (int predicateId = 0; predicateId < numPredicates; predicateId++) {
+            SenseInstance senseX = instance.predicates.get(predicateId);
 
-			String lemma = senseX.getPredicateLemma();
-			assert lemma != null;
+            String lemma = senseX.getPredicateLemma();
+            assert lemma != null;
 
-			log.debug("Adding variables for " + lemma);
+            log.debug("Adding variables for " + lemma);
 
-			double[] senseScores = manager.getScores(senseX, true);
+            double[] senseScores = manager.getScores(senseX, true);
 
-			Set<Integer> set = new HashSet<>();
+            Set<Integer> set = new HashSet<>();
 
-			for (int senseId = 0; senseId < senseScores.length; senseId++) {
-				if (!manager.isValidSense(lemma, senseId))
-					continue;
+            for (int senseId = 0; senseId < senseScores.length; senseId++) {
+                if (!manager.isValidSense(lemma, senseId))
+                    continue;
 
-				String label = manager.getSense(senseId);
-				double score = senseScores[senseId];
-				String variableIdentifier = getSenseVariableIdentifier(viewName, predicateId, label);
-				int var = xmp.addBooleanVariable(score);
-				variableManager.addVariable(variableIdentifier, var);
-				set.add(var);
-				log.debug("Sense variable: " + score + " " + variableIdentifier + " " + var + " " + label);
-			}
+                String label = manager.getSense(senseId);
+                double score = senseScores[senseId];
+                String variableIdentifier =
+                        getSenseVariableIdentifier(viewName, predicateId, label);
+                int var = xmp.addBooleanVariable(score);
+                variableManager.addVariable(variableIdentifier, var);
+                set.add(var);
+                log.debug("Sense variable: " + score + " " + variableIdentifier + " " + var + " "
+                        + label);
+            }
 
-			log.debug("Adding unique sense label constraint");
-			addUniqueLabelConstraint(xmp, set);
-		}
+            log.debug("Adding unique sense label constraint");
+            addUniqueLabelConstraint(xmp, set);
+        }
 
-		assert variableManager.size() > 0 : "No varaibles added for " + this.ta;
-	}
+        assert variableManager.size() > 0 : "No varaibles added for " + this.ta;
+    }
 
-	private void addUniqueLabelConstraint(ILPSolver xmp, Set<Integer> set) {
-		int[] vars = new int[set.size()];
-		double[] coeffs = new double[set.size()];
-		int i = 0;
-		for (int v : set) {
-			vars[i] = v;
-			coeffs[i++] = 1.0;
-		}
+    private void addUniqueLabelConstraint(ILPSolver xmp, Set<Integer> set) {
+        int[] vars = new int[set.size()];
+        double[] coeffs = new double[set.size()];
+        int i = 0;
+        for (int v : set) {
+            vars[i] = v;
+            coeffs[i++] = 1.0;
+        }
 
-		addEqualityConstraint(xmp, vars, coeffs, 1.0);
-	}
+        addEqualityConstraint(xmp, vars, coeffs, 1.0);
+    }
 
-	public static String getSenseVariableIdentifier(String type, int predicateId, String label) {
-		return type + ":sense:" + predicateId + ":" + label;
-	}
+    public static String getSenseVariableIdentifier(String type, int predicateId, String label) {
+        return type + ":sense:" + predicateId + ":" + label;
+    }
 
-	public TokenLabelView getOutputView() throws Exception {
-		return runInference().getView(manager, ta);
-	}
+    public TokenLabelView getOutputView() throws Exception {
+        return runInference().getView(manager, ta);
+    }
 }

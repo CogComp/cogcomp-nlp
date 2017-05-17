@@ -3,14 +3,14 @@ package edu.illinois.cs.cogcomp.verbsense.experiment;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 
 class PreExtractRecord {
-	String lemma;
-	int label;
-	FeatureVector features;
+    String lemma;
+    int label;
+    FeatureVector features;
 
-	public PreExtractRecord(String lemma, int label, FeatureVector features) {
-		this.lemma = lemma;
-		this.label = label;
-		this.features = features;
-	}
+    public PreExtractRecord(String lemma, int label, FeatureVector features) {
+        this.lemma = lemma;
+        this.label = label;
+        this.features = features;
+    }
 
 }

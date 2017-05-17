@@ -25,8 +25,9 @@ public class VerbSenseAnnotator extends Annotator {
     }
 
     public VerbSenseAnnotator(boolean lazilyInitialize, ResourceManager rm) {
-        super(VerbSenseConstants.viewName, new String[] {ViewNames.POS,
-                ViewNames.LEMMA, ViewNames.SHALLOW_PARSE, ViewNames.NER_CONLL}, lazilyInitialize, new VerbSenseConfigurator().getConfig(rm));
+        super(VerbSenseConstants.viewName, new String[] {ViewNames.POS, ViewNames.LEMMA,
+                ViewNames.SHALLOW_PARSE, ViewNames.NER_CONLL}, lazilyInitialize,
+                new VerbSenseConfigurator().getConfig(rm));
     }
 
     @Override
