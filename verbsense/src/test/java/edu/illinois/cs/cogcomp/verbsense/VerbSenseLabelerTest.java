@@ -17,19 +17,19 @@ public class VerbSenseLabelerTest extends TestCase {
         annotator = new VerbSenseAnnotator();
     }
 
-//    public void testGetPrediction() throws Exception {
-//        ta = preProcessor.preProcessText("John Smith wrote a book.");
-//        taNoVerb = preProcessor.preProcessText("Events from the year 1872.");
-//        assertEquals("John Smith (01 wrote) a book . ", labeler.getPrediction(ta).toString());
-//        assertEquals("Events from the year 1872 . ", labeler.getPrediction(taNoVerb).toString());
-//    }
+    public void testGetPrediction() throws Exception {
+        ta = preProcessor.preProcessText("John Smith wrote a book.");
+        taNoVerb = preProcessor.preProcessText("Events from the year 1872.");
+        assertEquals("John Smith (01 wrote) a book . ", labeler.getPrediction(ta).toString());
+        assertEquals("Events from the year 1872 . ", labeler.getPrediction(taNoVerb).toString());
+    }
 
     public void testAnnotator() throws Exception {
         ta = preProcessor.preProcessText("John Smith wrote a book.");
         taNoVerb = preProcessor.preProcessText("Events from the year 1872.");
         annotator.addView(ta);
-//        annotator.addView(taNoVerb);
+        annotator.addView(taNoVerb);
         assertEquals("John Smith (01 wrote) a book . ", ta.getView(annotator.getViewName()).toString());
-//        assertEquals("Events from the year 1872 . ", taNoVerb.getView(annotator.getViewName()).toString());
+        assertEquals("Events from the year 1872 . ", taNoVerb.getView(annotator.getViewName()).toString());
     }
 }
