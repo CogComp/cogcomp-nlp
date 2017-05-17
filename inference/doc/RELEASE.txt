@@ -1,0 +1,20 @@
+Version 0.3.1
+Moved from JLIS-core-5.0 to IllinoisSL-core-0.1
+
+Version 0.4
+Major change: Moved ILPSolver to this project from LBJ (might break code).
+Updated ILPConstraintGenerator to take use arbitrary inputs for generating
+constraints during cutting plane inference.
+Allows real valued inference variables.
+Deprecated CuttingPlaneILPHook.
+Miscellaneous bugfixes.
+
+Version 0.4.1
+Made Gurobi an optional dependency
+
+Version 0.5.0
+Added the oj! Algorithm (ojAlgo) solver
+Updated dependencies
+
+Version 0.6.0
+Moving augmenting the current ilp-solvers with lbjava's ilp-solver

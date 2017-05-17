@@ -1,0 +1,617 @@
+<!-- 
+                              A DTD for
+                     Reference Key Annotation of
+                           EDT Entities and
+                         RDC Relations in the
+                           ACE Evaluations
+
+                          John C. Henderson
+                                MITRE
+                             2000-01-05
+
+v 1.1 Added versioning for semantic compatibility.
+      Added CHARSEQ in reponse to request from George Doddington.
+      Replaced ENTITY_NAME tag for encoding attribute with a general
+      ENTITY_ATTRIBUTES tag within which can be multiple attributes,
+      the only one of which we now have being NAME.
+
+v 1.2 Added extra attributes to SOURCE_FILE element, indicating source,
+      author and encoding.
+
+v 1.3 Added ROLE attribute under entity_mention and added GENERIC attribute
+      under entity_type.  Also added REFERENCE attribute to entity_mention
+      to indicate whether literal or intended.  Also changed ID attribute value
+      within document to CDATA (instead of ID)
+
+v 1.4 Added support for RDC relations, their attributes and mentions.
+      Also cleaned up and brought things up to date for EDT entities.
+      2002/03/24.  David Day.
+
+v 1.4.2 Removed rel_arg_role element, since this is now established within
+        SUBTYPE attribute on relation elements.  Added NA as valid value for
+        entity_mention REFERENCE attribute.
+        2002/05/01.  David Day.
+
+v 1.4.3 Changed all RELATION SUBTYPE values to use hyphens instead of underscore
+        characters in the case of multi-word phrases (e.g., "LOCATED-IN").
+        2002/05/28.  David Day.
+
+v 1.4.4 Modified RELATION element SUBTYPE attribute values: Added BASED-IN.
+        Removed NA from ENTITY_MENTION attribute values for ROLE and REFERENCE.
+        Instead of being REQUIRED these attributes are now IMPLIED (that is,
+        they are optional).
+
+v 2.0   SUBTYPE modifications:
+          Added:   CLIENT.
+          Changed: MEMBER-OF to MEMBER.
+          Removed: CONTAINED-IN.
+        VERSION modifications:
+          Changed: 1.4.4 to 2.0.
+        David; 2002-06-20.
+
+v 2.0.1 SUBTYPE modifications:
+                  Added: FROM
+                                 BRANCH
+                             LOCATED-IN (LOCATED already existed; left both)
+                Robyn; 2002-06-28
+
+v 3.* became ALF (ACE LDC Format)
+
+v 4.0.0 LDC and BBN update: updated to version 4.0.0 to match new ALF dtd
+
+v 4.1.0 LDC: updated for the ACE4 Pilot exercise; 2004-11-11
+
+v 4.2.0 LDC: updated for the ACE4 Pilot exercise; additional changes; 
+        2004-11-15.
+
+v 5.0.x LDC, NIST, MITRE: updated for the AC2005 Pilot exerecise to
+        support the additional evaluation of Events and Entity
+        Normalization & Disambiguation (END).  2004-11 through 2005-01.
+
+v 5.1.0 LDC, ACE Community: Updated for the data for ACE 2005 training
+        and evaluation data; Changed "quantity" to "value"; added new
+        "timex2" and "timex2_mention" elements, and removed
+        TIMEX2-related definitions from "value"; relation_mention and
+        event_mention extents are now required; entity_mention heads are
+        now required; updated types and subtypes; removed "PRE" from
+        entity_mention TYPE and LDCTYPE; removed "CMC", "MWH" and "MSC"
+        from entity_mention LDCTYPE; disallowed multiple anchors in
+        event_mention; made the SUBTYPE attribute of entity to #REQUIRED
+
+v 5.1.1 (1) TYPE="Life" SUBTYPE="Date" eliminated from event inventory.
+        (2) Bounding box specification updated.
+
+ -->
+
+<!-- URI should be a unique identifier for the source file in question.
+     SOURCE is a more general indicator of the news source from whence
+       the source_file has been retrieved.  Likely values are CNN, APW,
+       NPR, etc.
+     TYPE indicates general class of signal (text, audio or image).
+     VERSION attribute is used to perform optionaly versioning by
+       matching against its value.
+     AUTHOR attribute value should indicate the organization and/or
+       person who produced the annotations contained in this file
+       (e.g., "Ramshaw/BBN", "Ferro/MITRE", etc.).
+     ENCODING indicates type-specific encoding standard being used
+       in source file, such as UTF-8 for text data, wav for speech
+       signals, etc.
+
+-->     
+
+<!ELEMENT source_file      (external_resource*,document+)>
+<!ATTLIST source_file
+                           URI      CDATA              #REQUIRED
+                           SOURCE   CDATA              #IMPLIED
+                           TYPE     (text|audio|image) #REQUIRED
+                           VERSION  NMTOKEN            #IMPLIED
+                           AUTHOR   CDATA              #IMPLIED
+                           ENCODING CDATA              #IMPLIED
+>
+
+<!-- By giving document ID the XML type ID (see entity), an implicit
+     promise is being made that there will be no duplicate document
+     IDs in a file.  CDATA will be used for now because IDREFs should
+     not be allowed to point to these DOCID ID's. --> 
+
+<!ELEMENT document         (entity|relation|event|value|timex2)* >
+<!ATTLIST document
+                           DOCID CDATA #REQUIRED
+>
+
+<!-- *********************************************************************
+
+     The Entity Normalization and Disambiguation task defined for ACE
+     requires that entities identified within a document must be
+     associated with an element from some external resource.  The
+     external_resource element declares the unique, universal URN that
+     identifies this resource, and associates a locally unique NAME
+     for the resource that may be used as an abbreviation within the
+     APF file, and referenced from external_link elements (see further
+     down in the DTD).
+
+     The present types of elements that are currently expected to be
+     linked to external resources are: entity.  In the future we may
+     choose to link other types of elements (such as relation, event,
+     value). to external resources.
+
+     The text (#PCDATA) contained within the body of the external_resource
+
+     ********************************************************************* -->
+
+<!ELEMENT external_resource  (#PCDATA)>
+<!ATTLIST external_resource
+                   URN      CDATA             #REQUIRED
+                   NAME     ID                #REQUIRED
+>
+
+<!-- ********************************************** -->
+<!-- Entities, their attributes and their mentions. -->
+<!-- ********************************************** -->
+
+<!-- List of TYPE/SUBTYPE pairs (as of May 7, 2005)
+
+TYPE="PER" SUBTYPE="Individual"
+TYPE="PER" SUBTYPE="Group"
+TYPE="PER" SUBTYPE="Indeterminate"
+
+TYPE="ORG" SUBTYPE="Government"
+TYPE="ORG" SUBTYPE="Non-Governmental"
+TYPE="ORG" SUBTYPE="Commercial"
+TYPE="ORG" SUBTYPE="Educational"
+TYPE="ORG" SUBTYPE="Media"
+TYPE="ORG" SUBTYPE="Religious"
+TYPE="ORG" SUBTYPE="Sports"
+TYPE="ORG" SUBTYPE="Medical-Science"
+TYPE="ORG" SUBTYPE="Entertainment"
+
+TYPE="LOC" SUBTYPE="Address"
+TYPE="LOC" SUBTYPE="Boundary"
+TYPE="LOC" SUBTYPE="Water-Body"
+TYPE="LOC" SUBTYPE="Celestial"
+TYPE="LOC" SUBTYPE="Land-Region-Natural"
+TYPE="LOC" SUBTYPE="Region-General"
+TYPE="LOC" SUBTYPE="Region-International"
+
+TYPE="GPE" SUBTYPE="Continent"
+TYPE="GPE" SUBTYPE="Nation"
+TYPE="GPE" SUBTYPE="State-or-Province"
+TYPE="GPE" SUBTYPE="County-or-District"
+TYPE="GPE" SUBTYPE="Population-Center"
+TYPE="GPE" SUBTYPE="GPE-Cluster"
+TYPE="GPE" SUBTYPE="Special"
+
+TYPE="FAC" SUBTYPE="Building-Grounds"
+TYPE="FAC" SUBTYPE="Subarea-Facility"
+TYPE="FAC" SUBTYPE="Path"
+TYPE="FAC" SUBTYPE="Airport"
+TYPE="FAC" SUBTYPE="Plant"
+
+TYPE="VEH" SUBTYPE="Land"
+TYPE="VEH" SUBTYPE="Air"
+TYPE="VEH" SUBTYPE="Water"
+TYPE="VEH" SUBTYPE="Subarea-Vehicle"
+TYPE="VEH" SUBTYPE="Underspecified"
+
+TYPE="WEA" SUBTYPE="Blunt"
+TYPE="WEA" SUBTYPE="Exploding"
+TYPE="WEA" SUBTYPE="Sharp"
+TYPE="WEA" SUBTYPE="Chemical"
+TYPE="WEA" SUBTYPE="Biological"
+TYPE="WEA" SUBTYPE="Shooting"
+TYPE="WEA" SUBTYPE="Projectile"
+TYPE="WEA" SUBTYPE="Nuclear"
+TYPE="WEA" SUBTYPE="Underspecified"
+-->
+
+<!ELEMENT entity         (entity_mention+,entity_attributes*,external_link*)>
+<!ATTLIST entity
+                         ID      ID                                #REQUIRED
+                         TYPE    (PER|ORG|LOC|GPE|FAC|VEH|WEA)     #REQUIRED
+                         SUBTYPE (Individual|Group|Indeterminate|
+                           Government|Non-Governmental|
+                           Commercial|Educational|
+                           Media|Religious|Sports|
+                           Medical-Science|Entertainment|
+                           Address|Boundary|Water-Body|Celestial|
+                           Land-Region-Natural|Region-General|
+                           Region-International|Continent|Nation|
+                           State-or-Province|County-or-District|
+                           Population-Center|GPE-Cluster|Special|
+                           Building-Grounds|Subarea-Facility|Path|
+                           Airport|Plant|Land|Air|Water|Subarea-Vehicle|
+                           Blunt|Exploding|Sharp|Chemical|
+                           Biological|Shooting|Projectile|Nuclear|
+                           Underspecified)                         #REQUIRED
+                         CLASS   (NEG|SPC|GEN|USP)                 #REQUIRED
+>
+
+
+<!-- *********************************************************************
+
+     The external_link element associates an individual entity
+     identified at the document level with an element (or entry) in an
+     external resource.  The RESOURCE attribute specifies the external
+     resource being referenced (via its locally unique NAME), and the
+     EID attribute specifies the ID of the element (or entry) in that
+     resource to which this entity is being linked.
+
+     ********************************************************************* -->
+
+<!ELEMENT external_link    EMPTY>
+<!ATTLIST external_link
+                           RESOURCE           IDREF              #REQUIRED
+                           EID                CDATA              #REQUIRED
+>
+
+
+<!-- entity_mention -->
+
+<!ELEMENT entity_mention   (extent, head)>
+<!ATTLIST entity_mention
+                           ID        ID                          #REQUIRED
+                           TYPE      (NAM|NOM|PRO)               #REQUIRED
+                           LDCTYPE   (NAM|NOM|BAR|PRO|WHQ|
+                                      HLS|PTV|APP|ARC|
+                                      EAP|NAMPRE|NOMPRE)         #IMPLIED
+                           ROLE      (PER|ORG|LOC|GPE)           #IMPLIED
+                           METONYMY_MENTION (TRUE|FALSE)         #IMPLIED
+                           LDCATR    (TRUE|FALSE)                #IMPLIED
+>
+
+<!-- There may be new attributes introduced in the future.  We incorporate
+     additional attributes underneath the single entity_attributes tag.
+     The name indexes directly into a portion of the signal, using one
+     of the four indexing types. -->
+
+<!ELEMENT entity_attributes (name*)>
+
+<!ELEMENT name             (bblist|charspan|charseq|timespan)>
+<!ATTLIST name             NAME  CDATA                            #IMPLIED
+>
+
+<!-- ****************************************************************** -->
+<!-- VALUES, their attributes and mentions.                             -->
+<!-- ****************************************************************** -->
+
+<!-- List of TYPE/SUBTYPE pairs (as of May 7, 2005)
+
+TYPE="Numeric" SUBTYPE="Money"
+TYPE="Numeric" SUBTYPE="Percent"
+TYPE="Contact-Info" SUBTYPE="Phone-Number"
+TYPE="Contact-Info" SUBTYPE="E-Mail"
+TYPE="Contact-Info" SUBTYPE="URL"
+
+TYPE="Crime"
+TYPE="Job-Title"
+TYPE="Sentence"
+
+-->
+
+<!ELEMENT value          (value_mention)>
+<!ATTLIST value
+                         ID      ID                                  #REQUIRED
+                         TYPE    (Numeric|Contact-Info|
+                                  Crime|Job-Title|Sentence)          #REQUIRED
+                         SUBTYPE (Money|Percent|Phone-Number|E-Mail|
+                                  URL)                               #IMPLIED
+>
+
+<!ELEMENT value_mention  (extent)>
+<!ATTLIST value_mention
+                         ID      ID                                  #REQUIRED
+>
+
+<!-- timex2 -->
+
+<!ELEMENT timex2        (timex2_mention)>
+<!ATTLIST timex2
+                         ID           ID                             #REQUIRED
+                         VAL          CDATA                          #IMPLIED
+                         MOD         (BEFORE|AFTER|ON_OR_BEFORE|
+                                      ON_OR_AFTER|LESS_THAN|
+                                      MORE_THAN|EQUAL_OR_LESS|
+                                      EQUAL_OR_MORE|START|MID|
+                                      END|APPROX)                    #IMPLIED
+                         ANCHOR_VAL   CDATA                          #IMPLIED  
+                         ANCHOR_DIR (WITHIN|STARTING|ENDING|
+                                     AS_OF|BEFORE|AFTER)             #IMPLIED
+                         SET          (YES)                          #IMPLIED
+                         NON_SPECIFIC (YES)                          #IMPLIED
+                         COMMENT      CDATA                          #IMPLIED
+>
+
+<!ELEMENT timex2_mention  (extent)>
+<!ATTLIST timex2_mention
+                         ID           ID                             #REQUIRED
+>
+
+<!-- The extent is the maximal subset of the signal permitted in
+     judging correctness, and the head is the minimal subset. -->
+
+<!ELEMENT extent           (bblist|charspan|charseq|timespan)>
+<!ELEMENT head             (bblist|charspan|charseq|timespan)>
+<!ELEMENT anchor           (bblist|charspan|charseq|timespan)>
+<!ELEMENT ldc_scope        (bblist|charspan|charseq|timespan)>
+
+<!ELEMENT charspan         (#PCDATA)>
+<!ATTLIST charspan         START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!ELEMENT charseq          (#PCDATA)>
+<!ATTLIST charseq          START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!ELEMENT timespan         (#PCDATA)>
+<!ATTLIST timespan         START NMTOKEN  #REQUIRED
+                           END   NMTOKEN  #REQUIRED
+>
+
+<!-- A list of bounding boxes is needed to describe wrapped words in
+     an image. -->
+
+<!ELEMENT bblist           (bbox)+>
+
+<!-- The attributes of each bounding box are a page number,
+     x (left) and y (lower) coordinates, and width and height.
+     Note that x and y are points in space, not pixel numbers.
+     (pixels have width and height and so x and y for a pixel
+     would be the left most and lowest point in the pixel.) -->
+
+<!ELEMENT bbox             (#PCDATA)>
+<!ATTLIST bbox             PAGE   NMTOKEN  #REQUIRED
+                           X      NMTOKEN  #REQUIRED
+                           WIDTH  NMTOKEN  #REQUIRED
+                           Y      NMTOKEN  #REQUIRED
+                           HEIGHT NMTOKEN  #REQUIRED
+>
+
+<!-- A character SPAN (charspan) is a pair of indices that wraps
+     the signal being annotated in text.   This means that the first
+     index points to the imaginary gap *before* the first character
+     and the second index points to the imaginary gap *after* the
+     final character in the span.
+
+     A character SEQUENCE (charseq) is a pair of indices pointing to
+     the first and last character of the text being annotated.  This
+     means that the first index points to the first character of the
+     text being annotated (which is the same as pointing to the
+     imaginary gap *before* the first character), and the second index
+     points to the last character in the annotated text (the imaginary
+     gap *before* the last character in the annotated text). -->
+
+
+<!-- Perhaps these next elements are better suited to life as
+     attributes of the previous elements.  This is  an artform, after
+     all.  The other version would be *equivalent*, which is all
+     anyone should ask. -->
+
+<!-- ****************************************************************** -->
+<!-- RELATIONS, their attributes and mentions.                          -->
+<!-- ****************************************************************** -->
+
+<!-- List of TYPE/SUBTYPE pairs (as of May 7, 2005)
+
+TYPE="PHYS" SUBTYPE="Located"
+TYPE="PHYS" SUBTYPE="Near"
+
+TYPE="PART-WHOLE" SUBTYPE="Geographical"
+TYPE="PART-WHOLE" SUBTYPE="Subsidiary"
+TYPE="PART-WHOLE" SUBTYPE="Artifact"
+
+TYPE="PER-SOC" SUBTYPE="Business"
+TYPE="PER-SOC" SUBTYPE="Family"
+TYPE="PER-SOC" SUBTYPE="Lasting-Personal"
+
+TYPE="ORG-AFF" SUBTYPE="Employment"
+TYPE="ORG-AFF" SUBTYPE="Ownership"
+TYPE="ORG-AFF" SUBTYPE="Founder"
+TYPE="ORG-AFF" SUBTYPE="Student-Alum"
+TYPE="ORG-AFF" SUBTYPE="Sports-Affiliation"
+TYPE="ORG-AFF" SUBTYPE="Investor-Shareholder"
+TYPE="ORG-AFF" SUBTYPE="Membership"
+
+TYPE="ART" SUBTYPE="User-Owner-Inventor-Manufacturer"
+
+TYPE="GEN-AFF" SUBTYPE="Citizen-Resident-Religion-Ethnicity"
+TYPE="GEN-AFF" SUBTYPE="Org-Location"
+
+TYPE="METONYMY" (no SUBTYPE)
+
+NOTE: METONYMY relations mark cross-type metonymies, and will not have
+      relation mentions or values for MODALITY and TENSE.  For these
+      reasons, we use "relation_mention*" instead of
+      "relation_mention+", and "#IMPLIED" for MODALITY and TENSE. 
+
+-->
+
+<!ELEMENT relation           (relation_argument,
+                              relation_argument+,
+                              relation_mention*)>
+<!ATTLIST relation           
+                             ID       ID                        #REQUIRED
+                             TYPE     (PHYS|PART-WHOLE|PER-SOC|ORG-AFF|
+                                       ART|GEN-AFF|METONYMY)    #REQUIRED
+                             SUBTYPE  (Located|Near|Geographical|
+                                       Subsidiary|Artifact|Business|
+                                       Family|Lasting-Personal|Employment|
+                                       Ownership|Founder|Student-Alum|
+                                       Sports-Affiliation|
+                                       Investor-Shareholder|
+                                       Membership|
+                                       User-Owner-Inventor-Manufacturer|
+                                       Citizen-Resident-Religion-Ethnicity|
+                                       Org-Location)            #IMPLIED
+                             MODALITY (Asserted|Other)          #IMPLIED
+                             TENSE    (Past|Present|Future|
+                                       Unspecified)             #IMPLIED
+>
+
+<!ELEMENT relation_argument  EMPTY>
+<!ATTLIST relation_argument   
+                             REFID     IDREF               #REQUIRED
+                             ROLE      (Arg-1|Arg-2|
+                                        Time-Within|
+                                        Time-Starting|
+                                        Time-Ending|
+                                        Time-Before|
+                                        Time-After|
+                                        Time-Holds|
+                                        Time-At-Beginning|
+                                        Time-At-End)       #REQUIRED
+>
+
+<!ELEMENT relation_mention  (extent,
+                             relation_mention_argument,
+                             relation_mention_argument+)>
+<!ATTLIST relation_mention   
+                            ID                ID                #REQUIRED
+                            LEXICALCONDITION  (Possessive|Preposition|
+                                               PreMod|Formulaic|Verbal|
+                                               Participial|Other|
+                                               Coordination)    #IMPLIED
+>
+
+<!ELEMENT relation_mention_argument  (extent?)>
+<!ATTLIST relation_mention_argument
+                            REFID     IDREF                 #REQUIRED
+                            ROLE      (Arg-1|Arg-2|
+                                       Time-Within|
+                                       Time-Starting|
+                                       Time-Ending|
+                                       Time-Before|
+                                       Time-After|
+                                       Time-Holds|
+                                       Time-At-Beginning|
+                                       Time-At-End)         #REQUIRED
+>
+
+<!-- ****************************************************************** -->
+<!-- EVENTS, their attributes and mentions.                             -->
+<!-- ****************************************************************** -->
+
+<!-- List of TYPE/SUBTYPE pairs (as of May 7, 2005)
+
+TYPE="Life" SUBTYPE="Be-Born"
+TYPE="Life" SUBTYPE="Die"
+TYPE="Life" SUBTYPE="Marry"
+TYPE="Life" SUBTYPE="Divorce"
+TYPE="Life" SUBTYPE="Injure"
+TYPE="Transaction" SUBTYPE="Transfer-Ownership"
+TYPE="Transaction" SUBTYPE="Transfer-Money"
+TYPE="Movement" SUBTYPE="Transport"
+TYPE="Business" SUBTYPE="Start-Org"
+TYPE="Business" SUBTYPE="End-Org"
+TYPE="Business" SUBTYPE="Declare-Bankruptcy"
+TYPE="Business" SUBTYPE="Merge-Org"
+TYPE="Conflict" SUBTYPE="Attack"
+TYPE="Conflict" SUBTYPE="Demonstrate"
+TYPE="Contact" SUBTYPE="Meet"
+TYPE="Contact" SUBTYPE="Phone-Write"
+TYPE="Personnel" SUBTYPE="Start-Position"
+TYPE="Personnel" SUBTYPE="End-Position"
+TYPE="Personnel" SUBTYPE="Nominate"
+TYPE="Personnel" SUBTYPE="Elect"
+TYPE="Justice" SUBTYPE="Arrest-Jail"
+TYPE="Justice" SUBTYPE="Release-Parole"
+TYPE="Justice" SUBTYPE="Charge-Indict"
+TYPE="Justice" SUBTYPE="Trial-Hearing"
+TYPE="Justice" SUBTYPE="Sue"
+TYPE="Justice" SUBTYPE="Convict"
+TYPE="Justice" SUBTYPE="Sentence"
+TYPE="Justice" SUBTYPE="Fine"
+TYPE="Justice" SUBTYPE="Execute"
+TYPE="Justice" SUBTYPE="Extradite"
+TYPE="Justice" SUBTYPE="Acquit"
+TYPE="Justice" SUBTYPE="Pardon"
+TYPE="Justice" SUBTYPE="Appeal"
+-->
+
+<!ELEMENT event             (event_argument*,
+                             event_mention+)>
+<!ATTLIST event 
+                            ID       ID                         #REQUIRED
+                            TYPE     (Life|Transaction|Movement|Business|
+                                      Conflict|Contact|Personnel|
+				      Justice)                  #REQUIRED
+                            SUBTYPE  (Be-Born|Die|Marry|
+                                      Divorce|Injure|Transfer-Ownership|
+                                      Transfer-Money|Transport|
+                                      Start-Org|End-Org|
+                                      Declare-Bankruptcy|Merge-Org|Attack|
+                                      Demonstrate|Meet|Phone-Write|
+                                      Start-Position|End-Position|Nominate|
+                                      Elect|Arrest-Jail|Release-Parole|
+                                      Charge-Indict|Trial-Hearing|
+                                      Sue|Convict|Sentence|
+                                      Fine|Execute|Extradite|Acquit|
+                                      Pardon|Appeal)             #REQUIRED
+                            MODALITY (Asserted|Other)            #REQUIRED
+                            POLARITY (Positive|Negative)         #REQUIRED
+                            GENERICITY (Generic|Specific)        #REQUIRED
+                            TENSE    (Past|Present|Future|
+                                      Unspecified)               #REQUIRED
+>
+
+<!ELEMENT event_argument     EMPTY>
+<!ATTLIST event_argument   
+                             REFID  IDREF               #REQUIRED
+                             ROLE  (Person|Place|
+                                    Buyer|Seller|
+                                    Beneficiary|Price|
+                                    Artifact|Origin|
+                                    Destination|Giver|
+                                    Recipient|Money|
+                                    Org|Agent|
+                                    Victim|Instrument|
+                                    Entity|Attacker|Target|
+                                    Defendant|Adjudicator|
+                                    Prosecutor|Plaintiff|
+                                    Crime|Position|
+                                    Sentence|
+                                    Vehicle|
+                                    Time-Within|
+                                    Time-Starting|
+                                    Time-Ending|
+                                    Time-Before|
+                                    Time-After|
+                                    Time-Holds|
+                                    Time-At-Beginning|
+                                    Time-At-End)       #REQUIRED
+>
+
+<!ELEMENT event_mention     (extent, ldc_scope?, anchor,
+                             event_mention_argument*)>
+<!ATTLIST event_mention 
+                            ID    ID                           #REQUIRED
+                            LEVEL (SEN)                        #IMPLIED
+>
+
+<!ELEMENT event_mention_argument    (extent?)>
+<!ATTLIST event_mention_argument   
+                                     REFID  IDREF              #REQUIRED
+                                     ROLE  (Person|Place|
+                                            Buyer|Seller|
+                                            Beneficiary|Price|
+                                            Artifact|Origin|
+                                            Destination|Giver|
+                                            Recipient|Money|
+                                            Org|Agent|
+                                            Victim|Instrument|
+                                            Entity|Attacker|Target|
+                                            Defendant|Adjudicator|
+                                            Prosecutor|Plaintiff|
+                                            Crime|Position|
+                                            Sentence|
+                                            Vehicle|
+                                            Time-Within|
+                                            Time-Starting|
+                                            Time-Ending|
+                                            Time-Before|
+                                            Time-After|
+                                            Time-Holds|
+                                            Time-At-Beginning|
+                                            Time-At-End)       #REQUIRED
+>
