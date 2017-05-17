@@ -1,11 +1,18 @@
 package edu.illinois.cs.cogcomp.verbsense.experiment;
 
-import edu.illinois.cs.cogcomp.core.utilities.ResourceManager;
-import edu.illinois.cs.cogcomp.edison.data.curator.CuratorClient;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.nlp.pipeline.IllinoisPreprocessor;
-import edu.illinois.cs.cogcomp.verbsense.Properties;
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.chunker.main.ChunkerAnnotator;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
+import edu.illinois.cs.cogcomp.curator.CuratorFactory;
+import edu.illinois.cs.cogcomp.ner.NERAnnotator;
+import edu.illinois.cs.cogcomp.nlp.lemmatizer.IllinoisLemmatizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.illinois.cs.cogcomp.verbsense.utilities.VerbSenseConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,29 +22,40 @@ public class TextPreProcessor {
 	private static TextPreProcessor instance;
 	private static final boolean forceUpdate = false;
 	private final boolean useCurator;
-	private final boolean tokenized;
-	private final CuratorClient curator;
-	private final IllinoisPreprocessor illinoisPreprocessor;
+	private final AnnotatorService annotator;
+	private final POSAnnotator pos;
+	private final ChunkerAnnotator chunker;
+	private final NERAnnotator ner;
+	private final IllinoisLemmatizer lemma;
+	private final TextAnnotationBuilder taBuilder;
 
-	public TextPreProcessor(boolean tokenized) throws Exception {
-		Properties config = Properties.getInstance();
-		this.useCurator = config.useCurator();
-		this.tokenized = tokenized;
+	private ResourceManager rm = new VerbSenseConfigurator().getDefaultConfig();
+
+	public TextPreProcessor() throws Exception {
+
+		this.useCurator = Boolean.valueOf(rm.getString(VerbSenseConfigurator.USE_CURATOR));
 
 		if (useCurator) {
-			curator = new CuratorClient(config.getCuratorHost(), config.getCuratorPort(), tokenized);
-			illinoisPreprocessor = null;
+			annotator = CuratorFactory.buildCuratorClient();
+			taBuilder = null;
+			pos = null;
+			ner = null;
+			lemma = null;
+			chunker = null;
 		}
 		else {
-			ResourceManager rm = new ResourceManager(config.getPipelineConfigFile());
-			illinoisPreprocessor = new IllinoisPreprocessor(rm);
-			curator = null;
+			annotator = null;
+			taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(false));
+			pos = new POSAnnotator();
+			ner = new NERAnnotator(ViewNames.NER_CONLL);
+			lemma = new IllinoisLemmatizer();
+			chunker = new ChunkerAnnotator();
 		}
 	}
 
-	public static void initialize(boolean tokenized) {
+	public static void initialize() {
 		try {
-			instance = new TextPreProcessor(tokenized);
+			instance = new TextPreProcessor();
 		} catch (Exception e) {
 			log.error("Unable to initialize the text pre-processor");
 			e.printStackTrace();
@@ -49,7 +67,7 @@ public class TextPreProcessor {
 		if (instance == null) {
 			// Start a new TextPreProcessor with default values (no Curator, no tokenization)
 			try {
-				instance = new TextPreProcessor(false);
+				instance = new TextPreProcessor();
 			} catch (Exception e) {
 				log.error("Unable to initialize the text pre-processor");
 				e.printStackTrace();
@@ -62,38 +80,27 @@ public class TextPreProcessor {
 	public TextAnnotation preProcessText(String text) throws Exception {
 		TextAnnotation ta;
 		if (useCurator) {
-			ta = curator.getTextAnnotation("", "", text, false);
-			addViewsFromCurator(ta, curator);
+			ta = annotator.createBasicTextAnnotation("", "", text);
 		}
 		else {
-			ta = illinoisPreprocessor.processTextToTextAnnotation("", "", text, false);
+			ta = taBuilder.createTextAnnotation(text);
 		}
-		return ta;
+		return preProcessText(ta);
 	}
 
-	public void preProcessText(TextAnnotation ta) throws Exception {
-		if (useCurator)
-			addViewsFromCurator(ta, curator);
+    public TextAnnotation preProcessText(TextAnnotation ta) throws Exception {
+		if (useCurator) {
+			annotator.addView(ta, ViewNames.POS);
+			annotator.addView(ta, ViewNames.LEMMA);
+			annotator.addView(ta, ViewNames.SHALLOW_PARSE);
+			annotator.addView(ta, ViewNames.NER_CONLL);
+		}
 		else {
-			illinoisPreprocessor.processTextAnnotation(ta, tokenized);
+			ta.addView(pos);
+			ta.addView(ner);
+			ta.addView(lemma);
+			ta.addView(chunker);
 		}
-	}
-
-	/**
-	 * Adds required views (annotations) from Curator. Used both when training and testing.
-	 *
-	 * @param ta The {@link TextAnnotation} where the views will be added
-	 * @param curator The Curator client providing the views
-	 * @throws Exception
-	 */
-	private void addViewsFromCurator(TextAnnotation ta, CuratorClient curator) throws Exception {
-		if (!ta.hasView(ViewNames.NER))
-			curator.addNamedEntityView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.SHALLOW_PARSE))
-			curator.addChunkView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.LEMMA))
-			curator.addLemmaView(ta, forceUpdate);
-		if (!ta.hasView(ViewNames.POS))
-			curator.addPOSView(ta, forceUpdate);
-	}
+        return ta;
+    }
 }

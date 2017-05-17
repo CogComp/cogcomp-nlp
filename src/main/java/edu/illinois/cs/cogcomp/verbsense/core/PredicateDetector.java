@@ -1,14 +1,14 @@
 package edu.illinois.cs.cogcomp.verbsense.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Option;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.edison.annotators.WordNetPlusLemmaViewGenerator;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordHelpers;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.SpanLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
-import edu.illinois.cs.cogcomp.edison.utilities.POSUtils;
+import edu.illinois.cs.cogcomp.nlp.utilities.POSUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +110,7 @@ public class PredicateDetector {
 
 			if (opt.isPresent()) {
 				Constituent c = new Constituent("", "", ta, i, i + 1);
-				c.addAttribute(CoNLLColumnFormatReader.LemmaIdentifier, opt.get());
+				c.addAttribute(PredicateArgumentView.LemmaIdentifier, opt.get());
 				list.add(c);
 			}
 		}

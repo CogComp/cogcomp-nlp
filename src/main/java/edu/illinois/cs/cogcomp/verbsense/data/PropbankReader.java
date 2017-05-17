@@ -2,23 +2,23 @@ package edu.illinois.cs.cogcomp.verbsense.data;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.data.corpora.PennTreebankReader;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
-import edu.illinois.cs.cogcomp.edison.sentences.ViewNames;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
-import edu.illinois.cs.cogcomp.edison.utilities.ParseUtils;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
+import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
 
 import java.io.FileNotFoundException;
 import java.util.*;
 
 public class PropbankReader extends PennTreebankReader {
-	public static final String LemmaIdentifier = CoNLLColumnFormatReader.LemmaIdentifier;
+	public static final String LemmaIdentifier = PredicateArgumentView.LemmaIdentifier;
 
 	private Iterator<TextAnnotation> wsjIterator;
 	private final Map<String, List<PropbankFields>> goldFields;
@@ -97,7 +97,7 @@ public class PropbankReader extends PennTreebankReader {
 			view.addTokenLabel(start, fields.getSense(), 1.0);
 			try {
 				view.addTokenAttribute(start, LemmaIdentifier, fields.getLemma());
-			} catch (EdisonException e) {
+			} catch (Exception e) {
 				//XXX Maybe log the exception?
 				e.printStackTrace();
 			}

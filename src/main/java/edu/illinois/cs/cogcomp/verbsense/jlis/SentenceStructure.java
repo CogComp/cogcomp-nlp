@@ -1,11 +1,11 @@
 package edu.illinois.cs.cogcomp.verbsense.jlis;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
-import edu.illinois.cs.cogcomp.verbsense.Constants;
+import edu.illinois.cs.cogcomp.verbsense.VerbSenseConstants;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class SentenceStructure implements IStructure {
 
 	public TokenLabelView getView(SenseManager manager, TextAnnotation ta) {
 		String viewName = SenseManager.getPredictedViewName();
-		TokenLabelView view = new TokenLabelView(viewName, Constants.systemIdentifier, ta, 1.0);
+		TokenLabelView view = new TokenLabelView(viewName, VerbSenseConstants.systemIdentifier, ta, 1.0);
 
 		for (SenseStructure y : this.ys) {
 			SenseInstance senseInstance = y.getInstance();

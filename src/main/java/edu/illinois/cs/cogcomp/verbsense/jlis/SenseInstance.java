@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.verbsense.jlis;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.util.FeatureVector;
 import edu.illinois.cs.cogcomp.verbsense.core.ModelInfo;
@@ -27,7 +27,7 @@ public class SenseInstance implements IInstance {
 	public SenseInstance(Constituent predicate, SenseManager manager) {
 		this.predicate = predicate;
 		this.manager = manager;
-		predicateLemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+		predicateLemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 	}
 
 	public SenseInstance(String lemma, String features) {

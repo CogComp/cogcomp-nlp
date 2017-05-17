@@ -1,16 +1,17 @@
 package edu.illinois.cs.cogcomp.verbsense;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.core.experiments.ClassificationTester;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.stats.Counter;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandIgnore;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.core.StructuredProblem;
 import edu.illinois.cs.cogcomp.sl.inference.AbstractInferenceSolver;
@@ -28,22 +29,20 @@ import edu.illinois.cs.cogcomp.verbsense.inference.ILPInference;
 import edu.illinois.cs.cogcomp.verbsense.inference.MulticlassInference;
 import edu.illinois.cs.cogcomp.verbsense.learn.JLISLearner;
 import edu.illinois.cs.cogcomp.verbsense.learn.LearnerParameters;
-import org.apache.commons.configuration.ConfigurationException;
+import edu.illinois.cs.cogcomp.verbsense.utilities.VerbSenseConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class Main {
-	private final static Logger log = LoggerFactory.getLogger(Main.class);
+public class VerbSenseClassifierMain {
+	private final static Logger log = LoggerFactory.getLogger(VerbSenseClassifierMain.class);
 
-	private static Properties properties;
-
+	private static ResourceManager rm;
 
 	@CommandIgnore
-	public static void main(String[] arguments) throws ConfigurationException {
-
-		InteractiveShell<Main> shell = new InteractiveShell<>(Main.class);
+	public static void main(String[] arguments) throws Exception {
+		InteractiveShell<VerbSenseClassifierMain> shell = new InteractiveShell<>(VerbSenseClassifierMain.class);
 
 		if (arguments.length == 0) {
 			System.err.println("Usage: <config-file> command");
@@ -55,8 +54,7 @@ public class Main {
 		} else {
 			long start_time = System.currentTimeMillis();
 			try {
-				Properties.initialize(arguments[0]);
-				properties = Properties.getInstance();
+				rm = new VerbSenseConfigurator().getDefaultConfig();
 
 				String[] args = new String[arguments.length - 1];
 				System.arraycopy(arguments, 1, args, 0, args.length);
@@ -78,6 +76,7 @@ public class Main {
 	@CommandDescription(description = "Performs the full training & testing sequence",
 			usage = "expt cacheDatasets=[true | false]")
 	public static void expt(String cacheDatasets) throws Exception {
+
 		// Step 1: Cache all the datasets we're going to use
 		if (Boolean.parseBoolean(cacheDatasets)) cacheDatasets();
 
@@ -92,7 +91,7 @@ public class Main {
 	@CommandDescription(description = "Reads and caches all the datasets", usage = "cacheDatasets")
 	public static void cacheDatasets() throws Exception {
 		log.info("Initializing datasets");
-		SentenceDBHandler.instance.initializeDatasets(properties.getSentenceDBFile());
+		SentenceDBHandler.instance.initializeDatasets(VerbSenseConfigurator.getSentenceDBFile(rm));
 
 		// Add Propbank data
 		log.info("Caching PropBank data");
@@ -105,15 +104,15 @@ public class Main {
 	}
 
 	private static void cachePropbank() throws Exception {
-		String treebankHome = properties.getPennTreebankHome();
-		String[] allSectionsArray = properties.getAllSections();
-		List<String> trainSections = Arrays.asList(properties.getAllTrainSections());
-		List<String> testSections = Arrays.asList(properties.getTestSections());
-		List<String> trainDevSections = Arrays.asList(properties.getTrainDevSections());
-		List<String> devSections = Arrays.asList(properties.getDevSections());
+		String treebankHome = rm.getString(VerbSenseConfigurator.PENN_TREEBANK_HOME);
+		String[] allSectionsArray = VerbSenseConfigurator.getAllSections();
+		List<String> trainSections = Arrays.asList(VerbSenseConfigurator.getAllTrainSections());
+		List<String> testSections = Arrays.asList(VerbSenseConfigurator.getTestSections());
+		List<String> trainDevSections = Arrays.asList(VerbSenseConfigurator.getTrainDevSections());
+		List<String> devSections = Arrays.asList(VerbSenseConfigurator.getDevSections());
 		List<String> ptb0204Sections = Arrays.asList("02", "03", "04");
 
-		String dataHome = properties.getPropbankHome();
+		String dataHome = rm.getString(VerbSenseConfigurator.PROPBANK_HOME.key);
 
 		String goldView = SenseManager.getGoldViewName();
 		Iterator<TextAnnotation> data = new PropbankReader(treebankHome, dataHome, allSectionsArray);
@@ -146,7 +145,7 @@ public class Main {
 		Counter<String> addedViews = new Counter<>();
 
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(true);
+		TextPreProcessor.initialize();
 
 		int count = 0;
 		while (dataset.hasNext()) {
@@ -186,9 +185,11 @@ public class Main {
 	public static void preExtract() throws Exception {
 		SenseManager manager = getManager(true);
 
+		ResourceManager conf = new VerbSenseConfigurator().getDefaultConfig();
+
 		// If models directory doesn't exist create it
-		if (!IOUtils.isDirectory(Properties.getInstance().getModelsDir()))
-			IOUtils.mkdir(Properties.getInstance().getModelsDir());
+		if (!IOUtils.isDirectory(conf.getString(conf.getString(VerbSenseConfigurator.MODELS_DIRECTORY))))
+			IOUtils.mkdir(conf.getString(conf.getString(VerbSenseConfigurator.MODELS_DIRECTORY)));
 
 		int numConsumers = Runtime.getRuntime().availableProcessors();
 
@@ -199,11 +200,11 @@ public class Main {
 
 		String featureSet = "" + modelInfo.featureManifest.getIncludedFeatures().hashCode();
 
-		String allDataCacheFile = properties.getFeatureCacheFile(featureSet, dataset);
+		String allDataCacheFile = VerbSenseConfigurator.getFeatureCacheFile(featureSet, dataset, rm);
 		FeatureVectorCacheFile featureCache = preExtract(numConsumers, manager, dataset, allDataCacheFile);
 
 		pruneFeatures(numConsumers, manager, featureCache,
-				properties.getPrunedFeatureCacheFile(featureSet));
+				VerbSenseConfigurator.getPrunedFeatureCacheFile(featureSet, rm));
 
 		Lexicon lexicon = modelInfo.getLexicon().getPrunedLexicon(manager.getPruneSize());
 
@@ -254,7 +255,7 @@ public class Main {
 		ModelInfo modelInfo = manager.getModelInfo();
 
 		String featureSet = "" + modelInfo.featureManifest.getIncludedFeatures().hashCode();
-		String cacheFile = properties.getPrunedFeatureCacheFile(featureSet);
+		String cacheFile = VerbSenseConfigurator.getPrunedFeatureCacheFile(featureSet, rm);
 		AbstractInferenceSolver[] inference = new AbstractInferenceSolver[numThreads];
 
 		//TODO Can I replace this with ILPInference?
@@ -286,7 +287,7 @@ public class Main {
 		SenseManager manager = getManager(false);
 		Dataset testSet = Dataset.PTBTest;
 
-		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.CuttingPlaneGurobi);
+		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
 
 		ClassificationTester senseTester = new ClassificationTester();
 		long start = System.currentTimeMillis();
@@ -312,8 +313,8 @@ public class Main {
 			if (count % 1000 == 0) {
 				long end = System.currentTimeMillis();
 				log.info(count + " sentences done. Took "
-						+ (end - start) + "ms, F1 so far = "
-						+ senseTester.getAverageF1());
+						+ (end - start) + "ms, Micro-F1 so far = "
+						+ senseTester.getMicroF1());
 			}
 		}
 

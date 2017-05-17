@@ -1,23 +1,30 @@
 package edu.illinois.cs.cogcomp.verbsense.core;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
-import edu.illinois.cs.cogcomp.verbsense.Constants;
-import edu.illinois.cs.cogcomp.verbsense.Properties;
+import edu.illinois.cs.cogcomp.verbsense.VerbSenseConstants;
 import edu.illinois.cs.cogcomp.verbsense.features.FeatureGenerators;
 import edu.illinois.cs.cogcomp.verbsense.inference.ILPInference;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseInstance;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseStructure;
+import edu.illinois.cs.cogcomp.verbsense.utilities.VerbSenseConfigurator;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -44,7 +51,7 @@ public class SenseManager {
 
 	private final Map<String, Set<String>> legalSenses;
 
-	private final Properties properties = Properties.getInstance();
+	private final ResourceManager rm = new VerbSenseConfigurator().getDefaultConfig();
 
 	private ModelInfo modelInfo;
 
@@ -92,8 +99,17 @@ public class SenseManager {
 
 	private Map<String, Set<String>> getLegalSensesMap() {
 		Map<String, Set<String>> map = new HashMap<>();
+		Datastore ds = null;
+		File senseFile = null;
 		try {
-			for (String line : LineIO.read("data/sense-list.txt")) {
+			ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+			senseFile = ds.getFile("edu.illinois.cs.cogcomp.verbsense", "sense-list.txt", 1.0, false);
+		} catch (InvalidPortException | InvalidEndpointException | DatastoreException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			for (String line : LineIO.read(senseFile.getAbsolutePath())) {
                 String predicate = line.split("\t")[0];
 				String[] senseArray = line.split("\t")[1].split(",");
 				Set<String> senseSet = new HashSet<>(Arrays.asList(senseArray));
@@ -110,7 +126,7 @@ public class SenseManager {
 		Feature.setUseAscii();
 		Feature.setKeepString();
 
-		FeatureManifest.setJWNLConfigFile(properties.getWordNetFile());
+		//FeatureManifest.setJWNLConfigFile(properties.getWordNetFile());
 
 		FeatureManifest.setFeatureExtractor("hyphen-argument-feature", FeatureGenerators.hyphenTagFeature);
 	}
@@ -164,7 +180,7 @@ public class SenseManager {
 	}
 
 	public static String getPredictedViewName() {
-		return Constants.viewName;
+		return VerbSenseConstants.viewName;
 	}
 
 	/**
@@ -172,7 +188,7 @@ public class SenseManager {
 	 */
 	public String getLexiconFileName() {
 		String identifier = getFeatureIdentifier();
-		return properties.getModelsDir() + "/sense." + identifier + ".lex";
+		return rm.getString(VerbSenseConfigurator.MODELS_DIRECTORY) + "/sense." + identifier + ".lex";
 	}
 
 	/**
@@ -180,7 +196,7 @@ public class SenseManager {
 	 */
 	public String getModelFileName() {
 		String identifier = getFeatureIdentifier();
-		return properties.getModelsDir() + "/sense." + identifier + ".lc";
+		return rm.getString(VerbSenseConfigurator.MODELS_DIRECTORY) + "/sense." + identifier + ".lc";
 	}
 
 	/**

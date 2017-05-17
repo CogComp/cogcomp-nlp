@@ -1,9 +1,9 @@
 package edu.illinois.cs.cogcomp.verbsense.inference;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.infer.ilp.*;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory.SolverType;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
@@ -41,7 +41,7 @@ public class ILPInference extends AbstractILPInference<SentenceStructure> {
 			Constituent predicateClone = predicate.cloneForNewView(predicate.getViewName());
 			SenseInstance x;
 
-			assert predicateClone.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+			assert predicateClone.hasAttribute(PredicateArgumentView.LemmaIdentifier);
 
 			x = new SenseInstance(predicateClone, manager);
 

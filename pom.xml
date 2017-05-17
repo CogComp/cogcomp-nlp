@@ -14,7 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	
-  <repositories>
+  	<repositories>
 		<repository>
 			<id>CogcompSoftware</id>
 			<name>CogcompSoftware</name>
@@ -23,33 +23,57 @@
 	</repositories>
 
 	<dependencies>
-        <!--Include the pre-trained model for running VerbSenseLabeler without training-->
-        <!--<dependency>-->
-            <!--<groupId>edu.illinois.cs.cogcomp</groupId>-->
-            <!--<artifactId>illinois-verbsense-model</artifactId>-->
-            <!--<version>1.1</version>-->
-        <!--</dependency>-->
-
-		<!--The Illinois pipeline can be used instead of the Curator for pre-processing -->
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>illinois-nlp-pipeline</artifactId>
-			<version>0.0.9</version>
+			<artifactId>illinois-edison</artifactId>
+			<version>3.1.19</version>
 		</dependency>
-
 		<dependency>
-			<groupId>com.gurobi</groupId>
-			<artifactId>gurobi</artifactId>
-			<version>6.0</version>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-core-utilities</artifactId>
+			<version>3.1.19</version>
 		</dependency>
-
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-pos</artifactId>
+			<version>3.1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-ner</artifactId>
+			<version>3.1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-chunker</artifactId>
+			<version>3.1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-lemmatizer</artifactId>
+			<version>3.1.19</version>
+		</dependency>
+		<dependency>
+			<groupId>edu.illinois.cs.cogcomp</groupId>
+			<artifactId>illinois-inference</artifactId>
+			<version>3.1.19</version>
+			<exclusions>
+				<exclusion>
+					<groupId>edu.illinois.cs.cogcomp</groupId>
+					<artifactId>illinois-sl-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>edu.illinois.cs.cogcomp</groupId>
+					<artifactId>illinois-sl</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-common-resources</artifactId>
 			<classifier>illinoisSRL</classifier>
 			<version>1.4</version>
 		</dependency>
-
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>IllinoisSL-core</artifactId>
@@ -64,34 +88,23 @@
 					<groupId>ch.qos.logback</groupId>
 					<artifactId>logback-classic</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>edu.illinois.cs.cogcomp</groupId>
+					<artifactId>coreUtilities</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.2.140</version>
 		</dependency>
-
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>edison</artifactId>
-			<version>0.7.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>edu.illinois.cs.cogcomp</groupId>
-			<artifactId>inference</artifactId>
-			<version>0.4.1</version>
-		</dependency>
-
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
@@ -107,13 +120,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>2.4</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -122,7 +133,6 @@
 		</dependency>
 	</dependencies>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -130,8 +140,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -153,13 +163,13 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-ssh</artifactId>
-          <version>2.4</version>
-      </extension>
-    </extensions>
+		<extensions>
+		  <extension>
+			<groupId>org.apache.maven.wagon</groupId>
+			  <artifactId>wagon-ssh</artifactId>
+			  <version>2.9</version>
+		  </extension>
+		</extensions>
 	</build>
 
 	<distributionManagement>

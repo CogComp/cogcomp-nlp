@@ -16,7 +16,7 @@ public class SenseStructure implements IStructure {
 		this.manager = manager;
 	}
 
-	@Override
+
 	public FeatureVector getFeatureVector() {
 		FeatureVector feats = instance.getCachedFeatureVector();
 		return feats.copyWithShift(label * manager.getModelInfo().getLexicon().size());

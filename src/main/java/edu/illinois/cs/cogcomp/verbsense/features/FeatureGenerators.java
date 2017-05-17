@@ -1,10 +1,10 @@
 package edu.illinois.cs.cogcomp.verbsense.features;
 
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.edison.features.DiscreteFeature;
 import edu.illinois.cs.cogcomp.edison.features.Feature;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
 import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 
 import java.util.HashSet;
@@ -23,12 +23,12 @@ public class FeatureGenerators {
 		public Set<Feature> getFeatures(Constituent c) throws EdisonException {
 
 			Set<Feature> features = new HashSet<>();
-			String surfaceString = c.getSurfaceString();
+			String surfaceString = c.getSurfaceForm();
 
 			if (surfaceString.contains("-") && c.length() == 1) {
 				Constituent predicate = c.getIncomingRelations().get(0).getSource();
 
-				String lemma = predicate.getAttribute(CoNLLColumnFormatReader.LemmaIdentifier);
+				String lemma = predicate.getAttribute(PredicateArgumentView.LemmaIdentifier);
 
 				assert lemma != null;
 

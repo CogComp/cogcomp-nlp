@@ -1,6 +1,11 @@
 package edu.illinois.cs.cogcomp.verbsense;
 
-import edu.illinois.cs.cogcomp.edison.sentences.*;
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
@@ -9,7 +14,7 @@ import edu.illinois.cs.cogcomp.verbsense.inference.ILPInference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VerbSenseLabeler {
@@ -24,7 +29,7 @@ public class VerbSenseLabeler {
 		String configFile = arguments[0];
 
 		String input;
-		VerbSenseLabeler labeler = new VerbSenseLabeler(configFile);
+		VerbSenseLabeler labeler = new VerbSenseLabeler();
 
 		System.out.print("Enter text (underscore to quit): ");
 		input = System.console().readLine().trim();
@@ -46,17 +51,14 @@ public class VerbSenseLabeler {
 		} while (!input.equals("_"));
 	}
 
-	public VerbSenseLabeler(String configFile) throws Exception {
+	public VerbSenseLabeler() throws Exception {
 		WordNetManager.loadConfigAsClasspathResource(true);
 
-		log.info("Initializing config");
-		Properties.initialize(configFile);
-
 		log.info("Initializing pre-processor");
-		TextPreProcessor.initialize(false);
+		TextPreProcessor.initialize();
 
 		log.info("Creating manager");
-		manager = Main.getManager(false);
+		manager = VerbSenseClassifierMain.getManager(false);
 
 		log.info("Loading models");
 		loadModel();
@@ -70,7 +72,9 @@ public class VerbSenseLabeler {
 	}
 
 	protected TextAnnotation initializeDummySentenceVerb() {
-		TextAnnotation ta = new TextAnnotation("", "", Arrays.asList("I do ."));
+		List<String[]> listOfTokens = new ArrayList<>();
+		listOfTokens.add(new String[]{"I", "do", "."});
+		TextAnnotation ta = BasicTextAnnotationBuilder.createTextAnnotationFromTokens("", "", listOfTokens);
 
 		TokenLabelView tlv = new TokenLabelView(ViewNames.POS, "Test", ta, 1.0);
 		tlv.addTokenLabel(0, "PRP", 1d);
@@ -103,9 +107,9 @@ public class VerbSenseLabeler {
 		List<Constituent> predicates = manager.getPredicateDetector().getPredicates(ta);
 		// If there are no verb identified, return an empty TokenLabelView
 		if (predicates.isEmpty())
-			return new TokenLabelView(SenseManager.getPredictedViewName(), Constants.systemIdentifier, ta, 1.0);
+			return new TokenLabelView(SenseManager.getPredictedViewName(), VerbSenseConstants.systemIdentifier, ta, 1.0);
 
-		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.CuttingPlaneGurobi);
+		ILPSolverFactory solver = new ILPSolverFactory(ILPSolverFactory.SolverType.JLISCuttingPlaneGurobi);
 		ILPInference inference = manager.getInference(solver, predicates);
 		return inference.getOutputView();
 	}

@@ -4,7 +4,7 @@ package edu.illinois.cs.cogcomp.verbsense;
  * @author Vivek Srikumar
  * TODO Change version before shipping
  */
-public class Constants {
+public class VerbSenseConstants {
 	public final static String systemVersion = "1.0";
 
 	public final static String systemName = "illinois-verbsense";

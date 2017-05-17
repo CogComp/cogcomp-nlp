@@ -1,10 +1,10 @@
 package edu.illinois.cs.cogcomp.verbsense.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
-import edu.illinois.cs.cogcomp.edison.data.CoNLLColumnFormatReader;
-import edu.illinois.cs.cogcomp.edison.sentences.Constituent;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.edison.sentences.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseInstance;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseStructure;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SentenceInstance;
@@ -42,7 +42,7 @@ public class SenseExampleGenerator {
 		PredicateDetector predicateDetector = manager.getPredicateDetector();
 
 		for (Constituent predicate : predicateDetector.getPredicates(ta)) {
-			if (!predicate.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
+			if (!predicate.hasAttribute(PredicateArgumentView.LemmaIdentifier)) {
 				System.out.println(ta);
 				System.out.println(predicate + " has no lemma!");
 				assert false;
@@ -57,7 +57,7 @@ public class SenseExampleGenerator {
 		TokenLabelView view = (TokenLabelView) ta.getView(SenseManager.getGoldViewName());
 
 		for (Constituent predicate : view.getConstituents()) {
-			if (!predicate.hasAttribute(CoNLLColumnFormatReader.LemmaIdentifier)) {
+			if (!predicate.hasAttribute(PredicateArgumentView.LemmaIdentifier)) {
 				System.out.println(ta);
 				System.out.println(view);
 				System.out.println(predicate + " has no lemma!");

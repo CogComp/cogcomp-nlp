@@ -2,10 +2,17 @@ package edu.illinois.cs.cogcomp.verbsense.core;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Lexicon;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.features.FeatureExtractor;
 import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
+import edu.illinois.cs.cogcomp.verbsense.utilities.VerbSenseConfigurator;
 import edu.illinois.cs.cogcomp.verbsense.utilities.WeightVectorUtils;
+import io.minio.errors.InvalidEndpointException;
+import io.minio.errors.InvalidPortException;
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +34,16 @@ public class ModelInfo {
 	public final FeatureManifest featureManifest;
 	public final FeatureExtractor fex;
 
+	private ResourceManager rm = new VerbSenseConfigurator().getDefaultConfig();
+
 	private WeightVector w;
 
 	private final SenseManager manager;
 
 	private Lexicon lexicon;
+
+	private Datastore ds = null;
+	File datastoreModels = null;
 
 	public ModelInfo(SenseManager manager) throws Exception {
 		this.manager = manager;
@@ -42,6 +54,15 @@ public class ModelInfo {
 		featureManifest.useCompressedName();
 
 		fex = featureManifest.createFex();
+
+		if(Boolean.valueOf(rm.getString(VerbSenseConfigurator.LOAD_MODELS_FROM_DATASTORE.key))) {
+			try {
+				ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+				datastoreModels = ds.getDirectory("edu.illinois.cs.cogcomp.verbsense", "verbsense-models", 1.0, false);
+			} catch (InvalidPortException | InvalidEndpointException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public WeightVector getWeights() {
@@ -57,15 +78,19 @@ public class ModelInfo {
 
 		synchronized (manager) {
 			if (w == null) {
-				String modelFile = manager.getModelFileName();
 				long start = System.currentTimeMillis();
-
-				if (!IOUtils.exists(modelFile)) {
-					log.info("Loading weight vector from {} in classpath", modelFile);
-					w = WeightVectorUtils.loadWeightVectorFromClassPath(modelFile);
-				} else {
-					log.info("Loading weight vector from {}", modelFile);
-					w = WeightVectorUtils.load(modelFile);
+				String modelFile = manager.getModelFileName();
+				if(Boolean.valueOf(rm.getString(VerbSenseConfigurator.LOAD_MODELS_FROM_DATASTORE.key))) {
+					w = WeightVectorUtils.load(datastoreModels + File.separator + modelFile);
+				}
+				else {
+					if (!IOUtils.exists(modelFile)) {
+						log.info("Loading weight vector from {} in classpath", modelFile);
+						w = WeightVectorUtils.loadWeightVectorFromClassPath(modelFile);
+					} else {
+						log.info("Loading weight vector from {}", modelFile);
+						w = WeightVectorUtils.load(modelFile);
+					}
 				}
 				long end = System.currentTimeMillis();
 				log.info("Finished loading weight vector. Took {} ms", (end - start));
@@ -82,17 +107,21 @@ public class ModelInfo {
 		String lexiconFile = manager.getLexiconFileName();
 		URL url = null;
 
-		try {
-			if (!IOUtils.exists(lexiconFile)) {
-				List<URL> list = IOUtils.lsResources(SenseManager.class, lexiconFile);
-				if (list.size() > 0)
-					url = list.get(0);
+		if(Boolean.valueOf(rm.getString(VerbSenseConfigurator.LOAD_MODELS_FROM_DATASTORE.key))) {
+			url = new File(datastoreModels + File.separator + manager.getLexiconFileName()).toURI().toURL();
+		}
+		else {
+			try {
+				if (!IOUtils.exists(lexiconFile)) {
+					List<URL> list = IOUtils.lsResources(SenseManager.class, lexiconFile);
+					if (list.size() > 0)
+						url = list.get(0);
+				} else {
+					url = new File(lexiconFile).toURI().toURL();
+				}
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
 			}
-			else {
-				url = new File(lexiconFile).toURI().toURL();
-			}
-		} catch (Exception ex) {
-			throw new RuntimeException(ex);
 		}
 
 		if (url == null) {

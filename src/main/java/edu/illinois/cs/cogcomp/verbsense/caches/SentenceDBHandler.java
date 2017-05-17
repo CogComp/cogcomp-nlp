@@ -1,10 +1,11 @@
 package edu.illinois.cs.cogcomp.verbsense.caches;
 
-import edu.illinois.cs.cogcomp.edison.data.IResetableIterator;
-import edu.illinois.cs.cogcomp.edison.sentences.EdisonSerializationHelper;
-import edu.illinois.cs.cogcomp.edison.sentences.TextAnnotation;
-import edu.illinois.cs.cogcomp.verbsense.Properties;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.IResetableIterator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.verbsense.data.Dataset;
+import edu.illinois.cs.cogcomp.verbsense.utilities.VerbSenseConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +21,10 @@ public class SentenceDBHandler {
 
 	private final String dbFile;
 
+	private static ResourceManager rm = new VerbSenseConfigurator().getDefaultConfig();
+
 	public static final SentenceDBHandler instance = new SentenceDBHandler(
-			Properties.getInstance().getSentenceDBFile());
+			VerbSenseConfigurator.getSentenceDBFile(rm));
 
 	private SentenceDBHandler(String dbFile) {
 		this.dbFile = dbFile;
@@ -151,7 +154,7 @@ public class SentenceDBHandler {
 
 	private byte[] serialize(TextAnnotation ta) {
 		try {
-			return EdisonSerializationHelper.serializeToBytes(ta);
+			return SerializationHelper.serializeTextAnnotationToBytes(ta);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
@@ -159,7 +162,7 @@ public class SentenceDBHandler {
 
 	private TextAnnotation deserialize(byte[] bytes) {
 		try {
-			return EdisonSerializationHelper.deserializeFromBytes(bytes);
+			return SerializationHelper.deserializeTextAnnotationFromBytes(bytes);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

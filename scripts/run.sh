@@ -1,5 +1,4 @@
 #!/bin/bash
-svn up
 mvn compile 
 mvn -q dependency:copy-dependencies
 
@@ -9,6 +8,6 @@ MEMORY="-Xmx25g"
 
 OPTIONS="-ea $MEMORY -cp $CP "
 
-MAINCLASS=edu.illinois.cs.cogcomp.newsrl.Main
+MAINCLASS=edu.illinois.cs.cogcomp.verbsense.Main
 
 time nice java $OPTIONS $MAINCLASS "$@"
