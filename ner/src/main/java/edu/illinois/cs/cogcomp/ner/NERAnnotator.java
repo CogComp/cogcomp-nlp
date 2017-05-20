@@ -246,7 +246,7 @@ public class NERAnnotator extends Annotator {
             doInitialize();
         }
         Lexicon labelLexicon = t1.getLabelLexicon();
-        Set<String> tagSet = new HashSet();
+        Set<String> tagSet = new HashSet<String>();
         for (int i =0; i < labelLexicon.size(); ++i) {
             tagSet.add(labelLexicon.lookupKey(i).getStringValue());
         }

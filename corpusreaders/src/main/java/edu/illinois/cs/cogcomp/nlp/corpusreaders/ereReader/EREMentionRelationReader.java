@@ -7,11 +7,14 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -19,8 +22,6 @@ import org.w3c.dom.*;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
-
-import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader.RelationIDAttribute;
 
 /**
  * Reads ERE data and instantiates TextAnnotations with the corresponding Mention and Relation
@@ -46,13 +47,32 @@ public class EREMentionRelationReader extends ERENerReader {
     private int numRelationMentionsInSource;
     private int numRelationMentionsGenerated;
 
+
     /**
-     * @param corpusName the name of the corpus, this can be anything.
-     * @param sourceDirectory the name of the directory containing the file.
+     * Read mention-relation annotations -- including coreference -- from ERE corpus.
+     *
+     * @param ereCorpus the ERE corpus release (values from
+     * {@link edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.EreCorpus}
+     * @param throwExceptionOnXmlParseFailure if 'true', throws exception if xml parser encounters e.g. mismatched
+     *                                        open/close tags
      * @throws Exception
      */
-    public EREMentionRelationReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean throwExceptionOnXmlTagMismatch) throws Exception {
-        super(corpusName, sourceDirectory, annotationDirectory, true, throwExceptionOnXmlTagMismatch); //addNominalMentions is 'true'
+    public EREMentionRelationReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        this(ereCorpus, new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), corpusRoot, throwExceptionOnXmlParseFailure);
+    }
+
+        /**
+         * Read mention-relation annotations -- including coreference -- from ERE corpus.
+         *
+         * @param ereCorpus the ERE corpus release (values from
+         * {@link edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.EreCorpus}
+         * @param taBuilder TextAnnotationBuilder suited to target corpus (e.g. language other than English)
+         * @param throwExceptionOnXmlParseFailure if 'true', throws exception if xml parser encounters e.g. mismatched
+         *                                        open/close tags
+         * @throws Exception
+         */
+    public EREMentionRelationReader(EreCorpus ereCorpus, TextAnnotationBuilder taBuilder, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
+        super(ereCorpus, taBuilder, corpusRoot, throwExceptionOnXmlParseFailure, true, true); //addNominalMentions is 'true'
         numRelationsInSource = 0;
         numRelationsGenerated = 0;
         numRelationMentionsInSource = 0;
@@ -78,23 +98,25 @@ public class EREMentionRelationReader extends ERENerReader {
         XmlTextAnnotation xmlTa = super.getAnnotationsFromFile(corpusFileListEntry).get(0);
         TextAnnotation sourceTa = xmlTa.getTextAnnotation();
         // SpanLabelView tokens = (SpanLabelView)sourceTa.getView(ViewNames.TOKENS);
-        CoreferenceView mentionView = new CoreferenceView(getViewName(), NAME, sourceTa, 1.0);
+        View mentionView = sourceTa.getView(getMentionViewName());
+
+        if (null == mentionView)
+            throw new IllegalStateException("View '" + getMentionViewName() + "' (mention view) not found.");
 
         // now pull all mentions we deal with
         for (int i = 1; i < corpusFileListEntry.size(); ++i) {
 
             Document doc = SimpleXMLParser.getDocument(corpusFileListEntry.get(i).toFile());
-            super.getEntitiesFromFile(doc, mentionView, xmlTa);
-            super.getFillersFromFile(doc, mentionView, xmlTa);
+//            super.getEntitiesFromFile(doc, mentionView, xmlTa);
+//            super.getFillersFromFile(doc, mentionView, xmlTa);
 
-
-            /**
+            /*
              * previous call populates mentionID : Constituent map needed to build relations
              * efficiently
              */
             getRelationsFromFile(doc, mentionView);
         }
-        sourceTa.addView(getViewName(), mentionView);
+        sourceTa.addView(getMentionViewName(), mentionView);
 
         return Collections.singletonList(xmlTa);
     }
@@ -105,7 +127,7 @@ public class EREMentionRelationReader extends ERENerReader {
      * @param doc XML document containing relation info
      * @param mentionView View to populate with relations
      */
-    private void getRelationsFromFile(Document doc, CoreferenceView mentionView)
+    private void getRelationsFromFile(Document doc, View mentionView)
             throws XMLException {
         Element element = doc.getDocumentElement();
         Element relElement = SimpleXMLParser.getElement(element, RELATIONS);
@@ -203,7 +225,7 @@ public class EREMentionRelationReader extends ERENerReader {
     }
 
     @Override
-    public String getViewName() {
+    public String getMentionViewName() {
         return ViewNames.MENTION_ERE;
     }
 

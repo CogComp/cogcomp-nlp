@@ -1,4 +1,4 @@
-# Illinois NER Tagger
+# Cogcomp NER Tagger
 
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
@@ -12,7 +12,7 @@ This assumes you have downloaded the package from the [Cogcomp download page](ht
 
 ### Using the Menu Driven Command Line Application
 
-IllinoisNER now includes a powerful menu driven command line application. This application provides users a flexible environment
+CogcompNER now includes a powerful menu driven command line application. This application provides users a flexible environment
 supporting applications ranging from simple evaluation to complex bulk tagging. The configuration file must be passed in on the command
 line, although there is the option to modify the confiruation during at runtime.
 
@@ -132,9 +132,7 @@ public class App
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.doInitialize();
-
-        co.addView(ta);
+        co.getView(ta);
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -148,7 +146,7 @@ $ javac -cp "dist/*:lib/*:models/*" App.java
 $ java -cp "dist/*:lib/*:models/*:." App
 ```
 
-If you have Maven installed,  you can easily incorporate the Illinois Named Entity Recognizer into
+If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
@@ -162,7 +160,7 @@ your Maven project by adding the following dependencies to your pom.xml file:
 ### Configuration
 NER has numerous parameters that can be tuned during training and/or which 
 affect memory footprint and performance at runtime. These flags and default
-values can be found in the classes in package edu.illinois.cs.cogcomp.ner.config.
+values can be found in the classes in package `edu.illinois.cs.cogcomp.ner.config`.
 
 By default, NER components use contextual features in a fairly large
 context window, and so its "isSentenceLevel" parameter is set to "false".

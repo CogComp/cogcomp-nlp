@@ -43,10 +43,6 @@ public class TestVerbClassFeatures {
         }
     }
 
-//    protected void setUp() throws Exception {
-//        super.setUp();
-//    }
-
     Set<String> correctResponses = new HashSet<>(Arrays.asList(new String[]{
             "landed\t[9.10]",
             "walked\t[51.3.2]",

@@ -7,13 +7,19 @@
  */
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
+import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Sentence class is a read-only projection of a TextAnnotation with all views restricted to a single sentence.
+ * For making changes to any views, you will have to edit the source TextAnnotation instance that was used to
+ * create the Sentence instance.
+ *
  * @author Vivek Srikumar
  */
 public class Sentence extends AbstractTextAnnotation implements Serializable {
@@ -155,4 +161,47 @@ public class Sentence extends AbstractTextAnnotation implements Serializable {
         return this.textAnnotation.getSentenceId(this.getStartSpan());
     }
 
+    /** Overrides for forbidden methods. */
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void addTopKView(String viewName, List<View> view) {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source text annotation instance.");
+    }
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void addViews(String[] viewNames, View[] views) {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source TextAnnotation instance.");
+    }
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void addView(String viewName, View view) {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source TextAnnotation instance.");
+    }
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void removeView(String viewName) {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source TextAnnotation instance.");
+    }
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void removeAllViews() {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source TextAnnotation instance.");
+    }
+
+    @Override
+    @AvoidUsing(reason = "Sentence class is read-only. Edit the source TextAnnotation instance directly.")
+    public void setTokens(String[] tokens, IntPair[] tokenCharacterOffsets) {
+        throw new UnsupportedOperationException("Editing a Sentence instance is not supported. " +
+                "You should edit the source TextAnnotation instance.");
+    }
 }

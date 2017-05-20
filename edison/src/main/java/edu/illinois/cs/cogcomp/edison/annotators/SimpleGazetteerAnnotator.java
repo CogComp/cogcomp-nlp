@@ -45,7 +45,6 @@ public class SimpleGazetteerAnnotator extends Annotator {
     private String pathToDictionaries;
 
 
-
     /**
      * Loads phrases of length 4 or less from gazetteers specified in default parameter
      * {@link SimpleGazetteerAnnotatorConfigurator#PATH_TO_DICTIONARIES}
