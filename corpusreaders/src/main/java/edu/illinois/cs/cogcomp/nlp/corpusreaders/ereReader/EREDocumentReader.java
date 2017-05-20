@@ -53,6 +53,9 @@ import org.slf4j.LoggerFactory;
  * LDC2016E31_DEFT_Rich_ERE_English ENR3 has -- I believe -- complete threads, where annotation files may be
  *    broken into several chunks. Taggable entities within quoted blocks are NOT marked.
  *
+ * TODO: handle DATELINE xml spans, which have content that probably should not be parsed as part of the text,
+ *     but a value we'd like to retain
+ *
  * @author redman
  * @author msammon
  */
@@ -113,6 +116,7 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String CORPUS_TYPE = "corpusType";
     public static final String SOURCE = "source";
     public static final String TRIGGER = "trigger";
+    public static final String ORIGIN = "origin";
 
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;

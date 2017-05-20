@@ -23,9 +23,10 @@ import org.w3c.dom.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
-//TODO: make sure filler mentions are read for args
+// TODO: make sure filler mentions are read for args
 // TODO: make sure multiple mentions per entity are possible
 
 
@@ -66,7 +67,7 @@ public class EREEventReader extends EREMentionRelationReader {
      * @param corpusRoot the data root directory for the ERE corpus to be processed
      * @param throwExceptionOnXmlParseFailure if 'true', throws exception if xml parser encounters e.g. mismatched
      *                                        open/close tags  @throws Exception
-     * @throws Exception
+     * @throws Exception if source/annotation file missing, or if xml not valid
      */
     public EREEventReader(EreCorpus ereCorpus, TextAnnotationBuilder taBldr, String corpusRoot, boolean throwExceptionOnXmlParseFailure) throws Exception {
         super(ereCorpus, taBldr, corpusRoot, throwExceptionOnXmlParseFailure);
@@ -126,9 +127,9 @@ public class EREEventReader extends EREMentionRelationReader {
 
     /**
      * read event mentions collected in a single HOPPER element
-     * @param node
-     * @param eventView
-     * @param xmlTa
+     * @param node an xml element corresponding ot a single event hopper
+     * @param eventView {@link PredicateArgumentView} to represent event mentions (triggers and arguments)
+     * @param xmlTa {@link TextAnnotation} containing event view, mention view, relation view, etc.
      */
     private void readEvent(Node node, PredicateArgumentView eventView, XmlTextAnnotation xmlTa) throws XMLException {
 
@@ -186,22 +187,25 @@ public class EREEventReader extends EREMentionRelationReader {
             numEventMentionsGenerated++;
             isEventGenerated = true;
 
-            Pair<List<Pair<String, String>>, List<Constituent>> arguments = getArguments(eventMentionNode);
-            List<Pair<String, String>> roleRealisList = arguments.getFirst();
-            double[] scores = new double[roleRealisList.size()];
-            String[] roleNames = new String[roleRealisList.size()];
+            List<Pair<List<String>, Constituent>> arguments = getArguments(eventMentionNode);
 
-            if (scores.length > 0) {
+            if (arguments.size() > 0) {
                 isEventGenerated = true;
-                for (int argIndex = 0; argIndex < scores.length; ++argIndex) {
-                    scores[argIndex] = 1;
-                    roleNames[argIndex] = roleRealisList.get(argIndex).getFirst();
-                    Constituent arg = arguments.getSecond().get(argIndex);
-                    Relation role = new Relation(roleNames[argIndex], trigger, arg, 1.0);
-                    eventView.addConstituent(arg);
+                for (Pair<List<String>, Constituent> arg : arguments) {
+                    List<String> roleRealisOrigin = arg.getFirst();
+                    if (roleRealisOrigin.size() != 3) {
+                        throw new IllegalStateException("roleRealisOrigin string list must have 3 elements. arg form: "
+                           + arg.getSecond().getSurfaceForm() + "; event id/mention id: " + eventId + ", " +
+                                eventMentionId);
+                    }
+
+                    Constituent ac = arg.getSecond();
+                    Relation role = new Relation(roleRealisOrigin.get(0), trigger, ac, 1.0);
+                    role.addAttribute(REALIS, roleRealisOrigin.get(1));
+                    role.addAttribute(ORIGIN, roleRealisOrigin.get(2));
+                    eventView.addConstituent(ac);
                     eventView.addRelation(role);
                 }
-
             }
         }
         if (isEventGenerated)
@@ -211,19 +215,22 @@ public class EREEventReader extends EREMentionRelationReader {
 
     /**
      * expect arguments to be mention nodes already created by {@link ERENerReader}
-     * @param eventMentionNode
-     * @return
+     * @param eventMentionNode an xml node representing an event mention
+     * @return a list of pairs containing an index-matched list of lists of three elements
+     *         (role, realis, and origin) and corresponding argument Constituent.
      */
-    private Pair<List<Pair<String, String>>, List<Constituent>> getArguments(Node eventMentionNode) {
+    private List<Pair<List<String>, Constituent>> getArguments(Node eventMentionNode) {
 
     /*
         <em_arg entity_id="ent-m.0d04z6" entity_mention_id="m-56bd16d7_2_75" role="giver" realis="true">cuba</em_arg>
         <em_arg entity_id="ent-m.09c7w0" entity_mention_id="m-56bd16d7_2_135" role="recipient" realis="true">US</em_arg>
+        <!-- from Event Argument Linking augmented corpus: -->
+        <em_arg entity_id="ent-243" entity_mention_id="m-237" role="victim" realis="true" origin="ldc">Four deaths</em_arg>
+
      */
         NodeList nl = ((Element) eventMentionNode).getElementsByTagName(EVENT_ARGUMENT);
 
-        ArrayList<Pair<String, String>> rolesAndRealis = new ArrayList<>();
-        ArrayList<Constituent> arguments = new ArrayList<>();
+        List<Pair<List<String>, Constituent>> arguments = new ArrayList<>();
 
         for (int argIndex = 0; argIndex < nl.getLength(); ++argIndex) {
             numEventRolesInSource++;
@@ -235,21 +242,26 @@ public class EREEventReader extends EREMentionRelationReader {
                 att = nnMap.getNamedItem(FILLER_ID);
 
             String entityMentionId = att.getNodeValue();
+            Constituent ac = getMentionConstituent(entityMentionId);
 
-                    Constituent ac = getMentionConstituent(entityMentionId);
             if (null == ac)
                 logger.error("Could not find mention Constituent for mentionId '{}'", entityMentionId);
             else {
                 numEventRolesGenerated++;
                 String role = nnMap.getNamedItem(ROLE).getNodeValue();
                 String realis = nnMap.getNamedItem(REALIS).getNodeValue();
-                Pair<String, String> rAndR = new Pair(role, realis);
-                rolesAndRealis.add(rAndR);
-                arguments.add(ac);
+                String origin = "ldc";
+                if (nnMap.getNamedItem(ORIGIN) != null)
+                    origin = nnMap.getNamedItem(ORIGIN).getNodeValue();
+                List<String> argAtts = new LinkedList<>();
+                argAtts.add(role);
+                argAtts.add(realis);
+                argAtts.add(origin);
+                arguments.add(new Pair(argAtts, ac));
             }
         }
 
-        return new Pair(rolesAndRealis, arguments);
+        return arguments;
     }
 
 
@@ -297,21 +309,17 @@ public class EREEventReader extends EREMentionRelationReader {
     @Override
     public String generateReport() {
 
-        StringBuilder bldr = new StringBuilder(super.generateReport());
-
-        bldr.append("Number of events in source: ").append(numEventsInSource)
-                .append(System.lineSeparator());
-        bldr.append("Number of events generated: ").append(numEventsGenerated)
-                .append(System.lineSeparator());
-        bldr.append("Number of event mentions in source: ").append(numEventMentionsInSource)
-                .append(System.lineSeparator());
-        bldr.append("Number of event mentions generated: ").append(numEventMentionsGenerated)
-                .append(System.lineSeparator());
-        bldr.append("Number of event arguments in source: ").append(numEventRolesInSource)
-                .append(System.lineSeparator());
-        bldr.append("Number of event arguments generated: ").append(numEventRolesGenerated)
-                .append(System.lineSeparator());
-
-        return bldr.toString();
+        return super.generateReport() + "Number of events in source: " + numEventsInSource +
+                System.lineSeparator() +
+                "Number of events generated: " + numEventsGenerated +
+                System.lineSeparator() +
+                "Number of event mentions in source: " + numEventMentionsInSource +
+                System.lineSeparator() +
+                "Number of event mentions generated: " + numEventMentionsGenerated +
+                System.lineSeparator() +
+                "Number of event arguments in source: " + numEventRolesInSource +
+                System.lineSeparator() +
+                "Number of event arguments generated: " + numEventRolesGenerated +
+                System.lineSeparator();
     }
 }

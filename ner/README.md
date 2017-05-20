@@ -43,11 +43,13 @@ This script requires the configuration file name.
 ### Java COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
-following commands (plain text files are included in `test/SampleInputs/`).
+following commands (a plain text file is included in `test/`).
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
 $ mkdir output
-$ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
+$ java -Xmx6g -classpath "target/*:target/dependency/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
 This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you 
@@ -140,10 +142,12 @@ public class App
 ```
 
 Note that you will need to include all the included jars on the classpath, as before.
+The following commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
-$ javac -cp "dist/*:lib/*:models/*" App.java
-$ java -cp "dist/*:lib/*:models/*:." App
+$ javac -cp "target/*.jar:target/dependency/*" App.java
+$ java -cp "target/*.jar:target/dependency/*:." App
 ```
 
 If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
