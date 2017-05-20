@@ -21,6 +21,10 @@ import java.util.regex.Pattern;
  * @author Vivek Srikumar
  */
 public class StringUtils {
+
+    public static final String DATE_FORMAT_NOW = "yyyy-MM-dd_HH-mm-ss";
+    static Pattern diacritPattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+
     public static String getFormattedString(double d, int numDecimalPlaces) {
         StringBuilder sb = new StringBuilder();
         sb.append("##.");
@@ -36,8 +40,6 @@ public class StringUtils {
         DecimalFormat df = new DecimalFormat("##.##");
         return df.format(d);
     }
-
-    public static final String DATE_FORMAT_NOW = "yyyy-MM-dd_HH-mm-ss";
 
     /**
      * Get the current date and time in a format so that sorting the string will sort the date.
@@ -83,11 +85,26 @@ public class StringUtils {
         return s.matches("-?\\d+(.\\d+)?");
     }
 
+    /**
+     * Uses 3rd party library to convert UTF8 string characters from non-English forms to English. Mainly useful
+     *    for removing diacritics.
+     * WARNING: NOT guaranteed to preserve character offsets.
+     * @param text String to normalize.
+     * @return normalized version of string.
+     */
     public static String normalizeUnicodeDiacritics(String text) {
         text = Normalizer.normalize(text, Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        text = pattern.matcher(text).replaceAll("");
+        text = diacritPattern.matcher(text).replaceAll("");
 
         return text;
     }
+
+
+    public static String normalizeUnicodeDiacriticChar(Character ch) {
+        String text = Normalizer.normalize(String.valueOf(ch), Form.NFD);
+        text = diacritPattern.matcher(text).replaceAll("");
+
+        return text;
+    }
+
 }

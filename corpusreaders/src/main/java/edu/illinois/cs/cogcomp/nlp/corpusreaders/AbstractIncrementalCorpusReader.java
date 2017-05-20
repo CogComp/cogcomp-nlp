@@ -15,7 +15,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 /**
  * A corpus reader that allows incremental processing of a corpus (so not assuming all documents are
@@ -30,19 +29,25 @@ import java.util.Set;
  * corpus list will generate at least one TextAnnotation. Can avoid by pre-loading next file's
  * annotations as soon as last TextAnnotation from current file is returned.
  */
-public abstract class AbstractIncrementalCorpusReader extends TextAnnotationReader {
+public abstract class AbstractIncrementalCorpusReader<T> extends AnnotationReader<T> {
+
     /**
-     * contains pointers to files comprising corpus.  Each entry may consist of a source document (first element
-     *    of each list) plus zero or more files with related annotations needed to instantiate the
-     *    corresponding TextAnnotation objects.
+     * contains pointers to files comprising corpus. Each entry may consist of a source document
+     * (first element of each list) plus zero or more files with related annotations needed to
+     * instantiate the corresponding TextAnnotation objects.
      */
     private List<List<Path>> fileList;
 
-    // holds TextAnnotations extracted from most recently accessed file
-    private List<TextAnnotation> stack;
+    /** holds TextAnnotations extracted from most recently accessed file */
+    private List<T> stack;
 
-    private int fileIndex; // points to index of file corresponding to current non-exhausted stack
-    private int stackIndex; // points to index of stack that will be returned by iterator next()
+    /** points to index of file corresponding to current non-exhausted stack */
+    private int fileIndex;
+
+    /** points to index of stack that will be returned by iterator next() */
+    private int stackIndex;
+
+    /** root directory of corpus */
     private String sourceDirectory;
 
     /**
@@ -59,9 +64,11 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
     /**
      * this method is called by the base class constructor, so all subclass-specific object
      * initialization must be done here.
+     *
+     * This default implementation assumes that annotation and source are both provided in the same file.
      */
     protected void initializeReader() {
-        this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.CORPUS_DIRECTORY);
+        this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY);
         try {
             fileList = getFileListing();
         } catch (IOException e) {
@@ -77,14 +84,17 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
         stack = new ArrayList<>(fileList.size());
     }
 
+
     public String getSourceDirectory() {
         return sourceDirectory;
     }
 
 
+    @Override
     public boolean hasNext() {
         return stackIndex < stack.size() || fileIndex < fileList.size();
     }
+
 
     /**
      * Returns the next element in the iteration.
@@ -93,7 +103,7 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * @throws NoSuchElementException if the iteration has no more elements
      */
     @Override
-    public TextAnnotation next() {
+    public T next() {
         if (stack.isEmpty() && fileIndex >= fileList.size())
             throw new NoSuchElementException();
 
@@ -102,7 +112,7 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
 
             do {
                 try {
-                    stack = getTextAnnotationsFromFile(fileList.get(fileIndex++));
+                    stack = getAnnotationsFromFile(fileList.get(fileIndex++));
                 } catch (Exception e) {
                     e.printStackTrace();
                     throw new NoSuchElementException(e.getMessage());
@@ -112,7 +122,7 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
             // because we didn't find any new TextAnnotations
         }
 
-        TextAnnotation returnTa = stack.get(stackIndex++);
+        T returnTa = stack.get(stackIndex++);
 
         return returnTa;
     }
@@ -124,10 +134,10 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * generate zero TextAnnotations if you are feeling picky. Note that the corpus directory is
      * specified as a constructor argument.
      *
-     * @return a list of lists of Path objects corresponding to files containing corpus documents to process.
-     *         each list entry contains a set of files consisting of a source file that contains the base text
-     *         that is decorated by annotations (plus possibly annotations as well) and zero or more files
-     *         that contain annotations for that base text.
+     * @return a list of lists of Path objects corresponding to files containing corpus documents to
+     *         process. each list entry contains a set of files consisting of a source file that
+     *         contains the base text that is decorated by annotations (plus possibly annotations as
+     *         well) and zero or more files that contain annotations for that base text.
      */
     abstract public List<List<Path>> getFileListing() throws IOException;
 
@@ -138,9 +148,17 @@ public abstract class AbstractIncrementalCorpusReader extends TextAnnotationRead
      * @param corpusFileListEntry corpus file containing content to be processed
      * @return List of TextAnnotation objects extracted from the corpus file
      */
-    public abstract List<TextAnnotation> getTextAnnotationsFromFile(List<Path> corpusFileListEntry)
+    abstract public List<T> getAnnotationsFromFile(List<Path> corpusFileListEntry)
             throws Exception;
 
 
+    /**
+     * generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
 
 }

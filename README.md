@@ -1,6 +1,6 @@
 # CogcompNLP
 
-[![Build Status](https://semaphoreci.com/api/v1/cogcomp/illinois-cogcomp-nlp/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/illinois-cogcomp-nlp)
+[![Build Status](https://semaphoreci.com/api/v1/cogcomp/cogcomp-nlp-2/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/cogcomp-nlp-2)
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
 
@@ -26,6 +26,7 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [illinois-quantifier](quantifier/README.md) | This tool detects mentions of quantities in the text, as well as normalizes it to a standard form. |
 | [illinois-inference](inference/README.md) |  A suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers. |
 | [illinois-depparse](depparse/README.md) | An application that identifies the dependency parse tree of a sentence. |
+| [illinois-prepsrl](prepsrl/README.md) | An application that identifies semantic relations expressed by prepositions and develops statistical learning models for predicting the relations. |
 
  - **Questions?** Have a look at our [FAQs](faq.md). 
 

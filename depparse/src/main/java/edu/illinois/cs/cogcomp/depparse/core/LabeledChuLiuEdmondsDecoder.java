@@ -11,6 +11,7 @@ import edu.cmu.cs.ark.cle.Arborescence;
 import edu.cmu.cs.ark.cle.ChuLiuEdmonds;
 import edu.cmu.cs.ark.cle.graph.DenseWeightedGraph;
 import edu.cmu.cs.ark.cle.util.Weighted;
+import edu.illinois.cs.cogcomp.core.math.MathUtilities;
 import edu.illinois.cs.cogcomp.depparse.features.LabeledDepFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.AbstractFeatureGenerator;
 import edu.illinois.cs.cogcomp.sl.core.AbstractInferenceSolver;
@@ -158,8 +159,9 @@ public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
      */
     private DepStruct LabeledChuLiuEdmonds(double[][] edgeScore, String[][] edgeLabel) {
         DenseWeightedGraph<Integer> dg = DenseWeightedGraph.from(edgeScore);
+        int rootIndex = MathUtilities.max(edgeScore[0]).getFirst();
         Weighted<Arborescence<Integer>> weightedSpanningTree =
-                ChuLiuEdmonds.getMaxArborescence(dg, 0);
+                ChuLiuEdmonds.getMaxArborescence(dg, rootIndex);
 
         Map<Integer, Integer> node2parent = weightedSpanningTree.val.parents;
 
@@ -167,9 +169,12 @@ public class LabeledChuLiuEdmondsDecoder extends AbstractInferenceSolver {
         String[] deprel = new String[edgeScore.length];
         Arrays.fill(deprel, "");
         for (Integer node : node2parent.keySet()) {
-            head[node] = node2parent.get(node);
+            // Detach any dummy root children and add them to the right root
+            head[node] = (node2parent.get(node) == 0) ? rootIndex : node2parent.get(node);
             deprel[node] = edgeLabel[head[node]][node];
         }
+        // Add the root label
+        deprel[rootIndex] = "ROOT";
         return new DepStruct(head, deprel);
     }
 

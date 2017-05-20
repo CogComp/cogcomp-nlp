@@ -8,7 +8,6 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Mappers;
-import edu.illinois.cs.cogcomp.core.algorithms.ProducerConsumer;
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
 import gnu.trove.map.hash.TIntIntHashMap;
@@ -23,16 +22,9 @@ import java.util.*;
  */
 
 public class CoreferenceView extends View {
-    private static Logger logger = LoggerFactory.getLogger(CoreferenceView.class);
-
     private static final long serialVersionUID = -5490913231260663181L;
-
-    // TODO: remove this
-    protected TIntIntHashMap canonicalEntitiesMap;
-
+    private static Logger logger = LoggerFactory.getLogger(CoreferenceView.class);
     private static ITransformer<Relation, Constituent> relationsToConstituents;
-
-    boolean modified = false;
 
     static {
         relationsToConstituents = new ITransformer<Relation, Constituent>() {
@@ -43,6 +35,10 @@ public class CoreferenceView extends View {
             }
         };
     }
+
+    // TODO: remove this
+    protected TIntIntHashMap canonicalEntitiesMap;
+    boolean modified = false;
 
     /**
      * Create a new CoreferenceView with default {@link #viewGenerator} and {@link #score}.
@@ -70,9 +66,10 @@ public class CoreferenceView extends View {
     }
 
     /**
-     * @param canonicalMention: The assumption is that all nodes with no parent are canonical
-     *        entities.
-     * @param coreferentMentions
+     * Adds the constituents provided in the arguments, with {@link Relation}s connecting the
+     *   canonical mention to the coreferent mentions.
+     * @param canonicalMention the 'most explicit' descriptor of the underlying entity
+     * @param coreferentMentions mentions that co-refer with the canonical mention
      */
     public void addCorefEdges(Constituent canonicalMention, List<Constituent> coreferentMentions) {
         double[] scores = new double[coreferentMentions.size()];
