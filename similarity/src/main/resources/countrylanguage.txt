@@ -1,0 +1,233 @@
+afghanistan	afghan	afghans
+albania	albanian	albanians
+algeria	algerian	algerians
+american	samoa	american	samoan	american	samoans
+andorra	andorran	andorrans
+angola	angolan	angolans
+anguilla	anguillan	anguillans
+antigua	barbuda	antiguan	barbudan	antiguans	barbudans
+argentina	argentine	argentinian	argentines	argentinians
+armenia	armenian	armenians
+aruba	aruban	arubans
+australia	australian	australians	aussies
+austria	austrian	austrians
+azerbaijan	azerbaijani	azeri	azerbaijanis	azeris
+bahamas	bahamian	bahamians
+bahrain	bahraini	bahrainis
+bangladesh	bangladeshi	bangladeshis
+barbados	barbadian	bajan	barbadians	bajans
+belarus	belarusian	belarusians
+belgium	belgian	belgians
+belize	belizean	belizeans
+benin	beninese	beninois	beninese	beninois
+bermuda	bermudian	bermudan	bermudians	bermudans
+bhutan	bhutanese	bhutanese
+bolivia	bolivian	bolivians
+bosnia	herzegovina	bosnian	bosniak	herzegovinian	bosnians	bosniaks	herzegovinians
+botswana	motswana	btswana	botswanan	batswana	botswanans
+brazil	brazilian	brazilians
+brunei	bruneian	bruneians
+bulgaria	bulgarian	bulgarians
+burkina	fasoa	burkinabe	burkinabe
+burundi	burundian	burundians
+cambodia	cambodian	cambodians
+cameroon	cameroonian	cameroonians
+canada	canadian	canadians	canucksb
+cape	verde	cape	verdean	cape	verdeans
+cayman islands	caymanian	caymanians
+central african republic	central african	central africans
+chad	chadian	chadians
+chile	chilean	chileans
+people republic of china	chinese	chinese
+colombia	colombian	colombians
+comoros	comorian	comorians
+congo	congolese	congo	congolese
+costa rica	costa rican	costa ricans
+croatia	croatian	croatians	croats
+cuba	cuban	cubans
+cyprus	cypriot	cypriots
+czech republic	czech	czechs
+denmark	danish	danes
+djibouti	djiboutian	djiboutians
+dominica	dominicanc	dominicansc
+dominican	republic	dominicand	dominicansd	quisqueyanos
+east	timor	timorese	timorese	maubere
+ecuador	ecuadorian	ecuadorians
+egypt	egyptian	egyptians
+salvador	salvadoran	salvadorian	salvadorean	salvadorans
+england	english	english
+equatorial guinea	equatorial guinean	equatoguinean	equatorial guineans	equatoguineans
+eritrea	eritrean	eritreans
+estonia	estonian	estonians
+ethiopia	ethiopian	ethiopians
+faroe	faroese	faroese
+fiji	fijian	fijians
+finland	finnish	finns	finnlanders
+france	french	french
+french guiana	french guianese	french guianese
+french polynesia	french polynesian	french polynesians	tahitians
+gabon	gabonese	gabonese
+gambia	gambian	gambians
+georgia	georgian	georgians
+germany	german	germans
+ghana	ghanaian	ghanaians
+gibraltar	gibraltar	gibraltarians
+great	britain	british	britons	british
+greece	greek	greciane	greeks	grecianse	hellenes
+greenland	greenlandic	greenlanders
+grenada	grenadian	grenadians
+guadeloupe	guadeloupe	guadeloupians
+guam	guamanian	guamanians
+guatemala	guatemalan	guatemalans
+guinea	guinean	guineans
+guinea bissau	guinea	bissau	guinean	guineans
+guyana	guyanese	guyanese
+haiti	haitian	haitians	ayisyen
+hong	kong	hong	kong	chinese	hongkongers	hong	kongers	chinese
+honduras	honduran	hondurans
+hungary	hungarian	hungarians	magyars
+iceland	icelandic	icelanders
+india	indian	indians
+indonesia	indonesian	indonesians
+iran	iranian	iranians
+iraq	iraqi	iraqis
+ireland	irish	irish
+republic	irelandg	irishg	irishg
+isle	man	manx	manx
+israel	israeli	israelis
+italy	italian	italice	italians	italicse
+jamaica	jamaican	jamaicans
+japan	japanese	japanese
+jordan	jordanian	jordanians
+kazakhstan	kazakhstani	kazakhstanis	kazakhs
+kenya	kenyan	kenyans
+kiribati	i-kiribati	kiribati
+north	korea	north	korean	koreans
+south	korea	south	korean
+kuwait	kuwaiti	kuwaitis
+kyrgyzstan	kyrgyzstani	kyrgyzstanis	kyrgyz
+laos	laotian	lao	laotians	laos
+latvia	latvian	latvians	letts
+lebanon	lebanese	lebanese
+lesotho	basotho	basotho
+liberia	liberian	liberians
+libya	libyan	libyans
+liechtenstein	liechtenstein	liechtensteiners
+lithuania	lithuanian	lithuanians
+luxembourg	luxembourg	luxembourgers
+macau	macanese	chinese	macanese	chinese
+macedonia	macedonian	macedonians
+madagascar	malagasy	malagasy
+malawi	malawian	malawians
+malaysia	malaysian	malaysians
+maldives	maldivian	maldivians
+mali	malian	malians
+malta	maltese	maltese
+marshall	islands	marshallese	marshallese
+martinique	martiniquais	martiniquais
+mauritania	mauritanian	mauritanians
+mauritius	mauritian	mauritians
+mayotte	mahoran	mahorais
+mexico	mexican	mexicans
+micronesia	micronesian	micronesians
+moldova	moldovan	moldovans
+monaco	monégasque	monacan	monégasques	monacans
+mongolia	mongolian	mongolians	mongols
+montenegro	montenegrin	montenegrins
+montserrat	montserratian	montserratians
+morocco	moroccan	moroccans
+mozambique	mozambican	mozambicans
+myanmarf	myanma	bamar	burmese
+namibia	namibian	namibians
+nauru	nauran	nauruans
+nepal	nepali	nepalese
+netherlands	dutch	dutch
+netherlands	antilles	dutch	antillean	dutch	antilleans
+new caledonia	new caledonian	new caledonians
+new zealand	new zealand	new zealanders
+nicaragua	nicaraguan	nicaraguans
+niue	niuean	niueans
+niger	nigerien	nigeriens
+nigeria	nigerian	nigerians
+norway	norwegian	norwegians
+northern marianas	northern marianan	northern marianans
+oman	omani	omanis
+pakistan	pakistani	pakistanis
+palestinian	palestinian	palestinians
+palau	palauan	palauans
+panama	panamanian	panamanians
+guinea	guinean	guineans
+paraguay	paraguayan	paraguayans
+peru	peruvian	peruvians
+philippines	philippine	filipino	filipinos	pinoy
+pitcairn	pitcairn
+poland	polish	poles
+portugal	portuguese	portuguese
+puerto	rico	puerto	rican	puerto	ricans	boricuas
+qatar	qatari	qataris
+réunion	réunionese	réunionese
+romania	romanian	romanians
+russia	russian	russians
+rwanda	rwandan	rwandans
+helena	helenian	helenians
+kitts	kittitian	kittitians
+nevis	nevisian	nevisians
+lucia	lucian	lucians
+samoa	samoan	samoans
+san	marino	sammarinese	sammarinese
+saudi arabia	saudi arabian	saudi arabians
+scotland	scottish	scots
+senegal	senegalese	senegalese
+serbia	serbian	serbians	serbs
+seychelles	seychellois	seychellois
+sierra	leone	sierra	leonean	sierra	leoneans
+singapore	singaporean	singaporeans
+slovakia	slovak	slovaks
+slovenia	slovenian	slovene	slovenians	slovenes
+somalia	somali	somalis
+somaliland	somaliland	somalilanders
+south africa	south african	south africans
+spain	spanish	spaniards
+sri lanka	sri lankan	sri lankans
+sudan	sudanese	sudanese
+surinam	surinamese	surinamers
+swaziland	swazi	swazis
+sweden	swedish	swedes
+switzerland	swiss	swiss
+syria	syrian	syrians
+taiwan	taiwanese	taiwanese
+tajikistan	tajikistani	tajikistanis	tajiks
+tanzania	tanzanian	tanzanians
+thailand	thai	thai
+togo	togolese	togolese
+tonga	tongan	tongans
+trinidad	trinidadian	trinidadians	trinis	trinibagonians
+tobago	tobagonian	tobagonians	trinibagonians
+tunisia	tunisian	tunisians
+turkey	turkish	turks
+turkmenistan	turkmen	turkmens
+tuvalu	tuvaluan	tuvaluans
+uganda	ugandan	ugandans
+ukraine	ukrainian	ukrainians
+emirates	emirati	emirian	emiratis	emirians
+UK	united kingdom	british	britons	british
+uruguay	uruguayan	uruguayans
+uzbekistan	uzbekistani	uzbek	uzbekistanis	uzbeks
+venezuela	venezuelan	venezuelans
+vietnam	vietnamese
+wales	welsh	welsh
+wallis	wallisian	wallisians
+futuna	futunan	futunans
+sahara	sahrawi	sahrawian	sahraouian	sahrawis	sahraouis
+yemen	yemeni	yemenis
+zambia	zambian	zambians
+zimbabwe	zimbabwean	zimbabweans
+
+africa	african	africans
+antarctica	antarctic	
+americas	american	americans
+asia	asian	asians
+australasia	australasian	australasians
+australia	australian	australians
+eurasia	eurasian	eurasians
+europe	european	europeans

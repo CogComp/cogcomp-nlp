@@ -1,0 +1,135 @@
+0	thailand----land of
+0	new zealand----land of
+1	new zealand----new zeland
+0	new zeland----land of
+1	fred rosenstiel----rosenstiel
+1	justin pulliam----pulliam
+1	hellmand----helman province
+1	district of columbia----d.c.
+1	alzheimer's disease international----adi
+0	poland----land of
+0	cleaveland----land of
+0	farley----far
+1	connaughton----sean t. connaughton
+1	michele bachmann----michelle bachmann
+0	sar----sarah
+0	bosnia----bos
+0	cameron----caperton
+1	west virginia----w. virginia
+1	lsu----lsu
+1	connaughton----james l. connaughton
+1	diaz----diaz
+0	samantha cameron----calderon
+1	schwartzenegger----schwarzenegger
+1	new jersey----new jersy
+0	ill.----will caldwell
+0	fl----fla
+1	david cameron----dc
+1	republic of bulgaria----bulgaria
+0	nancy caperton----cameron
+1	cfc----cfc
+1	ica----israel cancer association
+0	ukraine----ua
+0	america----american coalition for fathers and children
+0	san fran----iran
+0	pa.----tampa
+1	bangledesh----bangladesh
+1	connaughton----jared connaughton
+0	republic of india----indiana
+1	denmark----denmark
+1	glenda caldwell----caldwell
+0	ok----bankok
+1	taylor----jason taylor
+0	ne----new hampshire
+0	suri----republic of sri lanka
+0	wi----windy city
+0	wi----williams
+1	gorman----melissa gorman
+1	tampa bay----tb
+0	cam cameron----calderon
+0	cam cameron----caperton
+1	mmc----mmc group
+0	ecfc----cfc
+1	kingdom of belgium----belgium
+1	bis----bis
+1	jt----john terry
+1	sergei khadzhikurbanov----khadzhikurbanov
+0	land of 10,000 lakes----new zealand
+1	sd----san deigo
+1	jiang----jiang yu
+1	teodoro obiang nguema----teodoro
+1	il----illinois
+1	coulter----mann coulter
+0	sds----sd
+0	louis tomlinson----st. louis
+0	democrat-liberal party----democrat-liberals
+1	barcelona----barcelona
+1	taiwan----tiawan
+1	los angeles lakers----los angeles
+1	william----bill mott
+1	ccf----ccf
+1	republic of china----roc
+0	mccane----mcc
+1	beirut----berut
+0	jac----jack gorman
+0	venezuela----la.
+1	connaughton----tony connaughton
+1	connaughton----sean t. connaughton
+1	tampa----tampa
+0	state of israel----il
+0	n.c.----pnc
+0	npa----pa
+1	jared connaughton----connaughton
+1	cfc----cfc
+1	fsf----fsf
+1	nigerian ports authority----nigeria
+1	josh timonen----jt
+0	va.----vajpayee
+1	va.----valencia
+1	yang----yang
+1	jiang----jiang weixin
+0	hi----higher school of economics
+0	ncc----n.c.
+0	paul "dj pauly d" delvecchio----pa
+1	liverpol----liverpool football club
+1	afc----afc
+1	jqa----john quincy adams
+1	city----sin city
+1	ruben diaz jr.----diaz
+0	scotland----sc
+1	shanghai----sanghai
+1	libia----libya
+0	acfc----cfc
+1	kuwaite----kuwait petroleum corporation
+0	dane cameron----caper*ton
+0	cambodia----cambodian red cross
+1	thailand----thailand
+1	international cooperative alliance----ica
+1	national telecommunication commission----ntc
+0	sea----sean t. connaughton
+1	paul----paul ryan
+1	aaron johnson----aaron
+1	san diego----san deigo
+1	al-basrah----basrah
+0	il.----dzhabrail
+1	bruins----boston bruins
+1	uganda----uganda
+0	north korea----south korea
+0	ksa----ks
+0	t. j. lane----ne
+1	ndc----national democratic congress
+0	mia----miami
+0	mott----mo.
+0	australia----republic of austria
+0	0bama----'bama
+1	Obama----'bama
+1	rob----bill mott
+0	the palmetto state----the pine tree state
+1	diaz----juan diaz
+0	baig----big blue
+1	gorman----gorman
+1	stack----andrew joseph stack iii
+0	john smith----jane smith
+0	austria----australia
+0	india----indiana
+1	republic of austria----austria

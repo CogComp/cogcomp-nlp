@@ -1,0 +1,169 @@
+0	cooperative research center for contamination assessment and remediation of the environment----land of
+0	cleaveland----land of
+1	william caldwell iii----williams
+1	jason taylor----jt
+1	joeseph andrew stack----stack
+1	crc----crc
+1	detroit----detroit pistons
+1	minnesota----mn
+1	helman province----helmand province
+1	virginia----virginia tech
+1	caldwell----caldwell
+1	gorman----jack gorman
+0	chile----chine
+1	romania----roumania
+1	stavros dimas----dimas
+1	connaughton----connaughton
+1	jt----james taylor
+0	pittsburgh steelers----pissburgh
+0	ac/dc----dc
+1	belgium----belgum
+1	jt----j.t. gaskins
+0	orly----oily taint
+1	hugh m. caperton----caper*ton
+1	bosnia----bosnia- herzegovina
+0	maine----cambodia mine action group
+1	sc----sadr city
+0	david cameron----caperton
+0	ma----malaysia
+1	jiang yu----jiang
+1	republic of abkhazia----abkazia
+1	cfc----california film commission
+0	dubia----dubya
+1	juan diaz----diaz
+0	chris cameron----caperton
+1	cameron----cameron
+0	la----ucla
+1	american football conference----afc
+0	america----american conference
+1	greece----greece
+1	miami heat----heat
+0	cfl----fl
+1	jesse williams----williams
+1	mcc----marylebone cricket club
+1	harriet miers----harriet meirs
+1	florida----florida
+0	west virginia----virginia
+0	va----valley of the sun
+0	van hagar----va
+0	ne----san antone
+0	mcsame----mcshame
+1	collin ferrell----colin farrell
+1	college classique feminin----ccf
+1	hashemite kingdom of jordan----jordan
+1	institute of contemporary art----ica
+1	fc barcelona----barcelona
+1	miami----miami
+1	isf----isf
+1	taylor----jason taylor
+1	sean t. connaughton----sean t. connaughton
+0	kan.----mohsin hasan khan
+1	nairobi----narobi
+1	hawaii----hawai'i
+1	san antonio----san antonio
+1	jt----jt
+1	jt----jt ready
+1	jeremy renner----renner
+0	land of 10,000 lakes----england
+0	s.c.----space city
+0	connaughton----conn.
+1	jiang----jiang yu
+0	pa----npa
+0	scotland----s.c.
+0	cameron----caper*ton
+0	il----federal national council
+1	beirut----beirut
+1	republic of cyprus----cypris
+1	jt----jt
+1	people's national congress----pnc
+1	helmand----helman province
+0	tj lane----ne
+1	netherlands----kingdom of the netherlands
+1	republic of finland----finland
+0	or----taylor
+1	turkish football federation----tff
+1	mary z. connaughton----connaughton
+1	los angeles lakers----lal
+1	baitullah mehsud----baitullah mehsud
+0	canadian football league----canada
+1	william ignacio diaz----williams
+1	united airlines----united
+1	romania----romania
+1	baltimore ravens----ravens
+1	connaughton----connaughton
+1	white sox----sox
+0	n.c.----pnc
+1	jt----j.t. ready
+0	pyongyang----yang
+0	ca----cairo
+1	belgrade----belgrade
+1	joseph andrew stack----joseph stack
+0	caldwell----ca
+1	mangala samaraweera----samaraweera
+1	argentina----argentina
+0	sf----fsf
+0	hi----shanghi
+1	ncc----ncc
+1	caldwell----gary caldwell
+0	switzerland----land of 10,000 lakes
+1	ntc----nationwide title clearing
+0	cameron----gaston caperton
+1	joseph gordon levitt----jgl
+0	america's dairyland----maryland
+0	pyonyang----yang
+1	james cameron----cameron
+0	city----the eternal city
+1	ruben diaz jr.----ruben
+1	ukrain----ukraine
+0	sweden democrats----swedin
+1	indiana----ind.
+0	tom rosenstiel----t.o.
+1	suadi arabia----saudie arabia
+1	jets----new york jets
+0	ct----timothy c.t. yang
+1	vt----vermont
+1	austria----austria
+1	cameron----david cameron
+0	bolivia----central bank of bolivia
+1	verheugen----verheugen
+0	mehsud----me
+0	chi----china
+1	international cooperative alliance----ica
+1	sc----sol campbell
+0	rome----me
+1	ross----diana ross
+1	vegas----vegas
+1	city----america's finest city
+1	j.c.----jared connaughton
+0	cameron diaz----caperton
+0	health and safety----andy
+0	bristol city----bristol palin
+1	cameron----samantha cameron
+1	islamic solidarity federation----isf
+0	child----chili
+0	the sunflower state----the bluegrass state
+1	lfc----liverpool football club
+1	taylor----taylor phinney
+1	iraq----republic of iraq
+1	william caldwell----williams
+0	communist party of china----chine
+0	ron paul----rand paul
+1	al-khartoum----khartoum
+1	psf----palestinian struggle front
+1	cmag----campaign media analysis group
+1	gorman----jack gorman
+0	bangladesh cricket board----bangledesh
+0	la----larisa ilchenko
+1	caldwell----tracy caldwell dyson
+1	palestinian national council----pnc
+1	jerusalem----jurusalem
+1	qadeer----abdul qadeer khan
+1	taylor----david taylor
+0	the palmetto state----t.o.
+1	jiang----jiang
+1	diaz----david diaz
+0	a's----astralia
+1	new york----new york city
+1	gorman----gorman
+0	catherine freeman foundation----ca
+1	syria----syria
