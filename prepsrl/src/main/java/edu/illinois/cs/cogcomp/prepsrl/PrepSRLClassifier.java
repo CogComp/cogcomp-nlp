@@ -20,6 +20,8 @@ import edu.illinois.cs.cogcomp.prepsrl.features.POSContextBigrams;
 import edu.illinois.cs.cogcomp.prepsrl.features.WordBigrams;
 import edu.illinois.cs.cogcomp.prepsrl.features.WordContextBigrams;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +29,7 @@ import java.net.URL;
 import static edu.illinois.cs.cogcomp.prepsrl.features.PrepSRLFeatures.*;
 
 public class PrepSRLClassifier extends SparseNetworkLearner {
+    private static final Logger logger = LoggerFactory.getLogger(PrepSRLClassifier.class);
     private static final String PACKAGE_NAME = "edu.illinois.cs.cogcomp.esrl.prepsrl";
     public static final String CLASS_NAME = "PrepSRLClassifier";
 
@@ -38,20 +41,20 @@ public class PrepSRLClassifier extends SparseNetworkLearner {
             lcFilePath = new URL("file:" + modelPath);
             lexFilePath = new URL("file:" + lexiconPath);
         } catch (MalformedURLException e) {
-            System.err.println("Cannot create model/lexicon URLs (check path definition)");
+            logger.error("Cannot create model/lexicon URLs (check path definition)");
             System.exit(-1);
         }
         if (new File(modelPath).exists()) {
-            System.out.println("Reading model from " + modelPath);
+            logger.info("Reading model from " + modelPath);
             readModel(modelPath);
-            System.out.println("Reading lexicon from " + lexiconPath);
+            logger.info("Reading lexicon from " + lexiconPath);
             readLexiconOnDemand(lexiconPath);
         } else if (IOUtilities.existsInClasspath(PrepSRLClassifier.class, modelPath)) {
-            System.out.println("Model file " + modelPath + " located in a jar file");
+            logger.info("Model file " + modelPath + " located in a jar file");
             readModel(IOUtilities.loadFromClasspath(PrepSRLClassifier.class, modelPath));
             readLexiconOnDemand(IOUtilities.loadFromClasspath(PrepSRLClassifier.class, lexiconPath));
         } else {
-            System.out.println("Creating new model/lexicon");
+            logger.info("Creating new model/lexicon");
             containingPackage = PACKAGE_NAME;
             name = CLASS_NAME;
             setLabeler(new Label());
