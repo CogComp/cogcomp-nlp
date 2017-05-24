@@ -16,7 +16,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.edison.features.helpers.ParseHelper;
-import edu.illinois.cs.cogcomp.edison.utilities.EdisonException;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.PennTreebankReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
@@ -24,7 +23,7 @@ import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class PropbankReader extends PennTreebankReader {
+public class VerbSensePropbankReader extends PennTreebankReader {
     public static final String LemmaIdentifier = PredicateArgumentView.LemmaIdentifier;
 
     private Iterator<TextAnnotation> wsjIterator;
@@ -33,7 +32,7 @@ public class PropbankReader extends PennTreebankReader {
     private final Set<String> sections;
     protected String dataHome;
 
-    public PropbankReader(String treebankHome, String dataHome, String[] sections) throws Exception {
+    public VerbSensePropbankReader(String treebankHome, String dataHome, String[] sections) throws Exception {
         super(treebankHome, sections);
         this.dataHome = dataHome;
 

@@ -28,7 +28,7 @@ import edu.illinois.cs.cogcomp.verbsense.caches.SentenceDBHandler;
 import edu.illinois.cs.cogcomp.verbsense.core.ModelInfo;
 import edu.illinois.cs.cogcomp.verbsense.core.SenseManager;
 import edu.illinois.cs.cogcomp.verbsense.data.Dataset;
-import edu.illinois.cs.cogcomp.verbsense.data.PropbankReader;
+import edu.illinois.cs.cogcomp.verbsense.data.VerbSensePropbankReader;
 import edu.illinois.cs.cogcomp.verbsense.experiment.PreExtractor;
 import edu.illinois.cs.cogcomp.verbsense.experiment.PruningPreExtractor;
 import edu.illinois.cs.cogcomp.verbsense.experiment.TextPreProcessor;
@@ -125,7 +125,7 @@ public class VerbSenseClassifierMain {
 
         String goldView = SenseManager.getGoldViewName();
         Iterator<TextAnnotation> data =
-                new PropbankReader(treebankHome, dataHome, allSectionsArray);
+                new VerbSensePropbankReader(treebankHome, dataHome, allSectionsArray);
 
         int count = 0;
         while (data.hasNext()) {
