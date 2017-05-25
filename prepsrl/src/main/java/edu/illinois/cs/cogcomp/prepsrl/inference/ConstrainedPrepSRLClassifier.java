@@ -75,7 +75,7 @@ public class ConstrainedPrepSRLClassifier extends Classifier {
 
         try {
             result = inference.valueOf(prepSRLClassifier, example);
-        } catch (Exception e) {
+        } catch (AssertionError | Exception e) {
             logger.error
                     ("LBJava ERROR: Fatal error while evaluating classifier ConstrainedPrepSRLClassifier: "
                             + e);
