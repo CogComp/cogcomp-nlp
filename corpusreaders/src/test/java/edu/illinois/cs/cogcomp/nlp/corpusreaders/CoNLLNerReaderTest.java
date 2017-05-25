@@ -50,6 +50,6 @@ public class CoNLLNerReaderTest {
         tas.add(ta);
         tas.add(ta2);
 
-        CoNLLNerReader.TaToConll(tas, "/tmp/conlltests");
+        CoNLLNerReader.TaToConll(tas, "tmp/conlltests");
     }
 }
