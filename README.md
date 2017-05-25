@@ -1,5 +1,5 @@
 # CogcompNLP
-
+[![Build Status](http://morgoth.cs.illinois.edu:5800/app/rest/builds/buildType:(id:CogcompNlp_Build)/statusIcon)](morgoth.cs.illinois.edu:5800)
 [![Build Status](https://semaphoreci.com/api/v1/cogcomp/cogcomp-nlp-2/branches/master/badge.svg)](https://semaphoreci.com/cogcomp/cogcomp-nlp-2)
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
