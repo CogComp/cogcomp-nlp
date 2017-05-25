@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>3.1.20</version>
     <modules>
-        <module>core-utilities</module>
+        <module>core-utilitie asds</module>
         <module>tokenizer</module>
         <module>lemmatizer</module>
         <module>edison</module>
