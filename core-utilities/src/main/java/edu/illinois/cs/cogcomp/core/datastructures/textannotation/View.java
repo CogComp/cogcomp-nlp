@@ -150,9 +150,7 @@ public class View implements Serializable, IQueryable<Constituent> {
         endSpan = Math.max(this.endSpan, constituent.getEndSpan());
 
         if (startSpan >= 0 && endSpan >= 0) {
-
             for (int token = constituent.getStartSpan(); token < constituent.getEndSpan(); token++) {
-
                 this.addTokenToConstituentMapping(token, constituent);
             }
         }
