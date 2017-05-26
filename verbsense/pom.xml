@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>illinois-cogcomp-nlp</artifactId>
 		<groupId>edu.illinois.cs.cogcomp</groupId>
-		<version>3.1.19</version>
+		<version>3.1.20</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>illinois-verbsense</artifactId>
@@ -14,49 +14,41 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 	
-  	<repositories>
-		<repository>
-			<id>CogcompSoftware</id>
-			<name>CogcompSoftware</name>
-			<url>http://cogcomp.cs.illinois.edu/m2repo/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-edison</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-core-utilities</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-pos</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-ner</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-chunker</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-lemmatizer</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>illinois-inference</artifactId>
-			<version>3.1.19</version>
+			<version>3.1.20</version>
 			<exclusions>
 				<exclusion>
 					<groupId>edu.illinois.cs.cogcomp</groupId>
@@ -138,52 +130,5 @@
 			<version>2.7</version>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
-		<extensions>
-		  <extension>
-			<groupId>org.apache.maven.wagon</groupId>
-			  <artifactId>wagon-ssh</artifactId>
-			  <version>2.9</version>
-		  </extension>
-		</extensions>
-	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>CogcompSoftware</id>
-			<name>CogcompSoftware</name>
-			<url>scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
-		</repository>
-	</distributionManagement>
 
 </project>
