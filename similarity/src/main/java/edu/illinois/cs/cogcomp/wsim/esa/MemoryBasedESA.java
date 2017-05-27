@@ -335,7 +335,7 @@ public class MemoryBasedESA {
 		return null;
 	}
 
-	public double cosin(String s1, String s2) {
+	public double cosine(String s1, String s2) {
 		List<ConceptData> conceptList1 = retrieveConcepts(s1, 500, "tfidfVector");
 		HashMap<String, Double> vectorTopic = getVectorMap(conceptList1);
 		double normSentence = getNorm(vectorTopic);

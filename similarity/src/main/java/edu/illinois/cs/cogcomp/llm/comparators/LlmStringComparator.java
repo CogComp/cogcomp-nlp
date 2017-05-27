@@ -113,7 +113,9 @@ public class LlmStringComparator {
 	 */
 
 	public EntailmentResult determineNEEntailment(String[] ne1_, String[] ne2_) throws Exception {
-		WordComparator nec = new WordComparator();
+
+		WordComparator nec = new WordComparator(new SimConfigurator().getConfig(new ResourceManager(new Properties())));
+		nec.SetAs_NEComparator();
 		Aligner neAligner = new Aligner<String, EntailmentResult>(nec, filter);
 		return scoreAlignment(neAligner.align(ne1_, ne2_));
 	}

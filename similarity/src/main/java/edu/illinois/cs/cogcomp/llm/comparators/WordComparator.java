@@ -24,15 +24,17 @@ import edu.illinois.cs.cogcomp.mrcs.comparators.Comparator;
 import edu.illinois.cs.cogcomp.mrcs.dataStructures.EntailmentResult;
 
 /**
- * 
+ * Word Comparator used in LLM. It can be word or NE similarity metrics
  * @author mssammon
  *
  */
 public class WordComparator implements Comparator<String, EntailmentResult> {
+	//use simple score or not
 	private boolean computeSimpleScore;
+	//threshold is the minimum similarity score 
 	private double entailmentThreshold;
 	protected boolean defaultUpwardMonotone = true;
-
+	// word comparison metrics
 	private Metric wordSim;
 
 	private Logger logger = LoggerFactory.getLogger(WordComparator.class);
@@ -48,8 +50,14 @@ public class WordComparator implements Comparator<String, EntailmentResult> {
 		configure(rm_);
 	}
 
-	public WordComparator() throws IllegalArgumentException, IOException {
-		wordSim = new NESim();
+	/**
+	 * only used to initialize the NE comparator
+	 * 
+	 * @throws IllegalArgumentException
+	 * @throws IOException
+	 */
+	public void SetAs_NEComparator() throws IllegalArgumentException, IOException {
+		this.wordSim = new NESim();
 	}
 
 	/**

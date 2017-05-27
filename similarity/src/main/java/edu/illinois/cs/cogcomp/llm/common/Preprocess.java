@@ -8,10 +8,9 @@
 package edu.illinois.cs.cogcomp.llm.common;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
@@ -19,49 +18,60 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 public class Preprocess {
-	public static void main(String[] args) throws IOException {
-		String text1 = "Good afternoon, gentlemen. I am a HAL-9000 " + "computer. I was born in Urbana, Il. in 1992";
 
-		String corpus = "2001_ODYSSEY";
-		String textId = "001";
+	NERAnnotator co;
 
-		// Create a TextAnnotation using the LBJ sentence splitter
-		// and tokenizers.
-		TextAnnotationBuilder tab;
-		// don't split on hyphens, as NER models are trained this way
-		boolean splitOnHyphens = false;
-		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
-
-		TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
-
-		NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-		co.doInitialize();
-
-		co.addView(ta);
-
-		System.out.println(ta.getView(ViewNames.NER_CONLL));
+	public void initialize() {
+		try {
+			co = new NERAnnotator(ViewNames.NER_CONLL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public String getPhrase(String s, PhraseList list) {
+		return getContPhrase(getDiscontPhrase(s, list), list);
+	}
+
+	public String getContPhrase(String s, PhraseList list) {
 
 		String[] tokens = s.split("\\s+");
-		String prev = tokens[0];
 		String ret = null;
-		for (int i = 1; i < tokens.length; i++) {
-			String phrase;
-			if (prev != null) {
-				phrase = prev + "_" + tokens[i];
+		for (int i = 1; i < tokens.length;) {
+			String phrase = tokens[i - 1] + " " + tokens[i];
+			if (list.dict.contains(phrase)) {
+				ret += tokens[i - 1] + "_" + tokens[i] + " ";
+				i += 2;
 			} else
-				phrase = tokens[i];
-			if (!list.contains(phrase)) {
-				ret += prev + " " + tokens[i] + " ";
-				prev = null;
-			} else
-				prev = phrase;
-
+				i = +1;
 		}
-		if (prev != null)
-			ret += " " + prev;
+		return ret;
+	}
+
+	public String getDiscontPhrase(String s, PhraseList list) {
+		String[] tokens = s.split("\\s+");
+		ArrayList<String> words = new ArrayList<String>();
+		for (String ss : tokens)
+			words.add(ss);
+		for (int i = 0; i < words.size(); i++) {
+			if (list.verb.contains(words.get(i))) {
+				int j = i + 2;
+				while (j < i + 5 && j < words.size()) {
+					String phrase = words.get(i) + " " + words.get(j);
+					if (list.verbPhrase.contains(phrase)) {
+						words.set(i, words.get(i) + "_" + words.get(j));
+						words.remove(j);
+						break;
+					}
+
+				}
+			}
+		}
+		String ret = "";
+		for (int i = 0; i < words.size(); i++) {
+			ret += words.get(i) + " ";
+		}
 		return ret;
 	}
 
@@ -73,13 +83,9 @@ public class Preprocess {
 
 		TextAnnotation ta = tab.createTextAnnotation("001", "001", s);
 
-		NERAnnotator co;
 		try {
-			co = new NERAnnotator(ViewNames.NER_CONLL);
-			co.doInitialize();
-
-			co.addView(ta);
-		} catch (IOException e) {
+			co.getView(ta);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

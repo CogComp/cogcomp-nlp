@@ -24,8 +24,8 @@ public class ESASimTest {
 		String CONFIG = "config/configurations.properties";
 		ResourceManager rm_ = new ResourceManager(CONFIG);
 		MemoryBasedESA esa = new MemoryBasedESA(rm_);
-		double score1 = esa.cosin("queen", "king");
-		double score2 = esa.cosin("queen", "word");
+		double score1 = esa.cosine("queen", "king");
+		double score2 = esa.cosine("queen", "word");
 		assertTrue(score1 > score2);
 	}
 

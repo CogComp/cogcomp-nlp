@@ -19,6 +19,7 @@ import edu.illinois.cs.cogcomp.llm.comparators.LlmStringComparator;
 /**
  * 
  * Lexical Level Matching Metric
+ * 
  * @author shaoshi
  *
  */
@@ -40,7 +41,9 @@ public class LLMStringSim implements Metric<String> {
 		}
 
 		ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
-		list = new PhraseList(fullRm.getString(SimConfigurator.PHRASE_DICT.key));
+		String phrases = fullRm.getString(SimConfigurator.PHRASE_DICT.key);
+		String verbPhrases = fullRm.getString(SimConfigurator.VERB_PHRASES.key);
+		list = new PhraseList(phrases, verbPhrases);
 	}
 
 	@Override

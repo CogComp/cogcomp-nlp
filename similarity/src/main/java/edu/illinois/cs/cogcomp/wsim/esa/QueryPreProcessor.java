@@ -12,6 +12,14 @@ import java.util.Set;
 
 import edu.illinois.cs.cogcomp.descartes.util.Utilities;
 
+/**
+ * 
+ * This class is used to preprocess the query for ESA concepts retrieve and
+ * comparison
+ * 
+ * @author shaoshi
+ *
+ */
 public class QueryPreProcessor {
 
 	public static Set<String> stopSet = new HashSet<String>();

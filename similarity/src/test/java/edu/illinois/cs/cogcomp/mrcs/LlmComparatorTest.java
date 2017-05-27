@@ -91,7 +91,29 @@ public class LlmComparatorTest {
 	}
 
 	@Test
-	public void testParagramLlm() {
+	public void testwordnetLlm() {
+		Properties props = new Properties();
+		props.setProperty(SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet);
+		try {
+			llm = new LlmStringComparator(new ResourceManager(props));
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+
+		double score = 0.0;
+		try {
+			score = llm.compareStrings_(text, hyp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("score is: " + score);
+
+		assertTrue((Math.abs(score - this.expectedSimpleScoreWithStopwords)) > 0.0);
+	}
+	
+	@Test
+	public void testparagramllm() {
 		Properties props = new Properties();
 		props.setProperty(SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet);
 		try {

@@ -19,7 +19,13 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.wsim.embedding.Embedding;
 
 /**
- * Word Similarity Metrics including word2vec, Paragram, WordNet, Glove, ESA
+ * Word Similarity Metrics including word2vec, Paragram, WordNet, Glove, ESA. 
+ * 
+ * You need specify the file path in Config file for the metrics you want to use.
+ * 
+ * The class loads all or one of metrics above from file and compare function is used
+ * to compare two words and return similarity score 
+ * 
  * @author shaoshi
  *
  */
@@ -39,7 +45,9 @@ public class WordSim implements Metric<String> {
 
 	/**
 	 * Initialize all word similarity metrics instances
-	 * @param rm_ resource manager
+	 * 
+	 * @param rm_
+	 *            resource manager
 	 */
 	public WordSim(ResourceManager rm_) {
 
@@ -56,12 +64,16 @@ public class WordSim implements Metric<String> {
 		} catch (IOException e) {
 		}
 	}
-	
+
 	/**
 	 * similarity comparison method
-	 * @param small word1
-	 * @param big  word2
-	 * @param method word metrics method
+	 * 
+	 * @param small
+	 *            word1
+	 * @param big
+	 *            word2
+	 * @param method
+	 *            word metrics method
 	 * @return
 	 */
 
@@ -77,7 +89,7 @@ public class WordSim implements Metric<String> {
 		} else if (method.equals(EmbeddingConstant.phrase2vec)) {
 			score = phrase2vec.simScore(small, big);
 		} else if (method.equals(EmbeddingConstant.esa)) {
-			score = esa.cosin(small, big);
+			score = esa.cosine(small, big);
 		} else if (method.equals(EmbeddingConstant.wordnet)) {
 
 			return wnsim.compare(small, big);
@@ -87,7 +99,6 @@ public class WordSim implements Metric<String> {
 		return new MetricResponse(score, method);
 	}
 
-	
 	/**
 	 * Initialize specific word metrics instance
 	 * 

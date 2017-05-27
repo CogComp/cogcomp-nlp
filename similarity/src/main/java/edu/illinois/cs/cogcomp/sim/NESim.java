@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.nesim.compare.EntityComparison;
 
 /**
  * Name Entity Comparison Metric
+ * 
  * @author shaoshi
  *
  */
