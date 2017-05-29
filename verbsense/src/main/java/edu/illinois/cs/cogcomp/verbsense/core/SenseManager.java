@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.verbsense.core;
 
 import edu.illinois.cs.cogcomp.core.algorithms.Sorters;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.math.MathUtilities;
@@ -18,7 +19,6 @@ import edu.illinois.cs.cogcomp.edison.features.manifest.FeatureManifest;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.infer.ilp.ILPSolverFactory;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
-import edu.illinois.cs.cogcomp.verbsense.VerbSenseConstants;
 import edu.illinois.cs.cogcomp.verbsense.features.FeatureGenerators;
 import edu.illinois.cs.cogcomp.verbsense.inference.ILPInference;
 import edu.illinois.cs.cogcomp.verbsense.jlis.SenseInstance;
@@ -189,7 +189,7 @@ public class SenseManager {
     }
 
     public static String getPredictedViewName() {
-        return VerbSenseConstants.viewName;
+        return ViewNames.VERB_SENSE;
     }
 
     /**
