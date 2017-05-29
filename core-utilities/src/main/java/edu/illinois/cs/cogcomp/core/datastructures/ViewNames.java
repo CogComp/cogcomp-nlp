@@ -70,6 +70,8 @@ public class ViewNames {
     public static final String SRL_PREP = "SRL_PREP";
     public static final String SRL_COMMA = "SRL_COMMA";
 
+    public static final String VERB_SENSE = "VERB_SENSE";
+
     public static final String COREF = "COREF";
     // Constituents in this view contains heads of mentions only
     public static final String COREF_HEAD = "COREF_HEAD";
