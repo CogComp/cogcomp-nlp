@@ -27,6 +27,7 @@
         <module>commasrl</module>
         <module>prepsrl</module>
         <module>stanford_3.3.1</module>
+        <module>verbsense</module>
         <module>pipeline</module>
         <module>external</module>
     </modules>

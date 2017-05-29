@@ -49,7 +49,6 @@
             <groupId>com.gurobi</groupId>
             <artifactId>gurobi</artifactId>
             <version>7.0.1</version>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>net.sf.jgrapht</groupId>
