@@ -100,7 +100,7 @@ public class PrepSRLAnnotator extends Annotator {
                 if (beforeIt.hasNext()) {
                     Constituent nearestBefore = beforeIt.next();
                     arguments.add(nearestBefore);
-                    relations.add("before");
+                    relations.add("Governer");
                 }
 
                 IQueryable<Constituent> after = chunkCons.where(Queries.after(c));
@@ -109,7 +109,7 @@ public class PrepSRLAnnotator extends Annotator {
                 if (afterIt.hasNext()) {
                     Constituent nearestAfter = afterIt.next();
                     arguments.add(nearestAfter);
-                    relations.add("after");
+                    relations.add("Object");
                 }
                 double[] scores = new double[arguments.size()];
                 Arrays.fill(scores, 1.0);
