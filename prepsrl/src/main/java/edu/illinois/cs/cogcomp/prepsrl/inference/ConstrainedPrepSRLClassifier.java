@@ -14,18 +14,19 @@ import edu.illinois.cs.cogcomp.lbjava.classify.DiscretePrimitiveStringFeature;
 import edu.illinois.cs.cogcomp.lbjava.classify.Feature;
 import edu.illinois.cs.cogcomp.lbjava.classify.FeatureVector;
 import edu.illinois.cs.cogcomp.lbjava.infer.InferenceManager;
-import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import edu.illinois.cs.cogcomp.prepsrl.PrepSRLClassifier;
+import edu.illinois.cs.cogcomp.prepsrl.PrepSRLConfigurator;
 import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.LegalRoles;
 import edu.illinois.cs.cogcomp.prepsrl.inference.constraints.PrepSRLInferenceConstraints;
-
-import java.io.File;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An LBJava {@link Classifier} that creates an ILP inference using the constraints defined in
  * {@link PrepSRLInferenceConstraints} (right now only the {@link LegalRoles} constraint).
  */
 public class ConstrainedPrepSRLClassifier extends Classifier {
+    private final Logger logger = LoggerFactory.getLogger(ConstrainedPrepSRLClassifier.class);
     private static PrepSRLClassifier prepSRLClassifier;
 
     public ConstrainedPrepSRLClassifier() {
@@ -70,16 +71,16 @@ public class ConstrainedPrepSRLClassifier extends Classifier {
             InferenceManager.put(inference);
         }
 
-        String result = null;
+        String result;
 
         try {
             result = inference.valueOf(prepSRLClassifier, example);
-        } catch (Exception e) {
-            System.err
-                    .println("LBJava ERROR: Fatal error while evaluating classifier ConstrainedPrepSRLClassifier: "
+        } catch (AssertionError | Exception e) {
+            logger.error
+                    ("LBJava ERROR: Fatal error while evaluating classifier ConstrainedPrepSRLClassifier: "
                             + e);
-            e.printStackTrace();
-            System.exit(1);
+            logger.error("Returning local classifier prediction.");
+            result = prepSRLClassifier.discreteValue(example);
         }
 
         return result;

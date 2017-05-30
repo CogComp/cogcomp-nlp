@@ -55,4 +55,15 @@ public class PrepSRLAnnotatorTest {
         View view = annotator.getView(ta);
         assertEquals("Source", view.getConstituents().get(0).getLabel());
     }
+
+    @Test
+    public void testException() throws Exception {
+        String longSentence = "That put him a stroke ahead of Curt Byrum, John Adams and " +
+                "Lonnie Clements , all of whom are looking for their first " +
+                "victory on the PGA Tour .";
+        TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(longSentence);
+        preprocessor.annotate(ta);
+        View view = annotator.getView(ta);
+        assertEquals("ahead of", view.getConstituents().get(0).getSurfaceForm());
+    }
 }

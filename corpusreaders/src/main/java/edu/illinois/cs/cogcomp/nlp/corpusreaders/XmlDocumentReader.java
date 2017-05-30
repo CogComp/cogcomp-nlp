@@ -18,6 +18,7 @@ import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleaner;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
@@ -66,30 +67,48 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
     private final XmlTextAnnotationMaker xmlTextAnnotationMaker;
 
     protected String fileId;
-    protected String newFileText;
     private int numTextAnnotations;
     private int numFiles;
-    /**
-     * stores the representation for the most recently processed file.
-     */
-    private XmlTextAnnotation xmlTextAnnotation;
+    private String sourceFileExtension;
+    private String annotationFileExtension;
 
 
     /**
-     * assumes files are all from a single source directory. The XmlDocumentProcessor should be configured to
+     * Instantiate a reader for an xml corpus.  Default implementation assumes a single source corpus from which
+     *    user wants to strip xml markup, but record relevant xml markup info.
+     *
+     * The {@link XmlTextAnnotationMaker} should be configured to
      *   process the xml markup in the files you want to process.
      *
-     * @param corpusName used to set the corpusId field of all TextAnnotations created by this reader.
-     * @param sourceDirectory directory containing the source document files
-     * @param annotationDirectory directory containing separate standoff annotation files (if needed)
+     * @param rm resourceManager with configuration specs (source and annotation directories, file extensions, etc.)
      * @param xmlTextAnnotationMaker parses xml text and generates an XmlTextAnnotation.
      * @throws IOException
      */
-    public XmlDocumentReader(String corpusName, String sourceDirectory, String annotationDirectory, XmlTextAnnotationMaker xmlTextAnnotationMaker)
+    public XmlDocumentReader(ResourceManager rm, XmlTextAnnotationMaker xmlTextAnnotationMaker)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(corpusName, sourceDirectory, annotationDirectory));
+        super(rm);
         this.xmlTextAnnotationMaker = xmlTextAnnotationMaker;
+    }
 
+
+    /**
+     * this method is called by the base class constructor, so all subclass-specific object
+     * initialization must be done here.
+     *
+     * This default implementation assumes that annotation and source are both provided in the same file.
+     */
+    @Override
+    protected void initializeReader() {
+        this.sourceDirectory = resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY);
+        this.annotationFileExtension = resourceManager.getString(CorpusReaderConfigurator.ANNOTATION_EXTENSION);
+        this.sourceFileExtension = resourceManager.getString(CorpusReaderConfigurator.SOURCE_EXTENSION);
+
+        try {
+            fileList = getFileListing();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e.getMessage());
+        }
         numFiles = 0;
         numTextAnnotations = 0;
     }
@@ -107,21 +126,13 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
 
 
     /**
-     * Exclude any files not possessing this extension.
-     * TODO: make this configurable
-     * @return the required file extension.
-     */
-    protected String getRequiredFileExtension() {
-        return ".cmp.txt";
-    }
-
-
-    /**
      * generate a list of lists of files comprising the corpus. Each entry is expected to generate one or more
      * TextAnnotation objects, though the way the iterator is implemented allows for corpus files to
      * generate zero TextAnnotations if you are feeling picky. Each entry in the list is itself a list in
      * which the first file contains the source document. If that file does not also contain the annotation
      * info, the remaining entries in the list name the file(s) containing the annotation markup.
+     *
+     * The default implementation assumes only a single self-contained file is provided for each document.
      *
      * @return a List of Lists of Path objects, each containing a source file and corresponding markup files.
      */
@@ -130,7 +141,7 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
-                return name.endsWith(getRequiredFileExtension());
+                return name.endsWith(getRequiredSourceFileExtension());
             }
         };
         String[] fileList = IOUtils.lsFilesRecursive(super.getSourceDirectory(), filter);
@@ -185,5 +196,24 @@ public class XmlDocumentReader extends AbstractIncrementalCorpusReader<XmlTextAn
                 .append(System.lineSeparator());
         return bldr.toString();
     }
+
+
+    /**
+     * Exclude any files not possessing this extension.
+     * @return the required file extension.
+     */
+    protected String getRequiredSourceFileExtension() {
+        return sourceFileExtension;
+    }
+
+
+    /**
+     * Exclude any files not possessing this extension.
+     * @return the required file extension.
+     */
+    protected String getRequiredAnnotationFileExtension() {
+        return annotationFileExtension;
+    }
+
 
 }

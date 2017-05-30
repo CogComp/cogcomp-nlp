@@ -7,7 +7,9 @@ Here is what we currently have:
 | Annotator  | Description                                                                          | Link                                |
 |------------|--------------------------------------------------------------------------------------|-------------------------------------|
 | PathLSTM   | Semantic Role Labeling system introduced in [here](https://arxiv.org/abs/1605.07515) | https://github.com/microth/PathLSTM | 
-|            |                                                                                      |                                     | 
+| Stanford Relations |  Details [here](https://nlp.stanford.edu/software/relationExtractor.shtml)   |  https://stanfordnlp.github.io/CoreNLP/  |
+| Stanford OpenIE |  Details [here](https://nlp.stanford.edu/software/openie.shtml)   |  https://stanfordnlp.github.io/CoreNLP/  |
+| Stanford Co-reference |  Details [here](https://stanfordnlp.github.io/CoreNLP/coref.html)   |  https://stanfordnlp.github.io/CoreNLP/  |
 
 
 ## License 

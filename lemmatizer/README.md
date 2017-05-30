@@ -1,16 +1,16 @@
-# Illinois Lemmatizer
+# Cogcomp Lemmatizer
 
 ## CONTENTS
 
 1. PURPOSE  
-   1. The Illinois Lemmatizer 
+   1. The Cogcomp Lemmatizer 
    2. License 
 2. System requirements 
 3. Programmatic Use of the Lemmatizer
    1.  Lemmatizing Single Words
    2.  Lemmatizing Views
 4. Download contents 
-5. Compiling and Running the Illinois Lemmatizer
+5. Compiling and Running the Cogcomp Lemmatizer
 6. Contact Information 
 7. Developer Notes
 
@@ -47,16 +47,16 @@ While slower than stemmers, lemmatizers tend to produce more consistent,
 higher-quality output.  
 
 
-### 1.1 The Illinois Lemmatizer
+### 1.1 The Cogcomp Lemmatizer
 
-The Illinois Lemmatizer uses the JWNL library to access WordNet's
+The Cogcomp Lemmatizer uses the JWNL library to access WordNet's
 dictionaries to identify word root forms, and also uses some additional
 resources to handle prefixes and some verb forms.
 
 
 ### 1.2 License
 
-The Illinois Lemmatizer is available under a Research and Academic 
+The Cogcomp Lemmatizer is available under a Research and Academic 
 use license. For more details, visit the Curator website and click 
 the download link.
 
@@ -92,7 +92,7 @@ a) Lemmatize a single word
 -- return one or more candidate root forms of a word.
 
 b) Lemmatize a Record data structure's tokens, creating a new view.
--- this use allows easy integration with the Illinois NLP Curator, which specifies
+-- this use allows easy integration with the Cogcomp NLP Curator, which specifies
 a set of data structures for integrating the output of multiple NLP tools. 
 
 
@@ -126,8 +126,8 @@ visit [here](http://cogcomp.cs.illinois.edu/page/software_view/Curator) and in `
 
 ## 4. DOWNLOAD CONTENTS
 
-The Illinois Lemmatizer is released as either a Curator component or as 
-part of the Illinois Preprocessor bundle. The Curator downloads a tarball 
+The Cogcomp Lemmatizer is released as either a Curator component or as 
+part of the Cogcomp Preprocessor bundle. The Curator downloads a tarball 
 as part of its installation process (from which it is to be assumed you 
 have obtained this README). 
 
@@ -140,25 +140,18 @@ config -- example config file
 test/ -- input.txt and output.txt, used for making sure code is working as desired.
 ```
 
-## 5. COMPILING AND RUNNING THE ILLINOIS LEMMATIZER
+## 5. COMPILING AND RUNNING THE COGCOMP LEMMATIZER
 
 We assume that people will run this as part of the Curator, or part of the
-Illinois Preprocessor.  If you are a developer, you can use Maven to get
+Cogcomp Preprocessor.  If you are a developer, you can use Maven to get
 and compile this project.  
 
 
 ### 6. CONTACT INFORMATION
 
-You can ask questions/report problems via the CCG's software newsgroup, which you 
-can sign up for here:
+If you have any questions/issues use our issue tracker. 
 
-http://lists.cs.uiuc.edu/mailman/listinfo/illinois-ml-nlp-users
-
-
-### 7. DEVELOPER NOTES
-TODO 
-
-##Citation
+## Citation
 
 If you use this code in your research, please provide the URL for this github repository in the relevant publications.
 Thank you for citing us if you use us in your work! 

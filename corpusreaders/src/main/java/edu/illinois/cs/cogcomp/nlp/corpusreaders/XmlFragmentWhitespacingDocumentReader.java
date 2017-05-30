@@ -69,15 +69,15 @@ public class XmlFragmentWhitespacingDocumentReader extends AbstractIncrementalCo
     private int numFiles;
 
     /**
-     * assumes files are all from a single source directory.
+     * assumes files are all from a single source directory, and that no extraneous files are included in that directory.
      *
      * @param corpusName
      * @param sourceDirectory
      * @throws IOException
      */
-    public XmlFragmentWhitespacingDocumentReader(String corpusName, String sourceDirectory)
+    public XmlFragmentWhitespacingDocumentReader(String corpusName, String sourceDirectory, String sourceFileExtension, String annotationFileExtension)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(corpusName, sourceDirectory, sourceDirectory));
+        super(CorpusReaderConfigurator.buildResourceManager(corpusName, sourceDirectory, sourceDirectory, sourceFileExtension, annotationFileExtension));
         taBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
         numFiles = 0;
         numTextAnnotations = 0;

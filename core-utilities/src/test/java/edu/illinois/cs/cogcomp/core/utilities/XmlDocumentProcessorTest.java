@@ -13,10 +13,7 @@ import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SPAN_INFO;
 import static org.junit.Assert.assertEquals;
@@ -35,6 +32,7 @@ public class XmlDocumentProcessorTest {
             "Hi, &amp; how do you <img href=\"www.madeup.org/picture\">do?</post>\n</doc>\n";
 
     private static final String CLEAN_TEXT = "\"No way. Really?\"\nHi, & how do you do?\n";
+    private static final IntPair POST_OFFSETS = new IntPair(172, 348);
     private static final IntPair AUTHOR_OFFSETS = new IntPair(149, 161);
     private static final String AUTHOR = "author";
     private static final String NAME = "John Marston";
@@ -75,32 +73,34 @@ cuba
         boolean throwExceptionOnXmlTagMiss = true;
         XmlDocumentProcessor proc = new XmlDocumentProcessor(deletableSpanTags, tagsWithAtts, tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> nt = proc.processXml(ORIG_TEXT);
+        Pair<StringTransformation, List<XmlDocumentProcessor.SpanInfo>> nt = proc.processXml(ORIG_TEXT);
 
         // check that we retained the right attributes, cleaned up the text, generated a sensible cleaned text, and can
         // recover the offsets of strings in the original text.
         StringTransformation st = nt.getFirst();
-        Map<IntPair, Map<String, String>> retainedTagInfo = nt.getSecond();
+        List<XmlDocumentProcessor.SpanInfo> retainedTagInfo = nt.getSecond();
 
         String cleanText = st.getTransformedText();
 
         assertEquals(ORIG_TEXT, st.getOrigText());
         assertEquals(CLEAN_TEXT, cleanText);
 
-        assertTrue(retainedTagInfo.containsKey(AUTHOR_OFFSETS));
-        Map<String, String> attInfo = retainedTagInfo.get(AUTHOR_OFFSETS);
-        assertTrue(attInfo.containsKey(AUTHOR));
-        assertEquals(NAME, attInfo.get(AUTHOR));
+//        Map<IntPair, String> attrVals = XmlDocumentProcessor.compileAttributeValues(retainedTagInfo);
+        Map<IntPair, XmlDocumentProcessor.SpanInfo> offsetToSpans = XmlDocumentProcessor.compileOffsetSpanMapping(retainedTagInfo);
+        assertTrue(offsetToSpans.containsKey(POST_OFFSETS));
+        XmlDocumentProcessor.SpanInfo spanInfo = offsetToSpans.get(POST_OFFSETS);
+        assertTrue(spanInfo.attributes.containsKey(AUTHOR));
+        assertEquals(NAME, spanInfo.attributes.get(AUTHOR).getFirst());
+        assertEquals(AUTHOR_OFFSETS, spanInfo.attributes.get(AUTHOR).getSecond());
         String origAuthStr = st.getOrigText().substring(AUTHOR_OFFSETS.getFirst(), AUTHOR_OFFSETS.getSecond());
         assertEquals(NAME, origAuthStr);
 
-        assertTrue(retainedTagInfo.containsKey(DISTR_OFFSETS));
-        attInfo = retainedTagInfo.get(DISTR_OFFSETS);
-        assertTrue(attInfo.containsKey(SPAN_INFO));
-        assertEquals("distraction", attInfo.get(SPAN_INFO));
+        assertTrue(offsetToSpans.containsKey(DISTR_OFFSETS));
+        spanInfo = offsetToSpans.get(DISTR_OFFSETS);
+        assertTrue(spanInfo.label.equals("distraction"));
         assertEquals(DISTR_SUBSTR, ORIG_TEXT.substring(DISTR_OFFSETS.getFirst(), DISTR_OFFSETS.getSecond()));
 
-        assertTrue(retainedTagInfo.containsKey(IQ_OFFSETS));
+        assertTrue(offsetToSpans.containsKey(IQ_OFFSETS));
         int iqStart = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getFirst());
         int iqEnd = st.computeModifiedOffsetFromOriginal(IQ_OFFSETS.getSecond());
 
