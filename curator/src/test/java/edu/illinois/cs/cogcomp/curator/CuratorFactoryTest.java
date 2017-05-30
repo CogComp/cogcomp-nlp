@@ -48,8 +48,8 @@ public class CuratorFactoryTest {
     public void testGetTextAnnotation() {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
         if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
-                && System.getenv().containsKey("SEMAPHORE")
-                && System.getenv().get("SEMAPHORE").equals("true")) {
+                && System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")
+                && System.getenv().containsKey("CIRCLECI") && System.getenv().get("CIRCLECI").equals("true")) {
             System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
         } else {
             TextAnnotation ta = null;
@@ -78,8 +78,8 @@ public class CuratorFactoryTest {
     public void testGetIndividualTextAnnotationViews() throws IOException {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
         if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
-                && System.getenv().containsKey("SEMAPHORE")
-                && System.getenv().get("SEMAPHORE").equals("true")) {
+                && System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")
+                && System.getenv().containsKey("CIRCLECI") && System.getenv().get("CIRCLECI").equals("true")) {
             System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
         } else {
             TextAnnotation ta = null;
@@ -104,8 +104,8 @@ public class CuratorFactoryTest {
     public void testGetAllTextAnnotationViews() {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
         if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
-                && System.getenv().containsKey("SEMAPHORE")
-                && System.getenv().get("SEMAPHORE").equals("true")) {
+                && System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")
+                && System.getenv().containsKey("CIRCLECI") && System.getenv().get("CIRCLECI").equals("true")) {
             System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
         } else {
             TextAnnotation ta = null;
@@ -126,8 +126,8 @@ public class CuratorFactoryTest {
     private void testViews(TextAnnotation ta) {
         // if we are running the test on Semaphore, ignore this test, since Gurobi is not provided on Semaphore.
         if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
-                && System.getenv().containsKey("SEMAPHORE")
-                && System.getenv().get("SEMAPHORE").equals("true")) {
+                && System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")
+                && System.getenv().containsKey("CIRCLECI") && System.getenv().get("CIRCLECI").equals("true")) {
             System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
         } else {
             assertTrue(ta.hasView(ViewNames.POS));

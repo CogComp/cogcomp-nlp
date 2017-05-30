@@ -1,4 +1,4 @@
-# Illinois NLP Pipeline
+# Cogcomp NLP Pipeline
 
 This software bundles some basic preprocessing steps that a lot of NLP
 applications need, with the goal of making them run locally. Some
@@ -10,7 +10,7 @@ constituency parsing, and (verb) semantic role labeling.  You can also
 use just a subset of these by changing the configuration file
 that the pipeline uses.
 
-By default, the illinois-nlp-pipeline will cache its outputs in a local
+By default, the cogcomp-nlp-pipeline will cache its outputs in a local
 directory, so that if you process overlapping data sets (or process
 the same data set multiple times), it will use a cached copy of the
 system outputs and run much faster.
@@ -22,7 +22,7 @@ please refer to the descriptions of the individual packages at the URLs
 provided. These annotations are stored as `View`s in a single `TextAnnotation`
 data structure.
 
-The Illinois NLP Pipeline provides a suite of state-of-the-art
+The Cogcomp NLP Pipeline provides a suite of state-of-the-art
 Natural Language Processing tools of varying complexity.  Some have
 specific prerequisites that must be present if you want to run them.
 The memory is expected MAXIMUM run-time memory required for the component
@@ -47,29 +47,24 @@ of several other components for which it is a dependency.
 11. Preposition SRL: <2GB
 12. Comma-SRL: <1GB, requires POS, Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL), Constituency Parser. 
 
-Note that individual Illinois NLP tools may depend on other tools
+Note that individual Cogcomp NLP tools may depend on other tools
 for inputs, and will not work unless those components are also active.
 If you try to run the system with an invalid configuration, it will
 print a warning about the missing components.
 
 ## Contents 
 
-If you have downloaded the Illinois NLP Pipeline as a stand-alone package,
-it will come with all the libraries and other files it requires. 
-
-The download package is organized thus:
+The pipeline module is organized thus:
 ```
 config/ : configuration files
-dist/ : the Illinois Preprocessor jar
-lib/ : dependencies
-scripts/ : scripts to allow command-line test of the Illinois NLP Pipeline
-src/ : source code for the Illinois NLP Pipeline
-test/ : test files used for the command line test of the Illinois NLP Pipeline
+scripts/ : scripts to allow command-line test of the Cogcomp NLP Pipeline
+src/ : source code for the Cogcomp NLP Pipeline
+test/ : test files used for the command line test of the Cogcomp NLP Pipeline
 ```
-See the section "Running the Illinois NLP Pipeline" for details on running the pipeline.
+See the section "Running the Cogcomp NLP Pipeline" for details on running the pipeline.
 
 This distribution contains all the dependencies needed to run the
-Illinois NLP Pipeline. This includes configuration files for some
+Cogcomp NLP Pipeline. This includes configuration files for some
 individual components; scripts to process plain text files from the
 command line; and .jar files for the libraries used by the pipeline and
 its components.
@@ -81,7 +76,7 @@ This software has been developed to allow some of our more complex tools
 to be run completely within a single JVM, either programmatically or
 from the command line,  instead of in tandem with the [CCG NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator).
 
-The illinois-nlp-pipeline package was designed to be used either
+The `cogcomp-nlp-pipeline` package was designed to be used either
 programmatically -- inline in your Java code -- or from the command line,
 using only those components you need to use for a given task.
 
@@ -94,22 +89,19 @@ tools will succeed in producing mutually consistent output.)
 One important note: if you wish to use your own tokenization, you should
 implement a class that follows the `Tokenizer` interface from
 `illinois-core-utilities`, and use it as an argument to a
-`TokenizerTextAnnotationBuilder` (also from illinois-core-utilities).
+`TokenizerTextAnnotationBuilder` (also from `cogcomp-core-utilities`).
 
 
 ### Running a Simple Command-Line Test
-Assuming you downloaded the pipeline package as a zip from the
-Illinois Cognitive Computation Group's web site. 
-
-The standard distribution for this package puts dependencies in `lib/`;
-the parser model in `data/`; and the config file in `config/`. There are
-two sample scripts that are provided to test that the
-pipeline works after you have downloaded
-it. `scripts/runPreprocessor.sh` takes as arguments a configuration file
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the pipeline binary in `target/` and copies all dependency jars into 
+`target/dependency`.  
+Two sample scripts are provided to test that the pipeline works after you have downloaded
+it. `scripts/runPipelineOnDataset.sh` takes as arguments a configuration file
 and a text file; it processes the text file according to the
 properties set in the config file, and writes output to STDOUT.
-scripts/testPreprocessor.sh is a self-contained script that calls
-`runPreprocessor.sh` with fixed arguments and compares the output to
+`scripts/testPreprocessor.sh` is a self-contained script that calls
+`runPipelineOnDataset.sh` with fixed arguments and compares the output to
 some reference output. If the new output and reference output are
 different, the script prints an error message and indicates the
 differences.
@@ -120,12 +112,12 @@ directory, run the command:
 Running the test:
 
 ```sh
-scripts/testPreprocessor.sh
+scripts/testPipeline.sh
 ```
 
 Running your own text to get a visual sense of what IllinoisPreprocessor is doing:
 ```sh
-scripts/runPreprocessor.sh  config/pipelineConfig.txt [yourTextFile] > [yourOutputFile]
+scripts/runPipelineOnDataset.sh  config/pipelineConfig.txt [yourInputFile] [yourOutputFile]
 ```
 
 ### Programmatic Use
@@ -184,7 +176,7 @@ is 1,000 words (fewer if you use resource-intensive annotators like
 Verb or Noun SRL).
 
 The method returns a `TextAnnotation` data structure (see the
-illinois-core-utilities package for details), which contains
+`cogcomp-core-utilities` package for details), which contains
 a View corresponding to each annotation source. Each View contains
 a set of `Constituents` and `Relations` representing the annotator output.
 Access views and constituents via:
@@ -225,7 +217,7 @@ The default configuration options are specified in the class
 `edu.illinois.cs.cogcomp.nlp.common.PipelineConfigurator`.
 Each property has a String as a key and a value.  If you want to change specific behaviors,
 such as activating or deactivating specific components, you can write non-default entries
-in a configuration file and use a ResourceManager (see illinois-core-utilities)
+in a configuration file and use a ResourceManager (see `cogcomp-core-utilities`)
 to instantiate an instance of the pipeline (any entries
 that duplicate default values will have no effect and are not required).
 
@@ -304,11 +296,12 @@ pipeline/scripts/runWebserver.sh
 
 The following arguments are supported:
 ```shell
-usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT]
+usage: pipeline/scripts/runWebserver.sh [-h] [--port PORT] [--rate HOURS]
 
 optional arguments:
   -h, --help             show this help message and exit
   --port PORT, -P PORT   Port to run the webserver.
+  --rate HOUR, -L HOUR   Max number of queries per day. If empty, there won't be any limit. 
 ```
 
 Here are the available APIs: 
@@ -342,7 +335,7 @@ System.out.println(ta.getAvailableViews()); // here you should see that the requ
 
 #### Python Client
 
-Coming soon . . . 
+[Sioux](https://github.com/CogComp/sioux) is our library for accessing our pipeline from Java.   
 
 
 ## Frequently Asked Questions (FAQs)

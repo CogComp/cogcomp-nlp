@@ -1,4 +1,4 @@
-# Illinois NER Tagger
+# Cogcomp NER Tagger
 
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
@@ -12,7 +12,7 @@ This assumes you have downloaded the package from the [Cogcomp download page](ht
 
 ### Using the Menu Driven Command Line Application
 
-IllinoisNER now includes a powerful menu driven command line application. This application provides users a flexible environment
+CogcompNER now includes a powerful menu driven command line application. This application provides users a flexible environment
 supporting applications ranging from simple evaluation to complex bulk tagging. The configuration file must be passed in on the command
 line, although there is the option to modify the confiruation during at runtime.
 
@@ -43,11 +43,13 @@ This script requires the configuration file name.
 ### Java COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
-following commands (plain text files are included in `test/SampleInputs/`).
+following commands (a plain text file is included in `test/`).
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
 $ mkdir output
-$ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
+$ java -Xmx6g -classpath "target/*:target/dependency/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
 This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you 
@@ -132,9 +134,7 @@ public class App
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.doInitialize();
-
-        co.addView(ta);
+        co.getView(ta);
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -142,13 +142,15 @@ public class App
 ```
 
 Note that you will need to include all the included jars on the classpath, as before.
+The following commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
-$ javac -cp "dist/*:lib/*:models/*" App.java
-$ java -cp "dist/*:lib/*:models/*:." App
+$ javac -cp "target/*.jar:target/dependency/*" App.java
+$ java -cp "target/*.jar:target/dependency/*:." App
 ```
 
-If you have Maven installed,  you can easily incorporate the Illinois Named Entity Recognizer into
+If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
@@ -162,7 +164,7 @@ your Maven project by adding the following dependencies to your pom.xml file:
 ### Configuration
 NER has numerous parameters that can be tuned during training and/or which 
 affect memory footprint and performance at runtime. These flags and default
-values can be found in the classes in package edu.illinois.cs.cogcomp.ner.config.
+values can be found in the classes in package `edu.illinois.cs.cogcomp.ner.config`.
 
 By default, NER components use contextual features in a fairly large
 context window, and so its "isSentenceLevel" parameter is set to "false".

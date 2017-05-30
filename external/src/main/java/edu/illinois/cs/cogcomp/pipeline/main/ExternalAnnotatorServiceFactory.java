@@ -13,6 +13,10 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.pipeline.common.ExternalToolsConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMHandler;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordCorefHandler;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordOpenIEHandler;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordRelationsHandler;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordTrueCaseHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,8 +61,8 @@ public class ExternalAnnotatorServiceFactory {
                 new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnDash));
 
         Map<String, Annotator> annotators = buildAnnotators();
-        return isSentencePipeline ? new BasicAnnotatorService(taBldr, annotators, fullRm)
-                : new SentencePipeline(taBldr, annotators, fullRm);
+        return isSentencePipeline ? new SentencePipeline(taBldr, annotators, fullRm) : 
+                new BasicAnnotatorService(taBldr, annotators, fullRm);
     }
 
     /**
@@ -72,6 +76,18 @@ public class ExternalAnnotatorServiceFactory {
         Map<String, Annotator> viewGenerators = new HashMap<>();
         PathLSTMHandler pathSRL = new PathLSTMHandler(true);
         viewGenerators.put(pathSRL.getViewName(), pathSRL);
+
+        StanfordCorefHandler corefNLPCoref = new StanfordCorefHandler();
+        viewGenerators.put(corefNLPCoref.getViewName(), corefNLPCoref);
+
+        StanfordRelationsHandler mentionHandler = new StanfordRelationsHandler();
+        viewGenerators.put(mentionHandler.getViewName(), mentionHandler);
+
+        StanfordOpenIEHandler openIEHandler = new StanfordOpenIEHandler();
+        viewGenerators.put(openIEHandler.getViewName(), openIEHandler);
+
+        StanfordTrueCaseHandler trueCaseHandler = new StanfordTrueCaseHandler();
+        viewGenerators.put(trueCaseHandler.getViewName(), trueCaseHandler);
 
         return viewGenerators;
     }

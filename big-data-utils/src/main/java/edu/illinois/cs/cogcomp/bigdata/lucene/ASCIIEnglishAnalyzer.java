@@ -31,19 +31,19 @@ import java.io.Reader;
  */
 public class ASCIIEnglishAnalyzer extends StopwordAnalyzerBase{
 
-	public ASCIIEnglishAnalyzer(Version version) {
-		super(version);
+	public ASCIIEnglishAnalyzer() {
+		super();
 	}
 
     @Override
-    protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-    	final Tokenizer source = new StandardTokenizer(matchVersion, reader);
-    	TokenStream result = new StandardFilter(matchVersion, source);
+    protected TokenStreamComponents createComponents(String fieldName) {
+    	final Tokenizer source = new StandardTokenizer();
+    	TokenStream result = new StandardFilter(source);
     	result = new ASCIIFoldingFilter(result);
-    	result = new EnglishPossessiveFilter(matchVersion, result);
+    	result = new EnglishPossessiveFilter(result);
     	result = new WordDelimiterFilter(result,WordDelimiterFilter.ALPHA,null);
-    	result = new LowerCaseFilter(matchVersion, result);
-    	result = new StopFilter(matchVersion, result, EnglishAnalyzer.getDefaultStopSet());
+    	result = new LowerCaseFilter(result);
+    	result = new StopFilter(result, EnglishAnalyzer.getDefaultStopSet());
     	result = new PorterStemFilter(result);
     	return new TokenStreamComponents(source, result);
     }

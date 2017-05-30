@@ -40,10 +40,16 @@ public class CoNLLNerReaderTest {
         cons = ta2.getView(ViewNames.NER_CONLL).getConstituents();
         assertEquals(cons.size(), 14);
 
+        TextAnnotation ta3 = cnr.next();
+        sentcons = ta3.getView(ViewNames.SENTENCE).getConstituents();
+        System.out.println(sentcons);
+        System.out.println(sentcons.size());
+        assertEquals(sentcons.size(), 2);
+
         List<TextAnnotation> tas = new ArrayList<>();
         tas.add(ta);
         tas.add(ta2);
 
-        CoNLLNerReader.TaToConll(tas, "/tmp/conlltests");
+        CoNLLNerReader.TaToConll(tas, "tmp/conlltests");
     }
 }

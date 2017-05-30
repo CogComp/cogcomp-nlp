@@ -1,9 +1,6 @@
-# Illinois Dependency Parser
+# Cogcomp Dependency Parser
 
-A dependency parser built using the [Illinois Structured Learning](https://github.com/IllinoisCogComp/illinois-sl) framework.
-
-## Licensing
-To see the full license for this software, see [LICENSE](../master/LICENSE).
+A dependency parser built using the [Illinois Structured Learning](https://github.com/CogComp/illinois-sl) framework.
 
 ## Quickstart
 
@@ -25,7 +22,10 @@ It is not hard to compile. `cd` to the main directory (`edu.illinois.cs.cogcomp.
 
 ### USE
 
-The parser is meant to be used as part of the [illinois-nlp-pipeline](pipeline/README.md),
+The parser is meant to be used as part of the [cogcomp-nlp-pipeline](pipeline/README.md),
 but it can also be used programmatically either from the `DepAnnotator`
 class (sentence-by-sentence processing based on `TextAnnotation`) or via the `MainClass`
 class for batch file processing mode.
+
+## Licensing
+To see the full license for this software, see [LICENSE](../master/LICENSE).

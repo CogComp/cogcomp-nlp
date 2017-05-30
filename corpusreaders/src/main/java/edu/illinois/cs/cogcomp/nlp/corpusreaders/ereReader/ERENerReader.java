@@ -7,13 +7,18 @@
  */
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.utilities.AnnotationFixer;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.SimpleXMLParser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.aceReader.XMLException;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
@@ -49,15 +54,14 @@ public class ERENerReader extends EREDocumentReader {
     private static final String NAME = EREDocumentReader.class.getCanonicalName();
     private static final Logger logger = LoggerFactory.getLogger(ERENerReader.class);
     private final boolean addNominalMentions;
-    private final String viewName;
+    private final String mentionViewName;
+    private final String corefViewName;
     private final boolean addFillers;
-
+    protected int starts[];
+    protected int ends[];
+    // private int numConstituent = 0;
     private int numOverlaps = 0;
     private int numOffsetErrors = 0;
-    // private int numConstituent = 0;
-
-    private int starts[];
-    private int ends[];
     /**
      * ERE annotation offsets appear to include some errors, such as including a leading space
      */
@@ -69,6 +73,10 @@ public class ERENerReader extends EREDocumentReader {
     private boolean allowSubwordOffsets;
     private Map<String, Constituent> mentionIdToConstituent;
     private Map<String, Set<String>> entityIdToMentionIds;
+    /**
+     * tracks anything in source xml markup that could be annotated
+     */
+    private Map<IntPair, XmlDocumentProcessor.SpanInfo> offsetToSpanInfo;
     private int numEntitiesInSource;
     private int numEntitiesGenerated;
     private int numXmlMarkupEntitiesGenerated;
@@ -80,26 +88,47 @@ public class ERENerReader extends EREDocumentReader {
 
 
     /**
-     * @param corpusName the name of the corpus, this can be anything.
-     * @param sourceDirectory the name of the directory containing the file.
-     * @param addNominalMentions a flag that if true, indicates that all mentions should be read,
-     *        and that the view created should be named {#ViewNames.MENTION_ERE}. Otherwise, only
-     *        named entities (proper nouns/personal names) are read.
+     * Reads Named Entity -- and possibly nominal mention -- annotation from an English ERE-format corpus.
+     *
+     * @param ereCorpus
+     * @param corpusRoot
+     * @param throwExceptionOnXmlParseFailure
+     * @param addNominalMentions              a flag that if true, indicates that nominal mentions should be read,
+     *                                        and that the view created should be named {#ViewNames.MENTION_ERE}.
+     * @param addFillers                      if 'true', indicates that non-coreferable mentions should be added.
      * @throws Exception
      */
-    public ERENerReader(String corpusName, String sourceDirectory, String annotationDirectory, boolean addNominalMentions, boolean throwExceptionOnXmlTagMismatch)
-            throws Exception {
-        super(corpusName, sourceDirectory, annotationDirectory, throwExceptionOnXmlTagMismatch);
+    public ERENerReader(EreCorpus ereCorpus, String corpusRoot, boolean throwExceptionOnXmlParseFailure, boolean addNominalMentions, boolean addFillers) throws Exception {
+        this(ereCorpus, new TokenizerTextAnnotationBuilder(new StatefulTokenizer()), corpusRoot,
+                throwExceptionOnXmlParseFailure, addNominalMentions, addFillers);
+    }
+
+    /**
+     * Reads Named Entity -- and possibly nominal mention -- annotation from an ERE-format corpus.
+     *
+     * @param ereCorpus                       specifies ERE release -- and therefore, corpus directory structure and xml tag set
+     * @param textAnnotationBuilder           TextAnnotationBuilder for target language
+     * @param corpusRoot                      data root of corpus directory
+     * @param throwExceptionOnXmlParseFailure
+     * @param addNominalMentions              a flag that if true, indicates that nominal mentions should be read,
+     *                                        and that the view created should be named {#ViewNames.MENTION_ERE}.
+     * @param addFillers                      if 'true', indicates that non-coreferable mentions should be added.
+     * @throws Exception
+     */
+    public ERENerReader(EreCorpus ereCorpus, TextAnnotationBuilder textAnnotationBuilder, String corpusRoot, boolean throwExceptionOnXmlParseFailure, boolean addNominalMentions, boolean addFillers) throws Exception {
+        super(ereCorpus, textAnnotationBuilder, corpusRoot, throwExceptionOnXmlParseFailure);
         this.addNominalMentions = addNominalMentions;
-        this.viewName = addNominalMentions ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
-        allowOffsetSlack = true;
-        allowSubwordOffsets = true;
         /*
          * fillers are arguments of relations/events that don't have a referent entity -- they are
          * too general and cannot be determined to co-refer with any other mentions. e.g. position
          * titles
          */
-        addFillers = true;
+        this.addFillers = addFillers;
+        this.mentionViewName = addNominalMentions || addFillers ? ViewNames.MENTION_ERE : ViewNames.NER_ERE;
+        this.corefViewName = ViewNames.COREF_ERE;
+
+        allowOffsetSlack = true;
+        allowSubwordOffsets = true;
 
         mentionIdToConstituent = new HashMap<>();
         entityIdToMentionIds = new HashMap<>();
@@ -116,6 +145,7 @@ public class ERENerReader extends EREDocumentReader {
         this.numXmlMarkupEntitiesGenerated = 0;
     }
 
+
     @Override
     public void reset() {
         super.reset();
@@ -131,10 +161,16 @@ public class ERENerReader extends EREDocumentReader {
         entityIdToMentionIds.clear();
 
         XmlTextAnnotation sourceTa = super.getAnnotationsFromFile(corpusFileListEntry).get(0);
+
+        if (null != this.offsetToSpanInfo)
+            this.offsetToSpanInfo.clear();
+        this.offsetToSpanInfo =
+                XmlDocumentProcessor.compileOffsetSpanMapping(sourceTa.getXmlMarkup());
+
         TextAnnotation ta = sourceTa.getTextAnnotation();
         SpanLabelView tokens = (SpanLabelView) ta.getView(ViewNames.TOKENS);
         compileOffsets(tokens);
-        SpanLabelView nerView = new SpanLabelView(getViewName(), NAME, ta, 1.0, false);
+        SpanLabelView nerView = new SpanLabelView(getMentionViewName(), NAME, ta, 1.0, false);
 
         // now pull all mentions we deal with. Start from file list index 1, as index 0 was source
         // text
@@ -146,14 +182,13 @@ public class ERENerReader extends EREDocumentReader {
                 getFillersFromFile(doc, nerView, sourceTa);
         }
 
-        sourceTa.getTextAnnotation().addView(getViewName(), nerView);
+        sourceTa.getTextAnnotation().addView(getMentionViewName(), nerView);
 
         if (addNominalMentions) {
             addCorefView(sourceTa);
-            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), ViewNames.COREF_ERE);
-        }
-        else
-            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getViewName());
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getCorefViewName());
+        } else
+            AnnotationFixer.rationalizeBoundaryAnnotations(sourceTa.getTextAnnotation(), getCorefViewName());
 
         // logger.info("number of constituents created: {}", numConstituent );
         logger.debug("number of overlaps preventing creation: {}", numOverlaps);
@@ -166,22 +201,27 @@ public class ERENerReader extends EREDocumentReader {
     private void addCorefView(XmlTextAnnotation xmlTa) {
 
         TextAnnotation ta = xmlTa.getTextAnnotation();
-        CoreferenceView cView = new CoreferenceView(ViewNames.COREF_ERE, ta);
+        CoreferenceView cView = new CoreferenceView(getCorefViewName(), ta);
         for (String eId : entityIdToMentionIds.keySet()) {
             Set<String> mentionIds = entityIdToMentionIds.get(eId);
+            if (mentionIds.isEmpty()) {
+                logger.error("No mention ids found for entity id '" + eId + "'.");
+                continue;
+            }
+
             Constituent canonical = null;
             List<Constituent> otherMents = new LinkedList<>();
             for (String mId : mentionIds) {
                 Constituent ment = mentionIdToConstituent.get(mId);
                 Constituent corefMent =
-                        new Constituent(ment.getLabel(), ViewNames.COREF_ERE, ta,
+                        new Constituent(ment.getLabel(), getCorefViewName(), ta,
                                 ment.getStartSpan(), ment.getEndSpan());
                 for (String att : ment.getAttributeKeys())
                     corefMent.addAttribute(att, ment.getAttribute(att));
 
                 if (null == canonical
                         || (canonical.size() < corefMent.size() && !canonical.getAttribute(
-                                EntityMentionTypeAttribute).equals(NAM))) {
+                        EntityMentionTypeAttribute).equals(NAM))) {
                     canonical = corefMent;
                     otherMents.remove(canonical);
                 } else
@@ -191,7 +231,6 @@ public class ERENerReader extends EREDocumentReader {
         }
         ta.addView(cView.getViewName(), cView);
     }
-
 
 
     protected void getFillersFromFile(Document doc, View nerView, XmlTextAnnotation xmlTa) throws XMLException {
@@ -205,7 +244,7 @@ public class ERENerReader extends EREDocumentReader {
 
     /**
      * WARNING: filler can have null value.
-     * 
+     *
      * @param fillerNode
      * @param view
      */
@@ -215,51 +254,61 @@ public class ERENerReader extends EREDocumentReader {
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
         int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
         String fillerForm = SimpleXMLParser.getContentString((Element) fillerNode);
+        String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();
+
         if (null == fillerForm || "".equals(fillerForm))
             throw new IllegalStateException("ERROR: did not find surface form for filler "
                     + nnMap.getNamedItem(ID).getNodeValue());
+
         IntPair offsets = getTokenOffsets(offset, offset + length, fillerForm, xmlTa);
+
         if (null != offsets) {
 
             if (-1 == offsets.getFirst() || -1 == offsets.getSecond()) {
 
                 String xmlStr = xmlTa.getXmlSt().getOrigText();
                 int fillerWindowMin = Math.max(offset - 100, 0);
-                int fillerWindowMax = Math.min(offset + 100, xmlStr.length() );
+                int fillerWindowMax = Math.min(offset + 100, xmlStr.length());
 
                 String fillerInfo = "filler form: " + fillerForm + "; orig xml offsets: " + offset + ", " +
-                    (offset + length) + "; context: '" + xmlStr.substring(fillerWindowMin, fillerWindowMax) + "'\n";
+                        (offset + length) + "; context: '" + xmlStr.substring(fillerWindowMin, fillerWindowMax) + "'\n";
 
-                logger.error("Couldn't find filler mention in clean text: {}", fillerInfo);
+                logger.warn("Couldn't find filler mention in clean text: {}", fillerInfo);
 
-                throw new IllegalStateException("ERROR: got an indication of deleted span for filler." +
-                "Since filler should not be an entity, EITHER it was in a quoted span, and therefore " +
-                "should not have been annotated, or it's in a deleted span that should not have been deleted (check" +
-                " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?)\n" +
-                "filler info: " + fillerInfo);
+                // look in markup...
+
+                boolean isFillerFound = recordNullMentionInfo(fillerId, fillerId, "FILLER", fillerNode, true);
+
+                if (!isFillerFound)
+                    logger.warn("ERROR: could not find text/xml markup corresponding to filler." +
+                            "Since filler should not be an entity, EITHER it was in a quoted span, and therefore " +
+                            "should not have been annotated, or it's in a deleted span that should not have been deleted (check" +
+                            " EREDocumentReader's use of XmlDocumentProcessor; were the right tags provided at construction?), " +
+                            "OR it is from xml markup and the offsets are incorrect (attempted retrieval allowed for +/- 1 char)\n" +
+                            "filler info: " + fillerInfo);
+//                logger.warn("could not create filler with id '{}'", nnMap.getNamedItem(ID)
+//                        .getNodeValue());
+            } else { //filler found...
+                if (offsets.getSecond() < offsets.getFirst())
+                    throw new IllegalStateException("for filler " + fillerId + ", second offset is less than first " +
+                            "(first, second:" + offsets.getFirst() + "," + offsets.getSecond() + ").");
+
+                Constituent fillerConstituent =
+                        new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(),
+                                offsets.getFirst(), offsets.getSecond() + 1);
+                fillerConstituent.addAttribute(EntityMentionIdAttribute, fillerId);
+                fillerConstituent.addAttribute(EntityMentionTypeAttribute, FILL);
+                view.addConstituent(fillerConstituent);
+                mentionIdToConstituent.put(fillerId, fillerConstituent);
             }
-
-            String fillerType = nnMap.getNamedItem(TYPE).getNodeValue();
-            if (offsets.getSecond() < offsets.getFirst()) {
-                logger.warn("for filler {}, second offset is less than first (first, second:{})",
-                        fillerId, "(" + offsets.getFirst() + "," + offsets.getSecond());
-            }
-            Constituent fillerConstituent =
-                    new Constituent(fillerType, view.getViewName(), view.getTextAnnotation(),
-                            offsets.getFirst(), offsets.getSecond() + 1);
-            fillerConstituent.addAttribute(EntityMentionIdAttribute, fillerId);
-            fillerConstituent.addAttribute(EntityMentionTypeAttribute, FILL);
-            view.addConstituent(fillerConstituent);
-            mentionIdToConstituent.put(fillerId, fillerConstituent);
-        } else
-            logger.warn("could not create filler with id '{}'", nnMap.getNamedItem(ID)
-                    .getNodeValue());
+        }
     }
+
 
     /**
      * Read entity mentions and populate the view provided.
-     * 
-     * @param doc XML document containing entity information.
+     *
+     * @param doc     XML document containing entity information.
      * @param nerView View to populate with new entity mentions
      * @throws XMLException
      */
@@ -273,15 +322,14 @@ public class ERENerReader extends EREDocumentReader {
     }
 
 
-
     /**
      * get the start and end offsets of all constituents and store them
      * note that these are based on the cleaned-up text, so need to be mapped back
      * to the original text.
-     * 
+     *
      * @param tokens SpanLabelView containing Token info (from TextAnnotation)
      */
-    private void compileOffsets(SpanLabelView tokens) {
+    protected void compileOffsets(SpanLabelView tokens) {
         List<Constituent> constituents = tokens.getConstituents();
         int n = constituents.size();
         starts = new int[n];
@@ -296,11 +344,11 @@ public class ERENerReader extends EREDocumentReader {
 
     /**
      * Find the index of the first constituent at startOffset.
-     * 
+     *
      * @param startOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    private int findStartIndex(int startOffset) {
+    protected int findStartIndex(int startOffset) {
         for (int i = 0; i < starts.length; i++) {
             if (startOffset == starts[i])
                 return i;
@@ -317,11 +365,11 @@ public class ERENerReader extends EREDocumentReader {
 
     /**
      * Find the index of the first constituent *near* startOffset.
-     * 
+     *
      * @param startOffset the character offset we want.
      * @return the index of the first constituent.
      */
-    private int findStartIndexIgnoreError(int startOffset) {
+    protected int findStartIndexIgnoreError(int startOffset) {
         for (int i = 0; i < starts.length; i++) {
             if (startOffset <= starts[i])
                 return i;
@@ -334,11 +382,11 @@ public class ERENerReader extends EREDocumentReader {
      * Find the index of the first token constituent that has end char offset "endOffset" and return
      * the value one higher than that index (to instantiate Constituents, which use one-past-the-end
      * indexing).
-     * 
+     *
      * @param endOffset the character offset for which we want a corresponding token index.
      * @return the index of the token.
      */
-    private int findEndIndex(int endOffset, String rawText) {
+    protected int findEndIndex(int endOffset, String rawText) {
         int prevOffset = 0;
         for (int i = 0; i < ends.length; i++) {
             if (endOffset == ends[i])
@@ -359,11 +407,11 @@ public class ERENerReader extends EREDocumentReader {
     /**
      * Find the index of the first constituent at startOffset. Return that index + 1 (for
      * past-the-end indexing used by Constituents)
-     * 
+     *
      * @param endOffset the character offset we want.
      * @return one plus the index of the first token that has that end character offset.
      */
-    private int findEndIndexIgnoreError(int endOffset) {
+    protected int findEndIndexIgnoreError(int endOffset) {
         for (int i = 0; i < ends.length; i++) {
             if (endOffset <= ends[i])
                 if (i > 0 && Math.abs(endOffset - ends[i]) > Math.abs(endOffset - ends[i - 1]))
@@ -378,7 +426,7 @@ public class ERENerReader extends EREDocumentReader {
     /**
      * read the entities from the gold standard xml and produce appropriate constituents in the
      * view. NOTE: the constituents will not be ordered when we are done.
-     *
+     * <p>
      * <entity id="ent-56bd16d7_2_1620" type="FAC" specificity="nonspecific"> <entity_mention
      * id="m-56bd16d7_2_480" noun_type="NOM" source="ENG_DF_001241_20150407_F0000007T" offset="1645"
      * length="11"> <mention_text>restaurants</mention_text> <nom_head
@@ -386,7 +434,7 @@ public class ERENerReader extends EREDocumentReader {
      * </entity_mention> </entity>
      *
      * @param eNode the entity node, contains the more specific mentions of that entity.
-     * @param view the span label view we will add the labels to.
+     * @param view  the span label view we will add the labels to.
      * @throws XMLException
      */
     public void readEntity(Node eNode, View view, XmlTextAnnotation xmlTa) throws XMLException {
@@ -403,23 +451,26 @@ public class ERENerReader extends EREDocumentReader {
         boolean isEntityFound = false;
         for (int i = 0; i < nl.getLength(); ++i) {
             Node mentionNode = nl.item(i);
+            Set<String> mentionIds = entityIdToMentionIds.get(eId);
+            if (null == mentionIds) {
+                mentionIds = new HashSet<>();
+                entityIdToMentionIds.put(eId, mentionIds);
+            }
             Constituent mentionConstituent = getMention(mentionNode, label, view, xmlTa);
             if (null == mentionConstituent) { // mention may reference xml markup
-                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, xmlTa) || isEntityFound;
-            }
-            else {
+                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, false) || isEntityFound;
+            } else {
+                String mentionId = mentionConstituent.getAttribute(EntityMentionIdAttribute);
+//                if (mentionIds.contains(mentionId))
+//                    continue;
+
                 mentionConstituent.addAttribute(EntityIdAttribute, eId);
                 mentionConstituent.addAttribute(EntitySpecificityAttribute, specificity);
                 view.addConstituent(mentionConstituent);
                 isMentionAdded = true;
                 numMentionsGenerated++;
 
-                Set<String> mentionIds = entityIdToMentionIds.get(eId);
-                if (null == mentionIds) {
-                    mentionIds = new HashSet<>();
-                    entityIdToMentionIds.put(eId, mentionIds);
-                }
-                mentionIds.add(mentionConstituent.getAttribute(EntityMentionIdAttribute));
+                mentionIds.add(mentionId);
             }
         }
         if (isMentionAdded || isEntityFound)
@@ -428,30 +479,39 @@ public class ERENerReader extends EREDocumentReader {
 
     /**
      * for a mention that could not be mapped to a set of tokens in the cleaned text, record the information
-     *    to allow use of information by downstream systems in the XmlTextAnnotation object associated with the
-     *    source xml.
-     * @param label
-     * @param eId
-     * @param specificity
-     * @param mentionNode
-     * @param xmlTa
+     * to allow use of information by downstream systems in the XmlTextAnnotation object associated with the
+     * source xml.  This means finding the original span that contains the mention (expected to be an attribute)
+     * and updating its attributes with additional mention information.
+     *
+     * @param label       label for entity
+     * @param eId         entity id
+     * @param specificity entity specificity
+     * @param mentionNode mention markup
      */
-    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode, XmlTextAnnotation xmlTa) throws XMLException {
+    private boolean recordNullMentionInfo(String label, String eId, String specificity, Node mentionNode,
+                                          boolean isFiller) throws XMLException {
 
         NamedNodeMap nnMap = mentionNode.getAttributes();
         String mId = nnMap.getNamedItem(ID).getNodeValue();
-        String nounType = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
+        String nounType = "NONE";
+
+        if (!isFiller)
+            nounType = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
 
         /*
          * expect one child
          */
-        NodeList mnl = ((Element) mentionNode).getElementsByTagName(MENTION_TEXT);
         String mentionForm = null;
+        if (isFiller)
+            mentionForm = mentionNode.getTextContent();
+        else {
+            NodeList mnl = ((Element) mentionNode).getElementsByTagName(MENTION_TEXT);
 
-        if (mnl.getLength() > 0) {
-            mentionForm = SimpleXMLParser.getContentString((Element) mnl.item(0));
-        } else {
-            logger.error("No surface form found for mention with id {}.", mId);
+            if (mnl.getLength() > 0) {
+                mentionForm = SimpleXMLParser.getContentString((Element) mnl.item(0));
+            } else {
+                logger.error("No surface form found for mention with id {}.", mId);
+            }
         }
 
         int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
@@ -459,31 +519,25 @@ public class ERENerReader extends EREDocumentReader {
 
         IntPair origOffsets = new IntPair(offset, offset + length);
 
-        Map<IntPair, Map<String, String>> spanInfo = xmlTa.getXmlMarkup();
 
-        boolean isFound = spanInfo.containsKey(origOffsets);
+//        boolean isFound = spanInfo.containsKey(origOffsets);
 
-        if (!isFound)
-            logger.warn("could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
-                ") in xml markup info " + "in XmlTextAnnotation. Entity id, label, form are: " + eId + "," + label +
-                "," + mentionForm + ". Trying shifted indexes.");
+        XmlDocumentProcessor.SpanInfo mentionInfo = findAndUpdateMentionInfo(origOffsets, nounType, label, eId, mId, specificity);
 
-        Map<String, String> mentionInfo = findMentionInfo(spanInfo, origOffsets);
+        boolean isFound = true;
 
-        isFound = true;
-        if (mentionInfo.isEmpty()) {
+        if (null == mentionInfo) {
             isFound = false;
             logger.warn("even with shifted indexes, could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
-                    ") in xml markup info " + "in XmlTextAnnotation.");
+                    ") in xml markup info " + "in XmlTextAnnotation. Entity id, mention id, label, form are: " + eId +
+                    "," + mId + ", " + label + "," + mentionForm + ".");
         }
         if (isFound)
             numXmlMarkupMentionsGenerated++; // ...and so excluded from cleaned-up text.
-        spanInfo.put(origOffsets, mentionInfo);
-        mentionInfo.put(ENTITY_ID, eId);
-        mentionInfo.put(ENTITY_MENTION_ID, mId);
-        mentionInfo.put(SPECIFICITY, specificity);
-        mentionInfo.put(NOUN_TYPE, nounType);
-        mentionInfo.put(IS_FOUND, Boolean.toString(isFound));
+
+        if (!isFound)
+            logger.warn("could not find offset pair (" + origOffsets.getFirst() + "," + (origOffsets.getSecond()) +
+                    ") in xml markup info " + "in XmlTextAnnotation.  Trying shifted indexes.");
 
         return isFound;
     }
@@ -492,19 +546,27 @@ public class ERENerReader extends EREDocumentReader {
      * mention length should be the same, but in at least one file many offsets are shifted by +1
      * allow also -1 shift
      */
-    private Map<String, String> findMentionInfo(Map<IntPair, Map<String, String>> spanInfo, IntPair origOffsets) {
+    private XmlDocumentProcessor.SpanInfo findAndUpdateMentionInfo(IntPair origOffsets, String nounType, String label,
+                                                                   String eId, String mId, String specificity) {
 
-        Map<String, String> mentionInfo = spanInfo.get(origOffsets);
-
-        if (null == mentionInfo)
-            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() - 1, origOffsets.getSecond() - 1));
+        XmlDocumentProcessor.SpanInfo mentionInfo = offsetToSpanInfo.get(origOffsets);
 
         if (null == mentionInfo)
-            mentionInfo = spanInfo.get(new IntPair(origOffsets.getFirst() + 1, origOffsets.getSecond() + 1));
+            mentionInfo = offsetToSpanInfo.get(new IntPair(origOffsets.getFirst() - 1, origOffsets.getSecond() - 1));
 
-        if (null == mentionInfo) {
-            mentionInfo = new HashMap<>();
-            spanInfo.put(origOffsets, mentionInfo);
+        if (null == mentionInfo)
+            mentionInfo = offsetToSpanInfo.get(new IntPair(origOffsets.getFirst() + 1, origOffsets.getSecond() + 1));
+
+        if (null != mentionInfo) {
+
+            mentionInfo.attributes.put(ENTITY_ID, new Pair(eId, origOffsets));
+            mentionInfo.attributes.put(ENTITY_MENTION_ID, new Pair(mId, origOffsets));
+            mentionInfo.attributes.put(SPECIFICITY, new Pair(specificity, origOffsets));
+            mentionInfo.attributes.put(NOUN_TYPE, new Pair(nounType, origOffsets));
+            mentionInfo.attributes.put(IS_FOUND, new Pair(Boolean.toString(null != mentionInfo), origOffsets));
+
+            if (null != label)
+                mentionInfo.attributes.put(TYPE, new Pair(label, origOffsets));
         }
 
         return mentionInfo;
@@ -527,9 +589,8 @@ public class ERENerReader extends EREDocumentReader {
          * user does not add nominal mentions
          */
         numMentionsInSource++;
-        // we have a valid mention(a "NAM" or a "NOM"), add it to out view.
-        int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
-        int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
+
+        // we have a valid mention(a "NAM" or a "NOM"), add it to our view.
 
         /*
          * expect one child
@@ -544,6 +605,8 @@ public class ERENerReader extends EREDocumentReader {
             return null;
         }
 
+        int offset = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
+        int length = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
         IntPair offsets = getTokenOffsets(offset, offset + length, mentionForm, xmlTa);
         if (null == offsets)
             return null;
@@ -572,7 +635,7 @@ public class ERENerReader extends EREDocumentReader {
 
         try {
             mentionConstituent =
-                    new Constituent(label, getViewName(), view.getTextAnnotation(),
+                    new Constituent(label, view.getViewName(), view.getTextAnnotation(),
                             offsets.getFirst(), offsets.getSecond() + 1);
             mentionConstituent.addAttribute(EntityMentionTypeAttribute, noun_type);
             mentionConstituent.addAttribute(EntityMentionIdAttribute, mId);
@@ -609,22 +672,22 @@ public class ERENerReader extends EREDocumentReader {
         return new IntPair(startChar, endChar);
     }
 
-// TODO: need to handle poster names, which are no longer kept in the cleaned text
 
     /**
      * find the token offsets in the TextAnnotation that correspond to the source character offsets for the given
-     *    mention
+     * mention
+     *
      * @param origStartOffset start character offset from xml markup
-     * @param origEndOffset end character offset from xml markup
-     * @param mentionForm mention form from xml markup
-     * @param xmlTa XmlTextAnnotation object storing original xml, transformed text, extracted xml markup,
-     *              and corresponding TextAnnotation
+     * @param origEndOffset   end character offset from xml markup
+     * @param mentionForm     mention form from xml markup
+     * @param xmlTa           XmlTextAnnotation object storing original xml, transformed text, extracted xml markup,
+     *                        and corresponding TextAnnotation
      * @return Intpair(-1, -1) if the specified offsets correspond to deleted span (and hence likely a name mention
-     *          in xml metadata, e.g. post author); null if no mapped tokens could be found (possibly, indexes refer
-     *          to the middle of a single token because tokenizer can't segment some strings); or the corresponding
-     *          token indexes
+     * in xml metadata, e.g. post author); null if no mapped tokens could be found (possibly, indexes refer
+     * to the middle of a single token because tokenizer can't segment some strings); or the corresponding
+     * token indexes
      */
-    private IntPair getTokenOffsets(int origStartOffset, int origEndOffset, String mentionForm, XmlTextAnnotation xmlTa) {
+    protected IntPair getTokenOffsets(int origStartOffset, int origEndOffset, String mentionForm, XmlTextAnnotation xmlTa) {
 
         StringTransformation st = xmlTa.getXmlSt();
 
@@ -653,7 +716,7 @@ public class ERENerReader extends EREDocumentReader {
             returnOffset = new IntPair(si, ei);
         } catch (IllegalArgumentException iae) {
             logger.error("could not find token offsets for mention form '" + mentionForm + ", start, end orig: (" +
-                    origStartOffset + "," + origEndOffset + "); adjusted: (" + adjStart + "," + adjEnd + ")." );
+                    origStartOffset + "," + origEndOffset + "); adjusted: (" + adjStart + "," + adjEnd + ").");
             System.exit(1);
         } catch (RuntimeException re) {
             numOffsetErrors++;
@@ -689,9 +752,15 @@ public class ERENerReader extends EREDocumentReader {
         return returnOffset;
     }
 
-    public String getViewName() {
-        return viewName;
+    public String getMentionViewName() {
+        return mentionViewName;
     }
+
+
+    public String getCorefViewName() {
+        return corefViewName;
+    }
+
 
     /**
      * after reading a file's entity information, allows the client to find a Constituent
@@ -699,7 +768,7 @@ public class ERENerReader extends EREDocumentReader {
      * to a problem with the annotation file (inaccurate offsets), or tokenization is incorrect
      * (target name is part of compound term), or other constraints apply (e.g. if overlapping
      * entity mentions are prohibited)
-     * 
+     *
      * @param mentionId mentionId parsed from the annotation file
      * @return Constituent corresponding to the mentionId, or null if it is not found
      */
@@ -712,7 +781,7 @@ public class ERENerReader extends EREDocumentReader {
      * this reader relies on its own tokenization (none is provided in the source corpus) and if
      * token segmentation differs, mentions specified in the source may not be found in the text by
      * this reader.
-     * 
+     *
      * @return String describing annotations read and generated.
      */
     @Override
