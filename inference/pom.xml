@@ -56,11 +56,35 @@
             <version>0.8.3</version>
         </dependency>
         <dependency>
+            <groupId>de.zib.jscip.nativ</groupId>
+            <artifactId>scip</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/scip.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.12</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <!--<forkMode>true</forkMode>-->
+                    <useSystemClassLoader>true</useSystemClassLoader>
+                    <environmentVariables>
+                        <LD_LIBRARY_PATH>${basedir}/lib/</LD_LIBRARY_PATH>
+                        <DYLD_LIBRARY_PATH>${basedir}/lib/</DYLD_LIBRARY_PATH>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
