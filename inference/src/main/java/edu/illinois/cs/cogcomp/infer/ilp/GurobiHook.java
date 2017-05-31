@@ -430,6 +430,7 @@ public class GurobiHook implements ILPSolver {
      * @param index The index of the variable whose value is requested.
      * @return The value of the variable.
      **/
+    @Override
     public boolean getBooleanValue(int index) {
         if (!isSolved)
             return false;
