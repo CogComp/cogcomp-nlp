@@ -16,7 +16,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.trees.TreeParserFactory;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.TextAnnotationReader;
 import edu.illinois.cs.cogcomp.nlp.utilities.POSFromParse;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
 
@@ -27,7 +26,7 @@ import java.util.Collections;
 /**
  * @author Vivek Srikumar
  */
-public class PennTreebankReader extends TextAnnotationReader {
+public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
 
     public static final String PENN_TREEBANK_WSJ = "PennTreebank-WSJ";
 
@@ -36,18 +35,14 @@ public class PennTreebankReader extends TextAnnotationReader {
     protected final String[] sections;
 
     protected final String combinedWSJHome;
-
+    private final String parseViewName;
     protected int currentSectionId;
-
     String[] currentSectionFiles;
     int currentFileId;
-
-    private ArrayList<String> lines;
     int currentLineId;
 
     int treeInFile;
-
-    private final String parseViewName;
+    private ArrayList<String> lines;
 
     /**
      * Reads all the sections of the combined annotation from penn treebank
@@ -55,7 +50,7 @@ public class PennTreebankReader extends TextAnnotationReader {
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
     public PennTreebankReader(String treebankHome) throws Exception {
-        this(treebankHome, null, ViewNames.PARSE_GOLD);
+        this(treebankHome, null, ViewNames.PARSE_GOLD, ".mrg", ".mrg");
     }
 
     /**
@@ -65,7 +60,7 @@ public class PennTreebankReader extends TextAnnotationReader {
      * @param parseViewName The name of the parse view which is to be added
      */
     public PennTreebankReader(String treebankHome, String parseViewName) throws Exception {
-        this(treebankHome, null, parseViewName);
+        this(treebankHome, null, parseViewName, ".mrg", ".mrg");
     }
 
     /**
@@ -74,7 +69,7 @@ public class PennTreebankReader extends TextAnnotationReader {
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
     public PennTreebankReader(String treebankHome, String[] sections) throws Exception {
-        this(treebankHome, sections, ViewNames.PARSE_GOLD);
+        this(treebankHome, sections, ViewNames.PARSE_GOLD, ".mrg", ".mrg");
     }
 
     /**
@@ -82,9 +77,9 @@ public class PennTreebankReader extends TextAnnotationReader {
      *
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
-    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
+    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName, String sourceFileExtension, String annotationFileExtension)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome));
+        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome, treebankHome, sourceFileExtension, annotationFileExtension));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 
@@ -115,6 +110,7 @@ public class PennTreebankReader extends TextAnnotationReader {
         currentSectionId++;
     }
 
+    @Override
     public boolean hasNext() {
         if (lines == null)
             return true;
@@ -129,7 +125,13 @@ public class PennTreebankReader extends TextAnnotationReader {
 
     }
 
-    protected TextAnnotation makeTextAnnotation() throws AnnotatorException {
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     *
+     * @return an annotation object.
+     */
+    @Override
+    public TextAnnotation next() {
         // first check if we don't have any more lines
         if (lines == null || currentLineId == lines.size()) {
             // check if the current section has no more files
@@ -161,8 +163,18 @@ public class PennTreebankReader extends TextAnnotationReader {
 
         }
 
-        return findNextTree();
+        TextAnnotation ta = null;
+
+        try {
+            ta = findNextTree();
+        } catch (AnnotatorException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(e);
+        }
+
+        return ta;
     }
+
 
     private TextAnnotation findNextTree() throws AnnotatorException {
 
@@ -222,5 +234,16 @@ public class PennTreebankReader extends TextAnnotationReader {
         return ta;
     }
 
+
     public void remove() {}
+
+
+    /**
+     * TODO: generate a human-readable report of annotations read from the source file (plus whatever
+     * other relevant statistics the user should know about).
+     */
+    public String generateReport() {
+        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+    }
+
 }

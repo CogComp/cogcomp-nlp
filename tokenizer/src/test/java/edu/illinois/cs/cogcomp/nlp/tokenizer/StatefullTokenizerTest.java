@@ -42,12 +42,9 @@ import org.slf4j.LoggerFactory;
  * @author t-redman adapted from original tokenizer tests to test the StatefulTokenizer.
  */
 public class StatefullTokenizerTest {
-    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
-
-
-
     private static final String INFILE =
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/tokenizer/splitterWhitespaceTest.txt";
+    private static Logger logger = LoggerFactory.getLogger(StatefullTokenizerTest.class);
 
     /**
      * test whether the mapping between character offset and token index is correct.
@@ -267,7 +264,7 @@ public class StatefullTokenizerTest {
     }
 
     @Test
-    public void testStatefullTokenizerEmptyString() {
+    public void testEmptyString() {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
@@ -275,11 +272,29 @@ public class StatefullTokenizerTest {
     }
 
     @Test
-    public void testStatefullTokenizerStringWithNewline() {
+    public void testStringWithNewline() {
         Tokenizer tkr = new StatefulTokenizer();
         String text = "this\nsentence";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
         assertEquals(tknzn.getTokens().length, 2);
     }
-
+    
+    @Test
+    public void testSplitOnDash() {
+        Tokenizer tkr = new StatefulTokenizer();
+        String text = "IAEA Director-General Mohamed ElBaradei ";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 6);
+    }
+    
+    @Test
+    public void testSplitPeriodEnd() {
+        Tokenizer tkr = new StatefulTokenizer(false);
+        String text = "You see always, oh we're going to do this, we're going to--. ";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 17);
+        tkr = new StatefulTokenizer(true);
+        tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 18);
+    }
 }

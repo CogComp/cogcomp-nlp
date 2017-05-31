@@ -1,6 +1,6 @@
-# illinois-edison
+# Cogcomp Edison
 
-*Edison* is a feature extraction framework that uses the data structures of [illinois-core-utilities](../core-utilities/README.md)
+*Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
 This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 
@@ -17,7 +17,7 @@ that can be applied to text to generate features.
 
 ## Maven dependency
 To use Edison as a Maven dependency please add the following lines to your `pom.xml` file:
-```
+```xml
 <repositories>
     <repository>
         <id>CogcompSoftware</id>
@@ -30,7 +30,7 @@ To use Edison as a Maven dependency please add the following lines to your `pom.
     <dependency>
         <groupId>edu.illinois.cs.cogcomp</groupId>
         <artifactId>illinois-edison</artifactId>
-        <version>3.0.44</version>
+        <version>#VERSION</version>
     </dependency>
 </dependencies>
 ```
@@ -39,8 +39,10 @@ or if you are using SBT:
 ```
 resolvers += "CogcompSoftware" at "http://cogcomp.cs.illinois.edu/m2repo/"
 
-libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "3.0.44"
+libraryDependencies += "edu.illinois.cs.cogcomp" % "illinois-edison" % "#VERSION"
 ```
+
+where `#VERSION` is the version included in the `pom.xml` file. 
 
 ## The `FeatureExtractor` interface
 Edison comes with several built-in feature extractors. 

@@ -66,7 +66,7 @@ public class LBJavaUtils {
                 }
 
                 Word wcurrent = new Word(token, wprevious);
-                if (null != tags) {
+                if (null != tags && !tags.isEmpty()) {
                     Constituent tag = tags.get(tagIndex++);
                     wcurrent.partOfSpeech = tag.getLabel();
                 }

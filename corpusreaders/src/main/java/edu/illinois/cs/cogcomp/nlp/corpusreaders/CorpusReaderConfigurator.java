@@ -20,7 +20,27 @@ public class CorpusReaderConfigurator extends Configurator {
     public static final Property CORPUS_NAME = new Property("corpusName", "dummyCorpusName");
     public static final Property CORPUS_DIRECTORY = new Property("corpusDirectory",
             "dummyCorpusDirectory");
+    public static final Property SOURCE_DIRECTORY = new Property("sourceDirectory", "dummySourceDir");
+    public static final Property ANNOTATION_DIRECTORY = new Property("annotationDirectory", "dummyAnnotationDir");
+    public static final Property SOURCE_EXTENSION = new Property("sourceFileExtension", ".xml");
+    public static final Property ANNOTATION_EXTENSION = new Property("annotationFileExtension", ".xml");
 
+    public static ResourceManager buildResourceManager(String corpus) {
+        Properties props = new Properties();
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpus);
+        return new ResourceManager(props);
+    }
+
+    public static ResourceManager buildResourceManager(String corpusName, String sourceDir, String annotationDir,
+                                                       String sourceFileExtension, String annotationFileExtension) {
+        Properties props = new Properties();
+        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, sourceDir);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key, annotationDir);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_EXTENSION.key, sourceFileExtension);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_EXTENSION.key, annotationFileExtension);
+        return new ResourceManager(props);
+    }
 
     /**
      * get a ResourceManager object with the default key/value pairs for this configurator
@@ -29,21 +49,10 @@ public class CorpusReaderConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY};
+        // for now, omit source and annotation directories because they must be set to path on User host machine
+        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY, // SOURCE_DIRECTORY, ANNOTATION_DIRECTORY,
+            SOURCE_EXTENSION, ANNOTATION_EXTENSION};
         return new ResourceManager(generateProperties(props));
-    }
-
-    public static ResourceManager buildResourceManager(String corpus) {
-        Properties props = new Properties();
-        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpus);
-        return new ResourceManager(props);
-    }
-
-    public static ResourceManager buildResourceManager(String corpusName, String corpusDirectory) {
-        Properties props = new Properties();
-        props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
-        props.setProperty(CorpusReaderConfigurator.CORPUS_DIRECTORY.key, corpusDirectory);
-        return new ResourceManager(props);
     }
 
 }

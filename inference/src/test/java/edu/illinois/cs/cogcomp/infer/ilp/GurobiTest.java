@@ -17,10 +17,11 @@ public class GurobiTest {
 
     @Test
     public void testGurobi() throws GRBException {
-        if (System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true")
-                && System.getenv().containsKey("SEMAPHORE")
-                && System.getenv().get("SEMAPHORE").equals("true")) {
-            System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
+
+        if(System.getenv().containsKey("CI") && System.getenv().get("CI").equals("true") &&
+                System.getenv().containsKey("SEMAPHORE") && System.getenv().get("SEMAPHORE").equals("true")
+                && System.getenv().containsKey("CIRCLECI") && System.getenv().get("CIRCLECI").equals("true")) {
+          System.out.println("Running the test on Semaphore. Skipping this test  . . . ");
         } else {
             try {
                 GRBEnv env = new GRBEnv();

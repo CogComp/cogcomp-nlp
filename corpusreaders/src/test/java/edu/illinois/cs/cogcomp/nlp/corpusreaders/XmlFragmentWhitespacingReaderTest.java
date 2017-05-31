@@ -39,31 +39,21 @@ public class XmlFragmentWhitespacingReaderTest {
 
     private static final String RAW_FILE_DIR =
             "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
-    // private static final String REF_FILE_DIR =
-    // "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereReferenceDocuments";
-
-    private static String REF_TEXT_ONE;
-    private static String REF_TEXT_TWO;
-
-    private static org.slf4j.Logger logger =
-            LoggerFactory.getLogger(XmlFragmentWhitespacingReaderTest.class);
-
+    private final static String TEST_DIR =
+            "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
+    private static org.slf4j.Logger logger = LoggerFactory
+            .getLogger(XmlFragmentWhitespacingReaderTest.class);
 
     private static String readReferenceText(String dir, String referenceFile)
             throws FileNotFoundException {
         return LineIO.slurp(dir + "/" + referenceFile);
     }
 
-
-
-    private final static String TEST_DIR =
-            "src/test/resources/edu/illinois/cs/cogcomp/nlp/corpusreaders/ereSentimentDocuments";
-
     @Test
     public void testReader() {
         XmlFragmentWhitespacingDocumentReader reader = null;
         try {
-            reader = new XmlFragmentWhitespacingDocumentReader("ERE_BEST", TEST_DIR);
+            reader = new XmlFragmentWhitespacingDocumentReader("ERE_BEST", TEST_DIR, ".txt", ".txt");
         } catch (IOException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -72,7 +62,7 @@ public class XmlFragmentWhitespacingReaderTest {
             fail(e.getMessage());
         }
 
-        List<Path> files = null;
+        List<List<Path>> files = null;
         try {
             files = reader.getFileListing();
         } catch (IOException e) {
@@ -80,23 +70,20 @@ public class XmlFragmentWhitespacingReaderTest {
             fail(e.getMessage());
         }
 
-
         assertEquals(2, files.size());
 
-
         Set<String> names = new TreeSet<>();
-        for (Path file : files)
-            names.add(file.getName(file.getNameCount() - 1).toString());
+        for (List<Path> file : files)
+            names.add(file.get(0).getName(file.get(0).getNameCount() - 1).toString());
 
         assertTrue(names.contains(REF_FILE_ONE));
         assertTrue(names.contains(REF_FILE_TWO));
 
-
         Map<String, TextAnnotation> tas = new HashMap<>();
-        for (Path file : files) {
+        for (List<Path> file : files) {
             try {
-                tas.put(file.getName(file.getNameCount() - 1).toString(), reader
-                        .getTextAnnotationsFromFile(file).get(0));
+                tas.put(file.get(0).getName(file.get(0).getNameCount() - 1).toString(), reader
+                        .getAnnotationsFromFile(file).get(0));
             } catch (Exception e) {
                 e.printStackTrace();
                 fail(e.getMessage());
@@ -104,7 +91,6 @@ public class XmlFragmentWhitespacingReaderTest {
         }
         logger.info("----\n" + tas.get(REF_FILE_ONE).getText() + "----\n");
         logger.info("----\n" + tas.get(REF_FILE_TWO).getText() + "----\n");
-
 
         String FIRST_ERE_FILE = RAW_FILE_DIR + "/" + REF_FILE_ONE;
         String firstRawText = null;
@@ -114,7 +100,6 @@ public class XmlFragmentWhitespacingReaderTest {
             e.printStackTrace();
             fail(e.getMessage());
         }
-
 
         Pattern sun = Pattern.compile("\\w*Sun\\w*");
         Matcher sunMatcher = sun.matcher(firstRawText);
@@ -136,10 +121,8 @@ public class XmlFragmentWhitespacingReaderTest {
             }
         }
         for (IntPair missedSpan : sunSpans)
-            logger.error("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan)
-                    + "'.");
+            logger.error("MISSED SPAN: '" + printSpanInContext(firstRawText, missedSpan) + "'.");
         assertTrue(sunSpans.isEmpty());
-
     }
 
     private String printSpanInContext(String rawText, IntPair span) {
@@ -149,7 +132,5 @@ public class XmlFragmentWhitespacingReaderTest {
         int contextEnd = Math.min(rawText.length(), end + 15);
         return rawText.substring(contextStart, start) + "###" + rawText.substring(start, end)
                 + "###" + rawText.substring(end, contextEnd) + "'.";
-
     }
-
 }

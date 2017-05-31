@@ -181,12 +181,11 @@ public class Constituent implements Serializable, HasAttributes {
 
     /**
      * Return map of labels to scores. If not explicitly created, returns null.
-     * The returned map is a copy, to avoid inadvertant changes to the label/score mapping.
+     * The returned map is a copy, to avoid inadvertent changes to the label/score mapping.
      *
      * @return map of labels to scores
      */
-    public Map<String, Double> getLabelsToScores()
-    {
+    public Map<String, Double> getLabelsToScores() {
         Map<String, Double> returnMap = null;
 
         if ( null != labelsToScores) {
@@ -584,8 +583,8 @@ public class Constituent implements Serializable, HasAttributes {
 
     public Constituent cloneForNewView(String newViewName) {
         Constituent cloneC =
-                new Constituent(this.getLabel(), newViewName, this.getTextAnnotation(),
-                        this.getStartSpan(), this.getEndSpan());
+                new Constituent(this.labelsToScores, this.getLabel(), this.getConstituentScore(), newViewName,
+                        this.getTextAnnotation(), this.getStartSpan(), this.getEndSpan());
 
         for (String k : this.getAttributeKeys()) {
             cloneC.addAttribute(k, this.getAttribute(k));
@@ -596,8 +595,8 @@ public class Constituent implements Serializable, HasAttributes {
 
     public Constituent cloneForNewViewWithDestinationLabel(String newViewName, String Dlabel) {
         Constituent cloneC =
-                new Constituent(Dlabel, newViewName, this.getTextAnnotation(), this.getStartSpan(),
-                        this.getEndSpan());
+                new Constituent(this.labelsToScores, Dlabel, this.getConstituentScore(), newViewName,
+                        this.getTextAnnotation(), this.getStartSpan(), this.getEndSpan());
         for (String k : this.getAttributeKeys()) {
             cloneC.addAttribute(k, this.getAttribute(k));
         }

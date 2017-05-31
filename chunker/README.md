@@ -1,24 +1,6 @@
-# Illinois Chunker (Shallow Parser)
+# Cogcomp Chunker (Shallow Parser)
 
-Chunking (Shallow Parsing) is the identification of constituents (noun groups, verbs, verb groups etc.) in a sentence. The system implemented here is based of the following paper: 
-
-## Citation: 
-
-```
-@inproceedings{PunyakanokRo01,
-    author = {V. Punyakanok and D. Roth},
-    title = {The Use of Classifiers in Sequential Inference},
-    booktitle = {NIPS},
-    pages = {995--1001},
-    year = {2001},
-    publisher = {MIT Press},
-    acceptance = {25/514 (4.8\%) Oral Presentations; 152/514 (29%) overall},
-    url = " http://cogcomp.cs.illinois.edu/papers/nips01.pdf",
-    funding = {NSF98 CAREER},
-    projects = {LnI,SI,IE,NE,NLP,CCM},
-    comment = {Structured, sequential output; Sequence Prediction: HMM with classifiers, Conditional Models, Constraint Satisfaction},
-}
-```
+Chunking (Shallow Parsing) is the identification of constituents (noun groups, verbs, verb groups etc.) in a sentence. 
 
 ## Usage
 
@@ -62,7 +44,7 @@ When using`ChunkerAnnotator`, the models are loaded automatically from the direc
 Thus, to use your own models (maybe you need to train your models first; please read the following section `Training`), simply place them in this directory and they will be loaded; otherwise, the model version
 specified in this project's `pom.xml` file will be loaded from the Maven repository and used.
 
-**Note** : To use your own models, **exclude** the `illinois-chunker-model` artifact from the `illinois-chunker` dependency in your `pom.xml` to avoid potential conflicts.
+**Note** : To use your own models, **exclude** the `illinois-chunker-model` artifact from the `cogcomp-chunker` dependency in your `pom.xml` to avoid potential conflicts.
 
 ## Training
 The class [`ChunkerTrain`](src/main/java/edu/illinois/cs/cogcomp/chunker/main/ChunkerTrain.java) contains a main method that can be used to
@@ -76,7 +58,7 @@ Please also refer to [mvn_train.sh](scripts/mvn_train.sh) for an example of usag
 ## Off-the-shelf scripts
 There are a bunch of scripts provided with this package in [scripts](scripts/). Please make sure [apache maven](http://maven.apache.org/install.html) is installed before running these scripts. They should be run from the module root directory, i.e., illinois-cogcomp-nlp/chunker/. For example,
 ```
-cd illinois-cogcomp-nlp/chunker/
+cd cogcomp-nlp/chunker/
 sh scripts/mvn_demo.sh
 ```
 1. `mvn_compile.sh`: to compile the illinois-chunker module.
@@ -101,6 +83,27 @@ sh scripts/mvn_test_conll.sh (model directory) (model name)
 ## Tips for IntelliJ users
 Command line use can be found in [scripts](scripts/). But if you want to use IDEs like IntelliJ, please check the following tips before running.
 ### Import project
-Please import the `illinois-cogcomp-nlp` project from `Existing Sources` using the external model `Maven`.
+Please import the `cogcomp-nlp` project from `Existing Sources` using the external model `Maven`.
 ### Setup
 Select the `Run` tab. From the drop-down menu, select `Edit Configurations`. In the `Configuration` tab therein, specify the `Working directory` to be `$MODULE_DIR$`. Also, don't forget to set up corresponding `Program arguments`.
+
+## Further Reading 
+
+The system implemented here is based of the following paper: 
+
+```
+@inproceedings{PunyakanokRo01,
+    author = {V. Punyakanok and D. Roth},
+    title = {The Use of Classifiers in Sequential Inference},
+    booktitle = {NIPS},
+    pages = {995--1001},
+    year = {2001},
+    publisher = {MIT Press},
+    acceptance = {25/514 (4.8\%) Oral Presentations; 152/514 (29%) overall},
+    url = " http://cogcomp.cs.illinois.edu/papers/nips01.pdf",
+    funding = {NSF98 CAREER},
+    projects = {LnI,SI,IE,NE,NLP,CCM},
+    comment = {Structured, sequential output; Sequence Prediction: HMM with classifiers, Conditional Models, Constraint Satisfaction},
+}
+```
+

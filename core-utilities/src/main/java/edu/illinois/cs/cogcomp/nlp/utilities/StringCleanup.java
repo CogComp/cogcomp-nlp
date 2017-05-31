@@ -62,6 +62,8 @@ public class StringCleanup {
         return normString;
     }
 
+
+
     /**
      * substitute based on types: for a character encoding not in range, replace punctuation with
      * generic punctuation whitespace with whitespace letter with letter number with number currency
@@ -134,21 +136,27 @@ public class StringCleanup {
         return new Pair<>(newChar, codepoint);
     }
 
+
+
     static public String normalizeToUtf8(String origString_) {
         String utf8Str = normalizeToEncoding(origString_, Charset.forName("UTF-8"));
         return StringUtils.normalizeUnicodeDiacritics(utf8Str);
     }
 
+
+
     static public String normalizeToLatin1(String origString_) {
         String noDiacriticStr = normalizeToUtf8(origString_);
-
         return normalizeToEncoding(noDiacriticStr, Charset.forName("ISO-8859-1"));
     }
+
+
 
     static public String normalizeToAscii(String origString_) {
         String latin1Str = normalizeToLatin1(origString_);
         return normalizeToEncoding(latin1Str, Charset.forName("ascii"));
     }
+
 
     /*
      * Control Characters such as ^C, ^\, ^M etc. are a part of the C0 ASCII Control Character Set.
