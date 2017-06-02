@@ -488,21 +488,20 @@ public class TreeView extends View {
             String constituentLabel = child.getLabel().getFirst();
 
             Constituent childConstituent;
-            if (start == end) {
-                childConstituent =
-                        new Constituent(constituentLabel, constituentScore, this.getViewName(),
-                                this.getTextAnnotation(), -1, 0);
+            if (start >= end) {
+                // Ignore constituents with incorrect span bounds
+                logger.debug("Constituent with incorrect span found in " + root.getViewName());
             } else {
                 childConstituent =
                         createNewConstituent(start, end, constituentLabel, constituentScore);
+
+                this.addConstituent(childConstituent);
+
+                this.addRelation(new Relation(edgeLabel, root, childConstituent, edgeScore));
+
+                Tree<Double> scoresChild = scores.getChild(childId);
+                this.addScoredParseTree(child, scoresChild, childConstituent, sentenceStartPosition);
             }
-
-            this.addConstituent(childConstituent);
-
-            this.addRelation(new Relation(edgeLabel, root, childConstituent, edgeScore));
-
-            Tree<Double> scoresChild = scores.getChild(childId);
-            this.addScoredParseTree(child, scoresChild, childConstituent, sentenceStartPosition);
         }
     }
 
@@ -526,10 +525,9 @@ public class TreeView extends View {
 
             String constituentLabel = childLabel.getFirst();
             Constituent childConstituent;
-            if (start == end) {
-                childConstituent =
-                        new Constituent(constituentLabel, 1.0, this.getViewName(),
-                                this.getTextAnnotation(), -1, 0);
+            if (start >= end) {
+                // Ignore constituents with incorrect span bounds
+                logger.debug("Constituent with incorrect span found in " + root.getViewName());
             } else {
                 childConstituent = createNewConstituent(start, end, constituentLabel, 1.0);
 
@@ -545,10 +543,11 @@ public class TreeView extends View {
                         assert false : "Expecting token: " + token + ", found " + s + " instead.";
                     }
                 }
+
+                this.addConstituent(childConstituent);
+                this.addRelation(new Relation(edgeLabel, root, childConstituent, 1.0));
+                this.addParseTree(child, childConstituent, sentenceStartPosition);
             }
-            this.addConstituent(childConstituent);
-            this.addRelation(new Relation(edgeLabel, root, childConstituent, 1.0));
-            this.addParseTree(child, childConstituent, sentenceStartPosition);
         }
     }
 

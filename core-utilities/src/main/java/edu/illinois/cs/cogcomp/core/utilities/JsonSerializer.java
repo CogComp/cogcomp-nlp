@@ -35,7 +35,7 @@ public class JsonSerializer extends AbstractSerializer {
     public static final String TOKENOFFSETS = "tokenOffsets";
     public static final String LABEL_SCORE_MAP = "labelScoreMap";
     public static final String PROPERTIES = "properties";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     /**
@@ -71,6 +71,13 @@ public class JsonSerializer extends AbstractSerializer {
 
         List<Constituent> constituents = view.getConstituents();
 
+        // Performance of the indexOf method is terrible, so we will collect the 
+        // indices of all constituents here.
+        HashMap<Constituent, Integer> constituentMap = new HashMap<>();
+        for (int i = 0 ; i < constituents.size(); i++) {
+            constituentMap.put(constituents.get(i), i);
+        }
+        
         try {
             logger.debug(TextAnnotationPrintHelper.printView(view));
             if (DEBUG)
@@ -102,8 +109,8 @@ public class JsonSerializer extends AbstractSerializer {
                 Constituent src = r.getSource();
                 Constituent tgt = r.getTarget();
 
-                int srcId = constituents.indexOf(src);
-                int tgtId = constituents.indexOf(tgt);
+                int srcId = constituentMap.get(src);//constituents.indexOf(src);
+                int tgtId = constituentMap.get(tgt);//constituents.indexOf(tgt);
 
                 if (srcId < 0)
                     throw new IllegalStateException("ERROR: Couldn't find index in constituent list for argument constituent: " +
@@ -406,6 +413,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
+// TODO: comment out this next two lines as part of addressing issue #406
             if (viewName.equals(ViewNames.SENTENCE))
                 continue;
 
@@ -430,6 +438,9 @@ public class JsonSerializer extends AbstractSerializer {
 
         writeAttributes(ta, json);
 
+        // TODO: uncomment to generate Sentences fix (part of addressing issue #406)
+//        if (ta.hasView(ViewNames.SENTENCE))
+//            ta.setSentences();
 
         return json;
     }

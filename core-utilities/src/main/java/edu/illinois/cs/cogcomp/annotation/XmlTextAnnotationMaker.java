@@ -14,7 +14,10 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotat
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.TextCleanerStringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +34,7 @@ import java.util.Set;
  */
 public class XmlTextAnnotationMaker {
 
+    private static final Logger logger = LoggerFactory.getLogger(XmlTextAnnotationMaker.class);
     /**
      * tokenizes/sentence splits the cleaned text for further processing
      */
@@ -67,11 +71,12 @@ public class XmlTextAnnotationMaker {
      */
     public XmlTextAnnotation createTextAnnotation(String xmlText, String corpusId, String docId)  {
 
-        StringTransformation xmlSt = new StringTransformation(xmlText);
-        Pair<StringTransformation, Map<IntPair, Map<String, String>>> cleanResults =
-                xmlProcessor.processXml(xmlSt);
+        logger.info("processing text from document {}", docId);
+        Pair<StringTransformation, List<XmlDocumentProcessor.SpanInfo>> cleanResults =
+                xmlProcessor.processXml(xmlText);
 
-        TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId, xmlSt.getTransformedText());
+        TextAnnotation ta = taBuilder.createTextAnnotation(corpusId, docId,
+                cleanResults.getFirst().getTransformedText());
 
         return new XmlTextAnnotation(cleanResults.getFirst(), ta, cleanResults.getSecond());
     }

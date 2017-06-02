@@ -9,6 +9,11 @@ package edu.illinois.cs.cogcomp.core.datastructures;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class contains the canonical strings used for naming standard views. They are used both in
  * Curator's views as well as {@link TextAnnotation} views
@@ -63,6 +68,7 @@ public class ViewNames {
     public static final String SRL_VERB = "SRL_VERB";
     public static final String SRL_NOM = "SRL_NOM";
     public static final String SRL_PREP = "SRL_PREP";
+    public static final String SRL_COMMA = "SRL_COMMA";
 
     public static final String COREF = "COREF";
     // Constituents in this view contains heads of mentions only
@@ -114,7 +120,8 @@ public class ViewNames {
     public static final String NER_ERE = "NER_ERE";
     public static final String MENTION_ERE = "MENTION_ERE";
     public static final String COREF_ERE = "COREF_ERE";
-
+    public static final String POST_ERE = "POST_ERE";
+    public static final String EVENT_ERE = "EVENT_ERE";
 
     public static ViewTypes getViewType(String viewName) {
         switch (viewName) {
@@ -139,6 +146,8 @@ public class ViewNames {
             case GAZETTEER:
             case TREE_GAZETTEER:
             case GAZETTEER_NE:
+            case POST_ERE:
+            case EVENT_ERE:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
@@ -157,6 +166,7 @@ public class ViewNames {
             case SRL_VERB:
             case SRL_NOM:
             case SRL_PREP:
+            case SRL_COMMA:
                 return ViewTypes.PREDICATE_ARGUMENT_VIEW;
             case COREF:
             case COREF_HEAD:
@@ -172,5 +182,20 @@ public class ViewNames {
         return viewName.equals(ViewNames.PARSE_BERKELEY) || viewName.equals(ViewNames.PARSE_CHARNIAK) ||
                 viewName.equals(ViewNames.PARSE_CHARNIAK_KBEST) || viewName.equals(ViewNames.PARSE_GOLD) ||
                 viewName.equals(ViewNames.PARSE_STANFORD);
+    }
+
+
+    /**
+     * @return the view names: TOKENS, SENTENCE, PARAGRAPH, LEMMA, POS, TREE_GAZETTEER, ...
+     */
+    public static List<String> getAllViewNames(){
+        List<String> viewNames = new ArrayList<>();
+        Field[] fields = ViewNames.class.getDeclaredFields();
+        for (Field f : fields) {
+            if (Modifier.isStatic(f.getModifiers())) {
+                viewNames.add(f.getName());
+            }
+        }
+        return viewNames;
     }
 }

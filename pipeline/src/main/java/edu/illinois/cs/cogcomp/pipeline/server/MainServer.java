@@ -11,8 +11,6 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
-import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -22,10 +20,12 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.internal.HelpScreenException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.Filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -37,6 +37,12 @@ public class MainServer {
 
     private static ArgumentParser argumentParser;
 
+    private static AnnotatorService pipeline = null;
+
+    private static Map clients = null;
+
+    private static double lastTimeWeReset = 0.0;
+
     static {
         // Setup Argument Parser with options.
         argumentParser =
@@ -44,13 +50,43 @@ public class MainServer {
                         "Pipeline Webserver.");
         argumentParser.addArgument("--port", "-P").type(Integer.class).setDefault(8080)
                 .dest("port").help("Port to run the webserver.");
+        argumentParser.addArgument("--rate", "-L").type(Integer.class).setDefault(-1).dest("rate")
+                .help("Limits the number of queries per day.");
     }
 
-    public static void main(String[] args) {
+    public static void setAnnotatorService(AnnotatorService service) {
+        pipeline = service;
+    }
+
+    public static void setPipeline(Logger logger) {
+        try {
+            logger.info("Starting to load the pipeline . . . ");
+            printMemoryDetails(logger);
+            pipeline = PipelineFactory.buildPipelineWithAllViews();
+            logger.info("Done with loading the pipeline  . . .");
+            printMemoryDetails(logger);
+        } catch (IOException | AnnotatorException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * It will reset the hashmap of IPs every 24 hours.
+     */
+    public static void resetServer() {
+        // we reset the IP-map every 24 hours.
+        if (getHour() - lastTimeWeReset >= 24) {
+            // reset
+            lastTimeWeReset = getHour();
+            clients.clear();
+        }
+    }
+
+    public static void startServer(String[] args, Logger logger) {
         Namespace parseResults;
 
         try {
-             parseResults = argumentParser.parseArgs(args);
+            parseResults = argumentParser.parseArgs(args);
         } catch (HelpScreenException ex) {
             return;
         } catch (ArgumentParserException ex) {
@@ -60,36 +96,59 @@ public class MainServer {
 
         port(parseResults.getInt("port"));
 
-        AnnotatorService pipeline = null;
-        try {
-            logger.info("Starting to load the pipeline . . . ");
-            printMemoryDetails();
-            ResourceManager rm = new PipelineConfigurator().getDefaultConfig();
-            pipeline = PipelineFactory.buildPipeline(rm);
-            logger.info("Done with loading the pipeline  . . .");
-            printMemoryDetails();
-        } catch (IOException | AnnotatorException e) {
-            e.printStackTrace();
+        // create a hashmap to keep track of client ip addresses and their
+        int rate = parseResults.getInt("rate");
+        if( rate > 0) {
+            clients = new HashMap<String, Integer>();
         }
 
         AnnotatorService finalPipeline = pipeline;
         get("/annotate", "application/json", (request, response)->{
             logger.info("GET request . . . ");
-            logger.info( "request.body(): " + request.body());
-            String text = request.queryParams("text");
-            String views = request.queryParams("views");
-            return annotateText(finalPipeline, text, views);
+            boolean canServe = true;
+            if(rate > 0) {
+                resetServer();
+                String ip = request.ip();
+                int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                if( callsSofar > rate ) canServe = false;
+                clients.put(ip, callsSofar + 1);
+            }
+            if(canServe) {
+                logger.info("request.body(): " + request.body());
+                String text = request.queryParams("text");
+                String views = request.queryParams("views");
+                return annotateText(finalPipeline, text, views, logger);
+            }
+            else {
+                response.status(429);
+                return "You have reached your maximum daily query limit :-/ ";
+            }
         });
 
-        post("/annotate", (request, response) -> {
-                logger.info("POST request . . . ");
-                logger.info( "request.body(): " + request.body());
-                Map<String, String> map = splitQuery(request.body());
-                System.out.println("POST body parameters parsed: " + map);
-                String text = map.get("text");
-                String views = map.get("views");
-                return annotateText(finalPipeline, text, views);
-            }
+        post("/annotate", (request, response) ->
+                {
+                    logger.info("POST request . . . ");
+                    boolean canServe = true;
+                    if(rate > 0) {
+                        resetServer();
+                        String ip = request.ip();
+                        int callsSofar = (Integer) clients.getOrDefault(ip, 0);
+                        if( callsSofar > rate ) canServe = false;
+                        clients.put(ip, callsSofar + 1);
+                    }
+                    if(canServe) {
+                        logger.info( "request.body(): " + request.body());
+                        Map<String, String> map = splitQuery(request.body());
+                        System.out.println("POST body parameters parsed: " + map);
+                        String text = map.get("text");
+                        String views = map.get("views");
+                        return annotateText(finalPipeline, text, views, logger);
+                    }
+                    else {
+                        response.status(429);
+                        return "You have reached your maximum daily query limit :-/ ";
+                    }
+                }
         );
 
         // api to get name of the available views
@@ -98,13 +157,25 @@ public class MainServer {
             viewsString += ", " + view;
         }
         String finalViewsString = viewsString;
+
+        enableCORS("*", "*", "*");
+
         get("/viewNames", (req, res) -> finalViewsString);
 
         post("/viewNames", (req, res) -> finalViewsString);
     }
 
-    private static String annotateText(AnnotatorService finalPipeline, String text, String views)
-            throws AnnotatorException {
+    public static double getHour() {
+        return System.currentTimeMillis() / (1000.0 * 3600);
+    }
+
+    public static void main(String[] args) {
+        setPipeline(logger);
+        startServer(args, logger);
+    }
+
+    private static String annotateText(AnnotatorService finalPipeline, String text, String views,
+            Logger logger) throws AnnotatorException {
         if (views == null || text == null) {
             return "The parameters 'text' and/or 'views' are not specified. Here is a sample input:  \n ?text=\"This is a sample sentence. I'm happy.\"&views=POS,NER";
         } else {
@@ -118,11 +189,10 @@ public class MainServer {
                 logger.info("Adding the view: ->" + vuName.trim() + "<-");
                 try {
                     finalPipeline.addView(ta, vuName.trim());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                printMemoryDetails();
+                printMemoryDetails(logger);
             }
             logger.info("Done adding the views. Deserializing the view now.");
             String output = SerializationHelper.serializeToJson(ta);
@@ -131,7 +201,15 @@ public class MainServer {
         }
     }
 
-    public static void printMemoryDetails() {
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        before((Filter) (request, response) -> {
+            response.header("Access-Control-Allow-Origin", origin);
+            response.header("Access-Control-Request-Method", methods);
+            response.header("Access-Control-Allow-Headers", headers);
+        });
+    }
+
+    public static void printMemoryDetails(Logger logger) {
         int mb = 1024 * 1024;
 
         // Getting the runtime reference from system
@@ -155,7 +233,8 @@ public class MainServer {
         String[] pairs = query.split("&");
         for (String pair : pairs) {
             int idx = pair.indexOf("=");
-            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
+            query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"),
+                    URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
         }
         return query_pairs;
     }

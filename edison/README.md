@@ -1,6 +1,6 @@
-# Illinois Edison
+# Cogcomp Edison
 
-*Edison* is a feature extraction framework that uses the data structures of [illinois-core-utilities](../core-utilities/README.md)
+*Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.
 We can define functions for feature extraction that use the tokens and one or more views. 
 This enables us to not only develop feature sets like words, n-grams, paths in parse trees, which work with a single view, 

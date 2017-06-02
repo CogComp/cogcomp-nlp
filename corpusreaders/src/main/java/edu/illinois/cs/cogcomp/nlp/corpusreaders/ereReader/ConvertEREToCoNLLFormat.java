@@ -12,7 +12,10 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+
+import static edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader.*;
 
 /**
  * Read the ERE data and produce, in CoNLL format, gold standard data including named and nominal
@@ -32,14 +35,19 @@ public class ConvertEREToCoNLLFormat {
      */
     public static void main(String[] args) throws Exception {
 
-        if (args.length != 3) {
-            System.err.println("Usage: " + NAME + " corpusDir includeNominals<true|false> outDir");
+        if (args.length != 5) {
+            System.err.println("Usage: " + NAME + " ERECorpusVal corpusRoot includeNominals<true|false> outDir\n\nSee " +
+            "module README or ERECorpusReader.EreCorpus enumeration for possible values.");
             System.exit(-1);
         }
 
-        final String corpusDir = args[0];
-        final boolean includeNominals = Boolean.parseBoolean(args[1]);
-        final String conllDir = args[2];
+        final String ereCorpusVal = args[0];
+        final String corpusRoot = args[1];
+
+        final boolean includeNominals = Boolean.parseBoolean(args[2]);
+
+        final String conllDir = args[3];
+
 
         if (IOUtils.exists(conllDir))
             if (!IOUtils.isDirectory(conllDir)) {
@@ -49,11 +57,14 @@ public class ConvertEREToCoNLLFormat {
             } else
                 IOUtils.mkdir(conllDir);
 
-        ERENerReader reader = new ERENerReader("ERE NER", corpusDir, includeNominals);
+        boolean throwExceptionOnXmlTagMismatch = true;
+        ERENerReader reader =
+                new ERENerReader(EreCorpus.valueOf(ereCorpusVal), corpusRoot, throwExceptionOnXmlTagMismatch, includeNominals, includeNominals);
 
         while (reader.hasNext()) {
-            TextAnnotation ta = reader.next();
-            View nerView = ta.getView(reader.getViewName());
+            XmlTextAnnotation xmlTa = reader.next();
+            TextAnnotation ta = xmlTa.getTextAnnotation();
+            View nerView = ta.getView(reader.getMentionViewName());
             CoNLL2002Writer.writeViewInCoNLL2003Format(nerView, ta,
                     conllDir + "/" + ta.getCorpusId() + ".txt");
         }

@@ -1,19 +1,16 @@
 package edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
@@ -22,6 +19,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
+import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor.SpanInfo;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.CoNLL2002Writer;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterator;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils.DocumentIterator.Language;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
@@ -34,75 +33,41 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
  * @author redman
  */
 public class ConvertOntonotesToColumn {
-    /**
-     * a structure to store span information: label, offsets, attributes (including value offsets)
-     */
-    static class SpanInfo {
+    static final private Set<String> tagsWithText = new HashSet<>();
+    static final private Set<String> dropTags = new HashSet<>();
 
-        /** the label of the named entity. */
-        public final String label;
-        
-        /** the start and end of the span. */
-        public final IntPair spanOffsets;
-        
-        /** the attributes taken from the xml tag. */
-        public final Map<String, Pair<String, IntPair>> attributes;
-
-        /**
-         * need the label, start and end, and the attributes.
-         * @param label the named entity label.
-         * @param spanOffsets the offsets.
-         * @param attributes the xml tag attributes.
-         */
-        public SpanInfo(String label, IntPair spanOffsets, Map<String, Pair<String, IntPair>> attributes ) {
-            this.label = label;
-            this.spanOffsets = spanOffsets;
-            this.attributes = attributes;
-        }
+    // define the attributes we want to keep for the tags we have.
+    static final private Map<String, Set<String>> tagsWithAtts = new HashMap<>();
+    static {
+        Set<String> docAttrs = new HashSet<>();
+        docAttrs.add("docno");
+        tagsWithAtts.put("doc", docAttrs);
+        Set<String> nameAttrs = new HashSet<>();
+        nameAttrs.add("type");
+        tagsWithAtts.put("enamex", nameAttrs);
     }
 
-    static public void main2(String[] args) throws FileNotFoundException {
-        
-        String inFile = "/shared/corpora/corporaWeb/multi-mode/multi/ontonotes-release-5.0/data/files/data/english/annotations/nw/wsj/00/wsj_0061.name";
-        // make sure the output directory exists.
- 
-        // "en"
-        int counter = 0;
-        long start = System.currentTimeMillis();
- 
-        // define all tags with text.
-        Set<String> tagsWithText = new HashSet<>();
- 
-        // define the attributes we want to keep for the tags we have.
-        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-        {
-            Set<String> docAttrs = new HashSet<>();
-            docAttrs.add("docno");
-            tagsWithAtts.put("doc", docAttrs);
-        }
-        {
-            Set<String> nameAttrs = new HashSet<>();
-            nameAttrs.add("type");
-            tagsWithAtts.put("enamex", nameAttrs);
-        }
- 
-        boolean throwExceptionOnXmlParseFail = true;
+    /**
+     * read the file indicated by the argument which is the file name, and path.
+     * @param document the data read from the file.
+     * @return the XmlTextAnnotation containing the text annotation, and xml markup offset data.
+     * @throws IOException 
+     */
+    static private XmlTextAnnotation getNameTextAnnotation(File file) throws IOException {
+        String document = LineIO.slurp(file.getCanonicalPath());
         // we keep everything.
-        Set<String> dropTags = new HashSet<>();
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, dropTags);
+        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, dropTags, true);
         StatefulTokenizer st = new StatefulTokenizer();
         TokenizerTextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(st);
         XmlTextAnnotationMaker xtam = new XmlTextAnnotationMaker(taBuilder, xmlProcessor);
  
-        String document = LineIO.slurp(inFile);
+        // read the file and create the annotation.
         XmlTextAnnotation xta = xtam.createTextAnnotation(document, "OntoNotes 5.0", "test");
         TextAnnotation ta = xta.getTextAnnotation();
-        List<SpanInfo> fudge = getSpanInfos(xta);
-        //List<XmlDocumentProcessor.SpanInfo> fudge = xta.getXmlMarkup();
-        System.out.println(ta + "\n");
+        List<SpanInfo> fudge = xta.getXmlMarkup();
  
+        // create the named entity vi
         View nerView = new SpanLabelView(ViewNames.NER_ONTONOTES, ta);
-        String cleanText = ta.getText();
         for (SpanInfo si : fudge) {
             if ("enamex".equalsIgnoreCase(si.label)) {
  
@@ -110,28 +75,16 @@ public class ConvertOntonotesToColumn {
                 String neLabel = si.attributes.get("type").getFirst();
                 int cleanTextCharStart = xta.getXmlSt().computeModifiedOffsetFromOriginal(charOffsets.getFirst());
                 int cleanTextCharEnd = xta.getXmlSt().computeModifiedOffsetFromOriginal(charOffsets.getSecond());
-                System.err.println("ne string: '" + cleanText.substring(cleanTextCharStart, cleanTextCharEnd) + "'");
                 int cleanTextNeTokStart = ta.getTokenIdFromCharacterOffset(cleanTextCharStart);
                 int cleanTextNeTokEnd = ta.getTokenIdFromCharacterOffset(cleanTextCharEnd-1); // StringTransformation returns one-past-the-end index; TextAnnotation maps at-the-end index
                 Constituent neCon = new Constituent(neLabel, nerView.getViewName(), ta, cleanTextNeTokStart, cleanTextNeTokEnd + 1); //constituent token indexing uses one-past-the-end
                 nerView.addConstituent(neCon);
             }
-            counter++;
-            System.out.println("Read " + counter + " documents in " + (System.currentTimeMillis() - start));
-            System.out.println(nerView.toString());
         }
+        ta.addView(ViewNames.NER_ONTONOTES, nerView);
+        return xta;
     }
     
-	private static List<SpanInfo> getSpanInfos(XmlTextAnnotation xta) {
-	    ArrayList<SpanInfo> spans = new ArrayList<>();
-        Map<IntPair, Map<String, String>> fudge = xta.getXmlMarkup();
-        for (Entry<IntPair, Map<String, String>> entry : fudge.entrySet()) {
-            IntPair loc = entry.getKey();
-            Map<String, String> attributes = entry.getValue();
-            SpanInfo si = new SpanInfo(attributes.get("type"), )
-        }
-        return null;
-    }
     /**
 	 * This is used primarily for quick testing. The bulk of this should be used as a
 	 * starting point for a unit test, question is can we include some of the files for
@@ -184,44 +137,24 @@ public class ConvertOntonotesToColumn {
 			f.mkdirs();
 		}
 		
+		// make sure there is a file separator.
+		if (!outputdir.endsWith(File.separator))
+		    outputdir += File.separator;
+		
 		// "en"
 		DocumentIterator di = new DocumentIterator(topdir, language, kind);
 		int counter = 0;
 		long start = System.currentTimeMillis();
-		
-		// define all tags with text.
-		Set <String> tagsWithText = new HashSet<>();
-        
-        // define the attributes we want to keep for the tags we have.
-        Map<String, Set<String>> tagsWithAtts = new HashMap<>();
-        {
-            Set <String> docAttrs = new HashSet<>();
-            docAttrs.add("docno");
-            tagsWithAtts.put("doc", docAttrs);
+        while (di.hasNext()) {
+            File document = di.next();
+            TextAnnotation ta = getNameTextAnnotation(document).getTextAnnotation();
+            String path = document.getAbsolutePath();
+            path = outputdir+path.substring(topdir.length());
+            path += ".conll";
+            System.out.println(counter+":"+path);
+            CoNLL2002Writer.writeViewInCoNLL2003Format(ta.getView(ViewNames.NER_ONTONOTES), ta, path);
+            counter++;
         }
-        {
-            Set <String> nameAttrs = new HashSet<>();
-            nameAttrs.add("type");
-            tagsWithAtts.put("enamex", nameAttrs);
-        }
-        
-        // we keep everything.
-        Set <String> dropTags = new HashSet<>();
-		XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(tagsWithText, tagsWithAtts, dropTags);
-		StatefulTokenizer st = new StatefulTokenizer();
-		TokenizerTextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(st);
-		XmlTextAnnotationMaker xtam = new XmlTextAnnotationMaker(taBuilder, xmlProcessor);
-		while (di.hasNext()) {
-		    String docId = di.documentId();
-			String document = di.next();
-			XmlTextAnnotation xta = xtam.createTextAnnotation(document, "OntoNotes 5.0", docId);
-			TextAnnotation ta = xta.getTextAnnotation();
-			Map<IntPair, Map<String, String>> fudge = xta.getXmlMarkup();
-            System.out.println(ta+"\n");
-			System.out.println(fudge);
-			counter++;
-		}
-		long end = System.currentTimeMillis();
 		System.out.println("Read "+counter+" documents in "+(System.currentTimeMillis()-start));
 	}
 }

@@ -2,8 +2,6 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders.ontonotes.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,7 +12,7 @@ import java.util.Iterator;
  * assuming the same hierarchical structure as the official OntoNotes distribution. 
  * @author redman
  */
-public class DocumentIterator implements Iterator<String> {
+public class DocumentIterator implements Iterator<File> {
     /**
      * available languages.
      * @author redman
@@ -138,41 +136,22 @@ public class DocumentIterator implements Iterator<String> {
 	    }
 	}
 	
-	/**
-	 * Read file into a string and return that.
-	 */
-	private String readDocument(File fileToRead) throws IOException {
-	    return new String(Files.readAllBytes(Paths.get(fileToRead.toString())));
-	}
-
 	@Override
 	public boolean hasNext() {
 		return which < documents.size();
 	}
-
-	/**
-	 * Get the document name, note this is the "next" document after we call the next() method.
-	 * @return documentid the document name.
-	 */
-	public String documentId() {
-	    return documents.get(which).getName();
-	}
+	
 	/**
 	 * This method fetches the next file, if there is an IO error, it will
 	 * throw an IllegalArgumentException.
 	 */
 	@Override
-	public String next() throws IllegalArgumentException {
+	public File next() throws IllegalArgumentException {
 		if (!hasNext())
 			return null;
-		String next;
-        try {
-            next = readDocument(documents.get(which));
-            which++;
-            return next;
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Could not read the file",e);
-        }
+		File next = documents.get(which);
+        which++;
+        return next;
 	}
 	
 	/**

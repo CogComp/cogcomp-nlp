@@ -1,5 +1,4 @@
-# Illinois NER Tagger
-====================
+# Cogcomp NER Tagger
 
 This is a state of the art NER tagger that tags plain text with named entities. 
 The newest version tags entities with either the "classic" 4-label type set 
@@ -7,18 +6,13 @@ The newest version tags entities with either the "classic" 4-label type set
 18-label type set (based on the OntoNotes corpus). It uses gazetteers extracted from Wikipedia, word class models 
 derived from unlabeled text, and expressive non-local features.
 
-## Licensing
-To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
-and press 'Download'. The next screen displays the license. 
-
-
 ## Quickstart
 
 This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
 
 ### Using the Menu Driven Command Line Application
 
-IllinoisNER now includes a powerful menu driven command line application. This application provides users a flexible environment
+CogcompNER now includes a powerful menu driven command line application. This application provides users a flexible environment
 supporting applications ranging from simple evaluation to complex bulk tagging. The configuration file must be passed in on the command
 line, although there is the option to modify the confiruation during at runtime.
 
@@ -111,7 +105,7 @@ import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
-import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.*;
 import java.io.IOException;
 
@@ -131,14 +125,14 @@ public class App
         // Create a TextAnnotation using the LBJ sentence splitter
         // and tokenizers.
         TextAnnotationBuilder tab;
-        tab = new TokenizerTextAnnotationBuilder(new IllinoisTokenizer());
+        // don't split on hyphens, as NER models are trained this way
+        boolean splitOnHyphens = false;
+        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.doInitialize();
-
-        co.addView(ta);
+        co.getView(ta);
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -152,7 +146,7 @@ $ javac -cp "dist/*:lib/*:models/*" App.java
 $ java -cp "dist/*:lib/*:models/*:." App
 ```
 
-If you have Maven installed,  you can easily incorporate the Illinois Named Entity Recognizer into
+If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
 your Maven project by adding the following dependencies to your pom.xml file:
 
 ```xml
@@ -166,7 +160,7 @@ your Maven project by adding the following dependencies to your pom.xml file:
 ### Configuration
 NER has numerous parameters that can be tuned during training and/or which 
 affect memory footprint and performance at runtime. These flags and default
-values can be found in the classes in package edu.illinois.cs.cogcomp.ner.config.
+values can be found in the classes in package `edu.illinois.cs.cogcomp.ner.config`.
 
 By default, NER components use contextual features in a fairly large
 context window, and so its "isSentenceLevel" parameter is set to "false".
@@ -178,7 +172,7 @@ sophisticated features that depend on deeper levels of NLP processing
 
 ### PREREQUISITES
 
-- Java 1.7+ (see [here](https://www.java.com/en/download/help/download_options.xml)).
+- Java 1.8+ (see [here](https://www.java.com/en/download/help/download_options.xml)).
 - Maven 3 (see [here](http://maven.apache.org/download.cgi))
 - If you are running it on Windows, you may need to set path variables
 (see [here](http://docs.oracle.com/javase/tutorial/essential/environment/paths.html)).
@@ -214,7 +208,7 @@ For this section, we will assume you use Maven, and have compiled the code, and 
 The example script [train.sh](scripts/train.sh) trains a model like this:
 
 ```bash
-$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train <training-file> <development-set-file> <files-format> <config-file>
+$ java -Xmx8g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train <training-file> <development-set-file> <files-format> <config-file>
 ```
 
 Where the parameters are:
@@ -232,7 +226,7 @@ Complete, working example. Before running this, open [`config/ner.properties`](c
 something else (for example, `ner/mymodels`). This will prevent it from attempting to overwrite the jar.
 
 ```bash
-$ java -Xmx4g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt config/ner.properties
+$ java -Xmx8g -cp target/classes:target/dependency/* edu.illinois.cs.cogcomp.ner.NerTagger -train test/Test/0224.txt test/Test/0228.txt config/ner.properties
 ```
 
 (This is is just dummy data, so it gives a score of about 12 F1).
@@ -277,7 +271,11 @@ marked with an empty line, which is not the case for "brackets format".
 
 See the files in [test/Test/](test/Test/) for sample column format.
 
-##Citation
+## Licensing
+To see the full license for this software, see [LICENSE](../master/LICENSE) or visit the [download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger) for this software
+and press 'Download'. The next screen displays the license. 
+
+## Citation
 
 L. Ratinov and D. Roth, Design Challenges and Misconceptions in Named Entity Recognition. CoNLL (2009) pp.
 

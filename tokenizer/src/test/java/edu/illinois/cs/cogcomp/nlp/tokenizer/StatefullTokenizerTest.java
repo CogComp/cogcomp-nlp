@@ -289,10 +289,8 @@ public class StatefullTokenizerTest {
     @Test
     public void testSplitOnDash() {
         Tokenizer tkr = new StatefulTokenizer();
-        String text = "IAEA Director-General Mohamed ElBaradei";
+        String text = "IAEA Director-General Mohamed ElBaradei ";
         Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
-        for (String token : tknzn.getTokens())
-            System.out.println("token : "+token);
         assertEquals(tknzn.getTokens().length, 6);
     }
     
@@ -320,4 +318,14 @@ public class StatefullTokenizerTest {
 
     }
 
+    @Test
+    public void testSplitPeriodEnd() {
+        Tokenizer tkr = new StatefulTokenizer(false);
+        String text = "You see always, oh we're going to do this, we're going to--. ";
+        Tokenizer.Tokenization tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 17);
+        tkr = new StatefulTokenizer(true);
+        tknzn = tkr.tokenizeTextSpan(text);
+        assertEquals(tknzn.getTokens().length, 18);
+    }
 }

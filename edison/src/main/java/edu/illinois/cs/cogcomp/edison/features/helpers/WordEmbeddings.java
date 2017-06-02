@@ -60,13 +60,11 @@ public class WordEmbeddings {
         }
     }
 
-
     public static List<Boolean> isLowercasedEmbeddingByResource = null;
     public static List<String> resources = null;
     public static List<Integer> embeddingDimensionalities = null;
     public static int dimensionalitiesSum = 0;
     public static List<HashMap<String, double[]>> embeddingByResource = null;
-
 
     public static void initWithDefaults() throws IOException {
         ResourceManager rm = (new WordEmbeddingsConfigurator()).getDefaultConfig();
@@ -83,11 +81,9 @@ public class WordEmbeddings {
         List<Boolean> isLowercasedEmbedding = new LinkedList<>();
         isLowercasedEmbedding.add(rm.getBoolean(WordEmbeddingsConfigurator.isLowercase.key));
 
-
         List<Double> normalizationConstant = new LinkedList<>();
         normalizationConstant.add(rm
                 .getDouble(WordEmbeddingsConfigurator.normalizationConstants.key));
-
 
         List<NormalizationMethod> normalizationMethods = new LinkedList<>();
         normalizationMethods.add(NormalizationMethod.valueOf(rm

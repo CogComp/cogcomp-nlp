@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.0.106</version>
+        <version>3.1.18</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,33 +24,39 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.0.106</version>
+            <version>3.1.18</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.0.106</version>
+            <version>3.1.18</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.cogcomp</groupId>
+            <artifactId>cogcomp-datastore</artifactId>
+            <version>1.9.7</version>
+        </dependency>
+
+        <!--Daniel: the resources commented out because we load them programmatically now. -->
         <!-- Contains the gazetteers and Brown clusters -->
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>brown-clusters</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>gazetteers</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
-	    <dependency>
-	        <groupId>edu.illinois.cs.cogcomp.resources</groupId>
-	        <artifactId>wordEmbedding</artifactId>
-	        <version>1.5</version>
-	        <scope>runtime</scope>
-	    </dependency>
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>brown-clusters</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>gazetteers</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
+	    <!--<dependency>-->
+	        <!--<groupId>edu.illinois.cs.cogcomp.resources</groupId>-->
+	        <!--<artifactId>wordEmbedding</artifactId>-->
+	        <!--<version>1.5</version>-->
+	        <!--<scope>runtime</scope>-->
+	    <!--</dependency>-->
         <!--  LBJava stuff.  -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -60,8 +66,9 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>3.0.106</version>
+            <version>3.1.18</version>
         </dependency>
+
 
         <!-- models: you need to use/specify a new path to avoid using these -->
         <dependency>
@@ -76,7 +83,13 @@
             <version>3.0</version>
             <classifier>OntoNotes</classifier>
         </dependency>
-        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+            <optional>true</optional>
+        </dependency>
+
         <!-- Non-Illinois packages -->
         <dependency>
             <groupId>org.apache.commons</groupId>

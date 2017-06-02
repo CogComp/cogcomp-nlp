@@ -29,10 +29,6 @@ import org.slf4j.LoggerFactory;
 public class TestParseViewGenerator {
     private static Logger logger = LoggerFactory.getLogger(TestParseViewGenerator.class);
 
-//    protected void setUp() throws Exception {
-//        super.setUp();
-//    }
-
     @Test
     public final void testCharniakParseViewGenerator() {
         String sentence = "This is a test .";

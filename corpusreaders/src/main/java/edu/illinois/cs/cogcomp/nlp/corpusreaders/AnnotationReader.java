@@ -13,25 +13,23 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 /**
- * A fairly generic iterator that generates TextAnnotation objects from some input source.
+ * A fairly generic iterator that generates some kind of Annotation objects from some input source.
  *
  * @author Vivek Srikumar
- *         <p>
- *         Sep 4, 2009
  * @author mssammon
  */
-public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
-        IResetableIterator<TextAnnotation> {
+public abstract class AnnotationReader<T> implements Iterable<T>,
+        IResetableIterator<T> {
 
-    private static Logger log = LoggerFactory.getLogger(TextAnnotationReader.class);
+    private static Logger log = LoggerFactory.getLogger(AnnotationReader.class);
 
     protected final String corpusName;
     protected final ResourceManager resourceManager;
     protected int currentAnnotationId;
+
 
     /**
      * ResourceManager must provide a value for {@link CorpusReaderConfigurator}.CORPUS_NAME, plus
@@ -39,12 +37,13 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
      * 
      * @param rm ResourceManager with constructor arguments.
      */
-    public TextAnnotationReader(ResourceManager rm) {
+    public AnnotationReader(ResourceManager rm) {
         this.resourceManager = rm;
         this.corpusName = rm.getString(CorpusReaderConfigurator.CORPUS_NAME.key);
         initializeReader();
         reset();
     }
+
 
     /**
      * called by constructor to perform subclass-specific initialization.
@@ -59,24 +58,25 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
         this.currentAnnotationId = 0;
     }
 
-    public Iterator<TextAnnotation> iterator() {
+
+    public Iterator<T> iterator() {
         return this;
     }
 
-    public TextAnnotation next() {
-        try {
-            TextAnnotation ta = makeTextAnnotation();
-            currentAnnotationId++;
 
-            return ta;
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("Error creating TextAnnotation", e);
-            return null;
-        }
-    }
+    /**
+     * is there another annotation object to return?
+     * @return 'true' if there is at least one more annotation, 'false' otherwise
+     */
+    public abstract boolean hasNext();
 
-    protected abstract TextAnnotation makeTextAnnotation() throws Exception;
+
+    /**
+     * return the next annotation object. Don't forget to increment currentAnnotationId.
+     * @return an annotation object.
+     */
+    public abstract T next();
+
 
     /**
      * @throws {@link UnsupportedOperationException} to let user know nothing happens.
@@ -90,7 +90,6 @@ public abstract class TextAnnotationReader implements Iterable<TextAnnotation>,
      * generate a human-readable report of annotations read from the source file (plus whatever
      * other relevant statistics the user should know about).
      */
-
     abstract public String generateReport();
 
 }
