@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
  * This class will read NER data from the OntoNotes 5.0 corpora stored in it's SQL representation 
  * in a mySQL database and produce a TextAnnotation containing the sentences, tokens and NER view.
  * @author redman
+ * @deprecated we have decided NOT to use the database version of the OntoNotes 5.0 corpora, just too shoddy.
  */
 public class NERViewGenerator {
 
@@ -61,10 +62,12 @@ public class NERViewGenerator {
 		String s = workspace.toString();
 		return s;
 	}
+	
 	/**
-	 * get the text annotation for a single document.
+	 * get the text annotation for a single document containing the tokenization and the NER view.
 	 * @param con the connection.
 	 * @param documentId the document id.
+	 * @return the text annotation containing the NER view.
 	 * @throws SQLException 
 	 */
 	static public TextAnnotation getTextAnnotation(Connection con, String documentId) throws SQLException {
@@ -152,11 +155,10 @@ public class NERViewGenerator {
 	 * This is used primarily for quick testing. The bulk of this should be used as a
 	 * starting point for a unit test, question is can we include some of the files for
 	 * the test in the code repository?
-	 * @param args
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	static public void main(String[] args) throws ClassNotFoundException, SQLException {
+    static public void main(String[] args) throws ClassNotFoundException, SQLException {
 		String document = "bc/cctv/00/cctv_0000@0000@cctv@bc@en@on";
 		Connection con = getConnection("jdbc:mysql://localhost:3306/ontonotes", "cline","~reallyhard~");
 		TextAnnotation ta = getTextAnnotation(con, document);

@@ -22,10 +22,9 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CorpusSplitConfigur
  * class will traverse a directory distributing what data it finds into a test, train and
  * dev set sequentially. The resulting data will be split across a test train and dev directory
  * within an output directory provided on the command line. The split configuration is determined
- * by the {@see CorpusSplitConfigurator}.
+ * by the {@link edu.illinois.cs.cogcomp.nlp.corpusreaders.corpusutils.CorpusSplitConfigurator}.
  * @author redman
  */
-
 public class CreateTrainDevTestSplit {
 
     /** the text set. */
