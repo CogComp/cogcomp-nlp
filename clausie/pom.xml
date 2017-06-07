@@ -29,6 +29,12 @@
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
             <version>3.1.20</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>edu.illinois.cs.cogcomp</groupId>
+                    <artifactId>stanford_3.3.1</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
