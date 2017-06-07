@@ -25,5 +25,10 @@
             <artifactId>illinois-core-utilities</artifactId>
             <version>3.1.20</version>
         </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-nlp-pipeline</artifactId>
+            <version>3.1.20</version>
+        </dependency>
     </dependencies>
 </project>

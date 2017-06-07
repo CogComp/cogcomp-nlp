@@ -24,7 +24,7 @@ public class ClausIEAnnotator extends Annotator {
     private ClausIE clausIE = new ClausIE();
 
     public ClausIEAnnotator() {
-        super("CLAUSIE", new String[]{ViewNames.SENTENCE});
+        super("CLAUSIE", new String[]{ViewNames.SENTENCE}, true);
     }
 
     @Override
