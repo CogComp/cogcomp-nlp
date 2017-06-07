@@ -39,64 +39,6 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
         this.tokenizer = tokenizer;
     }
 
-
-    @Override
-    public String getName() {
-        return NAME;
-    }
-
-    /**
-     * create a TextAnnotation for the text argument, using the Tokenizer provided at construction.
-     * The text should be free from html/xml tags and non-English characters, assuming you want to
-     * process this text with other NLP components.
-     *
-     * @param text the text to build the TextAnnotation
-     * @return a TextAnnotation object with {@link ViewNames#SENTENCE} and {@link ViewNames#TOKENS}
-     *         views and default corpus id and text id fields.
-     * @throws IllegalArgumentException if the tokenizer has problems processing the text.
-     */
-    @Override
-    public TextAnnotation createTextAnnotation(String text) throws IllegalArgumentException {
-        return createTextAnnotation(DEFAULT_CORPUS_ID, DEFAULT_TEXT_ID, text);
-    }
-
-
-
-    /**
-     * Tokenize the input text (split into sentences and "words" within sentences) and populate a
-     * TextAnnotation object. Specifies token character offsets with respect to original text. Input
-     * text should be English and avoid html and xml tags, and non-English characters may cause
-     * problems if you use the TextAnnotation as input to other NLP components.
-     *
-     * @param corpusId a field in TextAnnotation that can be used by the client for book-keeping
-     *        (e.g. track texts from the same corpus)
-     * @param textId a field in TextAnnotation that can be used by the client for book-keeping (e.g.
-     *        identify a specific document by some reference string)
-     * @param text the plain English text to process
-     * @return a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE}
-     *         views.
-     * @throws IllegalArgumentException if the tokenizer has problems with the input text.
-     */
-    @Override
-    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text)
-            throws IllegalArgumentException {
-        Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan(text);
-        return new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
-                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
-    }
-
-    /**
-     * A stub method that <b>should not</b> be called with this Builder. Please use
-     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder} if you need to create
-     * {@link TextAnnotation} from pre-tokenized text.
-     */
-    @Override
-    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text,
-            Tokenizer.Tokenization tokenization) throws IllegalArgumentException {
-        throw new IllegalArgumentException(
-                "Cannot create annotation from tokenized text using TokenizerTextAnnotationBuilder");
-    }
-
     /**
      * instantiate a TextAnnotation using a SentenceViewGenerator to create an explicit Sentence
      * view
@@ -154,6 +96,71 @@ public class TokenizerTextAnnotationBuilder implements TextAnnotationBuilder {
         return ta;
     }
 
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+    /**
+     * create a TextAnnotation for the text argument, using the Tokenizer provided at construction.
+     * The text should be free from html/xml tags and non-English characters, assuming you want to
+     * process this text with other NLP components.
+     *
+     * @param text the text to build the TextAnnotation
+     * @return a TextAnnotation object with {@link ViewNames#SENTENCE} and {@link ViewNames#TOKENS}
+     *         views and default corpus id and text id fields.
+     * @throws IllegalArgumentException if the tokenizer has problems processing the text.
+     */
+    @Override
+    public TextAnnotation createTextAnnotation(String text) throws IllegalArgumentException {
+        return createTextAnnotation(DEFAULT_CORPUS_ID, DEFAULT_TEXT_ID, text);
+    }
+
+    /**
+     * Tokenize the input text (split into sentences and "words" within sentences) and populate a
+     * TextAnnotation object. Specifies token character offsets with respect to original text. Input
+     * text should be English and avoid html and xml tags, and non-English characters may cause
+     * problems if you use the TextAnnotation as input to other NLP components.
+     *
+     * @param corpusId a field in TextAnnotation that can be used by the client for book-keeping
+     *        (e.g. track texts from the same corpus)
+     * @param textId a field in TextAnnotation that can be used by the client for book-keeping (e.g.
+     *        identify a specific document by some reference string)
+     * @param text the plain English text to process
+     * @return a TextAnnotation object with {@link ViewNames#TOKENS} and {@link ViewNames#SENTENCE}
+     *         views.
+     * @throws IllegalArgumentException if the tokenizer has problems with the input text.
+     */
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text)
+            throws IllegalArgumentException {
+        Tokenizer.Tokenization tokenization = tokenizer.tokenizeTextSpan(text);
+        TextAnnotation ta = new TextAnnotation(corpusId, textId, text, tokenization.getCharacterOffsets(),
+                tokenization.getTokens(), tokenization.getSentenceEndTokenIndexes());
+        SpanLabelView view =
+                new SpanLabelView(ViewNames.SENTENCE, NAME, ta, 1.0);
+
+        int start = 0;
+        for (int s : tokenization.getSentenceEndTokenIndexes()) {
+            view.addSpanLabel(start, s, ViewNames.SENTENCE, 1d);
+            start = s;
+        }
+        ta.addView(ViewNames.SENTENCE, view);
+
+        return ta;
+    }
+
+    /**
+     * A stub method that <b>should not</b> be called with this Builder. Please use
+     * {@link edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder} if you need to create
+     * {@link TextAnnotation} from pre-tokenized text.
+     */
+    @Override
+    public TextAnnotation createTextAnnotation(String corpusId, String textId, String text,
+            Tokenizer.Tokenization tokenization) throws IllegalArgumentException {
+        throw new IllegalArgumentException(
+                "Cannot create annotation from tokenized text using TokenizerTextAnnotationBuilder");
+    }
 
     /**
      * Create a new text annotation using the given text, the tokens and the sentence boundary
