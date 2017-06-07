@@ -38,6 +38,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
     public static final Property USE_SRL_PREP = new Property("usePrepSRL", FALSE);
     public static final Property USE_SRL_COMMA = new Property("useCommaSRL", FALSE);
     public static final Property USE_QUANTIFIER = new Property("useQuantifier", FALSE);
+    public static final Property USE_VERB_SENSE = new Property("useVerbSense", FALSE);
     public static final Property USE_JSON = new Property("useJson", FALSE);
     public static final Property USE_LAZY_INITIALIZATION = new Property(
             AnnotatorConfigurator.IS_LAZILY_INITIALIZED.key, TRUE);
@@ -72,7 +73,7 @@ public class PipelineConfigurator extends AnnotatorConfigurator {
         Property[] properties =
                 {USE_POS, USE_LEMMA, USE_SHALLOW_PARSE, USE_DEP, USE_NER_CONLL, USE_NER_ONTONOTES,
                         USE_STANFORD_PARSE, USE_STANFORD_DEP, USE_SRL_VERB, USE_SRL_NOM, USE_SRL_PREP, USE_SRL_COMMA,
-                        USE_QUANTIFIER, USE_JSON,
+                        USE_QUANTIFIER, USE_VERB_SENSE, USE_JSON,
                         USE_LAZY_INITIALIZATION, USE_SRL_INTERNAL_PREPROCESSOR, SPLIT_ON_DASH,
                         USE_SENTENCE_PIPELINE};
         return (new AnnotatorServiceConfigurator().getConfig(new ResourceManager(

@@ -29,6 +29,7 @@ import edu.illinois.cs.cogcomp.quant.driver.Quantifier;
 import edu.illinois.cs.cogcomp.srl.SemanticRoleLabeler;
 import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
 import edu.illinois.cs.cogcomp.srl.core.SRLType;
+import edu.illinois.cs.cogcomp.verbsense.VerbSenseAnnotator;
 import edu.stanford.nlp.pipeline.POSTaggerAnnotator;
 import edu.stanford.nlp.pipeline.ParserAnnotator;
 import org.slf4j.Logger;
@@ -106,6 +107,10 @@ public class PipelineFactory {
                         break;
                     case ViewNames.SRL_COMMA:
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_COMMA.key,
+                                Configurator.TRUE);
+                        break;
+                    case ViewNames.VERB_SENSE:
+                        nonDefaultValues.put(PipelineConfigurator.USE_VERB_SENSE.key,
                                 Configurator.TRUE);
                         break;
                     default:
@@ -335,6 +340,10 @@ public class PipelineFactory {
             viewGenerators.put(ViewNames.SRL_COMMA, commaLabeler);
         }
 
+        if(rm.getBoolean(PipelineConfigurator.USE_VERB_SENSE)) {
+            VerbSenseAnnotator verbSense = new VerbSenseAnnotator();
+            viewGenerators.put(ViewNames.VERB_SENSE, verbSense);
+        }
         return viewGenerators;
     }
 
