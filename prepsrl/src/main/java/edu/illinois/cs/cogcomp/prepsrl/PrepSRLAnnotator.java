@@ -9,11 +9,9 @@ package edu.illinois.cs.cogcomp.prepsrl;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TokenLabelView;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.depparse.DepConfigurator;
 import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
@@ -21,8 +19,7 @@ import edu.illinois.cs.cogcomp.lbjava.nlp.DataReader;
 import edu.illinois.cs.cogcomp.prepsrl.data.PrepSRLDataReader;
 import edu.illinois.cs.cogcomp.prepsrl.inference.ConstrainedPrepSRLClassifier;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * An {@link Annotator} that adds a {@link TokenLabelView} for Prepositional SRL. This consists of
@@ -81,12 +78,45 @@ public class PrepSRLAnnotator extends Annotator {
                 candidates.add(multiWordPrep);
         }
 
-        SpanLabelView prepositionLabelView = new SpanLabelView(viewName, viewName + "-annotator", ta, 1.0, true);
+        PredicateArgumentView prepositionLabelView = new PredicateArgumentView(viewName, viewName + "-annotator", ta, 1.0);
+
+
+        IQueryable<Constituent> chunkCons = ta.select(ViewNames.SHALLOW_PARSE);
         for (Constituent c : candidates) {
             String role = classifier.discreteValue(c);
-            if (!role.equals(DataReader.CANDIDATE))
-                prepositionLabelView.addSpanLabel(c.getStartSpan(), c.getEndSpan(), role, 1.0);
+            if (!role.equals(DataReader.CANDIDATE)) {
+                Constituent p = new Constituent(role, 1.0, viewName, ta, c.getStartSpan(), c.getEndSpan());
+
+                List<String> relations = new ArrayList<>();
+                List<Constituent> arguments = new ArrayList<>();
+
+                // adding source and target constituents from chunk view
+                IQueryable<Constituent> before = chunkCons.where(Queries.before(c));
+                before.orderBy((o1, o2) -> {
+                    // Descending order to find the nearest before
+                    return o2.getEndSpan() - o1.getEndSpan();
+                });
+                Iterator<Constituent> beforeIt = before.iterator();
+                if (beforeIt.hasNext()) {
+                    Constituent nearestBefore = beforeIt.next();
+                    arguments.add(nearestBefore);
+                    relations.add("Governer");
+                }
+
+                IQueryable<Constituent> after = chunkCons.where(Queries.after(c));
+                after.orderBy(Comparator.comparingInt(Constituent::getEndSpan));
+                Iterator<Constituent> afterIt = after.iterator();
+                if (afterIt.hasNext()) {
+                    Constituent nearestAfter = afterIt.next();
+                    arguments.add(nearestAfter);
+                    relations.add("Object");
+                }
+                double[] scores = new double[arguments.size()];
+                Arrays.fill(scores, 1.0);
+                prepositionLabelView.addPredicateArguments(p, arguments, relations.toArray(new String[relations.size()]), scores);
+            }
         }
+
         ta.addView(viewName, prepositionLabelView);
     }
 }

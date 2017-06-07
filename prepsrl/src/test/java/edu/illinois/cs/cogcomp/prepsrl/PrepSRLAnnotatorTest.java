@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.prepsrl;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -32,7 +33,7 @@ public class PrepSRLAnnotatorTest {
     public void testDummy() throws Exception {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 1);
         View view = annotator.getView(ta);
-        assertEquals("ObjectOfVerb", view.getConstituents().get(0).getLabel());
+        assertEquals("ObjectOfVerb", ((PredicateArgumentView)view).getPredicates().get(0).getLabel());
     }
 
     @Test
@@ -41,7 +42,7 @@ public class PrepSRLAnnotatorTest {
         TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(shortSentence);
         preprocessor.annotate(ta);
         View view = annotator.getView(ta);
-        assertEquals("Location", view.getConstituents().get(0).getLabel());
+        assertEquals("Location", ((PredicateArgumentView)view).getPredicates().get(0).getLabel());
     }
 
     @Test
@@ -52,8 +53,9 @@ public class PrepSRLAnnotatorTest {
                         + "traceable to a single defective gene .";
         TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(longSentence);
         preprocessor.annotate(ta);
-        View view = annotator.getView(ta);
-        assertEquals("Source", view.getConstituents().get(0).getLabel());
+        PredicateArgumentView view = (PredicateArgumentView)annotator.getView(ta);
+        assertEquals("Source", view.getPredicates().get(0).getLabel());
+        System.out.println(view);
     }
 
     @Test
@@ -64,6 +66,6 @@ public class PrepSRLAnnotatorTest {
         TextAnnotation ta = TextAnnotationUtilities.createFromTokenizedString(longSentence);
         preprocessor.annotate(ta);
         View view = annotator.getView(ta);
-        assertEquals("ahead of", view.getConstituents().get(0).getSurfaceForm());
+        assertEquals("ahead of", ((PredicateArgumentView)view).getPredicates().get(0).getSurfaceForm());
     }
 }
