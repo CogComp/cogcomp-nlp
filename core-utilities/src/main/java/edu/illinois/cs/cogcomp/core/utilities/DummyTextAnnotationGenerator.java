@@ -194,7 +194,7 @@ public class DummyTextAnnotationGenerator {
 
     private static String[] allPossibleViews = new String[] {ViewNames.POS, ViewNames.LEMMA,
             ViewNames.SHALLOW_PARSE, ViewNames.PARSE_GOLD, ViewNames.SRL_VERB, ViewNames.NER_CONLL,
-            ViewNames.PSEUDO_PARSE_STANFORD};
+            ViewNames.PSEUDO_PARSE_STANFORD, ViewNames.SENTENCE};
 
     /**
      * Generate a {@link TextAnnotation} (containing a set of {@link View}s specified in the input)
@@ -236,6 +236,14 @@ public class DummyTextAnnotationGenerator {
 
         for (String viewName : viewsToAdd) {
             switch (viewName) {
+                case ViewNames.SENTENCE:
+                    SpanLabelView sentView = new SpanLabelView(ViewNames.SENTENCE, ta);
+                    sentView.addConstituent(new Constituent("sent1", ViewNames.SENTENCE, ta, 0, pos1.length));
+                    sentView.addConstituent(new Constituent("sent2", ViewNames.SENTENCE, ta, pos1.length + 1, pos1.length + pos2.length));
+                    sentView.addConstituent(new Constituent("sent3", ViewNames.SENTENCE, ta, pos1.length + pos2.length + 1, pos1.length + pos2.length + pos3.length));
+                    System.out.println("inside sentView: number of constituents: " + sentView.getConstituents().size());
+                    ta.addView(ViewNames.SENTENCE, sentView);
+                    break;
                 case ViewNames.POS:
                     TokenLabelView posView = new TokenLabelView(viewName, ta);
                     String[] pos1Overall = withNoisyLabels ? pos_noisy1 : pos1;
