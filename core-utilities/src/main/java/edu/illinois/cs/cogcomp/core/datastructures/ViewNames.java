@@ -130,6 +130,7 @@ public class ViewNames {
             case TOKENS:
             case LEMMA:
             case POS:
+            case VERB_SENSE: 
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
