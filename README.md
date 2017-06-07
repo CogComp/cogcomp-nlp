@@ -1,4 +1,4 @@
-# CogCompNLP
+# CogcompNLP
 [![Build Status](http://morgoth.cs.illinois.edu:5800/app/rest/builds/buildType:(id:CogcompNlp_Build)/statusIcon)](morgoth.cs.illinois.edu:5800)
 [![Build Status](http://morgoth.cs.illinois.edu:8080/buildStatus/icon?job=cogcomp-nlp)](http://morgoth.cs.illinois.edu:8080/job/cogcomp-nlp/)
 [![Build status](https://ci.appveyor.com/api/projects/status/f53iv8435rq875ex/branch/master?svg=true)](https://ci.appveyor.com/project/bhargavm/illinois-cogcomp-nlp/branch/master)
@@ -16,7 +16,7 @@ Each library contains detailed readme and instructions on how to use it. In addi
 | [nlp-pipeline](pipeline/README.md) | Provides an end-to-end NLP processing application that runs a variety of NLP tools on input text. |
 | [core-utilities](core-utilities/README.md) | Provides a set of NLP-friendly data structures and a number of  NLP-related utilities that support writing NLP applications, running experiments, etc. |
 | [corpusreaders](corpusreaders/README.md) | Provides classes to read documents from corpora into `core-utilities` data structures. |
-| [curator](curator/README.md) | Supports use of [CogComp NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator), a tool to run NLP applications as services. |
+| [curator](curator/README.md) | Supports use of [Cogcomp NLP Curator](http://cogcomp.cs.illinois.edu/page/software_view/Curator), a tool to run NLP applications as services. |
 | [edison](edison/README.md) | A library for feature extraction from `core-utilities` data structures.  | 
 | [lemmatizer](lemmatizer/README.md)  |  An application that uses [WordNet](https://wordnet.princeton.edu/) and simple rules to find the root forms of words in plain text. | 
 | [tokenizer](tokenizer/README.md) | An application that identifies sentence and word boundaries in plain text. | 
@@ -52,8 +52,8 @@ To include one of the modules in your Maven project, add the following snippet w
     ...
     <repositories>
         <repository>
-            <id>CogCompSoftware</id>
-            <name>CogCompSoftware</name>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
             <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
         </repository>
     </repositories>
