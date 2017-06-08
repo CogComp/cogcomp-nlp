@@ -37,15 +37,13 @@ public class ClausIEAnnotator extends Annotator {
     protected void addView(TextAnnotation ta) throws AnnotatorException {
         assert ta.hasView(ViewNames.SENTENCE): "Sentences view didn't find . . . ";
         List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
-        System.out.println("sentences.size: " + sentences.size());
         View vu = new View(viewName, "ClausIEAnnotator", ta, 1.0);
         assert sentences.size() == ta.getNumberOfSentences();
         for(Constituent sent : sentences) {
             clausIE.parse(sent.getSurfaceForm());
             clausIE.detectClauses();
             clausIE.generatePropositions();
-            System.out.println(sent.getSurfaceForm());
-            Constituent sentenceCons = new Constituent("", viewName, ta, sent.getStartSpan(), sent.getEndSpan());
+            Constituent sentenceCons = new Constituent("sent-" + sent.getSentenceId(), viewName, ta, sent.getStartSpan(), sent.getEndSpan());
             int propId = 0;
             for(Proposition p : clausIE.getPropositions()) {
                 String proposition = p.subject();
