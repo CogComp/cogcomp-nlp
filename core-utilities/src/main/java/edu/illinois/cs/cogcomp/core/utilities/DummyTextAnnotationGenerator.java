@@ -240,10 +240,11 @@ public class DummyTextAnnotationGenerator {
                     SpanLabelView sentView = new SpanLabelView(ViewNames.SENTENCE, ta);
                     sentView.addConstituent(new Constituent("sent1", ViewNames.SENTENCE, ta, 0, pos1.length));
                     if (sentenceNum > 1)
-                        sentView.addConstituent(new Constituent("sent2", ViewNames.SENTENCE, ta, pos1.length + 1, pos1.length + pos2.length));
+                        sentView.addConstituent(new Constituent("sent2", ViewNames.SENTENCE, ta,
+                                pos1.length, pos1.length + pos2.length));
                     if (sentenceNum > 2)
-                        sentView.addConstituent(new Constituent("sent3", ViewNames.SENTENCE, ta, pos1.length + pos2.length + 1, pos1.length + pos2.length + pos3.length));
-                    System.out.println("inside sentView: number of constituents: " + sentView.getConstituents().size());
+                        sentView.addConstituent(new Constituent("sent3", ViewNames.SENTENCE, ta,
+                                pos1.length + pos2.length, pos1.length + pos2.length + pos3.length));
                     ta.addView(ViewNames.SENTENCE, sentView);
                     break;
                 case ViewNames.POS:
