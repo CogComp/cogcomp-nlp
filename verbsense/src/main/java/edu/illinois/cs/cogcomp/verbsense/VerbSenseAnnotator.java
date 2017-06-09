@@ -24,7 +24,7 @@ public class VerbSenseAnnotator extends Annotator {
     TextPreProcessor preProcessor;
 
     public VerbSenseAnnotator() {
-        this(false);
+        this(true);
     }
 
     public VerbSenseAnnotator(boolean lazilyInitialize) {
