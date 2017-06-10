@@ -74,13 +74,13 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model</artifactId>
-            <version>3.0</version>
+            <version>3.3</version>
             <classifier>CoNLL</classifier>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model</artifactId>
-            <version>3.0</version>
+            <version>3.3</version>
             <classifier>OntoNotes</classifier>
         </dependency>
         <dependency>

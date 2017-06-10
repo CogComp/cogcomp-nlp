@@ -6,6 +6,20 @@ The newest version tags entities with either the "classic" 4-label type set
 18-label type set (based on the OntoNotes corpus). It uses gazetteers extracted from Wikipedia, word class models 
 derived from unlabeled text, and expressive non-local features.
 
+As of model version 3.3, the CoNLL classifiers are trained using a data set
+augmented with email data. Overall, this slightly improves performance
+on the CoNLL data and significantly improves performance on email data.
+
+
+| Corpus | F1 on held-out data |
+| :--- | :--- |
+| CoNLL | 91.08 |
+| OntoNotes | 84.88 |
+| Enron email | 77.68 |
+| MUC | 88.37 |
+
+
+
 ## Quickstart
 
 This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).

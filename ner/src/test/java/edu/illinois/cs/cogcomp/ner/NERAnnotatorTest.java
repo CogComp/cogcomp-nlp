@@ -42,10 +42,7 @@ import static org.junit.Assert.*;
  * @author redman
  */
 public class NERAnnotatorTest {
-    private static Logger logger = LoggerFactory.getLogger(NERAnnotatorTest.class);
-
     final static String TOKEN_TEST = "NOHO Ltd. partners with Telford International Company Inc";
-
     /** the text used for this test. */
     final static String TEST_INPUT =
             " For researchers, like Larry Smarr, with big data but little access to the IT tools needed to analyze it, "
@@ -64,7 +61,6 @@ public class NERAnnotatorTest {
                     + "Campus Bridging team on an on-site XCBC installation, these folks can get their science up and running again. Jack Smith can "
                     + "attest to that. As cyberinfrastructure coordinator in the Division of Science and Research of the West Virginia Higher "
                     + "Education Policy Commission, Smith worked closely with Fischer and colleague Eric Coulter when they came to Marshall.";
-
     /** these are the entities we expect. */
     final static String[] tmp =
             {
@@ -81,7 +77,7 @@ public class NERAnnotatorTest {
                     "XSEDE Compatible Basic Cluster",
                     "XCBC",
                     "XSEDE",
-                    "Campus Bridging",
+                    "Campus Bridging team",
                     "Marshall University",
                     "Huntington",
                     "Virginia",
@@ -104,13 +100,15 @@ public class NERAnnotatorTest {
                     "IU", // only from level 1
                     "GPUs" // should not get this either
             };
-
+    /** the expected entities as a hashset. */
+    final static HashSet<String> entities = new HashSet<>();
     /** this helper can create text annotations from text. */
     private static final TextAnnotationBuilder tab = new TokenizerTextAnnotationBuilder(
             new StatefulTokenizer());
-
+    private static Logger logger = LoggerFactory.getLogger(NERAnnotatorTest.class);
     /** static annotator. */
     static private NERAnnotator nerAnnotator = null;
+
     static {
         try {
             nerAnnotator =
@@ -123,10 +121,64 @@ public class NERAnnotatorTest {
         }
     }
 
-    /** the expected entities as a hashset. */
-    final static HashSet<String> entities = new HashSet<>();
     static {
         Collections.addAll(entities, tmp);
+    }
+
+    /**
+     * this is a stand alone test we can run to check performance. If you want to run in a profiler,
+     * this is your guy.
+     *
+     * @param args the arguments.
+     */
+    static public void main(String[] args) {
+        final int SIZE = 500;
+
+        // need to get any lazy data initialization out of the way to get a good read.
+        {
+            TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
+            View view = null;
+            try {
+                view = getView(ta);
+            } catch (AnnotatorException e) {
+                e.printStackTrace();
+                fail(e.getMessage());
+            }
+            for (Constituent c : view.getConstituents()) {
+                assertTrue(entities.contains(c.toString()));
+            }
+        }
+
+        // create one thread per core, launch them.
+        final int numcores = Runtime.getRuntime().availableProcessors() / 2;
+        ArrayList<NERThread> threads = new ArrayList<>();
+        for (int i = 0; i < numcores; i++) {
+            NERThread t = new NERThread(SIZE);
+            threads.add(t);
+            t.start();
+        }
+        logger.info("Running on " + numcores);
+
+        // wait for all to complete.
+        for (Thread t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        int count = threads.size();
+        long avg = 0;
+        for (NERThread t : threads) {
+            avg += t.averageRunTime;
+        }
+        logger.info("Average runtime is " + (avg / count));
+    }
+
+    public static View getView(TextAnnotation ta) throws AnnotatorException {
+        nerAnnotator.getView(ta);
+        return ta.getView(nerAnnotator.getViewName());
     }
 
     /**
@@ -152,7 +204,7 @@ public class NERAnnotatorTest {
     /**
      * get a rough measure of this machines performance capabilities. Just do double adds to see how
      * long it takes.
-     * 
+     *
      * @return the computed performance factor.
      */
     private long measureMachinePerformance() {
@@ -220,61 +272,6 @@ public class NERAnnotatorTest {
         System.out.printf("For text size = %d, average NER runtime = %d, normalized = %f",
                 TEST_INPUT.length(), start, (double) start / (double) expectedPerformance);
         assertTrue(start <= expectedPerformance);
-    }
-
-    /** this thread runs continuously to sample NER performance. */
-    static class NERThread extends Thread {
-
-        /** records average performance. */
-        long averageRunTime = -1;
-
-        /** the last view computed. */
-        private View view = null;
-
-        /** the number of invocations to do. */
-        int duration;
-
-        /** just a counter for unique names. */
-        static int c = 0;
-
-        /** contains an error message if there is one. */
-        private String error = null;
-
-        NERThread(int size) {
-            super("NERPerformanceTest-" + c);
-            c++;
-            this.duration = size;
-        }
-
-        /** just do the same thing over and over. */
-        public void run() {
-            TextAnnotation ta1 = tab.createTextAnnotation(TEST_INPUT);
-            {
-                try {
-                    view = getView(ta1);
-                } catch (AnnotatorException e) {
-                    e.printStackTrace();
-                    fail(e.getMessage());
-                }
-                assertTrue(view != null);
-            }
-            long start = System.currentTimeMillis();
-            for (int i = 0; i < duration; i++) {
-                TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-                try {
-                    view = getView(ta);
-                } catch (AnnotatorException e) {
-                    e.printStackTrace();
-                    fail(e.getMessage());
-                }
-                for (Constituent c : view.getConstituents()) {
-                    if (!entities.contains(c.toString()))
-                        error = "No entity named \"" + c.toString() + "\"";
-                }
-            }
-            if (error == null)
-                averageRunTime = (System.currentTimeMillis() - start) / duration;
-        }
     }
 
     /**
@@ -346,62 +343,6 @@ public class NERAnnotatorTest {
     }
 
     /**
-     * this is a stand alone test we can run to check performance. If you want to run in a profiler,
-     * this is your guy.
-     * 
-     * @param args the arguments.
-     */
-    static public void main(String[] args) {
-        final int SIZE = 500;
-
-        // need to get any lazy data initialization out of the way to get a good read.
-        {
-            TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
-            View view = null;
-            try {
-                view = getView(ta);
-            } catch (AnnotatorException e) {
-                e.printStackTrace();
-                fail(e.getMessage());
-            }
-            for (Constituent c : view.getConstituents()) {
-                assertTrue(entities.contains(c.toString()));
-            }
-        }
-
-        // create one thread per core, launch them.
-        final int numcores = Runtime.getRuntime().availableProcessors() / 2;
-        ArrayList<NERThread> threads = new ArrayList<>();
-        for (int i = 0; i < numcores; i++) {
-            NERThread t = new NERThread(SIZE);
-            threads.add(t);
-            t.start();
-        }
-        logger.info("Running on " + numcores);
-
-        // wait for all to complete.
-        for (Thread t : threads) {
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        int count = threads.size();
-        long avg = 0;
-        for (NERThread t : threads) {
-            avg += t.averageRunTime;
-        }
-        logger.info("Average runtime is " + (avg / count));
-    }
-
-    public static View getView(TextAnnotation ta) throws AnnotatorException {
-        nerAnnotator.getView(ta);
-        return ta.getView(nerAnnotator.getViewName());
-    }
-
-    /**
      * Test for corner case where user specifies a single label and non-zero noise level.
      *
      */
@@ -422,5 +363,56 @@ public class NERAnnotatorTest {
                 "L-MISC", "L-ORG", "L-PER", "O", "U-LOC", "U-MISC", "U-ORG", "U-PER"};
         Set<String> set = new HashSet(Arrays.asList(elements));
         assertTrue(tags.equals(set));
+    }
+
+    /** this thread runs continuously to sample NER performance. */
+    static class NERThread extends Thread {
+
+        /** just a counter for unique names. */
+        static int c = 0;
+        /** records average performance. */
+        long averageRunTime = -1;
+        /** the number of invocations to do. */
+        int duration;
+        /** the last view computed. */
+        private View view = null;
+        /** contains an error message if there is one. */
+        private String error = null;
+
+        NERThread(int size) {
+            super("NERPerformanceTest-" + c);
+            c++;
+            this.duration = size;
+        }
+
+        /** just do the same thing over and over. */
+        public void run() {
+            TextAnnotation ta1 = tab.createTextAnnotation(TEST_INPUT);
+            {
+                try {
+                    view = getView(ta1);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail(e.getMessage());
+                }
+                assertTrue(view != null);
+            }
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < duration; i++) {
+                TextAnnotation ta = tab.createTextAnnotation(TEST_INPUT);
+                try {
+                    view = getView(ta);
+                } catch (AnnotatorException e) {
+                    e.printStackTrace();
+                    fail(e.getMessage());
+                }
+                for (Constituent c : view.getConstituents()) {
+                    if (!entities.contains(c.toString()))
+                        error = "No entity named \"" + c.toString() + "\"";
+                }
+            }
+            if (error == null)
+                averageRunTime = (System.currentTimeMillis() - start) / duration;
+        }
     }
 }
