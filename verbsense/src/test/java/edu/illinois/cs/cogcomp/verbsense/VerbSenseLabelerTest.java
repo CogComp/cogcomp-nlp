@@ -22,6 +22,7 @@ public class VerbSenseLabelerTest extends TestCase {
         labeler = new VerbSenseLabeler();
         preProcessor = TextPreProcessor.getInstance();
         annotator = new VerbSenseAnnotator();
+        annotator.doInitialize();
     }
 
     public void testGetPrediction() throws Exception {
