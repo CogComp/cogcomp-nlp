@@ -17,9 +17,18 @@ echoerr() { echo "$@" 1>&2; }
 
 
 
-CONFIGFILE=src/test/resources/xmlcorpus.properties
-CORPUSNAME="TestCorpusPreprocessor"
-CORPUSDIR=src/test/resources/xmlcorpus
+#CONFIGFILE=src/test/resources/xmlcorpus.properties
+#CORPUSNAME="TestCorpusPreprocessor"
+#CORPUSDIR=src/test/resources/xmlcorpus
+
+if [ $# -eq 3 ]; then
+	CONFIGFILE=$1
+	CORPUSNAME=$2
+	CORPUSDIR=$3
+else
+    echo "Usage: $0 config inFile/inDir outFile/outDir"
+    exit -1
+fi
 
 
 DIST="target"
@@ -27,8 +36,8 @@ LIB="target/dependency"
 CONFIG="config"
 
 
-MAIN="edu.illinois.cs.cogcomp.nlp.main.RunPipeline"
-FLAGS="-Xmx20g -XX:MaxPermSize=1g -Xverify:all"
+MAIN="edu.illinois.cs.cogcomp.pipeline.main.RunPipeline"
+FLAGS="-Xmx30g -XX:MaxPermSize=1g -Xverify:all"
 
 
 

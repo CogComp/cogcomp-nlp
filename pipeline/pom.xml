@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.11</version>
+        <version>3.1.20</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,42 +15,47 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-lemmatizer</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-corpusreaders</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-quantifier</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-prep-srl</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-comma</artifactId>
-            <version>2.3.3</version>
+            <version>3.1.20</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>stanford_3.3.1</artifactId>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
@@ -67,24 +72,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
-        </dependency>
-        <!-- Stanford Core NLP, used for its parser (for SRL) -->
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-corenlp</artifactId>
-            <version>3.3.1</version>
-            <classifier>models</classifier>
         </dependency>
 
         <dependency>
@@ -113,14 +106,14 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-depparse</artifactId>
-            <version>3.1.11</version>
+            <version>3.1.20</version>
         </dependency>
 
         <!--for pipeline web-server-->
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.5.3</version>
+            <version>2.5.5</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

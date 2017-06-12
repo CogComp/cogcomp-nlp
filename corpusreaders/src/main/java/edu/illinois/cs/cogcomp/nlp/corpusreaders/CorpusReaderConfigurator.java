@@ -22,6 +22,8 @@ public class CorpusReaderConfigurator extends Configurator {
             "dummyCorpusDirectory");
     public static final Property SOURCE_DIRECTORY = new Property("sourceDirectory", "dummySourceDir");
     public static final Property ANNOTATION_DIRECTORY = new Property("annotationDirectory", "dummyAnnotationDir");
+    public static final Property SOURCE_EXTENSION = new Property("sourceFileExtension", ".xml");
+    public static final Property ANNOTATION_EXTENSION = new Property("annotationFileExtension", ".xml");
 
     public static ResourceManager buildResourceManager(String corpus) {
         Properties props = new Properties();
@@ -29,11 +31,14 @@ public class CorpusReaderConfigurator extends Configurator {
         return new ResourceManager(props);
     }
 
-    public static ResourceManager buildResourceManager(String corpusName, String sourceDir, String annotationDir) {
+    public static ResourceManager buildResourceManager(String corpusName, String sourceDir, String annotationDir,
+                                                       String sourceFileExtension, String annotationFileExtension) {
         Properties props = new Properties();
         props.setProperty(CorpusReaderConfigurator.CORPUS_NAME.key, corpusName);
         props.setProperty(CorpusReaderConfigurator.SOURCE_DIRECTORY.key, sourceDir);
         props.setProperty(CorpusReaderConfigurator.ANNOTATION_DIRECTORY.key, annotationDir);
+        props.setProperty(CorpusReaderConfigurator.SOURCE_EXTENSION.key, sourceFileExtension);
+        props.setProperty(CorpusReaderConfigurator.ANNOTATION_EXTENSION.key, annotationFileExtension);
         return new ResourceManager(props);
     }
 
@@ -44,7 +49,9 @@ public class CorpusReaderConfigurator extends Configurator {
      */
     @Override
     public ResourceManager getDefaultConfig() {
-        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY};
+        // for now, omit source and annotation directories because they must be set to path on User host machine
+        Property[] props = new Property[] {CORPUS_NAME, CORPUS_DIRECTORY, // SOURCE_DIRECTORY, ANNOTATION_DIRECTORY,
+            SOURCE_EXTENSION, ANNOTATION_EXTENSION};
         return new ResourceManager(generateProperties(props));
     }
 

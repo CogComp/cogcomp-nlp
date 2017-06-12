@@ -50,7 +50,7 @@ public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
     public PennTreebankReader(String treebankHome) throws Exception {
-        this(treebankHome, null, ViewNames.PARSE_GOLD);
+        this(treebankHome, null, ViewNames.PARSE_GOLD, ".mrg", ".mrg");
     }
 
     /**
@@ -60,7 +60,7 @@ public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
      * @param parseViewName The name of the parse view which is to be added
      */
     public PennTreebankReader(String treebankHome, String parseViewName) throws Exception {
-        this(treebankHome, null, parseViewName);
+        this(treebankHome, null, parseViewName, ".mrg", ".mrg");
     }
 
     /**
@@ -69,7 +69,7 @@ public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
     public PennTreebankReader(String treebankHome, String[] sections) throws Exception {
-        this(treebankHome, sections, ViewNames.PARSE_GOLD);
+        this(treebankHome, sections, ViewNames.PARSE_GOLD, ".mrg", ".mrg");
     }
 
     /**
@@ -77,9 +77,9 @@ public class PennTreebankReader extends AnnotationReader<TextAnnotation> {
      *
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
      */
-    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName)
+    public PennTreebankReader(String treebankHome, String[] sections, String parseViewName, String sourceFileExtension, String annotationFileExtension)
             throws Exception {
-        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome, treebankHome));
+        super(CorpusReaderConfigurator.buildResourceManager(PENN_TREEBANK_WSJ, treebankHome, treebankHome, sourceFileExtension, annotationFileExtension));
         this.parseViewName = parseViewName;
         combinedWSJHome = treebankHome;
 

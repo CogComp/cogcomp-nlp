@@ -1,0 +1,27 @@
+### IntelliJ
+.idea
+illinois-comma.iml
+target
+
+### Eclipse
+.classpath
+.project
+.settings
+
+### Preprocessor cache
+data/CommaTAGoldFinal.ser
+
+
+### Testing and error analysis.
+# All data files required for experiments, including preprocessor caches, are included
+data/errors.analyzed
+data/errors_NER
+data/full_annotation
+data/delete
+data/errors.ner
+data/examples
+data/output
+
+
+### LBJ-generated files
+# src/main/java/edu/illinois/cs/cogcomp/comma/lbj
