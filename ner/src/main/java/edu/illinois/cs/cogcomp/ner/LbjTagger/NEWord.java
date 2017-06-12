@@ -57,6 +57,7 @@ public class NEWord extends Word {
     public String form = null;// override the Word.form field!
     public String originalForm = null;// what was the form that we read from the file
     public String normalizedForm = null;// after the title normalization stage
+    public String domainName = null;
     public boolean isCaseNormalized = false;
     private HashMap<String, Integer> nonLocalFeatures = null;
     private String[] nonLocFeatArray = null;
@@ -82,6 +83,15 @@ public class NEWord extends Word {
         neTypeLevel1 = null;
     }
 
+    public NEWord(Word w, NEWord p, String type, String domainName) {
+        super(w.form, w.partOfSpeech, w.lemma, w.wordSense, p, w.start, w.end);
+        form = w.form;
+        originalForm = w.form;
+        neLabel = type;
+        neTypeLevel1 = null;
+        this.domainName = domainName;
+    }
+
     /**
      * Add the provided token to the sentence, for also do any additional word spliting.
      *
@@ -91,6 +101,12 @@ public class NEWord extends Word {
      */
     public static void addTokenToSentence(LinkedVector sentence, String token, String tag) {
         NEWord word = new NEWord(new Word(token), null, tag);
+        addTokenToSentence(sentence, word);
+    }
+
+    //FE
+    public static void addTokenToSentence(LinkedVector sentence, String token, String tag, String domainName) {
+        NEWord word = new NEWord(new Word(token), null, tag, domainName);
         addTokenToSentence(sentence, word);
     }
 
