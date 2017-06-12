@@ -69,6 +69,8 @@ public class ParametersForLbjCode {
     // this will selectively lowercase the text in the first sentence if it's all-capitalized
     public boolean normalizeTitleText = false;
 
+    public boolean useFE = false;
+
     public Language language = null;
 
     // can be:

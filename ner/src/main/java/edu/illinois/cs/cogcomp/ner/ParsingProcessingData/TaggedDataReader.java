@@ -35,15 +35,26 @@ public class TaggedDataReader {
         if (ParametersForLbjCode.currentParameters.sortLexicallyFilesInFolders) {
             Arrays.sort(domains);
         }
-        for (String domain1 : domains) {
-            String domain = path + "/" + domain1;
-            if (new File(domain).isDirectory()) {
-                String[] files = (new File(domain)).list();
-                for (String file1 : files) {
-                    String file = domain + "/" + file1;
-                    if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
-                        res.addElement(readFile(file, format, file1, domain1));
+
+        if (ParametersForLbjCode.currentParameters.useFE) {
+            for (String domain1 : domains) {
+                String domain = path + "/" + domain1;
+                if (new File(domain).isDirectory()) {
+                    String[] files = (new File(domain)).list();
+                    for (String file1 : files) {
+                        String file = domain + "/" + file1;
+                        if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
+                            res.addElement(readFile(file, format, file1, domain1));
+                        }
                     }
+                }
+            }
+        }
+        else {
+            for (String file1 : domains) {
+                String file = path + "/" + file1;
+                if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
+                    res.addElement(readFile(file, format, file1));
                 }
             }
         }

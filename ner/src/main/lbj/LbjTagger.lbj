@@ -17,7 +17,9 @@ discrete% wordType(NEWord word) <-
 {
 	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTopicTitleInfo")){
 		sense "" : WordTopicAndLayoutFeatures.getWordType(word);
-		sense word.domainName+"" : WordTopicAndLayoutFeatures.getWordType(word);
+		if(ParametersForLbjCode.currentParameters.useFE) {
+		    sense word.domainName+"" : WordTopicAndLayoutFeatures.getWordType(word);
+		}
 	}
 }
 
@@ -36,7 +38,9 @@ discrete% GazetteersFeatures(NEWord word) <-
 	 		if(w.gazetteers!=null)
 		 		for(int j=0;j<w.gazetteers.size();j++) {
 					sense i: w.gazetteers.get(j);
-					sense word.domainName+i: w.gazetteers.get(j);
+					if(ParametersForLbjCode.currentParameters.useFE) {
+    					sense word.domainName+i: w.gazetteers.get(j);
+    				}
 				}
 	 		i++;
 	 		w = (NEWord) w.next;
@@ -59,7 +63,9 @@ real% WordEmbeddingFeatures(NEWord word) <-
 			if(embedding!=null)
 				for(int dim=0;dim<embedding.length;dim++){
 				    sense "place"+i+"dim"+dim : embedding[dim];
-				    sense word.domainName+"place"+i+"dim"+dim : embedding[dim];
+				    if(ParametersForLbjCode.currentParameters.useFE) {
+    				    sense word.domainName+"place"+i+"dim"+dim : embedding[dim];
+    				}
 				}
 			i++;
 		}
@@ -73,7 +79,9 @@ discrete% WikifierFeatures(NEWord word) <-
         if(word.wikifierFeatures != null){
             for(int i = 0; i < word.wikifierFeatures.length; i++){
                 sense "" : "WIKI-"+word.wikifierFeatures[i];
-                sense word.domainName+"" : "WIKI-"+word.wikifierFeatures[i];
+                if(ParametersForLbjCode.currentParameters.useFE) {
+                    sense word.domainName+"" : "WIKI-"+word.wikifierFeatures[i];
+                }
             }
         }
     }
@@ -84,7 +92,9 @@ discrete% IsSentenceStart(NEWord word) <-
 {
 	if(word.previous==null)
 		sense "start" : "1";
-		sense word.domainName+"start" : "1";
+		if(ParametersForLbjCode.currentParameters.useFE) {
+    		sense word.domainName+"start" : "1";
+        }
 }
 
 
@@ -104,7 +114,9 @@ discrete% Forms(NEWord word) <-
   		w=startWord;
   		for (; w != last; w = (NEWord) w.next){
 			sense i : MyString.normalizeDigitsForFeatureExtraction(w.form);
-			sense word.domainName+i : MyString.normalizeDigitsForFeatureExtraction(w.form);
+			if(ParametersForLbjCode.currentParameters.useFE) {
+			    sense word.domainName+i : MyString.normalizeDigitsForFeatureExtraction(w.form);
+			}
 			i++;
 		}
 	}
@@ -125,7 +137,9 @@ discrete% BrownClusterPaths(NEWord word) <-
   			String[] paths=bc.getPrefixes(w);
   			for(int j=0;j<paths.length;j++) {
   			  	sense i : paths[j];
-  			  	sense word.domainName+i : paths[j];
+  			  	if(ParametersForLbjCode.currentParameters.useFE) {
+      			  	sense word.domainName+i : paths[j];
+      			}
   			}
   			i++;
   		}
@@ -148,7 +162,9 @@ discrete% FormParts(NEWord word) <-
 			for(int j=0;j<lastParts.length;j++)
 			{
 				sense count:  MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
-				sense word.domainName+count : MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+				if(ParametersForLbjCode.currentParameters.useFE) {
+    				sense word.domainName+count : MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+    			}
 				count--;
 			}
 			w = (NEWord)w.previous;
@@ -162,7 +178,9 @@ discrete% FormParts(NEWord word) <-
 			for(int j=0;j<lastParts.length;j++)
 			{
 				sense count:  MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
-				sense word.domainName+count : MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+				if(ParametersForLbjCode.currentParameters.useFE) {
+    				sense word.domainName+count : MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+    			}
 				count++;
 			}
 			w = (NEWord)w.next;
@@ -184,7 +202,9 @@ discrete{false, true}% Capitalization(NEWord word) <-
 
   		for (; w != last; w = (NEWord) w.next) {
   		    sense i : w.capitalized;
-  		    sense word.domainName+i : w.capitalized;
+  		    if(ParametersForLbjCode.currentParameters.useFE) {
+  		        sense word.domainName+i : w.capitalized;
+  		    }
   		    i++;
   		}
   	}
@@ -213,9 +233,11 @@ discrete{false, true}% WordTypeInformation(NEWord word) <-
 	    sense "c" + i : allCapitalized;
 	    sense "d" + i : allDigits;
 	    sense "p" + i : allNonLetters;
-	    sense word.domainName + "c" + i : allCapitalized;
-        sense word.domainName + "d" + i : allDigits;
-        sense word.domainName + "p" + i : allNonLetters;
+	    if(ParametersForLbjCode.currentParameters.useFE) {
+    	    sense word.domainName + "c" + i : allCapitalized;
+            sense word.domainName + "d" + i : allDigits;
+            sense word.domainName + "p" + i : allNonLetters;
+        }
   	  }
   	}
 }
@@ -229,18 +251,24 @@ discrete% Affixes(NEWord word) <-
 	  	for (int i = 3; i <= 4; ++i)
     		if (word.form.length() > i) {
     		    sense "p|" : word.form.substring(0, i);
-    		    sense word.domainName + "p|" : word.form.substring(0, i);
+    		    if(ParametersForLbjCode.currentParameters.useFE) {
+        		    sense word.domainName + "p|" : word.form.substring(0, i);
+        		}
     		}
   		for (int i = 1; i <= 4; ++i)
     		if (word.form.length() > i) {
     		    sense "s|" : word.form.substring(N - i);
-    		    sense word.domainName + "s|" : word.form.substring(N - i);
+    		    if(ParametersForLbjCode.currentParameters.useFE) {
+        		    sense word.domainName + "s|" : word.form.substring(N - i);
+        		}
     		}
 		
 		if(ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))	
 			for(int i=0;i<word.parts.length;i++) {
 			    sense "part"+i : word.parts[i];
-			    sense word.domainName + "part"+i : word.parts[i];
+			    if(ParametersForLbjCode.currentParameters.useFE) {
+    			    sense word.domainName + "part"+i : word.parts[i];
+    			}
 			}
 	}
 }
@@ -254,12 +282,16 @@ discrete% AffixesZH(NEWord word) <-
 	  	for (int i = 1; i <= 2; ++i)
     		if (word.form.length() > i) {
     		    sense "ZH-p|" : word.form.substring(0, i);
-    		    sense word.domainName + "ZH-p|" : word.form.substring(0, i);
+    		    if(ParametersForLbjCode.currentParameters.useFE) {
+        		    sense word.domainName + "ZH-p|" : word.form.substring(0, i);
+        		}
     		}
   		for (int i = 1; i <= 2; ++i)
     		if (word.form.length() > i) {
     		    sense "ZH-s|" : word.form.substring(N - i);
-    		    sense word.domainName + "ZH-s|" : word.form.substring(N - i);
+    		    if(ParametersForLbjCode.currentParameters.useFE) {
+        		    sense word.domainName + "ZH-s|" : word.form.substring(N - i);
+        		}
     		}
 	}
 }
@@ -274,7 +306,9 @@ real% nonLocalFeatures(NEWord word) <-
 	String[] feats=word.getAllNonlocalFeatures();
 	for(int i=0;i<feats.length;i++) {
 		sense feats[i]: word.getNonLocFeatCount(feats[i]);
-		sense word.domainName + feats[i]: word.getNonLocFeatCount(feats[i]);
+		if(ParametersForLbjCode.currentParameters.useFE) {
+    		sense word.domainName + feats[i]: word.getNonLocFeatCount(feats[i]);
+    	}
 	}
 }
 
@@ -290,11 +324,15 @@ discrete% PreviousTag1Level1(NEWord word) <-
 	  	{
 			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
 			    sense "-1" : ((NEWord)w.previous).neLabel;
-			    sense word.domainName+"-1" : ((NEWord)w.previous).neLabel;
+			    if(ParametersForLbjCode.currentParameters.useFE) {
+    			    sense word.domainName+"-1" : ((NEWord)w.previous).neLabel;
+    			}
 			}
 	    	else {
 	    		sense "-1" : ((NEWord)w.previous).neTypeLevel1;
-	    	    sense word.domainName + "-1" : ((NEWord)w.previous).neTypeLevel1;
+	    		if(ParametersForLbjCode.currentParameters.useFE) {
+    	    	    sense word.domainName + "-1" : ((NEWord)w.previous).neTypeLevel1;
+    	    	}
 	    	}
       	}
     }
@@ -313,11 +351,15 @@ discrete% PreviousTag2Level1(NEWord word) <-
 	  	{
 			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
 			    sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
-			    sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+			    if(ParametersForLbjCode.currentParameters.useFE) {
+    			    sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+    			}
 			}
 		   	else {
 		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
-		    	sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
+		    	if(ParametersForLbjCode.currentParameters.useFE) {
+    		    	sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
+    		    }
 		   	}
 	 	}
 	  }
@@ -361,7 +403,9 @@ real% prevTagsForContextLevel1(NEWord word) <-
 				String[] all=count[j].getTokens();
 				for(i=0;i<all.length;i++) {
 					sense j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
-                    sense word.domainName+j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
+					if(ParametersForLbjCode.currentParameters.useFE) {
+                        sense word.domainName+j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
+                    }
 				}
 			}
 		}
@@ -403,7 +447,9 @@ discrete% PreviousTagPatternLevel1(NEWord word) <-
                 res=(String) pattern.elementAt(i)+"_"+res;
             res = label+"_"+res;
             sense "" : res;
-            sense word.domainName + "" : res;
+            if(ParametersForLbjCode.currentParameters.useFE) {
+                sense word.domainName + "" : res;
+            }
         }
 	}
 }
@@ -433,11 +479,15 @@ discrete% PreviousTag1Level2(NEWord word) <-
 	  	{
 			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
 			    sense "-1" : ((NEWord)w.previous).neLabel;
-			    sense word.domainName + "-1" : ((NEWord)w.previous).neLabel;
+			    if(ParametersForLbjCode.currentParameters.useFE) {
+    			    sense word.domainName + "-1" : ((NEWord)w.previous).neLabel;
+    			}
 			}
 	    	else {
 	    		sense "-1" : ((NEWord)w.previous).neTypeLevel2;
-                sense word.domainName + "-1" : ((NEWord)w.previous).neTypeLevel2;
+	    		if(ParametersForLbjCode.currentParameters.useFE) {
+                    sense word.domainName + "-1" : ((NEWord)w.previous).neTypeLevel2;
+                }
 	    	}
       	}
     }
@@ -456,11 +506,15 @@ discrete% PreviousTag2Level2(NEWord word) <-
 	  	{
 			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
 		   		sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
-                sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+		   		if(ParametersForLbjCode.currentParameters.useFE) {
+                    sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+                }
 			}
 		   	else {
 		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel2;
-		    	sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel2;
+		    	if(ParametersForLbjCode.currentParameters.useFE) {
+    		    	sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel2;
+    		    }
 		    }
 	 	}
 	  }
@@ -504,7 +558,9 @@ real% prevTagsForContextLevel2(NEWord word) <-
 				String[] all=count[j].getTokens();
 				for(i=0;i<all.length;i++) {
 					sense j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
-                    sense word.domainName + j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
+					if(ParametersForLbjCode.currentParameters.useFE) {
+                        sense word.domainName + j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);
+                    }
 				}
 			}
 		}
@@ -518,7 +574,9 @@ real% Level1AggregationFeatures(NEWord word) <-
         	for(int i=0;i<word.getLevel1AggregationFeatures().size();i++){
         		NEWord.RealFeature f=word.getLevel1AggregationFeatures().get(i);
         		sense f.featureGroupName: f.featureValue;
-        		sense word.domainName + f.featureGroupName: f.featureValue;
+        		if(ParametersForLbjCode.currentParameters.useFE) {
+            		sense word.domainName + f.featureGroupName: f.featureValue;
+            	}
         	}
         }
 }
@@ -568,7 +626,9 @@ discrete% PreviousTagPatternLevel2(NEWord word) <-
                 res=(String) pattern.elementAt(i)+"_"+res;
             res = label+"_"+res;
             sense "" : res;
-            sense word.domainName + "" : res;
+            if(ParametersForLbjCode.currentParameters.useFE) {
+                sense word.domainName + "" : res;
+            }
         }
 	}
 }

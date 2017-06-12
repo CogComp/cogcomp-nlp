@@ -226,6 +226,11 @@ public class Parameters {
                 }
             }
 
+            if (rm.containsKey("useFE")) {
+                param.useFE =
+                        Boolean.parseBoolean(rm.getString("useFE"));
+            }
+
             if (rm.containsKey("normalizeTitleText")) {
                 param.normalizeTitleText = Boolean.parseBoolean(rm.getString("normalizeTitleText"));
             }
