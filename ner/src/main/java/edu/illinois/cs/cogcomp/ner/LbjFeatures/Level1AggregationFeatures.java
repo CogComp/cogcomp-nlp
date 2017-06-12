@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D8F814B82C030158FFAC0280905C0A7DD5D38885F0A4922BAE93AD96984DC8C42DD56D56FFBB3DAA8721420904EDB9FEDC364B57F1658FD85F86A555C859D8E8C7A86363C814563FD11710F3279681F00EF0C590A27BC6F4811934A4CBADF176450A9343CC8E3E35335ED92F54B902A39F86D9F0B4CF55DBC91B077863A2CD2CB7A5B0CB42605EC740703181E7AC33EE2BD4581F5F29AD4077145A5CF942D26E6B5B95B49BBB90A410EB3421959312504F146AE1D161C4DC9339260F1FCFCDADAB1C785B38714729A8D9F297F68FFBD375849E730D68100000
+// F1B88000000000000000590914B430130158FFAC0501216138E5D6D38847D385A49255FC96776798C633233982D69EF777677B2D351A218406662FDB7F681D7B73033CF6C6FEF9A9681B1F9205C21D7ACC8266E3DF02EA0E74F2B039B583048A1CC2C3BFD26246929876BEFC76AA0DD623336C47EE9BAF44951DB986F9262F12ACB2EECC861C8558D47252388F8CA5587D4C0624C4010E11EE6CAFC4A7D67D06ABC62DA390B743657EB82A3CC0EADD253CD9680A650E5342D6B90A421C82AFBEF23CB035EFA9B603878371FDD7B917CFF9D8461C27AD93C10FDB1AA86BAB69E9D5C57287C1ECF28EACFB22CB100000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class Level1AggregationFeatures extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'Level1AggregationFeatures(NEWord)' defined on line 517 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Level1AggregationFeatures(NEWord)' defined on line 573 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -54,9 +54,12 @@ public class Level1AggregationFeatures extends Classifier
         __id = "" + (f.featureGroupName);
         __value = f.featureValue;
         __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-        __id = "" + (word.domainName + f.featureGroupName);
-        __value = f.featureValue;
-        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+        if (ParametersForLbjCode.currentParameters.useFE)
+        {
+          __id = "" + (word.domainName + f.featureGroupName);
+          __value = f.featureValue;
+          __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+        }
       }
     }
     return __result;
@@ -67,7 +70,7 @@ public class Level1AggregationFeatures extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'Level1AggregationFeatures(NEWord)' defined on line 517 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Level1AggregationFeatures(NEWord)' defined on line 573 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

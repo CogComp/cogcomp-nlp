@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000DC351DE42C0341DF59BC2194B12E28C3A3431360F542842E4D74358D584DC6D26BD1B0A1EFDDBD57C0800FEEB439EDB7E4FE937677994B3738E0FA06A607D25796351BC9A07E0D8A13EA13FB16391D78639145470781E53CF28C500B9A032A022A1BF4ADC876F5F8A33C87E5A138ACDEB71F2058B2D0AD45FB95AEB65E48456F9173C2AB43032EC966CE6A2CD143A087D212E5534B40ED17EE4B1855023105165D4191F40E5D919A6909B8916E4DC8E52A4A65E514780A56E93F6CAC46442169862C8F85AD4D09842EA70CE8EC6FA287CA07CEBC90C61037B879169E66581E95F8D314B751EB1B02B1C4A27029A8D729903481047BBD00B1DBD6126CFE254E6919522F92B7D3F24B9812619563AC1B0AFC0CAA89E1E28027C92E1448FF43F8D6DA367E8CACF146C1EE1AF76329EC946278A3343D6933B5FA30B1CE73386D2DFE50DA5C9BCFF87A7B137021B0F40F6158122F707C4278E144F911D9485FE6205280A3A6954546F3A80E6F0FE5F6976AB0ACC724FB197A4B80F1DC6FF0699811064B300000
+// F1B88000000000000000DC3515B62C0301EFB276162902B2EC7C5DD06C8AF23172CABDE1744B7A464B9AB425B8B1EF7FD5A9A5515F16F63A018EDD7FDDD77F5E29A4337D861FA06AA17D2B82D422693516D2A6536C536673C621FB71A358A8E0E03CB68F109B006351A54E444D66458E1FCE3F1B8413C979A53A2BBFC58B0416B4D86292E5D05EB05658456E9073C28B4D030EC9A7CEAB2CD143A087D212C5534B80ED07E6B0D0B2F4620A2CAA9023E11CB85D25D2123133CC8291C37015DACB28E014BCC23EDC82398942C215BF6F1A439862194C5708D1D9DE550F051E8D58328D206660F23C29DCA0D79578D314B351E21B0A138945614250BF4231680308E67B1063A7BD0488F55A8CC03A1986E49DBE931AD8D01A843D833CC9EA18551251EC9027CE2E1858FF4DF8D6DA36731919FD8C83CD34FFCA52D931F4E057AF4A92766AE570638DF660DA5ABDB0A5B837EFF177F6D66F426EB40F6158ED2F70BC4278E140F110D948573D87A8714749238A86CF0208B5FFFF787755A1C15CE4F8FA15FBC84B8C9EE9624017D6ADAAB5FFDF20ACC9B51BAE300000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class PreviousTagPatternLevel1 extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 374 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 418 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -98,9 +98,12 @@ public class PreviousTagPatternLevel1 extends Classifier
         __id = "";
         __value = "" + (res);
         __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-        __id = "" + (word.domainName + "");
-        __value = "" + (res);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        if (ParametersForLbjCode.currentParameters.useFE)
+        {
+          __id = "" + (word.domainName + "");
+          __value = "" + (res);
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
       }
     }
     return __result;
@@ -111,7 +114,7 @@ public class PreviousTagPatternLevel1 extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 374 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTagPatternLevel1(NEWord)' defined on line 418 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

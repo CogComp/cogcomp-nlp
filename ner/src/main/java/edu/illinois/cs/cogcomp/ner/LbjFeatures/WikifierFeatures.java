@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D8F8DCA02C04C048F556C501A5A85C3BF37215015A8705A701F05D6AA1D67712BB5444C7777BA5014C3840293CCC7394276B701274D54AC71E289466499BA58C609C4353293EAEB58815F0770718065994659704CECC8C27F7E989C92E34D224ADD74B8B86356D6636DBE64BBC85BD50DD205FDB845816B9DDCAA8FAF523A3368EABC2B135164010B6706C81DF1AF132CF482E294F1DD9CB32A8A10D296B405A0308A47EB897F412AFD4E69773C6DEF2D37359FBC31FF7972EFE087CBBE9E1BEAFE3E5100000
+// F1B8800000000000000059F8BBA02C040154F75EAB024240385BF8A4210154C249412611DC44743EE2CCE60111FFDDD88228858230335CD7C16A06BB51274D646C74E299425ACD5D2463895299192076FB24C0A38B28B4403FC52F39F088D4D8C47378199282ED6D224ADDB5B8BC76BC2CC2DA7DD86793B6B31AB40AE314A2C0F9DDD0A2E3F78C86D01ABEAAA6C45A1140CAD1813447BFEFC00F5341754A77E6FED1154D40D296B405A0D38AC6C39177412AFE9C51FABFFFC3A5B5A439732E1D958939FF676ED2E92F334F6FA9B3FC54C31149100000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class WikifierFeatures extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'WikifierFeatures(NEWord)' defined on line 71 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'WikifierFeatures(NEWord)' defined on line 77 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -55,9 +55,12 @@ public class WikifierFeatures extends Classifier
           __id = "";
           __value = "" + ("WIKI-" + word.wikifierFeatures[i]);
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "");
-          __value = "" + ("WIKI-" + word.wikifierFeatures[i]);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "");
+            __value = "" + ("WIKI-" + word.wikifierFeatures[i]);
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
     }
@@ -69,7 +72,7 @@ public class WikifierFeatures extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'WikifierFeatures(NEWord)' defined on line 71 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'WikifierFeatures(NEWord)' defined on line 77 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

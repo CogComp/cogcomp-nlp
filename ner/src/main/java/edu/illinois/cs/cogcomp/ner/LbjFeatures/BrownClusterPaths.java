@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B880000000000000005619FDB43C03017CFF59370E8698D02E3A9DC7078EB82360A2E3C8D347DE57B49E291794DE446FFBB795BBF1652090777FDBFCDF84EAD5648E1FA1E19C6366255DEC32DC25FB671D4F9E3D25E0D0F513C8218F10D50443B492DD07609B76B4FABC2726374995D4486CF9362B0C4D7D48EEDDE783E8B53E35D6CDB0E77438F7596017CC0FB47B3856603EFBE29B24F15CA04B1F0A51C1BB36958E0F60AA4D9FEC05058528843B97BC9003A13CD1C078DA4EA6C06AEAA250248E057BBCBE6CD8F06B438B3FA06FD3EC304270E4327B48F5AD6DEEC4B42930DA9B44D957726926507E4822AAF2E054303EDC3963BA9F206B16B3CA9566168F91161A778E2A62E3E08CBA82BD6EA4815B27951A959F53B7488003786C127FE7FD687E5E2457EB0B9299BDD0F7CC49FBD044F45B70D244878FCF20B3FBFACC82200000
+// F1B880000000000000005919FDF42C03017CFF5939442B5AEA13E3A50F1420F2A1242A6C702C3C8DE60D564B4EAD93C81EF77FAC0C12E39962D4FEEEB7F9BF1DC5BBC80D3E53C329D6CC8AAAD974A95AE7DE2A9E8FDD25E0D0F513C0218F20D50443B492DD07609B985A7E56932B93ACCA62243EBB89C2035F531AB75BF6E83E6D8F45B17F48F915FEF45AE5C133CFCDDE06991C0F7BB4EA0D741B20D6C386507AEE8561A3CB18A257EF868282C2144A9DCB5E4081C01EE0AFDF652753403575592012478AB7CCB3E8B1F1C696077E51CEF283F009C183D8CD21E786B5BBE8694270A537E8AE47F3C25CA0EC90544D5A8341D0C871F4ADCA6EB08D68DE0B6699581E764858ED1AB8A98F4302FA2AC6B9B2160DAC5658665E7DCE11220CC1A178CDBFD7B1E979B05FF9F7CAD1E46CD172C6756E673CF993569088B02FE9F8612AD7CEFB10E8A96CC6E5200000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class BrownClusterPaths extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'BrownClusterPaths(NEWord)' defined on line 116 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'BrownClusterPaths(NEWord)' defined on line 128 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -67,9 +67,12 @@ public class BrownClusterPaths extends Classifier
           __id = "" + (i);
           __value = "" + (paths[j]);
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + i);
-          __value = "" + (paths[j]);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + i);
+            __value = "" + (paths[j]);
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
         i++;
       }
@@ -82,7 +85,7 @@ public class BrownClusterPaths extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'BrownClusterPaths(NEWord)' defined on line 116 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'BrownClusterPaths(NEWord)' defined on line 128 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

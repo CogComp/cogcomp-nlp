@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D6091CA43C040168F55E7B069484314C3ABD8792A715A8705C3FA9C40642DDD2BBB13A69EBBB3B96A64B49040667EF9FE366A66F593A04BB647BE96180EA3ADF5265A7BC147BCFDA30B539CAFEE5DABA1DBCF25C237CE0CD02972DE4F6466D9FB7BEE1FDED756B6A2AAEC932316AE51D09E0D932FFC6F5CB4FDA90A9D8F70AFA466FF533B43D846310CA07452AC14BB04BAD781B0586CA342C25E592036952EA13F9F1227152C47D6BA0956C1973ECD8B34A34D581AFC0A0BF31ECD22F183D71B574F1C6B3F31D2FC70A5FF71535EE795A421233152AE43C15A191E9C8721DDD8CB557CB009C657864CD0B8ADE64EA4B69B122B3715EC2B8E49FE70076838C902C100000
+// F1B88000000000000000590914F43C03C058FFA8994C4DAAB658832959BC4BD5043170017E0DAB291579C41724189AFFD17A47416AD5054A44E8F9FB72FBA98B278E1F0D8E691710ED50CEF2165A7F4E57B4F9AD39539C67DFC6D5D0D9C592C23783005309C3867A7723BE8736DDDFBCBEAC6D85451C9343E7AE51D0A6F1C12F3AD7269EB53E5391EB3CF8466F7D66696A19C6C309283A524938DE20A5DCE7C241436D142425E59202856907D03F9F7B4E2A4031AD651469154ED8373EE09E057160FDDB28EF4837B09F0C9EA8DB3C732B1872A5E9F04BEE73A62DDF0B49824662A98A351743D8C0643C8267732F75D131049DAEF11A606CDCA7285C45A8ADEE429DDA8402B378FE182BC2E327EB00C2426E9F8F100000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -38,7 +38,7 @@ public class Capitalization extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 178 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 196 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -67,9 +67,12 @@ public class Capitalization extends Classifier
         __id = "" + (i);
         __value = "" + (w.capitalized);
         __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + (word.domainName + i);
-        __value = "" + (w.capitalized);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+        if (ParametersForLbjCode.currentParameters.useFE)
+        {
+          __id = "" + (word.domainName + i);
+          __value = "" + (w.capitalized);
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+        }
         i++;
       }
     }
@@ -81,7 +84,7 @@ public class Capitalization extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 178 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Capitalization(NEWord)' defined on line 196 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

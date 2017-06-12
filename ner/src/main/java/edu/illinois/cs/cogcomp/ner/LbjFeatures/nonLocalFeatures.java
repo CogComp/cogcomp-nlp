@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B8800000000000000059E81BA02C030168F55E611A1285C9D6D1444729C2E0E05A340B7DA184FE02941709EBBB76A8283ABCD1CDFFDFF1710DAF51013D99F66DF90D6A9206C2CC1FAC1A3878C0505FA1E907941C1D0D4B0DB03116793B270C4B7FED039FF9ABAA0A7E00583A40E48DD452BAE5AA5A74A12DD5E2A5B211744A88B44D8B616BF51B9CF4DBD970E98251F1444EB47238D1F86D191B3228EF3D233CCF20ED811BBAFF000000
+// F1B8800000000000000059E813B02C04C058FFA4611EA41B83BDA3888D9AC128383883C963DA727D4027778388FFDD3B2A2E8218402FE5EB71143E6204C4D0F9C8BA1D48828E59E5FE85A58B6A69145358B1C63885AE7F708E297C3C264DA8E13C2D93DC4EE7EC3B21A3610569208D4ED9599645FA3D2C125F1EC96397E9520B742F8F296F6F003FF085F8F4D399B2E8414DBD290E6B305B132660C082EB6696E879517B85C92A80258FA6544F85FAFB9332CB5E1C852D9C209FF99C7F76D300C774F00553100000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class nonLocalFeatures extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 274 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 306 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -52,9 +52,12 @@ public class nonLocalFeatures extends Classifier
       __id = "" + (feats[i]);
       __value = word.getNonLocFeatCount(feats[i]);
       __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
-      __id = "" + (word.domainName + feats[i]);
-      __value = word.getNonLocFeatCount(feats[i]);
-      __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+      if (ParametersForLbjCode.currentParameters.useFE)
+      {
+        __id = "" + (word.domainName + feats[i]);
+        __value = word.getNonLocFeatCount(feats[i]);
+        __result.addFeature(new RealPrimitiveStringFeature(this.containingPackage, this.name, __id, __value));
+      }
     }
     return __result;
   }
@@ -64,7 +67,7 @@ public class nonLocalFeatures extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 274 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'nonLocalFeatures(NEWord)' defined on line 306 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

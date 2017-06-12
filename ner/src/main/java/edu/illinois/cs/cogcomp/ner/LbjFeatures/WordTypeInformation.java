@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B880000000000000005825D6B43C0301EFB27B18B5BCAD22E74BBA025514491E78D0F37C6FAE252B4A429A3FD6FFDDB4F5C691319248EDD3FCD3FCDD5293739964B8F5503160300BAB6C3C91C3B2D9FAF3A2CB79582DB3669B29EDAE6D5616F478F0BC01EB08710ED313DC67420ADCD92DF8F256AA27C82BA5B649670C2A2099DA53A95BAD812C594BC8B43F08F1ED4F487D4D7FD9CB4B0C368ED71296CB3001CC8DE28818A60C3E41E97C0C16990C50CC66D2562908CA5888161B0EE4FABABE601FB983298FE63683C19EC5148D8ECE3AA43EB1755B914D2C0B15BDF85A60EDFA65C4C0AA17621F139D9960D7B5F2A4904621890192BA8B5628F726E450EEE22079EB1EFACDA917665A4E32A57B9DE2BDF22865656B34490B42727B2D840AC75BB5FC77B982D9566B56A1237B3C690E2EB6BE594C83AE266904A402BC8CB22E6635558A35660DBCA5E67DA11DCB13FA943170EBFBD9F4203F86E3CF703F6B87435090C46C20D6EB1793081496016A9D416147737974D36CD3E9F80F6BFAF58AA11438B6F0BB79415EA674F42754F0698AFF97D98A8FBDDF409FFAE7E0EEBF10B8F941FB49300000
+// F1B880000000000000005925FEB43C0301DF75E6307B695754CF8665146A28823CF0A8F936B737929525294D9FB6FFBB796AB5BC89884124FEEEDDB7FEE29248DCD0A3CFA52796131076A6CDE90C3B635C3E74587BA69ADCA9B31A554B8B6F958D0D113CC6A0F5026901D3073C7D4406CED8637FF25EC571896E5B138AC575B4798CD5D60DE3AE72B457DAC171ACED1E7443C32A53C836F4FAC18060B3D58CA1DE40427BEAD08105F044282C3560206691C91C86410238C045D252389C4487EB6BFAD142E62E451EBB360BD30E9B08963C3B94B238F6247D6B36B9E4B16BD4F9AA3CDE9B81128A7CB80B340B71D4676BE54B698C5107927ECB21E8B41F9850538FBB84C7AFA4CBA076BF9958657F8ECF66BDCEE6114B2B23C0152CC849CFA43598AE5DDA2A8DF62A4F299FA8B18CDFE0300C7C79E2A290170E26491CC9A8C372DA458D7AAA24337E613AC306B5B640B8AF8B62D4818FEF6FA391C83D177FF9C83437F6A022814F9024EB159D28545611689F016247737E70E19DEAE54FAE1C7DEB455FA4D9A2BFFCB0EAD2EDC5BF5E50A4FFAF2D24FA9E91F280244FF79FB32D1FBB3E320EFD668D68FE70238C5DE6AC300000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -38,7 +38,7 @@ public class WordTypeInformation extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 196 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 216 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -81,15 +81,18 @@ public class WordTypeInformation extends Classifier
         __id = "" + ("p" + i);
         __value = "" + (allNonLetters);
         __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + (word.domainName + "c" + i);
-        __value = "" + (allCapitalized);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + (word.domainName + "d" + i);
-        __value = "" + (allDigits);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
-        __id = "" + (word.domainName + "p" + i);
-        __value = "" + (allNonLetters);
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+        if (ParametersForLbjCode.currentParameters.useFE)
+        {
+          __id = "" + (word.domainName + "c" + i);
+          __value = "" + (allCapitalized);
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+          __id = "" + (word.domainName + "d" + i);
+          __value = "" + (allDigits);
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+          __id = "" + (word.domainName + "p" + i);
+          __value = "" + (allNonLetters);
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 2));
+        }
       }
     }
     return __result;
@@ -100,7 +103,7 @@ public class WordTypeInformation extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 196 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'WordTypeInformation(NEWord)' defined on line 216 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D919D6B43C03017CFBAC150125AEAC44F59DD602E3CB15A80E4C713C7195B7DD2AB6233792E3EEBBB7DCA2E64DDC921848CDDFEEEEF7779B2ACC2A3CD38392A05F28422D3FB33637876EB248E570ED145102EA5A59523769E2C8DBA1F3C9A9C13ECA2B615BBF6F5C50A475954A1A9B526FB1DE4A2D4798FA22862F7016857A4DE0258EBFA21716C691FC05F4CD4548900F7144D08260E031E7A7D783A402A8458D8A96781C00CB7905312403FF800E8752B3553627659E988EEE338943C97027352B8C49B50886788C50F9539870FF3984B1B05A0D9DEA1F7F0DA54EF16D6ECC32A65F62D923AF62B9269813E3552764F372816B1F336ABD66FBBE5B1657DF0B69AD7E2DA3A66C3C6E82A5D502BF20EE55D753AE1E19ABFD6BABDC13B85E9F406D358181EE200000
+// F1B88000000000000000DA25FDB43C0301EF75E82809257562AF46731447B715A80E4C701F12B6FAB547D466E25CF9BFFDDB56D1BD8A34723E021277F5EBFEEB3E27549954787007E541AED0944ADBB73637875E3248E4B0E3145102E64A59523EC25FD8DBE1E3D589C13ECA2B615BB55D2E205ABAC22D0CCD117DD8672596AB2C77114DCF1481EC925B3841ABE552E2C8D23E90AE19B1B80310E72889304130E831EBA3D5839402A84585773DCF60760EBA48A901289E75007AB6CE45D09C955A742AD78C0C4671F45116FB7B2E6F4A9B929D85AC0188EF0A633F1B16CE8EF76C86BA45A0DADFB3BFD5E616D6701576E915BAF09E491D7B9D81B4C81F5A2931AF99060D48F523AB996FB75B132E6BF11F2ABF9A4BE8AE1A27A3A86D7958B610BB55B4BAE1CF0AE17FDB62BD5766BC8F607553952F09300000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class Affixes extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'Affixes(NEWord)' defined on line 226 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Affixes(NEWord)' defined on line 248 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -56,9 +56,12 @@ public class Affixes extends Classifier
           __id = "p|";
           __value = "" + (word.form.substring(0, i));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "p|");
-          __value = "" + (word.form.substring(0, i));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "p|");
+            __value = "" + (word.form.substring(0, i));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
       for (int i = 1; i <= 4; ++i)
@@ -68,9 +71,12 @@ public class Affixes extends Classifier
           __id = "s|";
           __value = "" + (word.form.substring(N - i));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "s|");
-          __value = "" + (word.form.substring(N - i));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "s|");
+            __value = "" + (word.form.substring(N - i));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
       if (ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))
@@ -80,9 +86,12 @@ public class Affixes extends Classifier
           __id = "" + ("part" + i);
           __value = "" + (word.parts[i]);
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "part" + i);
-          __value = "" + (word.parts[i]);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "part" + i);
+            __value = "" + (word.parts[i]);
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
     }
@@ -94,7 +103,7 @@ public class Affixes extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'Affixes(NEWord)' defined on line 226 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Affixes(NEWord)' defined on line 248 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

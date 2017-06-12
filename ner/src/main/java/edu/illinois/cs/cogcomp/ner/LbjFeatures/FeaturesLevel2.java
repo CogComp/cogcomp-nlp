@@ -41,7 +41,7 @@ public class FeaturesLevel2 extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'FeaturesLevel2(NEWord)' defined on line 578 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'FeaturesLevel2(NEWord)' defined on line 638 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -62,7 +62,7 @@ public class FeaturesLevel2 extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'FeaturesLevel2(NEWord)' defined on line 578 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'FeaturesLevel2(NEWord)' defined on line 638 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

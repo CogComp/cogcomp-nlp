@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000DAF8F5B43C03415CFBAC520E848EA54D74BBD044491825C70548DB56BED4719631DCD40FFEEBBB775B031446B709B0901ECFE4EC9B5B5A550C887407E6C8D754A5CC56579F0E34D0F2C782894E0F106D08CB5D1477C460AB2F1E669F871EB6C265924047177A516057C4109EECFD31BEED54D6D1D53EB94134280503A11C18FD5BAD539473850E372DD2941FEB61A4D6B29B8051C4BF69581F1AB2A547D4C5B45520F314E610BC0C949C7D46A07A524699553C63FBD60338E552474802613FCF9E350C9DF800A4B4A81CAB64E1F899D2704B70A6FD1FE9517D68CE033F687EF9A82DF995514EB7B9EE77F6EB7EB0F3808E9DC2200000
+// F1B880000000000000005B05D5B4301301CFB2B40C2907ED1AE3A7DA022D2505E0F1411AF696F637D8CD52ABB90E76FFBB9E1D25144CA0AC2469033B33B3B5B5E50160C3083736CE332FC6A2BA1FD97AA1E92D3A06893CB185302FA539EE2139872E9EA6E7F71EB6C2611980D58D165814D12212FD8FB5E48B7714B57C798F225C6C148281C006F49B65BB62AE60B0C7C8AB5692E579249A5FA4E204503AE7BC2C87AEA861D53169255909EB027D40B9807C56A63C11C949095665D62DC7D138338E15647C802663DCF1ED50C9E7230E837E046D532F8E0317BCFDC95223E46CB39FE54B6FD5ABD4598209DE768BAEBEF82E1F7BE6514EFF29FE767C5D6BE3008423A3B589200000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class AffixesZH extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'AffixesZH(NEWord)' defined on line 250 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'AffixesZH(NEWord)' defined on line 278 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -56,9 +56,12 @@ public class AffixesZH extends Classifier
           __id = "ZH-p|";
           __value = "" + (word.form.substring(0, i));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "ZH-p|");
-          __value = "" + (word.form.substring(0, i));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "ZH-p|");
+            __value = "" + (word.form.substring(0, i));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
       for (int i = 1; i <= 2; ++i)
@@ -68,9 +71,12 @@ public class AffixesZH extends Classifier
           __id = "ZH-s|";
           __value = "" + (word.form.substring(N - i));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "ZH-s|");
-          __value = "" + (word.form.substring(N - i));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "ZH-s|");
+            __value = "" + (word.form.substring(N - i));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
     }
@@ -82,7 +88,7 @@ public class AffixesZH extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'AffixesZH(NEWord)' defined on line 250 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'AffixesZH(NEWord)' defined on line 278 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000DA0913B63C030158FFACBA1A06152A1C36DDC452D5A6C46079ECA4C713A2A841EE4E48052FFDB272E0EC2DE29220D2A77FD7FE4DA5953354A74C2996F634F2D89EA8A86F4EA8CBE5C760E61784792CBCC0FD0BB14EB43C66B96485ED2075BAFA7D0D29E57FCC4E3E4F6A734626FC42D48F094FE1C7436DBCB3D13FCE6559925307D748D2175126E7696976FD14FE6CC3E16E0FDB37A6C629F8D0516AC8AF53D5F229FA32EBC27ADA43C9A195FDD01012F248C66546876C4CDFBD0A4B7AACCA8C593ECF05A57B16B98B57AF70C3DD14C318C524ED15DA93EE8E2BCEFB6FBB5CE9EA7E7098625D5D84200000
+// F1B880000000000000005C0914B620130158FFAC47148D05CC16F8DDA7A2BE5C561F0B5C37477C52213199944192EF773BAB52E5A582E1AC04E23F2FEB7F6A3DCB124F8318521E15BB0CDAAEB8A1F886A8CB9A65E8A3835C740CBF41EB04F612F5A225BF8F5887EE8AE5FEE3C5782731880DAF4B39B545E30127BEE393EED95FA4B5E50E93FCE115990138FA5F0AB48F602CCE60D2F6CB39C3C8A7879918D06C881394E3624109432E74573554E5F847F272537B413196BDF02064BC809D4B8C0ED029FEFE4012D26DA6D86ACFBC16203ECBA4CC1A8ACECDE366962A40E5F98417983862A9E3158AD3F10FE72AF7F65F815E296EA0E43EDE784B200000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class PreviousTag2Level2 extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PreviousTag2Level2(NEWord)' defined on line 449 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTag2Level2(NEWord)' defined on line 499 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -59,18 +59,24 @@ public class PreviousTag2Level2 extends Classifier
             __id = "-2";
             __value = "" + (((NEWord) ((NEWord) w.previous).previous).neLabel);
             __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-            __id = "" + (word.domainName + "-2");
-            __value = "" + (((NEWord) ((NEWord) w.previous).previous).neLabel);
-            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+            if (ParametersForLbjCode.currentParameters.useFE)
+            {
+              __id = "" + (word.domainName + "-2");
+              __value = "" + (((NEWord) ((NEWord) w.previous).previous).neLabel);
+              __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+            }
           }
           else
           {
             __id = "-2";
             __value = "" + (((NEWord) ((NEWord) w.previous).previous).neTypeLevel2);
             __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-            __id = "" + (word.domainName + "-2");
-            __value = "" + (((NEWord) ((NEWord) w.previous).previous).neTypeLevel2);
-            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+            if (ParametersForLbjCode.currentParameters.useFE)
+            {
+              __id = "" + (word.domainName + "-2");
+              __value = "" + (((NEWord) ((NEWord) w.previous).previous).neTypeLevel2);
+              __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+            }
           }
         }
       }
@@ -83,7 +89,7 @@ public class PreviousTag2Level2 extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PreviousTag2Level2(NEWord)' defined on line 449 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTag2Level2(NEWord)' defined on line 499 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

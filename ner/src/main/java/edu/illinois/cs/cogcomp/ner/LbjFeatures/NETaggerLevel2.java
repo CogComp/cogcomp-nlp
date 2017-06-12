@@ -130,7 +130,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner
       if (!(example instanceof NEWord || example instanceof Object[]))
       {
         String type = example == null ? "null" : example.getClass().getName();
-        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 582 of LbjTagger.lbj received '" + type + "' as input.");
+        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 642 of LbjTagger.lbj received '" + type + "' as input.");
         new Exception().printStackTrace();
         System.exit(1);
       }
@@ -160,7 +160,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner
       if (!(examples instanceof NEWord[] || examples instanceof Object[][]))
       {
         String type = examples == null ? "null" : examples.getClass().getName();
-        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 582 of LbjTagger.lbj received '" + type + "' as input.");
+        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 642 of LbjTagger.lbj received '" + type + "' as input.");
         new Exception().printStackTrace();
         System.exit(1);
       }
@@ -180,7 +180,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner
       if (!(__example instanceof NEWord || __example instanceof Object[]))
       {
         String type = __example == null ? "null" : __example.getClass().getName();
-        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 582 of LbjTagger.lbj received '" + type + "' as input.");
+        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 642 of LbjTagger.lbj received '" + type + "' as input.");
         new Exception().printStackTrace();
         System.exit(1);
       }
@@ -218,7 +218,7 @@ public class NETaggerLevel2 extends SparseNetworkLearner
       if (!(examples instanceof NEWord[] || examples instanceof Object[][]))
       {
         String type = examples == null ? "null" : examples.getClass().getName();
-        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 582 of LbjTagger.lbj received '" + type + "' as input.");
+        System.err.println("Classifier 'NETaggerLevel2(NEWord)' defined on line 642 of LbjTagger.lbj received '" + type + "' as input.");
         new Exception().printStackTrace();
         System.exit(1);
       }

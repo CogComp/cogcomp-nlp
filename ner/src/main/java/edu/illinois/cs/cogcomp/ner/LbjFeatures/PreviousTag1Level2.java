@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D9F814B62C040158FFAC43058C25C50B7C6AE9A8E5C01C344A7E5DC33C6957756663A841FFBBB1392A74923037997FED7F6A1B2B5644CB2DA8174B1A39AD4B3D21748B7FCBA9F770E68E49692AFC90DF29DD15EB23C66F9C2C2B80C5E6E7EB2430DBDE891E3EDF6A77031B3684D16D29EE1C7436DBC217EC3B74456A45F9BE329D28EF0843BB14B8B1FE4AF03AE9E5664EB37E4D8D4AA97A4861C34D5D65A6E4C0BEBDE5020F20AC623DC8E382F1F71547F435AD3A43B18B264D6F84DD48D7AC8A2D714F6F4ABF24079CEF422BE3F10341EF737F132E23CC5140986C458C100000
+// F1B88000000000000000DBF814B62C040158FFAC43024692E28D3635F421F2D01C34A4FCBA913C69577566675111FFB772A19874B79230379973FEB7FA5BCB12C88318511E1C684CD89E6651E10DDB5E579FD18A583AC250F1358338DD24EB2346672F24CBC045DAF7611A54DB94448E3E873DB54313112731EB85EE1C7436D3F72E92FCE1159925DBFAF806B08B3016E7586175ED15FE70D3CBCC1C727E4D094AE25C1A34AB5C5D69B121685FD5F2064FC809D47691CB34E3471503AB92DE1B23B6475CF5A6526C5693AF7F1357B1672CDA5420FAF421F2238E4C0E9C0ADC96F87BA9FFA96F11B79BFCF26162D3E643200000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class PreviousTag1Level2 extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'PreviousTag1Level2(NEWord)' defined on line 428 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTag1Level2(NEWord)' defined on line 474 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -57,18 +57,24 @@ public class PreviousTag1Level2 extends Classifier
           __id = "-1";
           __value = "" + (((NEWord) w.previous).neLabel);
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "-1");
-          __value = "" + (((NEWord) w.previous).neLabel);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "-1");
+            __value = "" + (((NEWord) w.previous).neLabel);
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
         else
         {
           __id = "-1";
           __value = "" + (((NEWord) w.previous).neTypeLevel2);
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + "-1");
-          __value = "" + (((NEWord) w.previous).neTypeLevel2);
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + "-1");
+            __value = "" + (((NEWord) w.previous).neTypeLevel2);
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
         }
       }
     }
@@ -80,7 +86,7 @@ public class PreviousTag1Level2 extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'PreviousTag1Level2(NEWord)' defined on line 428 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'PreviousTag1Level2(NEWord)' defined on line 474 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

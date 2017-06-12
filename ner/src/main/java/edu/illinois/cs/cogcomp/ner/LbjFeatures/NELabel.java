@@ -46,7 +46,7 @@ public class NELabel extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'NELabel(NEWord)' defined on line 268 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'NELabel(NEWord)' defined on line 300 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -61,7 +61,7 @@ public class NELabel extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'NELabel(NEWord)' defined on line 268 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'NELabel(NEWord)' defined on line 300 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

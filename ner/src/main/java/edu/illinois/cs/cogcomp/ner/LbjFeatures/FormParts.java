@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B880000000000000005E1915F42C03017CFBAC9B442B561610F1D18F220F2A213103E301E1AE670C1E6D26BD930C8FDDDBDA8064031F1C733D4ADBEDD5FF777FB6A4621D861FC160A47E7F24B53EF0BFF8A47A052F61047A90F604330F936227EC4D6833F6F9697DA25C82924B6496F01B86682C61A1DC85D381E8B29650943738B1FDBAA281F2086430E792665D33A4ADA0B4A4E829506E811EB4122337ABB91F17A7F83BF8DD140C349149601CB6970795FCA1DC8BFB8184A5028E243BDECE4451CBBBBF7291EBEE8250EE9EA43EB29A2C4C05E282340FB483BE28C22BCAA9690EA8FDF54554746539C9F46A099036B6CDCA5564BAACA818B300FBA2AB46F6B26E3A3784C8234937BB06F681E1AF77DED52CDD6C9474297A0191D61B74372B51E918BF29EFADA6194501CFDB6E4693D02ED925D384AA27EFFA123B580FF44BB6D86633687FF68DEB033271FA8A7B3ED30763F814B4C5BDF90277AB0FF891781E906CE0719B81FAF0706E28B4FE300000
+// F1B88000000000000000DE15D4F42C0401DFB232984AD43438E19287118B8A4C40C8702C16D67081C6771777B2F16CFFEEC2B2653862298743D46B3B33F676EDCB79199453A5C358EB2D5CDA0D6D4038EDDB2D91CA8F801ADD08710A9240C53150325B164E5F3C2E2556817A5A6D82D655B87A82C69A1DC84DD91EAB29650943758B90A6E6289A5805FA3CF2B9955F88296B2C29293C47E8506C8F45A8CDC7FC664780FE23AF03D168CB49149601A6DCA14B67BB6C356E790094B040D186C99F835552F9EFEB7568FAFEA258EF9E253E339A2D420BA935E801CA0E4A302BCC377BD21C50FBF37734786539C9D87209B036772737FA55CB471520CC002073471C9D662CFB6750C8374933B37EC64155CFD3DB61CDC6C7BE852F61227AD26796646D9C3D7F694F6D65B84D9801C74FC1F2621627C8DB5A1CE7FAA9EBB5E33550B7C3068044F72C7E5D779643C58F55CEF4A439FAB3FA8DA9DBD4C1E1AD3217D6F72B6ADD18F776E84762A8EB176CB8C4EB6CFDB13288FDB8B5400000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class FormParts extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'FormParts(NEWord)' defined on line 139 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'FormParts(NEWord)' defined on line 153 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -62,9 +62,12 @@ public class FormParts extends Classifier
           __id = "" + (count);
           __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + count);
-          __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + count);
+            __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
           count--;
         }
         w = (NEWord) w.previous;
@@ -81,9 +84,12 @@ public class FormParts extends Classifier
           __id = "" + (count);
           __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
           __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-          __id = "" + (word.domainName + count);
-          __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
-          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          if (ParametersForLbjCode.currentParameters.useFE)
+          {
+            __id = "" + (word.domainName + count);
+            __value = "" + (MyString.normalizeDigitsForFeatureExtraction(lastParts[j]));
+            __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+          }
           count++;
         }
         w = (NEWord) w.next;
@@ -98,7 +104,7 @@ public class FormParts extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'FormParts(NEWord)' defined on line 139 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'FormParts(NEWord)' defined on line 153 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

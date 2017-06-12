@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B880000000000000005A191DB43C03016CFF59370E869AD22E3A9DC71DD044D128ACE93EA7B172D6229C5D67A8FFBB794BA59DB984124F29FEE7FD77C594E73E091F81696D5DE395D26D6D590DAC192CC278F00AD2427FAD9EA545ECB8AE6F9F5E2D6985C6A17E0D0F8F65C615373E0DF3AD72F2FE6D0B623EF607F9C422D7296A108681841C7B31CC3ABD9045AD3F05828DA570909497AA080663783389E4B79C1DC1C43555A02BC820F68EB12A7A1BE2C067CA0E3F083710974E4B5CBA3C732BD8F19697E196DEF64D8AB0CA01CD3B67C7D6A4CE4473E411FA3EF9C0034A752C21A7883AE01B12E5073F86C3205691C9BCDA4B5D1D844C3A15FDCF3E0F77AB0BFE6FF0CE8CCEA03261AB2A77CB2AD117857E2BF5AD2A367A73C46D42D70945D0DF16125496B69D5EA463D09DF38823968105EBF216C5636697200000
+// F1B880000000000000005A191DB43C03016CFF59370E869AD22E3A95D71DD044D128ACE93EA7B172D6229C5DD6ACEF77F2965B2B7B12586379C77FBFEB4FA22FB478C87A033BEA1F9CC7AB0BEA28D8CB25894E0F504B284E15B3DD88AC9715DDFBEBD5BDA0B856BEC1A1E1ECA851A6E6D1AF76BF2E5ECDA16D46CFD1EE29154AF82D4300D030928F172823ABD914DAD37F582859570909497EA0806252C50C87CD94E4A403D6D5B28C23A0CBEBFAF8E96CAB038B5650BF30EC514E193B92EDD1E709D6DF04BC3F84BDCF54D0AB0CA01CD3B67C7B6A2CDA8E68B54CDE8B29B04F9E590B48E12E8A34C68871CDC3A1F8049560792BB2D6D443211F064D53FFA3C1F4716F3CEE98D19957164C247D4F98734B62E03EC95734B9E69D9E523953947142557CC8EB5F83B9E0E916885456B199FFC54209DF325CE3CFF90F197EB1BE7B0CB9FA200000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -34,7 +34,7 @@ public class Forms extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'Forms(NEWord)' defined on line 93 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Forms(NEWord)' defined on line 103 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -73,9 +73,12 @@ public class Forms extends Classifier
         __id = "" + (i);
         __value = "" + (MyString.normalizeDigitsForFeatureExtraction(w.form));
         __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-        __id = "" + (word.domainName + i);
-        __value = "" + (MyString.normalizeDigitsForFeatureExtraction(w.form));
-        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        if (ParametersForLbjCode.currentParameters.useFE)
+        {
+          __id = "" + (word.domainName + i);
+          __value = "" + (MyString.normalizeDigitsForFeatureExtraction(w.form));
+          __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+        }
         i++;
       }
     }
@@ -87,7 +90,7 @@ public class Forms extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'Forms(NEWord)' defined on line 93 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'Forms(NEWord)' defined on line 103 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }

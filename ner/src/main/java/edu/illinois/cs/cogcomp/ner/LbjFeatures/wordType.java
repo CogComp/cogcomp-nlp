@@ -1,5 +1,5 @@
 // Modifying this comment will cause the next execution of LBJava to overwrite this file.
-// F1B88000000000000000D9E81CA02C030144F7569080D226E304DB888501B41F019E9363B5988DC69D4A8419EFBB969AA77F6B3CCCCBD136D75C810710F4263AAF61392E056C372D92C6750F20B534276DCAB98146F9117E7DBFE9C0ACAA366471E7E9CA1578E81DB2AB8F8E39B0ADA3F72CE311325515B6B2563C30F8EA62196A19EE1D97401206D0FD8CEC99C57F4D58C66E9CB1682F3B07A96B99B83A0968A98F7A88B2069FF0A6081ED026449E3AA0100000
+// F1B88000000000000000D9E81CA02C03C068F5524148D01BF00AE544C188368789CEC57DC4A2EA91D4B8C01FDDDE68AB3B29B42CFF3F5E3D68B678E17607727ABCEB3C4A8D5517D1FE416DB08708960293A27AAD8547C919BCFC7DD296495707E0DAF9239D0A2F1C1279472E89395FAC85E306F98818A52576AE2D8FB1EED63422D432D91D2328010B48F6563657EAA7A0E3B73F4E50D75F13C15D65FB86506CC673D3B1002535B1DDA885189FF3FEF93CCB00804D334504100000
 
 package edu.illinois.cs.cogcomp.ner.LbjFeatures;
 
@@ -51,9 +51,12 @@ public class wordType extends Classifier
       __id = "";
       __value = "" + (WordTopicAndLayoutFeatures.getWordType(word));
       __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
-      __id = "" + (word.domainName + "");
-      __value = "" + (WordTopicAndLayoutFeatures.getWordType(word));
-      __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+      if (ParametersForLbjCode.currentParameters.useFE)
+      {
+        __id = "" + (word.domainName + "");
+        __value = "" + (WordTopicAndLayoutFeatures.getWordType(word));
+        __result.addFeature(new DiscretePrimitiveStringFeature(this.containingPackage, this.name, __id, __value, valueIndexOf(__value), (short) 0));
+      }
     }
     return __result;
   }
