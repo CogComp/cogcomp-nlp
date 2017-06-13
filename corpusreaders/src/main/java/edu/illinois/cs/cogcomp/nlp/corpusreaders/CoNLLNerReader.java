@@ -178,7 +178,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
             String[] sline = line.split("\t");
 
 
-            if (line.startsWith("B-")) {
+            if (line.startsWith("B-") || line.startsWith("U-")) {
                 // two consecutive entities.
                 if (start > -1) {
                     // peel off a constituent if it exists.
