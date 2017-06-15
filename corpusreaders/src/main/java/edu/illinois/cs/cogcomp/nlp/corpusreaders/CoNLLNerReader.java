@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -135,6 +136,7 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
         } else {
             try {
                 files = IOUtils.ls(corpusdirectory);
+                Arrays.sort(files);
                 for (int i = 0; i < files.length; i++) {
                     files[i] = Paths.get(corpusdirectory, files[i]).toString();
                 }
@@ -153,7 +155,38 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
         }
     }
 
-    /**
+    @Override
+    protected void initializeReader() {
+        String[] files = new String[0];
+        this.textAnnotations = new ArrayList<>();
+
+        String corpusdirectory =
+                this.resourceManager.getString(CorpusReaderConfigurator.SOURCE_DIRECTORY.key);
+
+        // In case the input argument is a single file
+        if (!IOUtils.isDirectory(corpusdirectory)) {
+            files = new String[] {corpusdirectory};
+        } else {
+            try {
+                files = IOUtils.ls(corpusdirectory);
+                Arrays.sort(files);
+                for (int i = 0; i < files.length; i++) {
+                    files[i] = Paths.get(corpusdirectory, files[i]).toString();
+                }
+            } catch (IOException e) {
+                logger.error("Error listing directory.");
+                logger.error(e.getMessage());
+            }
+        }
+        try {
+            for (String file : files) {
+                textAnnotations.add(loadCoNLLfile(file));
+            }
+        } catch (IOException e) {
+            logger.error("Error reading file.");
+            logger.error(e.getMessage());
+        }
+    }    /**
      * This loads filename into a textannotation.
      *
      * @param filename
@@ -260,7 +293,6 @@ public class CoNLLNerReader extends AnnotationReader<TextAnnotation> {
 
         return ta;
     }
-
 
     @Override
     public boolean hasNext() {
