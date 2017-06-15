@@ -54,7 +54,7 @@ public class NerInitTest {
         }
 
         assert (ta.hasView(ViewNames.NER_CONLL));
-        assertEquals(ta.getView(ViewNames.NER_CONLL).getConstituents().size(), 2);
+        assertEquals(1, ta.getView(ViewNames.NER_CONLL).getConstituents().size());
     }
 
 

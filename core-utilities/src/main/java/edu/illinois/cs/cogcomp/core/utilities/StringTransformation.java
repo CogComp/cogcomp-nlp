@@ -328,8 +328,15 @@ public class StringTransformation implements Serializable {
     private int computeCurrentOffset(int modOffset) {
         int currentChange = 0;
         for (Integer changeIndex : currentOffsetModifications.keySet()) {
-            if (changeIndex >= modOffset)
-                break;
+            if (changeIndex >= modOffset) {
+                EditType mod = currentOffsetModifications.get(changeIndex).getSecond();
+                if (mod.equals(EditType.DELETE))
+                    break;
+                else if (changeIndex > modOffset) // increase in current offsets
+                    break;
+
+            }
+
             currentChange += currentOffsetModifications.get(changeIndex).getFirst();
         }
         return modOffset + currentChange;

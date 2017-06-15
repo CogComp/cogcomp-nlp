@@ -339,7 +339,7 @@ public class NERAnnotatorTest {
             fail(e.getMessage());
         }
 
-        assertEquals(3, nerView.getNumberOfConstituents());
+        assertEquals(4, nerView.getNumberOfConstituents());
     }
 
     /**
