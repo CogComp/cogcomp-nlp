@@ -37,40 +37,50 @@ public class Preprocess {
 	public String getContPhrase(String s, PhraseList list) {
 
 		String[] tokens = s.split("\\s+");
-		String ret = null;
+		String ret = "";
 		for (int i = 1; i < tokens.length;) {
 			String phrase = tokens[i - 1] + " " + tokens[i];
 			if (list.dict.contains(phrase)) {
 				ret += tokens[i - 1] + "_" + tokens[i] + " ";
 				i += 2;
-			} else
-				i = +1;
+			} else{
+				ret += tokens[i - 1]+" ";
+				i += 1;
+			}
+			//System.out.println(ret);	
 		}
+		ret+=tokens[tokens.length-1];
 		return ret;
 	}
 
 	public String getDiscontPhrase(String s, PhraseList list) {
 		String[] tokens = s.split("\\s+");
+
 		ArrayList<String> words = new ArrayList<String>();
-		for (String ss : tokens)
+		for (String ss : tokens) {
 			words.add(ss);
+		}
 		for (int i = 0; i < words.size(); i++) {
-			if (list.verb.contains(words.get(i))) {
-				int j = i + 2;
+			if (list.firstWord.contains(words.get(i))) {
+				int j = i + 1;
 				while (j < i + 5 && j < words.size()) {
 					String phrase = words.get(i) + " " + words.get(j);
-					if (list.verbPhrase.contains(phrase)) {
+					if (list.discPhrase.contains(phrase)) {
+						//System.out.println("disc phrase found!!!!! " + phrase);
 						words.set(i, words.get(i) + "_" + words.get(j));
 						words.remove(j);
 						break;
 					}
-
+					j++;
 				}
 			}
 		}
 		String ret = "";
 		for (int i = 0; i < words.size(); i++) {
-			ret += words.get(i) + " ";
+			if (i == words.size() - 1)
+				ret += words.get(i);
+			else
+				ret += words.get(i) + " ";
 		}
 		return ret;
 	}

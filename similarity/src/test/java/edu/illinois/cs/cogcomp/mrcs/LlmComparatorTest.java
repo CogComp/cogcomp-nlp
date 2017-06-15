@@ -115,7 +115,7 @@ public class LlmComparatorTest {
 	@Test
 	public void testparagramllm() {
 		Properties props = new Properties();
-		props.setProperty(SimConfigurator.WORD_METRIC.key, EmbeddingConstant.wordnet);
+		props.setProperty(SimConfigurator.WORD_METRIC.key, EmbeddingConstant.paragram);
 		try {
 			llm = new LlmStringComparator(new ResourceManager(props));
 		} catch (IOException e) {

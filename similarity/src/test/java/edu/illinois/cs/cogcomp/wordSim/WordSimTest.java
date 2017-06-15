@@ -25,17 +25,17 @@ import static org.junit.Assert.assertTrue;
 public class WordSimTest {
 	
 	
-	WordSim ws;
+	static ResourceManager rm_;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		String file="config/configurations.properites";
-		ResourceManager rm_ = new SimConfigurator().getConfig(new ResourceManager(file));
-		WordSim ws = new WordSim(rm_);
+		String file="config/test.configurations.properties";
+		rm_ = new SimConfigurator().getConfig(new ResourceManager(file));
 	}
 
 	@Test
 	public void testWordNet(){
+		WordSim ws = new WordSim(rm_,"wordnet");
 		MetricResponse m1 = ws.compare("word", "sentence", "wordnet");
 		MetricResponse m2 = ws.compare("word", "wife", "wordnet");
 		assertTrue(m1.score > m2.score);
@@ -43,23 +43,11 @@ public class WordSimTest {
 	
 	@Test
 	public void testParagram() throws Exception {
+		WordSim ws = new WordSim(rm_,"paragram");
 		MetricResponse m1 = ws.compare("word", "sentence", "paragram");
 		MetricResponse m2 = ws.compare("word", "wife", "paragram");
 		assertTrue(m1.score > m2.score);
 	}
 
-	@Test
-	public void testWord2vec() throws Exception {
-		MetricResponse m1 = ws.compare("word", "sentence", "word2vec");
-		MetricResponse m2 = ws.compare("word", "wife", "word2vec");
-		assertTrue(m1.score > m2.score);
-	}
-	
-	@Test
-	public void testGlove() throws Exception {
-		MetricResponse m1 = ws.compare("word", "sentence", "glove");
-		MetricResponse m2 = ws.compare("word", "wife", "glove");
-		assertTrue(m1.score > m2.score);
-	}
 	
 }

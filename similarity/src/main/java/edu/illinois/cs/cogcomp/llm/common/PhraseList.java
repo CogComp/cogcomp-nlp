@@ -22,39 +22,33 @@ import java.util.HashSet;
 public class PhraseList {
 	// all phrases
 	HashSet<String> dict = new HashSet<String>();
-	// discontinuous verb phrase
-	HashSet<String> verb = new HashSet<String>();
-	HashSet<String> verbPhrase = new HashSet<String>();
+	// discontinuous  phrase
+	HashSet<String> firstWord = new HashSet<String>();
+	HashSet<String> discPhrase = new HashSet<String>();
 
-	public PhraseList(String dictionary, String discontPhrase) {
+	public PhraseList(String dictionary) {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader(dictionary));
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
-				if (line.length() > 0) {
-					dict.add(line);
+				String[] tokens=line.split("\\s+");
+				if (tokens.length == 3) {
+					dict.add(tokens[0]+" "+tokens[1]);
 				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		try {
-			reader = new BufferedReader(new FileReader(discontPhrase));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				line = line.trim();
-				if (line.length() > 0) {
-					String arr[] = line.split("\\s+");
-					verb.add(arr[0]);
-					verbPhrase.add(line);
-				}
+				if (tokens[2].equals("0")){
+					discPhrase.add(tokens[0]+" "+tokens[1]);
+					//System.out.println(tokens[0]+" "+tokens[1]);
+					firstWord.add(tokens[0]);
+				}	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+
 	}
+	
 
 }

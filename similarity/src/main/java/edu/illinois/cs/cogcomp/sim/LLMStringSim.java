@@ -27,12 +27,10 @@ public class LLMStringSim implements Metric<String> {
 	private LlmStringComparator llm;
 	ResourceManager rm_;
 	Preprocess preprocess;
-	private static final String config = "config/LlmConfig.txt";
 	PhraseList list;
 
-	public LLMStringSim() {
+	public LLMStringSim(String config) {
 		try {
-
 			rm_ = new ResourceManager(config);
 			llm = new LlmStringComparator(rm_);
 		} catch (IllegalArgumentException | IOException e) {
@@ -42,8 +40,7 @@ public class LLMStringSim implements Metric<String> {
 
 		ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
 		String phrases = fullRm.getString(SimConfigurator.PHRASE_DICT.key);
-		String verbPhrases = fullRm.getString(SimConfigurator.VERB_PHRASES.key);
-		list = new PhraseList(phrases, verbPhrases);
+		list = new PhraseList(phrases);
 	}
 
 	@Override
@@ -53,11 +50,12 @@ public class LLMStringSim implements Metric<String> {
 			ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
 			double score;
 			if (fullRm.getBoolean(SimConfigurator.USE_PHRASE_COMPARISON.key)) {
-
+				System.out.println("using phrase representations");
 				arg1 = preprocess.getPhrase(arg1, list);
 				arg2 = preprocess.getPhrase(arg2, list);
 			}
 			if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
+				System.out.println("using NER annotator");
 				TextAnnotation ta1 = preprocess.runNER(arg1);
 				TextAnnotation ta2 = preprocess.runNER(arg2);
 				score = llm.compareStrings(ta1, ta2);

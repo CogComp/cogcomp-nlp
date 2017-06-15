@@ -18,6 +18,12 @@
         </dependency>
         
         <dependency>
+            <groupId>org.cogcomp</groupId>
+    		<artifactId>cogcomp-datastore</artifactId>
+    		<version>1.9.7</version>
+        </dependency>
+        
+        <dependency>
     		<groupId>edu.illinois.cs.cogcomp</groupId>
     		<artifactId>illinois-ner</artifactId>
     		<version>3.1.7</version>
@@ -57,7 +63,7 @@
  		 <dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
 			<artifactId>DatalessClassification</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 		</dependency>
         
         <dependency>

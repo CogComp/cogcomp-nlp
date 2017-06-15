@@ -197,7 +197,7 @@ public class LlmStringComparator {
 		for (int i = 0; i < ne2.size(); i++) {
 			ne2_[i] = ne2.get(i).getTokenizedSurfaceForm();
 		}
-
+		
 		return (double) this.determineEntailment(source_, target_).getScore();
 	}
 
