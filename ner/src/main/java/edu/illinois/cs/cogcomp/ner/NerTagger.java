@@ -30,10 +30,11 @@ public class NerTagger {
             System.exit(-1);
         }
 
-        ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
         try {
             boolean areWeTraining = args[0].equalsIgnoreCase("-train");
             Parameters.readConfigAndLoadExternalData(args[args.length - 1], areWeTraining);
+            ParametersForLbjCode cp = ParametersForLbjCode.currentParameters;
+
 
             if (args[0].equalsIgnoreCase("-annotate")) {
                 NETagPlain.init();
