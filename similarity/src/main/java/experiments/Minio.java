@@ -14,23 +14,23 @@ public class Minio {
 		Datastore ds = new Datastore(endpoint,accessKey,secretKey);
 		ds.publishFile("org.cogcomp.wordembedding",
                 "word2vec.txt", 1.5,
-                "src/main/resources/test.txt",
+                "/shared/bronte/sling3/data/vectors-enwikitext_vivek200.txt",
                 false, true);  
 		ds.publishFile("org.cogcomp.wordembedding",
                 "glove.txt", 1.5,
-                "src/main/resources/test.txt",
+                "/shared/bronte/sling3/data/glove.6B.200d.txt",
                 false, true);  
 		ds.publishFile("org.cogcomp.wordembedding",
                 "phrase2vec.txt", 1.5,
-                "src/main/resources/test.txt",
+                "/shared/bronte/sling3/data/phraseEmbedding.txt",
                 false, true);  
 		ds.publishFile("org.cogcomp.wordembedding",
                 "memorybasedESA.txt", 1.5,
-                "src/main/resources/test.txt",
+                "/shared/bronte/sling3/data/memorybasedESA.txt",
                 false, true);  
 		ds.publishFile("org.cogcomp.wordembedding",
                 "pageIDMapping.txt", 1.5,
-                "src/main/resources/test.txt",
+                "/shared/bronte/sling3/data/pageIDMapping.txt",
                 false, true);  
 		
 	}
