@@ -52,7 +52,7 @@ public class PredicateArgumentView extends View {
         this.predicates.add(predicate);
 
         for (int i = 0; i < args.size(); i++) {
-            this.addConstituent(args.get(i));
+            if(!this.containsConstituent(args.get(i))) this.addConstituent(args.get(i));
             this.addRelation(new Relation(relations[i], predicate, args.get(i), scores[i]));
         }
     }
