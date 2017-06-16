@@ -12,6 +12,7 @@ public class Minio {
 		String accessKey=rm.getString("ACCESS-KEY");
 		String secretKey=rm.getString("SECRET-KEY");
 		Datastore ds = new Datastore(endpoint,accessKey,secretKey);
+		/**
 		ds.publishFile("org.cogcomp.wordembedding",
                 "word2vec.txt", 1.5,
                 "/shared/bronte/sling3/data/vectors-enwikitext_vivek200.txt",
@@ -24,13 +25,14 @@ public class Minio {
                 "phrase2vec.txt", 1.5,
                 "/shared/bronte/sling3/data/phraseEmbedding.txt",
                 false, true);  
+        **/        
 		ds.publishFile("org.cogcomp.wordembedding",
                 "memorybasedESA.txt", 1.5,
-                "/shared/bronte/sling3/data/memorybasedESA.txt",
+                "/shared/bronte/sling3/data/MemoryBasedESA.txt",
                 false, true);  
 		ds.publishFile("org.cogcomp.wordembedding",
                 "pageIDMapping.txt", 1.5,
-                "/shared/bronte/sling3/data/pageIDMapping.txt",
+                "/shared/bronte/sling3/data/wikiPageIDMapping.txt",
                 false, true);  
 		
 	}
