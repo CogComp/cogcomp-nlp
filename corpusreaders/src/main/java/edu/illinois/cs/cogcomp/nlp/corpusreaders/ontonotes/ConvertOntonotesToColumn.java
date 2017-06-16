@@ -60,23 +60,23 @@ public class ConvertOntonotesToColumn {
         StatefulTokenizer st = new StatefulTokenizer();
         TokenizerTextAnnotationBuilder taBuilder = new TokenizerTextAnnotationBuilder(st);
         XmlTextAnnotationMaker xtam = new XmlTextAnnotationMaker(taBuilder, xmlProcessor);
- 
+
         // read the file and create the annotation.
         XmlTextAnnotation xta = xtam.createTextAnnotation(document, "OntoNotes 5.0", "test");
         TextAnnotation ta = xta.getTextAnnotation();
         List<SpanInfo> fudge = xta.getXmlMarkup();
- 
+
         // create the named entity vi
         View nerView = new SpanLabelView(ViewNames.NER_ONTONOTES, ta);
         for (SpanInfo si : fudge) {
             if ("enamex".equalsIgnoreCase(si.label)) {
- 
+
                 IntPair charOffsets = si.spanOffsets;
                 String neLabel = si.attributes.get("type").getFirst();
                 int cleanTextCharStart = xta.getXmlSt().computeModifiedOffsetFromOriginal(charOffsets.getFirst());
                 int cleanTextCharEnd = xta.getXmlSt().computeModifiedOffsetFromOriginal(charOffsets.getSecond());
                 int cleanTextNeTokStart = ta.getTokenIdFromCharacterOffset(cleanTextCharStart);
-                int cleanTextNeTokEnd = ta.getTokenIdFromCharacterOffset(cleanTextCharEnd-1); // StringTransformation returns one-past-the-end index; TextAnnotation maps at-the-end index
+                int cleanTextNeTokEnd = ta.getTokenIdFromCharacterOffset(cleanTextCharEnd - 1); // StringTransformation returns one-past-the-end index; TextAnnotation maps at-the-end index
                 Constituent neCon = new Constituent(neLabel, nerView.getViewName(), ta, cleanTextNeTokStart, cleanTextNeTokEnd + 1); //constituent token indexing uses one-past-the-end
                 nerView.addConstituent(neCon);
             }
@@ -84,77 +84,73 @@ public class ConvertOntonotesToColumn {
         ta.addView(ViewNames.NER_ONTONOTES, nerView);
         return xta;
     }
-    
+
     /**
-	 * This is used primarily for quick testing. The bulk of this should be used as a
-	 * starting point for a unit test, question is can we include some of the files for
-	 * the test in the code repository?
-	 * @param args
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
-	 * @throws IOException 
-	 */
-	static public void main(String[] args) throws IOException {
-		if (args.length < 4) {
-			System.err.println("This executable requires four arguments:\n"
-					+ " ConvertOntonotesToColumn <OntoNotes Directory> <language>"
-					+ " <file_kind> <output_directory>");
-			System.exit(-1);
-		}
-		String topdir = args[0];
-		Language language = null;
+     * This is used primarily for quick testing. The bulk of this should be used as a
+     * starting point for a unit test.
+     * @param args
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     * @throws IOException 
+     */
+    static public void main(String[] args) throws IOException {
+        if (args.length < 4) {
+            System.err.println("This executable requires four arguments:\n" 
+        + " ConvertOntonotesToColumn <OntoNotes Directory> <language>" + " <file_kind> <output_directory>");
+            System.exit(-1);
+        }
+        String topdir = args[0];
+        Language language = null;
         try {
             language = DocumentIterator.Language.valueOf(args[1]);
         } catch (IllegalArgumentException iae) {
             System.out.print("language must be one of : ");
             for (DocumentIterator.Language l : DocumentIterator.Language.values())
-                System.out.print(l.toString()+" ");
+                System.out.print(l.toString() + " ");
             System.out.println();
             System.exit(-1);
         }
 
-		DocumentIterator.FileKind kind = null;
+        DocumentIterator.FileKind kind = null;
         try {
             kind = DocumentIterator.FileKind.valueOf(args[2]);
         } catch (IllegalArgumentException iae) {
             System.out.print("file_kind must be one of : ");
             for (DocumentIterator.FileKind l : DocumentIterator.FileKind.values())
-                System.out.print(l.toString()+" ");
+                System.out.print(l.toString() + " ");
             System.out.println();
             System.exit(-1);
         }
-		String outputdir = args[3];
-		
-		// make sure the output directory exists.
-		File f = new File(outputdir);
-		if (f.exists()) {
-			if (!f.isDirectory()) {
-				System.err.println("The output directory must specify a directory:\n"
-				                + " ConvertOntonotesToColumn <OntoNotes Directory> <language>"
-			                    + " <file_kind> <output_directory>");
-			}
-		} else {
-			f.mkdirs();
-		}
-		
-		// make sure there is a file separator.
-		if (!outputdir.endsWith(File.separator))
-		    outputdir += File.separator;
-		
-		// "en"
-		DocumentIterator di = new DocumentIterator(topdir, language, kind);
-		int counter = 0;
-		long start = System.currentTimeMillis();
+        String outputdir = args[3];
+
+        // make sure the output directory exists.
+        File f = new File(outputdir);
+        if (f.exists()) {
+            if (!f.isDirectory()) {
+                System.err.println("The output directory must specify a directory:\n" + " ConvertOntonotesToColumn <OntoNotes Directory> <language>" + " <file_kind> <output_directory>");
+            }
+        } else {
+            f.mkdirs();
+        }
+
+        // make sure there is a file separator.
+        if (!outputdir.endsWith(File.separator))
+            outputdir += File.separator;
+
+        // "en"
+        DocumentIterator di = new DocumentIterator(topdir, language, kind);
+        int counter = 0;
+        long start = System.currentTimeMillis();
         while (di.hasNext()) {
             File document = di.next();
             TextAnnotation ta = getNameTextAnnotation(document).getTextAnnotation();
             String path = document.getAbsolutePath();
-            path = outputdir+path.substring(topdir.length());
+            path = outputdir + path.substring(topdir.length());
             path += ".conll";
-            System.out.println(counter+":"+path);
+            System.out.println(counter + ":" + path);
             CoNLL2002Writer.writeViewInCoNLL2003Format(ta.getView(ViewNames.NER_ONTONOTES), ta, path);
             counter++;
         }
-		System.out.println("Read "+counter+" documents in "+(System.currentTimeMillis()-start));
-	}
+        System.out.println("Read " + counter + " documents in " + (System.currentTimeMillis() - start));
+    }
 }

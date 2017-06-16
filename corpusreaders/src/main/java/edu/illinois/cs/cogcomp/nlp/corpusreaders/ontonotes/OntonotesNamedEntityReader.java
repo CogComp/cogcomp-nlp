@@ -67,9 +67,6 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
     /** the home directory to traverse. */
     protected final String homeDirectory;
     
-    /** the name of the resulting view. */
-    protected String parseViewName = "OntonotesNER";
-    
     /** the list of files, compiled during initialization, used to iterate over the parse trees. */
     protected ArrayList<File> filelist = new ArrayList<File> ();
     
@@ -78,6 +75,9 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
     
     /** the current file ready to be read. */
     protected String currentfile = null;
+    
+    /** contains a count of the number of each entity type encountered. */
+    private HashMap<String, Integer> entityCounts = new HashMap<String, Integer>();
     
     /**
      * Reads the specified sections from penn treebank
@@ -175,6 +175,11 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
                     System.err.println("Something wonky in \""+docid+"\", at "+charOffsets+", "+cleanTextCharStart+" - "+cleanTextCharEnd
                         +" = "+ta.text.substring(cleanTextCharStart, cleanTextCharEnd));
                 } else {
+                    if (entityCounts.containsKey(neLabel)) {
+                        entityCounts.put(neLabel, (entityCounts.get(neLabel)+1));
+                    } else {
+                        entityCounts.put(neLabel, 1);
+                    }
                     Constituent neCon = new Constituent(neLabel, nerView.getViewName(), ta, cleanTextNeTokStart, cleanTextNeTokEnd + 1); //constituent token indexing uses one-past-the-end
                     nerView.addConstituent(neCon);
                 }
@@ -190,7 +195,17 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
      * other relevant statistics the user should know about).
      */
     public String generateReport() {
-        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+        if (filelist.size() > 0) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("Read "+fileindex+" of "+filelist.size()+" files. Entity counts follow:\n");
+            for (String entity : entityCounts.keySet()) {
+                sb.append(entity+" : "+entityCounts.get(entity)+"\n");
+            }
+            return sb.toString();
+        } else {
+            return "No files were read.";
+        }
+        
     }
 
     @Override
@@ -206,7 +221,7 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
      */
     static public void main(String[] args) throws IOException {
         if (args.length < 3) {
-            System.err.println("This executable requires four arguments:\n"
+            System.err.println("This executable requires three arguments:\n"
                     + " OntonotesTreebankReader <OntoNotes Directory> <language> <output_directory>");
             System.exit(-1);
         }
@@ -242,6 +257,6 @@ public class OntonotesNamedEntityReader extends AnnotationReader<XmlTextAnnotati
             if ((count % 10) == 0)
                 System.out.println("Completed "+count+" of "+otr.filelist.size());
         }
-        System.out.println("Processed a total of "+count+" of "+otr.filelist.size()+" treebanks.");
+        System.out.println(otr.generateReport());
     }
 }

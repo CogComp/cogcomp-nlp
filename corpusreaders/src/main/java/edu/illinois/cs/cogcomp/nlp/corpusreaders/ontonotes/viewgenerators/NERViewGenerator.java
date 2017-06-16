@@ -20,7 +20,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
  * This class will read NER data from the OntoNotes 5.0 corpora stored in it's SQL representation 
  * in a mySQL database and produce a TextAnnotation containing the sentences, tokens and NER view.
  * @author redman
- * @deprecated we have decided NOT to use the database version of the OntoNotes 5.0 corpora, just too shoddy.
+ * @AvoidUsing(reason = "This class has been deprecated in favor of mechanism reading the data from the original files.",
+            alternative = "OntonotesNamedEntityReader")
  */
 public class NERViewGenerator {
 

@@ -54,6 +54,9 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
     /** the current file ready to be read. */
     protected String currentfile = null;
     
+    /** the number of trees produced. */
+    protected int treesProduced = 0;
+    
     /**
      * Reads the specified sections from penn treebank
      * @param treebankHome The directory that points to the merged (mrg) files of the WSJ portion
@@ -89,7 +92,10 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
             return true;
         }
     }
-
+    
+    /** the annotation exception, or null if none. */
+    private Exception error = null;
+    
     /**
      * return the next annotation object. Don't forget to increment currentAnnotationId.
      *
@@ -101,15 +107,17 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
         try {
             lines = LineIO.read(currentfile);
         } catch (FileNotFoundException e1) {
+            error = e1;
             e1.printStackTrace();
             return null;
         }
         try {
-            TextAnnotation ta = findNextTree(lines);
+            TextAnnotation ta = parseTreebankData(lines);
             return ta;
         } catch (AnnotatorException e) {
+            error = e;
             e.printStackTrace();
-            throw new IllegalStateException(e);
+            return null;
         }
     }
 
@@ -119,7 +127,7 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
      * @return the text annotation.
      * @throws AnnotatorException
      */
-    private TextAnnotation findNextTree(ArrayList<String> lines) throws AnnotatorException {
+    private TextAnnotation parseTreebankData(ArrayList<String> lines) throws AnnotatorException {
         StringBuilder sb = new StringBuilder();
         int numParen = 0;
         int currentLineId = 0;
@@ -142,6 +150,7 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
                 if (text.length != 0) {
                     sentences.add(text);
                     trees.add(tree);
+                    treesProduced++;
                 } else 
                     System.err.println("Y "+tree);
                 sb = new StringBuilder();
@@ -182,7 +191,12 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
      * other relevant statistics the user should know about).
      */
     public String generateReport() {
-        throw new UnsupportedOperationException("ERROR: generateReport() Not yet implemented.");
+        if (error != null) {
+            return "OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+" of "+filelist.size()+" files.\n"
+                            +"Error encountered: "+error.getMessage();
+        } else {
+            return "OntonotesTreebankReader produced "+treesProduced+" trees from "+fileindex+" of "+filelist.size()+" files.";
+        }
     }
 
     @Override
@@ -217,9 +231,9 @@ public class OntonotesTreebankReader extends AnnotationReader<TextAnnotation> {
             }
             
             count++;
-            if ((count % 10) == 0)
+            if ((count % 100) == 0)
                 System.out.println("Completed "+count+" of "+otr.filelist.size());
         }
-        System.out.println("Processed a total of "+count+" of "+otr.filelist.size()+" treebanks.");
+        System.out.println(otr.generateReport());
     }
 }
