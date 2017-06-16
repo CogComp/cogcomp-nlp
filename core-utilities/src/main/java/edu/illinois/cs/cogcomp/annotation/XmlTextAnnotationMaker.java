@@ -70,8 +70,7 @@ public class XmlTextAnnotationMaker {
      *          the cleaned text, and xml markup extracted from source
      */
     public XmlTextAnnotation createTextAnnotation(String xmlText, String corpusId, String docId)  {
-
-        logger.info("processing text from document {}", docId);
+    	logger.debug("processing text from document {}", docId);
         Pair<StringTransformation, List<XmlDocumentProcessor.SpanInfo>> cleanResults =
                 xmlProcessor.processXml(xmlText);
 
