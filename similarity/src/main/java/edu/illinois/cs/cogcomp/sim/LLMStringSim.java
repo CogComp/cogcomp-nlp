@@ -56,6 +56,7 @@ public class LLMStringSim implements Metric<String> {
 			}
 			if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
 				System.out.println("using NER annotator");
+				preprocess.initializeNER();
 				TextAnnotation ta1 = preprocess.runNER(arg1);
 				TextAnnotation ta2 = preprocess.runNER(arg2);
 				score = llm.compareStrings(ta1, ta2);

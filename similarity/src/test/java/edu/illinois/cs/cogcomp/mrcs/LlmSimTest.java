@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.sim.LLMStringSim;
 import edu.illinois.cs.cogcomp.sim.Metric;
 
 public class LlmSimTest {
-
+	@Ignore
 	@Test
 	public void llmSimTest(){
 		String config = "config/configurations.properties";
@@ -34,7 +34,7 @@ public class LlmSimTest {
 
 	}
 	
-	@Ignore
+	
 	@Test 
 	public void llmNERSimTest(){
 		String config = "config/test.configurations.properties";

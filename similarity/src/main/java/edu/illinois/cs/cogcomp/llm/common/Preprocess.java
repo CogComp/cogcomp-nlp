@@ -7,11 +7,15 @@
  */
 package edu.illinois.cs.cogcomp.llm.common;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.ner.NERAnnotator;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
@@ -21,7 +25,7 @@ public class Preprocess {
 
 	NERAnnotator co;
 
-	public void initialize() {
+	public void initializeNER() {
 		try {
 			co = new NERAnnotator(ViewNames.NER_CONLL);
 		} catch (IOException e) {
@@ -101,5 +105,14 @@ public class Preprocess {
 		}
 
 		return ta;
+	}
+	
+	
+	public static void main (String[] args){
+		Preprocess p=new Preprocess();
+		p.initializeNER();
+		TextAnnotation ta = p.runNER("Donald Trump turn on the light");
+		List<Constituent> ne = ta.getView(ViewNames.NER_CONLL).getConstituents();
+		System.out.println(ne.toString());
 	}
 }

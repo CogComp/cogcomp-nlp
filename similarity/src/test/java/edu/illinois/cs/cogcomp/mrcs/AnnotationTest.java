@@ -2,9 +2,14 @@ package edu.illinois.cs.cogcomp.mrcs;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.llm.common.PhraseList;
 import edu.illinois.cs.cogcomp.llm.common.Preprocess;
 
@@ -29,10 +34,14 @@ public class AnnotationTest {
 		assertTrue(ret.equals("please turn_on the light"));
 	}
 	
-	
-	@Ignore
+	@Ignore	
 	@Test
 	public void nerTest(){
-		
+		Preprocess p=new Preprocess();
+		p.initializeNER();
+		TextAnnotation ta = p.runNER("Donald Trump turn on the light");
+		List<Constituent> ne = ta.getView(ViewNames.NER_CONLL).getConstituents();
+		System.out.println(ne.toString());
+		assertTrue(ne.equals("please turn_on the light"));
 	}
 }
