@@ -41,7 +41,8 @@ public class AnnotationTest {
 		p.initializeNER();
 		TextAnnotation ta = p.runNER("Donald Trump turn on the light");
 		List<Constituent> ne = ta.getView(ViewNames.NER_CONLL).getConstituents();
-		System.out.println(ne.toString());
-		assertTrue(ne.equals("please turn_on the light"));
+		Constituent secondSent = ne.get(0);
+		String target_ = secondSent.getTokenizedSurfaceForm();
+		assertTrue(target_.equals("Donald Trump"));
 	}
 }

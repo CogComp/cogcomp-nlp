@@ -7,7 +7,7 @@ import edu.illinois.cs.cogcomp.sim.LLMStringSim;
 import edu.illinois.cs.cogcomp.sim.Metric;
 
 public class LlmSimTest {
-	@Ignore
+	
 	@Test
 	public void llmSimTest(){
 		String config = "config/configurations.properties";
@@ -20,7 +20,7 @@ public class LlmSimTest {
 		assert( score > score2);
 	}
 	
-	@Ignore
+	
 	@Test
 	public void llmphraseSimTest(){
 		String config = "config/test2.configurations.properties";
@@ -44,6 +44,7 @@ public class LlmSimTest {
 		String s3="He turn off the light";
 		double score=llm.compare(s1, s2).score;
 		double score2=llm.compare(s1, s3).score;
+		System.out.println(score+ " "+score2);
 		assert( score > score2);
 	}
 }

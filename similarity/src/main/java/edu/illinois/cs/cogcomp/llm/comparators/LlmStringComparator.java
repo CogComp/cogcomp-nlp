@@ -102,23 +102,6 @@ public class LlmStringComparator {
 		return scoreAlignment(alignStringArrays(textToks_, hypToks_));
 	}
 
-	/**
-	 * determines best lexical level match of two arrays of Name Entity using
-	 * NESim.
-	 * 
-	 * @param ne1_
-	 * @param ne2_
-	 * @return
-	 * @throws Exception
-	 */
-
-	public EntailmentResult determineNEEntailment(String[] ne1_, String[] ne2_) throws Exception {
-
-		WordComparator nec = new WordComparator(new SimConfigurator().getConfig(new ResourceManager(new Properties())));
-		nec.SetAs_NEComparator();
-		Aligner neAligner = new Aligner<String, EntailmentResult>(nec, filter);
-		return scoreAlignment(neAligner.align(ne1_, ne2_));
-	}
 
 	/**
 	 * generate the result (score, label, etc.) for the given alignment using
@@ -168,6 +151,23 @@ public class LlmStringComparator {
 	}
 
 	/**
+	 * determines best lexical level match of two arrays of Name Entity using
+	 * NESim.
+	 * 
+	 * @param ne1_
+	 * @param ne2_
+	 * @return
+	 * @throws Exception
+	 */
+
+	public Alignment<String> alignNEStringArrays(String[] ne1_, String[] ne2_) throws Exception {
+		WordComparator nec = new WordComparator(new SimConfigurator().getConfig(new ResourceManager(new Properties())));
+		nec.SetAs_NEComparator();
+		Aligner<String, EntailmentResult> neAligner = new Aligner<String, EntailmentResult>(nec, filter);
+		return neAligner.align(ne1_, ne2_);
+	}
+	
+	/**
 	 * convenience method to generate a scalar score for two input sentences
 	 * passed as TextAnnotation.
 	 * 
@@ -190,17 +190,46 @@ public class LlmStringComparator {
 		String[] ne1_ = new String[ne1.size()];
 		for (int i = 0; i < ne1.size(); i++) {
 			ne1_[i] = ne1.get(i).getTokenizedSurfaceForm();
+			System.out.println("ne1: "+ne1_[i]);
 		}
 
 		List<Constituent> ne2 = source.getView(ViewNames.NER_CONLL).getConstituents();
 		String[] ne2_ = new String[ne2.size()];
 		for (int i = 0; i < ne2.size(); i++) {
 			ne2_[i] = ne2.get(i).getTokenizedSurfaceForm();
+			System.out.println("ne2: "+ne1_[2]);
 		}
 		
-		return (double) this.determineEntailment(source_, target_).getScore();
+		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);
+		
+		String[] textTokens_=new String[getTokens(source_).length-ne1.size()];
+		int i=0;
+		for(String s:getTokens(source_)){
+			if (!ne1.contains(s))  {
+				System.out.println("source tokens: "+s);
+				textTokens_[i]=s;
+				i++;
+			}
+		}
+		
+		String[] hypTokens_=new String[getTokens(target_).length-ne2.size()];
+		i=0;
+		for(String s:getTokens(target_)){
+			if (!ne2.contains(s))  {
+				System.out.println("hyper tokens: "+s);
+				hypTokens_[i]=s;
+				i++;
+			}
+		}
+		
+		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
+		double sentenceScore =scorer.scoreAlignment(sentenceAlignment).getScore();
+		System.out.println("sentencescore " +sentenceScore);
+		double neScore =scorer.scoreAlignment(neAlignment).getScore();
+		System.out.println("nescore " +neScore);
+		return (sentenceScore*hypTokens_.length+neScore*ne2.size())/(hypTokens_.length+ne2.size());
 	}
-
+	
 	/**
 	 * convenience method to generate a scalar score for two input sentences
 	 * passed as Strings..

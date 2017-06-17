@@ -91,7 +91,7 @@ public class Preprocess {
 
 	public TextAnnotation runNER(String s) {
 		TextAnnotationBuilder tab;
-		// don't split on hyphens, as NER models are trained this way
+		
 		boolean splitOnHyphens = false;
 		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
 
@@ -107,12 +107,4 @@ public class Preprocess {
 		return ta;
 	}
 	
-	
-	public static void main (String[] args){
-		Preprocess p=new Preprocess();
-		p.initializeNER();
-		TextAnnotation ta = p.runNER("Donald Trump turn on the light");
-		List<Constituent> ne = ta.getView(ViewNames.NER_CONLL).getConstituents();
-		System.out.println(ne.toString());
-	}
 }
