@@ -51,6 +51,7 @@ public class Embedding {
 		}
 		int count = 0;
 		try {
+			System.out.println("load file from " + mapPath);
 			String line = reader.readLine();
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();

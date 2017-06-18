@@ -30,7 +30,7 @@ public class LlmSimTest {
 		String s3="please turn on the light";
 		double score=llm.compare(s1, s2).score;
 		double score2=llm.compare(s1, s3).score;
-		assert( score > score2);
+		assert( score < score2);
 
 	}
 	
