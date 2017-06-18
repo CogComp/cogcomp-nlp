@@ -57,6 +57,7 @@ public class WordComparator implements Comparator<String, EntailmentResult> {
 	 * @throws IOException
 	 */
 	public void SetAs_NEComparator() throws IllegalArgumentException, IOException {
+		System.out.println("set Name entity comparator");
 		this.wordSim = new NESim();
 	}
 

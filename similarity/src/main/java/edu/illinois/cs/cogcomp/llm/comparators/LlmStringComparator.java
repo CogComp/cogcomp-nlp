@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.config.SimConfigurator;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -27,6 +28,8 @@ import edu.illinois.cs.cogcomp.mrcs.comparators.Comparator;
 import edu.illinois.cs.cogcomp.mrcs.dataStructures.Alignment;
 import edu.illinois.cs.cogcomp.mrcs.dataStructures.EntailmentResult;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.IllinoisTokenizer;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 public class LlmStringComparator {
 
@@ -36,6 +39,7 @@ public class LlmStringComparator {
 	private Aligner<String, EntailmentResult> aligner;
 	private WordListFilter filter;
 	private Comparator<String, EntailmentResult> comparator;
+	private Aligner<String, EntailmentResult> neAligner;
 	private GreedyAlignmentScorer<String> scorer;
 	IllinoisTokenizer tokenizer;
 
@@ -59,7 +63,7 @@ public class LlmStringComparator {
 		tokenizer = new IllinoisTokenizer();
 		this.comparator = comparator;
 		filter = new WordListFilter(fullRm);
-
+		neAligner = new Aligner<String, EntailmentResult>(new NEComparator(),filter);
 		aligner = new Aligner<String, EntailmentResult>(comparator, filter);
 		scorer = new GreedyAlignmentScorer<String>(threshold);
 
@@ -160,10 +164,7 @@ public class LlmStringComparator {
 	 * @throws Exception
 	 */
 
-	public Alignment<String> alignNEStringArrays(String[] ne1_, String[] ne2_) throws Exception {
-		WordComparator nec = new WordComparator(new SimConfigurator().getConfig(new ResourceManager(new Properties())));
-		nec.SetAs_NEComparator();
-		Aligner<String, EntailmentResult> neAligner = new Aligner<String, EntailmentResult>(nec, filter);
+	public Alignment<String> alignNEStringArrays(String[] ne1_, String[] ne2_) throws Exception {		
 		return neAligner.align(ne1_, ne2_);
 	}
 	
@@ -177,7 +178,7 @@ public class LlmStringComparator {
 	 * @throws Exception
 	 */
 
-	public double compareStrings(TextAnnotation source, TextAnnotation target) throws Exception {
+	public double compareAnnotation(TextAnnotation source, TextAnnotation target) throws Exception {
 
 		List<Constituent> sentences = source.getView(ViewNames.SENTENCE).getConstituents();
 		Constituent firstSent = sentences.get(0);
@@ -244,4 +245,5 @@ public class LlmStringComparator {
 
 		return (double) this.determineEntailment(source_, target_).getScore();
 	}
+	
 }

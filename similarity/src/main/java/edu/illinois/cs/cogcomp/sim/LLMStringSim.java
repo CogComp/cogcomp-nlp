@@ -24,7 +24,7 @@ import edu.illinois.cs.cogcomp.llm.comparators.LlmStringComparator;
  *
  */
 public class LLMStringSim implements Metric<String> {
-	private LlmStringComparator llm;
+	public LlmStringComparator llm;
 	ResourceManager rm_;
 	Preprocess preprocess;
 	PhraseList list;
@@ -60,7 +60,7 @@ public class LLMStringSim implements Metric<String> {
 				preprocess.initializeNER();
 				TextAnnotation ta1 = preprocess.runNER(arg1);
 				TextAnnotation ta2 = preprocess.runNER(arg2);
-				score = llm.compareStrings(ta1, ta2);
+				score = llm.compareAnnotation(ta1, ta2);
 			} else
 				score = llm.compareStrings_(arg1, arg2);
 			return new MetricResponse(score, reason);
