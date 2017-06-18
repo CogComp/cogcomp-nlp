@@ -216,7 +216,6 @@ public class LlmStringComparator {
 		int i=0;
 		for(String s:getTokens(source_)){
 			if (!ne1_word.contains(s))  {
-				System.out.println("source tokens: "+s);
 				textTokens_[i]=s;
 				i++;
 			}
@@ -226,12 +225,11 @@ public class LlmStringComparator {
 		i=0;
 		for(String s:getTokens(target_)){
 			if (!ne2_word.contains(s))  {
-				System.out.println("hyper tokens: "+s);
 				hypTokens_[i]=s;
 				i++;
 			}
 		}
-		System.out.println("reach line 234");
+		
 		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
 		double sentenceScore =scorer.scoreAlignment(sentenceAlignment).getScore();
 		System.out.println("sentencescore " +sentenceScore);
