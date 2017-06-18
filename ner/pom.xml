@@ -71,11 +71,12 @@
 
 
         <!-- models: you need to use/specify a new path to avoid using these -->
+        <!-- if you want to use CoNLL-only models, use version 3.2 -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model</artifactId>
             <version>3.3</version>
-            <classifier>CoNLL</classifier>
+            <classifier>CoNLL_enron</classifier>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
