@@ -333,35 +333,44 @@ public class Main extends AbstractMain {
         if (indirectory.isDirectory()) {
             File[] files = indirectory.listFiles();
             if (outdirectory != null) {
-                System.out.println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
-                System.out.println("Completed   : ");
+                long start = -1;
                 double ratio = 50.0 / (double) files.length;
                 int completed = 0;
                 int i = 0;
                 for (; i < files.length; i++) {
                     File infile = files[i];
                     processInputFile(infile);
-
+                    if (start == -1) {
+                        System.out.println("Total Files : ••••••••••••••••••••••••••••••••••••••••••••••••••");
+                        System.out.print(  "Completed   : ");
+                        start = System.currentTimeMillis();
+                    }
+                    
                     // present completion.
                     while ((i * ratio) > completed) {
-                        System.out.println("•");
+                        System.out.print("•");
                         completed++;
                     }
                 }
                 this.getResultProcessor().done();
                 while ((i * ratio) > completed) {
-                    System.out.println("•");
+                    System.out.print("•");
                     completed++;
                     i++;
                 }
                 System.out.println("");
+                long time = System.currentTimeMillis() - start;
+                System.out.println("Produced all annotations, average execution time was "+(long)((double)time/(double)(files.length-1))+" ticks per execution.");
             } else {
                 int i = 0;
+                long start = System.currentTimeMillis();
                 for (; i < files.length; i++) {
                     File infile = files[i];
                     processInputFile(infile);
                 }
                 this.getResultProcessor().done();
+                long time = System.currentTimeMillis() - start;
+                System.out.println("Produced all annotations, average execution time was "+(long)((double)time/(double)files.length)+" ticks per execution.");
             }
         } else {
             processInputFile(indirectory);

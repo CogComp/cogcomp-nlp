@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
+import java.util.List;
+
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.BasicAnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -55,8 +57,13 @@ public class POSFromParse extends Annotator {
             parseTree = ParseUtils.snipNullNodes(parseTree);
             parseTree = ParseUtils.stripFunctionTags(parseTree);
 
-            if (parseTree.getYield().size() != ta.getSentence(sentenceId).size())
+            if (parseTree.getYield().size() != ta.getSentence(sentenceId).size()) {
+                Sentence s = ta.getSentence(sentenceId);
+                System.err.println(":"+s+":");
+                List<Tree<String>> tree = parseTree.getYield();
+                System.err.println("-"+tree+"-");
                 throw new IllegalStateException("Parse tree size != ta.size()");
+            }
 
             for (Tree<String> y : parseTree.getYield()) {
                 posView.addTokenLabel(tokenId++, y.getParent().getLabel(), 1.0);

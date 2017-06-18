@@ -5,8 +5,8 @@
 # alternative learning rates and thicknesses. Note that the defaults
 # are overriden by the configuration arguments for both models.
 #
-learnrate=(.3 .2 .1 .06)
-thickness=(50 60)
+learnrate=(.2 .01)
+thickness=(20 200)
 
 for i in ${learnrate[@]}; do
     for j in ${thickness[@]}; do
