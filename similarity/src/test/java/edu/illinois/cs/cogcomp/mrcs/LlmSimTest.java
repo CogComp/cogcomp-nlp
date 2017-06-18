@@ -53,24 +53,5 @@ public class LlmSimTest {
 		System.out.println(score+" "+score2);
 		assert( score > score2);
 	}
-	/**
-	@Test
-	public void caoxiaoyu() throws Exception{
-		String config = "config/test.configurations.properties";
-		LLMStringSim llm =new LLMStringSim(config);
-		TextAnnotationBuilder tab;
-		String s1="please turn on the light";
-		String s2="please turn off the TV";	
-		boolean splitOnHyphens = false;
-		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
-		TextAnnotation ta1 = tab.createTextAnnotation("001", "001", s1);
-		TextAnnotation ta2 = tab.createTextAnnotation("001", "001", s2);
 
-		ta1.addView("NER_CONLL", new View("1","1",ta1,1));
-		ta2.addView("NER_CONLL", new View("1","1",ta1,1));
-		double score=llm.llm.compareAnnotation(ta1,ta2);
-		
-		
-	}
-	**/
 }

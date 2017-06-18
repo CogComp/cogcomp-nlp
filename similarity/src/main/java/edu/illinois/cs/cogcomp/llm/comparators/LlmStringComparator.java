@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.llm.comparators;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 
@@ -186,37 +187,45 @@ public class LlmStringComparator {
 		sentences = target.getView(ViewNames.SENTENCE).getConstituents();
 		Constituent secondSent = sentences.get(0);
 		String target_ = secondSent.getTokenizedSurfaceForm();
-
+		HashSet<String> ne1_word=new HashSet<String>();
+		HashSet<String> ne2_word=new HashSet<String>();
 		List<Constituent> ne1 = source.getView(ViewNames.NER_CONLL).getConstituents();
 		String[] ne1_ = new String[ne1.size()];
 		for (int i = 0; i < ne1.size(); i++) {
 			ne1_[i] = ne1.get(i).getTokenizedSurfaceForm();
+			for (String s: getTokens(ne1_[i])){
+				ne1_word.add(s);
+			}
 			System.out.println("ne1: "+ne1_[i]);
 		}
-		System.out.println("reached line 195");
+		
 		List<Constituent> ne2 = target.getView(ViewNames.NER_CONLL).getConstituents();
+
 		String[] ne2_ = new String[ne2.size()];
 		for (int i = 0; i < ne2.size(); i++) {
 			ne2_[i] = ne2.get(i).getTokenizedSurfaceForm();
+			for (String s: getTokens(ne2_[i])){
+				ne2_word.add(s);
+			}
 			System.out.println("ne2: "+ne2_[i]);
 		}
-		System.out.println("reached line 202");
+
 		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);
 		
 		String[] textTokens_=new String[getTokens(source_).length-ne1.size()];
 		int i=0;
 		for(String s:getTokens(source_)){
-			if (!ne1.contains(s))  {
+			if (!ne1_word.contains(s))  {
 				System.out.println("source tokens: "+s);
 				textTokens_[i]=s;
 				i++;
 			}
 		}
-		System.out.println("reached line 214");
+		
 		String[] hypTokens_=new String[getTokens(target_).length-ne2.size()];
 		i=0;
 		for(String s:getTokens(target_)){
-			if (!ne2.contains(s))  {
+			if (!ne2_word.contains(s))  {
 				System.out.println("hyper tokens: "+s);
 				hypTokens_[i]=s;
 				i++;
