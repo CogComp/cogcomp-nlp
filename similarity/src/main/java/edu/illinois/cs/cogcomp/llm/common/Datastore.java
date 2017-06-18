@@ -24,7 +24,7 @@ import io.minio.errors.NoResponseException;
 
 public class Datastore {
     private MinioClient minioClient = null;
-    private static final String CONFIG_FILE = "src/main/resources/datastore-config-sample.properties";
+    private static final String CONFIG_FILE = "config/datastore.properties";
 
     // this is where we keep the files locally
     private String DATASTORE_FOLDER = "src/main/resources/";
@@ -147,15 +147,15 @@ public class Datastore {
     public static void main(String[] args) throws DatastoreException{
     	Datastore ds=new Datastore();
     	
-    	ds.getFile("org.cogcomp.wordembedding", "word2vec.txt", 1.5);
+    	//ds.getFile("org.cogcomp.wordembedding", "word2vec.txt", 1.5);
     	
-    	ds.getFile("org.cogcomp.wordembedding", "glove.txt", 1.5);
+    	//ds.getFile("org.cogcomp.wordembedding", "glove.txt", 1.5);
     	
     	ds.getFile("org.cogcomp.wordembedding", "phrase2vec.txt", 1.5);
     	
-    	ds.getFile("org.cogcomp.wordembedding", "memorybasedESA.txt", 1.5);
+    	//ds.getFile("org.cogcomp.wordembedding", "memorybasedESA.txt", 1.5);
     	
-    	ds.getFile("org.cogcomp.wordembedding", "pageIDMapping.txt", 1.5);
+    	//ds.getFile("org.cogcomp.wordembedding", "pageIDMapping.txt", 1.5);
     }
  
 }

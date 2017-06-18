@@ -26,7 +26,7 @@ public class LlmSimTest {
 		String config = "config/test2.configurations.properties";
 		Metric llm =new LLMStringSim(config);
 		String s1="please turn off the light";
-		String s2="please close the light";
+		String s2="please turn the light";
 		String s3="please turn on the light";
 		double score=llm.compare(s1, s2).score;
 		double score2=llm.compare(s1, s3).score;
@@ -34,7 +34,7 @@ public class LlmSimTest {
 
 	}
 	
-	
+	@Ignore
 	@Test 
 	public void llmNERSimTest(){
 		String config = "config/test.configurations.properties";

@@ -53,6 +53,7 @@ public class LLMStringSim implements Metric<String> {
 				System.out.println("using phrase representations");
 				arg1 = preprocess.getPhrase(arg1, list);
 				arg2 = preprocess.getPhrase(arg2, list);
+				//System.out.println(arg1+"||"+arg2);
 			}
 			if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
 				System.out.println("using NER annotator");

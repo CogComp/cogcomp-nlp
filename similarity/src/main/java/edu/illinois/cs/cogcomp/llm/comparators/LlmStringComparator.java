@@ -192,14 +192,14 @@ public class LlmStringComparator {
 			ne1_[i] = ne1.get(i).getTokenizedSurfaceForm();
 			System.out.println("ne1: "+ne1_[i]);
 		}
-
-		List<Constituent> ne2 = source.getView(ViewNames.NER_CONLL).getConstituents();
+		System.out.println("reached line 195");
+		List<Constituent> ne2 = target.getView(ViewNames.NER_CONLL).getConstituents();
 		String[] ne2_ = new String[ne2.size()];
 		for (int i = 0; i < ne2.size(); i++) {
 			ne2_[i] = ne2.get(i).getTokenizedSurfaceForm();
-			System.out.println("ne2: "+ne1_[2]);
+			System.out.println("ne2: "+ne2_[i]);
 		}
-		
+		System.out.println("reached line 202");
 		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);
 		
 		String[] textTokens_=new String[getTokens(source_).length-ne1.size()];
