@@ -37,7 +37,7 @@ public class LLMStringSim implements Metric<String> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		preprocess=new Preprocess();
 		ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
 		String phrases = fullRm.getString(SimConfigurator.PHRASE_DICT.key);
 		list = new PhraseList(phrases);

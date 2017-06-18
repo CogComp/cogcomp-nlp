@@ -44,7 +44,7 @@ public class LlmSimTest {
 		String s3="He turn off the light";
 		double score=llm.compare(s1, s2).score;
 		double score2=llm.compare(s1, s3).score;
-		System.out.println(score+ " "+score2);
+		System.out.println(score+" "+score2);
 		assert( score > score2);
 	}
 }

@@ -51,6 +51,7 @@ public class Embedding {
 		}
 		int count = 0;
 		try {
+			System.out.println("loading file from "+mapPath);
 			String line = reader.readLine();
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
@@ -63,8 +64,7 @@ public class Embedding {
 					}
 					vectors.put(word, vec);
 					count++;
-					if (count % 50000 == 0)
-						System.out.println("load word " + count);
+					
 				}
 			}
 		} catch (Exception e) {
