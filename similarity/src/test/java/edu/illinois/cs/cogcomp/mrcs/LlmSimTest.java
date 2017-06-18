@@ -34,7 +34,6 @@ public class LlmSimTest {
 
 	}
 	
-	@Ignore
 	@Test 
 	public void llmNERSimTest(){
 		String config = "config/test.configurations.properties";
