@@ -212,7 +212,7 @@ public class LlmStringComparator {
 
 		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);
 		
-		String[] textTokens_=new String[getTokens(source_).length-ne1.size()];
+		String[] textTokens_=new String[getTokens(source_).length-ne1_word.size()];
 		int i=0;
 		for(String s:getTokens(source_)){
 			if (!ne1_word.contains(s))  {
@@ -222,7 +222,7 @@ public class LlmStringComparator {
 			}
 		}
 		
-		String[] hypTokens_=new String[getTokens(target_).length-ne2.size()];
+		String[] hypTokens_=new String[getTokens(target_).length-ne2_word.size()];
 		i=0;
 		for(String s:getTokens(target_)){
 			if (!ne2_word.contains(s))  {
@@ -231,7 +231,7 @@ public class LlmStringComparator {
 				i++;
 			}
 		}
-		
+		System.out.println("reach line 234");
 		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
 		double sentenceScore =scorer.scoreAlignment(sentenceAlignment).getScore();
 		System.out.println("sentencescore " +sentenceScore);

@@ -27,7 +27,7 @@ public class LlmSimTest {
 		assert( score > score2);
 	}
 	
-	
+	@Ignore
 	@Test
 	public void llmphraseSimTest(){
 		String config = "config/test2.configurations.properties";
