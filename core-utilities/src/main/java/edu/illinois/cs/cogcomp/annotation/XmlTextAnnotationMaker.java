@@ -63,7 +63,7 @@ public class XmlTextAnnotationMaker {
      * {@link TextAnnotation} by
      * tokenizing the given text string.
      *
-     * @param xmlText Raw xml text from corpus docuemnt
+     * @param xmlText Raw xml text from corpus document
      * @param corpusId corpus identifier
      * @param docId text identifier
      * @return an XmlTextAnnotation with the cleaned text (StringTransformation), TextAnnotation for

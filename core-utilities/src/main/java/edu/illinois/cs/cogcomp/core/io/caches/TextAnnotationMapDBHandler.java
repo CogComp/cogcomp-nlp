@@ -37,7 +37,8 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
 
     public TextAnnotationMapDBHandler(String dbFile) {
         try {
-            db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().make();
+            // enabling transactions avoids cache corruption if service fails.
+            this.db = DBMaker.fileDB(dbFile).closeOnJvmShutdown().transactionEnable().make();
         }
         catch (DBException e) {
 //            logger.warn("mapdb couldn't instantiate db using file '{}': check error and either remove lock, " +
