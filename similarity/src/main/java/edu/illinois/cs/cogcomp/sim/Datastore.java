@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.llm.common;
+package edu.illinois.cs.cogcomp.sim;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +83,7 @@ public class Datastore {
         System.out.println("Downloading the file from datastore . . . ");
         System.out.println("\t\tGroupId: " + augmentedGroupId);
         System.out.println("\t\tArtifactId: " + versionedFileName);
-        String fileFolder = DATASTORE_FOLDER + File.separator + augmentedGroupId;
+        String fileFolder = DATASTORE_FOLDER;
         IOUtils.mkdir(fileFolder);
         if(versionedFileName.contains("/")) {
             int idx = versionedFileName.lastIndexOf("/");

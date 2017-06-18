@@ -196,7 +196,6 @@ public class LlmStringComparator {
 			for (String s: getTokens(ne1_[i])){
 				ne1_word.add(s);
 			}
-			System.out.println("ne1: "+ne1_[i]);
 		}
 		
 		List<Constituent> ne2 = target.getView(ViewNames.NER_CONLL).getConstituents();
@@ -207,7 +206,6 @@ public class LlmStringComparator {
 			for (String s: getTokens(ne2_[i])){
 				ne2_word.add(s);
 			}
-			System.out.println("ne2: "+ne2_[i]);
 		}
 
 		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);

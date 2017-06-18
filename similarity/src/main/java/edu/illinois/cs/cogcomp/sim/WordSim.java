@@ -103,7 +103,7 @@ public class WordSim implements Metric<String> {
 	 * Initialize specific word metrics instance
 	 * 
 	 * @param rm_
-	 * @param method
+	 * @param method is the word comparison metric
 	 */
 	public WordSim(ResourceManager rm_, String method) {
 		this.method = method;
