@@ -43,11 +43,11 @@ public class ParaphraseTest {
 	public static void main(String[] args) throws Exception {
 		ParaphraseTest p = new ParaphraseTest();
 		System.out.println("phrase only:");
-		p.CONFIG = "config/configurations.properties";
+		p.CONFIG = "config/test.configurations.properties";
 		p.testMS("phrase2vec");
 		p.testSICK("phrase2vec");
 		System.out.println("phrase and ner:");
-		p.CONFIG = "config/configurations.properties";
+		p.CONFIG = "config/test2.configurations.properties";
 		p.testMS("phrase2vec");
 		p.testSICK("phrase2vec");
 		// p.testMS("word2vec");
@@ -153,9 +153,6 @@ public class ParaphraseTest {
 					score.put(s, sc);
 					// System.out.println(sc);
 				}
-
-				if (count % 100 == 0)
-					System.out.println(count);
 				count++;
 			}
 		} catch (Exception e) {
