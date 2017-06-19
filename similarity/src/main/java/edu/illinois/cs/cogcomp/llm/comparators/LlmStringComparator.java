@@ -229,9 +229,10 @@ public class LlmStringComparator {
 
 		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
 		double sentenceScore = scorer.scoreAlignment(sentenceAlignment).getScore();
-		System.out.println("sentencescore " + sentenceScore);
+		//System.out.println("sentencescore " + sentenceScore);
 		double neScore = scorer.scoreAlignment(neAlignment).getScore();
-		System.out.println("nescore " + neScore);
+		//System.out.println("nescore " + neScore);
+		if (ne1.size()==0 || ne2.size()==0) return sentenceScore;
 		return (sentenceScore * hypTokens_.length + neScore * ne2.size()) / (hypTokens_.length + ne2.size());
 	}
 
