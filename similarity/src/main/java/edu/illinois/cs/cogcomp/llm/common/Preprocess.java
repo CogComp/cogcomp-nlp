@@ -47,13 +47,13 @@ public class Preprocess {
 			if (list.dict.contains(phrase)) {
 				ret += tokens[i - 1] + "_" + tokens[i] + " ";
 				i += 2;
-			} else{
-				ret += tokens[i - 1]+" ";
+			} else {
+				ret += tokens[i - 1] + " ";
 				i += 1;
 			}
-			//System.out.println(ret);	
+			// System.out.println(ret);
 		}
-		ret+=tokens[tokens.length-1];
+		ret += tokens[tokens.length - 1];
 		return ret;
 	}
 
@@ -70,7 +70,8 @@ public class Preprocess {
 				while (j < i + 5 && j < words.size()) {
 					String phrase = words.get(i) + " " + words.get(j);
 					if (list.discPhrase.contains(phrase)) {
-						//System.out.println("disc phrase found!!!!! " + phrase);
+						// System.out.println("disc phrase found!!!!! " +
+						// phrase);
 						words.set(i, words.get(i) + "_" + words.get(j));
 						words.remove(j);
 						break;
@@ -91,7 +92,7 @@ public class Preprocess {
 
 	public TextAnnotation runNER(String s) {
 		TextAnnotationBuilder tab;
-		
+
 		boolean splitOnHyphens = false;
 		tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
 
@@ -106,5 +107,5 @@ public class Preprocess {
 
 		return ta;
 	}
-	
+
 }

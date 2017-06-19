@@ -64,7 +64,7 @@ public class LlmStringComparator {
 		tokenizer = new IllinoisTokenizer();
 		this.comparator = comparator;
 		filter = new WordListFilter(fullRm);
-		neAligner = new Aligner<String, EntailmentResult>(new NEComparator(),filter);
+		neAligner = new Aligner<String, EntailmentResult>(new NEComparator(), filter);
 		aligner = new Aligner<String, EntailmentResult>(comparator, filter);
 		scorer = new GreedyAlignmentScorer<String>(threshold);
 
@@ -106,7 +106,6 @@ public class LlmStringComparator {
 	public EntailmentResult determineEntailment(String[] textToks_, String[] hypToks_) throws Exception {
 		return scoreAlignment(alignStringArrays(textToks_, hypToks_));
 	}
-
 
 	/**
 	 * generate the result (score, label, etc.) for the given alignment using
@@ -165,10 +164,10 @@ public class LlmStringComparator {
 	 * @throws Exception
 	 */
 
-	public Alignment<String> alignNEStringArrays(String[] ne1_, String[] ne2_) throws Exception {		
+	public Alignment<String> alignNEStringArrays(String[] ne1_, String[] ne2_) throws Exception {
 		return neAligner.align(ne1_, ne2_);
 	}
-	
+
 	/**
 	 * convenience method to generate a scalar score for two input sentences
 	 * passed as TextAnnotation.
@@ -187,55 +186,55 @@ public class LlmStringComparator {
 		sentences = target.getView(ViewNames.SENTENCE).getConstituents();
 		Constituent secondSent = sentences.get(0);
 		String target_ = secondSent.getTokenizedSurfaceForm();
-		HashSet<String> ne1_word=new HashSet<String>();
-		HashSet<String> ne2_word=new HashSet<String>();
+		HashSet<String> ne1_word = new HashSet<String>();
+		HashSet<String> ne2_word = new HashSet<String>();
 		List<Constituent> ne1 = source.getView(ViewNames.NER_CONLL).getConstituents();
 		String[] ne1_ = new String[ne1.size()];
 		for (int i = 0; i < ne1.size(); i++) {
 			ne1_[i] = ne1.get(i).getTokenizedSurfaceForm();
-			for (String s: getTokens(ne1_[i])){
+			for (String s : getTokens(ne1_[i])) {
 				ne1_word.add(s);
 			}
 		}
-		
+
 		List<Constituent> ne2 = target.getView(ViewNames.NER_CONLL).getConstituents();
 
 		String[] ne2_ = new String[ne2.size()];
 		for (int i = 0; i < ne2.size(); i++) {
 			ne2_[i] = ne2.get(i).getTokenizedSurfaceForm();
-			for (String s: getTokens(ne2_[i])){
+			for (String s : getTokens(ne2_[i])) {
 				ne2_word.add(s);
 			}
 		}
 
-		Alignment<String> neAlignment = alignNEStringArrays(ne1_,ne2_);
-		
-		String[] textTokens_=new String[getTokens(source_).length-ne1_word.size()];
-		int i=0;
-		for(String s:getTokens(source_)){
-			if (!ne1_word.contains(s))  {
-				textTokens_[i]=s;
+		Alignment<String> neAlignment = alignNEStringArrays(ne1_, ne2_);
+
+		String[] textTokens_ = new String[getTokens(source_).length - ne1_word.size()];
+		int i = 0;
+		for (String s : getTokens(source_)) {
+			if (!ne1_word.contains(s)) {
+				textTokens_[i] = s;
 				i++;
 			}
 		}
-		
-		String[] hypTokens_=new String[getTokens(target_).length-ne2_word.size()];
-		i=0;
-		for(String s:getTokens(target_)){
-			if (!ne2_word.contains(s))  {
-				hypTokens_[i]=s;
+
+		String[] hypTokens_ = new String[getTokens(target_).length - ne2_word.size()];
+		i = 0;
+		for (String s : getTokens(target_)) {
+			if (!ne2_word.contains(s)) {
+				hypTokens_[i] = s;
 				i++;
 			}
 		}
-		
+
 		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
-		double sentenceScore =scorer.scoreAlignment(sentenceAlignment).getScore();
-		System.out.println("sentencescore " +sentenceScore);
-		double neScore =scorer.scoreAlignment(neAlignment).getScore();
-		System.out.println("nescore " +neScore);
-		return (sentenceScore*hypTokens_.length+neScore*ne2.size())/(hypTokens_.length+ne2.size());
+		double sentenceScore = scorer.scoreAlignment(sentenceAlignment).getScore();
+		System.out.println("sentencescore " + sentenceScore);
+		double neScore = scorer.scoreAlignment(neAlignment).getScore();
+		System.out.println("nescore " + neScore);
+		return (sentenceScore * hypTokens_.length + neScore * ne2.size()) / (hypTokens_.length + ne2.size());
 	}
-	
+
 	/**
 	 * convenience method to generate a scalar score for two input sentences
 	 * passed as Strings..
@@ -250,5 +249,5 @@ public class LlmStringComparator {
 
 		return (double) this.determineEntailment(source_, target_).getScore();
 	}
-	
+
 }

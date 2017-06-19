@@ -37,8 +37,11 @@ public class LLMStringSim implements Metric<String> {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		preprocess=new Preprocess();
 		ResourceManager fullRm = new SimConfigurator().getConfig(rm_);
+		preprocess = new Preprocess();
+		if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
+			preprocess.initializeNER();
+		}
 		String phrases = fullRm.getString(SimConfigurator.PHRASE_DICT.key);
 		list = new PhraseList(phrases);
 	}
@@ -53,11 +56,10 @@ public class LLMStringSim implements Metric<String> {
 				System.out.println("using phrase representations");
 				arg1 = preprocess.getPhrase(arg1, list);
 				arg2 = preprocess.getPhrase(arg2, list);
-				//System.out.println(arg1+"||"+arg2);
+				// System.out.println(arg1+"||"+arg2);
 			}
 			if (fullRm.getBoolean(SimConfigurator.USE_NE_COMPARISON.key)) {
 				System.out.println("using NER annotator");
-				preprocess.initializeNER();
 				TextAnnotation ta1 = preprocess.runNER(arg1);
 				TextAnnotation ta2 = preprocess.runNER(arg2);
 				score = llm.compareAnnotation(ta1, ta2);

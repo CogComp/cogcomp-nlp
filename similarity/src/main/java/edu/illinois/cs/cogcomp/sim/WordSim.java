@@ -19,12 +19,13 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.wsim.embedding.Embedding;
 
 /**
- * Word Similarity Metrics including word2vec, Paragram, WordNet, Glove, ESA. 
+ * Word Similarity Metrics including word2vec, Paragram, WordNet, Glove, ESA.
  * 
- * You need specify the file path in Config file for the metrics you want to use.
+ * You need specify the file path in Config file for the metrics you want to
+ * use.
  * 
- * The class loads all or one of metrics above from file and compare function is used
- * to compare two words and return similarity score 
+ * The class loads all or one of metrics above from file and compare function is
+ * used to compare two words and return similarity score
  * 
  * @author shaoshi
  *
@@ -103,7 +104,8 @@ public class WordSim implements Metric<String> {
 	 * Initialize specific word metrics instance
 	 * 
 	 * @param rm_
-	 * @param method is the word comparison metric
+	 * @param method
+	 *            is the word comparison metric
 	 */
 	public WordSim(ResourceManager rm_, String method) {
 		this.method = method;

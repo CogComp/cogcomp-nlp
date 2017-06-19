@@ -106,9 +106,9 @@ public class MemoryBasedESA {
 	public List<ConceptData> retrieveConcepts(String query, int topK, String vectorField) {
 
 		query = QueryPreProcessor.process(query);
-		
+
 		HashMap<Integer, Double> conceptVector = getConceptVectorBasedonSegmentation(query, topK, vectorField);
-		
+
 		List<ConceptData> concepts = new ArrayList<ConceptData>();
 		try {
 			if (conceptVector == null || conceptVector.size() == 0)

@@ -25,13 +25,14 @@ import edu.illinois.cs.cogcomp.mrcs.dataStructures.EntailmentResult;
 
 /**
  * Word Comparator used in LLM. It can be word or NE similarity metrics
+ * 
  * @author mssammon
  *
  */
 public class WordComparator implements Comparator<String, EntailmentResult> {
-	//use simple score or not
+	// use simple score or not
 	private boolean computeSimpleScore;
-	//threshold is the minimum similarity score 
+	// threshold is the minimum similarity score
 	private double entailmentThreshold;
 	protected boolean defaultUpwardMonotone = true;
 	// word comparison metrics

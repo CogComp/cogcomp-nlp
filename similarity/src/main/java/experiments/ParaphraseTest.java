@@ -10,6 +10,8 @@ package experiments;
 import edu.illinois.cs.cogcomp.config.SimConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.llm.comparators.LlmStringComparator;
+import edu.illinois.cs.cogcomp.sim.LLMStringSim;
+
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 
 import java.io.BufferedReader;
@@ -21,6 +23,7 @@ import java.util.HashMap;
  * Created by sling3 on 4/12/17.
  */
 public class ParaphraseTest {
+	public String CONFIG;
 
 	public class SentencePair {
 
@@ -39,12 +42,14 @@ public class ParaphraseTest {
 
 	public static void main(String[] args) throws Exception {
 		ParaphraseTest p = new ParaphraseTest();
-		p.testMS("wordnet");
-		p.testSICK("wordnet");
-		p.testMS("word2vec");
-		p.testSICK("word2vec");
-		p.testMS("glove");
-		p.testSICK("glove");
+		System.out.println("phrase only:");
+		p.CONFIG = "config/configurations.properties";
+		p.testMS("phrase2vec");
+		p.testSICK("phrase2vec");
+		System.out.println("phrase and ner:");
+		p.CONFIG = "config/configurations.properties";
+		p.testMS("phrase2vec");
+		p.testSICK("phrase2vec");
 		// p.testMS("word2vec");
 		// p.testMS("esa");
 		// p.testMS("gloce");
@@ -52,10 +57,8 @@ public class ParaphraseTest {
 
 	public void testMS(String metric) throws Exception {
 		HashMap<SentencePair, Double> score = new HashMap();
-		String CONFIG = "config/configurations.properties";
-		ResourceManager rm_ = new SimConfigurator().metricsConfig(metric, CONFIG);
 		int count = 0;
-		LlmStringComparator llm = new LlmStringComparator(rm_);
+		LLMStringSim llm = new LLMStringSim(CONFIG);
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader("/shared/bronte/sling3/data/msr-para-train.tsv"));
@@ -71,7 +74,7 @@ public class ParaphraseTest {
 					String[] arr = line.split("\t");
 					SentencePair s = new SentencePair(arr[3], arr[4], arr[1] + "-" + arr[2], arr[0]);
 					// System.out.println(arr[3]+" "+arr[4]);
-					double sc = llm.compareStrings_(arr[3], arr[4]);
+					double sc = llm.compare(arr[3], arr[4]).score;
 					score.put(s, sc);
 
 				}
@@ -103,7 +106,7 @@ public class ParaphraseTest {
 				if (line.length() > 0) {
 					String[] arr = line.split("\t");
 					SentencePair s = new SentencePair(arr[3], arr[4], arr[1] + "-" + arr[2], arr[0]);
-					double sc = llm.compareStrings_(arr[3], arr[4]);
+					double sc = llm.compare(arr[3], arr[4]).score;
 					score2.put(s, sc);
 					count++;
 				}
@@ -129,10 +132,9 @@ public class ParaphraseTest {
 
 	public void testSICK(String metric) throws Exception {
 		HashMap<SentencePair, Double> score = new HashMap();
-		String CONFIG = "config/configurations.properties";
-		ResourceManager rm_ = new SimConfigurator().metricsConfig(metric, CONFIG);
+
 		int count = 0;
-		LlmStringComparator llm = new LlmStringComparator(rm_);
+		LLMStringSim llm = new LLMStringSim(CONFIG);
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new FileReader("/shared/bronte/sling3/data/SICK_test_annotated.txt"));
@@ -147,7 +149,7 @@ public class ParaphraseTest {
 				if (line.length() > 0) {
 					String[] arr = line.split("\t");
 					SentencePair s = new SentencePair(arr[1], arr[2], arr[0], arr[3]);
-					double sc = llm.compareStrings_(arr[1], arr[2]);
+					double sc = llm.compare(arr[1], arr[2]).score;
 					score.put(s, sc);
 					// System.out.println(sc);
 				}

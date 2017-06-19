@@ -111,7 +111,7 @@ public class LlmComparatorTest {
 
 		assertTrue((Math.abs(score - this.expectedSimpleScoreWithStopwords)) > 0.0);
 	}
-	
+
 	@Test
 	public void testparagramllm() {
 		Properties props = new Properties();

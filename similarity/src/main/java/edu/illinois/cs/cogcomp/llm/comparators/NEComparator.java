@@ -7,16 +7,15 @@ import edu.illinois.cs.cogcomp.sim.Metric;
 import edu.illinois.cs.cogcomp.sim.MetricResponse;
 import edu.illinois.cs.cogcomp.sim.NESim;
 
-public class NEComparator implements Comparator<String, EntailmentResult>{
+public class NEComparator implements Comparator<String, EntailmentResult> {
 
 	private Metric NEComparator;
-	
-	
-	public NEComparator(){
+
+	public NEComparator() {
 
 		NEComparator = new NESim();
 	}
-	
+
 	@Override
 	public EntailmentResult compare(String specific_, String general_) throws Exception {
 		String genTok = StringCleanup.normalizeToLatin1(general_);
@@ -42,8 +41,7 @@ public class NEComparator implements Comparator<String, EntailmentResult>{
 
 		}
 
-		return new EntailmentResult(source, (float) score, reason, isEntailed, isPositivePolarity,
-				true, null);
+		return new EntailmentResult(source, (float) score, reason, isEntailed, isPositivePolarity, true, null);
 	}
 
 }

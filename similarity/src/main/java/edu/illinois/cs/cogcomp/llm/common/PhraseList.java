@@ -22,7 +22,7 @@ import java.util.HashSet;
 public class PhraseList {
 	// all phrases
 	HashSet<String> dict = new HashSet<String>();
-	// discontinuous  phrase
+	// discontinuous phrase
 	HashSet<String> firstWord = new HashSet<String>();
 	HashSet<String> discPhrase = new HashSet<String>();
 
@@ -33,22 +33,20 @@ public class PhraseList {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				line = line.trim();
-				String[] tokens=line.split("\\s+");
+				String[] tokens = line.split("\\s+");
 				if (tokens.length == 3) {
-					dict.add(tokens[0]+" "+tokens[1]);
+					dict.add(tokens[0] + " " + tokens[1]);
 				}
-				if (tokens[2].equals("0")){
-					discPhrase.add(tokens[0]+" "+tokens[1]);
-					//System.out.println(tokens[0]+" "+tokens[1]);
+				if (tokens[2].equals("0")) {
+					discPhrase.add(tokens[0] + " " + tokens[1]);
+					// System.out.println(tokens[0]+" "+tokens[1]);
 					firstWord.add(tokens[0]);
-				}	
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-
 	}
-	
 
 }
