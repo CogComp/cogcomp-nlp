@@ -28,8 +28,7 @@ public class WordSimTest {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		String file = "config/test.configurations.properties";
-		rm_ = new SimConfigurator().getConfig(new ResourceManager(file));
+		rm_ = new SimConfigurator().getDefaultConfig();
 	}
 
 	@Test

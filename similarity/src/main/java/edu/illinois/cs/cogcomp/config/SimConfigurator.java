@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Property;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 public class SimConfigurator extends Configurator {
-	public static final Property PHRASE_DICT = new Property("phrase_dict", "phrases.txt");
+	public static final Property PHRASE_DICT = new Property("phrase_dict", "src/main/resources/phrases.txt");
 	public static final Property USE_NE_COMPARISON = new Property("useNER", Configurator.FALSE);
 	public static final Property USE_PHRASE_COMPARISON = new Property("usePhraseSim", Configurator.FALSE);
 	public static final Property USE_SIMPLE_SCORE = new Property("useSimpleScore", Configurator.FALSE);
@@ -20,13 +20,13 @@ public class SimConfigurator extends Configurator {
 	public static final Property WORD_METRIC = new Property("wordMetric", "wordnet");
 	public static final Property WORD_ENTAILMENT_THRESHOLD = new Property("wordEntailmentThreshold", "0.001");
 	public static final Property LLM_ENTAILMENT_THRESHOLD = new Property("llmThreshold", "0.5");
-	public static final Property WORD2VEC = new Property("word2vec", "data/word2vec.txt");
+	public static final Property WORD2VEC = new Property("word2vec", "src/main/resources／1.5/word2vec.txt");
 	public static final Property PARAGRAM = new Property("paragram", "src/main/resources/paragram_vectors.txt");
-	public static final Property GLOVE = new Property("glove", "data/glove.txt");
-	public static final Property PHRASE2VEC = new Property("phrase2vec", "data/phrase2vec.txt");
-	public static final Property MEMORYBASEDESA = new Property("memorybasedESA", "data/memorybasedESA.txt");
+	public static final Property GLOVE = new Property("glove", "src/main/resources／1.5/glove.txt");
+	public static final Property PHRASE2VEC = new Property("phrase2vec", "src/main/resources／1.5/phrase2vec.txt");
+	public static final Property MEMORYBASEDESA = new Property("memorybasedESA", "src/main/resources／1.5/memorybasedESA.txt");
 	public static final Property PARAGRAM_DIM = new Property("paragram_dim", "25");
-	public static final Property PAGE_ID_MAPPING = new Property("pageIDMapping", "data/pageIDMapping.txt");
+	public static final Property PAGE_ID_MAPPING = new Property("pageIDMapping", "src/main/resources／1.5/pageIDMapping.txt");
 	public static final Property EMBEDDING_DIM = new Property("embedding_dim", "200");
 
 	@Override

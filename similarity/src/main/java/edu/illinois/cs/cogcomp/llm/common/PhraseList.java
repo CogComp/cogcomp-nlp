@@ -13,8 +13,11 @@ import java.io.FileReader;
 import java.util.HashSet;
 
 /**
- * load both continuous phrase and discontinuous phrase. Only supports for two
- * word phrase now. TODO: Mult-word phrase
+ * load both continuous phrase and discontinuous phrase from the resource file. See /src/main/resources/phrases.txt
+ * "0" means discontinuous phrase. "1" means continuous phrase.
+ * 
+ * 
+ * Currently only supports for two word phrase now. TODO: Mult-word phrase
  * 
  * @author shaoshi
  *
@@ -22,6 +25,7 @@ import java.util.HashSet;
 public class PhraseList {
 	// all phrases
 	HashSet<String> dict = new HashSet<String>();
+	
 	// discontinuous phrase
 	HashSet<String> firstWord = new HashSet<String>();
 	HashSet<String> discPhrase = new HashSet<String>();

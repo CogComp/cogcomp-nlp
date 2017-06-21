@@ -169,8 +169,12 @@ public class LlmStringComparator {
 	}
 
 	/**
-	 * convenience method to generate a scalar score for two input sentences
-	 * passed as TextAnnotation.
+	 * Convenience method to generate a scalar score for two input sentences
+	 * passed as TextAnnotation. The function is used only when NER is called and
+	 * NER_CONLL view is generated. 
+	 * 
+	 * Compared with function determineEntailment(String text_, String hyp_) 
+	 * which generates score for two input sentences passed as String. 
 	 * 
 	 * @param source_
 	 * @param target_
@@ -229,10 +233,11 @@ public class LlmStringComparator {
 
 		Alignment<String> sentenceAlignment = alignStringArrays(textTokens_, hypTokens_);
 		double sentenceScore = scorer.scoreAlignment(sentenceAlignment).getScore();
-		//System.out.println("sentencescore " + sentenceScore);
+		// System.out.println("sentencescore " + sentenceScore);
 		double neScore = scorer.scoreAlignment(neAlignment).getScore();
-		//System.out.println("nescore " + neScore);
-		if (ne1.size()==0 || ne2.size()==0) return sentenceScore;
+		// System.out.println("nescore " + neScore);
+		if (ne1.size() == 0 || ne2.size() == 0)
+			return sentenceScore;
 		return (sentenceScore * hypTokens_.length + neScore * ne2.size()) / (hypTokens_.length + ne2.size());
 	}
 
