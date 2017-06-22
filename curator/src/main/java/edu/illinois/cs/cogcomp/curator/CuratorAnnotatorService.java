@@ -42,7 +42,6 @@ public class CuratorAnnotatorService implements AnnotatorService {
     private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
-     *
      * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
@@ -190,7 +189,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
         if (ta.hasView(viewName))
             return false;
 
-        if (annotationCache.contains(ta)) {
+        if (annotationCache != null && annotationCache.contains(ta)) {
             ta = annotationCache.getTextAnnotation(ta);
             return false;
         }
