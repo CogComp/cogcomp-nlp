@@ -25,6 +25,7 @@
         <module>quantifier</module>
         <module>depparse</module>
         <module>commasrl</module>
+        <module>clausie</module>
         <module>prepsrl</module>
         <module>stanford_3.3.1</module>
         <module>verbsense</module>
