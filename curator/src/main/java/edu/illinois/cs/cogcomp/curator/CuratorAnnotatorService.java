@@ -201,6 +201,10 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         ta.addView(annotator);
 
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
+        }
+
         return isUpdated;
     }
 
