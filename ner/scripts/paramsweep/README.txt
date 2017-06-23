@@ -13,18 +13,16 @@ benchmarkData directory should be placed in the same directory as the scripts.
 2. Check Out the Source Code
 Check out the version of the source code you want to use, or download the 
 appropriate zip file. There should a a directory named "cogcomp-nlp"
-containing the source code.
+containing the source code, also in the same directory as the scripts.
 
 3. Generate the Sweep
 
-For NER, the learning rate and thickness are hard-coded in the 
-LbjTagger.lbj file. The code source is copied by the “generatesweep.sh” 
+For NER, the learning rate and thickness for new training are codified in the 
+configuration file. The code source is copied by the “generatesweep.sh” 
 script into separate directories with names indicating the learning rate 
 and the thickness. For example, r.01-t10 indicates a directory containing 
 a run where the SparseAveragedPerceptron was run with default parameters of 
-learning rate = .01 and thickness = 10. Once the copy of the source directory
-is made, the LbjTagger.lbj file is programmatically modified to change the
-learning rate and thickness appropriately. The generatesweep.sh file contains
+learning rate = .01 and thickness = 10. The generatesweep.sh file contains
 the ranges of learning rates and thicknesses to sweep, a directory is created
 for each combination of these two arguments.
 
@@ -34,19 +32,21 @@ The generatesweep.sh file will generate the directories containing instances
 of the code base to do the various computations for later comparison. The 
 “compile.sh” script will do a maven compile in the resulting directories. This
 script also contains a range of learning rate and thickness parameters; these 
-must correspond exactly to what is in the compile.sh file. Running compile.sh
-will compile all the codes generated in the previous step.
+must correspond exactly to what is in the generatesweep.sh file(and all other 
+scripts for that matter). Running compile.sh will compile all the codes generated
+in the previous step.
 
 5. Linking Training and Testing Data
 
-“link.sh” creates a link in each of the directories where benchmark will run to 
-the benchmarkData directory containing the data to run. The benchmarkData directory
-where the symbolic links original is hard coded in the link.sh file, but can be 
-easily changed. The user will have to supply the data for the benchmarkData 
-directories, configured exactly as document in benchmark.sh script that actually 
-executes training and testing. Users must supply training data in "train", training 
-evaluation data in "dev" and final  testing data in "test" for each of these 
-datasets.  
+“link.sh” copies the training data into each of the directories where benchmark 
+will run. The source benchmark directory is hard coded in the link.sh file, but 
+can be easily changed. The user will have to supply the content for the 
+benchmark directories, configured exactly as documented in benchmark.sh 
+script that actually executes training and testing. Users must supply training 
+data in "train", training evaluation data in "dev" and final  testing data in "test" 
+for each of these datasets. Once this script has copied the training data into each
+training directory, it will also catenate the appropriate thickness and learning
+rate to the configuration files.
 
 6. Training and Testing the Models
 

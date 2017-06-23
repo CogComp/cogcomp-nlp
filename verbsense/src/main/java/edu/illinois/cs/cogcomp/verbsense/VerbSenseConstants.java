@@ -16,6 +16,4 @@ public class VerbSenseConstants {
     public final static String systemName = "illinois-verbsense";
 
     public final static String systemIdentifier = systemName + systemVersion;
-
-    public final static String viewName = "VERB_SENSE";
 }

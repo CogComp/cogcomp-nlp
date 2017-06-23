@@ -98,7 +98,7 @@ public abstract class IOUtils {
     }
 
     /**
-     * List the contents of a directory.
+     * List the contents of a directory. NOTE: Order of list is not guaranteed to be consistent across runs/machines.
      */
     public static String[] ls(String directory) throws IOException {
         if (!isDirectory(directory)) {

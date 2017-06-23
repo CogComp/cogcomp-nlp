@@ -67,7 +67,6 @@ public class CachingPipelineTest {
         }
     }
 
-
     @Before
     public void testSetup() {}
 

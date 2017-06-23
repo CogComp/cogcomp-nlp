@@ -54,6 +54,11 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-verbsense</artifactId>
+            <version>3.1.20</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>stanford_3.3.1</artifactId>
             <version>3.1.20</version>
         </dependency>

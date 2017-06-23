@@ -105,6 +105,10 @@ public class StringTransformation implements Serializable {
                 throw new IllegalStateException("ERROR: edit affects deleted span (offsets are negative). Reorder " +
                     "edits or filter overlapping edits.");
             }
+            if (start > end) {
+                throw new IllegalStateException("ERROR: edit has end offset less than start offset. Some kind of " +
+                    "unhelpful interaction between edits - could be a bug.");
+            }
         }
         // compute the net change in offset: negative for deletion/reduction, positive for insertion,
         //   zero for same-length substitution; store with indexes in current transformed text
@@ -324,8 +328,15 @@ public class StringTransformation implements Serializable {
     private int computeCurrentOffset(int modOffset) {
         int currentChange = 0;
         for (Integer changeIndex : currentOffsetModifications.keySet()) {
-            if (changeIndex > modOffset)
-                break;
+            if (changeIndex >= modOffset) {
+                EditType mod = currentOffsetModifications.get(changeIndex).getSecond();
+                if (mod.equals(EditType.DELETE))
+                    break;
+                else if (changeIndex > modOffset) // increase in current offsets
+                    break;
+
+            }
+
             currentChange += currentOffsetModifications.get(changeIndex).getFirst();
         }
         return modOffset + currentChange;

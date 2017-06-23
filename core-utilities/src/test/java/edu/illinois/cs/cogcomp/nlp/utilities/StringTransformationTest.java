@@ -295,6 +295,22 @@ public class StringTransformationTest {
 
     }
 
+    @Test
+    public void testContiguousEdits() {
+        String text = "He spoke with Paul <ENAMEX TYPE=\"PERSON\"><ENAMEX TYPE=\"PERSON\" E_OFF=\"1\">Paula</ENAMEX> Zahn</ENAMEX> .";
+        StringTransformation st = new StringTransformation(text);
+        st.transformString(19, 41, "");
+        st.transformString(41, 73, "");
+        st.transformString(78, 87, "");
+        st.transformString(92,101, "");
+
+        String modifiedStr = st.getTransformedText();
+
+        assertEquals(text, st.getOrigText());
+        assertEquals(31, modifiedStr.length());
+        assertEquals("He spoke with Paul Paula Zahn .", modifiedStr);
+    }
+
 
     /**
      * runs the same set of ops as testSequence, but applies edits after each transformation.
