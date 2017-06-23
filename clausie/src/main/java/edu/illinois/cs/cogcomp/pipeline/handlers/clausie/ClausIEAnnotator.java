@@ -5,10 +5,9 @@
  * Developed by: The Cognitive Computation Group University of Illinois at Urbana-Champaign
  * http://cogcomp.cs.illinois.edu/
  */
-package edu.illinois.cs.cogcomp.pipeline.handlers;
+package edu.illinois.cs.cogcomp.pipeline.handlers.clausie;
 
 import de.mpii.clausie.ClausIE;
-import de.mpii.clausie.Proposition;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -40,17 +39,11 @@ public class ClausIEAnnotator extends Annotator {
         View vu = new View(viewName, "ClausIEAnnotator", ta, 1.0);
         assert sentences.size() == ta.getNumberOfSentences();
         for(Constituent sent : sentences) {
-            clausIE.parse(sent.getSurfaceForm());
-            clausIE.detectClauses();
-            clausIE.generatePropositions();
+            String[] clausieResults = ClausieSplitter.split(sent.getSurfaceForm());
             Constituent sentenceCons = new Constituent("sent-" + sent.getSentenceId(), viewName, ta, sent.getStartSpan(), sent.getEndSpan());
             int propId = 0;
-            for(Proposition p : clausIE.getPropositions()) {
-                String proposition = p.subject();
-                proposition += " " + p.relation();
-                for(int i = 0; i < p.noArguments(); i++)
-                    proposition += " " + p.argument(i);
-                sentenceCons.addAttribute("proposition-" + propId, proposition);
+            for(String clausieSent : clausieResults) {
+                sentenceCons.addAttribute("clauseIe:" + propId, clausieSent);
                 propId++;
             }
             vu.addConstituent(sentenceCons);

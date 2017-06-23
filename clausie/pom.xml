@@ -17,7 +17,7 @@
     <dependencies>
         <dependency>
             <groupId>de.mpii.clausie</groupId>
-            <artifactId>clausie</artifactId>
+            <artifactId>clausie-modified</artifactId>
             <version>0.0.1</version>
         </dependency>
         <dependency>
@@ -31,11 +31,6 @@
             <version>1.7.12</version>
         </dependency>
         <dependency>
-            <groupId>net.sf.jopt-simple</groupId>
-            <artifactId>jopt-simple</artifactId>
-            <version>4.4</version>
-        </dependency>
-        <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
             <version>3.1.20</version>
@@ -47,14 +42,19 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-parser</artifactId>
-            <version>2.0.4</version>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>4.4</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
-            <artifactId>stanford-parser</artifactId>
-            <version>2.0.4</version>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.nlp</groupId>
+            <artifactId>stanford-corenlp</artifactId>
+            <version>3.3.0</version>
             <classifier>models</classifier>
         </dependency>
     </dependencies>
