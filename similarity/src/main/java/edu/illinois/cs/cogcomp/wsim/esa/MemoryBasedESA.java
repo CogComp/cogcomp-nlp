@@ -32,20 +32,14 @@ public class MemoryBasedESA {
 
 	private HashMap<String, String> pageIdTitleMapping;
 
-	public MemoryBasedESA(ResourceManager rm_) {
-
-		System.out.println("[Read Memory ESA Data] " + rm_.getString(SimConfigurator.MEMORYBASEDESA.key));
-
-		File inputFile = null;
-
-		inputFile = new File(rm_.getString(SimConfigurator.MEMORYBASEDESA.key));
+	public MemoryBasedESA(File memorybasedESA, File pageIDMapping) {
 
 		wordVectors = new HashMap<String, HashMap<Integer, Double>>();
 		wordIDF = new HashMap<String, Double>();
 		int cc = 0;
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new FileReader(inputFile));
+			reader = new BufferedReader(new FileReader(memorybasedESA));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -80,9 +74,8 @@ public class MemoryBasedESA {
 		pageIdTitleMapping = new HashMap<String, String>();
 
 		try {
-			File mappingFile = new File(rm_.getString(SimConfigurator.PAGE_ID_MAPPING.key));
-			System.out.println("Read mapping file: " + mappingFile.getAbsolutePath());
-			FileReader mappReader = new FileReader(mappingFile);
+			//System.out.println("Read mapping file: " + mappingFile.getAbsolutePath());
+			FileReader mappReader = new FileReader(pageIDMapping);
 			BufferedReader bf = new BufferedReader(mappReader);
 			String line = "";
 			while ((line = bf.readLine()) != null) {

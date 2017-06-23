@@ -7,14 +7,18 @@
  */
 package edu.illinois.cs.cogcomp.sim;
 
+import java.io.File;
 import java.io.IOException;
+
+import org.cogcomp.Datastore;
+import org.cogcomp.DatastoreException;
 
 import edu.illinois.cs.cogcomp.wsim.esa.MemoryBasedESA;
 
 import edu.illinois.cs.cogcomp.wsim.wordnet.WNSim;
 import edu.illinois.cs.cogcomp.config.EmbeddingConstant;
 import edu.illinois.cs.cogcomp.config.SimConfigurator;
-import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.wsim.embedding.Embedding;
 
@@ -38,6 +42,7 @@ public class WordSim implements Metric<String> {
 	Embedding phrase2vec;
 	MemoryBasedESA esa;
 	String method;
+	Datastore ds;
 
 	@Override
 	public MetricResponse compare(String arg1, String arg2) throws IllegalArgumentException {
@@ -52,18 +57,24 @@ public class WordSim implements Metric<String> {
 	 */
 	public WordSim(ResourceManager rm_) {
 
-		paragram = new Embedding(rm_.getString(SimConfigurator.PARAGRAM.key),
-				rm_.getInt(SimConfigurator.PARAGRAM_DIM.key));
-		word2vec = new Embedding(rm_.getString(SimConfigurator.WORD2VEC.key),
+		word2vec = new Embedding(getFile(SimConfigurator.WORD2VEC.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
+
+		File file = new File(rm_.getString(SimConfigurator.PARAGRAM.key));
+		paragram = new Embedding(file, rm_.getInt(SimConfigurator.PARAGRAM_DIM.key));
+
+		glove = new Embedding(getFile(SimConfigurator.GLOVE.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
+
+		phrase2vec = new Embedding(getFile(SimConfigurator.PHRASE2VEC.key),
 				rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-		glove = new Embedding(rm_.getString(SimConfigurator.GLOVE.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-		phrase2vec = new Embedding(rm_.getString(SimConfigurator.PHRASE2VEC.key),
-				rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-		esa = new MemoryBasedESA(rm_);
+
+		esa = new MemoryBasedESA(getFile(SimConfigurator.MEMORYBASEDESA.key),
+				getFile(SimConfigurator.PAGE_ID_MAPPING.key));
+
 		try {
 			wnsim = new WNSim();
 		} catch (IOException e) {
 		}
+
 	}
 
 	/**
@@ -89,7 +100,7 @@ public class WordSim implements Metric<String> {
 			score = glove.simScore(small, big);
 		} else if (method.equals(EmbeddingConstant.phrase2vec)) {
 			score = phrase2vec.simScore(small, big);
-		} else if (method.equals(EmbeddingConstant.esa)) {
+		} else if (method.equals(EmbeddingConstant.memorybasedESA)) {
 			score = esa.cosine(small, big);
 		} else if (method.equals(EmbeddingConstant.wordnet)) {
 
@@ -108,30 +119,81 @@ public class WordSim implements Metric<String> {
 	 *            is the word comparison metric
 	 */
 	public WordSim(ResourceManager rm_, String method) {
+
 		this.method = method;
 
 		if (method.equals(EmbeddingConstant.word2vec)) {
-			word2vec = new Embedding(rm_.getString(SimConfigurator.WORD2VEC.key),
+			word2vec = new Embedding(getFile(SimConfigurator.WORD2VEC.key),
 					rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
 		} else if (method.equals(EmbeddingConstant.paragram)) {
-			paragram = new Embedding(rm_.getString(SimConfigurator.PARAGRAM.key),
-					rm_.getInt(SimConfigurator.PARAGRAM_DIM.key));
+			File file = new File(rm_.getString(SimConfigurator.PARAGRAM.key));
+			paragram = new Embedding(file, rm_.getInt(SimConfigurator.PARAGRAM_DIM.key));
 		} else if (method.equals(EmbeddingConstant.glove)) {
-			glove = new Embedding(rm_.getString(SimConfigurator.GLOVE.key),
-					rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
+			glove = new Embedding(getFile(SimConfigurator.GLOVE.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
 		} else if (method.equals(EmbeddingConstant.phrase2vec)) {
-			phrase2vec = new Embedding(rm_.getString(SimConfigurator.PHRASE2VEC.key),
+			phrase2vec = new Embedding(getFile(SimConfigurator.PHRASE2VEC.key),
 					rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-		} else if (method.equals(EmbeddingConstant.esa)) {
-			esa = new MemoryBasedESA(rm_);
+		} else if (method.equals(EmbeddingConstant.memorybasedESA)) {
+			esa = new MemoryBasedESA(getFile(SimConfigurator.MEMORYBASEDESA.key),
+					getFile(SimConfigurator.PAGE_ID_MAPPING.key));
 		} else if (method.equals(EmbeddingConstant.wordnet)) {
 			try {
 				wnsim = new WNSim();
 			} catch (IOException e) {
 			}
-		} else
+		} else if (method.equals(EmbeddingConstant.customized)){
+			File file = new File(rm_.getString(SimConfigurator.CUSTOMIZED.key));
+			paragram = new Embedding(file, rm_.getInt(SimConfigurator.CUSTOMIZED_EMBEDDING_DIM.key));
+		}
 			throw new IllegalArgumentException("Requires an legal word comparison metric");
 
+	}
+
+	public File getFile(String method) {
+		try {
+			ResourceManager rm=new ResourceConfigurator().getDefaultConfig();
+			ds=new Datastore(rm.getString("datastoreEndpoint"));
+		} catch (DatastoreException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		File f = null;
+		if (method.equals(EmbeddingConstant.word2vec)) {
+			try {
+				f = ds.getFile("org.cogcomp.wordembedding", "word2vec.txt", 1.5);
+			} catch (DatastoreException e) {
+				e.printStackTrace();
+			}
+		} else if (method.equals(EmbeddingConstant.glove)) {
+			try {
+				f = ds.getFile("org.cogcomp.wordembedding", "glove.txt", 1.5);
+			} catch (DatastoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (method.equals(EmbeddingConstant.phrase2vec)) {
+			try {
+				f = ds.getFile("org.cogcomp.wordembedding", "phrase2vec.txt", 1.5);
+			} catch (DatastoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (method.equals(EmbeddingConstant.memorybasedESA)) {
+			try {
+				f = ds.getFile("org.cogcomp.wordembedding", "memorybasedESA.txt", 1.5);
+			} catch (DatastoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else if (method.equals(EmbeddingConstant.pageIDMapping)) {
+			try {
+				f = ds.getFile("org.cogcomp.wordembedding", "pageIDMapping.txt", 1.5);
+			} catch (DatastoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return f;
 	}
 
 }

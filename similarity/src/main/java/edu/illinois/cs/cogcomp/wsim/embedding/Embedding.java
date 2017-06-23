@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.wsim.embedding;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -29,15 +30,15 @@ public class Embedding {
 	private double[] zeroArray;
 	private HTreeMap<String, double[]> vectors;
 
-	public Embedding(String mapPath, int dimension) {
+	public Embedding(File file, int dimension) {
 		try {
-			loadEmbedding(mapPath, dimension);
+			loadEmbedding(file, dimension);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void loadEmbedding(String mapPath, int dimension) throws FileNotFoundException {
+	private void loadEmbedding(File mapPath, int dimension) throws FileNotFoundException {
 
 		DB db = DBMaker.memoryDB().make();
 		vectors = db.hashMap("some_other_map", Serializer.STRING, Serializer.DOUBLE_ARRAY).create();

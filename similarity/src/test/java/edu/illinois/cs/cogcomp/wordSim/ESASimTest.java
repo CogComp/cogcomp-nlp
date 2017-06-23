@@ -13,6 +13,7 @@ import edu.illinois.cs.cogcomp.wsim.esa.MemoryBasedESA;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
@@ -23,7 +24,9 @@ public class ESASimTest {
 	public void test() throws IOException {
 		String CONFIG = "config/test.configurations.properties";
 		ResourceManager rm_ = new ResourceManager(CONFIG);
-		MemoryBasedESA esa = new MemoryBasedESA(rm_);
+		File f1=new File(rm_.getString("memorybasedESA"));
+		File f2=new File(rm_.getString("memorybasedESA"));
+		MemoryBasedESA esa = new MemoryBasedESA(f1,f2);
 		double score1 = esa.cosine("queen", "king");
 		System.out.println(score1);
 		double score2 = esa.cosine("queen", "word");

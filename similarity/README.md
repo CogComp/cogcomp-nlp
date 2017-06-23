@@ -8,20 +8,20 @@ different similarity resources.
 
 ## Download Resource File
 
-To download resource file including: Word2vec, Glove, ESA, simply run the main function in Datastore class in `edu.illinois.cs.cogcomp.sim` package. It will download those file from Cogcomp server to `src/main/resources/1.5` in your local machine. You can also comment out the resource that you don't want or use your own file. Notice: "paragram" is already included in the `src/main/resources/`.
+Once you first use the specific metrics, the system will automatically download corresponding resource file from Cogcomp server to `user.home` directory in your local machine.
+Notice: Some resource file is very large and it may take a while to download. "paragram" is already included in the `src/main/resources/`.
 
 ## Configure File
 
 The default configure file is `config/configurations.properties.` And see the default config in `SimConfigurator` in `edu.illinois.cs.cogcomp.config` package.
 
-`wordMetric` is the  word comparison metric. It can be chosen from "word2vec", "paragram", "esa", "glove", "wordnet" or "phrase2vec" (provided you have downloaded the relevant data resource -- see above). Notice: This metric will also be used as word comparator in LLM.
+`wordMetric` is the  word comparison metric. It can be chosen from "word2vec", "paragram", "esa", "glove", "wordnet" "phrase2vec" or "customized" (your own embedding file). Notice: This metric will also be used as word comparator in LLM.
 
 `usePhraseSim` option will automatically tokenized the sentence into phrase-based units when comparing sentences and notice it should be used with "phrase2vec".
 
 `useNER` option will run NER on sentence and compare name-entity using NE comparison metrics in LLM.
 
-`word2vec` is the word2vec file location in your computer. Similarly,  other resource use the same way to specify the location.
-
+`customized` gives your option to use your own embedding file. Just put the location of the file at this field and the dimension of the embedding at the filed `customized_embedding_dim`.
 
 ## Word similarity
 To use word comparison metric:
