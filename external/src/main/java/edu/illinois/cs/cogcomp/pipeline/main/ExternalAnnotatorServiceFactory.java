@@ -16,6 +16,7 @@ import edu.illinois.cs.cogcomp.pipeline.handlers.PathLSTMHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordCorefHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordOpenIEHandler;
 import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordRelationsHandler;
+import edu.illinois.cs.cogcomp.pipeline.handlers.StanfordTrueCaseHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -84,6 +85,9 @@ public class ExternalAnnotatorServiceFactory {
 
         StanfordOpenIEHandler openIEHandler = new StanfordOpenIEHandler();
         viewGenerators.put(openIEHandler.getViewName(), openIEHandler);
+
+        StanfordTrueCaseHandler trueCaseHandler = new StanfordTrueCaseHandler();
+        viewGenerators.put(trueCaseHandler.getViewName(), trueCaseHandler);
 
         return viewGenerators;
     }

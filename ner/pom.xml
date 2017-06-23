@@ -5,7 +5,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.13</version>
+        <version>3.1.20</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -24,12 +24,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-tokenizer</artifactId>
-            <version>3.1.13</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-core-utilities</artifactId>
-            <version>3.1.13</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
@@ -66,21 +66,22 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>LBJava-NLP-tools</artifactId>
-            <version>3.1.13</version>
+            <version>3.1.20</version>
         </dependency>
 
 
         <!-- models: you need to use/specify a new path to avoid using these -->
+        <!-- if you want to use CoNLL-only models, use version 3.2 -->
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model</artifactId>
-            <version>3.0</version>
-            <classifier>CoNLL</classifier>
+            <version>3.3</version>
+            <classifier>CoNLL_enron</classifier>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner-model</artifactId>
-            <version>3.0</version>
+            <version>3.3</version>
             <classifier>OntoNotes</classifier>
         </dependency>
         <dependency>

@@ -7,9 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.nlp.tokenizer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.awt.event.KeyEvent;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -53,7 +50,6 @@ import java.util.regex.Pattern;
 public class TokenizerStateMachine {
     /** valid URI schemes. */
     final static String[] schemes = {"http", "https", "ftp", "svn", "email"};
-    private static Logger logger = LoggerFactory.getLogger(TokenizerStateMachine.class);
     /** matches up to the end of the url. */
     final Pattern urlpat = Pattern
             .compile("[a-zA-Z0-9]+://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
@@ -673,6 +669,8 @@ public class TokenizerStateMachine {
             int lastdash = term.lastIndexOf("-");
             if (lastdash != -1)
                 term = term.substring(lastdash + 1);
+            if (term.length() == 0)
+                return false;
             ArrayList<String> abbrs = Acronyms.get(term.charAt(0));
             if (abbrs != null && abbrs.contains(term))
                 return true;

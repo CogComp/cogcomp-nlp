@@ -350,7 +350,7 @@ for (int i = 0; i < ta.size(); i++) {
 }
 ```
 
-###Creating Annotators
+### Creating Annotators
 
 The `AnnotatorService` class is based on stringing together classes that
 extend the `Annotator` abstract class. This class is used within the 
@@ -387,7 +387,7 @@ on the other hand, has features that depend on a context that may
 extend into previous sentences: if the sentence-by-sentence approach
 is used for NER, some degradation is to be expected. 
 
-###Configurators
+### Configurators
 
 For ease of use of your own NLP software, especially classes that
 extend `Annotator` or `AnnotatorService`, you are encouraged to create 
@@ -401,7 +401,7 @@ to specify only non-default configuration options when you instantiate
 one or more classes that use `ResourceManager` and `Configurator`
 to manage configuration options.
 
-###Serialization and Deserialization
+### Serialization and Deserialization
 
 To store `TextAnnotation` objects on disk, serialization/deserialization is supported in the following formats:
 
@@ -438,7 +438,7 @@ TextAnnotation ta = SerializationHelper.deserializeFromProtobuf("text_annotation
 
 More usage information in the `SerializationHelper` class.
 
-###Generating Protocol Buffer Java Code
+### Generating Protocol Buffer Java Code
 
 **Note:** If you make any change to TextAnnotation class which involves adding/removing data items, make sure to update the
 protocol buffer schema and the corresponding serialization code accordingly.
@@ -455,7 +455,7 @@ protoc --java_out=core-utilities/src/main/java core-utilities/src/main/proto/Tex
 mvn license:format
 ```
 
-##Citation
+## Citation
 
 If you use this code in your research, please provide the URL for this github repository in the relevant publications.  
 If you use any of the NLP modules, please check their README files to see if there are relevant publications to cite. 

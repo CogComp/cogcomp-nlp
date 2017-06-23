@@ -54,7 +54,7 @@ public class CoNLL2002Writer {
      * 
      * @param view the view with the labels to produce.
      * @param ta the text annotation.
-     * @param filename the filename.
+     * @param filename the filename output file name.
      * @throws IOException
      */
     static public void writeViewInCoNLL2003Format(View view, TextAnnotation ta, String filename)
@@ -198,10 +198,10 @@ public class CoNLL2002Writer {
                 sb.append('O');
             }
 
-            // doc index I guess
-            sb.append("\t0\t");
+            // sentence index I guess
+            sb.append("\t"+sentenceindex+"\t");
 
-            // entity offset
+            // token offset
             sb.append(entityWithinSentence);
             entityWithinSentence++;
 

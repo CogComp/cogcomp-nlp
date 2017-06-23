@@ -70,6 +70,8 @@ public class ViewNames {
     public static final String SRL_PREP = "SRL_PREP";
     public static final String SRL_COMMA = "SRL_COMMA";
 
+    public static final String VERB_SENSE = "VERB_SENSE";
+
     public static final String COREF = "COREF";
     // Constituents in this view contains heads of mentions only
     public static final String COREF_HEAD = "COREF_HEAD";
@@ -121,6 +123,8 @@ public class ViewNames {
     public static final String NER_ERE = "NER_ERE";
     public static final String MENTION_ERE = "MENTION_ERE";
     public static final String COREF_ERE = "COREF_ERE";
+    public static final String POST_ERE = "POST_ERE";
+    public static final String EVENT_ERE = "EVENT_ERE";
 
 
     public static ViewTypes getViewType(String viewName) {
@@ -128,6 +132,7 @@ public class ViewNames {
             case TOKENS:
             case LEMMA:
             case POS:
+            case VERB_SENSE: 
                 return ViewTypes.TOKEN_LABEL_VIEW;
             case SENTENCE:
             case PARAGRAPH:
@@ -146,6 +151,8 @@ public class ViewNames {
             case GAZETTEER:
             case TREE_GAZETTEER:
             case GAZETTEER_NE:
+            case POST_ERE:
+            case EVENT_ERE:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:

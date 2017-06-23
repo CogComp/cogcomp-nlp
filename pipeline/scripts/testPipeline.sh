@@ -4,12 +4,12 @@
 # PURPOSE: test the Illinois Temporal Extractor using a fixed
 #   input file and reference output. 
 # executor must have read/write/execute privileges in test dir. 
-#
+# must first run 'mvn install' and 'mvn dependency:copy-dependencies"
 
 CONFIG="config"
 TEST="test"
 
-RUNSCRIPT="runPreprocessor.sh"
+RUNSCRIPT="runPipelineOnDataset.sh"
 CONFIG_FILE="$CONFIG/pipeline-config.properties"
 TEST_IN="$TEST/testIn.txt"
 TEST_OUT_TXT="$TEST/testOut.txt"
@@ -24,7 +24,7 @@ if [ ! -e $REF_FILE ]; then
 fi
 
 
-CMD="./scripts/$RUNSCRIPT $CONFIG_FILE $TEST_IN $TEST_OUT_TXT $TEST_OUT_SER"
+CMD="./scripts/$RUNSCRIPT $CONFIG_FILE $TEST_IN $TEST_OUT_TXT"
 
 echo "$0: running command '$CMD'"
 

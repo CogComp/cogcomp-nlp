@@ -6,6 +6,23 @@ The newest version tags entities with either the "classic" 4-label type set
 18-label type set (based on the OntoNotes corpus). It uses gazetteers extracted from Wikipedia, word class models 
 derived from unlabeled text, and expressive non-local features.
 
+As of model version 3.3, the CoNLL classifiers are trained using a data set augmented with email data. Overall, 
+this slightly improves performance on the CoNLL data and significantly improves performance on email data.
+This is the model that is used by default; you can specify other models as indicated in the table below by 
+setting the configuration parameter "modelName" to the value under "Model classifier" (OntoNotes has its
+own NerOntonotesConfigurator class). 
+
+
+| Corpus | F1 on held-out data | Model classifier | Model version |
+| :--- | :--- | :--- | :--- |
+| CoNLL (trained on CoNLL only)| 90.88 | CoNLL | 3.1 |
+| CoNLL (trained on CoNLL + enron) | 91.08 | CoNLL_enron | 3.3 |
+| OntoNotes | 84.88 | OntoNotes | 3.3 |
+| Enron email | 77.68 | ConLL_enron | 3.3 |
+| MUC | 88.37 | CoNLL_enron | 3.3 |
+
+
+
 ## Quickstart
 
 This assumes you have downloaded the package from the [Cogcomp download page](http://cogcomp.cs.illinois.edu/page/software_view/NETagger). If instead, you have cloned the github repo, then see the [Compilation section](#how-to-compile-the-software).
@@ -43,11 +60,13 @@ This script requires the configuration file name.
 ### Java COMMAND LINE
 
 To annotate plain text files, navigate to the root directory (`illinois-ner/`), and run the
-following commands (plain text files are included in `test/SampleInputs/`).
+following commands (a plain text file is included in `test/`).
+NOTE: These commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
 $ mkdir output
-$ java -Xmx3g -classpath "dist/*:lib/*:models/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
+$ java -Xmx6g -classpath "target/*:target/dependency/*" edu.illinois.cs.cogcomp.ner.NerTagger -annotate test/SampleInputs/ output/ config/ner.properties
 ```
 
 This will annotate each file in the input directory with 4 NER categories: PER, LOC, ORG, and MISC. This may be slow. If you 
@@ -132,9 +151,7 @@ public class App
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
 
         NERAnnotator co = new NERAnnotator(ViewNames.NER_CONLL);
-        co.doInitialize();
-
-        co.addView(ta);
+        co.getView(ta);
 
         System.out.println(ta.getView(ViewNames.NER_CONLL));
     }
@@ -142,10 +159,12 @@ public class App
 ```
 
 Note that you will need to include all the included jars on the classpath, as before.
+The following commands assume you ran `mvn install` and `mvn dependency:copy-dependencies`,
+which create the ner binary in `target/` and copies all dependency jars into `target/dependency`.
 
 ```bash
-$ javac -cp "dist/*:lib/*:models/*" App.java
-$ java -cp "dist/*:lib/*:models/*:." App
+$ javac -cp "target/*.jar:target/dependency/*" App.java
+$ java -cp "target/*.jar:target/dependency/*:." App
 ```
 
 If you have Maven installed,  you can easily incorporate the Cogcomp Named Entity Recognizer into
