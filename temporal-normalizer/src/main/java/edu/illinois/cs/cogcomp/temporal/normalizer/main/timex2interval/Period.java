@@ -9,47 +9,49 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.*;
 
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
+
 public class Period {
-	public static Set<String> dateUnit = new HashSet<String>() {{
-		add("day");
-		add("week");
-		add("month");
-		add("year");
-		add("century");
-		add("decade");
-		add("quarter");
-	}};
-
-	public static HashMap<String, String> unitMap = new HashMap<String, String>(){
-		{
-			put("day", "D");
-			put("days", "D");
-			put("week", "W");
-			put("weeks", "W");
-			put("month", "M");
-			put("months", "M");
-			put("year", "Y");
-			put("years", "Y");
-			put("century", "00Y");
-			put("centuries", "00Y");
-			put("decade", "0Y");
-			put("decades", "0Y");
-			put("second", "S");
-			put("seconds", "S");
-			put("minute", "M");
-			put("minutes", "M");
-			put("hour", "H");
-			put("hours", "H");
-			put("time", "X");
-			put("timex", "X");
-			put("morning", "MO");
-			put("noon", "12:00");
-			put("afternoon", "AF");
-			put("evening", "EV");
-			put("night", "NI");
-
-		}
-	};
+//	public static Set<String> dateUnit = new HashSet<String>() {{
+//		add("day");
+//		add("week");
+//		add("month");
+//		add("year");
+//		add("century");
+//		add("decade");
+//		add("quarter");
+//	}};
+//
+//	public static HashMap<String, String> unitMap = new HashMap<String, String>(){
+//		{
+//			put("day", "D");
+//			put("days", "D");
+//			put("week", "W");
+//			put("weeks", "W");
+//			put("month", "M");
+//			put("months", "M");
+//			put("year", "Y");
+//			put("years", "Y");
+//			put("century", "00Y");
+//			put("centuries", "00Y");
+//			put("decade", "0Y");
+//			put("decades", "0Y");
+//			put("second", "S");
+//			put("seconds", "S");
+//			put("minute", "M");
+//			put("minutes", "M");
+//			put("hour", "H");
+//			put("hours", "H");
+//			put("time", "X");
+//			put("timex", "X");
+//			put("morning", "MO");
+//			put("noon", "12:00");
+//			put("afternoon", "AF");
+//			put("evening", "EV");
+//			put("night", "NI");
+//
+//		}
+//	};
 
 	public static List<String> normTimexToList(String timex) {
 		String []list = timex.split("\\-");
@@ -125,7 +127,7 @@ public class Period {
 
 		String units = "";
 
-		for (String unitStr: dateUnit) {
+		for (String unitStr: dateUnitSet) {
 			units = units + unitStr + "|";
 		}
 		units += "s$";
@@ -142,7 +144,8 @@ public class Period {
 			String anchorStr = "";
 			if (residual.length()>0) {
 				TemporalPhrase anchorPhrase = new TemporalPhrase(residual, temporalPhrase.getTense());
-				TimexChunk anchorTimex = ModifiedDate.ModifiedRule(start, anchorPhrase);
+				//TimexChunk anchorTimex = ModifiedDate.ModifiedRule(start, anchorPhrase);
+				TimexChunk anchorTimex = TimexNormalizer.normalize(anchorPhrase);
 				if (anchorTimex!=null) {
 					anchorStr = anchorTimex.getAttribute(TimexNames.value);
 				}
@@ -192,25 +195,36 @@ public class Period {
 				String val = "";
 				if (anchorStr.length()>0) {
 					List<String> normTimexList = Period.normTimexToList(anchorStr);
-					if (normTimexList.size()==1) {
-						String anchorYear = normTimexList.get(0);
-						String anchorMonth = "01";
-						String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
-						val = anchorYear + "-" + anchorMonth + "-" + dayStr;
+					String anchorYear = normTimexList.get(0);
+					String anchorDate;
+					String anchorMonth;
+					if (normTimexList.size()==1 || Integer.parseInt(temp1)>31) {
+						anchorMonth = "01";
 					}
 					else {
-						String anchorYear = normTimexList.get(0);
-						String anchorMonth = normTimexList.get(1);
-						String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
-						val = anchorYear + "-" + anchorMonth + "-" + dayStr;
+						anchorMonth = normTimexList.get(1);
 					}
+					DateTime normDateTime = new DateTime(Integer.parseInt(anchorYear),
+							Integer.parseInt(anchorMonth), 1, 0, 0);
+					normDateTime = normDateTime.minusDays(-1*Integer.parseInt(temp1));
+					anchorYear = String.valueOf(normDateTime.getYear());
+					anchorMonth = String.valueOf(normDateTime.getMonthOfYear());
+					anchorDate = String.valueOf(normDateTime.getDayOfMonth());
+					anchorMonth = anchorMonth.length()==1?"0"+anchorMonth:anchorMonth;
+					anchorDate = anchorDate.length()==1?"0"+anchorDate:anchorDate;
+					val = anchorYear + "-" + anchorMonth + "-" + anchorDate;
+
 				}
 				else {
-					int anchorYear = start.getYear();
-					int anchorMonth = start.getMonthOfYear();
-					String monthStr = anchorMonth < 10 ? "0" + anchorMonth : String.valueOf(anchorMonth);
-					String dayStr = Integer.parseInt(temp1) < 10 ? "0" + temp1 : temp1;
-					val = String.valueOf(anchorYear) + "-" + monthStr + "-" + dayStr;
+					int month = Integer.parseInt(temp1)>31?1:start.getMonthOfYear();
+					DateTime normDateTime = new DateTime(start.getYear(), month, 1, 0, 0);
+					normDateTime = normDateTime.minusDays(-1*Integer.parseInt(temp1));
+					String anchorYear = String.valueOf(normDateTime.getYear());
+					String anchorMonth = String.valueOf(normDateTime.getMonthOfYear());
+					String anchorDate = String.valueOf(normDateTime.getDayOfMonth());
+					anchorMonth = anchorMonth.length()==1?"0"+anchorMonth:anchorMonth;
+					anchorDate = anchorDate.length()==1?"0"+anchorDate:anchorDate;
+					val = String.valueOf(anchorYear) + "-" + anchorMonth + "-" + anchorDate;
 				}
 				tc.addAttribute(TimexNames.value, String.valueOf(val));
 				return tc;
@@ -288,7 +302,7 @@ public class Period {
 
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(1900, 3, 14, 3, 3, 3, 3);
-		String example = "1st day of this week";
+		String example = "the 99th day of the year";
 		TimexChunk sample = Periodrule(startTime, new TemporalPhrase(example, "past"));
 		System.out.println(sample.toTIMEXString());
 	}

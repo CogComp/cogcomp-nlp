@@ -121,8 +121,18 @@ public class TemporalChunkerAnnotator extends Annotator{
 //        tagger.readModel(lcPath);
 //        tagger.readLexicon(lexPath);
         tagger = new Chunker(
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr_iter50.lc",
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/TBAQ_full_1label_corr_iter50.lex"
+//                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
+//                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
+//                        "TBAQ_full_1label_corr_temp50/TBAQ_full_1label_corr_temp50.lc",
+//                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
+//                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
+//                        "TBAQ_full_1label_corr_temp50/TBAQ_full_1label_corr_temp50.lex"
+                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
+                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
+                        "prev_TB_full_1label_corr_bestit/prev_TB_full_1label_corr_bestit.lc",
+                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
+                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
+                        "prev_TB_full_1label_corr_bestit/prev_TB_full_1label_corr_bestit.lex"
                 );
         this.useHeidelTime =
                 rm.getString(TemporalChunkerConfigurator.USE_HEIDELTIME) != "False";

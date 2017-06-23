@@ -6,110 +6,13 @@ import org.joda.time.Interval;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
 
 /**
  * Created by zhilifeng on 2/19/17.
  */
 public class Duration {
 
-    public static Set<String> timeUnit = new HashSet<String>() {{
-        add("second");
-        add("seconds");
-        add("minute");
-        add("minutes");
-        add("hour");
-        add("hours");
-    }};
-    public static Set<String> dateUnit = new HashSet<String>() {{
-        add("day");
-        add("days");
-        add("week");
-        add("weeks");
-        add("month");
-        add("months");
-        add("year");
-        add("years");
-        add("century");
-        add("centuries");
-        add("decade");
-        add("decades");
-    }};
-
-    public static HashMap<String, String> hierarchy = new HashMap<String, String>(){
-        {
-            put("century", "decade");
-            put("centuries", "decade");
-            put("decades", "year");
-            put("decade", "year");
-            put("years", "month");
-            put("year", "month");
-            put("months", "day");
-            put("month", "day");
-            put("weeks", "day");
-            put("week", "days");
-            put("days", "hour");
-            put("day", "hour");
-            put("hours", "minute");
-            put("hour", "minute");
-            put("minute", "second");
-            put("minutes", "second");
-
-        }
-    };
-
-    public static HashMap<String, Integer> base = new HashMap<String, Integer>(){
-        {
-            put("century", 100);
-            put("centuries", 100);
-            put("decades", 10);
-            put("decade", 10);
-            put("years", 10);
-            put("year", 10);
-            put("months", 12);
-            put("month", 12);
-            put("weeks", 4);
-            put("week", 4);
-            put("days", 15);
-            put("day", 15);
-            put("hours", 24);
-            put("hour", 24);
-            put("minute", 60);
-            put("minutes", 60);
-            put("second", 60);
-            put("seconds", 60);
-        }
-    };
-
-    public static HashMap<String, String> unitMap = new HashMap<String, String>(){
-        {
-            put("day", "D");
-            put("days", "D");
-            put("week", "W");
-            put("weeks", "W");
-            put("month", "M");
-            put("months", "M");
-            put("year", "Y");
-            put("years", "Y");
-            put("century", "00Y");
-            put("centuries", "00Y");
-            put("decade", "0Y");
-            put("decades", "0Y");
-            put("second", "S");
-            put("seconds", "S");
-            put("minute", "M");
-            put("minutes", "M");
-            put("hour", "H");
-            put("hours", "H");
-            put("time", "X");
-            put("timex", "X");
-            put("morning", "MO");
-            put("noon", "12:00");
-            put("afternoon", "AF");
-            put("evening", "EV");
-            put("night", "NI");
-
-        }
-    };
 
     public static double fracToDec(String frac) {
         if (!frac.contains("/")) {
@@ -201,17 +104,19 @@ public class Duration {
 
 
 
-        String fracPatternStr = "(\\s*(\\d+(?:[./]\\d+)*)\\s*(?:(year(?:s)?|month(?:s)?|day(?:s)?|" +
-                "weekend(?:s)?|week(?:s)?|decade(?:s)?|tenure(?:s)?|centur(?:y)?(?:ies)?|hour(?:s)?|" +
-                "minute(?:s)?|second(?:s)?))*)+";
+//        String fracPatternStr = "(\\s*(\\d+(?:[./]\\d+)*)\\s*(?:(year(?:s)?|month(?:s)?|day(?:s)?|" +
+//                "weekend(?:s)?|week(?:s)?|decade(?:s)?|tenure(?:s)?|centur(?:y)?(?:ies)?|hour(?:s)?|" +
+//                "minute(?:s)?|second(?:s)?))*)+";
+        String fracPatternStr = "(\\s*(\\d+(?:[./]\\d+)*)\\s*(?:(" + dateUnit + "|" + timeUnit  + "))*)+";
         Pattern fracPattern = Pattern.compile(fracPatternStr);
         String canonicalPhrase = Duration.converter(phrase);
+        boolean containsFrac = canonicalPhrase.contains("/");
         Matcher fracMatcher = fracPattern.matcher(canonicalPhrase);
         String prevQuant = null;
         String prevUnit = null;
         String fracRes = "P";
         boolean isFirstUnit = true;
-        while (fracMatcher.find()) {
+        while (containsFrac && fracMatcher.find()) {
             String quantity = fracMatcher.group(2);
             String unit = fracMatcher.group(3);
             if (unit==null) {
@@ -231,7 +136,7 @@ public class Duration {
             else {
                 prevUnit = unit;
                 if (isFirstUnit) {
-                    if (timeUnit.contains(unit)) {
+                    if (timeUnitSet.contains(unit)) {
                         fracRes += "T";
                         isFirstUnit = false;
                     }
@@ -267,6 +172,7 @@ public class Duration {
             return tc;
         }
 
+
         // This captures strings like (some number)(some unit)
         String patternStr = "\\s*((?:(?:\\d+|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|" +
                 "eighteen|nineteen|twenty|thirty|fourty|fifth|sixty|seventy|eighty|ninety|" +
@@ -276,10 +182,10 @@ public class Duration {
                 "minute(?:s)?|second(?:s)?))\\s*\\w*";
 
         // Just a special term, which means 5 years
-//        if (phrase.equals("tenure")) {
-//            tc.addAttribute(TimexNames.value, "P5Y");
-//            return tc;
-//        }
+        if (phrase.equals("tenure")) {
+            tc.addAttribute(TimexNames.value, "P5Y");
+            return tc;
+        }
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase);
         boolean matchFound = matcher.find();

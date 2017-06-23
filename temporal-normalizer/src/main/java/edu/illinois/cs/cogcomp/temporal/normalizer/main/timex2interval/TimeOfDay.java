@@ -12,6 +12,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
+
 /**
  * Created by zhilifeng on 3/22/17.
  */
@@ -36,7 +38,6 @@ public class TimeOfDay {
         return phrase;
     }
 
-    public static String timePatternStr = "\\s*(\\d+)\\s*(:\\d+)?\\s*(:\\d+)?\\s*(am|a.m.|a.m|pm|p.m.|p.m)?";
     public static TimexChunk timeRule(DateTime start, TemporalPhrase temporalPhrase) {
         String phrase = temporalPhrase.getPhrase();
         phrase = phrase.trim().toLowerCase().replace(" +", " ");
@@ -119,7 +120,7 @@ public class TimeOfDay {
             String residual = StringUtils.difference(whole, phrase);
             if (residual.length()>0) {
                 residual = residual.trim().replace(" +", " ").toLowerCase();
-                TimexChunk date = ModifiedDate.ModifiedRule(start,
+                TimexChunk date = TimexNormalizer.normalize(
                         new TemporalPhrase(residual, temporalPhrase.getTense()));
                 if (date != null) {
                     res = date.getAttribute(TimexNames.value) + res;
@@ -139,7 +140,7 @@ public class TimeOfDay {
     }
 
     public static void main(String[] args) {
-        TemporalPhrase temporalPhrase = new TemporalPhrase(" 4 a.m. eastern standard time saturday", "past");
+        TemporalPhrase temporalPhrase = new TemporalPhrase(" 4 a.m. eastern standard time 2013-03-07", "past");
         TimexChunk tc = TimeOfDay.timeRule(new DateTime(), temporalPhrase);
         System.out.println(tc.toTIMEXString());
     }

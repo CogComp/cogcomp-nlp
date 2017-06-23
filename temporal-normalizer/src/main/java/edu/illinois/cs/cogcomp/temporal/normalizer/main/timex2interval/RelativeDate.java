@@ -7,9 +7,10 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.regex.*;
 
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
+
 public class RelativeDate {
-	public static String number = "(?:twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|fourty|fifth|sixty|seventy|eighty|ninety|hundred|thousand|million|billion|an|a|one|two|three|four|five|six|seven|eight|nine|ten|eleven|this)";
-	public static String quantifier = "(?:several|few|a few|bunch|a bunch|set|a set)";
+
 	public static DateMapping temp = new DateMapping();
 
 	public static TimexChunk Relativerule(DateTime start, String phrase) {
@@ -87,11 +88,15 @@ public class RelativeDate {
 			phrase = phrase.replaceAll("next decade", "next ten years");
 
 		}
-		String patternStr = "\\s*(additional|since|before|after|next|following|in|during|upcoming|last|previous|precding|from|prior to|these|recent|over|past)\\s*((?:\\d{1,4}|"
+		/*String patternStr = "\\s*(additional|since|before|after|next|following|in|during|upcoming|last|previous|precding|from|prior to|these|recent|over|past)\\s*((?:\\d{1,4}|"
 				+ number
 				+ ")\\s*(?:"
 				+ number
 				+ ")?)\\s*(year(?:s)?|day(?:s)?|month(?:s)?|week(?:s)?|decade(?:s)?|centur(?:y)?(?:ies)?|hour(?:s)?|minute(?:s)?|second(?:s)?)\\s*\\w*";
+		*/
+		String patternStr = "\\s*(" + positionTerm + "|" + shiftIndicator + ")\\s*((?:\\d{1,4}|" + number + ")\\s*(?:"
+				+ number + ")?)\\s*(" + dateUnit +"|" + timeUnit + ")\\s*\\w*";
+
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(phrase);
 		boolean matchFound = matcher.find();
@@ -831,7 +836,7 @@ public class RelativeDate {
 
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(2001, 3, 14, 3, 3, 3, 3);
-		String example = "one day ag";
+		String example = "one day ago";
 		TimexChunk sample = Relativerule(startTime, example);
 
 		System.out.println(RelativeDate.converter("one hundred days"));

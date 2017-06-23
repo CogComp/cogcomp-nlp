@@ -8,6 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
 
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
+
 /**
  * Created by zhilifeng on 3/21/17.
  * This class normalizes TIMEX3 SET: "every day", "annually", "daily", etc.
@@ -16,69 +18,7 @@ import java.util.Set;
 
 
 public class SetRule {
-    public static String freq = "\\s*(once|twice|thrice|\\d{1} time(?:s)?|\\d{1} day(?:s)?|\\d{1} week(?:s)?" +
-            "|\\d{1} month(?:s)?|\\d{1} year(?:s)?)\\s*";
 
-    public static String quant = "\\s*(every|each|per)\\s*";
-    public static String monther = "jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?" +
-            "|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?";
-    public static String weekday = "mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?" +
-            "|sat(?:urday)?|sun(?:day)?";
-    public static String unit = "\\s*(day(?:s)?|month(?:s)?|week(?:s)?|year(?:s)?|decade(?:s)?|century|centuries" +
-            "|morning|noon|afternoon|evening|night|quarter|" + monther + "|" + weekday + ")\\s*";
-    public static String adverb = "\\s*(?:everyday|weekly|biweekly|yearly|daily|annually|monthly)\\s*";
-
-    public static String timeofDay = "(morning|noon|afternoon|evening|night)";
-    public static HashMap<String, Integer> freqMap = new HashMap<String, Integer>(){
-        {
-            put("once", 1);
-            put("twice", 2);
-            put("thrice", 3);
-        }
-    };
-
-    public static Set<String> timeSet = new HashSet<String>(){
-        {
-            add("minute");
-            add("minutes");
-            add("second");
-            add("seconds");
-            add("hour");
-            add("hours");
-        }
-    };
-    public static HashMap<String, String> unitMap = new HashMap<String, String>(){
-        {
-            put("day", "D");
-            put("days", "D");
-            put("week", "W");
-            put("weeks", "W");
-            put("month", "M");
-            put("months", "M");
-            put("year", "Y");
-            put("years", "Y");
-            put("quarter", "Q");
-            put("quarters", "Q");
-            put("century", "00Y");
-            put("centuries", "00Y");
-            put("decade", "0Y");
-            put("decades", "Y");
-            put("second", "S");
-            put("seconds", "S");
-            put("minute", "M");
-            put("minutes", "M");
-            put("hour", "H");
-            put("hours", "H");
-            put("time", "X");
-            put("timex", "X");
-            put("morning", "MO");
-            put("noon", "12:00");
-            put("afternoon", "AF");
-            put("evening", "EV");
-            put("night", "NI");
-
-        }
-    };
 
     public static String normalizeFreq(String freqStr) {
         int freqNum;
@@ -111,7 +51,7 @@ public class SetRule {
 
         if (unitMap.containsKey(unitStr)) {
             String timexUnit = unitMap.get(unitStr);
-            if (timeSet.contains(unitStr))
+            if (timeUnitSet.contains(unitStr))
                 res = "PT"+numNum+timexUnit;
             else
                 res = "P"+numNum+timexUnit;
@@ -310,7 +250,7 @@ public class SetRule {
     }
 
     public static void main (String[] args){
-        String test = "each quarter";
+        String test = "every morning";
         TimexChunk tc = SetRule.SetRule(new TemporalPhrase(test)) ;
         System.out.println(tc.toTIMEXString());
     }

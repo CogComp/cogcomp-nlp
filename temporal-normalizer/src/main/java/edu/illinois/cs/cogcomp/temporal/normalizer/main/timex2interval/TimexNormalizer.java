@@ -14,10 +14,10 @@ import java.util.Date;
 public class TimexNormalizer {
 	//1999-02-10
 	protected static String defaultcountry = "UNITED_STATES";
-	protected static String defaultyear = "1998";
-	protected static String deyear = "1998";
-	protected static String demonth = "08";
-	protected static String deday = "07";
+	protected static String defaultyear = "2013";
+	protected static String deyear = "2013";
+	protected static String demonth = "03";
+	protected static String deday = "22";
 	protected static String dehour = "12";
 	protected static String deminute = "30";
 	protected static String desecond = "00";
@@ -96,7 +96,7 @@ public class TimexNormalizer {
 //		CANNOT NORMALIZE: The day
 //		CANNOT NORMALIZE: the day
 //		CANNOT NORMALIZE: recent weeks
-		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("a minute and half", "past"));
+		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("this month", "past"));
 		System.out.println(temp.toTIMEXString());
 
 	}

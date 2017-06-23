@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.curator.CuratorFactory;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
+import edu.illinois.cs.cogcomp.nlp.utilities.StringCleanup;
 import edu.illinois.cs.cogcomp.pipeline.common.PipelineConfigurator;
 import edu.illinois.cs.cogcomp.pipeline.main.PipelineFactory;
 import edu.illinois.cs.cogcomp.temporal.normalizer.main.TemporalChunkerAnnotator;
@@ -54,11 +55,13 @@ public class TestTemporalChunker {
     //private String testText;
     private List<String> DCTs;
     private List<String> testText;
+    //private String folderName = "test_TB";
+    //private String folderName = "last_30_TB";
     //private String folderName = "uw_TimeBank";
     //private String folderName = "uw_AQUAINT";
     //private String folderName = "TimeBank";
-    //private String folderName = "AQUAINT";
-    private String folderName = "te3-platinum";
+    private String folderName = "AQUAINT";
+    //private String folderName = "te3-platinum";
     //private String folderName = "ht2.1_res";
     //private String folderName = "AQUAINT_ht";
     //private String folderName = "TimeBank_ht";
@@ -86,7 +89,7 @@ public class TestTemporalChunker {
         DocumentBuilder builder = factory.newDocumentBuilder();
         for (File file : listOfFiles) {
             if (file.isFile()) {
-//                if (!file.getName().equals("CNN_20130322_1003.tml.TE3input"))
+//                if (!file.getName().equals(""))
 //                    continue;
                 String testFile = fullFolderName + "/" + file.getName();
                 byte[] encoded = Files.readAllBytes(Paths.get(testFile));
@@ -151,8 +154,12 @@ public class TestTemporalChunker {
             fail(e.getMessage());
         }
 
+        String norm = input.replaceAll("\\n", " ");
+        norm = StringCleanup.normalizeToUtf8(norm);
+
+
         try {
-            as.createAnnotatedTextAnnotation("test", "test", input);
+            as.createAnnotatedTextAnnotation("test", "test", norm);
         } catch (AnnotatorException e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -160,16 +167,19 @@ public class TestTemporalChunker {
     }
 
     @Test public void testNormalizationWithTrueExtraction() throws Exception {
-//        Properties props = new Properties();
-//        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
-        AnnotatorService pipeline = PipelineFactory.buildPipeline(ViewNames.POS);
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
+        // TODO: Configurtaor.TRUE/FALSE is reversed, in the future when this is fixed,
+        // TODO: change it back
+        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
+        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
 
-        //AnnotatorService annotator = null;
-//        try {
-//            annotator = CuratorFactory.buildCuratorClient();
-//        } catch (Exception e) {
-//            fail("Exception while creating AnnotatorService " + e.getStackTrace());
-//        }
+        AnnotatorService annotator = null;
+        try {
+            annotator = CuratorFactory.buildCuratorClient();
+        } catch (Exception e) {
+            fail("Exception while creating AnnotatorService " + e.getStackTrace());
+        }
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
         // System.out.println(tca.normalizeSinglePhrase("Feb 28", "2013-03-22"));
@@ -185,10 +195,21 @@ public class TestTemporalChunker {
             PrintStream ps = new PrintStream(filename);
             ps.print(testText.get(j));
             ps.close();
-            TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id",  LineIO.slurp(filename));
+
+            FileInputStream fis = new FileInputStream(filename);
+            int content;
+            String text = "";
+            while ((content = fis.read()) != -1) {
+                // convert to char and display it
+                text += (char) content;
+            }
+
+            text = text.replaceAll("\\n", " ");
+            TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id",  text);
+//            TextAnnotation ta = null;
 //            try {
-//                //ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
-//                ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id", testText.get(j) );
+//                ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
+//                //ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id", testText.get(j) );
 //            } catch (AnnotatorException e) {
 //                fail("Exception while creating TextAnnotation" + e.getStackTrace());
 //            }
@@ -219,10 +240,10 @@ public class TestTemporalChunker {
 //                for (TimexChunk tc:timex)
 //                    System.out.println(tc.toTIMEXString());
                 tca.setTimex(timex);
-                String outputFileName = "TE3_goldext_illininorm/" +docIDs.get(j) + ".tml";
+                String outputFileName = "AQ_goldext_illininorm/" +docIDs.get(j) + ".tml";
                 //String outputFileName = "AQ_goldext_htnorm/" +docIDs.get(j) + ".tml";
 
-                //tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
+                tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
                 numTimex += timex.size();
                 tca.deleteTimex();
             } catch (AnnotatorException e) {
@@ -242,6 +263,12 @@ public class TestTemporalChunker {
 
     @Test
     public void testTemporalChunker() throws Exception {
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
+        // TODO: Configurtaor.TRUE/FALSE is reversed, in the future when this is fixed,
+        // TODO: change it back
+        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
+        AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
         AnnotatorService annotator = null;
         try {
             annotator = CuratorFactory.buildCuratorClient();
@@ -258,17 +285,18 @@ public class TestTemporalChunker {
         List <TextAnnotation>taList = new ArrayList<>();
         long preprocessTime = System.currentTimeMillis();
         for (int j = 0; j < testText.size(); j ++) {
-            TextAnnotation ta = null;
-            try {
-                ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
-            } catch (AnnotatorException e) {
-                fail("Exception while creating TextAnnotation" + e.getStackTrace());
-            }
-            try {
-                annotator.addView(ta, ViewNames.POS);
-            } catch (AnnotatorException e) {
-                fail("Exception while adding POS VIEW " + e.getStackTrace());
-            }
+            TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", testText.get(j));
+//            TextAnnotation ta = null;
+//            try {
+//                ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
+//            } catch (AnnotatorException e) {
+//                fail("Exception while creating TextAnnotation" + e.getStackTrace());
+//            }
+//            try {
+//                annotator.addView(ta, ViewNames.POS);
+//            } catch (AnnotatorException e) {
+//                fail("Exception while adding POS VIEW " + e.getStackTrace());
+//            }
             taList.add(ta);
         }
         System.out.println("Start");
@@ -313,7 +341,7 @@ public class TestTemporalChunker {
             String compressedText = builder.toString();
             assertNotNull(compressedText);
 */
-            String outputFileName = "./TE3_chunker_illininorm/"+docIDs.get(j) + ".tml";
+            String outputFileName = "./last_30_TB_chunker_illininorm/"+docIDs.get(j) + ".tml";
 //            for(TimexChunk tc: tca.getTimex()) {
 //                System.out.println(tc.toTIMEXString());
 //            }

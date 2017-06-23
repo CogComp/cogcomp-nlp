@@ -8,7 +8,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
+import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.monther;
 
 //Define the time line
 //Morning 7:00-11:00 Noon 11:00-2:00 Afternoon 2:00-6:00 Evening 6:00-9:00 Night 9:00-12:00
@@ -21,7 +22,8 @@ public class ModifiedDate {
 
 		// ###################################################preprocess
 		// 1################################################
-		String preprocess = "\\A(morning|afternoon|noon|evening|night|early|earlier|later|late)\\s*(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\Z";
+		//String preprocess = "\\A(morning|afternoon|noon|evening|night|early|earlier|later|late)\\s*(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\Z";
+		String preprocess = "\\A(" + timeofDay + "|" + modIndicator + ")\\s*(" + weekday + ")\\Z";
 		Pattern pattern11 = Pattern.compile(preprocess);
 		Matcher matcher11 = pattern11.matcher(phrase);
 		boolean matcher11Found = matcher11.find();
@@ -64,7 +66,8 @@ public class ModifiedDate {
 		// ###################################################preprocess
 		// 2################################################
 
-		String ownprocess = "\\A(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\s*(morning|afternoon|noon|evening|night)\\Z";
+		//String ownprocess = "\\A(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\s*(morning|afternoon|noon|evening|night)\\Z";
+		String ownprocess = "\\A(" + weekday + ")\\s*(" + timeofDay + ")\\Z";
 		Pattern pattern2 = Pattern.compile(ownprocess);
 		Matcher matcher2 = pattern2.matcher(phrase);
 		boolean matcher2Found = matcher2.find();
@@ -82,8 +85,10 @@ public class ModifiedDate {
 
 		}
 
-		String monther = "(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|year)";
-		String specialterm = "\\A(?:morning|afternoon|noon|evening|night|spring|fall|summer|winter|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\Z";
+		//String monther = "(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|year)";
+		String monther = "(" + KnowledgeBase.monther + ")";
+		//String specialterm = "\\A(?:morning|afternoon|noon|evening|night|spring|fall|summer|winter|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\Z";
+		String specialterm = "\\A(" + timeofDay + "|" + season + "|" + weekday + ")\\Z";
 		Pattern onepattern = Pattern.compile(specialterm);
 
 		Matcher onematcher = onepattern.matcher(phrase);
@@ -111,7 +116,7 @@ public class ModifiedDate {
 		int day;
 		int flagbefore = -1;
 		int flagafter = -1;
-		String timeOfDay="";
+		String thisTimeOfDay="";
 		int prematchDay=-1;
 		DateTime finish;
 		String temp1;
@@ -134,7 +139,9 @@ public class ModifiedDate {
 			phrase = phrase.trim();
 			flagafter = 1;
 		}
-		String spepatternStr = "(morning|afternoon|noon|evening|night|spring|fall|summer|winter|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\s*(last|past|next|upcoming|this|following|previous)\\s*(week|month|year)";
+		//String spepatternStr = "(morning|afternoon|noon|evening|night|spring|fall|summer|winter|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)\\s*(last|past|next|upcoming|this|following|previous)\\s*(week|month|year)";
+
+		String spepatternStr = "(" + timeofDay + "|" + season + "|" + weekday + ")\\s*(" + shiftIndicator + ")\\s*(" + dateUnit + ")";
 		Pattern spepattern = Pattern.compile(spepatternStr);
 		Matcher spematcher = spepattern.matcher(phrase);
 		boolean spematchFound = spematcher.find();
@@ -146,8 +153,11 @@ public class ModifiedDate {
 			phrase = group2 + " " + group1;
 
 		}
-		String patternStr = "\\s*(end|begin(?:ing)?|start|last|past|next|upcoming|this|following|previous|yesterday|tomorrow|today|early|late|earlier|later)\\s*(morning|afternoon|noon|evening|night|month|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekend|week|century|decade|year|day|hour|minute|second|spring|fall|summer|winter|"
-				+ monther + ")";
+//		String patternStr = "\\s*(end|begin(?:ing)?|start|last|past|next|upcoming|this|following|previous|yesterday|tomorrow|today|early|late|earlier|later)\\s*(morning|afternoon|noon|evening|night|month|mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?|weekend|week|century|decade|year|day|hour|minute|second|spring|fall|summer|winter|"
+//				+ monther + ")";
+		String patternStr = "\\s*(" + shiftIndicator + "|" + modIndicator + "|" + specialDayTerm + ")\\s*(" +
+				timeofDay + "|" + dateUnit + "|" +weekday + "|" + season + "|" +  KnowledgeBase.monther  + ")";
+		//System.out.println(patternStr);
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(phrase);
 		boolean matchFound = matcher.find();
@@ -175,7 +185,8 @@ public class ModifiedDate {
 				phrase = phrase.replaceAll(matcher.group(0), "");
 				phrase = phrase.trim();
 				// System.out.println("lalal"+phrase);
-				String prepatternStr = "(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|year)";
+				//String prepatternStr = "(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may?|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sept(?:ember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?|year)";
+				String prepatternStr = "(" + KnowledgeBase.monther + "|year)";
 				Pattern prepattern = Pattern.compile(prepatternStr);
 				Matcher prematcher = prepattern.matcher(phrase);
 				boolean prematchFound = prematcher.find();
@@ -199,7 +210,8 @@ public class ModifiedDate {
 					}
 				}
 
-				prepatternStr = "(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)";
+				//prepatternStr = "(mon(?:day)?|tues(?:day)?|wed(?:nesday)?|thur(?:sday)?|fri(?:day)?|sat(?:urday)?|sun(?:day)?)";
+				prepatternStr = "(" + weekday + ")";
 				prepattern = Pattern.compile(prepatternStr);
 				prematcher = prepattern.matcher(phrase);
 				prematchFound = prematcher.find();
@@ -212,13 +224,14 @@ public class ModifiedDate {
 //
 //				morning|afternoon|noon|evening|night|spring|fall|summer|winter|
 
-				prepatternStr = "(morning|afternoon|noon|evening|night)";
+				//prepatternStr = "(morning|afternoon|noon|evening|night)";
+				prepatternStr = "(" + timeofDay + ")";
 				prepattern = Pattern.compile(prepatternStr);
 				prematcher = prepattern.matcher(phrase);
 				prematchFound = prematcher.find();
 				if (prematchFound) {
-					if (SetRule.unitMap.containsKey(prematcher.group(1))) {
-						timeOfDay = SetRule.unitMap.get(prematcher.group(1));
+					if (unitMap.containsKey(prematcher.group(1))) {
+						thisTimeOfDay = unitMap.get(prematcher.group(1));
 						preflag = 1;
 					}
 				}
@@ -508,7 +521,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -525,7 +538,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -542,7 +555,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -559,7 +572,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -576,7 +589,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -593,7 +606,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -610,7 +623,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1101,7 +1114,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1124,7 +1137,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1147,7 +1160,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1170,7 +1183,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1193,7 +1206,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1216,7 +1229,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1239,7 +1252,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1568,7 +1581,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1584,7 +1597,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1600,7 +1613,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1616,7 +1629,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1632,7 +1645,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1648,7 +1661,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}
@@ -1664,7 +1677,7 @@ public class ModifiedDate {
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						if (preflag == 1) {
 							tc.addAttribute(TimexNames.value,
-									tc.getAttribute(TimexNames.value) + "T"+timeOfDay);
+									tc.getAttribute(TimexNames.value) + "T"+thisTimeOfDay);
 						}
 						return tc;
 					}

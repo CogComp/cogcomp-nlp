@@ -89,6 +89,16 @@ public class phrase
 
         return false;
     }
+
+    public static boolean isInteger(String string) {
+        try {
+            Integer.valueOf(string);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
     public static boolean test(String[]tester){
         //System.out.println("The number of it is"+tester[0]);
         //first principle: Only one token length can be greater than 2
@@ -101,9 +111,14 @@ public class phrase
         if(tester[1].length()>2&&tester[2].length()>2){
             return false;
         }
+
+        if(!isInteger(tester[0]) || !isInteger(tester[1]) || !isInteger(tester[2])) {
+            return false;
+        }
+
         //######################################################################
         //second principle:if there is one token length greater than 2 or the value greater than 31,the other two tokens can not both greater than 12 and one greater than 31
-        if(tester[0].length()>2||Integer.parseInt(tester[0])>31){
+        if(tester[0].length()>2||(isInteger(tester[0]) && Integer.parseInt(tester[0])>31)){
             flagnum=0;
             if(Integer.parseInt(tester[1])>12&&Integer.parseInt(tester[2])>12){
                 return false;
@@ -123,7 +138,7 @@ public class phrase
             }
         }
 
-        else if(tester[1].length()>2||Integer.parseInt(tester[1])>31){
+        else if(tester[1].length()>2||(isInteger(tester[1]) && Integer.parseInt(tester[1])>31)){
             flagnum=1;
             if(Integer.parseInt(tester[0])>12&&Integer.parseInt(tester[2])>12){
                 return false;
@@ -143,7 +158,7 @@ public class phrase
             }
         }
 
-        else if(tester[2].length()>2||Integer.parseInt(tester[2])>31){
+        else if(tester[2].length()>2||(isInteger(tester[2]) && Integer.parseInt(tester[2])>31)){
             flagnum=2;
             if(Integer.parseInt(tester[1])>12&&Integer.parseInt(tester[0])>12){
                 return false;
@@ -303,6 +318,9 @@ public class phrase
     public static boolean halftest(String[]tester){
         //first principle: Only one token length can be greater than 2
         if(tester[0].length()>2&&tester[1].length()>2){
+            return false;
+        }
+        if(!isInteger(tester[0]) || !isInteger(tester[1]) || !isInteger(tester[2])) {
             return false;
         }
         //######################################################################
@@ -1570,6 +1588,10 @@ public class phrase
             phrase1=phrase1.replace("a couple of", "2");
         }
 
+        if(phrase1.contains("fiscal")){
+            phrase1=phrase1.replace("fiscal", "");
+        }
+
         if(phrase1.contains("couples of")){
             phrase1=phrase1.replace("couples of", "2");
         }
@@ -1893,7 +1915,7 @@ public class phrase
                         // Modified by Zhili: if the sentence is past tense, and the month mentioned is
                         // after DCT, then subtract 1 from year
                         String tense = temporalPhrase.getTense();
-                        if (tense.equals("past")) {
+                        if (tense.equals("past") && isInteger(token[0])) {
                             if (start.getMonthOfYear() < Integer.parseInt(token[0])) {
                                 token[2] = String.valueOf(Integer.parseInt(referenceyear) - 1);
                             }

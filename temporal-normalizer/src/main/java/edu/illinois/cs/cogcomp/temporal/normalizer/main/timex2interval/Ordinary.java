@@ -206,7 +206,8 @@ public class Ordinary {
 
 	public static void main(String args[]) {
 		DateTime startTime = new DateTime(2000, 1, 1, 3, 3, 3, 3);
-		String example = "the day before yesterday";
+		String example = "3 days before yesterday";
 		TimexChunk sample = Ordinaryrule(startTime, example);
+		System.out.println(sample.toTIMEXString());
 	}
 }
