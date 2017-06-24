@@ -49,33 +49,6 @@ public class WordSim implements Metric<String> {
 		return compare(arg1, arg2, method);
 	}
 
-	/**
-	 * Initialize all word similarity metrics instances
-	 * 
-	 * @param rm_
-	 *            resource manager
-	 */
-	public WordSim(ResourceManager rm_) {
-
-		word2vec = new Embedding(getFile(SimConfigurator.WORD2VEC.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-
-		File file = new File(rm_.getString(SimConfigurator.PARAGRAM.key));
-		paragram = new Embedding(file, rm_.getInt(SimConfigurator.PARAGRAM_DIM.key));
-
-		glove = new Embedding(getFile(SimConfigurator.GLOVE.key), rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-
-		phrase2vec = new Embedding(getFile(SimConfigurator.PHRASE2VEC.key),
-				rm_.getInt(SimConfigurator.EMBEDDING_DIM.key));
-
-		esa = new MemoryBasedESA(getFile(SimConfigurator.MEMORYBASEDESA.key),
-				getFile(SimConfigurator.PAGE_ID_MAPPING.key));
-
-		try {
-			wnsim = new WNSim();
-		} catch (IOException e) {
-		}
-
-	}
 
 	/**
 	 * similarity comparison method

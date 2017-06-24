@@ -25,7 +25,7 @@ public class ESASimTest {
 		String CONFIG = "config/test.configurations.properties";
 		ResourceManager rm_ = new ResourceManager(CONFIG);
 		File f1=new File(rm_.getString("memorybasedESA"));
-		File f2=new File(rm_.getString("memorybasedESA"));
+		File f2=new File(rm_.getString("pageIDMapping"));
 		MemoryBasedESA esa = new MemoryBasedESA(f1,f2);
 		double score1 = esa.cosine("queen", "king");
 		System.out.println(score1);
