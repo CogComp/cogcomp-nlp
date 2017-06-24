@@ -32,13 +32,13 @@ fi
 
 
 # Classpath
-cpath=".:target/test-classes"
+cpath=".:target/classes"
 
-for JAR in `ls $DIST/*jar`; do
+for JAR in `ls $DIST/*.jar`; do
     cpath="$cpath:$JAR"
 done
 
-for JAR in `ls $LIB/*jar`; do
+for JAR in `ls $LIB/*.jar`; do
     cpath="$cpath:$JAR"
 done
 

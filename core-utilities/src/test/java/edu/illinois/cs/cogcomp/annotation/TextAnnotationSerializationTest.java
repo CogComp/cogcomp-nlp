@@ -8,7 +8,10 @@
 package edu.illinois.cs.cogcomp.annotation;
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.utilities.DummyTextAnnotationGenerator;
 import edu.illinois.cs.cogcomp.core.utilities.SerializationHelper;
 import junit.framework.TestCase;
 import org.junit.Before;
@@ -66,4 +69,12 @@ public class TextAnnotationSerializationTest {
         assertEquals(ta2.getText(), ta.getText());
     }
 
+    @Test
+    public void testPredicateArgumentSerialization() throws Exception {
+        TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
+        String json = SerializationHelper.serializeToJson(ta);
+        TextAnnotation ta2 = SerializationHelper.deserializeFromJson(json);
+        assertEquals(((PredicateArgumentView)ta.getView(ViewNames.SRL_VERB)).getPredicates().size(),
+                ((PredicateArgumentView)ta2.getView(ViewNames.SRL_VERB)).getPredicates().size());
+    }
 }

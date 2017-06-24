@@ -12,18 +12,16 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.IOUtils;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.core.utilities.StringUtils;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.edison.config.BrownClusterViewGeneratorConfigurator;
+import org.cogcomp.Datastore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
@@ -37,15 +35,11 @@ import java.util.zip.GZIPInputStream;
  * @author Vivek Srikumar
  */
 public class BrownClusterViewGenerator extends Annotator {
-    public final static String file100 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt";
-    public final static String file320 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt";
-    public final static String file1000 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
-    public final static String file3200 =
-            "brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
-    private final Logger log = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
+    public final static String file100 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c100-freq1.txt";
+    public final static String file320 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c320-freq1.txt";
+    public final static String file1000 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt";
+    public final static String file3200 = "brown-rcv1.clean.tokenized-CoNLL03.txt-c3200-freq1.txt";
+    private final Logger logger = LoggerFactory.getLogger(BrownClusterViewGenerator.class);
 
     // NER:
     // "brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt"
@@ -90,9 +84,10 @@ public class BrownClusterViewGenerator extends Annotator {
         clusterToStrings = new HashMap<>();
     }
 
+    // not being used, becuse we don't load the files from claspath.
     @SuppressWarnings("resource")
-    private void loadClusters() throws Exception {
-        log.debug("Loading brown clusters from {}", file);
+    private void loadClustersFromClassPath() throws Exception {
+        logger.debug("Loading brown clusters from {}", file);
 
         List<URL> resources = IOUtils.lsResources(BrownClusterViewGenerator.class, file);
 
@@ -107,6 +102,17 @@ public class BrownClusterViewGenerator extends Annotator {
         if (gzip)
             stream = new GZIPInputStream(stream);
 
+        loadFromInputStream(stream);
+    }
+
+    public void loadFromDataStore() throws Exception {
+        Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
+        File f = dsNoCredentials.getFile("org.cogcomp.brown-clusters", file, 1.3);
+        InputStream is = new FileInputStream(f);
+        loadFromInputStream(is);
+    }
+
+    private void loadFromInputStream(InputStream stream) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
         String line;
@@ -151,8 +157,7 @@ public class BrownClusterViewGenerator extends Annotator {
 
         reader.close();
 
-        log.info("Finished loading {} brown clusters from {}", clusterToStrings.size(), file);
-
+        logger.info("Finished loading {} brown clusters from {}", clusterToStrings.size(), file);
     }
 
 
@@ -213,7 +218,8 @@ public class BrownClusterViewGenerator extends Annotator {
             synchronized (BrownClusterViewGenerator.class) {
                 if (clusterToStrings.size() == 0) {
                     try {
-                        loadClusters();
+                        //loadClustersFromClassPath();
+                        loadFromDataStore();
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }

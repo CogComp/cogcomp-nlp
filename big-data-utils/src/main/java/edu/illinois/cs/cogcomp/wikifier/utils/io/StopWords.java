@@ -38,7 +38,7 @@ public class StopWords implements Predicate<String>{
 //        }
 //    }
     public static final Set<String> DEFAULT_BIG_STOPWORDS = new HashSet<String>(words);
-    public static final CharArraySet DEFAULT_BIG_LUCENE_STOPS = CharArraySet.copy(Lucene.version, DEFAULT_BIG_STOPWORDS);
+    public static final CharArraySet DEFAULT_BIG_LUCENE_STOPS = CharArraySet.copy(DEFAULT_BIG_STOPWORDS);
     
     /**
      * Constructs the default stop words set

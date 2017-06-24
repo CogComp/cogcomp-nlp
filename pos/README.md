@@ -1,19 +1,6 @@
-# Illinois Part-of-Speech Tagger
+# Cogcomp Part-of-Speech Tagger
 
-Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. The system implemented 
-here is based of the following paper: 
-
-```
-@inproceedings{Even-ZoharRo01,
-    author = {Y. Even-Zohar and D. Roth},
-    title = {A Sequential Model for Multi Class Classification},
-    booktitle = {EMNLP},
-    pages = {10-19},
-    year = {2001},
-    url = " http://cogcomp.cs.illinois.edu/papers/emnlp01.pdf"
-}
-```
-
+Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. 
 
 ## Usage
 
@@ -70,8 +57,6 @@ For example,
 
 ## Citation
 
-D. Roth and D. Zelenko, Part of Speech Tagging Using a Network of Linear Separators. Coling-Acl, The 17th International Conference on Computational Linguistics (1998) pp.1136--1142
-
 Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.edu/page/software_view/POS
 
 ```
@@ -86,4 +71,14 @@ Thank you for citing us if you use us in your work! http://cogcomp.cs.illinois.e
     funding = {NSF98,KDI},
     projects = {SI,NLP},
 }
+
+@inproceedings{Even-ZoharRo01,
+    author = {Y. Even-Zohar and D. Roth},
+    title = {A Sequential Model for Multi Class Classification},
+    booktitle = {EMNLP},
+    pages = {10-19},
+    year = {2001},
+    url = " http://cogcomp.cs.illinois.edu/papers/emnlp01.pdf"
+}
 ```
+

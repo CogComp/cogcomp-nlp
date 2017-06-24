@@ -21,12 +21,12 @@ import org.apache.lucene.util.Version;
 
 public class CharacterShingleAnalyzer extends Analyzer{
 
-    private static Version matchVersion = Version.LUCENE_43;
+    private static Version matchVersion = Version.LUCENE_6_0_0;
 
     public static class CharacterShingleTokenizer extends CharTokenizer{
 
-        public CharacterShingleTokenizer(Reader input) {
-            super(matchVersion, input);
+        public CharacterShingleTokenizer() {
+            super();
         }
 
         @Override
@@ -37,11 +37,11 @@ public class CharacterShingleAnalyzer extends Analyzer{
     }
 
     @Override
-    protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
-        final Tokenizer source = new CharacterShingleTokenizer(reader);
-        TokenStream result = new StandardFilter(matchVersion, source);
+    protected TokenStreamComponents createComponents(String fieldName) {
+        final Tokenizer source = new CharacterShingleTokenizer();
+        TokenStream result = new StandardFilter(source);
         result = new ASCIIFoldingFilter(result);
-        result = new LowerCaseFilter(matchVersion, result);
+        result = new LowerCaseFilter(result);
         result = new ShingleFilter(result, 3);
 
 //        result = new WordDelimiterFilter(result, WordDelimiterFilter.DIGIT, null);

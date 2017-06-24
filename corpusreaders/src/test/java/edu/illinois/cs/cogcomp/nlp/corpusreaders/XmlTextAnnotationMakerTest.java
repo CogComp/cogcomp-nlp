@@ -10,6 +10,7 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.annotation.XmlTextAnnotationMaker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
@@ -20,7 +21,10 @@ import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
 import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Map;
+
+import static org.junit.Assert.fail;
 
 /**
  * Test XmlTextAnnotationMaker functionality. Non-unit test, as it requires access to ERE corpus.
@@ -51,7 +55,7 @@ public class XmlTextAnnotationMakerTest {
 
     private static final String XML_FILE2 =
             "/shared/corpora/corporaWeb/deft/eng/LDC2016E31_DEFT_Rich_ERE_English_Training_Annotation_R3/" +
-                    "data/source/ENG_DF_001237_20150411_F0000008Ew.xml"; //ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
+                    "data/source/ENG_DF_001237_20150411_F0000008E.xml"; //ENG_DF_001238_20150323_F0000007D.xml"; // ENG_DF_000261_20150319_F00000084.xml";
     // public void testNerReader() {
 
     /**
@@ -60,13 +64,15 @@ public class XmlTextAnnotationMakerTest {
      */
     public static void main(String[] args) {
 
-        TextAnnotationBuilder textAnnotationBuilder = new TokenizerTextAnnotationBuilder(new StatefulTokenizer());
-
         boolean throwExceptionOnXmlTagMiss = true;
-        XmlDocumentProcessor xmlProcessor = new XmlDocumentProcessor(EREDocumentReader.deletableSpanTags,
-                EREDocumentReader.tagsWithAtts, EREDocumentReader.tagsToIgnore, throwExceptionOnXmlTagMiss);
 
-        XmlTextAnnotationMaker maker = new XmlTextAnnotationMaker(textAnnotationBuilder, xmlProcessor);
+        XmlTextAnnotationMaker maker = null;
+        try {
+            maker = EREDocumentReader.buildEreXmlTextAnnotationMaker(EREDocumentReader.EreCorpus.ENR3.name(), throwExceptionOnXmlTagMiss);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
 
         testWithFile(maker, XML_FILE2);
 
@@ -122,13 +128,13 @@ public class XmlTextAnnotationMakerTest {
             System.out.println("------\nsource: " + st.getOrigText().substring(sourceSpan.getFirst(), sourceSpan.getSecond()) +
                 ", (" + sourceSpan.getFirst() + ", " + sourceSpan.getSecond() + ")\n");
         }
-        Map<IntPair, Map<String, String>> atts = output.getXmlMarkup();
-
-        for (IntPair offsets : atts.keySet()) {
+        List<XmlDocumentProcessor.SpanInfo> markup = output.getXmlMarkup();
+        Map<IntPair, XmlDocumentProcessor.SpanInfo> markupMap = XmlDocumentProcessor.compileOffsetSpanMapping(markup);
+        for (IntPair offsets : markupMap.keySet()) {
             System.out.print(offsets.getFirst() + "-" + offsets.getSecond() + ": ");
-            Map<String, String> attVals = atts.get(offsets);
+            Map<String, Pair<String, IntPair>> attVals = markupMap.get(offsets).attributes;
             for (String attType : attVals.keySet())
-                System.out.println(attType + ": " + attVals.get(attType));
+                System.out.println(attType + ": " + attVals.get(attType).getFirst());
             System.out.println();
         }
 

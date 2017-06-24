@@ -67,7 +67,6 @@ public class CachingPipelineTest {
         }
     }
 
-
     @Before
     public void testSetup() {}
 
@@ -190,8 +189,9 @@ public class CachingPipelineTest {
 
     @Test
     public void testHyphenSplit() {
-        String source = "The man said that Jean-Pierre Thibault was only present from 2002-2003.  Jean-Pierre (" +
-                "also known as John-Paul) saw fit to share this only last Tuesday- who knows why.";
+        String source =
+                "The man said that Jean-Pierre Thibault was only present from 2002-2003.  Jean-Pierre ("
+                        + "also known as John-Paul) saw fit to share this only last Tuesday- who knows why.";
 
         TextAnnotation basicTextAnnotation = null;
         try {

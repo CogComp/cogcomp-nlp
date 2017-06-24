@@ -19,11 +19,11 @@ public class ExternalAnnotatorsServer {
     private static Logger logger = LoggerFactory.getLogger(ExternalAnnotatorsServer.class);
 
     public static void main(String[] args) throws IOException, AnnotatorException {
-        System.out.println("Starting create the externals annotators pipeline . . . ");
+        logger.info("Starting create the externals annotators pipeline . . . ");
         AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();
-        System.out.println("Setting the service . . . ");
-        MainServer.setAnnotatorSetvice(service, logger);
-        System.out.println("Start the server . . . ");
+        logger.info("Setting the service . . . ");
+        MainServer.setAnnotatorService(service);
+        logger.info("Start the server . . . ");
         MainServer.startServer(args, logger);
     }
 }

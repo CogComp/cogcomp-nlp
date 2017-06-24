@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
@@ -36,11 +38,10 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
     private static TextAnnotationBuilder taBuilder;
     private final Map<String, Annotator> viewProviders;
-
-
+    protected TextAnnotationCache annotationCache = null;
+    private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
-     * 
      * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
@@ -65,7 +66,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
      */
     protected CuratorAnnotatorService(ResourceManager rm) {
         if (!rm.getBoolean(CuratorConfigurator.DISABLE_CACHE))
-            throw new IllegalArgumentException("CuratorAnnotatorService doesn't support caching");
+            this.annotationCache = new TextAnnotationMapDBHandler(cacheFile);
 
         CuratorClient curatorClient = new CuratorClient(rm);
 
@@ -185,10 +186,13 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         boolean isUpdated = false;
 
-        // TODO Until a caching mechanism is available in illinois-core-utilities, this
-        // AnnotatorService will not support caching
         if (ta.hasView(viewName))
             return false;
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            return false;
+        }
 
         Annotator annotator = viewProviders.get(viewName);
 
@@ -197,8 +201,10 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         ta.addView(annotator);
 
-        // TODO Until a caching mechanism is available in illinois-core-utilities, this
-        // AnnotatorService will not support caching
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
+        }
+
         return isUpdated;
     }
 

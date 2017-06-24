@@ -53,7 +53,7 @@ public class XmlFragmentWhitespacingReaderTest {
     public void testReader() {
         XmlFragmentWhitespacingDocumentReader reader = null;
         try {
-            reader = new XmlFragmentWhitespacingDocumentReader("ERE_BEST", TEST_DIR);
+            reader = new XmlFragmentWhitespacingDocumentReader("ERE_BEST", TEST_DIR, ".txt", ".txt");
         } catch (IOException e) {
             e.printStackTrace();
             fail(e.getMessage());
