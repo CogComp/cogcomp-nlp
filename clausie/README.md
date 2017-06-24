@@ -7,4 +7,4 @@ The representation of these extractions can be flexibly customized to the underl
 
 More details can be found in [1]. 
 
-[1] Del Corro, Luciano, and Rainer Gemulla. "Clausie: clause-based open information extraction." Proceedings of the 22nd international conference on World Wide Web. ACM, 2013. 
+[1] Del Corro, Luciano, and Rainer Gemulla. "Clausie: clause-based open information extraction." Proceedings of the 22nd international conference on World Wide Web. ACM, 2013.
