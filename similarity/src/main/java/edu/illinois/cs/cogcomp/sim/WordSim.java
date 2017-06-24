@@ -144,7 +144,7 @@ public class WordSim implements Metric<String> {
 		} else if (method.equals(EmbeddingConstant.customized)){
 			File file = new File(rm_.getString(SimConfigurator.CUSTOMIZED.key));
 			paragram = new Embedding(file, rm_.getInt(SimConfigurator.CUSTOMIZED_EMBEDDING_DIM.key));
-		}
+		} else
 			throw new IllegalArgumentException("Requires an legal word comparison metric");
 
 	}
