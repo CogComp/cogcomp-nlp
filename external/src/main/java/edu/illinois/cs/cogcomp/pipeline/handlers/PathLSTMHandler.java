@@ -89,6 +89,7 @@ public class PathLSTMHandler extends Annotator {
                 new PredicateArgumentView(viewName, "PathLSTMGenerator", ta, 1.0);
 
         for(int sentIt = 0; sentIt < ta.getNumberOfSentences(); sentIt++) {
+            log.info("Sentence " + sentIt + " out of " + ta.getNumberOfSentences() + " sentences. ");
             List<String> words = new LinkedList<String>();
             words.add("<ROOT>"); // dummy ROOT token
             words.addAll(Arrays.asList(ta.getSentence(sentIt).getTokens())); // pre-tokenized text
