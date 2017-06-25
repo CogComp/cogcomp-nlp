@@ -75,7 +75,7 @@
                     <version>2.19.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx20g</argLine>
+                        <argLine>-Xmx35g</argLine>
                     </configuration>
                 </plugin>
             </plugins>
