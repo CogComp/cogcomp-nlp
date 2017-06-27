@@ -9,9 +9,11 @@ package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -235,7 +237,7 @@ public class TextAnnotationUtilities {
 
         for (Constituent c : constituentsToCopy) {
             // replacing the constituents with a new ones, with token ids shifted
-            Constituent newC = copyConstituentWithNewOffsets(newTA, c, offset);
+            Constituent newC = copyConstituentWithNewTokenOffsets(newTA, c, offset);
             consMap.put(c, newC);
             newVu.addConstituent(newC);
         }
@@ -284,7 +286,7 @@ public class TextAnnotationUtilities {
      * @param offset the offset to shift token indexes of new Constituent. Can be negative.
      * @return the new Constituent
      */
-    private static Constituent copyConstituentWithNewOffsets(TextAnnotation newTA, Constituent c, int offset) {
+    private static Constituent copyConstituentWithNewTokenOffsets(TextAnnotation newTA, Constituent c, int offset) {
         int newStart = c.getStartSpan() + offset;
         int newEnd = c.getEndSpan() + offset;
 
@@ -300,6 +302,95 @@ public class TextAnnotationUtilities {
         copyAttributesFromTo(c, newCon);
 
         return newCon;
+    }
+
+    /**
+     * given a TextAnnotation generated from the transformed text of a StringTransformation object, and the
+     *    corresponding StringTransformation object, generate a new TextAnnotation whose annotations correspond
+     *    to those of the transformed text TextAnnotation, but whose offsets correspond to the original text
+     * Example: you parse an xml-formatted news document, and use a StringTransformation to record all the places
+     *    you removed xml markup or made other changes.  You process the cleaned text with a set of NLP
+     *    tools. This method takes the output and maps the offsets back to the xml-formatted source document.
+     * This is useful for e.g. TAC evaluations, where provenance offsets are important.
+     * @param ta
+     * @param st
+     * @return
+     */
+    public static TextAnnotation mapTransformedTextAnnotationToSource(TextAnnotation ta,
+                                                                      StringTransformation st) {
+
+        if (!ta.getText().equals(st.getTransformedText()))
+            throw new IllegalStateException("transformed text does not match the TextAnnotation text: " +
+                    "StringTransformation: '" +
+            st.getTransformedText() + "'\nTextAnnotation: '" + ta.getText() + "'.");
+
+        IntPair[] updatedTokenCharOffsets = new IntPair[ta.getTokens().length];
+
+        List<Constituent> sentences = ta.getView(ViewNames.SENTENCE).getConstituents();
+        int[] updatedSentenceEndPositions = new int[sentences.size()];
+        int count = 0;
+        for (Constituent sent : sentences) { // same token offsets as originals!
+            updatedSentenceEndPositions[count++] = sent.getEndSpan();
+        }
+
+        View origTokView = ta.getView(ViewNames.TOKENS);
+
+        count = 0;
+        for (Constituent origTok : origTokView.getConstituents()) {
+            IntPair newCharOffsets = st.getOriginalOffsets(origTok.getStartCharOffset(), origTok.getEndCharOffset());
+            updatedTokenCharOffsets[count++] = newCharOffsets;
+        }
+
+        TextAnnotation newTA = new TextAnnotation(ta.getCorpusId(), ta.getId(), st.getOrigText(),
+                updatedTokenCharOffsets, ta.getTokens(), updatedSentenceEndPositions);
+
+        for (String vuName : ta.getAvailableViews()) {
+            View vu = ta.getView(vuName);
+
+            View newVu = null;
+            if (newTA.hasView(vuName))
+                newVu = newTA.getView(vuName);
+            else {
+                if (vu instanceof TokenLabelView) {
+                    newVu = new TokenLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                } else if (vu instanceof SpanLabelView) {
+                    newVu = new SpanLabelView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                } else if (vu instanceof CoreferenceView) {
+                    newVu = new CoreferenceView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                } else if (vu instanceof PredicateArgumentView) {
+                    newVu = new PredicateArgumentView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                } else if (vu instanceof TreeView) {
+                    newVu = new TreeView(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                } else {
+                    newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
+                }
+                newTA.addView(vuName, newVu);
+            }
+
+            Map<Constituent, Constituent> consMap = new HashMap<>();
+            List<Constituent> constituentsToCopy = vu.getConstituents();
+
+            for (Constituent c : constituentsToCopy) {
+                // replacing the constituents with new ones, token ids remain the same (!)
+//                IntPair origCharOffsets = st.getOriginalOffsets(c.getStartCharOffset(), c.getEndCharOffset());
+                Constituent newC = copyConstituentWithNewTokenOffsets(newTA, c, 0);
+                consMap.put(c, newC);
+                newVu.addConstituent(newC);
+            }
+            for (Relation r : vu.getRelations()) {
+                //don't include relations that cross into irrelevant span
+                if (!consMap.containsKey(r.getSource()) || !consMap.containsKey(r.getTarget()))
+                    continue;
+                // replacing the relations with a new ones, with their constituents replaced with the shifted ones.
+                Relation newR = copyRelation(r, consMap);
+                newVu.addRelation(newR);
+            }
+            if (vu instanceof TreeView) {
+                ((TreeView) newVu).makeTrees();
+            }
+        }
+
+        return newTA;
     }
 
 }

@@ -164,6 +164,12 @@ public class EREReaderTest {
 
         XmlTextAnnotation xmlTa = runEventReader(corpusDir, newWantedId);
 
+        List<String> output = Collections.singletonList(SerializationHelper.serializeToJson(xmlTa.getTextAnnotation(), true));
+        try {
+            LineIO.write("ereOut.json", output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

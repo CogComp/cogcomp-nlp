@@ -117,6 +117,8 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String SOURCE = "source";
     public static final String TRIGGER = "trigger";
     public static final String ORIGIN = "origin";
+    public static final String UNKNOWN_KBID = "not_in_kb";
+    public static final String KBID = "kb_id";
 
     /** aim for consistent naming */
     public static final String EntityMentionTypeAttribute = ACEReader.EntityMentionTypeAttribute;
@@ -134,6 +136,7 @@ public class EREDocumentReader extends XmlDocumentReader {
     public static final String RelationTargetRoleAttribute = "RelationTargetRole";
     public static final String EventIdAttribute = "event_id";
     public static final String EventMentionIdAttribute = "event_mention_id";
+    public static final String EntityKbIdAttribute = "kb_id";
 
 
     public static final String NAME_START = "nameStartOffset";
