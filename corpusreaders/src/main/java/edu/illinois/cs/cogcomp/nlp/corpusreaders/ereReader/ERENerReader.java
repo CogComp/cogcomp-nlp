@@ -73,6 +73,8 @@ public class ERENerReader extends EREDocumentReader {
     private boolean allowSubwordOffsets;
     private Map<String, Constituent> mentionIdToConstituent;
     private Map<String, Set<String>> entityIdToMentionIds;
+    private Map<String, String> entityIdToKbId;
+
     /**
      * tracks anything in source xml markup that could be annotated
      */
@@ -132,6 +134,7 @@ public class ERENerReader extends EREDocumentReader {
 
         mentionIdToConstituent = new HashMap<>();
         entityIdToMentionIds = new HashMap<>();
+        entityIdToKbId = new HashMap<>();
 
         resetEntityMentionCounters();
     }
@@ -218,6 +221,9 @@ public class ERENerReader extends EREDocumentReader {
                                 ment.getStartSpan(), ment.getEndSpan());
                 for (String att : ment.getAttributeKeys())
                     corefMent.addAttribute(att, ment.getAttribute(att));
+                corefMent.addAttribute(EntityIdAttribute, eId);
+                if (!entityIdToKbId.get(eId).equals(UNKNOWN_KBID))
+                    corefMent.addAttribute(EntityKbIdAttribute, entityIdToKbId.get(eId));
 
                 if (null == canonical
                         || (canonical.size() < corefMent.size() && !canonical.getAttribute(
@@ -439,9 +445,14 @@ public class ERENerReader extends EREDocumentReader {
      */
     public void readEntity(Node eNode, View view, XmlTextAnnotation xmlTa) throws XMLException {
         NamedNodeMap nnMap = eNode.getAttributes();
-        String label = nnMap.getNamedItem(TYPE).getNodeValue();
+        String enityType = nnMap.getNamedItem(TYPE).getNodeValue();
         String eId = nnMap.getNamedItem(ID).getNodeValue();
         String specificity = nnMap.getNamedItem(SPECIFICITY).getNodeValue();
+        String kbId = UNKNOWN_KBID;
+        if (null != nnMap.getNamedItem(KBID)) {
+            kbId = nnMap.getNamedItem(KBID).getNodeValue();
+        }
+        entityIdToKbId.put(eId, kbId);
 
         numEntitiesInSource++;
         // now for specifics get the mentions.
@@ -456,9 +467,9 @@ public class ERENerReader extends EREDocumentReader {
                 mentionIds = new HashSet<>();
                 entityIdToMentionIds.put(eId, mentionIds);
             }
-            Constituent mentionConstituent = getMention(mentionNode, label, view, xmlTa);
+            Constituent mentionConstituent = getMention(mentionNode, enityType, view, xmlTa);
             if (null == mentionConstituent) { // mention may reference xml markup
-                isEntityFound = recordNullMentionInfo(label, eId, specificity, mentionNode, false) || isEntityFound;
+                isEntityFound = recordNullMentionInfo(enityType, eId, specificity, mentionNode, false) || isEntityFound;
             } else {
                 String mentionId = mentionConstituent.getAttribute(EntityMentionIdAttribute);
 //                if (mentionIds.contains(mentionId))
@@ -573,7 +584,7 @@ public class ERENerReader extends EREDocumentReader {
     }
 
 
-    private Constituent getMention(Node mentionNode, String label, View view, XmlTextAnnotation xmlTa) throws XMLException {
+    private Constituent getMention(Node mentionNode, String entityType, View view, XmlTextAnnotation xmlTa) throws XMLException {
         Constituent mentionConstituent = null;
         NamedNodeMap nnMap = mentionNode.getAttributes();
         String noun_type = nnMap.getNamedItem(NOUN_TYPE).getNodeValue();
@@ -635,7 +646,7 @@ public class ERENerReader extends EREDocumentReader {
 
         try {
             mentionConstituent =
-                    new Constituent(label, view.getViewName(), view.getTextAnnotation(),
+                    new Constituent(entityType, view.getViewName(), view.getTextAnnotation(),
                             offsets.getFirst(), offsets.getSecond() + 1);
             mentionConstituent.addAttribute(EntityMentionTypeAttribute, noun_type);
             mentionConstituent.addAttribute(EntityMentionIdAttribute, mId);
