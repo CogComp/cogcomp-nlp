@@ -52,7 +52,6 @@ public class MyHolidayManager {
 		DateTime finish = new DateTime(Integer.parseInt(tokens[0]),
 				Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2]), 23,
 				59, 59, 59);
-		//Interval result = new Interval(start, finish);
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 		TimexChunk tc = new TimexChunk();
 		tc.setContent(timexStr);

@@ -252,10 +252,8 @@ public class KnowledgeBase {
     public static String season = StringUtils.join(seasonSet, "|");
     public static String unit = "\\s*(" + StringUtils.join(timeOfDaySet, "|") + "|" +
             StringUtils.join(dateUnitSet, "|") + "|" + monther + "|" + weekday + ")\\s*";
-    //public static String adverb = "\\s*(?:everyday|weekly|biweekly|yearly|daily|annually|monthly)\\s*";
     public static String adverb = "\\s*(?:" + StringUtils.join(setAdvSet, "|") + ")\\s*";
 
-    //public static String timeofDay = "(morning|noon|afternoon|evening|night)";
     public static String timeofDay =  StringUtils.join(timeOfDaySet, "|");
     public static String dateUnit = StringUtils.join(dateUnitSet, "|");
     public static String timeUnit = StringUtils.join(timeUnitSet, "|");

@@ -92,10 +92,6 @@ public class TimexNormalizer {
 	}
 
 	public static void main(String [] args) {
-//		CANNOT NORMALIZE: Several days
-//		CANNOT NORMALIZE: The day
-//		CANNOT NORMALIZE: the day
-//		CANNOT NORMALIZE: recent weeks
 		TimexChunk temp = TimexNormalizer.normalize(new TemporalPhrase("this month", "past"));
 		System.out.println(temp.toTIMEXString());
 

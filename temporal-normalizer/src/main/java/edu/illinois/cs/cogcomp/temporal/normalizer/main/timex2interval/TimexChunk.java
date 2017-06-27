@@ -89,11 +89,5 @@ public class TimexChunk {
         }
         res+=">";
         return res;
-//
-//        return String.format("%s <TIMEX3 %s %s%s>",
-//                content,
-//                "type=\"" + (attributes.get("type") == null ? "DATE" : attributes.get("type") ) + "\"",
-//                "value=\"" + attributes.get("value") + "\"",
-//                attributes.get("mod") == null ? "" : " mod=\"" + attributes.get("mod") + "\"");
     }
 }

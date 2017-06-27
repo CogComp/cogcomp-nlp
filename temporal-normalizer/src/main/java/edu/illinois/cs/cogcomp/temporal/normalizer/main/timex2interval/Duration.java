@@ -203,7 +203,6 @@ public class Duration {
             if (numterm == 2) {
 
                 temp1 = matcher.group(1);
-                // System.out.println(matcher.group(2));
                 temp2 = matcher.group(2);
                 temp3 = RelativeDate.converter(temp1);
                 if (temp3 == null) {
@@ -215,80 +214,45 @@ public class Duration {
                 else {
                     amount = temp3;
                 }
-                // System.out.println(amount);
                 if (temp2.equals("years") || temp2.equals("year")) {
-//                    finish = start.plusYears(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + amount + "Y");
                     return tc;
                 } else if (temp2.equals("day") || temp2.equals("days")) {
-//                    finish = start.plusDays(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + amount + "D");
                     return tc;
                 } else if (temp2.equals("month")
                         || temp2.equals("months")) {
-//                    finish = start.plusMonths(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + amount + "M");
                     return tc;
                 } else if (temp2.equals("weekend") || temp2.equals("weekends")) {
-//                    finish = start.plusWeeks(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + (2*Integer.parseInt(amount)) + "D");
                     return tc;
                 } else if (temp2.equals("week") || temp2.equals("weeks")) {
-//                    finish = start.plusWeeks(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + amount + "W");
                     return tc;
                 }  else if (temp2.equals("decade")
                         || temp2.equals("decades")) {
-
-//                    finish = start.plusYears(amount * 10);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     amount = amount.equals("X")?amount:String.valueOf(Integer.parseInt(amount)*10);
                     tc.addAttribute(TimexNames.value, "P" + amount + "Y");
                     return tc;
                 } else if (temp2.equals("century")
                         || temp2.equals("centuries")) {
-//                    finish = start.plusYears(amount * 100);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     amount = amount.equals("X")?amount:String.valueOf(Integer.parseInt(amount)*100);
                     tc.addAttribute(TimexNames.value, "P" + amount + "Y");
                     return tc;
                 } else if (temp2.equals("quarter")
                         || temp2.equals("quarters")) {
-//                    finish = start.plusMinutes(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "P" + amount + "Q");
                     return tc;
                 } else if (temp2.equals("hour") || temp2.equals("hours")) {
-//                    finish = start.plusHours(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "PT" + amount + "H");
                     return tc;
                 } else if (temp2.equals("minute")
                         || temp2.equals("minutes")) {
-//                    finish = start.plusMinutes(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "PT" + amount + "M");
                     return tc;
                 } else if (temp2.equals("second")
                         || temp2.equals("seconds")) {
-//                    finish = start.plusSeconds(amount);
-//                    interval = new Interval(start, finish);
-//                    return interval;
                     tc.addAttribute(TimexNames.value, "PT" + amount + "S");
                     return tc;
                 }
@@ -298,7 +262,6 @@ public class Duration {
         }
 
         // Here we capture single vague durations like "days", "years"
-        // System.out.println(amount);
         if (phrase.charAt(phrase.length()-1)=='s')
             amount = "X";
         else
@@ -340,8 +303,6 @@ public class Duration {
             tc.addAttribute(TimexNames.value, "PT" + amount + "S");
             return tc;
         }
-
-
 
         return null;
     }

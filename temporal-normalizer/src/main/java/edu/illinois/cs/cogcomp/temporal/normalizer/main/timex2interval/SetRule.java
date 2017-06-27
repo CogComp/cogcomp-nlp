@@ -14,7 +14,6 @@ import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.Kn
  * Created by zhilifeng on 3/21/17.
  * This class normalizes TIMEX3 SET: "every day", "annually", "daily", etc.
  */
-// TODO: every monday: <TIMEX3 tid="t5" type="SET" value="XXXX-WXX-1" quant="EVERY" freq="1W">every monday</TIMEX3> notice the freq
 
 
 public class SetRule {

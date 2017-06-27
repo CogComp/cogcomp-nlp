@@ -43,13 +43,11 @@ public class Ordinary {
 				temp2 = matcher.group(2);
 				if (temp1.equals("before")) {
 					if (temp2.equals("today")) {
-						//start = start.minusDays(1);
 						day = start.getDayOfMonth();
 						month = start.getMonthOfYear();
 						year = start.getYear();
 						start = new DateTime(0, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						tc.addAttribute(TimexNames.mod, TimexNames.BEFORE);
 						return tc;
@@ -61,7 +59,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(0, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day+1, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						tc.addAttribute(TimexNames.mod, TimexNames.BEFORE);
 						return tc;
@@ -75,7 +72,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(0, 1, 1, 0, 0, 0, 0);
 						finish = new DateTime(year, month, day, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(finish));
 						tc.addAttribute(TimexNames.mod, TimexNames.BEFORE);
 						return tc;
@@ -90,7 +86,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						tc.addAttribute(TimexNames.mod, TimexNames.AFTER);
 						return tc;
@@ -103,7 +98,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						tc.addAttribute(TimexNames.mod, TimexNames.AFTER);
 						return tc;
@@ -116,7 +110,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day-1, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						tc.addAttribute(TimexNames.mod, TimexNames.AFTER);
 						return tc;
@@ -131,7 +124,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						return tc;
 					}
@@ -142,7 +134,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						return tc;
 					}
@@ -154,7 +145,6 @@ public class Ordinary {
 						year = start.getYear();
 						start = new DateTime(year, month, day, 0, 0, 0, 0);
 						finish = new DateTime(9999, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, fmt.print(start));
 						return tc;
 					}
@@ -170,7 +160,6 @@ public class Ordinary {
 					year = start.getYear();
 					start = new DateTime(year, month, day, 0, 0, 0, 0);
 					finish = new DateTime(year, month, day, 23, 59, 59, 59);
-					//interval = new Interval(start, finish);
 					tc.addAttribute(TimexNames.value, fmt.print(finish));
 					return tc;
 
@@ -183,7 +172,6 @@ public class Ordinary {
 					year = start.getYear();
 					start = new DateTime(year, month, day, 0, 0, 0, 0);
 					finish = new DateTime(year, month, day, 23, 59, 59, 59);
-					//interval = new Interval(start, finish);
 					tc.addAttribute(TimexNames.value, fmt.print(finish));
 					return tc;
 				}
@@ -195,7 +183,6 @@ public class Ordinary {
 					year = start.getYear();
 					start = new DateTime(year, month, day, 0, 0, 0, 0);
 					finish = new DateTime(year, month, day, 23, 59, 59, 59);
-					//interval = new Interval(start, finish);
 					tc.addAttribute(TimexNames.value, fmt.print(finish));
 					return tc;
 				}

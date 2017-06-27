@@ -45,13 +45,11 @@ public class phrase
     static DateTime defaultstart=new DateTime(0,1,1,0,0,0,0);
     static DateTime defaultfinish=new DateTime(0,1,1,0,0,0,0);
     static Interval overlap=new Interval(defaultstart,defaultfinish);
-    //	static String month1="(?:jan(?:uary))?";
-//    static String two="XX";
-    //   static String four="XXXX";
-//The parameters of the function fullnumerical	function
-//Chinese style: YY/MM/DD
-//USA style: MM/DD/YY
-//Europe style: DD/MM/YY
+
+    //The parameters of the function fullnumerical	function
+    //Chinese style: YY/MM/DD
+    //USA style: MM/DD/YY
+    //Europe style: DD/MM/YY
     public enum datetype{
         CHINESE, USA, EUROPE
     }
@@ -100,7 +98,6 @@ public class phrase
     }
 
     public static boolean test(String[]tester){
-        //System.out.println("The number of it is"+tester[0]);
         //first principle: Only one token length can be greater than 2
         if(tester[0].length()>2&&tester[1].length()>2){
             return false;
@@ -185,19 +182,14 @@ public class phrase
     //First type: 3.20.1980;1998/11/12;02-10-86;1988 11 12;
     public static String fullnumerical(String phrase,datetype information){
         String patternStr="\\s*\\d{1,4}\\s*(?:\\s|[/\\-\\.\\,])\\s*\\d{1,4}\\s*(?:\\s|[/\\-\\.\\,])\\s*\\d{1,4}\\s*";
-        //	System.out.println("love");
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase);
         boolean matchFound = matcher.find();
         String aim=new String();
         if (matchFound) {
-            //	System.out.println(phrase);
             // Get all groups for this match
-            //   for (int i=0; i<=matcher.groupCount(); i++) {
             String delims = "[ -/.,]+";
             String[]tokens=phrase.split(delims);
-            //	System.out.println(tokens[1]+"ilvoe");
-            //  }
 
             // The phrase should pass all the principle test of the date form
             if(test(tokens)){
@@ -221,17 +213,14 @@ public class phrase
     }
 
     public static String fullnamedate(String phrase,datetype information){
-        //	System.out.println("come in");
         int i;
         int j;
         DateMapping temp=new DateMapping();
         String[] passby=new String[3];
-        //	System.out.println("Enter into here");
         String patternStr="\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase);
         boolean matchFound = matcher.find();
-        //	System.out.println(matcher.group(0));
         boolean submatchFound;
         if(matchFound){
             String subpatternStr=month;
@@ -245,11 +234,8 @@ public class phrase
             }
 
             if(i<=3){
-                //  System.out.println(matcher.group(i));
                 flagmonnum=i;
-                //	System.out.println(+flagnum);
                 monthnum=temp.hm.get(matcher.group(flagmonnum));
-                //	System.out.println(monthnum);
             }
             String subpatternStr2="\\s*(\\d{1,4}(?:st|nd|rd|th))\\s*";
             Pattern subpattern2=Pattern.compile(subpatternStr2);
@@ -264,7 +250,6 @@ public class phrase
             if(i<=3){
                 flagdaynum=i;
                 day=(matcher.group(flagdaynum)).split("[a-z]")[0];
-                //  System.out.println("FASDFASDFASD");
             }
 
             if(flagdaynum!=-1&&flagmonnum!=-1){
@@ -291,7 +276,6 @@ public class phrase
                     if(j!=flagmonnum){
                         passby[i]=matcher.group(j);
                         i++;
-                        //	System.out.println(passby[1]);
                     }
                 }
                 if(test2(passby)){
@@ -300,8 +284,6 @@ public class phrase
                 }
 
                 else{
-
-                    //System.out.println(matcher.group(2));
                     switch(information){
                         case CHINESE: return monthnum+"/"+matcher.group(3)+"/"+matcher.group(1);
                         case USA: return monthnum+"/"+matcher.group(3)+"/"+matcher.group(1);
@@ -394,13 +376,8 @@ public class phrase
         boolean matchFound = matcher.find();
         String aim=new String();
         if (matchFound) {
-            //System.out.println(phrase);
-            // Get all groups for this match
-            //   for (int i=0; i<=matcher.groupCount(); i++) {
             String delims = "[ -/.]+";
             String[]tokens=phrase.split(delims);
-            //System.out.println(tokens[2]);
-            //  }
 
             // The phrase should pass all the principle test of the date form
             if(halftest(tokens)){
@@ -408,7 +385,6 @@ public class phrase
                 //case1:year,month
                 if(flagdaynum==-1){
                     aim=tokens[flagmonnum]+"/XX/"+tokens[flagnum];
-                    //System.out.println(aim);
                     return aim;
                 }
                 //case 2: month and day
@@ -440,7 +416,6 @@ public class phrase
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase);
         boolean matchFound = matcher.find();
-        //System.out.println(matcher.group(1));
         boolean submatchFound;
 
         if(matchFound){
@@ -456,11 +431,8 @@ public class phrase
             }
 
             if(i<=2){
-                //  System.out.println("come in");
                 flagmonnum=i;
-                //	System.out.println(+flagnum);
                 monthnum=temp.hm.get(matcher.group(flagmonnum));
-                //	System.out.println(monthnum);
             }
             String subpatternStr2="\\s*(\\d{1,4}(?:st|nd|rd|th))\\s*";
             Pattern subpattern2=Pattern.compile(subpatternStr2);
@@ -475,7 +447,6 @@ public class phrase
             if(i<=2){
                 flagdaynum=i;
                 day=(matcher.group(flagdaynum)).split("[a-z]")[0];
-                //  System.out.println();
             }
 
             //case 1:month,day
@@ -530,20 +501,15 @@ public class phrase
         DateMapping temp=new DateMapping();
         //It records the number of term(Example:day,month,year)
         int numterm=0;
-        //	datetype form=datetype.USA;
         String result;
         phrase1=phrase1.toLowerCase();
         phrase1=phrase1.trim();
-        //	result=phrase1.split("[a-z]")[0];
-        //	System.out.println(result);
-//		String patternStr="((?:\\d{1,4}(?:st|nd|rd|th))|"+month+")(?:\\s|[/\\-\\.])((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")(?:\\s|[/\\-\\.])((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")";
+
         String patternStr="\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])?\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*(?:\\s|[/\\-\\.\\,])?\\s*((?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase1);
         boolean matchFound = matcher.find();
-//		System.out.println(phrase1);
-        //	System.out.println(matcher.group(2));
-        //	boolean submatchFound;
+
         if(matchFound){
             for(i=1;i<=3;i++){
                 if(matcher.group(i)==null){
@@ -555,18 +521,14 @@ public class phrase
                 i--;
             }
             numterm=i;
-            //	System.out.println(+numterm);
             //First situation: day,month,year
             if(numterm==3){
-                //		System.out.println("come in");
                 result=fullnumerical(phrase1,form);
-                //		System.out.println(result);
                 //It is not pure numerical full date
                 if(result==null){
 
                     result=fullnamedate(phrase1,form);
                 }
-                //		System.out.println(result);
                 return result;
             }
 
@@ -574,11 +536,9 @@ public class phrase
             else if(numterm==2){
 
                 result=halfnumerical(phrase1,form);
-                //		System.out.println(result);
                 //It is not pure numerical full date
                 if(result==null){
                     result=halfnamedate(phrase1,form);
-                    //			System.out.println(result);
 
                 }
                 return result;
@@ -600,9 +560,7 @@ public class phrase
                     boolean submatchFound=submatcher.find();
                     if(submatchFound){
                         monthnum=temp.hm.get(matcher.group(1));
-                        //	System.out.println(monthnum);
                         result=monthnum+"/XX/XXXX";
-                        //	 System.out.println(result);
                         return result;
                     }
 
@@ -615,9 +573,7 @@ public class phrase
                         String tempz = matcher.group(2);
                         if(submatchFound1){
                             day=(matcher.group(1)).split("[a-z]")[0];
-                            //	System.out.println(monthnum);
                             result="XX/"+day+"/XXXX";
-                            //		 System.out.println(result);
                             return result;
                         }
 
@@ -632,33 +588,25 @@ public class phrase
                                 year=matcher.group(1);
                                 if(year.length()==1){
                                     result="XX/XX/000"+year;
-                                    //					 System.out.println(result);
                                     return result;
                                 }
 
                                 else if(year.length()==2){
                                     result="XX/XX/00"+year;
-                                    //				 System.out.println(result);
                                     return result;
                                 }
 
                                 else if(year.length()==3){
                                     result="XX/XX/0"+year;
-                                    //				 System.out.println(result);
                                     return result;
                                 }
 
                                 else{
                                     result="XX/XX/"+year;
-                                    //					 System.out.println(result);
                                     return result;
                                 }
-                                //	System.out.println(monthnum);
-
                             }
                         }
-
-
                     }
                 }
             }
@@ -666,768 +614,6 @@ public class phrase
         return null;
     }
 
-    /**
-    public HashMap<String,String> comparetest(HashMap<String,String>mapNames){
-        flagnull=0;
-        int result;
-        String temp;
-        HashMap<String,String>mapResult=new HashMap<String,String>();
-        form=datetype.valueOf(mapNames.get("DATESTYLE"));
-        String defaultcountry=mapNames.get("COUNTRYNAME");
-        //Get the reference date and time
-        referenceyear=mapNames.get("REYEAR");
-        referenceyear=referenceyear.trim();
-        referencemonth=mapNames.get("REMONTH");
-        referencemonth=referencemonth.trim();
-        referenceday=mapNames.get("REDAY");
-        referenceday=referenceday.trim();
-        String referencehour=mapNames.get("REHOUR");
-        referencehour=referencehour.trim();
-        String referenceminute=mapNames.get("REMINUTE");
-        referenceminute=referenceminute.trim();
-        String referencesecond=mapNames.get("RESECOND");
-        referencesecond=referencesecond.trim();
-        String referencems=mapNames.get("REMS");
-        referencems=referencems.trim();
-        //Call the function
-        result=canonizecompare(mapNames.get("FIRST_STRING"),mapNames.get("SECOND_STRING"),referenceyear,referencemonth,referenceday,referencehour,referenceminute,referencesecond,referencems,referenceyear,defaultcountry,mapNames.get("CONDITION"));
-        if(flagnull==0){
-            temp=Integer.toString(result);
-            mapResult.put("RESULT",temp);
-            String delims = "[/]";
-            String[] token=firstphrase.split(delims);
-            if(token[0].equals("0000-01-01T00:00:00.000")){
-                token[0]="-infinity";
-            }
-            if(token[0].equals("9999-12-31T23:59:59.059")){
-                token[0]="+infinity";
-            }
-            if(token[1].equals("0000-01-01T00:00:00.000")){
-                token[1]="-infinity";
-            }
-            if(token[1].equals("9999-12-31T23:59:59.059")){
-                token[1]="+infinity";
-            }
-            mapResult.put("ONE",token[0]);
-            mapResult.put("TWO",token[1]);
-            String[] piece=secondphrase.split(delims);
-            if(piece[0].equals("0000-01-01T00:00:00.000")){
-                piece[0]="-infinity";
-            }
-            if(piece[0].equals("9999-12-31T23:59:59.059")){
-                piece[0]="+infinity";
-            }
-            if(piece[1].equals("0000-01-01T00:00:00.000")){
-                piece[1]="-infinity";
-            }
-            if(piece[1].equals("9999-12-31T23:59:59.059")){
-                piece[1]="+infinity";
-            }
-            mapResult.put("THREE", piece[0]);
-            mapResult.put("FOUR", piece[1]);
-            mapResult.put("FIVE", Integer.toString(flagnull));
-            return mapResult;
-        }
-
-        else{
-            mapResult.put("ONE","-infinity");
-            mapResult.put("TWO","+infinity");
-            mapResult.put("THREE","-infinity");
-            mapResult.put("FOUR","+infinity");
-            mapResult.put("FIVE", Integer.toString(flagnull));
-            return mapResult;
-        }
-
-    }
-
-*/
-
-    public static int compareinterval(Interval one,Interval two, String condition){
-
-        if(condition.equals("before")){
-            if(one.isBefore(two)){
-                return 1;
-            }
-
-            else{
-                return 0;
-            }
-        }
-
-        else if(condition.equals("after")){
-            if(one.isAfter(two)){
-                return 1;
-            }
-
-            else{
-                return 0;
-            }
-        }
-
-        else if(condition.equals("equal")){
-            if(one.equals(two)){
-                return 1;
-            }
-
-
-            else{
-                return 0;
-            }
-        }
-
-        else if(condition.equals("contain")){
-            if(one.overlaps(two)){
-                overlap=one.overlap(two);
-
-                if((overlap.equals(two))&&(overlap.equals(one)==false)){
-                    return 1;
-                }
-
-                else{
-                    return 0;
-                }
-            }
-
-            else{
-                return 0;
-            }
-        }
-
-        else if(condition.equals("before and overlap")){
-            if(one.overlaps(two)){
-                overlap=one.overlap(two);
-                if(one.getStart().isBefore(two.getStart())){
-                    if(one.getEnd().isBefore(two.getEnd())){
-                        return 1;
-                    }
-
-                    else if(one.getEnd().isEqual(two.getEnd())){
-                        return 1;
-                    }
-                    else{
-                        return 0;
-                    }
-                }
-
-                else{
-                    return 0;
-                }
-            }
-
-            else{
-                return 0;
-            }
-        }
-
-        else if(condition.equals("after and overlap")){
-            if(one.overlaps(two)){
-                overlap=one.overlap(two);
-                if(one.getStart().isAfter(two.getStart())){
-                    if(one.getEnd().isAfter(two.getEnd())){
-                        return 1;
-                    }
-
-                    else{
-                        return 0;
-                    }
-                }
-
-                else{
-                    return 0;
-                }
-            }
-
-            else{
-                return 0;
-            }
-
-        }
-
-        return 0;
-    }
-
-/**
-    public static int canonizecompare(String phrase1,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional) {
-        return canonizecompare(new TemporalPhrase(phrase1), phrase2, deyear, demonth, deday, dehour, deminute, desecond, dems, defaultyear, defaultcountry, conditional);
-    }
-
-    public static int canonizecompare(TemporalPhrase temporalPhrase,String phrase2,String deyear,String demonth,String deday,String dehour,String deminute,String desecond,String dems,String defaultyear,String defaultcountry,String conditional){
-        String phrase1 = temporalPhrase.getPhrase();
-        referencemonth=demonth;
-        referenceday=deday;
-        referenceyear=deyear;
-        int flaggy=0;
-        int i;
-        String tempmain=new String();
-        phrase1=phrase1.toLowerCase();
-        phrase1=phrase1.trim();
-        phrase2=phrase2.toLowerCase();
-        phrase2=phrase2.trim();
-        constantphrase1=phrase1;
-        constantphrase2=phrase2;
-
-
-        //	phrase2=tempmain;
-
-        if(phrase1.contains("a couple of")){
-            phrase1=phrase1.replace("a couple of", "2");
-        }
-
-        if(phrase1.contains("couples of")){
-            phrase1=phrase1.replace("couples of", "2");
-        }
-
-        if(phrase1.contains("the")){
-            phrase1=phrase1.replaceAll("the", "");
-
-        }
-
-        if(phrase1.contains("of")){
-            phrase1=phrase1.replaceAll("of", "");
-
-        }
-        //special case: distinguish may and may day
-        if(phrase1.equals("may")){
-            phrase1="this "+phrase1;
-        }
-
-        if(phrase2.contains("a couple of")){
-            phrase2=phrase2.replace("a couple of", "2");
-        }
-
-        if(phrase2.contains("couples of")){
-            phrase2=phrase2.replace("couples of", "2");
-        }
-
-        if(phrase2.contains("the")){
-            phrase2=phrase2.replaceAll("the", "");
-
-        }
-
-        if(phrase2.contains("of")){
-            phrase2=phrase2.replaceAll("of", "");
-
-        }
-        //special case: distinguish may and may day
-        if(phrase2.equals("may")){
-            phrase2="this "+phrase2;
-        }
-        //System.out.println(phrase1);
-        DateTime start = new DateTime(Integer.parseInt(deyear),Integer.parseInt(demonth),Integer.parseInt(deday),Integer.parseInt(dehour),Integer.parseInt(deminute),Integer.parseInt(desecond),Integer.parseInt(dems));
-        Interval one=new Interval(start,start);
-        Interval two=new Interval(start,start);
-
-        //Get the interval of phrase1
-        if(RelativeDate.Relativerule(start, phrase1)!=null){
-            one=RelativeDate.Relativerule(start, phrase1);
-        }
-
-        else if(ModifiedDate.ModifiedRule(start, temporalPhrase)!=null){
-
-            one=ModifiedDate.ModifiedRule(start, temporalPhrase);
-        }
-
-        else if(Ordinary.Ordinaryrule(start, phrase1)!=null){
-
-            one=Ordinary.Ordinaryrule(start, phrase1);
-
-        }
-
-        else if(Period.Periodrule(start, phrase1)!=null){
-            one=Period.Periodrule(start, phrase1);
-        }
-
-
-        else{
-            comparenum=4;
-            if(phrase1.matches(".*[0-9].*")){
-
-            }
-
-            else{
-                for(i=1;i<=168;i++){
-                    if(getLevenshteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""))<comparenum){
-                        comparenum=getLevenshteinDistance(hotoken[i].replaceAll(" ",""),phrase1.replaceAll(" ", ""));
-                        tempmain=hotoken[i];
-                        flaggy=1;
-                        if(comparenum==0){
-                            break;
-                        }
-                    }
-                }
-                if(flaggy==1){
-                    phrase1=tempmain;
-                }
-                flaggy=0;
-                comparenum=4;
-            }
-            String patternstring=holiday;
-            Pattern prepattern=Pattern.compile(patternstring);
-            Matcher prematcher=prepattern.matcher(phrase1);
-            boolean prefound=prematcher.find();
-
-            if(prefound){
-
-                //	System.out.println(phrase1);
-                one=Jollyday.test(phrase1,defaultcountry,Integer.parseInt(defaultyear));
-
-
-            }
-            else{
-                flagonlyyear=-1;
-                if(phrase1.contains("year")){
-                    phrase1=phrase1.replaceAll("year", "");
-                    flagonlyyear=1;
-                }
-                String patternStr="(before|after|in|during|since|from|prior to|on)\\s*((?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?)\\s*";
-                Pattern pattern = Pattern.compile(patternStr);
-                Matcher matcher = pattern.matcher(phrase1);
-                boolean matchFound = matcher.find();
-                String preword;
-                if(matchFound){
-                    onlymonth=-1;
-                    onlyyear=-1;
-                    flagnum=-1;
-                    flagmonnum=-1;
-                    flagdaynum=-1;
-                    preword=matcher.group(1);
-
-                    result1=converter(matcher.group(2));
-
-                    String delims = "[/]";
-                    String[] token=result1.split(delims);
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-                    if(preword.equals("before")||preword.equals("prior to")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            DateTime tempfinish=tempstart.minusDays(1);
-                            tempstart=new DateTime(0,1,1,0,0,0,0);
-                            one=new Interval(tempstart,tempfinish);
-
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2])-1,12,31,23,59,59,59);
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            tempfinish=tempfinish.minusDays(1);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-                    }
-                    else if(preword.equals("after")||preword.equals("from")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusMonths(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusYears(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusDays(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-                    }
-
-                    else if((preword.equals("in")||preword.equals("during"))&&(onlymonth==1||onlyyear==1)){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusMonths(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusYears(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                        }
-                    }
-                    else{
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-                    //System.out.println(matcher.group(2));
-                }
-
-                else{
-                    onlyyear=-1;
-                    onlymonth=-1;
-                    flagnum=-1;
-                    flagmonnum=-1;
-                    flagdaynum=-1;
-                    result1=converter(phrase1);
-                    if(result1==null){
-                        flagnull=1;
-                        return 0;
-                    }
-                    String delims = "[/]";
-                    String[] token=result1.split(delims);
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-                    if(onlymonth==1){
-
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusMonths(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-
-                    else if((onlyyear==1)||(flagonlyyear==1)){
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusYears(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-
-                    else{
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-                    result1=token[0]+"/"+token[1]+"/"+token[2];
-                    //	System.out.println(">>>Date1:"+constantphrase1);
-                    //	System.out.println("[Date1("+one+")]");
-                }
-            }
-        }
-
-        //Get the interval of phrase2
-        if(RelativeDate.Relativerule(start, phrase2)!=null){
-            two=RelativeDate.Relativerule(start, phrase2);
-        }
-        else if(ModifiedDate.ModifiedRule(start, new TemporalPhrase(phrase2))!=null){
-            two=ModifiedDate.ModifiedRule(start, new TemporalPhrase(phrase2));
-        }
-
-        else if(Ordinary.Ordinaryrule(start, phrase2)!=null){
-            two=Ordinary.Ordinaryrule(start, phrase2);
-        }
-
-        else if(Period.Periodrule(start, phrase2)!=null){
-            two=Period.Periodrule(start, phrase2);
-        }
-
-        else{
-
-            if(phrase2.matches(".*[0-9].*")){
-
-            }
-
-            else{
-                for(i=1;i<=168;i++){
-                    if(getLevenshteinDistance(hotoken[i].replaceAll(" ", ""),phrase2.replaceAll(" ", ""))<comparenum){
-                        comparenum=getLevenshteinDistance(hotoken[i].replaceAll(" ", ""),phrase2.replaceAll(" ", ""));
-                        tempmain=hotoken[i];
-                        flaggy=1;
-                        if(comparenum==0){
-                            break;
-                        }
-                    }
-                }
-                if(flaggy==1){
-                    phrase2=tempmain;
-                }
-            }
-
-            String patternstring=holiday;
-            Pattern prepattern=Pattern.compile(patternstring);
-            Matcher prematcher=prepattern.matcher(phrase2);
-            boolean prefound=prematcher.find();
-
-            if(prefound){
-
-
-                two=Jollyday.test(phrase2,defaultcountry,Integer.parseInt(defaultyear));
-
-
-            }
-
-            else{
-                flagonlyyear=-1;
-                if(phrase2.contains("year")){
-                    phrase2=phrase2.replaceAll("year", "");
-                    flagonlyyear=1;
-                }
-                String patternStr="(before|after|in|during|since|from|prior to|on)\\s*((?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?\\s*(?:\\s|[/\\-\\.\\,])?\\s*(?:(?:\\d{1,4}(?:st|nd|rd|th)?)|"+month+")?)\\s*";
-                Pattern pattern = Pattern.compile(patternStr);
-                Matcher matcher = pattern.matcher(phrase2);
-                boolean matchFound = matcher.find();
-                String preword;
-                if(matchFound){
-                    onlymonth=-1;
-                    onlyyear=-1;
-                    flagnum=-1;
-                    flagmonnum=-1;
-                    flagdaynum=-1;
-                    preword=matcher.group(1);
-                    result2=converter(matcher.group(2));
-                    if(result2==null){
-                        flagnull=1;
-                        return 0;
-                    }
-                    String delims = "[/]";
-                    String[] token=result2.split(delims);
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-                    if(preword.equals("before")||preword.equals("prior to")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            DateTime tempfinish=tempstart.minusDays(1);
-                            tempstart=new DateTime(0,1,1,0,0,0,0);
-                            two=new Interval(tempstart,tempfinish);
-
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2])-1,12,31,23,59,59,59);
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            tempfinish=tempfinish.minusDays(1);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-                    }
-                    else if(preword.equals("after")||preword.equals("from")||preword.equals("since")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusMonths(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusYears(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusDays(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-                    }
-
-                    else if((preword.equals("in")||preword.equals("during"))&&(onlymonth==1||onlyyear==1)){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusMonths(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusYears(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            two=new Interval(tempstart,tempfinish);
-                        }
-                    }
-                    else{
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        two=new Interval(tempstart,tempfinish);
-                    }
-                    //System.out.println(matcher.group(2));
-                }
-
-                else{
-                    onlyyear=-1;
-                    onlymonth=-1;
-                    flagnum=-1;
-                    flagmonnum=-1;
-                    flagdaynum=-1;
-                    result2=converter(phrase2);
-                    if(result2==null){
-                        flagnull=1;
-                        return 0;
-                    }
-                    String delims = "[/]";
-                    String[] token=result2.split(delims);
-
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    if(onlymonth==1){
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusMonths(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        two=new Interval(tempstart,tempfinish);
-                    }
-
-                    else if((onlyyear==1)||(flagonlyyear==1)){
-
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusYears(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        two=new Interval(tempstart,tempfinish);
-                    }
-
-                    else{
-
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        two=new Interval(tempstart,tempfinish);
-
-                    }
-
-                    result2=token[0]+"/"+token[1]+"/"+token[2];
-                    //System.out.println(">>>Date2:"+constantphrase2);
-                    //System.out.println("[Date2("+two+")]");
-                }
-            }
-        }
-
-        if(one==null||two==null){
-            flagnull=1;
-            return 0;
-        }
-
-        //   System.out.println("The result is "+compareinterval(one,two,conditional));
-        firstphrase=one.toString();
-        secondphrase=two.toString();
-        return compareinterval(one,two,conditional);
-
-    }*/
 
     public static int getLevenshteinDistance (String s, String t) {
         if (s == null || t == null) {
@@ -1520,8 +706,6 @@ public class phrase
         else{
             resulting=canonize(phrase,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry).toString();
         }
-        //	System.out.println(canonize(phrase,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry));
-        //   canonizecompare(phrase1,phrase2,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry,condition);
 
         return resulting;
     }
@@ -1543,10 +727,7 @@ public class phrase
         String condition="contain";
         phrase1=phrase1.toLowerCase();
         phrase2=phrase2.toLowerCase();
-        //	System.out.println(phrase1);
 
-        //	System.out.println(phrase1);
-        //	System.out.println(phrase2);
         if(canonize(phrase1,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry)==null){
 
             System.err.println("Sorry we can not figure out the phrase");
@@ -1690,14 +871,9 @@ public class phrase
             boolean prefound=prematcher.find();
 
             if(prefound){
-
-                //	System.out.println(phrase1);
                 tc=Jollyday.test(phrase1,defaultcountry,Integer.parseInt(defaultyear));
-
-
             }
             else{
-
                 flagonlyyear=-1;
                 if(phrase1.contains("year")){
                     phrase1=phrase1.replaceAll("year", "");
@@ -1758,143 +934,13 @@ public class phrase
                     }
 
                     return tc;
-
-                    /** Zhili: directly return the splitted value
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        String tense = temporalPhrase.getTense();
-                        if (tense.equals("past")) {
-                            if (start.getMonthOfYear() < Integer.parseInt(token[0])) {
-                                token[2] = String.valueOf(Integer.parseInt(referenceyear) - 1);
-                            }
-                        }
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-                    if(preword.equals("before")||preword.equals("prior to")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            DateTime tempfinish=tempstart.minusDays(1);
-                            tempstart=new DateTime(0,1,1,0,0,0,0);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
-
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2])-1,12,31,23,59,59,59);
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(0,1,1,0,0,0,0);
-                            DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                            tempfinish=tempfinish.minusDays(1);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempfinish));
-                        }
-                    }
-                    else if(preword.equals("after")||preword.equals("from")){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusMonths(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusYears(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
-                        }
-
-                        else{
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            tempstart=tempstart.minusDays(-1);
-                            DateTime tempfinish=new DateTime(9999,12,31,23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
-                        }
-                    }
-
-                    else if((preword.equals("in")||preword.equals("during"))&&(onlymonth==1||onlyyear==1)){
-                        if(onlymonth==1){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusMonths(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
-                        }
-
-                        else if((onlyyear==1)||(flagonlyyear==1)){
-                            DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                            DateTime tempfinish=tempstart.minusYears(-1);
-                            tempfinish=tempfinish.minusDays(1);
-                            tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                            one=new Interval(tempstart,tempfinish);
-                            tc.addAttribute(TimexNames.type, TimexNames.DATE);
-                            tc.addAttribute(TimexNames.value, fmt.print(tempstart));
-                        }
-                    }
-                    else{
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }*/
-                    //System.out.println(matcher.group(2));
-
-
                 }
-
-
                 else{
                     onlyyear=-1;
                     onlymonth=-1;
                     flagnum=-1;
                     flagmonnum=-1;
                     flagdaynum=-1;
-//
-//                    TimexChunk durationRes = Duration.DurationRule(start, phrase1);
-//                    if (durationRes!=null) {
-//                        return durationRes;
-//                    }
 
                     result1=converter(phrase1);
                     if(result1==null){
@@ -1932,85 +978,10 @@ public class phrase
                         tc.addAttribute(TimexNames.value, token[2]);
                     }
                     return tc;
-
-                    /** Zhili: directly return splitted value above
-                    //Do not know the year
-                    if(token[2].equals("XXXX")){
-                        token[2]=referenceyear;
-                        // Modified by Zhili: if the sentence is past tense, and the month mentioned is
-                        // after DCT, then subtract 1 from year
-                        String tense = temporalPhrase.getTense();
-                        if (tense.equals("past")) {
-                            if (!token[0].equals("XX") && start.getMonthOfYear()<Integer.parseInt(token[0])) {
-                                token[2]=String.valueOf(Integer.parseInt(referenceyear)-1);
-                            }
-                        }
-
-                        if(token[0].equals("XX")){
-                            token[0]=referencemonth;
-                        }
-
-                        else{
-                            if(token[1].equals("XX")){
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-
-                    //Know the year
-                    else{
-
-                        if(token[1].equals("XX")){
-                            if(token[0].equals("XX")){
-                                token[1]="01";
-                                token[0]="01";
-                                onlyyear=1;
-                            }
-                            else{
-                                token[1]="01";
-                                onlymonth=1;
-                            }
-                        }
-                    }
-                    if(onlymonth==1){
-
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusMonths(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-
-                    else if((onlyyear==1)||(flagonlyyear==1)){
-                        DateTime tempstart=new DateTime(Integer.parseInt(token[2]),Integer.parseInt(token[0]),Integer.parseInt(token[1]),0,0,0,0);
-                        DateTime tempfinish=tempstart.minusYears(-1);
-                        tempfinish=tempfinish.minusDays(1);
-                        tempfinish=new DateTime(tempfinish.getYear(),tempfinish.getMonthOfYear(),tempfinish.getDayOfMonth(),23,59,59,59);
-                        one=new Interval(tempstart,tempfinish);
-                    }
-
-                    else{
-                        try {
-                            DateTime tempstart = new DateTime(Integer.parseInt(token[2]), Integer.parseInt(token[0]), Integer.parseInt(token[1]), 0, 0, 0, 0);
-                            DateTime tempfinish = new DateTime(Integer.parseInt(token[2]), Integer.parseInt(token[0]), Integer.parseInt(token[1]), 23, 59, 59, 59);
-                            one = new Interval(tempstart, tempfinish);
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    }
-                    result1=token[0]+"/"+token[1]+"/"+token[2];
-                    //	System.out.println(">>>Date1:"+constantphrase1);
-                    //	System.out.println("[Date1("+one+")]");
-
-                */
                 }
-
             }
         }
-
         return tc;
     }
-
 
 }

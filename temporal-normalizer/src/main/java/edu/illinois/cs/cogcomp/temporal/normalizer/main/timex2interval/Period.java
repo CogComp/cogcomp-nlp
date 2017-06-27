@@ -12,46 +12,6 @@ import java.util.regex.*;
 import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
 
 public class Period {
-//	public static Set<String> dateUnit = new HashSet<String>() {{
-//		add("day");
-//		add("week");
-//		add("month");
-//		add("year");
-//		add("century");
-//		add("decade");
-//		add("quarter");
-//	}};
-//
-//	public static HashMap<String, String> unitMap = new HashMap<String, String>(){
-//		{
-//			put("day", "D");
-//			put("days", "D");
-//			put("week", "W");
-//			put("weeks", "W");
-//			put("month", "M");
-//			put("months", "M");
-//			put("year", "Y");
-//			put("years", "Y");
-//			put("century", "00Y");
-//			put("centuries", "00Y");
-//			put("decade", "0Y");
-//			put("decades", "0Y");
-//			put("second", "S");
-//			put("seconds", "S");
-//			put("minute", "M");
-//			put("minutes", "M");
-//			put("hour", "H");
-//			put("hours", "H");
-//			put("time", "X");
-//			put("timex", "X");
-//			put("morning", "MO");
-//			put("noon", "12:00");
-//			put("afternoon", "AF");
-//			put("evening", "EV");
-//			put("night", "NI");
-//
-//		}
-//	};
 
 	public static List<String> normTimexToList(String timex) {
 		String []list = timex.split("\\-");
@@ -114,7 +74,6 @@ public class Period {
 					virtualStart.getMinuteOfHour(),
 					virtualStart.getSecondOfMinute(),
 					virtualStart.getMillisOfSecond() + 1);
-			//interval = new Interval(virtualStart, virtualStart);
 			tc.addAttribute(TimexNames.value, TimexNames.PRESENT_REF);
 			return tc;
 		}
@@ -144,7 +103,6 @@ public class Period {
 			String anchorStr = "";
 			if (residual.length()>0) {
 				TemporalPhrase anchorPhrase = new TemporalPhrase(residual, temporalPhrase.getTense());
-				//TimexChunk anchorTimex = ModifiedDate.ModifiedRule(start, anchorPhrase);
 				TimexChunk anchorTimex = TimexNormalizer.normalize(anchorPhrase);
 				if (anchorTimex!=null) {
 					anchorStr = anchorTimex.getAttribute(TimexNames.value);
@@ -155,7 +113,6 @@ public class Period {
 				year = (Integer.parseInt(temp1) - 1) * 100;
 				start = new DateTime(year, 1, 1, 0, 0, 0, 0);
 				finish = new DateTime(year + 99, 12, 31, 23, 59, 59, 59);
-				//interval = new Interval(start, finish);
 				tc.addAttribute(TimexNames.value, String.valueOf(finish.getCenturyOfEra()));
 				return tc;
 			}
@@ -236,25 +193,15 @@ public class Period {
 					year = start.getCenturyOfEra();
 					year = year * 100 + Integer.parseInt(temp1);
 					if (modiword == 0) {
-
-						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
-						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
 					}
 
 					else if (modiword == 1) {
-						start = new DateTime(year, 1, 1, 0, 0, 0, 0);
-						finish = new DateTime(year + 3, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
 						tc.addAttribute(TimexNames.mod, TimexNames.START);
 					}
 
 					else if (modiword == 2) {
-						start = new DateTime(year + 7, 1, 1, 0, 0, 0, 0);
-						finish = new DateTime(year + 9, 12, 31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(year/10));
 						tc.addAttribute(TimexNames.mod, TimexNames.END);
 					}
@@ -268,7 +215,6 @@ public class Period {
 								0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 9, 12,
 								31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
 					}
 
@@ -277,7 +223,6 @@ public class Period {
 								0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 3, 12,
 								31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
 						tc.addAttribute(TimexNames.mod, TimexNames.START);
 					}
@@ -287,7 +232,6 @@ public class Period {
 								0, 0, 0, 0);
 						finish = new DateTime(Integer.parseInt(temp1) + 9, 12,
 								31, 23, 59, 59, 59);
-						//interval = new Interval(start, finish);
 						tc.addAttribute(TimexNames.value, String.valueOf(finish.getYear()/10));
 						tc.addAttribute(TimexNames.mod, TimexNames.END);
 					}
