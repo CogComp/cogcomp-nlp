@@ -21,7 +21,7 @@ import edu.illinois.cs.cogcomp.srl.config.SrlConfigurator;
  * @author Mark Sammons
  * @author Christos Christodoulopoulos
  */
-public class PipelineConfigurator extends AnnotatorConfigurator {
+public class PipelineConfigurator extends AnnotatorServiceConfigurator {
 
     // flags for individual components; default is TRUE for everything
     public static final Property USE_POS = new Property("usePos", FALSE);
