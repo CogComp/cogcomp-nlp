@@ -165,10 +165,6 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     @SuppressWarnings("ConstantConditions")
     @NotNull
     private Iterable<String> getAllDatasets() {
-        ReentrantReadWriteLock.ReadLock lock = db.getLock$mapdb().readLock();
-        lock.tryLock();
-        Iterable<String> allNames = db.getAllNames();
-        lock.unlock();
-        return allNames;
+        return db.getAllNames();
     }
 }
