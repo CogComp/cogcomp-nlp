@@ -47,7 +47,7 @@ public class BasicAnnotatorService implements AnnotatorService {
 
     private static Logger logger = LoggerFactory.getLogger(BasicAnnotatorService.class);
 
-    protected TextAnnotationCache annotationCache = null;
+    protected TextAnnotationMapDBHandler annotationCache = null;
     protected boolean disableCache = false;
 
     /**
@@ -242,11 +242,18 @@ public class BasicAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
             throws AnnotatorException {
+        if (!disableCache) {
+            if(annotationCache.containsInDataset(corpusId, text,
+                    TextAnnotationMapDBHandler.getSortedViewNames(viewNames)))
+                return annotationCache.getTextAnnotationFromDataset(corpusId, text,
+                        TextAnnotationMapDBHandler.getSortedViewNames(viewNames));
+        }
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
-        return addViewsAndCache(ta, viewNames, this.forceUpdate );
+        TextAnnotation taWithViews = addViewsAndCache(ta, viewNames, this.forceUpdate );
+        if (!disableCache)
+            annotationCache.addTextAnnotation(taWithViews.getCorpusId(), taWithViews);
+        return taWithViews;
     }
-
-
 
     /**
      * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
@@ -292,8 +299,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         return addViewsAndCache(ta, viewProviders.keySet(), replaceExistingViews);
     }
 
-
-
     /**
      * DOES NOT CACHE THE ADDED VIEW!!!
      *
@@ -312,28 +317,16 @@ public class BasicAnnotatorService implements AnnotatorService {
         if ( !textAnnotation.hasView( viewName )  || forceUpdate ) {
             isUpdated = true;
 
-            if ( !viewProviders.containsKey( viewName ) )
+            if ( !viewProviders.containsKey(viewName) )
                 throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
 
-            Annotator annotator = viewProviders.get( viewName );
+            Annotator annotator = viewProviders.get(viewName);
 
             for ( String prereqView : annotator.getRequiredViews() )
-            {
                 addView( textAnnotation, prereqView );
-            }
 
             View v = annotator.getView(textAnnotation);
-
             textAnnotation.addView( annotator.getViewName(), v );
-
-            if (!disableCache) {
-                try {
-                    annotationCache.addTextAnnotation(textAnnotation.getCorpusId(), textAnnotation);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new AnnotatorException(e.getMessage());
-                }
-            }
         }
 
         if (isUpdated && throwExceptionIfNotCached)
