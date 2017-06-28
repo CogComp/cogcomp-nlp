@@ -299,7 +299,7 @@ public class TokenizerStateMachine {
                                             // punctuation then, pass through
                                         }
                                     } else {
-                                        if ( (Character.isAlphabetic(c) && !Character.isUpperCase(c)) || Character.isDigit(c))
+                                        if ( (Character.isAlphabetic(c) && Character.isUpperCase(c)) || Character.isDigit(c))
                                             // the next character is not white space, so the period
                                             // is part of the word
                                             return;
