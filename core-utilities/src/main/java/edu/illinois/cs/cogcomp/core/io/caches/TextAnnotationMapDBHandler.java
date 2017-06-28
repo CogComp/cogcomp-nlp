@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Implements the {@link TextAnnotationCache} interface using {@code MapDB} storage.
@@ -143,6 +142,11 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
             final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
             data.remove(ta.getTokenizedText().hashCode());
         }
+    }
+
+    public void removeTextAnnotationFromDataset(TextAnnotation ta, String dataset) {
+        final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
+        data.remove(ta.getTokenizedText().hashCode());
     }
 
     @Override
