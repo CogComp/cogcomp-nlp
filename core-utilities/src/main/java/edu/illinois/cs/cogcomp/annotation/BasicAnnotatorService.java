@@ -143,11 +143,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
     }
 
-
-
-
-
-
     /**
      * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized
      * text by using the {@link edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder}. Note that
@@ -314,8 +309,7 @@ public class BasicAnnotatorService implements AnnotatorService {
         if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
             return false;
 
-        if ( !textAnnotation.hasView( viewName )  || forceUpdate )
-        {
+        if ( !textAnnotation.hasView( viewName )  || forceUpdate ) {
             isUpdated = true;
 
             if ( !viewProviders.containsKey( viewName ) )
@@ -331,6 +325,15 @@ public class BasicAnnotatorService implements AnnotatorService {
             View v = annotator.getView(textAnnotation);
 
             textAnnotation.addView( annotator.getViewName(), v );
+
+            if (!disableCache) {
+                try {
+                    annotationCache.addTextAnnotation(textAnnotation.getCorpusId(), textAnnotation);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new AnnotatorException(e.getMessage());
+                }
+            }
         }
 
         if (isUpdated && throwExceptionIfNotCached)

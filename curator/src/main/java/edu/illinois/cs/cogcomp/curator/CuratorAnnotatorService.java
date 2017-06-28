@@ -38,7 +38,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
     private static TextAnnotationBuilder taBuilder;
     private final Map<String, Annotator> viewProviders;
-    protected TextAnnotationCache annotationCache = null;
+    protected TextAnnotationMapDBHandler annotationCache = null;
     private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
@@ -189,7 +189,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
         if (ta.hasView(viewName))
             return false;
 
-        if (annotationCache != null && annotationCache.contains(ta)) {
+        if (annotationCache != null && annotationCache.containsInDataset(ta, viewName)) {
             ta = annotationCache.getTextAnnotation(ta);
             return false;
         }
@@ -201,7 +201,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         ta.addView(annotator);
 
-        if (annotationCache != null && annotationCache.contains(ta)) {
+        if (annotationCache != null && !annotationCache.contains(ta)) {
             annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
         }
 

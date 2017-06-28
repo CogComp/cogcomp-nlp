@@ -136,6 +136,11 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         return isContained;
     }
 
+    public boolean containsInDataset(TextAnnotation ta, String dataset) {
+        final ConcurrentMap<Integer, byte[]> data = getMap(dataset);
+        return data.containsKey(ta.getTokenizedText().hashCode());
+    }
+
     @Override
     public void removeTextAnnotation(TextAnnotation ta) {
         for (String dataset : getAllDatasets()) {
