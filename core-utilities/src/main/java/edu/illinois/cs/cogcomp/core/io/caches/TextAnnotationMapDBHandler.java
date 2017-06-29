@@ -108,6 +108,13 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         db.commit();
     }
 
+    public void updateTextAnnotationInDataset(String dataset, TextAnnotation ta) throws IOException {
+        final ConcurrentMap<String, byte[]> data = getMap(dataset);
+         data.replace(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())),
+                 SerializationHelper.serializeTextAnnotationToBytes(ta));
+        db.commit();
+    }
+
     private static String getSortedViewNames(Set<String> viewNames) {
         return new TreeSet(viewNames).toString();
     }
@@ -211,7 +218,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
 
     @SuppressWarnings("ConstantConditions")
     @NotNull
-    private Iterable<String> getAllDatasets() {
+    public Iterable<String> getAllDatasets() {
         return db.getAllNames();
     }
 }

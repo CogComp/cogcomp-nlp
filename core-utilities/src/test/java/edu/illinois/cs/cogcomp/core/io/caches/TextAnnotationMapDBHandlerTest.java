@@ -95,8 +95,7 @@ public class TextAnnotationMapDBHandlerTest {
     }
 
     @Test
-    public void testGetTextAnnotation()
-    {
+    public void testGetTextAnnotation() {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(new String[]{ViewNames.POS, ViewNames.NER_CONLL, ViewNames.SRL_VERB}, false, 2);
 
         assertTrue(ta.hasView(ViewNames.SRL_VERB));

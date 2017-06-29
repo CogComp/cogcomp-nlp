@@ -89,7 +89,6 @@ public class BasicAnnotatorService implements AnnotatorService {
                 .getBoolean(AnnotatorServiceConfigurator.FORCE_CACHE_UPDATE.key));
     }
 
-
     /**
      * constructor that uses AnnotatorServiceConfigurator default configuration
      * 
@@ -361,11 +360,16 @@ public class BasicAnnotatorService implements AnnotatorService {
     public TextAnnotation addViewsAndCache(TextAnnotation ta, Set<String> viewsToAnnotate, boolean clientForceUpdate) throws AnnotatorException {
         boolean isUpdated = false;
 
-        if (!(forceUpdate || clientForceUpdate) && !disableCache)
-            if (annotationCache.contains(ta))
-                ta = annotationCache.getTextAnnotation(ta);
+        if (!(forceUpdate || clientForceUpdate) && !disableCache) {
+            if (annotationCache.containsInDataset(ta.getCorpusId(), ta.getTokenizedText(), viewProviders.keySet())) {
+                ta = annotationCache.getTextAnnotationFromDataset(ta.getCorpusId(),
+                        ta.getTokenizedText(), viewProviders.keySet());
+                return ta;
+            }
+        }
 
         for (String viewName : viewsToAnnotate) {
+            logger.debug(" ---> Adding view for view " + viewName);
             try {
                 isUpdated = addView(ta, viewName) || isUpdated;
             } catch (AnnotatorException e) {
