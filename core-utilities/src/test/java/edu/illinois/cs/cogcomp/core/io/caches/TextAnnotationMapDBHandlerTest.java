@@ -44,8 +44,9 @@ public class TextAnnotationMapDBHandlerTest {
     @Test
     public void addRemoveTextAnnotation() throws Exception {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 2);
+
         // Check that the TextAnnotation is not contained in the DB
-        mapDBHandler.removeTextAnnotation(ta);
+        mapDBHandler.removeTextAnnotation(testTa);
 
         assertFalse(mapDBHandler.contains(ta));
 

@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
 import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
@@ -37,12 +36,11 @@ import java.util.*;
 public class CuratorAnnotatorService implements AnnotatorService {
 
     private static TextAnnotationBuilder taBuilder;
-    private final Map<String, Annotator> viewProviders;
-    protected TextAnnotationCache annotationCache = null;
+    private Map<String, Annotator> viewProviders;
+    protected TextAnnotationMapDBHandler annotationCache = null;
     private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
-     * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
         this(new CuratorConfigurator().getDefaultConfig());
@@ -98,8 +96,8 @@ public class CuratorAnnotatorService implements AnnotatorService {
         annotators.add(new CuratorAnnotator(curatorClient, ViewNames.LEMMA, requiredViews));
         annotators.add(new CuratorAnnotator(curatorClient, ViewNames.SHALLOW_PARSE, requiredViews));
         annotators.add(new CuratorAnnotator(curatorClient, ViewNames.DEPENDENCY, requiredViews));
-        annotators
-                .add(new CuratorAnnotator(curatorClient, ViewNames.PARSE_BERKELEY, requiredViews));
+//        annotators
+//                .add(new CuratorAnnotator(curatorClient, ViewNames.PARSE_BERKELEY, requiredViews));
 
         requiredViews =
                 new String[] {ViewNames.SENTENCE, ViewNames.TOKENS, ViewNames.POS,
@@ -143,8 +141,14 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
+
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
+
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
+
         return ta;
     }
 
@@ -152,8 +156,14 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
+
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
+
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
         return ta;
     }
 
@@ -161,8 +171,15 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Set<String> viewNames) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
+
         for (String viewName : viewNames)
             addView(ta, viewName);
+
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
+
         return ta;
     }
 
@@ -171,8 +188,15 @@ public class CuratorAnnotatorService implements AnnotatorService {
             String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
+
         for (String viewName : viewNames)
             addView(ta, viewName);
+
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
+
         return ta;
     }
 
@@ -189,21 +213,12 @@ public class CuratorAnnotatorService implements AnnotatorService {
         if (ta.hasView(viewName))
             return false;
 
-        if (annotationCache != null && annotationCache.contains(ta)) {
-            ta = annotationCache.getTextAnnotation(ta);
-            return false;
-        }
-
         Annotator annotator = viewProviders.get(viewName);
 
         for (String prereqView : annotator.getRequiredViews())
             isUpdated = addView(ta, prereqView);
 
         ta.addView(annotator);
-
-        if (annotationCache != null && annotationCache.contains(ta)) {
-            annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
-        }
 
         return isUpdated;
     }
@@ -247,7 +262,6 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
         for (String view : viewProviders.keySet())
             addView(ta, view);
-
         return ta;
     }
 }

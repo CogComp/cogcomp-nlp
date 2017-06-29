@@ -7,12 +7,14 @@
  */
 package edu.illinois.cs.cogcomp.curator;
 
+import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewTypes;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotationUtilities;
 import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
 import edu.illinois.cs.cogcomp.core.utilities.Identifier;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.thrift.base.*;
 import edu.illinois.cs.cogcomp.thrift.curator.Curator;
@@ -27,10 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.SocketException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * <b>UPDATE:</b> While {@link edu.illinois.cs.cogcomp.curator.CuratorClient} will still be able to
@@ -133,10 +132,10 @@ public class CuratorClient {
         // and initialized empty view collections
         Record record = new Record();
         record.setRawText(text);
-        record.setLabelViews(new TreeMap<String, Labeling>());
-        record.setParseViews(new TreeMap<String, Forest>());
-        record.setClusterViews(new TreeMap<String, Clustering>());
-        record.setViews(new TreeMap<String, View>());
+        record.setLabelViews(new TreeMap<>());
+        record.setParseViews(new TreeMap<>());
+        record.setClusterViews(new TreeMap<>());
+        record.setViews(new TreeMap<>());
         record.setIdentifier(Identifier.getId(text, respectTokenization));
 
         if (respectTokenization) {

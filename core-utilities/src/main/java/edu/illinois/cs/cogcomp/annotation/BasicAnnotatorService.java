@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class BasicAnnotatorService implements AnnotatorService {
 
     private static Logger logger = LoggerFactory.getLogger(BasicAnnotatorService.class);
 
-    protected TextAnnotationCache annotationCache = null;
+    protected TextAnnotationMapDBHandler annotationCache = null;
     protected boolean disableCache = false;
 
     /**
@@ -100,10 +101,7 @@ public class BasicAnnotatorService implements AnnotatorService {
             Map<String, Annotator> viewProviders) throws AnnotatorException {
         this(textAnnotationBuilder, viewProviders, (new AnnotatorServiceConfigurator())
                 .getDefaultConfig());
-
     }
-
-
 
     /**
      * Populates the AnnotatorService with {@link View} providers and initializes cache manager, if caching enabled.
@@ -142,11 +140,6 @@ public class BasicAnnotatorService implements AnnotatorService {
 
         this.throwExceptionIfNotCached = throwExceptionIfNotCached;
     }
-
-
-
-
-
 
     /**
      * Creates a basic {@link TextAnnotation} with sentence and token views with the pre-tokenized
@@ -248,10 +241,18 @@ public class BasicAnnotatorService implements AnnotatorService {
             String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
-        return addViewsAndCache(ta, viewNames, this.forceUpdate );
+
+        if (!disableCache) {
+            if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+                return annotationCache.getTextAnnotationFromDataset(corpusId, text, viewProviders.keySet());
+        }
+
+        TextAnnotation taWithViews = addViewsAndCache(ta, viewNames, this.forceUpdate );
+        if (!disableCache)
+            annotationCache.addTextAnnotationWithViewNames(taWithViews.getCorpusId(),
+                    taWithViews, viewProviders.keySet());
+        return taWithViews;
     }
-
-
 
     /**
      * Add a new {@link Annotator} to the service. All prerequisite views must already be provided by other annotators
@@ -297,8 +298,6 @@ public class BasicAnnotatorService implements AnnotatorService {
         return addViewsAndCache(ta, viewProviders.keySet(), replaceExistingViews);
     }
 
-
-
     /**
      * DOES NOT CACHE THE ADDED VIEW!!!
      *
@@ -314,22 +313,18 @@ public class BasicAnnotatorService implements AnnotatorService {
         if (ViewNames.SENTENCE.equals(viewName) || ViewNames.TOKENS.equals(viewName))
             return false;
 
-        if ( !textAnnotation.hasView( viewName )  || forceUpdate )
-        {
+        if ( !textAnnotation.hasView( viewName )  || forceUpdate ) {
             isUpdated = true;
 
-            if ( !viewProviders.containsKey( viewName ) )
+            if ( !viewProviders.containsKey(viewName) )
                 throw new AnnotatorException( "View '" + viewName + "' cannot be provided by this AnnotatorService." );
 
-            Annotator annotator = viewProviders.get( viewName );
+            Annotator annotator = viewProviders.get(viewName);
 
             for ( String prereqView : annotator.getRequiredViews() )
-            {
                 addView( textAnnotation, prereqView );
-            }
 
             View v = annotator.getView(textAnnotation);
-
             textAnnotation.addView( annotator.getViewName(), v );
         }
 
@@ -382,7 +377,7 @@ public class BasicAnnotatorService implements AnnotatorService {
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
             try {
-                annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
+                annotationCache.addTextAnnotationWithViewNames(ta.getCorpusId(), ta, viewProviders.keySet());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new AnnotatorException(e.getMessage());
@@ -390,6 +385,5 @@ public class BasicAnnotatorService implements AnnotatorService {
         }
         return ta;
     }
-
 
 }
