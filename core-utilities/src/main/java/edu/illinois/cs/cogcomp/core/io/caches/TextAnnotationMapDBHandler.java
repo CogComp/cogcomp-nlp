@@ -76,9 +76,18 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     public void addTextAnnotation(String dataset, TextAnnotation ta) {
         final ConcurrentMap<String, byte[]> data = getMap(dataset);
         try {
-            data.put(getKey(ta.getTokenizedText(),
-                    getSortedViewNames(ta.getAvailableViews())),
+            data.put(getKey(ta.getTokenizedText(), ta.getAvailableViews()),
                     SerializationHelper.serializeTextAnnotationToBytes(ta));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        db.commit();
+    }
+
+    public void addTextAnnotationWithViewNames(String dataset, TextAnnotation ta, Set<String> viewNames) {
+        final ConcurrentMap<String, byte[]> data = getMap(dataset);
+        try {
+            data.put(getKey(ta.getTokenizedText(), viewNames), SerializationHelper.serializeTextAnnotationToBytes(ta));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +99,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<String, byte[]> data = getMap(dataset);
             try {
-                data.replace(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())),
+                data.replace(getKey(ta.getTokenizedText(), ta.getAvailableViews()),
                         SerializationHelper.serializeTextAnnotationToBytes(ta));
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -99,7 +108,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         db.commit();
     }
 
-    public static String getSortedViewNames(Set<String> viewNames) {
+    private static String getSortedViewNames(Set<String> viewNames) {
         return new TreeSet(viewNames).toString();
     }
 
@@ -143,12 +152,12 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         boolean isContained = false;
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<String, byte[]> data = getMap(dataset);
-            isContained |= data.containsKey(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())));
+            isContained |= data.containsKey(getKey(ta.getTokenizedText(), ta.getAvailableViews()));
         }
         return isContained;
     }
 
-    public boolean contains(String text, String views) {
+    public boolean contains(String text, Set<String> views) {
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<String, byte[]> data = getMap(dataset);
             if (data.containsKey(getKey(text, views))) return true;
@@ -156,8 +165,9 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         return false;
     }
 
-    public boolean containsInDataset(String dataset, String text, String views) {
+    public boolean containsInDataset(String dataset, String text, Set<String> views) {
         final ConcurrentMap<String, byte[]> data = getMap(dataset);
+        System.out.println("key: " + getKey(text, views));
         return data.containsKey(getKey(text, views));
     }
 
@@ -165,16 +175,16 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     public void removeTextAnnotation(TextAnnotation ta) {
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<String, byte[]> data = getMap(dataset);
-            data.remove(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())));
+            data.remove(getKey(ta.getTokenizedText(), ta.getAvailableViews()));
         }
     }
 
     public void removeTextAnnotationFromDataset(String dataset, TextAnnotation ta) {
         final ConcurrentMap<String, byte[]> data = getMap(dataset);
-        data.remove(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())));
+        data.remove(getKey(ta.getTokenizedText(), ta.getAvailableViews()));
     }
 
-    public TextAnnotation getTextAnnotationFromDataset(String dataset, String text, String viewNames) {
+    public TextAnnotation getTextAnnotationFromDataset(String dataset, String text, Set<String> viewNames) {
         final ConcurrentMap<String, byte[]> data = getMap(dataset);
         if(data.containsKey(getKey(text, viewNames))) {
             byte[] taData = data.get(getKey(text, viewNames));
@@ -187,8 +197,8 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
     public TextAnnotation getTextAnnotation(TextAnnotation ta) {
         for (String dataset : getAllDatasets()) {
             final ConcurrentMap<String, byte[]> data = getMap(dataset);
-            if(data.containsKey(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())))) {
-                byte[] taData = data.get(getKey(ta.getTokenizedText(), getSortedViewNames(ta.getAvailableViews())));
+            if(data.containsKey(getKey(ta.getTokenizedText(), ta.getAvailableViews()))) {
+                byte[] taData = data.get(getKey(ta.getTokenizedText(), ta.getAvailableViews()));
                 return SerializationHelper.deserializeTextAnnotationFromBytes(taData);
             }
         }

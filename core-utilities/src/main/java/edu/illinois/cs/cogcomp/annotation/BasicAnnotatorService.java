@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -100,10 +101,7 @@ public class BasicAnnotatorService implements AnnotatorService {
             Map<String, Annotator> viewProviders) throws AnnotatorException {
         this(textAnnotationBuilder, viewProviders, (new AnnotatorServiceConfigurator())
                 .getDefaultConfig());
-
     }
-
-
 
     /**
      * Populates the AnnotatorService with {@link View} providers and initializes cache manager, if caching enabled.
@@ -242,16 +240,17 @@ public class BasicAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
             throws AnnotatorException {
-        if (!disableCache) {
-            if(annotationCache.containsInDataset(corpusId, text,
-                    TextAnnotationMapDBHandler.getSortedViewNames(viewNames)))
-                return annotationCache.getTextAnnotationFromDataset(corpusId, text,
-                        TextAnnotationMapDBHandler.getSortedViewNames(viewNames));
-        }
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+
+        if (!disableCache) {
+            if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+                return annotationCache.getTextAnnotationFromDataset(corpusId, text, viewProviders.keySet());
+        }
+
         TextAnnotation taWithViews = addViewsAndCache(ta, viewNames, this.forceUpdate );
         if (!disableCache)
-            annotationCache.addTextAnnotation(taWithViews.getCorpusId(), taWithViews);
+            annotationCache.addTextAnnotationWithViewNames(taWithViews.getCorpusId(),
+                    taWithViews, viewProviders.keySet());
         return taWithViews;
     }
 
@@ -378,7 +377,7 @@ public class BasicAnnotatorService implements AnnotatorService {
 
         if (!disableCache && (isUpdated || forceUpdate) || clientForceUpdate) {
             try {
-                annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
+                annotationCache.addTextAnnotationWithViewNames(ta.getCorpusId(), ta, viewProviders.keySet());
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new AnnotatorException(e.getMessage());
@@ -386,6 +385,5 @@ public class BasicAnnotatorService implements AnnotatorService {
         }
         return ta;
     }
-
 
 }

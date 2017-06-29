@@ -36,12 +36,11 @@ import java.util.*;
 public class CuratorAnnotatorService implements AnnotatorService {
 
     private static TextAnnotationBuilder taBuilder;
-    private final Map<String, Annotator> viewProviders;
+    private Map<String, Annotator> viewProviders;
     protected TextAnnotationMapDBHandler annotationCache = null;
     private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
-     * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
         this(new CuratorConfigurator().getDefaultConfig());
@@ -138,29 +137,17 @@ public class CuratorAnnotatorService implements AnnotatorService {
         return taBuilder.createTextAnnotation(corpusId, docId, text, tokenization);
     }
 
-    private Set<String> augmentedViews() {
-        Set<String> aug = new HashSet<>(viewProviders.keySet());
-
-        // these two already exist in basic annotation
-        aug.add(ViewNames.TOKENS);
-        aug.add(ViewNames.SENTENCE);
-        return aug;
-    }
-
     @Override
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
-
-        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(),
-                TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews())))
-            return annotationCache.getTextAnnotationFromDataset(corpusId, text,
-                    TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews()));
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
 
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
 
-        annotationCache.addTextAnnotation(corpusId, ta);
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
 
         return ta;
     }
@@ -170,15 +157,13 @@ public class CuratorAnnotatorService implements AnnotatorService {
             String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
 
-        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(),
-                TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews())))
-            return annotationCache.getTextAnnotationFromDataset(corpusId, text,
-                    TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews()));
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
 
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
 
-        annotationCache.addTextAnnotation(corpusId, ta);
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
         return ta;
     }
 
@@ -187,15 +172,13 @@ public class CuratorAnnotatorService implements AnnotatorService {
             String text, Set<String> viewNames) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
 
-        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(),
-                TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews())))
-            return annotationCache.getTextAnnotationFromDataset(corpusId, text,
-                    TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews()));
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
 
         for (String viewName : viewNames)
             addView(ta, viewName);
 
-        annotationCache.addTextAnnotation(corpusId, ta);
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
 
         return ta;
     }
@@ -206,15 +189,13 @@ public class CuratorAnnotatorService implements AnnotatorService {
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
 
-        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(),
-                TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews())))
-            return annotationCache.getTextAnnotationFromDataset(corpusId, text,
-                    TextAnnotationMapDBHandler.getSortedViewNames(augmentedViews()));
+        if(annotationCache.containsInDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet()))
+            return annotationCache.getTextAnnotationFromDataset(corpusId, ta.getTokenizedText(), viewProviders.keySet());
 
         for (String viewName : viewNames)
             addView(ta, viewName);
 
-        annotationCache.addTextAnnotation(corpusId, ta);
+        annotationCache.addTextAnnotationWithViewNames(corpusId, ta, viewProviders.keySet());
 
         return ta;
     }
@@ -281,7 +262,6 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
         for (String view : viewProviders.keySet())
             addView(ta, view);
-
         return ta;
     }
 }
