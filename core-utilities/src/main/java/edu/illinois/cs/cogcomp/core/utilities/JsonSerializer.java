@@ -88,7 +88,6 @@ public class JsonSerializer extends AbstractSerializer {
         if (constituents.size() > 0) {
             JsonArray cJson = new JsonArray();
             for (int i = 0; i < view.getNumberOfConstituents(); i++) {
-
                 Constituent constituent = constituents.get(i);
                 JsonObject c = new JsonObject();
                 writeConstituent(constituent, c);
@@ -184,8 +183,7 @@ public class JsonSerializer extends AbstractSerializer {
                 int tgt = readInt("targetConstituent", rJ);
 
                 Map<String, Double> labelsToScores = null;
-                if (rJ.has(LABEL_SCORE_MAP))
-                {
+                if (rJ.has(LABEL_SCORE_MAP)) {
                     labelsToScores = new HashMap<>();
                     readLabelsToScores(labelsToScores, rJ);
                 }
@@ -470,7 +468,6 @@ public class JsonSerializer extends AbstractSerializer {
 
             for (int k = 0; k < viewData.size(); k++) {
                 JsonObject kView = (JsonObject) viewData.get(k);
-
                 topKViews.add(readView(kView, ta));
             }
 

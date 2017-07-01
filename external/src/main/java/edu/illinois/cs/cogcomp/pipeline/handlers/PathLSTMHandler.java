@@ -117,20 +117,20 @@ public class PathLSTMHandler extends Annotator {
                 List<String> relations = new ArrayList<>();
 
                 for (Word a : p.getArgMap().keySet()) {
-
                     Set<Word> singleton = new TreeSet<Word>();
                     String label = p.getArgumentTag(a);
                     Yield y = a.getYield(p, label, singleton);
                     IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
 
                     assert span.getFirst() <= span.getSecond() : ta;
-                    args.add(new Constituent(label, viewName, ta, span.getFirst(), span.getSecond()));
+                    if(pav.getConstituentsCoveringSpan(span.getFirst(), span.getSecond()).size() == 0)
+                        args.add(new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond()));
+                    else
+                        args.add(pav.getConstituentsCoveringSpan(span.getFirst(), span.getSecond()).get(0));
                     relations.add(label);
                 }
-
                 pav.addPredicateArguments(predicate, args,
                         relations.toArray(new String[relations.size()]), new double[relations.size()]);
-
             }
         }
 
