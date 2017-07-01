@@ -102,6 +102,14 @@ public class JsonSerializer extends AbstractSerializer {
 
         if (relations.size() > 0) {
 
+            // if we're using relations, constituents shouldn't have any duplicates; otherwise upon deserialization
+            // things would not be as expected
+            Set<Constituent> consSet = new HashSet<>(constituents);
+            if(consSet.size() < constituents.size())
+                logger.error("There are duplicate constituents in the '" + view + "' view. " +
+                        "You have to fix this otherwise things will be messed up, upon deserialization. ");
+
+
             JsonArray rJson = new JsonArray();
 
             for (Relation r : relations) {

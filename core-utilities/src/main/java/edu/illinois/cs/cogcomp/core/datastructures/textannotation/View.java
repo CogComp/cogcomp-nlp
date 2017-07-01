@@ -416,7 +416,6 @@ public class View implements Serializable, IQueryable<Constituent> {
     public List<Constituent> getConstituentsWithSpan(IntPair span) {
         List<Constituent> list = new ArrayList<>();
         for(Constituent c : this.constituents) if (c.getSpan().equals(span)) list.add(c);
-        list.sort(TextAnnotationUtilities.constituentStartComparator);
         return list;
     }
 
