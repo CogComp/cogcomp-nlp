@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -117,7 +116,9 @@ public class PathLSTMHandler extends Annotator {
                     IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
                     Constituent c = new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond());
                     assert span.getFirst() <= span.getSecond(): ta;
-                    if(!pav.getConstituents().contains(c)) pav.addConstituent(c);
+                    List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(),
+                            span.getSecond()));
+                    if(consList.isEmpty()) pav.addConstituent(c);
                     pav.addRelation(new Relation(label, predicate, c, 1.0));
                 }
             }
