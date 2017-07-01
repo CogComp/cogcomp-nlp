@@ -7,15 +7,12 @@
  */
 package edu.illinois.cs.cogcomp.pipeline.handlers;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import org.cogcomp.Datastore;
 import org.cogcomp.DatastoreException;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import se.lth.cs.srl.CompletePipeline;
 import se.lth.cs.srl.corpus.Predicate;
@@ -104,33 +101,25 @@ public class PathLSTMHandler extends Annotator {
 
                 IntPair predicateSpan = new IntPair(p.getIdx() - 1, p.getIdx());
                 String predicateLemma = p.getLemma();
-
                 Constituent predicate =
                         new Constituent("Predicate", viewName, ta, predicateSpan.getFirst(),
                                 predicateSpan.getSecond());
                 predicate.addAttribute(PredicateArgumentView.LemmaIdentifier, predicateLemma);
-
                 String sense = p.getSense();
                 predicate.addAttribute(PredicateArgumentView.SenseIdentifer, sense);
 
-                List<Constituent> args = new ArrayList<>();
-                List<String> relations = new ArrayList<>();
+                pav.addConstituent(predicate);
 
                 for (Word a : p.getArgMap().keySet()) {
                     Set<Word> singleton = new TreeSet<Word>();
                     String label = p.getArgumentTag(a);
                     Yield y = a.getYield(p, label, singleton);
                     IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
-
-                    assert span.getFirst() <= span.getSecond() : ta;
-                    if(pav.getConstituentsCoveringSpan(span.getFirst(), span.getSecond()).size() == 0)
-                        args.add(new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond()));
-                    else
-                        args.add(pav.getConstituentsCoveringSpan(span.getFirst(), span.getSecond()).get(0));
-                    relations.add(label);
+                    Constituent c = new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond());
+                    assert span.getFirst() <= span.getSecond(): ta;
+                    if(!pav.getConstituents().contains(c)) pav.addConstituent(c);
+                    pav.addRelation(new Relation(label, predicate, c, 1.0));
                 }
-                pav.addPredicateArguments(predicate, args,
-                        relations.toArray(new String[relations.size()]), new double[relations.size()]);
             }
         }
 
