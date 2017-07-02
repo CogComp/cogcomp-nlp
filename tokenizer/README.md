@@ -1,4 +1,4 @@
-# Cogcomp Tokenizer
+# CogComp Tokenizer
 
 This project is based on work by Yiming Jiang, who wrote the initial
 version and evaluated CCG and Stanford tokenizers against a corpus
@@ -114,7 +114,7 @@ evaluator.evaluateIllinoisTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_ST
 evaluator.evaluateStanfordTokenizer(EvaluationCriteria.ON_SAMPLE_AGAINST_GOLD_STANDARD);
 ```
 
-## About Cogcomp Tokenizer
+## About CogComp Tokenizer
 
 * Developed by: Yiming Jiang
 * Advised by: Professor Dan Roth

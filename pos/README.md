@@ -1,4 +1,4 @@
-# Cogcomp Part-of-Speech Tagger
+# CogComp Part-of-Speech Tagger
 
 Part-of-Speech Tagging is the identification of words as nouns, verbs, adjectives, adverbs, etc. 
 
@@ -11,8 +11,8 @@ Here is how you can add maven dependencies into your program:
 ```xml
     <repositories>
         <repository>
-            <id>CogcompSoftware</id>
-            <name>CogcompSoftware</name>
+            <id>CogCompSoftware</id>
+            <name>CogCompSoftware</name>
             <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
         </repository>
     </repositories>

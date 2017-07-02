@@ -27,9 +27,7 @@ public class TextAnnotationMapDBHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-
-        if (IOUtils.exists(dbFile))
-            IOUtils.rm(dbFile);
+        if (IOUtils.exists(dbFile)) IOUtils.rm(dbFile);
 
         mapDBHandler = new TextAnnotationMapDBHandler(dbFile);
         mapDBHandler.addTextAnnotation(testDataset, testTa);

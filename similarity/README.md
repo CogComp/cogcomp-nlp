@@ -1,4 +1,4 @@
-# Cogcomp Similarity
+# CogComp Similarity
 
 This module specifies a simple API for NLP components that compare
 objects -- especially Strings -- and return a score indicating how

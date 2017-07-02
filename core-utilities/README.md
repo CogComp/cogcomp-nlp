@@ -1,4 +1,4 @@
-# Cogcomp Core-Utilities
+# CogComp Core-Utilities
 
    cogcomp-core-utilities is a Java library that is designed to help programming NLP
    applications by providing a uniform representation of various NLP

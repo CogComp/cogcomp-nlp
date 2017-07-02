@@ -1,4 +1,4 @@
-# Cogcomp Inference 
+# CogComp Inference 
 
 This project is a suite of unified wrappers to a set optimization libraries, as well as some basic approximate solvers: 
 
