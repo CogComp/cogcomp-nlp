@@ -224,7 +224,6 @@ public class TextAnnotationUtilities {
             } else {
                 newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
             }
-            newTA.addView(vuName, newVu);
         }
 
         Map<Constituent, Constituent> consMap = new HashMap<>();
@@ -249,8 +248,13 @@ public class TextAnnotationUtilities {
             Relation newR = copyRelation(r, consMap);
             newVu.addRelation(newR);
         }
-        if (vu instanceof TreeView) {
-            ((TreeView) newVu).makeTrees();
+
+        if (newVu.getNumberOfConstituents() > 0) {
+            newTA.addView(vuName, newVu);
+
+            if (vu instanceof TreeView) {
+                ((TreeView) newVu).makeTrees();
+            }
         }
     }
 

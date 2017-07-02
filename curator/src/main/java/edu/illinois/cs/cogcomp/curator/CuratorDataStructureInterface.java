@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.curator;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.trees.Tree;
 import edu.illinois.cs.cogcomp.nlp.utilities.ParseUtils;
@@ -89,8 +90,23 @@ public class CuratorDataStructureInterface {
                 sentenceEndPositions);
     }
 
+    /**
+     * note that the trees in the Forest argument need not be actual parse trees (they can e.g. be output by
+     *    SRL components) -- so we cannot enforce a constraint requiring that the number of trees be
+     *    the same as the number of sentences.
+     * @param viewName
+     * @param ta
+     * @param parseForest
+     * @return
+     */
     public static TreeView alignForestToParseTreeView(String viewName, TextAnnotation ta,
             Forest parseForest) {
+
+//        if ((parseForest.trees.size() != ta.getView(ViewNames.SENTENCE).getNumberOfConstituents())) {
+//            String msg = "ERROR: Number of trees does not agree with number of sentences (" +
+//                    parseForest.trees.size() + " vs. " + ta.getView(ViewNames.SENTENCE).getNumberOfConstituents() + ").";
+//            log.warn(msg);
+//        }
 
         final List<edu.illinois.cs.cogcomp.thrift.base.Tree> trees = parseForest.getTrees();
         final String parseSource = parseForest.getSource();
@@ -270,6 +286,14 @@ public class CuratorDataStructureInterface {
             TextAnnotation ta, Forest forest) {
         if (forest == null)
             return new PredicateArgumentView(viewName, "", ta, 1.0);
+
+//        if ((forest.trees.size() != ta.getView(ViewNames.SENTENCE).getNumberOfConstituents())) {
+//
+//            String msg = "ERROR: Number of trees does not agree with number of sentences (" +
+//                    forest.trees.size() + " vs. " + ta.getView(ViewNames.SENTENCE).getNumberOfConstituents() + ").";
+//            log.warn(msg);
+////         IllegalStateException();
+//        }
 
         String source = "";
         if (forest.isSetSource())
