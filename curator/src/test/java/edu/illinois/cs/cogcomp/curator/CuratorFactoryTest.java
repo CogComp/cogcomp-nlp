@@ -38,7 +38,7 @@ public class CuratorFactoryTest {
 
     private String text;
 
-    private AnnotatorService curator;
+    private static AnnotatorService curator;
 
     @Before
     public void setUp() throws Exception {
