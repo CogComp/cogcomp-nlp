@@ -20,12 +20,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class TextAnnotationUtilitiesTest {
+
+    /**
+     * note that this test checks getSubTextAnnotation()'s behavior when a sentence has no constituents in
+     *   a particular view for a particular sentence (view is not generated in sentence level version)
+     */
     @Test
     public void test() {
         TextAnnotation ta = DummyTextAnnotationGenerator.generateAnnotatedTextAnnotation(false, 3);
         TextAnnotation subTA = TextAnnotationUtilities.getSubTextAnnotation(ta, 2);
         assertTrue(subTA.getText().equals("The paving commenced Monday and will finish in June ."));
-        assertTrue(Objects.equals(subTA.getAvailableViews().toString(), "[SRL_VERB, PSEUDO_PARSE_STANFORD, POS, NER_CONLL, LEMMA, SHALLOW_PARSE, TOKENS, SENTENCE, PARSE_GOLD]"));
+        assertTrue(Objects.equals(subTA.getAvailableViews().toString(), "[SRL_VERB, PSEUDO_PARSE_STANFORD, POS, LEMMA, SHALLOW_PARSE, TOKENS, SENTENCE, PARSE_GOLD]"));
         assertTrue(Objects.equals(subTA.getView(ViewNames.SHALLOW_PARSE).toString(), "[NP The paving ] [VP commenced ] [NP Monday ] [VP will finish ] [PP in ] [NP June ] "));
         String parse = "(S1 (S (NP (DT The)\n" +
                 "    (NN paving))\n" +
