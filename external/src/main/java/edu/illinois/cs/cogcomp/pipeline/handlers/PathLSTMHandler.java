@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.*;
 
 public class PathLSTMHandler extends Annotator {
 
@@ -80,50 +81,65 @@ public class PathLSTMHandler extends Annotator {
 
     private PredicateArgumentView getSRL(TextAnnotation ta) throws Exception {
         log.debug("Input: {}", ta.getText());
+        ExecutorService executor = Executors.newSingleThreadExecutor();
 
         PredicateArgumentView pav =
                 new PredicateArgumentView(viewName, "PathLSTMGenerator", ta, 1.0);
 
         for(int sentIt = 0; sentIt < ta.getNumberOfSentences(); sentIt++) {
             log.info("Sentence " + sentIt + " out of " + ta.getNumberOfSentences() + " sentences. ");
-            List<String> words = new LinkedList<String>();
-            words.add("<ROOT>"); // dummy ROOT token
-            words.addAll(Arrays.asList(ta.getSentence(sentIt).getTokens())); // pre-tokenized text
+            int finalSentIt = sentIt;
+            final Future future = executor.submit(
+                    new Callable() {
+                        public String call() throws Exception {
+                            List<String> words = new LinkedList<String>();
+                            words.add("<ROOT>"); // dummy ROOT token
+                            words.addAll(Arrays.asList(ta.getSentence(finalSentIt).getTokens())); // pre-tokenized text
 
-            // run SRL
-            Sentence parsed = SRLpipeline.parse(words);
+                            // run SRL
+                            Sentence parsed = SRLpipeline.parse(words);
 
-            for (Predicate p : parsed.getPredicates()) {
-                // skip nominal predicates
-                if (p.getPOS().startsWith("N"))
-                    continue;
+                            for (Predicate p : parsed.getPredicates()) {
+                                // skip nominal predicates
+                                if (p.getPOS().startsWith("N"))
+                                    continue;
 
-                IntPair predicateSpan = new IntPair(p.getIdx() - 1, p.getIdx());
-                String predicateLemma = p.getLemma();
-                Constituent predicate =
-                        new Constituent("Predicate", viewName, ta, predicateSpan.getFirst(),
-                                predicateSpan.getSecond());
-                predicate.addAttribute(PredicateArgumentView.LemmaIdentifier, predicateLemma);
-                String sense = p.getSense();
-                predicate.addAttribute(PredicateArgumentView.SenseIdentifer, sense);
+                                IntPair predicateSpan = new IntPair(p.getIdx() - 1, p.getIdx());
+                                String predicateLemma = p.getLemma();
+                                Constituent predicate =
+                                        new Constituent("Predicate", viewName, ta, predicateSpan.getFirst(),
+                                                predicateSpan.getSecond());
+                                predicate.addAttribute(PredicateArgumentView.LemmaIdentifier, predicateLemma);
+                                String sense = p.getSense();
+                                predicate.addAttribute(PredicateArgumentView.SenseIdentifer, sense);
 
-                pav.addConstituent(predicate);
+                                pav.addConstituent(predicate);
 
-                for (Word a : p.getArgMap().keySet()) {
-                    Set<Word> singleton = new TreeSet<Word>();
-                    String label = p.getArgumentTag(a);
-                    Yield y = a.getYield(p, label, singleton);
-                    IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
-                    Constituent c = new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond());
-                    assert span.getFirst() <= span.getSecond(): ta;
-                    List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(),
-                            span.getSecond()));
-                    if(consList.isEmpty()) pav.addConstituent(c);
-                    pav.addRelation(new Relation(label, predicate, c, 1.0));
-                }
+                                for (Word a : p.getArgMap().keySet()) {
+                                    Set<Word> singleton = new TreeSet<Word>();
+                                    String label = p.getArgumentTag(a);
+                                    Yield y = a.getYield(p, label, singleton);
+                                    IntPair span = new IntPair(y.first().getIdx() - 1, y.last().getIdx());
+                                    Constituent c = new Constituent("Argument", viewName, ta, span.getFirst(), span.getSecond());
+                                    assert span.getFirst() <= span.getSecond() : ta;
+                                    List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(),
+                                            span.getSecond()));
+                                    if (consList.isEmpty()) pav.addConstituent(c);
+                                    pav.addRelation(new Relation(label, predicate, c, 1.0));
+                                }
+                            }
+                            return "ok";
+                        }
+                    });
+
+
+            try {
+                future.get(120, TimeUnit.SECONDS);
+            } catch (TimeoutException ie) {
+                log.error("Timeout in execution of PathLSTM . . . ");
             }
+            executor.shutdown();
         }
-
         return pav;
     }
 

@@ -383,8 +383,7 @@ public class JsonSerializer extends AbstractSerializer {
         }
     }
 
-    private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out)
-    {
+    private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out) {
         JsonObject labelScoreMap = new JsonObject();
         for (String key : Sorters.sortSet(obj.keySet()))
             writeDouble( key, obj.get(key), out);
@@ -419,7 +418,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-// TODO: comment out this next two lines as part of addressing issue #406
+            // TODO: comment out this next two lines as part of addressing issue #406
             if (viewName.equals(ViewNames.SENTENCE))
                 continue;
 
