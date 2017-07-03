@@ -333,6 +333,19 @@ public class BasicAnnotatorService implements AnnotatorService {
 
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
 
+        // if it already contains its, return it.
+        if (!forceUpdate && !disableCache && annotationCache.contains(ta)) {
+            TextAnnotation taFromCache = annotationCache.getTextAnnotation(ta);
+            boolean containsAll = true;
+            for(String vu : viewsToAnnotate) {
+                if(!taFromCache.getAvailableViews().contains(vu)) {
+                    containsAll = false;
+                    break;
+                }
+            }
+            if(containsAll) return taFromCache;
+        }
+
         return addViewsAndCache(ta, viewsToAnnotate, false);
     }
 
