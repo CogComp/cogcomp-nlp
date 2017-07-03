@@ -17,7 +17,6 @@ import java.io.IOException;
 
 public class ExternalAnnotatorsServer {
     private static Logger logger = LoggerFactory.getLogger(ExternalAnnotatorsServer.class);
-
     public static void main(String[] args) throws IOException, AnnotatorException {
         logger.info("Starting create the externals annotators pipeline . . . ");
         AnnotatorService service = ExternalAnnotatorServiceFactory.buildPipeline();

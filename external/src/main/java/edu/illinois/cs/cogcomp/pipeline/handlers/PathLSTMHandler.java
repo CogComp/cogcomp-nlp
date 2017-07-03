@@ -132,14 +132,13 @@ public class PathLSTMHandler extends Annotator {
                         }
                     });
 
-
             try {
                 future.get(120, TimeUnit.SECONDS);
             } catch (TimeoutException ie) {
                 log.error("Timeout in execution of PathLSTM . . . ");
             }
-            executor.shutdown();
         }
+        executor.shutdown();
         return pav;
     }
 
