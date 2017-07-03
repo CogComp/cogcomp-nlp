@@ -238,8 +238,11 @@ public class CuratorAnnotatorService implements AnnotatorService {
             return false;
 
         if (annotationCache != null && annotationCache.contains(ta)) {
-            ta = annotationCache.getTextAnnotation(ta);
-            if(ta.getAvailableViews().contains(viewName)) return false;
+            TextAnnotation taFromCache = annotationCache.getTextAnnotation(ta);
+            if(taFromCache.getAvailableViews().contains(viewName)) {
+                ta.addView(viewName, taFromCache.getView(viewName));
+                return false;
+            }
         }
 
         Annotator annotator = viewProviders.get(viewName);
