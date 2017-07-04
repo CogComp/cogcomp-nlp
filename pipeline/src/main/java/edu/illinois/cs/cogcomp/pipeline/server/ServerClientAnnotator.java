@@ -101,13 +101,20 @@ public class ServerClientAnnotator extends Annotator {
     }
 
     public TextAnnotation annotate(String str) throws Exception {
+        return annotate(str, false);
+    }
+
+    /**
+     * @param overwrite if true, it would overwrite the values on cache
+     */
+    public TextAnnotation annotate(String str, boolean overwrite) throws Exception {
         String viewsConnected = Arrays.toString(viewsToAdd);
         String views = viewsConnected.substring(1, viewsConnected.length() - 1).replace(" ", "");
         ConcurrentMap<String, byte[]> concurrentMap =
                 (db != null) ? db.hashMap(viewName, Serializer.STRING, Serializer.BYTE_ARRAY)
                         .createOrOpen() : null;
         String key = DigestUtils.sha1Hex(str + views);
-        if (concurrentMap != null && concurrentMap.containsKey(key)) {
+        if (!overwrite && concurrentMap != null && concurrentMap.containsKey(key)) {
             byte[] taByte = concurrentMap.get(key);
             return SerializationHelper.deserializeTextAnnotationFromBytes(taByte);
         } else {
@@ -146,9 +153,14 @@ public class ServerClientAnnotator extends Annotator {
 
     @Override
     public void addView(TextAnnotation ta) {
+        addView(ta, false);
+    }
+
+
+    public void addView(TextAnnotation ta, boolean overwrite) {
         TextAnnotation newTA = null;
         try {
-            newTA = annotate(ta.getText());
+            newTA = annotate(ta.getText(), overwrite);
         } catch (Exception e) {
             e.printStackTrace();
         }
