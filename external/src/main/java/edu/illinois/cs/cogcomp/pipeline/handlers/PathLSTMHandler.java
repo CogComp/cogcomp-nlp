@@ -124,7 +124,12 @@ public class PathLSTMHandler extends Annotator {
                                     assert span.getFirst() <= span.getSecond() : ta;
                                     List<Constituent> consList = pav.getConstituentsWithSpan(new IntPair(span.getFirst(),
                                             span.getSecond()));
-                                    if (consList.isEmpty()) pav.addConstituent(c);
+                                    if (consList.isEmpty()) {
+                                        pav.addConstituent(c);
+                                    }
+                                    else {
+                                        c = consList.get(0);
+                                    }
                                     pav.addRelation(new Relation(label, predicate, c, 1.0));
                                 }
                             }
