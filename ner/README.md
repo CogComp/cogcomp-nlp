@@ -173,7 +173,7 @@ sophisticated features that depend on deeper levels of NLP processing
 (currently, very few are used/required). 
 
 
-### How to use the new parameter "useFE"
+### How to use the new parameter 'useFE'
 useFE is used to decide whether we want to use Frustratingly Easy Domain Adaptation or not. The default value is false. If useFE is true, then the structure of the training data folder must follow the structure like
 
 trainingData:
