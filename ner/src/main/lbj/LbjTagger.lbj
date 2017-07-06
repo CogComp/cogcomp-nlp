@@ -64,7 +64,7 @@ real% WordEmbeddingFeatures(NEWord word) <-
 				for(int dim=0;dim<embedding.length;dim++){
 				    sense "place"+i+"dim"+dim : embedding[dim];
 				    if(ParametersForLbjCode.currentParameters.useFE) {
-    				    sense word.domainName+"place"+i+"dim"+dim : embedding[dim];
+    			        sense word.domainName+"place"+i+"dim"+dim : embedding[dim];
     				}
 				}
 			i++;
@@ -90,11 +90,12 @@ discrete% WikifierFeatures(NEWord word) <-
 
 discrete% IsSentenceStart(NEWord word) <-
 {
-	if(word.previous==null)
+	if(word.previous==null){
 		sense "start" : "1";
 		if(ParametersForLbjCode.currentParameters.useFE) {
     		sense word.domainName+"start" : "1";
         }
+    }
 }
 
 
@@ -154,6 +155,9 @@ discrete% FormParts(NEWord word) <-
   		ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))
 	{ 
 		sense "0" : word.form;
+		if(ParametersForLbjCode.currentParameters.useFE) {
+            sense word.domainName+"0" : word.form;
+        }
 		int i=-1;
 		int count=-1;
 		NEWord w = (NEWord)word.previous;
@@ -215,30 +219,30 @@ discrete{false, true}% WordTypeInformation(NEWord word) <-
 {
 	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTypeInformation"))
 	{ 
-	  int i;
-	  NEWord w = word, last = word;
-	  for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
-	  for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+	    int i;
+	    NEWord w = word, last = word;
+	    for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+	    for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
 
-	  for (; w != last; w = (NEWord) w.next, ++i)
-	  {
-	    boolean allCapitalized = true, allDigits = true, allNonLetters = true;
+	    for (; w != last; w = (NEWord) w.next, ++i)
+	    {
+	        boolean allCapitalized = true, allDigits = true, allNonLetters = true;
 	
-	    for (int j = 0; j < w.form.length(); ++j) {
-	    	char c = w.form.charAt(j);
-	      	allCapitalized &= Character.isUpperCase(c);
-	      	allDigits &= (Character.isDigit(c)||c=='.'||c==',');
-	      	allNonLetters &= !Character.isLetter(c);
-	    }
-	    sense "c" + i : allCapitalized;
-	    sense "d" + i : allDigits;
-	    sense "p" + i : allNonLetters;
-	    if(ParametersForLbjCode.currentParameters.useFE) {
-    	    sense word.domainName + "c" + i : allCapitalized;
-            sense word.domainName + "d" + i : allDigits;
-            sense word.domainName + "p" + i : allNonLetters;
-        }
-  	  }
+	        for (int j = 0; j < w.form.length(); ++j) {
+	    	    char c = w.form.charAt(j);
+	      	    allCapitalized &= Character.isUpperCase(c);
+	      	    allDigits &= (Character.isDigit(c)||c=='.'||c==',');
+	      	    allNonLetters &= !Character.isLetter(c);
+	        }
+	        sense "c" + i : allCapitalized;
+	        sense "d" + i : allDigits;
+	        sense "p" + i : allNonLetters;
+	        if(ParametersForLbjCode.currentParameters.useFE) {
+    	        sense word.domainName + "c" + i : allCapitalized;
+                sense word.domainName + "d" + i : allDigits;
+                sense word.domainName + "p" + i : allNonLetters;
+            }
+  	    }
   	}
 }
 
@@ -343,26 +347,26 @@ discrete% PreviousTag2Level1(NEWord word) <-
 {
 	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag2"))
 	{ 
-	  int i;
-	  NEWord w = word;
-	  if(w.previous!=null)
-	  {
-		if(((NEWord)w.previous).previous!=null)
-	  	{
-			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
-			    sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
-			    if(ParametersForLbjCode.currentParameters.useFE) {
-    			    sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
-    			}
-			}
-		   	else {
-		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
-		    	if(ParametersForLbjCode.currentParameters.useFE) {
-    		    	sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
-    		    }
-		   	}
-	 	}
-	  }
+	    int i;
+	    NEWord w = word;
+	    if(w.previous!=null)
+	    {
+		    if(((NEWord)w.previous).previous!=null)
+	  	    {
+			    if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
+			        sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+			        if(ParametersForLbjCode.currentParameters.useFE) {
+    			        sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+    			    }
+			    }
+		    	else {
+		    	    sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
+		    	    if(ParametersForLbjCode.currentParameters.useFE) {
+    		    	    sense word.domainName + "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
+    		        }
+		   	    }
+	 	    }
+	    }
   	}
 }
 
@@ -384,14 +388,14 @@ real% prevTagsForContextLevel1(NEWord word) <-
 		for(i=0;i<1000&&w!=null;i++){
 			for(j=0;j<words.length;j++){
 				if(words[j]!=null&&w.form.equals(words[j])){
-						if(NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/){
-							if(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.useNoise())
-								count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.randomLabel());
-							else					 
-								count[j].addToken(w.neLabel);
-						}
+					if(NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/){
+						if(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.useNoise())
+							count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.randomLabel());
 						else
-			    			count[j].addToken(w.neTypeLevel1);
+							count[j].addToken(w.neLabel);
+						}
+					else
+		    			count[j].addToken(w.neTypeLevel1);
 				}
 			}
 			w=(NEWord)w.previousIgnoreSentenceBoundary;
