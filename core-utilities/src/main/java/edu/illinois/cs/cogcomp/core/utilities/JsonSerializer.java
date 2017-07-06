@@ -35,7 +35,7 @@ public class JsonSerializer extends AbstractSerializer {
     public static final String TOKENOFFSETS = "tokenOffsets";
     public static final String LABEL_SCORE_MAP = "labelScoreMap";
     public static final String PROPERTIES = "properties";
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final Logger logger = LoggerFactory.getLogger(JsonSerializer.class);
 
     /**
@@ -71,6 +71,13 @@ public class JsonSerializer extends AbstractSerializer {
 
         List<Constituent> constituents = view.getConstituents();
 
+        // Performance of the indexOf method is terrible, so we will collect the 
+        // indices of all constituents here.
+        HashMap<Constituent, Integer> constituentMap = new HashMap<>();
+        for (int i = 0 ; i < constituents.size(); i++) {
+            constituentMap.put(constituents.get(i), i);
+        }
+        
         try {
             logger.debug(TextAnnotationPrintHelper.printView(view));
             if (DEBUG)
@@ -81,7 +88,6 @@ public class JsonSerializer extends AbstractSerializer {
         if (constituents.size() > 0) {
             JsonArray cJson = new JsonArray();
             for (int i = 0; i < view.getNumberOfConstituents(); i++) {
-
                 Constituent constituent = constituents.get(i);
                 JsonObject c = new JsonObject();
                 writeConstituent(constituent, c);
@@ -96,14 +102,22 @@ public class JsonSerializer extends AbstractSerializer {
 
         if (relations.size() > 0) {
 
+            // if we're using relations, constituents shouldn't have any duplicates; otherwise upon deserialization
+            // things would not be as expected
+            Set<Constituent> consSet = new HashSet<>(constituents);
+            if(consSet.size() < constituents.size())
+                logger.error("There are duplicate constituents in the '" + view + "' view. " +
+                        "You have to fix this otherwise things will be messed up, upon deserialization. ");
+
+
             JsonArray rJson = new JsonArray();
 
             for (Relation r : relations) {
                 Constituent src = r.getSource();
                 Constituent tgt = r.getTarget();
 
-                int srcId = constituents.indexOf(src);
-                int tgtId = constituents.indexOf(tgt);
+                int srcId = constituentMap.get(src);//constituents.indexOf(src);
+                int tgtId = constituentMap.get(tgt);//constituents.indexOf(tgt);
 
                 if (srcId < 0)
                     throw new IllegalStateException("ERROR: Couldn't find index in constituent list for argument constituent: " +
@@ -177,8 +191,7 @@ public class JsonSerializer extends AbstractSerializer {
                 int tgt = readInt("targetConstituent", rJ);
 
                 Map<String, Double> labelsToScores = null;
-                if (rJ.has(LABEL_SCORE_MAP))
-                {
+                if (rJ.has(LABEL_SCORE_MAP)) {
                     labelsToScores = new HashMap<>();
                     readLabelsToScores(labelsToScores, rJ);
                 }
@@ -463,7 +476,6 @@ public class JsonSerializer extends AbstractSerializer {
 
             for (int k = 0; k < viewData.size(); k++) {
                 JsonObject kView = (JsonObject) viewData.get(k);
-
                 topKViews.add(readView(kView, ta));
             }
 

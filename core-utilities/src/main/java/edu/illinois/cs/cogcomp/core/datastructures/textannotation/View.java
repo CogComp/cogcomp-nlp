@@ -8,6 +8,7 @@
 package edu.illinois.cs.cogcomp.core.datastructures.textannotation;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IQueryable;
+import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.QueryableList;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.transformers.ITransformer;
@@ -409,6 +410,15 @@ public class View implements Serializable, IQueryable<Constituent> {
         return list;
     }
 
+    /**
+     * @return all the constituents that have exact span start/end.
+     */
+    public List<Constituent> getConstituentsWithSpan(IntPair span) {
+        List<Constituent> list = new ArrayList<>();
+        for(Constituent c : this.constituents) if (c.getSpan().equals(span)) list.add(c);
+        return list;
+    }
+
     public List<Constituent> getConstituentsCoveringTokens(Collection<Integer> tokenIds) {
 
         Set<Constituent> output = new HashSet<>();
@@ -591,5 +601,4 @@ public class View implements Serializable, IQueryable<Constituent> {
     public int count() {
         return this.constituents.size();
     }
-
 }
