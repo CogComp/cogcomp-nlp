@@ -95,6 +95,11 @@ public class TaggedDataReader {
         return res;
     }
 
+    /**
+     * The readFile is used for Frustratingly Easy domain adaptation only.
+     * @param domainName This argument is the domain of document so that we can know each document's domain.
+     */
+
     public static NERDocument readFile(String path, String format, String documentName, String domainName)
             throws Exception {
         NERDocument res = null;
