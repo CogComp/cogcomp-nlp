@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.cogcomp</groupId>
+    <artifactId>MD</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0</version>
+    <name>MD</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>LBJava</artifactId>
+            <version>1.2.26</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-corpusreaders</artifactId>
+            <version>3.1.22</version>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>CogcompSoftware</id>
+            <name>CogcompSoftware</name>
+            <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>edu.illinois.cs.cogcomp</groupId>
+                <artifactId>lbjava-maven-plugin</artifactId>
+                <version>1.2.26</version>
+                <configuration>
+                    <lbjavaInputFileList>
+                        <param>${project.basedir}/src/lbj/md.lbj</param>
+                    </lbjavaInputFileList>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,5 @@
+package org.cogcomp.md;
+
+discrete test_label (String c) <- {
+    return "1";
+}
