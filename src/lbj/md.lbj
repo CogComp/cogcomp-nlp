@@ -3,3 +3,15 @@ package org.cogcomp.md;
 discrete test_label (String c) <- {
     return "1";
 }
+
+discrete test_classifier (String c) <-
+    learn test_label
+    from new BIOReader("data/a", "a")
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/a", "a")
+
+    progressOutput 10000
+end
