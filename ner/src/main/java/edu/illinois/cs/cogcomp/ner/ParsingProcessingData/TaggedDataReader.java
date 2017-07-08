@@ -29,18 +29,36 @@ public class TaggedDataReader {
 
     public static Vector<NERDocument> readFolder(String path, String format) throws Exception {
         Vector<NERDocument> res = new Vector<>();
-        String[] files = (new File(path)).list();
+        String[] domains = (new File(path)).list();
 
         // sort the files so we can get deterministic order.
         if (ParametersForLbjCode.currentParameters.sortLexicallyFilesInFolders) {
-            Arrays.sort(files);
+            Arrays.sort(domains);
         }
-        for (String file1 : files) {
-            String file = path + "/" + file1;
-            if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
-                res.addElement(readFile(file, format, file1));
+
+        if (ParametersForLbjCode.currentParameters.useFE) {
+            for (String domain1 : domains) {
+                String domain = path + "/" + domain1;
+                if (new File(domain).isDirectory()) {
+                    String[] files = (new File(domain)).list();
+                    for (String file1 : files) {
+                        String file = domain + "/" + file1;
+                        if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
+                            res.addElement(readFile(file, format, file1, domain1));
+                        }
+                    }
+                }
             }
         }
+        else {
+            for (String file1 : domains) {
+                String file = path + "/" + file1;
+                if ((new File(file)).isFile() && (!file1.equals(".DS_Store"))) {
+                    res.addElement(readFile(file, format, file1));
+                }
+            }
+        }
+
         if (ParametersForLbjCode.currentParameters.treatAllFilesInFolderAsOneBigDocument) {
             // connecting sentence boundaries
             for (int i = 0; i < res.size() - 1; i++) {
@@ -76,6 +94,29 @@ public class TaggedDataReader {
         connectSentenceBoundaries(res.sentences);
         return res;
     }
+
+    /**
+     * The readFile is used for Frustratingly Easy domain adaptation only.
+     * @param domainName This argument is the domain of document so that we can know each document's domain.
+     */
+
+    public static NERDocument readFile(String path, String format, String documentName, String domainName)
+            throws Exception {
+        NERDocument res = null;
+        if (format.equals("-c")) {
+            res = (new ColumnFileReader(path)).read(documentName, domainName);
+        } else {
+            if (format.equals("-r")) {
+                res = BracketFileReader.read(path, documentName);
+            } else {
+                System.err.println("Fatal error: unrecognized file format: " + format);
+                System.exit(0);
+            }
+        }
+        connectSentenceBoundaries(res.sentences);
+        return res;
+    }
+
 
     public static void connectSentenceBoundaries(ArrayList<LinkedVector> sentences) {
         // connecting sentence boundaries
