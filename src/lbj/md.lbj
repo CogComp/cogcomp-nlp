@@ -1,17 +1,23 @@
 package org.cogcomp.md;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 
-discrete test_label (String c) <- {
-    return "1";
+discrete bio_label (Constituent c) <- {
+    return c.getAttribute("BIO");
 }
 
-discrete test_classifier (String c) <-
-    learn test_label
-    from new BIOReader("data/a", "a")
+discrete% word_features (Constituent c) <- {
+    sense c.toString();
+}
+
+discrete test_classifier (Constituent c) <-
+learn bio_label
+    using word_features
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/a", "a")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05")
 
     progressOutput 10000
 end

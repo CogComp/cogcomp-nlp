@@ -1,4 +1,10 @@
 package org.cogcomp.md;
+
+/*
+ * The reader file which reads B/I/O tag for each word of a certain corpus
+ * Supports mode:
+ * "ACE05" -> ACE 2005 with ACEReader
+ */
 import java.util.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
