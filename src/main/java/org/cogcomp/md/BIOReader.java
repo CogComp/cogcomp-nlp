@@ -6,10 +6,15 @@ package org.cogcomp.md;
  * "ACE05" -> ACE 2005 with ACEReader
  */
 import java.util.*;
+
+import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 
 public class BIOReader implements Parser
 {
@@ -18,6 +23,7 @@ public class BIOReader implements Parser
     private List<TextAnnotation> taList;
     private String _path;
     private String _mode;
+    private List<Annotator> annotators;
 
     public BIOReader(String path, String mode){
         _path = path;
@@ -37,6 +43,13 @@ public class BIOReader implements Parser
                 e.printStackTrace();
             }
             for (TextAnnotation ta : aceReader) {
+                POSAnnotator posAnnotator = new POSAnnotator();
+                try {
+                    posAnnotator.addView(ta);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
                 ret.add(ta);
             }
         }

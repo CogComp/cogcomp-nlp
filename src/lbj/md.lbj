@@ -1,17 +1,21 @@
 package org.cogcomp.md;
+import java.util.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 
 discrete bio_label (Constituent c) <- {
     return c.getAttribute("BIO");
 }
 
-discrete% word_features (Constituent c) <- {
-    sense c.toString();
+discrete% gazetteers_features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        sense features.get(i);
+    }
 }
 
-discrete test_classifier (Constituent c) <-
+discrete bio_classifier (Constituent c) <-
 learn bio_label
-    using word_features
+    using gazetteers_features
     from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {
