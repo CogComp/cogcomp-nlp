@@ -5,9 +5,11 @@ package org.cogcomp.md;
  * Supports mode:
  * "ACE05" -> ACE 2005 with ACEReader
  */
+import java.io.File;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
@@ -15,6 +17,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import org.cogcomp.Datastore;
 
 public class BIOReader implements Parser
 {
@@ -45,7 +48,8 @@ public class BIOReader implements Parser
             for (TextAnnotation ta : aceReader) {
                 POSAnnotator posAnnotator = new POSAnnotator();
                 try {
-                    posAnnotator.addView(ta);
+                    ta.addView(posAnnotator);
+                    GazetteerViewGenerator.gazetteersInstance.addView(ta);
                 }
                 catch (Exception e){
                     e.printStackTrace();
