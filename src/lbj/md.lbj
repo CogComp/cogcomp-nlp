@@ -1,6 +1,7 @@
 package org.cogcomp.md;
 import java.util.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 
 discrete bio_label (Constituent c) <- {
     return c.getAttribute("BIO");
@@ -13,9 +14,27 @@ discrete% gazetteers_features (Constituent c) <- {
     }
 }
 
+real% wordEmbedding_features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getWordEmbeddingsFeatures(c);
+}
+
+discrete% isSentenceStart (Constituent c) <- {
+    sense "start" : BIOFeatureExtractor.isSentenceStart(c);
+}
+
+discrete% wordForm_features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getWordFormFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
 discrete bio_classifier (Constituent c) <-
 learn bio_label
-    using gazetteers_features
+    using isSentenceStart, wordForm_features
     from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {
