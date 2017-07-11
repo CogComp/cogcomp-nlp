@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by Xuanyu on 7/9/2017.
+ * This is the FeatureExtractor Class for the lbj file
+ * Normally we define all feature extraction activities that is required here
  */
 public class BIOFeatureExtractor {
     public static List<String> getGazetteerFeatures(Constituent c){

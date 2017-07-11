@@ -41,6 +41,11 @@
             <version>3.1.22</version>
         </dependency>
         <dependency>
+            <groupId>edu.illinois.cs.cogcomp</groupId>
+            <artifactId>illinois-external-annotators</artifactId>
+            <version>3.1.22</version>
+        </dependency>
+        <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
             <version>1.9.7</version>

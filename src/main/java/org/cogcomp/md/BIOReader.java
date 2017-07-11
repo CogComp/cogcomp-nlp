@@ -4,12 +4,14 @@ package org.cogcomp.md;
  * The reader file which reads B/I/O tag for each word of a certain corpus
  * Supports mode:
  * "ACE05" -> ACE 2005 with ACEReader
+ * It returns Constituents duplicated from Token View, all the returning Constituents should be of size 1
+ * The returning Constituents has an attribute "BIO", with value "B","I" or "O"
+ * Example usage: Parser parser = new BIOReader("data/", "ACE05");
  */
 import java.io.File;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
-import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
@@ -69,21 +71,27 @@ public class BIOReader implements Parser
             for (TextAnnotation ta : taList){
                 View tokenView = ta.getView(ViewNames.TOKENS);
                 View mentionView = ta.getView(ViewNames.MENTION_ACE);
+                View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
                 String[] token2tags = new String[tokenView.getConstituents().size()];
                 for (int i = 0; i < token2tags.length; i++){
                     token2tags[i] = "O";
                 }
                 for (Constituent c : mentionView.getConstituents()){
-                    token2tags[c.getStartSpan()] = "B";
-                    for (int i = c.getStartSpan() + 1; i < c.getEndSpan(); i++){
+                    Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
+                    token2tags[cHead.getStartSpan()] = "B";
+                    for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
                         token2tags[i] = "I";
                     }
                 }
                 for (int i = 0; i < token2tags.length; i++){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
-                    Constituent newToken = curToken.cloneForNewView("MD");
+                    Constituent newToken = curToken.cloneForNewView("BIO");
                     newToken.addAttribute("BIO", token2tags[i]);
-                    ret.add(newToken);
+                    bioView.addConstituent(newToken);
+                }
+                ta.addView("BIO", bioView);
+                for (Constituent c : bioView){
+                    ret.add(c);
                 }
             }
         }

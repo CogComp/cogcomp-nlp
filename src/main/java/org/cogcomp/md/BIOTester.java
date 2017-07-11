@@ -1,5 +1,6 @@
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
@@ -7,7 +8,9 @@ import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 /**
- * Created by admin on 7/10/2017.
+ * Created by Xuanyu on 7/10/2017.
+ * This is the Tester Class
+ * It requires untrained classifiers generated directly by LBJava
  */
 public class BIOTester {
     public static String getPath(String mode, int fold){
@@ -30,13 +33,19 @@ public class BIOTester {
             Parser train_parser = new BIOReader(getPath("train", i), "ACE05");
             Parser test_parser = new BIOReader(getPath("eval", i), "ACE05");
             bio_label output = new bio_label();
-
+            System.out.println("Start training fold " + i);
             BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
             classifier.setLexiconLocation("tmp/bio_classifier_fold_" + i + ".lex");
             Learner preExtractLearner = trainer.preExtract("tmp/bio_classifier_fold_" + i + ".ex", true, Lexicon.CountPolicy.none);
             preExtractLearner.saveLexicon();
             Lexicon lexicon = preExtractLearner.getLexicon();
             classifier.setLexicon(lexicon);
+            int examples = 0;
+            for (Object example = train_parser.next(); example != null; example = train_parser.next()){
+                examples ++;
+            }
+            train_parser.reset();
+            classifier.initialize(examples, preExtractLearner.getLexicon().size());
             for (Object example = train_parser.next(); example != null; example = train_parser.next()){
                 classifier.learn(example);
             }
@@ -47,6 +56,8 @@ public class BIOTester {
             int labeled_mention = 0;
             int predicted_mention = 0;
             int correct_mention = 0;
+
+            System.out.println("Start evaluating fold " + i);
 
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 String bioTag = classifier.discreteValue(example);
@@ -63,6 +74,10 @@ public class BIOTester {
                         if (!classifier.discreteValue(pointerToken).equals(output.discreteValue(pointerToken))){
                             correct_predicted = false;
                         }
+                        if (pointerToken.getStartSpan() == pointerToken.getTextAnnotation().getSentenceFromToken(pointerToken.getStartSpan()).getEndSpan() - 1){
+                            break;
+                        }
+                        pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
                     }
                     if (correct_predicted){
                         correct_mention ++;
