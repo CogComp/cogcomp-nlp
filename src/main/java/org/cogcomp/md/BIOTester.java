@@ -2,10 +2,16 @@ package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Xuanyu on 7/10/2017.
@@ -28,6 +34,46 @@ public class BIOTester {
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
+        List<Constituent> goldCons = new ArrayList<>();
+        List<Constituent> goldConsNew = new ArrayList<>();
+        List<Constituent> goldConsRemove = new ArrayList<>();
+        for (int i = 0; i < 5; i++){
+            try {
+                ACEReader aceReader = new ACEReader("data/partition_with_dev/eval/" + i, false);
+                for (TextAnnotation ta : aceReader){
+                    View mentionView = ta.getView(ViewNames.MENTION_ACE);
+                    for (Constituent c : mentionView.getConstituents()){
+                        Constituent ch = ACEReader.getEntityHeadForConstituent(c, ta, "A");
+                        goldCons.add(ch);
+                    }
+                }
+                aceReader = new ACEReader("data/partition/eval/" + i, false);
+                for (TextAnnotation ta : aceReader){
+                    View mentionView = ta.getView(ViewNames.MENTION_ACE);
+                    for (Constituent c : mentionView.getConstituents()){
+                        Constituent ch = ACEReader.getEntityHeadForConstituent(c, ta, "B");
+                        goldConsNew.add(ch);
+                    }
+                }
+            }
+            catch (Exception e){
+
+            }
+        }
+        int matchCount = 0;
+        for (Constituent oc : goldCons){
+            for (Constituent nc : goldConsNew){
+                if (oc.getTextAnnotation().getText().equals(nc.getTextAnnotation().getText())){
+                    if (oc.getStartSpan() == nc.getStartSpan() && oc.getEndSpan() == nc.getEndSpan()){
+                        matchCount ++;
+                    }
+                }
+            }
+        }
+        System.out.println("Total gold mentions: " + goldCons.size());
+        System.out.println("Total gold mentions comp: " + goldConsNew.size());
+        System.out.println("Match mentions: " + matchCount);
+
         for (int i = 0; i < 5; i++){
             bio_classifier classifier = new bio_classifier();
             Parser train_parser = new BIOReader(getPath("train", i), "ACE05");
@@ -69,6 +115,12 @@ public class BIOTester {
                     labeled_mention ++;
                     Constituent curToken = (Constituent)example;
                     Constituent pointerToken = curToken;
+                    for (Constituent gc : goldCons){
+                        if (gc.getTextAnnotation().getText().equals(curToken.getTextAnnotation().getText()) &&
+                                gc.getStartSpan() == curToken.getStartSpan()){
+                            goldConsRemove.add(gc);
+                        }
+                    }
                     boolean correct_predicted = true;
                     while (!pointerToken.getAttribute("BIO").equals("O")){
                         if (!classifier.discreteValue(pointerToken).equals(output.discreteValue(pointerToken))){
@@ -97,6 +149,10 @@ public class BIOTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
+        goldCons.removeAll(goldConsRemove);
+        for (Constituent c : goldCons){
+            System.out.println(c.toString());
+        }
 
     }
 

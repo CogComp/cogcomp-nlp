@@ -6,9 +6,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
+import org.cogcomp.Datastore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +24,7 @@ import java.util.List;
  */
 public class BIOFeatureExtractor {
     public static List<String> getGazetteerFeatures(Constituent c){
+        /*
         List<String> ret_features = new ArrayList<>();
         String label = "";
         TextAnnotation ta = c.getTextAnnotation();
@@ -26,6 +32,19 @@ public class BIOFeatureExtractor {
         Constituent gazetteerConstituent = gazetteerView.getConstituentsCovering(c).get(0);
         if (gazetteerConstituent != null){
             label = gazetteerConstituent.getLabel();
+        }
+        return ret_features;
+        */
+        List<String> ret_features = new ArrayList<>();
+        try {
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+            GazetteersFactory.init(5, gazetteersResource.getPath(), true);
+            Gazetteers gazetteers = GazetteersFactory.get();
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
         return ret_features;
     }

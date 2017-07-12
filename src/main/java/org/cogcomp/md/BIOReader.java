@@ -12,9 +12,12 @@ import java.io.File;
 import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
+import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
@@ -51,7 +54,6 @@ public class BIOReader implements Parser
                 POSAnnotator posAnnotator = new POSAnnotator();
                 try {
                     ta.addView(posAnnotator);
-                    GazetteerViewGenerator.gazetteersInstance.addView(ta);
                 }
                 catch (Exception e){
                     e.printStackTrace();
@@ -67,6 +69,15 @@ public class BIOReader implements Parser
 
     private List<Constituent> getTokensFromTAs(){
         List<Constituent> ret = new ArrayList<>();
+        try {
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
+            GazetteersFactory.init(5, gazetteersResource.getPath(), true);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        Gazetteers gazetteers = GazetteersFactory.get();
         if (_mode.equals("ACE05")){
             for (TextAnnotation ta : taList){
                 View tokenView = ta.getView(ViewNames.TOKENS);
@@ -91,6 +102,7 @@ public class BIOReader implements Parser
                 }
                 ta.addView("BIO", bioView);
                 for (Constituent c : bioView){
+                    ((FlatGazetteers)gazetteers).annotateConstituent(c);
                     ret.add(c);
                 }
             }
