@@ -23,29 +23,26 @@ import java.util.List;
  * Normally we define all feature extraction activities that is required here
  */
 public class BIOFeatureExtractor {
-    public static List<String> getGazetteerFeatures(Constituent c){
-        /*
-        List<String> ret_features = new ArrayList<>();
-        String label = "";
-        TextAnnotation ta = c.getTextAnnotation();
-        View gazetteerView = ta.getView(ViewNames.GAZETTEER);
-        Constituent gazetteerConstituent = gazetteerView.getConstituentsCovering(c).get(0);
-        if (gazetteerConstituent != null){
-            label = gazetteerConstituent.getLabel();
+    public static List<Pair<Integer, String>> getGazetteerFeatures(Constituent c){
+        List<Pair<Integer, String>> ret_features = new ArrayList<>();
+        View bioView = c.getTextAnnotation().getView("BIO");
+        for (int i = -1 ; i < 3; i++){
+            int curId = c.getStartSpan() + i;
+            if (curId < 0 || curId >= bioView.getEndSpan()){
+                continue;
+            }
+            Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + i).get(0);
+            if (cCur != null){
+                String[] features = cCur.getAttribute("GAZ").split(",");
+                for (String f : features){
+                    if (f == null){
+                        continue;
+                    }
+                    ret_features.add(new Pair<>(i, f));
+                }
+            }
         }
-        return ret_features;
-        */
-        List<String> ret_features = new ArrayList<>();
-        try {
-            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
-            File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath(), true);
-            Gazetteers gazetteers = GazetteersFactory.get();
 
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
         return ret_features;
     }
 

@@ -10,7 +10,10 @@ discrete bio_label (Constituent c) <- {
 discrete% gazetteers_features (Constituent c) <- {
     List features = BIOFeatureExtractor.getGazetteerFeatures(c);
     for (int i = 0; i < features.size(); i++){
-        sense features.get(i);
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
     }
 }
 
@@ -32,9 +35,25 @@ discrete% wordForm_features (Constituent c) <- {
     }
 }
 
+discrete{false, true}% Capitalization (Constituent c) <- {
+    View bioView = c.getTextAnnotation().getView("BIO");
+    for (int i = -1; i < 3; i++){
+        int curId = c.getStartSpan() + i;
+        if (curId < 0 || curId >= bioView.getEndSpan()){
+            continue;
+        }
+        Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + i).get(0);
+        if (cCur != null){
+            String cCurForm = cCur.toString();
+            boolean cap = (!cCurForm.equals(cCurForm.toLowerCase()));
+            sense i : cap;
+        }
+    }
+}
+
 discrete bio_classifier (Constituent c) <-
 learn bio_label
-    using isSentenceStart, wordForm_features
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features
     from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {

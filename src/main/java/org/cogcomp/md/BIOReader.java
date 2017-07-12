@@ -72,7 +72,7 @@ public class BIOReader implements Parser
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
-            GazetteersFactory.init(5, gazetteersResource.getPath(), true);
+            GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -98,11 +98,11 @@ public class BIOReader implements Parser
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     Constituent newToken = curToken.cloneForNewView("BIO");
                     newToken.addAttribute("BIO", token2tags[i]);
+                    newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
                     bioView.addConstituent(newToken);
                 }
                 ta.addView("BIO", bioView);
                 for (Constituent c : bioView){
-                    ((FlatGazetteers)gazetteers).annotateConstituent(c);
                     ret.add(c);
                 }
             }
