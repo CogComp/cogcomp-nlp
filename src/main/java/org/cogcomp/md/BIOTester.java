@@ -122,7 +122,17 @@ public class BIOTester {
                         }
                     }
                     boolean correct_predicted = true;
+                    String wholeMention = "";
+                    int startIdx = pointerToken.getStartSpan();
+                    int endIdx = startIdx + 1;
                     while (!pointerToken.getAttribute("BIO").equals("O")){
+                        if (endIdx - 1 > startIdx){
+                            if (pointerToken.getAttribute("BIO").equals("B")){
+                                endIdx --;
+                                break;
+                            }
+                        }
+                        wholeMention += pointerToken.toString() + " ";
                         if (!classifier.discreteValue(pointerToken).equals(output.discreteValue(pointerToken))){
                             correct_predicted = false;
                         }
@@ -130,8 +140,13 @@ public class BIOTester {
                             break;
                         }
                         pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
+                        endIdx = pointerToken.getStartSpan() + 1;
                     }
                     if (correct_predicted){
+                        for (int k = startIdx; k < endIdx; k++){
+                            View bioView = curToken.getTextAnnotation().getView("BIO");
+                            Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
+                        }
                         correct_mention ++;
                     }
                 }

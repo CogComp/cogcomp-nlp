@@ -51,9 +51,74 @@ discrete{false, true}% Capitalization (Constituent c) <- {
     }
 }
 
+discrete% Affixes (Constituent c) <- {
+    String form = c.toString();
+    for (int i = 3; i <= 4; i++){
+        if (form.length() > i){
+            sense "p|" : form.substring(0, i);
+        }
+    }
+    for (int i = 1; i <= 4; i++){
+        if (form.length() > i){
+            sense "s|" : form.substring(form.length() - i);
+        }
+    }
+}
+
+discrete% POS_Features (Constituent c) <- {
+    List features = BIOFeatureExtractor.getPOSFeatures(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% AffixesZH (Constituent c) <- {
+    String form = c.toString();
+    for (int i = 1; i <= 2; i++){
+        if (form.length() > i){
+            sense "ZH-p|" : form.substring(0, i);
+        }
+    }
+    for (int i = 1; i <= 2; i++){
+        if (form.length() > i){
+            sense "ZH-s|" : form.substring(form.length() - i);
+        }
+    }
+}
+
+discrete{false, true}% WordTypeInformation (Constituent c) <- {
+    List features = BIOFeatureExtractor.getWordTypeInformation(c);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        boolean val = (Boolean)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% BrownClusterPaths (Constituent c) <- {
+        List features = BIOFeatureExtractor.getBrownClusterPaths(c);
+        for (int i = 0; i < features.size(); i++){
+            Pair p = (Pair)features.get(i);
+            int idx = (Integer)p.getFirst();
+            String val = (String)p.getSecond();
+            sense idx : val;
+        }
+}
+
+discrete% previousLevel (Constituent c) <- {
+    if (c.getStartSpan() - 1 > 0){
+        Constituent cPrev = c.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(c.getStartSpan() - 1).get(0);
+        sense "-1" : bio_classifier.discreteValue(cPrev);
+    }
+}
+
 discrete bio_classifier (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, POS_Features, WordTypeInformation, BrownClusterPaths
     from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {

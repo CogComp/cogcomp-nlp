@@ -15,6 +15,7 @@ import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.annotators.GazetteerViewGenerator;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
@@ -22,6 +23,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import org.apache.xpath.operations.Bool;
 import org.cogcomp.Datastore;
 
 public class BIOReader implements Parser
@@ -73,11 +75,25 @@ public class BIOReader implements Parser
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            Vector<String> bcs = new Vector<>();
+            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brown-clusters/brownBllipClusters");
+            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            Vector<Integer> bcst = new Vector<>();
+            bcst.add(5);
+            bcst.add(5);
+            bcst.add(5);
+            Vector<Boolean> bcsl = new Vector<>();
+            bcsl.add(false);
+            bcsl.add(false);
+            bcsl.add(false);
+            BrownClusters.init(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
         Gazetteers gazetteers = GazetteersFactory.get();
+        BrownClusters brownClusters = BrownClusters.get();
         if (_mode.equals("ACE05")){
             for (TextAnnotation ta : taList){
                 View tokenView = ta.getView(ViewNames.TOKENS);
@@ -99,6 +115,7 @@ public class BIOReader implements Parser
                     Constituent newToken = curToken.cloneForNewView("BIO");
                     newToken.addAttribute("BIO", token2tags[i]);
                     newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
+                    newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
                     bioView.addConstituent(newToken);
                 }
                 ta.addView("BIO", bioView);

@@ -8,9 +8,12 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
+import opennlp.tools.parser.Cons;
+import org.apache.xpath.operations.Bool;
 import org.cogcomp.Datastore;
 
 import java.io.File;
@@ -87,6 +90,63 @@ public class BIOFeatureExtractor {
         if (c.getEndSpan() < sentenceEnd - 1){
             ret_features.add(new Pair<>(2, ta.getToken(c.getStartSpan() + 2)));
             ret_features.add(new Pair<>(2, MyString.normalizeDigitsForFeatureExtraction(ta.getToken(c.getStartSpan() + 2))));
+        }
+        return ret_features;
+    }
+
+    public static List<Pair<Integer, String>> getPOSFeatures (Constituent c) {
+        List<Pair<Integer, String>> ret_features = new ArrayList<>();
+        View posView = c.getTextAnnotation().getView(ViewNames.POS);
+        for (int i = -1; i < 3; i++){
+            int curId = c.getStartSpan() + i;
+            if (curId < 0 || curId >= posView.getEndSpan()){
+                continue;
+            }
+            ret_features.add(new Pair<>(i, posView.getConstituentsCoveringToken(curId).get(0).getLabel()));
+        }
+        return ret_features;
+    }
+
+    public static List<Pair<String, Boolean>> getWordTypeInformation(Constituent c){
+        List<Pair<String, Boolean>> ret_features = new ArrayList<>();
+        View bioView = c.getTextAnnotation().getView("BIO");
+        for (int j = -1; j < 3; j++) {
+            int curId = c.getStartSpan() + j;
+            if (curId < 0 || curId >= bioView.getEndSpan()){
+                continue;
+            }
+            Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + j).get(0);
+            String form = cCur.toString();
+            boolean allCapitalized = true, allDigits = true, allNonLetters = true;
+            for (int i = 0; i < form.length(); i++) {
+                char ch = form.charAt(i);
+                allCapitalized &= Character.isUpperCase(ch);
+                allDigits &= (Character.isDigit(ch) || ch == '.' || ch == ',');
+                allNonLetters &= !Character.isLetter(ch);
+            }
+            ret_features.add(new Pair<>("c" + j, allCapitalized));
+            ret_features.add(new Pair<>("d" + j, allDigits));
+            ret_features.add(new Pair<>("p" + j, allNonLetters));
+        }
+        return ret_features;
+    }
+
+    public static List<Pair<Integer, String>> getBrownClusterPaths(Constituent c){
+        List<Pair<Integer, String>> ret_features = new ArrayList<>();
+        View bioView = c.getTextAnnotation().getView("BIO");
+        for (int i = -1; i < 3; i++){
+            int curId = c.getStartSpan() + i;
+            if (curId < 0 || curId >= bioView.getEndSpan()){
+                continue;
+            }
+            Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + i).get(0);
+            String[] features = cCur.getAttribute("BC").split(",");
+            for (String s : features) {
+                if (s == null){
+                    continue;
+                }
+                ret_features.add(new Pair<>(i, s));
+            }
         }
         return ret_features;
     }
