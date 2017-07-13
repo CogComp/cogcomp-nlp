@@ -78,6 +78,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        db.commit();
     }
 
     @Override
@@ -90,6 +91,7 @@ public class TextAnnotationMapDBHandler implements TextAnnotationCache {
                 throw new RuntimeException(e);
             }
         }
+        db.commit();
     }
 
     @Override

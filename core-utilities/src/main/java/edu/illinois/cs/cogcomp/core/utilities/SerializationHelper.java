@@ -40,14 +40,14 @@ public class SerializationHelper {
         serializeTextAnnotationToFile(ta, fileName, forceOverwrite, false);
     }
 
-        /**
-         * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set to false and
-         * file already exists, this method throws an exception.
-         *
-         * @param ta The text annotation to be serialized
-         * @param fileName Name of file to write to
-         * @param forceOverwrite Whether or not to overwrite existing file.
-         */
+    /**
+     * Serialize a TextAnnotation and then write to file. If forceOverwrite_ is set to false and
+     * file already exists, this method throws an exception.
+     *
+     * @param ta The text annotation to be serialized
+     * @param fileName Name of file to write to
+     * @param forceOverwrite Whether or not to overwrite existing file.
+     */
     public static void serializeTextAnnotationToFile(TextAnnotation ta, String fileName,
             boolean forceOverwrite, boolean useJson) throws IOException {
         File outFile = new File(fileName);
@@ -67,7 +67,6 @@ public class SerializationHelper {
         }
     }
 
-
     /**
      * Serialize a text annotation into a byte array. This can be useful for writing into a file or
      * a database record. Uses Apache's {@link SerializationUtils}.
@@ -78,7 +77,6 @@ public class SerializationHelper {
     public static byte[] serializeTextAnnotationToBytes(TextAnnotation ta) throws IOException {
         return SerializationUtils.serialize(ta);
     }
-
 
     /**
      * Read serialized record from file and deserialize it. Expects Thrift serialization format, one
@@ -91,8 +89,6 @@ public class SerializationHelper {
             throws Exception {
         return deserializeTextAnnotationFromFile(fileName, false);
     }
-
-
 
     /**
          * Read serialized record from file and deserialize it. Expects Thrift serialization format, one
@@ -163,7 +159,6 @@ public class SerializationHelper {
      * @throws Exception
      */
     public static TextAnnotation deserializeFromJson(String jsonString) throws Exception {
-
         JsonSerializer serializer = new JsonSerializer();
         return serializer.readTextAnnotation(jsonString);
     }

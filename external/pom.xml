@@ -2,7 +2,7 @@
     <parent>
         <artifactId>illinois-cogcomp-nlp</artifactId>
         <groupId>edu.illinois.cs.cogcomp</groupId>
-        <version>3.1.21</version>
+        <version>3.1.22</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-nlp-pipeline</artifactId>
-            <version>3.1.21</version>
+            <version>3.1.22</version>
         </dependency>
         <dependency>
             <groupId>org.cogcomp</groupId>
@@ -75,7 +75,7 @@
                     <version>2.19.1</version>
                     <configuration>
                         <!--increase the memory requirements if you need more space-->
-                        <argLine>-Xmx20g</argLine>
+                        <argLine>-Xmx35g</argLine>
                     </configuration>
                 </plugin>
             </plugins>

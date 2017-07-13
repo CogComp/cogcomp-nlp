@@ -50,7 +50,7 @@ public class Acronyms {
             "MAR", "MM", "MR", "MRS", "MS", "MT", "Maj", "Mar", "Messrs", "Mlle", "Mme", "Mr",
             "Mrs", "Ms", "Msg", "Mt", "NO", "NOV", "No", "Nov", "OCT", "Oct", "Op", "Ord", "Pfc",
             "Ph", "Prof", "Pvt", "Rep", "Reps", "Res", "Rev", "Rt", "SEP", "SEPT", "ST", "Sen",
-            "Sens", "Sep", "Sept", "Sfc", "Sgt", "Sr", "St", "Supt", "Surg", "U.S", "al", "apr",
+            "Sens", "Sep", "Sept", "Sfc", "Sgt", "Sr", "St", "Ft", "Supt", "Surg", "U.S", "al", "apr",
             "aug", "dec", "feb", "jan", "jul", "jun", "ma", "nov", "oct", "sep", "sept", "v", "vs",
             "a.m", "p.m", "A.M", "P.M", "e.g", "i.e", "Corp", "Ala", "AL", "AK", "AS", "Ariz",
             "AZ", "Ark", "AR", "Calif", "CA", "Colo", "CO", "Co", "co", "Conn", "CT", "Del", "DE",
