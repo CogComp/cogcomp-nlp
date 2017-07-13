@@ -104,9 +104,14 @@ public class BIOTester {
             int correct_mention = 0;
 
             System.out.println("Start evaluating fold " + i);
-
+            String preBIOLevel1 = "";
+            String preBIOLevel2 = "";
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
+                ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
+                ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
                 String bioTag = classifier.discreteValue(example);
+                preBIOLevel1 = bioTag;
+                preBIOLevel2 = preBIOLevel1;
                 if (bioTag.equals("B")){
                     predicted_mention ++;
                 }
@@ -125,13 +130,18 @@ public class BIOTester {
                     String wholeMention = "";
                     int startIdx = pointerToken.getStartSpan();
                     int endIdx = startIdx + 1;
+                    String preBIOLevel1_dup = ((Constituent) example).getAttribute("preBIOLevel1");
+                    String preBIOLevel2_dup = ((Constituent) example).getAttribute("preBIOLevel2");
                     while (!pointerToken.getAttribute("BIO").equals("O")){
                         if (endIdx - 1 > startIdx){
                             if (pointerToken.getAttribute("BIO").equals("B")){
-                                endIdx --;
                                 break;
                             }
                         }
+                        pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+                        pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+                        preBIOLevel1_dup = classifier.discreteValue(pointerToken);
+                        preBIOLevel2_dup = preBIOLevel1_dup;
                         wholeMention += pointerToken.toString() + " ";
                         if (!classifier.discreteValue(pointerToken).equals(output.discreteValue(pointerToken))){
                             correct_predicted = false;
@@ -142,6 +152,7 @@ public class BIOTester {
                         pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
                         endIdx = pointerToken.getStartSpan() + 1;
                     }
+                    endIdx --;
                     if (correct_predicted){
                         for (int k = startIdx; k < endIdx; k++){
                             View bioView = curToken.getTextAnnotation().getView("BIO");
