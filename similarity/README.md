@@ -8,7 +8,7 @@ different similarity resources.
 
 ## Download Resource File
 
-Once you first use the specific metrics, the system will automatically download corresponding resource file from Cogcomp server to `user.home` directory in your local machine.
+Once you first use the specific metrics, the system will automatically download corresponding resource file from CogComp server to `user.home` directory in your local machine.
 Notice: Some resource file is very large and it may take a while to download. "paragram" is already included in the `src/main/resources/`.
 
 ## Configure File
