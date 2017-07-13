@@ -109,16 +109,37 @@ discrete% BrownClusterPaths (Constituent c) <- {
         }
 }
 
-discrete% previousLevel (Constituent c) <- {
+discrete% preBIOLevel1 (Constituent c) <- {
     if (c.getStartSpan() - 1 > 0){
         Constituent cPrev = c.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(c.getStartSpan() - 1).get(0);
-        sense "-1" : bio_classifier.discreteValue(cPrev);
+        if (cPrev != null){
+            if (c.getAttribute("isTraining").equals("true")){
+                sense "-1" : cPrev.getAttribute("BIO");
+            }
+            else if (!c.getAttribute("preBIOLevel1").equals("")){
+                sense "-1" : c.getAttribute("preBIOLevel1");
+            }
+        }
+    }
+}
+
+discrete% preBIOLevel2 (Constituent c) <- {
+    if (c.getStartSpan() - 2 > 0){
+        Constituent cPrev = c.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(c.getStartSpan() - 2).get(0);
+        if (cPrev != null){
+            if (c.getAttribute("isTraining").equals("true")){
+                sense "-2" : cPrev.getAttribute("BIO");
+            }
+            else if (!c.getAttribute("preBIOLevel1").equals("")){
+                sense "-2" : c.getAttribute("preBIOLevel2");
+            }
+        }
     }
 }
 
 discrete bio_classifier (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, POS_Features, WordTypeInformation, BrownClusterPaths
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, POS_Features, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
     from new BIOReader("data/partition_with_dev/train/0", "ACE05")
     5 rounds
     with SupportVectorMachine {

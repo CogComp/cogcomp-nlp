@@ -116,6 +116,12 @@ public class BIOReader implements Parser
                     newToken.addAttribute("BIO", token2tags[i]);
                     newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
                     newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
+                    if (_path.contains("train")){
+                        newToken.addAttribute("isTraining", "true");
+                    }
+                    else{
+                        newToken.addAttribute("isTraining", "false");
+                    }
                     bioView.addConstituent(newToken);
                 }
                 ta.addView("BIO", bioView);
