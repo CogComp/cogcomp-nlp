@@ -2,6 +2,8 @@ package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.lbjava.classify.Score;
+import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
@@ -65,6 +67,28 @@ public class BIOTester {
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
                 String bioTag = classifier.discreteValue(example);
+
+                double b_score = 0.0, i_score = 0.0, o_score = 0.0;
+                ScoreSet scores = classifier.scores(example);
+                Score[] scoresArray = scores.toArray();
+                for (Score score : scoresArray){
+                    if (score.value.equals("B")){
+                        b_score = score.score;
+                    }
+                    else if (score.value.equals("I")){
+                        i_score = score.score;
+                    }
+                    else if (score.value.equals("O")){
+                        o_score = score.score;
+                    }
+                }
+                //TODO: Solve start with "I"
+                if (bioTag.equals("I") && !(preBIOLevel1.equals("I") || preBIOLevel1.equals("B"))){
+                    if (Math.abs(b_score - i_score) < 0.1){
+                        //bioTag = "B";
+                    }
+                }
+
                 preBIOLevel1 = bioTag;
                 preBIOLevel2 = preBIOLevel1;
                 if (bioTag.equals("B")){
@@ -106,8 +130,12 @@ public class BIOTester {
                         correct_mention ++;
                     }
                     else {
-                        for (int k = startIdx; k < endIdx; k++){
-                            View bioView = curToken.getTextAnnotation().getView("BIO");
+                        View bioView = curToken.getTextAnnotation().getView("BIO");
+                        int printStart = startIdx;
+                        if (correctTag.equals("B") && bioTag.equals("I")){
+                            printStart --;
+                        }
+                        for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
                             System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + classifier.discreteValue(ct) + ", ");
                         }
