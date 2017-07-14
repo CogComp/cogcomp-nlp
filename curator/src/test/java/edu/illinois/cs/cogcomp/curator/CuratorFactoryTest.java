@@ -14,12 +14,14 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.PredicateArgumentView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
+import edu.illinois.cs.cogcomp.core.utilities.configuration.Configurator;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,12 +38,16 @@ public class CuratorFactoryTest {
 
     private String text;
 
-    private AnnotatorService curator;
+    private static AnnotatorService curator;
 
     @Before
     public void setUp() throws Exception {
         text = LineIO.slurp(TEXT_FILE);
-        curator = CuratorFactory.buildCuratorClient();
+        Properties settings = new Properties();
+        settings.setProperty(CuratorConfigurator.DISABLE_CACHE.key, Configurator.FALSE);
+        ResourceManager rm = new ResourceManager(settings);
+        ResourceManager config = new CuratorConfigurator().getConfig(rm);
+        if (curator == null) curator = CuratorFactory.buildCuratorClient(config);
     }
 
     @Test

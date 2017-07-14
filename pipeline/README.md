@@ -1,4 +1,4 @@
-# Cogcomp NLP Pipeline
+# CogComp NLP Pipeline
 
 This software bundles some basic preprocessing steps that a lot of NLP
 applications need, with the goal of making them run locally. Some
@@ -22,7 +22,7 @@ please refer to the descriptions of the individual packages at the URLs
 provided. These annotations are stored as `View`s in a single `TextAnnotation`
 data structure.
 
-The Cogcomp NLP Pipeline provides a suite of state-of-the-art
+The CogComp NLP Pipeline provides a suite of state-of-the-art
 Natural Language Processing tools of varying complexity.  Some have
 specific prerequisites that must be present if you want to run them.
 The memory is expected MAXIMUM run-time memory required for the component
@@ -47,7 +47,7 @@ of several other components for which it is a dependency.
 11. Preposition SRL: <2GB
 12. Comma-SRL: <1GB, requires POS, Lemmatizer, Part-of-Speech, Named Entity Recognizer (CoNLL), Constituency Parser. 
 
-Note that individual Cogcomp NLP tools may depend on other tools
+Note that individual CogComp NLP tools may depend on other tools
 for inputs, and will not work unless those components are also active.
 If you try to run the system with an invalid configuration, it will
 print a warning about the missing components.
@@ -57,14 +57,14 @@ print a warning about the missing components.
 The pipeline module is organized thus:
 ```
 config/ : configuration files
-scripts/ : scripts to allow command-line test of the Cogcomp NLP Pipeline
-src/ : source code for the Cogcomp NLP Pipeline
-test/ : test files used for the command line test of the Cogcomp NLP Pipeline
+scripts/ : scripts to allow command-line test of the CogComp NLP Pipeline
+src/ : source code for the CogComp NLP Pipeline
+test/ : test files used for the command line test of the CogComp NLP Pipeline
 ```
-See the section "Running the Cogcomp NLP Pipeline" for details on running the pipeline.
+See the section "Running the CogComp NLP Pipeline" for details on running the pipeline.
 
 This distribution contains all the dependencies needed to run the
-Cogcomp NLP Pipeline. This includes configuration files for some
+CogComp NLP Pipeline. This includes configuration files for some
 individual components; scripts to process plain text files from the
 command line; and .jar files for the libraries used by the pipeline and
 its components.
@@ -335,7 +335,7 @@ System.out.println(ta.getAvailableViews()); // here you should see that the requ
 
 #### Python Client
 
-[Sioux](https://github.com/CogComp/sioux) is our library for accessing our pipeline from Java.   
+[CogComp-NLPy](https://github.com/CogComp/cogcomp-nlpy) is our library for accessing our pipeline from Java.   
 
 
 ## Frequently Asked Questions (FAQs)

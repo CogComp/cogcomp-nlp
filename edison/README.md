@@ -1,4 +1,4 @@
-# Cogcomp Edison
+# CogComp Edison
 
 *Edison* is a feature extraction framework that uses the data structures of [cogcomp-core-utilities](../core-utilities/README.md)
 to extract features used in NLP applications.

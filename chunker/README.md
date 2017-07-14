@@ -1,4 +1,4 @@
-# Cogcomp Chunker (Shallow Parser)
+# CogComp Chunker (Shallow Parser)
 
 Chunking (Shallow Parsing) is the identification of constituents (noun groups, verbs, verb groups etc.) in a sentence. 
 

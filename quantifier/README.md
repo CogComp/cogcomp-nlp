@@ -1,4 +1,4 @@
-# Cogcomp Quantifier
+# CogComp Quantifier
 
 This tool takes plain, unannotated text as input and detects mentions
 of quantities in the text, as well as normalizes it to a standard
@@ -12,17 +12,17 @@ quantifier and also allows for training the model using your own
 training data.
 
 ## Requirements
-Compiling the Cogcomp Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
+Compiling the CogComp Quantifier *requires* Java 1.6 or higher. If you use it a maven (sbt, etc) dependency, you need Java 1.8. 
 
 ## Installation
-Cogcomp Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
+CogComp Quantifier can be downloaded from http://cogcomp.cs.illinois.edu/page/software_view/Quantifier.
 
 
-## Running the Cogcomp Quantifier
+## Running the CogComp Quantifier
 
 ### Generating Quantities for plain text file
 
-The Cogcomp Quantifier comes bundled with a program that takes a
+The CogComp Quantifier comes bundled with a program that takes a
 plain, unannotated text file as input and produces that same text with
 standardized quantity annotations as output. To invoke this program,
 type:
@@ -55,8 +55,8 @@ declarations in your project's `pom.xml` file:
 </dependencies>
 <repositories>
     <repository>
-        <id>CogcompSoftware</id>
-        <name>CogcompSoftware</name>
+        <id>CogCompSoftware</id>
+        <name>CogCompSoftware</name>
         <url>http://cogcomp.cs.illinois.edu/m2repo/</url>
     </repository>
 </repositories>
