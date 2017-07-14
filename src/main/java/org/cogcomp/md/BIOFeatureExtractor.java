@@ -9,6 +9,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,5 +130,20 @@ public class BIOFeatureExtractor {
             }
         }
         return ret_features;
+    }
+
+    public static boolean isInPronounList(Constituent c){
+        String form = c.toString().toLowerCase();
+        List<String> pronouns = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("data/Pronouns"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                pronouns.add(line);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return pronouns.contains(form);
     }
 }

@@ -106,15 +106,24 @@ public class BIOReader implements Parser
                         //continue;
                     }
                     Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
-                    token2tags[cHead.getStartSpan()] = "B";
+                    token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
                     for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
-                        token2tags[i] = "I";
+                        token2tags[i] = "I," + c.getAttribute("EntityMentionType");
                     }
                 }
                 for (int i = 0; i < token2tags.length; i++){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     Constituent newToken = curToken.cloneForNewView("BIO");
-                    newToken.addAttribute("BIO", token2tags[i]);
+                    if (token2tags[i].equals("O")) {
+                        newToken.addAttribute("BIO", token2tags[i]);
+                    }
+                    else{
+                        String[] group = token2tags[i].split(",");
+                        String tag = group[0];
+                        String eml = group[1];
+                        newToken.addAttribute("BIO", tag);
+                        newToken.addAttribute("EntityMentionType", eml);
+                    }
                     newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
                     newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
                     if (_path.contains("train")){

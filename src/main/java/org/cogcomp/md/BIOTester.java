@@ -26,6 +26,17 @@ public class BIOTester {
             return "INVALID_PATH";
         }
     }
+
+    public static String inference(Constituent c, bio_classifier classifier){
+        String originalTag = classifier.discreteValue(c);
+        String inferedTag = originalTag;
+        if (!originalTag.equals("B")) {
+            if (BIOFeatureExtractor.isInPronounList(c)) {
+                //inferedTag = "B";
+            }
+        }
+        return inferedTag;
+    }
     public static void test_cv(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -66,28 +77,7 @@ public class BIOTester {
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-                String bioTag = classifier.discreteValue(example);
-
-                double b_score = 0.0, i_score = 0.0, o_score = 0.0;
-                ScoreSet scores = classifier.scores(example);
-                Score[] scoresArray = scores.toArray();
-                for (Score score : scoresArray){
-                    if (score.value.equals("B")){
-                        b_score = score.score;
-                    }
-                    else if (score.value.equals("I")){
-                        i_score = score.score;
-                    }
-                    else if (score.value.equals("O")){
-                        o_score = score.score;
-                    }
-                }
-                //TODO: Solve start with "I"
-                if (bioTag.equals("I") && !(preBIOLevel1.equals("I") || preBIOLevel1.equals("B"))){
-                    if (Math.abs(b_score - i_score) < 0.1){
-                        //bioTag = "B";
-                    }
-                }
+                String bioTag = inference((Constituent)example, classifier);
 
                 preBIOLevel1 = bioTag;
                 preBIOLevel2 = preBIOLevel1;
@@ -113,10 +103,10 @@ public class BIOTester {
                         }
                         pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
                         pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
-                        preBIOLevel1_dup = classifier.discreteValue(pointerToken);
+                        preBIOLevel1_dup = inference(pointerToken, classifier);
                         preBIOLevel2_dup = preBIOLevel1_dup;
                         wholeMention += pointerToken.toString() + " ";
-                        if (!classifier.discreteValue(pointerToken).equals(output.discreteValue(pointerToken))){
+                        if (!inference(pointerToken, classifier).equals(output.discreteValue(pointerToken))){
                             correct_predicted = false;
                         }
                         if (pointerToken.getStartSpan() == pointerToken.getTextAnnotation().getSentenceFromToken(pointerToken.getStartSpan()).getEndSpan() - 1){
@@ -137,9 +127,9 @@ public class BIOTester {
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + classifier.discreteValue(ct) + ", ");
+                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        System.out.println();
+                        //System.out.println();
                     }
                 }
             }
