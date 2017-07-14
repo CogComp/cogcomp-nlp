@@ -90,6 +90,10 @@ public class PipelineFactory {
                         nonDefaultValues.put(PipelineConfigurator.USE_SRL_VERB.key,
                                 Configurator.TRUE);
                         break;
+                    case ViewNames.SRL_NOM:
+                        nonDefaultValues.put(PipelineConfigurator.USE_SRL_NOM.key,
+                                Configurator.TRUE);
+                        break;
                     case ViewNames.DEPENDENCY_STANFORD:
                         nonDefaultValues.put(PipelineConfigurator.USE_STANFORD_DEP.key,
                                 Configurator.TRUE);
