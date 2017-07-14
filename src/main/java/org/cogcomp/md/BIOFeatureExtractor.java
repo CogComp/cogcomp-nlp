@@ -6,17 +6,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
-import opennlp.tools.parser.Cons;
-import org.apache.xpath.operations.Bool;
-import org.cogcomp.Datastore;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,19 +38,6 @@ public class BIOFeatureExtractor {
             }
         }
 
-        return ret_features;
-    }
-
-    public static List<String> getWordEmbeddingsFeatures(Constituent c){
-        List<String> ret_features = new ArrayList<>();
-        try {
-            WordEmbeddings.initWithDefaults();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        double[] we_0 = WordEmbeddings.getEmbedding(c);
-        System.out.println(we_0);
         return ret_features;
     }
 

@@ -17,10 +17,6 @@ discrete% gazetteers_features (Constituent c) <- {
     }
 }
 
-real% wordEmbedding_features (Constituent c) <- {
-    List features = BIOFeatureExtractor.getWordEmbeddingsFeatures(c);
-}
-
 discrete% isSentenceStart (Constituent c) <- {
     sense "start" : BIOFeatureExtractor.isSentenceStart(c);
 }
