@@ -241,12 +241,15 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
             i = i + curTokenLength - 1;
         }
         resText = new String(resTextChar);
-
-        ta =
-                taBuilder.createTextAnnotation(
-                        this.corpusId,
-                        textId,
-                        resText);
+        String[] fileNameGroup = fileName.split("\\\\");
+        String groupName = fileNameGroup[fileNameGroup.length - 2];
+        if (groupName.equals("bn")) {
+            ta =
+                    taBuilder.createTextAnnotation(
+                            this.corpusId,
+                            textId,
+                            resText);
+        }
         // Add metadata attributes to the generated Text Annotation.
         if (doc.metadata != null) {
             for (String metadataKey : doc.metadata.keySet()) {

@@ -7,7 +7,9 @@
  */
 package edu.illinois.cs.cogcomp.ner.ExpressiveFeatures;
 
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.ner.IO.ResourceUtilities;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
 import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
@@ -23,6 +25,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * This singleton class contains all the gazetteer data and dictionaries. Can only be accessed via
@@ -203,13 +206,63 @@ public class FlatGazetteers implements Gazetteers {
         } // i
     }
 
-    public String annotateConstituent(Constituent c){
+    public String getGazetteersTag(Constituent c){
         String expression = c.toString();
         String ret = "";
         for (int i = 0; i < dictionaries.size(); i++){
+            THashSet<String> curDict = dictionaries.get(i);
+            for (String s : curDict){
+                //if (s.contains(expression)){
+                if (s.equals(expression)){
+                    String fullName = dictNames.get(i);
+                    String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                    ret += shortName + ",";
+                }
+            }
+        }
+        return ret;
+    }
+
+    public String annotateConstituent(Constituent c){
+        String expression = c.toString();
+        String ret = "";
+        View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
+        for (int startIdx = -3; startIdx < 0; startIdx++){
+            String combinedExpression = "";
+            boolean integrity = true;
+            for (int pointer = startIdx; pointer <= 0; pointer ++){
+                int curTokenIdx = c.getStartSpan() + pointer;
+                if (curTokenIdx < 0){
+                    integrity = false;
+                    break;
+                }
+                String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
+                combinedExpression += pointerString + " ";
+            }
+            if (combinedExpression.endsWith(" ")){
+                combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
+            }
+            if (integrity){
+                for (int i = 0; i < dictionaries.size(); i++){
+                    if (dictionaries.get(i).contains(combinedExpression)) {
+                        String fullName = dictNames.get(i);
+                        String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
+                        ret += shortName + ",";
+                    }
+                }
+                for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
+                    if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
+                        String fullName = dictNames.get(i);
+                        String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
+                        ret += shortName + "(IC),";
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < dictionaries.size(); i++){
             if (dictionaries.get(i).contains(expression)){
                 String fullName = dictNames.get(i);
-                String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                String shortName = "B-" + fullName.split("/")[fullName.split("/").length - 1];
                 ret += shortName + ",";
             }
         }

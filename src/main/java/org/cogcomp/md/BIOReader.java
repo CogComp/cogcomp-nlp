@@ -104,6 +104,9 @@ public class BIOReader implements Parser
                     token2tags[i] = "O";
                 }
                 for (Constituent c : mentionView.getConstituents()){
+                    if (!c.getAttribute("EntityMentionType").equals("PRO")){
+                        //continue;
+                    }
                     Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
                     token2tags[cHead.getStartSpan()] = "B";
                     for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){

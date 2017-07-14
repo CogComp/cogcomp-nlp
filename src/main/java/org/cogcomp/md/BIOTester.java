@@ -160,6 +160,14 @@ public class BIOTester {
                         }
                         correct_mention ++;
                     }
+                    else {
+                        for (int k = startIdx; k < endIdx; k++){
+                            View bioView = curToken.getTextAnnotation().getView("BIO");
+                            Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
+                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + classifier.discreteValue(ct) + ", ");
+                        }
+                        System.out.println();
+                    }
                 }
             }
             total_labeled_mention += labeled_mention;
@@ -177,7 +185,7 @@ public class BIOTester {
         System.out.println("F1: " + f);
         goldCons.removeAll(goldConsRemove);
         for (Constituent c : goldCons){
-            System.out.println(c.toString());
+            //System.out.println(c.toString());
         }
 
     }
