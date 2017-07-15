@@ -12,6 +12,8 @@ import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -20,6 +22,8 @@ import java.util.*;
  * @author Vivek Srikumar
  */
 public class TextAnnotationUtilities {
+
+    static private Logger logger = LoggerFactory.getLogger(TextAnnotationUtilities.class);
 
     /**
      * This comparator will sort entities on start location, but where start is equal on end as well
@@ -204,6 +208,12 @@ public class TextAnnotationUtilities {
 
     public static void copyViewFromTo(String vuName, TextAnnotation ta, TextAnnotation newTA, int sourceStartTokenIndex, int sourceEndTokenIndex, int offset) {
         View vu = ta.getView(vuName);
+
+        if(vu == null) {
+            // either the view is not contained, or the view contained is null
+            logger.warn("The view `" + vuName + "` for sentence `" + ta.text + "` is empty . . . ");
+            return;
+        }
 
         View newVu = null;
         if (newTA.hasView(vuName))
