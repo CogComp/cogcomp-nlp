@@ -141,12 +141,12 @@ discrete bio_classifier (Constituent c) <-
 learn bio_label
     using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, POS_Features, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
-    from new BIOReader("data/partition_with_dev/train/0", "ACE05")
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
 
     progressOutput 10000
 end

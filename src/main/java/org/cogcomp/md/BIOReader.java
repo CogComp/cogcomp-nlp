@@ -31,11 +31,13 @@ public class BIOReader implements Parser
     private List<TextAnnotation> taList;
     private String _path;
     private String _mode;
+    private String _type;
     private List<Annotator> annotators;
 
-    public BIOReader(String path, String mode){
+    public BIOReader(String path, String mode, String type){
         _path = path;
         _mode = mode;
+        _type = type;
         taList = getTextAnnotations();
         tokenList = getTokensFromTAs();
     }
@@ -102,8 +104,10 @@ public class BIOReader implements Parser
                     token2tags[i] = "O";
                 }
                 for (Constituent c : mentionView.getConstituents()){
-                    if (!c.getAttribute("EntityMentionType").equals("PRO")){
-                        //continue;
+                    if (!_type.equals("ALL")) {
+                        if (!c.getAttribute("EntityMentionType").equals(_type)) {
+                            continue;
+                        }
                     }
                     Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
                     token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");

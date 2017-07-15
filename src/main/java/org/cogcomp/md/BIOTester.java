@@ -30,6 +30,20 @@ public class BIOTester {
     public static String inference(Constituent c, bio_classifier classifier){
         String originalTag = classifier.discreteValue(c);
         String inferedTag = originalTag;
+        View bioView = c.getTextAnnotation().getView("BIO");
+        //TODO: Inference on single "I"
+        if (originalTag.equals("O")){
+            if (c.getStartSpan() + 1 < bioView.getEndSpan()) {
+                Constituent nextTest = bioView.getConstituentsCoveringToken(c.getStartSpan() + 1).get(0);
+                nextTest.addAttribute("preBIOLevel1", originalTag);
+                nextTest.addAttribute("preBIOLevel2", c.getAttribute("preBIOLevel1"));
+                String nextTag = classifier.discreteValue(nextTest);
+                if (nextTag.equals("I")){
+                    //inferedTag = "B";
+                }
+            }
+        }
+        //TODO: Hard rule on pronouns
         if (!originalTag.equals("B")) {
             if (BIOFeatureExtractor.isInPronounList(c)) {
                 //inferedTag = "B";
@@ -44,8 +58,8 @@ public class BIOTester {
 
         for (int i = 0; i < 5; i++){
             bio_classifier classifier = new bio_classifier();
-            Parser train_parser = new BIOReader(getPath("train", i), "ACE05");
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05");
+            Parser train_parser = new BIOReader(getPath("train", i), "ACE05", "ALL");
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
             BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
@@ -77,6 +91,7 @@ public class BIOTester {
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
+                String mentionType = ((Constituent)example).getAttribute("EntityMentionType");
                 String bioTag = inference((Constituent)example, classifier);
 
                 preBIOLevel1 = bioTag;
@@ -127,9 +142,9 @@ public class BIOTester {
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        //System.out.println();
+                        System.out.println();
                     }
                 }
             }
