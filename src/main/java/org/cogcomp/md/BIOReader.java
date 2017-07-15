@@ -34,10 +34,16 @@ public class BIOReader implements Parser
     private String _type;
     private List<Annotator> annotators;
 
+    public String id;
+
+
     public BIOReader(String path, String mode, String type){
         _path = path;
         _mode = mode;
         _type = type;
+        String[] path_group = path.split("/");
+        String group = path_group[path_group.length - 1];
+        id = group + "_" + type;
         taList = getTextAnnotations();
         tokenList = getTokensFromTAs();
     }

@@ -137,10 +137,91 @@ discrete{false, true}% isInProList (Constituent c) <- {
     sense BIOFeatureExtractor.isInPronounList(c);
 }
 
-discrete bio_classifier (Constituent c) <-
+discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
     using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, POS_Features, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
+    //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+
+    progressOutput 10000
+end
+
+discrete bio_classifier_nom (Constituent c) <-
+learn bio_label
+    using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+
+    progressOutput 10000
+end
+
+discrete bio_classifier_pro (Constituent c) <-
+learn bio_label
+    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    5 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+
+    progressOutput 10000
+end
+
+real% bioScore (Constituent c) <- {
+    String scoreSet = c.getAttribute("BIOScores");
+    String[] scores = scoreSet.split(",");
+    for (int i = 0 ; i < scores.length; i++){
+        double curScore = Double.parseDouble(scores[i]);
+        sense i : Double.parseDouble(scores[i]);
+    }
+}
+
+discrete % judges (Constituent c) <- {
+    String[] discreteVals = new String[3];
+    discreteVals[0] = c.getAttribute("A_prediction");
+    discreteVals[1] = c.getAttribute("A_prediction");
+    discreteVals[2] = c.getAttribute("A_prediction");
+    sense "nam" : discreteVals[0];
+    sense "nom" : discreteVals[1];
+    sense "pro" : discreteVals[2];
+    int b_count = 0;
+    int i_count = 0;
+    int o_count = 0;
+    for (int i = 0; i < 3; i++){
+        if (discreteVals[i].equals("B")){
+            b_count++;
+        }
+        else if (discreteVals[i].equals("I")){
+            i_count++;
+        }
+        else{
+            o_count++;
+        }
+    }
+    sense "b_count" : b_count;
+    sense "i_count" : i_count;
+    sense "o_count" : o_count;
+    if (b_count > 0){
+        sense "HasB";
+    }
+    else{
+        sense "NoB";
+    }
+}
+discrete bio_joint_classifier (Constituent c) <-
+learn bio_label
+    using bioScore
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
     5 rounds
     with SupportVectorMachine {

@@ -241,7 +241,8 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
             i = i + curTokenLength - 1;
         }
         resText = new String(resTextChar);
-        String[] fileNameGroup = fileName.split("\\\\");
+        String fileNameTransformed = fileName.replace(File.separator, "/");
+        String[] fileNameGroup = fileNameTransformed.split("/");
         String groupName = fileNameGroup[fileNameGroup.length - 2];
         if (groupName.equals("bn")) {
             ta =
