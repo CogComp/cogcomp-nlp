@@ -21,6 +21,8 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import org.cogcomp.Datastore;
 
@@ -45,6 +47,7 @@ public class BIOReader implements Parser
         String group = path_group[path_group.length - 1];
         id = group + "_" + type;
         taList = getTextAnnotations();
+        annotateTas();
         tokenList = getTokensFromTAs();
     }
 
@@ -59,20 +62,38 @@ public class BIOReader implements Parser
                 e.printStackTrace();
             }
             for (TextAnnotation ta : aceReader) {
-                POSAnnotator posAnnotator = new POSAnnotator();
-                try {
-                    ta.addView(posAnnotator);
-                }
-                catch (Exception e){
-                    e.printStackTrace();
-                }
                 ret.add(ta);
+            }
+        }
+        else if (_mode.equals("ERE")){
+            EREMentionRelationReader ereMentionRelationReader = null;
+            try {
+                ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, _path, false);
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            for (XmlTextAnnotation xta : ereMentionRelationReader){
+                ret.add(xta.getTextAnnotation());
             }
         }
         else{
             System.out.println("No defult actions for unknown mode");
         }
         return ret;
+    }
+
+    private void annotateTas(){
+        for (TextAnnotation ta : taList){
+            POSAnnotator posAnnotator = new POSAnnotator();
+            try {
+                ta.addView(posAnnotator);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private List<Constituent> getTokensFromTAs(){

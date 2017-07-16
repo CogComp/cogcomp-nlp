@@ -158,6 +158,7 @@ public class BIOTester {
         return cur;
     }
 
+
     public static bio_joint_classifier train_joint_classifier (bio_classifier_nam a, bio_classifier_nom b, bio_classifier_pro c, Parser parser){
         List<Constituent> examples = new ArrayList<>();
         int exampleCount = 0;
@@ -192,6 +193,17 @@ public class BIOTester {
         String originalTag = classifier.discreteValue(target);
         String inferedTag = originalTag;
         View bioView = target.getTextAnnotation().getView("BIO");
+
+        if (a.discreteValue(t).equals("B") || b.discreteValue(t).equals("B") || c.discreteValue(t).equals("B")){
+            return "B";
+        }
+        if (a.discreteValue(t).equals("I") || b.discreteValue(t).equals("I") || c.discreteValue(t).equals("I")){
+            return "I";
+        }
+        else{
+            return "O";
+        }
+        /*
         //TODO: Inference on single "I"
         if (originalTag.equals("O")){
             if (target.getStartSpan() + 1 < bioView.getEndSpan()) {
@@ -212,6 +224,7 @@ public class BIOTester {
             }
         }
         return inferedTag;
+        */
     }
 
     public static String inference(Constituent c, Learner classifier){
@@ -222,7 +235,8 @@ public class BIOTester {
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
-
+        int b_double = 0;
+        int b_triple = 0;
         for (int i = 0; i < 5; i++){
 
             Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
@@ -248,9 +262,26 @@ public class BIOTester {
             System.out.println("Start evaluating fold " + i);
             String preBIOLevel1 = "";
             String preBIOLevel2 = "";
+            int b_count = 0;
+
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
+                if (classifier_nam.discreteValue(example).equals("B")){
+                    b_count ++;
+                }
+                if (classifier_nom.discreteValue(example).equals("B")){
+                    b_count ++;
+                }
+                if (classifier_pro.discreteValue(example).equals("B")){
+                    b_count ++;
+                }
+                if (b_count == 2){
+                    b_double ++;
+                }
+                if (b_count == 3){
+                    b_triple ++;
+                }
                 String mentionType = ((Constituent)example).getAttribute("EntityMentionType");
                 //String bioTag = joint_inference((Constituent)example, classifier_nam, classifier_nom, classifier_pro, classifier);
                 String bioTag = inference((Constituent)example, classifier);
@@ -279,8 +310,8 @@ public class BIOTester {
                         }
                         pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
                         pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
-                        //preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
-                        preBIOLevel1_dup = inference(pointerToken, classifier);
+                        preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
+                        //preBIOLevel1_dup = inference(pointerToken, classifier);
                         preBIOLevel2_dup = preBIOLevel1_dup;
                         wholeMention += pointerToken.toString() + " ";
                         //if (!joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier).equals(output.discreteValue(pointerToken))){
@@ -305,9 +336,9 @@ public class BIOTester {
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        //System.out.println();
+                        System.out.println();
                     }
                 }
             }
@@ -324,7 +355,8 @@ public class BIOTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
-
+        System.out.println("Double b: " + b_double);
+        System.out.println("Triple b: " + b_triple);
     }
 
     public static void main(String[] args){
