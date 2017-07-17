@@ -376,9 +376,9 @@ public class BIOTester {
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        //System.out.println();
+                        System.out.println();
                     }
                 }
             }
