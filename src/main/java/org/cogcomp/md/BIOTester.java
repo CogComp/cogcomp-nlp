@@ -1,6 +1,8 @@
 package org.cogcomp.md;
 
 import EDU.oswego.cs.dl.util.concurrent.FJTask;
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
@@ -9,9 +11,12 @@ import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import opennlp.tools.parser.Cons;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Xuanyu on 7/10/2017.
@@ -81,7 +86,7 @@ public class BIOTester {
         return classifier;
     }
 
-    public static bio_classifier_pro train_pro_classifier(Parser train_parser){
+    public static bio_classifier_pro train_pro_classifier(bio_classifier_nam classifier_nam, bio_classifier_nom classifier_nom, Parser train_parser){
         bio_classifier_pro classifier = new bio_classifier_pro();
         train_parser.reset();
         BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
@@ -228,6 +233,17 @@ public class BIOTester {
     }
 
     public static String inference(Constituent c, Learner classifier){
+        View posView = c.getTextAnnotation().getView(ViewNames.POS);
+        List<Constituent> posCons = posView.getConstituentsCoveringToken(c.getStartSpan());
+        if (posCons.size() > 0){
+            String posLabel = posCons.get(0).getLabel();
+            if (posLabel.contains("PRP") || posLabel.contains("WP")){
+                //return "B";
+            }
+        }
+        if (!BIOFeatureExtractor.isInPronounList(c).equals("")){
+            return "B";
+        }
         return classifier.discreteValue(c);
     }
 
@@ -237,9 +253,11 @@ public class BIOTester {
         int total_correct_mention = 0;
         int b_double = 0;
         int b_triple = 0;
+        Map<String, Integer> containProMap = new HashMap<>();
+        Map<String, Integer> hitProMap = new HashMap<>();
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "PRO");
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
             Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM");
@@ -249,11 +267,12 @@ public class BIOTester {
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
-            bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
+            bio_classifier_pro classifier_pro = train_pro_classifier(classifier_nam, classifier_nom, train_parser_pro);
 
 
             //bio_joint_classifier classifier = train_joint_classifier(classifier_nam, classifier_nom, classifier_pro, train_parser_all);
-            bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+            //bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+            bio_classifier_pro classifier = classifier_pro;
 
             int labeled_mention = 0;
             int predicted_mention = 0;
@@ -267,6 +286,26 @@ public class BIOTester {
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
+                //OPTIONAL-STARt
+                Constituent c = (Constituent)example;
+                if (!BIOFeatureExtractor.isInPronounList(c).equals("")){
+                    String proForm = BIOFeatureExtractor.isInPronounList(c);
+                    if (containProMap.containsKey(proForm)){
+                        containProMap.put(proForm, containProMap.get(proForm) + 1);
+                    }
+                    else{
+                        containProMap.put(proForm, 1);
+                    }
+                    if (c.getAttribute("BIO").equals("B")){
+                        if (hitProMap.containsKey(proForm)){
+                            hitProMap.put(proForm, hitProMap.get(proForm) + 1);
+                        }
+                        else{
+                            hitProMap.put(proForm, 1);
+                        }
+                    }
+                }
+                //OPTIONAL-END
                 if (classifier_nam.discreteValue(example).equals("B")){
                     b_count ++;
                 }
@@ -330,15 +369,16 @@ public class BIOTester {
                     }
                     else {
                         View bioView = curToken.getTextAnnotation().getView("BIO");
+                        //System.out.println(curToken.getTextAnnotation().getSentenceFromToken(curToken.getStartSpan()));
                         int printStart = startIdx;
                         if (correctTag.equals("B") && bioTag.equals("I")){
                             printStart --;
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        System.out.println();
+                        //System.out.println();
                     }
                 }
             }
@@ -357,6 +397,16 @@ public class BIOTester {
         System.out.println("F1: " + f);
         System.out.println("Double b: " + b_double);
         System.out.println("Triple b: " + b_triple);
+        /*
+        for (String key : containProMap.keySet()){
+            int conNum = containProMap.get(key);
+            int hitNum = 0;
+            if (hitProMap.containsKey(key)){
+                hitNum = hitProMap.get(key);
+            }
+            System.out.println(key + ": " + hitNum + "/" + conNum + " = " + (double)hitNum/(double)conNum);
+        }
+        */
     }
 
     public static void main(String[] args){

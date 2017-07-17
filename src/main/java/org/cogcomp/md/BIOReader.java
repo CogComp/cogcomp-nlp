@@ -167,12 +167,22 @@ public class BIOReader implements Parser
                 }
                 ta.addView("BIO", bioView);
                 for (Constituent c : bioView){
+                    //if (BIOFeatureExtractor.isInPronounList(c)){
+                        //if (c.getAttribute("BIO").equals("B") == false){
+                        if (false){
+                            System.out.println(c.getTextAnnotation().getId());
+                            System.out.println(c.getTextAnnotation().getSentenceFromToken(c.getStartSpan()));
+                            System.out.println(c.toString());
+                            System.out.println(c.getAttribute("BIO"));
+                            System.out.println();
+                        }
+                    //}
                     ret.add(c);
                 }
             }
         }
         else{
-            System.out.println("No defult actions for unknown mode");
+            System.out.println("No default actions for unknown mode");
         }
         return ret;
     }

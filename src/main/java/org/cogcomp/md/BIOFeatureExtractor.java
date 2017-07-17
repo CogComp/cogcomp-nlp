@@ -132,7 +132,7 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
-    public static boolean isInPronounList(Constituent c){
+    public static String isInPronounList(Constituent c){
         String form = c.toString().toLowerCase();
         List<String> pronouns = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("data/Pronouns"))) {
@@ -144,6 +144,11 @@ public class BIOFeatureExtractor {
         catch (Exception e){
             e.printStackTrace();
         }
-        return pronouns.contains(form);
+        if (pronouns.contains(form)){
+            return form;
+        }
+        else{
+            return "";
+        }
     }
 }
