@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.cogcomp</groupId>
             <artifactId>cogcomp-datastore</artifactId>
-            <version>1.9.7</version>
+            <version>1.9.8</version>
         </dependency>
 
         <!--Daniel: the resources commented out because we load them programmatically now. -->

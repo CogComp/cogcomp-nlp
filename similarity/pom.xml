@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.cogcomp</groupId>
 			<artifactId>cogcomp-datastore</artifactId>
-			<version>1.9.7</version>
+			<version>1.9.8</version>
 		</dependency>
 		<dependency>
 			<groupId>edu.illinois.cs.cogcomp</groupId>
