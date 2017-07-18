@@ -227,82 +227,46 @@ public class FlatGazetteers implements Gazetteers {
         String expression = c.toString();
         String ret = "";
         View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
-        for (int startIdx = -4; startIdx < 0; startIdx++){
-            String combinedExpression = "";
-            boolean integrity = true;
-            for (int pointer = startIdx; pointer <= 0; pointer ++){
-                int curTokenIdx = c.getStartSpan() + pointer;
-                if (curTokenIdx < 0){
-                    integrity = false;
-                    break;
+        for (int startIdx = -4; startIdx <= 0; startIdx ++){
+            for (int len = Math.abs(startIdx); len <= 4; len ++) {
+                String combinedExpression = "";
+                boolean integrity = true;
+                for (int pointer = startIdx; pointer <= startIdx + len; pointer++) {
+                    int curTokenIdx = c.getStartSpan() + pointer;
+                    if (curTokenIdx < 0 || curTokenIdx >= bioView.getEndSpan()) {
+                        integrity = false;
+                        break;
+                    }
+                    String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
+                    combinedExpression += pointerString + " ";
                 }
-                String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
-                combinedExpression += pointerString + " ";
-            }
-            if (combinedExpression.endsWith(" ")){
-                combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
-            }
-            if (integrity){
-                for (int i = 0; i < dictionaries.size(); i++){
-                    if (dictionaries.get(i).contains(combinedExpression)) {
-                        String fullName = dictNames.get(i);
-                        String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
-                        ret += shortName + ",";
+                if (combinedExpression.endsWith(" ")) {
+                    combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
+                }
+                if (integrity) {
+                    for (int i = 0; i < dictionaries.size(); i++) {
+                        if (dictionaries.get(i).contains(combinedExpression)) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                            if (startIdx == 0) {
+                                ret += "B-" + shortName + ",";
+                            } else {
+                                ret += "L-" + shortName + ",";
+                            }
+                        }
+                    }
+                    for (int i = 0; i < dictionariesIgnoreCase.size(); i++) {
+                        if (dictionariesIgnoreCase.get(i).contains(combinedExpression)) {
+                            String fullName = dictNames.get(i);
+                            String shortName = fullName.split("/")[fullName.split("/").length - 1] + "(IC)";
+                            if (startIdx == 0) {
+                                ret += "B-" + shortName + ",";
+                            } else {
+                                ret += "L-" + shortName + ",";
+                            }
+                        }
                     }
                 }
-                for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
-                    if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
-                        String fullName = dictNames.get(i);
-                        String shortName = "I-" + fullName.split("/")[fullName.split("/").length - 1];
-                        ret += shortName + "(IC),";
-                    }
-                }
-            }
-        }
-        for (int endIdx = 1; endIdx < 4;endIdx++){
-            String combinedExpression = "";
-            boolean integrity = true;
-            for (int pointer = 0; pointer <= endIdx; pointer ++){
-                int curTokenIdx = c.getStartSpan() + pointer;
-                if (curTokenIdx >= bioView.getEndSpan()){
-                    integrity = false;
-                    break;
-                }
-                String pointerString = bioView.getConstituentsCoveringToken(curTokenIdx).get(0).toString();
-                combinedExpression += pointerString + " ";
-            }
-            if (combinedExpression.endsWith(" ")){
-                combinedExpression = combinedExpression.substring(0, combinedExpression.length() - 1);
-            }
-            if (integrity){
-                for (int i = 0; i < dictionaries.size(); i++){
-                    if (dictionaries.get(i).contains(combinedExpression)) {
-                        String fullName = dictNames.get(i);
-                        String shortName = "B-" + fullName.split("/")[fullName.split("/").length - 1];
-                        ret += shortName + ",";
-                    }
-                }
-                for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
-                    if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
-                        String fullName = dictNames.get(i);
-                        String shortName = "B-" + fullName.split("/")[fullName.split("/").length - 1];
-                        ret += shortName + "(IC),";
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < dictionaries.size(); i++){
-            if (dictionaries.get(i).contains(expression)){
-                String fullName = dictNames.get(i);
-                String shortName = "U-" + fullName.split("/")[fullName.split("/").length - 1];
-                ret += shortName + ",";
-            }
-        }
-        for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
-            if (dictionariesIgnoreCase.get(i).contains(expression.toLowerCase())){
-                String fullName = dictNames.get(i);
-                String shortName = "U-" + fullName.split("/")[fullName.split("/").length - 1];
-                ret += shortName + "(IC),";
             }
         }
         return ret;

@@ -1,7 +1,5 @@
 package org.cogcomp.md;
 
-import EDU.oswego.cs.dl.util.concurrent.FJTask;
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
@@ -11,7 +9,6 @@ import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
-import opennlp.tools.parser.Cons;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -242,7 +239,7 @@ public class BIOTester {
             }
         }
         if (!BIOFeatureExtractor.isInPronounList(c).equals("")){
-            return "B";
+            //return "B";
         }
         return classifier.discreteValue(c);
     }
@@ -257,12 +254,12 @@ public class BIOTester {
         Map<String, Integer> hitProMap = new HashMap<>();
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "PRO");
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
             Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM");
             Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05", "NOM");
-            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "PRO");
+            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "SPE_PRO");
             Parser train_parser_all = new BIOReader(getPath("train", i), "ACE05", "ALL");
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
@@ -271,9 +268,9 @@ public class BIOTester {
 
 
             //bio_joint_classifier classifier = train_joint_classifier(classifier_nam, classifier_nom, classifier_pro, train_parser_all);
-            //bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
-            bio_classifier_pro classifier = classifier_pro;
-
+            bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+            //bio_classifier_pro classifier = classifier_pro;
+            //bio_classifier_nom classifier = classifier_nom;
             int labeled_mention = 0;
             int predicted_mention = 0;
             int correct_mention = 0;

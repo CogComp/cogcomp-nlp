@@ -132,7 +132,11 @@ public class BIOReader implements Parser
                 }
                 for (Constituent c : mentionView.getConstituents()){
                     if (!_type.equals("ALL")) {
-                        if (!c.getAttribute("EntityMentionType").equals(_type)) {
+                        String excludeType = _type;
+                        if (_type.startsWith("SPE_")){
+                            excludeType = _type.substring(4);
+                        }
+                        if (!c.getAttribute("EntityMentionType").equals(excludeType)) {
                             continue;
                         }
                     }
@@ -140,6 +144,16 @@ public class BIOReader implements Parser
                     token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
                     for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
                         token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                    }
+                }
+                if (_type.equals("SPE_PRO")){
+                    for (Constituent c : ta.getView(ViewNames.POS)){
+                        String posLabel = c.getLabel();
+                        if (posLabel.contains("PRP") || posLabel.contains("WP")){
+                            if (c.getEndSpan() - 1 == c.getStartSpan()){
+                                token2tags[c.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                            }
+                        }
                     }
                 }
                 for (int i = 0; i < token2tags.length; i++){
