@@ -19,6 +19,14 @@ import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * for test of
+ * mapTransformedTextAnnotationToSource(TextAnnotation ta,
+ StringTransformation st)
+ *
+ * see corpusreaders test:
+ * edu.illinois.cs.cogcomp.nlp.corpusreaders.EREReaderTest
+ */
 public class TextAnnotationUtilitiesTest {
 
     /**
@@ -70,4 +78,6 @@ public class TextAnnotationUtilitiesTest {
         String mappedParse = parseView.toString().trim();
         assertEquals(parse, mappedParse);
     }
+
+
 }

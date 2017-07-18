@@ -349,6 +349,9 @@ public class TextAnnotationUtilities {
                 updatedTokenCharOffsets, ta.getTokens(), updatedSentenceEndPositions);
 
         for (String vuName : ta.getAvailableViews()) {
+
+            if (ViewNames.TOKENS.equals(vuName) || ViewNames.SENTENCE.equals(vuName))
+                continue;
             View vu = ta.getView(vuName);
 
             View newVu = null;

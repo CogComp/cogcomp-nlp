@@ -13,13 +13,13 @@ setting the configuration parameter "modelName" to the value under "Model classi
 own NerOntonotesConfigurator class). 
 
 
-| Corpus | F1 on held-out data | Model classifier | Model version |
-| :--- | :--- | :--- | :--- |
-| CoNLL (trained on CoNLL only)| 90.88 | CoNLL | 3.1 |
-| CoNLL (trained on CoNLL + enron) | 91.08 | CoNLL_enron | 3.3 |
-| OntoNotes | 84.88 | OntoNotes | 3.3 |
-| Enron email | 77.68 | ConLL_enron | 3.3 |
-| MUC | 88.37 | CoNLL_enron | 3.3 |
+| Corpus | F1 on held-out data | Model classifier | Model version | View Name |
+| :--- | :--- | :--- | :--- | :--- |
+| CoNLL (trained on CoNLL only)| 90.88 | CoNLL | 3.1 | ViewNames.NER_CONLL |
+| CoNLL (trained on CoNLL + enron) | 91.08 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
+| OntoNotes | 84.88 | OntoNotes | 3.3 | ViewNames.NER_ONTONOTES |
+| Enron email | 77.68 | ConLL_enron | 3.3 | ViewNames.NER_CONLL |
+| MUC | 88.37 | CoNLL_enron | 3.3 | ViewNames.NER_CONLL |
 
 
 

@@ -9,6 +9,7 @@ package edu.illinois.cs.cogcomp.core.utilities;
 
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import edu.illinois.cs.cogcomp.core.utilities.XmlDocumentProcessor;
 import org.junit.Test;
@@ -113,6 +114,7 @@ cuba
 
         IntPair origYouOffsets = st.getOriginalOffsets(doStart, doEnd);
         assertEquals("do?", ORIG_TEXT.substring(origYouOffsets.getFirst(), origYouOffsets.getSecond()));
+
     }
 
 }
