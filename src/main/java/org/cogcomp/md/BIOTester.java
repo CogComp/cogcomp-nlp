@@ -2,7 +2,9 @@ package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
@@ -248,10 +250,7 @@ public class BIOTester {
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
-        int b_double = 0;
-        int b_triple = 0;
-        Map<String, Integer> containProMap = new HashMap<>();
-        Map<String, Integer> hitProMap = new HashMap<>();
+
         for (int i = 0; i < 5; i++){
 
             Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
@@ -259,7 +258,7 @@ public class BIOTester {
             System.out.println("Start training fold " + i);
             Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM");
             Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05", "NOM");
-            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "SPE_PRO");
+            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "PRO");
             Parser train_parser_all = new BIOReader(getPath("train", i), "ACE05", "ALL");
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
@@ -278,52 +277,18 @@ public class BIOTester {
             System.out.println("Start evaluating fold " + i);
             String preBIOLevel1 = "";
             String preBIOLevel2 = "";
-            int b_count = 0;
 
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-                //OPTIONAL-STARt
-                Constituent c = (Constituent)example;
-                if (!BIOFeatureExtractor.isInPronounList(c).equals("")){
-                    String proForm = BIOFeatureExtractor.isInPronounList(c);
-                    if (containProMap.containsKey(proForm)){
-                        containProMap.put(proForm, containProMap.get(proForm) + 1);
-                    }
-                    else{
-                        containProMap.put(proForm, 1);
-                    }
-                    if (c.getAttribute("BIO").equals("B")){
-                        if (hitProMap.containsKey(proForm)){
-                            hitProMap.put(proForm, hitProMap.get(proForm) + 1);
-                        }
-                        else{
-                            hitProMap.put(proForm, 1);
-                        }
-                    }
-                }
-                //OPTIONAL-END
-                if (classifier_nam.discreteValue(example).equals("B")){
-                    b_count ++;
-                }
-                if (classifier_nom.discreteValue(example).equals("B")){
-                    b_count ++;
-                }
-                if (classifier_pro.discreteValue(example).equals("B")){
-                    b_count ++;
-                }
-                if (b_count == 2){
-                    b_double ++;
-                }
-                if (b_count == 3){
-                    b_triple ++;
-                }
+
                 String mentionType = ((Constituent)example).getAttribute("EntityMentionType");
                 //String bioTag = joint_inference((Constituent)example, classifier_nam, classifier_nom, classifier_pro, classifier);
                 String bioTag = inference((Constituent)example, classifier);
 
-                preBIOLevel1 = bioTag;
                 preBIOLevel2 = preBIOLevel1;
+                preBIOLevel1 = bioTag;
+
                 if (bioTag.equals("B")){
                     predicted_mention ++;
                 }
@@ -346,9 +311,9 @@ public class BIOTester {
                         }
                         pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
                         pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
-                        preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
-                        //preBIOLevel1_dup = inference(pointerToken, classifier);
+                        //preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
                         preBIOLevel2_dup = preBIOLevel1_dup;
+                        preBIOLevel1_dup = inference(pointerToken, classifier);
                         wholeMention += pointerToken.toString() + " ";
                         //if (!joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier).equals(output.discreteValue(pointerToken))){
                         if (!inference(pointerToken, classifier).equals(output.discreteValue(pointerToken))){
@@ -373,9 +338,9 @@ public class BIOTester {
                         }
                         for (int k = printStart; k < endIdx; k++){
                             Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
                         }
-                        System.out.println();
+                        //System.out.println();
                     }
                 }
             }
@@ -392,21 +357,79 @@ public class BIOTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
-        System.out.println("Double b: " + b_double);
-        System.out.println("Triple b: " + b_triple);
-        /*
-        for (String key : containProMap.keySet()){
-            int conNum = containProMap.get(key);
-            int hitNum = 0;
-            if (hitProMap.containsKey(key)){
-                hitNum = hitProMap.get(key);
+    }
+
+    public static void test_ere(){
+        int total_labeled_mention = 0;
+        int total_predicted_mention = 0;
+        int total_correct_mention = 0;
+
+        Parser test_parser = new BIOReader("data/ere/data", "ERE", "ALL");
+        Parser train_parser = new BIOReader(getPath("train", 0), "ACE05", "ALL");
+        bio_label output = new bio_label();
+
+        bio_classifier_nam classifier = train_nam_classifier(train_parser);
+        String preBIOLevel1 = "";
+        String preBIOLevel2 = "";
+        for (Object example = test_parser.next(); example != null; example = test_parser.next()){
+            ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
+            ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
+            String predictedTag = inference((Constituent)example, classifier);
+            String goldTag = output.discreteValue(example);
+            preBIOLevel2 = preBIOLevel1;
+            preBIOLevel1 = predictedTag;
+            if (goldTag.equals("B")){
+                total_labeled_mention ++;
             }
-            System.out.println(key + ": " + hitNum + "/" + conNum + " = " + (double)hitNum/(double)conNum);
+            if (predictedTag.equals("B")){
+                total_predicted_mention ++;
+            }
+            TextAnnotation ta = ((Constituent) example).getTextAnnotation();
+            View bioView = ta.getView("BIO");
+            int curIdx = ((Constituent) example).getStartSpan();
+            if (goldTag.equals("B") && predictedTag.equals("B")){
+                boolean match = true;
+                curIdx ++;
+                if (curIdx < bioView.getEndSpan()) {
+                    Constituent pointerToken = bioView.getConstituentsCoveringToken(curIdx).get(0);
+                    String preLevel1Dup = predictedTag;
+                    String preLevel2Dup = preBIOLevel2;
+                    while (!pointerToken.getAttribute("BIO").equals("O")){
+                        if (preLevel1Dup == null || preLevel2Dup == null){
+                            System.out.println("NULL STRING");
+                        }
+                        pointerToken.addAttribute("preBIOLevel1", preLevel1Dup);
+                        pointerToken.addAttribute("preBIOLevel2", preLevel2Dup);
+                        String curPredictedTag = inference(pointerToken, classifier);
+                        preLevel2Dup = preLevel1Dup;
+                        preLevel1Dup = curPredictedTag;
+                        if (!pointerToken.getAttribute("BIO").equals(curPredictedTag)){
+                            match = false;
+                        }
+                        curIdx ++;
+                        if (curIdx >= bioView.getEndSpan()){
+                            break;
+                        }
+                        pointerToken = bioView.getConstituentsCoveringToken(curIdx).get(0);
+                    }
+                }
+                if (match){
+                    total_correct_mention ++;
+                }
+            }
         }
-        */
+        System.out.println("Total Labeled Mention: " + total_labeled_mention);
+        System.out.println("Total Predicted Mention: " + total_predicted_mention);
+        System.out.println("Total Correct Mention: " + total_correct_mention);
+        double p = (double)total_correct_mention / (double)total_predicted_mention;
+        double r = (double)total_correct_mention / (double)total_labeled_mention;
+        double f = 2 * p * r / (p + r);
+        System.out.println("Precision: " + p);
+        System.out.println("Recall: " + r);
+        System.out.println("F1: " + f);
     }
 
     public static void main(String[] args){
-        test_cv();
+        test_ere();
     }
 }

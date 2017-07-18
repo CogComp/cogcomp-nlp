@@ -126,7 +126,7 @@ discrete% preBIOLevel2 (Constituent c) <- {
             if (c.getAttribute("isTraining").equals("true")){
                 sense "-2" : cPrev.getAttribute("BIO");
             }
-            else if (!c.getAttribute("preBIOLevel1").equals("")){
+            else if (!c.getAttribute("preBIOLevel2").equals("")){
                 sense "-2" : c.getAttribute("preBIOLevel2");
             }
         }
@@ -139,7 +139,7 @@ discrete{false, true}% isInProList (Constituent c) <- {
 
 discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")

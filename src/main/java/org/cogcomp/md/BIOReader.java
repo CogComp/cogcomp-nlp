@@ -121,82 +121,80 @@ public class BIOReader implements Parser
         }
         Gazetteers gazetteers = GazetteersFactory.get();
         BrownClusters brownClusters = BrownClusters.get();
+        String mentionViewName = "";
         if (_mode.equals("ACE05")){
-            for (TextAnnotation ta : taList){
-                View tokenView = ta.getView(ViewNames.TOKENS);
-                View mentionView = ta.getView(ViewNames.MENTION_ACE);
-                View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
-                String[] token2tags = new String[tokenView.getConstituents().size()];
-                for (int i = 0; i < token2tags.length; i++){
-                    token2tags[i] = "O";
-                }
-                for (Constituent c : mentionView.getConstituents()){
-                    if (!_type.equals("ALL")) {
-                        String excludeType = _type;
-                        if (_type.startsWith("SPE_")){
-                            excludeType = _type.substring(4);
-                        }
-                        if (!c.getAttribute("EntityMentionType").equals(excludeType)) {
-                            continue;
-                        }
-                    }
-                    Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
-                    token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
-                    for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
-                        token2tags[i] = "I," + c.getAttribute("EntityMentionType");
-                    }
-                }
-                if (_type.equals("SPE_PRO")){
-                    for (Constituent c : ta.getView(ViewNames.POS)){
-                        String posLabel = c.getLabel();
-                        if (posLabel.contains("PRP") || posLabel.contains("WP")){
-                            if (c.getEndSpan() - 1 == c.getStartSpan()){
-                                token2tags[c.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
-                            }
-                        }
-                    }
-                }
-                for (int i = 0; i < token2tags.length; i++){
-                    Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
-                    Constituent newToken = curToken.cloneForNewView("BIO");
-                    if (token2tags[i].equals("O")) {
-                        newToken.addAttribute("BIO", token2tags[i]);
-                    }
-                    else{
-                        String[] group = token2tags[i].split(",");
-                        String tag = group[0];
-                        String eml = group[1];
-                        newToken.addAttribute("BIO", tag);
-                        newToken.addAttribute("EntityMentionType", eml);
-                    }
-                    newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
-                    newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
-                    if (_path.contains("train")){
-                        newToken.addAttribute("isTraining", "true");
-                    }
-                    else{
-                        newToken.addAttribute("isTraining", "false");
-                    }
-                    bioView.addConstituent(newToken);
-                }
-                ta.addView("BIO", bioView);
-                for (Constituent c : bioView){
-                    //if (BIOFeatureExtractor.isInPronounList(c)){
-                        //if (c.getAttribute("BIO").equals("B") == false){
-                        if (false){
-                            System.out.println(c.getTextAnnotation().getId());
-                            System.out.println(c.getTextAnnotation().getSentenceFromToken(c.getStartSpan()));
-                            System.out.println(c.toString());
-                            System.out.println(c.getAttribute("BIO"));
-                            System.out.println();
-                        }
-                    //}
-                    ret.add(c);
-                }
-            }
+            mentionViewName = ViewNames.MENTION_ACE;
+        }
+        else if (_mode.equals("ERE")){
+            mentionViewName = ViewNames.MENTION_ERE;
         }
         else{
-            System.out.println("No default actions for unknown mode");
+            System.out.println("No actions for undefined mode");
+        }
+        for (TextAnnotation ta : taList){
+            View tokenView = ta.getView(ViewNames.TOKENS);
+            View mentionView = ta.getView(mentionViewName);
+            View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
+            String[] token2tags = new String[tokenView.getConstituents().size()];
+            for (int i = 0; i < token2tags.length; i++){
+                token2tags[i] = "O";
+            }
+            for (Constituent c : mentionView.getConstituents()){
+                if (!_type.equals("ALL")) {
+                    String excludeType = _type;
+                    if (_type.startsWith("SPE_")){
+                        excludeType = _type.substring(4);
+                    }
+                    if (!c.getAttribute("EntityMentionType").equals(excludeType)) {
+                        continue;
+                    }
+                }
+                Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
+                if (cHead == null){
+                    continue;
+                }
+                token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
+                    token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                }
+            }
+            if (_type.equals("SPE_PRO")){
+                for (Constituent c : ta.getView(ViewNames.POS)){
+                    String posLabel = c.getLabel();
+                    if (posLabel.contains("PRP") || posLabel.contains("WP")){
+                        if (c.getEndSpan() - 1 == c.getStartSpan()){
+                            token2tags[c.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < token2tags.length; i++){
+                Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
+                Constituent newToken = curToken.cloneForNewView("BIO");
+                if (token2tags[i].equals("O")) {
+                    newToken.addAttribute("BIO", token2tags[i]);
+                }
+                else{
+                    String[] group = token2tags[i].split(",");
+                    String tag = group[0];
+                    String eml = group[1];
+                    newToken.addAttribute("BIO", tag);
+                    newToken.addAttribute("EntityMentionType", eml);
+                }
+                newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
+                newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
+                if (_path.contains("train")){
+                    newToken.addAttribute("isTraining", "true");
+                }
+                else{
+                    newToken.addAttribute("isTraining", "false");
+                }
+                bioView.addConstituent(newToken);
+            }
+            ta.addView("BIO", bioView);
+            for (Constituent c : bioView){
+                ret.add(c);
+            }
         }
         return ret;
     }
