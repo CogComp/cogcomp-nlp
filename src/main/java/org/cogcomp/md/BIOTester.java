@@ -364,11 +364,11 @@ public class BIOTester {
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE", "ALL");
-        Parser train_parser = new BIOReader(getPath("train", 0), "ACE05", "ALL");
+        Parser test_parser = new BIOReader("data/ere/data", "ERE", "NOM");
+        Parser train_parser = new BIOReader(getPath("train", 0), "ACE05", "NOM");
         bio_label output = new bio_label();
 
-        bio_classifier_nam classifier = train_nam_classifier(train_parser);
+        bio_classifier_nom classifier = train_nom_classifier(train_parser);
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
@@ -387,7 +387,13 @@ public class BIOTester {
             TextAnnotation ta = ((Constituent) example).getTextAnnotation();
             View bioView = ta.getView("BIO");
             int curIdx = ((Constituent) example).getStartSpan();
+            List<String> words = new ArrayList<>();
+            List<String> gTags = new ArrayList<>();
+            List<String> pTags = new ArrayList<>();
             if (goldTag.equals("B") && predictedTag.equals("B")){
+                words.add(((Constituent)example).toString());
+                gTags.add("B");
+                pTags.add("B");
                 boolean match = true;
                 curIdx ++;
                 if (curIdx < bioView.getEndSpan()) {
@@ -395,15 +401,15 @@ public class BIOTester {
                     String preLevel1Dup = predictedTag;
                     String preLevel2Dup = preBIOLevel2;
                     while (!pointerToken.getAttribute("BIO").equals("O")){
-                        if (preLevel1Dup == null || preLevel2Dup == null){
-                            System.out.println("NULL STRING");
-                        }
                         pointerToken.addAttribute("preBIOLevel1", preLevel1Dup);
                         pointerToken.addAttribute("preBIOLevel2", preLevel2Dup);
                         String curPredictedTag = inference(pointerToken, classifier);
+                        words.add(pointerToken.toString());
+                        gTags.add(output.discreteValue(pointerToken));
+                        pTags.add(curPredictedTag);
                         preLevel2Dup = preLevel1Dup;
                         preLevel1Dup = curPredictedTag;
-                        if (!pointerToken.getAttribute("BIO").equals(curPredictedTag)){
+                        if (!output.discreteValue(pointerToken).equals(curPredictedTag)){
                             match = false;
                         }
                         curIdx ++;
@@ -415,6 +421,12 @@ public class BIOTester {
                 }
                 if (match){
                     total_correct_mention ++;
+                }
+                else{
+                    for (int i = 0; i < words.size(); i++){
+                        System.out.print(words.get(i) + " " + gTags.get(i) + " " + pTags.get(i) + ", ");
+                    }
+                    System.out.println();
                 }
             }
         }
@@ -430,6 +442,6 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        test_ere();
+        test_cv();
     }
 }
