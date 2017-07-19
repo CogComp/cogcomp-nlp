@@ -631,7 +631,7 @@ public class ERENerReader extends EREDocumentReader {
         if (mnl.getLength() > 0) {
 
             Node headNode = mnl.item(0);
-            nnMap = mentionNode.getAttributes();
+            nnMap = headNode.getAttributes();
             headForm = headNode.getNodeValue();
             int headStart = Integer.parseInt(nnMap.getNamedItem(OFFSET).getNodeValue());
             int headLength = Integer.parseInt(nnMap.getNamedItem(LENGTH).getNodeValue());
