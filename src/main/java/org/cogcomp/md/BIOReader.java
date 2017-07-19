@@ -34,15 +34,17 @@ public class BIOReader implements Parser
     private String _path;
     private String _mode;
     private String _type;
+    private boolean _isBIO;
     private List<Annotator> annotators;
 
     public String id;
 
 
-    public BIOReader(String path, String mode, String type){
+    public BIOReader(String path, String mode, String type, Boolean isBIO){
         _path = path;
         _mode = mode;
         _type = type;
+        _isBIO = isBIO;
         String[] path_group = path.split("/");
         String group = path_group[path_group.length - 1];
         id = group + "_" + type;
@@ -154,10 +156,25 @@ public class BIOReader implements Parser
                     continue;
                 }
 
-                token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
-                for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
-                    token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                if (_isBIO) {
+                    token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                    for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
+                        token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                    }
                 }
+                else {
+                    if (cHead.getStartSpan()+1 == cHead.getEndSpan()) {
+                        token2tags[cHead.getStartSpan()] = "U," + c.getAttribute("EntityMentionType");
+                    }
+                    else {
+                        token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                        for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan() - 1; i++) {
+                            token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                        }
+                        token2tags[cHead.getEndSpan() - 1] = "L," + c.getAttribute("EntityMentionType");
+                    }
+                }
+
             }
             if (_type.equals("SPE_PRO")){
                 for (Constituent c : ta.getView(ViewNames.POS)){
