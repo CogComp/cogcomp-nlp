@@ -138,6 +138,10 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
                 extentConstituent.getAttribute("EntityHeadEndCharOffset") == null){
             return null;
         }
+        if (extentConstituent.getAttribute("EntityHeadStartCharOffset") == "HEAD" ||
+                extentConstituent.getAttribute("EntityHeadEndCharOffset") == "HEAD"){
+            return extentConstituent;
+        }
         int startCharOffset =
                 Integer.parseInt(extentConstituent
                         .getAttribute(ACEReader.EntityHeadStartCharOffset));
