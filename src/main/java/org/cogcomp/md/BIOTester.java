@@ -586,25 +586,33 @@ public class BIOTester {
                         }
                         pointerToken = bioView.getConstituentsCoveringToken(curIdx).get(0);
                     }
-                    if (inference_with_type(classifier_nam, classifier_nom, classifier_pro, pointerToken).getFirst().equals("I")){
+                    pointerToken.addAttribute("preBIOLevel1", preLevel1Dup);
+                    pointerToken.addAttribute("preBIOLevel2", preLevel2Dup);
+                    Pair<String, String> curPrediction = inference_with_type(classifier_nam, classifier_nom, classifier_pro, pointerToken);
+                    if (curPrediction.getFirst().equals("I")){
+                        words.add(pointerToken.toString());
+                        pTags.add(curPrediction.getFirst());
+                        gTags.add(output.discreteValue(pointerToken));
+                        pTypes.add(curPrediction.getSecond());
+                        gTypes.add(pointerToken.getAttribute("EntityMentionType"));
                         match = false;
                     }
                 }
-                if (match && type_match){
+                if (match){
                     total_correct_mention ++;
                 }
                 else{
                     for (int i = 0; i < words.size(); i++){
-                        //System.out.print(words.get(i) + " " + gTags.get(i) + " " + pTags.get(i) + ", ");
+                        System.out.print(words.get(i) + " " + gTags.get(i) + " " + pTags.get(i) + ", ");
                     }
-                    //System.out.println();
+                    System.out.println();
                 }
 
                 if (match && !type_match){
                     for (int i = 0; i < words.size(); i++){
-                        System.out.print(words.get(i) + " (" + gTags.get(i) + " " + pTags.get(i) + ")" + " (" + gTypes.get(i) + " " + pTypes.get(i) + "), ");
+                        //System.out.print(words.get(i) + " (" + gTags.get(i) + " " + pTags.get(i) + ")" + " (" + gTypes.get(i) + " " + pTypes.get(i) + "), ");
                     }
-                    System.out.println();
+                    //System.out.println();
                 }
             }
         }
