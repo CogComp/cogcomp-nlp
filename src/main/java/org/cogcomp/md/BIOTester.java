@@ -1,5 +1,6 @@
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
@@ -359,22 +360,75 @@ public class BIOTester {
         System.out.println("F1: " + f);
     }
 
+    public static Pair<String, String> inference_with_type(bio_classifier_nam classifier_nam, bio_classifier_nom classifier_nom, bio_classifier_pro classifier_pro, Constituent c){
+        String[] tags = new String[3];
+        tags[0] = classifier_nam.discreteValue(c);
+        tags[1] = classifier_nom.discreteValue(c);
+        tags[2] = classifier_pro.discreteValue(c);
+        int b_count = 0;
+        int i_count = 0;
+        int o_count = 0;
+        for (String s : tags){
+            if (s.equals("B")){
+                b_count ++;
+            }
+            if (s.equals("I")){
+                i_count ++;
+            }
+            if (s.equals("O")){
+                o_count ++;
+            }
+        }
+        if (b_count == 1 && o_count == 2){
+            if (tags[0].equals("B")){
+                return new Pair<>("B", "NAM");
+            }
+            else if (tags[1].equals("B")){
+                return new Pair<>("B", "NOM");
+            }
+            else {
+                return new Pair<>("B", "PRO");
+            }
+        }
+        if (i_count == 1 && o_count == 2){
+            if (tags[0].equals("I")){
+                return new Pair<>("I", "NAM");
+            }
+            else if (tags[1].equals("B")){
+                return new Pair<>("I", "NOM");
+            }
+            else {
+                return new Pair<>("I", "PRO");
+            }
+        }
+        if (b_count > 1 || i_count > 1 || (b_count >= 1 && i_count >= 1)){
+            System.out.println("No defined action to handle this case");
+        }
+        return new Pair<>("O", "NA");
+    }
+
     public static void test_ere(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
         Parser test_parser = new BIOReader("data/ere/data", "ERE", "NOM");
-        Parser train_parser = new BIOReader(getPath("train", 0), "ACE05", "NOM");
+        Parser train_parser_nam = new BIOReader(getPath("train", 0), "ACE05", "NAM");
+        Parser train_parser_nom = new BIOReader(getPath("train", 0), "ACE05", "NOM");
+        Parser train_parser_pro = new BIOReader(getPath("train", 0), "ACE05", "PRO");
         bio_label output = new bio_label();
 
-        bio_classifier_nom classifier = train_nom_classifier(train_parser);
+        bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
+        bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
+        bio_classifier_pro classifier_pro = train_pro_classifier(null, null, train_parser_pro);
+
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-            String predictedTag = inference((Constituent)example, classifier);
+            Pair<String, String> prediction = inference_with_type(classifier_nam, classifier_nom, classifier_pro, (Constituent)example);
+            String predictedTag = prediction.getFirst();
             String goldTag = output.discreteValue(example);
             preBIOLevel2 = preBIOLevel1;
             preBIOLevel1 = predictedTag;
@@ -403,7 +457,8 @@ public class BIOTester {
                     while (!pointerToken.getAttribute("BIO").equals("O")){
                         pointerToken.addAttribute("preBIOLevel1", preLevel1Dup);
                         pointerToken.addAttribute("preBIOLevel2", preLevel2Dup);
-                        String curPredictedTag = inference(pointerToken, classifier);
+                        Pair<String, String> curPrediction = inference_with_type(classifier_nam, classifier_nom, classifier_pro, pointerToken);
+                        String curPredictedTag = curPrediction.getFirst();
                         words.add(pointerToken.toString());
                         gTags.add(output.discreteValue(pointerToken));
                         pTags.add(curPredictedTag);
