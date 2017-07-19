@@ -3,9 +3,7 @@ package org.cogcomp.md;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
-import edu.illinois.cs.cogcomp.depparse.io.CONLLReader;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
@@ -15,9 +13,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Xuanyu on 7/10/2017.
@@ -248,20 +244,63 @@ public class BIOTester {
         return classifier.discreteValue(c);
     }
 
+    public static Constituent getConstituent(Constituent curToken, Learner classifier, boolean isGold) {
+        Constituent pointerToken = curToken;
+        int startIdx = pointerToken.getStartSpan();
+        int endIdx = startIdx + 1;
+        String preBIOLevel1_dup = curToken.getAttribute("preBIOLevel1");
+        String preBIOLevel2_dup = curToken.getAttribute("preBIOLevel2");
+        while (true) {
+            pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+            pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+            if (isGold){
+                if (pointerToken.getAttribute("BIO").equals("O") || pointerToken.getAttribute("BIO").equals("U")) {
+                    break;
+                }
+                if (endIdx - 1 > startIdx){
+                    if (pointerToken.getAttribute("BIO").equals("B")){
+                        break;
+                    }
+                }
+            }
+            else {
+                if (inference(pointerToken, classifier).equals("O") || inference(pointerToken, classifier).equals("U")) {
+                    break;
+                }
+                if (endIdx - 1 > startIdx){
+                    if (inference(pointerToken, classifier).equals("B")){
+                        break;
+                    }
+                }
+                preBIOLevel2_dup = preBIOLevel1_dup;
+                preBIOLevel1_dup = inference(pointerToken, classifier);
+            }
+            if (pointerToken.getStartSpan() == pointerToken.getTextAnnotation().getSentenceFromToken(pointerToken.getStartSpan()).getEndSpan() - 1){
+                break;
+            }
+            pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
+            endIdx = pointerToken.getStartSpan() + 1;
+        }
+        endIdx --;
+        Constituent wholeMention = new Constituent(curToken.getLabel(), 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
+        return wholeMention;
+    }
+
     public static void test_cv(){
+        boolean isBIO = true;
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL");
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL", isBIO);
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
-            Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM");
-            Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05", "NOM");
-            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "PRO");
-            Parser train_parser_all = new BIOReader(getPath("train", i), "ACE05", "ALL");
+            Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM", isBIO);
+            Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05", "NOM", isBIO);
+            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "PRO", isBIO);
+            Parser train_parser_all = new BIOReader(getPath("train", i), "ACE05", "ALL", isBIO);
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
@@ -291,65 +330,86 @@ public class BIOTester {
                 preBIOLevel2 = preBIOLevel1;
                 preBIOLevel1 = bioTag;
 
-                if (bioTag.equals("B")){
+                int flag1 = 0;
+                int flag2 = 0;
+
+                if (bioTag.equals("B") || bioTag.equals("U")){
                     predicted_mention ++;
+                    flag1 = 1;
                 }
                 String correctTag = output.discreteValue(example);
-                if (correctTag.equals("B")){
+
+                if (correctTag.equals("B") || correctTag.equals("U")){
                     labeled_mention ++;
+                    flag2 = 1;
+                }
+
+                if (flag1 == 1 && flag2 == 1) {
                     Constituent curToken = (Constituent)example;
-                    Constituent pointerToken = curToken;
-                    boolean correct_predicted = true;
-                    String wholeMention = "";
-                    int startIdx = pointerToken.getStartSpan();
-                    int endIdx = startIdx + 1;
                     String preBIOLevel1_dup = ((Constituent) example).getAttribute("preBIOLevel1");
                     String preBIOLevel2_dup = ((Constituent) example).getAttribute("preBIOLevel2");
-                    while (!pointerToken.getAttribute("BIO").equals("O")){
-                        if (endIdx - 1 > startIdx){
-                            if (pointerToken.getAttribute("BIO").equals("B")){
-                                break;
-                            }
-                        }
-                        pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
-                        pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
-                        //preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
-                        preBIOLevel2_dup = preBIOLevel1_dup;
-                        preBIOLevel1_dup = inference(pointerToken, classifier);
-                        wholeMention += pointerToken.toString() + " ";
-                        //if (!joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier).equals(output.discreteValue(pointerToken))){
-                        if (!inference(pointerToken, classifier).equals(output.discreteValue(pointerToken))){
-                            correct_predicted = false;
-                        }
-                        if (pointerToken.getStartSpan() == pointerToken.getTextAnnotation().getSentenceFromToken(pointerToken.getStartSpan()).getEndSpan() - 1){
-                            break;
-                        }
-                        pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
-                        endIdx = pointerToken.getStartSpan() + 1;
-                    }
-                    endIdx --;
-                    pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
-                    pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
-                    if (inference(pointerToken, classifier).equals("I")){
-                        correct_predicted = false;
-                    }
-                    if (correct_predicted){
-                        correct_mention ++;
-                    }
-                    else {
-                        View bioView = curToken.getTextAnnotation().getView("BIO");
-                        //System.out.println(curToken.getTextAnnotation().getSentenceFromToken(curToken.getStartSpan()));
-                        int printStart = startIdx;
-                        if (correctTag.equals("B") && bioTag.equals("I")){
-                            printStart --;
-                        }
-                        for (int k = printStart; k < endIdx; k++){
-                            Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
-                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
-                        }
-                        //System.out.println();
-                    }
+                    curToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+                    curToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+                    Constituent goldMention = getConstituent(curToken, classifier, true);
+                    Constituent predictMention = getConstituent(curToken, classifier, false);
+                    if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan())
+                        correct_mention++;
                 }
+
+//                if (correctTag.equals("B") && bioTag.equals("B")){
+//                    Constituent curToken = (Constituent)example;
+//                    Constituent pointerToken = curToken;
+//                    boolean correct_predicted = true;
+//                    String wholeMention = "";
+//                    int startIdx = pointerToken.getStartSpan();
+//                    int endIdx = startIdx + 1;
+//                    String preBIOLevel1_dup = ((Constituent) example).getAttribute("preBIOLevel1");
+//                    String preBIOLevel2_dup = ((Constituent) example).getAttribute("preBIOLevel2");
+//                    while (!pointerToken.getAttribute("BIO").equals("O") && !pointerToken.getAttribute("BIO").equals("U")){
+//                        if (endIdx - 1 > startIdx){
+//                            if (pointerToken.getAttribute("BIO").equals("B")){
+//                                break;
+//                            }
+//                        }
+//                        pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+//                        pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+//                        //preBIOLevel1_dup = joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier);
+//                        preBIOLevel2_dup = preBIOLevel1_dup;
+//                        preBIOLevel1_dup = inference(pointerToken, classifier);
+//                        wholeMention += pointerToken.toString() + " ";
+//                        //if (!joint_inference(pointerToken, classifier_nam, classifier_nom, classifier_pro, classifier).equals(output.discreteValue(pointerToken))){
+//                        if (!inference(pointerToken, classifier).equals(output.discreteValue(pointerToken))){
+//                            correct_predicted = false;
+//                        }
+//                        if (pointerToken.getStartSpan() == pointerToken.getTextAnnotation().getSentenceFromToken(pointerToken.getStartSpan()).getEndSpan() - 1){
+//                            break;
+//                        }
+//                        pointerToken = pointerToken.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(pointerToken.getStartSpan() + 1).get(0);
+//                        endIdx = pointerToken.getStartSpan() + 1;
+//                    }
+//                    endIdx --;
+//                    pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+//                    pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+//                    if (inference(pointerToken, classifier).equals("I")){
+//                        correct_predicted = false;
+//                    }
+//                    if (correct_predicted){
+//                        correct_mention ++;
+//                    }
+//                    else {
+//                        View bioView = curToken.getTextAnnotation().getView("BIO");
+//                        //System.out.println(curToken.getTextAnnotation().getSentenceFromToken(curToken.getStartSpan()));
+//                        int printStart = startIdx;
+//                        if (correctTag.equals("B") && bioTag.equals("I")){
+//                            printStart --;
+//                        }
+//                        for (int k = printStart; k < endIdx; k++){
+//                            Constituent ct = bioView.getConstituentsCoveringToken(k).get(0);
+//                            //System.out.print(ct.toString() + " " + ct.getAttribute("BIO") + " " + inference(ct, classifier) + ", ");
+//                        }
+//                        //System.out.println();
+//                    }
+//                }
             }
             total_labeled_mention += labeled_mention;
             total_predicted_mention += predicted_mention;
@@ -492,7 +552,7 @@ public class BIOTester {
         }
         return new Pair<>("O", "NA");
     }
-
+  
     public static void test_ere(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -634,6 +694,6 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        test_ere();
+        test_cv();
     }
 }

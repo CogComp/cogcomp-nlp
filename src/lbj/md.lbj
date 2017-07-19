@@ -142,12 +142,12 @@ learn bio_label
     using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
-    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
 
     progressOutput 10000
 end
@@ -155,12 +155,12 @@ end
 discrete bio_classifier_nom (Constituent c) <-
 learn bio_label
     using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
-    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
 
     progressOutput 10000
 end
@@ -168,12 +168,12 @@ end
 discrete bio_classifier_pro (Constituent c) <-
 learn bio_label
     using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
-    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
 
     progressOutput 10000
 end
@@ -222,12 +222,12 @@ discrete % judges (Constituent c) <- {
 discrete bio_joint_classifier (Constituent c) <-
 learn bio_label
     using bioScore
-    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL")
+    from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
 
     }
-    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL")
+    testFrom new BIOReader("data/partition_with_dev/eval/0", "ACE05", "ALL", true)
 
     progressOutput 10000
 end
