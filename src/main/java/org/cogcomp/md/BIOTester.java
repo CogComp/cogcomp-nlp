@@ -327,6 +327,11 @@ public class BIOTester {
                         endIdx = pointerToken.getStartSpan() + 1;
                     }
                     endIdx --;
+                    pointerToken.addAttribute("preBIOLevel1", preBIOLevel1_dup);
+                    pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
+                    if (inference(pointerToken, classifier).equals("I")){
+                        correct_predicted = false;
+                    }
                     if (correct_predicted){
                         correct_mention ++;
                     }
@@ -401,8 +406,88 @@ public class BIOTester {
                 return new Pair<>("I", "PRO");
             }
         }
-        if (b_count > 1 || i_count > 1 || (b_count >= 1 && i_count >= 1)){
-            System.out.println("No defined action to handle this case");
+        double highest_b_score = -10.0;
+        double highest_i_score = -10.0;
+        String highest_b_tag = "";
+        String highest_i_tag = "";
+        if (tags[0].equals("B") || tags[0].equals("I")) {
+            ScoreSet scores = classifier_nam.scores(c);
+            Score[] scoresArray = scores.toArray();
+            for (Score score : scoresArray) {
+                if (score.value.equals("B") && tags[0].equals("B")) {
+                    double b_score = score.score;
+                    if (b_score > highest_b_score){
+                        highest_b_score = b_score;
+                        highest_b_tag = "NAM";
+                    }
+                } else if (score.value.equals("I") && tags[0].equals("I")) {
+                    double i_score = score.score;
+                    if (i_score > highest_i_score){
+                        highest_i_score = i_score;
+                        highest_i_tag = "NAM";
+                    }
+                }
+            }
+        }
+        if (tags[1].equals("B") || tags[1].equals("I")){
+            ScoreSet scores = classifier_nom.scores(c);
+            Score[] scoresArray = scores.toArray();
+            for (Score score : scoresArray){
+                if (score.value.equals("B") && tags[1].equals("B")) {
+                    double b_score = score.score;
+                    if (b_score > highest_b_score){
+                        highest_b_score = b_score;
+                        highest_b_tag = "NOM";
+                    }
+                } else if (score.value.equals("I") && tags[1].equals("I")) {
+                    double i_score = score.score;
+                    if (i_score > highest_i_score){
+                        highest_i_score = i_score;
+                        highest_i_tag = "NOM";
+                    }
+                }
+            }
+        }
+        if (tags[2].equals("B") || tags[2].equals("I")){
+            ScoreSet scores = classifier_pro.scores(c);
+            Score[] scoresArray = scores.toArray();
+            for (Score score : scoresArray){
+                if (score.value.equals("B") && tags[2].equals("B")) {
+                    double b_score = score.score;
+                    if (b_score > highest_b_score){
+                        highest_b_score = b_score;
+                        highest_b_tag = "PRO";
+                    }
+                } else if (score.value.equals("I") && tags[2].equals("I")) {
+                    double i_score = score.score;
+                    if (i_score > highest_i_score){
+                        highest_i_score = i_score;
+                        highest_i_tag = "PRO";
+                    }
+                }
+            }
+        }
+        if (b_count == 2 && o_count == 1){
+            return new Pair<>("B", highest_b_tag);
+        }
+        if (i_count == 2 && o_count == 1){
+            return new Pair<>("I", highest_i_tag);
+        }
+        if (b_count >= 1 && i_count >= 1){
+            if (b_count > i_count){
+                return new Pair<>("B", highest_b_tag);
+            }
+            else if (i_count > b_count){
+                return new Pair<>("I", highest_i_tag);
+            }
+            else{
+                if (highest_b_score > highest_i_score){
+                    return new Pair<>("B", highest_b_tag);
+                }
+                else{
+                    return new Pair<>("I", highest_i_tag);
+                }
+            }
         }
         return new Pair<>("O", "NA");
     }
@@ -412,7 +497,18 @@ public class BIOTester {
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE", "NOM");
+        Map<String, Integer> type_map = new HashMap<>();
+        type_map.put("l_nam", 0);
+        type_map.put("l_nom", 0);
+        type_map.put("l_pro", 0);
+        type_map.put("p_nam", 0);
+        type_map.put("p_nom", 0);
+        type_map.put("p_pro", 0);
+        type_map.put("c_nam", 0);
+        type_map.put("c_nom", 0);
+        type_map.put("c_pro", 0);
+
+        Parser test_parser = new BIOReader("data/ere/data", "ERE", "ALL");
         Parser train_parser_nam = new BIOReader(getPath("train", 0), "ACE05", "NAM");
         Parser train_parser_nom = new BIOReader(getPath("train", 0), "ACE05", "NOM");
         Parser train_parser_pro = new BIOReader(getPath("train", 0), "ACE05", "PRO");
@@ -429,14 +525,18 @@ public class BIOTester {
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
             Pair<String, String> prediction = inference_with_type(classifier_nam, classifier_nom, classifier_pro, (Constituent)example);
             String predictedTag = prediction.getFirst();
+            String predictedType = prediction.getSecond();
             String goldTag = output.discreteValue(example);
+            String goldType = ((Constituent)example).getAttribute("EntityMentionType");
             preBIOLevel2 = preBIOLevel1;
             preBIOLevel1 = predictedTag;
             if (goldTag.equals("B")){
                 total_labeled_mention ++;
+                type_map.put("l_" + goldType.toLowerCase(), type_map.get("l_" + goldType.toLowerCase()) + 1);
             }
             if (predictedTag.equals("B")){
                 total_predicted_mention ++;
+                type_map.put("p_" + predictedType.toLowerCase(), type_map.get("p_" + predictedType.toLowerCase()) + 1);
             }
             TextAnnotation ta = ((Constituent) example).getTextAnnotation();
             View bioView = ta.getView("BIO");
@@ -444,24 +544,37 @@ public class BIOTester {
             List<String> words = new ArrayList<>();
             List<String> gTags = new ArrayList<>();
             List<String> pTags = new ArrayList<>();
+            List<String> gTypes = new ArrayList<>();
+            List<String> pTypes = new ArrayList<>();
             if (goldTag.equals("B") && predictedTag.equals("B")){
                 words.add(((Constituent)example).toString());
                 gTags.add("B");
+                gTypes.add(goldType);
                 pTags.add("B");
+                pTypes.add(predictedType);
                 boolean match = true;
+                boolean type_match = true;
+                if (predictedType.equals(goldType)){
+                    type_map.put("c_" + predictedType.toLowerCase(), type_map.get("c_" + predictedType.toLowerCase()) + 1);
+                }
+                else{
+                    type_match = false;
+                }
                 curIdx ++;
                 if (curIdx < bioView.getEndSpan()) {
                     Constituent pointerToken = bioView.getConstituentsCoveringToken(curIdx).get(0);
                     String preLevel1Dup = predictedTag;
                     String preLevel2Dup = preBIOLevel2;
-                    while (!pointerToken.getAttribute("BIO").equals("O")){
+                    while (pointerToken.getAttribute("BIO").equals("I")){
                         pointerToken.addAttribute("preBIOLevel1", preLevel1Dup);
                         pointerToken.addAttribute("preBIOLevel2", preLevel2Dup);
                         Pair<String, String> curPrediction = inference_with_type(classifier_nam, classifier_nom, classifier_pro, pointerToken);
                         String curPredictedTag = curPrediction.getFirst();
                         words.add(pointerToken.toString());
                         gTags.add(output.discreteValue(pointerToken));
+                        gTypes.add(pointerToken.getAttribute("EntityMentionType"));
                         pTags.add(curPredictedTag);
+                        pTypes.add(curPrediction.getSecond());
                         preLevel2Dup = preLevel1Dup;
                         preLevel1Dup = curPredictedTag;
                         if (!output.discreteValue(pointerToken).equals(curPredictedTag)){
@@ -473,13 +586,23 @@ public class BIOTester {
                         }
                         pointerToken = bioView.getConstituentsCoveringToken(curIdx).get(0);
                     }
+                    if (inference_with_type(classifier_nam, classifier_nom, classifier_pro, pointerToken).getFirst().equals("I")){
+                        match = false;
+                    }
                 }
-                if (match){
+                if (match && type_match){
                     total_correct_mention ++;
                 }
                 else{
                     for (int i = 0; i < words.size(); i++){
-                        System.out.print(words.get(i) + " " + gTags.get(i) + " " + pTags.get(i) + ", ");
+                        //System.out.print(words.get(i) + " " + gTags.get(i) + " " + pTags.get(i) + ", ");
+                    }
+                    //System.out.println();
+                }
+
+                if (match && !type_match){
+                    for (int i = 0; i < words.size(); i++){
+                        System.out.print(words.get(i) + " (" + gTags.get(i) + " " + pTags.get(i) + ")" + " (" + gTypes.get(i) + " " + pTypes.get(i) + "), ");
                     }
                     System.out.println();
                 }
@@ -494,9 +617,13 @@ public class BIOTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
+
+        for (String key : type_map.keySet()){
+            System.out.println(key + ": " + type_map.get(key));
+        }
     }
 
     public static void main(String[] args){
-        test_cv();
+        test_ere();
     }
 }
