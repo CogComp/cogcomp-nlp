@@ -12,6 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -508,7 +509,8 @@ public class BIOTester {
         type_map.put("c_nom", 0);
         type_map.put("c_pro", 0);
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE", "ALL");
+        //Parser test_parser = new BIOReader("data/ere/data", "ERE", "ALL");
+        Parser test_parser = new BIOReader("data/tac/2016.nom", "ColumnFormat", "ALL");
         Parser train_parser_nam = new BIOReader(getPath("train", 0), "ACE05", "NAM");
         Parser train_parser_nom = new BIOReader(getPath("train", 0), "ACE05", "NOM");
         Parser train_parser_pro = new BIOReader(getPath("train", 0), "ACE05", "PRO");

@@ -21,9 +21,11 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import org.apache.thrift.TEnum;
 import org.cogcomp.Datastore;
 
 public class BIOReader implements Parser
@@ -78,6 +80,12 @@ public class BIOReader implements Parser
                 ret.add(xta.getTextAnnotation());
             }
         }
+        else if (_mode.equals("ColumnFormat")){
+            ColumnFormatReader columnFormatReader = new ColumnFormatReader(_path);
+            for (TextAnnotation ta : columnFormatReader){
+                ret.add(ta);
+            }
+        }
         else{
             System.out.println("No defult actions for unknown mode");
         }
@@ -127,6 +135,9 @@ public class BIOReader implements Parser
         }
         else if (_mode.equals("ERE")){
             mentionViewName = ViewNames.MENTION_ERE;
+        }
+        else if (_mode.equals("ColumnFormat")){
+            mentionViewName = "MENTIONS";
         }
         else{
             System.out.println("No actions for undefined mode");
