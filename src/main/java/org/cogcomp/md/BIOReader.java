@@ -163,6 +163,7 @@ public class BIOReader implements Parser
                     }
                 }
                 Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
+
                 if (cHead == null){
                     continue;
                 }
