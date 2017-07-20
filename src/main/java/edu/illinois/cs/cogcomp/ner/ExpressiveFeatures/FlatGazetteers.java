@@ -223,7 +223,7 @@ public class FlatGazetteers implements Gazetteers {
         return ret;
     }
 
-    public String annotateConstituent(Constituent c){
+    public String annotateConstituent(Constituent c, boolean isBIO){
         String expression = c.toString();
         String ret = "";
         View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
@@ -248,10 +248,26 @@ public class FlatGazetteers implements Gazetteers {
                         if (dictionaries.get(i).contains(combinedExpression)) {
                             String fullName = dictNames.get(i);
                             String shortName = fullName.split("/")[fullName.split("/").length - 1];
-                            if (startIdx == 0) {
-                                ret += "B-" + shortName + ",";
-                            } else {
-                                ret += "L-" + shortName + ",";
+                            if (isBIO) {
+                                if (startIdx == 0) {
+                                    ret += "B-" + shortName + ",";
+                                } else {
+                                    ret += "L-" + shortName + ",";
+                                }
+                            }
+                            else {
+                                if (startIdx == 0 && len == 0){
+                                    ret += "U-" + shortName + ",";
+                                }
+                                if (startIdx + len == 0){
+                                    ret += "L-" + shortName + ",";
+                                }
+                                if (startIdx == 0 && len > 0){
+                                    ret += "B-" + shortName + ",";
+                                }
+                                if (startIdx < 0 && startIdx + len > 0){
+                                    ret += "I-" + shortName + ",";
+                                }
                             }
                         }
                     }
@@ -259,10 +275,26 @@ public class FlatGazetteers implements Gazetteers {
                         if (dictionariesIgnoreCase.get(i).contains(combinedExpression)) {
                             String fullName = dictNames.get(i);
                             String shortName = fullName.split("/")[fullName.split("/").length - 1] + "(IC)";
-                            if (startIdx == 0) {
-                                ret += "B-" + shortName + ",";
-                            } else {
-                                ret += "L-" + shortName + ",";
+                            if (isBIO) {
+                                if (startIdx == 0) {
+                                    ret += "B-" + shortName + ",";
+                                } else {
+                                    ret += "L-" + shortName + ",";
+                                }
+                            }
+                            else {
+                                if (startIdx == 0 && len == 0){
+                                    ret += "U-" + shortName + ",";
+                                }
+                                if (startIdx + len == 0){
+                                    ret += "L-" + shortName + ",";
+                                }
+                                if (startIdx == 0 && len > 0){
+                                    ret += "B-" + shortName + ",";
+                                }
+                                if (startIdx < 0 && startIdx + len > 0){
+                                    ret += "I-" + shortName + ",";
+                                }
                             }
                         }
                     }

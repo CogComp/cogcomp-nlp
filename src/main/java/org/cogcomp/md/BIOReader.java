@@ -210,9 +210,9 @@ public class BIOReader implements Parser
                     newToken.addAttribute("BIO", tag);
                     newToken.addAttribute("EntityMentionType", eml);
                 }
-                newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken));
+                newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken, true));
                 newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
-                if (_path.contains("train")){
+                if (_path.contains("train") || _path.contains("all")){
                     newToken.addAttribute("isTraining", "true");
                 }
                 else{
