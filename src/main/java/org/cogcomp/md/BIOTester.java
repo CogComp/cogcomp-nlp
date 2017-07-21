@@ -37,6 +37,25 @@ public class BIOTester {
         }
     }
 
+    public static <T> T mostCommon(List<T> list) {
+        Map<T, Integer> map = new HashMap<>();
+
+        for (T t : list) {
+            Integer val = map.get(t);
+            map.put(t, val == null ? 1 : val + 1);
+        }
+
+        Map.Entry<T, Integer> max = null;
+
+        for (Map.Entry<T, Integer> e : map.entrySet()) {
+            if (max == null || e.getValue() > max.getValue())
+                max = e;
+        }
+
+        return max.getKey();
+    }
+
+
     public static bio_classifier_nam train_nam_classifier(Parser train_parser){
         bio_classifier_nam classifier = new bio_classifier_nam();
         train_parser.reset();
@@ -53,11 +72,13 @@ public class BIOTester {
         }
         train_parser.reset();
         classifier.initialize(examples, preExtractLearner.getLexicon().size());
-        for (Object example = train_parser.next(); example != null; example = train_parser.next()){
-            classifier.learn(example);
+        for (int i = 0; i < 1; i++) {
+            train_parser.reset();
+            for (Object example = train_parser.next(); example != null; example = train_parser.next()) {
+                classifier.learn(example);
+            }
+            classifier.doneWithRound();
         }
-        train_parser.reset();
-        classifier.doneWithRound();
         classifier.doneLearning();
         return classifier;
     }
@@ -250,6 +271,9 @@ public class BIOTester {
 
     public static Constituent getConstituent(Constituent curToken, Learner classifier, boolean isGold) {
         View bioView = curToken.getTextAnnotation().getView("BIO");
+        String goldType = (curToken.getAttribute("BIO").split("-"))[1];
+        List<String> predictedTypes = new ArrayList<>();
+        predictedTypes.add((inference(curToken, classifier).split("-"))[1]);
         int startIdx = curToken.getStartSpan();
         int endIdx = startIdx + 1;
         if (endIdx < bioView.getEndSpan()) {
@@ -262,22 +286,30 @@ public class BIOTester {
                 pointerToken.addAttribute("preBIOLevel2", preBIOLevel2_dup);
                 if (isGold) {
                     String curGold = pointerToken.getAttribute("BIO");
-                    if (!(curGold.equals("I") || curGold.equals("L"))) {
+                    if (!(curGold.startsWith("I") || curGold.startsWith("L"))) {
                         break;
                     }
                 }
                 else {
                     String curPrediction = inference(pointerToken, classifier);
-                    if (!(curPrediction.equals("I") || curPrediction.equals("L"))) {
+                    if (!(curPrediction.startsWith("I") || curPrediction.startsWith("L"))) {
                         break;
                     }
+                    predictedTypes.add(curPrediction.split("-")[1]);
                 }
                 preBIOLevel2_dup = preBIOLevel1_dup;
                 preBIOLevel1_dup = inference(pointerToken, classifier);
                 endIdx ++;
             }
         }
+
         Constituent wholeMention = new Constituent(curToken.getLabel(), 1.0f, "BIO_Mention", curToken.getTextAnnotation(), startIdx, endIdx);
+        if (isGold){
+            wholeMention.addAttribute("EntityType", goldType);
+        }
+        else{
+            wholeMention.addAttribute("EntityType", mostCommon(predictedTypes));
+        }
         return wholeMention;
     }
 
@@ -323,13 +355,13 @@ public class BIOTester {
                 boolean goldStart = false;
                 boolean predictedStart = false;
 
-                if (bioTag.equals("B") || bioTag.equals("U")){
+                if (bioTag.startsWith("B") || bioTag.startsWith("U")){
                     predicted_mention ++;
                     predictedStart = true;
                 }
                 String correctTag = output.discreteValue(example);
 
-                if (correctTag.equals("B") || correctTag.equals("U")){
+                if (correctTag.startsWith("B") || correctTag.startsWith("U")){
                     labeled_mention ++;
                     goldStart = true;
                 }
@@ -338,7 +370,9 @@ public class BIOTester {
                     Constituent goldMention = getConstituent((Constituent)example, classifier, true);
                     Constituent predictMention = getConstituent((Constituent)example, classifier, false);
                     if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan()) {
-                        correct_mention++;
+                        if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
+                            correct_mention++;
+                        }
                     }
                 }
             }
@@ -381,13 +415,13 @@ public class BIOTester {
             boolean goldStart = false;
             boolean predictedStart = false;
 
-            if (bioTag.equals("B") || bioTag.equals("U")){
+            if (bioTag.startsWith("B") || bioTag.startsWith("U")){
                 total_predicted_mention ++;
                 predictedStart = true;
             }
             String correctTag = ((Constituent)example).getAttribute("BIO");
 
-            if (correctTag.equals("B") || correctTag.equals("U")){
+            if (correctTag.startsWith("B") || correctTag.startsWith("U")){
                 total_labeled_mention ++;
                 goldStart = true;
             }
@@ -396,7 +430,9 @@ public class BIOTester {
                 Constituent goldMention = getConstituent((Constituent)example, classifier, true);
                 Constituent predictMention = getConstituent((Constituent)example, classifier, false);
                 if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan()) {
-                    total_correct_mention++;
+                    if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
+                        total_correct_mention++;
+                    }
                 }
             }
         }
@@ -581,6 +617,7 @@ public class BIOTester {
         int total_miss = 0;
         int total_miss_not_in_dict = 0;
         int total_dict_hit = 0;
+        Map<String, Integer> mentionTypeErrorMap = new HashedMap();
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
@@ -590,32 +627,43 @@ public class BIOTester {
             preBIOLevel2 = preBIOLevel1;
             preBIOLevel1 = predictedTag;
             boolean goldStart = false;
-            if (goldTag.equals("B") || goldTag.equals("U")){
+            if (goldTag.startsWith("B") || goldTag.startsWith("U")){
                 total_labeled_mention ++;
                 goldStart = true;
             }
             boolean predictedStart = false;
-            if (predictedTag.equals("B") || goldTag.equals("U")){
+            if (predictedTag.startsWith("B") || predictedTag.startsWith("U")){
                 total_predicted_mention ++;
                 predictedStart = true;
             }
             boolean correct = false;
+            boolean type_match = false;
             if (goldStart && predictedStart){
                 Constituent goldMention = getConstituent((Constituent)example, classifier, true);
                 Constituent predictedMention = getConstituent((Constituent)example, classifier, false);
                 if (goldMention.getStartSpan() == predictedMention.getStartSpan() && goldMention.getEndSpan() == predictedMention.getEndSpan()){
-                    total_correct_mention ++;
                     correct = true;
                     if (ACEDict.contains(goldMention.getTextAnnotation().getToken(goldMention.getStartSpan()).toLowerCase())) {
                         total_dict_hit++;
                     }
                 }
+                if (goldMention.getAttribute("EntityType").equals(predictedMention.getAttribute("EntityType"))){
+                    type_match = true;
+                }
                 else {
-                    System.out.println(goldMention.toString());
-                    System.out.println(predictedMention.toString());
-                    System.out.println();
+                    String error = goldMention.getAttribute("EntityType") + " " + predictedMention.getAttribute("EntityType");
+                    if (mentionTypeErrorMap.containsKey(error)){
+                        mentionTypeErrorMap.put(error, mentionTypeErrorMap.get(error) + 1);
+                    }
+                    else{
+                        mentionTypeErrorMap.put(error, 1);
+                    }
+                }
+                if (correct){
+                    total_correct_mention ++;
                 }
             }
+            /*
             if (goldStart && !correct){
                 total_miss ++;
                 Constituent goldMention = getConstituent((Constituent)example, classifier, true);
@@ -623,14 +671,15 @@ public class BIOTester {
                 Sentence sentence = goldMention.getTextAnnotation().getSentenceFromToken(goldMention.getStartSpan());
                 for (int i = sentence.getStartSpan(); i < sentence.getEndSpan(); i++){
                     Constituent curC = bioView.getConstituentsCoveringToken(i).get(0);
-                    System.out.print(curC.toString() + "(" + curC.getAttribute("BIO") + " " + inference(curC, classifier) + ") ");
+                    //System.out.print(curC.toString() + "(" + curC.getAttribute("BIO") + " " + inference(curC, classifier) + ") ");
                 }
-                System.out.println();
-                System.out.println();
+                //System.out.println();
+                //System.out.println();
                 if (!ACEDict.contains(goldMention.getTextAnnotation().getToken(goldMention.getStartSpan()).toLowerCase())){
                     total_miss_not_in_dict ++;
                 }
             }
+            */
         }
         System.out.println("Total miss: " + total_miss);
         System.out.println("Miss dict: " + total_miss_not_in_dict);
@@ -645,8 +694,8 @@ public class BIOTester {
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
 
-        for (String key : type_map.keySet()){
-            System.out.println(key + ": " + type_map.get(key));
+        for (String key : mentionTypeErrorMap.keySet()){
+            System.out.println(key + ": " + mentionTypeErrorMap.get(key));
         }
     }
 
@@ -655,9 +704,9 @@ public class BIOTester {
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
-        Parser train_parser = new BIOReader("data/all", "ACE05", "NAM", true);
-        Parser test_parser = new BIOReader("data/tac/2016.nam", "ColumnFormat", "ALL", true);
-        bio_classifier_nam classifier = train_nam_classifier(train_parser);
+        Parser train_parser = new BIOReader("data/all", "ACE05", "NOM", false);
+        Parser test_parser = new BIOReader("data/tac/2016.nom", "ColumnFormat", "ALL", false);
+        bio_classifier_nom classifier = train_nom_classifier(train_parser);
         String preLevel1 = "";
         String preLevel2 = "";
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
@@ -667,11 +716,11 @@ public class BIOTester {
             String goldTag = ((Constituent)example).getAttribute("BIO");
             boolean predictedStart = false;
             boolean goldStart = false;
-            if (predictedTag.equals("B")){
+            if (predictedTag.startsWith("B") || predictedTag.startsWith("U")){
                 total_predicted_mention ++;
                 predictedStart = true;
             }
-            if (goldTag.equals("B")){
+            if (goldTag.startsWith("B") || goldTag.startsWith("U")){
                 total_labeled_mention ++;
                 goldStart = true;
             }
@@ -697,6 +746,6 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        test_ere();
+        test_tac();
     }
 }

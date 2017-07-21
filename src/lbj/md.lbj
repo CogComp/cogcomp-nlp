@@ -139,7 +139,7 @@ discrete{false, true}% isInProList (Constituent c) <- {
 
 discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
@@ -154,7 +154,7 @@ end
 
 discrete bio_classifier_nom (Constituent c) <-
 learn bio_label
-    using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
+    using wordForm_features, BrownClusterPaths, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {

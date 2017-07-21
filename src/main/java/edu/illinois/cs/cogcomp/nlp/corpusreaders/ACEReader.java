@@ -160,7 +160,6 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
             for (String attributeKey : extentConstituent.getAttributeKeys()) {
                 cons.addAttribute(attributeKey, extentConstituent.getAttribute(attributeKey));
             }
-
             return cons;
         }
 

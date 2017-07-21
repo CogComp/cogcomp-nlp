@@ -163,27 +163,40 @@ public class BIOReader implements Parser
                     }
                 }
                 Constituent cHead = ACEReader.getEntityHeadForConstituent(c, ta, "HEAD");
+                if (_mode.equals("ERE")) {
+                    c.addAttribute("EntityType", c.getLabel());
+                }
 
                 if (cHead == null){
                     continue;
                 }
+                if (c.getAttribute("EntityType").equals("VEH") || c.getAttribute("EntityType").equals("WEA")){
+                    //continue;
+                }
+                //c.addAttribute("EntityType", "MENTION");
 
                 if (_isBIO) {
-                    token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                    token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                    ///token2tags[cHead.getStartSpan()] = "B,"+ c.getAttribute("EntityMentionType");
                     for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
-                        token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                        token2tags[i] = "I-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                        //token2tags[i] = "I,"+ c.getAttribute("EntityMentionType");
                     }
                 }
                 else {
                     if (cHead.getStartSpan()+1 == cHead.getEndSpan()) {
-                        token2tags[cHead.getStartSpan()] = "U," + c.getAttribute("EntityMentionType");
+                        token2tags[cHead.getStartSpan()] = "U-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                        //token2tags[cHead.getStartSpan()] = "U," + c.getAttribute("EntityMentionType");
                     }
                     else {
-                        token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
+                        token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                        //token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
                         for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan() - 1; i++) {
-                            token2tags[i] = "I," + c.getAttribute("EntityMentionType");
+                            token2tags[i] = "I-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                            //token2tags[i] = "I," + c.getAttribute("EntityMentionType");
                         }
-                        token2tags[cHead.getEndSpan() - 1] = "L," + c.getAttribute("EntityMentionType");
+                        token2tags[cHead.getEndSpan() - 1] = "L-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
+                        //token2tags[cHead.getEndSpan() - 1] = "L," + c.getAttribute("EntityMentionType");
                     }
                 }
 
@@ -211,7 +224,7 @@ public class BIOReader implements Parser
                     newToken.addAttribute("BIO", tag);
                     newToken.addAttribute("EntityMentionType", eml);
                 }
-                newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken, true));
+                newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken, _isBIO));
                 newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
                 if (_path.contains("train") || _path.contains("all")){
                     newToken.addAttribute("isTraining", "true");
