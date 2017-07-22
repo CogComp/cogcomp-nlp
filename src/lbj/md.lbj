@@ -2,6 +2,7 @@ package org.cogcomp.md;
 import java.util.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
 
 discrete bio_label (Constituent c) <- {
     return c.getAttribute("BIO");
@@ -137,9 +138,31 @@ discrete{false, true}% isInProList (Constituent c) <- {
     sense BIOFeatureExtractor.isInPronounList(c);
 }
 
+discrete% wordNetTag (Constituent c) <- {
+    String combined = c.getAttribute("WORDNETTAG");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense (s.split("\\."))[0] : (s.split("\\."))[1];
+        }
+    }
+}
+
+discrete% wordNetHym (Constituent c) <- {
+    String combined = c.getAttribute("WORDNETHYM");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense i : s;
+        }
+    }
+}
+
 discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2, wordNetTag, wordNetHym, POS_Features
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
@@ -154,7 +177,7 @@ end
 
 discrete bio_classifier_nom (Constituent c) <-
 learn bio_label
-    using wordForm_features, BrownClusterPaths, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
+    using wordForm_features, BrownClusterPaths, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH, wordNetTag, wordNetHym, POS_Features
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
@@ -164,6 +187,18 @@ learn bio_label
 
     progressOutput 10000
 end
+
+constraint no_other_type_nom (Constituent c)
+{
+    bio_classifier_nom(c)::"B-MENTION" => bio_classifier_nam(c) !: "B-MENTION" /\ bio_classifier_pro(c) !: "B-MENTION";
+    bio_classifier_nom(c)::"I-MENTION" => bio_classifier_nam(c) !: "I-MENTION" /\ bio_classifier_pro(c) !: "I-MENTION";
+}
+
+inference constrained_bio_classifier_nom head Constituent c {
+    Constituent c {return c;}
+    subjectto {@no_other_type_nom(c);}
+    with new ILPInference(new OJalgoHook())
+}
 
 discrete bio_classifier_pro (Constituent c) <-
 learn bio_label

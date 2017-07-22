@@ -7,12 +7,15 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
+import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
+import net.didion.jwnl.data.POS;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Xuanyu on 7/9/2017.
@@ -150,5 +153,38 @@ public class BIOFeatureExtractor {
         else{
             return "";
         }
+    }
+
+    public static String getWordNetTags(WordNetManager wordnet, Constituent c){
+        List<String> ret = null;
+        try {
+            //ret = wordnet.getHypernyms(c.toLowerCase(), true);
+            //ret = wordnet.getSynonyms(c.toLowerCase(), true);
+            //ret = wordnet.getSynsets(c.toLowerCase(), true);
+            ret = wordnet.getLexicographerFileNames(c.toString().toLowerCase(), true);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        String retStr = "";
+        for (String s : ret){
+            retStr += s + ",";
+        }
+        return  retStr;
+    }
+
+    public static String getWordNetHyms(WordNetManager wordnet, Constituent c){
+        List<String> ret = null;
+        try {
+            ret = wordnet.getHypernyms(c.toString().toLowerCase(), true);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        String retStr = "";
+        for (String s : ret){
+            retStr += s + ",";
+        }
+        return  retStr;
     }
 }

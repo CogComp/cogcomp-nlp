@@ -13,6 +13,7 @@ import java.util.*;
 
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
+import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
@@ -25,6 +26,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
+import edu.mit.jwi.item.Word;
 import org.apache.thrift.TEnum;
 import org.cogcomp.Datastore;
 
@@ -108,6 +110,7 @@ public class BIOReader implements Parser
 
     private List<Constituent> getTokensFromTAs(){
         List<Constituent> ret = new ArrayList<>();
+        WordNetManager wordNet = null;
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
@@ -125,6 +128,8 @@ public class BIOReader implements Parser
             bcsl.add(false);
             bcsl.add(false);
             BrownClusters.init(bcs, bcst, bcsl);
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
         }
         catch (Exception e){
             e.printStackTrace();
@@ -173,7 +178,7 @@ public class BIOReader implements Parser
                 if (c.getAttribute("EntityType").equals("VEH") || c.getAttribute("EntityType").equals("WEA")){
                     //continue;
                 }
-                //c.addAttribute("EntityType", "MENTION");
+                c.addAttribute("EntityType", "MENTION");
 
                 if (_isBIO) {
                     token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
@@ -226,6 +231,14 @@ public class BIOReader implements Parser
                 }
                 newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken, _isBIO));
                 newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
+                if (!newToken.toString().contains("http")) {
+                    newToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, newToken));
+                    newToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, newToken));
+                }
+                else {
+                    newToken.addAttribute("WORDNETTAG", ",");
+                    newToken.addAttribute("WORDNETHYM", ",");
+                }
                 if (_path.contains("train") || _path.contains("all")){
                     newToken.addAttribute("isTraining", "true");
                 }

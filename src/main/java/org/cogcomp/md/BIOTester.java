@@ -6,6 +6,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.lbjava.classify.Classifier;
 import edu.illinois.cs.cogcomp.lbjava.classify.Score;
 import edu.illinois.cs.cogcomp.lbjava.classify.ScoreSet;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
@@ -254,7 +256,7 @@ public class BIOTester {
         */
     }
 
-    public static String inference(Constituent c, Learner classifier){
+    public static String inference(Constituent c, Classifier classifier){
         View posView = c.getTextAnnotation().getView(ViewNames.POS);
         List<Constituent> posCons = posView.getConstituentsCoveringToken(c.getStartSpan());
         if (posCons.size() > 0){
@@ -269,10 +271,11 @@ public class BIOTester {
         return classifier.discreteValue(c);
     }
 
-    public static Constituent getConstituent(Constituent curToken, Learner classifier, boolean isGold) {
+    public static Constituent getConstituent(Constituent curToken, Classifier classifier, boolean isGold) {
         View bioView = curToken.getTextAnnotation().getView("BIO");
         String goldType = (curToken.getAttribute("BIO").split("-"))[1];
         List<String> predictedTypes = new ArrayList<>();
+        System.out.println(inference(curToken, classifier));
         predictedTypes.add((inference(curToken, classifier).split("-"))[1]);
         int startIdx = curToken.getStartSpan();
         int endIdx = startIdx + 1;
@@ -397,9 +400,9 @@ public class BIOTester {
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
-        Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05", "ALL", isBIO);
-        Parser train_parser_all = new BIOReader("data/all", "ACE05", "ALL", isBIO);
-        bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+        Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05", "NOM", isBIO);
+        Parser train_parser_all = new BIOReader("data/all", "ACE05", "NOM", isBIO);
+        bio_classifier_nom classifier = train_nom_classifier(train_parser_all);
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
 
@@ -574,7 +577,7 @@ public class BIOTester {
         }
         return new Pair<>("O", "NA");
     }
-  
+
     public static void test_ere(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -591,9 +594,14 @@ public class BIOTester {
         type_map.put("c_nom", 0);
         type_map.put("c_pro", 0);
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE", "NAM", true);
-        Parser train_parser = new BIOReader("data/all", "ACE05", "NAM", true);
-        bio_classifier_nam classifier = train_nam_classifier(train_parser);
+        Parser test_parser = new BIOReader("data/ere/data", "ERE", "NOM", true);
+        Parser train_parser_nam = new BIOReader("data/all", "ACE05", "NAM", true);
+        Parser train_parser_nom = new BIOReader("data/all", "ACE05", "NOM", true);
+        Parser train_parser_pro = new BIOReader("data/all", "ACE05", "PRO", true);
+        bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
+        bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
+        bio_classifier_pro classifier_pro = train_pro_classifier(null, null, train_parser_pro);
+        no_other_type_nom classifier = new no_other_type_nom(classifier_nam, classifier_nom, classifier_pro);
 
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
@@ -663,7 +671,7 @@ public class BIOTester {
                     total_correct_mention ++;
                 }
             }
-            /*
+/*
             if (goldStart && !correct){
                 total_miss ++;
                 Constituent goldMention = getConstituent((Constituent)example, classifier, true);
@@ -671,15 +679,15 @@ public class BIOTester {
                 Sentence sentence = goldMention.getTextAnnotation().getSentenceFromToken(goldMention.getStartSpan());
                 for (int i = sentence.getStartSpan(); i < sentence.getEndSpan(); i++){
                     Constituent curC = bioView.getConstituentsCoveringToken(i).get(0);
-                    //System.out.print(curC.toString() + "(" + curC.getAttribute("BIO") + " " + inference(curC, classifier) + ") ");
+                    System.out.print(curC.toString() + "(" + curC.getAttribute("BIO") + " " + inference(curC, classifier) + ") ");
                 }
-                //System.out.println();
-                //System.out.println();
+                System.out.println();
+                System.out.println();
                 if (!ACEDict.contains(goldMention.getTextAnnotation().getToken(goldMention.getStartSpan()).toLowerCase())){
                     total_miss_not_in_dict ++;
                 }
             }
-            */
+*/
         }
         System.out.println("Total miss: " + total_miss);
         System.out.println("Miss dict: " + total_miss_not_in_dict);
@@ -746,6 +754,17 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        test_tac();
+        /*
+        WordNetManager wordNet = null;
+        try {
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(BIOFeatureExtractor.getWordNetTags(wordNet, "resorts"));
+        */
+        test_ere();
     }
 }
