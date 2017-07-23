@@ -162,7 +162,7 @@ discrete% wordNetHym (Constituent c) <- {
 
 discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
-    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2, wordNetTag, wordNetHym, POS_Features
+    using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
     //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
@@ -187,18 +187,6 @@ learn bio_label
 
     progressOutput 10000
 end
-
-constraint no_other_type_nom (Constituent c)
-{
-    bio_classifier_nom(c)::"B-MENTION" => bio_classifier_nam(c) !: "B-MENTION" /\ bio_classifier_pro(c) !: "B-MENTION";
-    bio_classifier_nom(c)::"I-MENTION" => bio_classifier_nam(c) !: "I-MENTION" /\ bio_classifier_pro(c) !: "I-MENTION";
-}
-
-inference constrained_bio_classifier_nom head Constituent c {
-    Constituent c {return c;}
-    subjectto {@no_other_type_nom(c);}
-    with new ILPInference(new OJalgoHook())
-}
 
 discrete bio_classifier_pro (Constituent c) <-
 learn bio_label
@@ -225,8 +213,8 @@ real% bioScore (Constituent c) <- {
 discrete % judges (Constituent c) <- {
     String[] discreteVals = new String[3];
     discreteVals[0] = c.getAttribute("A_prediction");
-    discreteVals[1] = c.getAttribute("A_prediction");
-    discreteVals[2] = c.getAttribute("A_prediction");
+    discreteVals[1] = c.getAttribute("B_prediction");
+    discreteVals[2] = c.getAttribute("C_prediction");
     sense "nam" : discreteVals[0];
     sense "nom" : discreteVals[1];
     sense "pro" : discreteVals[2];
@@ -247,16 +235,11 @@ discrete % judges (Constituent c) <- {
     sense "b_count" : b_count;
     sense "i_count" : i_count;
     sense "o_count" : o_count;
-    if (b_count > 0){
-        sense "HasB";
-    }
-    else{
-        sense "NoB";
-    }
 }
+
 discrete bio_joint_classifier (Constituent c) <-
 learn bio_label
-    using bioScore
+    using bioScore, judges
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {

@@ -1,0 +1,10 @@
+package org.cogcomp.md;
+import java.util.*;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
+
+discrete extentLabel (Relation r) <- {
+    return r.getLabel();
+}
+

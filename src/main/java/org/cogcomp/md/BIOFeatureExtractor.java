@@ -158,9 +158,6 @@ public class BIOFeatureExtractor {
     public static String getWordNetTags(WordNetManager wordnet, Constituent c){
         List<String> ret = null;
         try {
-            //ret = wordnet.getHypernyms(c.toLowerCase(), true);
-            //ret = wordnet.getSynonyms(c.toLowerCase(), true);
-            //ret = wordnet.getSynsets(c.toLowerCase(), true);
             ret = wordnet.getLexicographerFileNames(c.toString().toLowerCase(), true);
         }
         catch (Exception e){

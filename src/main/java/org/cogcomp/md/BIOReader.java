@@ -57,7 +57,7 @@ public class BIOReader implements Parser
         tokenList = getTokensFromTAs();
     }
 
-    private List<TextAnnotation> getTextAnnotations(){
+    public List<TextAnnotation> getTextAnnotations(){
         List<TextAnnotation> ret = new ArrayList<>();
         if (_mode.equals("ACE05")){
             ACEReader aceReader = null;
