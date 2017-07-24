@@ -272,7 +272,7 @@ public class FlatGazetteers implements Gazetteers {
                         }
                     }
                     for (int i = 0; i < dictionariesIgnoreCase.size(); i++) {
-                        if (dictionariesIgnoreCase.get(i).contains(combinedExpression)) {
+                        if (dictionariesIgnoreCase.get(i).contains(combinedExpression.toLowerCase())) {
                             String fullName = dictNames.get(i);
                             String shortName = fullName.split("/")[fullName.split("/").length - 1] + "(IC)";
                             if (isBIO) {
@@ -299,6 +299,26 @@ public class FlatGazetteers implements Gazetteers {
                         }
                     }
                 }
+            }
+        }
+        return ret;
+    }
+
+    public String annotatePhrase(Constituent phrase){
+        String expression = phrase.toString();
+        String ret = "";
+        for (int i = 0; i < dictionaries.size(); i++) {
+            if (dictionaries.get(i).contains(expression)) {
+                String fullName = dictNames.get(i);
+                String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                ret += shortName + ",";
+            }
+        }
+        for (int i = 0; i < dictionariesIgnoreCase.size(); i++){
+            if (dictionaries.get(i).contains(expression.toLowerCase())){
+                String fullName = dictNames.get(i);
+                String shortName = fullName.split("/")[fullName.split("/").length - 1];
+                ret += shortName + "(IC),";
             }
         }
         return ret;

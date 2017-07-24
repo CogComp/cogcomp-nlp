@@ -2,9 +2,123 @@ package org.cogcomp.md;
 import java.util.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
 import edu.illinois.cs.cogcomp.infer.ilp.OJalgoHook;
 
 discrete extentLabel (Relation r) <- {
-    return r.getLabel();
+    return r.getRelationName();
 }
 
+discrete headLastWord (Relation r) <- {
+    return r.getTarget().getTextAnnotation().getToken(r.getTarget().getEndSpan() - 1).toLowerCase();
+}
+
+discrete beforeHead (Relation r) <- {
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        return true;
+    }
+    return false;
+}
+
+discrete afterHead (Relation r) <- {
+    if (r.getSource().getStartSpan() >= r.getTarget().getEndSpan()){
+        return true;
+    }
+    return false;
+}
+
+discrete headText (Relation r) <- {
+    return r.getTarget().toString().toLowerCase();
+}
+
+discrete% headForm (Relation r) <- {
+    Constituent headC = r.getTarget();
+    for (int i = headC.getStartSpan(); i < headC.getEndSpan(); i++){
+        sense (i - headC.getStartSpan()) : headC.getTextAnnotation().getToken(i);
+        sense "IC_" + (i - headC.getStartSpan()) : headC.getTextAnnotation().getToken(i).toLowerCase();
+    }
+}
+
+discrete afterHeadPOS (Relation r ) <- {
+    TextAnnotation ta = r.getTarget().getTextAnnotation();
+    if (r.getTarget().getEndSpan() < ta.getView(ViewNames.TOKENS).getEndSpan() - 1){
+        return ta.getView(ViewNames.POS).getConstituentsCoveringToken(r.getTarget().getEndSpan() + 1).get(0).getLabel();
+    }
+    return "OUT_OF_BOUND";
+}
+
+discrete% gazetteersFeaturesHead (Relation r) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeaturesHead(r);
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% headFeatures (Relation r) <-
+    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead
+
+discrete% wordFormExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getWordFormFeatures(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% gazetteersFeaturesExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getGazetteerFeaturesSingle(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        sense "0" : features.get(i);
+    }
+}
+
+discrete{false, true}% WordTypeInformationExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getWordTypeInformation(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        String idx = (String)p.getFirst();
+        boolean val = (Boolean)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% POSExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getPOSFeatures(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% BrownClusterPathsExtent (Relation r) <- {
+    List features = BIOFeatureExtractor.getBrownClusterPaths(r.getSource());
+    for (int i = 0; i < features.size(); i++){
+        Pair p = (Pair)features.get(i);
+        int idx = (Integer)p.getFirst();
+        String val = (String)p.getSecond();
+        sense idx : val;
+    }
+}
+
+discrete% extentFeatures (Relation r) <-
+    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent
+
+discrete extent_classifier (Relation r) <-
+learn extentLabel
+    using headFeatures, extentFeatures
+    from new ExtentReader("data/all")
+    1 rounds
+    with SupportVectorMachine {
+
+    }
+    testFrom new ExtentReader("data/all")
+    progressOutput 10000
+end

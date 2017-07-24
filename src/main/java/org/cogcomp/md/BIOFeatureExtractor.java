@@ -2,10 +2,7 @@ package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
@@ -43,6 +40,42 @@ public class BIOFeatureExtractor {
             }
         }
 
+        return ret_features;
+    }
+
+    public static List<String> getGazetteerFeaturesSingle(Constituent c){
+        List<String> ret_features = new ArrayList<>();
+        String[] features = c.getAttribute("GAZ").split(",");
+        for (String f : features) {
+            if (f == null) {
+                continue;
+            }
+            ret_features.add(f);
+        }
+        return ret_features;
+    }
+
+    public static List<Pair<String, String>> getGazetteerFeaturesHead(Relation r){
+        TextAnnotation ta = r.getTarget().getTextAnnotation();
+        List<Pair<String, String>> ret_features = new ArrayList<>();
+        for (int i = r.getTarget().getStartSpan(); i < r.getTarget().getEndSpan(); i++){
+            String curGazFeature = r.getTarget().getAttribute("GAZ" + i);
+            String[] features = curGazFeature.split(",");
+            for (String f : features){
+                if (f == null){
+                    continue;
+                }
+                ret_features.add(new Pair<>(Integer.toString(i - r.getTarget().getStartSpan()), f));
+            }
+        }
+        String phraseGazFeature = r.getTarget().getAttribute("GAZ");
+        String[] features = phraseGazFeature.split(",");
+        for (String f : features){
+            if (f == null){
+                continue;
+            }
+            ret_features.add(new Pair<>("PhraseGaz" , f));
+        }
         return ret_features;
     }
 
@@ -93,7 +126,8 @@ public class BIOFeatureExtractor {
 
     public static List<Pair<String, Boolean>> getWordTypeInformation(Constituent c){
         List<Pair<String, Boolean>> ret_features = new ArrayList<>();
-        View bioView = c.getTextAnnotation().getView("BIO");
+        //View bioView = c.getTextAnnotation().getView("BIO");
+        View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
         for (int j = -1; j < 3; j++) {
             int curId = c.getStartSpan() + j;
             if (curId < 0 || curId >= bioView.getEndSpan()){
