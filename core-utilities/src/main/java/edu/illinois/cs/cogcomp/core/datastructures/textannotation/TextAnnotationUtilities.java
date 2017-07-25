@@ -265,7 +265,7 @@ public class TextAnnotationUtilities {
      * @param consMap map from original constituents to new counterparts
      * @return new relation with all info copied from original, but with new source and target constituents
      */
-    private static Relation copyRelation(Relation r, Map<Constituent, Constituent> consMap) {
+    public static Relation copyRelation(Relation r, Map<Constituent, Constituent> consMap) {
         Relation newRel = null;
 
         if ( null == r.getLabelsToScores() )
@@ -278,7 +278,7 @@ public class TextAnnotationUtilities {
         return newRel;
     }
 
-    private static void copyAttributesFromTo(HasAttributes origObj, HasAttributes newObj) {
+    public static void copyAttributesFromTo(HasAttributes origObj, HasAttributes newObj) {
         for(String key : origObj.getAttributeKeys())
             newObj.addAttribute(key, origObj.getAttribute(key));
     }
@@ -290,7 +290,7 @@ public class TextAnnotationUtilities {
      * @param offset the offset to shift token indexes of new Constituent. Can be negative.
      * @return the new Constituent
      */
-    private static Constituent copyConstituentWithNewTokenOffsets(TextAnnotation newTA, Constituent c, int offset) {
+    public static Constituent copyConstituentWithNewTokenOffsets(TextAnnotation newTA, Constituent c, int offset) {
         int newStart = c.getStartSpan() + offset;
         int newEnd = c.getEndSpan() + offset;
 
