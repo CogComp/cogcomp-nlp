@@ -255,6 +255,8 @@ public class TextAnnotationUtilities {
             if (vu instanceof TreeView) {
                 ((TreeView) newVu).makeTrees();
             }
+            else if (vu instanceof PredicateArgumentView)
+                ((PredicateArgumentView) vu).findPredicates();
         }
     }
 
