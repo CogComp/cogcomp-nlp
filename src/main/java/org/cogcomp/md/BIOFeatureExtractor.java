@@ -169,6 +169,18 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    public static List<String> getBrownClusterPathsSingle(Constituent c){
+        List<String> ret_features = new ArrayList<>();
+        String[] features = c.getAttribute("BC").split(",");
+        for (String s : features) {
+            if (s == null){
+                continue;
+            }
+            ret_features.add(s);
+        }
+        return ret_features;
+    }
+
     public static String isInPronounList(Constituent c){
         String form = c.toString().toLowerCase();
         List<String> pronouns = new ArrayList<>();

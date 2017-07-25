@@ -256,7 +256,10 @@ public class BIOTester {
 
     public static Constituent getConstituent(Constituent curToken, Classifier classifier, boolean isGold) {
         View bioView = curToken.getTextAnnotation().getView("BIO");
-        String goldType = (curToken.getAttribute("BIO").split("-"))[1];
+        String goldType = "NA";
+        if (!curToken.getAttribute("BIO").startsWith("O")) {
+            goldType = (curToken.getAttribute("BIO").split("-"))[1];
+        }
         List<String> predictedTypes = new ArrayList<>();
         predictedTypes.add((inference(curToken, classifier).split("-"))[1]);
         int startIdx = curToken.getStartSpan();
@@ -753,6 +756,6 @@ public class BIOTester {
         }
         System.out.println(BIOFeatureExtractor.getWordNetTags(wordNet, "resorts"));
         */
-        test_tac();
+        test_cv();
     }
 }

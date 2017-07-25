@@ -162,7 +162,6 @@ public class ACEReader extends AnnotationReader<TextAnnotation> {
             }
             return cons;
         }
-
         return null;
     }
 

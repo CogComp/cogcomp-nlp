@@ -58,8 +58,21 @@ discrete% gazetteersFeaturesHead (Relation r) <- {
     }
 }
 
+discrete headType (Relation r) <- {
+    return r.getTarget().getAttribute("EntityType");
+}
+
+discrete headLevel (Relation r) <- {
+    return r.getTarget().getAttribute("EntityMentionType");
+}
+
+discrete% headDistance (Relation r) <- {
+    sense "ToStart" : r.getTarget().getStartSpan() - r.getSource().getStartSpan();
+    sense "ToEnd" : r.getTarget().getEndSpan() - r.getSource().getStartSpan();
+}
+
 discrete% headFeatures (Relation r) <-
-    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead
+    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead, headDistance
 
 discrete% wordFormExtent (Relation r) <- {
     List features = BIOFeatureExtractor.getWordFormFeatures(r.getSource());
@@ -99,12 +112,9 @@ discrete% POSExtent (Relation r) <- {
 }
 
 discrete% BrownClusterPathsExtent (Relation r) <- {
-    List features = BIOFeatureExtractor.getBrownClusterPaths(r.getSource());
+    List features = BIOFeatureExtractor.getBrownClusterPathsSingle(r.getSource());
     for (int i = 0; i < features.size(); i++){
-        Pair p = (Pair)features.get(i);
-        int idx = (Integer)p.getFirst();
-        String val = (String)p.getSecond();
-        sense idx : val;
+        sense "0" : features.get(i);
     }
 }
 

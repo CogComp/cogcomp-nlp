@@ -36,6 +36,14 @@ public class ExtentReader implements Parser
         taList = getTextAnnotations();
         pairList = getPairs();
     }
+
+    public String getId(){
+        String ret = _path;
+        ret = ret.replace("/", "");
+        ret = ret.replace("\\", "");
+        return ret;
+    }
+
     public List<TextAnnotation> getTextAnnotations(){
         List<TextAnnotation> ret = new ArrayList<>();
         ACEReader aceReader = null;
@@ -58,11 +66,25 @@ public class ExtentReader implements Parser
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
+            Vector<String> bcs = new Vector<>();
+            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brown-clusters/brownBllipClusters");
+            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            Vector<Integer> bcst = new Vector<>();
+            bcst.add(5);
+            bcst.add(5);
+            bcst.add(5);
+            Vector<Boolean> bcsl = new Vector<>();
+            bcsl.add(false);
+            bcsl.add(false);
+            bcsl.add(false);
+            BrownClusters.init(bcs, bcst, bcsl);
         }
         catch (Exception e){
             e.printStackTrace();
         }
         Gazetteers gazetteers = GazetteersFactory.get();
+        BrownClusters brownClusters = BrownClusters.get();
         for (TextAnnotation ta : taList){
             View mentionView = ta.getView(ViewNames.MENTION_ACE);
             View tokenView = ta.getView(ViewNames.TOKENS);
@@ -70,29 +92,34 @@ public class ExtentReader implements Parser
                 Constituent head = ACEReader.getEntityHeadForConstituent(mention, ta, "HEADS");
                 for (int i = head.getStartSpan(); i < head.getEndSpan(); i++) {
                     head.addAttribute("GAZ" + i, ((FlatGazetteers) gazetteers).annotateConstituent(tokenView.getConstituentsCoveringToken(i).get(0), false));
+                    head.addAttribute("BC" + i, brownClusters.getPrefixesCombined(tokenView.getConstituentsCoveringToken(i).get(0).toString()));
                 }
                 head.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(head));
                 for (int i = mention.getStartSpan(); i < head.getStartSpan(); i++){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
+                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
                     Relation leftR = new Relation("true", curToken, head, 1.0f);
                     ret.add(leftR);
                 }
                 for (int i = head.getEndSpan(); i < mention.getEndSpan(); i++){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
+                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
                     Relation rightR = new Relation("true", curToken, head, 1.0f);
                     ret.add(rightR);
                 }
                 if (mention.getStartSpan() > 0){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getStartSpan() - 1).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
+                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }
                 if (mention.getEndSpan() < tokenView.getEndSpan()){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getEndSpan()).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
+                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }
