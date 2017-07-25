@@ -353,7 +353,7 @@ public class BIOTester {
 
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "PRO", isBIO);
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL", isBIO);
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
             Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM", isBIO);
@@ -363,11 +363,11 @@ public class BIOTester {
 
             //bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             //bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
-            bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
+            //bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
 
             //bio_classifier_nam classifier = null;
             //bio_joint_classifier classifier = train_joint_classifier(classifier_nam, classifier_nom, classifier_pro, train_parser_all);
-            bio_classifier_pro classifier = classifier_pro;
+            bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
 
             int labeled_mention = 0;
             int predicted_mention = 0;

@@ -118,12 +118,39 @@ discrete% BrownClusterPathsExtent (Relation r) <- {
     }
 }
 
+discrete% WordNetTagExtent (Relation r) <- {
+    String combined = r.getSource().getAttribute("WORDNETTAG");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense (s.split("\\."))[0] : (s.split("\\."))[1];
+        }
+    }
+}
+
+discrete% WordNetHymExtent (Relation r) <- {
+    String combined = r.getSource().getAttribute("WORDNETHYM");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            sense i : s;
+        }
+    }
+}
+
 discrete% extentFeatures (Relation r) <-
-    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent
+    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent, WordNetTagExtent, WordNetHymExtent
+
+discrete% combinedFeatures (Relation r) <-
+    headFeatures && extentFeatures, wordFormExtent && afterHeadPOS, POSExtent && afterHeadPOS,
+    wordFormExtent && headLastWord, POSExtent && headLastWord,
+    headFeatures && headFeatures, extentFeatures && extentFeatures
 
 discrete extent_classifier (Relation r) <-
 learn extentLabel
-    using headFeatures, extentFeatures
+    using headFeatures, extentFeatures, combinedFeatures
     from new ExtentReader("data/all")
     1 rounds
     with SupportVectorMachine {

@@ -62,7 +62,10 @@ public class ExtentReader implements Parser
     }
     public List<Relation> getPairs(){
         List<Relation> ret = new ArrayList<>();
+        WordNetManager wordNet = null;
         try {
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
@@ -79,6 +82,7 @@ public class ExtentReader implements Parser
             bcsl.add(false);
             bcsl.add(false);
             BrownClusters.init(bcs, bcst, bcsl);
+
         }
         catch (Exception e){
             e.printStackTrace();
@@ -99,6 +103,8 @@ public class ExtentReader implements Parser
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
                     curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
+                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
+                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
                     Relation leftR = new Relation("true", curToken, head, 1.0f);
                     ret.add(leftR);
                 }
@@ -106,6 +112,8 @@ public class ExtentReader implements Parser
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
                     curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
+                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
+                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
                     Relation rightR = new Relation("true", curToken, head, 1.0f);
                     ret.add(rightR);
                 }
@@ -113,6 +121,8 @@ public class ExtentReader implements Parser
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getStartSpan() - 1).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
                     curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
+                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
+                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }
@@ -120,6 +130,8 @@ public class ExtentReader implements Parser
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getEndSpan()).get(0);
                     curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
                     curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
+                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
+                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }

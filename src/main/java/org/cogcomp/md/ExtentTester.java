@@ -8,6 +8,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
+import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.classify.TestDiscrete;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
@@ -101,7 +102,7 @@ public class ExtentTester {
         System.out.println("False F1: " + f);
     }
 
-    public static void addHeadAttributes(Constituent head, Gazetteers gazetteers, BrownClusters brownClusters){
+    public static void addHeadAttributes(Constituent head, Gazetteers gazetteers, BrownClusters brownClusters, WordNetManager wordnet){
         View tokenView = head.getTextAnnotation().getView(ViewNames.TOKENS);
         for (int i = head.getStartSpan(); i < head.getEndSpan(); i++) {
             head.addAttribute("GAZ" + i, ((FlatGazetteers) gazetteers).annotateConstituent(tokenView.getConstituentsCoveringToken(i).get(0), false));
@@ -110,18 +111,20 @@ public class ExtentTester {
         head.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(head));
     }
 
-    public static void addExtentAttributes(Constituent extent, Gazetteers gazetteers, BrownClusters brownClusters){
+    public static void addExtentAttributes(Constituent extent, Gazetteers gazetteers, BrownClusters brownClusters, WordNetManager wordnet){
         extent.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(extent, false));
         extent.addAttribute("BC", brownClusters.getPrefixesCombined(extent.toString()));
+        extent.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordnet, extent));
+        extent.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordnet, extent));
     }
 
-    public static Constituent getFullMention(extent_classifier classifier, Constituent head, Gazetteers gazetteers, BrownClusters brownClusters){
-        addHeadAttributes(head, gazetteers, brownClusters);
+    public static Constituent getFullMention(extent_classifier classifier, Constituent head, Gazetteers gazetteers, BrownClusters brownClusters, WordNetManager wordnet){
+        addHeadAttributes(head, gazetteers, brownClusters, wordnet);
         View tokenView = head.getTextAnnotation().getView(ViewNames.TOKENS);
         int leftIdx = head.getStartSpan() - 1;
         while (leftIdx >= tokenView.getStartSpan()){
             Constituent cur = tokenView.getConstituentsCoveringToken(leftIdx).get(0);
-            addExtentAttributes(cur, gazetteers, brownClusters);
+            addExtentAttributes(cur, gazetteers, brownClusters, wordnet);
             Relation candidate = new Relation("UNKNOWN", cur, head, 1.0f);
             String prediction = classifier.discreteValue(candidate);
             if (prediction.equals("false")){
@@ -136,7 +139,7 @@ public class ExtentTester {
         int rightIdx = head.getEndSpan();
         while (rightIdx < tokenView.getEndSpan()){
             Constituent cur = tokenView.getConstituentsCoveringToken(rightIdx).get(0);
-            addExtentAttributes(cur, gazetteers, brownClusters);
+            addExtentAttributes(cur, gazetteers, brownClusters, wordnet);
             Relation candidate = new Relation("UNKNOWN", cur, head, 1.0f);
             String prediction = classifier.discreteValue(candidate);
             if (prediction.equals("false")){
@@ -158,7 +161,10 @@ public class ExtentTester {
         int labeled = 0;
         int correct = 0;
         POSAnnotator posAnnotator = null;
+        WordNetManager wordNet = null;
         try{
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
             posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
@@ -203,7 +209,7 @@ public class ExtentTester {
                 for (Constituent mention : mentionView.getConstituents()){
                     labeled ++;
                     Constituent head = ACEReader.getEntityHeadForConstituent(mention, ta, "HEADS");
-                    Constituent predictedFullMention = getFullMention(classifier, head, gazetteers, brownClusters);
+                    Constituent predictedFullMention = getFullMention(classifier, head, gazetteers, brownClusters, wordNet);
                     if (predictedFullMention.getStartSpan() == mention.getStartSpan() &&
                             predictedFullMention.getEndSpan() == mention.getEndSpan()){
                         correct ++;
@@ -228,7 +234,10 @@ public class ExtentTester {
 
     public static void testExtentOnPredictedHead(){
         POSAnnotator posAnnotator = null;
+        WordNetManager wordNet = null;
         try{
+            WordNetManager.loadConfigAsClasspathResource(true);
+            wordNet = WordNetManager.getInstance();
             posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
@@ -277,9 +286,11 @@ public class ExtentTester {
                     Constituent predictMention = BIOTester.getConstituent((Constituent)example, h_classifier, false);
                     predictedHeads.add(predictMention);
                 }
+                preBIOLevel2 = preBIOLevel1;
+                preBIOLevel1 = bioTag;
             }
             for (Constituent head : predictedHeads){
-                Constituent mention = getFullMention(e_classifier, head, gazetteers, brownClusters);
+                Constituent mention = getFullMention(e_classifier, head, gazetteers, brownClusters, wordNet);
                 predictedMentions.add(mention);
             }
 
@@ -325,7 +336,7 @@ public class ExtentTester {
     }
 
     public static void main(String[] args){
-        //testExtentOnGoldHead();
-         testExtentOnPredictedHead();
+        testExtentOnGoldHead();
+        //testExtentOnPredictedHead();
     }
 }
