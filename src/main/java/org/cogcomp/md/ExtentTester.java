@@ -112,8 +112,21 @@ public class ExtentTester {
     }
 
     public static void addExtentAttributes(Constituent extent, Gazetteers gazetteers, BrownClusters brownClusters, WordNetManager wordnet){
+        View tokenView = extent.getTextAnnotation().getView(ViewNames.TOKENS);
         extent.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(extent, false));
         extent.addAttribute("BC", brownClusters.getPrefixesCombined(extent.toString()));
+        if (extent.getStartSpan() - 1 > tokenView.getStartSpan()) {
+            extent.addAttribute("BCm1", brownClusters.getPrefixesCombined(tokenView.getConstituentsCoveringToken(extent.getStartSpan() - 1).get(0).toString()));
+        }
+        else {
+            extent.addAttribute("BCm1", ",");
+        }
+        if (extent.getStartSpan() + 1 < tokenView.getEndSpan()) {
+            extent.addAttribute("BCp1", brownClusters.getPrefixesCombined(tokenView.getConstituentsCoveringToken(extent.getStartSpan() + 1).get(0).toString()));
+        }
+        else {
+            extent.addAttribute("BCm1", ",");
+        }
         extent.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordnet, extent));
         extent.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordnet, extent));
     }

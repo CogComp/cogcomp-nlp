@@ -362,12 +362,12 @@ public class BIOTester {
             Parser train_parser_all = new BIOReader(getPath("train", i), "ACE05", "ALL", isBIO);
 
             //bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
-            //bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
+            bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
             //bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
 
-            //bio_classifier_nam classifier = null;
+            bio_classifier_nom classifier = classifier_nom;
             //bio_joint_classifier classifier = train_joint_classifier(classifier_nam, classifier_nom, classifier_pro, train_parser_all);
-            bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+            //bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
 
             int labeled_mention = 0;
             int predicted_mention = 0;
@@ -435,8 +435,8 @@ public class BIOTester {
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
         Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05", "ALL", isBIO);
-        Parser train_parser_all = new BIOReader("data/all", "ACE05", "ALL", isBIO);
-        bio_classifier_nam classifier = train_nam_classifier(train_parser_all);
+        Parser train_parser_all = new BIOReader("data/all", "ACE05", "PRO", isBIO);
+        bio_classifier_pro classifier = train_pro_classifier(train_parser_all);
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
 
@@ -756,6 +756,6 @@ public class BIOTester {
         }
         System.out.println(BIOFeatureExtractor.getWordNetTags(wordNet, "resorts"));
         */
-        test_cv();
+        test_ts();
     }
 }

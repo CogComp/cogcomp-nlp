@@ -143,6 +143,66 @@ discrete% WordNetHymExtent (Relation r) <- {
 discrete% extentFeatures (Relation r) <-
     wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent, WordNetTagExtent, WordNetHymExtent
 
+discrete% POSBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        sense (i - anchor) : r.getSource().getTextAnnotation().getView(ViewNames.POS).getConstituentsCoveringToken(i).get(0).getLabel();
+    }
+}
+
+discrete% wordFormBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        sense (i - anchor) : r.getSource().getTextAnnotation().getToken(i);
+    }
+}
+
+discrete% wordTypeBetween (Relation r) <- {
+    int startIdx = 1;
+    int endIdx = 0;
+    if (r.getSource().getStartSpan() < r.getTarget().getStartSpan()){
+        startIdx = r.getSource().getEndSpan();
+        endIdx = r.getTarget().getStartSpan();
+    }
+    else{
+        startIdx = r.getTarget().getEndSpan();
+        endIdx = r.getSource().getStartSpan();
+    }
+    int anchor = startIdx;
+    for (int i = startIdx; i < endIdx; i++){
+        List features = BIOFeatureExtractor.getWordTypeInformation(r.getSource().getTextAnnotation().getView(ViewNames.TOKENS).getConstituentsCoveringToken(i).get(0));
+        for (int j = 0; j < features.size(); j++){
+            Pair p = (Pair)features.get(j);
+            String idx = (String)p.getFirst();
+            boolean val = (Boolean)p.getSecond();
+            sense idx + "_" + (i - anchor) : val;
+        }
+    }
+}
+
+discrete% betweenFeatures (Relation r) <-
+    POSBetween, wordFormBetween
+
 discrete% combinedFeatures (Relation r) <-
     headFeatures && extentFeatures, wordFormExtent && afterHeadPOS, POSExtent && afterHeadPOS,
     wordFormExtent && headLastWord, POSExtent && headLastWord,
@@ -150,7 +210,7 @@ discrete% combinedFeatures (Relation r) <-
 
 discrete extent_classifier (Relation r) <-
 learn extentLabel
-    using headFeatures, extentFeatures, combinedFeatures
+    using headFeatures, extentFeatures, betweenFeatures, combinedFeatures
     from new ExtentReader("data/all")
     1 rounds
     with SupportVectorMachine {

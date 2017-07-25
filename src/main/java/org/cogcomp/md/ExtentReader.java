@@ -94,44 +94,26 @@ public class ExtentReader implements Parser
             View tokenView = ta.getView(ViewNames.TOKENS);
             for (Constituent mention : mentionView){
                 Constituent head = ACEReader.getEntityHeadForConstituent(mention, ta, "HEADS");
-                for (int i = head.getStartSpan(); i < head.getEndSpan(); i++) {
-                    head.addAttribute("GAZ" + i, ((FlatGazetteers) gazetteers).annotateConstituent(tokenView.getConstituentsCoveringToken(i).get(0), false));
-                    head.addAttribute("BC" + i, brownClusters.getPrefixesCombined(tokenView.getConstituentsCoveringToken(i).get(0).toString()));
-                }
-                head.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotatePhrase(head));
-                for (int i = mention.getStartSpan(); i < head.getStartSpan(); i++){
+                ExtentTester.addHeadAttributes(head, gazetteers, brownClusters, wordNet);
+
+                for (int i = mention.getStartSpan(); i < mention.getEndSpan(); i++){
+                    if (i >= head.getStartSpan() && i < head.getEndSpan()){
+                        continue;
+                    }
                     Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
-                    curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
-                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
-                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
-                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
-                    Relation leftR = new Relation("true", curToken, head, 1.0f);
-                    ret.add(leftR);
-                }
-                for (int i = head.getEndSpan(); i < mention.getEndSpan(); i++){
-                    Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);
-                    curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
-                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
-                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
-                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
-                    Relation rightR = new Relation("true", curToken, head, 1.0f);
-                    ret.add(rightR);
+                    ExtentTester.addExtentAttributes(curToken, gazetteers, brownClusters, wordNet);
+                    Relation R = new Relation("true", curToken, head, 1.0f);
+                    ret.add(R);
                 }
                 if (mention.getStartSpan() > 0){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getStartSpan() - 1).get(0);
-                    curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
-                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
-                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
-                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
+                    ExtentTester.addExtentAttributes(curToken, gazetteers, brownClusters, wordNet);
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }
                 if (mention.getEndSpan() < tokenView.getEndSpan()){
                     Constituent curToken = tokenView.getConstituentsCoveringToken(mention.getEndSpan()).get(0);
-                    curToken.addAttribute("GAZ", ((FlatGazetteers) gazetteers).annotateConstituent(curToken, false));
-                    curToken.addAttribute("BC", brownClusters.getPrefixesCombined(curToken.toString()));
-                    curToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, curToken));
-                    curToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, curToken));
+                    ExtentTester.addExtentAttributes(curToken, gazetteers, brownClusters, wordNet);
                     Relation falseR = new Relation("false", curToken, head, 1.0f);
                     ret.add(falseR);
                 }
