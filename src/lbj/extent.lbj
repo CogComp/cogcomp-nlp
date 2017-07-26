@@ -71,8 +71,16 @@ discrete% headDistance (Relation r) <- {
     sense "ToEnd" : r.getTarget().getEndSpan() - r.getSource().getStartSpan();
 }
 
+discrete% headCap (Relation r) <- {
+    Constituent headC = r.getTarget();
+    for (int i = headC.getStartSpan(); i < headC.getEndSpan(); i++){
+        String curForm = headC.getTextAnnotation().getToken(i);
+        sense (i - headC.getStartSpan()) : (curForm.equals(curForm.toLowerCase()));
+    }
+}
+
 discrete% headFeatures (Relation r) <-
-    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead, headDistance
+    headLastWord, beforeHead, afterHead, headText, headForm, afterHeadPOS, gazetteersFeaturesHead, headDistance, headCap
 
 discrete% wordFormExtent (Relation r) <- {
     List features = BIOFeatureExtractor.getWordFormFeatures(r.getSource());
@@ -112,9 +120,23 @@ discrete% POSExtent (Relation r) <- {
 }
 
 discrete% BrownClusterPathsExtent (Relation r) <- {
-    List features = BIOFeatureExtractor.getBrownClusterPathsSingle(r.getSource());
-    for (int i = 0; i < features.size(); i++){
-        sense "0" : features.get(i);
+    String[] cur = r.getSource().getAttribute("BC").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense 0 : cur[i];
+        }
+    }
+    cur = r.getSource().getAttribute("BCm1").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense -1 : cur[i];
+        }
+    }
+    cur = r.getSource().getAttribute("BCp1").split(",");
+    for (int i = 0; i < cur.length; i++){
+        if (cur[i] != ""){
+            sense 1 : cur[i];
+        }
     }
 }
 
@@ -140,8 +162,15 @@ discrete% WordNetHymExtent (Relation r) <- {
     }
 }
 
+discrete CapitalizationExtent (Relation r) <- {
+    if (r.getSource().toString().equals(r.getSource().toString().toLowerCase())){
+        return "false";
+    }
+    return "true";
+}
+
 discrete% extentFeatures (Relation r) <-
-    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent, WordNetTagExtent, WordNetHymExtent
+    wordFormExtent, gazetteersFeaturesExtent, WordTypeInformationExtent, POSExtent, WordNetTagExtent, WordNetHymExtent, CapitalizationExtent
 
 discrete% POSBetween (Relation r) <- {
     int startIdx = 1;
