@@ -415,6 +415,13 @@ public class BIOTester {
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
 
+        int total_correct_nam = 0;
+        int total_false_type_nam = 0;
+        int total_correct_nom = 0;
+        int total_false_type_nom = 0;
+        int total_correct_pro = 0;
+        int total_false_type_pro = 0;
+
         Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05", "ALL", isBIO);
         Parser train_parser_nam = new BIOReader("data/all", "ACE05", "NAM", isBIO);
         Parser train_parser_nom = new BIOReader("data/all", "ACE05", "NOM", isBIO);
@@ -432,8 +439,30 @@ public class BIOTester {
         String preBIOLevel2 = "";
 
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
+
+            String smnam = "";
+            String smnom = "";
+            Constituent example_cons = (Constituent)example;
+            View bioView = example_cons.getTextAnnotation().getView("BIO");
+            Sentence curSentence = example_cons.getTextAnnotation().getSentenceFromToken(example_cons.getStartSpan());
+            for (int i = curSentence.getStartSpan(); i < curSentence.getEndSpan(); i++){
+                Constituent c = bioView.getConstituentsCoveringToken(i).get(0);
+                c.addAttribute("preBIOLevel1", "O");
+                c.addAttribute("preBIOLevel2", "O");
+                String namPredicted = classifier_nam.discreteValue(c);
+                String nomPredicted = classifier_nom.discreteValue(c);
+                if (!namPredicted.equals("O")){
+                    smnam += namPredicted + ",";
+                }
+                if (!nomPredicted.equals("O")){
+                    smnom += nomPredicted + ",";
+                }
+            }
+
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
+            ((Constituent)example).addAttribute("SMNAM", smnam);
+            ((Constituent)example).addAttribute("SMNOM", smnom);
 
             Pair<String, Integer> cands = joint_inference((Constituent)example, candidates, null);
 
@@ -460,10 +489,40 @@ public class BIOTester {
             if (goldStart && predictedStart) {
                 Constituent goldMention = getConstituent((Constituent)example, candidates[learnerIdx], true);
                 Constituent predictMention = getConstituent((Constituent)example, candidates[learnerIdx], false);
+                boolean boundaryCorrect = false;
+                boolean typeCorrect = false;
                 if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan()) {
-                    //if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
-                        total_correct_mention++;
-                    //}
+                    boundaryCorrect = true;
+                }
+                if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
+                    typeCorrect = true;
+                }
+                if (boundaryCorrect){
+                    total_correct_mention ++;
+                    if (learnerIdx == 0){
+                        total_correct_nam ++;
+                    }
+                    if (learnerIdx == 1){
+                        total_correct_nom ++;
+                    }
+                    if (learnerIdx == 2){
+                        total_correct_pro ++;
+                    }
+                }
+                if (boundaryCorrect && !typeCorrect){
+                    if (learnerIdx == 0){
+                        total_false_type_nam ++;
+                    }
+                    if (learnerIdx == 1){
+                        total_false_type_nom ++;
+                    }
+                    if (learnerIdx == 2){
+                        total_false_type_pro ++;
+                        System.out.println(goldMention.getTextAnnotation().getSentenceFromToken(goldMention.getStartSpan()).toString());
+                        System.out.println(goldMention.toString() + " " + goldMention.getAttribute("EntityType") + " " + predictMention.getAttribute("EntityType"));
+                        System.out.println(((Constituent)example).getAttribute("SMNAM") + " " + ((Constituent)example).getAttribute("SMNO';M"));
+                        System.out.println();
+                    }
                 }
             }
         }
@@ -477,6 +536,10 @@ public class BIOTester {
         System.out.println("Precision: " + p);
         System.out.println("Recall: " + r);
         System.out.println("F1: " + f);
+
+        System.out.println("NAM: " + total_false_type_nam + "/" + total_correct_nam);
+        System.out.println("NOM: " + total_false_type_nom + "/" + total_correct_nom);
+        System.out.println("PRO: " + total_false_type_pro + "/" + total_correct_pro);
     }
 
     public static void test_ere(){
@@ -647,8 +710,8 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        //test_ts();
-        test_cv();
+        test_ts();
+        //test_cv();
         //test_ere();
         //calculateAvgMentionLength();
     }
