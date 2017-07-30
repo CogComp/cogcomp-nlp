@@ -224,26 +224,85 @@ public class BIOTester {
         }
 
         double highest_start_score = -10.0;
-        int highest_start_cands = -1;
-        String output = "O";
+
+        Map<Integer, Double> remaining = new HashedMap();
+        String[] preBIOLevel1 = new String[3];
+        String[] preBIOLevel2 = new String[3];
+        for (int i = 0; i < 3; i++){
+            preBIOLevel2[i] = "O";
+        }
+        int chosen = -1;
 
         for (int i = 0; i < candidates.length; i++){
             String prediction = candidates[i].discreteValue(t);
+            preBIOLevel1[i] = prediction;
             if (prediction.startsWith("B") || prediction.startsWith("U")){
                 ScoreSet scores = candidates[i].scores(t);
                 Score[] scoresArray = scores.toArray();
                 for (Score s : scoresArray){
                     if (s.value.equals(prediction)){
+                        remaining.put(i, s.score);
                         if (s.score > highest_start_score){
                             highest_start_score = s.score;
-                            highest_start_cands = i;
-                            output = prediction;
+                            chosen = i;
                         }
                     }
                 }
             }
         }
-        return new Pair<>(output, highest_start_cands);
+        if (chosen == -1){
+            return new Pair<>("O", -1);
+        }
+        int next = t.getStartSpan() + 1;
+        while (next < t.getTextAnnotation().getSentenceFromToken(t.getStartSpan()).getEndSpan()){
+            Constituent current = t.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(next).get(0);
+            current.addAttribute("preBIOLevel1", preBIOLevel1[chosen]);
+            current.addAttribute("preBIOLevel2", preBIOLevel2[chosen]);
+            String chosenPrediction = candidates[chosen].discreteValue(current);
+            if (!(chosenPrediction.startsWith("I") || chosenPrediction.startsWith("L"))){
+                break;
+            }
+            for (int r : remaining.keySet()){
+                if (r == chosen){
+                    continue;
+                }
+                current.addAttribute("preBIOLevel1", preBIOLevel1[r]);
+                current.addAttribute("preBIOLevel2", preBIOLevel2[r]);
+                String currentPrediction = candidates[r].discreteValue(current);
+                if (!(currentPrediction.startsWith("I") || currentPrediction.startsWith("L"))){
+                    remaining.remove(r);
+                }
+            }
+            if (remaining.size() < 2){
+                break;
+            }
+            double highest = -10.0;
+            for (int r : remaining.keySet()){
+                String prediction = candidates[r].discreteValue(current);
+                ScoreSet scores = candidates[r].scores(current);
+                Score[] scoresArray = scores.toArray();
+                for (Score s : scoresArray){
+                    if (s.value.equals(prediction)){
+                        double new_score = remaining.get(r) + s.score;
+                        remaining.put(r, new_score);
+                        if (new_score > highest){
+                            highest = new_score;
+                            chosen = r;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < 3; i++){
+                preBIOLevel2[i] = preBIOLevel1[i];
+                preBIOLevel1[i] = candidates[i].discreteValue(current);
+            }
+            next ++;
+        }
+        if (chosen == -1){
+            return new Pair<>("O", -1);
+        }
+        return new Pair<>(candidates[chosen].discreteValue(t), chosen);
+        //return new Pair<>(output, highest_start_cands);
     }
 
     public static String inference(Constituent c, Classifier classifier){
@@ -734,8 +793,8 @@ public class BIOTester {
     }
 
     public static void main(String[] args){
-        test_ts();
-        //test_cv();
+        //test_ts();
+        test_cv();
         //test_ere();
         //calculateAvgMentionLength();
     }

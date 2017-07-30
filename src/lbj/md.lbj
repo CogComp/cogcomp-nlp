@@ -227,7 +227,7 @@ end
 
 discrete bio_classifier_pro (Constituent c) <-
 learn bio_label
-    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart, sameSentenceTypes
+    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
