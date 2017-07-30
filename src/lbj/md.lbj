@@ -160,11 +160,48 @@ discrete% wordNetHym (Constituent c) <- {
     }
 }
 
+discrete% sameSentenceTypes (Constituent c) <- {
+    String combined = c.getAttribute("SMNAMPRE");
+    String[] group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNAM_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNOMPRE");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNOM_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNAMAFT");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNAMAFT_" + gp[0] : gp[1];
+        }
+    }
+    combined = c.getAttribute("SMNOMAFT");
+    group = combined.split(",");
+    for (int i = 0; i < group.length; i++){
+        String s= group[i];
+        if (!s.equals("")){
+            String[] gp = s.split("-");
+            sense "SMNOMAFT_" + gp[0] : gp[1];
+        }
+    }
+}
+
 discrete bio_classifier_nam (Constituent c) <-
 learn bio_label
     using Capitalization, gazetteers_features, isSentenceStart, wordForm_features, Affixes, AffixesZH, WordTypeInformation, BrownClusterPaths, preBIOLevel1, preBIOLevel2
-    //using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
-    //using wordForm_features, BrownClusterPaths, POS_Features, isSentenceStart, gazetteers_features, Capitalization, Affixes, AffixesZH
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {
@@ -190,7 +227,7 @@ end
 
 discrete bio_classifier_pro (Constituent c) <-
 learn bio_label
-    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart
+    using wordForm_features, BrownClusterPaths, POS_Features, WordTypeInformation, isSentenceStart, sameSentenceTypes
     from new BIOReader("data/partition_with_dev/train/0", "ACE05", "ALL", true)
     5 rounds
     with SupportVectorMachine {

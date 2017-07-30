@@ -440,29 +440,54 @@ public class BIOTester {
 
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
 
-            String smnam = "";
-            String smnom = "";
+            String smnamPre = "";
+            String smnomPre = "";
+            String smnamAft = "";
+            String smnomAft = "";
             Constituent example_cons = (Constituent)example;
             View bioView = example_cons.getTextAnnotation().getView("BIO");
             Sentence curSentence = example_cons.getTextAnnotation().getSentenceFromToken(example_cons.getStartSpan());
-            for (int i = curSentence.getStartSpan(); i < curSentence.getEndSpan(); i++){
+            int idx = 0;
+            for (int i = curSentence.getStartSpan(); i < example_cons.getStartSpan(); i++){
                 Constituent c = bioView.getConstituentsCoveringToken(i).get(0);
                 c.addAttribute("preBIOLevel1", "O");
                 c.addAttribute("preBIOLevel2", "O");
                 String namPredicted = classifier_nam.discreteValue(c);
                 String nomPredicted = classifier_nom.discreteValue(c);
-                if (!namPredicted.equals("O")){
-                    smnam += namPredicted + ",";
+                //TODO: Try agree here
+                if (namPredicted.startsWith("B") || namPredicted.startsWith("U")){
+                    smnamPre += idx + "-" + namPredicted.substring(2) + ",";
+                    idx ++;
                 }
-                if (!nomPredicted.equals("O")){
-                    smnom += nomPredicted + ",";
+                else if (nomPredicted.startsWith("B") || nomPredicted.startsWith("U")){
+                    smnomPre += idx + "-" + nomPredicted.substring(2) + ",";
+                    idx ++;
+                }
+            }
+            idx = 0;
+            for (int i = example_cons.getEndSpan(); i < curSentence.getEndSpan(); i++){
+                Constituent c = bioView.getConstituentsCoveringToken(i).get(0);
+                c.addAttribute("preBIOLevel1", "O");
+                c.addAttribute("preBIOLevel2", "O");
+                String namPredicted = classifier_nam.discreteValue(c);
+                String nomPredicted = classifier_nom.discreteValue(c);
+                //TODO: Try agree here
+                if (namPredicted.startsWith("B") || namPredicted.startsWith("U")){
+                    smnamAft += idx + "-" + namPredicted.substring(2) + ",";
+                    idx ++;
+                }
+                else if (nomPredicted.startsWith("B") || nomPredicted.startsWith("U")){
+                    smnomAft += idx + "-" + nomPredicted.substring(2) + ",";
+                    idx ++;
                 }
             }
 
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-            ((Constituent)example).addAttribute("SMNAM", smnam);
-            ((Constituent)example).addAttribute("SMNOM", smnom);
+            ((Constituent)example).addAttribute("SMNAMPRE", smnamPre);
+            ((Constituent)example).addAttribute("SMNOMPRE", smnomPre);
+            ((Constituent)example).addAttribute("SMNAMAFT", smnamAft);
+            ((Constituent)example).addAttribute("SMNOMAFT", smnomAft);
 
             Pair<String, Integer> cands = joint_inference((Constituent)example, candidates, null);
 
@@ -520,7 +545,6 @@ public class BIOTester {
                         total_false_type_pro ++;
                         System.out.println(goldMention.getTextAnnotation().getSentenceFromToken(goldMention.getStartSpan()).toString());
                         System.out.println(goldMention.toString() + " " + goldMention.getAttribute("EntityType") + " " + predictMention.getAttribute("EntityType"));
-                        System.out.println(((Constituent)example).getAttribute("SMNAM") + " " + ((Constituent)example).getAttribute("SMNO';M"));
                         System.out.println();
                     }
                 }
