@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 import org.apache.commons.collections.map.HashedMap;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Xuanyu on 7/10/2017.
@@ -225,7 +226,7 @@ public class BIOTester {
 
         double highest_start_score = -10.0;
 
-        Map<Integer, Double> remaining = new HashedMap();
+        Map<Integer, Double> remaining = new ConcurrentHashMap<>();
         String[] preBIOLevel1 = new String[3];
         String[] preBIOLevel2 = new String[3];
         for (int i = 0; i < 3; i++){
@@ -253,6 +254,10 @@ public class BIOTester {
         if (chosen == -1){
             return new Pair<>("O", -1);
         }
+        else{
+            return new Pair<>(candidates[chosen].discreteValue(t), chosen);
+        }
+        /*
         int next = t.getStartSpan() + 1;
         while (next < t.getTextAnnotation().getSentenceFromToken(t.getStartSpan()).getEndSpan()){
             Constituent current = t.getTextAnnotation().getView("BIO").getConstituentsCoveringToken(next).get(0);
@@ -262,6 +267,7 @@ public class BIOTester {
             if (!(chosenPrediction.startsWith("I") || chosenPrediction.startsWith("L"))){
                 break;
             }
+            List<Integer> remaining_to_remove = new ArrayList<>();
             for (int r : remaining.keySet()){
                 if (r == chosen){
                     continue;
@@ -270,8 +276,12 @@ public class BIOTester {
                 current.addAttribute("preBIOLevel2", preBIOLevel2[r]);
                 String currentPrediction = candidates[r].discreteValue(current);
                 if (!(currentPrediction.startsWith("I") || currentPrediction.startsWith("L"))){
-                    remaining.remove(r);
+                    //remaining.remove(r);
+                    remaining_to_remove.add(r);
                 }
+            }
+            for (int tr : remaining_to_remove){
+                remaining.remove(tr);
             }
             if (remaining.size() < 2){
                 break;
@@ -303,6 +313,7 @@ public class BIOTester {
         }
         return new Pair<>(candidates[chosen].discreteValue(t), chosen);
         //return new Pair<>(output, highest_start_cands);
+        */
     }
 
     public static String inference(Constituent c, Classifier classifier){
@@ -794,8 +805,9 @@ public class BIOTester {
 
     public static void main(String[] args){
         //test_ts();
-        test_cv();
+        //test_cv();
         //test_ere();
         //calculateAvgMentionLength();
+        BIOCombinedReader.generateNewSplit();
     }
 }
