@@ -20,28 +20,29 @@ import java.io.Serializable;
 public class MetricResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public final double score;
-    public final String reason;
+	public final String reason;
 
-    public MetricResponse(double score, String reason) {
-        this.score = score;
-        this.reason = reason;
-    }
+	public MetricResponse(double score, String reason) {
+		this.score = score;
+		this.reason = reason;
+	}
 
-    public String toString() {
-        StringBuilder bldr = new StringBuilder( "Score: ");
-        bldr.append( score ).append( "; Reason: " ).append( reason ).append( System.lineSeparator() );
+	public String toString() {
+		StringBuilder bldr = new StringBuilder("Score: ");
+		bldr.append(score).append("; Reason: ").append(reason).append(System.lineSeparator());
 
-        return bldr.toString();
-    }
-    
-//    public void writeObject(ObjectOutputStream out) throws IOException {
-//        out.writeDouble(score);
-//    	out.writeObject(reason);
-//    }
-//
-//    public void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-//        score = in.readDouble();
-//        reason = (String) in.readObject();
-//    }
-    
+		return bldr.toString();
+	}
+
+	// public void writeObject(ObjectOutputStream out) throws IOException {
+	// out.writeDouble(score);
+	// out.writeObject(reason);
+	// }
+	//
+	// public void readObject(ObjectInputStream in) throws IOException,
+	// ClassNotFoundException {
+	// score = in.readDouble();
+	// reason = (String) in.readObject();
+	// }
+
 }

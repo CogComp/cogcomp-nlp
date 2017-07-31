@@ -7,7 +7,7 @@
     <groupId>edu.illinois.cs.cogcomp</groupId>
     <artifactId>illinois-cogcomp-nlp</artifactId>
     <packaging>pom</packaging>
-    <version>3.1.20</version>
+    <version>3.1.25</version>
     <modules>
         <module>core-utilities</module>
         <module>tokenizer</module>
@@ -26,6 +26,7 @@
         <module>quantifier</module>
         <module>depparse</module>
         <module>commasrl</module>
+        <module>clausie</module>
         <module>prepsrl</module>
         <module>stanford_3.3.1</module>
         <module>verbsense</module>

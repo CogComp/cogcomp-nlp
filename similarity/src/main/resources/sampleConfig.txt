@@ -1,0 +1,2 @@
+wnPath  /path/to/WordnetFolder/dict
+paraphrasePath  /path/to/paraphrase/embedding/file

@@ -14,6 +14,8 @@ import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationCache;
+import edu.illinois.cs.cogcomp.core.io.caches.TextAnnotationMapDBHandler;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.nlp.tokenizer.Tokenizer;
 
@@ -36,11 +38,10 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
     private static TextAnnotationBuilder taBuilder;
     private final Map<String, Annotator> viewProviders;
-
-
+    protected TextAnnotationCache annotationCache = null;
+    private String cacheFile = "curatorCache.db";
     /**
      * Overloaded constructor with default configuration.
-     * 
      * @see edu.illinois.cs.cogcomp.curator.CuratorAnnotatorService#CuratorAnnotatorService(ResourceManager)
      */
     protected CuratorAnnotatorService() throws Exception {
@@ -65,7 +66,7 @@ public class CuratorAnnotatorService implements AnnotatorService {
      */
     protected CuratorAnnotatorService(ResourceManager rm) {
         if (!rm.getBoolean(CuratorConfigurator.DISABLE_CACHE))
-            throw new IllegalArgumentException("CuratorAnnotatorService doesn't support caching");
+            this.annotationCache = new TextAnnotationMapDBHandler(cacheFile);
 
         CuratorClient curatorClient = new CuratorClient(rm);
 
@@ -142,6 +143,18 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId, String text)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            // clone the views
+            HashSet<String> views = new HashSet<>(viewProviders.keySet());
+            views.removeAll(ta.getAvailableViews());
+            if(views.size() == 0) {
+                // it contains the required views; otherwise continue
+                return ta;
+            }
+        }
+
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
         return ta;
@@ -151,6 +164,18 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Tokenizer.Tokenization tokenization) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            // clone the views
+            HashSet<String> views = new HashSet<>(viewProviders.keySet());
+            views.removeAll(ta.getAvailableViews());
+            if(views.size() == 0) {
+                // it contains the required views; otherwise continue
+                return ta;
+            }
+        }
+
         for (String viewName : viewProviders.keySet())
             addView(ta, viewName);
         return ta;
@@ -160,6 +185,18 @@ public class CuratorAnnotatorService implements AnnotatorService {
     public TextAnnotation createAnnotatedTextAnnotation(String corpusId, String textId,
             String text, Set<String> viewNames) throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text);
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            // clone the views
+            HashSet<String> views = new HashSet<>(viewProviders.keySet());
+            views.removeAll(ta.getAvailableViews());
+            if(views.size() == 0) {
+                // it contains the required views; otherwise continue
+                return ta;
+            }
+        }
+
         for (String viewName : viewNames)
             addView(ta, viewName);
         return ta;
@@ -170,6 +207,18 @@ public class CuratorAnnotatorService implements AnnotatorService {
             String text, Tokenizer.Tokenization tokenization, Set<String> viewNames)
             throws AnnotatorException {
         TextAnnotation ta = createBasicTextAnnotation(corpusId, textId, text, tokenization);
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            // clone the views
+            HashSet<String> views = new HashSet<>(viewProviders.keySet());
+            views.removeAll(ta.getAvailableViews());
+            if(views.size() == 0) {
+                // it contains the required views; otherwise continue
+                return ta;
+            }
+        }
+
         for (String viewName : viewNames)
             addView(ta, viewName);
         return ta;
@@ -185,10 +234,16 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         boolean isUpdated = false;
 
-        // TODO Until a caching mechanism is available in illinois-core-utilities, this
-        // AnnotatorService will not support caching
         if (ta.hasView(viewName))
             return false;
+
+        if (annotationCache != null && annotationCache.contains(ta)) {
+            TextAnnotation taFromCache = annotationCache.getTextAnnotation(ta);
+            if(taFromCache.getAvailableViews().contains(viewName)) {
+                ta.addView(viewName, taFromCache.getView(viewName));
+                return false;
+            }
+        }
 
         Annotator annotator = viewProviders.get(viewName);
 
@@ -197,8 +252,11 @@ public class CuratorAnnotatorService implements AnnotatorService {
 
         ta.addView(annotator);
 
-        // TODO Until a caching mechanism is available in illinois-core-utilities, this
-        // AnnotatorService will not support caching
+        if (annotationCache != null && annotationCache.contains(ta))
+            annotationCache.updateTextAnnotation(ta);
+        else
+            annotationCache.addTextAnnotation(ta.getCorpusId(), ta);
+
         return isUpdated;
     }
 
@@ -239,6 +297,17 @@ public class CuratorAnnotatorService implements AnnotatorService {
      */
     @Override
     public TextAnnotation annotateTextAnnotation(TextAnnotation ta, boolean replaceExistingViews) throws AnnotatorException {
+        if (!replaceExistingViews && annotationCache != null && annotationCache.contains(ta)) {
+            ta = annotationCache.getTextAnnotation(ta);
+            // clone the views
+            HashSet<String> views = new HashSet<>(viewProviders.keySet());
+            views.removeAll(ta.getAvailableViews());
+            if(views.size() == 0) {
+                // it contains the required views; otherwise continue
+                return ta;
+            }
+        }
+
         for (String view : viewProviders.keySet())
             addView(ta, view);
 

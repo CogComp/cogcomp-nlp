@@ -1,0 +1,15 @@
+debug	true
+useStopwords	true
+useLemmas	true
+useMetric	false
+stopwordFile	llmStopwords.txt
+useSimpleScore	true
+metricName	WNSim
+metricHost	handy.cs.uiuc.edu
+metricPort	29023
+metricThreshold	0.0001
+wordEntailmentThreshold 0.0001
+llmThreshold    0.5
+
+llm_word_sim_method PARAPHRASE
+wnPath  data/WordNet_3-0/dict

@@ -88,7 +88,6 @@ public class JsonSerializer extends AbstractSerializer {
         if (constituents.size() > 0) {
             JsonArray cJson = new JsonArray();
             for (int i = 0; i < view.getNumberOfConstituents(); i++) {
-
                 Constituent constituent = constituents.get(i);
                 JsonObject c = new JsonObject();
                 writeConstituent(constituent, c);
@@ -102,6 +101,14 @@ public class JsonSerializer extends AbstractSerializer {
         List<Relation> relations = view.getRelations();
 
         if (relations.size() > 0) {
+
+            // if we're using relations, constituents shouldn't have any duplicates; otherwise upon deserialization
+            // things would not be as expected
+            Set<Constituent> consSet = new HashSet<>(constituents);
+            if(consSet.size() < constituents.size())
+                logger.error("There are duplicate constituents in the '" + view + "' view. " +
+                        "You have to fix this otherwise things will be messed up, upon deserialization. ");
+
 
             JsonArray rJson = new JsonArray();
 
@@ -184,8 +191,7 @@ public class JsonSerializer extends AbstractSerializer {
                 int tgt = readInt("targetConstituent", rJ);
 
                 Map<String, Double> labelsToScores = null;
-                if (rJ.has(LABEL_SCORE_MAP))
-                {
+                if (rJ.has(LABEL_SCORE_MAP)) {
                     labelsToScores = new HashMap<>();
                     readLabelsToScores(labelsToScores, rJ);
                 }
@@ -377,8 +383,7 @@ public class JsonSerializer extends AbstractSerializer {
         }
     }
 
-    private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out)
-    {
+    private static void writeLabelsToScores(Map<String, Double> obj, JsonObject out) {
         JsonObject labelScoreMap = new JsonObject();
         for (String key : Sorters.sortSet(obj.keySet()))
             writeDouble( key, obj.get(key), out);
@@ -413,7 +418,7 @@ public class JsonSerializer extends AbstractSerializer {
 
         JsonArray views = new JsonArray();
         for (String viewName : Sorters.sortSet(ta.getAvailableViews())) {
-// TODO: comment out this next two lines as part of addressing issue #406
+            // TODO: comment out this next two lines as part of addressing issue #406
             if (viewName.equals(ViewNames.SENTENCE))
                 continue;
 
@@ -470,7 +475,6 @@ public class JsonSerializer extends AbstractSerializer {
 
             for (int k = 0; k < viewData.size(); k++) {
                 JsonObject kView = (JsonObject) viewData.get(k);
-
                 topKViews.add(readView(kView, ta));
             }
 

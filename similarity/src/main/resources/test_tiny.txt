@@ -1,0 +1,26 @@
+<testset>
+	<pair id="1" entailment="UNKNOWN" task="QA">
+		<t>LOSAIL, Qatar (AFP) - Torrential rain caused the season-opening Qatar MotoGP to be cancelled on Sunday, leaving officials and teams in a frenzy before deciding to race on Monday instead at this floodlit desert venue. Monsoon-like conditions, accompanied by swirling winds, arrived just moments before Australia's Casey Stoner, on pole position, was due to lead defending world champion Valentino Rossi and the other riders away on the warm-up lap. "It's just unlucky with the weather," said Australian Ducati rider Stoner, the 2007 world champion, who was bidding for a third successive win here.</t>
+		<h>Valentino Rossi won the season-opening Qatar MotoGP.</h>
+	</pair>
+	<pair id="2" entailment="CONTRADICTION" task="QA">
+		<t>Euro MPs have voted overwhelmingly to cut the cost of texting and using the internet on mobiles abroad. The cap for a "roaming" text will fall to 11 euro cents (10p; 14 US cents), from about 29 cents on average today. The EU-wide caps, excluding VAT, will take effect in July. They cover text messages and data roaming services, such as checking e-mails while abroad. The current price cap of 46 euro cents per minute for an outgoing voice call will also fall to 43 cents in July.</t>
+		<h>A roaming text cost 46 euro cents.</h>
+	</pair>
+	<pair id="3" entailment="UNKNOWN" task="QA">
+		<t>However Mr Johnson said it was likely there would still be more cases and there was the possibility of a second wave in the autumn or winter. The advice was followed by news that the number of confirmed cases of swine flu in the UK has risen to 18. Health officials are trying to trace those on the same flight as a Scottish man diagnosed with swine flu on Sunday. The man, from Ayrshire - Scotland's fourth confirmed case - flew from Birmingham International to Glasgow Airport on Thursday. He is thought to have picked up the virus while in Texas, but the authorities said no other flights were affected.</t>
+		<h>Mr. Johnson is a health official.</h>
+	</pair>
+	<pair id="4" entailment="ENTAILMENT" task="QA">
+		<t>A Spanish man who has admitted killing a Welsh couple, has expressed remorse for his actions and apologised to their son in his murder trial. Brian and Tina Johnson were bludgeoned to death with a hammer on Fuerteventura in the Canary Islands in July 2006. Juan Carmelo Santana told the jury at Las Palmas criminal court that he blamed the drink and drugs he had taken for the attacks. The jury is expected to begin its deliberations later.</t>
+		<h>Mr. and Mrs. Johnson were killed by Santana.</h>
+	</pair>
+	<pair id="5" entailment="UNKNOWN" task="QA">
+		<t>"There is a rational basis to distinguish between people driving cars and semi trucks," Jambois said. "All I would say is I think he has an uphill battle." The lawsuit says the truckers' Fifth and Fourteenth amendment rights are being violated because there is no way for them to apply for an occupational license. Mutschler said the state is taking away the truckers' right to drive a truck for a living. He said he will argue that while driving is a privilege, once a person has a license for work, it becomes a right.</t>
+		<h>Fifth Amendment right is about driving license.</h>
+	</pair>
+	<pair id="6" entailment="ENTAILMENT" task="QA">
+		<t>Rain is pelting down on Dona Porcela's treatment room in Puerto Cabezas, the main town on Nicaragua's Northern Caribbean coast. The room is barren except for a few plastic chairs, a wooden table and some old plastic bottles balanced precariously on timber beams. Dona Porcela is a respected traditional healer here and the bottles are filled with her secret medicinal potions. Her patient today is a teenage girl asleep on a piece of cardboard, serving as a mattress on the dirt floor.</t>
+		<h>Dona Porcela is a healer.</h>
+	</pair>
+</testset>
