@@ -34,6 +34,10 @@ public class TimexNormalizer {
 		this.defaultcountry = country;
 	}
 
+	/**
+	 * Set document creation time
+	 * @param dct
+     */
 	public void setTime(Date dct) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(dct);
@@ -47,6 +51,12 @@ public class TimexNormalizer {
 		this.dems = String.valueOf(cal.get(Calendar.MILLISECOND));
 	}
 
+	/**
+	 * normalize a temporal phrase with dct specified
+	 * @param timex
+	 * @param dct
+     * @return
+     */
 	public static TimexChunk normalize(String timex, Date dct) {
 
 		Calendar cal = Calendar.getInstance();
@@ -67,13 +77,18 @@ public class TimexNormalizer {
 			e.printStackTrace();
 		}
 		p = p.toLowerCase();
-		TimexChunk canonicalTime = phrase.canonize(p, deyear,
+		TimexChunk canonicalTime = Phrase.canonize(p, deyear,
 				demonth, deday, dehour, deminute, desecond, dems,
 				defaultyear, defaultcountry);
 		canonicalTime.setContent(timex);
 		return canonicalTime;
 	}
 
+	/**
+	 * Normalize a TemporalPhrase, this means we have a string and a tense
+	 * @param timex
+	 * @return
+     */
 	public static TimexChunk normalize(TemporalPhrase timex) {
 		String origPhrase = timex.getPhrase();
 		String p = timex.getPhrase();
@@ -86,7 +101,7 @@ public class TimexNormalizer {
 		//TODO: remember update timex using p
 		p = p.toLowerCase();
 		timex.setPhrase(p);
-		TimexChunk canonicalTime = phrase.canonize(timex, TimexNormalizer.deyear,
+		TimexChunk canonicalTime = Phrase.canonize(timex, TimexNormalizer.deyear,
 				TimexNormalizer.demonth, TimexNormalizer.deday,
 				TimexNormalizer.dehour, TimexNormalizer.deminute,
 				TimexNormalizer.desecond, TimexNormalizer.dems,

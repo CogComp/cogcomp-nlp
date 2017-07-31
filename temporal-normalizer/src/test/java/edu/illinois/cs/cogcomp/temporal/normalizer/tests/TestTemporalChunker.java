@@ -11,6 +11,7 @@ import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorService;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.io.LineIO;
@@ -48,11 +49,16 @@ import java.util.Properties;
 import java.util.logging.Level;
 
 import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 /**
  * Created by zhilifeng on 11/1/16.
+ * This is the test class for TemporalChunkerAnnotator
+ * In addition, users can follow the test to set up annotators.
+ * Also we provide two evaluations: 1) normalizing with gold chunks, and
+ * 2) normalizing with our extraction (using chunker)
  */
 public class TestTemporalChunker {
 //    private String testFileName = "test.txt";
@@ -67,8 +73,8 @@ public class TestTemporalChunker {
     //private String folderName = "uw_TimeBank";
     //private String folderName = "uw_AQUAINT";
     //private String folderName = "TimeBank";
-    private String folderName = "AQUAINT";
-    //private String folderName = "te3-platinum";
+    //private String folderName = "AQUAINT";
+    private String folderName = "te3-platinum";
     //private String folderName = "ht2.1_res";
     //private String folderName = "AQUAINT_ht";
     //private String folderName = "TimeBank_ht";
@@ -96,8 +102,6 @@ public class TestTemporalChunker {
         DocumentBuilder builder = factory.newDocumentBuilder();
         for (File file : listOfFiles) {
             if (file.isFile()) {
-//                if (!file.getName().equals(""))
-//                    continue;
                 String testFile = fullFolderName + "/" + file.getName();
                 byte[] encoded = Files.readAllBytes(Paths.get(testFile));
                 String fileContent = new String(encoded, StandardCharsets.UTF_8);
@@ -125,17 +129,6 @@ public class TestTemporalChunker {
                 }
             }
         }
-
-//        te3inputText = new ArrayList<>();
-//        URL te3URL = TestTemporalChunker.class.getClassLoader().getResource(te3ForderName);
-//        File te3Folder = new File(te3URL.getFile());
-//        File[] te3Inputs = te3Folder.listFiles();
-//        for (File file : te3Inputs) {
-//            String testFile = te3URL.getFile() + "/" + file.getName();
-//            byte[] encoded = Files.readAllBytes(Paths.get(testFile));
-//            String fileContent = new String(encoded, StandardCharsets.UTF_8);
-//            te3inputText.add(fileContent);
-//        }
 
     }
 
@@ -173,7 +166,7 @@ public class TestTemporalChunker {
         }
     }
 
-    @Test public void testNormalizationWithTrueExtraction() throws Exception {
+    public void testNormalizationWithTrueExtraction() throws Exception {
         Properties props = new Properties();
         props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
         // TODO: Configurtaor.TRUE/FALSE is reversed, in the future when this is fixed,
@@ -181,15 +174,8 @@ public class TestTemporalChunker {
         props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
         AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
 
-        AnnotatorService annotator = null;
-        try {
-            annotator = CuratorFactory.buildCuratorClient();
-        } catch (Exception e) {
-            fail("Exception while creating AnnotatorService " + e.getStackTrace());
-        }
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
-        // System.out.println(tca.normalizeSinglePhrase("Feb 28", "2013-03-22"));
         ResourceManager nerRm = new TemporalChunkerConfigurator().getDefaultConfig();
         IOUtilities.existsInClasspath(TemporalChunkerAnnotator.class, nerRm.getString("modelDirPath"));
 
@@ -213,24 +199,19 @@ public class TestTemporalChunker {
 
             text = text.replaceAll("\\n", " ");
             TextAnnotation ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id",  text);
-//            TextAnnotation ta = null;
-//            try {
-//                ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
-//                //ta = pipeline.createAnnotatedTextAnnotation( "corpus", "id", testText.get(j) );
-//            } catch (AnnotatorException e) {
-//                fail("Exception while creating TextAnnotation" + e.getStackTrace());
-//            }
-//            try {
-//                annotator.addView(ta, ViewNames.POS);
-//            } catch (AnnotatorException e) {
-//                fail("Exception while adding POS VIEW " + e.getStackTrace());
-//            }
             taList.add(ta);
         }
 
         long startTime = System.currentTimeMillis();
 
         int numTimex = 0;
+
+        String outputFolder = "AQ_goldext_illininorm";
+        File outDir = new File(outputFolder);
+        if (!outDir.exists()) {
+            outDir.mkdir();
+        }
+
         for (int j = 0; j < te3inputText.size(); j ++) {
 //            if(!docIDs.get(j).contains("CNN_20130322_1003")) {
 //                continue;
@@ -247,7 +228,7 @@ public class TestTemporalChunker {
 //                for (TimexChunk tc:timex)
 //                    System.out.println(tc.toTIMEXString());
                 tca.setTimex(timex);
-                String outputFileName = "AQ_goldext_illininorm/" +docIDs.get(j) + ".tml";
+                String outputFileName = outputFolder + "/" +docIDs.get(j) + ".tml";
                 //String outputFileName = "AQ_goldext_htnorm/" +docIDs.get(j) + ".tml";
 
                 tca.write2Text(outputFileName, docIDs.get(j) ,testText.get(j));
@@ -268,7 +249,6 @@ public class TestTemporalChunker {
 
     }
 
-    @Test
     public void testTemporalChunker() throws Exception {
         Properties props = new Properties();
         props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
@@ -276,12 +256,7 @@ public class TestTemporalChunker {
         // TODO: change it back
         props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
         AnnotatorService pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
-        AnnotatorService annotator = null;
-        try {
-            annotator = CuratorFactory.buildCuratorClient();
-        } catch (Exception e) {
-            fail("Exception while creating AnnotatorService " + e.getStackTrace());
-        }
+
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
         // System.out.println(tca.normalizeSinglePhrase("Feb 28", "2013-03-22"));
@@ -291,30 +266,23 @@ public class TestTemporalChunker {
 
         List <TextAnnotation>taList = new ArrayList<>();
         long preprocessTime = System.currentTimeMillis();
+
         for (int j = 0; j < testText.size(); j ++) {
             TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", testText.get(j));
-//            TextAnnotation ta = null;
-//            try {
-//                ta = annotator.createBasicTextAnnotation("corpus", "id", testText.get(j));
-//            } catch (AnnotatorException e) {
-//                fail("Exception while creating TextAnnotation" + e.getStackTrace());
-//            }
-//            try {
-//                annotator.addView(ta, ViewNames.POS);
-//            } catch (AnnotatorException e) {
-//                fail("Exception while adding POS VIEW " + e.getStackTrace());
-//            }
             taList.add(ta);
         }
         System.out.println("Start");
         long startTime = System.currentTimeMillis();
+        String outputFolder = "te3_chunker_illininorm";
+        File outDir = new File(outputFolder);
+        if (!outDir.exists()) {
+            outDir.mkdir();
+        }
+
         for (int j = 0; j < testText.size(); j ++) {
-//            if (!docIDs.get(j).contains("XIE19981203.0008")){
-//                continue;
-//            }
+
             tca.addDocumentCreationTime(DCTs.get(j));
             TextAnnotation ta = taList.get(j);
-            //System.out.println(docIDs.get(j));
 
             try {
                 tca.addView(ta);
@@ -322,33 +290,7 @@ public class TestTemporalChunker {
                 fail("Exception while adding TIMEX3 VIEW " + e.getStackTrace());
             }
 
-//            View timexView = ta.getView(ViewNames.TIMEX3);
-
-//            String corpId = "IllinoisTimeAnnotator";
-//            List<Constituent> timeCons = timexView.getConstituents();
-
-//            for(Constituent c: timeCons) {
-//                System.out.println(c);
-//            }
-            // Keep track of the compressed index of each constituent.
-/*            Span[] compressedSpans = new Span[timeCons.size()];
-            int spanStart;
-
-            // Builds a string of the concatenated constituents from a labeled view.
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < timeCons.size(); i++) {
-                Constituent c = timeCons.get(i);
-                spanStart = builder.length();
-
-                builder.append(c.toString());
-                builder.append("; ");
-
-                compressedSpans[i] = new Span(spanStart, builder.length() - 2);
-            }
-            String compressedText = builder.toString();
-            assertNotNull(compressedText);
-*/
-            String outputFileName = "./last_30_TB_chunker_illininorm/"+docIDs.get(j) + ".tml";
+            String outputFileName = "./" + outputFolder + "/" + docIDs.get(j) + ".tml";
 //            for(TimexChunk tc: tca.getTimex()) {
 //                System.out.println(tc.toTIMEXString());
 //            }
@@ -362,4 +304,51 @@ public class TestTemporalChunker {
         System.out.println("Preprocess + process time: " + (endTime-preprocessTime) );
     }
 
+    @Test
+    public void testTemporalChunkerWithPlainText() throws Exception{
+        Properties props = new Properties();
+        props.setProperty( PipelineConfigurator.USE_POS.key, Configurator.TRUE );
+        // TODO: Configurtaor.TRUE/FALSE is reversed, in the future when this is fixed,
+        // TODO: change it back
+        props.setProperty( PipelineConfigurator.USE_SENTENCE_PIPELINE.key, Configurator.TRUE );
+        AnnotatorService pipeline = null;
+        pipeline = PipelineFactory.buildPipeline(new ResourceManager(props));
+        String text = "The flu season is winding down, and it has killed 105 children so far - about the average toll.\n" +
+                "\n" +
+                "The season started about a month earlier than usual, sparking concerns it might turn into the worst in " +
+                "a decade. It ended up being very hard on the elderly, but was moderately severe overall, according to " +
+                "the Centers for Disease Control and Prevention.\n" +
+                "\n" +
+                "Six of the pediatric deaths were reported in the last week, and it's possible there will be more, said " +
+                "the CDC's Dr. Michael Jhung said Friday.\n" +
+                "\n" +
+                "Roughly 100 children die in an average flu season. One exception was the swine flu pandemic of " +
+                "2009-2010, when 348 children died.\n" +
+                "\n" +
+                "The CDC recommends that all children ages 6 months and older be vaccinated against flu each season, " +
+                "though only about half get a flu shot or nasal spray.\n" +
+                "\n" +
+                "All but four of the children who died were old enough to be vaccinated, but 90 percent of them did " +
+                "not get vaccinated, CDC officials said.\n" +
+                "\n" +
+                "This year's vaccine was considered effective in children, though it didn't work very well in older " +
+                "people. And the dominant flu strain early in the season was one that tends to " +
+                "cause more severe illness.\n" +
+                "\n" +
+                "The government only does a national flu death count for children. But it does track hospitalization " +
+                "rates for people 65 and older, and those statistics have been grim.\n" +
+                "\n" +
+                "In that group, 177 out of every 100,000 were hospitalized with flu-related illness in the past " +
+                "several months. That's more than 2 1/2 times higher than any other recent season.\n" +
+                "\n" +
+                "This flu season started in early December, a month earlier than usual, and peaked by the end " +
+                "of year. Since then, flu reports have been dropping off throughout the country.\n" +
+                "\n" +
+                "\"We appear to be getting close to the end of flu season,\" Jhung said.";
+        TextAnnotation ta = pipeline.createAnnotatedTextAnnotation("corpus", "id", text);
+        tca.addView(ta);
+        View temporalViews = ta.getView(ViewNames.TIMEX3);
+        List<Constituent> constituents = temporalViews.getConstituents();
+        assertEquals("<TIMEX3 type=\"DURATION\" value=\"P1M\">", constituents.get(0).getLabel());
+    }
 }

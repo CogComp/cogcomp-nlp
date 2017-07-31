@@ -56,6 +56,12 @@ public class Period {
 
 	}
 
+	/**
+	 * This function deals with a period of time with format the xxth day/month, etc
+	 * @param start the anchor time
+	 * @param temporalPhrase
+     * @return
+     */
 	public static TimexChunk Periodrule(DateTime start, TemporalPhrase temporalPhrase) {
 
 		int year;

@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import org.joda.time.Interval;
 import org.joda.time.DateTime;
 
+/**
+ * This class converts a holiday to a date
+ */
 public class Jollyday {
 	static int[] list = new int[100];
 	static int j = 0;

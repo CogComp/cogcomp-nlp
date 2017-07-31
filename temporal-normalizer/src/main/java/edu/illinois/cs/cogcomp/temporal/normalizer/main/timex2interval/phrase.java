@@ -11,7 +11,6 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
  * Created by zhilifeng on 11/10/16.
  */
 
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +20,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-public class phrase
+public class Phrase
 {
     static int flagnull=0;
     static int comparenum=4;
@@ -53,7 +52,7 @@ public class phrase
     static DateTime defaultfinish=new DateTime(0,1,1,0,0,0,0);
     static Interval overlap=new Interval(defaultstart,defaultfinish);
 
-    //The parameters of the function fullnumerical	function
+    //The parameters of the function fullNumerical	function
     //Chinese style: YY/MM/DD
     //USA style: MM/DD/YY
     //Europe style: DD/MM/YY
@@ -187,7 +186,7 @@ public class phrase
     }
 
     //First type: 3.20.1980;1998/11/12;02-10-86;1988 11 12;
-    public static String fullnumerical(String phrase,datetype information){
+    public static String fullNumerical(String phrase, datetype information){
         String patternStr="\\s*\\d{1,4}\\s*(?:\\s|[/\\-\\.\\,])\\s*\\d{1,4}\\s*(?:\\s|[/\\-\\.\\,])\\s*\\d{1,4}\\s*";
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(phrase);
@@ -198,7 +197,7 @@ public class phrase
             String delims = "[ -/.,]+";
             String[]tokens=phrase.split(delims);
 
-            // The phrase should pass all the principle test of the date form
+            // The Phrase should pass all the principle test of the date form
             if(test(tokens)){
                 if(flagnum!=-1&&flagdaynum!=-1&&flagmonnum!=-1){
                     aim=tokens[flagmonnum]+"/"+tokens[flagdaynum]+"/"+tokens[flagnum];
@@ -219,7 +218,7 @@ public class phrase
         return null;
     }
 
-    public static String fullnamedate(String phrase,datetype information){
+    public static String fullNameDate(String phrase, datetype information){
         int i;
         int j;
         DateMapping temp=new DateMapping();
@@ -386,7 +385,7 @@ public class phrase
             String delims = "[ -/.]+";
             String[]tokens=phrase.split(delims);
 
-            // The phrase should pass all the principle test of the date form
+            // The Phrase should pass all the principle test of the date form
             if(halftest(tokens)){
 
                 //case1:year,month
@@ -530,11 +529,11 @@ public class phrase
             numterm=i;
             //First situation: day,month,year
             if(numterm==3){
-                result=fullnumerical(phrase1,form);
+                result= fullNumerical(phrase1,form);
                 //It is not pure numerical full date
                 if(result==null){
 
-                    result=fullnamedate(phrase1,form);
+                    result= fullNameDate(phrase1,form);
                 }
                 return result;
             }
@@ -707,7 +706,7 @@ public class phrase
 
         String resulting;
         if(canonize(phrase,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry)==null){
-            return"Sorry we can not figure out the phrase";
+            return"Sorry we can not figure out the Phrase";
         }
 
         else{
@@ -737,11 +736,11 @@ public class phrase
 
         if(canonize(phrase1,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry)==null){
 
-            System.err.println("Sorry we can not figure out the phrase");
+            System.err.println("Sorry we can not figure out the Phrase");
         }
         //   canonizecompare(phrase1,phrase2,deyear,demonth,deday,dehour,deminute,desecond,dems,defaultyear,defaultcountry,condition);
         if(flagnull==1){
-            System.err.println("Sorry we can not figure out the phrase.");
+            System.err.println("Sorry we can not figure out the Phrase.");
 
         }
 

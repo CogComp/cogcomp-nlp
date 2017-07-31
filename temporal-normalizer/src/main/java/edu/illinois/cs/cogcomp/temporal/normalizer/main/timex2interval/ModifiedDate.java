@@ -7,7 +7,6 @@
  */
 package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
-import java.sql.Time;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,12 +15,21 @@ import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
-import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.monther;
 
-//Define the time line
-//Morning 7:00-11:00 Noon 11:00-2:00 Afternoon 2:00-6:00 Evening 6:00-9:00 Night 9:00-12:00
+/**
+ * This class provides method to normalize a group of temporal phrases that are modified by
+ * words like "before", "since", etc
+ * Define the time line
+ * Morning 7:00-11:00 Noon 11:00-2:00 Afternoon 2:00-6:00 Evening 6:00-9:00 Night 9:00-12:00
+ */
 public class ModifiedDate {
 
+	/**
+	 *
+	 * @param start the start point (anchor time) of the Phrase
+	 * @param temporalPhrase
+     * @return
+     */
 	public static TimexChunk ModifiedRule(DateTime start, TemporalPhrase temporalPhrase) {
 		String phrase = temporalPhrase.getPhrase();
 		phrase = phrase.trim();
@@ -37,7 +45,7 @@ public class ModifiedDate {
 			TimexChunk tc = new TimexChunk();
 			tc.addAttribute(TimexNames.type, TimexNames.DATE);
 			String secondphrase = new String();
-			// split the phrase into two parts
+			// split the Phrase into two parts
 			// TODO: write converter to convert TIMEX3 to datepoint
 			String firstphrase = "this" + matcher11.group(2);
 			tc = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase, temporalPhrase.getTense()));
@@ -70,7 +78,7 @@ public class ModifiedDate {
 		Matcher matcher2 = pattern2.matcher(phrase);
 		boolean matcher2Found = matcher2.find();
 		if (matcher2Found) {
-			// split the phrase into two parts
+			// split the Phrase into two parts
 			String firstphrase = "this" + matcher2.group(1);
 			String secondphrase = "this" + matcher2.group(2);
 			TimexChunk keypoint = ModifiedDate.ModifiedRule(start, new TemporalPhrase(firstphrase, temporalPhrase.getTense()));

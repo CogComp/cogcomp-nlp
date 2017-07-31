@@ -23,10 +23,18 @@ import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.Kn
 
 /**
  * Created by zhilifeng on 3/22/17.
+ * This class provides methods to normalize temporal string that contains a specific time of a day,
+ * e.g. "10:30"
  */
 public class TimeOfDay {
     // Here we get rid of timezone phrases, currently didn't deal with the offset
     // TODO: add support to offset
+
+    /**
+     * This function convert a phrase with time zone
+     * @param phrase
+     * @return
+     */
     public static String converter(String phrase) {
         Set<String> zoneIds = DateTimeZone.getAvailableIDs();
 
@@ -45,6 +53,12 @@ public class TimeOfDay {
         return phrase;
     }
 
+    /**
+     * Convert a phrase with a specific time to timex3 format
+     * @param start anchor time
+     * @param temporalPhrase
+     * @return
+     */
     public static TimexChunk timeRule(DateTime start, TemporalPhrase temporalPhrase) {
         String phrase = temporalPhrase.getPhrase();
         phrase = phrase.trim().toLowerCase().replace(" +", " ");

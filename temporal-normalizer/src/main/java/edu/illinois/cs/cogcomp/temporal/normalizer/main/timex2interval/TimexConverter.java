@@ -21,6 +21,11 @@ import java.util.regex.Pattern;
 
 public class TimexConverter {
 
+    /**
+     * Convert a timex3 format to a range/interval
+     * @param tc
+     * @return
+     */
     public static Interval timeConverter(TimexChunk tc) {
         String patternStr = "\\s*([\\w]*)[-]([\\w]*)[-](.*)";
         Pattern pattern = Pattern.compile(patternStr);

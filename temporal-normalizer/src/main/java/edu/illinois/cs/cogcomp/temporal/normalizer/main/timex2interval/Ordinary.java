@@ -14,8 +14,18 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.regex.*;
 
+/**
+ * This class handles special temporal phrases that contain ordinary terms like "yesterday", "tomorrow",
+ * and "today", etc
+ */
 public class Ordinary {
 
+	/**
+	 * This functions deals with special terms like today, tomorrow, and yesterday
+	 * @param start anchor time of the Phrase
+	 * @param phrase
+     * @return
+     */
 	public static TimexChunk Ordinaryrule(DateTime start, String phrase) {
 		int numterm = 0;
 		int i;

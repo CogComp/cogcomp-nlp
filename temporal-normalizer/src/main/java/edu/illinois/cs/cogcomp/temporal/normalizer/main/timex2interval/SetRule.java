@@ -25,7 +25,11 @@ import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.Kn
 
 public class SetRule {
 
-
+    /**
+     *
+     * @param freqStr
+     * @return
+     */
     public static String normalizeFreq(String freqStr) {
         int freqNum;
         String res = "";
@@ -45,6 +49,12 @@ public class SetRule {
         return res;
     }
 
+    /**
+     * Convert a frequency to timex3 format
+     * @param numStr how often an event happens (3)
+     * @param unitStr the unit of the above frequency (days a week)
+     * @return
+     */
     public static String normalizeValue(String numStr, String unitStr){
         int numNum;
         String res = "";
@@ -94,6 +104,11 @@ public class SetRule {
         return res;
     }
 
+    /**
+     * This function normalizes special recurrent adverbs like weekly
+     * @param phrase
+     * @return
+     */
     public static TimexChunk normalizeSpecialAdverb(String phrase) {
         TimexChunk tc = new TimexChunk();
         tc.addAttribute(TimexNames.type, TimexNames.SET);
@@ -122,6 +137,11 @@ public class SetRule {
         return tc;
     }
 
+    /**
+     * This function converts a recurrent time: every day to timex3 format
+     * @param temporalPhrase
+     * @return
+     */
     public static TimexChunk SetRule(TemporalPhrase temporalPhrase) {
         String phrase = temporalPhrase.getPhrase();
         phrase = phrase.toLowerCase();
@@ -134,7 +154,7 @@ public class SetRule {
         if (adverbChunk!=null) {
             return adverbChunk;
         }
-        // This pattern captures any phrase with (freq)(number)(unit): once a day
+        // This pattern captures any Phrase with (freq)(number)(unit): once a day
         String freqUnitPatternStr = freq + "(a|an|\\d{1})*" + unit;
 
         // Captures (freq)(quant)(number)(unit): once every two days

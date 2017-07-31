@@ -9,7 +9,10 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 /**
  * Created by zhilifeng on 2/16/17.
+ * This class contains a string that is the temporal phrase, and a tense
+ * that could be present, past, or future
  */
+
 public class TemporalPhrase {
     private String phrase;
     private String tense;

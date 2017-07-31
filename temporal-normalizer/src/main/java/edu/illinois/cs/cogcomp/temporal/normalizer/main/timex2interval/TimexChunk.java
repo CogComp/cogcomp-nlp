@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * Created by zhilifeng on 1/4/17.
+ * This class contains a data structure that represent a timex3 chunk
  */
 public class TimexChunk {
 
@@ -89,8 +90,20 @@ public class TimexChunk {
         this.charEnd = charEnd;
     }
 
+    /**
+     * Return TIMEX3 tags and the string content
+     * @return
+     */
     public String toTIMEXString() {
-        String res = content + " <TIMEX3";
+        return  content + " " + this.toTIMEXTag();
+    }
+
+    /**
+     * Just return the TIMEX3 tag
+     * @return
+     */
+    public String toTIMEXTag() {
+        String res = "<TIMEX3";
         for(Map.Entry<String, String> entry: attributes.entrySet()) {
             res += " " + entry.getKey() + "=\"" + entry.getValue() + "\"";
         }

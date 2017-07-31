@@ -31,7 +31,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-pos</artifactId>
-            <version>3.0.89</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker-model</artifactId>
-            <version>3.0.25</version>
+            <version>3.0.77</version>
         </dependency>
         <dependency>
             <groupId>org.apache.uima</groupId>
@@ -56,12 +56,12 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-chunker</artifactId>
-            <version>3.0.89</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-curator</artifactId>
-            <version>3.0.89</version>
+            <version>3.1.20</version>
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
@@ -71,7 +71,7 @@
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
             <artifactId>illinois-ner</artifactId>
-            <version>3.0.89</version>
+            <version>3.1.20</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -13,6 +13,8 @@ import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 
 /**
  * Created by ZhiliFeng on 10/30/16.
+ * Congurator for TemporalChunkerAnnotator
+ * Define chunker model path, whether to use HeidelTime for normalization, what POS tagger to use, etc.
  */
 public class TemporalChunkerConfigurator extends Configurator {
 

@@ -20,6 +20,7 @@ import edu.illinois.cs.cogcomp.chunker.main.lbjava.Chunker;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.core.utilities.AvoidUsing;
 import edu.illinois.cs.cogcomp.core.utilities.configuration.ResourceManager;
 import edu.illinois.cs.cogcomp.lbjava.io.IOUtilities;
 import edu.illinois.cs.cogcomp.lbjava.nlp.seg.Token;
@@ -53,6 +54,11 @@ import java.util.regex.Pattern;
 
 /**
  * Created by zhilifeng on 10/2/16.
+ * This class provides an Annotator for temporal normalization.
+ * User can choose whether use our implementation of the normalizer
+ * or HeidelTime. The results follow TIMEX3 standard.
+ * This class also provides a method to write the normalized results
+ * to .tml files.
  */
 public class TemporalChunkerAnnotator extends Annotator{
     private static final String NAME = TemporalChunkerAnnotator.class.getCanonicalName();
@@ -68,6 +74,7 @@ public class TemporalChunkerAnnotator extends Annotator{
     private DocumentBuilder builder;
     private Boolean useHeidelTime;
     private List<TimexChunk> timex;
+    private TimexChunk placeHolder;
 
     public List<TimexChunk> getTimex() {
         return timex;
@@ -83,6 +90,7 @@ public class TemporalChunkerAnnotator extends Annotator{
         this(true);
     }
 
+    @AvoidUsing(reason = "No config specified")
     /**
      * Constructor parameter allows user to specify whether or not to lazily initialize.
      * PLEASE DO NOT USE THIS CONSTRUCTOR
@@ -110,6 +118,10 @@ public class TemporalChunkerAnnotator extends Annotator{
     }
 
     @Override
+    /**
+     * Initialize TemporalChunkerAnnotator with the given ResourceManager
+     * @param nonDefaultRm ResourceManager that specifies model paths, etc
+     */
     public void initialize(ResourceManager rm) {
         URL lcPath =
                 IOUtilities.loadFromClasspath(
@@ -122,25 +134,12 @@ public class TemporalChunkerAnnotator extends Annotator{
                         rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH)
                 );
 
-//        tagger = new Chunker(
-//                rm.getString(TemporalChunkerConfigurator.MODEL_PATH),
-//                rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH));
-//        tagger.readModel(lcPath);
-//        tagger.readLexicon(lexPath);
         tagger = new Chunker(
-//                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
-//                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
-//                        "TBAQ_full_1label_corr_temp50/TBAQ_full_1label_corr_temp50.lc",
-//                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
-//                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
-//                        "TBAQ_full_1label_corr_temp50/TBAQ_full_1label_corr_temp50.lex"
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
-                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
-                        "prev_TB_full_1label_corr_bestit/prev_TB_full_1label_corr_bestit.lc",
-                "/Users/zhilifeng/Desktop/DanRothResearch/illinois-cogcomp-nlp/temporal-normalizer/src/" +
-                        "main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/" +
-                        "prev_TB_full_1label_corr_bestit/prev_TB_full_1label_corr_bestit.lex"
-                );
+                rm.getString(TemporalChunkerConfigurator.MODEL_PATH),
+                rm.getString(TemporalChunkerConfigurator.MODEL_LEX_PATH));
+        tagger.readModel(lcPath);
+        tagger.readLexicon(lexPath);
+
         this.useHeidelTime =
                 rm.getString(TemporalChunkerConfigurator.USE_HEIDELTIME) != "False";
 
@@ -170,6 +169,9 @@ public class TemporalChunkerAnnotator extends Annotator{
 
     }
 
+    /**
+     * Delete the current list of timxes
+     */
     public void deleteTimex() {
         this.timex = new ArrayList<>();
     }
@@ -212,7 +214,6 @@ public class TemporalChunkerAnnotator extends Annotator{
                     // modify lbjToken.type for later ifs
                     lbjtoken.type = "B" + lbjtoken.type.substring(1);
                 } else if (clabel.length() >= 3 && !clabel.equals(lbjtoken.type.substring(2))) {
-                    // trying to avoid mysterious null pointer exception...
                     lbjtoken.type = "B" + lbjtoken.type.substring(1);
                 }
             }
@@ -248,12 +249,15 @@ public class TemporalChunkerAnnotator extends Annotator{
                             this.timex.add(normRes);
                         }
                         else {
-                            TimexChunk dummy = new TimexChunk();
-                            dummy.setCharStart(temp_label.getStartCharOffset());
-                            dummy.setCharEnd(temp_label.getEndCharOffset());
-                            this.timex.add(dummy);
+                            // Our normalize may produce null result for some extraction
+                            // we still need to add a dummy placeholder
+                            // so that evaluation will catch this
+                            placeHolder = new TimexChunk();
+                            placeHolder.setCharStart(temp_label.getStartCharOffset());
+                            placeHolder.setCharEnd(temp_label.getEndCharOffset());
+                            this.timex.add(placeHolder);
                         }
-                        label = new Constituent(normRes==null?"":normRes.toTIMEXString(),
+                        label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
                                 ViewNames.TIMEX3, record,
                                 currentChunkStart, currentChunkEnd);
                     }
@@ -290,7 +294,7 @@ public class TemporalChunkerAnnotator extends Annotator{
                 TemporalPhrase temporalPhrase = new TemporalPhrase(temp_label.toString(), tense);
                 TimexChunk normRes = timexNormalizer.normalize(temporalPhrase);
 
-                label = new Constituent(normRes==null?"":normRes.toTIMEXString(),
+                label = new Constituent(normRes==null?"":normRes.toTIMEXTag(),
                         ViewNames.TIMEX3, record,
                         currentChunkStart, currentChunkEnd);
                 if (normRes != null){
@@ -299,10 +303,10 @@ public class TemporalChunkerAnnotator extends Annotator{
                     this.timex.add(normRes);
                 }
                 else {
-                    TimexChunk dummy = new TimexChunk();
-                    dummy.setCharStart(temp_label.getStartCharOffset());
-                    dummy.setCharEnd(temp_label.getEndCharOffset());
-                    this.timex.add(dummy);
+                    placeHolder = new TimexChunk();
+                    placeHolder.setCharStart(temp_label.getStartCharOffset());
+                    placeHolder.setCharEnd(temp_label.getEndCharOffset());
+                    this.timex.add(placeHolder);
                 }
             }
             chunkView.addConstituent(label);
@@ -312,6 +316,13 @@ public class TemporalChunkerAnnotator extends Annotator{
         return; // chunkView;
     }
 
+    /**
+     * Given a single sentence and a DCT, do normalization
+     * @param phrase
+     * @param date
+     * @return
+     * @throws Exception
+     */
     public String normalizeSinglePhrase(String phrase, String date) throws Exception {
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
         Date dct = f.parse(date);
@@ -342,7 +353,7 @@ public class TemporalChunkerAnnotator extends Annotator{
     }
 
     /**
-     * Normalize temporal phrase
+     * Normalize temporal Phrase
      * @param temporal_phrase
      * @return
      * @throws Exception
@@ -362,6 +373,13 @@ public class TemporalChunkerAnnotator extends Annotator{
         return res;
     }
 
+    /**
+     * Normalize using HeidelTime, store results to the given list of TimexChunk
+     * @param temporal_phrase
+     * @param tc the list that user stores normalized timex to
+     * @return
+     * @throws Exception
+     */
     private String heidelTimeNormalize(String temporal_phrase, List<TimexChunk> tc) throws Exception {
         // If user didn't specify document creation date, use the current date
         if (this.dct == null) {
@@ -376,6 +394,14 @@ public class TemporalChunkerAnnotator extends Annotator{
         String res = recurseNormalizedTimeML(rootElement, temporal_phrase, tc);
         return res;
     }
+
+    /**
+     * Normalize phrases given a Node (xml format)
+     * @param node
+     * @param temporal_phrase
+     * @param timex
+     * @return
+     */
     private String recurseNormalizedTimeML(Node node, String temporal_phrase, List<TimexChunk> timex) {
         // Base case: return empty string
         if (node == null) {
@@ -407,6 +433,7 @@ public class TemporalChunkerAnnotator extends Annotator{
         }
         return "";
     }
+
     /**
      * Recursively read each XML tag of HeidelTime's result.
      * Notice: HeidelTime gives nested TIMEML tags, which TempEval 3 doesn't require.
@@ -466,23 +493,13 @@ public class TemporalChunkerAnnotator extends Annotator{
             return null;
     }
 
+    /**
+     * Get the tense of a given sentence
+     * @param ta current TextAnnotation
+     * @param currSpan the start and end position of the phrase
+     * @return
+     */
     public String getSentenceTense(TextAnnotation ta, IntPair currSpan) {
-//        Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
-//        IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
-//        View PosView = ta.getView("POS");
-//        List<Constituent> sentenceConstituents = PosView.getConstituents();
-//        String posStr = PosView.toString();
-//        String[] posList = posStr.split("\\)");
-//        String tense = "present";
-//        for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
-//            Constituent currConstituent = sentenceConstituents.get(t);
-//            //System.out.println(currConstituent.getView());
-//            if (posList[t].indexOf("VBD")!=-1 || posList[t].indexOf("VBN")!=-1){
-//                tense = "past";
-//            }
-//        }
-//        return tense;
-
         Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
         IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
         View PosView = ta.getView("POS");
@@ -492,7 +509,6 @@ public class TemporalChunkerAnnotator extends Annotator{
         String tense = "present";
         for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
             Constituent currConstituent = sentenceConstituents.get(t);
-            //System.out.println(currConstituent.getView());
             String prevWord = null;
             String prev2Word = null;
             if (t-1>=0) {
@@ -517,6 +533,14 @@ public class TemporalChunkerAnnotator extends Annotator{
         return tense;
     }
 
+    /**
+     * Extract timex from a TIMEML format text with golden normalization
+     * @param text the original timeml text (with golden value)
+     * @param content the plain text of the original text
+     * @param ta
+     * @return
+     * @throws Exception
+     */
     public List<TimexChunk> extractTimexFromFile(String text, String content, TextAnnotation ta) throws Exception{
         Document document = builder.parse(new InputSource(new StringReader(text)));
         Element rootElement = document.getDocumentElement();
@@ -527,15 +551,6 @@ public class TemporalChunkerAnnotator extends Annotator{
         HashMap<String, Integer> stringSpanMap = new HashMap<>();
         HashMap<IntPair, TimexChunk> res = new HashMap<>();
         int currPos = 0;
-//        HeidelTimeStandalone htTime = new HeidelTimeStandalone(
-//                Language.ENGLISH,
-//                DocumentType.NEWS,
-//                OutputType.TIMEML,
-//                "src/main/java/edu/illinois/cs/cogcomp/temporal/normalizer/main/conf/heideltime_config.props",
-//                POSTagger.NO,
-//                false
-//        );
-//        java.util.logging.Logger.getLogger("HeidelTimeStandalone").setLevel(Level.OFF);
 
         String docId = "";
         for (int i=0; i<nodeList.getLength(); i++)
@@ -546,17 +561,6 @@ public class TemporalChunkerAnnotator extends Annotator{
             if (currentNode.getNodeName().indexOf("DOCID")!=-1) {
                 docId = currentNode.getTextContent();
             }
-
-//            if (currentNode.getNodeName().indexOf("DCT")!=-1) {
-//                Node dctNode = currentNode.getChildNodes().item(0);
-//                NamedNodeMap dctAttrs = dctNode.getAttributes();
-//                for (int j = 0; j < dctAttrs.getLength(); j++) {
-//                    if (dctAttrs.item(j).getNodeName().equals("value")) {
-//                        //DCTs.add(dctAttrs.item(j).getNodeValue());
-//                        System.out.println(dctAttrs.item(j).getNodeValue());
-//                    }
-//                }
-//            }
 
             if (currentNode.getNodeName().indexOf("EXTRAINFO")!=-1) {
                 String info = currentNode.getTextContent();
@@ -611,6 +615,11 @@ public class TemporalChunkerAnnotator extends Annotator{
                 IntPair currSpan = new IntPair(0, 0);
                 int charStart = 0;
                 int charEnd = 0;
+
+                // We use te3-platinum dataset for evaluation, in its AP_20130322.tml
+                // file, there's a string "2009-2010". Our tokenizer will tokenize them
+                // into a whole. Here we need to split them into separate tokens:
+                // 2009 and 2010
                 if (currStr.equals("2009") && startEndPos.size()==0) {
                     currSpan = ta.getSpansMatching("2009-2010").get(0);
                     charStart = ta.getTokenCharacterOffset(currSpan.getFirst()).getFirst();
@@ -631,46 +640,12 @@ public class TemporalChunkerAnnotator extends Annotator{
                     }
                 }
 
-
                 currPos = content.indexOf(currStr, currPos);
                 charStart = currPos;
                 charEnd = currPos + currStr.length();
                 currPos = charEnd + 1;
 
-//                Sentence currSentence = ta.getSentenceFromToken(currSpan.getFirst());
-//                IntPair sentenceSpan = currSentence.getSentenceConstituent().getSpan();
-//                View PosView = ta.getView("POS");
-//                List<Constituent> sentenceConstituents = PosView.getConstituents();
-//                String posStr = PosView.toString();
-//                String[] posList = posStr.split("\\)");
-//                String tense = "present";
-//                for (int t = sentenceSpan.getFirst(); t < sentenceSpan.getSecond(); t++) {
-//                    Constituent currConstituent = sentenceConstituents.get(t);
-//                    //System.out.println(currConstituent.getView());
-//                    String prevWord = null;
-//                    String prev2Word = null;
-//                    if (t-1>=0) {
-//                        prevWord = sentenceConstituents.get(t-1).toString().toLowerCase();
-//                    }
-//                    if (t-2>=0) {
-//                        prev2Word = sentenceConstituents.get(t-2).toString().toLowerCase();
-//                    }
-//
-//                    boolean isPerfect = false;
-//                    if ( (prevWord != null && prevWord.matches("have|has|had")) ||
-//                            (prev2Word != null && prev2Word.matches("have|has|had"))
-//                            ) {
-//                        if (posList[t].indexOf("VBN")!=-1 ) {
-//                            isPerfect = true;
-//                        }
-//                    }
-//                    if (posList[t].indexOf("VBD")!=-1 || isPerfect){
-//                        tense = "past";
-//                    }
-//                }
-
                 String tense = getSentenceTense(ta, currSpan);
-                //System.out.println(trueTc.toTIMEXString());
 
                 TimexChunk tc = null;
                 try {
@@ -708,16 +683,11 @@ public class TemporalChunkerAnnotator extends Annotator{
                     tc.setContent(currStr);
                     tc.setCharStart(charStart);
                     tc.setCharEnd(charEnd);
-
-                    //                tc.setInterval(normInterval);
                     timex.add(tc);
                     res.put(new IntPair(charStart, charEnd), tc);
                 }
-                //System.out.println(currStr + " " + normInterval);
                 trueTc.setCharStart(charStart);
                 trueTc.setCharEnd(charEnd);
-
-
                 trueTimexs.add(trueTc);
             }
 
@@ -728,7 +698,6 @@ public class TemporalChunkerAnnotator extends Annotator{
             IntPair key = new IntPair(tc.getCharStart(), tc.getCharEnd());
             if (!res.containsKey(key)) {
                 System.out.println(tc.toTIMEXString());
-                //TimexChunk htRes = this.getTimexChunkFromHeidelTime(tc.getContent(), htTime, this.dct, ta);
                 TimexChunk htRes = null;
                 if (htRes!=null) {
                     htRes.setContent(tc.getContent());
@@ -798,33 +767,6 @@ public class TemporalChunkerAnnotator extends Annotator{
         return timex;
     }
 
-//    /**
-//     * Normalize temporal phrase using Illini-time
-//     * @param temporal_phrase
-//     * @return
-//     * @throws Exception
-//     */
-//    private String illiniNormalize(Constituent temporal_phrase) throws Exception {
-//        // If user didn't specify document creation date, use the current date
-//        if (this.dct == null) {
-//            this.dct = new Date();
-//            timexNormalizer.setTime(this.dct);
-//        }
-//
-//        //String temp = this.heidelTime.process(text, this.dct);
-//        //System.out.println(temp);
-//        String xml_res = this.heidelTime.process(temporal_phrase.toString(), this.dct);
-//        System.out.println(xml_res);
-//        int startIndex = xml_res.indexOf("<TimeML>");
-//        xml_res = xml_res.substring(startIndex);
-//        Interval interval_res = timexNormalizer.normalize(temporal_phrase.toString());
-//
-//        String string_res = interval_res==null?"":interval_res.toString();
-//
-//        return string_res;
-//    }
-
-
     @Override
     public String getViewName() {
         return ViewNames.TIMEX3;
@@ -843,7 +785,13 @@ public class TemporalChunkerAnnotator extends Annotator{
         return new String[] {ViewNames.POS};
     }
 
-
+    /**
+     * Change the format of a text to valid timeml format, such that we can use
+     * validator provided by te3-platinum dataset.
+     * @param text
+     * @param docID
+     * @return
+     */
     public String formatTempEval3(String text, String docID) {
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
         DateFormat df2 = new SimpleDateFormat("yyyyMMdd");
@@ -861,10 +809,14 @@ public class TemporalChunkerAnnotator extends Annotator{
                 text.replace("&", "&amp;"));
     }
 
+    /**
+     * Write text to a valid timeml format
+     * @param outputFilename
+     * @param docID
+     * @param text
+     * @throws IOException
+     */
     public void write2Text(String outputFilename, String docID, String text) throws IOException {
-//        File f = new File(System.getProperty("user.dir"), outputFilename);
-//        if(!f.exists())
-//            f.createNewFile();
         char[] originalDocumentText = text.toCharArray();
         Map<Integer, String> timexInsertionMap = new HashMap<Integer, String>();
         int tidCount = 1;

@@ -38,6 +38,12 @@ public class ConvertWordToNumber {
 	private static ArrayList<String> list = new ArrayList<String>(
 			Arrays.asList(numerals));
 
+	/**
+	 * This function parses individual digit of a numerical string
+	 * @param text string we want to parse numerical
+	 * @return long that should be a number
+	 * @throws Exception
+     */
 	public static long parseNumerals(String text) throws Exception {
 		long value = 0;
 		String[] words = text.replaceAll(" and ", " ").split("\\s");
@@ -69,9 +75,14 @@ public class ConvertWordToNumber {
 	private static long[] digits = { 1000000000000L, 1000000000L, 1000000L,
 			1000L };
 
+	/**
+	 * This function utilizes parseNumerical()
+	 * @param text string we want to parse
+	 * @return long
+	 * @throws Exception
+     */
 	public static long parse(String text) throws Exception {
 		text = text.toLowerCase().replaceAll("-", " ");
-		// System.out.println("Inside is"+text);
 		long totalValue = 0;
 		boolean processed = false;
 		for (int n = 0; n < words.length; n++) {
@@ -98,9 +109,14 @@ public class ConvertWordToNumber {
 			return parseNumerals(text);
 	}
 
+	/**
+	 * This function converts numerical strings like "ten" to arabic numbers 10.
+	 * Notice we distinguish between "one" and "first".
+	 * @param phrase
+	 * @return string that contains arabic numbers
+	 * @throws Exception
+     */
 	public static String ConvertWTN(String phrase) throws Exception {
-		// System.out.println("The current phrase is "+phrase);
-
 		for (String ordinal: ordinals) {
 			phrase = phrase.replaceAll(ordinal, ordinal+" th");
 		}
@@ -114,10 +130,8 @@ public class ConvertWordToNumber {
 		String newphrase = new String();
 		String tophrase = new String();
 		String[] token = phrase.split(delims);
-		// System.out.println("The current is "+token[0]);
 		for (int i = 0; i < token.length; i++) {
 			String numberWordsText = token[i];
-			// System.out.println("The number is "+ConvertWordToNumber.parse(numberWordsText));
 			if (ConvertWordToNumber.parse(numberWordsText) != -1) {
 
 				if (!newphrase.equals("")) {
@@ -155,7 +169,6 @@ public class ConvertWordToNumber {
 				}
 
 				else {
-					// System.out.println(i);
 					newphrase = newphrase + "-" + setoken[i];
 				}
 
@@ -180,8 +193,6 @@ public class ConvertWordToNumber {
 				tophrase = tophrase + " " + token[i];
 			}
 		}
-
-		// System.out.println("Phrase : "+ tophrase);
 
 		tophrase = tophrase.replaceAll(" th ", "th ");
 		return tophrase;

@@ -16,10 +16,20 @@ import java.util.regex.*;
 
 import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.KnowledgeBase.*;
 
+/**
+ * This class provides normalizer for temporal phrases that are anchored to certain dates (may not be DCT).
+ * For example, "after xxx"
+ */
 public class RelativeDate {
 
 	public static DateMapping temp = new DateMapping();
 
+	/**
+	 * This function converts phrase that contains a relative date: more than xxx, etc
+	 * @param start anchor time
+	 * @param phrase
+     * @return
+     */
 	public static TimexChunk Relativerule(DateTime start, String phrase) {
 		int numterm;
 		int flag_ago = 0;

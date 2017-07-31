@@ -17,6 +17,7 @@ import static edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval.Kn
 
 /**
  * Created by zhilifeng on 2/19/17.
+ * This class provides method to normalize a duration of time
  */
 public class Duration {
 
@@ -33,7 +34,11 @@ public class Duration {
 
     }
 
-    // convert to fraction: half==>1/2
+    /**
+     * convert a string that represents a fraction to fraction format: half ==> 1/2, etc
+     * @param input
+     * @return
+     */
     public static String converter(String input) {
         HashMap<String, String> fracMap = new HashMap<>();
         fracMap.put("half", "1/2");
@@ -66,6 +71,9 @@ public class Duration {
         return res;
     }
 
+    /**
+     * Maps some strings to TIMEX3 MOD
+     */
     public static HashMap<String, String> modMap = new HashMap<String, String>(){
         {
             put(TimexNames.LESS_THAN, "(almost|less than)");
@@ -75,6 +83,14 @@ public class Duration {
         }
     };
 
+    /**
+     * Main method in the class. Given a temporal string and DCT, normalize using TIMEX3 format.
+     * The temporal string is supposed to contain a duration of time, for details check TIMEX3 standard
+     * about the definition of DURATION
+     * @param start
+     * @param phrase
+     * @return
+     */
     public static TimexChunk DurationRule(DateTime start, String phrase){
         start = new DateTime(0,1,1,0,0,0);
         phrase = phrase.trim();

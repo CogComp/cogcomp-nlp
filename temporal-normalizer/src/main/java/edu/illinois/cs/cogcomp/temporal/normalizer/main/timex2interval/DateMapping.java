@@ -9,6 +9,9 @@ package edu.illinois.cs.cogcomp.temporal.normalizer.main.timex2interval;
 
 import java.util.*;
 
+/**
+ * This class contains a hash map between a date string and a number
+ */
 public class DateMapping {
 
 	// Create a hash map

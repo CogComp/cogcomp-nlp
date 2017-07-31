@@ -153,6 +153,7 @@ public class ViewNames {
             case GAZETTEER_NE:
             case POST_ERE:
             case EVENT_ERE:
+            case TIMEX3:
                 return ViewTypes.SPAN_LABEL_VIEW;
             case DEPENDENCY:
             case DEPENDENCY_STANFORD:
@@ -178,7 +179,6 @@ public class ViewNames {
             case COREF_EXTENT:
             case COREF_ERE:
                 return ViewTypes.COREF_VIEW;
-            case TIMEX3:
         }
         return null;
     }
