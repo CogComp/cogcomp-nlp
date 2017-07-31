@@ -37,16 +37,20 @@ public class BIOReader implements Parser
     private List<TextAnnotation> taList;
     private String _path;
     private String _mode;
+    private String _binary_indicator;
     private String _type;
     private boolean _isBIO;
     private List<Annotator> annotators;
 
     public String id;
 
+    public BIOReader(){
 
+    }
     public BIOReader(String path, String mode, String type, Boolean isBIO){
         _path = path;
-        _mode = mode;
+        _mode = mode.split("-")[0];
+        _binary_indicator = mode.split("-")[1];
         _type = type;
         _isBIO = isBIO;
         String[] path_group = path.split("/");
@@ -178,7 +182,7 @@ public class BIOReader implements Parser
                 if (c.getAttribute("EntityType").equals("VEH") || c.getAttribute("EntityType").equals("WEA")){
                     //continue;
                 }
-                //c.addAttribute("EntityType", "MENTION");
+                c.addAttribute("EntityType", "MENTION");
 
                 if (_isBIO) {
                     token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
@@ -231,67 +235,6 @@ public class BIOReader implements Parser
                 }
                 newToken.addAttribute("GAZ", ((FlatGazetteers)gazetteers).annotateConstituent(newToken, _isBIO));
                 newToken.addAttribute("BC", brownClusters.getPrefixesCombined(newToken.toString()));
-                Sentence curSentence = ta.getSentenceFromToken(newToken.getStartSpan());
-                /*
-                List<Constituent> sameSentenceMention = mentionView.getConstituentsCoveringSpan(curSentence.getStartSpan(), curSentence.getEndSpan());
-                String namMentions = "";
-                String nomMentions = "";
-                if (sameSentenceMention != null){
-                    for (Constituent sm : sameSentenceMention){
-                        if (sm.getAttribute("EntityMentionType").equals("NAM")){
-                            namMentions += sm.getAttribute("EntityType") + ",";
-                        }
-                        if (sm.getAttribute("EntityMentionType").equals("NOM")){
-                            nomMentions += sm.getAttribute("EntityType") + ",";
-                        }
-                    }
-                }
-                newToken.addAttribute("SMNAM", namMentions);
-                newToken.addAttribute("SMNOM", nomMentions);
-                */
-                String namMentionsPre = "";
-                String namMentionsAfter = "";
-                String nomMentionsPre = "";
-                String nomMentionsAfter = "";
-                int idx = 0;
-                for (int j = curSentence.getStartSpan(); j < i; j++){
-                    String[] group = token2tags[j].split(",");
-                    if (group[0].startsWith("B") || group[0].startsWith("U")) {
-                        String tag = group[0].split("-")[0];
-                        String type = group[0].split("-")[1];
-                        String eml = group[1];
-                        if (eml.equals("NAM")) {
-                            namMentionsPre += idx + "-" + type + ",";
-                            idx++;
-                        }
-                        if (eml.equals("NOM")) {
-                            nomMentionsPre += idx + "-" + type + ",";
-                            idx++;
-                        }
-                    }
-                }
-                idx = 0;
-                for (int j = i + 1; j < curSentence.getEndSpan(); j++){
-                    String[] group = token2tags[j].split(",");
-                    if (group[0].startsWith("B") || group[0].startsWith("U")) {
-                        String tag = group[0].split("-")[0];
-                        String type = group[0].split("-")[1];
-                        String eml = group[1];
-                        if (eml.equals("NAM")) {
-                            namMentionsAfter += idx + "-" + type + ",";
-                            idx++;
-                        }
-                        if (eml.equals("NOM")) {
-                            nomMentionsAfter += idx + "-" + type + ",";
-                            idx++;
-                        }
-                    }
-                }
-                newToken.addAttribute("SMNAMPRE", namMentionsPre);
-                newToken.addAttribute("SMNOMPRE", nomMentionsPre);
-                newToken.addAttribute("SMNAMAFT", namMentionsAfter);
-                newToken.addAttribute("SMNOMAFT", nomMentionsAfter);
-
                 if (!newToken.toString().contains("http")) {
                     newToken.addAttribute("WORDNETTAG", BIOFeatureExtractor.getWordNetTags(wordNet, newToken));
                     newToken.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordNet, newToken));
@@ -300,7 +243,8 @@ public class BIOReader implements Parser
                     newToken.addAttribute("WORDNETTAG", ",");
                     newToken.addAttribute("WORDNETHYM", ",");
                 }
-                if (_path.contains("train") || _path.contains("all")){
+                //if (_path.contains("train") || _path.contains("all")){
+                if (_binary_indicator.equals("TRAIN")){
                     newToken.addAttribute("isTraining", "true");
                 }
                 else{

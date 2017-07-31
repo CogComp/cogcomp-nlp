@@ -75,7 +75,7 @@ public class BIOTester {
         }
         train_parser.reset();
         classifier.initialize(examples, preExtractLearner.getLexicon().size());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             train_parser.reset();
             for (Object example = train_parser.next(); example != null; example = train_parser.next()) {
                 classifier.learn(example);
@@ -387,12 +387,12 @@ public class BIOTester {
 
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05", "ALL", isBIO);
+            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05-EVAL", "ALL", isBIO);
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
-            Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05", "NAM", isBIO);
-            Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05", "NOM", isBIO);
-            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05", "PRO", isBIO);
+            Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05-TRAIN", "NAM", isBIO);
+            Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05-TRAIN", "NOM", isBIO);
+            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05-TRAIN", "PRO", isBIO);
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
@@ -492,10 +492,10 @@ public class BIOTester {
         int total_correct_pro = 0;
         int total_false_type_pro = 0;
 
-        Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05", "ALL", isBIO);
-        Parser train_parser_nam = new BIOReader("data/all", "ACE05", "NAM", isBIO);
-        Parser train_parser_nom = new BIOReader("data/all", "ACE05", "NOM", isBIO);
-        Parser train_parser_pro = new BIOReader("data/all", "ACE05", "PRO", isBIO);
+        Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05-EVAL", "ALL", isBIO);
+        Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", isBIO);
+        Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", isBIO);
+        Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", isBIO);
         bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
         bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
         bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
@@ -510,54 +510,8 @@ public class BIOTester {
 
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
 
-            String smnamPre = "";
-            String smnomPre = "";
-            String smnamAft = "";
-            String smnomAft = "";
-            Constituent example_cons = (Constituent)example;
-            View bioView = example_cons.getTextAnnotation().getView("BIO");
-            Sentence curSentence = example_cons.getTextAnnotation().getSentenceFromToken(example_cons.getStartSpan());
-            int idx = 0;
-            for (int i = curSentence.getStartSpan(); i < example_cons.getStartSpan(); i++){
-                Constituent c = bioView.getConstituentsCoveringToken(i).get(0);
-                c.addAttribute("preBIOLevel1", "O");
-                c.addAttribute("preBIOLevel2", "O");
-                String namPredicted = classifier_nam.discreteValue(c);
-                String nomPredicted = classifier_nom.discreteValue(c);
-                //TODO: Try agree here
-                if (namPredicted.startsWith("B") || namPredicted.startsWith("U")){
-                    smnamPre += idx + "-" + namPredicted.substring(2) + ",";
-                    idx ++;
-                }
-                else if (nomPredicted.startsWith("B") || nomPredicted.startsWith("U")){
-                    smnomPre += idx + "-" + nomPredicted.substring(2) + ",";
-                    idx ++;
-                }
-            }
-            idx = 0;
-            for (int i = example_cons.getEndSpan(); i < curSentence.getEndSpan(); i++){
-                Constituent c = bioView.getConstituentsCoveringToken(i).get(0);
-                c.addAttribute("preBIOLevel1", "O");
-                c.addAttribute("preBIOLevel2", "O");
-                String namPredicted = classifier_nam.discreteValue(c);
-                String nomPredicted = classifier_nom.discreteValue(c);
-                //TODO: Try agree here
-                if (namPredicted.startsWith("B") || namPredicted.startsWith("U")){
-                    smnamAft += idx + "-" + namPredicted.substring(2) + ",";
-                    idx ++;
-                }
-                else if (nomPredicted.startsWith("B") || nomPredicted.startsWith("U")){
-                    smnomAft += idx + "-" + nomPredicted.substring(2) + ",";
-                    idx ++;
-                }
-            }
-
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-            ((Constituent)example).addAttribute("SMNAMPRE", smnamPre);
-            ((Constituent)example).addAttribute("SMNOMPRE", smnomPre);
-            ((Constituent)example).addAttribute("SMNAMAFT", smnamAft);
-            ((Constituent)example).addAttribute("SMNOMAFT", smnomAft);
 
             Pair<String, Integer> cands = joint_inference((Constituent)example, candidates, null);
 
@@ -640,26 +594,32 @@ public class BIOTester {
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
+        int total_correct_type_match = 0;
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE", "NOM", true);
-        Parser train_parser_nam = new BIOReader("data/all", "ACE05", "NAM", true);
-        Parser train_parser_nom = new BIOReader("data/all", "ACE05", "NOM", true);
-        Parser train_parser_pro = new BIOReader("data/all", "ACE05", "PRO", true);
-        Parser train_parser_all = new BIOReader("data/all", "ACE05", "ALL", true);
-        //bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
-        //bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
-        //bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
-        Classifier classifier = train_nom_classifier(train_parser_nom);
+        Parser test_parser = new BIOReader("data/ere/data", "ERE-EVAL", "ALL", false);
+        Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", false);
+        Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", false);
+        Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", false);
+        bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
+        bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
+        bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
 
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
+
+        Learner[] candidates = new Learner[3];
+        candidates[0] = classifier_nam;
+        candidates[1] = classifier_nom;
+        candidates[2] = classifier_pro;
+
         Map<String, Integer> mentionTypeErrorMap = new HashedMap();
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
 
-            String predictedTag = inference((Constituent)example, classifier);
+            Pair<String, Integer> prediction = joint_inference((Constituent)example, candidates, null);
             String goldTag = ((Constituent)example).getAttribute("BIO");
+            String predictedTag = prediction.getFirst();
             preBIOLevel2 = preBIOLevel1;
             preBIOLevel1 = predictedTag;
             boolean goldStart = false;
@@ -675,44 +635,26 @@ public class BIOTester {
             boolean correct = false;
             boolean type_match = false;
             if (goldStart && predictedStart){
-                Constituent goldMention = getConstituent((Constituent)example, classifier, true);
-                Constituent predictedMention = getConstituent((Constituent)example, classifier, false);
+                Constituent goldMention = getConstituent((Constituent)example, candidates[prediction.getSecond()], true);
+                Constituent predictedMention = getConstituent((Constituent)example, candidates[prediction.getSecond()], false);
                 if (goldMention.getStartSpan() == predictedMention.getStartSpan() && goldMention.getEndSpan() == predictedMention.getEndSpan()){
                     correct = true;
                 }
                 if (goldMention.getAttribute("EntityType").equals(predictedMention.getAttribute("EntityType"))){
                     type_match = true;
                 }
-                else {
-                    String error = goldMention.getAttribute("EntityType") + " " + predictedMention.getAttribute("EntityType");
-                    if (mentionTypeErrorMap.containsKey(error)){
-                        mentionTypeErrorMap.put(error, mentionTypeErrorMap.get(error) + 1);
-                    }
-                    else{
-                        mentionTypeErrorMap.put(error, 1);
-                    }
-                }
                 if (correct){
                     total_correct_mention ++;
+                    if (type_match){
+                        total_correct_type_match ++;
+                    }
                 }
             }
-            /*
-            if (goldStart && !correct){
-                Constituent goldMention = getConstituent((Constituent)example, classifier, true);
-                View bioView = goldMention.getTextAnnotation().getView("BIO");
-                Sentence sentence = goldMention.getTextAnnotation().getSentenceFromToken(goldMention.getStartSpan());
-                for (int i = sentence.getStartSpan(); i < sentence.getEndSpan(); i++){
-                    Constituent curC = bioView.getConstituentsCoveringToken(i).get(0);
-                    System.out.print(curC.toString() + "(" + curC.getAttribute("BIO") + " " + inference(curC, classifier) + ") ");
-                }
-                System.out.println();
-                System.out.println();
-            }
-            */
         }
         System.out.println("Total Labeled Mention: " + total_labeled_mention);
         System.out.println("Total Predicted Mention: " + total_predicted_mention);
         System.out.println("Total Correct Mention: " + total_correct_mention);
+        System.out.println("Total Correct Type Match: " + total_correct_type_match);
         double p = (double)total_correct_mention / (double)total_predicted_mention;
         double r = (double)total_correct_mention / (double)total_labeled_mention;
         double f = 2 * p * r / (p + r);
@@ -803,11 +745,153 @@ public class BIOTester {
         System.out.println("PRO LENGTH: " + pro / procount);
     }
 
+    public static void test_hybrid(){
+        int total_labeled_mention = 0;
+        int total_predicted_mention = 0;
+        int total_correct_mention = 0;
+
+        int total_ace_labeled_mention = 0;
+        int total_ere_labeled_mention = 0;
+        int total_ace_predicted_mention = 0;
+        int total_ere_predicted_mention = 0;
+        int total_ace_correct_mention = 0;
+        int total_ere_correct_mention = 0;
+        int total_ace_type_correct = 0;
+        int total_ere_type_correct = 0;
+
+
+        for (int i = 0; i < 5; i++) {
+            Parser test_parser = new BIOCombinedReader(i, "EVAL", "ALL");
+            Parser train_parser_nam = new BIOCombinedReader(i, "TRAIN", "NAM");
+            Parser train_parser_nom = new BIOCombinedReader(i, "TRAIN", "NOM");
+            Parser train_parser_pro = new BIOCombinedReader(i, "TRAIN", "PRO");
+            bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
+            bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
+            bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
+
+            Learner[] candidates = new Learner[3];
+            candidates[0] = classifier_nam;
+            candidates[1] = classifier_nom;
+            candidates[2] = classifier_pro;
+
+            String preBIOLevel1 = "";
+            String preBIOLevel2 = "";
+
+            for (Object example = test_parser.next(); example != null; example = test_parser.next()) {
+
+                ((Constituent) example).addAttribute("preBIOLevel1", preBIOLevel1);
+                ((Constituent) example).addAttribute("preBIOLevel2", preBIOLevel2);
+
+                Pair<String, Integer> cands = joint_inference((Constituent) example, candidates, null);
+
+                String bioTag = cands.getFirst();
+                int learnerIdx = cands.getSecond();
+
+                preBIOLevel2 = preBIOLevel1;
+                preBIOLevel1 = bioTag;
+
+                boolean goldStart = false;
+                boolean predictedStart = false;
+
+                if (bioTag.startsWith("B") || bioTag.startsWith("U")) {
+                    total_predicted_mention++;
+                    if (((Constituent)example).getTextAnnotation().getId().startsWith("bn") ||
+                            ((Constituent)example).getTextAnnotation().getId().startsWith("nw")){
+                        total_ace_predicted_mention ++;
+                    }
+                    else {
+                        total_ere_predicted_mention ++;
+                    }
+                    predictedStart = true;
+                }
+                String correctTag = ((Constituent) example).getAttribute("BIO");
+
+                if (correctTag.startsWith("B") || correctTag.startsWith("U")) {
+                    total_labeled_mention++;
+                    if (((Constituent)example).getTextAnnotation().getId().startsWith("bn") ||
+                            ((Constituent)example).getTextAnnotation().getId().startsWith("nw")){
+                        total_ace_labeled_mention ++;
+                    }
+                    else {
+                        total_ere_labeled_mention ++;
+                    }
+                    goldStart = true;
+                }
+
+                if (goldStart && predictedStart) {
+                    Constituent goldMention = getConstituent((Constituent) example, candidates[learnerIdx], true);
+                    Constituent predictMention = getConstituent((Constituent) example, candidates[learnerIdx], false);
+                    boolean boundaryCorrect = false;
+                    boolean typeCorrect = false;
+                    if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan()) {
+                        boundaryCorrect = true;
+                    }
+                    if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
+                        typeCorrect = true;
+                    }
+                    if (boundaryCorrect) {
+                        total_correct_mention++;
+                        if (((Constituent)example).getTextAnnotation().getId().startsWith("bn") ||
+                                ((Constituent)example).getTextAnnotation().getId().startsWith("nw")){
+                            total_ace_correct_mention ++;
+                        }
+                        else {
+                            total_ere_correct_mention ++;
+                        }
+                        if (typeCorrect){
+                            if (((Constituent)example).getTextAnnotation().getId().startsWith("bn") ||
+                                    ((Constituent)example).getTextAnnotation().getId().startsWith("nw")){
+                                total_ace_type_correct ++;
+                            }
+                            else {
+                                total_ere_type_correct ++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        System.out.println("Total Labeled Mention: " + total_labeled_mention);
+        System.out.println("Total Predicted Mention: " + total_predicted_mention);
+        System.out.println("Total Correct Mention: " + total_correct_mention);
+        double p = (double)total_correct_mention / (double)total_predicted_mention;
+        double r = (double)total_correct_mention / (double)total_labeled_mention;
+        double f = 2 * p * r / (p + r);
+        System.out.println("Precision: " + p);
+        System.out.println("Recall: " + r);
+        System.out.println("F1: " + f);
+
+        System.out.println("Total Labeled Mention ACE: " + total_ace_labeled_mention);
+        System.out.println("Total Predicted Mention ACE: " + total_ace_predicted_mention);
+        System.out.println("Total Correct Mention ACE: " + total_ace_correct_mention);
+        System.out.println("Total Type Correct ACE: " + total_ace_type_correct);
+        p = (double)total_ace_correct_mention / (double)total_ace_predicted_mention;
+        r = (double)total_ace_correct_mention / (double)total_ace_labeled_mention;
+        f = 2 * p * r / (p + r);
+        System.out.println("Precision: " + p);
+        System.out.println("Recall: " + r);
+        System.out.println("F1: " + f);
+
+        System.out.println("Total Labeled Mention ERE: " + total_ere_labeled_mention);
+        System.out.println("Total Predicted Mention ERE: " + total_ere_predicted_mention);
+        System.out.println("Total Correct Mention ERE: " + total_ere_correct_mention);
+        System.out.println("Total Type Correct ERE: " + total_ere_type_correct);
+        p = (double)total_ere_correct_mention / (double)total_ere_predicted_mention;
+        r = (double)total_ere_correct_mention / (double)total_ere_labeled_mention;
+        f = 2 * p * r / (p + r);
+        System.out.println("Precision: " + p);
+        System.out.println("Recall: " + r);
+        System.out.println("F1: " + f);
+
+    }
+
     public static void main(String[] args){
         //test_ts();
         //test_cv();
-        //test_ere();
+        test_ere();
         //calculateAvgMentionLength();
-        BIOCombinedReader.generateNewSplit();
+        //BIOCombinedReader.generateNewSplit();
+        //test_hybrid();
     }
 }
