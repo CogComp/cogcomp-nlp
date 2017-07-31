@@ -35,7 +35,7 @@ import java.util.concurrent.*;
 
 public class PathLSTMHandler extends Annotator {
 
-    public static final String SRL_VERB_PATH_LSTM = "SRL_VERB_PATH_LSTM";
+    public static final String SRL_VERB_PATH_LSTM = "PATH_LSTM_SRL";
 
     private CompletePipeline SRLpipeline;
 
@@ -102,8 +102,7 @@ public class PathLSTMHandler extends Annotator {
 
                         for (Predicate p : parsed.getPredicates()) {
                             // skip nominal predicates
-                            if (p.getPOS().startsWith("N"))
-                                continue;
+                            // if (p.getPOS().startsWith("N")) continue;
 
                             IntPair predicateSpan = new IntPair(p.getIdx() - 1, p.getIdx());
                             String predicateLemma = p.getLemma();

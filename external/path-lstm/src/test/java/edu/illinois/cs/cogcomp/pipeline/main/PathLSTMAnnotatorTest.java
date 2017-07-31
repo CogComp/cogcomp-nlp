@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
  *
  * @author khashab2
  */
-public class ExternalAnnotatorsTest {
+public class PathLSTMAnnotatorTest {
 
     private AnnotatorService service = null;
     private TextAnnotation ta = null;
