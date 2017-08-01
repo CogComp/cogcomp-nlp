@@ -28,15 +28,33 @@ import java.util.concurrent.ConcurrentHashMap;
  * It requires untrained classifiers generated directly by LBJava
  */
 public class BIOTester {
-    public static String getPath(String mode, int fold){
-        if (mode.equals("train")){
-            return "data/partition_with_dev/train/" + fold;
+    public static String getPath(String mode, String corpus, int fold){
+        if (corpus.equals("ERE")) {
+            if (mode.equals("train")) {
+                return "data/ere/cv/train/" + fold;
+            }
+            else if (mode.equals("eval")) {
+                return "data/ere/cv/eval/" + fold;
+            } else {
+                return "INVALID_PATH";
+            }
         }
-        if (mode.equals("eval")){
-            return "data/partition_with_dev/eval/" + fold;
+        else if (corpus.equals("ACE")){
+            if (mode.equals("train")) {
+                return "data/partition_with_dev/train/" + fold;
+            }
+            else if (mode.equals("eval")) {
+                return "data/partition_with_dev/eval/" + fold;
+            }
+            else if (mode.equals("dev")){
+                return "data/partition_with_dev/dev";
+            }
+            else{
+                return "INVALID_PATH";
+            }
         }
-        else{
-            return "INVALID_PATH";
+        else {
+            return "INVALID CORPUS";
         }
     }
 
@@ -385,14 +403,14 @@ public class BIOTester {
         int total_correct_mention = 0;
         int violations = 0;
 
-        for (int i = 0; i < 5; i++){
+        for (int i = 0; i < 1; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", i), "ACE05-EVAL", "ALL", isBIO);
+            Parser test_parser = new BIOReader(getPath("eval", "ERE", i), "ERE-EVAL", "ALL", isBIO);
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
-            Parser train_parser_nam = new BIOReader(getPath("train", i), "ACE05-TRAIN", "NAM", isBIO);
-            Parser train_parser_nom = new BIOReader(getPath("train", i), "ACE05-TRAIN", "NOM", isBIO);
-            Parser train_parser_pro = new BIOReader(getPath("train", i), "ACE05-TRAIN", "PRO", isBIO);
+            Parser train_parser_nam = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "NAM", isBIO);
+            Parser train_parser_nom = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "NOM", isBIO);
+            Parser train_parser_pro = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "PRO", isBIO);
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
@@ -888,8 +906,8 @@ public class BIOTester {
 
     public static void main(String[] args){
         //test_ts();
-        //test_cv();
-        test_ere();
+        test_cv();
+        //test_ere();
         //calculateAvgMentionLength();
         //BIOCombinedReader.generateNewSplit();
         //test_hybrid();
