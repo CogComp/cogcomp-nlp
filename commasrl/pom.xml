@@ -176,11 +176,11 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo</url>
         </repository>
         <site>
             <id>CogcompSoftwareDoc</id>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/${project.artifactId}</url>
+            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/software/doc/${project.artifactId}</url>
         </site>
     </distributionManagement>
 </project>

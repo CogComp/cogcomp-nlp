@@ -16,7 +16,7 @@ fi
 file=illinois-chunker-model-${version}.jar
 jar cf ${file} ${directory}
 
-m2repository=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo
+m2repository=scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo
 repoId=CogcompSoftware
 
 deployOpts="-Durl=$m2repository -DrepositoryId=$repoId"

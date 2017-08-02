@@ -37,7 +37,7 @@ public class NETaggerLevel2$$1 extends Classifier
     if (!(__example instanceof NEWord))
     {
       String type = __example == null ? "null" : __example.getClass().getName();
-      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 527 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 526 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
@@ -54,7 +54,7 @@ public class NETaggerLevel2$$1 extends Classifier
     if (!(examples instanceof NEWord[]))
     {
       String type = examples == null ? "null" : examples.getClass().getName();
-      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 527 of LbjTagger.lbj received '" + type + "' as input.");
+      System.err.println("Classifier 'NETaggerLevel2$$1(NEWord)' defined on line 526 of LbjTagger.lbj received '" + type + "' as input.");
       new Exception().printStackTrace();
       System.exit(1);
     }
