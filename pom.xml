@@ -25,12 +25,16 @@
         <module>quantifier</module>
         <module>depparse</module>
         <module>commasrl</module>
-        <module>clausie</module>
         <module>prepsrl</module>
-        <module>stanford_3.3.1</module>
         <module>verbsense</module>
         <module>pipeline</module>
-        <module>external</module>
+
+        <!--external tools -->
+        <module>external/external-commons</module>
+        <module>external/clausie</module>
+        <module>external/path-lstm</module>
+        <module>external/stanford_3.3.1</module>
+        <module>external/stanford_3.8.0</module>
     </modules>
 
     <properties>
