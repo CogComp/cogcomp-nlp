@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * creates a web-server with clausie annotator.
+ */
 public class ClausIE_AnnotatorService {
     public static AnnotatorService service = null;
     public static void initialize() throws IOException, AnnotatorException {

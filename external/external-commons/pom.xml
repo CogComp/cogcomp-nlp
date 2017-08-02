@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>external-commons</artifactId>
-    <name>Eexternal Annotators Commons</name>
+    <name>External Annotators Commons</name>
     <description>Common classes shared among external annotators</description>
 
     <dependencies>

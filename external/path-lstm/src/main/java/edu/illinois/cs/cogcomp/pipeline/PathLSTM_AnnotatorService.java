@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * creates a web-server with path-lstm srl annotator
+ */
 public class PathLSTM_AnnotatorService {
     public static AnnotatorService service = null;
     public static void initialize() throws IOException, AnnotatorException {

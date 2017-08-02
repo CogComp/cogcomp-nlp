@@ -30,6 +30,10 @@ import java.util.Map;
 
 import static spark.Spark.*;
 
+/**
+ * This creates a webserver for exposing annotators over the web.
+ * To use this, one has to set annotators, and good to go!
+ */
 public class ExternalAnnotatorsServer {
 
     private static Logger logger = LoggerFactory.getLogger(ExternalAnnotatorsServer.class);
