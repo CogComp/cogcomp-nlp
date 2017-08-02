@@ -21,6 +21,6 @@ mvn deploy:deploy-file \
     -Dversion=${VERSION} \
     -Dclassifier=models \
     -Dpackaging=jar \
-    -Durl=scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo \
+    -Durl=scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo \
     -DrepositoryId=CogcompSoftware
 fi

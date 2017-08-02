@@ -25,7 +25,7 @@ fi
 file=illinois-ner-${version}-models-${type}.jar
 jar cf ${file} ${directory}
 
-m2repository=scp://bilbo.cs.uiuc.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo
+m2repository=scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo
 repoId=CogcompSoftware
 
 deployOpts=;
