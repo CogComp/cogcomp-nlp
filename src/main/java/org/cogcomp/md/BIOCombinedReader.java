@@ -38,21 +38,50 @@ public class BIOCombinedReader extends BIOReader {
         id = "Hybrid_" + fold;
     }
     public List<TextAnnotation> readTasByFold(int fold, String mode){
-        List<TextAnnotation> tas = getTAs();
+        List<String> corpus = new ArrayList<>();
+        if (mode.contains("ACE")){
+            corpus.add("ACE");
+        }
+        if (mode.contains("ERE")){
+            corpus.add("ERE");
+        }
+        if (mode.contains("ALL")){
+            corpus.add("ACE");
+            corpus.add("ERE");
+        }
+        List<TextAnnotation> tas = getTAs(corpus);
         HashMap<String, TextAnnotation> taMap = new HashMap<>();
         for (TextAnnotation ta : tas){
             taMap.put(ta.getId(), ta);
         }
         List<TextAnnotation> ret = new ArrayList<>();
         String file_name = "";
-        if (mode.equals("TRAIN")) {
-            file_name = "data/split/train_fold_" + fold;
+        if (mode.contains("ACE")) {
+            if (mode.contains("TRAIN")) {
+                file_name = "data/split/ace_train_fold_" + fold;
+            } else if (mode.contains("EVAL")) {
+                file_name = "data/split/ace_eval_fold_" + fold;
+            } else {
+                return ret;
+            }
         }
-        else if (mode.equals("EVAL")){
-            file_name = "data/split/eval_fold_" + fold;
+        else if (mode.contains("ERE")){
+            if (mode.contains("TRAIN")) {
+                file_name = "data/split/ere_train_fold_" + fold;
+            } else if (mode.equals("EVAL")) {
+                file_name = "data/split/ere_eval_fold_" + fold;
+            } else {
+                return ret;
+            }
         }
-        else {
-            return ret;
+        else if (mode.contains("ALL")){
+            if (mode.contains("TRAIN")) {
+                file_name = "data/split/train_fold_" + fold;
+            } else if (mode.equals("EVAL")) {
+                file_name = "data/split/eval_fold_" + fold;
+            } else {
+                return ret;
+            }
         }
         POSAnnotator posAnnotator = new POSAnnotator();
         try (BufferedReader br = new BufferedReader(new FileReader(file_name))) {
@@ -172,7 +201,7 @@ public class BIOCombinedReader extends BIOReader {
                     newToken.addAttribute("WORDNETTAG", ",");
                     newToken.addAttribute("WORDNETHYM", ",");
                 }
-                if (_mode.equals("TRAIN")){
+                if (_mode.contains("TRAIN")){
                     newToken.addAttribute("isTraining", "true");
                 }
                 else{
@@ -187,8 +216,8 @@ public class BIOCombinedReader extends BIOReader {
         }
         return ret;
     }
-    public static void generateNewSplit(){
-        List<TextAnnotation> tas = getTAs();
+    public static void generateNewSplit(List<String> corpus, String prefix){
+        List<TextAnnotation> tas = getTAs(corpus);
         long seed = System.nanoTime();
         Collections.shuffle(tas, new Random(seed));
         int size = tas.size();
@@ -202,8 +231,8 @@ public class BIOCombinedReader extends BIOReader {
             List<TextAnnotation> train = new ArrayList<>(tas.subList(0, start));
             train.addAll(new ArrayList<>(tas.subList(end, size)));
             System.out.println("Partitioning fold " + i + " train_size: " + train.size() + " eval_size:" + eval.size());
-            String train_file_name = "data/split/train_fold_" + i;
-            String eval_file_name = "data/split/eval_fold_" + i;
+            String train_file_name = "data/split/" + prefix + "train_fold_" + i;
+            String eval_file_name = "data/split/" + prefix + "eval_fold_" + i;
             BufferedWriter bw = null;
             FileWriter fw = null;
             try {
@@ -228,28 +257,30 @@ public class BIOCombinedReader extends BIOReader {
             System.out.println("Splitting fold " + i + " done");
         }
     }
-    public static List<TextAnnotation> getTAs(){
+    public static List<TextAnnotation> getTAs(List<String> scope){
         List<TextAnnotation> tas = new ArrayList<>();
-        ACEReader aceReader = null;
-        try{
-            aceReader = new ACEReader("data/all", false);
+        if (scope.contains("ACE")) {
+            ACEReader aceReader = null;
+            try {
+                aceReader = new ACEReader("data/all", false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            for (TextAnnotation ta : aceReader) {
+                tas.add(ta);
+            }
         }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        for (TextAnnotation ta : aceReader) {
-            tas.add(ta);
-        }
-        EREMentionRelationReader ereMentionRelationReader = null;
-        try {
-            ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, "data/ere/data", false);
+        if (scope.contains("ERE")) {
+            EREMentionRelationReader ereMentionRelationReader = null;
+            try {
+                ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, "data/ere/data", false);
 
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        for (XmlTextAnnotation xta : ereMentionRelationReader){
-            tas.add(xta.getTextAnnotation());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            for (XmlTextAnnotation xta : ereMentionRelationReader) {
+                tas.add(xta.getTextAnnotation());
+            }
         }
         return tas;
     }

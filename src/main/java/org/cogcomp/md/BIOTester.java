@@ -35,7 +35,11 @@ public class BIOTester {
             }
             else if (mode.equals("eval")) {
                 return "data/ere/cv/eval/" + fold;
-            } else {
+            }
+            else if (mode.equals("all")){
+                return "data/ere/data";
+            }
+            else {
                 return "INVALID_PATH";
             }
         }
@@ -48,6 +52,9 @@ public class BIOTester {
             }
             else if (mode.equals("dev")){
                 return "data/partition_with_dev/dev";
+            }
+            else if (mode.equals("all")){
+                return "data/all";
             }
             else{
                 return "INVALID_PATH";
@@ -356,7 +363,9 @@ public class BIOTester {
             goldType = (curToken.getAttribute("BIO").split("-"))[1];
         }
         List<String> predictedTypes = new ArrayList<>();
-        predictedTypes.add((inference(curToken, classifier).split("-"))[1]);
+        if (!isGold) {
+            predictedTypes.add((inference(curToken, classifier).split("-"))[1]);
+        }
         int startIdx = curToken.getStartSpan();
         int endIdx = startIdx + 1;
         if (endIdx < bioView.getEndSpan()) {
@@ -403,9 +412,9 @@ public class BIOTester {
         int total_correct_mention = 0;
         int violations = 0;
 
-        for (int i = 0; i < 1; i++){
+        for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", "ERE", i), "ERE-EVAL", "ALL", isBIO);
+            Parser test_parser = new BIOReader(getPath("eval", "ERE", i), "ERE-EVAL", "NAM", isBIO);
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
             Parser train_parser_nam = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "NAM", isBIO);
@@ -468,15 +477,14 @@ public class BIOTester {
                     labeled_mention ++;
                     goldStart = true;
                 }
-
+                boolean correctBoundary = false;
                 if (goldStart && predictedStart) {
                     int candidateIdx = cands.getSecond();
                     Constituent goldMention = getConstituent((Constituent)example, candidates[candidateIdx], true);
                     Constituent predictMention = getConstituent((Constituent)example, candidates[candidateIdx], false);
                     if (goldMention.getStartSpan() == predictMention.getStartSpan() && goldMention.getEndSpan() == predictMention.getEndSpan()) {
-                        //if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
-                            correct_mention++;
-                        //}
+                        correctBoundary = true;
+                        correct_mention++;
                     }
                 }
             }
@@ -779,10 +787,10 @@ public class BIOTester {
 
 
         for (int i = 0; i < 5; i++) {
-            Parser test_parser = new BIOCombinedReader(i, "EVAL", "ALL");
-            Parser train_parser_nam = new BIOCombinedReader(i, "TRAIN", "NAM");
-            Parser train_parser_nom = new BIOCombinedReader(i, "TRAIN", "NOM");
-            Parser train_parser_pro = new BIOCombinedReader(i, "TRAIN", "PRO");
+            Parser test_parser = new BIOCombinedReader(i, "ALL-EVAL", "ALL");
+            Parser train_parser_nam = new BIOCombinedReader(i, "ALL-TRAIN", "NAM");
+            Parser train_parser_nom = new BIOCombinedReader(i, "ALL-TRAIN", "NOM");
+            Parser train_parser_pro = new BIOCombinedReader(i, "ALL-TRAIN", "PRO");
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
             bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
@@ -909,7 +917,9 @@ public class BIOTester {
         test_cv();
         //test_ere();
         //calculateAvgMentionLength();
-        //BIOCombinedReader.generateNewSplit();
+        //List<String> corpus = new ArrayList<>();
+        //corpus.add("ERE");
+        //BIOCombinedReader.generateNewSplit(corpus, "ere_");
         //test_hybrid();
     }
 }
