@@ -84,13 +84,20 @@ public class BIOTester {
     }
 
 
-    public static bio_classifier_nam train_nam_classifier(Parser train_parser){
+    public static bio_classifier_nam train_nam_classifier(Parser train_parser, String modelLoc){
         bio_classifier_nam classifier = new bio_classifier_nam();
         train_parser.reset();
         BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-        String parser_id = ((BIOReader)train_parser).id;
-        classifier.setLexiconLocation("tmp/bio_classifier_" + parser_id + ".lex");
-        Learner preExtractLearner = trainer.preExtract("tmp/bio_classifier_" + parser_id + ".ex", true, Lexicon.CountPolicy.none);
+        String modelFileName = "";
+        if (modelLoc == null){
+            String parser_id = ((BIOReader)train_parser).id;
+            modelFileName = "tmp/bio_classifier_" + parser_id;
+        }
+        else{
+            modelFileName = modelLoc;
+        }
+        classifier.setLexiconLocation(modelFileName + ".lex");
+        Learner preExtractLearner = trainer.preExtract(modelFileName + ".ex", true, Lexicon.CountPolicy.none);
         preExtractLearner.saveLexicon();
         Lexicon lexicon = preExtractLearner.getLexicon();
         classifier.setLexicon(lexicon);
@@ -108,16 +115,71 @@ public class BIOTester {
             classifier.doneWithRound();
         }
         classifier.doneLearning();
+        if (modelLoc != null){
+            classifier.setModelLocation(modelFileName + ".lc");
+            classifier.saveModel();
+        }
+        return classifier;
+    }
+
+    public static bio_classifier_nam train_nam_classifier(Parser train_parser){
+        return train_nam_classifier(train_parser, null);
+    }
+
+    public static bio_classifier_nom train_nom_classifier(Parser train_parser, String modelLoc){
+        bio_classifier_nom classifier = new bio_classifier_nom();
+        train_parser.reset();
+        BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
+        String modelFileName = "";
+        if (modelLoc == null){
+            String parser_id = ((BIOReader)train_parser).id;
+            modelFileName = "tmp/bio_classifier_" + parser_id;
+        }
+        else{
+            modelFileName = modelLoc;
+        }
+        classifier.setLexiconLocation(modelFileName + ".lex");
+        Learner preExtractLearner = trainer.preExtract(modelFileName + ".ex", true, Lexicon.CountPolicy.none);
+        preExtractLearner.saveLexicon();
+        Lexicon lexicon = preExtractLearner.getLexicon();
+        classifier.setLexicon(lexicon);
+        int examples = 0;
+        for (Object example = train_parser.next(); example != null; example = train_parser.next()){
+            examples ++;
+        }
+        train_parser.reset();
+        classifier.initialize(examples, preExtractLearner.getLexicon().size());
+        for (Object example = train_parser.next(); example != null; example = train_parser.next()){
+            classifier.learn(example);
+        }
+        train_parser.reset();
+        classifier.doneWithRound();
+        classifier.doneLearning();
+        if (modelLoc != null){
+            classifier.setModelLocation(modelFileName + ".lc");
+            classifier.saveModel();
+        }
         return classifier;
     }
 
     public static bio_classifier_nom train_nom_classifier(Parser train_parser){
-        bio_classifier_nom classifier = new bio_classifier_nom();
+        return train_nom_classifier(train_parser, null);
+    }
+
+    public static bio_classifier_pro train_pro_classifier(Parser train_parser, String modelLoc){
+        bio_classifier_pro classifier = new bio_classifier_pro();
         train_parser.reset();
         BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-        String parser_id = ((BIOReader)train_parser).id;
-        classifier.setLexiconLocation("tmp/bio_classifier_" + parser_id + ".lex");
-        Learner preExtractLearner = trainer.preExtract("tmp/bio_classifier_" + parser_id + ".ex", true, Lexicon.CountPolicy.none);
+        String modelFileName = "";
+        if (modelLoc == null){
+            String parser_id = ((BIOReader)train_parser).id;
+            modelFileName = "tmp/bio_classifier_" + parser_id;
+        }
+        else{
+            modelFileName = modelLoc;
+        }
+        classifier.setLexiconLocation(modelFileName + ".lex");
+        Learner preExtractLearner = trainer.preExtract(modelFileName + ".ex", true, Lexicon.CountPolicy.none);
         preExtractLearner.saveLexicon();
         Lexicon lexicon = preExtractLearner.getLexicon();
         classifier.setLexicon(lexicon);
@@ -133,32 +195,15 @@ public class BIOTester {
         train_parser.reset();
         classifier.doneWithRound();
         classifier.doneLearning();
+        if (modelLoc != null){
+            classifier.setModelLocation(modelFileName + ".lc");
+            classifier.saveModel();
+        }
         return classifier;
     }
 
     public static bio_classifier_pro train_pro_classifier(Parser train_parser){
-        bio_classifier_pro classifier = new bio_classifier_pro();
-        train_parser.reset();
-        BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-        String parser_id = ((BIOReader)train_parser).id;
-        classifier.setLexiconLocation("tmp/bio_classifier_" + parser_id + ".lex");
-        Learner preExtractLearner = trainer.preExtract("tmp/bio_classifier_" + parser_id + ".ex", true, Lexicon.CountPolicy.none);
-        preExtractLearner.saveLexicon();
-        Lexicon lexicon = preExtractLearner.getLexicon();
-        classifier.setLexicon(lexicon);
-        int examples = 0;
-        for (Object example = train_parser.next(); example != null; example = train_parser.next()){
-            examples ++;
-        }
-        train_parser.reset();
-        classifier.initialize(examples, preExtractLearner.getLexicon().size());
-        for (Object example = train_parser.next(); example != null; example = train_parser.next()){
-            classifier.learn(example);
-        }
-        train_parser.reset();
-        classifier.doneWithRound();
-        classifier.doneLearning();
-        return classifier;
+        return train_pro_classifier(train_parser, null);
     }
 
     public static Constituent add_joint_score(Learner a, Learner b, Learner c, Constituent cur){
@@ -414,12 +459,12 @@ public class BIOTester {
 
         for (int i = 0; i < 5; i++){
 
-            Parser test_parser = new BIOReader(getPath("eval", "ERE", i), "ERE-EVAL", "NAM", isBIO);
+            Parser test_parser = new BIOCombinedReader(i, "ERE-EVAL", "ALL");
             bio_label output = new bio_label();
             System.out.println("Start training fold " + i);
-            Parser train_parser_nam = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "NAM", isBIO);
-            Parser train_parser_nom = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "NOM", isBIO);
-            Parser train_parser_pro = new BIOReader(getPath("train", "ERE", i), "ERE-TRAIN", "PRO", isBIO);
+            Parser train_parser_nam = new BIOCombinedReader(i, "ERE-TRAIN", "NAM");
+            Parser train_parser_nom = new BIOCombinedReader(i, "ERE-TRAIN", "NOM");
+            Parser train_parser_pro = new BIOCombinedReader(i, "ERE-TRAIN", "PRO");
 
             bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
             bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
@@ -439,6 +484,7 @@ public class BIOTester {
             String preBIOLevel2 = "";
 
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
+                System.out.println(((Constituent)example).toString());
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
 
@@ -912,14 +958,34 @@ public class BIOTester {
 
     }
 
+    public static void TrainModel(String corpus){
+        if (corpus.equals("ACE")) {
+            Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", false);
+            Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", false);
+            Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", false);
+            train_nam_classifier(train_parser_nam, "models/ACE_NAM");
+            train_nom_classifier(train_parser_nom, "models/ACE_NOM");
+            train_pro_classifier(train_parser_pro, "models/ACE_PRO");
+        }
+        else if (corpus.equals("ERE")){
+            Parser train_parser_nam = new BIOReader("data/ere/data", "ERE-TRAIN", "NAM", false);
+            Parser train_parser_nom = new BIOReader("data/ere/data", "ERE-TRAIN", "NOM", false);
+            Parser train_parser_pro = new BIOReader("data/ere/data", "ERE-TRAIN", "PRO", false);
+            train_nam_classifier(train_parser_nam, "models/ERE_NAM");
+            train_nom_classifier(train_parser_nom, "models/ERE_NOM");
+            train_pro_classifier(train_parser_pro, "models/ERE_PRO");
+        }
+    }
+
     public static void main(String[] args){
         //test_ts();
-        test_cv();
+        //test_cv();
         //test_ere();
         //calculateAvgMentionLength();
         //List<String> corpus = new ArrayList<>();
         //corpus.add("ERE");
         //BIOCombinedReader.generateNewSplit(corpus, "ere_");
         //test_hybrid();
+        TrainModel("ACE");
     }
 }

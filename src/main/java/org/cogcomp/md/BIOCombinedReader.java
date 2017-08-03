@@ -68,7 +68,7 @@ public class BIOCombinedReader extends BIOReader {
         else if (mode.contains("ERE")){
             if (mode.contains("TRAIN")) {
                 file_name = "data/split/ere_train_fold_" + fold;
-            } else if (mode.equals("EVAL")) {
+            } else if (mode.contains("EVAL")) {
                 file_name = "data/split/ere_eval_fold_" + fold;
             } else {
                 return ret;
@@ -77,7 +77,7 @@ public class BIOCombinedReader extends BIOReader {
         else if (mode.contains("ALL")){
             if (mode.contains("TRAIN")) {
                 file_name = "data/split/train_fold_" + fold;
-            } else if (mode.equals("EVAL")) {
+            } else if (mode.contains("EVAL")) {
                 file_name = "data/split/eval_fold_" + fold;
             } else {
                 return ret;
