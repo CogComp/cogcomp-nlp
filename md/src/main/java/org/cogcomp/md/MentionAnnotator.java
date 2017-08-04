@@ -89,7 +89,7 @@ public class MentionAnnotator extends Annotator{
 
     @Override
     public void addView(TextAnnotation ta) throws AnnotatorException{
-        View mentionView = new SpanLabelView("MENTIONS", MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
+        View mentionView = new SpanLabelView("MENTION", MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
         View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
         View tokenView = ta.getView(ViewNames.TOKENS);
         for (int i = tokenView.getStartSpan(); i < tokenView.getEndSpan(); i++){
