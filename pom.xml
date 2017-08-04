@@ -25,12 +25,16 @@
         <module>quantifier</module>
         <module>depparse</module>
         <module>commasrl</module>
-        <module>clausie</module>
         <module>prepsrl</module>
-        <module>stanford_3.3.1</module>
         <module>verbsense</module>
         <module>pipeline</module>
-        <module>external</module>
+
+        <!--external tools -->
+        <module>external/external-commons</module>
+        <module>external/clausie</module>
+        <module>external/path-lstm</module>
+        <module>external/stanford_3.3.1</module>
+        <module>external/stanford_3.8.0</module>
     </modules>
 
     <properties>
@@ -51,11 +55,11 @@
         <repository>
             <id>CogcompSoftware</id>
             <name>CogcompSoftware</name>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/m2repo</url>
+            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/m2repo</url>
         </repository>
         <site>
             <id>CogcompSoftwareDoc</id>
-            <url>scp://bilbo.cs.illinois.edu:/mounts/bilbo/disks/0/www/cogcomp/html/software/doc/</url>
+            <url>scp://legolas.cs.illinois.edu:/srv/data/cogcomp/html/software/doc/</url>
         </site>
     </distributionManagement>
 
