@@ -8,6 +8,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
+import edu.illinois.cs.cogcomp.lbjava.Train;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
 import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
@@ -31,15 +32,28 @@ import java.util.Vector;
  */
 public class ExtentTester {
 
-    public static extent_classifier train_extent_classifier(ExtentReader train_parser){
+    public static extent_classifier train_extent_classifier(ExtentReader train_parser, String prefix){
         extent_classifier classifier = new extent_classifier();
-        String postfix = train_parser.getId();
-        classifier.setLexiconLocation("tmp/extent_classifier_" + postfix + ".lex");
+        String modelFileName = "";
+        if (prefix == null){
+            String postfix = train_parser.getId();
+            modelFileName = "tmp/extent_classifier_" +  postfix;
+        }
+        else{
+            modelFileName = prefix;
+        }
+        classifier.setLexiconLocation(modelFileName + ".lex");
         BatchTrainer trainer = new BatchTrainer(classifier, train_parser);
-        Lexicon lexicon = trainer.preExtract("tmp/extent_classifier_fold_" + postfix + ".ex", true);
+        Lexicon lexicon = trainer.preExtract(modelFileName + ".ex", true);
         classifier.setLexicon(lexicon);
+        classifier.setModelLocation(modelFileName + ".lc");
         trainer.train(1);
+        classifier.saveModel();
         return classifier;
+    }
+
+    public static extent_classifier train_extent_classifier(ExtentReader train_parser){
+        return train_extent_classifier(train_parser, null);
     }
 
     public static void testSimpleExtent(){
@@ -166,6 +180,8 @@ public class ExtentTester {
         Constituent fullMention = new Constituent(head.getLabel(), 1.0f, "EXTENT_MENTION", head.getTextAnnotation(), leftIdx, rightIdx + 1);
         fullMention.addAttribute("EntityHeadStartSpan", Integer.toString(head.getStartSpan()));
         fullMention.addAttribute("EntityHeadEndSpan", Integer.toString(head.getEndSpan()));
+        fullMention.addAttribute("EntityType", head.getAttribute("EntityType"));
+        fullMention.addAttribute("EntityMentionType", head.getAttribute("EntityMentionType"));
         return fullMention;
     }
 
@@ -356,6 +372,17 @@ public class ExtentTester {
         System.out.println("Total predicted mention: " + total_mention_predicted);
         System.out.println("Total head correct: " + total_mention_head_correct);
         System.out.println("Total extent correct: " + total_mention_extent_correct);
+    }
+
+    public static void TrainModel(String corpus){
+        if (corpus.equals("ACE")){
+            ExtentReader e_train_parser = new ExtentReader("data/all");
+            train_extent_classifier(e_train_parser, "models/EXTENT_ACE");
+        }
+    }
+
+    public static void TrainACEModel(){
+        TrainModel("ACE");
     }
 
     public static void main(String[] args){
