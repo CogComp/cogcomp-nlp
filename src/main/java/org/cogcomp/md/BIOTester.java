@@ -15,6 +15,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import org.apache.commons.collections.map.HashedMap;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -818,15 +819,29 @@ public class BIOTester {
         }
     }
 
-    public static void main(String[] args){
-        //test_ts();
-        //test_cv();
-        //test_ere();
-        //calculateAvgMentionLength();
-        //List<String> corpus = new ArrayList<>();
-        //corpus.add("ERE");
-        //BIOCombinedReader.generateNewSplit(corpus, "ere_");
-        //test_hybrid();
+    public static void TrainACEModel(){
         TrainModel("ACE");
+    }
+
+    public static void TrainEREModel(){
+        TrainModel("ERE");
+    }
+
+    public static void main(String[] args){
+        if (args.length == 0){
+            System.out.println("No method call given.");
+            return;
+        }
+        String methodName;
+        String methodValue = null;
+        Class[] parameters = new Class[]{};
+        methodName = args[0];
+        try {
+            Method m = BIOTester.class.getMethod(methodName, parameters);
+            Object ret = m.invoke(methodValue, parameters);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Vector;
 
-/*
+/**
  * This class gives a given TextAnnotation a new View "MENTION"
  * The View contains Constituents that are annotated mentions of the given TextAnnotation
  * The annotator requires POS View to work.

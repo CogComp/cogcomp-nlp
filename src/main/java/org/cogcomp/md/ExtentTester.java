@@ -1,5 +1,6 @@
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
@@ -8,6 +9,7 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.learn.BatchTrainer;
+import edu.illinois.cs.cogcomp.lbjava.learn.Learner;
 import edu.illinois.cs.cogcomp.lbjava.learn.Lexicon;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
@@ -19,6 +21,7 @@ import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 import org.cogcomp.Datastore;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -276,12 +279,22 @@ public class ExtentTester {
         int total_mention_head_correct = 0;
         int total_mention_extent_correct = 0;
         for (int i = 0; i < 5; i++) {
-            BIOReader h_train_parser = new BIOReader("data/partition_with_dev/train/" + i, "ACE05", "ALL", true);
-            bio_classifier_nam h_classifier = BIOTester.train_nam_classifier(h_train_parser);
+            BIOReader h_train_parser_nam = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NAM", true);
+            BIOReader h_train_parser_nom = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "NOM", true);
+            BIOReader h_train_parser_pro = new BIOReader("data/partition_with_dev/train/" + i, "ACE05-TRAIN", "PRO", true);
+
+            bio_classifier_nam h_classifier_nam = BIOTester.train_nam_classifier(h_train_parser_nam);
+            bio_classifier_nom h_classifier_nom = BIOTester.train_nom_classifier(h_train_parser_nom);
+            bio_classifier_pro h_classifier_pro = BIOTester.train_pro_classifier(h_train_parser_pro);
+            Learner[] h_candidates = new Learner[3];
+            h_candidates[0] = h_classifier_nam;
+            h_candidates[1] = h_classifier_nom;
+            h_candidates[2] = h_classifier_pro;
+
             ExtentReader e_train_parser = new ExtentReader("data/partition_with_dev/train/"  + i);
             extent_classifier e_classifier = train_extent_classifier(e_train_parser);
 
-            BIOReader test_parser = new BIOReader("data/partition_with_dev/eval/" + i, "ACE05", "ALL", true);
+            BIOReader test_parser = new BIOReader("data/partition_with_dev/eval/" + i, "ACE05-EVAL", "ALL", true);
             test_parser.reset();
             String preBIOLevel1 = "";
             String preBIOLevel2 = "";
@@ -290,9 +303,10 @@ public class ExtentTester {
             for (Object example = test_parser.next(); example != null; example = test_parser.next()){
                 ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
                 ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
-                String bioTag = BIOTester.inference((Constituent)example, h_classifier);
+                Pair<String, Integer> h_prediction = BIOTester.joint_inference((Constituent)example, h_candidates);
+                String bioTag = h_prediction.getFirst();
                 if (bioTag.startsWith("B") || bioTag.startsWith("U")){
-                    Constituent predictMention = BIOTester.getConstituent((Constituent)example, h_classifier, false);
+                    Constituent predictMention = BIOTester.getConstituent((Constituent)example, h_candidates[h_prediction.getSecond()], false);
                     predictedHeads.add(predictMention);
                 }
                 preBIOLevel2 = preBIOLevel1;
@@ -345,7 +359,20 @@ public class ExtentTester {
     }
 
     public static void main(String[] args){
-        testExtentOnGoldHead();
-        //testExtentOnPredictedHead();
+        if (args.length == 0){
+            System.out.println("No method call given.");
+            return;
+        }
+        String methodName;
+        String methodValue = null;
+        Class[] parameters = new Class[]{};
+        methodName = args[0];
+        try {
+            Method m = ExtentTester.class.getMethod(methodName, parameters);
+            Object ret = m.invoke(methodValue, parameters);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
