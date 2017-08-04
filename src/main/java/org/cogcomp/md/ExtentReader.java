@@ -9,7 +9,6 @@ import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
-import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
@@ -22,7 +21,10 @@ import java.util.List;
 import java.util.Vector;
 
 /**
- * Created by xuany on 7/23/2017.
+ * This is the reader for extends
+ * Given a head, it reads all tokens to either head's left and right
+ * with the head itself into a Relation
+ * It stops until reading one token-head pair where the token is not part of the head's extent
  */
 public class ExtentReader implements Parser
 {

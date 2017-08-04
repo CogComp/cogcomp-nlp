@@ -1,13 +1,5 @@
 package org.cogcomp.md;
 
-/*
- * The reader file which reads B/I/O tag for each word of a certain corpus
- * Supports mode:
- * "ACE05" -> ACE 2005 with ACEReader
- * It returns Constituents duplicated from Token View, all the returning Constituents should be of size 1
- * The returning Constituents has an attribute "BIO", with value "B","I" or "O"
- * Example usage: Parser parser = new BIOReader("data/", "ACE05");
- */
 import java.io.File;
 import java.util.*;
 
@@ -26,9 +18,18 @@ import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;
-import edu.mit.jwi.item.Word;
-import org.apache.thrift.TEnum;
 import org.cogcomp.Datastore;
+
+/**
+ * The reader file which reads B/I/O/(L/U) tag for each word of a certain corpus
+ * Supports mode:
+ * ACE 2005 with ACEReader
+ * ERE with EREMentionRelationReader
+ * ColumnFormat with any column formatted data
+ * It returns Constituents duplicated from Token View, all the returning Constituents should be of size 1
+ * The returning Constituents has an attribute "BIO", with value "B","I","O","L" or "U".
+ * @Example: Parser parser = new BIOReader("data/", "ACE05-TRAIN", "NAM", false);
+ */
 
 public class BIOReader implements Parser
 {
@@ -47,6 +48,18 @@ public class BIOReader implements Parser
     public BIOReader(){
 
     }
+
+    /**
+     *
+     * @param path The system path to the data
+     * @param mode Corpus followed by "-" and indicator (TRAIN/EVAL). e.g., "ACE05-EVAL"
+     * @param type The type of mentions that the reader keeps.
+     *             "NAM" -> Only named entities
+     *             "NOM" -> Only nominals
+     *             "PRO" -> Only pronouns
+     *             "ALL" -> All mentions
+     * @param isBIO Indicates if the tagging schema is "BIO" or "BIOLU"
+     */
     public BIOReader(String path, String mode, String type, Boolean isBIO){
         _path = path;
         _mode = mode.split("-")[0];

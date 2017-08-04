@@ -3,21 +3,18 @@ package org.cogcomp.md;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
-import edu.illinois.cs.cogcomp.edison.features.helpers.WordEmbeddings;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.MyString;
-import net.didion.jwnl.data.POS;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
- * Created by Xuanyu on 7/9/2017.
  * This is the FeatureExtractor Class for the lbj file
- * Normally we define all feature extraction activities that is required here
+ * We define most of the features here
+ * Each static function performs an extraction on a given target
  */
 public class BIOFeatureExtractor {
     public static List<Pair<Integer, String>> getGazetteerFeatures(Constituent c){

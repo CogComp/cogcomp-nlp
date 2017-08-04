@@ -4,8 +4,9 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 import java.util.List;
 
-/**
- * Created by xuanyu on 7/15/2017.
+/*
+ * This is a Parser that reads a List of Objects and
+ * returns all Objects in the form of Parser.
  */
 public class ArrayToParser implements Parser {
     private List readings;

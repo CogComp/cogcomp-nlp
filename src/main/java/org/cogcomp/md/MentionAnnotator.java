@@ -22,8 +22,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Vector;
 
-/**
- * Created by admin on 8/3/2017.
+/*
+ * This class gives a given TextAnnotation a new View "MENTION"
+ * The View contains Constituents that are annotated mentions of the given TextAnnotation
+ * The annotator requires POS View to work.
  */
 public class MentionAnnotator extends Annotator{
 
@@ -110,7 +112,7 @@ public class MentionAnnotator extends Annotator{
             Constituent currentBIO = tokenView.getConstituentsCoveringToken(i).get(0);
             currentBIO.addAttribute("preBIOLevel1", preBIOLevel1);
             currentBIO.addAttribute("preBIOLevel2", preBIOLevel2);
-            Pair<String, Integer> prediction = BIOTester.joint_inference(currentBIO, candidates, null);
+            Pair<String, Integer> prediction = BIOTester.joint_inference(currentBIO, candidates);
             String predictedTag = prediction.getFirst();
             preBIOLevel2 = preBIOLevel1;
             preBIOLevel1 = predictedTag;
