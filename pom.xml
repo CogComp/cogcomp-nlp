@@ -14,7 +14,7 @@
         <module>lemmatizer</module>
         <module>edison</module>
         <module>curator</module>
-        <module>MD</module>
+        <module>md</module>
         <module>pos</module>
         <module>chunker</module>
         <module>ner</module>
