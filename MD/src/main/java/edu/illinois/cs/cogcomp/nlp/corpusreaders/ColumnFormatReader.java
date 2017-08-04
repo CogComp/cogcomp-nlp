@@ -3,11 +3,9 @@ package edu.illinois.cs.cogcomp.nlp.corpusreaders;
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Sentence;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
-import edu.illinois.cs.cogcomp.lbjava.parse.LineByLine;
 
 import java.io.File;
 import java.util.ArrayList;
