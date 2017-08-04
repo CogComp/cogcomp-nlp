@@ -1,0 +1,529 @@
+package edu.illinois.cs.cogcomp.ner.LbjFeatures;
+
+import java.util.*;
+
+import edu.illinois.cs.cogcomp.ner.LbjTagger.NEWord;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordTopicAndLayoutFeatures;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.Gazetteers;
+import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.WordEmbeddings;
+import edu.illinois.cs.cogcomp.ner.LbjTagger.ParametersForLbjCode;
+import edu.illinois.cs.cogcomp.ner.StringStatisticsUtils.*;
+
+  
+//---------------- CLASSIFIER LEVEL 1 -------------------
+ 
+discrete% wordType(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTopicTitleInfo")){
+		sense "" : WordTopicAndLayoutFeatures.getWordType(word); 
+	}
+}
+
+discrete% GazetteersFeatures(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("GazetteersFeatures"))
+	{ 
+ 		int i=0;
+   		NEWord w = word, last = (NEWord)word.next;
+  
+   		for (i = 0; i < 2 && last != null; ++i) last = (NEWord) last.next;
+   		for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+  
+ 		do 
+   		{
+	 		if(w.gazetteers!=null)
+		 		for(int j=0;j<w.gazetteers.size();j++)
+					sense i: w.gazetteers.get(j);
+	 		i++;
+	 		w = (NEWord) w.next;
+   		}while(w != last);
+ 	}
+}
+
+
+real% WordEmbeddingFeatures(NEWord word) <-
+{
+  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordEmbeddings"))
+	{ 
+  		int i;
+  		NEWord w = word, last = word;
+  		for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+  		for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+
+  		for (; w != last; w = (NEWord) w.next) {
+  			double[] embedding=WordEmbeddings.getEmbedding(w);
+			if(embedding!=null)
+				for(int dim=0;dim<embedding.length;dim++)
+					sense "place"+i+"dim"+dim : embedding[dim];
+			i++;
+		}
+	}
+}
+
+discrete% WikifierFeatures(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WikifierFeatures")){
+
+        if(word.wikifierFeatures != null){
+            for(int i = 0; i < word.wikifierFeatures.length; i++){
+                sense "" : "WIKI-"+word.wikifierFeatures[i];
+            }
+        }
+    }
+}
+
+
+discrete% IsSentenceStart(NEWord word) <-
+{
+	if(word.previous==null)
+		sense "start" : "1";
+}
+
+
+discrete% Forms(NEWord word) <-
+{
+  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Forms"))
+	{ 
+  		int i;
+  		NEWord w = word, last = word;
+  		for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+  		for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+
+		int startIndex=i;
+		NEWord startWord=w;
+  		for (; w != last; w = (NEWord) w.next) sense i++ : w.form;
+  		i=startIndex;
+  		w=startWord;
+  		for (; w != last; w = (NEWord) w.next){
+			sense i : MyString.normalizeDigitsForFeatureExtraction(w.form);
+			i++;
+		}
+	}
+}
+
+// Problem 1
+discrete% BrownClusterPaths(NEWord word) <-
+{
+  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("BrownClusterPaths"))
+	{ 
+		BrownClusters bc = BrownClusters.get();
+  		int i;
+  		NEWord w = word, last = word;
+  		for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+  		for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+
+  		for (; w != last; w = (NEWord) w.next){
+  			String[] paths=bc.getPrefixes(w);
+  			for(int j=0;j<paths.length;j++)
+  				sense i : paths[j];
+  			i++;
+  		}
+	}
+}
+
+
+// Problem 1
+discrete% FormParts(NEWord word) <-
+{
+  	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Forms")&&
+  		ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))
+	{ 
+		sense "0" : word.form;
+		int i=-1;
+		int count=-1;
+		NEWord w = (NEWord)word.previous;
+		while(w!=null&&i>=-2){
+			String[] lastParts= w.parts;
+			for(int j=0;j<lastParts.length;j++)
+			{
+				sense count:  MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+				count--;
+			}
+			w = (NEWord)w.previous;
+			i--;
+		}
+		i=1;
+		count=1;
+		w = (NEWord)word.next;
+		while(w!=null&&i<=2){
+			String[] lastParts= w.parts;
+			for(int j=0;j<lastParts.length;j++)
+			{
+				sense count:  MyString.normalizeDigitsForFeatureExtraction(lastParts[j]);
+				count++;
+			}
+			w = (NEWord)w.next;
+			i++;
+		}
+  	}
+}
+
+
+// Feature set i
+discrete{false, true}% Capitalization(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Capitalization"))
+	{ 
+	 	int i;
+  		NEWord w = word, last = word;
+  		for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+  		for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+
+  		for (; w != last; w = (NEWord) w.next) sense i++ : w.capitalized;
+  	}
+}
+
+// Feature set ii
+discrete{false, true}% WordTypeInformation(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("WordTypeInformation"))
+	{ 
+	  int i;
+	  NEWord w = word, last = word;
+	  for (i = 0; i <= 2 && last != null; ++i) last = (NEWord) last.next;
+	  for (i = 0; i > -2 && w.previous != null; --i) w = (NEWord) w.previous;
+
+	  for (; w != last; w = (NEWord) w.next, ++i)
+	  {
+	    boolean allCapitalized = true, allDigits = true, allNonLetters = true;
+	
+	    for (int j = 0; j < w.form.length(); ++j) {
+	    	char c = w.form.charAt(j);
+	      	allCapitalized &= Character.isUpperCase(c);
+	      	allDigits &= (Character.isDigit(c)||c=='.'||c==',');
+	      	allNonLetters &= !Character.isLetter(c);
+	    }
+	    sense "c" + i : allCapitalized;
+	    sense "d" + i : allDigits;
+	    sense "p" + i : allNonLetters;
+  	  }
+  	}
+}
+
+// Feature set iii
+discrete% Affixes(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Affixes"))
+	{ 
+  		int N = word.form.length();
+	  	for (int i = 3; i <= 4; ++i)
+    		if (word.form.length() > i) sense "p|" : word.form.substring(0, i);
+  		for (int i = 1; i <= 4; ++i)
+    		if (word.form.length() > i) sense "s|" : word.form.substring(N - i);
+		
+		if(ParametersForLbjCode.currentParameters.tokenizationScheme.equals(ParametersForLbjCode.TokenizationScheme.DualTokenizationScheme))	
+			for(int i=0;i<word.parts.length;i++)
+				sense "part"+i : word.parts[i];
+
+	}
+}
+
+discrete% AffixesZH(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("Affixes")
+	&& ParametersForLbjCode.currentParameters.language.equals("zh"))
+	{
+  		int N = word.form.length();
+	  	for (int i = 1; i <= 2; ++i)
+    		if (word.form.length() > i) sense "ZH-p|" : word.form.substring(0, i);
+  		for (int i = 1; i <= 2; ++i)
+    		if (word.form.length() > i) sense "ZH-s|" : word.form.substring(N - i);
+	}
+}
+
+
+discrete NELabel(NEWord word) <- { return word.neLabel; }
+
+real% nonLocalFeatures(NEWord word) <-
+{
+	//no need to check which features are active here- if 
+	//nonlocal features are not used, they will not be generated! 
+	String[] feats=word.getAllNonlocalFeatures();
+	for(int i=0;i<feats.length;i++)
+		sense feats[i]: word.getNonLocFeatCount(feats[i]);
+}
+
+
+// Feature set iv
+discrete% PreviousTag1Level1(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1"))
+	{ 
+	  	int i;
+	  	NEWord w = word;
+	  	if(w.previous!=null)
+	  	{
+			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+	    		sense "-1" : ((NEWord)w.previous).neLabel;
+	    	else
+	    		sense "-1" : ((NEWord)w.previous).neTypeLevel1;
+      	}
+    }
+}
+
+// Feature set iv
+discrete% PreviousTag2Level1(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag2"))
+	{ 
+	  int i;
+	  NEWord w = word;
+	  if(w.previous!=null)
+	  {
+		if(((NEWord)w.previous).previous!=null)
+	  	{
+			if (NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+		   		sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+		   	else
+		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel1;
+	 	}
+	  }
+  	}
+}
+
+real% prevTagsForContextLevel1(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext"))
+	{
+	  	int i,j;
+  		NEWord w = word;
+		String[] words=new String[3];
+		OccurrenceCounter[] count=new OccurrenceCounter[3];
+	  	for (i = 0; i <= 2 && w != null; ++i) {
+			count[i]=new OccurrenceCounter();
+			words[i]=w.form;
+			w = (NEWord) w.next;
+		}
+			
+		w=(NEWord)word.previousIgnoreSentenceBoundary;
+		for(i=0;i<1000&&w!=null;i++){
+			for(j=0;j<words.length;j++){
+				if(words[j]!=null&&w.form.equals(words[j])){
+						if(NETaggerLevel1.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/){
+							if(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.useNoise())
+								count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel1RandomGenerator.randomLabel());
+							else					 
+								count[j].addToken(w.neLabel);
+						}
+						else
+			    			count[j].addToken(w.neTypeLevel1);
+				}
+			}
+			w=(NEWord)w.previousIgnoreSentenceBoundary;
+		}
+	
+		for(j=0;j<count.length;j++){
+			if(count[j]!=null)	
+			{
+				String[] all=count[j].getTokens();
+				for(i=0;i<all.length;i++)
+					sense j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);	
+			}
+		}
+	}
+}
+
+// See nearly identical PreviousTagPatternLevel2 for comments on this.   
+discrete% PreviousTagPatternLevel1(NEWord word) <-
+{
+    if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTagPatternLevel1")){
+        NEWord w = (NEWord)word.previous;
+        Vector pattern = new Vector();
+        String label ="O";
+        if(w!=null) {
+            if (NETaggerLevel1.isTraining) 
+                label = ((NEWord)w).neLabel;
+            else
+                label = ((NEWord)w).neTypeLevel1;
+        } else {
+            label = null;
+        }
+        
+        for(int i=0;i<2&&label!=null&&label.equals("O"); i++ ) {
+            pattern.addElement(w.form);
+            w = (NEWord)w.previous;
+            if(w!=null) {
+                if (NETaggerLevel1.isTraining) 
+                    label = ((NEWord)w).neLabel;
+                else
+                    label = ((NEWord)w).neTypeLevel1;
+            } else {
+                label = null;
+            }
+        }
+        if(pattern.size()>0&&label!=null&&!label.equals("O")) {
+            label=label.substring(2);
+            String res = "";
+            for(int i=0;i<pattern.size();i++)
+                res=(String) pattern.elementAt(i)+"_"+res;
+            res = label+"_"+res;
+            sense "" : res;		
+        }
+	}
+}
+
+mixed% FeaturesSharedTemp(NEWord word) 	<-	IsSentenceStart, Capitalization, nonLocalFeatures, GazetteersFeatures, FormParts, Forms,  WordTypeInformation, Affixes, BrownClusterPaths, WordEmbeddingFeatures, WikifierFeatures, AffixesZH
+
+mixed% FeaturesLevel1SharedWithLevel2(NEWord word)  <- FeaturesSharedTemp /*,  IsWordCaseNormalized&&FeaturesSharedTemp*/
+
+mixed% FeaturesLevel1Only(NEWord word) <- PreviousTagPatternLevel1, PreviousTag1Level1,PreviousTag2Level1, prevTagsForContextLevel1, PreviousTag1Level1&&Forms
+
+discrete NETaggerLevel1(NEWord word)  <-
+learn NELabel
+  using FeaturesLevel1SharedWithLevel2,FeaturesLevel1Only
+  with new SparseNetworkLearner(new SparseAveragedPerceptron(.05, 0, 30))
+end
+
+//---------------- CLASSIFIER LEVEL 2 -------------------
+
+// Feature set iv
+discrete% PreviousTag1Level2(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag1"))
+	{ 
+	  	int i;
+	  	NEWord w = word;
+	  	if(w.previous!=null)
+	  	{
+			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+	    		sense "-1" : ((NEWord)w.previous).neLabel;
+	    	else
+	    		sense "-1" : ((NEWord)w.previous).neTypeLevel2;
+      	}
+    }
+}
+
+// Feature set iv
+discrete% PreviousTag2Level2(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTag2"))
+	{ 
+	  int i;
+	  NEWord w = word;
+	  if(w.previous!=null)
+	  {
+		if(((NEWord)w.previous).previous!=null)
+	  	{
+			if (NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) 
+		   		sense "-2" : ((NEWord)((NEWord)w.previous).previous).neLabel;
+		   	else
+		    	sense "-2" : ((NEWord)((NEWord)w.previous).previous).neTypeLevel2;
+	 	}
+	  }
+  	}
+}
+
+real% prevTagsForContextLevel2(NEWord word) <-
+{
+	if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PrevTagsForContext"))
+	{
+	  	int i,j;
+  		NEWord w = word;
+		String[] words=new String[3];
+		OccurrenceCounter[] count=new OccurrenceCounter[3];
+	  	for (i = 0; i <= 2 && w != null; ++i) {
+			count[i]=new OccurrenceCounter();
+			words[i]=w.form;
+			w = (NEWord) w.next;
+		}
+			
+		w=(NEWord)word.previousIgnoreSentenceBoundary;
+		for(i=0;i<1000&&w!=null;i++){
+			for(j=0;j<words.length;j++){
+				if(words[j]!=null&&w.form.equals(words[j])){
+						if(NETaggerLevel2.isTraining/*&&ParametersForLbjCode.currentParameters.trainingIteration==0*/) {
+							if(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.useNoise())
+								count[j].addToken(ParametersForLbjCode.currentParameters.prevPredictionsLevel2RandomGenerator.randomLabel());
+							else					 
+								count[j].addToken(w.neLabel);
+						}
+						else
+			    			count[j].addToken(w.neTypeLevel2);
+				}
+			}
+			w=(NEWord)w.previousIgnoreSentenceBoundary;
+		}
+	
+		for(j=0;j<count.length;j++){
+			if(count[j]!=null)	
+			{
+				String[] all=count[j].getTokens();
+				for(i=0;i<all.length;i++)
+					sense j+"_"+all[i] : count[j].getCount(all[i])/((double)count[j].totalTokens);	
+			}
+		}
+	}
+}
+
+
+real% Level1AggregationFeatures(NEWord word) <-
+{
+        if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PredictionsLevel1")){
+        	for(int i=0;i<word.getLevel1AggregationFeatures().size();i++){
+        		NEWord.RealFeature f=word.getLevel1AggregationFeatures().get(i);
+        		sense f.featureGroupName: f.featureValue;
+        	}
+        }
+}
+
+// This looks at a small window of text (at most 2 tokens) before the word in question.
+// If there is a named entity in the window, make feature out of NETag+(w-2)+(w-1)
+discrete% PreviousTagPatternLevel2(NEWord word) <-
+{
+    if(ParametersForLbjCode.currentParameters.featuresToUse.containsKey("PreviousTagPatternLevel2")){
+        Vector pattern = new Vector();
+        String label ="O";
+
+        // think of this block as getting the label of the word.
+        // (duplicated below)
+        NEWord w = (NEWord)word.previous;
+        if(w!=null) {
+            if (NETaggerLevel2.isTraining) 
+                label = ((NEWord)w).neLabel;
+            else
+                label = ((NEWord)w).neTypeLevel2;
+        } else {
+            label = null;
+        }
+
+        // look back at most 2 tokens (from word)
+        // stop if you reach a labeled token.
+        for(int i = 0; i < 2 && label != null && label.equals("O"); i++ ) {
+            // w.form is the actual text of the word.
+            // never actually add words NOT labeled O (ie, named entities)
+            pattern.addElement(w.form);
+            w = (NEWord)w.previous;
+            if(w!=null) {
+                if (NETaggerLevel2.isTraining) 
+                    label = ((NEWord)w).neLabel;
+                else
+                    label = ((NEWord)w).neTypeLevel2;
+            } else {
+                label = null;
+            }
+        }
+        
+        if(pattern.size()>0&&label!=null&&!label.equals("O")) {
+            // presumably this captures B-, or I-, or O-, etc.
+            label=label.substring(2); 
+            String res = "";
+            for(int i=0;i<pattern.size();i++)
+                res=(String) pattern.elementAt(i)+"_"+res;
+            res = label+"_"+res;
+            sense "" : res;		
+        }
+	}
+}
+
+
+
+mixed% FeaturesLevel2(NEWord word) <-   PreviousTagPatternLevel2, Level1AggregationFeatures,  PreviousTag1Level2, PreviousTag2Level2 ,  prevTagsForContextLevel2, PreviousTag1Level2&&Forms
+																	
+
+discrete NETaggerLevel2(NEWord word)  <-
+learn NELabel 
+  using FeaturesLevel1SharedWithLevel2,FeaturesLevel2
+  with new SparseNetworkLearner(new SparseAveragedPerceptron(.05, 0, 30))
+end
+

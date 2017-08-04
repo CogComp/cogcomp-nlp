@@ -1,0 +1,282 @@
+UNICEF	International Childrent's Emergency Fund # Ulskajf Nlsajdf Idkajflkj Clakfowaieru Edkafj Flaksdjf
+1LT	First Lieutenant
+2LT	Second Lieutenant
+A2C2	Army airspace command and control
+AA	Anti-Aircraft
+AA	assessment agent
+AA	avenue of approach
+AAA	antiaircraft artillery
+AAA	arrival and assembly area
+AAA	assign alternate area
+AAAS	amphibious aviation assault ship
+AABB	American Association of Blood Banks
+AABWS	amphibious assault bulk water system
+AAC	activity address code
+AAC	Army Air Corps
+AAC	Australian Army Cadets
+AACG	arrival airfield control group
+AADC	area air defense commander
+AADP	area air defense plan
+AA&E	arms, ammunition, and explosives
+AAEC	aeromedical evacuation control team
+AAFC	Australian Air Force Cadets
+AAFES	Army and Air Force Exchange Service
+AAFIF	automated air facility information file
+AAFS	amphibious assault fuel system
+AAFSF	amphibious assault fuel supply facility
+AAGS	Army air-ground system
+AAI	air-to-air interface
+AAM	air-to-air missile
+AAMDC	US Army Air and Missile Defense Command
+AAOE	arrival and assembly operations element
+AAOG	arrival and assembly operations group
+AAP	Allied administrative publication
+AAP	assign alternate parent
+AAR	after action report
+AAR	after action review
+AAS	Army Apprentice School
+AAST	aeromedical evacuation administrative support team
+AAT	automatic analog test
+AAT	aviation advisory team
+AAU	analog applique unit
+AAV	amphibious assault vehicle
+AAW	antiair warfare
+AB	airbase
+ABCA	American, British, Canadian, Australian Armies Program
+ABCS	Army Battle Command System
+ABD	airbase defense
+ABFC	advanced base functional component
+ADF	Australian Defence Force
+ADFA	Australian Defence Force Academy
+ADFC	Australian Defence Force Cadets
+ADOS	Active Duty Other Services
+ADSW	Active Duty Special Work
+AFI	Awaiting Further Instruction
+AFO	Another Fucking Observer
+AFOSI	Air Force Office of Special Investigations
+AIM	Airborne Intercept Missile
+AIPD	Army Institute For Professional Development
+AIRTC	Air Training Corps
+AIT	Advanced Individual Training
+An	Antonov
+ANZAC	Australian and New Zealand Army Corps
+AOL	Absent Over Leave
+A&P	administrative and personnel
+AP	Armor-Piercing
+APC	Armored Personnel Carrier
+APFSDS	Armour-Piercing Fin-Stabilized Discarding Sabot
+APO AE	Army Post Office Armies in Europe
+APPN	Appropriation Number
+APRT	Army Physical Readiness Test
+ARA	Australian Regular Army
+ARes	Army Reserve
+ARM	Anti-Radar Missile
+ARM	Anti-Radiation Missile
+ARMS	Automated Recruit Management System
+ARVN	Army of the Republic of
+ASAP	As Soon As Possible
+ASEAN	Association of South East Asian Nations
+ASM	Air to Surface Missile
+ASM	Anti-Ship Missile
+ASV	Anti-Surface Vessel
+ATTRS	Army Training Requirements And Resources Development
+AWOL	Absent Without Leave
+BCT	Basic Combat Training
+BDF	Barbados Defence Force
+Be	Beriev
+BEA	Budget Execution Authority
+BOHICA	Bend Over Here It Comes Again
+C1	Command
+C2	Command And Control
+C3	Command Control And Communication
+C4IR	Command Control Communication Computers Intelligence And Recognition
+CAC	Common Access Card
+CAG	Commander, Air Group
+CAGE	Commercial and Government Entity
+CAS	Close Air Support
+CAT	Combat Application Tourniquets
+CCIR	Commanders Critical Information Requirements
+CDIAC	Carbon Dioxide Information Analysis Center
+CENTCOM	Central Command
+CF	Cluster Fuck
+CIA	Central Intelligence Agency
+CIC	Command Intelligence Center
+CINCLANT	Commander-in-chief, Atlantic Forces
+CINCLANTFLT	Commander-in-chief, Atlantic Fleet
+CINCPAC	Commander-in-chief, Pacific Forces
+CIWS	Close-In Weapon System
+CO	Commanding Officer
+CO	Company
+CODELS	Congressional Delegations
+CONUS	Continental United States
+COS	Chief of Staff
+CPT	Captain
+CPX	Command Post Exercise
+CQB	Close Quarters Battle
+CSM	Command Sergeant Major
+CT	Counter-terrorism Team
+CVN	Nuclear-powered Aircraft Carrier
+CZN	Nuclear-powered Airship Carrier
+DARPA	Defense Advanced Research Projects Agency
+DFAS	Defense Finance and Accounting Service
+DMS	Defense Message System
+DMZ	Demilitarized Zone
+DoDAF	Department of Defense Architectural Framework
+EOD	Explosive Ordnance Disposal
+ETA	Estimated time of arrival
+EUCOM	European Command
+Exfil	Exfiltration
+FA	Field Artillery
+FAR	Federal Acquistion Regulation
+FBCB2	Force XXI Battlefield Command Brigade and Below
+FBI	Federal Bureau of Investigation
+FEBA	Forward Edge of the Battle Area
+FLOT	Forward Line of Troops
+FLOTUS	First Lady of the United States
+FNG	Fucking New Guy
+FOB	Forward Operating Base
+FOD	Foreign Object Damage
+FOD	Foreign Object Debris
+FSA	Force Structure Allowance
+FTUS	Full Time Unit Specialist
+FUBAR	Fouled Up Beyond All Repair
+FUBAR	Fucked Up Beyond All Repair
+G1	General Staff Level office for Personnel and Manpower
+G2	General Staff Level office for Military Intelligence
+G3	General Staff Level office for Operations and Plans
+G4	General Staff Level office for Logistics
+G5	General Staff Level office for Military/Civil Affairs
+G6	General Staff Level office for Signal and Communication
+G7	General Staff Level office for Training and Exercises
+G8	General Staff Level office for Force Development and Analysis
+G9	General Staff Level office for Civil Operations
+GEN	General
+GI	General Issue
+GO	General Officer
+GOCO	Government owned, contractor operated
+GPMG	General Purpose Machine Gun
+GPS	Global Positioning S ystem
+GROM	Polish Special Operations Team
+Gulag	The Chief Administration of Collective Labor Camps
+HEAT	High Explosive Anti-Tank warhead
+HMAS	Her Majesty's Australian Ship
+HMCS	Her Majesty's Canadian Ship
+HMMWV	High Mobility Multipurpose Wheeled Vehicle
+HMNZS	Her Majesty's New Zealand Ship
+HMS	Hans Majest� Skepp
+HMS	Her Majesty's Ship
+HOMSEC	Homeland Security
+HYT	High Year Tenure
+IAF	Indian Air Force
+IAF	Israeli Air Force
+ICBM	Intercontinental Ballistic Missile
+IED	Improvised Explosive Device
+IFF	Identification Friend or Foe
+IFV	Infantry Fighting Vehicle
+Il	Ilyushin
+Interpol	International Criminal Police Organization
+ISO	Inter School Course
+JETDS	Joint Electronics Type Designation System
+KIA	Killed In Action
+LZ	Landing Zone
+MBT	Main Battle Tank
+MCEN	Marine Corps Enterprise Network
+MFA	Ministry of Foreign Affairs
+MG	Major General
+Mi	Mil Moscow Helicopter Plant
+MIA	Missing In Action
+MICV	Mechanized Infantry Combat Vehicle
+MiG	Mikoyan-Gurevich
+MOAB	Massive Ordnance Air Blast bomb
+MOB	Main Operating Base
+MPDS	Military Planning Data Allowance
+MRAP	Mine Resistant Ambush Protected
+MRE	Meal Ready to Eat
+MRX	Mission Rehearsal Exercise
+MTOE	Modified Table Of Organizational Equipment
+MTS+	Movement Tracking System Plus
+NAFTA	North American Free Trade Agreement
+NAS	Naval Air Station
+NATO	North Atlantic Treaty Organisation
+NCIS	Naval Criminal Investigative Service
+NMC	Not Mission Capable
+NMCI	Naval Marine Corps Internet
+OBE	Overcome by Events
+OCONUS	Outside Continental United States
+OFO	Out Fucking Off
+OODA	Observe, Orient, Decide, And Act
+OPSEC	Operations Security
+OTV	Outer Tactical Vest
+PACOM	Pacific Command
+PFT	Physical Fitness Test
+PLT	Platoon
+PME	Professional Military Education
+PMS	Planned Maintenance Schedule
+PO	Post Office
+POTUS	President of the United States
+POW	Prisoner Of War
+PT	Physical Training
+RAAF	Royal Australian Air Force
+RAF	Royal Air Force
+RAN	Royal Australian Navy
+RCSC	Royal Canadian Sea Cadets
+RFP	Request for Proposal
+RMC	Royal Military College of Canada  in Kingston, Ontario
+RN	Royal Navy
+RNZAF	Royal New Zealand Air Force
+RPG	Rocket-Propelled Grenade
+RPM	Rounds per minute
+RSS	Regional Security System
+RV	Rendez-Vous
+SAAS	Standard Army Ammunition System
+SAM	Surface-to-air Missile
+SARSS	Standard Army Retail Supply System
+SEAL	Sea, Air and Land
+SFC	Sergeant First Class
+SGM	Sergeant Major
+SGT	Sergeant
+SITREP	Situation Report
+SMA	Sergeant Major of the Army
+SNAFU	Situation Normal: All Fucked Up
+SOCOM	United States Special Operations Command
+SOL	Shit Out of Luck
+SOP	Standard Operating Procedures
+SOS	Shit On a Shingle
+SSG	Staff Sergeant
+TAD	Temporary Additional Duty
+TDY	Temporary Duty
+TFOA	Things Falling Off Aircraft
+TU	Tits Up
+UA	Unauthorized Absence
+UAV	Unmanned Aerial Vehicle
+UCAV	Unmanned Combat Air Vehicle
+ULLS	Unit Level Logisitics System
+UMA	Unit Mobilization Assistor
+UN	United Nations
+US	United States
+USA	United States of America
+USAF	United States Air Force
+USAFE	United States Air Forces in Europe
+USAREC	US Army REcruiting Command
+USAREUR	US Army European Command
+USMC	United States Marine Corps
+USN	United States Navy
+USO	United Service Organizations
+USR	Unit Status Report
+UUV	Unmanned Underwater Vehicle
+UXB	Unexploded Bomb
+VBIED	Vehicle Borne Improvised Explosive Device
+VDM	Visual Distinguishing Mark
+VFD	Volunteer Fire Department
+WIA	Wounded In Action
+MSR	Microsoft Research
+ISAF	International Security and Assistance Force
+IOC	International Olympic Committee
+MU	Manchester United
+PDL	Democrat-Liberal Party
+MMC	MMC Group
+AC	American Conference
+CFL	Canadian Football League
+SD	Sweden Democrats
+CBB	Central Bank of Bolivia
+NFL	National Football League

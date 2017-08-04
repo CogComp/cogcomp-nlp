@@ -1,0 +1,14 @@
+(define features
+    (define predicate-features
+        (transform-input constituent-parent
+    		     (list word
+    			   pos
+    			   lemma
+    			   capitalization
+
+    			   (attribute :name predicate)
+
+    			   (subcat-frame :parse-view *default-parser*)
+    			   nom-lex-class)))
+
+predicate-features)

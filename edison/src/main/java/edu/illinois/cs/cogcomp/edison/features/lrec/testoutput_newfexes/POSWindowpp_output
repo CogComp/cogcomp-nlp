@@ -1,0 +1,44 @@
+Running edu.illinois.cs.cogcomp.edison.features.factory.TestPOSWindowpp
+POSWindowpp Feature Extractor
+GOT TOKENS FROM TEXTAnn
+This
+is
+a
+test
+.
+This
+is
+another
+one
+.
+My
+mother-in-law
+has
+arrived
+.
+Testlist size is 15
+The constituent we are extracting features from in this test is: is
+Printing Set of Features
+POSWindowpp:0_0(DT)
+POSWindowpp:1_0(VBZ)
+POSWindowpp:2_0(DT)
+POSWindowpp:3_0(NN)
+POSWindowpp:4_0(.)
+POSWindowpp:5_0(null)
+POSWindowpp:6_0(null)
+POSWindowpp:0_1(DT_VBZ)
+POSWindowpp:1_1(VBZ_DT)
+POSWindowpp:2_1(DT_NN)
+POSWindowpp:3_1(NN_.)
+POSWindowpp:4_1(._null)
+POSWindowpp:5_1(null_null)
+POSWindowpp:6_1(null)
+POSWindowpp:0_2(DT_VBZ_DT)
+POSWindowpp:1_2(VBZ_DT_NN)
+POSWindowpp:2_2(DT_NN_.)
+POSWindowpp:3_2(NN_._null)
+POSWindowpp:4_2(._null_null)
+POSWindowpp:5_2(null_null)
+POSWindowpp:6_2(null)
+GOT FEATURES YES!
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 sec

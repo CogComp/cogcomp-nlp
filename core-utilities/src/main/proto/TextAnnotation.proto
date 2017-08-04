@@ -1,0 +1,149 @@
+syntax = "proto2";
+
+// Protocol Buffer definition for TextAnnotation structure
+// This file is used to generate Java files to write/read TA in
+// Protocol Buffer format.
+// Note: If you make changes to this file, make sure to generate Java
+// files and update the serialization code accordingly.
+
+package textannotation;
+
+option java_outer_classname = "TextAnnotationImpl";
+option java_package = "edu.illinois.cs.cogcomp.core.utilities.protobuf";
+option java_multiple_files = false;
+
+// Root TextAnnotation message
+message TextAnnotationProto {
+
+  // Corpus Identifier
+  required string corpusId = 1;
+
+  // Document Identifier
+  required string id = 2;
+
+  // Raw text corresponding to this annotation
+  required string text = 3;
+
+  // List of tokens
+  repeated string tokens = 4;
+
+  // Token Offset information
+  repeated TokenOffsetsProto tokenOffsets = 5;
+
+  // List of Sentences
+  required SentenceProto sentences = 6;
+
+  // List of Views
+  repeated ViewProto views = 7;
+
+  // Attribute information
+  map<string, string> properties = 8;
+}
+
+// Token Offset message structure
+message TokenOffsetsProto {
+
+  // Surface form of the token
+  required string form = 1;
+
+  // Offset of the start character in source text
+  required int32 startCharOffset = 2;
+
+  // Offset of the last character in text + 1
+  // Note: End offset is not part of the current token. [startCharOffset, endCharOffset)
+  required int32 endCharOffset = 3;
+}
+
+// Sentence message structure
+message SentenceProto {
+
+  // Class name for the generator
+  required string generator = 1;
+
+  // Score of the sentence
+  optional double score = 2 [ default = 0 ];
+
+  // List of sentence end positions
+  repeated int32 sentenceEndPositions = 3;
+}
+
+// View message structure
+message ViewProto {
+
+  // Name of the view
+  required string viewName = 1;
+
+  // View Data information
+  repeated ViewDataProto viewData = 2;
+}
+
+// ViewData message structure
+message ViewDataProto {
+
+  // Type of the view. Corresponds to class name in core-utilities
+  required string viewType = 1;
+
+  // Name of the view
+  required string viewName = 2;
+
+  // Class name of the generator
+  required string generator = 3;
+
+  // Score of the View
+  optional double score = 4 [ default = 0 ];
+
+  // List of constituents in the view
+  // Note: Order of constituents stored is important and should be preserved
+  repeated ConstituentProto constituents = 5;
+
+  // List of relations in the view
+  // Note: Order of constituents stored is important and should be preserved
+  repeated RelationProto relations = 6;
+}
+
+// Constituent message structure
+message ConstituentProto {
+
+  // Label of the constituent
+  required string label = 1;
+
+  // Score of the constituent
+  optional double score = 2 [ default = 0 ];
+
+  // Start index of the span
+  // Span indices correspond to indices in the tokens list.
+  required int32 start = 3;
+
+  // End index of the span + 1
+  // Span indices correspond to indices in the tokens list.
+  // Usage: a span corresponds to [start, end) - end is not inclusive.
+  required int32 end = 4;
+
+  // Attribute information
+  map<string, string> properties = 5;
+
+  // Map containing scores to each label
+  map<string, double> labelScoreMap = 6;
+}
+
+// Relation message structure
+message RelationProto {
+
+  // Name of the relation
+  required string relationName = 1;
+
+  // Score of the relation
+  optional double score = 2 [ default = 0 ];
+
+  // Identifier for the source constituent
+  required int32 srcConstituent = 3;
+
+  // Identifier for the target constituent
+  required int32 targetConstituent = 4;
+
+  // Attribute information
+  map<string, string> properties = 5;
+
+  // Map containing scores to each label
+  map<string, double> labelScoreMap = 6;
+}
