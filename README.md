@@ -1,9 +1,10 @@
-# MD
+# Mention Detection
+
 A mention detection module that annoatates all mentions of the given TextAnnoatation
 
 ## Run Mention Head Tests
 
-`mvn exec:java -Dexec.mainClass="org.cogcomp.md.BIBOTester [METHOD]"`
+`mvn exec:java -Dexec.mainClass="org.cogcomp.md.BIOTester [METHOD]"`
 
 Supported Methods:
  - "test_cv" Run a five fold cross validation on ACE
@@ -15,7 +16,7 @@ Supported Methods:
  
 ## Run Mention Extent Tests
 
-`mvn exec:java -Dexec.mainClass="org.cogcomp.md.BIBOTester [METHOD]"`
+`mvn exec:java -Dexec.mainClass="org.cogcomp.md.ExtentTester [METHOD]"`
 
 Supported Methods:
  - "testExtentOnGoldHead" Run a test of predicting extents with gold heads on ACE
