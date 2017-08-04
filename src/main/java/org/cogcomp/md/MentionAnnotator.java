@@ -111,7 +111,7 @@ public class MentionAnnotator extends Annotator{
         String preBIOLevel1 = "";
         String preBIOLevel2 = "";
         for (int i = bioView.getStartSpan(); i < bioView.getEndSpan(); i++){
-            Constituent currentBIO = tokenView.getConstituentsCoveringToken(i).get(0);
+            Constituent currentBIO = bioView.getConstituentsCoveringToken(i).get(0);
             currentBIO.addAttribute("preBIOLevel1", preBIOLevel1);
             currentBIO.addAttribute("preBIOLevel2", preBIOLevel2);
             Pair<String, Integer> prediction = BIOTester.joint_inference(currentBIO, candidates);
