@@ -13,9 +13,9 @@ import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.HasAttributes;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 
 import java.io.PrintStream;
 import java.util.*;
@@ -231,7 +231,6 @@ public class TextAnnotationUtilities {
             } else {
                 newVu = new View(vu.viewName, vu.viewGenerator, newTA, vu.score);
             }
-            newTA.addView(vuName, newVu);
         }
 
         Map<Constituent, Constituent> consMap = new HashMap<>();
@@ -263,8 +262,11 @@ public class TextAnnotationUtilities {
             if (vu instanceof TreeView) {
                 ((TreeView) newVu).makeTrees();
             }
+<<<<<<< HEAD
             else if (vu instanceof PredicateArgumentView)
                 ((PredicateArgumentView) vu).findPredicates();
+=======
+>>>>>>> origin
         }
     }
 
@@ -300,7 +302,11 @@ public class TextAnnotationUtilities {
      * @param offset the offset to shift token indexes of new Constituent. Can be negative.
      * @return the new Constituent
      */
+<<<<<<< HEAD
     public static Constituent copyConstituentWithNewTokenOffsets(TextAnnotation newTA, Constituent c, int offset) {
+=======
+    private static Constituent copyConstituentWithNewTokenOffsets(TextAnnotation newTA, Constituent c, int offset) {
+>>>>>>> origin
         int newStart = c.getStartSpan() + offset;
         int newEnd = c.getEndSpan() + offset;
 
@@ -359,9 +365,12 @@ public class TextAnnotationUtilities {
                 updatedTokenCharOffsets, ta.getTokens(), updatedSentenceEndPositions);
 
         for (String vuName : ta.getAvailableViews()) {
+<<<<<<< HEAD
 
             if (ViewNames.TOKENS.equals(vuName) || ViewNames.SENTENCE.equals(vuName))
                 continue;
+=======
+>>>>>>> origin
             View vu = ta.getView(vuName);
 
             View newVu = null;
