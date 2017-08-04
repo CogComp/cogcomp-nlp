@@ -58,7 +58,7 @@ public class PredicateArgumentView extends View {
     }
 
     /**
-     * force update of 'predicates' field. 
+     * force update of 'predicates' field.
      */
     public void findPredicates() {
         predicates.clear();

@@ -25,8 +25,6 @@ import java.util.*;
  */
 public class TextAnnotationUtilities {
 
-    static private Logger logger = LoggerFactory.getLogger(TextAnnotationUtilities.class);
-
     /**
      * This comparator will sort entities on start location, but where start is equal on end as well
      * so the shorter entities come first.
@@ -62,7 +60,6 @@ public class TextAnnotationUtilities {
             };
     public final static Comparator<Sentence> sentenceStartComparator = (o1, o2) -> constituentStartComparator.compare(o1.sentenceConstituent,
             o2.sentenceConstituent);
-
     public final static Comparator<Constituent> constituentEndComparator =
             (arg0, arg1) -> {
                 int end0 = arg0.getEndSpan();
@@ -75,7 +72,6 @@ public class TextAnnotationUtilities {
                 else
                     return 0;
             };
-
     public final static Comparator<Constituent> constituentLengthComparator =
             (arg0, arg1) -> {
                 int size0 = arg0.size();
@@ -96,6 +92,7 @@ public class TextAnnotationUtilities {
 
         return firstCompare;
         };
+    static private Logger logger = LoggerFactory.getLogger(TextAnnotationUtilities.class);
 
     public static TextAnnotation createFromTokenizedString(String text) {
         return BasicTextAnnotationBuilder.createTextAnnotationFromTokens(Collections
