@@ -1,5 +1,6 @@
 package org.cogcomp.md;
 
+import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 import java.util.List;

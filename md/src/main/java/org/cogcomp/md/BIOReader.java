@@ -14,7 +14,6 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.nlp.corpusreaders.ColumnFormatReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import edu.illinois.cs.cogcomp.pos.POSAnnotator;

@@ -81,6 +81,7 @@
                         <param>${project.basedir}/src/lbj/md.lbj</param>
                         <param>${project.basedir}/src/lbj/extent.lbj</param>
                     </lbjavaInputFileList>
+                    <gspFlag>${project.basedir}/src/main/java</gspFlag>
                 </configuration>
             </plugin>
         </plugins>

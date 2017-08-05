@@ -1,5 +1,6 @@
 package org.cogcomp.md;
 
+import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;

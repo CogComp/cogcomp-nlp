@@ -1,5 +1,6 @@
-package org.cogcomp.md;
+package org.cogcomp.md.LbjGen;
 import java.util.*;
+import org.cogcomp.md.*;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;

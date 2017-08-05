@@ -1,4 +1,4 @@
-package edu.illinois.cs.cogcomp.nlp.corpusreaders;
+package org.cogcomp.md;
 
 import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
@@ -6,6 +6,9 @@ import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.SpanLabelView;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
 import edu.illinois.cs.cogcomp.lbjava.nlp.ColumnFormat;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.AnnotationReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.CorpusReaderConfigurator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -14,7 +17,7 @@ import java.util.List;
 /**
  * Created by Xuanyu on 7/19/2017.
  */
-public class ColumnFormatReader extends AnnotationReader<TextAnnotation>{
+public class ColumnFormatReader extends AnnotationReader<TextAnnotation> {
     String _path;
     List<String> _filePaths;
     List<TextAnnotation> _tas;

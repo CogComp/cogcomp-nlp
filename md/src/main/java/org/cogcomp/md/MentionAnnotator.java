@@ -1,5 +1,7 @@
 package org.cogcomp.md;
 
+import org.cogcomp.md.LbjGen.*;
+
 import edu.illinois.cs.cogcomp.annotation.Annotator;
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;

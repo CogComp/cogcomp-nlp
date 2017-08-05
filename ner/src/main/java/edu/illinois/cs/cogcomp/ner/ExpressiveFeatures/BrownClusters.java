@@ -152,6 +152,15 @@ public class BrownClusters {
         return res;
     }
 
+    final public String getPrefixesCombined(String word){
+        String[] cl = getPrefixes(word);
+        String ret = "";
+        for (String s : cl){
+            ret += s + ",";
+        }
+        return ret;
+    }
+
     private static void printArr(String[] arr) {
         for (String anArr : arr)
             logger.info(" " + anArr);
