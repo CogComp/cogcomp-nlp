@@ -45,18 +45,50 @@ public class MentionAnnotator extends Annotator{
     private Learner[] candidates;
     private FlatGazetteers gazetteers;
     private BrownClusters brownClusters;
-    WordNetManager wordNet;
+    private WordNetManager wordNet;
 
     public MentionAnnotator(){
-        this(true);
+        this(true, "ACE_NONTYPE");
     }
 
-    public MentionAnnotator(boolean lazilyInitialize){
+    public MentionAnnotator(String mode) {
+        this(true, mode);
+    }
+
+    public MentionAnnotator(boolean lazilyInitialize, String mode){
         super(ViewNames.MENTION, new String[]{ViewNames.POS}, lazilyInitialize);
-        classifier_nam = new bio_classifier_nam("models/ACE_NAM.lc", "models/ACE_NAM.lex");
-        classifier_nom = new bio_classifier_nom("models/ACE_NOM.lc", "models/ACE_NOM.lex");
-        classifier_pro = new bio_classifier_pro("models/ACE_PRO.lc", "models/ACE_PRO.lex");
-        classifier_extent = new extent_classifier("models/EXTENT_ACE.lc", "models/EXTENT_ACE.lex");
+        String fileName_NAM = "";
+        String fileName_NOM = "";
+        String fileName_PRO = "";
+        String fileName_EXTENT = "";
+        if (mode.equals("ACE_NONTYPE")){
+            fileName_NAM = "models/ACE_NAM";
+            fileName_NOM = "models/ACE_NOM";
+            fileName_PRO = "models/ACE_PRO";
+            fileName_EXTENT = "models/EXTENT_ACE";
+        }
+        if (mode.equals("ACE_TYPE")){
+            fileName_NAM = "models/ACE_NAM_TYPE";
+            fileName_NOM = "models/ACE_NOM_TYPE";
+            fileName_PRO = "models/ACE_PRO_TYPE";
+            fileName_EXTENT = "models/EXTENT_ACE";
+        }
+        if (mode.equals("ERE_NONTYPE")){
+            fileName_NAM = "models/ERE_NAM";
+            fileName_NOM = "models/ERE_NOM";
+            fileName_PRO = "models/ERE_PRO";
+            fileName_EXTENT = "models/EXTENT_ERE";
+        }
+        if (mode.equals("ERE_TYPE")){
+            fileName_NAM = "models/ERE_NAM_TYPE";
+            fileName_NOM = "models/ERE_NOM_TYPE";
+            fileName_PRO = "models/ERE_PRO_TYPE";
+            fileName_EXTENT = "models/EXTENT_ERE";
+        }
+        classifier_nam = new bio_classifier_nam(fileName_NAM + ".lc", fileName_NAM + ".lex");
+        classifier_nom = new bio_classifier_nom(fileName_NOM+".lc", fileName_NOM + ".lex");
+        classifier_pro = new bio_classifier_pro(fileName_PRO + ".lc", fileName_PRO + ".lex");
+        classifier_extent = new extent_classifier(fileName_EXTENT + ".lc", fileName_EXTENT + ".lex");
 
         try {
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());

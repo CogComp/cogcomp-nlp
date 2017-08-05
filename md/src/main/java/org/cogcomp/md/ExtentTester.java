@@ -185,7 +185,7 @@ public class ExtentTester {
         if (rightIdx >= tokenView.getEndSpan()){
             rightIdx = tokenView.getEndSpan() - 1;
         }
-        Constituent fullMention = new Constituent(head.getLabel(), 1.0f, "EXTENT_MENTION", head.getTextAnnotation(), leftIdx, rightIdx + 1);
+        Constituent fullMention = new Constituent(head.getLabel(), 1.0f, ViewNames.MENTION, head.getTextAnnotation(), leftIdx, rightIdx + 1);
         fullMention.addAttribute("EntityHeadStartSpan", Integer.toString(head.getStartSpan()));
         fullMention.addAttribute("EntityHeadEndSpan", Integer.toString(head.getEndSpan()));
         fullMention.addAttribute("EntityType", head.getAttribute("EntityType"));
@@ -206,9 +206,9 @@ public class ExtentTester {
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters/brownBllipClusters");
-            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
+            bcs.add("brown-clusters" + File.separator + "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
             Vector<Integer> bcst = new Vector<>();
             bcst.add(5);
             bcst.add(5);
@@ -224,8 +224,8 @@ public class ExtentTester {
         }
         Gazetteers gazetteers = GazetteersFactory.get();
         BrownClusters brownClusters = BrownClusters.get();
-        for (int i = 0; i < 5; i++) {
-            ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i);
+        for (int i = 0; i < 1; i++) {
+            ExtentReader train_parser = new ExtentReader("data/partition_with_dev/train/"  + i, "ACE");
             extent_classifier classifier = train_extent_classifier(train_parser);
             ACEReader aceReader = null;
             try{
@@ -269,19 +269,17 @@ public class ExtentTester {
     }
 
     public static void testExtentOnPredictedHead(){
-        POSAnnotator posAnnotator = null;
         WordNetManager wordNet = null;
         try{
             WordNetManager.loadConfigAsClasspathResource(true);
             wordNet = WordNetManager.getInstance();
-            posAnnotator = new POSAnnotator();
             Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters/brownBllipClusters");
-            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
+            bcs.add("brown-clusters" + File.separator + "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
             Vector<Integer> bcst = new Vector<>();
             bcst.add(5);
             bcst.add(5);
@@ -384,13 +382,21 @@ public class ExtentTester {
 
     public static void TrainModel(String corpus){
         if (corpus.equals("ACE")){
-            ExtentReader e_train_parser = new ExtentReader("data/all");
-            train_extent_classifier(e_train_parser, "models/EXTENT_ACE");
+            ExtentReader e_train_parser = new ExtentReader("data/all", "ACE");
+            train_extent_classifier(e_train_parser, "models/EXTENT_ACE_TYPE");
+        }
+        if (corpus.equals("ERE")){
+            ExtentReader e_train_parser = new ExtentReader("data/ere/data", "ERE");
+            train_extent_classifier(e_train_parser, "models/EXTENT_ERE_TYPE");
         }
     }
 
     public static void TrainACEModel(){
         TrainModel("ACE");
+    }
+
+    public static void TrainEREModel() {
+        TrainModel("ERE");
     }
 
     public static void main(String[] args){

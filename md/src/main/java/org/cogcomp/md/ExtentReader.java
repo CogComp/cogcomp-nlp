@@ -7,12 +7,11 @@
  */
 package org.cogcomp.md;
 
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
+import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
 import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Relation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
 import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
@@ -39,10 +38,19 @@ public class ExtentReader implements Parser
     private List<Relation> pairList;
     private List<TextAnnotation> taList;
     private String _path;
+    private String _corpus;
     private int pairIdx;
+
+    public ExtentReader(String path, String corpus){
+        _path = path;
+        _corpus = corpus;
+        taList = getTextAnnotations();
+        pairList = getPairs();
+    }
 
     public ExtentReader(String path){
         _path = path;
+        _corpus = "ACE";
         taList = getTextAnnotations();
         pairList = getPairs();
     }
@@ -56,17 +64,33 @@ public class ExtentReader implements Parser
 
     public List<TextAnnotation> getTextAnnotations(){
         List<TextAnnotation> ret = new ArrayList<>();
-        ACEReader aceReader = null;
-        POSAnnotator posAnnotator = new POSAnnotator();
-        try {
-            aceReader = new ACEReader(_path, false);
-            for (TextAnnotation ta : aceReader){
-                ta.addView(posAnnotator);
-                ret.add(ta);
+        if (_corpus.equals("ACE")) {
+            ACEReader aceReader = null;
+            POSAnnotator posAnnotator = new POSAnnotator();
+            try {
+                aceReader = new ACEReader(_path, false);
+                for (TextAnnotation ta : aceReader) {
+                    ta.addView(posAnnotator);
+                    ret.add(ta);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        catch (Exception e){
-            e.printStackTrace();
+        if (_corpus.equals("ERE")){
+            EREMentionRelationReader ereMentionRelationReader = null;
+            POSAnnotator posAnnotator = new POSAnnotator();
+            try {
+                ereMentionRelationReader = new EREMentionRelationReader(EREDocumentReader.EreCorpus.ENR3, _path, false);
+                for (XmlTextAnnotation xta : ereMentionRelationReader){
+                    TextAnnotation ta = xta.getTextAnnotation();
+                    ta.addView(posAnnotator);
+                    ret.add(ta);
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return ret;
     }
@@ -99,11 +123,21 @@ public class ExtentReader implements Parser
         }
         Gazetteers gazetteers = GazetteersFactory.get();
         BrownClusters brownClusters = BrownClusters.get();
+        String mentionViewName = ViewNames.MENTION_ACE;
+        if (_corpus.equals("ERE")){
+            mentionViewName = ViewNames.MENTION_ERE;
+        }
         for (TextAnnotation ta : taList){
-            View mentionView = ta.getView(ViewNames.MENTION_ACE);
+            View mentionView = ta.getView(mentionViewName);
             View tokenView = ta.getView(ViewNames.TOKENS);
             for (Constituent mention : mentionView){
                 Constituent head = ACEReader.getEntityHeadForConstituent(mention, ta, "HEADS");
+                if (head == null){
+                    continue;
+                }
+                if (!head.hasAttribute("EntityType")){
+                    head.addAttribute("EntityType", head.getLabel());
+                }
                 ExtentTester.addHeadAttributes(head, gazetteers, brownClusters, wordNet);
 
                 for (int i = mention.getStartSpan(); i < mention.getEndSpan(); i++){
