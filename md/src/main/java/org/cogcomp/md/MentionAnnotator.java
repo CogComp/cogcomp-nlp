@@ -54,7 +54,7 @@ public class MentionAnnotator extends Annotator{
     }
 
     public MentionAnnotator(boolean lazilyInitialize){
-        super("MENTION", new String[]{ViewNames.POS}, lazilyInitialize);
+        super(ViewNames.MENTION, new String[]{ViewNames.POS}, lazilyInitialize);
         classifier_nam = new bio_classifier_nam("models/ACE_NAM.lc", "models/ACE_NAM.lex");
         classifier_nom = new bio_classifier_nom("models/ACE_NOM.lc", "models/ACE_NOM.lex");
         classifier_pro = new bio_classifier_pro("models/ACE_PRO.lc", "models/ACE_PRO.lex");
@@ -98,7 +98,7 @@ public class MentionAnnotator extends Annotator{
 
     @Override
     public void addView(TextAnnotation ta) throws AnnotatorException{
-        View mentionView = new SpanLabelView("MENTION", MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
+        View mentionView = new SpanLabelView(ViewNames.MENTION, MentionAnnotator.class.getCanonicalName(), ta, 1.0f, true);
         View bioView = new SpanLabelView("BIO", BIOReader.class.getCanonicalName(), ta, 1.0f);
         View tokenView = ta.getView(ViewNames.TOKENS);
         for (int i = tokenView.getStartSpan(); i < tokenView.getEndSpan(); i++){
@@ -143,7 +143,7 @@ public class MentionAnnotator extends Annotator{
                 mentionView.addConstituent(fullMention);
             }
         }
-        ta.addView("MENTION", mentionView);
+        ta.addView(ViewNames.MENTION, mentionView);
     }
 
 }

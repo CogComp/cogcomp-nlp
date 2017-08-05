@@ -37,8 +37,8 @@ public class AnnotatorTester {
                 ta.addView(posAnnotator);
                 mentionAnnotator.addView(ta);
                 total_labeled += ta.getView(ViewNames.MENTION_ERE).getNumberOfConstituents();
-                total_predicted += ta.getView("MENTION").getNumberOfConstituents();
-                for (Constituent pc : ta.getView("MENTION").getConstituents()){
+                total_predicted += ta.getView(ViewNames.MENTION).getNumberOfConstituents();
+                for (Constituent pc : ta.getView(ViewNames.MENTION).getConstituents()){
                     for (Constituent gc : ta.getView(ViewNames.MENTION_ERE).getConstituents()){
                         Constituent gch = ACEReader.getEntityHeadForConstituent(gc, ta, "B");
                         if (gch == null){
