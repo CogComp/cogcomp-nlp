@@ -139,9 +139,9 @@ public class BIOReader implements Parser
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             Vector<String> bcs = new Vector<>();
-            bcs.add("brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brownBllipClusters");
-            bcs.add("brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            bcs.add("brown-clusters" + File.separator + "brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brown-clusters" + File.separator + "brownBllipClusters");
+            bcs.add("brown-clusters" + File.separator + "brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
             Vector<Integer> bcst = new Vector<>();
             bcst.add(5);
             bcst.add(5);
@@ -205,39 +205,23 @@ public class BIOReader implements Parser
 
                 if (_isBIO) {
                     token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                    ///token2tags[cHead.getStartSpan()] = "B,"+ c.getAttribute("EntityMentionType");
                     for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan(); i++){
                         token2tags[i] = "I-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                        //token2tags[i] = "I,"+ c.getAttribute("EntityMentionType");
                     }
                 }
                 else {
                     if (cHead.getStartSpan()+1 == cHead.getEndSpan()) {
                         token2tags[cHead.getStartSpan()] = "U-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                        //token2tags[cHead.getStartSpan()] = "U," + c.getAttribute("EntityMentionType");
                     }
                     else {
                         token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                        //token2tags[cHead.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
                         for (int i = cHead.getStartSpan() + 1; i < cHead.getEndSpan() - 1; i++) {
                             token2tags[i] = "I-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                            //token2tags[i] = "I," + c.getAttribute("EntityMentionType");
                         }
                         token2tags[cHead.getEndSpan() - 1] = "L-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
-                        //token2tags[cHead.getEndSpan() - 1] = "L," + c.getAttribute("EntityMentionType");
                     }
                 }
 
-            }
-            if (_type.equals("SPE_PRO")){
-                for (Constituent c : ta.getView(ViewNames.POS)){
-                    String posLabel = c.getLabel();
-                    if (posLabel.contains("PRP") || posLabel.contains("WP")){
-                        if (c.getEndSpan() - 1 == c.getStartSpan()){
-                            token2tags[c.getStartSpan()] = "B," + c.getAttribute("EntityMentionType");
-                        }
-                    }
-                }
             }
             for (int i = 0; i < token2tags.length; i++){
                 Constituent curToken = tokenView.getConstituentsCoveringToken(i).get(0);

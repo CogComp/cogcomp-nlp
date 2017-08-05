@@ -88,7 +88,7 @@ public class BrownClusters {
                 THashMap<String, String> h = new THashMap<>();
                 // We used to access the files as resources. Now we are accessing them programmatically.
                 // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-                InputStream is = new FileInputStream(bcDirectory.getPath() + File.separator + "brown-clusters" + File.separator + pathsToClusterFiles.elementAt(i));
+                InputStream is = new FileInputStream(bcDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i));
                 InFile in = new InFile(is);
                 String line = in.readLine();
                 int wordsAdded = 0;
