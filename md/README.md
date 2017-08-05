@@ -1,20 +1,16 @@
 # Mention Detection
 
-A mention detection module that annoatates all mentions of the given TextAnnoatation
-
 ## Introduction
 
-### Mention Detection
+A mention is a reference or representation of an entity or an object that appeared in texts. Mentions can have different mention types and the entity a mention is referencing can have different entity types. For example, in the sentence "He is Obama, the president.", "He", "Obama" and "the president" are referencing to the same object (Barack Obama himself), so they are all mentions to the entity Barack Obama. 
 
-A mention detection module aims to annotate all the mentions of different entities in the given texts. In this package, we took the approach of detection all mention heads first, then predict mention extents for all the predicted mention heads.
+This is a mention detection module that aims to annotate all mentions in given texts. It has an annotator that accepts a TextAnnotation and give it a new view which contains all the mentions as Constituents.
 
-### Head Detection
+This package tags all the tokens in a text into either "B/I/O" or "B/I/O/L/U" schema, then train/test on each single token. After predicting all tokens, we interpret this representation back to mentions.
 
-This package tagged all the tokens in a text into either "B/I/O" or "B/I/O/L/U" schema, then train/test on each single token. After evaluating all tokens, we interpret this representation back to mentions.
+## Extent Detection
 
-### Extent Detection
-
-This package does extent classification after detecting mention heads. In the training process, each token in the extent to both right and left of a given mention head is formed into pairs to train a binary classifier, saying whether the token is in the extent or not. To add negative examples, one token to the left and right of the mention extent is added. In the evaluating process, given a mention head, the package forms pairs with tokens to the left and right, until finding a token that is predicted to be not in the extent.
+The mentions predicted from the previous step is only mention heads. After detecting all mention-heads first, this package also has extent classification for each heads. In the extent classifier training process, each token in the extent to both right and left of a given mention head is formed into pairs to train a binary classifier, indicating whether the token is in the extent or not. To add negative examples, one token to the left and right of the mention extent is added. In the evaluating process, given a mention head, the package forms pairs with tokens to the left and right, until finding a token that is predicted to be not in the extent.
 
 ## Results
 
@@ -33,10 +29,45 @@ ACE: 89.45
 ## Using Annotator
 
 ```java
-TextAnnoatation to_be_annoatated;
-MentionAnnotator mentionAnnotator = new MentionAnnotator();
-mentionAnnotator.addView(to_be_annotated);
-List predictedMentions = to_be_annotated.getView("MENTION").getConstituents();
+import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
+import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
+import edu.illinois.cs.cogcomp.nlp.utility.TokenizerTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
+import edu.illinois.cs.cogcomp.nlp.tokenizer.StatefulTokenizer;
+import org.cogcomp.md.MentionAnnotator;
+
+import java.io.IOException;
+import java.util.List;
+
+public class app
+{
+    public static void main( String[] args ) throws IOException, AnnotatorException
+    {
+        String text1 = "Good afternoon, gentlemen. I am a HAL-9000 "
+                + "computer. I was born in Urbana, Il. in 1992";
+
+        String corpus = "2001_ODYSSEY";
+        String textId = "001";
+
+        // Create a TextAnnotation using the LBJ sentence splitter
+        // and tokenizers.
+        TextAnnotationBuilder tab;
+        // don't split on hyphens, as NER models are trained this way
+        boolean splitOnHyphens = false;
+        tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
+
+        TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
+
+        MentionAnnotator mentionAnnotator = new MentionAnnotator();
+        mentionAnnotator.addView(ta);
+
+        View mentionView = ta.getView(ViewNames.MENTION);
+        List<Constituent> predictedMentions = mentionView.getConstituents();
+    }
+}
 ```
 
 ## Run Tests
@@ -62,7 +93,7 @@ Supported Methods:
  - "testExtentOnPredictedHead" Run a test of predicting extents with predicted heads on ACE
 
 ## Citation
-
+If you use this tool, please cite the following works.
 ```
 @inproceedings{PengChRo15,
     author = {Haoruo Peng, Kai-Wei Chang Dan Roth},

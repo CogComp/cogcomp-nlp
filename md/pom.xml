@@ -44,7 +44,7 @@
         </dependency>
         <dependency>
             <groupId>edu.illinois.cs.cogcomp</groupId>
-            <artifactId>illinois-external-annotators</artifactId>
+            <artifactId>stanford_3.8.0</artifactId>
             <version>3.1.25</version>
         </dependency>
     </dependencies>
