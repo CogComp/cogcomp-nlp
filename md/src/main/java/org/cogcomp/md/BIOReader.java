@@ -139,9 +139,9 @@ public class BIOReader implements Parser
             File gazetteersResource = ds.getDirectory("org.cogcomp.gazetteers", "gazetteers", 1.3, false);
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters/brownBllipClusters");
-            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            bcs.add("brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brownBllipClusters");
+            bcs.add("brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
             Vector<Integer> bcst = new Vector<>();
             bcst.add(5);
             bcst.add(5);

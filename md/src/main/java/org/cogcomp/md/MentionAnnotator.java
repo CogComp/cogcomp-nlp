@@ -38,8 +38,6 @@ import java.util.Vector;
  */
 public class MentionAnnotator extends Annotator{
 
-    private static final String NAME = MentionAnnotator.class.getCanonicalName();
-    private final Logger logger = LoggerFactory.getLogger(MentionAnnotator.class);
     private bio_classifier_nam classifier_nam;
     private bio_classifier_nom classifier_nom;
     private bio_classifier_pro classifier_pro;
@@ -66,9 +64,9 @@ public class MentionAnnotator extends Annotator{
             GazetteersFactory.init(5, gazetteersResource.getPath() + File.separator + "gazetteers", true);
             gazetteers = (FlatGazetteers) GazetteersFactory.get();
             Vector<String> bcs = new Vector<>();
-            bcs.add("brown-clusters/brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
-            bcs.add("brown-clusters/brownBllipClusters");
-            bcs.add("brown-clusters/brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
+            bcs.add("brown-english-wikitext.case-intact.txt-c1000-freq10-v3.txt");
+            bcs.add("brownBllipClusters");
+            bcs.add("brown-rcv1.clean.tokenized-CoNLL03.txt-c1000-freq1.txt");
             Vector<Integer> bcst = new Vector<>();
             bcst.add(5);
             bcst.add(5);

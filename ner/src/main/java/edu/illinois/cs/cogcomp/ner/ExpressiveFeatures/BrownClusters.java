@@ -76,7 +76,7 @@ public class BrownClusters {
 
         try {
         Datastore dsNoCredentials = new Datastore(new ResourceConfigurator().getDefaultConfig());
-        File gazDirectory = dsNoCredentials.getDirectory("org.cogcomp.brown-clusters", "brown-clusters", 1.5, false);
+        File bcDirectory = dsNoCredentials.getDirectory("org.cogcomp.brown-clusters", "brown-clusters", 1.5, false);
 
         synchronized (INIT_SYNC) {
             brownclusters = new BrownClusters();
@@ -88,7 +88,7 @@ public class BrownClusters {
                 THashMap<String, String> h = new THashMap<>();
                 // We used to access the files as resources. Now we are accessing them programmatically.
                 // InFile in = new InFile(ResourceUtilities.loadResource(pathsToClusterFiles.elementAt(i)));
-                InputStream is = new FileInputStream(gazDirectory.getPath() + File.separator + pathsToClusterFiles.elementAt(i));
+                InputStream is = new FileInputStream(bcDirectory.getPath() + File.separator + "brown-clusters" + File.separator + pathsToClusterFiles.elementAt(i));
                 InFile in = new InFile(is);
                 String line = in.readLine();
                 int wordsAdded = 0;
