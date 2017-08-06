@@ -12,7 +12,7 @@ import edu.illinois.cs.cogcomp.lbjava.parse.Parser;
 
 import java.util.List;
 
-/*
+/**
  * This is a Parser that reads a List of Objects and
  * returns all Objects in the form of Parser.
  */

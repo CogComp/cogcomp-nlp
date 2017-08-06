@@ -28,6 +28,7 @@ import org.cogcomp.Datastore;
 
 /**
  * The reader file which reads B/I/O/(L/U) tag for each word of a certain corpus
+ * @ParserType; Constituent
  * Supports mode:
  * ACE 2005 with ACEReader
  * ERE with EREMentionRelationReader
@@ -35,6 +36,9 @@ import org.cogcomp.Datastore;
  * It returns Constituents duplicated from Token View, all the returning Constituents should be of size 1
  * The returning Constituents has an attribute "BIO", with value "B","I","O","L" or "U".
  * @Example: Parser parser = new BIOReader("data/", "ACE05-TRAIN", "NAM", false);
+ * @Process: The reader first reads TextAnnotations from corpus using corpusreaders,
+ *            then annotates the TextAnnotations with required views
+ *            then parse the TextAnnotations into tokens.
  */
 
 public class BIOReader implements Parser
@@ -47,7 +51,6 @@ public class BIOReader implements Parser
     private String _binary_indicator;
     private String _type;
     private boolean _isBIO;
-    private List<Annotator> annotators;
 
     public String id;
 
@@ -201,7 +204,7 @@ public class BIOReader implements Parser
                 if (c.getAttribute("EntityType").equals("VEH") || c.getAttribute("EntityType").equals("WEA")){
                     //continue;
                 }
-                c.addAttribute("EntityType", "MENTION");
+                //c.addAttribute("EntityType", "MENTION");
 
                 if (_isBIO) {
                     token2tags[cHead.getStartSpan()] = "B-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
@@ -246,7 +249,6 @@ public class BIOReader implements Parser
                     newToken.addAttribute("WORDNETTAG", ",");
                     newToken.addAttribute("WORDNETHYM", ",");
                 }
-                //if (_path.contains("train") || _path.contains("all")){
                 if (_binary_indicator.equals("TRAIN")){
                     newToken.addAttribute("isTraining", "true");
                 }

@@ -25,16 +25,17 @@ import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.BrownClusters;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.FlatGazetteers;
 import edu.illinois.cs.cogcomp.ner.ExpressiveFeatures.GazetteersFactory;
 import org.cogcomp.Datastore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Vector;
 
 /**
- * This class gives a given TextAnnotation a new View "MENTION"
+ * This class gives a given TextAnnotation a new View ViewNames.MENTION
  * The View contains Constituents that are annotated mentions of the given TextAnnotation
  * The annotator requires POS View to work.
+ *
+ * The Constituents in ViewNames.MENTION is the full mention includes extent
+ * To get the head of a Constituent, use the Attribute "EntityHeadStartSpan" and "EntityHeadEndSpan"
  */
 public class MentionAnnotator extends Annotator{
 
@@ -47,10 +48,21 @@ public class MentionAnnotator extends Annotator{
     private BrownClusters brownClusters;
     private WordNetManager wordNet;
 
+    /**
+     * By default, the initializer set mode to "ACE_NONTYPE"
+     */
     public MentionAnnotator(){
         this(true, "ACE_NONTYPE");
     }
 
+    /**
+     *
+     * @param mode Indicates the model expected to lead
+     *             "ACE_NONTYPE" -> model trained on ACE without EntityType
+     *             "ACE_TYPE" -> model trained on ACE with EntityType
+     *             "ERE_NONTYPE" -> model trained on ERE without EntityType
+     *             "ERE_TYPE" -> model trained on ERE with EntityType
+     */
     public MentionAnnotator(String mode) {
         this(true, mode);
     }
@@ -61,30 +73,45 @@ public class MentionAnnotator extends Annotator{
         String fileName_NOM = "";
         String fileName_PRO = "";
         String fileName_EXTENT = "";
-        if (mode.equals("ACE_NONTYPE")){
-            fileName_NAM = "models/ACE_NAM";
-            fileName_NOM = "models/ACE_NOM";
-            fileName_PRO = "models/ACE_PRO";
-            fileName_EXTENT = "models/EXTENT_ACE";
+        try {
+            Datastore ds = new Datastore(new ResourceConfigurator().getDefaultConfig());
+            if (mode.contains("ACE")) {
+                File extentFlie = ds.getDirectory("org.cogcomp.mention", "ACE_EXTENT", 1.0, false);
+                fileName_EXTENT = extentFlie.getPath() + File.separator + "ACE_EXTENT" + File.separator + "EXTENT_ACE";
+                if (mode.contains("NON")){
+                    File headFile = ds.getDirectory("org.cogcomp.mention", "ACE_HEAD_NONTYPE", 1.0, false);
+                    fileName_NAM = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_NAM";
+                    fileName_NOM = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_NOM";
+                    fileName_PRO = headFile.getPath() + File.separator + "ACE_HEAD_NONTYPE" + File.separator + "ACE_PRO";
+                }
+                else {
+                    File headFile = ds.getDirectory("org.cogcomp.mention", "ACE_HEAD_TYPE", 1.0, false);
+                    fileName_NAM = headFile.getPath() + File.separator + "ACE_HEAD_TYPE" + File.separator + "ACE_NAM_TYPE";
+                    fileName_NOM = headFile.getPath() + File.separator + "ACE_HEAD_TYPE" + File.separator + "ACE_NOM_TYPE";
+                    fileName_PRO = headFile.getPath() + File.separator + "ACE_HEAD_TYPE" + File.separator + "ACE_PRO_TYPE";
+                }
+            }
+            else if (mode.contains("ERE")){
+                File extentFlie = ds.getDirectory("org.cogcomp.mention", "ERE_EXTENT", 1.0, false);
+                fileName_EXTENT = extentFlie.getPath() + File.separator + "ERE_EXTENT" + File.separator + "EXTENT_ERE";
+                if (mode.contains("NON")){
+                    File headFile = ds.getDirectory("org.cogcomp.mention", "ERE_HEAD_NONTYPE", 1.0, false);
+                    fileName_NAM = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_NAM";
+                    fileName_NOM = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_NOM";
+                    fileName_PRO = headFile.getPath() + File.separator + "ERE_HEAD_NONTYPE" + File.separator + "ERE_PRO";
+                }
+                else {
+                    File headFile = ds.getDirectory("org.cogcomp.mention", "ERE_HEAD_TYPE", 1.0, false);
+                    fileName_NAM = headFile.getPath() + File.separator + "ERE_HEAD_TYPE" + File.separator + "ERE_NAM_TYPE";
+                    fileName_NOM = headFile.getPath() + File.separator + "ERE_HEAD_TYPE" + File.separator + "ERE_NOM_TYPE";
+                    fileName_PRO = headFile.getPath() + File.separator + "ERE_HEAD_TYPE" + File.separator + "ERE_PRO_TYPE";
+                }
+            }
         }
-        if (mode.equals("ACE_TYPE")){
-            fileName_NAM = "models/ACE_NAM_TYPE";
-            fileName_NOM = "models/ACE_NOM_TYPE";
-            fileName_PRO = "models/ACE_PRO_TYPE";
-            fileName_EXTENT = "models/EXTENT_ACE";
+        catch (Exception e){
+            e.printStackTrace();
         }
-        if (mode.equals("ERE_NONTYPE")){
-            fileName_NAM = "models/ERE_NAM";
-            fileName_NOM = "models/ERE_NOM";
-            fileName_PRO = "models/ERE_PRO";
-            fileName_EXTENT = "models/EXTENT_ERE";
-        }
-        if (mode.equals("ERE_TYPE")){
-            fileName_NAM = "models/ERE_NAM_TYPE";
-            fileName_NOM = "models/ERE_NOM_TYPE";
-            fileName_PRO = "models/ERE_PRO_TYPE";
-            fileName_EXTENT = "models/EXTENT_ERE";
-        }
+
         classifier_nam = new bio_classifier_nam(fileName_NAM + ".lc", fileName_NAM + ".lex");
         classifier_nom = new bio_classifier_nom(fileName_NOM+".lc", fileName_NOM + ".lex");
         classifier_pro = new bio_classifier_pro(fileName_PRO + ".lc", fileName_PRO + ".lex");
@@ -122,7 +149,6 @@ public class MentionAnnotator extends Annotator{
     }
 
     public void initialize(ResourceManager rm){
-
 
     }
 

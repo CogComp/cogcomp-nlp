@@ -7,7 +7,6 @@
  */
 package org.cogcomp.md;
 
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
@@ -27,10 +26,11 @@ import java.util.*;
 import java.lang.*;
 
 /**
+ * @ParserType: Constituent
  * This is a reader that reads multiple corpus at the same time.
  * Current version supports reading ACE and ERE together.
  * The reader reads TextAnnotation list from file.
- * Using the function "generateNewSplit" to random split all read data into five folds.
+ * Must use the function "generateNewSplit" to splits before using.
  */
 public class BIOCombinedReader extends BIOReader {
     List<Constituent> constituents;
@@ -38,6 +38,13 @@ public class BIOCombinedReader extends BIOReader {
     int cons_idx;
     String _type;
     String _mode;
+    /**
+     * @param fold The fold index (0-4) you want to access
+     * @param mode Indicates the corpus and train/eval e.g. "ERE-TRAIN"
+     *              mode "ALL-TRAIN/EVAL" indicates all folds together,
+     *              In this mode, "fold" is ignored
+     * @param type Indicates the type (NAM/NOM/PRO/ALL) kept
+     */
     public BIOCombinedReader(int fold, String mode, String type){
         _mode = mode;
         _type = type;
@@ -157,9 +164,6 @@ public class BIOCombinedReader extends BIOReader {
             for (Constituent c : mentionView.getConstituents()){
                 if (!_type.equals("ALL")) {
                     String excludeType = _type;
-                    if (_type.startsWith("SPE_")){
-                        excludeType = _type.substring(4);
-                    }
                     if (!c.getAttribute("EntityMentionType").equals(excludeType)) {
                         continue;
                     }
@@ -172,10 +176,13 @@ public class BIOCombinedReader extends BIOReader {
                     continue;
                 }
                 if (c.getAttribute("EntityType").equals("VEH") || c.getAttribute("EntityType").equals("WEA")){
-                    continue;
+                    //continue;
                 }
-                //c.addAttribute("EntityType", "MENTION");
+                c.addAttribute("EntityType", "MENTION");
 
+                /**
+                 * @Note that unlike BIOReader, the tagging schema is set to "BIOLU" here
+                 */
                 if (cHead.getStartSpan()+1 == cHead.getEndSpan()) {
                     token2tags[cHead.getStartSpan()] = "U-" + c.getAttribute("EntityType") + "," + c.getAttribute("EntityMentionType");
                 }
@@ -225,6 +232,17 @@ public class BIOCombinedReader extends BIOReader {
         }
         return ret;
     }
+
+    /**
+     *
+     * @param corpus A list of corpus that is in the splitting pool.
+     * @param prefix The prefix of the split record file for output.
+     *
+     * @Note To make the Reader works without any modification,
+     *        The prefix of ACE corpus should be "ace_"
+     *        The prefix of ERE corpus should be "ere_"
+     *        The prefix of combined corpus should be ""
+     */
     public static void generateNewSplit(List<String> corpus, String prefix){
         List<TextAnnotation> tas = getTAs(corpus);
         long seed = System.nanoTime();

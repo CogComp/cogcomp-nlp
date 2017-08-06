@@ -7,11 +7,9 @@
  */
 package org.cogcomp.md;
 
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.Constituent;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.TextAnnotation;
-import edu.illinois.cs.cogcomp.core.datastructures.textannotation.View;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.XmlTextAnnotation;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ACEReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
@@ -20,9 +18,12 @@ import edu.illinois.cs.cogcomp.pos.POSAnnotator;
 
 /**
  * The testing class for MentionAnnotator
- * Validating if everything is working as expected
+ * Validating if the annotator is working as expected
  */
 public class AnnotatorTester {
+    /**
+     * By default, this function uses the ERE model trained with Type on ERE corpus, should have a fairly high performance.
+     */
     public static void test_basic_annotator(){
         EREMentionRelationReader ereMentionRelationReader = null;
         POSAnnotator posAnnotator = new POSAnnotator();

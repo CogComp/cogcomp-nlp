@@ -10,7 +10,6 @@ package org.cogcomp.md;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREDocumentReader;
 import edu.illinois.cs.cogcomp.nlp.corpusreaders.ereReader.EREMentionRelationReader;
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.resources.ResourceConfigurator;
 import edu.illinois.cs.cogcomp.edison.utilities.WordNetManager;
@@ -41,6 +40,11 @@ public class ExtentReader implements Parser
     private String _corpus;
     private int pairIdx;
 
+    /**
+     *
+     * @param path The data pth
+     * @param corpus The corpus "ACE/ERE"
+     */
     public ExtentReader(String path, String corpus){
         _path = path;
         _corpus = corpus;
@@ -48,6 +52,9 @@ public class ExtentReader implements Parser
         pairList = getPairs();
     }
 
+    /**
+     *  When no corpus is selected, it is set to "ACE"
+     */
     public ExtentReader(String path){
         _path = path;
         _corpus = "ACE";
@@ -55,6 +62,9 @@ public class ExtentReader implements Parser
         pairList = getPairs();
     }
 
+    /**
+     * Produce an ID for model naming
+     */
     public String getId(){
         String ret = _path;
         ret = ret.replace("/", "");

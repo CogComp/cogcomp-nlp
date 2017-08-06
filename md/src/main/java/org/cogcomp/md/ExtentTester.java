@@ -152,6 +152,16 @@ public class ExtentTester {
         extent.addAttribute("WORDNETHYM", BIOFeatureExtractor.getWordNetHyms(wordnet, extent));
     }
 
+    /**
+     * Gets the full mention of the given  head
+     * @param classifier The extent classifier
+     * @param head The head Constituent
+     * @param gazetteers gazetteers
+     * @param brownClusters brownclusters
+     * @param wordnet wordnet
+     * @return A Constituent of a full mention (extent included)
+     * @Note The returned Constituent has Attributes "EntityHeadStartSpan" and "EntityHeadEndSpan"
+     */
     public static Constituent getFullMention(extent_classifier classifier, Constituent head, Gazetteers gazetteers, BrownClusters brownClusters, WordNetManager wordnet){
         addHeadAttributes(head, gazetteers, brownClusters, wordnet);
         View tokenView = head.getTextAnnotation().getView(ViewNames.TOKENS);

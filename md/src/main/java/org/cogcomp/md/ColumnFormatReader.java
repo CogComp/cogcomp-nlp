@@ -22,7 +22,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Xuanyu on 7/19/2017.
+ * This is a reader similar to ACEReader
+ * It reads column formatted files and returns TextAnnotations.
+ * @Issue: It does not obey the token index defined in the columnformat file,
+ *          The first token is assigned index 0, rather than the index in the file.
  */
 public class ColumnFormatReader extends AnnotationReader<TextAnnotation> {
     String _path;

@@ -32,6 +32,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class BIOTester {
+
+    /**
+     * Returns the corpus data paths.
+     * @param mode "train/eval/all/dev"
+     * @param corpus "ACE/ERE"
+     * @param fold The fold index. Not used in mode "all/dev"
+     */
     public static String getPath(String mode, String corpus, int fold){
         if (corpus.equals("ERE")) {
             if (mode.equals("train")) {
@@ -69,6 +76,9 @@ public class BIOTester {
         }
     }
 
+    /**
+     * Extracts the most common predicted type in a given BILOU sequence.
+     */
     public static <T> T mostCommon(List<T> list) {
         Map<T, Integer> map = new HashMap<>();
 
@@ -87,7 +97,11 @@ public class BIOTester {
         return max.getKey();
     }
 
-
+    /**
+     * Trainer for the head named entity classifier.
+     * @param train_parser The parser containing all training examples
+     * @param modelLoc The expected model file destination. Support null.
+     */
     public static bio_classifier_nam train_nam_classifier(Parser train_parser, String modelLoc){
         bio_classifier_nam classifier = new bio_classifier_nam();
         train_parser.reset();
@@ -130,6 +144,11 @@ public class BIOTester {
         return train_nam_classifier(train_parser, null);
     }
 
+    /**
+     * Trainer for the head nominal classifier.
+     * @param train_parser The parser containing all training examples
+     * @param modelLoc The expected model file destination. Support null.
+     */
     public static bio_classifier_nom train_nom_classifier(Parser train_parser, String modelLoc){
         bio_classifier_nom classifier = new bio_classifier_nom();
         train_parser.reset();
@@ -170,6 +189,11 @@ public class BIOTester {
         return train_nom_classifier(train_parser, null);
     }
 
+    /**
+     * Trainer for the head pronoun classifier.
+     * @param train_parser The parser containing all training examples
+     * @param modelLoc The expected model file destination. Support null.
+     */
     public static bio_classifier_pro train_pro_classifier(Parser train_parser, String modelLoc){
         bio_classifier_pro classifier = new bio_classifier_pro();
         train_parser.reset();
@@ -210,6 +234,17 @@ public class BIOTester {
         return train_pro_classifier(train_parser, null);
     }
 
+    /**
+     *
+     * @param t The target Consitutent
+     * @param candidates The learner array containing 3 Learners.
+     *                    candidates[0] : NAM
+     *                    candidates[1] : NOM
+     *                    candidates[2] : PRO
+     * @return a pair of a String and a Integer.
+     *          The String: The result of the joint inferencing
+     *          The Integer: The index of the selected learner in candidates
+     */
     public static Pair<String, Integer> joint_inference(Constituent t, Learner[] candidates){
 
         double highest_start_score = -10.0;
@@ -251,6 +286,13 @@ public class BIOTester {
         return classifier.discreteValue(c);
     }
 
+    /**
+     *
+     * @param curToken The token of the start of a mention (either gold/predicted)
+     * @param classifier The selected classifier from joint_inference
+     * @param isGold Indicates if getting the gold mention or not
+     * @return A constituent of the entire mention head. The size may be larger than 1.
+     */
     public static Constituent getConstituent(Constituent curToken, Classifier classifier, boolean isGold) {
         View bioView = curToken.getTextAnnotation().getView("BIO");
         String goldType = "NA";
@@ -302,6 +344,9 @@ public class BIOTester {
         return wholeMention;
     }
 
+    /**
+     * Cross Validation tester
+     */
     public static void test_cv(){
         boolean isBIO = false;
         int total_labeled_mention = 0;
@@ -403,6 +448,9 @@ public class BIOTester {
         System.out.println("violations: " + violations);
     }
 
+    /**
+     * Test set tester
+     */
     public static void test_ts(){
         boolean isBIO = false;
         int total_labeled_mention = 0;
@@ -416,10 +464,10 @@ public class BIOTester {
         int total_correct_pro = 0;
         int total_false_type_pro = 0;
 
-        Parser test_parser = new BIOReader("data/partition_with_dev/dev", "ACE05-EVAL", "ALL", isBIO);
-        Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", isBIO);
-        Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", isBIO);
-        Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", isBIO);
+        Parser test_parser = new BIOReader(getPath("dev", "ACE", 0), "ACE05-EVAL", "ALL", isBIO);
+        Parser train_parser_nam = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NAM", isBIO);
+        Parser train_parser_nom = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NOM", isBIO);
+        Parser train_parser_pro = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "PRO", isBIO);
         bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
         bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
         bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
@@ -470,7 +518,7 @@ public class BIOTester {
                 if (goldMention.getAttribute("EntityType").equals(predictMention.getAttribute("EntityType"))) {
                     typeCorrect = true;
                 }
-                if (boundaryCorrect){
+                if (boundaryCorrect && typeCorrect){
                     total_correct_mention ++;
                     if (learnerIdx == 0){
                         total_correct_nam ++;
@@ -514,16 +562,19 @@ public class BIOTester {
         System.out.println("PRO: " + total_false_type_pro + "/" + total_correct_pro);
     }
 
+    /**
+     * ERE corpus tester
+     */
     public static void test_ere(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
         int total_correct_mention = 0;
         int total_correct_type_match = 0;
 
-        Parser test_parser = new BIOReader("data/ere/data", "ERE-EVAL", "ALL", false);
-        Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", false);
-        Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", false);
-        Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", false);
+        Parser test_parser = new BIOReader(getPath("all", "ERE", 0), "ERE-EVAL", "ALL", false);
+        Parser train_parser_nam = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NAM", false);
+        Parser train_parser_nom = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NOM", false);
+        Parser train_parser_pro = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "PRO", false);
         bio_classifier_nam classifier_nam = train_nam_classifier(train_parser_nam);
         bio_classifier_nom classifier_nom = train_nom_classifier(train_parser_nom);
         bio_classifier_pro classifier_pro = train_pro_classifier(train_parser_pro);
@@ -536,7 +587,6 @@ public class BIOTester {
         candidates[1] = classifier_nom;
         candidates[2] = classifier_pro;
 
-        Map<String, Integer> mentionTypeErrorMap = new HashedMap();
         for (Object example = test_parser.next(); example != null; example = test_parser.next()){
             ((Constituent)example).addAttribute("preBIOLevel1", preBIOLevel1);
             ((Constituent)example).addAttribute("preBIOLevel2", preBIOLevel2);
@@ -633,10 +683,14 @@ public class BIOTester {
         System.out.println("F1: " + f);
     }
 
+    /**
+     * Calculates the average mention head size by type.
+     * Research purposes only
+     */
     public static void calculateAvgMentionLength(){
         ACEReader aceReader = null;
         try{
-            aceReader = new ACEReader("data/all", false);
+            aceReader = new ACEReader(getPath("all", "ERE", 0), false);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -669,6 +723,10 @@ public class BIOTester {
         System.out.println("PRO LENGTH: " + pro / procount);
     }
 
+    /**
+     * Test the model trained on hybrid ACE/ERE and evaluated on hybrid ACE/ERE
+     * Produce results on separate types
+     */
     public static void test_hybrid(){
         int total_labeled_mention = 0;
         int total_predicted_mention = 0;
@@ -812,17 +870,17 @@ public class BIOTester {
 
     public static void TrainModel(String corpus){
         if (corpus.equals("ACE")) {
-            Parser train_parser_nam = new BIOReader("data/all", "ACE05-TRAIN", "NAM", false);
-            Parser train_parser_nom = new BIOReader("data/all", "ACE05-TRAIN", "NOM", false);
-            Parser train_parser_pro = new BIOReader("data/all", "ACE05-TRAIN", "PRO", false);
+            Parser train_parser_nam = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NAM", false);
+            Parser train_parser_nom = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "NOM", false);
+            Parser train_parser_pro = new BIOReader(getPath("all", "ACE", 0), "ACE05-TRAIN", "PRO", false);
             train_nam_classifier(train_parser_nam, "models/ACE_NAM");
             train_nom_classifier(train_parser_nom, "models/ACE_NOM");
             train_pro_classifier(train_parser_pro, "models/ACE_PRO");
         }
         else if (corpus.equals("ERE")){
-            Parser train_parser_nam = new BIOReader("data/ere/data", "ERE-TRAIN", "NAM", false);
-            Parser train_parser_nom = new BIOReader("data/ere/data", "ERE-TRAIN", "NOM", false);
-            Parser train_parser_pro = new BIOReader("data/ere/data", "ERE-TRAIN", "PRO", false);
+            Parser train_parser_nam = new BIOReader(getPath("all", "ERE", 0), "ACE05-TRAIN", "NAM", false);
+            Parser train_parser_nom = new BIOReader(getPath("all", "ERE", 0), "ACE05-TRAIN", "NOM", false);
+            Parser train_parser_pro = new BIOReader(getPath("all", "ERE", 0), "ACE05-TRAIN", "PRO", false);
             train_nam_classifier(train_parser_nam, "models/ERE_NAM");
             train_nom_classifier(train_parser_nom, "models/ERE_NOM");
             train_pro_classifier(train_parser_pro, "models/ERE_PRO");

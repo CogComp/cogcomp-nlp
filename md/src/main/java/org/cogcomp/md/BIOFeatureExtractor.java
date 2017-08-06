@@ -7,7 +7,6 @@
  */
 package org.cogcomp.md;
 
-import org.cogcomp.md.LbjGen.*;
 import edu.illinois.cs.cogcomp.core.datastructures.Pair;
 import edu.illinois.cs.cogcomp.core.datastructures.ViewNames;
 import edu.illinois.cs.cogcomp.core.datastructures.textannotation.*;
@@ -25,6 +24,13 @@ import java.util.List;
  * Each static function performs an extraction on a given target
  */
 public class BIOFeatureExtractor {
+
+    /**
+     * Extracts the gazetteers feature for a given constituent
+     * The size of the Constituent should be 1.
+     * This function checks the word and two words after it
+     * The feature itself was extracted in BIOReader prior to this extraction
+     */
     public static List<Pair<Integer, String>> getGazetteerFeatures(Constituent c){
         List<Pair<Integer, String>> ret_features = new ArrayList<>();
         View bioView = c.getTextAnnotation().getView("BIO");
@@ -48,6 +54,11 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Extract the gazetteer feature of only the Constituent given.
+     * No other words is looked at
+     * The size of the Constituent should be 1
+     */
     public static List<String> getGazetteerFeaturesSingle(Constituent c){
         List<String> ret_features = new ArrayList<>();
         String[] features = c.getAttribute("GAZ").split(",");
@@ -60,8 +71,11 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * This functions works for the extent classifier.
+     * It extracts the gazetteers feature of the head in a given (token,head) pair.
+     */
     public static List<Pair<String, String>> getGazetteerFeaturesHead(Relation r){
-        TextAnnotation ta = r.getTarget().getTextAnnotation();
         List<Pair<String, String>> ret_features = new ArrayList<>();
         for (int i = r.getTarget().getStartSpan(); i < r.getTarget().getEndSpan(); i++){
             String curGazFeature = r.getTarget().getAttribute("GAZ" + i);
@@ -84,6 +98,10 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Check if the Constituent is a start of a sentence
+     * The size of the Constituent should be 1
+     */
     public static String isSentenceStart (Constituent c){
         Sentence sentence = c.getTextAnnotation().getSentenceFromToken(c.getStartSpan());
         int sentenceStart = sentence.getStartSpan();
@@ -93,6 +111,10 @@ public class BIOFeatureExtractor {
         return "0";
     }
 
+    /**
+     * Get the form/lemma features of a given Constituent.
+     * The size of the Constituent should be 1
+     */
     public static List<Pair<Integer, String>> getWordFormFeatures (Constituent c){
         List<Pair<Integer, String>> ret_features = new ArrayList<>();
         TextAnnotation ta = c.getTextAnnotation();
@@ -116,6 +138,10 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Extracts Part-of-speech tagging features of a given Constituent
+     * The size of the Constituent should be 1
+     */
     public static List<Pair<Integer, String>> getPOSFeatures (Constituent c) {
         List<Pair<Integer, String>> ret_features = new ArrayList<>();
         View posView = c.getTextAnnotation().getView(ViewNames.POS);
@@ -129,16 +155,19 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * This extracts the special form of a given Constituent (all digits... etc)
+     * The size of the Constituent should be 1
+     */
     public static List<Pair<String, Boolean>> getWordTypeInformation(Constituent c){
         List<Pair<String, Boolean>> ret_features = new ArrayList<>();
-        //View bioView = c.getTextAnnotation().getView("BIO");
-        View bioView = c.getTextAnnotation().getView(ViewNames.TOKENS);
+        View tokenView = c.getTextAnnotation().getView(ViewNames.TOKENS);
         for (int j = -1; j < 3; j++) {
             int curId = c.getStartSpan() + j;
-            if (curId < 0 || curId >= bioView.getEndSpan()){
+            if (curId < 0 || curId >= tokenView.getEndSpan()){
                 continue;
             }
-            Constituent cCur = bioView.getConstituentsCoveringToken(c.getStartSpan() + j).get(0);
+            Constituent cCur = tokenView.getConstituentsCoveringToken(c.getStartSpan() + j).get(0);
             String form = cCur.toString();
             boolean allCapitalized = true, allDigits = true, allNonLetters = true;
             for (int i = 0; i < form.length(); i++) {
@@ -154,6 +183,11 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Get the brown-clusters representations of a given Constituent
+     * This function checks one word before and two words after it.
+     * The size of the Constituent should be 1
+     */
     public static List<Pair<Integer, String>> getBrownClusterPaths(Constituent c){
         List<Pair<Integer, String>> ret_features = new ArrayList<>();
         View bioView = c.getTextAnnotation().getView("BIO");
@@ -174,6 +208,11 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Extracts brown-cluster representation.
+     * It only extracts the feature on the given Constituent
+     * The size of the Constituent should be 1
+     */
     public static List<String> getBrownClusterPathsSingle(Constituent c){
         List<String> ret_features = new ArrayList<>();
         String[] features = c.getAttribute("BC").split(",");
@@ -186,6 +225,11 @@ public class BIOFeatureExtractor {
         return ret_features;
     }
 
+    /**
+     * Check if the the given Constituent is a pronoun that is defined in a pronoun list
+     * Results show that if the list aligns with the definition of the corpus, it helps
+     * The size of the Constituent should be 1
+     */
     public static String isInPronounList(Constituent c){
         String form = c.toString().toLowerCase();
         List<String> pronouns = new ArrayList<>();
@@ -206,6 +250,11 @@ public class BIOFeatureExtractor {
         }
     }
 
+    /**
+     * Extracts the wordNet document names of the given Constituent.
+     * Helps nominals when crossing domains.
+     * The size of the Constituent should be 1
+     */
     public static String getWordNetTags(WordNetManager wordnet, Constituent c){
         List<String> ret = null;
         try {
@@ -221,6 +270,11 @@ public class BIOFeatureExtractor {
         return  retStr;
     }
 
+    /**
+     * Extracts the hypernyms from wordNet of the given Constituent.
+     * Helps nominals when crossing domains.
+     * The size of the Constituent should be 1
+     */
     public static String getWordNetHyms(WordNetManager wordnet, Constituent c){
         List<String> ret = null;
         try {

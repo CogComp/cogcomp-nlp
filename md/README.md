@@ -1,10 +1,12 @@
 # Mention Detection
 
+See the [parent package reademe](https://github.com/CogComp/cogcomp-nlp/blob/master/README.md) first
+
 ## Introduction
 
 A mention is a reference or representation of an entity or an object that appeared in texts. Mentions can have different mention types and the entity a mention is referencing can have different entity types. For example, in the sentence "He is Obama, the president.", "He", "Obama" and "the president" are referencing to the same object (Barack Obama himself), so they are all mentions to the entity Barack Obama. 
 
-This is a mention detection module that aims to annotate all mentions in given texts. It has an annotator that accepts a TextAnnotation and give it a new view which contains all the mentions as Constituents.
+This is a mention detection module that aims to annotate all mentions in given texts. It has an annotator that accepts a `TextAnnotation` and give it a new view which contains all the mentions as `Constituent`.
 
 This package tags all the tokens in a text into either "B/I/O" or "B/I/O/L/U" schema, then train/test on each single token. After predicting all tokens, we interpret this representation back to mentions.
 
@@ -26,7 +28,9 @@ Extent boundary accuracy given Head
 
 ACE: 89.45
 
-## Using Annotator
+## Usage
+
+### Using Annotator
 
 ```java
 import edu.illinois.cs.cogcomp.annotation.AnnotatorException;
@@ -60,7 +64,15 @@ public class app
         tab = new TokenizerTextAnnotationBuilder(new StatefulTokenizer(splitOnHyphens));
 
         TextAnnotation ta = tab.createTextAnnotation(corpus, textId, text1);
-
+        
+        /*
+         * You can initialize MentionAnnotator with a model parameter or not.
+         * With model parameter like new MentionAnnotator("ERE_TYPE"), you can 
+         * indicate which model the annotator uses. In this case, it is trained on ERE with types.
+         * If you choose to initialize without the parameter like shown below, it is by default
+         * the model trained on ACE without type.
+         * Please refer to the comments in MentionAnnotator.java for more information
+         */
         MentionAnnotator mentionAnnotator = new MentionAnnotator();
         mentionAnnotator.addView(ta);
 
@@ -69,6 +81,14 @@ public class app
     }
 }
 ```
+
+### Using package to train/test
+
+This package also supports custom training. Through this, the user can produce models that is not pre-loaded in the annotator.
+
+To use this, put `data/` `models/` `tmp/` at the root of the cogcomp-nlp package, then modify/run tests from `BIOTester`, `ExtentTester` or `AnnotatorTester`
+
+Please note that the user need to check the inner implementation of the tests to ensure data paths and output paths are correct.
 
 ## Run Tests
 
