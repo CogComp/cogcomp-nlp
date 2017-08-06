@@ -7,6 +7,8 @@
  */
 package edu.illinois.cs.cogcomp.nlp.utilities;
 
+import edu.illinois.cs.cogcomp.annotation.BasicTextAnnotationBuilder;
+import edu.illinois.cs.cogcomp.annotation.TextAnnotationBuilder;
 import edu.illinois.cs.cogcomp.core.datastructures.IntPair;
 import edu.illinois.cs.cogcomp.core.utilities.StringTransformation;
 import org.junit.Before;
